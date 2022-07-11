@@ -119,7 +119,7 @@ class TouchPanRotateAndDollyHandler {
                 return;
             }
 
-       //     event.stopPropagation();
+            event.stopPropagation();
             event.preventDefault();
 
             if (waitForTick) {
@@ -132,8 +132,8 @@ class TouchPanRotateAndDollyHandler {
             // Scaling drag-rotate to canvas boundary
 
             const canvasBoundary = scene.canvas.boundary;
-            const canvasWidth = canvasBoundary[0];
-            const canvasHeight = canvasBoundary[1];
+            const canvasWidth = canvasBoundary[2];
+            const canvasHeight = canvasBoundary[3];
 
             const touches = event.touches;
 
