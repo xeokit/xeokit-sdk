@@ -119,7 +119,7 @@ class TouchPanRotateAndDollyHandler {
                 return;
             }
 
-            event.stopPropagation();
+       //     event.stopPropagation();
             event.preventDefault();
 
             if (waitForTick) {
