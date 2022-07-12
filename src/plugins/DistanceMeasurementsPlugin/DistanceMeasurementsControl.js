@@ -91,7 +91,7 @@ class DistanceMeasurementsControl extends Component {
         const scene = this.scene;
         const cameraControl = plugin.viewer.cameraControl;
         const canvas = scene.canvas.canvas;
-        const input = plugin.viewer.scene.input;
+        const input = scene.input;
         const startDot = this._touchStartDot;
 
         const pickSurfacePrecisionEnabled = scene.pickSurfacePrecisionEnabled;
@@ -111,7 +111,7 @@ class DistanceMeasurementsControl extends Component {
 
         const touchStartCanvasPos = math.vec2();
         const touchEndCanvasPos = math.vec2();
-        const touchDistanceStartWorldPos = math.vec3();
+        const touchStartWorldPos = math.vec3();
 
         this._onMouseHoverSurface = cameraControl.on("hoverSurface", event => {
             // This gets fired for both mouse and touch input, but we don't care when handling touch
@@ -134,7 +134,10 @@ class DistanceMeasurementsControl extends Component {
         });
 
         this._onInputMouseUp = input.on("mouseup", (coords) => {
-            if (coords[0] > lastMouseCanvasX + mouseCanvasClickTolerance || coords[0] < lastMouseCanvasX - mouseCanvasClickTolerance || coords[1] > lastMouseCanvasY + mouseCanvasClickTolerance || coords[1] < lastMouseCanvasY - mouseCanvasClickTolerance) {
+            if (coords[0] > lastMouseCanvasX + mouseCanvasClickTolerance ||
+                coords[0] < lastMouseCanvasX - mouseCanvasClickTolerance ||
+                coords[1] > lastMouseCanvasY + mouseCanvasClickTolerance ||
+                coords[1] < lastMouseCanvasY - mouseCanvasClickTolerance) {
                 return;
             }
             if (this._currentDistanceMeasurementByMouse) {
@@ -238,7 +241,7 @@ class DistanceMeasurementsControl extends Component {
                         case FIRST_TOUCH_EXPECTED:
                             startDot.setVisible(true);
                             this._touchStartMarker.worldPos = pickResult.worldPos;
-                            touchDistanceStartWorldPos.set(pickResult.worldPos);
+                            touchStartWorldPos.set(pickResult.worldPos);
                             touchState = SECOND_TOUCH_EXPECTED;
                             break;
                         case SECOND_TOUCH_EXPECTED:
@@ -248,7 +251,7 @@ class DistanceMeasurementsControl extends Component {
                                 id: math.createUUID(),
                                 origin: {
                                     entity: mouseHoverEntity,
-                                    worldPos: touchDistanceStartWorldPos
+                                    worldPos: touchStartWorldPos
                                 },
                                 target: {
                                     entity: mouseHoverEntity,
