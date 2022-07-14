@@ -257,7 +257,7 @@ class Dot {
         style[&quot;z-index&quot;] = cfg.zIndex === undefined ? &quot;40000005&quot; : cfg.zIndex ;
         style.width = 8 + &quot;px&quot;;
         style.height = 8 + &quot;px&quot;;
-        style.visibility = &quot;visible&quot;;
+        style.visibility = cfg.visible !== false ? &quot;visible&quot; : &quot;hidden&quot;;
         style.top = 0 + &quot;px&quot;;
         style.left = 0 + &quot;px&quot;;
         style[&quot;box-shadow&quot;] = &quot;0 2px 5px 0 #182A3D;&quot;;

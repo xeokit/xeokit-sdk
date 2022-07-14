@@ -513,6 +513,7 @@ class Marker extends Component {
         }
         this._viewPosDirty = true;
         this.fire(&quot;worldPos&quot;, this._worldPos);
+        this._needUpdate();
     }
 
     /**

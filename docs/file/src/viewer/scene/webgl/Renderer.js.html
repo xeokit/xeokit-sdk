@@ -891,6 +891,19 @@ const Renderer = function (scene, options) {
 
             //------------------------------------------------------------------------------------------------------
             // Render deferred bins
+            //
+            // Order:
+            //
+            // 1. Opaque color fill
+            // 2. Opaque edges
+            // 3. Opaque X-ray fill
+            // 4. Opaque X-ray edges
+            // 5. Opaque highlight
+            // 6. Transparent highlight
+            // 7. Selected opaque
+            // 8. Selected transparent
+            // 9. Normal transparent
+            // 10. X-rayed transparent
             //------------------------------------------------------------------------------------------------------
 
             // Opaque color with SAO
@@ -923,66 +936,6 @@ const Renderer = function (scene, options) {
             if (xrayEdgesOpaqueBinLen &gt; 0) {
                 for (i = 0; i &lt; xrayEdgesOpaqueBinLen; i++) {
                     xrayEdgesOpaqueBin[i].drawEdgesXRayed(frameCtx);
-                }
-            }
-
-            // Transparent
-
-            if (xrayedFillTransparentBinLen &gt; 0 || xrayEdgesTransparentBinLen &gt; 0 || normalFillTransparentBinLen &gt; 0 || normalEdgesTransparentBinLen &gt; 0) {
-                gl.enable(gl.CULL_FACE);
-                gl.enable(gl.BLEND);
-                if (canvasTransparent) {
-                    gl.blendEquation(gl.FUNC_ADD);
-                    gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-                } else {
-                    gl.blendEquation(gl.FUNC_ADD);
-                    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-                }
-                frameCtx.backfaces = false;
-                if (!alphaDepthMask) {
-                    gl.depthMask(false);
-                }
-
-                // Transparent color edges
-
-                if (normalFillTransparentBinLen &gt; 0 || normalEdgesTransparentBinLen &gt; 0) {
-                    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-                }
-                if (normalEdgesTransparentBinLen &gt; 0) {
-                    for (i = 0; i &lt; normalEdgesTransparentBinLen; i++) {
-                        drawable = normalEdgesTransparentBin[i];
-                        drawable.drawEdgesColorTransparent(frameCtx);
-                    }
-                }
-
-                // Transparent color fill
-
-                if (normalFillTransparentBinLen &gt; 0) {
-                    for (i = 0; i &lt; normalFillTransparentBinLen; i++) {
-                        drawable = normalFillTransparentBin[i];
-                        drawable.drawColorTransparent(frameCtx);
-                    }
-                }
-
-                // Transparent X-ray edges
-
-                if (xrayEdgesTransparentBinLen &gt; 0) {
-                    for (i = 0; i &lt; xrayEdgesTransparentBinLen; i++) {
-                        xrayEdgesTransparentBin[i].drawEdgesXRayed(frameCtx);
-                    }
-                }
-
-                // Transparent X-ray fill
-
-                if (xrayedFillTransparentBinLen &gt; 0) {
-                    for (i = 0; i &lt; xrayedFillTransparentBinLen; i++) {
-                        xrayedFillTransparentBin[i].drawSilhouetteXRayed(frameCtx);
-                    }
-                }
-
-                gl.disable(gl.BLEND);
-                if (!alphaDepthMask) {
-                    gl.depthMask(true);
                 }
             }
 
@@ -1102,6 +1055,66 @@ const Renderer = function (scene, options) {
                     }
                 }
                 gl.disable(gl.BLEND);
+            }
+
+            // Transparent
+
+            if (xrayedFillTransparentBinLen &gt; 0 || xrayEdgesTransparentBinLen &gt; 0 || normalFillTransparentBinLen &gt; 0 || normalEdgesTransparentBinLen &gt; 0) {
+                gl.enable(gl.CULL_FACE);
+                gl.enable(gl.BLEND);
+                if (canvasTransparent) {
+                    gl.blendEquation(gl.FUNC_ADD);
+                    gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+                } else {
+                    gl.blendEquation(gl.FUNC_ADD);
+                    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+                }
+                frameCtx.backfaces = false;
+                if (!alphaDepthMask) {
+                    gl.depthMask(false);
+                }
+
+                // Transparent color edges
+
+                if (normalFillTransparentBinLen &gt; 0 || normalEdgesTransparentBinLen &gt; 0) {
+                    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+                }
+                if (normalEdgesTransparentBinLen &gt; 0) {
+                    for (i = 0; i &lt; normalEdgesTransparentBinLen; i++) {
+                        drawable = normalEdgesTransparentBin[i];
+                        drawable.drawEdgesColorTransparent(frameCtx);
+                    }
+                }
+
+                // Transparent color fill
+
+                if (normalFillTransparentBinLen &gt; 0) {
+                    for (i = 0; i &lt; normalFillTransparentBinLen; i++) {
+                        drawable = normalFillTransparentBin[i];
+                        drawable.drawColorTransparent(frameCtx);
+                    }
+                }
+
+                // Transparent X-ray edges
+
+                if (xrayEdgesTransparentBinLen &gt; 0) {
+                    for (i = 0; i &lt; xrayEdgesTransparentBinLen; i++) {
+                        xrayEdgesTransparentBin[i].drawEdgesXRayed(frameCtx);
+                    }
+                }
+
+                // Transparent X-ray fill
+
+                if (xrayedFillTransparentBinLen &gt; 0) {
+                    for (i = 0; i &lt; xrayedFillTransparentBinLen; i++) {
+                        xrayedFillTransparentBin[i].drawSilhouetteXRayed(frameCtx);
+                    }
+                }
+
+                gl.disable(gl.BLEND);
+                if (!alphaDepthMask) {
+                    gl.depthMask(true);
+                }
             }
 
             const endTime = Date.now();

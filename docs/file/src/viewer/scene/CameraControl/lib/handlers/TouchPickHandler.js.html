@@ -390,6 +390,8 @@ class TouchPickHandler {
 
                         if (pickController.pickResult) {
 
+                            pickController.pickResult.touchInput = true;
+
                             cameraControl.fire(&quot;doublePicked&quot;, pickController.pickResult);
 
                             if (pickController.pickedSurface) {
@@ -420,6 +422,8 @@ class TouchPickHandler {
 
                         if (pickController.pickResult) {
 
+                            pickController.pickResult.touchInput = true;
+
                             cameraControl.fire(&quot;picked&quot;, pickController.pickResult);
 
                             if (pickController.pickedSurface) {
@@ -444,7 +448,7 @@ class TouchPickHandler {
                 activeTouches[i][1] = touches[i].pageY;
             }
 
-            e.stopPropagation();
+          //  e.stopPropagation();
 
         }, {passive: true});
 
