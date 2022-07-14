@@ -147,6 +147,7 @@ class DistanceMeasurementsPlugin extends Plugin {
      * @param {boolean} [cfg.defaultTargetVisible=true] The default value of the DistanceMeasurements `targetVisible` property.
      * @param {boolean} [cfg.defaultWireVisible=true] The default value of the DistanceMeasurements `wireVisible` property.
      * @param {boolean} [cfg.defaultAxisVisible=true] The default value of the DistanceMeasurements `axisVisible` property.
+     * @param {boolean} [cfg.defaultAxisEnabled=true] The default value of the DistanceMeasurements `axisVisible` property.
      * @param {string} [cfg.defaultColor=#00BBFF] The default color of the length dots, wire and label.
      * @param {number} [cfg.zIndex] If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
      */
@@ -263,6 +264,7 @@ class DistanceMeasurementsPlugin extends Plugin {
             },
             visible: params.visible,
             wireVisible: params.wireVisible,
+            axisVisible: params.axisVisible !== false && this.defaultAxisVisible !== false,
             originVisible: params.originVisible,
             targetVisible: params.targetVisible,
             color: params.color

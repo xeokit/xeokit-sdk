@@ -43,7 +43,8 @@ class DistanceMeasurementsControl extends Component {
         this._touchStartDot = new Dot(plugin._container,
             {
                 fillColor: plugin.defaultColor,
-                zIndex: plugin.zIndex + 1
+                zIndex: plugin.zIndex + 1,
+                visible: false
             });
 
         // Tracks 3D world pos of touch start, dynamically calculates 2D canvas pos
@@ -121,7 +122,7 @@ class DistanceMeasurementsControl extends Component {
             canvas.style.cursor = "pointer";
             if (this._currentDistanceMeasurementByMouse) {
                 this._currentDistanceMeasurementByMouse.wireVisible = this._currentDistanceMeasurementByMouseInittouchState.wireVisible;
-                this._currentDistanceMeasurementByMouse.axisVisible = this._currentDistanceMeasurementByMouseInittouchState.axisVisible;
+                this._currentDistanceMeasurementByMouse.axisVisible = this._currentDistanceMeasurementByMouseInittouchState.axisVisible && this.plugin.defaultAxisVisible;
                 this._currentDistanceMeasurementByMouse.targetVisible = this._currentDistanceMeasurementByMouseInittouchState.targetVisible;
                 this._currentDistanceMeasurementByMouse.target.entity = mouseHoverEntity;
                 this._currentDistanceMeasurementByMouse.target.worldPos = mouseWorldPos;
@@ -185,7 +186,7 @@ class DistanceMeasurementsControl extends Component {
                         },
                         approximate: true
                     });
-                    this._currentDistanceMeasurementByMouseInittouchState.axisVisible = this._currentDistanceMeasurementByMouse.axisVisible;
+                    this._currentDistanceMeasurementByMouseInittouchState.axisVisible = this._currentDistanceMeasurementByMouse.axisVisible && this.plugin.defaultAxisVisible;
                     this._currentDistanceMeasurementByMouseInittouchState.wireVisible = this._currentDistanceMeasurementByMouse.wireVisible;
                     this._currentDistanceMeasurementByMouseInittouchState.targetVisible = this._currentDistanceMeasurementByMouse.targetVisible;
                     this.fire("measurementStart", this._currentDistanceMeasurementByMouse);
