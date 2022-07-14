@@ -142,7 +142,7 @@ class AngleMeasurementsControl extends Component {
                             const pickResult = scene.pick({
                                 canvasPos: mouseHoverCanvasPos,
                                 pickSurface: true,
-                                pickSurfacePrecision: true
+                                pickSurfacePrecision: pickSurfacePrecisionEnabled
                             });
                             if (pickResult && pickResult.worldPos) {
                                 worldPos.set(pickResult.worldPos);

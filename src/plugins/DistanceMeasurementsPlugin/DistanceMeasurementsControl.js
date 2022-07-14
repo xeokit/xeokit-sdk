@@ -235,7 +235,7 @@ class DistanceMeasurementsControl extends Component {
                 const pickResult = scene.pick({
                     canvasPos: touchEndCanvasPos,
                     pickSurface: true,
-                    pickSurfacePrecision: false
+                    pickSurfacePrecision: pickSurfacePrecisionEnabled
                 });
                 if (pickResult && pickResult.worldPos) {
                     switch (touchState) {
@@ -258,7 +258,7 @@ class DistanceMeasurementsControl extends Component {
                                     entity: mouseHoverEntity,
                                     worldPos: pickResult.worldPos
                                 },
-                                approximate: true
+                                approximate: (!pickSurfacePrecisionEnabled)
                             });
                             touchState = FIRST_TOUCH_EXPECTED;
                             break;
