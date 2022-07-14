@@ -146,7 +146,7 @@ class AngleMeasurementsPlugin extends Plugin {
         this._measurements = {};
 
         this.defaultColor = cfg.defaultColor;
-        this.zIndex = cfg.zIndex;
+        this.zIndex = cfg.zIndex || 10000;
     }
 
     /**

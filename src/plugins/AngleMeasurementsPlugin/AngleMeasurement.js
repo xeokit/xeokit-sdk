@@ -52,21 +52,34 @@ class AngleMeasurement extends Component {
 
         this._originDot = new Dot(this._container, {
             fillColor: this._color,
-            zIndex: plugin.zIndex + 1
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
         });
         this._cornerDot = new Dot(this._container, {
             fillColor: this._color,
-            zIndex: plugin.zIndex + 1
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
         });
         this._targetDot = new Dot(this._container, {
             fillColor: this._color,
-            zIndex: plugin.zIndex + 1
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
         });
 
-        this._originWire = new Wire(this._container, {color: this._color || "blue", thickness: 1, zIndex: plugin.zIndex});
-        this._targetWire = new Wire(this._container, {color: this._color || "red", thickness: 1, zIndex: plugin.zIndex});
+        this._originWire = new Wire(this._container, {
+            color: this._color || "blue",
+            thickness: 1,
+            zIndex: plugin.zIndex
+        });
+        this._targetWire = new Wire(this._container, {
+            color: this._color || "red",
+            thickness: 1,
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
+        });
 
-        this._angleLabel = new Label(this._container, {fillColor: this._color || "#00BBFF", prefix: "", text: "", zIndex: plugin.zIndex + 2});
+        this._angleLabel = new Label(this._container, {
+            fillColor: this._color || "#00BBFF",
+            prefix: "",
+            text: "",
+            zIndex: plugin.zIndex + 2
+        });
 
         this._wpDirty = false;
         this._vpDirty = false;

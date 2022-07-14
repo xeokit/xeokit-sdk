@@ -169,7 +169,7 @@ class DistanceMeasurementsPlugin extends Plugin {
         this.defaultWireVisible = cfg.defaultWireVisible !== false;
         this.defaultAxisVisible = cfg.defaultAxisVisible !== false;
         this.defaultColor = cfg.defaultColor !== undefined ? cfg.defaultColor : "#00BBFF";
-        this.zIndex = cfg.zIndex;
+        this.zIndex = cfg.zIndex || 10000;
     }
 
     /**

@@ -62,64 +62,64 @@ class DistanceMeasurement extends Component {
 
         this._originDot = new Dot(this._container, {
             fillColor: this._color,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
         });
 
         this._targetDot = new Dot(this._container, {
             fillColor: this._color,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
         });
 
         this._lengthWire = new Wire(this._container, {
             color: this._color,
             thickness: 2,
-            zIndex: plugin.zIndex
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
         });
 
         this._xAxisWire = new Wire(this._container, {
             color: "red",
             thickness: 1,
-            zIndex: plugin.zIndex
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
         });
 
         this._yAxisWire = new Wire(this._container, {
             color: "green",
             thickness: 1,
-            zIndex: plugin.zIndex
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
         });
 
         this._zAxisWire = new Wire(this._container, {
             color: "blue",
             thickness: 1,
-            zIndex: plugin.zIndex
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
         });
 
         this._lengthLabel = new Label(this._container, {
             fillColor: this._color,
             prefix: "",
             text: "",
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 4: undefined
         });
 
         this._xAxisLabel = new Label(this._container, {
             fillColor: "red",
             prefix: "X",
             text: "",
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 3: undefined
         });
 
         this._yAxisLabel = new Label(this._container, {
             fillColor: "green",
             prefix: "Y",
             text: "",
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 3: undefined
         });
 
         this._zAxisLabel = new Label(this._container, {
             fillColor: "blue",
             prefix: "Z",
             text: "",
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 3: undefined
         });
 
         this._wpDirty = false;
