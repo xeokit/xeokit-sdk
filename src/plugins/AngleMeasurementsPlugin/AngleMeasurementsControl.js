@@ -67,12 +67,6 @@ class AngleMeasurementsControl extends Component {
             return;
         }
 
-        this.startDot = new Dot(this.plugin._container,
-            {
-                fillColor: this.plugin.defaultColor,
-                zIndex: this.plugin.zIndex + 1
-            });
-
         const plugin = this.plugin;
         const scene = this.scene;
         const cameraControl = plugin.viewer.cameraControl;
@@ -230,9 +224,7 @@ class AngleMeasurementsControl extends Component {
         });
 
         this._onHoverNothing = cameraControl.on("hoverOff", event => {
-            if (this.startDot) {
-                this.startDot.setVisible(false);
-            }
+
             isMouseHoveringEntity = false;
             if (this._currentAngleMeasurement) {
                 switch (this._state) {
@@ -350,11 +342,6 @@ class AngleMeasurementsControl extends Component {
 
         if (!this._active) {
             return;
-        }
-
-        if (this.startDot) {
-            this.startDot.destroy();
-            this.startDot = null;
         }
 
         this.reset();
