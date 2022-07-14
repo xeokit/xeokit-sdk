@@ -20,7 +20,7 @@ class Dot {
         style["z-index"] = cfg.zIndex === undefined ? "40000005" : cfg.zIndex ;
         style.width = 8 + "px";
         style.height = 8 + "px";
-        style.visibility = "visible";
+        style.visibility = cfg.visible !== false ? "visible" : "hidden";
         style.top = 0 + "px";
         style.left = 0 + "px";
         style["box-shadow"] = "0 2px 5px 0 #182A3D;";
