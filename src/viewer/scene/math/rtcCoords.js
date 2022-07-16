@@ -78,7 +78,7 @@ function worldToRTCPos(worldPos, rtcCenter, rtcPos) {
  * ````false````, we can safely ignore the data returned in ````rtcPositions```` and ````rtcCenter````,
  * since ````rtcCenter```` will equal ````[0,0,0]````, and ````rtcPositions```` will contain identical values to ````positions````.
  */
-function worldToRTCPositions(worldPositions, rtcPositions, rtcCenter, cellSize = 1000000) {
+function worldToRTCPositions(worldPositions, rtcPositions, rtcCenter, cellSize = 1000) {
 
     const center = math.getPositionsCenter(worldPositions, tempVec3a);
 
