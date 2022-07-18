@@ -236,13 +236,7 @@ class Canvas extends Component {
                     boundary[2] = newWidth;
                     boundary[3] = newHeight;
 
-                    /**
-                     * Fired whenever this Canvas's {@link Canvas/boundary} property changes.
-                     *
-                     * @event boundary
-                     * @param value The property's new value
-                     */
-                    if (!newResolutionScale || newCanvasSize) {
+                    if (!newResolutionScale) {
                         this.fire("boundary", boundary);
                     }
 
