@@ -453,11 +453,13 @@ function loadNode(ctx, node, matrix) {
             }
             if (createEntity) {
                 sceneModel.createEntity(utils.apply(createEntity, {
-                    meshIds: meshIds
+                    meshIds: meshIds,
+                    isObject: true
                 }));
             } else {
                 sceneModel.createEntity({
-                    meshIds: meshIds
+                    meshIds: meshIds,
+                    isObject: true
                 });
             }
         }
