@@ -226,8 +226,8 @@ class TrianglesInstancingOcclusionRenderer {
             src.push("in float isPerspective;");
         }
         if (clipping) {
-            src.push("in vec4 vWorldPosition;");
-            src.push("in vec4 vFlags2;");
+            src.push("out vec4 vWorldPosition;");
+            src.push("out vec4 vFlags2;");
         }
         src.push("void main(void) {");
 
@@ -279,8 +279,8 @@ class TrianglesInstancingOcclusionRenderer {
             src.push("out float vFragDepth;");
         }
         if (clipping) {
-            src.push("out vec4 vWorldPosition;");
-            src.push("out vec4 vFlags2;");
+            src.push("in vec4 vWorldPosition;");
+            src.push("in vec4 vFlags2;");
             for (let i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
