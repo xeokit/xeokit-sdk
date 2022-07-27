@@ -1,4 +1,4 @@
-<!doctype html>
+?<!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -97,7 +97,7 @@
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../assets/models/xkt/v8/ifc/OTCConferenceCenter.ifc.xkt",
         edges: true
@@ -105,9 +105,9 @@
 
     const t0 = performance.now();
     document.getElementById("time").innerHTML = "Loading model...";
-    model.on("loaded", function () {
+    sceneModel.on("loaded", function () {
         const t1 = performance.now();
-        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
 
         const metaModel = viewer.metaScene.metaModels[model.id];
 

@@ -6,7 +6,6 @@ class PickResult {
 
     /**
      * @private
-     * @param value
      */
     constructor() {
 
@@ -42,6 +41,12 @@ class PickResult {
          * @type {Boolean}
          */
         this.pickSurfacePrecision = false;
+
+        /**
+         * True when picked from touch input, else false when from mouse input.
+         * @type {boolean}
+         */
+        this.touchInput = false;
 
         this._canvasPos = new Int16Array([0, 0]);
         this._origin = new Float64Array([0, 0, 0]);
@@ -320,6 +325,7 @@ class PickResult {
         this._gotBary = false;
         this._gotWorldNormal = false;
         this._gotUV = false;
+        this.touchInput = false;
     }
 }
 

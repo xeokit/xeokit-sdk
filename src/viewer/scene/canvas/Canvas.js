@@ -170,33 +170,31 @@ class Canvas extends Component {
 
         let lastParent = null;
 
-        let tickCount = 0; // chipmunk
+        let tickCount = 0;
 
         this._tick = this.scene.on("tick", () => {
 
-            tickCount++; // chipmunk
+            tickCount++;
 
             self._canvasSizeChanged = false;
 
-            if (self.optimizeResizeDetection)
-            {
-                if (tickCount < 60) // chipmunk
-                { // chipmunk
-                    return; // chipmunk
-                } // chipmunk
+            if (self.optimizeResizeDetection) {
+                if (tickCount < 10) {
+                    return;
+                }
             }
 
-            tickCount = 0; // chipmunk
+            tickCount = 0;
 
             const canvas = this.canvas;
 
             const newResolutionScale = (this._resolutionScale !== lastResolutionScale);
             const newWindowSize = (window.innerWidth !== lastWindowWidth || window.innerHeight !== lastWindowHeight);
 
-            if (!newWindowSize) // chipmunk
-            { // chipmunk
-                return; // chipmunk
-            } // chipmunk
+            if (!newWindowSize) {
+                // This return caused the canvas to never resize in xeokit-bim-viewer
+                // return;
+            }
 
             const newCanvasSize = (canvas.clientWidth !== lastCanvasWidth || canvas.clientHeight !== lastCanvasHeight);
             const newCanvasPos = (canvas.offsetLeft !== lastCanvasOffsetLeft || canvas.offsetTop !== lastCanvasOffsetTop);
@@ -238,13 +236,7 @@ class Canvas extends Component {
                     boundary[2] = newWidth;
                     boundary[3] = newHeight;
 
-                    /**
-                     * Fired whenever this Canvas's {@link Canvas/boundary} property changes.
-                     *
-                     * @event boundary
-                     * @param value The property's new value
-                     */
-                    if (!newResolutionScale || newCanvasSize) {
+                    if (!newResolutionScale) {
                         this.fire("boundary", boundary);
                     }
 

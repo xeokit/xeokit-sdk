@@ -8087,7 +8087,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Returns true if an occlusion test is needed.\n     *\n     * @returns {boolean}\n     ",
+                  "value": "*\n     * Returns true if an occlusion test is needed.\n     *\n     * @returns {Boolean}\n     ",
                   "start": 4189,
                   "end": 4285,
                   "loc": {
@@ -8227,7 +8227,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Returns true if an occlusion test is needed.\n     *\n     * @returns {boolean}\n     ",
+                  "value": "*\n     * Returns true if an occlusion test is needed.\n     *\n     * @returns {Boolean}\n     ",
                   "start": 4189,
                   "end": 4285,
                   "loc": {
@@ -38775,7 +38775,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Returns true if an occlusion test is needed.\n     *\n     * @returns {boolean}\n     ",
+                    "value": "*\n     * Returns true if an occlusion test is needed.\n     *\n     * @returns {Boolean}\n     ",
                     "start": 4189,
                     "end": 4285,
                     "loc": {
@@ -38915,7 +38915,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Returns true if an occlusion test is needed.\n     *\n     * @returns {boolean}\n     ",
+                    "value": "*\n     * Returns true if an occlusion test is needed.\n     *\n     * @returns {Boolean}\n     ",
                     "start": 4189,
                     "end": 4285,
                     "loc": {
@@ -62532,7 +62532,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Returns true if an occlusion test is needed.\n     *\n     * @returns {boolean}\n     ",
+      "value": "*\n     * Returns true if an occlusion test is needed.\n     *\n     * @returns {Boolean}\n     ",
       "start": 4189,
       "end": 4285,
       "loc": {
@@ -77969,7 +77969,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Returns true if an occlusion test is needed.\n     *\n     * @returns {boolean}\n     ",
+      "value": "*\n     * Returns true if an occlusion test is needed.\n     *\n     * @returns {Boolean}\n     ",
       "start": 4189,
       "end": 4285,
       "loc": {

@@ -52,21 +52,34 @@ class AngleMeasurement extends Component {
 
         this._originDot = new Dot(this._container, {
             fillColor: this._color,
-            zIndex: plugin.zIndex + 1
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
         });
         this._cornerDot = new Dot(this._container, {
             fillColor: this._color,
-            zIndex: plugin.zIndex + 1
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
         });
         this._targetDot = new Dot(this._container, {
             fillColor: this._color,
-            zIndex: plugin.zIndex + 1
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
         });
 
-        this._originWire = new Wire(this._container, {color: this._color || "blue", thickness: 1, zIndex: plugin.zIndex});
-        this._targetWire = new Wire(this._container, {color: this._color || "red", thickness: 1, zIndex: plugin.zIndex});
+        this._originWire = new Wire(this._container, {
+            color: this._color || "blue",
+            thickness: 1,
+            zIndex: plugin.zIndex
+        });
+        this._targetWire = new Wire(this._container, {
+            color: this._color || "red",
+            thickness: 1,
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
+        });
 
-        this._angleLabel = new Label(this._container, {fillColor: this._color || "#00BBFF", prefix: "", text: "", zIndex: plugin.zIndex + 2});
+        this._angleLabel = new Label(this._container, {
+            fillColor: this._color || "#00BBFF",
+            prefix: "",
+            text: "",
+            zIndex: plugin.zIndex + 2
+        });
 
         this._wpDirty = false;
         this._vpDirty = false;
@@ -321,10 +334,23 @@ class AngleMeasurement extends Component {
         return this._angle;
     }
 
+    /**
+     * Gets the color of the angle measurement.
+     *
+     * The color is an HTML string representation, eg. "#00BBFF" and "blue".
+     *
+     * @type {String}
+     */
     get color() {
         return this._color;
     }
 
+    /** Sets the color of the angle measurement.
+     *
+     * The color is given as an HTML string representation, eg. "#00BBFF" and "blue".
+     *
+     * @type {String}
+     */
     set color(value) {
         this._originDot.setFillColor(value);
         this._cornerDot.setFillColor(value);
@@ -339,7 +365,7 @@ class AngleMeasurement extends Component {
     /**
      * Sets whether this AngleMeasurement is visible or not.
      *
-     * @type Boolean
+     * @type {Boolean}
      */
     set visible(value) {
         value = value !== false;
@@ -355,7 +381,7 @@ class AngleMeasurement extends Component {
     /**
      * Gets whether this AngleMeasurement is visible or not.
      *
-     * @type Boolean
+     * @type {Boolean}
      */
     get visible() {
         return this._visible;

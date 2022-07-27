@@ -1,8 +1,6 @@
 /*
-
  Parser for .XKT Format V10
-
- */
+*/
 
 import {utils} from "../../../viewer/scene/utils.js";
 import * as p from "./lib/pako.js";
@@ -23,30 +21,31 @@ function extract(elements) {
         metadata: elements[0],
         textureData: elements[1],
         eachTextureDataPortion: elements[2],
-        positions: elements[3],
-        normals: elements[4],
-        colors: elements[5],
-        uvs: elements[6],
-        indices: elements[7],
-        edgeIndices: elements[8],
-        eachTextureSetTextures: elements[9],
-        matrices: elements[10],
-        reusedGeometriesDecodeMatrix: elements[11],
-        eachGeometryPrimitiveType: elements[12],
-        eachGeometryPositionsPortion: elements[13],
-        eachGeometryNormalsPortion: elements[14],
-        eachGeometryColorsPortion: elements[15],
-        eachGeometryUVsPortion: elements[16],
-        eachGeometryIndicesPortion: elements[17],
-        eachGeometryEdgeIndicesPortion: elements[18],
-        eachMeshGeometriesPortion: elements[19],
-        eachMeshMatricesPortion: elements[20],
-        eachMeshTextureSet: elements[21],
-        eachMeshMaterialAttributes: elements[22],
-        eachEntityId: elements[23],
-        eachEntityMeshesPortion: elements[24],
-        eachTileAABB: elements[25],
-        eachTileEntitiesPortion: elements[26]
+        eachTextureDimensions: elements[3],
+        positions: elements[4],
+        normals: elements[5],
+        colors: elements[6],
+        uvs: elements[7],
+        indices: elements[8],
+        edgeIndices: elements[9],
+        eachTextureSetTextures: elements[10],
+        matrices: elements[11],
+        reusedGeometriesDecodeMatrix: elements[12],
+        eachGeometryPrimitiveType: elements[13],
+        eachGeometryPositionsPortion: elements[14],
+        eachGeometryNormalsPortion: elements[15],
+        eachGeometryColorsPortion: elements[16],
+        eachGeometryUVsPortion: elements[17],
+        eachGeometryIndicesPortion: elements[18],
+        eachGeometryEdgeIndicesPortion: elements[19],
+        eachMeshGeometriesPortion: elements[20],
+        eachMeshMatricesPortion: elements[21],
+        eachMeshTextureSet: elements[22],
+        eachMeshMaterialAttributes: elements[23],
+        eachEntityId: elements[24],
+        eachEntityMeshesPortion: elements[25],
+        eachTileAABB: elements[26],
+        eachTileEntitiesPortion: elements[27]
     };
 }
 
@@ -60,6 +59,7 @@ function inflate(deflatedData) {
         metadata: JSON.parse(pako.inflate(deflatedData.metadata, {to: 'string'})),
         textureData: new Uint8Array(inflate(deflatedData.textureData)),
         eachTextureDataPortion: new Uint32Array(inflate(deflatedData.eachTextureDataPortion)),
+        eachTextureDimensions: new Uint16Array(inflate(deflatedData.eachTextureDimensions)),
         positions: new Uint16Array(inflate(deflatedData.positions)),
         normals: new Int8Array(inflate(deflatedData.normals)),
         colors: new Uint8Array(inflate(deflatedData.colors)),
@@ -97,11 +97,23 @@ const decompressColor = (function () {
     };
 })();
 
-function load(viewer, options, inflatedData, performanceModel) {
+const imagDataToImage = (function () {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    return function (imagedata) {
+        canvas.width = imagedata.width;
+        canvas.height = imagedata.height;
+        context.putImageData(imagedata, 0, 0);
+        return canvas.toDataURL();
+    };
+})();
+
+function load(viewer, options, inflatedData, sceneModel) {
 
     const metadata = inflatedData.metadata;
     const textureData = inflatedData.textureData;
     const eachTextureDataPortion = inflatedData.eachTextureDataPortion;
+    const eachTextureDimensions = inflatedData.eachTextureDimensions;
     const positions = inflatedData.positions;
     const normals = inflatedData.normals;
     const colors = inflatedData.colors;
@@ -138,7 +150,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
     // Create metamodel, unless already loaded from external JSON file by XKTLoaderPlugin
 
-    const metaModelId = performanceModel.id;
+    const metaModelId = sceneModel.id;
 
     if (!viewer.metaScene.metaModels[metaModelId]) {
 
@@ -148,7 +160,7 @@ function load(viewer, options, inflatedData, performanceModel) {
             globalizeObjectIds: options.globalizeObjectIds
         });
 
-        performanceModel.once("destroyed", () => {
+        sceneModel.once("destroyed", () => {
             viewer.metaScene.destroyMetaModel(metaModelId);
         });
     }
@@ -158,16 +170,17 @@ function load(viewer, options, inflatedData, performanceModel) {
     for (let textureIndex = 0; textureIndex < numTextures; textureIndex++) {
         const atLastTexture = (textureIndex === (numTextures - 1));
         const textureDataPortionStart = eachTextureDataPortion[textureIndex];
-        const textureDataPortionEnd = atLastTexture ? textureData.length : (eachTextureDataPortion[textureIndex + 1] - 1);
+        const textureDataPortionEnd = atLastTexture ? textureData.length : (eachTextureDataPortion[textureIndex + 1]);
         const textureDataPortionSize = textureDataPortionEnd - textureDataPortionStart;
         const textureDataPortionExists = (textureDataPortionSize > 0);
         if (textureDataPortionExists) {
-            const imageData = textureData.subarray(textureDataPortionStart, textureDataPortionEnd);
-            const base64String = URL.createObjectURL(new Blob([imageData.buffer], {type: 'image/jpeg'} /* (1) */));
-            performanceModel.createTexture({
+
+            const imageDataSubarray = new Uint8Array(textureData.subarray(textureDataPortionStart, textureDataPortionEnd));
+            const arrayBuffer = imageDataSubarray.buffer;
+
+            sceneModel.createTexture({
                 id: `texture-${textureIndex}`,
-                src: base64String,
-                //    flipY: true
+                buffers: [arrayBuffer]
             });
         }
     }
@@ -182,7 +195,7 @@ function load(viewer, options, inflatedData, performanceModel) {
         const normalsTextureIndex = eachTextureSetTextures[eachTextureSetTexturesIndex + 2];
         const emissiveTextureIndex = eachTextureSetTextures[eachTextureSetTexturesIndex + 3];
         const occlusionTextureIndex = eachTextureSetTextures[eachTextureSetTexturesIndex + 4];
-        performanceModel.createTextureSet({
+        sceneModel.createTextureSet({
             id: textureSetId,
             colorTextureId: colorTextureIndex >= 0 ? `texture-${colorTextureIndex}` : null,
             normalsTextureId: normalsTextureIndex >= 0 ? `texture-${normalsTextureIndex}` : null,
@@ -243,7 +256,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
             const xktEntityId = eachEntityId[tileEntityIndex];
 
-            const entityId = options.globalizeObjectIds ? math.globalizeObjectId(performanceModel.id, xktEntityId) : xktEntityId;
+            const entityId = options.globalizeObjectIds ? math.globalizeObjectId(sceneModel.id, xktEntityId) : xktEntityId;
 
             const finalTileEntityIndex = (numEntities - 1);
             const atLastTileEntity = (tileEntityIndex === finalTileEntityIndex);
@@ -314,14 +327,9 @@ function load(viewer, options, inflatedData, performanceModel) {
                 const textureSetId = (textureSetIndex >= 0) ? `textureSet-${textureSetIndex}` : null;
 
                 const meshColor = decompressColor(eachMeshMaterialAttributes.subarray((meshIndex * 6), (meshIndex * 6) + 3));
-                //const meshOpacity = eachMeshMaterialAttributes[(meshIndex * 6) + 3] / 255.0;
+                const meshOpacity = eachMeshMaterialAttributes[(meshIndex * 6) + 3] / 255.0;
                 const meshMetallic = eachMeshMaterialAttributes[(meshIndex * 6) + 4] / 255.0;
                 const meshRoughness = eachMeshMaterialAttributes[(meshIndex * 6) + 5] / 255.0;
-
-                // const meshColor = [.3, .3, .3];
-                const meshOpacity = 1;
-                // const meshMetallic = 0;
-                // const meshRoughness = 1;
 
                 const meshId = nextMeshId++;
 
@@ -332,7 +340,7 @@ function load(viewer, options, inflatedData, performanceModel) {
                     const meshMatrixIndex = eachMeshMatricesPortion[meshIndex];
                     const meshMatrix = matrices.slice(meshMatrixIndex, meshMatrixIndex + 16);
 
-                    const geometryId = "geometry." + tileIndex + "." + geometryIndex; // These IDs are local to the PerformanceModel
+                    const geometryId = "geometry." + tileIndex + "." + geometryIndex; // These IDs are local to the VBOSceneModel
 
                     let geometryArrays = geometryArraysCache[geometryId];
 
@@ -423,7 +431,7 @@ function load(viewer, options, inflatedData, performanceModel) {
                                 transformedAndRecompressedPositions[i + 2] = tempVec4a[2];
                             }
 
-                            performanceModel.createMesh(utils.apply(meshDefaults, {
+                            sceneModel.createMesh(utils.apply(meshDefaults, {
                                 id: meshId,
                                 textureSetId: textureSetId,
                                 origin: tileCenter,
@@ -447,9 +455,8 @@ function load(viewer, options, inflatedData, performanceModel) {
 
                             if (!geometryCreatedInTile[geometryId]) {
 
-                                performanceModel.createGeometry({
+                                sceneModel.createGeometry({
                                     id: geometryId,
-                                    origin: tileCenter,
                                     primitive: geometryArrays.primitiveName,
                                     positionsCompressed: geometryArrays.geometryPositions,
                                     normalsCompressed: geometryArrays.geometryNormals,
@@ -463,7 +470,7 @@ function load(viewer, options, inflatedData, performanceModel) {
                                 geometryCreatedInTile[geometryId] = true;
                             }
 
-                            performanceModel.createMesh(utils.apply(meshDefaults, {
+                            sceneModel.createMesh(utils.apply(meshDefaults, {
                                 id: meshId,
                                 geometryId: geometryId,
                                 textureSetId: textureSetId,
@@ -471,7 +478,8 @@ function load(viewer, options, inflatedData, performanceModel) {
                                 color: meshColor,
                                 metallic: meshMetallic,
                                 roughness: meshRoughness,
-                                opacity: meshOpacity
+                                opacity: meshOpacity,
+                                origin: tileCenter
                             }));
 
                             meshIds.push(meshId);
@@ -528,7 +536,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
                     if (geometryValid) {
 
-                        performanceModel.createMesh(utils.apply(meshDefaults, {
+                        sceneModel.createMesh(utils.apply(meshDefaults, {
                             id: meshId,
                             textureSetId: textureSetId,
                             origin: tileCenter,
@@ -553,7 +561,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
             if (meshIds.length > 0) {
 
-                performanceModel.createEntity(utils.apply(entityDefaults, {
+                sceneModel.createEntity(utils.apply(entityDefaults, {
                     id: entityId,
                     isObject: true,
                     meshIds: meshIds
@@ -566,10 +574,10 @@ function load(viewer, options, inflatedData, performanceModel) {
 /** @private */
 const ParserV10 = {
     version: 10,
-    parse: function (viewer, options, elements, performanceModel) {
+    parse: function (viewer, options, elements, sceneModel) {
         const deflatedData = extract(elements);
         const inflatedData = inflate(deflatedData);
-        load(viewer, options, inflatedData, performanceModel);
+        load(viewer, options, inflatedData, sceneModel);
     }
 };
 

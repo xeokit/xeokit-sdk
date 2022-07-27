@@ -1,4 +1,4 @@
-import { Plugin, Viewer, PerformanceModel, IFCObjectDefaults } from "../../viewer";
+import { Plugin, Viewer, VBOSceneModel, IFCObjectDefaults } from "../../viewer";
 
 export declare type XKTLoaderPluginConfiguration = {
   /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
@@ -271,7 +271,7 @@ export declare interface IXKTDefaultDataSource {
    * in data pipelines), then that metamodel will be loaded and the metamodel in the XKT 8 file will be ignored.
    *
    * @param {LoadXKTModel} params Loading parameters.
-   * @returns {PerformanceModel} Entity representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}.
+   * @returns {VBOSceneModel} Entity representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}.
    */
-  load(params: LoadXKTModel): PerformanceModel;
+  load(params: LoadXKTModel): VBOSceneModel;
 }

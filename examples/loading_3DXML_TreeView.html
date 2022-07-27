@@ -323,7 +323,7 @@
         workerScriptsPath: "../src/plugins/XML3DLoaderPlugin/zipjs/" // Where to find Web Worker scripts used by zip.js
     });
 
-    const model = xml3dLoader.load({
+    const sceneModel = xml3dLoader.load({
         id: "myModel",
         src: "../assets/models/xml3d/3dpreview.3dxml",
         materialType: "SpecularMaterial", // <<----------- Create physically-based SpecularMaterials
@@ -335,9 +335,9 @@
     // When model loaded, create a tree view to navigate its objects
     //------------------------------------------------------------------------------------------------------------------
 
-    model.on("loaded", () => {
-        treeView.addModel(model.id);
-        viewer.cameraFlight.jumpTo(model);
+    sceneModel.on("loaded", () => {
+        treeView.addModel(sceneModel.id);
+        viewer.cameraFlight.jumpTo(sceneModel);
     });
 
     //------------------------------------------------------------------------------------------------------------------

@@ -2,6 +2,8 @@
  * @private
  */
 
+import {LinearEncoding, sRGBEncoding} from "../../constants/constants";
+
 const DrawShaderSource = function (mesh) {
     if (mesh._material._state.type === "LambertMaterial") {
         this.vertex = buildVertexLambert(mesh);
@@ -12,11 +14,9 @@ const DrawShaderSource = function (mesh) {
     }
 };
 
-const TEXTURE_DECODE_FUNCS = {
-    "linear": "linearToLinear",
-    "sRGB": "sRGBToLinear",
-    "gamma": "gammaToLinear"
-};
+const TEXTURE_DECODE_FUNCS = {};
+TEXTURE_DECODE_FUNCS[LinearEncoding] = "linearToLinear";
+TEXTURE_DECODE_FUNCS[sRGBEncoding] = "sRGBToLinear";
 
 function getReceivesShadow(mesh) {
     if (!mesh.receivesShadow) {

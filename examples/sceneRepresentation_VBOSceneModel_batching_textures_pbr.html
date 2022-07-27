@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../assets/images/performance_model_icon.png"/>
+    <h1>VBOSceneModel</h1>
+    <h2>Geometry batching with textures</h2>
+    <p>In this example, we're programmatically building a simple model with a color texture from xeokit's scene graph
+        components, while
+        providing separate geometry for each object.</p>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html"
+               target="_other">VBOSceneModel</a>
+        </li>
+    </ul>
+</div>
+</body>
+
+<script type="module">
+
+    import {
+        Viewer,
+        DirLight,
+        ReflectionMap,
+        LightMap,
+        loadOBJGeometry,
+        VBOSceneModel,
+        sRGBEncoding
+    } from "./../dist/xeokit-sdk.es.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true,
+        pbrEnabled: true
+    });
+
+    viewer.scene.camera.eye = [0.47, 1.97, 1.50];
+    viewer.scene.camera.look = [-0.46, 0.58, -0.5];
+    viewer.scene.camera.up = [-0.22, 0.84, -0.48];
+
+    viewer.scene.gammaInput = true;
+    viewer.scene.gammaOutput = true;
+    viewer.scene.gammaFactor = 1.8;
+
+    viewer.scene.clearLights();
+
+    new DirLight(viewer.scene, {
+        dir: [0.8, -0.6, -0.8],
+        color: [1.0, 1.0, 1.0],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new DirLight(viewer.scene, {
+        dir: [-0.8, -0.4, -0.4],
+        color: [1.0, 1.0, 1.0],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new DirLight(viewer.scene, {
+        dir: [0.2, -0.8, 0.8],
+        color: [1.0, 1.0, 1.0],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new ReflectionMap(viewer.scene, {
+        src: [
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PX.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NX.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PY.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NY.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PZ.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NZ.png"
+        ],
+        encoding: sRGBEncoding
+    });
+
+    const vboSceneModel = new VBOSceneModel(viewer.scene, {
+        id: "hydrantModel"
+    });
+
+    vboSceneModel.createTexture({
+        id: "myColorTexture",
+        src: "../assets/models/obj/fireHydrant/fire_hydrant_Base_Color.png"
+    });
+
+    vboSceneModel.createTexture({
+        id: "myMetallicRoughnessTexture",
+        src: "../assets/models/obj/fireHydrant/fire_hydrant_MetallicRoughness.png"
+    });
+
+    vboSceneModel.createTexture({
+        id: "myOcclusionTexture",
+        src: "../assets/models/obj/fireHydrant/fire_hydrant_Mixed_AO.png"
+    });
+
+    vboSceneModel.createTexture({
+        id: "myNormalsTexture",
+        src: "../assets/models/obj/fireHydrant/fire_hydrant_Normal_OpenGL.png"
+    });
+
+    vboSceneModel.createTextureSet({
+        id: "myTextureSet",
+        colorTextureId: "myColorTexture",
+        metallicRoughnessTextureId: "myMetallicRoughnessTexture",
+        occlusionTextureId: "myOcclusionTexture",
+        normalsTextureId: "myNormalsTexture"
+    });
+
+    loadOBJGeometry(viewer.scene, {
+        src: "../assets/models/obj/fireHydrant/FireHydrantMesh.obj"
+    })
+        .then(function (geometryArrays) {
+
+            for (let x = -1; x < 1; x += 1) {
+                for (let z = -1; z < 1; z += 1) {
+
+                    const meshId = `hydrantMesh.${x}.${z}`;
+                    const entityId = `hydrantEntity.${x}.${z}`;
+
+                    vboSceneModel.createMesh({
+                        id: meshId,
+                        textureSetId: "myTextureSet",
+                        primitive: "triangles",
+                        positions: geometryArrays.positions,
+                        normals: geometryArrays.normals,
+                        uv: geometryArrays.uv,
+                        indices: geometryArrays.indices,
+                        position: [x, 0, z]
+                    });
+
+                    vboSceneModel.createEntity({
+                        id: entityId,
+                        meshIds: [meshId]
+                    });
+                }
+            }
+
+            vboSceneModel.finalize();
+        });
+
+    window.viewer = viewer;
+</script>
+</html>

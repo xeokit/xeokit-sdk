@@ -63,7 +63,7 @@ class ReadableGeometry extends Geometry {
 
     /**
      * @private
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     get isReadableGeometry() {
         return true;

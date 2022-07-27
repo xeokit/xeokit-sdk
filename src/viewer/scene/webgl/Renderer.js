@@ -9,6 +9,7 @@ import {SAOOcclusionRenderer} from "./sao/SAOOcclusionRenderer.js";
 import {createRTCViewMat} from "../math/rtcCoords.js";
 import {SAODepthLimitedBlurRenderer} from "./sao/SAODepthLimitedBlurRenderer.js";
 import {RenderBufferManager} from "./RenderBufferManager.js";
+import {getExtension} from "./getExtension.js";
 
 /**
  * @private
@@ -50,6 +51,15 @@ const Renderer = function (scene, options) {
     const saoDepthLimitedBlurRenderer = new SAODepthLimitedBlurRenderer(scene);
 
     this._occlusionTester = null; // Lazy-created in #addMarker()
+
+    this.capabilities = {
+        astcSupported: !!getExtension(gl, 'WEBGL_compressed_texture_astc'),
+        etc1Supported: true, // WebGL2
+        etc2Supported: !!getExtension(gl, 'WEBGL_compressed_texture_etc'),
+        dxtSupported: !!getExtension(gl, 'WEBGL_compressed_texture_s3tc'),
+        bptcSupported: !!getExtension(gl, 'EXT_texture_compression_bptc'),
+        pvrtcSupported: !!(getExtension(gl, 'WEBGL_compressed_texture_pvrtc') || getExtension(gl, 'WEBKIT_WEBGL_compressed_texture_pvrtc'))
+    };
 
     this.setTransparentEnabled = function (enabled) {
         transparentEnabled = enabled;
@@ -191,7 +201,7 @@ const Renderer = function (scene, options) {
 
     /**
      * Returns true if the next call to render() will draw something
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     this.needsRender = function () {
         return (imageDirty || drawableListDirty || stateSortDirty);
@@ -644,6 +654,19 @@ const Renderer = function (scene, options) {
 
             //------------------------------------------------------------------------------------------------------
             // Render deferred bins
+            //
+            // Order:
+            //
+            // 1. Opaque color fill
+            // 2. Opaque edges
+            // 3. Opaque X-ray fill
+            // 4. Opaque X-ray edges
+            // 5. Opaque highlight
+            // 6. Transparent highlight
+            // 7. Selected opaque
+            // 8. Selected transparent
+            // 9. Normal transparent
+            // 10. X-rayed transparent
             //------------------------------------------------------------------------------------------------------
 
             // Opaque color with SAO
@@ -679,70 +702,11 @@ const Renderer = function (scene, options) {
                 }
             }
 
-            // Transparent
-
-            if (xrayedFillTransparentBinLen > 0 || xrayEdgesTransparentBinLen > 0 || normalFillTransparentBinLen > 0 || normalEdgesTransparentBinLen > 0) {
-                gl.enable(gl.CULL_FACE);
-                gl.enable(gl.BLEND);
-                if (canvasTransparent) {
-                    gl.blendEquation(gl.FUNC_ADD);
-                    gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-                } else {
-                    gl.blendEquation(gl.FUNC_ADD);
-                    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-                }
-                frameCtx.backfaces = false;
-                if (!alphaDepthMask) {
-                    gl.depthMask(false);
-                }
-
-                // Transparent X-ray edges
-
-                if (xrayEdgesTransparentBinLen > 0) {
-                    for (i = 0; i < xrayEdgesTransparentBinLen; i++) {
-                        xrayEdgesTransparentBin[i].drawEdgesXRayed(frameCtx);
-                    }
-                }
-
-                // Transparent X-ray fill
-
-                if (xrayedFillTransparentBinLen > 0) {
-                    for (i = 0; i < xrayedFillTransparentBinLen; i++) {
-                        xrayedFillTransparentBin[i].drawSilhouetteXRayed(frameCtx);
-                    }
-                }
-
-                // Transparent color edges
-
-                if (normalFillTransparentBinLen > 0 || normalEdgesTransparentBinLen > 0) {
-                    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-                }
-                if (normalEdgesTransparentBinLen > 0) {
-                    for (i = 0; i < normalEdgesTransparentBinLen; i++) {
-                        drawable = normalEdgesTransparentBin[i];
-                        drawable.drawEdgesColorTransparent(frameCtx);
-                    }
-                }
-
-                // Transparent color fill
-
-                if (normalFillTransparentBinLen > 0) {
-                    for (i = 0; i < normalFillTransparentBinLen; i++) {
-                        drawable = normalFillTransparentBin[i];
-                        drawable.drawColorTransparent(frameCtx);
-                    }
-                }
-                gl.disable(gl.BLEND);
-                if (!alphaDepthMask) {
-                    gl.depthMask(true);
-                }
-            }
-
             // Opaque highlight
 
             if (highlightedFillOpaqueBinLen > 0 || highlightedEdgesOpaqueBinLen > 0) {
                 frameCtx.lastProgramId = null;
-                if ( scene.highlightMaterial.glowThrough) {
+                if (scene.highlightMaterial.glowThrough) {
                     gl.clear(gl.DEPTH_BUFFER_BIT);
                 }
 
@@ -854,6 +818,66 @@ const Renderer = function (scene, options) {
                     }
                 }
                 gl.disable(gl.BLEND);
+            }
+
+            // Transparent
+
+            if (xrayedFillTransparentBinLen > 0 || xrayEdgesTransparentBinLen > 0 || normalFillTransparentBinLen > 0 || normalEdgesTransparentBinLen > 0) {
+                gl.enable(gl.CULL_FACE);
+                gl.enable(gl.BLEND);
+                if (canvasTransparent) {
+                    gl.blendEquation(gl.FUNC_ADD);
+                    gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+                } else {
+                    gl.blendEquation(gl.FUNC_ADD);
+                    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+                }
+                frameCtx.backfaces = false;
+                if (!alphaDepthMask) {
+                    gl.depthMask(false);
+                }
+
+                // Transparent color edges
+
+                if (normalFillTransparentBinLen > 0 || normalEdgesTransparentBinLen > 0) {
+                    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+                }
+                if (normalEdgesTransparentBinLen > 0) {
+                    for (i = 0; i < normalEdgesTransparentBinLen; i++) {
+                        drawable = normalEdgesTransparentBin[i];
+                        drawable.drawEdgesColorTransparent(frameCtx);
+                    }
+                }
+
+                // Transparent color fill
+
+                if (normalFillTransparentBinLen > 0) {
+                    for (i = 0; i < normalFillTransparentBinLen; i++) {
+                        drawable = normalFillTransparentBin[i];
+                        drawable.drawColorTransparent(frameCtx);
+                    }
+                }
+
+                // Transparent X-ray edges
+
+                if (xrayEdgesTransparentBinLen > 0) {
+                    for (i = 0; i < xrayEdgesTransparentBinLen; i++) {
+                        xrayEdgesTransparentBin[i].drawEdgesXRayed(frameCtx);
+                    }
+                }
+
+                // Transparent X-ray fill
+
+                if (xrayedFillTransparentBinLen > 0) {
+                    for (i = 0; i < xrayedFillTransparentBinLen; i++) {
+                        xrayedFillTransparentBin[i].drawSilhouetteXRayed(frameCtx);
+                    }
+                }
+
+                gl.disable(gl.BLEND);
+                if (!alphaDepthMask) {
+                    gl.depthMask(true);
+                }
             }
 
             const endTime = Date.now();

@@ -1,6 +1,8 @@
 export * from "./camera/index.js";
 export * from "./geometry/index.js";
 export * from "./ImagePlane/index.js";
+export * from "./Bitmap/index.js";
+export * from "./LineSet/index.js";
 export * from "./lights/index.js";
 export * from "./marker/index.js";
 export * from "./materials/index.js";
@@ -16,3 +18,4 @@ export * from "./utils/index.js";
 export * from "./Component.js";
 export * from "./utils.js";
 export * from "./stats.js";
+export * from "./constants/constants.js";

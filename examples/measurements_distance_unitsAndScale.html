@@ -79,9 +79,9 @@
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
-        src: "../assets/models/xkt/v8/ifc/Duplex.ifc.xkt", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        src: "../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt", // Creates a MetaObject instances in scene.metaScene.metaObjects
         edges: true
     });
 
@@ -91,7 +91,7 @@
 
     const distanceMeasurements = new DistanceMeasurementsPlugin(viewer);
 
-    model.on("loaded", () => {
+    sceneModel.on("loaded", () => {
 
         //------------------------------------------------------------------------------------------------------------------
         // Create some DistanceMeasurements
@@ -100,12 +100,12 @@
         const myMeasurement1 = distanceMeasurements.createMeasurement({
             id: "distanceMeasurement1",
             origin: {
-                entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FLOH"],
-                worldPos: [0.044, 5.998, 17.767]
+                entity: viewer.scene.objects["0jf0rYHfX3RAB3bSIRjmoa"],
+                worldPos: [0.04815268516540527, 6.0054426193237305, 17.76587677001953]
             },
             target: {
                 entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FLOH"],
-                worldPos: [4.738, 3.172, 17.768]
+                worldPos: [4.70150089263916, 3.09493088722229, 17.766956329345703]
             },
             visible: true,
             wireVisible: true
@@ -115,11 +115,11 @@
             id: "distanceMeasurement2",
             origin: {
                 entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FNr2"],
-                worldPos: [0.457, 2.532, 17.766]
+                worldPos: [0.44101902244149116, 2.513236278487104, 17.79690253112633]
             },
             target: {
                 entity: viewer.scene.objects["1CZILmCaHETO8tf3SgGEXu"],
-                worldPos: [0.436, 0.001, 22.135]
+                worldPos: [5.2587011937829935, 0.07359975878555769, 17.844586643910404]
             },
             visible: true,
             wireVisible: true

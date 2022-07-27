@@ -639,6 +639,7 @@ class CameraControl extends Component {
             pointerEnabled: true,
             constrainVertical: false,
             smartPivot: false,
+            doubleClickTimeFrame: 250,
 
             // Rotation
 
@@ -1600,6 +1601,30 @@ class CameraControl extends Component {
      */
     get smartPivot() {
         return this._configs.smartPivot;
+    }
+
+    /**
+     * Sets the double click time frame length in milliseconds.
+     * 
+     * If two mouse click events occur within this time frame, it is considered a double click. 
+     * 
+     * Default is ````250````
+     * 
+     * @param {Number} value New double click time frame.
+     */
+    set doubleClickTimeFrame(value) {
+        this._configs.doubleClickTimeFrame = (value !== undefined && value !== null) ? value : 250;
+    }
+
+    /**
+     * Gets the double click time frame length in milliseconds.
+     *  
+     * Default is ````250````
+     * 
+     * @param {Number} value Current double click time frame.
+     */
+    get doubleClickTimeFrame() {
+        return this._configs.doubleClickTimeFrame;
     }
 
     /**

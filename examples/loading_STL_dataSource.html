@@ -73,14 +73,14 @@
         dataSource: new MyDataSource()
     });
 
-    const model = stlLoader.load({
+    const sceneModel = stlLoader.load({
         id: "myModel",
         src: "../assets/models/stl/binary/spurGear.stl",
         smoothNormals: true
     });
 
-    model.on("loaded", () => {
-        viewer.cameraFlight.jumpTo(model);
+    sceneModel.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(sceneModel);
         viewer.scene.on("tick", () => {
             viewer.camera.orbitYaw(0.4);
         })

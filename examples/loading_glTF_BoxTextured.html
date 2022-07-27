@@ -56,16 +56,15 @@
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
-    const model = gltfLoader.load({
+    const sceneModel = gltfLoader.load({
         id: "myModel",
         src: "../assets/models/gltf/BoxTextured/glTF/BoxTextured.gltf",
         edges: true,
-        colorTextureEnabled: true,
-        performance: true
+        colorTextureEnabled: true
     });
 
-    model.on("loaded", () => {
-        viewer.cameraFlight.flyTo(model);
+    sceneModel.on("loaded", () => {
+        viewer.cameraFlight.flyTo(sceneModel);
     });
 
     viewer.cameraControl.on("picked", function (e) {

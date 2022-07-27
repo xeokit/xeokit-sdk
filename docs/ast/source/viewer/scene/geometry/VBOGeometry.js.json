@@ -1042,7 +1042,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * @private\n     * @returns {boolean}\n     ",
+                  "value": "*\n     * @private\n     * @returns {Boolean}\n     ",
                   "start": 1843,
                   "end": 1896,
                   "loc": {
@@ -1150,7 +1150,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * @private\n     * @returns {boolean}\n     ",
+                  "value": "*\n     * @private\n     * @returns {Boolean}\n     ",
                   "start": 1843,
                   "end": 1896,
                   "loc": {
@@ -17766,7 +17766,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * @private\n     * @returns {boolean}\n     ",
+                    "value": "*\n     * @private\n     * @returns {Boolean}\n     ",
                     "start": 1843,
                     "end": 1896,
                     "loc": {
@@ -17874,7 +17874,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * @private\n     * @returns {boolean}\n     ",
+                    "value": "*\n     * @private\n     * @returns {Boolean}\n     ",
                     "start": 1843,
                     "end": 1896,
                     "loc": {
@@ -34289,7 +34289,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * @private\n     * @returns {boolean}\n     ",
+      "value": "*\n     * @private\n     * @returns {Boolean}\n     ",
       "start": 1843,
       "end": 1896,
       "loc": {
@@ -36678,7 +36678,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * @private\n     * @returns {boolean}\n     ",
+      "value": "*\n     * @private\n     * @returns {Boolean}\n     ",
       "start": 1843,
       "end": 1896,
       "loc": {

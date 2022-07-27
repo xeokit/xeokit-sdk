@@ -52,7 +52,7 @@
 </body>
 <script type="module">
 
-    import {Viewer, GLTFLoaderPlugin, DirLight, ReflectionMap, LightMap} from "./../dist/xeokit-sdk.es.js";
+    import {Viewer, GLTFLoaderPlugin, ReflectionMap, LightMap} from "./../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -96,13 +96,13 @@
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
-    const model = gltfLoader.load({
+    const sceneModel = gltfLoader.load({
         id: "myModel",
         src: "../assets/models/gltf/DamagedHelmet/glTF-Binary/DamagedHelmet.glb"
     });
 
-    model.on("loaded", () => {
-        viewer.cameraFlight.jumpTo(model);
+    sceneModel.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(sceneModel);
     });
 
 </script>

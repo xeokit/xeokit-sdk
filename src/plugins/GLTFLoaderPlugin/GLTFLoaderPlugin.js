@@ -1,18 +1,21 @@
 import {utils} from "../../viewer/scene/utils.js"
-import {PerformanceModel} from "../../viewer/scene/models/PerformanceModel/PerformanceModel.js";
-import {Node} from "../../viewer/scene/nodes/Node.js";
+import {VBOSceneModel} from "../../viewer/scene/models/VBOSceneModel/VBOSceneModel.js";
 import {Plugin} from "../../viewer/Plugin.js";
-import {GLTFSceneGraphLoader} from "./GLTFSceneGraphLoader.js";
-import {GLTFPerformanceModelLoader} from "./GLTFPerformanceModelLoader.js";
+import {GLTFVBOSceneModelLoader} from "./GLTFVBOSceneModelLoader.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
 import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
 
 /**
  * {@link Viewer} plugin that loads models from [glTF](https://www.khronos.org/gltf/).
  *
+ * * Loads all glTF formats, including embedded and binary formats.
+ * * Loads physically-based materials and textures.
  * * Creates an {@link Entity} representing each model it loads, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
  * * Creates an {@link Entity} for each object within the model, which is indicated by each glTF ````node```` that has a ````name```` attribute. Those Entities will have {@link Entity#isObject} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#objects}.
  * * When loading, can set the World-space position, scale and rotation of each model within World space, along with initial properties for all the model's {@link Entity}s.
+ * * Not recommended for large models. For best performance with large glTF datasets, we recommend first converting them
+ * to ````.xkt```` format (eg. using [convert2xkt](https://github.com/xeokit/xeokit-convert)), then loading
+ * the ````.xkt```` using {@link XKTLoaderPlugin}.
  *
  * ## Metadata
  *
@@ -22,23 +25,6 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  * Each {@link MetaObject} has a {@link MetaObject#type}, which indicates the classification of its corresponding {@link Entity}. When loading
  * metadata, we can also provide GLTFLoaderPlugin with a custom lookup table of initial values to set on the properties of each type of {@link Entity}. By default, GLTFLoaderPlugin
  * uses its own map of default colors and visibilities for IFC element types.
- *
- * ## Quality Setting
- *
- * By default, GLTFLoaderPlugin will load a high-performance scene representation that's optimized for low memory usage and
- * optimal rendering. The high-performance representation renders large numbers of objects efficiently, using geometry
- * batching and instancing, with simple Lambertian shading that ignores any textures and realistic materials in the glTF.
- *
- * Specifying ````performance:false```` to {@link GLTFLoaderPlugin#load} will internally load a heavier scene
- * representation comprised of {@link Node}, {@link Mesh}, {@link Geometry}, {@link Material} and {@link Texture} components,
- * that will exactly preserve the materials specified in the glTF. Use this when you want to load a model for a realistic preview,
- * maybe using PBR etc.
- *
- * We tend to use the default ````performance:true```` setting for CAD and BIM models, where structure is more important that
- * surface appearance.
- *
- * Publically, GLTFLoaderPlugin creates the same {@link Entity}s for both levels of performance. Privately, however, it implements
- * {@link Entity}s using two different sets of concrete subtypes, for its two different internally-managed scene representations.
  *
  * ## Usage
  *
@@ -52,8 +38,6 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  * to the standard IFC element colors in the GLTFModel's current map. Override that with your own map via property {@link GLTFLoaderPlugin#objectDefaults}.
  *
  * Read more about this example in the user guide on [Viewing BIM Models Offline](https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-xeokit-c373e48bc4094ff5b6e5c5700ff580ee).
- *
- * We're leaving ````performance: true```` since our model has many objects and we're not interested in realistic rendering.
  *
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_glTF_OTCConferenceCenter)]
  *
@@ -93,8 +77,7 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  *      id: "myModel",
  *      src: "./models/gltf/OTCConferenceCenter/scene.gltf",
  *      metaModelSrc: "./models/gltf/OTCConferenceCenter/metaModel.json",     // Creates a MetaModel (see below)
- *      edges: true,
- *      performance: true  // Load high-performance scene representation (default is false)
+ *      edges: true
  * });
  *
  * model.on("loaded", () => {
@@ -196,16 +179,8 @@ class GLTFLoaderPlugin extends Plugin {
     constructor(viewer, cfg = {}) {
 
         super("GLTFLoader", viewer, cfg);
-
-        /**
-         * @private
-         */
-        this._sceneGraphLoader = new GLTFSceneGraphLoader(this, cfg);
-
-        /**
-         * @private
-         */
-        this._performanceModelLoader = new GLTFPerformanceModelLoader(this, cfg);
+        
+        this._sceneModelLoader = new GLTFVBOSceneModelLoader(this, cfg);
 
         this.dataSource = cfg.dataSource;
         this.objectDefaults = cfg.objectDefaults;
@@ -278,8 +253,7 @@ class GLTFLoaderPlugin extends Plugin {
      * @param {Boolean} [params.colorTextureEnabled=true] Indicates if base color texture rendering is enabled for the model. Overridden by ````pbrEnabled````.  Only works when {@link Scene#colorTextureEnabled} is also ````true````.
      * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the glTF. When false, ignores backfaces.
      * @param {Number} [params.edgeThreshold=10] When xraying, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
-     * @param {Boolean} [params.performance=true] Set ````false```` to load all the materials and textures provided by the glTF file, otherwise leave ````true```` to load the default high-performance representation optimized for low memory usage and efficient rendering.
-     * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
+      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
      */
     load(params = {}) {
 
@@ -288,31 +262,16 @@ class GLTFLoaderPlugin extends Plugin {
             delete params.id;
         }
 
-        const performance = params.performance !== false;
-
-        const model = performance
-
-            // PerformanceModel provides performance-oriented scene representation
-            // converting glTF materials to simple flat-shading without textures
-
-            ? new PerformanceModel(this.viewer.scene, utils.apply(params, {
-                isModel: true
-            }))
-
-            // Scene Node graph supports original glTF materials
-
-            : new Node(this.viewer.scene, utils.apply(params, {
+        const sceneModel =  new VBOSceneModel(this.viewer.scene, utils.apply(params, {
                 isModel: true
             }));
 
-        const modelId = model.id;  // In case ID was auto-generated
+        const modelId = sceneModel.id;  // In case ID was auto-generated
 
         if (!params.src && !params.gltf) {
             this.error("load() param expected: src or gltf");
-            return model; // Return new empty model
+            return sceneModel; // Return new empty model
         }
-
-        const loader = performance ? this._performanceModelLoader : this._sceneGraphLoader;
 
         if (params.metaModelSrc || params.metaModelData) {
 
@@ -390,9 +349,9 @@ class GLTFLoaderPlugin extends Plugin {
                 };
 
                 if (params.src) {
-                    loader.load(this, model, params.src, params);
+                    this._sceneModelLoader.load(this, sceneModel, params.src, params);
                 } else {
-                    loader.parse(this, model, params.gltf, params);
+                    this._sceneModelLoader.parse(this, sceneModel, params.gltf, params);
                 }
             };
 
@@ -439,17 +398,17 @@ class GLTFLoaderPlugin extends Plugin {
             };
 
             if (params.src) {
-                loader.load(this, model, params.src, params);
+                this._sceneModelLoader.load(this, sceneModel, params.src, params);
             } else {
-                loader.parse(this, model, params.gltf, params);
+                this._sceneModelLoader.parse(this, sceneModel, params.gltf, params);
             }
         }
 
-        model.once("destroyed", () => {
+        sceneModel.once("destroyed", () => {
             this.viewer.metaScene.destroyMetaModel(modelId);
         });
 
-        return model;
+        return sceneModel;
     }
 
     /**

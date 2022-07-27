@@ -48,7 +48,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, GLTFLoaderPlugin, DistanceMeasurementsPlugin} from "./../dist/xeokit-sdk.es.js";
+    import {Viewer, GLTFLoaderPlugin, XKTLoaderPlugin, DistanceMeasurementsPlugin} from "./../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -68,10 +68,16 @@
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
-    const model = gltfLoader.load({
+    // const sceneModel = gltfLoader.load({
+    //     id: "myModel",
+    //     src: "../assets/models/andpad/honshikan_via_blender.glb"
+    // });
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const sceneModel = xktLoader.load({
         id: "myModel",
-        src: "../assets/models/gltf/skatepark/scene.gltf",
-        performance: true
+        src: "../assets/models/andpad/honshikan_via_blender.glb.xkt"
     });
 
     //------------------------------------------------------------------------------------------------------------------

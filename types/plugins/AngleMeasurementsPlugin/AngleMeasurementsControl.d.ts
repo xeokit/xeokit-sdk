@@ -16,7 +16,7 @@ export declare class AngleMeasurementsControl extends Component {
   
   /** Gets if this AngleMeasurementsControl is currently active, where it is responding to input.
    *
-   * @returns {boolean}
+   * @returns {Boolean}
    */
   get active(): boolean;
   

@@ -14,7 +14,7 @@ export declare abstract class Configs {
   /**
    * Gets whether double precision mode is enabled for all Viewers.
    *
-   * @returns {boolean}
+   * @returns {Boolean}
    */
   get doublePrecisionEnabled(): boolean;
 }

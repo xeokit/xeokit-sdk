@@ -121,7 +121,7 @@ class OcclusionTester {
     /**
      * Returns true if an occlusion test is needed.
      *
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     get needOcclusionTest() {
         return this._occlusionTestListDirty;

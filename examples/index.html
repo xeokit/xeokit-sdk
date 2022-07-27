@@ -300,12 +300,22 @@
 
             ["loading_XKT_dataSource", "Loading a model from XKT using a custom data source"],
             ["loading_XKT_concurrently", "Loading multiple models from XKT concurrently"],
-            ["loading_XKT_maxGeometryBatchSize_50M", "Setting PerformanceModel#maxGeometryBatchSize to 50000"],
-            ["loading_XKT_maxGeometryBatchSize_20K", "Setting PerformanceModel#maxGeometryBatchSize to 20000"],
+            ["loading_XKT_maxGeometryBatchSize_50M", "Setting VBOSceneModel#maxGeometryBatchSize to 50000"],
+            ["loading_XKT_maxGeometryBatchSize_20K", "Setting VBOSceneModel#maxGeometryBatchSize to 20000"],
             ["loading_XKT_jitter_singlePrecision_MAP", "Demonstrates rounding jitter"],
             ["loading_XKT_jitter_fullPrecision_MAP", "Double-precision rendering to eliminate rounding jitter"],
             ["loading_XKT_jitter_fullPrecision_MAP_annotations", "Annotations with double-precision rendering"],
             ["loading_XKT_forceBackfaces", "Forcing front faces visible"],
+
+            "#",
+
+            ["loading_XKT_Textures_DamagedHelmet", "Loading a model with textures from XKT"],
+            ["loading_XKT_Textures_HousePlan", "Loading a model with textures from XKT"],
+            ["loading_XKT_HousePlan_NoTextures", "Loading a model with textures from XKT"],
+
+            "#",
+
+            ["loading_XKT_Roadworks", "Viewing an XKT roadworks scan captured to glTF on iPhone 12 Pro with Scaniverse"],
 
             "#Loading IFC with WebIFCLoaderPlugin",
 
@@ -357,11 +367,13 @@
             ["loading_glTF_embedded_Box", "Loading an untextured box from gltf-Embedded format"],
             ["loading_glTF_embedded_MAP", "Viewing an IFC4 glTF BIM model placed at [1842022, 10, -5173301]"],
 
-         //   "#Loading glTF with textures",
+            //   "#Loading glTF with textures",
 
-         //   ["loading_glTF_BoxTextured", "Loading a textured box from gltf-Embedded format"],
-          //  ["loading_glTF_SkatePark", "Viewing a photogrammetry model with textures from gltf-Embedded format"],
-        //    ["loading_glTF_VianneyHouse", "Viewing a glTF model with textures from gltf-Embedded format"],
+            //   ["loading_glTF_BoxTextured", "Loading a textured box from gltf-Embedded format"],
+            //  ["loading_glTF_SkatePark", "Viewing a photogrammetry model with textures from gltf-Embedded format"],
+            //    ["loading_glTF_VianneyHouse", "Viewing a glTF model with textures from gltf-Embedded format"],
+
+            "#",
 
             "#Loading Binary glTF",
 
@@ -372,6 +384,9 @@
             ["loading_glb_Box", "Viewing a simple binary glTF model without textures"],
             ["loading_glb_BoxTextured", "Viewing a simple binary glTF model with textures"],
             ["loading_glb_DamagedHelmet", "Physically-based rendering of a binary glTF test model"],
+
+            ["loading_glTF_Roadworks", "Viewing a glTF roadworks scan captured on iPhone 12 Pro with Scaniverse"],
+            ["loading_glTF_binary_Roadworks", "Viewing a binary glTF roadworks scan captured on iPhone 12 Pro with Scaniverse"],
 
             "#Loading OBJ models",
 
@@ -444,22 +459,22 @@
         "Measuring Models": [
             "#Measuring angles",
             ["measurements_angle_modelWithMeasurements", "IFC 2x3 BIM model with angle measurements"],
-            ["measurements_angle_createWithMouse", "Click on the model to create angle measurements"],
-            ["measurements_angle_createWithMouse_photogrammetry", "Click on the model to create angle measurements"],
-            ["measurements_angle_createWithMouse_precision", "Click on the model to create full-precision angle measurements"],
+            ["measurements_angle_createWithMouse", "Click or tap on the model to create angle measurements"],
+            ["measurements_angle_createWithMouse_photogrammetry", "Click or tap on the model to create angle measurements"],
+            ["measurements_angle_createWithMouse_precision", "Click or tap on the model to create full-precision angle measurements"],
             "#Measuring distances",
             ["measurements_distance_modelWithMeasurements", "IFC 2x3 BIM model with distance measurements"],
-            ["measurements_distance_createWithMouse", "Click on the model to create distance measurements"],
-            ["measurements_distance_createWithMouse_photogrammetry", "Click on the model to create distance measurements"],
-            ["measurements_distance_createWithMouse_precision", "Click on the model to create full-precision distance measurements"],
-            ["measurements_distance_unitsAndScale", "Click on the model to create distance measurements"],
+            ["measurements_distance_modelWithMeasurements_hideAxisWires", "BIM model with distance measurements and axis-aligned wires hidden"],
+            ["measurements_distance_createWithMouse", "Click or tap on the model to create distance measurements"],
+            ["measurements_distance_createWithMouse_photogrammetry", "Click or tap on the model to create distance measurements"],
+            ["measurements_distance_createWithMouse_precision", "Click or tap on the model to create full-precision distance measurements"],
+            ["measurements_distance_unitsAndScale", "Click or tap on the model to create distance measurements"],
         ],
 
         "BCF Collaboration": [
             "#Saving and loading BCF viewpoints for BIM software interoperability",
             ["BCF_SaveViewpoint", "Saving viewer state as a BCF viewpoint"],
             ["BCF_LoadViewpoint", "Loading viewer state from a BCF viewpoint"],
-            ["BCF_LoadViewpoint_withSectionPlanesPlugin", "Loading a BCF viewpoint with section planes"],
             ["BCF_LoadViewpoint_defaultInvisible", "Loading a BCF viewpoint with defaultInvisible"],
             ["BCF_SaveViewpoint_MultipleModels", "Saving a BCF viewpoint for multiple models"],
             ["BCF_LoadViewpoint_MultipleModels", "Loading a BCF viewpoint for multiple models"],
@@ -486,8 +501,14 @@
             ["picking_ray_matrix", "Ray-picking objects with an arbitrary World-space ray"],
             ["picking_setObjectsPickable", "Controlling what's pickable - only the blue object pickable"],
 
-            ["picking_pickSurfacePrecision_PerformanceModel_batching", "Full-precision surface picking with PerformanceModel and batched geometries"],
-            ["picking_pickSurfacePrecision_PerformanceModel_instancing", "Full-precision surface picking with PerformanceModel and instanced geometries"]
+            ["picking_pickSurfacePrecision_VBOSceneModel_batching", "Full-precision surface picking with VBOSceneModel and batched geometries"],
+            ["picking_pickSurfacePrecision_VBOSceneModel_instancing", "Full-precision surface picking with VBOSceneModel and instanced geometries"]
+        ],
+
+        "Emphasizing Objects": [
+            ["emphasis_colorize_throughXRay", "Testing X-rayed object wrapping colorized object"],
+            ["emphasis_selected_throughXRay", "Testing X-rayed object wrapping selected object"],
+            ["emphasis_selectedAndHighlighted_throughTransparent_Duplex", "Testing X-rayed object wrapping colorized object, using Duplex model"]
         ],
 
         "Slicing Models": [
@@ -550,7 +571,7 @@
 
         "AxisGizmo": [
             "#Showing the coordinate axis",
-            ["gizmos_AxisGizmoPlugin", "Axis gnomon gizmo (see bottom right)"]
+            ["gizmos_AxisGizmoPlugin", "Axis gnomon gizmo (see bottom left)"]
         ],
 
         "Screenshots": [
@@ -612,49 +633,49 @@
             ["materials_LinesMaterial", "LinesMaterial"]
         ],
 
-        "PerformanceModel": [
+        "VBOSceneModel": [
 
             "#High-performance model representation component",
 
             "#Geometry reuse",
 
-            ["sceneRepresentation_PerformanceModel_instancing", "PerformanceModel with instanced triangle geometry"],
-            ["sceneRepresentation_PerformanceModel_instancing_autoNormals", "PerformanceModel with instanced triangle geometries and auto-generated normals"],
-            ["sceneRepresentation_PerformanceModel_instancing_textures", "PerformanceModel with instanced triangle geometry and textures"],
-            ["sceneRepresentation_PerformanceModel_instancing_textures_pbr", "PerformanceModel with instanced triangle geometry, textures and PBR"],
-            ["sceneRepresentation_PerformanceModel_instancing_geometries", "PerformanceModel with various types of instanced geometry"],
-            ["sceneRepresentation_PerformanceModel_instancing_points", "PerformanceModel with instanced point cloud geometry"],
-            ["sceneRepresentation_PerformanceModel_instancing_lines", "PerformanceModel with instanced line geometry"],
-            // "sceneRepresentation_PerformanceModel_instancing_annotations",
-            ["sceneRepresentation_PerformanceModel_instancing_transform", "PerformanceModel with instanced triangle geometry"],
-            ["sceneRepresentation_PerformanceModel_instancing_benchmark", "PerformanceModel instanced triangle geometry benchmark"],
-            ["sceneRepresentation_PerformanceModel_instancing_origin", "PerformanceModel with instanced triangle geometry and RTC coordinates"],
-            ["sceneRepresentation_PerformanceModel_instancing_origin_SAO", "PerformanceModel with instanced triangle geometry, RTC coordinates and SAO"],
-            ["sceneRepresentation_PerformanceModel_instancing_SAO", "PerformanceModel with instanced triangle geometry and SAO"],
-            ["sceneRepresentation_PerformanceModel_instancing_PBR", "PerformanceModel with instanced triangle geometry and physically-based rendering"],
-            ["sceneRepresentation_PerformanceModel_instancing_PBR_spheres", "PerformanceModel with instanced triangle geometry and physically-based rendering"],
+            ["sceneRepresentation_VBOSceneModel_instancing", "VBOSceneModel with instanced triangle geometry"],
+            ["sceneRepresentation_VBOSceneModel_instancing_autoNormals", "VBOSceneModel with instanced triangle geometries and auto-generated normals"],
+            ["sceneRepresentation_VBOSceneModel_instancing_textures", "VBOSceneModel with instanced triangle geometry and textures"],
+            ["sceneRepresentation_VBOSceneModel_instancing_textures_pbr", "VBOSceneModel with instanced triangle geometry, textures and PBR"],
+            ["sceneRepresentation_VBOSceneModel_instancing_geometries", "VBOSceneModel with various types of instanced geometry"],
+            ["sceneRepresentation_VBOSceneModel_instancing_points", "VBOSceneModel with instanced point cloud geometry"],
+            ["sceneRepresentation_VBOSceneModel_instancing_lines", "VBOSceneModel with instanced line geometry"],
+            // "sceneRepresentation_VBOSceneModel_instancing_annotations",
+            ["sceneRepresentation_VBOSceneModel_instancing_transform", "VBOSceneModel with instanced triangle geometry"],
+            ["sceneRepresentation_VBOSceneModel_instancing_benchmark", "VBOSceneModel instanced triangle geometry benchmark"],
+            ["sceneRepresentation_VBOSceneModel_instancing_origin", "VBOSceneModel with instanced triangle geometry and RTC coordinates"],
+            ["sceneRepresentation_VBOSceneModel_instancing_origin_SAO", "VBOSceneModel with instanced triangle geometry, RTC coordinates and SAO"],
+            ["sceneRepresentation_VBOSceneModel_instancing_SAO", "VBOSceneModel with instanced triangle geometry and SAO"],
+            ["sceneRepresentation_VBOSceneModel_instancing_PBR", "VBOSceneModel with instanced triangle geometry and physically-based rendering"],
+            ["sceneRepresentation_VBOSceneModel_instancing_PBR_spheres", "VBOSceneModel with instanced triangle geometry and physically-based rendering"],
 
             "#Geometry batching",
 
-            ["sceneRepresentation_PerformanceModel_batching", "PerformanceModel with batched triangle geometries"],
-            ["sceneRepresentation_PerformanceModel_batching_autoNormals", "PerformanceModel with batched triangle geometries and auto-generated normals"],
-            ["sceneRepresentation_PerformanceModel_batching_textures", "PerformanceModel with batched triangle geometries and textures"],
-            ["sceneRepresentation_PerformanceModel_batching_textures_pbr", "PerformanceModel with batched triangle geometries, textures, and PBR"],
-            ["sceneRepresentation_PerformanceModel_batching_geometryInMemory", "PerformanceModel with batched triangle geometries, stored in browser memory"],
-            ["sceneRepresentation_PerformanceModel_batching_points", "PerformanceModel with batched point cloud geometries"],
-            ["sceneRepresentation_PerformanceModel_batching_lines", "PerformanceModel with batched line geometries"],
-            ["sceneRepresentation_PerformanceModel_batching_annotations", "PerformanceModel with batched triangle geometry and annotations"],
-            ["sceneRepresentation_PerformanceModel_batching_transform", "PerformanceModel with batched triangle geometry"],
-            ["sceneRepresentation_PerformanceModel_batching_benchmark", "PerformanceModel batched triangle geometry benchmark"],
-            ["sceneRepresentation_PerformanceModel_batching_origin", "PerformanceModel with batched triangle geometries and RTC coordinates"],
-            ["sceneRepresentation_PerformanceModel_batching_origin_SAO", "PerformanceModel with batched triangle geometries, RTC coordinates and SAO"],
-            ["sceneRepresentation_PerformanceModel_batching_SAO", "PerformanceModel with batched triangle geometries and SAO"],
-            ["sceneRepresentation_PerformanceModel_batching_PBR", "PerformanceModel with batched triangle geometries and PBR"],
+            ["sceneRepresentation_VBOSceneModel_batching", "VBOSceneModel with batched triangle geometries"],
+            ["sceneRepresentation_VBOSceneModel_batching_autoNormals", "VBOSceneModel with batched triangle geometries and auto-generated normals"],
+            ["sceneRepresentation_VBOSceneModel_batching_textures", "VBOSceneModel with batched triangle geometries and textures"],
+            ["sceneRepresentation_VBOSceneModel_batching_textures_pbr", "VBOSceneModel with batched triangle geometries, textures, and PBR"],
+            ["sceneRepresentation_VBOSceneModel_batching_textures_ktx2", "VBOSceneModel with batched triangle geometries and compressed KTX2 textures"],
+            ["sceneRepresentation_VBOSceneModel_batching_points", "VBOSceneModel with batched point cloud geometries"],
+            ["sceneRepresentation_VBOSceneModel_batching_lines", "VBOSceneModel with batched line geometries"],
+            ["sceneRepresentation_VBOSceneModel_batching_annotations", "VBOSceneModel with batched triangle geometry and annotations"],
+            ["sceneRepresentation_VBOSceneModel_batching_transform", "VBOSceneModel with batched triangle geometry"],
+            ["sceneRepresentation_VBOSceneModel_batching_benchmark", "VBOSceneModel batched triangle geometry benchmark"],
+            ["sceneRepresentation_VBOSceneModel_batching_origin", "VBOSceneModel with batched triangle geometries and RTC coordinates"],
+            ["sceneRepresentation_VBOSceneModel_batching_origin_SAO", "VBOSceneModel with batched triangle geometries, RTC coordinates and SAO"],
+            ["sceneRepresentation_VBOSceneModel_batching_SAO", "VBOSceneModel with batched triangle geometries and SAO"],
+            ["sceneRepresentation_VBOSceneModel_batching_PBR", "VBOSceneModel with batched triangle geometries and PBR"],
 
 
             "#Classifying with metadata",
 
-            ["sceneRepresentation_PerformanceModel_metadata", "PerformanceModel classified with metadata"]
+            ["sceneRepresentation_VBOSceneModel_metadata", "VBOSceneModel classified with metadata"]
         ],
 
         "Scene Graphs": [
@@ -677,6 +698,23 @@
             ["ImagePlane_imageInSectionPlane", "Plan view image embedded in section plane"]
         ],
 
+        "Bitmap": [
+
+            "#Showing bitmaps within 3D scenes",
+
+            ["Bitmap_storeyPlan", "Creating a 2D storey plan with a Bitmap"],
+            ["BCF_SaveViewpoint", "Saving viewer state with bitmaps and lines as a BCF viewpoint"]
+
+        ],
+
+        "LineSet": [
+
+            "#Showing line segments within 3D scenes",
+
+            ["LineSet_grid", "Creating a ground grid with a LineSet"],
+            ["BCF_SaveViewpoint", "Saving viewer state with bitmaps and lines as a BCF viewpoint"]
+        ],
+
         "Billboarding": [
 
             "#Keeping objects oriented towards the viewpoint",
@@ -693,11 +731,11 @@
             ["logDepthBuf_XKT_Lyon_logDepthBufDisabled", "Disabling the logarithmic depth buffer"],
             ["logDepthBuf_SceneGraph_RTC", "Scene graph with RTC geometry and logarithmic depth buffer enabled"],
             ["logDepthBuf_SceneGraph_RTC_logDepthBufDisabled", "Scene graph with RTC geometry and logarithmic depth buffer disabled"],
-            ["logDepthBuf_PerformanceModel_batching_RTC", "PerformanceModel RTC batched geometry with Logarithmic depth buffer enabled"],
-            ["logDepthBuf_PerformanceModel_batching_RTC_annotations", "PerformanceModel RTC batched geometry and annotations with Logarithmic depth buffer enabled"],
-            ["logDepthBuf_PerformanceModel_batching_RTC_logDepthBufDisabled", "PerformanceModel RTC batched geometry with Logarithmic depth buffer disabled"],
-            ["logDepthBuf_PerformanceModel_instancing_RTC", "PerformanceModel RTC instanced geometry with Logarithmic depth buffer enabled"],
-            ["logDepthBuf_PerformanceModel_instancing_RTC_logDepthBufDisabled", "PerformanceModel RTC instanced geometry with Logarithmic depth buffer disabled"],
+            ["logDepthBuf_VBOSceneModel_batching_RTC", "VBOSceneModel RTC batched geometry with Logarithmic depth buffer enabled"],
+            ["logDepthBuf_VBOSceneModel_batching_RTC_annotations", "VBOSceneModel RTC batched geometry and annotations with Logarithmic depth buffer enabled"],
+            ["logDepthBuf_VBOSceneModel_batching_RTC_logDepthBufDisabled", "VBOSceneModel RTC batched geometry with Logarithmic depth buffer disabled"],
+            ["logDepthBuf_VBOSceneModel_instancing_RTC", "VBOSceneModel RTC instanced geometry with Logarithmic depth buffer enabled"],
+            ["logDepthBuf_VBOSceneModel_instancing_RTC_logDepthBufDisabled", "VBOSceneModel RTC instanced geometry with Logarithmic depth buffer disabled"],
         ],
 
         "Mementos": [

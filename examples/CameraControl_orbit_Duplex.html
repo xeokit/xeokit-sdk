@@ -145,14 +145,14 @@
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
-        src: "../assets/models/xkt/v8/ifc/Duplex.ifc.xkt",
+        src: "../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt",
         edges: true
     });
 
-    model.on("loaded", () => { // This synchronizes camera.ortho.scale to the model boundary
-        cameraFlight.flyTo(model);
+    sceneModel.on("loaded", () => { // This synchronizes camera.ortho.scale to the model boundary
+        cameraFlight.flyTo(sceneModel);
     });
 
     //------------------------------------------------------------------------------------------------------------------
@@ -174,7 +174,7 @@
 
     const t0 = performance.now();
     document.getElementById("time").innerHTML = "Loading model...";
-    model.on("loaded", function () {
+    sceneModel.on("loaded", function () {
         const t1 = performance.now();
         document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds";
     });

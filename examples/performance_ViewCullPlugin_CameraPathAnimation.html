@@ -126,7 +126,7 @@
 
     // document.getElementById("time").innerHTML = "Loading model 1 of 7";
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../assets/models/xkt/v8/ifc/OTCConferenceCenter.ifc.xkt",
         edges: false
@@ -611,7 +611,7 @@
 
     // document.getElementById("time").innerHTML = "Loading model...";
 
-    model.on("loaded", function () {
+    sceneModel.on("loaded", function () {
         setTimeout(function () {
             cameraPathAnimation.play(0);
         }, 1000);

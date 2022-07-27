@@ -1,7 +1,7 @@
 {
-  "coverage": "36.24%",
-  "expectCount": 6508,
-  "actualCount": 2359,
+  "coverage": "37%",
+  "expectCount": 6762,
+  "actualCount": 2502,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 60,
@@ -53,7 +53,7 @@
     },
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js": {
       "expectCount": 62,
-      "actualCount": 24,
+      "actualCount": 26,
       "undocumentLines": [
         8,
         9,
@@ -90,29 +90,30 @@
         113,
         131,
         237,
-        270,
-        324,
-        328
+        270
       ]
     },
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js": {
-      "expectCount": 22,
+      "expectCount": 25,
       "actualCount": 8,
       "undocumentLines": [
         5,
         6,
         7,
-        8,
+        413,
+        33,
         34,
         35,
-        36,
-        37,
         38,
         39,
         40,
-        60,
-        118,
-        123
+        41,
+        42,
+        45,
+        46,
+        49,
+        50,
+        70
       ]
     },
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js": {
@@ -170,17 +171,20 @@
       ]
     },
     "src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js": {
-      "expectCount": 15,
+      "expectCount": 18,
       "actualCount": 7,
       "undocumentLines": [
-        5,
-        749,
-        753,
-        761,
-        765,
-        769,
-        472,
-        678
+        8,
+        9,
+        10,
+        11,
+        925,
+        929,
+        937,
+        941,
+        945,
+        575,
+        854
       ]
     },
     "src/plugins/CityJSONLoaderPlugin/CityJSONDefaultDataSource.js": {
@@ -198,24 +202,24 @@
         10,
         11,
         12,
-        152,
-        201,
-        215,
-        284,
-        301,
-        312,
-        394,
-        438,
-        535,
-        604,
-        659,
-        686,
-        703
+        154,
+        203,
+        217,
+        286,
+        303,
+        314,
+        396,
+        440,
+        537,
+        606,
+        661,
+        688,
+        705
       ]
     },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js": {
-      "expectCount": 64,
-      "actualCount": 19,
+      "expectCount": 67,
+      "actualCount": 21,
       "undocumentLines": [
         9,
         11,
@@ -251,50 +255,54 @@
         131,
         132,
         133,
-        147,
-        152,
-        157,
-        162,
-        167,
-        172,
-        185,
-        299,
-        357,
-        402,
-        406
+        134,
+        148,
+        153,
+        158,
+        163,
+        168,
+        173,
+        186,
+        300,
+        358,
+        403,
+        407
       ]
     },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js": {
-      "expectCount": 18,
+      "expectCount": 21,
       "actualCount": 8,
       "undocumentLines": [
-        327,
-        29,
-        31,
-        33,
-        39,
-        40,
-        41,
+        337,
+        30,
+        34,
+        36,
         43,
-        44,
-        72
+        51,
+        61,
+        62,
+        63,
+        66,
+        67,
+        70,
+        71
       ]
     },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js": {
       "expectCount": 22,
       "actualCount": 11,
       "undocumentLines": [
-        157,
-        159,
-        161,
-        165,
+        158,
+        160,
+        162,
         166,
         167,
         168,
         169,
         170,
         171,
-        215
+        172,
+        216
       ]
     },
     "src/plugins/FastNavPlugin/FastNavPlugin.js": {
@@ -328,14 +336,15 @@
       ]
     },
     "src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js": {
-      "expectCount": 12,
-      "actualCount": 10,
+      "expectCount": 11,
+      "actualCount": 8,
       "undocumentLines": [
-        222,
-        244
+        183,
+        197,
+        219
       ]
     },
-    "src/plugins/GLTFLoaderPlugin/GLTFPerformanceModelLoader.js": {
+    "src/plugins/GLTFLoaderPlugin/GLTFVBOSceneModelLoader.js": {
       "expectCount": 17,
       "actualCount": 1,
       "undocumentLines": [
@@ -355,17 +364,6 @@
         13,
         17,
         37
-      ]
-    },
-    "src/plugins/GLTFLoaderPlugin/GLTFSceneGraphLoader.js": {
-      "expectCount": 6,
-      "actualCount": 1,
-      "undocumentLines": [
-        70,
-        85,
-        18,
-        22,
-        46
       ]
     },
     "src/plugins/LASLoaderPlugin/LASDefaultDataSource.js": {
@@ -396,32 +394,32 @@
       "expectCount": 41,
       "actualCount": 15,
       "undocumentLines": [
-        107,
-        113,
-        130,
-        138,
-        142,
-        166,
-        168,
-        175,
-        209,
-        228,
+        108,
+        114,
+        131,
+        139,
+        143,
+        167,
+        169,
+        176,
+        210,
         229,
-        242,
-        247,
-        476,
-        489,
-        498,
-        542,
-        565,
-        588,
-        611,
-        632,
-        671,
+        230,
+        243,
+        248,
+        477,
+        490,
+        499,
+        543,
+        566,
+        589,
+        612,
+        633,
         672,
         673,
         674,
-        675
+        675,
+        676
       ]
     },
     "src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js": {
@@ -541,15 +539,15 @@
       "undocumentLines": [
         7,
         8,
-        108,
         109,
         110,
         111,
-        122,
-        163,
-        235,
-        325,
-        393
+        112,
+        123,
+        164,
+        236,
+        326,
+        394
       ]
     },
     "src/plugins/SkyboxesPlugin/SkyboxesPlugin.js": {
@@ -728,21 +726,22 @@
       ]
     },
     "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js": {
-      "expectCount": 30,
-      "actualCount": 18,
+      "expectCount": 33,
+      "actualCount": 20,
       "undocumentLines": [
         18,
-        415,
-        452,
-        474,
-        502,
-        530,
-        558,
-        590,
-        620,
-        788,
-        805,
-        847
+        463,
+        497,
+        519,
+        541,
+        569,
+        597,
+        625,
+        657,
+        687,
+        856,
+        873,
+        915
       ]
     },
     "src/plugins/XKTLoaderPlugin/parsers/ParserV1.js": {
@@ -757,16 +756,17 @@
       ]
     },
     "src/plugins/XKTLoaderPlugin/parsers/ParserV10.js": {
-      "expectCount": 8,
+      "expectCount": 9,
       "actualCount": 1,
       "undocumentLines": [
-        12,
-        17,
+        10,
+        15,
+        16,
         18,
-        20,
-        53,
+        52,
         90,
-        100
+        100,
+        111
       ]
     },
     "src/plugins/XKTLoaderPlugin/parsers/ParserV2.js": {
@@ -1033,11 +1033,11 @@
       "undocumentLines": []
     },
     "src/viewer/Viewer.js": {
-      "expectCount": 27,
-      "actualCount": 25,
+      "expectCount": 28,
+      "actualCount": 26,
       "undocumentLines": [
-        159,
-        294
+        158,
+        302
       ]
     },
     "src/viewer/localization/LocaleService.js": {
@@ -1081,8 +1081,8 @@
       "expectCount": 20,
       "actualCount": 18,
       "undocumentLines": [
-        380,
-        285
+        379,
+        284
       ]
     },
     "src/viewer/metadata/Property.js": {
@@ -1095,20 +1095,38 @@
       "actualCount": 7,
       "undocumentLines": []
     },
+    "src/viewer/scene/Bitmap/Bitmap.js": {
+      "expectCount": 38,
+      "actualCount": 26,
+      "undocumentLines": [
+        88,
+        89,
+        90,
+        91,
+        92,
+        94,
+        95,
+        96,
+        98,
+        99,
+        106,
+        465
+      ]
+    },
     "src/viewer/scene/CameraControl/CameraControl.js": {
-      "expectCount": 87,
-      "actualCount": 77,
+      "expectCount": 89,
+      "actualCount": 79,
       "undocumentLines": [
         613,
         621,
-        667,
-        685,
-        698,
-        710,
-        722,
-        945,
-        1616,
-        1625
+        668,
+        686,
+        699,
+        711,
+        723,
+        946,
+        1641,
+        1650
       ]
     },
     "src/viewer/scene/CameraControl/lib/CameraUpdater.js": {
@@ -1240,8 +1258,8 @@
         8,
         33,
         35,
-        321,
-        324
+        322,
+        325
       ]
     },
     "src/viewer/scene/CameraControl/lib/handlers/MousePickHandler.js": {
@@ -1253,8 +1271,8 @@
         16,
         17,
         18,
-        337,
-        346
+        340,
+        349
       ]
     },
     "src/viewer/scene/CameraControl/lib/handlers/TouchPanRotateAndDollyHandler.js": {
@@ -1279,8 +1297,8 @@
         7,
         32,
         34,
-        216,
-        223
+        220,
+        227
       ]
     },
     "src/viewer/scene/Component.js": {
@@ -1335,6 +1353,16 @@
         205,
         216,
         556
+      ]
+    },
+    "src/viewer/scene/LineSet/LineSet.js": {
+      "expectCount": 11,
+      "actualCount": 7,
+      "undocumentLines": [
+        81,
+        83,
+        86,
+        95
       ]
     },
     "src/viewer/scene/camera/Camera.js": {
@@ -1500,10 +1528,10 @@
         36,
         76,
         175,
-        273,
-        377,
-        425,
-        515
+        271,
+        375,
+        423,
+        513
       ]
     },
     "src/viewer/scene/canvas/Spinner.js": {
@@ -1516,6 +1544,76 @@
         181,
         278,
         311
+      ]
+    },
+    "src/viewer/scene/constants/constants.js": {
+      "expectCount": 67,
+      "actualCount": 3,
+      "undocumentLines": [
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        80,
+        81,
+        82,
+        83
       ]
     },
     "src/viewer/scene/core.js": {
@@ -1740,16 +1838,16 @@
       "expectCount": 14,
       "actualCount": 4,
       "undocumentLines": [
-        6,
-        20,
-        24,
-        59,
-        70,
+        7,
+        21,
+        25,
+        60,
         71,
-        78,
-        82,
-        91,
-        104
+        72,
+        79,
+        83,
+        92,
+        105
       ]
     },
     "src/viewer/scene/lights/DirLight.js": {
@@ -1979,28 +2077,27 @@
       ]
     },
     "src/viewer/scene/materials/Texture.js": {
-      "expectCount": 39,
+      "expectCount": 38,
       "actualCount": 20,
       "undocumentLines": [
-        7,
-        21,
-        25,
-        111,
-        125,
-        126,
-        130,
-        131,
-        132,
+        14,
+        28,
+        32,
+        119,
+        133,
         134,
-        153,
-        168,
-        178,
-        188,
-        198,
-        208,
-        212,
-        221,
-        230
+        138,
+        139,
+        140,
+        142,
+        161,
+        175,
+        184,
+        193,
+        202,
+        206,
+        215,
+        224
       ]
     },
     "src/viewer/scene/math/Frustum.js": {
@@ -2153,16 +2250,17 @@
     },
     "src/viewer/scene/mesh/draw/DrawShaderSource.js": {
       "expectCount": 9,
-      "actualCount": 1,
+      "actualCount": 0,
       "undocumentLines": [
-        15,
+        17,
         21,
         37,
         58,
         66,
         246,
         324,
-        552
+        552,
+        7
       ]
     },
     "src/viewer/scene/mesh/emphasis/EmphasisEdgesRenderer.js": {
@@ -2328,81 +2426,111 @@
       ]
     },
     "src/viewer/scene/models/PerformanceModel/PerformanceModel.js": {
-      "expectCount": 169,
+      "expectCount": 2,
+      "actualCount": 2,
+      "undocumentLines": []
+    },
+    "src/viewer/scene/models/SceneModel.js": {
+      "expectCount": 83,
+      "actualCount": 83,
+      "undocumentLines": []
+    },
+    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js": {
+      "expectCount": 170,
       "actualCount": 105,
       "undocumentLines": [
-        25,
-        26,
-        28,
-        29,
-        30,
-        31,
-        33,
-        34,
-        35,
-        36,
         37,
         38,
-        961,
-        963,
-        964,
-        965,
-        966,
-        968,
-        969,
-        970,
-        972,
-        973,
-        975,
-        977,
-        978,
-        979,
-        980,
-        981,
-        1056,
-        1060,
-        1061,
-        1062,
-        1063,
-        1067,
-        1068,
-        1070,
-        1075,
-        1076,
-        1077,
-        1078,
-        1081,
-        1082,
-        1084,
-        1085,
-        1086,
-        1088,
-        1093,
-        1115,
-        1334,
-        1446,
-        1469,
-        1492,
-        1515,
-        1538,
-        1565,
-        1592,
-        1615,
-        1641,
-        1716,
-        1738,
-        2291,
-        2303,
-        2489,
-        2719
+        40,
+        41,
+        42,
+        43,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        1112,
+        1114,
+        1116,
+        1117,
+        1118,
+        1119,
+        1121,
+        1122,
+        1123,
+        1125,
+        1126,
+        1128,
+        1130,
+        1131,
+        1132,
+        1133,
+        1134,
+        1209,
+        1213,
+        1214,
+        1215,
+        1216,
+        1220,
+        1221,
+        1223,
+        1228,
+        1229,
+        1230,
+        1231,
+        1234,
+        1235,
+        1237,
+        1238,
+        1239,
+        1241,
+        1246,
+        1268,
+        1497,
+        1609,
+        1632,
+        1655,
+        1678,
+        1701,
+        1728,
+        1755,
+        1778,
+        1804,
+        1879,
+        1901,
+        2495,
+        2507,
+        2693,
+        2923
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/ENTITY_FLAGS.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/ENTITY_FLAGS.js": {
       "expectCount": 1,
       "actualCount": 1,
       "undocumentLines": []
     },
-    "src/viewer/scene/models/PerformanceModel/lib/PerformanceGeometry.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/RENDER_PASSES.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/viewer/scene/models/VBOSceneModel/lib/ScratchMemory.js": {
+      "expectCount": 11,
+      "actualCount": 3,
+      "undocumentLines": [
+        9,
+        10,
+        11,
+        14,
+        19,
+        28,
+        38,
+        40
+      ]
+    },
+    "src/viewer/scene/models/VBOSceneModel/lib/VBOSceneModelGeometry.js": {
       "expectCount": 26,
       "actualCount": 5,
       "undocumentLines": [
@@ -2429,7 +2557,7 @@
         143
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/PerformanceMesh.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/VBOSceneModelMesh.js": {
       "expectCount": 40,
       "actualCount": 32,
       "undocumentLines": [
@@ -2443,7 +2571,7 @@
         81
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/PerformanceNode.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/VBOSceneModelNode.js": {
       "expectCount": 55,
       "actualCount": 41,
       "undocumentLines": [
@@ -2463,36 +2591,17 @@
         673
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/PerformanceTexture.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/VBOSceneModelTexture.js": {
       "expectCount": 5,
       "actualCount": 5,
       "undocumentLines": []
     },
-    "src/viewer/scene/models/PerformanceModel/lib/PerformanceTextureSet.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/VBOSceneModelTextureSet.js": {
       "expectCount": 9,
       "actualCount": 9,
       "undocumentLines": []
     },
-    "src/viewer/scene/models/PerformanceModel/lib/RENDER_PASSES.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
-    },
-    "src/viewer/scene/models/PerformanceModel/lib/ScratchMemory.js": {
-      "expectCount": 11,
-      "actualCount": 3,
-      "undocumentLines": [
-        9,
-        10,
-        11,
-        14,
-        19,
-        28,
-        38,
-        40
-      ]
-    },
-    "src/viewer/scene/models/PerformanceModel/lib/compression.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/compression.js": {
       "expectCount": 9,
       "actualCount": 7,
       "undocumentLines": [
@@ -2500,7 +2609,7 @@
         4
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/linesBatching/LinesBatchingBuffer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/linesBatching/LinesBatchingBuffer.js": {
       "expectCount": 10,
       "actualCount": 1,
       "undocumentLines": [
@@ -2515,7 +2624,7 @@
         19
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/linesBatching/LinesBatchingLayer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/linesBatching/LinesBatchingLayer.js": {
       "expectCount": 69,
       "actualCount": 7,
       "undocumentLines": [
@@ -2557,33 +2666,33 @@
         512,
         535,
         546,
-        600,
-        620,
-        627,
-        639,
-        653,
-        660,
-        687,
-        696,
-        705,
-        708,
-        711,
-        720,
-        729,
-        738,
-        741,
-        744,
-        747,
-        750,
-        753,
-        756,
-        759,
-        762,
-        765,
-        768
+        602,
+        622,
+        629,
+        641,
+        655,
+        662,
+        689,
+        698,
+        707,
+        710,
+        713,
+        722,
+        731,
+        740,
+        743,
+        746,
+        749,
+        752,
+        755,
+        758,
+        761,
+        764,
+        767,
+        770
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/linesBatching/LinesBatchingRenderers.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/linesBatching/LinesBatchingRenderers.js": {
       "expectCount": 11,
       "actualCount": 2,
       "undocumentLines": [
@@ -2598,7 +2707,7 @@
         48
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/linesBatching/renderers/LinesBatchingColorRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/linesBatching/renderers/LinesBatchingColorRenderer.js": {
       "expectCount": 29,
       "actualCount": 1,
       "undocumentLines": [
@@ -2632,7 +2741,7 @@
         280
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/linesBatching/renderers/LinesBatchingSilhouetteRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/linesBatching/renderers/LinesBatchingSilhouetteRenderer.js": {
       "expectCount": 30,
       "actualCount": 1,
       "undocumentLines": [
@@ -2667,7 +2776,7 @@
         308
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/linesInstancing/LinesInstancingLayer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/linesInstancing/LinesInstancingLayer.js": {
       "expectCount": 69,
       "actualCount": 10,
       "undocumentLines": [
@@ -2710,29 +2819,29 @@
         414,
         425,
         436,
-        511,
-        523,
-        539,
-        549,
-        560,
-        563,
-        568,
-        577,
-        586,
-        597,
-        600,
-        603,
-        606,
-        609,
-        614,
-        619,
-        624,
-        627,
-        630,
-        634
+        513,
+        525,
+        541,
+        551,
+        562,
+        565,
+        570,
+        579,
+        588,
+        599,
+        602,
+        605,
+        608,
+        611,
+        616,
+        621,
+        626,
+        629,
+        632,
+        636
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/linesInstancing/LinesInstancingRenderers.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/linesInstancing/LinesInstancingRenderers.js": {
       "expectCount": 11,
       "actualCount": 2,
       "undocumentLines": [
@@ -2747,7 +2856,7 @@
         48
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/linesInstancing/renderers/LinesInstancingColorRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/linesInstancing/renderers/LinesInstancingColorRenderer.js": {
       "expectCount": 33,
       "actualCount": 1,
       "undocumentLines": [
@@ -2785,7 +2894,7 @@
         342
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/linesInstancing/renderers/LinesInstancingSilhouetteRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/linesInstancing/renderers/LinesInstancingSilhouetteRenderer.js": {
       "expectCount": 32,
       "actualCount": 1,
       "undocumentLines": [
@@ -2822,7 +2931,7 @@
         334
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/pointsBatching/PointsBatchingBuffer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/PointsBatchingBuffer.js": {
       "expectCount": 11,
       "actualCount": 1,
       "undocumentLines": [
@@ -2838,7 +2947,7 @@
         20
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/pointsBatching/PointsBatchingLayer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/PointsBatchingLayer.js": {
       "expectCount": 65,
       "actualCount": 9,
       "undocumentLines": [
@@ -2878,29 +2987,29 @@
         518,
         539,
         550,
-        612,
-        634,
-        661,
-        670,
-        681,
-        684,
-        689,
-        698,
-        707,
-        718,
-        721,
-        724,
-        727,
-        730,
-        735,
-        744,
-        753,
-        758,
-        769,
-        772
+        614,
+        636,
+        663,
+        672,
+        683,
+        686,
+        691,
+        700,
+        709,
+        720,
+        723,
+        726,
+        729,
+        732,
+        737,
+        746,
+        755,
+        760,
+        771,
+        774
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/pointsBatching/PointsBatchingRenderers.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/PointsBatchingRenderers.js": {
       "expectCount": 17,
       "actualCount": 2,
       "undocumentLines": [
@@ -2921,7 +3030,7 @@
         93
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/pointsBatching/renderers/PointsBatchingColorRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/renderers/PointsBatchingColorRenderer.js": {
       "expectCount": 32,
       "actualCount": 1,
       "undocumentLines": [
@@ -2958,7 +3067,7 @@
         343
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/pointsBatching/renderers/PointsBatchingOcclusionRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/renderers/PointsBatchingOcclusionRenderer.js": {
       "expectCount": 30,
       "actualCount": 1,
       "undocumentLines": [
@@ -2993,7 +3102,7 @@
         293
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/pointsBatching/renderers/PointsBatchingPickDepthRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/renderers/PointsBatchingPickDepthRenderer.js": {
       "expectCount": 33,
       "actualCount": 1,
       "undocumentLines": [
@@ -3031,7 +3140,7 @@
         321
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/pointsBatching/renderers/PointsBatchingPickMeshRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/renderers/PointsBatchingPickMeshRenderer.js": {
       "expectCount": 32,
       "actualCount": 1,
       "undocumentLines": [
@@ -3068,7 +3177,7 @@
         310
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/pointsBatching/renderers/PointsBatchingShadowRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/renderers/PointsBatchingShadowRenderer.js": {
       "expectCount": 29,
       "actualCount": 1,
       "undocumentLines": [
@@ -3102,7 +3211,7 @@
         236
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/pointsBatching/renderers/PointsBatchingSilhouetteRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/renderers/PointsBatchingSilhouetteRenderer.js": {
       "expectCount": 32,
       "actualCount": 1,
       "undocumentLines": [
@@ -3139,7 +3248,7 @@
         329
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/pointsInstancing/PointsInstancingLayer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/PointsInstancingLayer.js": {
       "expectCount": 69,
       "actualCount": 10,
       "undocumentLines": [
@@ -3182,29 +3291,29 @@
         398,
         408,
         449,
-        524,
-        536,
-        552,
-        561,
-        572,
-        575,
-        580,
-        589,
-        598,
-        609,
-        612,
-        615,
-        618,
-        621,
-        626,
-        638,
-        643,
-        652,
-        661,
-        664
+        526,
+        538,
+        554,
+        563,
+        574,
+        577,
+        582,
+        591,
+        600,
+        611,
+        614,
+        617,
+        620,
+        623,
+        628,
+        640,
+        645,
+        654,
+        663,
+        666
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/pointsInstancing/PointsInstancingRenderers.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/PointsInstancingRenderers.js": {
       "expectCount": 21,
       "actualCount": 2,
       "undocumentLines": [
@@ -3229,7 +3338,7 @@
         123
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/pointsInstancing/renderers/PointsInstancingColorRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/renderers/PointsInstancingColorRenderer.js": {
       "expectCount": 36,
       "actualCount": 1,
       "undocumentLines": [
@@ -3270,7 +3379,7 @@
         376
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/pointsInstancing/renderers/PointsInstancingDepthRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/renderers/PointsInstancingDepthRenderer.js": {
       "expectCount": 33,
       "actualCount": 1,
       "undocumentLines": [
@@ -3308,7 +3417,7 @@
         343
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/pointsInstancing/renderers/PointsInstancingOcclusionRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/renderers/PointsInstancingOcclusionRenderer.js": {
       "expectCount": 34,
       "actualCount": 1,
       "undocumentLines": [
@@ -3347,7 +3456,7 @@
         348
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/pointsInstancing/renderers/PointsInstancingPickDepthRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/renderers/PointsInstancingPickDepthRenderer.js": {
       "expectCount": 36,
       "actualCount": 1,
       "undocumentLines": [
@@ -3388,7 +3497,7 @@
         363
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/pointsInstancing/renderers/PointsInstancingPickMeshRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/renderers/PointsInstancingPickMeshRenderer.js": {
       "expectCount": 35,
       "actualCount": 1,
       "undocumentLines": [
@@ -3428,7 +3537,7 @@
         354
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/pointsInstancing/renderers/PointsInstancingShadowRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/renderers/PointsInstancingShadowRenderer.js": {
       "expectCount": 31,
       "actualCount": 1,
       "undocumentLines": [
@@ -3464,7 +3573,7 @@
         284
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/pointsInstancing/renderers/PointsInstancingSilhouetteRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/renderers/PointsInstancingSilhouetteRenderer.js": {
       "expectCount": 34,
       "actualCount": 1,
       "undocumentLines": [
@@ -3503,7 +3612,7 @@
         360
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesBatching/TrianglesBatchingBuffer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/TrianglesBatchingBuffer.js": {
       "expectCount": 15,
       "actualCount": 1,
       "undocumentLines": [
@@ -3523,7 +3632,7 @@
         24
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesBatching/TrianglesBatchingLayer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/TrianglesBatchingLayer.js": {
       "expectCount": 84,
       "actualCount": 10,
       "undocumentLines": [
@@ -3560,50 +3669,50 @@
         111,
         115,
         122,
-        546,
-        550,
-        592,
-        597,
-        611,
-        625,
-        639,
-        653,
-        667,
-        681,
-        695,
-        701,
-        715,
-        741,
-        752,
-        829,
-        849,
-        856,
-        872,
-        886,
-        893,
-        928,
-        972,
-        985,
-        1011,
-        1021,
-        1033,
-        1043,
-        1053,
-        1065,
-        1074,
-        1083,
-        1092,
-        1101,
-        1112,
-        1124,
-        1136,
-        1146,
-        1156,
-        1178,
-        1274
+        545,
+        549,
+        591,
+        596,
+        610,
+        624,
+        638,
+        652,
+        666,
+        680,
+        694,
+        700,
+        714,
+        740,
+        751,
+        830,
+        850,
+        857,
+        873,
+        887,
+        894,
+        929,
+        973,
+        986,
+        1012,
+        1022,
+        1034,
+        1044,
+        1054,
+        1066,
+        1075,
+        1084,
+        1093,
+        1102,
+        1113,
+        1125,
+        1137,
+        1147,
+        1157,
+        1179,
+        1275
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesBatching/TrianglesBatchingRenderers.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/TrianglesBatchingRenderers.js": {
       "expectCount": 45,
       "actualCount": 2,
       "undocumentLines": [
@@ -3652,7 +3761,7 @@
         299
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingColorRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingColorRenderer.js": {
       "expectCount": 41,
       "actualCount": 1,
       "undocumentLines": [
@@ -3698,8 +3807,8 @@
         490
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingColorTextureRenderer.js": {
-      "expectCount": 44,
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingColorTextureRenderer.js": {
+      "expectCount": 41,
       "actualCount": 1,
       "undocumentLines": [
         6,
@@ -3711,43 +3820,40 @@
         21,
         25,
         30,
-        149,
-        155,
+        142,
+        148,
+        151,
+        157,
         158,
+        159,
+        160,
+        161,
+        162,
         164,
         165,
         166,
         167,
         168,
-        169,
-        170,
-        171,
-        173,
-        174,
-        175,
-        176,
-        177,
-        205,
-        215,
+        196,
+        206,
+        207,
+        208,
+        209,
+        210,
+        211,
+        213,
         216,
         217,
-        218,
-        219,
-        220,
         221,
-        223,
-        226,
-        227,
-        231,
-        235,
-        275,
-        282,
-        430,
-        525,
-        529
+        225,
+        265,
+        272,
+        351,
+        505,
+        509
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingDepthRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingDepthRenderer.js": {
       "expectCount": 28,
       "actualCount": 1,
       "undocumentLines": [
@@ -3780,7 +3886,7 @@
         281
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingEdgesColorRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingEdgesColorRenderer.js": {
       "expectCount": 29,
       "actualCount": 1,
       "undocumentLines": [
@@ -3814,7 +3920,7 @@
         285
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingEdgesRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingEdgesRenderer.js": {
       "expectCount": 30,
       "actualCount": 1,
       "undocumentLines": [
@@ -3849,7 +3955,7 @@
         309
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingFlatColorRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingFlatColorRenderer.js": {
       "expectCount": 38,
       "actualCount": 1,
       "undocumentLines": [
@@ -3892,7 +3998,7 @@
         476
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingNormalsRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingNormalsRenderer.js": {
       "expectCount": 32,
       "actualCount": 1,
       "undocumentLines": [
@@ -3929,7 +4035,7 @@
         300
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingOcclusionRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingOcclusionRenderer.js": {
       "expectCount": 29,
       "actualCount": 1,
       "undocumentLines": [
@@ -3963,23 +4069,23 @@
         280
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPBRRenderer.js": {
-      "expectCount": 53,
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPBRRenderer.js": {
+      "expectCount": 52,
       "actualCount": 1,
       "undocumentLines": [
-        6,
         7,
-        9,
+        8,
+        19,
         20,
         21,
         22,
-        23,
-        27,
-        31,
-        36,
-        176,
-        182,
-        185,
+        26,
+        30,
+        35,
+        175,
+        181,
+        184,
+        190,
         191,
         192,
         193,
@@ -3987,16 +4093,16 @@
         195,
         196,
         197,
-        198,
-        200,
+        199,
+        201,
         202,
         203,
         204,
         205,
-        206,
-        235,
-        239,
-        242,
+        234,
+        238,
+        241,
+        251,
         252,
         253,
         254,
@@ -4004,24 +4110,23 @@
         256,
         257,
         258,
-        259,
+        260,
         261,
         262,
         263,
         264,
-        265,
+        267,
         268,
-        269,
-        273,
-        277,
-        323,
-        330,
-        464,
-        877,
-        881
+        272,
+        276,
+        322,
+        329,
+        463,
+        876,
+        880
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickDepthRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickDepthRenderer.js": {
       "expectCount": 31,
       "actualCount": 1,
       "undocumentLines": [
@@ -4057,7 +4162,7 @@
         306
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickMeshRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickMeshRenderer.js": {
       "expectCount": 30,
       "actualCount": 1,
       "undocumentLines": [
@@ -4092,7 +4197,7 @@
         293
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickNormalsFlatRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickNormalsFlatRenderer.js": {
       "expectCount": 29,
       "actualCount": 1,
       "undocumentLines": [
@@ -4126,7 +4231,7 @@
         273
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickNormalsRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickNormalsRenderer.js": {
       "expectCount": 30,
       "actualCount": 1,
       "undocumentLines": [
@@ -4161,7 +4266,7 @@
         290
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingShadowRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingShadowRenderer.js": {
       "expectCount": 28,
       "actualCount": 1,
       "undocumentLines": [
@@ -4194,7 +4299,7 @@
         237
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingSilhouetteRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingSilhouetteRenderer.js": {
       "expectCount": 30,
       "actualCount": 1,
       "undocumentLines": [
@@ -4229,7 +4334,7 @@
         311
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesInstancing/TrianglesInstancingLayer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/TrianglesInstancingLayer.js": {
       "expectCount": 82,
       "actualCount": 9,
       "undocumentLines": [
@@ -4271,44 +4376,44 @@
         103,
         109,
         273,
-        354,
-        395,
-        409,
-        423,
-        437,
-        451,
-        465,
-        479,
-        485,
-        499,
-        513,
-        526,
-        567,
-        644,
-        658,
-        676,
-        719,
-        732,
-        758,
-        768,
-        780,
-        790,
-        800,
-        812,
-        821,
-        830,
-        839,
-        848,
-        859,
-        872,
-        884,
-        894,
-        904,
-        916,
-        1024
+        353,
+        394,
+        408,
+        422,
+        436,
+        450,
+        464,
+        478,
+        484,
+        498,
+        512,
+        525,
+        566,
+        645,
+        659,
+        677,
+        720,
+        733,
+        759,
+        769,
+        781,
+        791,
+        801,
+        813,
+        822,
+        831,
+        840,
+        849,
+        860,
+        873,
+        885,
+        895,
+        905,
+        917,
+        1025
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesInstancing/TrianglesInstancingRenderers.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/TrianglesInstancingRenderers.js": {
       "expectCount": 45,
       "actualCount": 2,
       "undocumentLines": [
@@ -4357,7 +4462,7 @@
         299
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingColorRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingColorRenderer.js": {
       "expectCount": 47,
       "actualCount": 1,
       "undocumentLines": [
@@ -4409,8 +4514,8 @@
         542
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingColorTextureRenderer.js": {
-      "expectCount": 50,
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingColorTextureRenderer.js": {
+      "expectCount": 44,
       "actualCount": 1,
       "undocumentLines": [
         6,
@@ -4422,49 +4527,43 @@
         21,
         25,
         30,
+        159,
+        165,
+        168,
         174,
-        180,
-        183,
-        189,
-        191,
-        192,
-        194,
-        195,
-        197,
-        198,
-        199,
-        201,
-        202,
-        203,
-        204,
-        205,
+        176,
+        177,
+        179,
+        181,
+        182,
+        184,
+        185,
+        186,
+        187,
+        188,
+        216,
+        226,
+        227,
+        228,
+        229,
+        230,
+        231,
         233,
+        234,
+        235,
+        237,
+        239,
+        240,
         243,
-        244,
-        245,
-        246,
         247,
-        248,
-        249,
-        251,
-        252,
-        253,
-        255,
-        256,
-        257,
-        259,
-        261,
-        262,
-        265,
-        269,
-        307,
-        314,
-        476,
-        567,
-        571
+        285,
+        292,
+        377,
+        531,
+        535
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingDepthRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingDepthRenderer.js": {
       "expectCount": 31,
       "actualCount": 1,
       "undocumentLines": [
@@ -4500,7 +4599,7 @@
         308
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingEdgesColorRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingEdgesColorRenderer.js": {
       "expectCount": 32,
       "actualCount": 1,
       "undocumentLines": [
@@ -4537,7 +4636,7 @@
         325
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingEdgesRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingEdgesRenderer.js": {
       "expectCount": 33,
       "actualCount": 1,
       "undocumentLines": [
@@ -4575,7 +4674,7 @@
         343
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingFlatColorRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingFlatColorRenderer.js": {
       "expectCount": 41,
       "actualCount": 1,
       "undocumentLines": [
@@ -4621,7 +4720,7 @@
         507
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingFlatNormalsRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingFlatNormalsRenderer.js": {
       "expectCount": 32,
       "actualCount": 1,
       "undocumentLines": [
@@ -4658,7 +4757,7 @@
         319
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingNormalsRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingNormalsRenderer.js": {
       "expectCount": 35,
       "actualCount": 1,
       "undocumentLines": [
@@ -4698,7 +4797,7 @@
         341
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingOcclusionRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingOcclusionRenderer.js": {
       "expectCount": 32,
       "actualCount": 1,
       "undocumentLines": [
@@ -4735,40 +4834,41 @@
         316
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPBRRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPBRRenderer.js": {
       "expectCount": 58,
       "actualCount": 1,
       "undocumentLines": [
-        6,
         7,
-        9,
+        8,
+        10,
+        19,
         20,
         21,
         22,
-        23,
-        27,
-        31,
-        36,
-        206,
-        212,
-        215,
-        221,
+        26,
+        30,
+        35,
+        205,
+        211,
+        214,
+        220,
+        222,
         223,
         224,
         225,
-        226,
+        227,
         228,
         229,
-        230,
-        232,
+        231,
+        233,
         234,
         235,
         236,
         237,
-        238,
-        267,
-        271,
-        274,
+        266,
+        270,
+        273,
+        283,
         284,
         285,
         286,
@@ -4776,29 +4876,28 @@
         288,
         289,
         290,
-        291,
+        292,
         293,
         294,
         295,
-        296,
+        297,
         298,
         299,
-        300,
+        301,
         302,
         303,
-        304,
+        305,
         306,
-        307,
-        310,
-        314,
-        357,
-        364,
-        493,
-        909,
-        913
+        309,
+        313,
+        356,
+        363,
+        492,
+        908,
+        912
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickDepthRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickDepthRenderer.js": {
       "expectCount": 34,
       "actualCount": 1,
       "undocumentLines": [
@@ -4837,7 +4936,7 @@
         342
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickMeshRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickMeshRenderer.js": {
       "expectCount": 33,
       "actualCount": 1,
       "undocumentLines": [
@@ -4875,7 +4974,7 @@
         335
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickNormalsFlatRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickNormalsFlatRenderer.js": {
       "expectCount": 32,
       "actualCount": 1,
       "undocumentLines": [
@@ -4912,7 +5011,7 @@
         311
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickNormalsRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickNormalsRenderer.js": {
       "expectCount": 38,
       "actualCount": 1,
       "undocumentLines": [
@@ -4955,7 +5054,7 @@
         351
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingShadowRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingShadowRenderer.js": {
       "expectCount": 30,
       "actualCount": 1,
       "undocumentLines": [
@@ -4990,7 +5089,7 @@
         276
       ]
     },
-    "src/viewer/scene/models/PerformanceModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingSilhouetteRenderer.js": {
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingSilhouetteRenderer.js": {
       "expectCount": 32,
       "actualCount": 1,
       "undocumentLines": [
@@ -5100,43 +5199,6 @@
         143
       ]
     },
-    "src/viewer/scene/paths/Earcut.js": {
-      "expectCount": 32,
-      "actualCount": 1,
-      "undocumentLines": [
-        52,
-        78,
-        109,
-        176,
-        199,
-        260,
-        291,
-        327,
-        356,
-        363,
-        379,
-        453,
-        460,
-        481,
-        546,
-        567,
-        583,
-        592,
-        602,
-        609,
-        616,
-        635,
-        641,
-        648,
-        664,
-        673,
-        694,
-        718,
-        740,
-        750,
-        775
-      ]
-    },
     "src/viewer/scene/paths/Path.js": {
       "expectCount": 19,
       "actualCount": 11,
@@ -5160,45 +5222,6 @@
         88,
         113,
         151
-      ]
-    },
-    "src/viewer/scene/paths/Shape.js": {
-      "expectCount": 5,
-      "actualCount": 0,
-      "undocumentLines": [
-        3,
-        5,
-        7,
-        10,
-        18
-      ]
-    },
-    "src/viewer/scene/paths/ShapePath.js": {
-      "expectCount": 10,
-      "actualCount": 0,
-      "undocumentLines": [
-        5,
-        6,
-        7,
-        8,
-        11,
-        18,
-        23,
-        28,
-        33,
-        38
-      ]
-    },
-    "src/viewer/scene/paths/ShapeUtils.js": {
-      "expectCount": 6,
-      "actualCount": 0,
-      "undocumentLines": [
-        39,
-        46,
-        3,
-        5,
-        14,
-        18
       ]
     },
     "src/viewer/scene/paths/SplineCurve.js": {
@@ -5228,8 +5251,8 @@
       ]
     },
     "src/viewer/scene/scene/Scene.js": {
-      "expectCount": 163,
-      "actualCount": 96,
+      "expectCount": 172,
+      "actualCount": 101,
       "undocumentLines": [
         23,
         27,
@@ -5253,51 +5276,55 @@
         524,
         525,
         527,
-        603,
-        608,
-        612,
-        652,
-        808,
-        809,
-        810,
-        812,
-        813,
+        617,
+        622,
+        626,
+        666,
+        822,
         823,
-        829,
-        860,
+        824,
+        826,
+        827,
+        837,
+        843,
         874,
-        910,
-        935,
-        942,
-        948,
-        954,
-        960,
-        967,
-        973,
-        979,
-        985,
-        990,
-        997,
-        1003,
-        1009,
+        888,
+        924,
+        949,
+        956,
+        961,
+        966,
+        972,
+        978,
+        984,
+        991,
+        996,
+        1001,
+        1007,
+        1013,
+        1019,
+        1024,
         1031,
-        1050,
-        1069,
-        1088,
-        1099,
-        1110,
-        1121,
-        1135,
-        1314,
-        1324,
-        1335,
-        1524,
-        1556,
-        1588,
-        1615,
-        1877,
-        1899,
-        1958
+        1037,
+        1043,
+        1065,
+        1084,
+        1103,
+        1122,
+        1133,
+        1144,
+        1155,
+        1169,
+        1358,
+        1368,
+        1379,
+        1568,
+        1600,
+        1632,
+        1659,
+        1921,
+        1943,
+        2002
       ]
     },
     "src/viewer/scene/sectionPlane/SectionPlane.js": {
@@ -5319,6 +5346,75 @@
       "expectCount": 1,
       "actualCount": 1,
       "undocumentLines": []
+    },
+    "src/viewer/scene/utils/Cache.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        1
+      ]
+    },
+    "src/viewer/scene/utils/FileLoader.js": {
+      "expectCount": 8,
+      "actualCount": 0,
+      "undocumentLines": [
+        4,
+        6,
+        8,
+        12,
+        148,
+        149,
+        153,
+        154
+      ]
+    },
+    "src/viewer/scene/utils/Loader.js": {
+      "expectCount": 16,
+      "actualCount": 0,
+      "undocumentLines": [
+        3,
+        5,
+        7,
+        9,
+        10,
+        11,
+        12,
+        13,
+        16,
+        19,
+        26,
+        29,
+        34,
+        39,
+        44,
+        49
+      ]
+    },
+    "src/viewer/scene/utils/LoadingManager.js": {
+      "expectCount": 20,
+      "actualCount": 0,
+      "undocumentLines": [
+        84,
+        1,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        17,
+        27,
+        40,
+        46,
+        53,
+        58,
+        63,
+        71
+      ]
     },
     "src/viewer/scene/utils/Map.js": {
       "expectCount": 6,
@@ -5345,6 +5441,49 @@
         43,
         49
       ]
+    },
+    "src/viewer/scene/utils/WorkerPool.js": {
+      "expectCount": 15,
+      "actualCount": 1,
+      "undocumentLines": [
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        15,
+        23,
+        29,
+        41,
+        42,
+        45,
+        49,
+        63
+      ]
+    },
+    "src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js": {
+      "expectCount": 18,
+      "actualCount": 6,
+      "undocumentLines": [
+        20,
+        21,
+        23,
+        626,
+        247,
+        248,
+        249,
+        250,
+        251,
+        259,
+        268,
+        271
+      ]
+    },
+    "src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js": {
+      "expectCount": 3,
+      "actualCount": 3,
+      "undocumentLines": []
     },
     "src/viewer/scene/utils.js": {
       "expectCount": 27,
@@ -5419,29 +5558,29 @@
       ]
     },
     "src/viewer/scene/webgl/PickResult.js": {
-      "expectCount": 47,
-      "actualCount": 27,
+      "expectCount": 48,
+      "actualCount": 28,
       "undocumentLines": [
-        46,
-        47,
-        48,
-        49,
-        50,
         51,
         52,
         53,
         54,
         55,
-        77,
-        101,
-        125,
-        150,
-        175,
-        200,
-        225,
-        250,
-        275,
-        299
+        56,
+        57,
+        58,
+        59,
+        60,
+        82,
+        106,
+        130,
+        155,
+        180,
+        205,
+        230,
+        255,
+        280,
+        304
       ]
     },
     "src/viewer/scene/webgl/Pickable.js": {
@@ -5560,28 +5699,49 @@
       ]
     },
     "src/viewer/scene/webgl/Texture2D.js": {
-      "expectCount": 19,
+      "expectCount": 30,
       "actualCount": 1,
       "undocumentLines": [
-        4,
-        15,
         17,
+        388,
+        421,
+        26,
+        28,
+        30,
+        31,
+        32,
         33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        41,
         47,
-        51,
-        66,
-        67,
-        68,
-        69,
-        71,
-        74,
-        108,
+        50,
+        82,
+        86,
+        97,
         112,
-        137,
-        174,
-        187,
-        198
+        115,
+        190,
+        299,
+        306,
+        353,
+        366,
+        377
       ]
+    },
+    "src/viewer/scene/webgl/convertConstant.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/viewer/scene/webgl/getExtension.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
     },
     "src/viewer/scene/webgl/occlusion/OcclusionLayer.js": {
       "expectCount": 36,
@@ -5676,9 +5836,9 @@
         11,
         12,
         14,
-        300,
-        308,
-        312,
+        301,
+        309,
+        313,
         22,
         24,
         28,
@@ -5696,12 +5856,12 @@
         48,
         49,
         54,
-        216,
-        218,
+        217,
         219,
-        225,
-        232,
-        295
+        220,
+        226,
+        233,
+        296
       ]
     },
     "src/viewer/scene/webgl/sao/SAOOcclusionRenderer.js": {

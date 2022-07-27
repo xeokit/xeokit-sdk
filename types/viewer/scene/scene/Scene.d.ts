@@ -6,7 +6,7 @@ import { Entity } from "../Entity";
 import { ReadableGeometry } from "../geometry";
 import { EdgeMaterial, EmphasisMaterial, PhongMaterial, PointsMaterial, LinesMaterial } from "../materials";
 import { Viewport } from "../viewport/Viewport";
-import { PerformanceModel } from "../models/PerformanceModel/PerformanceModel";
+import { VBOSceneModel } from "../models/VBOSceneModel/VBOSceneModel";
 import { Mesh } from "../mesh";
 import { Node } from "../nodes";
 
@@ -50,7 +50,7 @@ export declare class Scene extends Component {
    * @param callback Called fired on the event
    * @param scope  Scope for the callback
    */
-   on(event: "objectVisibility", callback: (entity: PerformanceModel | Mesh | Node) => void, scope?: any): string;
+   on(event: "objectVisibility", callback: (entity: VBOSceneModel | Mesh | Node) => void, scope?: any): string;
 
   /**
    * The epoch time (in milliseconds since 1970) when this Scene was instantiated.

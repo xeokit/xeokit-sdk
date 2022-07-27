@@ -1,1 +1,1 @@
-export * from "./PerformanceModel/";
+export * from "./VBOSceneModel/";

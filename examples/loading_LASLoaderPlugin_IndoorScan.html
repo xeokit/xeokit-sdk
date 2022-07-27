@@ -214,16 +214,16 @@
 
     document.getElementById("time").innerHTML = "Loading model...";
 
-    const model = lasLoader.load({
+    const sceneModel = lasLoader.load({
         id: "myModel",
         src: "../assets/models/las/indoor.0.1.laz"
     });
 
-    model.on("loaded", () => {
+    sceneModel.on("loaded", () => {
 
         window.viewer = viewer
         const t1 = performance.now();
-        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
     });
 
     //------------------------------------------------------------------------------------------------------------------

@@ -30,7 +30,7 @@
         information model. BCF defines views of a building model and associated information on collisions
         and errors connected with specific objects in the view. </p>
     <p>In this example, to simulate logging a model issue via BCF, we're loading a BIM model from the file system,
-        slicing it with a section plane, selecting some objects, then saving the viewer state as a JSON-encoded BCF
+        slicing it with a section plane, creating a grid groundplane and a bitmap plan view, selecting some objects, then saving the viewer state as a JSON-encoded BCF
         viewpoint.</p>
     <h3>Components Used</h3>
     <ul>
@@ -45,6 +45,14 @@
         <li>
             <a href="../docs/class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html"
                target="_other">SectionPlanesPlugin</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html"
+               target="_other">Bitmap</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/viewer/scene/LineSet/LineSet.js~LineSet.html"
+               target="_other">LineSet</a>
         </li>
         <li>
             <a href="../docs/class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html"
@@ -72,7 +80,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, BCFViewpointsPlugin} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, Bitmap, LineSet, buildGridGeometry, BCFViewpointsPlugin} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer
@@ -90,9 +98,9 @@
 
     const camera = viewer.camera;
 
-    camera.eye = [-2.37, 18.97, -26.12];
-    camera.look = [10.97, 5.82, -11.22];
-    camera.up = [0.36, 0.83, 0.40];
+    camera.eye = [-48.93, 50.41, -54.54];
+    camera.look = [0, 1.49, 0];
+    camera.up = [0.37, 0.83, 0.41];
 
     //------------------------------------------------------------------------------------------------------------------
     // Add a XKTModelsPlugin - we'll use this to load the model geometry and IFC metadata
@@ -116,7 +124,7 @@
     // Load the .xkt model and IFC metadata
     //------------------------------------------------------------------------------------------------------------------
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
         edges: true // Emphasise edges
@@ -133,12 +141,45 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
+    // Create a bitmap
+    //------------------------------------------------------------------------------------------------------------------
+
+    const bitmap = new Bitmap(viewer.scene, {
+        src: "../assets/images/schependomlaanPlanView.png",
+        visible: true,
+        height: 24.0,
+        pos: [-15, 0, -10],
+        normal: [0, -1, 0],
+        up: [0, 0, 1],
+        collidable: false,
+        opacity: 1.0,
+        clippable: false,
+        pickable: true
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a grid ground plane
+    //------------------------------------------------------------------------------------------------------------------
+
+    const geometryArrays = buildGridGeometry({
+        size: 60,
+        divisions: 10
+    });
+
+    new LineSet(viewer.scene, {
+        positions: geometryArrays.positions,
+        indices: geometryArrays.indices,
+        position: [10,0,10],
+        clippable: false
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
     // When the model has loaded,select some objects and save a BCF viewpoint
     //
     // The BCF viewpoint JSON is written to the JavaScript developer console
     //------------------------------------------------------------------------------------------------------------------
 
-    model.on("loaded", () => {
+    sceneModel.on("loaded", () => {
 
         viewer.scene.setObjectsSelected([
             "3b2U496P5Ebhz5FROhTwFH",
@@ -167,6 +208,8 @@
         pom.innerText = "Download BCF Viewpoint JSON";
         document.getElementById("downloadLink").appendChild(pom);
     });
+
+    window.viewer = viewer;
 
 </script>
 

@@ -55,7 +55,7 @@ class VBOGeometry extends Geometry {
 
     /**
      * @private
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     get isVBOGeometry() {
         return true;

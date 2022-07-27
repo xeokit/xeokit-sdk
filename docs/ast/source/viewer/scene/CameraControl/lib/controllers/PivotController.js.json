@@ -11985,7 +11985,7 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Returns true if we are currently pivoting.\n     *\n     * @returns {boolean}\n     ",
+                  "value": "*\n     * Returns true if we are currently pivoting.\n     *\n     * @returns {Boolean}\n     ",
                   "start": 4423,
                   "end": 4517,
                   "loc": {
@@ -12126,7 +12126,7 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Returns true if we are currently pivoting.\n     *\n     * @returns {boolean}\n     ",
+                  "value": "*\n     * Returns true if we are currently pivoting.\n     *\n     * @returns {Boolean}\n     ",
                   "start": 4423,
                   "end": 4517,
                   "loc": {
@@ -34926,7 +34926,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Returns true if we are currently pivoting.\n     *\n     * @returns {boolean}\n     ",
+                    "value": "*\n     * Returns true if we are currently pivoting.\n     *\n     * @returns {Boolean}\n     ",
                     "start": 4423,
                     "end": 4517,
                     "loc": {
@@ -35067,7 +35067,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Returns true if we are currently pivoting.\n     *\n     * @returns {boolean}\n     ",
+                    "value": "*\n     * Returns true if we are currently pivoting.\n     *\n     * @returns {Boolean}\n     ",
                     "start": 4423,
                     "end": 4517,
                     "loc": {
@@ -46783,7 +46783,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Returns true if we are currently pivoting.\n     *\n     * @returns {boolean}\n     ",
+      "value": "*\n     * Returns true if we are currently pivoting.\n     *\n     * @returns {Boolean}\n     ",
       "start": 4423,
       "end": 4517,
       "loc": {
@@ -69605,7 +69605,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Returns true if we are currently pivoting.\n     *\n     * @returns {boolean}\n     ",
+      "value": "*\n     * Returns true if we are currently pivoting.\n     *\n     * @returns {Boolean}\n     ",
       "start": 4423,
       "end": 4517,
       "loc": {

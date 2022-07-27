@@ -94,15 +94,14 @@
     // Load the .gltf model
     //------------------------------------------------------------------------------------------------------------------
 
-    const model = gltfLoader.load({
+    const sceneModel = gltfLoader.load({
         id: "myModel",
         src: "../assets/models/gltf/skatepark/scene.gltf",
-        colorTextureEnabled: true,
-        performance: true
+        colorTextureEnabled: true
     });
 
-    model.on("loaded", () => {
-        viewer.cameraFlight.jumpTo(model);
+    sceneModel.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(sceneModel);
     });
 
     //------------------------------------------------------------------------------------------------------------------

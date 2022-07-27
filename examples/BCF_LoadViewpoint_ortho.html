@@ -104,7 +104,7 @@
     // Load the XKT model and IFC metadata
     //------------------------------------------------------------------------------------------------------------------
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
         edges: true // Emphasise edges
@@ -116,7 +116,7 @@
     // The BCF viewpoint loads the camera position, creates a clipping plane, and selects several objects
     //------------------------------------------------------------------------------------------------------------------
 
-    model.on("loaded", () => {
+    sceneModel.on("loaded", () => {
 
         const bcfViewpoint = getBCFViewpoint();
 

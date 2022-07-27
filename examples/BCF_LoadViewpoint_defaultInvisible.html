@@ -98,15 +98,15 @@
     // Load two .xkt models and their IFC metadata
     //------------------------------------------------------------------------------------------------------------------
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
         edges: true // Emphasise edges
     });
 
-    const model2 = xktLoader.load({
-        id: "myModel2",
-        src: "../assets/models/xkt/v8/ifc/Duplex.ifc.xkt",
+    const sceneModel2 = xktLoader.load({
+        id: "mysceneModel2",
+        src: "../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt",
         edges: true
     });
 
@@ -116,8 +116,8 @@
     // The BCF viewpoint loads the camera position, creates a clipping plane, and selects several objects
     //------------------------------------------------------------------------------------------------------------------
 
-    model.on("loaded", () => {
-        model2.on("loaded", () => {
+    sceneModel.on("loaded", () => {
+        sceneModel2.on("loaded", () => {
             bcfViewpoints.setViewpoint(getBCFViewpoint());
         });
     });

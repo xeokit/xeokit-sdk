@@ -225,7 +225,7 @@
         dataSource: new MyDataSource()
     });
 
-    const model = gltfLoader.load({
+    const sceneModel = gltfLoader.load({
         id: "myModel",
         src: "../assets/models/gltf/Duplex/glTF-Embedded/Duplex.gltf",
         metaModelSrc: "../assets/models/gltf/Duplex/Duplex.json", // Creates a MetaObject instances in scene.metaScene.metaObjects
@@ -244,8 +244,8 @@
     // When model loaded, fit model to view
     //------------------------------------------------------------------------------------------------------------------
 
-    model.on("loaded", function () {
-        viewer.cameraFlight.flyTo(model);
+    sceneModel.on("loaded", function () {
+        viewer.cameraFlight.flyTo(sceneModel);
     });
 
 </script>

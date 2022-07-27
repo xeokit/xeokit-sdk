@@ -1,4 +1,4 @@
-import { Plugin, Viewer, PerformanceModel, IFCObjectDefaults } from "../../viewer";
+import { Plugin, Viewer, VBOSceneModel, IFCObjectDefaults } from "../../viewer";
 import { ModelStats } from "../index";
 
 /**
@@ -224,7 +224,7 @@ export declare class WebIFCLoaderPlugin extends Plugin {
    * Loads an ````IFC```` model into this WebIFCLoaderPlugin's {@link Viewer}.
    *
    * @param {LoadWebIFCModel} params Loading parameters.
-   * @returns {PerformanceModel} Entity representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}.
+   * @returns {VBOSceneModel} Entity representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}.
    */
-  load(params?: LoadWebIFCModel): PerformanceModel;
+  load(params?: LoadWebIFCModel): VBOSceneModel;
 }

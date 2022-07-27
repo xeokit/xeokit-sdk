@@ -62,64 +62,64 @@ class DistanceMeasurement extends Component {
 
         this._originDot = new Dot(this._container, {
             fillColor: this._color,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
         });
 
         this._targetDot = new Dot(this._container, {
             fillColor: this._color,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
         });
 
         this._lengthWire = new Wire(this._container, {
             color: this._color,
             thickness: 2,
-            zIndex: plugin.zIndex
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
         });
 
         this._xAxisWire = new Wire(this._container, {
             color: "red",
             thickness: 1,
-            zIndex: plugin.zIndex
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
         });
 
         this._yAxisWire = new Wire(this._container, {
             color: "green",
             thickness: 1,
-            zIndex: plugin.zIndex
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
         });
 
         this._zAxisWire = new Wire(this._container, {
             color: "blue",
             thickness: 1,
-            zIndex: plugin.zIndex
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
         });
 
         this._lengthLabel = new Label(this._container, {
             fillColor: this._color,
             prefix: "",
             text: "",
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 4: undefined
         });
 
         this._xAxisLabel = new Label(this._container, {
             fillColor: "red",
             prefix: "X",
             text: "",
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 3: undefined
         });
 
         this._yAxisLabel = new Label(this._container, {
             fillColor: "green",
             prefix: "Y",
             text: "",
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 3: undefined
         });
 
         this._zAxisLabel = new Label(this._container, {
             fillColor: "blue",
             prefix: "Z",
             text: "",
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 3: undefined
         });
 
         this._wpDirty = false;
@@ -131,6 +131,7 @@ class DistanceMeasurement extends Component {
         this._targetVisible = false;
         this._wireVisible = false;
         this._axisVisible = false;
+        this._axisEnabled = true;
 
         this._originMarker.on("worldPos", (value) => {
             this._originWorld.set(value || [0, 0, 0]);
@@ -414,7 +415,7 @@ class DistanceMeasurement extends Component {
     /**
      * Sets whether this DistanceMeasurement is visible or not.
      *
-     * @type Boolean
+     * @type {Boolean}
      */
     set visible(value) {
         value = value !== undefined ? Boolean(value) : this.plugin.defaultVisible;
@@ -435,7 +436,7 @@ class DistanceMeasurement extends Component {
     /**
      * Gets whether this DistanceMeasurement is visible or not.
      *
-     * @type Boolean
+     * @type {Boolean}
      */
     get visible() {
         return this._visible;
@@ -486,10 +487,36 @@ class DistanceMeasurement extends Component {
      *
      * @type {Boolean}
      */
+    set axisEnabled(value) {
+        value = value !== undefined ? Boolean(value) : this.plugin.defaultAxisVisible;
+        this._axisEnabled = value;
+        var axisVisible = this._visible && this._axisVisible && this._axisEnabled;
+        this._xAxisWire.setVisible(axisVisible);
+        this._yAxisWire.setVisible(axisVisible);
+        this._zAxisWire.setVisible(axisVisible);
+        this._xAxisLabel.setVisible(axisVisible && !this._xAxisLabelCulled);
+        this._yAxisLabel.setVisible(axisVisible && !this._yAxisLabelCulled);
+        this._zAxisLabel.setVisible(axisVisible && !this._zAxisLabelCulled);
+    }
+
+    /**
+     * Gets if the axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target} are visible.
+     *
+     * @type {Boolean}
+     */
+    get axisEnabled() {
+        return this._axisEnabled;
+    }
+    
+    /**
+     * Sets if the axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target} are visible.
+     *
+     * @type {Boolean}
+     */
     set axisVisible(value) {
         value = value !== undefined ? Boolean(value) : this.plugin.defaultAxisVisible;
         this._axisVisible = value;
-        var axisVisible = this._visible && this._axisVisible;
+        var axisVisible = this._visible && this._axisVisible && this._axisEnabled;
         this._xAxisWire.setVisible(axisVisible);
         this._yAxisWire.setVisible(axisVisible);
         this._zAxisWire.setVisible(axisVisible);

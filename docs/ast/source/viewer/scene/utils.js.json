@@ -18387,7 +18387,7 @@
         "trailingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n Tests if the given value is a string\n @param value\n @returns {boolean}\n @private\n ",
+            "value": "*\n Tests if the given value is a string\n @param value\n @returns {Boolean}\n @private\n ",
             "start": 6900,
             "end": 6989,
             "loc": {
@@ -18637,7 +18637,7 @@
         "leadingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n Tests if the given value is a string\n @param value\n @returns {boolean}\n @private\n ",
+            "value": "*\n Tests if the given value is a string\n @param value\n @returns {Boolean}\n @private\n ",
             "start": 6900,
             "end": 6989,
             "loc": {
@@ -18655,7 +18655,7 @@
         "trailingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n Tests if the given value is a number\n @param value\n @returns {boolean}\n @private\n ",
+            "value": "*\n Tests if the given value is a number\n @param value\n @returns {Boolean}\n @private\n ",
             "start": 7087,
             "end": 7176,
             "loc": {
@@ -18934,7 +18934,7 @@
         "leadingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n Tests if the given value is a number\n @param value\n @returns {boolean}\n @private\n ",
+            "value": "*\n Tests if the given value is a number\n @param value\n @returns {Boolean}\n @private\n ",
             "start": 7087,
             "end": 7176,
             "loc": {
@@ -18952,7 +18952,7 @@
         "trailingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n Tests if the given value is an ID\n @param value\n @returns {boolean}\n @private\n ",
+            "value": "*\n Tests if the given value is an ID\n @param value\n @returns {Boolean}\n @private\n ",
             "start": 7265,
             "end": 7351,
             "loc": {
@@ -19243,7 +19243,7 @@
         "leadingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n Tests if the given value is an ID\n @param value\n @returns {boolean}\n @private\n ",
+            "value": "*\n Tests if the given value is an ID\n @param value\n @returns {Boolean}\n @private\n ",
             "start": 7265,
             "end": 7351,
             "loc": {
@@ -19261,7 +19261,7 @@
         "trailingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n Tests if the given components are the same, where the components can be either IDs or instances.\n @param c1\n @param c2\n @returns {boolean}\n @private\n ",
+            "value": "*\n Tests if the given components are the same, where the components can be either IDs or instances.\n @param c1\n @param c2\n @returns {Boolean}\n @private\n ",
             "start": 7438,
             "end": 7595,
             "loc": {
@@ -20348,7 +20348,7 @@
         "leadingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n Tests if the given components are the same, where the components can be either IDs or instances.\n @param c1\n @param c2\n @returns {boolean}\n @private\n ",
+            "value": "*\n Tests if the given components are the same, where the components can be either IDs or instances.\n @param c1\n @param c2\n @returns {Boolean}\n @private\n ",
             "start": 7438,
             "end": 7595,
             "loc": {
@@ -20366,7 +20366,7 @@
         "trailingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n Tests if the given value is a function\n @param value\n @returns {boolean}\n @private\n ",
+            "value": "*\n Tests if the given value is a function\n @param value\n @returns {Boolean}\n @private\n ",
             "start": 7866,
             "end": 7957,
             "loc": {
@@ -20550,7 +20550,7 @@
         "leadingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n Tests if the given value is a function\n @param value\n @returns {boolean}\n @private\n ",
+            "value": "*\n Tests if the given value is a function\n @param value\n @returns {Boolean}\n @private\n ",
             "start": 7866,
             "end": 7957,
             "loc": {
@@ -20568,7 +20568,7 @@
         "trailingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n Tests if the given value is a JavaScript JSON object, eg, ````{ foo: \"bar\" }````.\n @param value\n @returns {boolean}\n @private\n ",
+            "value": "*\n Tests if the given value is a JavaScript JSON object, eg, ````{ foo: \"bar\" }````.\n @param value\n @returns {Boolean}\n @private\n ",
             "start": 8032,
             "end": 8166,
             "loc": {
@@ -20934,7 +20934,7 @@
         "leadingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n Tests if the given value is a JavaScript JSON object, eg, ````{ foo: \"bar\" }````.\n @param value\n @returns {boolean}\n @private\n ",
+            "value": "*\n Tests if the given value is a JavaScript JSON object, eg, ````{ foo: \"bar\" }````.\n @param value\n @returns {Boolean}\n @private\n ",
             "start": 8032,
             "end": 8166,
             "loc": {
@@ -23132,7 +23132,7 @@
         "trailingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n Returns true if the given map is empty.\n @param obj\n @returns {boolean}\n @private\n ",
+            "value": "*\n Returns true if the given map is empty.\n @param obj\n @returns {Boolean}\n @private\n ",
             "start": 9235,
             "end": 9325,
             "loc": {
@@ -23505,7 +23505,7 @@
         "leadingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n Returns true if the given map is empty.\n @param obj\n @returns {boolean}\n @private\n ",
+            "value": "*\n Returns true if the given map is empty.\n @param obj\n @returns {Boolean}\n @private\n ",
             "start": 9235,
             "end": 9325,
             "loc": {
@@ -29133,7 +29133,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n Tests if the given value is a string\n @param value\n @returns {boolean}\n @private\n ",
+      "value": "*\n Tests if the given value is a string\n @param value\n @returns {Boolean}\n @private\n ",
       "start": 6900,
       "end": 6989,
       "loc": {
@@ -29149,7 +29149,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n Tests if the given value is a number\n @param value\n @returns {boolean}\n @private\n ",
+      "value": "*\n Tests if the given value is a number\n @param value\n @returns {Boolean}\n @private\n ",
       "start": 7087,
       "end": 7176,
       "loc": {
@@ -29165,7 +29165,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n Tests if the given value is an ID\n @param value\n @returns {boolean}\n @private\n ",
+      "value": "*\n Tests if the given value is an ID\n @param value\n @returns {Boolean}\n @private\n ",
       "start": 7265,
       "end": 7351,
       "loc": {
@@ -29181,7 +29181,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n Tests if the given components are the same, where the components can be either IDs or instances.\n @param c1\n @param c2\n @returns {boolean}\n @private\n ",
+      "value": "*\n Tests if the given components are the same, where the components can be either IDs or instances.\n @param c1\n @param c2\n @returns {Boolean}\n @private\n ",
       "start": 7438,
       "end": 7595,
       "loc": {
@@ -29197,7 +29197,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n Tests if the given value is a function\n @param value\n @returns {boolean}\n @private\n ",
+      "value": "*\n Tests if the given value is a function\n @param value\n @returns {Boolean}\n @private\n ",
       "start": 7866,
       "end": 7957,
       "loc": {
@@ -29213,7 +29213,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n Tests if the given value is a JavaScript JSON object, eg, ````{ foo: \"bar\" }````.\n @param value\n @returns {boolean}\n @private\n ",
+      "value": "*\n Tests if the given value is a JavaScript JSON object, eg, ````{ foo: \"bar\" }````.\n @param value\n @returns {Boolean}\n @private\n ",
       "start": 8032,
       "end": 8166,
       "loc": {
@@ -29293,7 +29293,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n Returns true if the given map is empty.\n @param obj\n @returns {boolean}\n @private\n ",
+      "value": "*\n Returns true if the given map is empty.\n @param obj\n @returns {Boolean}\n @private\n ",
       "start": 9235,
       "end": 9325,
       "loc": {
@@ -67896,7 +67896,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n Tests if the given value is a string\n @param value\n @returns {boolean}\n @private\n ",
+      "value": "*\n Tests if the given value is a string\n @param value\n @returns {Boolean}\n @private\n ",
       "start": 6900,
       "end": 6989,
       "loc": {
@@ -68410,7 +68410,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n Tests if the given value is a number\n @param value\n @returns {boolean}\n @private\n ",
+      "value": "*\n Tests if the given value is a number\n @param value\n @returns {Boolean}\n @private\n ",
       "start": 7087,
       "end": 7176,
       "loc": {
@@ -68993,7 +68993,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n Tests if the given value is an ID\n @param value\n @returns {boolean}\n @private\n ",
+      "value": "*\n Tests if the given value is an ID\n @param value\n @returns {Boolean}\n @private\n ",
       "start": 7265,
       "end": 7351,
       "loc": {
@@ -69577,7 +69577,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n Tests if the given components are the same, where the components can be either IDs or instances.\n @param c1\n @param c2\n @returns {boolean}\n @private\n ",
+      "value": "*\n Tests if the given components are the same, where the components can be either IDs or instances.\n @param c1\n @param c2\n @returns {Boolean}\n @private\n ",
       "start": 7438,
       "end": 7595,
       "loc": {
@@ -71904,7 +71904,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n Tests if the given value is a function\n @param value\n @returns {boolean}\n @private\n ",
+      "value": "*\n Tests if the given value is a function\n @param value\n @returns {Boolean}\n @private\n ",
       "start": 7866,
       "end": 7957,
       "loc": {
@@ -72311,7 +72311,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n Tests if the given value is a JavaScript JSON object, eg, ````{ foo: \"bar\" }````.\n @param value\n @returns {boolean}\n @private\n ",
+      "value": "*\n Tests if the given value is a JavaScript JSON object, eg, ````{ foo: \"bar\" }````.\n @param value\n @returns {Boolean}\n @private\n ",
       "start": 8032,
       "end": 8166,
       "loc": {
@@ -77796,7 +77796,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n Returns true if the given map is empty.\n @param obj\n @returns {boolean}\n @private\n ",
+      "value": "*\n Returns true if the given map is empty.\n @param obj\n @returns {Boolean}\n @private\n ",
       "start": 9235,
       "end": 9325,
       "loc": {
