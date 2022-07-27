@@ -1,14 +1,15 @@
 # xeokit-sdk Change Log
 
 Find releases on npm: [@xeokit/xeokit-sdk](https://www.npmjs.com/package/@xeokit/xeokit-sdk)
-
+ 
 # 2.3
 
-Unreleased
+*Unreleased*
 
 ### Features
 
 * General
+  * Add ES5 build (2.3.0-beta-31). [#883](https://github.com/xeokit/xeokit-sdk/issues/841) ([**@TitouanGisle**](https://github.com/TitouanGisle))
   * Add TypeScript definitions. [#841](https://github.com/xeokit/xeokit-sdk/pull/841), [#839](https://github.com/xeokit/xeokit-sdk/pull/839), [#841](https://github.com/xeokit/xeokit-sdk/pull/841),  [#829](https://github.com/xeokit/xeokit-sdk/pull/829), [#826](https://github.com/xeokit/xeokit-sdk/pull/826),  [#833](https://github.com/xeokit/xeokit-sdk/pull/833) ([**@mlankamp**](https://github.com/mlankamp)) 
 * Viewer, BIMViewer
   * Performance textures.  [#847](https://github.com/xeokit/xeokit-sdk/pull/847) ([**@xeolabs**](https://github.com/xeolabs))
