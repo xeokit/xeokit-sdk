@@ -19,11 +19,18 @@ export default {
             file: './dist/xeokit-sdk.min.es5.js',
             format: 'es',
             name: 'bundle',
-            plugins: [getBabelOutputPlugin({ presets: ['@babel/preset-env']})]
+            plugins: [
+                getBabelOutputPlugin({ 
+                    presets: ['@babel/preset-env']
+                })
+            ]
         }
     ],
     plugins: [
-        nodeResolve(),
+        nodeResolve({
+            browser: true,
+            preferBuiltins: false
+        }),
         terser()
     ]
 }

@@ -46,6 +46,7 @@
   },
   "homepage": "https://xeokit.io",
   "dependencies": {
+    "@babel/core": "^7.18.6",
     "@babel/preset-env": "^7.18.6",
     "@loaders.gl/core": "^3.1.8",
     "@loaders.gl/draco": "^3.1.8",
