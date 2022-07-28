@@ -2159,6 +2159,7 @@ class VBOSceneModel extends Component {
                     const image = new Image();
                     image.onload = () => {
                         texture.setImage(image, {minFilter, magFilter, wrapS, wrapT, flipY: cfg.flipY, encoding});
+                        this.glRedraw();
                     };
                     image.src = cfg.src; // URL or Base64 string
                     break;
