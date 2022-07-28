@@ -24,7 +24,7 @@ class TrianglesBatchingColorTextureRenderer {
 
     _getHash() {
         const scene = this._scene;
-        return [scene._lightsState.getHash(), scene._sectionPlanesState.getHash(), (this._withSAO ? "sao" : "nosao")].join(";");
+        return [scene.gammaOutput, scene._lightsState.getHash(), scene._sectionPlanesState.getHash(), (this._withSAO ? "sao" : "nosao")].join(";");
     }
 
     drawLayer(frameCtx, batchingLayer, renderPass) {
@@ -161,6 +161,8 @@ class TrianglesBatchingColorTextureRenderer {
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
 
+        this._uGammaFactor = program.getLocation("gammaFactor");
+
         this._uLightAmbient = program.getLocation("lightAmbient");
         this._uLightColor = [];
         this._uLightDir = [];
@@ -260,6 +262,10 @@ class TrianglesBatchingColorTextureRenderer {
             const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
+
+        if (this._uGammaFactor) {
+            gl.uniform1f(this._uGammaFactor, scene.gammaFactor);
+        }
     }
 
     _buildShader() {
@@ -350,6 +356,7 @@ class TrianglesBatchingColorTextureRenderer {
 
     _buildFragmentShader() {
         const scene = this._scene;
+        const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
         const lightsState = scene._lightsState;
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
@@ -382,6 +389,21 @@ class TrianglesBatchingColorTextureRenderer {
 
             src.push("float unpackRGBToFloat( const in vec4 v ) {");
             src.push("    return dot( v, unPackFactors );");
+            src.push("}");
+        }
+        src.push("uniform float gammaFactor;");
+        src.push("vec4 linearToLinear( in vec4 value ) {");
+        src.push("  return value;");
+        src.push("}");
+        src.push("vec4 sRGBToLinear( in vec4 value ) {");
+        src.push("  return vec4( mix( pow( value.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), value.rgb * 0.0773993808, vec3( lessThanEqual( value.rgb, vec3( 0.04045 ) ) ) ), value.w );");
+        src.push("}");
+        src.push("vec4 gammaToLinear( in vec4 value) {");
+        src.push("  return vec4( pow( value.xyz, vec3( gammaFactor ) ), value.w );");
+        src.push("}");
+        if (gammaOutput) {
+            src.push("vec4 linearToGamma( in vec4 value, in float gammaFactor ) {");
+            src.push("  return vec4( pow( value.xyz, vec3( 1.0 / gammaFactor ) ), value.w );");
             src.push("}");
         }
         if (clipping) {
@@ -476,7 +498,11 @@ class TrianglesBatchingColorTextureRenderer {
         }
 
         src.push("vec4 color =  vec4((lightAmbient.rgb * lightAmbient.a * vColor.rgb) + (reflectedColor * vColor.rgb), vColor.a);");
-        src.push("vec4 colorTexel = color * texture(uColorMap, vUV);");
+        if (gammaOutput) {
+            src.push("vec4 colorTexel = color * sRGBToLinear(texture(uColorMap, vUV));");
+        } else {
+            src.push("vec4 colorTexel = color * texture(uColorMap, vUV);");
+        }
         src.push("float opacity = color.a;");
 
         if (this._withSAO) {
@@ -492,6 +518,10 @@ class TrianglesBatchingColorTextureRenderer {
             src.push("   outColor                = vec4(colorTexel.rgb * ambient, opacity);");
         } else {
             src.push("   outColor                = vec4(colorTexel.rgb, opacity);");
+        }
+
+        if (gammaOutput) {
+            src.push("outColor = linearToGamma(outColor, gammaFactor);");
         }
 
         if (scene.logarithmicDepthBufferEnabled) {
