@@ -98,7 +98,6 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-canvas">viewer/scene/canvas</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/canvas/Spinner.js~Spinner.html">Spinner</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-constants">viewer/scene/constants</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AlphaFormat">AlphaFormat</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BasicDepthPacking">BasicDepthPacking</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ByteType">ByteType</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ClampToEdgeWrapping">ClampToEdgeWrapping</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DepthFormat">DepthFormat</a></span></span></li>
@@ -120,7 +119,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipMapNearestFilter">NearestMipMapNearestFilter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipmapLinearFilter">NearestMipmapLinearFilter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipmapNearestFilter">NearestMipmapNearestFilter</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBADepthPacking">RGBADepthPacking</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBAFormat">RGBAFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBAIntegerFormat">RGBAIntegerFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_10x10_Format">RGBA_ASTC_10x10_Format</a></span></span></li>
@@ -261,7 +259,7 @@ class TrianglesBatchingColorTextureRenderer {
 
     _getHash() {
         const scene = this._scene;
-        return [scene._lightsState.getHash(), scene._sectionPlanesState.getHash(), (this._withSAO ? &quot;sao&quot; : &quot;nosao&quot;)].join(&quot;;&quot;);
+        return [scene.gammaOutput, scene._lightsState.getHash(), scene._sectionPlanesState.getHash(), (this._withSAO ? &quot;sao&quot; : &quot;nosao&quot;)].join(&quot;;&quot;);
     }
 
     drawLayer(frameCtx, batchingLayer, renderPass) {
@@ -398,6 +396,8 @@ class TrianglesBatchingColorTextureRenderer {
         this._uViewMatrix = program.getLocation(&quot;viewMatrix&quot;);
         this._uProjMatrix = program.getLocation(&quot;projMatrix&quot;);
 
+        this._uGammaFactor = program.getLocation(&quot;gammaFactor&quot;);
+
         this._uLightAmbient = program.getLocation(&quot;lightAmbient&quot;);
         this._uLightColor = [];
         this._uLightDir = [];
@@ -497,6 +497,10 @@ class TrianglesBatchingColorTextureRenderer {
             const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
+
+        if (this._uGammaFactor) {
+            gl.uniform1f(this._uGammaFactor, scene.gammaFactor);
+        }
     }
 
     _buildShader() {
@@ -587,6 +591,7 @@ class TrianglesBatchingColorTextureRenderer {
 
     _buildFragmentShader() {
         const scene = this._scene;
+        const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
         const lightsState = scene._lightsState;
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.sectionPlanes.length &gt; 0;
@@ -619,6 +624,21 @@ class TrianglesBatchingColorTextureRenderer {
 
             src.push(&quot;float unpackRGBToFloat( const in vec4 v ) {&quot;);
             src.push(&quot;    return dot( v, unPackFactors );&quot;);
+            src.push(&quot;}&quot;);
+        }
+        src.push(&quot;uniform float gammaFactor;&quot;);
+        src.push(&quot;vec4 linearToLinear( in vec4 value ) {&quot;);
+        src.push(&quot;  return value;&quot;);
+        src.push(&quot;}&quot;);
+        src.push(&quot;vec4 sRGBToLinear( in vec4 value ) {&quot;);
+        src.push(&quot;  return vec4( mix( pow( value.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), value.rgb * 0.0773993808, vec3( lessThanEqual( value.rgb, vec3( 0.04045 ) ) ) ), value.w );&quot;);
+        src.push(&quot;}&quot;);
+        src.push(&quot;vec4 gammaToLinear( in vec4 value) {&quot;);
+        src.push(&quot;  return vec4( pow( value.xyz, vec3( gammaFactor ) ), value.w );&quot;);
+        src.push(&quot;}&quot;);
+        if (gammaOutput) {
+            src.push(&quot;vec4 linearToGamma( in vec4 value, in float gammaFactor ) {&quot;);
+            src.push(&quot;  return vec4( pow( value.xyz, vec3( 1.0 / gammaFactor ) ), value.w );&quot;);
             src.push(&quot;}&quot;);
         }
         if (clipping) {
@@ -713,7 +733,11 @@ class TrianglesBatchingColorTextureRenderer {
         }
 
         src.push(&quot;vec4 color =  vec4((lightAmbient.rgb * lightAmbient.a * vColor.rgb) + (reflectedColor * vColor.rgb), vColor.a);&quot;);
-        src.push(&quot;vec4 colorTexel = color * texture(uColorMap, vUV);&quot;);
+        if (gammaOutput) {
+            src.push(&quot;vec4 colorTexel = color * sRGBToLinear(texture(uColorMap, vUV));&quot;);
+        } else {
+            src.push(&quot;vec4 colorTexel = color * texture(uColorMap, vUV);&quot;);
+        }
         src.push(&quot;float opacity = color.a;&quot;);
 
         if (this._withSAO) {
@@ -729,6 +753,10 @@ class TrianglesBatchingColorTextureRenderer {
             src.push(&quot;   outColor                = vec4(colorTexel.rgb * ambient, opacity);&quot;);
         } else {
             src.push(&quot;   outColor                = vec4(colorTexel.rgb, opacity);&quot;);
+        }
+
+        if (gammaOutput) {
+            src.push(&quot;outColor = linearToGamma(outColor, gammaFactor);&quot;);
         }
 
         if (scene.logarithmicDepthBufferEnabled) {

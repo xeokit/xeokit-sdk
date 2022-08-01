@@ -54,12 +54,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~basicdepthpacking",
-    "variable/index.html#static-variable-BasicDepthPacking",
-    "<span>BasicDepthPacking</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
-    "variable"
-  ],
-  [
     "@xeokit/xeokit-sdk/src/viewer/scene/bitmap/bitmap.js~bitmap",
     "class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html",
     "<span>Bitmap</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/Bitmap/Bitmap.js</span>",
@@ -658,12 +652,6 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html",
     "<span>QuadraticBezierCurve</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/paths/QuadraticBezierCurve.js</span>",
     "class"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgbadepthpacking",
-    "variable/index.html#static-variable-RGBADepthPacking",
-    "<span>RGBADepthPacking</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
-    "variable"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~rgbaformat",
@@ -1768,12 +1756,6 @@ window.esdocSearchIndex = [
     "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html#instance-method-reset",
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl#reset",
     "method"
-  ],
-  [
-    "src/plugins/anglemeasurementsplugin/anglemeasurementscontrol.js~anglemeasurementscontrol#startdot",
-    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html#instance-member-startDot",
-    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl#startDot",
-    "member"
   ],
   [
     "src/plugins/anglemeasurementsplugin/anglemeasurementsplugin.js",

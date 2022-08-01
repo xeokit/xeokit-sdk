@@ -98,7 +98,6 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-canvas">viewer/scene/canvas</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/canvas/Spinner.js~Spinner.html">Spinner</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-constants">viewer/scene/constants</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AlphaFormat">AlphaFormat</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BasicDepthPacking">BasicDepthPacking</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ByteType">ByteType</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ClampToEdgeWrapping">ClampToEdgeWrapping</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DepthFormat">DepthFormat</a></span></span></li>
@@ -120,7 +119,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipMapNearestFilter">NearestMipMapNearestFilter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipmapLinearFilter">NearestMipmapLinearFilter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipmapNearestFilter">NearestMipmapNearestFilter</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBADepthPacking">RGBADepthPacking</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBAFormat">RGBAFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBAIntegerFormat">RGBAIntegerFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_10x10_Format">RGBA_ASTC_10x10_Format</a></span></span></li>
@@ -299,64 +297,64 @@ class DistanceMeasurement extends Component {
 
         this._originDot = new Dot(this._container, {
             fillColor: this._color,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
         });
 
         this._targetDot = new Dot(this._container, {
             fillColor: this._color,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
         });
 
         this._lengthWire = new Wire(this._container, {
             color: this._color,
             thickness: 2,
-            zIndex: plugin.zIndex
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
         });
 
         this._xAxisWire = new Wire(this._container, {
             color: &quot;red&quot;,
             thickness: 1,
-            zIndex: plugin.zIndex
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
         });
 
         this._yAxisWire = new Wire(this._container, {
             color: &quot;green&quot;,
             thickness: 1,
-            zIndex: plugin.zIndex
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
         });
 
         this._zAxisWire = new Wire(this._container, {
             color: &quot;blue&quot;,
             thickness: 1,
-            zIndex: plugin.zIndex
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
         });
 
         this._lengthLabel = new Label(this._container, {
             fillColor: this._color,
             prefix: &quot;&quot;,
             text: &quot;&quot;,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 4: undefined
         });
 
         this._xAxisLabel = new Label(this._container, {
             fillColor: &quot;red&quot;,
             prefix: &quot;X&quot;,
             text: &quot;&quot;,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 3: undefined
         });
 
         this._yAxisLabel = new Label(this._container, {
             fillColor: &quot;green&quot;,
             prefix: &quot;Y&quot;,
             text: &quot;&quot;,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 3: undefined
         });
 
         this._zAxisLabel = new Label(this._container, {
             fillColor: &quot;blue&quot;,
             prefix: &quot;Z&quot;,
             text: &quot;&quot;,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 3: undefined
         });
 
         this._wpDirty = false;

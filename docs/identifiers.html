@@ -98,7 +98,6 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-canvas">viewer/scene/canvas</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/canvas/Spinner.js~Spinner.html">Spinner</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-constants">viewer/scene/constants</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AlphaFormat">AlphaFormat</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BasicDepthPacking">BasicDepthPacking</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ByteType">ByteType</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ClampToEdgeWrapping">ClampToEdgeWrapping</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DepthFormat">DepthFormat</a></span></span></li>
@@ -120,7 +119,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipMapNearestFilter">NearestMipMapNearestFilter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipmapLinearFilter">NearestMipmapLinearFilter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipmapNearestFilter">NearestMipmapNearestFilter</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBADepthPacking">RGBADepthPacking</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBAFormat">RGBAFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBAIntegerFormat">RGBAIntegerFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_10x10_Format">RGBA_ASTC_10x10_Format</a></span></span></li>
@@ -2610,35 +2608,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          <span data-ice="kind-icon" class="kind-variable">V</span>
-          
-          
-          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-BasicDepthPacking">BasicDepthPacking</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
+        <div data-ice="description"><p>Texture sampling mode that discards the <code>RGBA</code> components and just reads the <code>A</code> component.</p>
+</div>
       </div>
     </td>
     <td>
@@ -2666,7 +2637,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Signed 8-bit integer type.</p>
+</div>
       </div>
     </td>
     <td>
@@ -2694,7 +2666,7 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        <div data-ice="description"><p>Texture clamp-to-edge wrapping mode.</p>
+        <div data-ice="description"><p>Texture wrapping mode in which the last pixel of the texture stretches to the edge of the mesh.</p>
 </div>
       </div>
     </td>
@@ -2723,7 +2695,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture sampling mode that reads each element as a single depth value, converts it to a float and clamps to <code>[0,1]</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -2751,7 +2724,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture sampling mode that</p>
+</div>
       </div>
     </td>
     <td>
@@ -2779,7 +2753,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Signed 32-bit floating-point type.</p>
+</div>
       </div>
     </td>
     <td>
@@ -2807,7 +2782,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Signed 16-bit half-precision floating-point type.</p>
+</div>
       </div>
     </td>
     <td>
@@ -2835,7 +2811,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Signed 32-bit integer type.</p>
+</div>
       </div>
     </td>
     <td>
@@ -2863,7 +2840,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture encoding mode in which the texture image is in linear color space.</p>
+</div>
       </div>
     </td>
     <td>
@@ -2891,7 +2869,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture magnification and minification filter that returns the weighted average of the four nearest texels to the given sample coordinates.</p>
+</div>
       </div>
     </td>
     <td>
@@ -2919,7 +2898,10 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture minification filter that chooses two mipmaps that most closely match the size of the pixel being textured,
+finds within each mipmap the weighted average of the nearest texel to the center of the pixel, then returns the
+weighted average of those two values.</p>
+</div>
       </div>
     </td>
     <td>
@@ -2947,7 +2929,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture minification filter that chooses the mipmap that most closely matches the size of the pixel being textured and
+returns the weighted average of the four nearest texels to the given sample coordinates.</p>
+</div>
       </div>
     </td>
     <td>
@@ -2975,7 +2959,10 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture minification filter that chooses two mipmaps that most closely match the size of the pixel being textured,
+finds within each mipmap the weighted average of the nearest texel to the center of the pixel, then returns the
+weighted average of those two values.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3003,7 +2990,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture minification filter that chooses the mipmap that most closely matches the size of the pixel being textured and
+returns the weighted average of the four nearest texels to the given sample coordinates.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3031,7 +3020,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture sampling mode that reads each of the <code>RGBA</code> texture components as a luminance/alpha value, converted to a float and clamped to <code>[0,1]</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3059,7 +3049,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture sampling mode that reads each <code>RGB</code> texture component as a luminance value, converted to a float and clamped
+to <code>[0,1]</code>, while always reading the <code>A</code> channel as <code>1.0</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3087,7 +3079,7 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        <div data-ice="description"><p>Texture mirrored-repeat wrapping mode.</p>
+        <div data-ice="description"><p>Texture wrapping mode in which the texture repeats to infinity, mirroring on each repeat.</p>
 </div>
       </div>
     </td>
@@ -3116,7 +3108,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture magnification and minification filter that returns the nearest texel to the given sample coordinates.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3144,7 +3137,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture minification filter that chooses two mipmaps that most closely match the size of the pixel being textured
+and returns the nearest texel to the center of the pixel at the given sample coordinates.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3172,7 +3167,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture minification filter that chooses the mipmap that most closely matches the size of the pixel being textured and returns the nearest texel to the given sample coordinates.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3200,7 +3196,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture minification filter that chooses two mipmaps that most closely match the size of the pixel being textured
+and returns the nearest texel to the center of the pixel at the given sample coordinates.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3228,35 +3226,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          <span data-ice="kind-icon" class="kind-variable">V</span>
-          
-          
-          <span class="code" data-ice="name"><span><a href="variable/index.html#static-variable-RGBADepthPacking">RGBADepthPacking</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
+        <div data-ice="description"><p>Texture minification filter that chooses the mipmap that most closely matches the size of the pixel being textured
+and returns the nearest texel to the given sample coordinates.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3284,7 +3256,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture sampling mode that reads the <code>RGBA</code> components.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3312,7 +3285,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture sampling mode that reads the <code>RGBA</code> components as integers instead of floats.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3340,7 +3314,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as an <a href="https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_astc/">ATSC compressed</a>
+<code>RGBA</code> image.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3368,7 +3344,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as an <a href="https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_astc/">ATSC compressed</a>
+<code>RGBA</code> image.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3396,7 +3374,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as an <a href="https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_astc/">ATSC compressed</a>
+<code>RGBA</code> image.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3424,7 +3404,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as an <a href="https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_astc/">ATSC compressed</a>
+<code>RGBA</code> image.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3452,7 +3434,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as an <a href="https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_astc/">ATSC compressed</a>
+<code>RGBA</code> image.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3480,7 +3464,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as an <a href="https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_astc/">ATSC compressed</a>
+<code>RGBA</code> image.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3508,7 +3494,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as an <a href="https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_astc/">ATSC compressed</a>
+<code>RGBA</code> image.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3536,7 +3524,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as an <a href="https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_astc/">ATSC compressed</a>
+<code>RGBA</code> image.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3564,7 +3554,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as an <a href="https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_astc/">ATSC compressed</a>
+<code>RGBA</code> image.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3592,7 +3584,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as an <a href="https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_astc/">ATSC compressed</a>
+<code>RGBA</code> image.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3620,7 +3614,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as an <a href="https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_astc/">ATSC compressed</a>
+<code>RGBA</code> image.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3648,7 +3644,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as an <a href="https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_astc/">ATSC compressed</a>
+<code>RGBA</code> image.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3676,7 +3674,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as an <a href="https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_astc/">ATSC compressed</a>
+<code>RGBA</code> image.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3704,7 +3704,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as an <a href="https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_astc/">ATSC compressed</a>
+<code>RGBA</code> image.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3732,7 +3734,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as an <a href="https://www.khronos.org/opengl/wiki/BPTC_Texture_Compression">BPTC compressed</a>
+<code>RGBA</code> image.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3760,7 +3764,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as an <a href="https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_etc2/">ETC2 compressed</a>
+<code>RGBA</code> image.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3788,7 +3794,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as a <a href="https://en.wikipedia.org/wiki/PVRTC">PVRTC compressed</a>
+image, with <code>RGBA</code> compression in 2-bit mode and one block for each 8&#xD7;4 pixels.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3816,7 +3824,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as a <a href="https://en.wikipedia.org/wiki/PVRTC">PVRTC compressed</a>
+image, with <code>RGBA</code> compression in 4-bit mode and one block for each 4&#xD7;4 pixels.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3844,7 +3854,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as a <a href="https://en.wikipedia.org/wiki/S3_Texture_Compression">DXT1 compressed</a> <code>RGBA</code> image.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3872,7 +3883,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as a <a href="https://en.wikipedia.org/wiki/S3_Texture_Compression">DXT3 compressed</a> <code>RGBA</code> image.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3900,7 +3912,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as a <a href="https://en.wikipedia.org/wiki/S3_Texture_Compression">DXT5 compressed</a> <code>RGBA</code> image.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3928,7 +3941,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture sampling mode that discards the <code>A</code> component and reads the <code>RGB</code> components.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3956,7 +3970,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as an <a href="https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_etc1/">ETC1 compressed</a>
+<code>RGB</code> image.</p>
+</div>
       </div>
     </td>
     <td>
@@ -3984,7 +4000,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as an <a href="https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_etc2/">ETC2 compressed</a>
+<code>RGB</code> image.</p>
+</div>
       </div>
     </td>
     <td>
@@ -4012,7 +4030,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as a <a href="https://en.wikipedia.org/wiki/PVRTC">PVRTC compressed</a>
+image, with <code>RGB</code> compression in 2-bit mode and one block for each 8&#xD7;4 pixels.</p>
+</div>
       </div>
     </td>
     <td>
@@ -4040,7 +4060,9 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as a <a href="https://en.wikipedia.org/wiki/PVRTC">PVRTC compressed</a>
+image, with <code>RGB</code> compression in 4-bit mode and one block for each 4&#xD7;4 pixels.</p>
+</div>
       </div>
     </td>
     <td>
@@ -4068,7 +4090,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture format mode in which the texture is formatted as a <a href="https://en.wikipedia.org/wiki/S3_Texture_Compression">DXT1 compressed</a> <code>RGB</code> image.</p>
+</div>
       </div>
     </td>
     <td>
@@ -4096,7 +4119,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture sampling mode that discards the <code>A</code> and <code>B</code> components and just reads the <code>R</code> and <code>G</code> components.</p>
+</div>
       </div>
     </td>
     <td>
@@ -4124,7 +4148,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture sampling mode that discards the <code>A</code> and <code>B</code> components and just reads the <code>R</code> and <code>G</code> components, as integers instead of floats.</p>
+</div>
       </div>
     </td>
     <td>
@@ -4152,7 +4177,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture sampling mode that discards the <code>GBA</code> components and just reads the <code>R</code> component.</p>
+</div>
       </div>
     </td>
     <td>
@@ -4180,7 +4206,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture sampling mode that discards the <code>GBA</code> components and just reads the <code>R</code> component, as an integer instead of as a float.</p>
+</div>
       </div>
     </td>
     <td>
@@ -4208,7 +4235,7 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        <div data-ice="description"><p>Texture repeat wrapping mode.</p>
+        <div data-ice="description"><p>Texture wrapping mode in which the texture repeats to infinity.</p>
 </div>
       </div>
     </td>
@@ -4237,7 +4264,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Signed 16-bit integer type.</p>
+</div>
       </div>
     </td>
     <td>
@@ -4265,7 +4293,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Unsigned 8-bit integer type.</p>
+</div>
       </div>
     </td>
     <td>
@@ -4293,7 +4322,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Unsigned integer type for 24-bit depth texture data.</p>
+</div>
       </div>
     </td>
     <td>
@@ -4321,7 +4351,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Unsigned 32-bit integer type.</p>
+</div>
       </div>
     </td>
     <td>
@@ -4349,7 +4380,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture packing mode in which each <code>RGBA</code> channel is packed into 4 bits, for a combined total of 16 bits.</p>
+</div>
       </div>
     </td>
     <td>
@@ -4377,7 +4409,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture packing mode in which the <code>RGB</code> channels are each packed into 5 bits, and the <code>A</code> channel is packed into 1 bit, for a combined total of 16 bits.</p>
+</div>
       </div>
     </td>
     <td>
@@ -4405,7 +4438,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Unsigned 16-bit integer type.</p>
+</div>
       </div>
     </td>
     <td>
@@ -4433,7 +4467,8 @@ contain the number of units given by <span><a href="class/src/viewer/scene/camer
       <div>
         
         
-        
+        <div data-ice="description"><p>Texture encoding mode in which the texture image is in sRGB color space.</p>
+</div>
       </div>
     </td>
     <td>
