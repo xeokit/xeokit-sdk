@@ -2092,6 +2092,7 @@ class VBOSceneModel extends Component {
      * @param {Number} [cfg.magFilter=LinearFilter] How the texture is sampled when a texel covers more than one pixel. Supported values are {@link LinearFilter} and {@link NearestFilter}.
      * @param {Number} [cfg.wrapS=RepeatWrapping] Wrap parameter for texture coordinate *S*. Supported values are {@link ClampToEdgeWrapping}, {@link MirroredRepeatWrapping} and {@link RepeatWrapping}.
      * @param {Number} [cfg.wrapT=RepeatWrapping] Wrap parameter for texture coordinate *T*. Supported values are {@link ClampToEdgeWrapping}, {@link MirroredRepeatWrapping} and {@link RepeatWrapping}..
+     * @param {Number} [cfg.wrapR=RepeatWrapping] Wrap parameter for texture coordinate *R*. Supported values are {@link ClampToEdgeWrapping}, {@link MirroredRepeatWrapping} and {@link RepeatWrapping}.
      * @param {Boolean} [cfg.flipY=false] Flips this Texture's source data along its vertical axis when ````true````.
      * @param  {Number} [cfg.encoding=LinearEncoding] Encoding format. Supported values are {@link LinearEncoding} and {@link sRGBEncoding}.
      */
@@ -2135,6 +2136,11 @@ class VBOSceneModel extends Component {
             this.error(`[createTexture] Unsupported value for 'wrapT' - supported values are ClampToEdgeWrapping, MirroredRepeatWrapping and RepeatWrapping. Defaulting to RepeatWrapping.`);
             wrapT = RepeatWrapping;
         }
+        let wrapR = cfg.wrapR || RepeatWrapping;
+        if (wrapR !== ClampToEdgeWrapping && wrapR !== MirroredRepeatWrapping && wrapR !== RepeatWrapping) {
+            this.error(`[createTexture] Unsupported value for 'wrapR' - supported values are ClampToEdgeWrapping, MirroredRepeatWrapping and RepeatWrapping. Defaulting to RepeatWrapping.`);
+            wrapR = RepeatWrapping;
+        }
         let encoding = cfg.encoding || LinearEncoding;
         if (encoding !== LinearEncoding && encoding !== sRGBEncoding) {
             this.error("[createTexture] Unsupported value for 'encoding' - supported values are LinearEncoding and sRGBEncoding. Defaulting to LinearEncoding.");
@@ -2147,7 +2153,7 @@ class VBOSceneModel extends Component {
         if (cfg.image) { // Ignore transcoder for Images
             const image = cfg.image;
             image.crossOrigin = "Anonymous";
-            texture.setImage(image, {minFilter, magFilter, wrapS, wrapT, flipY: cfg.flipY, encoding});
+            texture.setImage(image, {minFilter, magFilter, wrapS, wrapT, wrapR, flipY: cfg.flipY, encoding});
 
         } else if (cfg.src) {
             const ext = cfg.src.split('.').pop();
@@ -2158,7 +2164,7 @@ class VBOSceneModel extends Component {
                 case "gif":
                     const image = new Image();
                     image.onload = () => {
-                        texture.setImage(image, {minFilter, magFilter, wrapS, wrapT, flipY: cfg.flipY, encoding});
+                        texture.setImage(image, {minFilter, magFilter, wrapS, wrapT, wrapR, flipY: cfg.flipY, encoding});
                         this.glRedraw();
                     };
                     image.src = cfg.src; // URL or Base64 string

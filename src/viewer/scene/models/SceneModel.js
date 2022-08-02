@@ -634,15 +634,20 @@ export class SceneModel  {
      * We can then supply the texture ID to {@link SceneModel#createTextureSet} when we want to create texture sets that use the texture.
      *
      * @param {*} cfg Texture properties.
-     * @param {String|Number} cfg.id Mandatory ID for the texture, to refer to with {@link SceneModel#createTextureSet}.
-     * @param {String} [cfg.src] Image source for the texture.
-     * @param {HTMLImageElement} [cfg.image] HTML Image object to load into this Texture.
-     * @param {String} [cfg.minFilter="linearMipmapLinear"] How the texture is sampled when a texel covers less than one pixel. Supported values are 'linear', 'linearMipmapNearest', 'nearestMipmapNearest', 'nearestMipmapLinear' and 'linearMipmapLinear'. Defaulting to 'linearMipmapLinear'.
-     * @param {String} [cfg.magFilter="linear"] How the texture is sampled when a texel covers more than one pixel. Supported values are 'linear' and 'nearest'.
-     * @param {String} [cfg.wrapS="repeat"] Wrap parameter for texture coordinate *S*. Supported values are 'clampToEdge', 'mirroredRepeat' and 'repeat'.
-     * @param {String} [cfg.wrapT="repeat"] Wrap parameter for texture coordinate *T*. Supported values are 'clampToEdge', 'mirroredRepeat' and 'repeat'.
+     * @param {String|Number} cfg.id Mandatory ID for the texture, to refer to with {@link VBOSceneModel#createTextureSet}.
+     * @param {String} [cfg.src] Image file for the texture. Assumed to be transcoded if not having a recognized image file
+     * extension (jpg, jpeg, png etc.). If transcoded, then assumes ````VBOSceneModel```` is configured with a {@link TextureTranscoder}.
+     * @param {ArrayBuffer[]} [cfg.buffers] Transcoded texture data. Assumes ````VBOSceneModel```` is
+     * configured with a {@link TextureTranscoder}. This parameter is given as an array of buffers so we can potentially support multi-image textures, such as cube maps.
+     * @param {HTMLImageElement} [cfg.image] HTML Image object to load into this texture. Overrides ````src```` and ````buffers````. Never transcoded.
+     * @param {Number} [cfg.minFilter=LinearMipmapLinearFilter] How the texture is sampled when a texel covers less than one pixel.
+     * Supported values are {@link LinearMipmapLinearFilter}, {@link LinearMipMapNearestFilter}, {@link NearestMipMapNearestFilter}, {@link NearestMipMapLinearFilter} and {@link LinearMipMapLinearFilter}.
+     * @param {Number} [cfg.magFilter=LinearFilter] How the texture is sampled when a texel covers more than one pixel. Supported values are {@link LinearFilter} and {@link NearestFilter}.
+     * @param {Number} [cfg.wrapS=RepeatWrapping] Wrap parameter for texture coordinate *S*. Supported values are {@link ClampToEdgeWrapping}, {@link MirroredRepeatWrapping} and {@link RepeatWrapping}.
+     * @param {Number} [cfg.wrapT=RepeatWrapping] Wrap parameter for texture coordinate *T*. Supported values are {@link ClampToEdgeWrapping}, {@link MirroredRepeatWrapping} and {@link RepeatWrapping}.
+     * @param {Number} [cfg.wrapR=RepeatWrapping] Wrap parameter for texture coordinate *R*. Supported values are {@link ClampToEdgeWrapping}, {@link MirroredRepeatWrapping} and {@link RepeatWrapping}.
      * @param {Boolean} [cfg.flipY=false] Flips this Texture's source data along its vertical axis when ````true````.
-     * @param  {String} [cfg.encoding="linear"] Encoding format. Supported values are 'linear', 'sRGB', 'gamma'
+     * @param {Number} [cfg.encoding=LinearEncoding] Encoding format. Supported values are {@link LinearEncoding} and {@link sRGBEncoding}.
      * @abstract
      */
     createTexture(cfg) {
