@@ -4,6 +4,17 @@ import {core} from "../../viewer/scene/core.js";
 import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords";
 import {parse} from '../../../node_modules/@loaders.gl/core/dist/esm/index.js';
 import {GLTFLoader} from '../../../node_modules/@loaders.gl/gltf/dist/esm/gltf-loader.js';
+import {
+    ClampToEdgeWrapping,
+    LinearFilter,
+    LinearMipMapLinearFilter,
+    LinearMipMapNearestFilter,
+    MirroredRepeatWrapping,
+    NearestFilter,
+    NearestMipMapLinearFilter,
+    NearestMipMapNearestFilter,
+    RepeatWrapping
+} from "../../viewer/scene/constants/constants.js";
 
 /**
  * @private
@@ -88,10 +99,8 @@ function getBasePath(src) {
 function parseGLTF(plugin, gltf, src, options, sceneModel, ok) {
     const spinner = plugin.viewer.scene.canvas.spinner;
     spinner.processes++;
-    const gl = sceneModel.scene.canvas.gl;
     parse(gltf, GLTFLoader, {
-        baseUri: options.basePath,
-        gl
+        baseUri: options.basePath
     }).then((gltfData) => {
         const ctx = {
             src: src,
@@ -131,10 +140,86 @@ function loadTexture(ctx, texture) {
         return;
     }
     const textureId = `texture-${ctx.nextId++}`;
+
+    let minFilter = NearestMipMapLinearFilter;
+    switch (texture.sampler.minFilter) {
+        case 9728:
+            minFilter = NearestFilter;
+            break;
+        case 9729:
+            minFilter = LinearFilter;
+            break;
+        case 9984:
+            minFilter = NearestMipMapNearestFilter;
+            break;
+        case 9985:
+            minFilter = LinearMipMapNearestFilter;
+            break;
+        case 9986:
+            minFilter = NearestMipMapLinearFilter;
+            break;
+        case 9987:
+            minFilter = LinearMipMapLinearFilter;
+            break;
+    }
+
+    let magFilter = LinearFilter;
+    switch (texture.sampler.magFilter) {
+        case 9728:
+            magFilter = NearestFilter;
+            break;
+        case 9729:
+            magFilter = LinearFilter;
+            break;
+    }
+
+    let wrapS = RepeatWrapping;
+    switch (texture.sampler.wrapS) {
+        case 33071:
+            wrapS = ClampToEdgeWrapping;
+            break;
+        case 33648:
+            wrapS = MirroredRepeatWrapping;
+            break;
+        case 10497:
+            wrapS = RepeatWrapping;
+            break;
+    }
+
+    let wrapT = RepeatWrapping;
+    switch (texture.sampler.wrapT) {
+        case 33071:
+            wrapT = ClampToEdgeWrapping;
+            break;
+        case 33648:
+            wrapT = MirroredRepeatWrapping;
+            break;
+        case 10497:
+            wrapT = RepeatWrapping;
+            break;
+    }
+
+    let wrapR = RepeatWrapping;
+    switch (texture.sampler.wrapR) {
+        case 33071:
+            wrapR = ClampToEdgeWrapping;
+            break;
+        case 33648:
+            wrapR = MirroredRepeatWrapping;
+            break;
+        case 10497:
+            wrapR = RepeatWrapping;
+            break;
+    }
     ctx.sceneModel.createTexture({
         id: textureId,
         image: texture.source.image,
         flipY: !!texture.flipY,
+        minFilter,
+        magFilter,
+        wrapS,
+        wrapT,
+        wrapR,
         //     encoding: sRGBEncoding
     });
     texture._textureId = textureId;
