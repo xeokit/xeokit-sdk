@@ -46,16 +46,16 @@
   },
   "homepage": "https://xeokit.io",
   "dependencies": {
-    "@babel/core": "^7.18.6",
-    "@babel/preset-env": "^7.18.6",
-    "@loaders.gl/core": "^3.1.8",
-    "@loaders.gl/draco": "^3.1.8",
-    "@loaders.gl/gltf": "^3.1.8",
-    "@loaders.gl/las": "^3.1.8",
-    "@rollup/plugin-babel": "^5.3.1",
-    "web-ifc": "0.0.34"
+    "@loaders.gl/core": "^3.2.6",
+    "@loaders.gl/draco": "^3.2.6",
+    "@loaders.gl/gltf": "^3.2.6",
+    "@loaders.gl/las": "^3.2.6",
+    "web-ifc": "^0.0.34"
   },
   "devDependencies": {
+    "@babel/core": "^7.18.6",
+    "@babel/preset-env": "^7.18.6",
+    "@rollup/plugin-babel": "^5.3.1",
     "@rollup/plugin-node-resolve": "^13.2.1",
     "esdoc": "^1.1.0",
     "esdoc-custom-theme": "^1.4.2",
