@@ -129,7 +129,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const pom = document.createElement('a');
-    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(getBCFViewpoint()));
+    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(getBCFViewpoint(), null, 4)));
     pom.setAttribute('download', "bcfViewpoint.json");
     pom.innerText = "Download BCF Viewpoint JSON";
     document.getElementById("downloadLink").appendChild(pom)
