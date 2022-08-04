@@ -21,17 +21,17 @@ import {Texture2D} from "../../webgl/Texture2D.js";
 import {utils} from "../../utils.js";
 import {getKTX2TextureTranscoder} from "../../utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js";
 import {
+    ClampToEdgeWrapping,
+    LinearEncoding,
     LinearFilter,
     LinearMipmapLinearFilter,
-    NearestMipMapLinearFilter,
-    RepeatWrapping,
-    LinearEncoding,
-    sRGBEncoding,
-    NearestMipMapNearestFilter,
-    ClampToEdgeWrapping,
-    MirroredRepeatWrapping,
     LinearMipMapNearestFilter,
-    NearestFilter
+    MirroredRepeatWrapping,
+    NearestFilter,
+    NearestMipMapLinearFilter,
+    NearestMipMapNearestFilter,
+    RepeatWrapping,
+    sRGBEncoding
 } from "../../constants/constants.js";
 
 const tempVec3a = math.vec3();
@@ -2164,7 +2164,15 @@ class VBOSceneModel extends Component {
                 case "gif":
                     const image = new Image();
                     image.onload = () => {
-                        texture.setImage(image, {minFilter, magFilter, wrapS, wrapT, wrapR, flipY: cfg.flipY, encoding});
+                        texture.setImage(image, {
+                            minFilter,
+                            magFilter,
+                            wrapS,
+                            wrapT,
+                            wrapR,
+                            flipY: cfg.flipY,
+                            encoding
+                        });
                         this.glRedraw();
                     };
                     image.src = cfg.src; // URL or Base64 string
@@ -2515,9 +2523,9 @@ class VBOSceneModel extends Component {
                 }
             }
             if (needNewBatchingLayers) {
-                for (let prim in this._currentBatchingLayers) {
-                    if (this._currentBatchingLayers.hasOwnProperty(prim)) {
-                        this._currentBatchingLayers[prim].finalize();
+                for (let primitiveId in this._currentBatchingLayers) {
+                    if (this._currentBatchingLayers.hasOwnProperty(primitiveId)) {
+                        this._currentBatchingLayers[primitiveId].finalize();
                     }
                 }
                 this._currentBatchingLayers = {};
@@ -2526,12 +2534,12 @@ class VBOSceneModel extends Component {
             const normalsProvided = (!!cfg.normals && cfg.normals.length > 0);
             if (primitive === "triangles" || primitive === "solid" || primitive === "surface") {
                 if (this._lastNormals !== null && normalsProvided !== this._lastNormals) {
-                    ["triangles", "solid", "surface"].map(primitiveId => {
+                    for (let primitiveId in this._currentBatchingLayers) {
                         if (this._currentBatchingLayers[primitiveId]) {
                             this._currentBatchingLayers[primitiveId].finalize();
                             delete this._currentBatchingLayers[primitiveId];
                         }
-                    });
+                    }
                 }
                 this._lastNormals = normalsProvided;
             }
@@ -2553,7 +2561,12 @@ class VBOSceneModel extends Component {
 
             const textureSet = textureSetId ? this._textureSets[textureSetId] : null;
 
-            layer = this._currentBatchingLayers[primitive];
+            const primitiveId = `${primitive}-\
+${cfg.normals && cfg.normals.length > 0 ? 1 : 0}-${cfg.normalsCompressed && cfg.normalsCompressed.length > 0 ? 1 : 0}-\
+${cfg.colors && cfg.colors.length > 0 ? 1 : 0}-${cfg.colorsCompressed && cfg.colorsCompressed.length > 0 ? 1 : 0}-\
+${cfg.uv && cfg.uv.length > 0 ? 1 : 0}-${cfg.uvCompressed && cfg.uvCompressed.length > 0 ? 1 : 0}`;
+
+            layer = this._currentBatchingLayers[primitiveId];
 
             const lenPositions = (positions || cfg.positionsCompressed).length;
 
@@ -2564,7 +2577,7 @@ class VBOSceneModel extends Component {
                     if (layer) {
                         if (!layer.canCreatePortion(lenPositions, indices.length)) {
                             layer.finalize();
-                            delete this._currentBatchingLayers[primitive];
+                            delete this._currentBatchingLayers[primitiveId];
                             layer = null;
                         }
                     }
@@ -2582,7 +2595,7 @@ class VBOSceneModel extends Component {
                             autoNormals: (!normalsProvided)
                         });
                         this._layerList.push(layer);
-                        this._currentBatchingLayers[primitive] = layer;
+                        this._currentBatchingLayers[primitiveId] = layer;
                     }
                     if (!edgeIndices) {
                         edgeIndices = buildEdgeIndices(positions || cfg.positionsCompressed, indices, null, this._edgeThreshold);
@@ -2616,7 +2629,7 @@ class VBOSceneModel extends Component {
                     if (layer) {
                         if (!layer.canCreatePortion(lenPositions, indices.length)) {
                             layer.finalize();
-                            delete this._currentBatchingLayers[primitive];
+                            delete this._currentBatchingLayers[primitiveId];
                             layer = null;
                         }
                     }
@@ -2630,7 +2643,7 @@ class VBOSceneModel extends Component {
                             maxGeometryBatchSize: this._maxGeometryBatchSize
                         });
                         this._layerList.push(layer);
-                        this._currentBatchingLayers[primitive] = layer;
+                        this._currentBatchingLayers[primitiveId] = layer;
                     }
                     portionId = layer.createPortion({
                         positions: positions,
@@ -2652,7 +2665,7 @@ class VBOSceneModel extends Component {
                     if (layer) {
                         if (!layer.canCreatePortion(lenPositions)) {
                             layer.finalize();
-                            delete this._currentBatchingLayers[primitive];
+                            delete this._currentBatchingLayers[primitiveId];
                             layer = null;
                         }
                     }
@@ -2666,7 +2679,7 @@ class VBOSceneModel extends Component {
                             maxGeometryBatchSize: this._maxGeometryBatchSize
                         });
                         this._layerList.push(layer);
-                        this._currentBatchingLayers[primitive] = layer;
+                        this._currentBatchingLayers[primitiveId] = layer;
                     }
                     portionId = layer.createPortion({
                         positions: positions,

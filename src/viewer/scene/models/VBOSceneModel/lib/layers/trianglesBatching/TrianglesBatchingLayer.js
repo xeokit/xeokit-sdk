@@ -206,8 +206,7 @@ class TrianglesBatchingLayer {
 
         const scene = this.model.scene;
         const buffer = this._buffer;
-        const positionsIndex = buffer.positions.length;
-        const vertsIndex = positionsIndex / 3;
+        const vertsBaseIndex = buffer.positions.length / 3;
 
         let numVerts;
 
@@ -371,13 +370,13 @@ class TrianglesBatchingLayer {
 
         if (indices) {
             for (let i = 0, len = indices.length; i < len; i++) {
-                buffer.indices.push(indices[i] + vertsIndex);
+                buffer.indices.push(vertsBaseIndex + indices[i]);
             }
         }
 
         if (edgeIndices) {
             for (let i = 0, len = edgeIndices.length; i < len; i++) {
-                buffer.edgeIndices.push(edgeIndices[i] + vertsIndex);
+                buffer.edgeIndices.push(vertsBaseIndex + edgeIndices[i]);
             }
         }
 
@@ -403,7 +402,7 @@ class TrianglesBatchingLayer {
         const portionId = this._portions.length;
 
         const portion = {
-            vertsBase: vertsIndex,
+            vertsBaseIndex: vertsBaseIndex,
             numVerts: numVerts
         };
 
@@ -454,7 +453,7 @@ class TrianglesBatchingLayer {
             if (this.model.scene.pickSurfacePrecisionEnabled) {
                 for (let i = 0, numPortions = this._portions.length; i < numPortions; i++) {
                     const portion = this._portions[i];
-                    const start = portion.vertsBase * 3;
+                    const start = portion.vertsBaseIndex * 3;
                     const end = start + (portion.numVerts * 3);
                     portion.quantizedPositions = quantizedPositions.slice(start, end);
                 }
@@ -717,9 +716,9 @@ class TrianglesBatchingLayer {
         }
         const portionsIdx = portionId;
         const portion = this._portions[portionsIdx];
-        const vertexBase = portion.vertsBase;
+        const vertsBaseIndex = portion.vertsBaseIndex;
         const numVerts = portion.numVerts;
-        const firstColor = vertexBase * 4;
+        const firstColor = vertsBaseIndex * 4;
         const lenColor = numVerts * 4;
         const tempArray = this._scratchMemory.getUInt8Array(lenColor);
         const r = color[0];
@@ -756,9 +755,9 @@ class TrianglesBatchingLayer {
 
         const portionsIdx = portionId;
         const portion = this._portions[portionsIdx];
-        const vertexBase = portion.vertsBase;
+        const vertsBaseIndex = portion.vertsBaseIndex;
         const numVerts = portion.numVerts;
-        const firstFlag = vertexBase * 4;
+        const firstFlag = vertsBaseIndex * 4;
         const lenFlags = numVerts * 4;
 
         const visible = !!(flags & ENTITY_FLAGS.VISIBLE);
@@ -774,7 +773,7 @@ class TrianglesBatchingLayer {
         let f0;
         if (!visible || culled || xrayed
             || (highlighted && !this.model.scene.highlightMaterial.glowThrough)
-            || (selected && !this.model.scene.selectedMaterial.glowThrough) ) {
+            || (selected && !this.model.scene.selectedMaterial.glowThrough)) {
             f0 = RENDER_PASSES.NOT_RENDERED;
         } else {
             if (transparent) {
@@ -862,9 +861,9 @@ class TrianglesBatchingLayer {
 
         const portionsIdx = portionId;
         const portion = this._portions[portionsIdx];
-        const vertexBase = portion.vertsBase;
+        const vertsBaseIndex = portion.vertsBaseIndex;
         const numVerts = portion.numVerts;
-        const firstFlag = vertexBase * 4;
+        const firstFlag = vertsBaseIndex * 4;
         const lenFlags = numVerts * 4;
         const clippable = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 255 : 0;
 
@@ -901,9 +900,9 @@ class TrianglesBatchingLayer {
         }
         const portionsIdx = portionId;
         const portion = this._portions[portionsIdx];
-        const vertexBase = portion.vertsBase;
+        const vertsBaseIndex = portion.vertsBaseIndex;
         const numVerts = portion.numVerts;
-        const firstOffset = vertexBase * 3;
+        const firstOffset = vertsBaseIndex * 3;
         const lenOffsets = numVerts * 3;
         const tempArray = this._scratchMemory.getFloat32Array(lenOffsets);
         const x = offset[0];
@@ -1168,10 +1167,10 @@ class TrianglesBatchingLayer {
         //     }
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // } else {
-            if (this._batchingRenderers.pickNormalsFlatRenderer) {
-                this._batchingRenderers.pickNormalsFlatRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
-            }
-       // }
+        if (this._batchingRenderers.pickNormalsFlatRenderer) {
+            this._batchingRenderers.pickNormalsFlatRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        }
+        // }
     }
 
     //------------------------------------------------------------------------------------------------
