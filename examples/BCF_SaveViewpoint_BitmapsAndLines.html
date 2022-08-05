@@ -30,7 +30,8 @@
         information model. BCF defines views of a building model and associated information on collisions
         and errors connected with specific objects in the view. </p>
     <p>In this example, to simulate logging a model issue via BCF, we're loading a BIM model from the file system,
-        slicing it with a section plane, adding some line segments and a bitmap, selecting some objects, then saving the viewer state as a JSON-encoded BCF
+        slicing it with a section plane, adding some line segments and a bitmap, selecting some objects, then saving the
+        viewer state as a JSON-encoded BCF
         viewpoint.</p>
     <h3>Components Used</h3>
     <ul>
@@ -195,21 +196,24 @@
             "1uDn0xT8LBkP15zQc9MVDW"
         ], true);
 
-        const viewpoint = bcfViewpoints.getViewpoint({ // Options
-            spacesVisible: false, // Don't force IfcSpace types visible in viewpoint (default)
-            spaceBoundariesVisible: false, // Don't show IfcSpace boundaries in viewpoint (default)
-            openingsVisible: false // Don't force IfcOpening types visible in viewpoint (default)
-        });
-
-        const viewpointStr = JSON.stringify(viewpoint, null, 4);
-
-        console.log(viewpointStr);
 
         // Create download link
         // https://stackoverflow.com/questions/2897619/using-html5-javascript-to-generate-and-save-a-file
 
         const pom = document.createElement('a');
-        pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(viewpointStr));
+
+        pom.onclick = function () {
+
+            const viewpoint = bcfViewpoints.getViewpoint({ // Options
+                spacesVisible: false, // Don't force IfcSpace types visible in viewpoint (default)
+                spaceBoundariesVisible: false, // Don't show IfcSpace boundaries in viewpoint (default)
+                openingsVisible: false // Don't force IfcOpening types visible in viewpoint (default)
+            });
+
+            const viewpointStr = JSON.stringify(viewpoint, null, 4);
+            pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(viewpointStr));
+        }
+
         pom.setAttribute('download', "bcfViewpoint.json");
         pom.innerText = "Download BCF Viewpoint JSON";
         document.getElementById("downloadLink").appendChild(pom);
