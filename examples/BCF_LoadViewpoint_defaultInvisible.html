@@ -127,11 +127,26 @@
     // https://stackoverflow.com/questions/2897619/using-html5-javascript-to-generate-and-save-a-file
     //------------------------------------------------------------------------------------------------------------------
 
+    // Create download link
+    // https://stackoverflow.com/questions/2897619/using-html5-javascript-to-generate-and-save-a-file
+
     const pom = document.createElement('a');
-    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(getBCFViewpoint(), null, 4)));
+
+    pom.onclick = function () {
+
+        const viewpoint = bcfViewpoints.getViewpoint({ // Options
+            spacesVisible: false, // Don't force IfcSpace types visible in viewpoint (default)
+            spaceBoundariesVisible: false, // Don't show IfcSpace boundaries in viewpoint (default)
+            openingsVisible: false // Don't force IfcOpening types visible in viewpoint (default)
+        });
+
+        const viewpointStr = JSON.stringify(viewpoint, null, 4);
+        pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(viewpointStr));
+    }
+
     pom.setAttribute('download', "bcfViewpoint.json");
     pom.innerText = "Download BCF Viewpoint JSON";
-    document.getElementById("downloadLink").appendChild(pom)
+    document.getElementById("downloadLink").appendChild(pom);
 
     //------------------------------------------------------------------------------------------------------------------
     // Returns the JSON BCF viewpoint we'll load
