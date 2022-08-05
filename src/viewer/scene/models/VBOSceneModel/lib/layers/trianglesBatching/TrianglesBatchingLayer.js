@@ -346,16 +346,18 @@ class TrianglesBatchingLayer {
             const g = color[1];
             const b = color[2];
             const a = opacity;
-            const metallicValue = (metallic !== null && metallic !== undefined) ? metallic : 0;
-            const roughnessValue = (roughness !== null && roughness !== undefined) ? roughness : 255;
             for (let i = 0; i < numVerts; i++) {
                 buffer.colors.push(r);
                 buffer.colors.push(g);
                 buffer.colors.push(b);
                 buffer.colors.push(a);
-                buffer.metallicRoughness.push(metallicValue);
-                buffer.metallicRoughness.push(roughnessValue);
             }
+        }
+        const metallicValue = (metallic !== null && metallic !== undefined) ? metallic : 0;
+        const roughnessValue = (roughness !== null && roughness !== undefined) ? roughness : 255;
+        for (let i = 0; i < numVerts; i++) {
+            buffer.metallicRoughness.push(metallicValue);
+            buffer.metallicRoughness.push(roughnessValue);
         }
 
         if (uv && uv.length > 0) {

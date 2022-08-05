@@ -23,7 +23,7 @@ const color = new Uint8Array([0, 0, 0, 1]);
  */
 class Texture2D {
 
-    constructor({gl, target, format, type, wrapS, wrapT, wrapR, preloadColor, premultiplyAlpha, flipY}) {
+    constructor({gl, target, format, type, wrapS, wrapT, wrapR, encoding, preloadColor, premultiplyAlpha, flipY}) {
 
         this.gl = gl;
 
@@ -37,7 +37,7 @@ class Texture2D {
         this.wrapS = wrapS || RepeatWrapping;
         this.wrapT = wrapT || RepeatWrapping;
         this.wrapR = wrapR || RepeatWrapping;
-
+        this.encoding = encoding || sRGBEncoding;
         this.texture = gl.createTexture();
 
         if (preloadColor) {

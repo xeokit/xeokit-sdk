@@ -2146,7 +2146,16 @@ class VBOSceneModel extends Component {
             this.error("[createTexture] Unsupported value for 'encoding' - supported values are LinearEncoding and sRGBEncoding. Defaulting to LinearEncoding.");
             encoding = LinearEncoding;
         }
-        const texture = new Texture2D({gl: this.scene.canvas.gl});
+        const texture = new Texture2D({
+            gl: this.scene.canvas.gl,
+            minFilter,
+            magFilter,
+            wrapS,
+            wrapT,
+            wrapR,
+           // flipY: cfg.flipY,
+            encoding
+        });
         if (cfg.preloadColor) {
             texture.setPreloadColor(cfg.preloadColor);
         }

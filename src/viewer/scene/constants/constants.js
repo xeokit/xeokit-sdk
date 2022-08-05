@@ -364,3 +364,8 @@ export const JPEGMediaType = 10001;
  * Media type for PNG images.
  */
 export const PNGMediaType = 10002;
+
+/**
+ * Media type for compressed texture data.
+ */
+export const CompressedMediaType = 10003;

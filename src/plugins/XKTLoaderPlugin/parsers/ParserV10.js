@@ -6,6 +6,7 @@ import {utils} from "../../../viewer/scene/utils.js";
 import * as p from "./lib/pako.js";
 import {math} from "../../../viewer/scene/math/math.js";
 import {geometryCompressionUtils} from "../../../viewer/scene/math/geometryCompressionUtils.js";
+import {JPEGMediaType, PNGMediaType} from "../../../viewer/scene/constants/constants.js";
 
 let pako = window.pako || p;
 if (!pako.inflate) {  // See https://github.com/nodeca/pako/issues/97
@@ -15,37 +16,41 @@ if (!pako.inflate) {  // See https://github.com/nodeca/pako/issues/97
 const tempVec4a = math.vec4();
 const tempVec4b = math.vec4();
 
+const NUM_TEXTURE_ATTRIBUTES = 9;
+
 function extract(elements) {
 
+    let i = 0;
+
     return {
-        metadata: elements[0],
-        textureData: elements[1],
-        eachTextureDataPortion: elements[2],
-        eachTextureDimensions: elements[3],
-        positions: elements[4],
-        normals: elements[5],
-        colors: elements[6],
-        uvs: elements[7],
-        indices: elements[8],
-        edgeIndices: elements[9],
-        eachTextureSetTextures: elements[10],
-        matrices: elements[11],
-        reusedGeometriesDecodeMatrix: elements[12],
-        eachGeometryPrimitiveType: elements[13],
-        eachGeometryPositionsPortion: elements[14],
-        eachGeometryNormalsPortion: elements[15],
-        eachGeometryColorsPortion: elements[16],
-        eachGeometryUVsPortion: elements[17],
-        eachGeometryIndicesPortion: elements[18],
-        eachGeometryEdgeIndicesPortion: elements[19],
-        eachMeshGeometriesPortion: elements[20],
-        eachMeshMatricesPortion: elements[21],
-        eachMeshTextureSet: elements[22],
-        eachMeshMaterialAttributes: elements[23],
-        eachEntityId: elements[24],
-        eachEntityMeshesPortion: elements[25],
-        eachTileAABB: elements[26],
-        eachTileEntitiesPortion: elements[27]
+        metadata: elements[i++],
+        textureData: elements[i++],
+        eachTextureDataPortion: elements[i++],
+        eachTextureAttributes: elements[i++],
+        positions: elements[i++],
+        normals: elements[i++],
+        colors: elements[i++],
+        uvs: elements[i++],
+        indices: elements[i++],
+        edgeIndices: elements[i++],
+        eachTextureSetTextures: elements[i++],
+        matrices: elements[i++],
+        reusedGeometriesDecodeMatrix: elements[i++],
+        eachGeometryPrimitiveType: elements[i++],
+        eachGeometryPositionsPortion: elements[i++],
+        eachGeometryNormalsPortion: elements[i++],
+        eachGeometryColorsPortion: elements[i++],
+        eachGeometryUVsPortion: elements[i++],
+        eachGeometryIndicesPortion: elements[i++],
+        eachGeometryEdgeIndicesPortion: elements[i++],
+        eachMeshGeometriesPortion: elements[i++],
+        eachMeshMatricesPortion: elements[i++],
+        eachMeshTextureSet: elements[i++],
+        eachMeshMaterialAttributes: elements[i++],
+        eachEntityId: elements[i++],
+        eachEntityMeshesPortion: elements[i++],
+        eachTileAABB: elements[i++],
+        eachTileEntitiesPortion: elements[i++]
     };
 }
 
@@ -57,9 +62,9 @@ function inflate(deflatedData) {
 
     return {
         metadata: JSON.parse(pako.inflate(deflatedData.metadata, {to: 'string'})),
-        textureData: new Uint8Array(inflate(deflatedData.textureData)),
+        textureData: new Uint8Array(deflatedData.textureData),  // <<----------------------------- ??? ZIPPing to blame?
         eachTextureDataPortion: new Uint32Array(inflate(deflatedData.eachTextureDataPortion)),
-        eachTextureDimensions: new Uint16Array(inflate(deflatedData.eachTextureDimensions)),
+        eachTextureAttributes: new Uint16Array(inflate(deflatedData.eachTextureAttributes)),
         positions: new Uint16Array(inflate(deflatedData.positions)),
         normals: new Int8Array(inflate(deflatedData.normals)),
         colors: new Uint8Array(inflate(deflatedData.colors)),
@@ -113,7 +118,7 @@ function load(viewer, options, inflatedData, sceneModel) {
     const metadata = inflatedData.metadata;
     const textureData = inflatedData.textureData;
     const eachTextureDataPortion = inflatedData.eachTextureDataPortion;
-    const eachTextureDimensions = inflatedData.eachTextureDimensions;
+    const eachTextureAttributes = inflatedData.eachTextureAttributes;
     const positions = inflatedData.positions;
     const normals = inflatedData.normals;
     const colors = inflatedData.colors;
@@ -171,17 +176,60 @@ function load(viewer, options, inflatedData, sceneModel) {
         const atLastTexture = (textureIndex === (numTextures - 1));
         const textureDataPortionStart = eachTextureDataPortion[textureIndex];
         const textureDataPortionEnd = atLastTexture ? textureData.length : (eachTextureDataPortion[textureIndex + 1]);
+
         const textureDataPortionSize = textureDataPortionEnd - textureDataPortionStart;
         const textureDataPortionExists = (textureDataPortionSize > 0);
+
+        const textureAttrBaseIdx = (textureIndex * NUM_TEXTURE_ATTRIBUTES);
+
+        const compressed = (eachTextureAttributes[textureAttrBaseIdx + 0] === 1);
+        const mediaType = eachTextureAttributes[textureAttrBaseIdx + 1];
+        const width = eachTextureAttributes[textureAttrBaseIdx + 2];
+        const height = eachTextureAttributes[textureAttrBaseIdx + 3];
+        const minFilter = eachTextureAttributes[textureAttrBaseIdx + 4];
+        const magFilter = eachTextureAttributes[textureAttrBaseIdx + 5]; // LinearFilter | NearestFilter
+        const wrapS = eachTextureAttributes[textureAttrBaseIdx + 6]; // ClampToEdgeWrapping | MirroredRepeatWrapping | RepeatWrapping
+        const wrapT = eachTextureAttributes[textureAttrBaseIdx + 7]; // ClampToEdgeWrapping | MirroredRepeatWrapping | RepeatWrapping
+        const wrapR = eachTextureAttributes[textureAttrBaseIdx + 8]; // ClampToEdgeWrapping | MirroredRepeatWrapping | RepeatWrapping
+
         if (textureDataPortionExists) {
 
             const imageDataSubarray = new Uint8Array(textureData.subarray(textureDataPortionStart, textureDataPortionEnd));
             const arrayBuffer = imageDataSubarray.buffer;
+            const textureId = `texture-${textureIndex}`;
 
-            sceneModel.createTexture({
-                id: `texture-${textureIndex}`,
-                buffers: [arrayBuffer]
-            });
+            if (compressed) {
+
+                sceneModel.createTexture({
+                    id: textureId,
+                    buffers: [arrayBuffer],
+                    minFilter,
+                    magFilter,
+                    wrapS,
+                    wrapT,
+                    wrapR
+                });
+
+            } else {
+
+                const mimeType = mediaType === JPEGMediaType ? "image/jpeg" : (mediaType === PNGMediaType ? "image/png" : "image/gif");
+                const blob = new Blob([arrayBuffer], {type: mimeType});
+                const urlCreator = window.URL || window.webkitURL;
+                const imageUrl = urlCreator.createObjectURL(blob);
+                const img = document.createElement('img');
+                img.src = imageUrl;
+
+                sceneModel.createTexture({
+                    id: textureId,
+                    image: img,
+                    //mediaType,
+                    minFilter,
+                    magFilter,
+                    wrapS,
+                    wrapT,
+                    wrapR
+                });
+            }
         }
     }
 
