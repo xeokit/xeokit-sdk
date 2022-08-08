@@ -62,7 +62,7 @@ function inflate(deflatedData) {
 
     return {
         metadata: JSON.parse(pako.inflate(deflatedData.metadata, {to: 'string'})),
-        textureData: new Uint8Array(deflatedData.textureData),  // <<----------------------------- ??? ZIPPing to blame?
+        textureData: new Uint8Array(inflate(deflatedData.textureData)),  // <<----------------------------- ??? ZIPPing to blame?
         eachTextureDataPortion: new Uint32Array(inflate(deflatedData.eachTextureDataPortion)),
         eachTextureAttributes: new Uint16Array(inflate(deflatedData.eachTextureAttributes)),
         positions: new Uint16Array(inflate(deflatedData.positions)),

@@ -52,14 +52,12 @@
 </body>
 <script type="module">
 
-    import {Viewer, GLTFLoaderPlugin, ReflectionMap, LightMap} from "./../dist/xeokit-sdk.es.js";
+    import {Viewer, GLTFLoaderPlugin, ReflectionMap, LightMap, sRGBEncoding} from "./../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true,
-        pbrEnabled: true,
-        saoEnabled: true,
-        colorTextureEnabled: true
+        pbrEnabled: true
     });
 
     viewer.camera.eye = [-2.56, 8.38, 8.27];
@@ -79,20 +77,9 @@
             "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PZ.png",
             "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NZ.png"
         ],
-        encoding: "sRGB"
+        encoding: sRGBEncoding
     });
 
-    // new LightMap(viewer.scene, {
-    //     src: [
-    //         "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PX.png",
-    //         "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NX.png",
-    //         "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PY.png",
-    //         "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NY.png",
-    //         "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
-    //         "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
-    //     ],
-    //     encoding: "sRGB"
-    // });
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 

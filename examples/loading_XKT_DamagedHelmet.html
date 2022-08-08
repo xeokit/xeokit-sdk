@@ -15,8 +15,8 @@
 <div class="slideout-sidebar">
     <img class="info-icon" src="../assets/images/bim_icon.png"/>
     <h1>XKTLoaderPlugin</h1>
-    <h2>Loading BIM geometry from the file system, ignoring textures</h2>
-    <p>In this example, we're loading an XKT file converted from binary glTF, without textures because we configured convert2xkt to ignore them.</p>
+    <h2>Loading an XKT file converted from a binary glTF test model</h2>
+    <p>In this example, we're loading an XKT file converted from binary glTF, complete with textures.</p>
     <h3>Stats</h3>
     <ul>
         <li>
@@ -37,7 +37,7 @@
     <h3>Resources</h3>
     <ul>
         <li>
-            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
+            <a href="https://github.com/KhronosGroup/glTF-Sample-Models"
                target="_other">Model source</a>
         </li>
     </ul>
@@ -45,7 +45,7 @@
 </body>
 <script type="module">
 
-    import {Viewer, ReflectionMap, XKTLoaderPlugin, FastNavPlugin, sRGBEncoding, LinearEncoding} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, ReflectionMap, XKTLoaderPlugin, sRGBEncoding} from "../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -53,39 +53,22 @@
         pbrEnabled: true
     });
 
-    viewer.camera.eye = [1394.38, 3.78, -247.05];
-    viewer.camera.look = [1391.46, 0.89, -244.24];
-    viewer.camera.up = [-0.41, 0.81, 0.40];
+    viewer.camera.eye = [-2.56, 8.38, 8.27];
+    viewer.camera.look = [13.44, 3.31, -14.83];
+    viewer.camera.up = [0.10, 0.98, -0.14];
 
     viewer.scene.gammaInput = true;
     viewer.scene.gammaOutput = true;
-    viewer.scene.gammaFactor = 2.4;
-
-    viewer.scene.sao.enabled = true; // Higher-quality SAO settings
-    viewer.scene.sao.numSamples = 100;
-    viewer.scene.sao.kernelRadius = 170;
-    viewer.scene.sao.intensity = 0.2;
-
-    const fastNavPlugin = new FastNavPlugin(viewer, {
-        hideEdges: true,
-        hideSAO: true,
-        hideColorTexture: false,
-        hidePBR: false,
-        hideTransparentObjects: false,
-        scaleCanvasResolution: false,
-        scaleCanvasResolutionFactor: 0.5,
-        delayBeforeRestore: true,
-        delayBeforeRestoreSeconds: 0.4
-    });
+    viewer.scene.gammaFactor = 2.0;
 
     new ReflectionMap(viewer.scene, {
         src: [
-            "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PX.png",
-            "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NX.png",
-            "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PY.png",
-            "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NY.png",
-            "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
-            "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PX.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NX.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PY.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NY.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PZ.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NZ.png"
         ],
         encoding: sRGBEncoding
     });
@@ -99,7 +82,7 @@
 
     const sceneModel = xktLoader.load({
         id: "myModel",
-        src: "../assets/models/xkt/v10/glb/HousePlan.notextures.glb.xkt",
+        src: "../assets/models/xkt/v10/glb/DamagedHelmet.textures.glb.xkt",
         edges: false
     });
 
@@ -108,7 +91,9 @@
         document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
     });
 
-    window.viewer = viewer; // For debugging
+    sceneModel.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(sceneModel);
+    });
 
 </script>
 </html>

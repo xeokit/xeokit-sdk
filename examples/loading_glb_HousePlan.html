@@ -53,8 +53,7 @@
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true,
-        pbrEnabled: true,
-        saoEnabled: true
+        pbrEnabled: true
     });
 
     viewer.camera.eye = [1394.38, 3.78, -247.05];
@@ -66,13 +65,9 @@
     viewer.scene.gammaFactor = 2.4;
 
     viewer.scene.sao.enabled = true; // Higher-quality SAO settings
-    viewer.scene.sao.numSamples = 60;
+    viewer.scene.sao.numSamples = 100;
     viewer.scene.sao.kernelRadius = 170;
     viewer.scene.sao.intensity = 0.2;
-
-    viewer.camera.eye = [1394.38, 3.78, -247.05];
-    viewer.camera.look = [1391.46, 0.89, -244.24];
-    viewer.camera.up = [-0.41, 0.81, 0.40];
 
     const fastNavPlugin = new FastNavPlugin(viewer, {
         hideEdges: true,
@@ -80,7 +75,7 @@
         hideColorTexture: false,
         hidePBR: false,
         hideTransparentObjects: false,
-        scaleCanvasResolution: true,
+        scaleCanvasResolution: false,
         scaleCanvasResolutionFactor: 0.5,
         delayBeforeRestore: true,
         delayBeforeRestoreSeconds: 0.4
@@ -103,7 +98,7 @@
     const sceneModel = gltfLoader.load({
         id: "myHousePlan",
         src: "../assets/models/gltf/HousePlan/glTF-Binary/HousePlan.glb",
-        edges: false
+        edges: true
     });
 
 </script>

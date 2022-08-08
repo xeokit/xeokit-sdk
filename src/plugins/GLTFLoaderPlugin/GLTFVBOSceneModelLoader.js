@@ -1,6 +1,7 @@
 import {math} from "../../viewer/scene/math/math.js";
 import {utils} from "../../viewer/scene/utils.js";
 import {core} from "../../viewer/scene/core.js";
+import {sRGBEncoding} from "../../viewer/scene/constants/constants.js";
 import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords";
 import {parse} from '../../../node_modules/@loaders.gl/core/dist/esm/index.js';
 import {GLTFLoader} from '../../../node_modules/@loaders.gl/gltf/dist/esm/gltf-loader.js';
@@ -220,7 +221,7 @@ function loadTexture(ctx, texture) {
         wrapS,
         wrapT,
         wrapR,
-        //     encoding: sRGBEncoding
+             encoding: sRGBEncoding
     });
     texture._textureId = textureId;
 }
@@ -278,6 +279,20 @@ function loadTextureSet(ctx, material) {
         }
         if (metallicPBR.metallicRoughnessTexture) {
             textureSetCfg.metallicRoughnessTextureId = metallicPBR.metallicRoughnessTexture.texture._textureId;
+        }
+    }
+    const extensions = material.extensions;
+    if (extensions) {
+        const specularPBR = extensions["KHR_materials_pbrSpecularGlossiness"];
+        if (specularPBR) {
+            const specularTexture = specularPBR.specularTexture;
+            if (specularTexture !== null && specularTexture !== undefined) {
+                //  textureSetCfg.colorTextureId = ctx.gltfData.textures[specularColorTexture.index]._textureId;
+            }
+            const specularColorTexture = specularPBR.specularColorTexture;
+            if (specularColorTexture !== null && specularColorTexture !== undefined) {
+                textureSetCfg.colorTextureId = ctx.gltfData.textures[specularColorTexture.index]._textureId;
+            }
         }
     }
     if (textureSetCfg.normalTextureId !== undefined ||

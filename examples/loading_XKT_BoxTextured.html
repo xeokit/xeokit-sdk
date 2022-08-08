@@ -15,8 +15,8 @@
 <div class="slideout-sidebar">
     <img class="info-icon" src="../assets/images/bim_icon.png"/>
     <h1>XKTLoaderPlugin</h1>
-    <h2>Loading BIM geometry from the file system, ignoring textures</h2>
-    <p>In this example, we're loading an XKT file converted from binary glTF, without textures because we configured convert2xkt to ignore them.</p>
+    <h2>Loading an XKT file converted from a binary glTF test model</h2>
+    <p>In this example, we're loading an XKT file converted from binary glTF, complete with textures.</p>
     <h3>Stats</h3>
     <ul>
         <li>
@@ -37,7 +37,7 @@
     <h3>Resources</h3>
     <ul>
         <li>
-            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
+            <a href="https://github.com/KhronosGroup/glTF-Sample-Models"
                target="_other">Model source</a>
         </li>
     </ul>
@@ -53,9 +53,9 @@
         pbrEnabled: true
     });
 
-    viewer.camera.eye = [1394.38, 3.78, -247.05];
-    viewer.camera.look = [1391.46, 0.89, -244.24];
-    viewer.camera.up = [-0.41, 0.81, 0.40];
+    viewer.camera.eye = [1.0194051044049957, 1.005669190245019, -0.974393515821049];
+    viewer.camera.look = [0, 0, 0];
+    viewer.camera.up = [-0.41972456069013275, 0.814172275672773, 0.4011917230942002];
 
     viewer.scene.gammaInput = true;
     viewer.scene.gammaOutput = true;
@@ -66,17 +66,17 @@
     viewer.scene.sao.kernelRadius = 170;
     viewer.scene.sao.intensity = 0.2;
 
-    const fastNavPlugin = new FastNavPlugin(viewer, {
-        hideEdges: true,
-        hideSAO: true,
-        hideColorTexture: false,
-        hidePBR: false,
-        hideTransparentObjects: false,
-        scaleCanvasResolution: false,
-        scaleCanvasResolutionFactor: 0.5,
-        delayBeforeRestore: true,
-        delayBeforeRestoreSeconds: 0.4
-    });
+    // const fastNavPlugin = new FastNavPlugin(viewer, {
+    //     hideEdges: true,
+    //     hideSAO: true,
+    //     hideColorTexture: false,
+    //     hidePBR: false,
+    //     hideTransparentObjects: false,
+    //     scaleCanvasResolution: false,
+    //     scaleCanvasResolutionFactor: 0.5,
+    //     delayBeforeRestore: true,
+    //     delayBeforeRestoreSeconds: 0.4
+    // });
 
     new ReflectionMap(viewer.scene, {
         src: [
@@ -99,7 +99,7 @@
 
     const sceneModel = xktLoader.load({
         id: "myModel",
-        src: "../assets/models/xkt/v10/glb/HousePlan.notextures.glb.xkt",
+        src: "../assets/models/xkt/v10/glb/BoxTextured.textures.glb.xkt",
         edges: false
     });
 

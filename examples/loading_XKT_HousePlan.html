@@ -15,8 +15,8 @@
 <div class="slideout-sidebar">
     <img class="info-icon" src="../assets/images/bim_icon.png"/>
     <h1>XKTLoaderPlugin</h1>
-    <h2>Loading BIM geometry from the file system, ignoring textures</h2>
-    <p>In this example, we're loading an XKT file converted from binary glTF, without textures because we configured convert2xkt to ignore them.</p>
+    <h2>Loading BIM geometry and textures from the file system</h2>
+    <p>In this example, we're loading an XKT file converted from binary glTF.</p>
     <h3>Stats</h3>
     <ul>
         <li>
@@ -99,8 +99,8 @@
 
     const sceneModel = xktLoader.load({
         id: "myModel",
-        src: "../assets/models/xkt/v10/glb/HousePlan.notextures.glb.xkt",
-        edges: false
+        src: "../assets/models/xkt/v10/glb/HousePlan.textures.glb.xkt",
+        edges: true
     });
 
     sceneModel.on("loaded", () => {
