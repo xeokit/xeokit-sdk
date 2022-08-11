@@ -10,6 +10,19 @@ import { VBOSceneModel } from "../models/VBOSceneModel/VBOSceneModel";
 import { Mesh } from "../mesh";
 import { Node } from "../nodes";
 
+export declare type TickEvent = {
+  /** The ID of this Scene. */
+  sceneID: string;
+  /** The time in seconds since 1970 that this Scene was instantiated. */
+  startTime: Number;
+  /** The time in seconds since 1970 of this "tick" event. */
+  time: Number;
+  /** The time of the previous "tick" event from this Scene.. */
+  prevTime: Number;
+  /** The time in seconds since the previous "tick" event from this Scene. */
+  deltaTime: Number;
+};
+
 export declare class Scene extends Component {
 
   /**
@@ -51,6 +64,14 @@ export declare class Scene extends Component {
    * @param scope  Scope for the callback
    */
    on(event: "objectVisibility", callback: (entity: VBOSceneModel | Mesh | Node) => void, scope?: any): string;
+
+   /**
+   * Fired on each game loop iteration.
+   * @event event The tick event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+   on(event: "tick", callback: (tickEvent: TickEvent) => void, scope?: any): string;
 
   /**
    * The epoch time (in milliseconds since 1970) when this Scene was instantiated.
