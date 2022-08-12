@@ -28,7 +28,7 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  *
  * ## Usage
  *
- * In the example below we'll load the Schependomlaan model from a [glTF file](http://xeokit.github.io/xeokit-sdk/examples/models/gltf/schependomlaan/), along
+ * In the example below we'll load a house plan model from a [binary glTF file](http://xeokit.github.io/xeokit-sdk/examples/models/gltf/schependomlaan/), along
  * with an accompanying JSON [IFC metadata file](http://xeokit.github.io/xeokit-sdk/examples/metaModels/schependomlaan/).
  *
  * This will create a bunch of {@link Entity}s that represents the model and its objects, along with a {@link MetaModel} and {@link MetaObject}s
@@ -38,8 +38,6 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  * to the standard IFC element colors in the GLTFModel's current map. Override that with your own map via property {@link GLTFLoaderPlugin#objectDefaults}.
  *
  * Read more about this example in the user guide on [Viewing BIM Models Offline](https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-xeokit-c373e48bc4094ff5b6e5c5700ff580ee).
- *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_glTF_OTCConferenceCenter)]
  *
  * ````javascript
  * import {Viewer, GLTFLoaderPlugin} from "xeokit-sdk.es.js";
@@ -124,8 +122,6 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  * In the example below, we'll scale our model to half its size, rotate it 90 degrees about its local X-axis, then
  * translate it 100 units along its X axis.
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_glTF_Duplex_transform)]
- *
  * ````javascript
  * const model = gltfLoader.load({
  *      src: "./models/gltf/Duplex/scene.gltf",
@@ -140,8 +136,6 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  *
  * We can also load only those objects that have the specified IFC types. In the example below, we'll load only the
  * objects that represent walls.
- *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_glTF_includeTypes_PlanView)]
  *
  * ````javascript
  * const model = gltfLoader.load({

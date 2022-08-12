@@ -138,6 +138,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~compressedmediatype",
+    "variable/index.html#static-variable-CompressedMediaType",
+    "<span>CompressedMediaType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/configs.js~configs",
     "class/src/viewer/Configs.js~Configs.html",
     "<span>Configs</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/Configs.js</span>",
@@ -270,6 +276,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~gifmediatype",
+    "variable/index.html#static-variable-GIFMediaType",
+    "<span>GIFMediaType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/plugins/gltfloaderplugin/gltfdefaultdatasource.js~gltfdefaultdatasource",
     "class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html",
     "<span>GLTFDefaultDataSource</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js</span>",
@@ -327,6 +339,12 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~inttype",
     "variable/index.html#static-variable-IntType",
     "<span>IntType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~jpegmediatype",
+    "variable/index.html#static-variable-JPEGMediaType",
+    "<span>JPEGMediaType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
     "variable"
   ],
   [
@@ -580,6 +598,12 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/camera/Ortho.js~Ortho.html",
     "<span>Ortho</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/camera/Ortho.js</span>",
     "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~pngmediatype",
+    "variable/index.html#static-variable-PNGMediaType",
+    "<span>PNGMediaType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
+    "variable"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/scene/paths/path.js~path",

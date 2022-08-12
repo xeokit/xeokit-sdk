@@ -100,11 +100,14 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-constants">viewer/scene/constants</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AlphaFormat">AlphaFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ByteType">ByteType</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ClampToEdgeWrapping">ClampToEdgeWrapping</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CompressedMediaType">CompressedMediaType</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DepthFormat">DepthFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DepthStencilFormat">DepthStencilFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-FloatType">FloatType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GIFMediaType">GIFMediaType</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-HalfFloatType">HalfFloatType</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IntType">IntType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-JPEGMediaType">JPEGMediaType</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LinearEncoding">LinearEncoding</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LinearFilter">LinearFilter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LinearMipMapLinearFilter">LinearMipMapLinearFilter</a></span></span></li>
@@ -119,6 +122,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipMapNearestFilter">NearestMipMapNearestFilter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipmapLinearFilter">NearestMipmapLinearFilter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipmapNearestFilter">NearestMipmapNearestFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-PNGMediaType">PNGMediaType</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBAFormat">RGBAFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBAIntegerFormat">RGBAIntegerFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_10x10_Format">RGBA_ASTC_10x10_Format</a></span></span></li>
@@ -4480,7 +4484,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/models/SceneModel.js.html#lineNumber741">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/models/SceneModel.js.html#lineNumber746">source</a></span></span>
     </span>
   </h3>
 
@@ -4830,7 +4834,7 @@ the Viewer will:</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/models/SceneModel.js.html#lineNumber715">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/models/SceneModel.js.html#lineNumber720">source</a></span></span>
     </span>
   </h3>
 
@@ -5082,7 +5086,7 @@ RTC coordinate system.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/models/SceneModel.js.html#lineNumber648">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/models/SceneModel.js.html#lineNumber653">source</a></span></span>
     </span>
   </h3>
 
@@ -5114,53 +5118,71 @@ RTC coordinate system.</p>
       <td data-ice="name" class="code" data-depth="1">cfg.id</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>Mandatory ID for the texture, to refer to with <span><a href="class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-method-createTextureSet">SceneModel#createTextureSet</a></span>.</p>
+      <td data-ice="description"><p>Mandatory ID for the texture, to refer to with <span><a href="class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-method-createTextureSet">VBOSceneModel#createTextureSet</a></span>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.src</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Image source for the texture.</p>
+      <td data-ice="description"><p>Image file for the texture. Assumed to be transcoded if not having a recognized image file
+extension (jpg, jpeg, png etc.). If transcoded, then assumes <code>VBOSceneModel</code> is configured with a <span><a href="class/src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js~TextureTranscoder.html">TextureTranscoder</a></span>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.buffers</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer">ArrayBuffer</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Transcoded texture data. Assumes <code>VBOSceneModel</code> is
+configured with a <span><a href="class/src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js~TextureTranscoder.html">TextureTranscoder</a></span>. This parameter is given as an array of buffers so we can potentially support multi-image textures, such as cube maps.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.image</td>
       <td data-ice="type" class="code"><span>HTMLImageElement</span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>HTML Image object to load into this Texture.</p>
+      <td data-ice="description"><p>HTML Image object to load into this texture. Overrides <code>src</code> and <code>buffers</code>. Never transcoded.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.minFilter</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: &quot;linearMipmapLinear&quot;</li></ul></td>
-      <td data-ice="description"><p>How the texture is sampled when a texel covers less than one pixel. Supported values are &apos;linear&apos;, &apos;linearMipmapNearest&apos;, &apos;nearestMipmapNearest&apos;, &apos;nearestMipmapLinear&apos; and &apos;linearMipmapLinear&apos;. Defaulting to &apos;linearMipmapLinear&apos;.</p>
+<li>default: LinearMipmapLinearFilter</li></ul></td>
+      <td data-ice="description"><p>How the texture is sampled when a texel covers less than one pixel.
+Supported values are <span><a href="variable/index.html#static-variable-LinearMipmapLinearFilter">LinearMipmapLinearFilter</a></span>, <span><a href="variable/index.html#static-variable-LinearMipMapNearestFilter">LinearMipMapNearestFilter</a></span>, <span><a href="variable/index.html#static-variable-NearestMipMapNearestFilter">NearestMipMapNearestFilter</a></span>, <span><a href="variable/index.html#static-variable-NearestMipMapLinearFilter">NearestMipMapLinearFilter</a></span> and <span><a href="variable/index.html#static-variable-LinearMipMapLinearFilter">LinearMipMapLinearFilter</a></span>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.magFilter</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: &quot;linear&quot;</li></ul></td>
-      <td data-ice="description"><p>How the texture is sampled when a texel covers more than one pixel. Supported values are &apos;linear&apos; and &apos;nearest&apos;.</p>
+<li>default: LinearFilter</li></ul></td>
+      <td data-ice="description"><p>How the texture is sampled when a texel covers more than one pixel. Supported values are <span><a href="variable/index.html#static-variable-LinearFilter">LinearFilter</a></span> and <span><a href="variable/index.html#static-variable-NearestFilter">NearestFilter</a></span>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.wrapS</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: &quot;repeat&quot;</li></ul></td>
-      <td data-ice="description"><p>Wrap parameter for texture coordinate <em>S</em>. Supported values are &apos;clampToEdge&apos;, &apos;mirroredRepeat&apos; and &apos;repeat&apos;.</p>
+<li>default: RepeatWrapping</li></ul></td>
+      <td data-ice="description"><p>Wrap parameter for texture coordinate <em>S</em>. Supported values are <span><a href="variable/index.html#static-variable-ClampToEdgeWrapping">ClampToEdgeWrapping</a></span>, <span><a href="variable/index.html#static-variable-MirroredRepeatWrapping">MirroredRepeatWrapping</a></span> and <span><a href="variable/index.html#static-variable-RepeatWrapping">RepeatWrapping</a></span>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.wrapT</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: &quot;repeat&quot;</li></ul></td>
-      <td data-ice="description"><p>Wrap parameter for texture coordinate <em>T</em>. Supported values are &apos;clampToEdge&apos;, &apos;mirroredRepeat&apos; and &apos;repeat&apos;.</p>
+<li>default: RepeatWrapping</li></ul></td>
+      <td data-ice="description"><p>Wrap parameter for texture coordinate <em>T</em>. Supported values are <span><a href="variable/index.html#static-variable-ClampToEdgeWrapping">ClampToEdgeWrapping</a></span>, <span><a href="variable/index.html#static-variable-MirroredRepeatWrapping">MirroredRepeatWrapping</a></span> and <span><a href="variable/index.html#static-variable-RepeatWrapping">RepeatWrapping</a></span>.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.wrapR</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: RepeatWrapping</li></ul></td>
+      <td data-ice="description"><p>Wrap parameter for texture coordinate <em>R</em>. Supported values are <span><a href="variable/index.html#static-variable-ClampToEdgeWrapping">ClampToEdgeWrapping</a></span>, <span><a href="variable/index.html#static-variable-MirroredRepeatWrapping">MirroredRepeatWrapping</a></span> and <span><a href="variable/index.html#static-variable-RepeatWrapping">RepeatWrapping</a></span>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -5173,10 +5195,10 @@ RTC coordinate system.</p>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.encoding</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: &quot;linear&quot;</li></ul></td>
-      <td data-ice="description"><p>Encoding format. Supported values are &apos;linear&apos;, &apos;sRGB&apos;, &apos;gamma&apos;</p>
+<li>default: LinearEncoding</li></ul></td>
+      <td data-ice="description"><p>Encoding format. Supported values are <span><a href="variable/index.html#static-variable-LinearEncoding">LinearEncoding</a></span> and <span><a href="variable/index.html#static-variable-sRGBEncoding">sRGBEncoding</a></span>.</p>
 </td>
     </tr>
 </tbody>
@@ -5213,7 +5235,7 @@ RTC coordinate system.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/models/SceneModel.js.html#lineNumber670">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/models/SceneModel.js.html#lineNumber675">source</a></span></span>
     </span>
   </h3>
 
@@ -5321,7 +5343,7 @@ means faster rendering.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/models/SceneModel.js.html#lineNumber873">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/models/SceneModel.js.html#lineNumber878">source</a></span></span>
     </span>
   </h3>
 
@@ -5365,7 +5387,7 @@ means faster rendering.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/models/SceneModel.js.html#lineNumber752">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/models/SceneModel.js.html#lineNumber757">source</a></span></span>
     </span>
   </h3>
 

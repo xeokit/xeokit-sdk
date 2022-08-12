@@ -100,11 +100,14 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-constants">viewer/scene/constants</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AlphaFormat">AlphaFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ByteType">ByteType</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ClampToEdgeWrapping">ClampToEdgeWrapping</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CompressedMediaType">CompressedMediaType</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DepthFormat">DepthFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DepthStencilFormat">DepthStencilFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-FloatType">FloatType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GIFMediaType">GIFMediaType</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-HalfFloatType">HalfFloatType</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IntType">IntType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-JPEGMediaType">JPEGMediaType</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LinearEncoding">LinearEncoding</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LinearFilter">LinearFilter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LinearMipMapLinearFilter">LinearMipMapLinearFilter</a></span></span></li>
@@ -119,6 +122,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipMapNearestFilter">NearestMipMapNearestFilter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipmapLinearFilter">NearestMipmapLinearFilter</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipmapNearestFilter">NearestMipmapNearestFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-PNGMediaType">PNGMediaType</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBAFormat">RGBAFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBAIntegerFormat">RGBAIntegerFormat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_10x10_Format">RGBA_ASTC_10x10_Format</a></span></span></li>
@@ -441,8 +445,7 @@ class TrianglesBatchingLayer {
 
         const scene = this.model.scene;
         const buffer = this._buffer;
-        const positionsIndex = buffer.positions.length;
-        const vertsIndex = positionsIndex / 3;
+        const vertsBaseIndex = buffer.positions.length / 3;
 
         let numVerts;
 
@@ -582,16 +585,18 @@ class TrianglesBatchingLayer {
             const g = color[1];
             const b = color[2];
             const a = opacity;
-            const metallicValue = (metallic !== null &amp;&amp; metallic !== undefined) ? metallic : 0;
-            const roughnessValue = (roughness !== null &amp;&amp; roughness !== undefined) ? roughness : 255;
             for (let i = 0; i &lt; numVerts; i++) {
                 buffer.colors.push(r);
                 buffer.colors.push(g);
                 buffer.colors.push(b);
                 buffer.colors.push(a);
-                buffer.metallicRoughness.push(metallicValue);
-                buffer.metallicRoughness.push(roughnessValue);
             }
+        }
+        const metallicValue = (metallic !== null &amp;&amp; metallic !== undefined) ? metallic : 0;
+        const roughnessValue = (roughness !== null &amp;&amp; roughness !== undefined) ? roughness : 255;
+        for (let i = 0; i &lt; numVerts; i++) {
+            buffer.metallicRoughness.push(metallicValue);
+            buffer.metallicRoughness.push(roughnessValue);
         }
 
         if (uv &amp;&amp; uv.length &gt; 0) {
@@ -606,13 +611,13 @@ class TrianglesBatchingLayer {
 
         if (indices) {
             for (let i = 0, len = indices.length; i &lt; len; i++) {
-                buffer.indices.push(indices[i] + vertsIndex);
+                buffer.indices.push(vertsBaseIndex + indices[i]);
             }
         }
 
         if (edgeIndices) {
             for (let i = 0, len = edgeIndices.length; i &lt; len; i++) {
-                buffer.edgeIndices.push(edgeIndices[i] + vertsIndex);
+                buffer.edgeIndices.push(vertsBaseIndex + edgeIndices[i]);
             }
         }
 
@@ -638,7 +643,7 @@ class TrianglesBatchingLayer {
         const portionId = this._portions.length;
 
         const portion = {
-            vertsBase: vertsIndex,
+            vertsBaseIndex: vertsBaseIndex,
             numVerts: numVerts
         };
 
@@ -689,7 +694,7 @@ class TrianglesBatchingLayer {
             if (this.model.scene.pickSurfacePrecisionEnabled) {
                 for (let i = 0, numPortions = this._portions.length; i &lt; numPortions; i++) {
                     const portion = this._portions[i];
-                    const start = portion.vertsBase * 3;
+                    const start = portion.vertsBaseIndex * 3;
                     const end = start + (portion.numVerts * 3);
                     portion.quantizedPositions = quantizedPositions.slice(start, end);
                 }
@@ -952,9 +957,9 @@ class TrianglesBatchingLayer {
         }
         const portionsIdx = portionId;
         const portion = this._portions[portionsIdx];
-        const vertexBase = portion.vertsBase;
+        const vertsBaseIndex = portion.vertsBaseIndex;
         const numVerts = portion.numVerts;
-        const firstColor = vertexBase * 4;
+        const firstColor = vertsBaseIndex * 4;
         const lenColor = numVerts * 4;
         const tempArray = this._scratchMemory.getUInt8Array(lenColor);
         const r = color[0];
@@ -991,9 +996,9 @@ class TrianglesBatchingLayer {
 
         const portionsIdx = portionId;
         const portion = this._portions[portionsIdx];
-        const vertexBase = portion.vertsBase;
+        const vertsBaseIndex = portion.vertsBaseIndex;
         const numVerts = portion.numVerts;
-        const firstFlag = vertexBase * 4;
+        const firstFlag = vertsBaseIndex * 4;
         const lenFlags = numVerts * 4;
 
         const visible = !!(flags &amp; ENTITY_FLAGS.VISIBLE);
@@ -1009,7 +1014,7 @@ class TrianglesBatchingLayer {
         let f0;
         if (!visible || culled || xrayed
             || (highlighted &amp;&amp; !this.model.scene.highlightMaterial.glowThrough)
-            || (selected &amp;&amp; !this.model.scene.selectedMaterial.glowThrough) ) {
+            || (selected &amp;&amp; !this.model.scene.selectedMaterial.glowThrough)) {
             f0 = RENDER_PASSES.NOT_RENDERED;
         } else {
             if (transparent) {
@@ -1097,9 +1102,9 @@ class TrianglesBatchingLayer {
 
         const portionsIdx = portionId;
         const portion = this._portions[portionsIdx];
-        const vertexBase = portion.vertsBase;
+        const vertsBaseIndex = portion.vertsBaseIndex;
         const numVerts = portion.numVerts;
-        const firstFlag = vertexBase * 4;
+        const firstFlag = vertsBaseIndex * 4;
         const lenFlags = numVerts * 4;
         const clippable = !!(flags &amp; ENTITY_FLAGS.CLIPPABLE) ? 255 : 0;
 
@@ -1136,9 +1141,9 @@ class TrianglesBatchingLayer {
         }
         const portionsIdx = portionId;
         const portion = this._portions[portionsIdx];
-        const vertexBase = portion.vertsBase;
+        const vertsBaseIndex = portion.vertsBaseIndex;
         const numVerts = portion.numVerts;
-        const firstOffset = vertexBase * 3;
+        const firstOffset = vertsBaseIndex * 3;
         const lenOffsets = numVerts * 3;
         const tempArray = this._scratchMemory.getFloat32Array(lenOffsets);
         const x = offset[0];
@@ -1403,10 +1408,10 @@ class TrianglesBatchingLayer {
         //     }
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // } else {
-            if (this._batchingRenderers.pickNormalsFlatRenderer) {
-                this._batchingRenderers.pickNormalsFlatRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
-            }
-       // }
+        if (this._batchingRenderers.pickNormalsFlatRenderer) {
+            this._batchingRenderers.pickNormalsFlatRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        }
+        // }
     }
 
     //------------------------------------------------------------------------------------------------
