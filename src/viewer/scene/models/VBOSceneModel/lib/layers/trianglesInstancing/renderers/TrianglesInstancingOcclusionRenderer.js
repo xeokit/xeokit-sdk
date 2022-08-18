@@ -219,7 +219,7 @@ class TrianglesInstancingOcclusionRenderer {
         src.push("uniform mat4 positionsDecodeMatrix;");
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
-            src.push("in float vFragDepth;");
+            src.push("out float vFragDepth;");
             src.push("bool isPerspectiveMatrix(mat4 m) {");
             src.push("    return (m[2][3] == - 1.0);");
             src.push("}");
@@ -274,9 +274,9 @@ class TrianglesInstancingOcclusionRenderer {
         src.push("precision mediump int;");
         src.push("#endif");
         if (scene.logarithmicDepthBufferEnabled) {
-            src.push("out float isPerspective;");
+            src.push("in float isPerspective;");
             src.push("uniform float logDepthBufFC;");
-            src.push("out float vFragDepth;");
+            src.push("in float vFragDepth;");
         }
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
