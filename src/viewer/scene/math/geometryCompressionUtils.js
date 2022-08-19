@@ -91,9 +91,9 @@ function compressPosition(p, aabb, q) {
         aabb[4] !== aabb[1] ? 65535 / (aabb[4] - aabb[1]) : 0,
         aabb[5] !== aabb[2] ? 65535 / (aabb[5] - aabb[2]) : 0
     ]);
-    q[0] = Math.floor((p[0] - aabb[0]) * multiplier[0]);
-    q[1] = Math.floor((p[1] - aabb[1]) * multiplier[1]);
-    q[2] = Math.floor((p[2] - aabb[2]) * multiplier[2]);
+    q[0] = Math.max(0, Math.min(65535, Math.floor((p[0] - aabb[0]) * multiplier[0])));
+    q[1] = Math.max(0, Math.min(65535, Math.floor((p[1] - aabb[1]) * multiplier[1])));
+    q[2] = Math.max(0, Math.min(65535, Math.floor((p[2] - aabb[2]) * multiplier[2])));
 }
 
 function decompressPosition(position, decodeMatrix, dest) {
