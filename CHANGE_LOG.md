@@ -1,5 +1,9 @@
 # xeokit-sdk Change Log
- 
+
+**Since v2.3, we now auto-generate the change log at https://github.com/xeokit/xeokit-sdk/releases**
+
+Listed below are changes prior to v2.3, logged using our previous system.
+
 # 2.3
 
 Aug 16, 2022
