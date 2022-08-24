@@ -557,10 +557,11 @@ class ImagePlane extends Component {
         const size = this._size;
         const width = this._imageSize[0];
         const height = this._imageSize[1];
-        const aspect = height / width;
         if (width > height) {
+            const aspect = height / width;
             this._node.scale = [size, 1.0, size * aspect];
         } else {
+            const aspect = width / height;
             this._node.scale = [size * aspect, 1.0, size];
         }
     }
