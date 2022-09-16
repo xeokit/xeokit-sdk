@@ -1062,7 +1062,7 @@ class Scene extends Component {
         }
     }
 
-    _objectXRayedUpdated(entity) {
+    _objectXRayedUpdated(entity, notify = true) {
         if (entity.xrayed) {
             if (ASSERT_OBJECT_STATE_UPDATE && this.xrayedObjects[entity.id]) {
                 console.error("Redundant object xray update (xrayed=true)");
@@ -1079,9 +1079,12 @@ class Scene extends Component {
             this._numXRayedObjects--;
         }
         this._xrayedObjectIds = null; // Lazy regenerate
+        if (notify) {
+          this.fire("objectXRayed", entity, true);
+        }
     }
 
-    _objectHighlightedUpdated(entity) {
+    _objectHighlightedUpdated(entity, notify = true) {
         if (entity.highlighted) {
             if (ASSERT_OBJECT_STATE_UPDATE && this.highlightedObjects[entity.id]) {
                 console.error("Redundant object highlight update (highlighted=true)");
@@ -1098,9 +1101,12 @@ class Scene extends Component {
             this._numHighlightedObjects--;
         }
         this._highlightedObjectIds = null; // Lazy regenerate
+        if (notify) {
+          this.fire("objectHighlighted", entity, true);
+        }
     }
 
-    _objectSelectedUpdated(entity) {
+    _objectSelectedUpdated(entity, notify = true) {
         if (entity.selected) {
             if (ASSERT_OBJECT_STATE_UPDATE && this.selectedObjects[entity.id]) {
                 console.error("Redundant object select update (selected=true)");
@@ -1117,6 +1123,9 @@ class Scene extends Component {
             this._numSelectedObjects--;
         }
         this._selectedObjectIds = null; // Lazy regenerate
+        if (notify) {
+          this.fire("objectSelected", entity, true);
+        }
     }
 
     _objectColorizeUpdated(entity, colorized) {
