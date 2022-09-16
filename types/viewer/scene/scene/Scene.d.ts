@@ -63,7 +63,7 @@ export declare class Scene extends Component {
    * @param callback Called fired on the event
    * @param scope  Scope for the callback
    */
-   on(event: "objectVisibility", callback: (entity: VBOSceneModel | Mesh | Node) => void, scope?: any): string;
+   on(event: "objectVisibility" | "objectXRayed" | "objectHighlighted" | "objectSelected", callback: (entity: VBOSceneModel | Mesh | Node) => void, scope?: any): string;
 
    /**
    * Fired on each game loop iteration.
