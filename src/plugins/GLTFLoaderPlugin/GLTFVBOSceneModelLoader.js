@@ -26,9 +26,9 @@ class GLTFVBOSceneModelLoader {
         cfg = cfg || {};
     }
 
-    load(plugin, sceneModel, src, options, ok, error) {
+    load(plugin, src, metaModelJSON, options, sceneModel, ok, error) {
         options = options || {};
-        loadGLTF(plugin, sceneModel, src, options, function () {
+        loadGLTF(plugin, src, metaModelJSON, options, sceneModel, function () {
                 core.scheduleTask(function () {
                     sceneModel.scene.fire("modelLoaded", sceneModel.id); // FIXME: Assumes listeners know order of these two events
                     sceneModel.fire("loaded", true, false);
@@ -46,9 +46,9 @@ class GLTFVBOSceneModelLoader {
             });
     }
 
-    parse(plugin, sceneModel, gltf, options, ok, error) {
+    parse(plugin, gltf, metaModelJSON,  options, sceneModel, ok, error) {
         options = options || {};
-        parseGLTF(plugin, gltf, "", options, sceneModel, function () {
+        parseGLTF(plugin, "", gltf, metaModelJSON,  options, sceneModel, function () {
                 sceneModel.scene.fire("modelLoaded", sceneModel.id); // FIXME: Assumes listeners know order of these two events
                 sceneModel.fire("loaded", true, false);
                 if (ok) {
@@ -65,14 +65,50 @@ class GLTFVBOSceneModelLoader {
     }
 }
 
-function loadGLTF(plugin, sceneModel, src, options, ok, error) {
+function getMetaModelCorrections(metaModelJSON) {
+    const eachRootStats = {};
+    const eachChildRoot = {};
+    const metaObjects = metaModelJSON.metaObjects || [];
+    const metaObjectsMap = {};
+    for (let i = 0, len = metaObjects.length; i < len; i++) {
+        const metaObject = metaObjects[i];
+        metaObjectsMap[metaObject.id] = metaObject;
+    }
+    for (let i = 0, len = metaObjects.length; i < len; i++) {
+        const metaObject = metaObjects[i];
+        if (metaObject.parent !== undefined && metaObject.parent !== null) {
+            const metaObjectParent = metaObjectsMap[metaObject.parent];
+            if (metaObject.type === metaObjectParent.type) {
+                let rootMetaObject = metaObjectParent;
+                while (rootMetaObject.parent && metaObjectsMap[rootMetaObject.parent].type === rootMetaObject.type) {
+                    rootMetaObject = metaObjectsMap[rootMetaObject.parent];
+                }
+                const rootStats = eachRootStats[rootMetaObject.id] || (eachRootStats[rootMetaObject.id] = {
+                    numChildren: 0,
+                    countChildren: 0
+                });
+                rootStats.numChildren++;
+                eachChildRoot[metaObject.id] = rootMetaObject;
+            } else {
+
+            }
+        }
+    }
+    return {
+        metaObjectsMap,
+        eachRootStats,
+        eachChildRoot
+    };
+}
+
+function loadGLTF(plugin, src, metaModelJSON, options, sceneModel,  ok, error) {
     const spinner = plugin.viewer.scene.canvas.spinner;
     spinner.processes++;
     const isGLB = (src.split('.').pop() === "glb");
     if (isGLB) {
         plugin.dataSource.getGLB(src, (arrayBuffer) => { // OK
                 options.basePath = getBasePath(src);
-                parseGLTF(plugin, arrayBuffer, src, options, sceneModel, ok, error);
+                parseGLTF(plugin, src, arrayBuffer, metaModelJSON,  options, sceneModel, ok, error);
                 spinner.processes--;
             },
             (err) => {
@@ -80,9 +116,9 @@ function loadGLTF(plugin, sceneModel, src, options, ok, error) {
                 error(err);
             });
     } else {
-        plugin.dataSource.getGLTF(src, (json) => { // OK
+        plugin.dataSource.getGLTF(src, (gltf) => { // OK
                 options.basePath = getBasePath(src);
-                parseGLTF(plugin, json, src, options, sceneModel, ok, error);
+                parseGLTF(plugin, src, gltf, metaModelJSON,  options, sceneModel, ok, error);
                 spinner.processes--;
             },
             (err) => {
@@ -97,7 +133,7 @@ function getBasePath(src) {
     return (i !== 0) ? src.substring(0, i + 1) : "";
 }
 
-function parseGLTF(plugin, gltf, src, options, sceneModel, ok) {
+function parseGLTF(plugin, src, gltf, metaModelJSON,  options, sceneModel, ok) {
     const spinner = plugin.viewer.scene.canvas.spinner;
     spinner.processes++;
     parse(gltf, GLTFLoader, {
@@ -105,6 +141,7 @@ function parseGLTF(plugin, gltf, src, options, sceneModel, ok) {
     }).then((gltfData) => {
         const ctx = {
             src: src,
+            metaModelCorrections: metaModelJSON ? getMetaModelCorrections(metaModelJSON) : null,
             loadBuffer: options.loadBuffer,
             basePath: options.basePath,
             handlenode: options.handlenode,
@@ -221,7 +258,7 @@ function loadTexture(ctx, texture) {
         wrapS,
         wrapT,
         wrapR,
-             encoding: sRGBEncoding
+        encoding: sRGBEncoding
     });
     texture._textureId = textureId;
 }
@@ -388,7 +425,7 @@ function loadScene(ctx, scene) {
     }
     for (let i = 0, len = nodes.length; i < len; i++) {
         const node = nodes[i];
-        loadNode(ctx, node, null);
+        loadNode(ctx, node, 0, null);
     }
 }
 
@@ -410,7 +447,9 @@ function countMeshUsage(ctx, node) {
     }
 }
 
-function loadNode(ctx, node, matrix) {
+const deferredMeshIds = [];
+
+function loadNode(ctx, node, depth, matrix) {
     const gltfData = ctx.gltfData;
     let localMatrix;
     if (node.matrix) {
@@ -445,6 +484,8 @@ function loadNode(ctx, node, matrix) {
             matrix = localMatrix;
         }
     }
+
+    const sceneModel = ctx.sceneModel;
     if (node.mesh) {
         const mesh = node.mesh;
         let createEntity;
@@ -457,13 +498,10 @@ function loadNode(ctx, node, matrix) {
                 createEntity = actions.createEntity;
             }
         }
-        const sceneModel = ctx.sceneModel;
         const worldMatrix = matrix ? matrix.slice() : math.identityMat4();
         const numPrimitives = mesh.primitives.length;
 
         if (numPrimitives > 0) {
-
-            const meshIds = [];
 
             for (let i = 0; i < numPrimitives; i++) {
 
@@ -539,29 +577,29 @@ function loadNode(ctx, node, matrix) {
                     meshCfg.color = new Float32Array([1.0, 1.0, 1.0]);
                     meshCfg.opacity = 1.0;
                 }
-                if (createEntity) {
-                    if (createEntity.colorize) {
-                        meshCfg.color = createEntity.colorize;
-                    }
-                    if (createEntity.opacity !== undefined && createEntity.opacity !== null) {
-                        meshCfg.opacity = createEntity.opacity;
-                    }
-                }
+                // if (createEntity) {
+                //     if (createEntity.colorize) {
+                //         meshCfg.color = createEntity.colorize;
+                //     }
+                //     if (createEntity.opacity !== undefined && createEntity.opacity !== null) {
+                //         meshCfg.opacity = createEntity.opacity;
+                //     }
+                // }
 
                 sceneModel.createMesh(meshCfg);
-                meshIds.push(meshCfg.id);
+                deferredMeshIds.push(meshCfg.id);
             }
-            if (createEntity) {
-                sceneModel.createEntity(utils.apply(createEntity, {
-                    meshIds: meshIds,
-                    isObject: true
-                }));
-            } else {
-                sceneModel.createEntity({
-                    meshIds: meshIds,
-                    isObject: true
-                });
-            }
+            // if (createEntity) {
+            //     sceneModel.createEntity(utils.apply(createEntity, {
+            //         meshIds: deferredMeshIds,
+            //         isObject: true
+            //     }));
+            // } else {
+            //     sceneModel.createEntity({
+            //         meshIds: deferredMeshIds,
+            //         isObject: true
+            //     });
+            // }
         }
     }
 
@@ -569,7 +607,54 @@ function loadNode(ctx, node, matrix) {
         const children = node.children;
         for (let i = 0, len = children.length; i < len; i++) {
             const childNode = children[i];
-            loadNode(ctx, childNode, matrix);
+            loadNode(ctx, childNode, depth + 1, matrix);
+        }
+    }
+
+    // Post-order visit scene node
+
+    const nodeName = node.name;
+    if (((nodeName !== undefined && nodeName !== null) || depth === 0) && deferredMeshIds.length > 0) {
+        if (nodeName === undefined || nodeName === null) {
+            ctx.log(`Warning: 'name' properties not found on glTF scene nodes - will randomly-generate object IDs in XKT`);
+        }
+        let entityId = nodeName; // Fall back on generated ID when `name` not found on glTF scene node(s)
+        // if (!!entityId && sceneModel.entities[entityId]) {
+        //     ctx.log(`Warning: Two or more glTF nodes found with same 'name' attribute: '${nodeName} - will randomly-generating an object ID in XKT`);
+        // }
+        // while (!entityId || sceneModel.entities[entityId]) {
+        //     entityId = "entity-" + ctx.nextId++;
+        // }
+        if (ctx.metaModelCorrections) {
+            // Merging meshes into XKTObjects that map to metaobjects
+            const rootMetaObject = ctx.metaModelCorrections.eachChildRoot[entityId];
+            if (rootMetaObject) {
+                const rootMetaObjectStats = ctx.metaModelCorrections.eachRootStats[rootMetaObject.id];
+                rootMetaObjectStats.countChildren++;
+                if (rootMetaObjectStats.countChildren >= rootMetaObjectStats.numChildren) {
+                    sceneModel.createEntity({
+                        id: rootMetaObject.id,
+                        meshIds: deferredMeshIds
+                    });
+                    deferredMeshIds.length = 0;
+                }
+            } else {
+                const metaObject = ctx.metaModelCorrections.metaObjectsMap[entityId];
+                if (metaObject) {
+                    sceneModel.createEntity({
+                        id: entityId,
+                        meshIds: deferredMeshIds
+                    });
+                    deferredMeshIds.length = 0;
+                }
+            }
+        } else {
+            // Create an XKTObject from the meshes at each named glTF node, don't care about metaobjects
+            sceneModel.createEntity({
+                id: entityId,
+                meshIds: deferredMeshIds
+            });
+            deferredMeshIds.length = 0;
         }
     }
 }

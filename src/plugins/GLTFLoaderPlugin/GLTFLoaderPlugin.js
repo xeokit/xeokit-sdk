@@ -173,7 +173,7 @@ class GLTFLoaderPlugin extends Plugin {
     constructor(viewer, cfg = {}) {
 
         super("GLTFLoader", viewer, cfg);
-        
+
         this._sceneModelLoader = new GLTFVBOSceneModelLoader(this, cfg);
 
         this.dataSource = cfg.dataSource;
@@ -231,8 +231,8 @@ class GLTFLoaderPlugin extends Plugin {
      * @param {String} [params.id] ID to assign to the root {@link Entity#id}, unique among all components in the Viewer's {@link Scene}, generated automatically by default.
      * @param {String} [params.src] Path to a glTF file, as an alternative to the ````gltf```` parameter.
      * @param {*} [params.gltf] glTF JSON, as an alternative to the ````src```` parameter.
-     * @param {String} [params.metaModelSrc] Path to an optional metadata file, as an alternative to the ````metaModelData```` parameter.
-     * @param {*} [params.metaModelData] JSON model metadata, as an alternative to the ````metaModelSrc```` parameter.
+     * @param {String} [params.metaModelSrc] Path to an optional metadata file, as an alternative to the ````metaModelJSON```` parameter.
+     * @param {*} [params.metaModelJSON] JSON model metadata, as an alternative to the ````metaModelSrc```` parameter.
      * @param {{String:Object}} [params.objectDefaults] Map of initial default states for each loaded {@link Entity} that represents an object. Default value is {@link IFCObjectDefaults}.
      * @param {String[]} [params.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {String[]} [params.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
@@ -247,7 +247,7 @@ class GLTFLoaderPlugin extends Plugin {
      * @param {Boolean} [params.colorTextureEnabled=true] Indicates if base color texture rendering is enabled for the model. Overridden by ````pbrEnabled````.  Only works when {@link Scene#colorTextureEnabled} is also ````true````.
      * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the glTF. When false, ignores backfaces.
      * @param {Number} [params.edgeThreshold=10] When xraying, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
-      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
+     * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
      */
     load(params = {}) {
 
@@ -256,9 +256,9 @@ class GLTFLoaderPlugin extends Plugin {
             delete params.id;
         }
 
-        const sceneModel =  new VBOSceneModel(this.viewer.scene, utils.apply(params, {
-                isModel: true
-            }));
+        const sceneModel = new VBOSceneModel(this.viewer.scene, utils.apply(params, {
+            isModel: true
+        }));
 
         const modelId = sceneModel.id;  // In case ID was auto-generated
 
@@ -267,13 +267,13 @@ class GLTFLoaderPlugin extends Plugin {
             return sceneModel; // Return new empty model
         }
 
-        if (params.metaModelSrc || params.metaModelData) {
+        if (params.metaModelSrc || params.metaModelJSON) {
 
             const objectDefaults = params.objectDefaults || this._objectDefaults || IFCObjectDefaults;
 
-            const processMetaModelData = (metaModelData) => {
+            const processMetaModelJSON = (metaModelJSON) => {
 
-                this.viewer.metaScene.createMetaModel(modelId, metaModelData, {
+                this.viewer.metaScene.createMetaModel(modelId, metaModelJSON, {
                     includeTypes: params.includeTypes,
                     excludeTypes: params.excludeTypes
                 });
@@ -343,9 +343,9 @@ class GLTFLoaderPlugin extends Plugin {
                 };
 
                 if (params.src) {
-                    this._sceneModelLoader.load(this, sceneModel, params.src, params);
+                    this._sceneModelLoader.load(this, params.src, metaModelJSON, params, sceneModel);
                 } else {
-                    this._sceneModelLoader.parse(this, sceneModel, params.gltf, params);
+                    this._sceneModelLoader.parse(this, params.gltf, metaModelJSON, params, sceneModel);
                 }
             };
 
@@ -355,20 +355,20 @@ class GLTFLoaderPlugin extends Plugin {
 
                 this.viewer.scene.canvas.spinner.processes++;
 
-                this._dataSource.getMetaModel(metaModelSrc, (metaModelData) => {
+                this._dataSource.getMetaModel(metaModelSrc, (metaModelJSON) => {
 
                     this.viewer.scene.canvas.spinner.processes--;
 
-                    processMetaModelData(metaModelData);
+                    processMetaModelJSON(metaModelJSON);
 
                 }, (errMsg) => {
                     this.error(`load(): Failed to load model metadata for model '${modelId} from  '${metaModelSrc}' - ${errMsg}`);
                     this.viewer.scene.canvas.spinner.processes--;
                 });
 
-            } else if (params.metaModelData) {
+            } else if (params.metaModelJSON) {
 
-                processMetaModelData(params.metaModelData);
+                processMetaModelJSON(params.metaModelJSON);
             }
 
         } else {
@@ -391,10 +391,11 @@ class GLTFLoaderPlugin extends Plugin {
                 return true; // Continue descending this glTF node subtree
             };
 
+
             if (params.src) {
-                this._sceneModelLoader.load(this, sceneModel, params.src, params);
+                this._sceneModelLoader.load(this, params.src, null, params, sceneModel);
             } else {
-                this._sceneModelLoader.parse(this, sceneModel, params.gltf, params);
+                this._sceneModelLoader.parse(this, params.gltf, null, params, sceneModel);
             }
         }
 
