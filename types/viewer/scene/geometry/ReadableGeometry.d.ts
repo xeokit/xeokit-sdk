@@ -31,7 +31,7 @@ export declare type ReadableGeometryConfiguration = {
  *
  * ReadableGeometry uses more memory than {@link VBOGeometry}, which only stores its geometry data in GPU memory.
  */
- export declare class ReadableGeometry extends Geometry {
+export declare class ReadableGeometry extends Geometry {
   /**
    * constructor
    * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
