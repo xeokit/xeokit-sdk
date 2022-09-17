@@ -364,6 +364,7 @@ class ModelTreeView {
                 numEntities: 0,
                 numVisibleEntities: 0,
                 checked: false,
+                xrayed: false,
                 children: []
             };
             this._rootNodes.push(buildingNode);
@@ -382,6 +383,7 @@ class ModelTreeView {
                 numEntities: 0,
                 numVisibleEntities: 0,
                 checked: false,
+                xrayed: false,
                 children: []
             };
             buildingNode.children.push(storeyNode);
@@ -406,6 +408,7 @@ class ModelTreeView {
                             numEntities: 0,
                             numVisibleEntities: 0,
                             checked: false,
+                            xrayed: false,
                             children: []
                         };
                         storeyNode.children.push(typeNode);
@@ -421,6 +424,7 @@ class ModelTreeView {
                         numEntities: 0,
                         numVisibleEntities: 0,
                         checked: false,
+                        xrayed: false,
                         children: []
                     };
                     typeNode.children.push(node);
@@ -454,6 +458,7 @@ class ModelTreeView {
                 numEntities: 0,
                 numVisibleEntities: 0,
                 checked: false,
+                xrayed: false,
                 children: []
             };
             this._rootNodes.push(rootNode);
@@ -475,6 +480,7 @@ class ModelTreeView {
                             numEntities: 0,
                             numVisibleEntities: 0,
                             checked: false,
+                            xrayed: false,
                             children: []
                         };
                         rootNode.children.push(typeNode);
@@ -490,6 +496,7 @@ class ModelTreeView {
                         numEntities: 0,
                         numVisibleEntities: 0,
                         checked: false,
+                        xrayed: false,
                         children: []
                     };
                     typeNode.children.push(node);
@@ -522,6 +529,7 @@ class ModelTreeView {
             numEntities: 0,
             numVisibleEntities: 0,
             checked: false,
+            xrayed: false,
             children: []
         };
         if (parent) {
