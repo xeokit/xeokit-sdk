@@ -24,7 +24,7 @@ export default class Tile {
     this.src = tileData.content.uri;
 
     const path = new URL(this.src).pathname;
-    this.name = path.substring(path.lastIndexOf("/") + 1);
+    this.name = `${tileset.name}_${path.substring(path.lastIndexOf("/") + 1)}`;
 
     this.parent = parent;
 

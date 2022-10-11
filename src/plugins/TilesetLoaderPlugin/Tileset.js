@@ -2,6 +2,8 @@ import Tile from "./Tile.js";
 
 import { eachLimit, makeQueue } from "./utils.js";
 
+let tilesetIndex = 0;
+
 export default class Tileset {
   /**
    * @param { TSL.TilesetLoaderPlugin } tilesetPlugin 
@@ -10,6 +12,8 @@ export default class Tileset {
    */
   constructor(tilesetPlugin, tilesetData) {
     this.plugin = tilesetPlugin;
+
+    this.name = tilesetData.name || `tileset-${tilesetIndex++}`;
 
     this.tiles = new Set();
     this.visibleTiles = new Set();
