@@ -19,6 +19,7 @@ declare namespace TSL {
   }
 
   interface Tileset {
+    name: string;
     plugin: TilesetLoaderPlugin;
     tiles: Set<Tile>;
     visibleTiles: Set<Tile>;
