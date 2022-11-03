@@ -4,6 +4,7 @@ export * from "./Entity";
 export * from "./camera";
 export * from "./CameraControl/CameraControl";
 export * from "./geometry";
+export * from "./lights";
 export * from "./marker";
 export * from "./materials";
 export * from "./math/math";
