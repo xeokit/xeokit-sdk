@@ -13,7 +13,7 @@ export declare type FastNavPluginConfiguration = {
   /** Whether to temporarily hide transparent objects whenever we interact with the Viewer. */
   hideTransparentObjects?: boolean;
   /** Whether to temporarily down-scale the canvas resolution whenever we interact with the Viewer. */
-  scaleCanvasResolution?: number;
+  scaleCanvasResolution?: boolean;
   /** The factor by which we downscale the canvas resolution whenever we interact with the Viewer. */
   scaleCanvasResolutionFactor?: number;
   /** Whether to temporarily have a delay before restoring normal rendering after we stop interacting with the Viewer. */
