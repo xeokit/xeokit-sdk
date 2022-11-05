@@ -841,7 +841,7 @@ class WebIFCLoaderPlugin extends Plugin {
                     ctx.metadata.propertySets.push(propertySet);
                     ctx.stats.numPropertySets++;
                     const relatedObjects = rel.RelatedObjects;
-                    if (!relatedObjects || relatedObjects.length === 0) {
+                    if (relatedObjects && relatedObjects.length > 0) {
                         for (let i = 0, len = relatedObjects.length; i < len; i++) {
                             const relatedObject = relatedObjects[i];
                             const metaObjectId = relatedObject.GlobalId.value;
