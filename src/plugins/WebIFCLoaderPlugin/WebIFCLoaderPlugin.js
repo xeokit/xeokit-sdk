@@ -842,16 +842,17 @@ class WebIFCLoaderPlugin extends Plugin {
                     ctx.stats.numPropertySets++;
                     const relatedObjects = rel.RelatedObjects;
                     if (!relatedObjects || relatedObjects.length === 0) {
-                        for (let i = 0, len = relatedObjects.length; i < len; i++) {
-                            const relatedObject = relatedObjects[i];
-                            const metaObjectId = relatedObject.GlobalId.value;
-                            const metaObject = ctx.metaObjects[metaObjectId];
-                            if (metaObject) {
-                                if (!metaObject.propertySetIds) {
-                                    metaObject.propertySetIds = [];
-                                }
-                                metaObject.propertySetIds.push(propertySetId);
+                        return;
+                    }
+                    for (let i = 0, len = relatedObjects.length; i < len; i++) {
+                        const relatedObject = relatedObjects[i];
+                        const metaObjectId = relatedObject.GlobalId.value;
+                        const metaObject = ctx.metaObjects[metaObjectId];
+                        if (metaObject) {
+                            if (!metaObject.propertySetIds) {
+                                metaObject.propertySetIds = [];
                             }
+                            metaObject.propertySetIds.push(propertySetId);
                         }
                     }
                 }
