@@ -1,0 +1,29 @@
+{
+  "name": "@xeokit/viewer",
+  "version": "1.0.0",
+  "module": "./dist/viewer.es.js",
+  "main": "./dist/viewer.cjs.js",
+  "types": "./types/index.d.ts",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "types"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && cross-env NODE_ENV=production PLUGIN=xkt INPUT=./index.js rollup -c ../../rollup/rollup.viewer.config.js"
+  },
+  "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
+  "homepage": "https://xeokit.io",
+  "author": "Lindsay Kay",
+  "license": "See LICENSE.txt",
+  "bugs": {
+    "url": "https://github.com/xeokit/xeokit-sdk/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xeokit/xeokit-sdk.git"
+  }
+}

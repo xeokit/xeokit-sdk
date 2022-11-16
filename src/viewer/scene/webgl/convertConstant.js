@@ -49,14 +49,15 @@ import {
     UnsignedByteType,
     RGBA_BPTC_Format,
     sRGBEncoding,
-    _SRGBAFormat,
+    // _SRGBAFormat,
     RepeatWrapping,
     ClampToEdgeWrapping,
     NearestFilter,
     LinearFilter,
     NearestMipMapNearestFilter,
     LinearMipMapNearestFilter,
-    NearestMipMapLinearFilter, LinearMipMapLinearFilter
+    NearestMipMapLinearFilter,
+    LinearMipMapLinearFilter
 } from '../constants/constants.js';
 
 import {getExtension} from "./getExtension.js";

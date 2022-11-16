@@ -1,0 +1,33 @@
+{
+  "name": "@xeokit/xkt-plugin",
+  "version": "1.0.0",
+  "private": false,
+  "module": "./dist/xkt.es.js",
+  "main": "./dist/xkt.cjs.js",
+  "types": "./types/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "types"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && cross-env NODE_ENV=production PLUGIN=xkt INPUT=./index.js rollup -c ../../../rollup/rollup.packages.config.js"
+  },
+  "dependencies": {
+    "@xeokit/viewer": "^1.0.0",
+    "pako": "2.1.0"
+  },
+  "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
+  "homepage": "https://xeokit.io",
+  "author": "Lindsay Kay",
+  "license": "See LICENSE.txt",
+  "bugs": {
+    "url": "https://github.com/xeokit/xeokit-sdk/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xeokit/xeokit-sdk.git"
+  }
+}

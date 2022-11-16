@@ -1,8 +1,5 @@
-import {utils} from "../../viewer/scene/utils.js"
-import {VBOSceneModel} from "../../viewer/scene/models/VBOSceneModel/VBOSceneModel.js";
-import {Plugin} from "../../viewer/Plugin.js";
+import {utils, VBOSceneModel,Plugin} from "@xeokit/viewer"
 import {XKTDefaultDataSource} from "./XKTDefaultDataSource.js";
-import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
 
 import {ParserV1} from "./parsers/ParserV1.js";
 import {ParserV2} from "./parsers/ParserV2.js";
@@ -14,6 +11,7 @@ import {ParserV7} from "./parsers/ParserV7.js";
 import {ParserV8} from "./parsers/ParserV8.js";
 import {ParserV9} from "./parsers/ParserV9.js";
 import {ParserV10} from "./parsers/ParserV10.js";
+import {IFCObjectDefaults} from "@xeokit/viewer/metadata/IFCObjectDefaults";
 
 const parsers = {};
 

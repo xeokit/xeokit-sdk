@@ -1,4 +1,4 @@
-import {Map} from "../../viewer/scene/utils/Map.js";
+import {Map} from "@xeokit/viewer";
 
 const idMap = new Map();
 
