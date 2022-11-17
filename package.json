@@ -70,7 +70,6 @@
     "eslint": "^8.13.0",
     "lerna": "^6.0.3",
     "parse5": "^7.0.0",
-    "read-pkg-up": "^9.1.0",
     "rollup": "^2.70.2",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-terser": "^7.0.2",
