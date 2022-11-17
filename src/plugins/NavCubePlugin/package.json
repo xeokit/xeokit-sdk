@@ -1,10 +1,10 @@
 {
-  "name": "@xeokit/viewer",
+  "name": "@xeokit/nav-cube-plugin",
   "version": "1.5.0",
-  "module": "./dist/viewer.es.js",
-  "main": "./dist/viewer.cjs.js",
-  "types": "./types/index.d.ts",
   "private": false,
+  "module": "./dist/nav-cube.es.js",
+  "main": "./dist/nav-cube.cjs.js",
+  "types": "./types/index.d.ts",
   "publishConfig": {
     "access": "public",
     "registry": "http://localhost:4873"
@@ -14,7 +14,10 @@
     "types"
   ],
   "scripts": {
-    "build": "rm -rf dist && cross-env NODE_ENV=production PLUGIN=xkt INPUT=./index.js rollup -c ../../rollup/rollup.viewer.config.js"
+    "build": "rm -rf dist && cross-env NODE_ENV=production PLUGIN=nav-cube INPUT=./index.js rollup -c ../../../rollup/rollup.packages.config.js"
+  },
+  "dependencies": {
+    "@xeokit/viewer": "^1.5.0"
   },
   "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
   "homepage": "https://xeokit.io",
@@ -26,5 +29,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/xeokit/xeokit-sdk.git"
-  }
+  },
+  "gitHead": "e5bc82808f7da5e6cdca02c5e3d91000d34b6d32"
 }

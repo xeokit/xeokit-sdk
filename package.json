@@ -10,7 +10,7 @@
     "test": "percy exec -- node ./snapshots.js",
     "docs": "rm -Rf ./docs/*; ./node_modules/.bin/esdoc",
     "typedocs": "rm -Rf ./docs/*; typedoc --tsconfig tsconfig.json",
-    "publish": "npm publish --access public"
+    "publish": "lerna publish"
   },
   "repository": {
     "type": "git",
@@ -81,7 +81,6 @@
     "/types"
   ],
   "workspaces": [
-    "src/plugins/**/*",
-    "src/viewer/*"
+    "src/**/*"
   ]
 }

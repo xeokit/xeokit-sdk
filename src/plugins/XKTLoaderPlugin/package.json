@@ -1,12 +1,13 @@
 {
   "name": "@xeokit/xkt-plugin",
-  "version": "1.0.0",
+  "version": "1.5.0",
   "private": false,
   "module": "./dist/xkt.es.js",
   "main": "./dist/xkt.cjs.js",
   "types": "./types/index.d.ts",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "http://localhost:4873"
   },
   "files": [
     "dist",
@@ -16,7 +17,7 @@
     "build": "rm -rf dist && cross-env NODE_ENV=production PLUGIN=xkt INPUT=./index.js rollup -c ../../../rollup/rollup.packages.config.js"
   },
   "dependencies": {
-    "@xeokit/viewer": "^1.0.0",
+    "@xeokit/viewer": "^1.5.0",
     "pako": "2.1.0"
   },
   "description": "Web Programming Toolkit for 3D/2D BIM and AEC Graphics",
@@ -29,5 +30,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/xeokit/xeokit-sdk.git"
-  }
+  },
+  "gitHead": "e5bc82808f7da5e6cdca02c5e3d91000d34b6d32"
 }

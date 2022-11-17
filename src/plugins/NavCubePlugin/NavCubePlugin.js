@@ -1,14 +1,7 @@
-import {Plugin} from "../../viewer/Plugin.js";
-import {math} from "../../viewer/scene/math/math.js";
-import {Scene} from "../../viewer/scene/scene/Scene.js";
-import {DirLight} from "./../../viewer/scene/lights/DirLight.js";
-import {Mesh} from "./../../viewer/scene/mesh/Mesh.js";
-import {ReadableGeometry} from "../../viewer/scene/geometry/ReadableGeometry.js";
-import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
-import {Texture} from "../../viewer/scene/materials/Texture.js";
-import {buildCylinderGeometry} from "../../viewer/scene/geometry/builders/buildCylinderGeometry.js";
+import {Plugin} from "@xeokit/viewer/Plugin";
+import {math, DirLight, Mesh, ReadableGeometry, PhongMaterial, ClampToEdgeWrapping, Texture, buildCylinderGeometry} from "@xeokit/viewer/scene";
 import {CubeTextureCanvas} from "./CubeTextureCanvas.js";
-import {ClampToEdgeWrapping} from "../../viewer/scene/constants/constants";
+import {Scene} from "@xeokit/viewer";
 
 /**
  * {@link Viewer} plugin that lets us look at the entire {@link Scene} from along a chosen axis or diagonal.

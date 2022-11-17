@@ -1,5 +1,4 @@
-import { Plugin } from "../../viewer/Plugin";
-import { Viewer } from "../../viewer/Viewer";
+import {Plugin, Viewer} from "@xeokit/viewer/types";
 
 export declare type NavCubePluginConfiguration = {
   /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
