@@ -133,6 +133,7 @@ class AngleMeasurementsPlugin extends Plugin {
      * @param {String} [cfg.id="AngleMeasurements"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {HTMLElement} [cfg.container] Container DOM element for markers and labels. Defaults to ````document.body````.
      * @param {string} [cfg.defaultColor=null] The default color of the dots, wire and label.
+    * @param {boolean} [cfg.defaultLabelsVisible=true] The default value of {@link AngleMeasurement.labelsVisible}.
      * @param {number} [cfg.zIndex] If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
     */
     constructor(viewer, cfg = {}) {
@@ -145,8 +146,33 @@ class AngleMeasurementsPlugin extends Plugin {
 
         this._measurements = {};
 
-        this.defaultColor = cfg.defaultColor;
+        this.defaultColor = cfg.defaultColor !== undefined ? cfg.defaultColor : "#00BBFF";
+        this.defaultLabelsVisible = cfg.defaultLabelsVisible !== false;
         this.zIndex = cfg.zIndex || 10000;
+
+        this._onMouseOver = (event, measurement) => {
+            this.fire("mouseOver", {
+                plugin: this,
+                measurement,
+                event
+            });
+        }
+
+        this._onMouseLeave = (event, measurement) => {
+            this.fire("mouseLeave", {
+                plugin: this,
+                measurement,
+                event
+            });
+        };
+
+        this._onContextMenu = (event, measurement) => {
+            this.fire("contextMenu", {
+                plugin: this,
+                measurement,
+                event
+            });
+        };
     }
 
     /**
@@ -221,6 +247,9 @@ class AngleMeasurementsPlugin extends Plugin {
             cornerVisible: true,
             targetWireVisible: true,
             targetVisible: true,
+            onMouseOver: this._onMouseOver,
+            onMouseLeave: this._onMouseLeave,
+            onContextMenu: this._onContextMenu
         });
         this._measurements[measurement.id] = measurement;
         measurement.on("destroyed", () => {
@@ -243,6 +272,17 @@ class AngleMeasurementsPlugin extends Plugin {
         }
         measurement.destroy();
         this.fire("measurementDestroyed", measurement);
+    }
+
+    /**
+     * Shows all or hides the angle label of each {@link AngleMeasurement}.
+     *
+     * @param {Boolean} labelsShown Whether or not to show the labels.
+     */
+    setLabelsShown(labelsShown) {
+        for (const [key, measurement] of Object.entries(this.measurements)) {
+            measurement.labelShown = labelsShown;
+        }
     }
 
     /**

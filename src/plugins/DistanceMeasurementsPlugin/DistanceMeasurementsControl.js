@@ -154,7 +154,7 @@ class DistanceMeasurementsControl extends Component {
                         }
                         this._currentDistanceMeasurementByMouse.approximate = false;
                     }
-
+                    this._currentDistanceMeasurementByMouse.clickable = true;
                     this.fire("measurementEnd", this._currentDistanceMeasurementByMouse);
                     this._currentDistanceMeasurementByMouse = null;
                 } else {
@@ -189,6 +189,7 @@ class DistanceMeasurementsControl extends Component {
                     this._currentDistanceMeasurementByMouseInittouchState.axisVisible = this._currentDistanceMeasurementByMouse.axisVisible && this.plugin.defaultAxisVisible;
                     this._currentDistanceMeasurementByMouseInittouchState.wireVisible = this._currentDistanceMeasurementByMouse.wireVisible;
                     this._currentDistanceMeasurementByMouseInittouchState.targetVisible = this._currentDistanceMeasurementByMouse.targetVisible;
+                    this._currentDistanceMeasurementByMouse.clickable = false;
                     this.fire("measurementStart", this._currentDistanceMeasurementByMouse);
                 }
             }
@@ -248,7 +249,7 @@ class DistanceMeasurementsControl extends Component {
                         case SECOND_TOUCH_EXPECTED:
                             startDot.setVisible(false);
                             this._touchStartMarker.worldPos = pickResult.worldPos;
-                            plugin.createMeasurement({
+                           const measurement = plugin.createMeasurement({
                                 id: math.createUUID(),
                                 origin: {
                                     entity: mouseHoverEntity,
@@ -260,6 +261,7 @@ class DistanceMeasurementsControl extends Component {
                                 },
                                 approximate: (!pickSurfacePrecisionEnabled)
                             });
+                            measurement.clickable = true;
                             touchState = FIRST_TOUCH_EXPECTED;
                             break;
                     }

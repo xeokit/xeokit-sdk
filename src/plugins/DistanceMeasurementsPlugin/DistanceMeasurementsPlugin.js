@@ -146,10 +146,11 @@ class DistanceMeasurementsPlugin extends Plugin {
      * @param {boolean} [cfg.defaultOriginVisible=true] The default value of the DistanceMeasurements `originVisible` property.
      * @param {boolean} [cfg.defaultTargetVisible=true] The default value of the DistanceMeasurements `targetVisible` property.
      * @param {boolean} [cfg.defaultWireVisible=true] The default value of the DistanceMeasurements `wireVisible` property.
+     * @param {boolean} [cfg.defaultLabelsVisible=true] The default value of the DistanceMeasurements `labelsVisible` property.
      * @param {boolean} [cfg.defaultAxisVisible=true] The default value of the DistanceMeasurements `axisVisible` property.
-     * @param {boolean} [cfg.defaultAxisEnabled=true] The default value of the DistanceMeasurements `axisVisible` property.
      * @param {string} [cfg.defaultColor=#00BBFF] The default color of the length dots, wire and label.
      * @param {number} [cfg.zIndex] If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
+     *
      */
     constructor(viewer, cfg = {}) {
 
@@ -167,9 +168,34 @@ class DistanceMeasurementsPlugin extends Plugin {
         this.defaultOriginVisible = cfg.defaultOriginVisible !== false;
         this.defaultTargetVisible = cfg.defaultTargetVisible !== false;
         this.defaultWireVisible = cfg.defaultWireVisible !== false;
+        this.defaultLabelsVisible = cfg.defaultLabelsVisible !== false;
         this.defaultAxisVisible = cfg.defaultAxisVisible !== false;
         this.defaultColor = cfg.defaultColor !== undefined ? cfg.defaultColor : "#00BBFF";
         this.zIndex = cfg.zIndex || 10000;
+
+        this._onMouseOver = (event, measurement) => {
+            this.fire("mouseOver", {
+                plugin: this,
+                measurement,
+                event
+            });
+        }
+
+        this._onMouseLeave = (event, measurement) => {
+            this.fire("mouseLeave", {
+                plugin: this,
+                measurement,
+                event
+            });
+        };
+
+        this._onContextMenu = (event, measurement) => {
+            this.fire("contextMenu", {
+                plugin: this,
+                measurement,
+                event
+            });
+        };
     }
 
     /**
@@ -240,6 +266,7 @@ class DistanceMeasurementsPlugin extends Plugin {
      * @param {Boolean} [params.targetVisible=true] Whether to initially show the {@link DistanceMeasurement} target.
      * @param {Boolean} [params.wireVisible=true] Whether to initially show the direct point-to-point wire between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
      * @param {Boolean} [params.axisVisible=true] Whether to initially show the axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
+     * @param {Boolean} [params.labelsVisible=true] Whether to initially show the labels.
      * @param {string} [params.color] The color of the length dot, wire and label.
      * @returns {DistanceMeasurement} The new {@link DistanceMeasurement}.
      */
@@ -265,9 +292,13 @@ class DistanceMeasurementsPlugin extends Plugin {
             visible: params.visible,
             wireVisible: params.wireVisible,
             axisVisible: params.axisVisible !== false && this.defaultAxisVisible !== false,
+            labelsVisible: params.labelsVisible !== false && this.defaultLabelsVisible !== false,
             originVisible: params.originVisible,
             targetVisible: params.targetVisible,
-            color: params.color
+            color: params.color,
+            onMouseOver: this._onMouseOver,
+            onMouseLeave: this._onMouseLeave,
+            onContextMenu: this._onContextMenu
         });
         this._measurements[measurement.id] = measurement;
         measurement.on("destroyed", () => {
@@ -290,6 +321,17 @@ class DistanceMeasurementsPlugin extends Plugin {
         }
         measurement.destroy();
         this.fire("measurementDestroyed", measurement);
+    }
+
+    /**
+     * Shows all or hides the angle label of each {@link DistanceMeasurement}.
+     *
+     * @param {Boolean} labelsShown Whether or not to show the labels.
+     */
+    setLabelsShown(labelsShown) {
+        for (const [key, measurement] of Object.entries(this.measurements)) {
+            measurement.labelShown = labelsShown;
+        }
     }
 
     /**

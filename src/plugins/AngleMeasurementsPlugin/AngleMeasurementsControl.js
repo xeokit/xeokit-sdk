@@ -298,6 +298,7 @@ class AngleMeasurementsControl extends Component {
                             this._currentAngleMeasurement.targetWireVisible = false;
                             this._currentAngleMeasurement.targetVisible = false;
                             this._currentAngleMeasurement.angleVisible = false;
+                            this._currentAngleMeasurement.clickable = false;
                             this._state = FINDING_CORNER;
                             this.fire("measurementStart", this._currentAngleMeasurement);
                             break;
@@ -313,6 +314,7 @@ class AngleMeasurementsControl extends Component {
                             //  this._currentAngleMeasurement.approximate = false;
                             this._currentAngleMeasurement.targetVisible = true;
                             this._currentAngleMeasurement.angleVisible = true;
+                            this._currentAngleMeasurement.clickable = true;
                             this.fire("measurementEnd", this._currentAngleMeasurement);
                             this._currentAngleMeasurement = null;
                             this._state = FINDING_ORIGIN;

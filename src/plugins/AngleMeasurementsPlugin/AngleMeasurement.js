@@ -50,35 +50,65 @@ class AngleMeasurement extends Component {
         this._pp = new Float64Array(12);
         this._cp = new Int16Array(6);
 
+        const onMouseOver = cfg.onMouseOver ? (event) => {
+            cfg.onMouseOver(event, this);
+        } : null;
+
+        const onMouseLeave = cfg.onMouseLeave ? (event) => {
+            cfg.onMouseLeave(event, this);
+        } : null;
+
+        const onContextMenu = cfg.onContextMenu ? (event) => {
+            cfg.onContextMenu(event, this);
+        } : null;
+
         this._originDot = new Dot(this._container, {
             fillColor: this._color,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined,
+            onMouseOver,
+            onMouseLeave,
+            onContextMenu
         });
         this._cornerDot = new Dot(this._container, {
             fillColor: this._color,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined,
+            onMouseOver,
+            onMouseLeave,
+            onContextMenu
         });
         this._targetDot = new Dot(this._container, {
             fillColor: this._color,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined,
+            onMouseOver,
+            onMouseLeave,
+            onContextMenu
         });
 
         this._originWire = new Wire(this._container, {
             color: this._color || "blue",
             thickness: 1,
-            zIndex: plugin.zIndex
+            zIndex: plugin.zIndex,
+            onMouseOver,
+            onMouseLeave,
+            onContextMenu
         });
         this._targetWire = new Wire(this._container, {
             color: this._color || "red",
             thickness: 1,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined,
+            onMouseOver,
+            onMouseLeave,
+            onContextMenu
         });
 
         this._angleLabel = new Label(this._container, {
             fillColor: this._color || "#00BBFF",
             prefix: "",
             text: "",
-            zIndex: plugin.zIndex + 2
+            zIndex: plugin.zIndex + 2,
+            onMouseOver,
+            onMouseLeave,
+            onContextMenu
         });
 
         this._wpDirty = false;
@@ -94,6 +124,8 @@ class AngleMeasurement extends Component {
         this._targetWireVisible = false;
 
         this._angleVisible = false;
+        this._labelsVisible = false;
+        this._clickable = true;
 
         this._originMarker.on("worldPos", (value) => {
             this._originWorld.set(value || [0, 0, 0]);
@@ -139,6 +171,7 @@ class AngleMeasurement extends Component {
         this.targetWireVisible = cfg.targetWireVisible;
 
         this.angleVisible = cfg.angleVisible;
+        this.labelsVisible = cfg.labelsVisible;
     }
 
     _update() {
@@ -198,7 +231,7 @@ class AngleMeasurement extends Component {
                 this._originWire.setVisible(false);
                 this._targetWire.setVisible(false);
 
-                this._angleLabel.setVisible(false);
+                this._angleLabel.setCulled(true);
 
                 return;
             }
@@ -262,7 +295,7 @@ class AngleMeasurement extends Component {
             this._originWire.setVisible(this._visible && this._originWireVisible);
             this._targetWire.setVisible(this._visible && this._targetWireVisible);
 
-            this._angleLabel.setVisible(this._visible && this._angleVisible);
+            this._angleLabel.setCulled(!(this._visible && this._angleVisible && this.labelsVisible));
 
             this._cpDirty = false;
         }
@@ -376,6 +409,8 @@ class AngleMeasurement extends Component {
         this._originWire.setVisible(this._visible && this._originWireVisible);
         this._targetWire.setVisible(this._visible && this._targetWireVisible);
         this._angleLabel.setVisible(this._visible && this._angleVisible);
+        this._cpDirty = true;
+        this._needUpdate();
     }
 
     /**
@@ -396,6 +431,8 @@ class AngleMeasurement extends Component {
         value = value !== false;
         this._originVisible = value;
         this._originDot.setVisible(this._visible && this._originVisible);
+        this._cpDirty = true;
+        this._needUpdate();
     }
 
     /**
@@ -416,6 +453,8 @@ class AngleMeasurement extends Component {
         value = value !== false;
         this._cornerVisible = value;
         this._cornerDot.setVisible(this._visible && this._cornerVisible);
+        this._cpDirty = true;
+        this._needUpdate();
     }
 
     /**
@@ -436,6 +475,8 @@ class AngleMeasurement extends Component {
         value = value !== false;
         this._targetVisible = value;
         this._targetDot.setVisible(this._visible && this._targetVisible);
+        this._cpDirty = true;
+        this._needUpdate();
     }
 
     /**
@@ -456,6 +497,8 @@ class AngleMeasurement extends Component {
         value = value !== false;
         this._originWireVisible = value;
         this._originWire.setVisible(this._visible && this._originWireVisible);
+        this._cpDirty = true;
+        this._needUpdate();
     }
 
     /**
@@ -476,6 +519,8 @@ class AngleMeasurement extends Component {
         value = value !== false;
         this._targetWireVisible = value;
         this._targetWire.setVisible(this._visible && this._targetWireVisible);
+        this._cpDirty = true;
+        this._needUpdate();
     }
 
     /**
@@ -496,6 +541,8 @@ class AngleMeasurement extends Component {
         value = value !== false;
         this._angleVisible = value;
         this._angleLabel.setVisible(this._visible && this._angleVisible);
+        this._cpDirty = true;
+        this._needUpdate();
     }
 
     /**
@@ -505,6 +552,67 @@ class AngleMeasurement extends Component {
      */
     get angleVisible() {
         return this._angleVisible;
+    }
+
+    /**
+     * Sets if the labels are visible.
+     *
+     * @type {Boolean}
+     */
+    set labelsVisible(value) {
+        value = value !== undefined ? Boolean(value) : this.plugin.defaultLabelsVisible;
+        this._labelsVisible = value;
+        var labelsVisible = this._visible && this._labelsVisible;
+        this._angleLabel.setVisible(labelsVisible);
+        this._cpDirty = true;
+        this._needUpdate();
+    }
+
+    /**
+     * Gets if the labels are visible.
+     *
+     * @type {Boolean}
+     */
+    get labelsVisible() {
+        return this._labelsVisible;
+    }
+
+    /**
+     * Sets if this DistanceMeasurement appears highlighted.
+     * @param highlighted
+     */
+    setHighlighted(highlighted) {
+        this._originDot.setHighlighted(highlighted);
+        this._cornerDot.setHighlighted(highlighted);
+        this._targetDot.setHighlighted(highlighted);
+        this._originWire.setHighlighted(highlighted);
+        this._targetWire.setHighlighted(highlighted);
+        this._angleLabel.setHighlighted(highlighted);
+    }
+
+    /**
+     * Sets if the wires, dots ad labels will fire "mouseOver" "mouseLeave" and "contextMenu" events.
+     *
+     * @type {Boolean}
+     */
+    set clickable(value) {
+        value = !!value;
+        this._clickable = value;
+        this._originDot.setClickable(this._clickable);
+        this._cornerDot.setClickable(this._clickable);
+        this._targetDot.setClickable(this._clickable);
+        this._originWire.setClickable(this._clickable);
+        this._targetWire.setClickable(this._clickable);
+        this._angleLabel.setClickable(this._clickable);
+    }
+
+    /**
+     * Gets if the wires, dots ad labels will fire "mouseOver" "mouseLeave" and "contextMenu" events.
+     *
+     * @type {Boolean}
+     */
+    get clickable() {
+        return this._clickable;
     }
 
     /**
