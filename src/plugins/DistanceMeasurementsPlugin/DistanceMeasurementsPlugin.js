@@ -9,7 +9,7 @@ import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
  *
  * * [[Example 1: Model with distance measurements](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_modelWithMeasurements)]
  * * [[Example 2: Create distance measurements with mouse](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_createWithMouse)]
- * * [[Example 3: Configuring units and scale](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_unitsAndScale)]
+ * * [[Example 3: Configuring units and scale](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_unitsAndScale)
  *
  * ## Overview
  *
@@ -131,6 +131,78 @@ import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
 
  * metrics.units = "meters";
  * metrics.scale = 10.0;
+ * ````
+ *
+ * ## Example 4: Attaching Mouse Handlers
+ *
+ * In our fourth example, we'll attach even handlers to our plugin, to catch when the user
+ * hovers or right-clicks over our measurements.
+ *
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_modelWithMeasurements)]
+ *
+ * ````javascript
+ * import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin} from "xeokit-sdk.es.js";
+ *
+ * const viewer = new Viewer({
+ *     canvasId: "myCanvas",
+ *     transparent: true
+ * });
+ *
+ * viewer.scene.camera.eye = [-2.37, 18.97, -26.12];
+ * viewer.scene.camera.look = [10.97, 5.82, -11.22];
+ * viewer.scene.camera.up = [0.36, 0.83, 0.40];
+ *
+ * const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ * const distanceMeasurements = new DistanceMeasurementsPlugin(viewer);
+ *
+ * distanceMeasurements.on("mouseOver", (e) => {
+ *     e.measurement.setHighlighted(true);
+ * });
+ *
+ * distanceMeasurements.on("mouseLeave", (e) => {
+ *     e.measurement.setHighlighted(false);
+ * });
+ *
+ * distanceMeasurements.on("contextMenu", (e) => {
+ *     // Show context menu
+ *     e.event.preventDefault();
+ * });
+ *
+ * const model = xktLoader.load({
+ *      src: "./models/xkt/duplex/duplex.xkt"
+ * });
+ *
+ * model.on("loaded", () => {
+ *
+ *      const myMeasurement1 = distanceMeasurements.createMeasurement({
+ *          id: "distanceMeasurement1",
+ *          origin: {
+ *              entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FLOH"],
+ *              worldPos: [0.044, 5.998, 17.767]
+ *          },
+ *          target: {
+ *              entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FLOH"],
+ *              worldPos: [4.738, 3.172, 17.768]
+ *          },
+ *          visible: true,
+ *          wireVisible: true
+ *      });
+ *
+ *      const myMeasurement2 = distanceMeasurements.createMeasurement({
+ *          id: "distanceMeasurement2",
+ *          origin: {
+ *              entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FNr2"],
+ *              worldPos: [0.457, 2.532, 17.766]
+ *          },
+ *          target: {
+ *              entity: viewer.scene.objects["1CZILmCaHETO8tf3SgGEXu"],
+ *              worldPos: [0.436, 0.001, 22.135]
+ *          },
+ *          visible: true,
+ *          wireVisible: true
+ *      });
+ * });
  * ````
  */
 class DistanceMeasurementsPlugin extends Plugin {
