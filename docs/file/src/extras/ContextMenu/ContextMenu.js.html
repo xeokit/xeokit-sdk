@@ -943,9 +943,7 @@ class ContextMenu {
 
                         item.itemElement.addEventListener(&quot;mouseenter&quot;, (event) =&gt; {
                             event.preventDefault();
-                            if (item.enabled === false) {
-                                return;
-                            }
+
                             const subMenu = item.subMenu;
                             if (!subMenu) {
                                 if (lastSubMenu) {
@@ -957,6 +955,10 @@ class ContextMenu {
                             if (lastSubMenu &amp;&amp; (lastSubMenu.id !== subMenu.id)) {
                                 self._hideMenu(lastSubMenu.id);
                                 lastSubMenu = null;
+                            }
+
+                            if (item.enabled === false) {
+                                return;
                             }
 
                             const itemElement = item.itemElement;

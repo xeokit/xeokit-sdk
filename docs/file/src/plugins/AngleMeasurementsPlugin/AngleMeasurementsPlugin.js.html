@@ -362,6 +362,85 @@ import {AngleMeasurementsControl} from &quot;./AngleMeasurementsControl.js&quot;
  *
  * angleMeasurements.control.activate();  // &lt;------------ Activate the AngleMeasurementsControl
  * ````
+ *
+ * ## Example 4: Attaching Mouse Handlers
+ *
+ * In our fourth example, we&apos;ll attach even handlers to our plugin, to catch when the user
+ * hovers or right-clicks over our measurements.
+ *
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_modelWithMeasurements)]
+ *
+ * ````javascript
+ * import {Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin} from &quot;xeokit-sdk.es.js&quot;;
+ *
+ * const viewer = new Viewer({
+ *     canvasId: &quot;myCanvas&quot;,
+ *     transparent: true
+ * });
+ *
+ * viewer.scene.camera.eye = [-2.37, 18.97, -26.12];
+ * viewer.scene.camera.look = [10.97, 5.82, -11.22];
+ * viewer.scene.camera.up = [0.36, 0.83, 0.40];
+ *
+ * const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ * const angleMeasurements = new AngleMeasurementsPlugin(viewer);
+ *
+ * angleMeasurements.on(&quot;mouseOver&quot;, (e) =&gt; {
+ *     e.measurement.setHighlighted(true);
+ * });
+ *
+ * angleMeasurements.on(&quot;mouseLeave&quot;, (e) =&gt; {
+ *     e.measurement.setHighlighted(false);
+ * });
+ *
+ * angleMeasurements.on(&quot;contextMenu&quot;, (e) =&gt; {
+ *     // Show context menu
+ *     e.event.preventDefault();
+ * });
+ *
+ * const model = xktLoader.load({
+ *      src: &quot;./models/xkt/duplex/duplex.xkt&quot;
+ * });
+ *
+ * model.on(&quot;loaded&quot;, () =&gt; {
+ *
+ *       angleMeasurementsPlugin.createMeasurement({
+ *             id: &quot;angleMeasurement1&quot;,
+ *             origin: {
+ *                 entity: viewer.scene.objects[&quot;1CZILmCaHETO8tf3SgGEXu&quot;],
+ *                 worldPos: [0.4158603637281142, 2.5193106917110457, 17.79972838299403]
+ *             },
+ *             corner: {
+ *                 entity: viewer.scene.objects[&quot;1CZILmCaHETO8tf3SgGEXu&quot;],
+ *                 worldPos: [0.41857741956197625,0.0987169929481646,17.799763071093395]
+ *             },
+ *             target: {
+ *                 entity: viewer.scene.objects[&quot;1CZILmCaHETO8tf3SgGEXu&quot;],
+ *                 worldPos: [5.235526066859247, 0.11580773869801986, 17.824891550941565]
+ *             },
+ *             visible: true
+ *         });
+ *
+ *         angleMeasurementsPlugin.createMeasurement({
+ *             id: &quot;angleMeasurement2&quot;,
+ *             origin: {
+ *                 entity: viewer.scene.objects[&quot;2O2Fr$t4X7Zf8NOew3FNr2&quot;],
+ *                 worldPos: [-0.00003814187850181838, 5.9996748076205115,17.79996871551525]
+ *             },
+ *             corner: {
+ *                 entity: viewer.scene.objects[&quot;2O2Fr$t4X7Zf8NOew3FNqI&quot;],
+ *                 worldPos: [-0.0005214119318139865, 3.1010044228517595, 17.787656604483363]
+ *
+ *             },
+ *             target: {
+ *                 entity: viewer.scene.objects[&quot;1s1jVhK8z0pgKYcr9jt7AB&quot;],
+ *                 worldPos: [ 8.380657312957396, 3.1055697628459553, 17.799220108187185]
+ *             },
+ *             visible: true
+ *         });
+ * });
+ * ````
  */
 class AngleMeasurementsPlugin extends Plugin {
 
@@ -372,6 +451,7 @@ class AngleMeasurementsPlugin extends Plugin {
      * @param {String} [cfg.id=&quot;AngleMeasurements&quot;] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {HTMLElement} [cfg.container] Container DOM element for markers and labels. Defaults to ````document.body````.
      * @param {string} [cfg.defaultColor=null] The default color of the dots, wire and label.
+    * @param {boolean} [cfg.defaultLabelsVisible=true] The default value of {@link AngleMeasurement.labelsVisible}.
      * @param {number} [cfg.zIndex] If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
     */
     constructor(viewer, cfg = {}) {
@@ -384,8 +464,33 @@ class AngleMeasurementsPlugin extends Plugin {
 
         this._measurements = {};
 
-        this.defaultColor = cfg.defaultColor;
+        this.defaultColor = cfg.defaultColor !== undefined ? cfg.defaultColor : &quot;#00BBFF&quot;;
+        this.defaultLabelsVisible = cfg.defaultLabelsVisible !== false;
         this.zIndex = cfg.zIndex || 10000;
+
+        this._onMouseOver = (event, measurement) =&gt; {
+            this.fire(&quot;mouseOver&quot;, {
+                plugin: this,
+                measurement,
+                event
+            });
+        }
+
+        this._onMouseLeave = (event, measurement) =&gt; {
+            this.fire(&quot;mouseLeave&quot;, {
+                plugin: this,
+                measurement,
+                event
+            });
+        };
+
+        this._onContextMenu = (event, measurement) =&gt; {
+            this.fire(&quot;contextMenu&quot;, {
+                plugin: this,
+                measurement,
+                event
+            });
+        };
     }
 
     /**
@@ -460,6 +565,9 @@ class AngleMeasurementsPlugin extends Plugin {
             cornerVisible: true,
             targetWireVisible: true,
             targetVisible: true,
+            onMouseOver: this._onMouseOver,
+            onMouseLeave: this._onMouseLeave,
+            onContextMenu: this._onContextMenu
         });
         this._measurements[measurement.id] = measurement;
         measurement.on(&quot;destroyed&quot;, () =&gt; {
@@ -482,6 +590,17 @@ class AngleMeasurementsPlugin extends Plugin {
         }
         measurement.destroy();
         this.fire(&quot;measurementDestroyed&quot;, measurement);
+    }
+
+    /**
+     * Shows all or hides the angle label of each {@link AngleMeasurement}.
+     *
+     * @param {Boolean} labelsShown Whether or not to show the labels.
+     */
+    setLabelsShown(labelsShown) {
+        for (const [key, measurement] of Object.entries(this.measurements)) {
+            measurement.labelShown = labelsShown;
+        }
     }
 
     /**

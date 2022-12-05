@@ -530,9 +530,11 @@ class LASLoaderPlugin extends Plugin {
         }
 
         const options = {
-            skip: this._skip,
-            fp64: this._fp64,
-            colorDepth: this._colorDepth
+            las: {
+                skip: this._skip,
+                fp64: this._fp64,
+                colorDepth: this._colorDepth
+            }
         };
 
         if (params.src) {

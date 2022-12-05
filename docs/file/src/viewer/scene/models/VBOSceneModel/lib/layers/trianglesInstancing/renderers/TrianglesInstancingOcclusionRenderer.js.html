@@ -458,7 +458,7 @@ class TrianglesInstancingOcclusionRenderer {
         src.push(&quot;uniform mat4 positionsDecodeMatrix;&quot;);
         if (scene.logarithmicDepthBufferEnabled) {
             src.push(&quot;uniform float logDepthBufFC;&quot;);
-            src.push(&quot;in float vFragDepth;&quot;);
+            src.push(&quot;out float vFragDepth;&quot;);
             src.push(&quot;bool isPerspectiveMatrix(mat4 m) {&quot;);
             src.push(&quot;    return (m[2][3] == - 1.0);&quot;);
             src.push(&quot;}&quot;);
@@ -513,9 +513,9 @@ class TrianglesInstancingOcclusionRenderer {
         src.push(&quot;precision mediump int;&quot;);
         src.push(&quot;#endif&quot;);
         if (scene.logarithmicDepthBufferEnabled) {
-            src.push(&quot;out float isPerspective;&quot;);
+            src.push(&quot;in float isPerspective;&quot;);
             src.push(&quot;uniform float logDepthBufFC;&quot;);
-            src.push(&quot;out float vFragDepth;&quot;);
+            src.push(&quot;in float vFragDepth;&quot;);
         }
         if (clipping) {
             src.push(&quot;in vec4 vWorldPosition;&quot;);

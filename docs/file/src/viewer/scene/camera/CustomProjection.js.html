@@ -298,7 +298,7 @@ class CustomProjection extends Component {
         this._inverseMatrixDirty = true;
         this._transposedMatrixDirty = true;
         this.glRedraw();
-        this.fire(&quot;far&quot;, this._state.matrix);
+        this.fire(&quot;matrix&quot;, this._state.matrix);
     }
 
     /**
