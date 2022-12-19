@@ -255,7 +255,7 @@ class LASLoaderPlugin extends Plugin {
      * @param {Number|String} value Valid values are 8, 16 and "auto".
      */
     set colorDepth(value) {
-        this._colorDepth = !!value;
+        this._colorDepth = value | "auto";
     }
 
     /**
@@ -410,10 +410,10 @@ class LASLoaderPlugin extends Plugin {
                         reject("No positions found in file");
                         return;
                     }
-                    
+
                     let positionsValue
                     let colorsCompressed;
-                    
+
                     switch (pointsFormatId) {
                         case 0:
                             positionsValue = readPositions(attributes.POSITION);
