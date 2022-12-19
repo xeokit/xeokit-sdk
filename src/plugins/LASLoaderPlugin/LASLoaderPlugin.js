@@ -255,7 +255,7 @@ class LASLoaderPlugin extends Plugin {
      * @param {Number|String} value Valid values are 8, 16 and "auto".
      */
     set colorDepth(value) {
-        this._colorDepth = value | "auto";
+        this._colorDepth = value || "auto";
     }
 
     /**
