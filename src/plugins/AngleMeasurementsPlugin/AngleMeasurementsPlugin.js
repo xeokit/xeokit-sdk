@@ -1,4 +1,4 @@
-import {Plugin} from "../../viewer/Plugin.js";
+import {Plugin} from "@xeokit/viewer";
 import {AngleMeasurement} from "./AngleMeasurement.js";
 import {AngleMeasurementsControl} from "./AngleMeasurementsControl.js";
 

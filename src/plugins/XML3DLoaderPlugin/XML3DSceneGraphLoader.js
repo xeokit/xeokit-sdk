@@ -1,11 +1,13 @@
-import {Node} from "../../viewer/scene/nodes/Node.js";
-import {Mesh} from "../../viewer/scene/mesh/Mesh.js";
-import {ReadableGeometry} from "../../viewer/scene/geometry/ReadableGeometry.js";
-import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
-import {MetallicMaterial} from "../../viewer/scene/materials/MetallicMaterial.js";
-import {SpecularMaterial} from "../../viewer/scene/materials/SpecularMaterial.js";
-import {LambertMaterial} from "../../viewer/scene/materials/LambertMaterial.js";
-import {math} from "../../viewer/scene/math/math.js";
+import {
+    LambertMaterial,
+    math,
+    Mesh,
+    MetallicMaterial,
+    Node,
+    PhongMaterial,
+    ReadableGeometry,
+    SpecularMaterial,
+} from "@xeokit/viewer/scene";
 
 import {zipLib} from "./zipjs/zip.js";
 import {zipExt} from "./zipjs/zip-ext.js";

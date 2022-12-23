@@ -1,21 +1,21 @@
-import {math} from "../../viewer/scene/math/math.js";
-import {utils} from "../../viewer/scene/utils.js";
-import {core} from "../../viewer/scene/core.js";
-import {sRGBEncoding} from "../../viewer/scene/constants/constants.js";
-import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords";
-import {parse} from '../../../node_modules/@loaders.gl/core/dist/esm/index.js';
-import {GLTFLoader} from '../../../node_modules/@loaders.gl/gltf/dist/esm/gltf-loader.js';
 import {
     ClampToEdgeWrapping,
+    core,
     LinearFilter,
     LinearMipMapLinearFilter,
     LinearMipMapNearestFilter,
+    math,
     MirroredRepeatWrapping,
     NearestFilter,
     NearestMipMapLinearFilter,
     NearestMipMapNearestFilter,
-    RepeatWrapping
-} from "../../viewer/scene/constants/constants.js";
+    RepeatWrapping,
+    sRGBEncoding,
+    utils,
+    worldToRTCPositions,
+} from "@xeokit/viewer/scene";
+import {parse} from '../../../node_modules/@loaders.gl/core/dist/esm/index.js';
+import {GLTFLoader} from '../../../node_modules/@loaders.gl/gltf/dist/esm/gltf-loader.js';
 
 /**
  * @private

@@ -1,7 +1,8 @@
-import {Map} from "./../../viewer/scene/utils/Map.js";
+import {Map} from "@xeokit/viewer/scene";
 import {
     validateMetaModelForTreeViewContainmentHierarchy,
-    validateMetaModelForTreeViewStoreysHierarchy, validateMetaModelForTreeViewTypesHierarchy
+    validateMetaModelForTreeViewStoreysHierarchy,
+    validateMetaModelForTreeViewTypesHierarchy,
 } from "./modelValidation.js";
 
 const idMap = new Map();

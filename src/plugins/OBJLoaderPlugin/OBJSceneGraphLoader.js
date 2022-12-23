@@ -1,10 +1,12 @@
-import {Mesh} from "../../viewer/scene/mesh/Mesh.js";
-import {ReadableGeometry} from "../../viewer/scene/geometry/ReadableGeometry.js";
-import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
-import {Texture} from "../../viewer/scene/materials/Texture.js";
-import {core} from "../../viewer/scene/core.js";
-import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords.js";
-import {math} from "../../viewer/scene/math/math.js";
+import {
+    core,
+    math,
+    Mesh,
+    PhongMaterial,
+    ReadableGeometry,
+    Texture,
+    worldToRTCPositions,
+} from "@xeokit/viewer/scene";
 
 const tempVec3a = math.vec3();
 

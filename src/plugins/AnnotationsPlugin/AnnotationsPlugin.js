@@ -1,7 +1,6 @@
-import {Plugin} from "../../viewer/Plugin.js";
+import {Plugin} from "@xeokit/viewer";
+import {math, utils} from "@xeokit/viewer/scene";
 import {Annotation} from "./Annotation.js";
-import {utils} from "../../viewer/scene/utils.js";
-import {math} from "../../viewer/scene/math/math.js";
 
 const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();

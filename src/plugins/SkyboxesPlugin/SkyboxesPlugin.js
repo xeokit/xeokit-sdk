@@ -1,5 +1,5 @@
-import {Plugin} from "../../viewer/Plugin.js";
-import {Skybox} from "../../viewer/scene/skybox/Skybox.js"
+import {Plugin} from "@xeokit/viewer";
+import {Skybox} from "@xeokit/viewer/scene"
 
 /**
  * {@link Viewer} plugin that manages skyboxes
