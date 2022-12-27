@@ -1,6 +1,5 @@
-import {Plugin} from "../../viewer/Plugin.js";
-import {Node} from "../../viewer/scene/nodes/Node.js";
-import {utils} from "../../viewer/scene/utils.js";
+import {Plugin} from "@xeokit/viewer";
+import {Node, utils} from "@xeokit/viewer/scene";
 import {OBJSceneGraphLoader} from "./OBJSceneGraphLoader.js";
 
 /**

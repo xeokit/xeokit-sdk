@@ -1,9 +1,5 @@
-import {Marker} from "../../viewer/scene/marker/Marker.js";
-import {Wire} from "../lib/html/Wire.js";
-import {Dot} from "../lib/html/Dot.js";
-import {Label} from "../lib/html/Label.js";
-import {math} from "../../viewer/scene/math/math.js";
-import {Component} from "../../viewer/scene/Component.js";
+import {Component, Marker, math} from "@xeokit/viewer/scene";
+import {Dot, Label, Wire} from "@xeokit/shared-plugin-lib";
 
 var originVec = math.vec3();
 var targetVec = math.vec3();

@@ -1,5 +1,4 @@
-import {Marker} from "../../viewer/scene/marker/Marker.js";
-import {utils} from "../../viewer/scene/utils.js";
+import {Marker, utils} from "@xeokit/viewer/scene";
 
 /**
  * A {@link Marker} with an HTML label attached to it, managed by an {@link AnnotationsPlugin}.

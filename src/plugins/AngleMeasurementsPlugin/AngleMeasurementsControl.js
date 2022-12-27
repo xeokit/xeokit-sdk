@@ -1,6 +1,4 @@
-import {Dot} from "../lib/html/Dot";
-import {Component} from "../../viewer/scene/Component.js";
-import {math} from "../../viewer/scene/math/math.js";
+import {Component, math} from "@xeokit/viewer/scene";
 
 const FINDING_ORIGIN = 0;
 const FINDING_CORNER = 1;

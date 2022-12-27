@@ -1,6 +1,4 @@
-import {math} from "../../viewer/scene/math/math.js";
-import {Scene} from "../../viewer/scene/scene/Scene.js";
-import {DirLight} from "./../../viewer/scene/lights/DirLight.js";
+import {DirLight, math, Scene} from "@xeokit/viewer/scene";
 import {Plane} from "./Plane.js";
 
 /**

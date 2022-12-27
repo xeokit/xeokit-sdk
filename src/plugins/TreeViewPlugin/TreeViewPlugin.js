@@ -1,5 +1,5 @@
+import {Plugin} from "@xeokit/viewer";
 import {ModelTreeView} from "./ModelTreeView.js";
-import {Plugin} from "../../viewer/Plugin.js";
 
 /**
  * @desc A {@link Viewer} plugin that provides an HTML tree view to navigate the IFC elements in models.

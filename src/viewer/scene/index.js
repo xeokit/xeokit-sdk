@@ -16,6 +16,7 @@ export * from "./sectionPlane/index.js";
 export * from "./skybox/index.js";
 export * from "./utils/index.js";
 export * from "./Component.js";
+export * from "./core.js";
 export * from "./utils.js";
 export * from "./stats.js";
 export * from "./scene/index.js";

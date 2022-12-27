@@ -1,4 +1,4 @@
-import {utils} from "../../viewer";
+import {utils} from "@xeokit/viewer/scene";
 
 /**
  * Default data access strategy for {@link CityJSONLoaderPlugin}.

@@ -1,9 +1,5 @@
-import {Plugin} from "../../viewer/Plugin.js";
-import {SectionPlane} from "../../viewer/scene/sectionPlane/SectionPlane.js";
-import {Bitmap} from "../../viewer/scene/Bitmap";
-import {LineSet} from "../../viewer/scene/LineSet";
-
-import {math} from "../../viewer/scene/math/math.js";
+import {Plugin} from "@xeokit/viewer";
+import {Bitmap, LineSet, math, SectionPlane} from "@xeokit/viewer/scene";
 
 const tempVec3 = math.vec3();
 const tempVec3a = math.vec3();

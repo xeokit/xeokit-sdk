@@ -1,6 +1,5 @@
-import {math} from "../../viewer/scene/math/math.js";
-import {Plugin} from "../../viewer/Plugin.js";
-import {SectionPlane} from "../../viewer/scene/sectionPlane/SectionPlane.js";
+import {Plugin} from "@xeokit/viewer";
+import {math, SectionPlane} from "@xeokit/viewer/scene";
 import {Control} from "./Control.js";
 import {Overview} from "./Overview.js";
 

@@ -1,15 +1,15 @@
-import {math} from "../../viewer/scene/math/math.js";
-
-import {buildCylinderGeometry} from "../../viewer/scene/geometry/builders/buildCylinderGeometry.js";
-import {buildTorusGeometry} from "../../viewer/scene/geometry/builders/buildTorusGeometry.js";
-
-import {ReadableGeometry} from "../../viewer/scene/geometry/ReadableGeometry.js";
-import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
-import {EmphasisMaterial} from "../../viewer/scene/materials/EmphasisMaterial.js";
-import {Node} from "../../viewer/scene/nodes/Node.js";
-import {Mesh} from "../../viewer/scene/mesh/Mesh.js";
-import {buildSphereGeometry} from "../../viewer/scene/geometry/builders/buildSphereGeometry.js";
-import {worldToRTCPos} from "../../viewer/scene/math/rtcCoords.js";
+import {
+    buildCylinderGeometry,
+    buildSphereGeometry,
+    buildTorusGeometry,
+    EmphasisMaterial,
+    math,
+    Mesh,
+    Node,
+    PhongMaterial,
+    ReadableGeometry,
+    worldToRTCPos,
+} from "@xeokit/viewer/scene";
 
 const zeroVec = new Float64Array([0, 0, 1]);
 const quat = new Float64Array(4);

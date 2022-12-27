@@ -1,11 +1,12 @@
-import {math} from "../../viewer/scene/math/math.js";
-import {Mesh} from "../../viewer/scene/mesh/Mesh.js";
-import {ReadableGeometry} from "../../viewer/scene/geometry/ReadableGeometry.js";
-import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
-import {buildBoxGeometry} from "../../viewer/scene/geometry/builders/buildBoxGeometry.js";
-import {EdgeMaterial} from "../../viewer/scene/materials/EdgeMaterial.js";
-import {EmphasisMaterial} from "../../viewer/scene/materials/EmphasisMaterial.js";
-
+import {
+    buildBoxGeometry,
+    EdgeMaterial,
+    EmphasisMaterial,
+    math,
+    Mesh,
+    PhongMaterial,
+    ReadableGeometry,
+} from "@xeokit/viewer/scene";
 
 /**
  * Renders a 3D plane within an {@link Overview} to indicate its {@link SectionPlane}'s current position and orientation.

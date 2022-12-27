@@ -1,7 +1,5 @@
-import {Dot} from "../lib/html/Dot.js";
-import {Component} from "../../viewer/scene/Component.js";
-import {math} from "../../viewer/scene/math/math.js";
-import {Marker} from "../../viewer";
+import {Component, math, Marker} from "@xeokit/viewer";
+import {Dot} from "@xeokit/shared-plugin-lib";
 
 /**
  * Creates {@link DistanceMeasurement}s from mouse and touch input.
