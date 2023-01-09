@@ -185,7 +185,9 @@
     // Create a AngleMeasurementsPlugin, with which we'll create AngleMeasurements
     //------------------------------------------------------------------------------------------------------------------
 
-    const angleMeasurementsPlugin = new AngleMeasurementsPlugin(viewer);
+    const angleMeasurementsPlugin = new AngleMeasurementsPlugin(viewer, {
+        zIndex: 100000 // If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
+    });
 
     angleMeasurementsPlugin.on("mouseOver", (e) => {
         e.measurement.setHighlighted(true);

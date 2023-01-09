@@ -177,6 +177,9 @@ class DistanceMeasurement extends Component {
         this._targetVisible = false;
         this._wireVisible = false;
         this._axisVisible = false;
+        this._xAxisVisible = false;
+        this._yAxisVisible = false;
+        this._zAxisVisible = false;
         this._axisEnabled = true;
         this._labelsVisible = false;
         this._clickable = true;
@@ -229,6 +232,9 @@ class DistanceMeasurement extends Component {
         this.targetVisible = cfg.targetVisible;
         this.wireVisible = cfg.wireVisible;
         this.axisVisible = cfg.axisVisible;
+        this.xAxisVisible = cfg.xAxisVisible;
+        this.yAxisVisible = cfg.yAxisVisible;
+        this.zAxisVisible = cfg.zAxisVisible;
         this.labelsVisible = cfg.labelsVisible;
     }
 
@@ -394,9 +400,11 @@ class DistanceMeasurement extends Component {
 
             this._originDot.setVisible(this._visible && this._originVisible);
             this._targetDot.setVisible(this._visible && this._targetVisible);
-            this._xAxisWire.setVisible(this.axisVisible);
-            this._yAxisWire.setVisible(this.axisVisible);
-            this._zAxisWire.setVisible(this.axisVisible);
+
+            this._xAxisWire.setVisible(this.axisVisible && this.xAxisVisible);
+            this._yAxisWire.setVisible(this.axisVisible && this.yAxisVisible);
+            this._zAxisWire.setVisible(this.axisVisible && this.zAxisVisible);
+
             this._lengthWire.setVisible(this.wireVisible);
             this._lengthLabel.setCulled(!this.wireVisible);
 
@@ -479,20 +487,30 @@ class DistanceMeasurement extends Component {
      * @type {Boolean}
      */
     set visible(value) {
+
         value = value !== undefined ? Boolean(value) : this.plugin.defaultVisible;
+
         this._visible = value;
+
         this._originDot.setVisible(this._visible && this._originVisible);
         this._targetDot.setVisible(this._visible && this._targetVisible);
         this._lengthWire.setVisible(this._visible && this._wireVisible);
         this._lengthLabel.setVisible(this._visible && this._wireVisible);
-        var axisVisible = this._visible && this._axisVisible;
-        this._xAxisWire.setVisible(axisVisible);
-        this._yAxisWire.setVisible(axisVisible);
-        this._zAxisWire.setVisible(axisVisible);
-        this._xAxisLabel.setVisible(axisVisible && !this._xAxisLabelCulled);
-        this._yAxisLabel.setVisible(axisVisible && !this._yAxisLabelCulled);
-        this._zAxisLabel.setVisible(axisVisible && !this._zAxisLabelCulled);
+
+        const xAxisVisible = this._visible && this._axisVisible && this._xAxisVisible;
+        const yAxisVisible = this._visible && this._axisVisible && this._yAxisVisible;
+        const zAxisVisible = this._visible && this._axisVisible && this._zAxisVisible;
+
+        this._xAxisWire.setVisible(xAxisVisible);
+        this._yAxisWire.setVisible(yAxisVisible);
+        this._zAxisWire.setVisible(zAxisVisible);
+
+        this._xAxisLabel.setVisible(xAxisVisible && !this._xAxisLabelCulled);
+        this._yAxisLabel.setVisible(yAxisVisible && !this._yAxisLabelCulled);
+        this._zAxisLabel.setVisible(zAxisVisible && !this._zAxisLabelCulled);
+
         this._cpDirty = true;
+
         this._needUpdate();
     }
 
@@ -556,12 +574,12 @@ class DistanceMeasurement extends Component {
         value = value !== undefined ? Boolean(value) : this.plugin.defaultAxisVisible;
         this._axisEnabled = value;
         var axisVisible = this._visible && this._axisVisible && this._axisEnabled;
-        this._xAxisWire.setVisible(axisVisible);
-        this._yAxisWire.setVisible(axisVisible);
-        this._zAxisWire.setVisible(axisVisible);
-        this._xAxisLabel.setVisible(axisVisible && !this._xAxisLabelCulled);
-        this._yAxisLabel.setVisible(axisVisible && !this._yAxisLabelCulled);
-        this._zAxisLabel.setVisible(axisVisible && !this._zAxisLabelCulled);
+        this._xAxisWire.setVisible(axisVisible && this._xAxisVisible);
+        this._yAxisWire.setVisible(axisVisible && this._yAxisVisible);
+        this._zAxisWire.setVisible(axisVisible && this._zAxisVisible);
+        this._xAxisLabel.setVisible(axisVisible && !this._xAxisLabelCulled&& this._xAxisVisible);
+        this._yAxisLabel.setVisible(axisVisible && !this._yAxisLabelCulled&& this._xAxisVisible);
+        this._zAxisLabel.setVisible(axisVisible && !this._zAxisLabelCulled&& this._xAxisVisible);
         this._cpDirty = true;
         this._needUpdate();
     }
@@ -588,12 +606,12 @@ class DistanceMeasurement extends Component {
         value = value !== undefined ? Boolean(value) : this.plugin.defaultAxisVisible;
         this._axisVisible = value;
         var axisVisible = this._visible && this._axisVisible && this._axisEnabled;
-        this._xAxisWire.setVisible(axisVisible);
-        this._yAxisWire.setVisible(axisVisible);
-        this._zAxisWire.setVisible(axisVisible);
-        this._xAxisLabel.setVisible(axisVisible && !this._xAxisLabelCulled);
-        this._yAxisLabel.setVisible(axisVisible && !this._yAxisLabelCulled);
-        this._zAxisLabel.setVisible(axisVisible && !this._zAxisLabelCulled);
+        this._xAxisWire.setVisible(axisVisible && this._xAxisVisible);
+        this._yAxisWire.setVisible(axisVisible && this._yAxisVisible);
+        this._zAxisWire.setVisible(axisVisible && this._zAxisVisible);
+        this._xAxisLabel.setVisible(axisVisible && !this._xAxisLabelCulled&& this._xAxisVisible);
+        this._yAxisLabel.setVisible(axisVisible && !this._yAxisLabelCulled&& this._yAxisVisible);
+        this._zAxisLabel.setVisible(axisVisible && !this._zAxisLabelCulled&& this._zAxisVisible);
         this._cpDirty = true;
         this._needUpdate();
     }
@@ -607,6 +625,90 @@ class DistanceMeasurement extends Component {
      */
     get axisVisible() {
         return this._axisVisible;
+    }
+
+    /**
+     * Sets if the X-axis-aligned wire between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target} is visible.
+     *
+     * Wires are only shown if enabled and visible.
+     *
+     * @type {Boolean}
+     */
+    set xAxisVisible(value) {
+        value = value !== undefined ? Boolean(value) : this.plugin.defaultAxisVisible;
+        this._xAxisVisible = value;
+        const axisVisible = this._visible && this._axisVisible && this._xAxisVisible && this._axisEnabled;
+        this._xAxisWire.setVisible(axisVisible);
+        this._xAxisLabel.setVisible(axisVisible && !this._xAxisLabelCulled);
+        this._cpDirty = true;
+        this._needUpdate();
+    }
+
+    /**
+     * Gets if the X-axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target} are visible.
+     *
+     * Wires are only shown if enabled and visible.
+     *
+     * @type {Boolean}
+     */
+    get xAxisVisible() {
+        return this._xAxisVisible;
+    }
+
+    /**
+     * Sets if the Y-axis-aligned wire between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target} is visible.
+     *
+     * Wires are only shown if enabled and visible.
+     *
+     * @type {Boolean}
+     */
+    set yAxisVisible(value) {
+        value = value !== undefined ? Boolean(value) : this.plugin.defaultAxisVisible;
+        this._yAxisVisible = value;
+        const axisVisible = this._visible && this._axisVisible && this._yAxisVisible && this._axisEnabled;
+        this._yAxisWire.setVisible(axisVisible);
+        this._yAxisLabel.setVisible(axisVisible && !this._yAxisLabelCulled);
+        this._cpDirty = true;
+        this._needUpdate();
+    }
+
+    /**
+     * Gets if the Y-axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target} are visible.
+     *
+     * Wires are only shown if enabled and visible.
+     *
+     * @type {Boolean}
+     */
+    get yAxisVisible() {
+        return this._yAxisVisible;
+    }
+
+    /**
+     * Sets if the Z-axis-aligned wire between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target} is visible.
+     *
+     * Wires are only shown if enabled and visible.
+     *
+     * @type {Boolean}
+     */
+    set zAxisVisible(value) {
+        value = value !== undefined ? Boolean(value) : this.plugin.defaultAxisVisible;
+        this._zAxisVisible = value;
+        const axisVisible = this._visible && this._axisVisible && this._zAxisVisible && this._axisEnabled;
+        this._zAxisWire.setVisible(axisVisible);
+        this._zAxisLabel.setVisible(axisVisible && !this._zAxisLabelCulled);
+        this._cpDirty = true;
+        this._needUpdate();
+    }
+
+    /**
+     * Gets if the Z-axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target} are visible.
+     *
+     * Wires are only shown if enabled and visible.
+     *
+     * @type {Boolean}
+     */
+    get zAxisVisible() {
+        return this._zAxisVisible;
     }
 
     /**

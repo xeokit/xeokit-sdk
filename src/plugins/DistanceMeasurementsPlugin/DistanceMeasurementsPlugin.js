@@ -220,6 +220,9 @@ class DistanceMeasurementsPlugin extends Plugin {
      * @param {boolean} [cfg.defaultWireVisible=true] The default value of the DistanceMeasurements `wireVisible` property.
      * @param {boolean} [cfg.defaultLabelsVisible=true] The default value of the DistanceMeasurements `labelsVisible` property.
      * @param {boolean} [cfg.defaultAxisVisible=true] The default value of the DistanceMeasurements `axisVisible` property.
+     * @param {boolean} [cfg.defaultXAxisVisible=true] The default value of the DistanceMeasurements `xAxisVisible` property.
+     * @param {boolean} [cfg.defaultYAxisVisible=true] The default value of the DistanceMeasurements `yAxisVisible` property.
+     * @param {boolean} [cfg.defaultZAxisVisible=true] The default value of the DistanceMeasurements `zAxisVisible` property.
      * @param {string} [cfg.defaultColor=#00BBFF] The default color of the length dots, wire and label.
      * @param {number} [cfg.zIndex] If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
      *
@@ -242,6 +245,9 @@ class DistanceMeasurementsPlugin extends Plugin {
         this.defaultWireVisible = cfg.defaultWireVisible !== false;
         this.defaultLabelsVisible = cfg.defaultLabelsVisible !== false;
         this.defaultAxisVisible = cfg.defaultAxisVisible !== false;
+        this.defaultXAxisVisible = cfg.defaultXAxisVisible !== false;
+        this.defaultYAxisVisible = cfg.defaultYAxisVisible !== false;
+        this.defaultZAxisVisible = cfg.defaultZAxisVisible !== false;
         this.defaultColor = cfg.defaultColor !== undefined ? cfg.defaultColor : "#00BBFF";
         this.zIndex = cfg.zIndex || 10000;
 
@@ -338,6 +344,9 @@ class DistanceMeasurementsPlugin extends Plugin {
      * @param {Boolean} [params.targetVisible=true] Whether to initially show the {@link DistanceMeasurement} target.
      * @param {Boolean} [params.wireVisible=true] Whether to initially show the direct point-to-point wire between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
      * @param {Boolean} [params.axisVisible=true] Whether to initially show the axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
+     * @param {Boolean} [params.xAxisVisible=true] Whether to initially show the X-axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
+     * @param {Boolean} [params.yAxisVisible=true] Whether to initially show the Y-axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
+     * @param {Boolean} [params.zAxisVisible=true] Whether to initially show the Z-axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
      * @param {Boolean} [params.labelsVisible=true] Whether to initially show the labels.
      * @param {string} [params.color] The color of the length dot, wire and label.
      * @returns {DistanceMeasurement} The new {@link DistanceMeasurement}.
@@ -364,6 +373,9 @@ class DistanceMeasurementsPlugin extends Plugin {
             visible: params.visible,
             wireVisible: params.wireVisible,
             axisVisible: params.axisVisible !== false && this.defaultAxisVisible !== false,
+            xAxisVisible: params.xAxisVisible !== false && this.defaultXAxisVisible !== false,
+            yAxisVisible: params.yAxisVisible !== false && this.defaultYAxisVisible !== false,
+            zAxisVisible: params.zAxisVisible !== false && this.defaultZAxisVisible !== false,
             labelsVisible: params.labelsVisible !== false && this.defaultLabelsVisible !== false,
             originVisible: params.originVisible,
             targetVisible: params.targetVisible,
@@ -405,6 +417,7 @@ class DistanceMeasurementsPlugin extends Plugin {
             measurement.labelShown = labelsShown;
         }
     }
+
 
     /**
      * Destroys all {@link DistanceMeasurement}s.
