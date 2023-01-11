@@ -9,6 +9,7 @@ import { Viewport } from "../viewport/Viewport";
 import { VBOSceneModel } from "../models/VBOSceneModel/VBOSceneModel";
 import { Mesh } from "../mesh";
 import { Node } from "../nodes";
+import { Input } from "../input/input";
 
 export declare type TickEvent = {
   /** The ID of this Scene. */
@@ -569,6 +570,8 @@ export declare class Scene extends Component {
   get aabb(): number[];
 
   get sao(): SAO;
+
+  get input(): Input;
 
   /**
    * Performs an occlusion test on all {@link Marker}s in this {@link Scene}.
