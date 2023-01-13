@@ -23,7 +23,7 @@ import {VBOGeometry} from "../geometry";
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#LineSet_grid)]
  *
  * ````javascript
- * import {Viewer, XKTLoaderPlugin, LineSet, buildGridGeometry} from "../dist/xeokit-sdk.es.js";
+ * import {Viewer, XKTLoaderPlugin, LineSet, buildGridGeometry} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
  *
  * const viewer = new Viewer({
  *      canvasId: "myCanvas",

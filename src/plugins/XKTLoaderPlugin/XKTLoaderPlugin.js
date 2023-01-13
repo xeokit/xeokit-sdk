@@ -192,7 +192,7 @@ parsers[ParserV10.version] = ParserV10;
  *
  * const textureTranscoder = new KTX2TextureTranscoder({
  *     viewer,
- *     transcoderPath: "./../dist/basis/" // <------ Path to Basis Universal transcoder
+ *     transcoderPath: "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/basis/" // <------ Path to Basis Universal transcoder
  * });
  *
  * const xktLoader = new XKTLoaderPlugin(viewer, {

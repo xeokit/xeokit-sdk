@@ -951,7 +951,7 @@ const defaultTextureSetId = "defaultTextureSet";
  *
  * const textureTranscoder = new KTX2TextureTranscoder({
  *     viewer,
- *     transcoderPath: "./../dist/basis/" // <------ Path to BasisU transcoder module
+ *     transcoderPath: "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/basis/" // <------ Path to BasisU transcoder module
  * });
  *
  * const vboSceneModel = new VBOSceneModel(viewer.scene, {
@@ -1015,7 +1015,7 @@ const defaultTextureSetId = "defaultTextureSet";
  *
  * const textureTranscoder = new KTX2TextureTranscoder({
  *     viewer,
- *     transcoderPath: "./../dist/basis/" // <------ Path to BasisU transcoder module
+ *     transcoderPath: "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/basis/" // <------ Path to BasisU transcoder module
  * });
  *
  * const vboSceneModel = new VBOSceneModel(viewer.scene, {
