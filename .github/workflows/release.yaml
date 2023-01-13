@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.trim.outputs.version }}
+    steps:
+      - id: trim
+        run: echo "::set-output name=version::${TAG:1}"
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+
+  release:
+    needs: setup
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          registry-url: https://registry.npmjs.org/
+
+      - name: Restore
+        run: npm ci
+
+      - name: Setup and build
+        run: |
+          npm install -g json
+          json -I -f package.json -e "this.version=\"$VERSION\""
+          npm run build
+          npm pack
+        env:
+          VERSION: ${{ needs.setup.outputs.version }}
+
+      - name: Publish to NPM
+        run: |
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          
