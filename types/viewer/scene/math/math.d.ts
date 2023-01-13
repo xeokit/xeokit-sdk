@@ -51,6 +51,11 @@ declare const math: {
    * Normalizes a three-element vector
    */
    normalizeVec3: (v: number[], dest?: any) => number[];
+
+   /**
+     * Multiplies each element of a three-element vector by a scalar.
+     */
+   mulVec3Scalar: (v: number[], scalar: number, dest?: number[]) => number[];
 };
 
 export {math};
