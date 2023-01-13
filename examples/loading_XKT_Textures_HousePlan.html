@@ -52,7 +52,7 @@
 </body>
 <script type="module">
 
-    import {Viewer, ReflectionMap, XKTLoaderPlugin, KTX2TextureTranscoder,FastNavPlugin, sRGBEncoding, LinearEncoding} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, ReflectionMap, XKTLoaderPlugin, KTX2TextureTranscoder,FastNavPlugin, sRGBEncoding, LinearEncoding} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -99,7 +99,7 @@
 
     const textureTranscoder = new KTX2TextureTranscoder({
         viewer,
-        transcoderPath: "./../dist/basis/" // <------ Path to Basis Universal transcoder
+        transcoderPath: "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/basis/" // <------ Path to Basis Universal transcoder
     });
 
     const xktLoader = new XKTLoaderPlugin(viewer, {
