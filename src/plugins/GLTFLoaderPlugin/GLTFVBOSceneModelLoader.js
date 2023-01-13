@@ -46,9 +46,9 @@ class GLTFVBOSceneModelLoader {
             });
     }
 
-    parse(plugin, gltf, metaModelJSON,  options, sceneModel, ok, error) {
+    parse(plugin, gltf, metaModelJSON, options, sceneModel, ok, error) {
         options = options || {};
-        parseGLTF(plugin, "", gltf, metaModelJSON,  options, sceneModel, function () {
+        parseGLTF(plugin, "", gltf, metaModelJSON, options, sceneModel, function () {
                 sceneModel.scene.fire("modelLoaded", sceneModel.id); // FIXME: Assumes listeners know order of these two events
                 sceneModel.fire("loaded", true, false);
                 if (ok) {
@@ -101,14 +101,14 @@ function getMetaModelCorrections(metaModelJSON) {
     };
 }
 
-function loadGLTF(plugin, src, metaModelJSON, options, sceneModel,  ok, error) {
+function loadGLTF(plugin, src, metaModelJSON, options, sceneModel, ok, error) {
     const spinner = plugin.viewer.scene.canvas.spinner;
     spinner.processes++;
     const isGLB = (src.split('.').pop() === "glb");
     if (isGLB) {
         plugin.dataSource.getGLB(src, (arrayBuffer) => { // OK
                 options.basePath = getBasePath(src);
-                parseGLTF(plugin, src, arrayBuffer, metaModelJSON,  options, sceneModel, ok, error);
+                parseGLTF(plugin, src, arrayBuffer, metaModelJSON, options, sceneModel, ok, error);
                 spinner.processes--;
             },
             (err) => {
@@ -118,7 +118,7 @@ function loadGLTF(plugin, src, metaModelJSON, options, sceneModel,  ok, error) {
     } else {
         plugin.dataSource.getGLTF(src, (gltf) => { // OK
                 options.basePath = getBasePath(src);
-                parseGLTF(plugin, src, gltf, metaModelJSON,  options, sceneModel, ok, error);
+                parseGLTF(plugin, src, gltf, metaModelJSON, options, sceneModel, ok, error);
                 spinner.processes--;
             },
             (err) => {
@@ -133,7 +133,7 @@ function getBasePath(src) {
     return (i !== 0) ? src.substring(0, i + 1) : "";
 }
 
-function parseGLTF(plugin, src, gltf, metaModelJSON,  options, sceneModel, ok) {
+function parseGLTF(plugin, src, gltf, metaModelJSON, options, sceneModel, ok) {
     const spinner = plugin.viewer.scene.canvas.spinner;
     spinner.processes++;
     parse(gltf, GLTFLoader, {
@@ -152,7 +152,10 @@ function parseGLTF(plugin, src, gltf, metaModelJSON,  options, sceneModel, ok) {
             //geometryCreated: {},
             numObjects: 0,
             nodes: [],
-            nextId: 0
+            nextId: 0,
+            log: (msg) => {
+                plugin.log(msg);
+            }
         };
         loadTextures(ctx);
         loadMaterials(ctx);
