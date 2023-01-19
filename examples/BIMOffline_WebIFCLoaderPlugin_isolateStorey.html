@@ -99,7 +99,8 @@
 
     // 1
     const ifcLoader = new WebIFCLoaderPlugin(viewer, {
-        wasmPath: "../dist/" // <<------- Path to web-ifc.wasm, which does the IFC parsing for us
+        //wasmPath: "../dist/" // <<------- Path to web-ifc.wasm, which does the IFC parsing for us
+        wasmPath: "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/"
     });
 
     // 2
