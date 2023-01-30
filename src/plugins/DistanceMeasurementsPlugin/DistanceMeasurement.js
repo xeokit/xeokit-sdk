@@ -182,7 +182,7 @@ class DistanceMeasurement extends Component {
         this._zAxisVisible = false;
         this._axisEnabled = true;
         this._labelsVisible = false;
-        this._clickable = true;
+        this._clickable = false;
 
         this._originMarker.on("worldPos", (value) => {
             this._originWorld.set(value || [0, 0, 0]);
