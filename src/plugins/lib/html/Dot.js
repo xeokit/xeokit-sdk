@@ -29,7 +29,7 @@ class Dot {
         dotStyle.left = 0 + "px";
         dotStyle["box-shadow"] = "0 2px 5px 0 #182A3D;";
         dotStyle["opacity"] = 1.0;
-        dotStyle["pointer-events"] = "none";
+        dotStyle["pointer-events"] = "all";
         if (cfg.onContextMenu) {
      //       dotStyle["cursor"] = "context-menu";
         }

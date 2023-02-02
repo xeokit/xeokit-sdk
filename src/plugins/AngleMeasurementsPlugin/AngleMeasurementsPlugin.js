@@ -232,6 +232,7 @@ class AngleMeasurementsPlugin extends Plugin {
         this._onMouseOver = (event, measurement) => {
             this.fire("mouseOver", {
                 plugin: this,
+                angleMeasurement: measurement,
                 measurement,
                 event
             });
@@ -240,6 +241,7 @@ class AngleMeasurementsPlugin extends Plugin {
         this._onMouseLeave = (event, measurement) => {
             this.fire("mouseLeave", {
                 plugin: this,
+                angleMeasurement: measurement,
                 measurement,
                 event
             });
@@ -248,6 +250,7 @@ class AngleMeasurementsPlugin extends Plugin {
         this._onContextMenu = (event, measurement) => {
             this.fire("contextMenu", {
                 plugin: this,
+                angleMeasurement: measurement,
                 measurement,
                 event
             });

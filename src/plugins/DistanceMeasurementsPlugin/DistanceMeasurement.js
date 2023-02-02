@@ -182,7 +182,7 @@ class DistanceMeasurement extends Component {
         this._zAxisVisible = false;
         this._axisEnabled = true;
         this._labelsVisible = false;
-        this._clickable = true;
+        this._clickable = false;
 
         this._originMarker.on("worldPos", (value) => {
             this._originWorld.set(value || [0, 0, 0]);
@@ -291,10 +291,10 @@ class DistanceMeasurement extends Component {
 
         if (vpz1 > near || vpz2 > near) {
 
-            this._xAxisLabel.setVisible(false);
-            this._yAxisLabel.setVisible(false);
-            this._zAxisLabel.setVisible(false);
-            this._lengthLabel.setVisible(false);
+            this._xAxisLabel.setCulled(true);
+            this._yAxisLabel.setCulled(true);
+            this._zAxisLabel.setCulled(true);
+            this._lengthLabel.setCulled(true);
 
             this._xAxisWire.setVisible(false);
             this._yAxisWire.setVisible(false);
@@ -397,6 +397,11 @@ class DistanceMeasurement extends Component {
                     this._zAxisLabel.setCulled(true);
                 }
             }
+
+            // this._xAxisLabel.setVisible(this.axisVisible && this.xAxisVisible);
+            // this._yAxisLabel.setVisible(this.axisVisible && this.yAxisVisible);
+            // this._zAxisLabel.setVisible(this.axisVisible && this.zAxisVisible);
+           // this._lengthLabel.setVisible(false);
 
             this._originDot.setVisible(this._visible && this._originVisible);
             this._targetDot.setVisible(this._visible && this._targetVisible);

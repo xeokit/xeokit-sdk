@@ -125,7 +125,7 @@ class AngleMeasurement extends Component {
 
         this._angleVisible = false;
         this._labelsVisible = false;
-        this._clickable = true;
+        this._clickable = false;
 
         this._originMarker.on("worldPos", (value) => {
             this._originWorld.set(value || [0, 0, 0]);

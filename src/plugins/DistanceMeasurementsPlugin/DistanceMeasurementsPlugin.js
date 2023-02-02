@@ -254,6 +254,7 @@ class DistanceMeasurementsPlugin extends Plugin {
         this._onMouseOver = (event, measurement) => {
             this.fire("mouseOver", {
                 plugin: this,
+                distanceMeasurement: measurement,
                 measurement,
                 event
             });
@@ -262,6 +263,7 @@ class DistanceMeasurementsPlugin extends Plugin {
         this._onMouseLeave = (event, measurement) => {
             this.fire("mouseLeave", {
                 plugin: this,
+                distanceMeasurement: measurement,
                 measurement,
                 event
             });
@@ -270,6 +272,7 @@ class DistanceMeasurementsPlugin extends Plugin {
         this._onContextMenu = (event, measurement) => {
             this.fire("contextMenu", {
                 plugin: this,
+                distanceMeasurement: measurement,
                 measurement,
                 event
             });
