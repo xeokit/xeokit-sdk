@@ -161,7 +161,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, LASLoaderPlugin, TreeViewPlugin} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, LASLoaderPlugin, TreeViewPlugin} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -205,25 +205,25 @@
     //----------------------------------------------------------------------------------------------------------------------
 
     const lasLoader = new LASLoaderPlugin(viewer, {
-        skip: 10,
-        fp64: false,
-        colorDepth: 8
+        skip: 1, // Load every point
+        fp64: false, // Positions expected in 32-bit floats instead of 64-bit
+        colorDepth: "auto" // Whether colors encoded using 8 or 16 bits - accepted values are "auto", 8 and 16
     });
 
     const t0 = performance.now();
 
     document.getElementById("time").innerHTML = "Loading model...";
 
-    const model = lasLoader.load({
+    const sceneModel = lasLoader.load({
         id: "myModel",
         src: "../assets/models/las/indoor.0.1.laz"
     });
 
-    model.on("loaded", () => {
+    sceneModel.on("loaded", () => {
 
         window.viewer = viewer
         const t1 = performance.now();
-        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
     });
 
     //------------------------------------------------------------------------------------------------------------------

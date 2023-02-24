@@ -1,70 +1,74 @@
 [
   {
     "name": "LinesBatchingLayer#createPortion",
-    "filePath": "src/viewer/scene/PerformanceModel/lib/layers/linesBatching/LinesBatchingLayer.js",
+    "filePath": "src/viewer/scene/models/VBOSceneModel/lib/layers/linesBatching/LinesBatchingLayer.js",
     "lines": [
       {
-        "lineNumber": 101,
+        "lineNumber": 105,
         "line": "    /**"
       },
       {
-        "lineNumber": 102,
+        "lineNumber": 106,
         "line": "     * Creates a new portion within this LinesBatchingLayer, returns the new portion ID."
       },
       {
-        "lineNumber": 103,
-        "line": "     *"
-      },
-      {
-        "lineNumber": 104,
-        "line": "     * Gives the portion the specified geometry, color and matrix."
-      },
-      {
-        "lineNumber": 105,
-        "line": "     *"
-      },
-      {
-        "lineNumber": 106,
-        "line": "     * @param cfg.positions Flat float Local-space positions array."
-      },
-      {
         "lineNumber": 107,
-        "line": "     * @param cfg.indices  Flat int indices array."
+        "line": "     *"
       },
       {
         "lineNumber": 108,
-        "line": "     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]"
+        "line": "     * Gives the portion the specified geometry, color and matrix."
       },
       {
         "lineNumber": 109,
-        "line": "     * @param cfg.opacity Opacity [0..255]"
+        "line": "     *"
       },
       {
         "lineNumber": 110,
-        "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
+        "line": "     * @param cfg.positions Flat float Local-space positions array."
       },
       {
         "lineNumber": 111,
-        "line": "     * @param [cfg.worldMatrix] Flat float 4x4 matrix"
+        "line": "     * @param cfg.positionsCompressed Flat quantized positions array - decompressed with TrianglesBatchingLayer positionsDecodeMatrix"
       },
       {
         "lineNumber": 112,
-        "line": "     * @param cfg.worldAABB Flat float AABB World-space AABB"
+        "line": "     * @param cfg.indices  Flat int indices array."
       },
       {
         "lineNumber": 113,
-        "line": "     * @param cfg.pickColor Quantized pick color"
+        "line": "     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]"
       },
       {
         "lineNumber": 114,
-        "line": "     * @returns {number} Portion ID"
+        "line": "     * @param cfg.opacity Opacity [0..255]"
       },
       {
         "lineNumber": 115,
-        "line": "     */"
+        "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
       },
       {
         "lineNumber": 116,
+        "line": "     * @param [cfg.worldMatrix] Flat float 4x4 matrix"
+      },
+      {
+        "lineNumber": 117,
+        "line": "     * @param cfg.worldAABB Flat float AABB World-space AABB"
+      },
+      {
+        "lineNumber": 118,
+        "line": "     * @param cfg.pickColor Quantized pick color"
+      },
+      {
+        "lineNumber": 119,
+        "line": "     * @returns {number} Portion ID"
+      },
+      {
+        "lineNumber": 120,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 121,
         "line": "    createPortion(cfg) {"
       }
     ],
@@ -75,74 +79,74 @@
   },
   {
     "name": "PointsBatchingLayer#createPortion",
-    "filePath": "src/viewer/scene/PerformanceModel/lib/layers/pointsBatching/PointsBatchingLayer.js",
+    "filePath": "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/PointsBatchingLayer.js",
     "lines": [
       {
-        "lineNumber": 103,
+        "lineNumber": 114,
         "line": "    /**"
       },
       {
-        "lineNumber": 104,
-        "line": "     * Creates a new portion within this PointCloudLayer, returns the new portion ID."
-      },
-      {
-        "lineNumber": 105,
-        "line": "     *"
-      },
-      {
-        "lineNumber": 106,
-        "line": "     * Gives the portion the specified geometry, color and matrix."
-      },
-      {
-        "lineNumber": 107,
-        "line": "     *"
-      },
-      {
-        "lineNumber": 108,
-        "line": "     * @param cfg.positions Flat float Local-space positions array."
-      },
-      {
-        "lineNumber": 109,
-        "line": "     * @param [cfg.colorsCompressed] Quantized RGB colors [0..255,0..255,0..255,0..255]"
-      },
-      {
-        "lineNumber": 110,
-        "line": "     * @param [cfg.colors] Flat float colors array."
-      },
-      {
-        "lineNumber": 111,
-        "line": "     * @param cfg.color Float RGB color [0..1,0..1,0..1]"
-      },
-      {
-        "lineNumber": 112,
-        "line": ""
-      },
-      {
-        "lineNumber": 113,
-        "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
-      },
-      {
-        "lineNumber": 114,
-        "line": "     * @param [cfg.worldMatrix] Flat float 4x4 matrix"
-      },
-      {
         "lineNumber": 115,
-        "line": "     * @param cfg.worldAABB Flat float AABB World-space AABB"
+        "line": "     * Creates a new portion within this PointsBatchingLayer, returns the new portion ID."
       },
       {
         "lineNumber": 116,
-        "line": "     * @param cfg.pickColor Quantized pick color"
+        "line": "     *"
       },
       {
         "lineNumber": 117,
-        "line": "     * @returns {number} Portion ID"
+        "line": "     * Gives the portion the specified geometry, color and matrix."
       },
       {
         "lineNumber": 118,
-        "line": "     */"
+        "line": "     *"
       },
       {
         "lineNumber": 119,
+        "line": "     * @param cfg.positions Flat float Local-space positions array."
+      },
+      {
+        "lineNumber": 120,
+        "line": "     * @param cfg.positionsCompressed Flat quantized positions array - decompressed with PointsBatchingLayer positionsDecodeMatrix"
+      },
+      {
+        "lineNumber": 121,
+        "line": "     * @param [cfg.colorsCompressed] Quantized RGB colors [0..255,0..255,0..255,0..255]"
+      },
+      {
+        "lineNumber": 122,
+        "line": "     * @param [cfg.colors] Flat float colors array."
+      },
+      {
+        "lineNumber": 123,
+        "line": "     * @param cfg.color Float RGB color [0..1,0..1,0..1]"
+      },
+      {
+        "lineNumber": 124,
+        "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
+      },
+      {
+        "lineNumber": 125,
+        "line": "     * @param [cfg.worldMatrix] Flat float 4x4 matrix"
+      },
+      {
+        "lineNumber": 126,
+        "line": "     * @param cfg.worldAABB Flat float AABB World-space AABB"
+      },
+      {
+        "lineNumber": 127,
+        "line": "     * @param cfg.pickColor Quantized pick color"
+      },
+      {
+        "lineNumber": 128,
+        "line": "     * @returns {number} Portion ID"
+      },
+      {
+        "lineNumber": 129,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 130,
         "line": "    createPortion(cfg) {"
       }
     ],
@@ -153,90 +157,106 @@
   },
   {
     "name": "TrianglesBatchingLayer#createPortion",
-    "filePath": "src/viewer/scene/PerformanceModel/lib/layers/trianglesBatching/TrianglesBatchingLayer.js",
+    "filePath": "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/TrianglesBatchingLayer.js",
     "lines": [
       {
-        "lineNumber": 132,
+        "lineNumber": 157,
         "line": "    /**"
       },
       {
-        "lineNumber": 133,
+        "lineNumber": 158,
         "line": "     * Creates a new portion within this TrianglesBatchingLayer, returns the new portion ID."
       },
       {
-        "lineNumber": 134,
+        "lineNumber": 159,
         "line": "     *"
       },
       {
-        "lineNumber": 135,
+        "lineNumber": 160,
         "line": "     * Gives the portion the specified geometry, color and matrix."
       },
       {
-        "lineNumber": 136,
+        "lineNumber": 161,
         "line": "     *"
       },
       {
-        "lineNumber": 137,
+        "lineNumber": 162,
         "line": "     * @param cfg.positions Flat float Local-space positions array."
       },
       {
-        "lineNumber": 138,
+        "lineNumber": 163,
+        "line": "     * @param cfg.positionsCompressed Flat quantized positions array - decompressed with TrianglesBatchingLayer positionsDecodeMatrix"
+      },
+      {
+        "lineNumber": 164,
         "line": "     * @param [cfg.normals] Flat float normals array."
       },
       {
-        "lineNumber": 139,
+        "lineNumber": 165,
+        "line": "     * @param [cfg.uv] Flat UVs array."
+      },
+      {
+        "lineNumber": 166,
+        "line": "     * @param [cfg.uvCompressed]"
+      },
+      {
+        "lineNumber": 167,
         "line": "     * @param [cfg.colors] Flat float colors array."
       },
       {
-        "lineNumber": 140,
+        "lineNumber": 168,
+        "line": "     * @param [cfg.colorsCompressed]"
+      },
+      {
+        "lineNumber": 169,
         "line": "     * @param cfg.indices  Flat int indices array."
       },
       {
-        "lineNumber": 141,
+        "lineNumber": 170,
         "line": "     * @param [cfg.edgeIndices] Flat int edges indices array."
       },
       {
-        "lineNumber": 142,
+        "lineNumber": 171,
         "line": "     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]"
       },
       {
-        "lineNumber": 143,
+        "lineNumber": 172,
         "line": "     * @param cfg.metallic Metalness factor [0..255]"
       },
       {
-        "lineNumber": 144,
+        "lineNumber": 173,
         "line": "     * @param cfg.roughness Roughness factor [0..255]"
       },
       {
-        "lineNumber": 145,
+        "lineNumber": 174,
         "line": "     * @param cfg.opacity Opacity [0..255]"
       },
       {
-        "lineNumber": 146,
+        "lineNumber": 175,
         "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
       },
       {
-        "lineNumber": 147,
+        "lineNumber": 176,
         "line": "     * @param [cfg.worldMatrix] Flat float 4x4 matrix"
       },
       {
-        "lineNumber": 148,
+        "lineNumber": 177,
         "line": "     * @param cfg.worldAABB Flat float AABB World-space AABB"
       },
       {
-        "lineNumber": 149,
+        "lineNumber": 178,
         "line": "     * @param cfg.pickColor Quantized pick color"
       },
       {
-        "lineNumber": 150,
+        "lineNumber": 179,
         "line": "     * @returns {number} Portion ID"
       },
       {
-        "lineNumber": 151,
+        "lineNumber": 180,
         "line": "     */"
       },
       {
-        "lineNumber": 152,
+        "lineNumber": 181,
         "line": "    createPortion(cfg) {"
       }
     ],
@@ -244,6 +264,114 @@
       "cfg"
     ],
     "docParams": []
+  },
+  {
+    "name": "KTX2TextureTranscoder#transcode",
+    "filePath": "src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js",
+    "lines": [
+      {
+        "lineNumber": 315,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 316,
+        "line": "     * Transcodes texture data from transcoded buffers into a {@link Texture2D}."
+      },
+      {
+        "lineNumber": 317,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 318,
+        "line": "     * @param {ArrayBuffer[]} buffers Transcoded texture data. Given as an array of buffers so that we can support multi-image textures, such as cube maps."
+      },
+      {
+        "lineNumber": 319,
+        "line": "     * @param {*} config Transcoding options."
+      },
+      {
+        "lineNumber": 320,
+        "line": "     * @param {Texture2D} texture The texture to load."
+      },
+      {
+        "lineNumber": 321,
+        "line": "     * @returns {Promise} Resolves when the texture has loaded."
+      },
+      {
+        "lineNumber": 322,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 323,
+        "line": "    transcode(buffers, texture, config = {}) {"
+      }
+    ],
+    "codeParams": [
+      "buffers",
+      "texture",
+      "config"
+    ],
+    "docParams": [
+      "buffers",
+      "config",
+      "texture"
+    ]
+  },
+  {
+    "name": "TextureTranscoder#transcode",
+    "filePath": "src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js",
+    "lines": [
+      {
+        "lineNumber": 11,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 12,
+        "line": "     * Transcodes texture data from transcoded buffers into a {@link Texture2D}."
+      },
+      {
+        "lineNumber": 13,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 14,
+        "line": "     * @param {ArrayBuffer[]} buffers Transcoded texture data. Given as an array of buffers so that we can support"
+      },
+      {
+        "lineNumber": 15,
+        "line": "     * multi-image textures, such as cube maps."
+      },
+      {
+        "lineNumber": 16,
+        "line": "     * @param {*} config Transcoding options."
+      },
+      {
+        "lineNumber": 17,
+        "line": "     * @param {Texture2D} texture The texture to load."
+      },
+      {
+        "lineNumber": 18,
+        "line": "     * @returns {Promise} Resolves when the texture has loaded."
+      },
+      {
+        "lineNumber": 19,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 20,
+        "line": "    transcode(buffers, texture, config = {}) {"
+      }
+    ],
+    "codeParams": [
+      "buffers",
+      "texture",
+      "config"
+    ],
+    "docParams": [
+      "buffers",
+      "config",
+      "texture"
+    ]
   },
   {
     "name": "Drawable#drawColorOpaque",

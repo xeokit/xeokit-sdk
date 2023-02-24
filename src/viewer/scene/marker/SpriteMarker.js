@@ -18,7 +18,7 @@ import {Marker} from "./Marker.js";
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#markers_SpriteMarker)]
  *
  * ```` javascript
- * import {Viewer, SpriteMarker } from "../dist/xeokit-sdk.es.js";
+ * import {Viewer, SpriteMarker } from "./https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
  *
  * const viewer = new Viewer({
  *        canvasId: "myCanvas",

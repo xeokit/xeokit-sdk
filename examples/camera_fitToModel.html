@@ -44,7 +44,7 @@
 </body>
 
 <script type="module">
-    import {Viewer, XKTLoaderPlugin} from "../dist/xeokit-sdk.min.es.js";
+    import {Viewer, XKTLoaderPlugin} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas"
@@ -56,14 +56,14 @@
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
-        src: "../assets/models/xkt/v8/ifc/Duplex.ifc.xkt",
+        src: "../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt",
         edges: true
     });
 
-    model.on("loaded", function () {
-        viewer.cameraFlight.flyTo(model);
+    sceneModel.on("loaded", function () {
+        viewer.cameraFlight.flyTo(sceneModel);
     });
 
 </script>

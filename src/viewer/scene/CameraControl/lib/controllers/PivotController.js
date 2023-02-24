@@ -223,7 +223,7 @@ class PivotController {
     /**
      * Returns true if we are currently pivoting.
      *
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     getPivoting() {
         return this._pivoting;

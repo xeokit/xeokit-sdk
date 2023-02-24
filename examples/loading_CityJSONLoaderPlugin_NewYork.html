@@ -179,7 +179,7 @@
 
 <script type="module">
 
-    import {Viewer, CityJSONLoaderPlugin, NavCubePlugin, TreeViewPlugin} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, CityJSONLoaderPlugin, NavCubePlugin, TreeViewPlugin} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -210,7 +210,7 @@
 
     const cityJSONLoader = new CityJSONLoaderPlugin(viewer);
 
-    const model = cityJSONLoader.load({
+    const sceneModel = cityJSONLoader.load({
         id: "myModel",
         src: "../assets/models/cityjson/VM05_2009.json",
         saoEnabled: true,
@@ -220,9 +220,9 @@
 
     const t0 = performance.now();
     document.getElementById("time").innerHTML = "Loading model...";
-    model.on("loaded", function () {
+    sceneModel.on("loaded", function () {
         const t1 = performance.now();
-        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
     });
 
     window.viewer = viewer;

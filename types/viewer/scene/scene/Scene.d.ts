@@ -6,9 +6,23 @@ import { Entity } from "../Entity";
 import { ReadableGeometry } from "../geometry";
 import { EdgeMaterial, EmphasisMaterial, PhongMaterial, PointsMaterial, LinesMaterial } from "../materials";
 import { Viewport } from "../viewport/Viewport";
-import { PerformanceModel } from "../PerformanceModel/PerformanceModel";
+import { VBOSceneModel } from "../models/VBOSceneModel/VBOSceneModel";
 import { Mesh } from "../mesh";
 import { Node } from "../nodes";
+import { Input } from "../input/input";
+
+export declare type TickEvent = {
+  /** The ID of this Scene. */
+  sceneID: string;
+  /** The time in seconds since 1970 that this Scene was instantiated. */
+  startTime: Number;
+  /** The time in seconds since 1970 of this "tick" event. */
+  time: Number;
+  /** The time of the previous "tick" event from this Scene.. */
+  prevTime: Number;
+  /** The time in seconds since the previous "tick" event from this Scene. */
+  deltaTime: Number;
+};
 
 export declare class Scene extends Component {
 
@@ -18,7 +32,7 @@ export declare class Scene extends Component {
    * @param callback Called fired on the event
    * @param scope  Scope for the callback
    */
-  on(event: "modelLoaded", callback: (modelId: number) => void, scope?: any): string;
+  on(event: "modelLoaded", callback: (modelId: string) => void, scope?: any): string;
 
   /**
    * Fires when a model is unloaded
@@ -26,7 +40,7 @@ export declare class Scene extends Component {
    * @param callback Called fired on the event
    * @param scope  Scope for the callback
    */
-  on(event: "modelUnloaded", callback: (modelId: number) => void, scope?: any): string;
+  on(event: "modelUnloaded", callback: (modelId: string) => void, scope?: any): string;
 
   /**
    * Fired when about to render a frame for a Scene.
@@ -50,7 +64,15 @@ export declare class Scene extends Component {
    * @param callback Called fired on the event
    * @param scope  Scope for the callback
    */
-   on(event: "objectVisibility", callback: (entity: PerformanceModel | Mesh | Node) => void, scope?: any): string;
+   on(event: "objectVisibility" | "objectXRayed" | "objectHighlighted" | "objectSelected", callback: (entity: VBOSceneModel | Mesh | Node) => void, scope?: any): string;
+
+   /**
+   * Fired on each game loop iteration.
+   * @event event The tick event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+   on(event: "tick", callback: (tickEvent: TickEvent) => void, scope?: any): string;
 
   /**
    * The epoch time (in milliseconds since 1970) when this Scene was instantiated.
@@ -548,6 +570,8 @@ export declare class Scene extends Component {
   get aabb(): number[];
 
   get sao(): SAO;
+
+  get input(): Input;
 
   /**
    * Performs an occlusion test on all {@link Marker}s in this {@link Scene}.

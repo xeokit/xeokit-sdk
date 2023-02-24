@@ -196,7 +196,7 @@ export declare class Viewer {
    * @param {Boolean} [params.includeGizmos=false] When true, will include gizmos like {@link SectionPlane} in the snapshot.
    * @returns {String} String-encoded image data URI.
    */
-  getSnapshot(params?: any): string;
+  getSnapshot(params: { width?: number, height?: number, format?: "jpeg" | "png"| "bmp", includeGizmos?: boolean }): string;
 
   /**
    * Exits snapshot mode.

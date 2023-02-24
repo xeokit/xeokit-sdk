@@ -240,23 +240,26 @@ class MousePickHandler {
 
             if (this._clicks === 1) { // First click
 
+                pickController.pickCursorPos = states.pointerCanvasPos;
+                pickController.schedulePickEntity = configs.doublePickFlyTo;
+                pickController.schedulePickSurface = pickedSurfaceSubs;
+                pickController.update();
+
+                const firstClickPickResult = pickController.pickResult;
+                const firstClickPickSurface = pickController.pickedSurface;
+
                 this._timeout = setTimeout(() => {
 
-                    pickController.pickCursorPos = states.pointerCanvasPos;
-                    pickController.schedulePickEntity = configs.doublePickFlyTo;
-                    pickController.schedulePickSurface = pickedSurfaceSubs;
-                    pickController.update();
+                    if (firstClickPickResult) {
 
-                    if (pickController.pickResult) {
+                        cameraControl.fire("picked", firstClickPickResult, true);
 
-                        cameraControl.fire("picked", pickController.pickResult, true);
+                        if (firstClickPickSurface) {
 
-                        if (pickController.pickedSurface) {
-
-                            cameraControl.fire("pickedSurface", pickController.pickResult, true);
+                            cameraControl.fire("pickedSurface", firstClickPickResult, true);
 
                             if ((!configs.firstPerson) && configs.followPointer) {
-                                controllers.pivotController.setPivotPos(pickController.pickResult.worldPos);
+                                controllers.pivotController.setPivotPos(firstClickPickResult.worldPos);
                                 if (controllers.pivotController.startPivot()) {
                                     controllers.pivotController.showPivot();
                                 }
@@ -270,7 +273,7 @@ class MousePickHandler {
 
                     this._clicks = 0;
 
-                }, 250);  // FIXME: Too short for track pads
+                }, configs.doubleClickTimeFrame);
 
             } else { // Second click
 

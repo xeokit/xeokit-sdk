@@ -1,4 +1,4 @@
-import { Plugin, Viewer, PerformanceModel } from "../../viewer";
+import { Plugin, Viewer, VBOSceneModel } from "../../viewer";
 
 export declare interface ISTLDefaultDataSource {
   /**
@@ -82,7 +82,7 @@ export declare class STLLoaderPlugin extends Plugin {
    * Loads an STL model from a file into this STLLoaderPlugin's {@link Viewer}.
    *
    * @param {LoadSTLModel} params Loading parameters.
-   * @returns {PerformanceModel} Entity representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}
+   * @returns {VBOSceneModel} Entity representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}
    */
-  load(params: LoadSTLModel): PerformanceModel;
+  load(params: LoadSTLModel): VBOSceneModel;
 }

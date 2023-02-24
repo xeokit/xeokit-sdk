@@ -42,12 +42,6 @@ class SAODepthLimitedBlurRenderer {
         this._uCameraProjectionMatrix = null;
         this._uCameraInverseProjectionMatrix = null;
 
-        this._uScale = null;
-        this._uIntensity = null;
-        this._uBias = null;
-        this._uKernelRadius = null;
-        this._uMinResolution = null;
-
         // VBOs
 
         this._uvBuf = null;
@@ -66,14 +60,15 @@ class SAODepthLimitedBlurRenderer {
         this._program = new Program(gl, {
 
             vertex: [
-                `precision highp float;
+                `#version 300 es
+                precision highp float;
                 precision highp int;
                     
-                attribute vec3 aPosition;
-                attribute vec2 aUV;
+                in vec3 aPosition;
+                in vec2 aUV;
                 uniform vec2 uViewport;
-                varying vec2 vUV;
-                varying vec2 vInvSize;
+                out vec2 vUV;
+                out vec2 vInvSize;
                 void main () {
                     vUV = aUV;
                     vInvSize = 1.0 / uViewport;
@@ -81,7 +76,8 @@ class SAODepthLimitedBlurRenderer {
                 }`],
 
             fragment: [
-                `precision highp float;
+                `#version 300 es
+                precision highp float;
                 precision highp int;
                     
                 #define PI 3.14159265359
@@ -90,8 +86,8 @@ class SAODepthLimitedBlurRenderer {
 
                 #define KERNEL_RADIUS ${KERNEL_RADIUS}
 
-                varying vec2        vUV;
-                varying vec2        vInvSize;
+                in vec2        vUV;
+                in vec2        vInvSize;
             
                 uniform sampler2D   uDepthTexture;
                 uniform sampler2D   uOcclusionTexture;              
@@ -138,14 +134,16 @@ class SAODepthLimitedBlurRenderer {
                     return ( uCameraNear * uCameraFar ) / ( ( uCameraFar - uCameraNear ) * invClipZ - uCameraFar );
                 }
 
-                float getDepth( const in vec2 screenPosition ) {`
-                + (WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"] ? `return texture2D(uDepthTexture, screenPosition).r;` : `return unpackRGBAToFloat(texture2D( uDepthTexture, screenPosition));`) +
-                `}
+                float getDepth( const in vec2 screenPosition ) {
+                    return vec4(texture(uDepthTexture, screenPosition)).r;
+                }
 
                 float getViewZ( const in float depth ) {
                      return perspectiveDepthToViewZ( depth );
                 }
 
+                out vec4 outColor;
+        
                 void main() {
                 
                     float depth = getDepth( vUV );
@@ -158,7 +156,7 @@ class SAODepthLimitedBlurRenderer {
                     bool lBreak = false;
 
                     float weightSum = uSampleWeights[0];
-                    float occlusionSum = unpackRGBAToFloat(texture2D( uOcclusionTexture, vUV )) * weightSum;
+                    float occlusionSum = unpackRGBAToFloat(texture( uOcclusionTexture, vUV )) * weightSum;
 
                     for( int i = 1; i <= KERNEL_RADIUS; i ++ ) {
 
@@ -173,7 +171,7 @@ class SAODepthLimitedBlurRenderer {
                         }
 
                         if( ! rBreak ) {
-                            occlusionSum += unpackRGBAToFloat(texture2D( uOcclusionTexture, sampleUV )) * sampleWeight;
+                            occlusionSum += unpackRGBAToFloat(texture( uOcclusionTexture, sampleUV )) * sampleWeight;
                             weightSum += sampleWeight;
                         }
 
@@ -185,13 +183,14 @@ class SAODepthLimitedBlurRenderer {
                         }
 
                         if( ! lBreak ) {
-                            occlusionSum += unpackRGBAToFloat(texture2D( uOcclusionTexture, sampleUV )) * sampleWeight;
+                            occlusionSum += unpackRGBAToFloat(texture( uOcclusionTexture, sampleUV )) * sampleWeight;
                             weightSum += sampleWeight;
                         }
                     }
 
-                    gl_FragColor = packFloatToRGBA(occlusionSum / weightSum);
-                }`]
+                    outColor = packFloatToRGBA(occlusionSum / weightSum);
+                }`
+            ]
         });
 
         if (this._program.errors) {
@@ -281,13 +280,10 @@ class SAODepthLimitedBlurRenderer {
 
         gl.uniform1fv(this._uSampleWeights, sampleWeights);
 
-        const depthTexture = WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"]
-            ? depthRenderBuffer.getDepthTexture()
-            : depthRenderBuffer.getTexture();
-
+        const depthTexture = depthRenderBuffer.getDepthTexture();
         const occlusionTexture = occlusionRenderBuffer.getTexture();
 
-        program.bindTexture(this._uDepthTexture, depthTexture, 0);
+        program.bindTexture(this._uDepthTexture, depthTexture, 0); // TODO: use FrameCtx.textureUnit
         program.bindTexture(this._uOcclusionTexture, occlusionTexture, 1);
 
         this._aUV.bindArrayBuffer(this._uvBuf);

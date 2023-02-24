@@ -61,7 +61,7 @@
         ReadableGeometry,
         buildPlaneGeometry,
         PhongMaterial
-    } from "../dist/xeokit-sdk.min.es.js";
+    } from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer
@@ -91,6 +91,7 @@
     const fastNavPlugin = new FastNavPlugin(viewer, {
         hideEdges: true,
         hideSAO: true,
+        hideColorTexture: true,
         hidePBR: true,
         hideTransparentObjects: false,
         scaleCanvasResolution: true,
@@ -127,18 +128,15 @@
 
     document.getElementById("time").innerHTML = "Loading model...";
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../assets/models/xkt/v8/ifc/HolterTower.ifc.xkt",
-        edges: true,
-        saoEnabled: true,
-        pbrEnabled: true,
-        backfaces: false
+        edges: true
     });
 
-    model.on("loaded", () => {
+    sceneModel.on("loaded", () => {
         const t1 = performance.now();
-        document.getElementById("time").innerHTML = `Model loaded in ${Math.floor(t1 - t0) / 1000.0} seconds<br>Objects: ${model.numEntities}`;
+        document.getElementById("time").innerHTML = `Model loaded in ${Math.floor(t1 - t0) / 1000.0} seconds<br>Objects: ${sceneModel.numEntities}`;
     });
 
     window.viewer = viewer;
@@ -149,6 +147,10 @@
 
     const edgeParams = new function () {
         this.edges = viewer.scene.edgeMaterial.edges;
+    }();
+
+    const pbrParams = new function () {
+        this.pbrEnabled = viewer.scene.pbrEnabled;
     }();
 
     const saoParams = new function () {
@@ -186,6 +188,8 @@
         const camera = viewer.scene.camera;
 
         viewer.scene.edgeMaterial.edges = edgeParams.edges;
+
+        viewer.scene.pbrEnabled = pbrParams.pbrEnabled;
 
         sao.enabled = saoParams.enabled;
         sao.kernelRadius = saoParams.kernelRadius;
@@ -232,6 +236,10 @@
     const edgesFolder = gui.addFolder('Edges');
     edgesFolder.add(edgeParams, 'edges');
     edgesFolder.open();
+
+    const pbrFolder = gui.addFolder('PBR');
+    pbrFolder.add(pbrParams, 'pbrEnabled');
+    pbrFolder.open();
 
     const saoFolder = gui.addFolder('SAO');
     saoFolder.add(saoParams, 'enabled');

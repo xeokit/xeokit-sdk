@@ -10,7 +10,14 @@
 </body>
 <script type="module">
 
-    import {Viewer, PerformanceModel, ReflectionMap, LightMap, buildSphereGeometry} from "../dist/xeokit-sdk.es.js";
+    import {
+        Viewer,
+        PerformanceModel,
+        ReflectionMap,
+        LightMap,
+        DirLight,
+        buildSphereGeometry
+    } from "./../dist/xeokit-sdk.es.js";
     import {signalTestComplete} from "./lib/utils.js";
 
     const viewer = new Viewer({
@@ -23,14 +30,43 @@
     viewer.scene.camera.look = [0, 0, 0];
     viewer.scene.camera.up = [0, 1, 0];
 
+    //------------------------------------------------------------------------------------------------------------------
+    // Configure lighting
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.gammaOutput = true;
+
+    viewer.scene.clearLights();
+
+    new DirLight(viewer.scene, {
+        dir: [0.8, -0.6, -0.8],
+        color: [0.8, 0.8, 0.8],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new DirLight(viewer.scene, {
+        dir: [-0.8, -0.4, -0.4],
+        color: [0.4, 0.4, 0.5],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new DirLight(viewer.scene, {
+        dir: [0.2, -0.8, 0.8],
+        color: [0.8, 0.8, 0.8],
+        intensity: 1.0,
+        space: "world"
+    });
+
     new ReflectionMap(viewer.scene, {
         src: [
-            "../assets/textures/reflect/desertRoad/px.png",
-            "../assets/textures/reflect/desertRoad/nx.png",
-            "../assets/textures/reflect/desertRoad/py.png",
-            "../assets/textures/reflect/desertRoad/ny.png",
-            "../assets/textures/reflect/desertRoad/pz.png",
-            "../assets/textures/reflect/desertRoad/nz.png"
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PX.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NX.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PY.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NY.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PZ.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NZ.png"
         ],
         encoding: "sRGB"
     });
@@ -61,6 +97,7 @@
         id: "sphereGeometry",
         primitive: "triangles",
         positions: sphere.positions,
+        uv:sphere.uv,
         normals: sphere.normals,
         indices: sphere.indices
     });

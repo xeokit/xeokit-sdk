@@ -70,15 +70,15 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, LASLoaderPlugin, FastNavPlugin} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, LASLoaderPlugin, FastNavPlugin} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true
     });
 
-    viewer.scene.camera.eye = [635796.0612086315, 904716.9767307387, 45112.039189163734];
-    viewer.scene.camera.look = [637290.78125, 900510.6982602561, 48790.09209449178];
+    viewer.scene.camera.eye = [635796.0612055798, 855416.1847290703, -3167.352900630285];
+    viewer.scene.camera.look = [637290.78125, 851209.90625, 510.70001220703125];
     viewer.scene.camera.up = [0.273790165300491, 0.686401912000719, 0.673714598763072];
 
     viewer.scene.camera.project.far = 100000;
@@ -110,22 +110,24 @@
     //----------------------------------------------------------------------------------------------------------------------
 
     const lasLoader = new LASLoaderPlugin(viewer, {
-        skip: 0.5
+        skip: 10, // Load every 10th point
+        fp64: false, // Positions expected in 32-bit floats instead of 64-bit
+        colorDepth: "auto" // Whether colors encoded using 8 or 16 bits - accepted values are "auto", 8 and 16
     });
 
     const t0 = performance.now();
 
     document.getElementById("time").innerHTML = "Loading model...";
 
-    const model = lasLoader.load({
+    const sceneModel = lasLoader.load({
         id: "myModel",
         src: "../assets/models/las/autzen.laz",
         rotation: [-90, 0, 0]
     });
 
-    model.on("loaded", () => {
+    sceneModel.on("loaded", () => {
         const t1 = performance.now();
-        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
     });
 
     //------------------------------------------------------------------------------------------------------------------

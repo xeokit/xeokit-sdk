@@ -14,7 +14,7 @@ function buildVertex(mesh) {
     const quantizedGeometry = !!mesh._geometry._state.compressGeometry;
     const src = [];
     src.push("// Mesh shadow vertex shader");
-    src.push("attribute vec3 position;");
+    src.push("in vec3 position;");
     src.push("uniform mat4 modelMatrix;");
     src.push("uniform mat4 shadowViewMatrix;");
     src.push("uniform mat4 shadowProjMatrix;");
@@ -23,7 +23,7 @@ function buildVertex(mesh) {
         src.push("uniform mat4 positionsDecodeMatrix;");
     }
     if (clipping) {
-        src.push("varying vec4 vWorldPosition;");
+        src.push("out vec4 vWorldPosition;");
     }
     src.push("void main(void) {");
     src.push("vec4 localPosition = vec4(position, 1.0); ");
@@ -60,7 +60,7 @@ function buildFragment(mesh) {
 
     if (clipping) {
         src.push("uniform bool clippable;");
-        src.push("varying vec4 vWorldPosition;");
+        src.push("in vec4 vWorldPosition;");
         for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
             src.push("uniform bool sectionPlaneActive" + i + ";");
             src.push("uniform vec3 sectionPlanePos" + i + ";");
@@ -76,6 +76,8 @@ function buildFragment(mesh) {
     src.push("  return comp;");
     src.push("}");
 
+    src.push("out vec4 outColor;");
+
     src.push("void main(void) {");
     if (clipping) {
         src.push("if (clippable) {");
@@ -88,7 +90,7 @@ function buildFragment(mesh) {
         src.push("  if (dist > 0.0) { discard; }");
         src.push("}");
     }
-    src.push("gl_FragColor = encodeFloat(gl_FragCoord.z);");
+    src.push("outColor = encodeFloat(gl_FragCoord.z);");
     src.push("}");
     return src;
 }

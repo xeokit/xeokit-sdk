@@ -65,7 +65,7 @@
         buildGridGeometry,
         PhongMaterial,
         Mesh
-    } from "../dist/xeokit-sdk.min.es.js";
+    } from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera, tweak the x-ray material and  SAO
@@ -112,7 +112,7 @@
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
         saoEnabled: true,
@@ -127,12 +127,12 @@
     // When model loaded, slide each building storey out and lay it on the ground plane
     //------------------------------------------------------------------------------------------------------------------
 
-    model.on("loaded", function () {
+    sceneModel.on("loaded", function () {
 
         setTimeout(() => {
 
             const t1 = performance.now();
-            document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
+            document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
 
             moveObject("0u4wgLe6n0ABVaiXyikbkA", [-25, -3, 0]);
             moveObject("0wPqxf9KX0nPDjgzD8mXwD", [-25, -6, 25]);

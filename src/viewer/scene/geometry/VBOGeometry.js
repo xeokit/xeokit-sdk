@@ -3,13 +3,10 @@ import {RenderState} from '../webgl/RenderState.js';
 import {ArrayBuf} from '../webgl/ArrayBuf.js';
 import {math} from '../math/math.js';
 import {stats} from '../stats.js';
-import {WEBGL_INFO} from '../webglInfo.js';
 import {buildEdgeIndices} from '../math/buildEdgeIndices.js';
 import {geometryCompressionUtils} from '../math/geometryCompressionUtils.js';
 
 const memoryStats = stats.memory;
-const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
-const IndexArrayType = bigIndicesSupported ? Uint32Array : Uint16Array;
 const tempAABB = math.AABB3();
 
 /**
@@ -58,7 +55,7 @@ class VBOGeometry extends Geometry {
 
     /**
      * @private
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     get isVBOGeometry() {
         return true;
@@ -199,13 +196,8 @@ class VBOGeometry extends Geometry {
             memoryStats.normals += state.normalsBuf.numItems;
         }
 
-        if (!bigIndicesSupported && cfg.indices.constructor === Uint32Array) {
-            this.error("This WebGL implementation does not support Uint32Array");
-            return; // TODO: Recover?
-        }
-
         {
-            const indices = (cfg.indices.constructor === Uint32Array || cfg.indices.constructor === Uint16Array) ? cfg.indices : new IndexArrayType(cfg.indices);
+            const indices = (cfg.indices.constructor === Uint32Array || cfg.indices.constructor === Uint16Array) ? cfg.indices : new Uint32Array(cfg.indices);
             state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, indices, indices.length, 1, gl.STATIC_DRAW);
             memoryStats.indices += state.indicesBuf.numItems;
             const edgeIndices = buildEdgeIndices(positions, indices, state.positionsDecodeMatrix, this._edgeThreshold);

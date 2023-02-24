@@ -26,8 +26,8 @@
                target="_other">Viewer</a>
         </li>
         <li>
-            <a href="../docs/class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html"
-               target="_other">PerformanceModel</a>
+            <a href="../docs/class/src/viewer/scene/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html"
+               target="_other">VBOSceneModel</a>
         </li>
         <li>
             <a href="../docs/class/src/viewer/scene/materials/LinesMaterial.js~LinesMaterial.html"
@@ -43,7 +43,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, PerformanceModel, buildVectorTextGeometry} from "../dist/xeokit-sdk.min.es.js";
+    import {Viewer, VBOSceneModel, buildVectorTextGeometry} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -71,12 +71,12 @@
     viewer.scene.linesMaterial.lineWidth = 1;
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a PerformanceModel containing lines
+    // Create a VBOSceneModel containing lines
     //------------------------------------------------------------------------------------------------------------------
 
-    const performanceModel = new PerformanceModel(viewer.scene, {
+    const vboSceneModel = new VBOSceneModel(viewer.scene, {
         id: "table",
-        isModel: true, // <--------------------- Represents a model, registers PerformanceModel by ID on viewer.scene.models
+        isModel: true, // <--------------------- Represents a model, registers VBOSceneModel by ID on viewer.scene.models
         position: [0, 0, 0],
         scale: [1, 1, 1],
         rotation: [0, 0, 0]
@@ -87,7 +87,7 @@
         size: 2
     });
 
-    performanceModel.createMesh({
+    vboSceneModel.createMesh({
         id: "linesMesh",
         primitive: "lines",
         color: [0, 0, 1],
@@ -95,12 +95,12 @@
         indices: geometry.indices
     });
 
-    performanceModel.createEntity({
+    vboSceneModel.createEntity({
         id: "lines",
         meshIds: ["linesMesh"]
     });
 
-    performanceModel.finalize();
+    vboSceneModel.finalize();
 
     //------------------------------------------------------------------------------------------------------------------
     // GUI to play with lines material properties

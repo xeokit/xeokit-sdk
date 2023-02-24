@@ -72,7 +72,7 @@ const decompressColor = (function () {
     };
 })();
 
-function load(viewer, options, inflatedData, performanceModel) {
+function load(viewer, options, inflatedData, sceneModel) {
 
     const positions = inflatedData.positions;
     const normals = inflatedData.normals;
@@ -152,7 +152,7 @@ function load(viewer, options, inflatedData, performanceModel) {
         for (let tileEntityIndex = firstTileEntityIndex; tileEntityIndex < lastTileEntityIndex; tileEntityIndex++) {
 
             const xktEntityId = eachEntityId[tileEntityIndex];
-            const entityId = options.globalizeObjectIds ? math.globalizeObjectId(performanceModel.id, xktEntityId) : xktEntityId;
+            const entityId = options.globalizeObjectIds ? math.globalizeObjectId(sceneModel.id, xktEntityId) : xktEntityId;
 
             const entityMatrixIndex = eachEntityMatricesPortion[tileEntityIndex];
             const entityMatrix = matrices.slice(entityMatrixIndex, entityMatrixIndex + 16);
@@ -229,16 +229,15 @@ function load(viewer, options, inflatedData, performanceModel) {
 
                     // Create mesh for multi-use primitive - create (or reuse) geometry, create mesh using that geometry
 
-                    const geometryId = "geometry." + tileIndex + "." + primitiveIndex; // These IDs are local to the PerformanceModel
+                    const geometryId = "geometry." + tileIndex + "." + primitiveIndex; // These IDs are local to the VBOSceneModel
 
                     if (!geometryCreated[geometryId]) {
 
-                        performanceModel.createGeometry({
+                        sceneModel.createGeometry({
                             id: geometryId,
-                            origin: tileCenter,
                             primitive: "triangles",
-                            positions: primitivePositions,
-                            normals: primitiveNormals,
+                            positionsCompressed: primitivePositions,
+                            normalsCompressed: primitiveNormals,
                             indices: primitiveIndices,
                             edgeIndices: primitiveEdgeIndices,
                             positionsDecodeMatrix: reusedPrimitivesDecodeMatrix
@@ -247,9 +246,10 @@ function load(viewer, options, inflatedData, performanceModel) {
                         geometryCreated[geometryId] = true;
                     }
 
-                    performanceModel.createMesh(utils.apply(meshDefaults, {
+                    sceneModel.createMesh(utils.apply(meshDefaults, {
                         id: meshId,
                         geometryId: geometryId,
+                        origin: tileCenter,
                         matrix: entityMatrix,
                         color: color,
                         opacity: opacity
@@ -259,12 +259,12 @@ function load(viewer, options, inflatedData, performanceModel) {
 
                 } else {
 
-                    performanceModel.createMesh(utils.apply(meshDefaults, {
+                    sceneModel.createMesh(utils.apply(meshDefaults, {
                         id: meshId,
                         origin: tileCenter,
                         primitive: "triangles",
-                        positions: primitivePositions,
-                        normals: primitiveNormals,
+                        positionsCompressed: primitivePositions,
+                        normalsCompressed: primitiveNormals,
                         indices: primitiveIndices,
                         edgeIndices: primitiveEdgeIndices,
                         positionsDecodeMatrix: tileDecodeMatrix,
@@ -278,7 +278,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
             if (meshIds.length > 0) {
 
-                performanceModel.createEntity(utils.apply(entityDefaults, {
+                sceneModel.createEntity(utils.apply(entityDefaults, {
                     id: entityId,
                     isObject: true,
                     meshIds: meshIds
@@ -291,10 +291,10 @@ function load(viewer, options, inflatedData, performanceModel) {
 /** @private */
 const ParserV6 = {
     version: 6,
-    parse: function (viewer, options, elements, performanceModel) {
+    parse: function (viewer, options, elements, sceneModel) {
         const deflatedData = extract(elements);
         const inflatedData = inflate(deflatedData);
-        load(viewer, options, inflatedData, performanceModel);
+        load(viewer, options, inflatedData, sceneModel);
     }
 };
 

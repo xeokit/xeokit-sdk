@@ -95,7 +95,7 @@
         buildGridGeometry,
         PhongMaterial,
         NavCubePlugin
-    } from "../dist/xeokit-sdk.min.es.js";
+    } from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera
@@ -146,15 +146,15 @@
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../assets/models/xkt/v7/MAP/MAP.xkt",
         metaModelSrc: "../assets/models/xkt/v7/MAP/MAP.json",
         edges: true
     });
 
-    model.on("loaded", () => { // This synchronizes camera.ortho.scale to the model boundary
-        cameraFlight.flyTo(model);
+    sceneModel.on("loaded", () => { // This synchronizes camera.ortho.scale to the model boundary
+        cameraFlight.flyTo(sceneModel);
     });
 
     //------------------------------------------------------------------------------------------------------------------
@@ -176,7 +176,7 @@
 
     const t0 = performance.now();
     document.getElementById("time").innerHTML = "Loading model...";
-    model.on("loaded", function () {
+    sceneModel.on("loaded", function () {
         const t1 = performance.now();
         document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds";
     });

@@ -68,7 +68,7 @@
         PhongMaterial,
         XKTLoaderPlugin,
         ViewCullPlugin
-    } from "../dist/xeokit-sdk.min.es.js";
+    } from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange camera
@@ -126,7 +126,7 @@
 
     // document.getElementById("time").innerHTML = "Loading model 1 of 7";
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../assets/models/xkt/v8/ifc/OTCConferenceCenter.ifc.xkt",
         edges: false
@@ -611,7 +611,7 @@
 
     // document.getElementById("time").innerHTML = "Loading model...";
 
-    model.on("loaded", function () {
+    sceneModel.on("loaded", function () {
         setTimeout(function () {
             cameraPathAnimation.play(0);
         }, 1000);

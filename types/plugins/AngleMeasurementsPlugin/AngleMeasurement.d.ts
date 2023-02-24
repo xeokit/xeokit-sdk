@@ -31,13 +31,13 @@ export declare class AngleMeasurement extends Component {
   /**
    * Sets whether this AngleMeasurement is visible or not.
    *
-   * @type Boolean
+   * @type {Boolean}
    */
   set visible(arg: boolean);
   /**
    * Gets whether this AngleMeasurement is visible or not.
    *
-   * @type Boolean
+   * @type {Boolean}
    */
   get visible(): boolean;
   /**

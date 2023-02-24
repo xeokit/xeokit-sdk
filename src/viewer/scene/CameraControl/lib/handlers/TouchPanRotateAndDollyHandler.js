@@ -138,8 +138,8 @@ class TouchPanRotateAndDollyHandler {
             // Scaling drag-rotate to canvas boundary
 
             const canvasBoundary = scene.canvas.boundary;
-            const canvasWidth = canvasBoundary[2] - canvasBoundary[0];
-            const canvasHeight = canvasBoundary[3] - canvasBoundary[1];
+            const canvasWidth = canvasBoundary[2];
+            const canvasHeight = canvasBoundary[3];
 
             const touches = event.touches;
 

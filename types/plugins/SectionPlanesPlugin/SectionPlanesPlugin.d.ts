@@ -7,7 +7,7 @@ export declare type SectionPlanesPluginConfiguration = {
   /** ID of a canvas element to display the overview. */
   overviewCanvasId?: string;
   /** Initial visibility of the overview canvas. */
-  overviewVisible?: string;
+  overviewVisible?: boolean;
 };
 
 /**

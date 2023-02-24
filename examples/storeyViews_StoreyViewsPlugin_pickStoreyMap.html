@@ -74,7 +74,7 @@
 
 <script type="module">
 
-    import {Viewer, StoreyViewsPlugin, XKTLoaderPlugin, math} from "../dist/xeokit-sdk.min.es.js";
+    import {Viewer, StoreyViewsPlugin, XKTLoaderPlugin, math} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -93,7 +93,7 @@
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
         edges: true
@@ -101,7 +101,7 @@
 
     const storeyViewsPlugin = new StoreyViewsPlugin(viewer);
 
-    model.on("loaded", () => {
+    sceneModel.on("loaded", () => {
 
         // Make all doors transparent
         viewer.scene.setObjectsOpacity(viewer.metaScene.getObjectIDsByType("IfcDoor"), 0.3);

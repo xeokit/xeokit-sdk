@@ -33,14 +33,14 @@ export declare class DistanceMeasurement extends Component {
   /**
    * Sets whether this DistanceMeasurement is visible or not.
    *
-   * @type Boolean
+   * @type {Boolean}
    */
   set visible(arg: boolean);
 
   /**
    * Gets whether this DistanceMeasurement is visible or not.
    *
-   * @type Boolean
+   * @type {Boolean}
    */
   get visible(): boolean;
 

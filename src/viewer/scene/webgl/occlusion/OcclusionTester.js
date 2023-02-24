@@ -121,7 +121,7 @@ class OcclusionTester {
     /**
      * Returns true if an occlusion test is needed.
      *
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     get needOcclusionTest() {
         return this._occlusionTestListDirty;
@@ -193,22 +193,19 @@ class OcclusionTester {
         const scene = this._scene;
         const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
+        src.push("#version 300 es");
         src.push("// OcclusionTester vertex shader");
-        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-            src.push("#extension GL_EXT_frag_depth : enable");
-        }
-        src.push("attribute vec3 position;");
+        
+        src.push("in vec3 position;");
         src.push("uniform mat4 modelMatrix;");
         src.push("uniform mat4 viewMatrix;");
         src.push("uniform mat4 projMatrix;");
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
-            if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-                src.push("varying float vFragDepth;");
-            }
+            src.push("out float vFragDepth;");
         }
         if (clipping) {
-            src.push("varying vec4 vWorldPosition;");
+            src.push("out vec4 vWorldPosition;");
         }
         src.push("void main(void) {");
         src.push("vec4 worldPosition = vec4(position, 1.0); ");
@@ -219,12 +216,7 @@ class OcclusionTester {
         src.push("   vec4 clipPos = projMatrix * viewPosition;");
         src.push("   gl_PointSize = " + POINT_SIZE + ".0;");
         if (scene.logarithmicDepthBufferEnabled) {
-            if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-                src.push("vFragDepth = 1.0 + clipPos.w;");
-            } else {
-                src.push("clipPos.z = log2( max( 1e-6, clipPos.w + 1.0 ) ) * logDepthBufFC - 1.0;");
-                src.push("clipPos.z *= clipPos.w;");
-            }
+           src.push("vFragDepth = 1.0 + clipPos.w;");
         } else {
             src.push("clipPos.z += " + MARKER_SPRITE_CLIPZ_OFFSET + ";");
         }
@@ -238,10 +230,9 @@ class OcclusionTester {
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
+        src.push("#version 300 es");
         src.push("// OcclusionTester fragment shader");
-        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-            src.push("#extension GL_EXT_frag_depth : enable");
-        }
+        
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -249,18 +240,19 @@ class OcclusionTester {
         src.push("precision mediump float;");
         src.push("precision mediump int;");
         src.push("#endif");
-        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+        if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
-            src.push("varying float vFragDepth;");
+            src.push("in float vFragDepth;");
         }
         if (clipping) {
-            src.push("varying vec4 vWorldPosition;");
+            src.push("in vec4 vWorldPosition;");
             for (let i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
+        src.push("out vec4 outColor;");
         src.push("void main(void) {");
         if (clipping) {
             src.push("  float dist = 0.0;");
@@ -271,10 +263,10 @@ class OcclusionTester {
             }
             src.push("  if (dist > 0.0) { discard; }");
         }
-        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-            src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
+        if (scene.logarithmicDepthBufferEnabled) {
+            src.push("gl_FragDepth = log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
-        src.push("   gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); ");
+        src.push("   outColor = vec4(1.0, 0.0, 0.0, 1.0); ");
         src.push("}");
         return src;
     }
@@ -320,10 +312,6 @@ class OcclusionTester {
         const sectionPlanesState = scene._sectionPlanesState;
         const camera = scene.camera;
         const project = scene.camera.project;
-
-        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"] && scene.logarithmicDepthBufferEnabled) {
-            gl.getExtension('EXT_frag_depth');
-        }
 
         program.bind();
 

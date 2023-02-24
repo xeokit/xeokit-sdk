@@ -51,7 +51,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin} from "../dist/xeokit-sdk.min.es.js";
+    import {Viewer, XKTLoaderPlugin} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera, tweak x-ray and highlight materials
@@ -243,9 +243,9 @@
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
-        src: "../assets/models/xkt/v8/ifc/Duplex.ifc.xkt",
+        src: "../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt",
         objectDefaults: myObjectDefaults, // Use our custom initial default states for object Entities
         edges: true
     });
@@ -254,9 +254,9 @@
 
     document.getElementById("time").innerHTML = "Loading model...";
 
-    model.on("loaded", function () {
+    sceneModel.on("loaded", function () {
         const t1 = performance.now();
-        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
 
     });
 

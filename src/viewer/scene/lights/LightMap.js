@@ -61,7 +61,7 @@ class LightMap extends CubeTexture {
      * @param {String:Object} [cfg.meta] Optional map of user-defined metadata to attach to this LightMap.
      * @param {String[]} [cfg.src=null] Paths to six image files to load into this LightMap.
      * @param {Boolean} [cfg.flipY=false] Flips this LightMap's source data along its vertical axis when true.
-     * @param {String} [cfg.encoding="linear"] Encoding format.  See the {@link LightMap#encoding} property for more info.
+     * @param {Number} [cfg.encoding=LinearEncoding] Encoding format. Supported values are {@link LinearEncoding} and {@link sRGBEncoding}.
      */
     constructor(owner, cfg = {}) {
         super(owner, cfg);

@@ -1,5 +1,5 @@
 import {utils} from "../../viewer/scene/utils.js"
-import {PerformanceModel} from "../../viewer/scene/PerformanceModel/PerformanceModel.js";
+import {VBOSceneModel} from "../../viewer/scene/models/VBOSceneModel/VBOSceneModel.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {XKTDefaultDataSource} from "./XKTDefaultDataSource.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
@@ -13,6 +13,7 @@ import {ParserV6} from "./parsers/ParserV6.js";
 import {ParserV7} from "./parsers/ParserV7.js";
 import {ParserV8} from "./parsers/ParserV8.js";
 import {ParserV9} from "./parsers/ParserV9.js";
+import {ParserV10} from "./parsers/ParserV10.js";
 
 const parsers = {};
 
@@ -25,6 +26,7 @@ parsers[ParserV6.version] = ParserV6;
 parsers[ParserV7.version] = ParserV7;
 parsers[ParserV8.version] = ParserV8;
 parsers[ParserV9.version] = ParserV9;
+parsers[ParserV10.version] = ParserV10;
 
 /**
  * {@link Viewer} plugin that loads models from xeokit's optimized *````.XKT````* format.
@@ -39,6 +41,7 @@ parsers[ParserV9.version] = ParserV9;
  * * An *````.XKT````* file is a single BLOB containing a model, compressed using geometry quantization
  * and [pako](https://nodeca.github.io/pako/).
  * * Supports double-precision coordinates.
+ * * Supports compressed textures.
  * * Set the position, scale and rotation of each model as you load it.
  * * Filter which IFC types get loaded.
  * * Configure initial default appearances for IFC types.
@@ -155,6 +158,51 @@ parsers[ParserV9.version] = ParserV9;
  *
  * // Destroy the model
  * model.destroy();
+ * ````
+ *
+ * ## Loading XKT files containing textures
+ *
+ * XKTLoaderPlugin uses a {@link KTX2TextureTranscoder} to load textures in XKT files (XKT v10+). An XKTLoaderPlugin has its own
+ * default KTX2TextureTranscoder, configured to load the Basis Codec from the CDN. If we wish, we can override that with our own
+ * KTX2TextureTranscoder instance that's configured to load the Codec locally.
+ *
+ * In the example below, we'll create a {@link Viewer} and add an XKTLoaderPlugin
+ * configured with a KTX2TextureTranscoder that finds the Codec in our local file system. Then we'll use the
+ * XKTLoaderPlugin to load an XKT file that contains KTX2 textures, which the plugin will transcode using
+ * its KTX2TextureTranscoder.
+ *
+ * We'll configure our KTX2TextureTranscoder to load the Basis Codec from a local directory. If we were happy with loading the
+ * Codec from our CDN (ie. our app will always have an Internet connection) then we could just leave out the
+ * KTX2TextureTranscoder altogether, and let the XKTLoaderPlugin use its internal default KTX2TextureTranscoder, which is configured to
+ * load the Codec from the CDN. We'll stick with loading our own Codec, in case we want to run our app without an Internet connection.
+ *
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Textures_HousePlan"><img src="https://xeokit.github.io/xeokit-sdk/assets/images/xktWithTextures.png"></a>
+ *
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Textures_HousePlan)]
+ *
+ * ````javascript
+ * const viewer = new Viewer({
+ *     canvasId: "myCanvas",
+ *     transparent: true
+ * });
+ *
+ * viewer.camera.eye = [-2.56, 8.38, 8.27];
+ * viewer.camera.look = [13.44, 3.31, -14.83];
+ * viewer.camera.up = [0.10, 0.98, -0.14];
+ *
+ * const textureTranscoder = new KTX2TextureTranscoder({
+ *     viewer,
+ *     transcoderPath: "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/basis/" // <------ Path to Basis Universal transcoder
+ * });
+ *
+ * const xktLoader = new XKTLoaderPlugin(viewer, {
+ *     textureTranscoder // <<------------- Transcodes KTX2 textures in XKT files
+ * });
+ *
+ * const sceneModel = xktLoader.load({
+ *     id: "myModel",
+ *     src: "./HousePlan.xkt" // <<------ XKT file with KTX2 textures
+ * });
  * ````
  *
  * ## Transforming
@@ -401,17 +449,20 @@ class XKTLoaderPlugin extends Plugin {
      * improve Viewer performance for models that have a lot of geometry reuse, but may also increase the amount of
      * browser and GPU memory they require. See [#769](https://github.com/xeokit/xeokit-sdk/issues/769) for more info.
      * @param {Number} [cfg.maxGeometryBatchSize=50000000] Maximum geometry batch size, as number of vertices. This is optionally supplied
-     * to limit the size of the batched geometry arrays that {@link PerformanceModel} internally creates for batched geometries.
+     * to limit the size of the batched geometry arrays that {@link VBOSceneModel} internally creates for batched geometries.
      * A low value means less heap allocation/de-allocation while loading batched geometries, but more draw calls and
      * slower rendering speed. A high value means larger heap allocation/de-allocation while loading, but less draw calls
      * and faster rendering speed. It's recommended to keep this somewhere roughly between ````50000```` and ````50000000```.
+     * @param {KTX2TextureTranscoder} [cfg.textureTranscoder] Transcoder used internally to transcode KTX2
+     * textures within the XKT. Only required when the XKT is version 10 or later, and contains KTX2 textures.
      */
     constructor(viewer, cfg = {}) {
 
         super("XKTLoader", viewer, cfg);
-
+        
         this._maxGeometryBatchSize = cfg.maxGeometryBatchSize;
 
+        this.textureTranscoder = cfg.textureTranscoder;
         this.dataSource = cfg.dataSource;
         this.objectDefaults = cfg.objectDefaults;
         this.includeTypes = cfg.includeTypes;
@@ -426,6 +477,24 @@ class XKTLoaderPlugin extends Plugin {
      */
     get supportedVersions() {
         return Object.keys(parsers);
+    }
+
+    /**
+     * Gets the texture transcoder.
+     *
+     * @type {TextureTranscoder}
+     */
+    get textureTranscoder() {
+        return this._textureTranscoder;
+    }
+
+    /**
+     * Sets the texture transcoder.
+     *
+     * @type {TextureTranscoder}
+     */
+    set textureTranscoder(textureTranscoder) {
+        this._textureTranscoder = textureTranscoder;
     }
 
     /**
@@ -643,8 +712,9 @@ class XKTLoaderPlugin extends Plugin {
      * @param {Number[]} [params.rotation=[0,0,0]] The model's orientation, given as Euler angles in degrees, for each of the X, Y and Z axis.
      * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's world transform matrix. Overrides the position, scale and rotation parameters. Relative to ````origin````.
      * @param {Boolean} [params.edges=false] Indicates if the model's edges are initially emphasized.
-     * @param {Boolean} [params.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to the model. SAO is configured by the Scene's {@link SAO} component. Only works when {@link SAO#enabled} is also ````true````
-     * @param {Boolean} [params.pbrEnabled=false] Indicates if physically-based rendering (PBR) will apply to the model. Only works when {@link Scene#pbrEnabled} is also ````true````.
+     * @param {Boolean} [params.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) is enabled for the model. SAO is configured by the Scene's {@link SAO} component. Only works when {@link SAO#enabled} is also ````true````
+     * @param {Boolean} [params.pbrEnabled=true] Indicates if physically-based rendering (PBR) is enabled for the model. Overrides ````colorTextureEnabled````. Only works when {@link Scene#pbrEnabled} is also ````true````.
+     * @param {Boolean} [params.colorTextureEnabled=true] Indicates if base color texture rendering is enabled for the model. Overridden by ````pbrEnabled````.  Only works when {@link Scene#colorTextureEnabled} is also ````true````.
      * @param {Number} [params.backfaces=false] When we set this ````true````, then we force rendering of backfaces for the model. When
      * we leave this ````false````, then we allow the Viewer to decide when to render backfaces. In that case, the
      * Viewer will hide backfaces on watertight meshes, show backfaces on open meshes, and always show backfaces on meshes when we slice them open with {@link SectionPlane}s.
@@ -663,17 +733,18 @@ class XKTLoaderPlugin extends Plugin {
             delete params.id;
         }
 
-        const performanceModel = new PerformanceModel(this.viewer.scene, utils.apply(params, {
+        const sceneModel = new VBOSceneModel(this.viewer.scene, utils.apply(params, {
             isModel: true,
+            textureTranscoder: this._textureTranscoder,
             maxGeometryBatchSize: this._maxGeometryBatchSize,
             origin: params.origin
         }));
 
-        const modelId = performanceModel.id;  // In case ID was auto-generated
+        const modelId = sceneModel.id;  // In case ID was auto-generated
 
         if (!params.src && !params.xkt) {
             this.error("load() param expected: src or xkt");
-            return performanceModel; // Return new empty model
+            return sceneModel; // Return new empty model
         }
 
         const options = {};
@@ -719,13 +790,13 @@ class XKTLoaderPlugin extends Plugin {
                 }
 
                 if (params.src) {
-                    this._loadModel(params.src, params, options, performanceModel);
+                    this._loadModel(params.src, params, options, sceneModel);
                 } else {
-                    this._parseModel(params.xkt, params, options, performanceModel);
+                    this._parseModel(params.xkt, params, options, sceneModel);
                 }
 
-                performanceModel.once("destroyed", () => {
-                    this.viewer.metaScene.destroyMetaModel(performanceModel.id);
+                sceneModel.once("destroyed", () => {
+                    this.viewer.metaScene.destroyMetaModel(sceneModel.id);
                 });
 
                 return true;
@@ -739,7 +810,7 @@ class XKTLoaderPlugin extends Plugin {
 
                 this._dataSource.getMetaModel(metaModelSrc, (metaModelData) => {
 
-                    if (performanceModel.destroyed) {
+                    if (sceneModel.destroyed) {
                         return;
                     }
 
@@ -747,7 +818,7 @@ class XKTLoaderPlugin extends Plugin {
 
                         this.error(`load(): Failed to load model metadata for model '${modelId} from '${metaModelSrc}' - metadata not valid`);
 
-                        performanceModel.fire("error", "Metadata not valid");
+                        sceneModel.fire("error", "Metadata not valid");
                     }
 
                     this.viewer.scene.canvas.spinner.processes--;
@@ -756,7 +827,7 @@ class XKTLoaderPlugin extends Plugin {
 
                     this.error(`load(): Failed to load model metadata for model '${modelId} from  '${metaModelSrc}' - ${errMsg}`);
 
-                    performanceModel.fire("error", `Failed to load model metadata from  '${metaModelSrc}' - ${errMsg}`);
+                    sceneModel.fire("error", `Failed to load model metadata from  '${metaModelSrc}' - ${errMsg}`);
 
                     this.viewer.scene.canvas.spinner.processes--;
                 });
@@ -767,41 +838,41 @@ class XKTLoaderPlugin extends Plugin {
 
                     this.error(`load(): Failed to load model metadata for model '${modelId} from '${params.metaModelSrc}' - metadata not valid`);
 
-                    performanceModel.fire("error", "Metadata not valid");
+                    sceneModel.fire("error", "Metadata not valid");
                 }
             }
 
         } else {
             if (params.src) {
-                this._loadModel(params.src, params, options, performanceModel);
+                this._loadModel(params.src, params, options, sceneModel);
             } else {
-                this._parseModel(params.xkt, params, options, performanceModel);
+                this._parseModel(params.xkt, params, options, sceneModel);
             }
         }
 
-        return performanceModel;
+        return sceneModel;
     }
 
-    _loadModel(src, params, options, performanceModel) {
+    _loadModel(src, params, options, sceneModel) {
 
         const spinner = this.viewer.scene.canvas.spinner;
 
         spinner.processes++;
 
         this._dataSource.getXKT(params.src, (arrayBuffer) => {
-                this._parseModel(arrayBuffer, params, options, performanceModel);
+                this._parseModel(arrayBuffer, params, options, sceneModel);
                 spinner.processes--;
             },
             (errMsg) => {
                 spinner.processes--;
                 this.error(errMsg);
-                performanceModel.fire("error", errMsg);
+                sceneModel.fire("error", errMsg);
             });
     }
 
-    _parseModel(arrayBuffer, params, options, performanceModel) {
+    _parseModel(arrayBuffer, params, options, sceneModel) {
 
-        if (performanceModel.destroyed) {
+        if (sceneModel.destroyed) {
             return;
         }
 
@@ -826,24 +897,24 @@ class XKTLoaderPlugin extends Plugin {
             byteOffset += elementSize;
         }
 
-        parser.parse(this.viewer, options, elements, performanceModel);
+        parser.parse(this.viewer, options, elements, sceneModel);
 
-        performanceModel.finalize();
+        sceneModel.finalize();
 
-        this._createDefaultMetaModelIfNeeded(performanceModel, params, options);
+        this._createDefaultMetaModelIfNeeded(sceneModel, params, options);
 
-        performanceModel.scene.once("tick", () => {
-            if (performanceModel.destroyed) {
+        sceneModel.scene.once("tick", () => {
+            if (sceneModel.destroyed) {
                 return;
             }
-            performanceModel.scene.fire("modelLoaded", performanceModel.id); // FIXME: Assumes listeners know order of these two events
-            performanceModel.fire("loaded", true, false); // Don't forget the event, for late subscribers
+            sceneModel.scene.fire("modelLoaded", sceneModel.id); // FIXME: Assumes listeners know order of these two events
+            sceneModel.fire("loaded", true, false); // Don't forget the event, for late subscribers
         });
     }
 
-    _createDefaultMetaModelIfNeeded(performanceModel, params, options) {
+    _createDefaultMetaModelIfNeeded(sceneModel, params, options) {
 
-        const metaModelId = performanceModel.id;
+        const metaModelId = sceneModel.id;
 
         if (!this.viewer.metaScene.metaModels[metaModelId]) {
 
@@ -858,7 +929,7 @@ class XKTLoaderPlugin extends Plugin {
                 parent: null
             });
 
-            const entityList = performanceModel.entityList;
+            const entityList = sceneModel.entityList;
 
             for (let i = 0, len = entityList.length; i < len; i++) {
                 const entity = entityList[i];
@@ -885,7 +956,7 @@ class XKTLoaderPlugin extends Plugin {
                 }
             });
 
-            performanceModel.once("destroyed", () => {
+            sceneModel.once("destroyed", () => {
                 this.viewer.metaScene.destroyMetaModel(metaModelId);
             });
         }

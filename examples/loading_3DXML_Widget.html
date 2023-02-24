@@ -43,7 +43,7 @@
         Viewer,
         ReflectionMap,
         XML3DLoaderPlugin
-    } from "../dist/xeokit-sdk.min.es.js";
+    } from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange camera
@@ -83,15 +83,15 @@
         workerScriptsPath: "../src/plugins/XML3DLoaderPlugin/zipjs/" // Where to find Web Worker scripts used by zip.js
     });
 
-    const model = xml3dLoader.load({
+    const sceneModel = xml3dLoader.load({
         id: "myModel",
         src: "../assets/models/xml3d/3dpreview.3dxml",
         materialType: "SpecularMaterial", // <<----------- Create SpecularMaterials
         edges: true
     });
 
-    model.on("loaded", () => {
-        viewer.cameraFlight.jumpTo(model);
+    sceneModel.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(sceneModel);
     });
 
     window.viewer = viewer;

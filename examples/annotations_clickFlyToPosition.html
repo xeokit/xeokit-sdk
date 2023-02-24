@@ -126,7 +126,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, AnnotationsPlugin} from "../dist/xeokit-sdk.min.es.js";
+    import {Viewer, XKTLoaderPlugin, AnnotationsPlugin} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -147,9 +147,9 @@
     const xktLoader = new XKTLoaderPlugin(viewer);
 
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
-        src: "../assets/models/xkt/v8/ifc/Duplex.ifc.xkt",
+        src: "../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt",
         edges: true
     });
 
@@ -185,7 +185,7 @@
         prevAnnotationClicked = annotation;
     });
 
-    model.on("loaded", () => {
+    sceneModel.on("loaded", () => {
 
         //------------------------------------------------------------------------------------------------------------------
         // Create some Annotations

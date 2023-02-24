@@ -170,7 +170,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, NavCubePlugin, TreeViewPlugin} from "../dist/xeokit-sdk.min.es.js";
+    import {Viewer, XKTLoaderPlugin, NavCubePlugin, TreeViewPlugin} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera, tweak x-ray and highlight materials
@@ -235,7 +235,7 @@
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
         edges: true,
@@ -245,16 +245,16 @@
 
     const t0 = performance.now();
     document.getElementById("time").innerHTML = "Loading model...";
-    model.on("loaded", function () {
+    sceneModel.on("loaded", function () {
         const t1 = performance.now();
-        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
 
         //----------------------------------------------------------------------------------------------------------------------
         // Add model to the tree view;
         // Specify options with custom display name for the root node.
         //----------------------------------------------------------------------------------------------------------------------
 
-        containmentTreeView.addModel(model.id, {
+        containmentTreeView.addModel(sceneModel.id, {
             rootName: "Schependomlaan Design"
         })
     });

@@ -59,7 +59,7 @@ class ReflectionMap extends CubeTexture {
      * @param {String} [cfg.id] Optional ID for this ReflectionMap, unique among all components in the parent scene, generated automatically when omitted.
      * @param {String[]} [cfg.src=null]  Paths to six image files to load into this ReflectionMap.
      * @param {Boolean} [cfg.flipY=false] Flips this ReflectionMap's source data along its vertical axis when true.
-     * @param {String} [cfg.encoding="linear"]  Encoding format.  See the {@link ReflectionMap/encoding} property for more info.
+     * @param {Number} [cfg.encoding=LinearEncoding] Encoding format. Supported values are {@link LinearEncoding} and {@link sRGBEncoding}.
      */
     constructor(owner, cfg = {}) {
         super(owner, cfg);

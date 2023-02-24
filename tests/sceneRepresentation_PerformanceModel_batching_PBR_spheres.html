@@ -10,8 +10,13 @@
 </body>
 <script type="module">
 
-    import {Viewer, PerformanceModel, buildSphereGeometry} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, PerformanceModel, buildSphereGeometry, ReflectionMap, LightMap, DirLight, Mesh, ReadableGeometry, PhongMaterial, buildVectorTextGeometry} from "./../dist/xeokit-sdk.es.js";
     import {signalTestComplete} from "./lib/utils.js";
+
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -23,103 +28,159 @@
     viewer.scene.camera.look = [0, 0, 0];
     viewer.scene.camera.up = [0, 1, 0];
 
-    // new ReflectionMap(viewer.scene, {
-    //     src: [
-    //         "../assets/textures/reflect/desertRoad/px.png",
-    //         "../assets/textures/reflect/desertRoad/nx.png",
-    //         "../assets/textures/reflect/desertRoad/py.png",
-    //         "../assets/textures/reflect/desertRoad/ny.png",
-    //         "../assets/textures/reflect/desertRoad/pz.png",
-    //         "../assets/textures/reflect/desertRoad/nz.png"
-    //     ],
-    //     encoding: "sRGB"
-    // });
-    //
-    // new LightMap(viewer.scene, {
-    //     src: [
-    //         "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PX.png",
-    //         "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NX.png",
-    //         "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PY.png",
-    //         "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NY.png",
-    //         "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
-    //         "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
-    //     ],
-    //     encoding: "sRGB"
-    // });
+    //------------------------------------------------------------------------------------------------------------------
+    // Configure lighting
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.gammaOutput = true;
+
+    viewer.scene.clearLights();
+
+    new DirLight(viewer.scene, {
+        dir: [0.8, -0.6, -0.8],
+        color: [0.8, 0.8, 0.8],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new DirLight(viewer.scene, {
+        dir: [-0.8, -0.4, -0.4],
+        color: [0.4, 0.4, 0.5],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new DirLight(viewer.scene, {
+        dir: [0.2, -0.8, 0.8],
+        color: [0.8, 0.8, 0.8],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new ReflectionMap(viewer.scene, {
+        src: [
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PX.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NX.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PY.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NY.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_PZ.png",
+            "../assets/textures/reflect/Uffizi_Gallery/Uffizi_Gallery_Radiance_NZ.png"
+        ],
+        encoding: "sRGB"
+    });
+
+    new LightMap(viewer.scene, {
+        src: [
+            "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PX.png",
+            "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NX.png",
+            "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PY.png",
+            "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NY.png",
+            "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
+            "../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
+        ],
+        encoding: "sRGB"
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a PerformanceModel representing a chart of roughness vs Metallic
+    //------------------------------------------------------------------------------------------------------------------
 
     const performanceModel = new PerformanceModel(viewer.scene, {
         id: "pbrMetalRoughness"
     });
 
+    let numObjects = 0;
+    let metallic = 0;
+    let roughness = 0;
+    const steps = 4;
+    const inc = 4;
+    const width = steps * inc;
+    const halfSide = width / 2;
+    const min = -halfSide;
+    const max = halfSide;
+    const metallicInc = 1.0 / steps;
+    const roughnessInc = 1.0 / steps;
+
     const sphere = buildSphereGeometry({
-        radius: 1.7,
+        radius: 1.5,
         heightSegments: 60,
         widthSegments: 60
     });
 
-    performanceModel.createMesh({
-        id: "sphere1",
-        primitive: "triangles",
-        positions: sphere.positions,
-        normals: sphere.normals,
-        indices: sphere.indices,
-        color: [0.6, 0.6, 0.6],
-        metallic: .9,
-        roughness: 0,
-        position: [-10, 0, 0]
-    });
+    for (let x = min; x <= max; x += inc) {
 
-    performanceModel.createMesh({
-        id: "sphere2",
-        primitive: "triangles",
-        positions: sphere.positions,
-        normals: sphere.normals,
-        indices: sphere.indices,
-        color: [0.6, 0.6, 0.6],
-        metallic: .9,
-        roughness: 0.3,
-        position: [-5, 0, 0]
-    });
+        metallic = 0;
 
-    performanceModel.createMesh({
-        id: "sphere3",
-        positions: sphere.positions,
-        normals: sphere.normals,
-        indices: sphere.indices,
-        color: [0.6, 0.6, 0.6],
-        metallic: .9,
-        roughness: 0.6,
-        position: [0, 0, 0]
-    });
+        for (let y = max; y >= min; y -= inc) {
 
-    performanceModel.createMesh({
-        id: "sphere4",
-        positions: sphere.positions,
-        normals: sphere.normals,
-        indices: sphere.indices,
-        color: [0.6, 0.6, 0.6],
-        metallic: .9,
-        roughness: 0.7,
-        position: [5, 0, 0]
-    });
+            const meshId = "mesh" + numObjects++;
 
-    performanceModel.createMesh({
-        id: "sphere5",
-        positions: sphere.positions,
-        normals: sphere.normals,
-        indices: sphere.indices,
-        color: [0.6, 0.6, 0.6],
-        metallic: .9,
-        roughness: 1.0,
-        position: [10, 0, 0]
-    });
+            performanceModel.createMesh({
+                id: meshId,
+                primitive: "triangles",
+                positions: sphere.positions,
+                uv: sphere.uv,
+                normals: sphere.normals,
+                indices: sphere.indices,
+                position: [x, y, 0],
+                color: [0.6, 0.6, 0.6],
+                metallic: metallic,
+                roughness: roughness
+            });
 
-    performanceModel.createEntity({
-        entityId: "allSpheres",
-        meshIds: ["sphere1", "sphere2", "sphere3", "sphere4", "sphere5"]
-    });
+            performanceModel.createEntity({
+                entityId: "" + x + "." + y,
+                meshIds: [meshId]
+            });
+
+            metallic += metallicInc;
+        }
+
+        roughness += roughnessInc;
+    }
 
     performanceModel.finalize();
+
+    //--------------------------------------------------------------------------------------
+    //  Axis labels
+    //--------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildVectorTextGeometry({
+            text: "PerformanceGeometry Instancing\nPBR Metallic vs Roughness",
+            size: .7
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            diffuse: [0, 0, 0],
+            lineWidth: 1
+        }),
+        position: [min, max + inc, 0]
+    });
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildVectorTextGeometry({
+            text: "0 ---------- Metallic -----------> 1",
+            size: .5
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            diffuse: [0, 0, 0],
+            lineWidth: 1
+        }),
+        rotation: [0, 0, 270],
+        position: [min - inc, max, 0]
+    });
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildVectorTextGeometry({
+            text: "0 ----------- Roughness -----------> 1",
+            size: .5
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            diffuse: [0, 0, 0],
+            lineWidth: 1
+        }),
+        position: [min, min - inc, 0]
+    });
 
     signalTestComplete(viewer);
 

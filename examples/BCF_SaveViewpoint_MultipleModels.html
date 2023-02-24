@@ -72,7 +72,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, BCFViewpointsPlugin} from "../dist/xeokit-sdk.min.es.js";
+    import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, BCFViewpointsPlugin} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer
@@ -108,14 +108,14 @@
 
     xktLoader.globalizeObjectIds = true;
 
-    const model = xktLoader.load({
+    const sceneModel = xktLoader.load({
         id: "model1",
         src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
         edges: true,
         excludeUnclassifiedObjects: false
     });
 
-    model.on("loaded", function () {
+    sceneModel.on("loaded", function () {
 
         const model2 = xktLoader.load({
             id: "model2",
@@ -137,21 +137,23 @@
 
             const bcfViewpoints = new BCFViewpointsPlugin(viewer);
 
-            const viewpoint = bcfViewpoints.getViewpoint({ // Options
-                spacesVisible: false, // Don't force IfcSpace types visible in viewpoint (default)
-                spaceBoundariesVisible: false, // Don't show IfcSpace boundaries in viewpoint (default)
-                openingsVisible: false // Don't force IfcOpening types visible in viewpoint (default)
-            });
-
-            const viewpointStr = JSON.stringify(viewpoint, null, 4);
-
-            console.log(viewpointStr);
-
             // Create download link
             // https://stackoverflow.com/questions/2897619/using-html5-javascript-to-generate-and-save-a-file
 
             const pom = document.createElement('a');
-            pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(viewpointStr));
+
+            pom.onclick = function() {
+
+                const viewpoint = bcfViewpoints.getViewpoint({ // Options
+                    spacesVisible: false, // Don't force IfcSpace types visible in viewpoint (default)
+                    spaceBoundariesVisible: false, // Don't show IfcSpace boundaries in viewpoint (default)
+                    openingsVisible: false // Don't force IfcOpening types visible in viewpoint (default)
+                });
+
+                const viewpointStr = JSON.stringify(viewpoint, null, 4);
+                pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(viewpointStr));
+            }
+
             pom.setAttribute('download', "bcfViewpoint.json");
             pom.innerText = "Download BCF Viewpoint JSON";
             document.getElementById("downloadLink").appendChild(pom);

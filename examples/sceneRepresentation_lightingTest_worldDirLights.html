@@ -86,7 +86,7 @@
     <img class="info-icon" src="../assets/images/lighting_icon.png"/>
     <h1>DirLight</h1>
     <h2>Directional World-space lighting test for various scene representations</h2>
-    <p>In this example, we're programmatically building a scene, using both the scene graph and PerformanceModel scene
+    <p>In this example, we're programmatically building a scene, using both the scene graph and VBOSceneModel scene
         representations, which we illuminate with directional World-space light sources.</p>
     <h3>Components Used</h3>
     <ul>
@@ -95,8 +95,8 @@
                target="_other">Viewer</a>
         </li>
         <li>
-            <a href="../docs/class/src/viewer/scene/PerformanceModel/PerformanceModel.js~PerformanceModel.html"
-               target="_other">PerformanceModel</a>
+            <a href="../docs/class/src/viewer/scene/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html"
+               target="_other">VBOSceneModel</a>
         </li>
         <li>
             <a href="../docs/class/src/viewer/scene/lights/DirLight.js~DirLight.html"
@@ -141,10 +141,10 @@
         buildBoxGeometry,
         ReadableGeometry,
         LambertMaterial,
-        PerformanceModel,
+        VBOSceneModel,
         DirLight,
         AnnotationsPlugin
-    } from "../dist/xeokit-sdk.min.es.js";
+    } from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -339,12 +339,12 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // PerformanceModel with batched geometries
+    // VBOSceneModel with batched geometries
     //------------------------------------------------------------------------------------------------------------------
 
-    const performanceModelBatched = new PerformanceModel(viewer.scene, {
+    const performanceModelBatched = new VBOSceneModel(viewer.scene, {
         id: "tableBatched",
-        isModel: true, // <--------------------- Represents a model, registers PerformanceModel by ID on viewer.scene.models
+        isModel: true, // <--------------------- Represents a model, registers VBOSceneModel by ID on viewer.scene.models
         position: [20, 0, 0],
         scale: [1, 1, 1],
         rotation: [0, 0, 0],
@@ -503,12 +503,12 @@
     performanceModelBatched.finalize();
 
     //------------------------------------------------------------------------------------------------------------------
-    // PerformanceModel with instanced geometries
+    // VBOSceneModel with instanced geometries
     //------------------------------------------------------------------------------------------------------------------
 
-    const performanceModelInstanced = new PerformanceModel(viewer.scene, {
+    const performanceModelInstanced = new VBOSceneModel(viewer.scene, {
         id: "tableInstancedInstanced",
-        isModel: true, // <--------------------- Represents a model, registers PerformanceModel by ID on viewer.scene.models
+        isModel: true, // <--------------------- Represents a model, registers VBOSceneModel by ID on viewer.scene.models
         position: [20, 0, 20],
         scale: [1, 1, 1],
         rotation: [0, 0, 0],
@@ -670,7 +670,7 @@
         labelShown: true,
         values: {
             glyph: "D",
-            title: "PerformanceModel with batched geometries",
+            title: "VBOSceneModel with batched geometries",
             markerBGColor: "lightgreen"
         },
     });
@@ -683,7 +683,7 @@
         labelShown: true,
         values: {
             glyph: "C",
-            title: "PerformanceModel with instanced geometries",
+            title: "VBOSceneModel with instanced geometries",
             markerBGColor: "lightgreen"
         },
     });

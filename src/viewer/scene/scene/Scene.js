@@ -569,6 +569,20 @@ class Scene extends Component {
         this.reflectionMaps = {};
 
         /**
+         * The {@link Bitmap}s in this Scene, each mapped to its {@link Bitmap#id}.
+         *
+         * @type {{String:Bitmap}}
+         */
+        this.bitmaps = {};
+
+        /**
+         * The {@link LineSet}s in this Scene, each mapped to its {@link LineSet#id}.
+         *
+         * @type {{String:LineSet}}
+         */
+        this.lineSets = {};
+
+        /**
          * The real world offset for this Scene
          *
          * @type {Number[]}
@@ -810,6 +824,7 @@ class Scene extends Component {
         this._logarithmicDepthBufferEnabled = !!cfg.logarithmicDepthBufferEnabled;
 
         this._pbrEnabled = !!cfg.pbrEnabled;
+        this._colorTextureEnabled = (cfg.colorTextureEnabled !== false);
 
         // Register Scene on xeokit
         // Do this BEFORE we add components below
@@ -938,6 +953,16 @@ class Scene extends Component {
         this._needRecompile = true;
     }
 
+    _bitmapCreated(bitmap) {
+        this.bitmaps[bitmap.id] = bitmap;
+        this.scene.fire("bitmapCreated", bitmap, true /* Don't retain event */);
+    }
+
+    _lineSetCreated(lineSet) {
+        this.lineSets[lineSet.id] = lineSet;
+        this.scene.fire("lineSetCreated", lineSet, true /* Don't retain event */);
+    }
+
     _lightCreated(light) {
         this.lights[light.id] = light;
         this.scene._lightsState.addLight(light._state);
@@ -963,6 +988,16 @@ class Scene extends Component {
         this._needRecompile = true;
     }
 
+    _bitmapDestroyed(bitmap) {
+        delete this.bitmaps[bitmap.id];
+        this.scene.fire("bitmapDestroyed", bitmap, true /* Don't retain event */);
+    }
+
+    _lineSetDestroyed(lineSet) {
+        delete this.lineSets[lineSet.id];
+        this.scene.fire("lineSetDestroyed", lineSet, true /* Don't retain event */);
+    }
+    
     _lightDestroyed(light) {
         delete this.lights[light.id];
         this.scene._lightsState.removeLight(light._state);
@@ -1027,7 +1062,7 @@ class Scene extends Component {
         }
     }
 
-    _objectXRayedUpdated(entity) {
+    _objectXRayedUpdated(entity, notify = true) {
         if (entity.xrayed) {
             if (ASSERT_OBJECT_STATE_UPDATE && this.xrayedObjects[entity.id]) {
                 console.error("Redundant object xray update (xrayed=true)");
@@ -1044,9 +1079,12 @@ class Scene extends Component {
             this._numXRayedObjects--;
         }
         this._xrayedObjectIds = null; // Lazy regenerate
+        if (notify) {
+          this.fire("objectXRayed", entity, true);
+        }
     }
 
-    _objectHighlightedUpdated(entity) {
+    _objectHighlightedUpdated(entity, notify = true) {
         if (entity.highlighted) {
             if (ASSERT_OBJECT_STATE_UPDATE && this.highlightedObjects[entity.id]) {
                 console.error("Redundant object highlight update (highlighted=true)");
@@ -1063,9 +1101,12 @@ class Scene extends Component {
             this._numHighlightedObjects--;
         }
         this._highlightedObjectIds = null; // Lazy regenerate
+        if (notify) {
+          this.fire("objectHighlighted", entity, true);
+        }
     }
 
-    _objectSelectedUpdated(entity) {
+    _objectSelectedUpdated(entity, notify = true) {
         if (entity.selected) {
             if (ASSERT_OBJECT_STATE_UPDATE && this.selectedObjects[entity.id]) {
                 console.error("Redundant object select update (selected=true)");
@@ -1082,6 +1123,9 @@ class Scene extends Component {
             this._numSelectedObjects--;
         }
         this._selectedObjectIds = null; // Lazy regenerate
+        if (notify) {
+          this.fire("objectSelected", entity, true);
+        }
     }
 
     _objectColorizeUpdated(entity, colorized) {
@@ -1147,6 +1191,16 @@ class Scene extends Component {
     }
 
     /**
+     * Returns the capabilities of this Scene.
+     *
+     * @private
+     * @returns {{astcSupported: boolean, etc1Supported: boolean, pvrtcSupported: boolean, etc2Supported: boolean, dxtSupported: boolean, bptcSupported: boolean}}
+     */
+    get capabilities() {
+        return this._renderer.capabilities;
+    }
+
+    /**
      * Whether {@link Entity#offset} is enabled.
      *
      * This is set via the {@link Viewer} constructor and is ````false```` by default.
@@ -1196,7 +1250,7 @@ class Scene extends Component {
     }
 
     /**
-     * Sets whether quality rendering is enabled.
+     * Gets whether physically-based rendering is enabled.
      *
      * Default is ````false````.
      *
@@ -1204,6 +1258,29 @@ class Scene extends Component {
      */
     get pbrEnabled() {
         return this._pbrEnabled;
+    }
+
+    /**
+     * Sets whether basic color texture rendering is enabled.
+     *
+     * Default is ````true````.
+     *
+     * @returns {Boolean} True if basic color texture rendering is enabled.
+     */
+    set colorTextureEnabled(colorTextureEnabled) {
+        this._colorTextureEnabled = !!colorTextureEnabled;
+        this.glRedraw();
+    }
+
+    /**
+     * Gets whether basic color texture rendering is enabled.
+     *
+     * Default is ````true````.
+     *
+     * @returns {Boolean} True if basic color texture rendering is enabled.
+     */
+    get colorTextureEnabled() {
+        return this._colorTextureEnabled;
     }
 
     /**
@@ -2120,6 +2197,27 @@ class Scene extends Component {
         }
     }
 
+    /**
+     * Destroys all {@link Line}s in this Scene.
+     */
+    clearBitmaps() {
+        const ids = Object.keys(this.bitmaps);
+        for (let i = 0, len = ids.length; i < len; i++) {
+            this.bitmaps[ids[i]].destroy();
+        }
+    }
+
+
+    /**
+     * Destroys all {@link Line}s in this Scene.
+     */
+    clearLines() {
+        const ids = Object.keys(this.lineSets);
+        for (let i = 0, len = ids.length; i < len; i++) {
+            this.lineSets[ids[i]].destroy();
+        }
+    }
+    
     /**
      * Gets the collective axis-aligned boundary (AABB) of a batch of {@link Entity}s that represent objects.
      *

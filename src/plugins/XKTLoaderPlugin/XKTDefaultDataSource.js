@@ -12,8 +12,8 @@ class XKTDefaultDataSource {
      * Gets metamodel JSON.
      *
      * @param {String|Number} metaModelSrc Identifies the metamodel JSON asset.
-     * @param {{Function(*)}} ok Fired on successful loading of the metamodel JSON asset.
-     * @param {{Function(*)}} error Fired on error while loading the metamodel JSON asset.
+     * @param {Function} ok Fired on successful loading of the metamodel JSON asset.
+     * @param {Function} error Fired on error while loading the metamodel JSON asset.
      */
     getMetaModel(metaModelSrc, ok, error) {
         utils.loadJSON(metaModelSrc,

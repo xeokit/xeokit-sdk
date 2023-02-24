@@ -76,7 +76,7 @@
 
 <script type="module">
 
-    import {Viewer, WebIFCLoaderPlugin, NavCubePlugin, TreeViewPlugin, FastNavPlugin} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, WebIFCLoaderPlugin, NavCubePlugin, TreeViewPlugin, FastNavPlugin} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -106,10 +106,11 @@
     new FastNavPlugin(viewer, {});
 
     const ifcLoader = new WebIFCLoaderPlugin(viewer, {
-        wasmPath: "../dist/" // <<------- Path to web-ifc.wasm, which does the IFC parsing for us
+        //wasmPath: "../dist/" // <<------- Path to web-ifc.wasm, which does the IFC parsing for us
+        wasmPath: "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/"
     });
 
-    const model = ifcLoader.load({
+    const sceneModel = ifcLoader.load({
         id: "myModel",
         src: "../assets/models/ifc/19_rue_Marc_Antoine_Petit_Ground_floor.ifc",
         loadMetadata: false,
@@ -118,9 +119,9 @@
 
     const t0 = performance.now();
     document.getElementById("time").innerHTML = "Loading model...";
-    model.on("loaded", function () {
+    sceneModel.on("loaded", function () {
         const t1 = performance.now();
-        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + model.numEntities;
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
     });
 
     window.viewer = viewer;

@@ -83,6 +83,15 @@ class TreeViewNode {
     get checked() {
 
     }
+
+    /** Whether or not the TreeViewNode is currently xrayed.
+     *
+     * @type {Boolean}
+     * @abstract
+     */
+     get xrayed() {
+
+    }
 }
 
 export {TreeViewNode};

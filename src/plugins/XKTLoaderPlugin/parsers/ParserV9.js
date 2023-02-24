@@ -109,7 +109,7 @@ const decompressColor = (function () {
     };
 })();
 
-function load(viewer, options, inflatedData, performanceModel) {
+function load(viewer, options, inflatedData, sceneModel) {
 
     const metadata = inflatedData.metadata;
 
@@ -148,7 +148,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
     // Create metamodel, unless already loaded from external JSON file by XKTLoaderPlugin
 
-    const metaModelId = performanceModel.id;
+    const metaModelId = sceneModel.id;
 
     if (!viewer.metaScene.metaModels[metaModelId]) {
 
@@ -158,7 +158,7 @@ function load(viewer, options, inflatedData, performanceModel) {
             globalizeObjectIds: options.globalizeObjectIds
         });
 
-        performanceModel.once("destroyed", () => {
+        sceneModel.once("destroyed", () => {
             viewer.metaScene.destroyMetaModel(metaModelId);
         });
     }
@@ -214,7 +214,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
             const xktEntityId = eachEntityId[tileEntityIndex];
 
-            const entityId = options.globalizeObjectIds ? math.globalizeObjectId(performanceModel.id, xktEntityId) : xktEntityId;
+            const entityId = options.globalizeObjectIds ? math.globalizeObjectId(sceneModel.id, xktEntityId) : xktEntityId;
 
             const finalTileEntityIndex = (numEntities - 1);
             const atLastTileEntity = (tileEntityIndex === finalTileEntityIndex);
@@ -294,7 +294,7 @@ function load(viewer, options, inflatedData, performanceModel) {
                     const meshMatrixIndex = eachMeshMatricesPortion[meshIndex];
                     const meshMatrix = matrices.slice(meshMatrixIndex, meshMatrixIndex + 16);
 
-                    const geometryId = "geometry." + tileIndex + "." + geometryIndex; // These IDs are local to the PerformanceModel
+                    const geometryId = "geometry." + tileIndex + "." + geometryIndex; // These IDs are local to the VBOSceneModel
 
                     let geometryArrays = geometryArraysCache[geometryId];
 
@@ -383,12 +383,12 @@ function load(viewer, options, inflatedData, performanceModel) {
                                 transformedAndRecompressedPositions[i + 2] = tempVec4a[2];
                             }
 
-                            performanceModel.createMesh(utils.apply(meshDefaults, {
+                            sceneModel.createMesh(utils.apply(meshDefaults, {
                                 id: meshId,
                                 origin: tileCenter,
                                 primitive: geometryArrays.primitiveName,
-                                positions: transformedAndRecompressedPositions,
-                                normals: geometryArrays.geometryNormals,
+                                positionsCompressed: transformedAndRecompressedPositions,
+                                normalsCompressed: geometryArrays.geometryNormals,
                                 colorsCompressed: geometryArrays.geometryColors,
                                 indices: geometryArrays.geometryIndices,
                                 edgeIndices: geometryArrays.geometryEdgeIndices,
@@ -405,12 +405,11 @@ function load(viewer, options, inflatedData, performanceModel) {
 
                             if (!geometryCreatedInTile[geometryId]) {
 
-                                performanceModel.createGeometry({
+                                sceneModel.createGeometry({
                                     id: geometryId,
-                                    origin: tileCenter,
                                     primitive: geometryArrays.primitiveName,
-                                    positions: geometryArrays.geometryPositions,
-                                    normals: geometryArrays.geometryNormals,
+                                    positionsCompressed: geometryArrays.geometryPositions,
+                                    normalsCompressed: geometryArrays.geometryNormals,
                                     colorsCompressed: geometryArrays.geometryColors,
                                     indices: geometryArrays.geometryIndices,
                                     edgeIndices: geometryArrays.geometryEdgeIndices,
@@ -420,9 +419,10 @@ function load(viewer, options, inflatedData, performanceModel) {
                                 geometryCreatedInTile[geometryId] = true;
                             }
 
-                            performanceModel.createMesh(utils.apply(meshDefaults, {
+                            sceneModel.createMesh(utils.apply(meshDefaults, {
                                 id: meshId,
                                 geometryId: geometryId,
+                                origin: tileCenter,
                                 matrix: meshMatrix,
                                 color: meshColor,
                                 metallic: meshMetallic,
@@ -481,12 +481,12 @@ function load(viewer, options, inflatedData, performanceModel) {
 
                     if (geometryValid) {
 
-                        performanceModel.createMesh(utils.apply(meshDefaults, {
+                        sceneModel.createMesh(utils.apply(meshDefaults, {
                             id: meshId,
                             origin: tileCenter,
                             primitive: primitiveName,
-                            positions: geometryPositions,
-                            normals: geometryNormals,
+                            positionsCompressed: geometryPositions,
+                            normalsCompressed: geometryNormals,
                             colorsCompressed: geometryColors,
                             indices: geometryIndices,
                             edgeIndices: geometryEdgeIndices,
@@ -504,7 +504,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
             if (meshIds.length > 0) {
 
-                performanceModel.createEntity(utils.apply(entityDefaults, {
+                sceneModel.createEntity(utils.apply(entityDefaults, {
                     id: entityId,
                     isObject: true,
                     meshIds: meshIds
@@ -517,10 +517,10 @@ function load(viewer, options, inflatedData, performanceModel) {
 /** @private */
 const ParserV9 = {
     version: 9,
-    parse: function (viewer, options, elements, performanceModel) {
+    parse: function (viewer, options, elements, sceneModel) {
         const deflatedData = extract(elements);
         const inflatedData = inflate(deflatedData);
-        load(viewer, options, inflatedData, performanceModel);
+        load(viewer, options, inflatedData, sceneModel);
     }
 };
 

@@ -1,0 +1,492 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 65532,
+      "max": [
+        7.469330310821533,
+        15.051145553588867,
+        4.358763694763184
+      ],
+      "min": [
+        -13.541621208190918,
+        -16.587812423706055,
+        -0.14012765884399414
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 786384,
+      "componentType": 5126,
+      "count": 65532,
+      "max": [
+        0.9999991655349731,
+        0.9972655773162842,
+        1.0
+      ],
+      "min": [
+        -1.0,
+        -0.9999992847442627,
+        -0.9999984502792358
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 65532,
+      "max": [
+        0.9998046159744263,
+        0.9989012479782104
+      ],
+      "min": [
+        0.0001220703125,
+        0.00013621582183986902
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 344313,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 1572768,
+      "componentType": 5126,
+      "count": 58125,
+      "max": [
+        7.470608234405518,
+        15.054265975952148,
+        4.370213508605957
+      ],
+      "min": [
+        -13.5416259765625,
+        -16.587812423706055,
+        -0.14012765884399414
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 2270268,
+      "componentType": 5126,
+      "count": 58125,
+      "max": [
+        0.9999997615814209,
+        0.9999998807907104,
+        0.9999998807907104
+      ],
+      "min": [
+        -1.0,
+        -0.9999792575836182,
+        -0.9999984502792358
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 524256,
+      "componentType": 5126,
+      "count": 58125,
+      "max": [
+        0.9998778104782104,
+        0.9989012479782104
+      ],
+      "min": [
+        0.0001220703125,
+        0.00012334121856838465
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 1377252,
+      "componentType": 5125,
+      "count": 259335,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 2967768,
+      "componentType": 5126,
+      "count": 65532,
+      "max": [
+        7.470608234405518,
+        15.054265975952148,
+        4.370213508605957
+      ],
+      "min": [
+        -13.541616439819336,
+        -16.587812423706055,
+        -0.14012765884399414
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 3754152,
+      "componentType": 5126,
+      "count": 65532,
+      "max": [
+        0.9999996423721313,
+        0.9999885559082031,
+        1.0
+      ],
+      "min": [
+        -0.9999998807907104,
+        -0.999997615814209,
+        -0.9994733333587646
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 989256,
+      "componentType": 5126,
+      "count": 65532,
+      "max": [
+        1.9998561143875122,
+        0.8084715604782104
+      ],
+      "min": [
+        1.0001220703125,
+        0.0001915885368362069
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 2414592,
+      "componentType": 5125,
+      "count": 343095,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 4540536,
+      "componentType": 5126,
+      "count": 17109,
+      "max": [
+        7.470608234405518,
+        12.776138305664063,
+        4.304060935974121
+      ],
+      "min": [
+        -7.680437088012695,
+        -16.58777618408203,
+        -0.14012622833251953
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 4745844,
+      "componentType": 5126,
+      "count": 17109,
+      "max": [
+        0.9999998807907104,
+        0.9205417633056641,
+        0.9999996423721313
+      ],
+      "min": [
+        -0.9999992847442627,
+        -0.999997615814209,
+        -0.9144372940063477
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1513512,
+      "componentType": 5126,
+      "count": 17109,
+      "max": [
+        1.9799482822418213,
+        0.6812683343887329
+      ],
+      "min": [
+        1.0005125999450684,
+        0.00013019575271755457
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 3786972,
+      "componentType": 5125,
+      "count": 71745,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "matousekfoto (https://sketchfab.com/matousekfoto)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/skatepark-17e32c89b5574d48b10f06a57d2500df",
+      "title": "Skatepark"
+    },
+    "generator": "Sketchfab-12.13.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 4073952,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 1650384,
+      "byteOffset": 4073952,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 4951152,
+      "byteOffset": 5724336,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 10675488,
+      "uri": "SkatePark.bin"
+    }
+  ],
+  "extensionsUsed": [
+    "KHR_materials_unlit"
+  ],
+  "images": [
+    {
+      "uri": "textures/skatepark_u1_v1_baseColor.jpeg"
+    },
+    {
+      "uri": "textures/skatepark_u2_v1_baseColor.jpeg"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_unlit": {}
+      },
+      "name": "skatepark_u1_v1",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.0
+      }
+    },
+    {
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_unlit": {}
+      },
+      "name": "skatepark_u2_v1",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1
+        },
+        "metallicFactor": 0.0
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "skatepark_skatepark_u1_v1_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "skatepark_skatepark_u1_v1_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 5,
+            "POSITION": 4,
+            "TEXCOORD_0": 6
+          },
+          "indices": 7,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "skatepark_skatepark_u2_v1_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 9,
+            "POSITION": 8,
+            "TEXCOORD_0": 10
+          },
+          "indices": 11,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "skatepark_skatepark_u2_v1_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 13,
+            "POSITION": 12,
+            "TEXCOORD_0": 14
+          },
+          "indices": 15,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        0.19998152554007653,
+        -0.002718228142235102,
+        -6.03567893938695e-19,
+        0.0,
+        0.0,
+        4.440892164675075e-17,
+        -0.20000000298023224,
+        0.0,
+        0.002718228142235102,
+        0.19998152554007653,
+        4.440481883085135e-17,
+        0.0,
+        -0.028816381469368935,
+        -0.010225567035377026,
+        -7.367145826946988e-08,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2
+      ],
+      "matrix": [
+        0.009999999776482582,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.009999999776482582,
+        0.0,
+        0.0,
+        -0.009999999776482582,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "skatepark.fbx"
+    },
+    {
+      "children": [
+        3
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "matrix": [
+        7.549789959870878e-06,
+        1.1102230246251565e-14,
+        99.99999999999972,
+        0.0,
+        99.99999999999962,
+        -4.371139006309477e-06,
+        -7.549789954319763e-06,
+        0.0,
+        4.371139006309477e-06,
+        99.99999999999991,
+        -3.552713678800501e-13,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "skatepark"
+    },
+    {
+      "mesh": 0,
+      "name": "skatepark_skatepark_u1_v1_0"
+    },
+    {
+      "mesh": 1,
+      "name": "skatepark_skatepark_u1_v1_0"
+    },
+    {
+      "mesh": 2,
+      "name": "skatepark_skatepark_u2_v1_0"
+    },
+    {
+      "mesh": 3,
+      "name": "skatepark_skatepark_u2_v1_0"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 1
+    }
+  ]
+}

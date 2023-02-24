@@ -6,7 +6,7 @@ import {Spinner} from './Spinner.js';
 import {WEBGL_INFO} from '../webglInfo.js';
 
 const WEBGL_CONTEXT_NAMES = [
-    "webgl",
+    "webgl2",
     "experimental-webgl",
     "webkit-3d",
     "moz-webgl",
@@ -72,6 +72,9 @@ class Canvas extends Component {
          */
         this.transparent = !!cfg.transparent;
 
+        // chipmunk
+        this.optimizeResizeDetection = true;
+
         /**
          * Attributes for the WebGL context
          *
@@ -108,7 +111,7 @@ class Canvas extends Component {
          * ````
          *
          * @property boundary
-         * @type {{Number[]}}
+         * @type {Number[]}
          * @final
          */
         this.boundary = [
@@ -167,12 +170,32 @@ class Canvas extends Component {
 
         let lastParent = null;
 
+        let tickCount = 0;
+
         this._tick = this.scene.on("tick", () => {
+
+            tickCount++;
+
+            self._canvasSizeChanged = false;
+
+            if (self.optimizeResizeDetection) {
+                if (tickCount < 10) {
+                    return;
+                }
+            }
+
+            tickCount = 0;
 
             const canvas = this.canvas;
 
             const newResolutionScale = (this._resolutionScale !== lastResolutionScale);
             const newWindowSize = (window.innerWidth !== lastWindowWidth || window.innerHeight !== lastWindowHeight);
+
+            if (!newWindowSize) {
+                // This return caused the canvas to never resize in xeokit-bim-viewer
+                // return;
+            }
+
             const newCanvasSize = (canvas.clientWidth !== lastCanvasWidth || canvas.clientHeight !== lastCanvasHeight);
             const newCanvasPos = (canvas.offsetLeft !== lastCanvasOffsetLeft || canvas.offsetTop !== lastCanvasOffsetTop);
 
@@ -180,6 +203,8 @@ class Canvas extends Component {
             const newParent = (parent !== lastParent);
 
             if (newResolutionScale || newWindowSize || newCanvasSize || newCanvasPos || newParent) {
+
+                self._canvasSizeChanged = true;
 
                 this._spinner._adjustPosition();
 
@@ -211,13 +236,7 @@ class Canvas extends Component {
                     boundary[2] = newWidth;
                     boundary[3] = newHeight;
 
-                    /**
-                     * Fired whenever this Canvas's {@link Canvas/boundary} property changes.
-                     *
-                     * @event boundary
-                     * @param value The property's new value
-                     */
-                    if (!newResolutionScale || newCanvasSize) {
+                    if (!newResolutionScale) {
                         this.fire("boundary", boundary);
                     }
 
@@ -438,17 +457,6 @@ class Canvas extends Component {
             // Setup extension (if necessary) and hints for fragment shader derivative functions
             if (this.webgl2) {
                 this.gl.hint(this.gl.FRAGMENT_SHADER_DERIVATIVE_HINT, this.gl.FASTEST);
-            } else {
-                if (WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_standard_derivatives"]) {
-                    const ext = this.gl.getExtension("OES_standard_derivatives");
-                    this.gl.hint(ext.FRAGMENT_SHADER_DERIVATIVE_HINT_OES, this.gl.FASTEST);
-                }
-                if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-                    this.gl.getExtension('EXT_frag_depth');
-                }
-                if (WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"]) {
-                    this.gl.getExtension('WEBGL_depth_texture');
-                }
             }
         }
     }

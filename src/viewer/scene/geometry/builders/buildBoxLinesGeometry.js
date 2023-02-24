@@ -26,7 +26,7 @@ import {utils} from '../../utils.js';
  *         xSize: 1,  // Half-size on each axis
  *         ySize: 1,
  *         zSize: 1
- *      }),
+ *      })),
  *      material: new PhongMaterial(viewer.scene, {
  *         emissive: [0,1,0]
  *      })

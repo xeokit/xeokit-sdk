@@ -194,19 +194,19 @@ export declare class Camera extends Component {
 
   /**
    * Gets if the World-space X-axis is "up".
-   * @returns {boolean}
+   * @returns {Boolean}
    */
   get xUp(): boolean;
 
   /**
    * Gets if the World-space Y-axis is "up".
-   * @returns {boolean}
+   * @returns {Boolean}
    */
   get yUp(): boolean;
 
   /**
    * Gets if the World-space Z-axis is "up".
-   * @returns {boolean}
+   * @returns {Boolean}
    */
   get zUp(): boolean;
 

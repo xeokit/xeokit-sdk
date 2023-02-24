@@ -79,7 +79,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, DirLight, AmbientLight, NavCubePlugin} from "../dist/xeokit-sdk.min.es.js";
+    import {Viewer, XKTLoaderPlugin, DirLight, AmbientLight, NavCubePlugin} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer with a logarithmic depth buffer
@@ -87,6 +87,7 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
+        saoEnabled: true,
         transparent: true,
         logarithmicDepthBufferEnabled: true // <<--- Enable logarithmic depth buffer
     });
@@ -190,7 +191,7 @@
         timer -= tickEvent.deltaTime;
         if (timer <= 0) {
             if (saoAndEdgesDisabled) {
-                //    viewer.scene.sao.enabled = true;
+                viewer.scene.sao.enabled = true;
                 viewer.scene.edgeMaterial.edges = true;
                 saoAndEdgesDisabled = false;
             }
@@ -282,8 +283,8 @@
                                         let numEntities = 0;
 
                                         for (let id in viewer.scene.models) {
-                                            const model = viewer.scene.models[id];
-                                            numEntities += model.numEntities;
+                                            const sceneModel = viewer.scene.models[id];
+                                            numEntities += sceneModel.numEntities;
                                         }
 
                                         const t1 = performance.now();

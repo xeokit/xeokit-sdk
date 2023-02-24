@@ -1,5 +1,5 @@
 import {utils} from "../../viewer/scene/utils.js";
-import {PerformanceModel} from "../../viewer/scene/PerformanceModel/PerformanceModel.js";
+import {VBOSceneModel} from "../../viewer/scene/models/VBOSceneModel/VBOSceneModel.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {LASDefaultDataSource} from "./LASDefaultDataSource.js";
 import {math} from "../../viewer";
@@ -255,7 +255,7 @@ class LASLoaderPlugin extends Plugin {
      * @param {Number|String} value Valid values are 8, 16 and "auto".
      */
     set colorDepth(value) {
-        this._colorDepth = !!value;
+        this._colorDepth = value || "auto";
     }
 
     /**
@@ -281,58 +281,60 @@ class LASLoaderPlugin extends Plugin {
             delete params.id;
         }
 
-        const performanceModel = new PerformanceModel(this.viewer.scene, utils.apply(params, {
+        const sceneModel = new VBOSceneModel(this.viewer.scene, utils.apply(params, {
             isModel: true
         }));
 
         if (!params.src && !params.las) {
             this.error("load() param expected: src or las");
-            return performanceModel; // Return new empty model
+            return sceneModel; // Return new empty model
         }
 
         const options = {
-            skip: this._skip,
-            fp64: this._fp64,
-            colorDepth: this._colorDepth
+            las: {
+                skip: this._skip,
+                fp64: this._fp64,
+                colorDepth: this._colorDepth
+            }
         };
 
         if (params.src) {
-            this._loadModel(params.src, params, options, performanceModel);
+            this._loadModel(params.src, params, options, sceneModel);
         } else {
             const spinner = this.viewer.scene.canvas.spinner;
             spinner.processes++;
-            this._parseModel(params.las, params, options, performanceModel).then(() => {
+            this._parseModel(params.las, params, options, sceneModel).then(() => {
                 spinner.processes--;
             }, (errMsg) => {
                 spinner.processes--;
                 this.error(errMsg);
-                performanceModel.fire("error", errMsg);
+                sceneModel.fire("error", errMsg);
             });
         }
 
-        return performanceModel;
+        return sceneModel;
     }
 
-    _loadModel(src, params, options, performanceModel) {
+    _loadModel(src, params, options, sceneModel) {
         const spinner = this.viewer.scene.canvas.spinner;
         spinner.processes++;
         this._dataSource.getLAS(params.src, (arrayBuffer) => {
-                this._parseModel(arrayBuffer, params, options, performanceModel).then(() => {
+                this._parseModel(arrayBuffer, params, options, sceneModel).then(() => {
                     spinner.processes--;
                 }, (errMsg) => {
                     spinner.processes--;
                     this.error(errMsg);
-                    performanceModel.fire("error", errMsg);
+                    sceneModel.fire("error", errMsg);
                 });
             },
             (errMsg) => {
                 spinner.processes--;
                 this.error(errMsg);
-                performanceModel.fire("error", errMsg);
+                sceneModel.fire("error", errMsg);
             });
     }
 
-    _parseModel(arrayBuffer, params, options, performanceModel) {
+    _parseModel(arrayBuffer, params, options, sceneModel) {
 
         function readPositions(attributesPosition) {
             const positionsValue = attributesPosition.value;
@@ -378,7 +380,7 @@ class LASLoaderPlugin extends Plugin {
 
         return new Promise((resolve, reject) => {
 
-            if (performanceModel.destroyed) {
+            if (sceneModel.destroyed) {
                 reject();
                 return;
             }
@@ -399,21 +401,19 @@ class LASLoaderPlugin extends Plugin {
             try {
                 parse(arrayBuffer, LASLoader, options).then((parsedData) => {
 
-                    const loaderData = parsedData.loaderData;
-                    const loaderDataHeader = loaderData.header;
-                    const pointsFormatId = loaderDataHeader.pointsFormatId;
-
                     const attributes = parsedData.attributes;
+                    const loaderData = parsedData.loaderData;
+                    const pointsFormatId = loaderData.pointsFormatId !== undefined ? loaderData.pointsFormatId : -1;
 
                     if (!attributes.POSITION) {
-                        performanceModel.finalize();
+                        sceneModel.finalize();
                         reject("No positions found in file");
                         return;
                     }
-                    
+
                     let positionsValue
                     let colorsCompressed;
-                    
+
                     switch (pointsFormatId) {
                         case 0:
                             positionsValue = readPositions(attributes.POSITION);
@@ -421,7 +421,7 @@ class LASLoaderPlugin extends Plugin {
                             break;
                         case 1:
                             if (!attributes.intensity) {
-                                performanceModel.finalize();
+                                sceneModel.finalize();
                                 reject("No positions found in file");
                                 return;
                             }
@@ -430,7 +430,7 @@ class LASLoaderPlugin extends Plugin {
                             break;
                         case 2:
                             if (!attributes.intensity) {
-                                performanceModel.finalize();
+                                sceneModel.finalize();
                                 reject("No positions found in file");
                                 return;
                             }
@@ -439,7 +439,7 @@ class LASLoaderPlugin extends Plugin {
                             break;
                         case 3:
                             if (!attributes.intensity) {
-                                performanceModel.finalize();
+                                sceneModel.finalize();
                                 reject("No positions found in file");
                                 return;
                             }
@@ -448,7 +448,7 @@ class LASLoaderPlugin extends Plugin {
                             break;
                     }
 
-                    performanceModel.createMesh({
+                    sceneModel.createMesh({
                         id: "pointsMesh",
                         primitive: "points",
                         positions: positionsValue,
@@ -457,13 +457,13 @@ class LASLoaderPlugin extends Plugin {
 
                     const pointsObjectId = math.createUUID();
 
-                    performanceModel.createEntity({
+                    sceneModel.createEntity({
                         id: pointsObjectId,
                         meshIds: ["pointsMesh"],
                         isObject: true
                     });
 
-                    performanceModel.finalize();
+                    sceneModel.finalize();
 
                     if (params.loadMetadata !== false) {
                         const rootMetaObjectId = math.createUUID();
@@ -485,22 +485,22 @@ class LASLoaderPlugin extends Plugin {
                             }],
                             propertySets: []
                         };
-                        const metaModelId = performanceModel.id;
+                        const metaModelId = sceneModel.id;
                         this.viewer.metaScene.createMetaModel(metaModelId, metadata, options);
                     }
 
-                    performanceModel.scene.once("tick", () => {
-                        if (performanceModel.destroyed) {
+                    sceneModel.scene.once("tick", () => {
+                        if (sceneModel.destroyed) {
                             return;
                         }
-                        performanceModel.scene.fire("modelLoaded", performanceModel.id); // FIXME: Assumes listeners know order of these two events
-                        performanceModel.fire("loaded", true, false); // Don't forget the event, for late subscribers
+                        sceneModel.scene.fire("modelLoaded", sceneModel.id); // FIXME: Assumes listeners know order of these two events
+                        sceneModel.fire("loaded", true, false); // Don't forget the event, for late subscribers
                     });
 
                     resolve();
                 });
             } catch (e) {
-                performanceModel.finalize();
+                sceneModel.finalize();
                 reject(e);
             }
         });

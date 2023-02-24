@@ -49,6 +49,7 @@ class Viewer {
      * @param {Boolean} [cfg.logarithmicDepthBufferEnabled=false] Whether to enable logarithmic depth buffer. When this is true,
      * you can set huge values for {@link Perspective#far} and {@link Ortho#far}, to push the far clipping plane back so
      * that it does not clip huge models.
+     * @param {Boolean} [cfg.colorTextureEnabled=true] Whether to enable base color texture rendering.
      * @param {Boolean} [cfg.pbrEnabled=false] Whether to enable physically-based rendering.
      * @param {LocaleService} [cfg.localeService=null] Optional locale-based translation service.
      */
@@ -85,7 +86,6 @@ class Viewer {
             canvasId: cfg.canvasId,
             canvasElement: cfg.canvasElement,
             keyboardEventsElement: cfg.keyboardEventsElement,
-            webgl2: false,
             contextAttr: {
                 preserveDrawingBuffer: cfg.preserveDrawingBuffer !== false,
                 premultipliedAlpha: (!!cfg.premultipliedAlpha),
@@ -107,7 +107,8 @@ class Viewer {
             entityOffsetsEnabled: (!!cfg.entityOffsetsEnabled),
             pickSurfacePrecisionEnabled: (!!cfg.pickSurfacePrecisionEnabled),
             logarithmicDepthBufferEnabled: (!!cfg.logarithmicDepthBufferEnabled),
-            pbrEnabled: (!!cfg.pbrEnabled)
+            pbrEnabled: (!!cfg.pbrEnabled),
+            colorTextureEnabled: (cfg.colorTextureEnabled !== false)
         });
 
         /**
@@ -161,6 +162,15 @@ class Viewer {
          * @private
          */
         this._eventSubs = {};
+    }
+
+    /**
+     * Returns the capabilities of this Viewer.
+     *
+     * @returns {{astcSupported: boolean, etc1Supported: boolean, pvrtcSupported: boolean, etc2Supported: boolean, dxtSupported: boolean, bptcSupported: boolean}}
+     */
+    get capabilities() {
+        return this.scene.capabilities;
     }
 
     /**

@@ -67,7 +67,7 @@
         ReadableGeometry,
         math,
         SectionPlanesPlugin
-    } from "../dist/xeokit-sdk.min.es.js";
+    } from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -199,7 +199,7 @@
             zSize: 1
         }));
 
-        const model = new Node(viewer.scene, {
+        const sceneModel = new Node(viewer.scene, {
             id: modelId,
             isModel: true, // <--------------------- Node represents a model
             rotation: [0, 0, 0],
@@ -271,7 +271,7 @@
             ]
         });
 
-        model.edges = true;
+        sceneModel.edges = true;
     }
 
 </script>

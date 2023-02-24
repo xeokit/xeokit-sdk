@@ -13,7 +13,7 @@ import {math} from "./scene/math/math.js";
  * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#Configs_disableDoublePrecisionAndRAF)]
  *
  * ````javascript
- * import {Configs, Viewer, XKTLoaderPlugin} from "../dist/xeokit-sdk.min.es.js";
+ * import {Configs, Viewer, XKTLoaderPlugin} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
  *
  * // Access xeoit-sdk global configs.
  * // We typically set configs only before we create any Viewers.
@@ -60,7 +60,7 @@ class Configs {
      *
      * This should only be set once, before creating any Viewers.
      *
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     set doublePrecisionEnabled(doublePrecision) {
         math.setDoublePrecisionEnabled(doublePrecision);
@@ -69,7 +69,7 @@ class Configs {
     /**
      * Gets whether double precision mode is enabled for all Viewers.
      *
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     get doublePrecisionEnabled() {
         return math.getDoublePrecisionEnabled();

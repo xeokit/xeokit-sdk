@@ -154,7 +154,7 @@ class Path extends Curve {
     /**
      * Gets point on this Path corresponding to the current value of {@link Path#t}.
      *
-     * @returns {{Number[]}} The point.
+     * @returns {Number[]} The point.
      */
     get point() {
         return this.getPoint(this._t);
@@ -174,7 +174,7 @@ class Path extends Curve {
      * Gets a point on this Path corresponding to the given progress position.
      *
      * @param {Number} t Indicates point of progress along this curve, in the range [0..1].
-     * @returns {{Number[]}}
+     * @returns {Number[]}
      */
     getPoint(t) {
         var d = t * this.length;

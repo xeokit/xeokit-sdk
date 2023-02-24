@@ -112,6 +112,36 @@ class ModelTreeView {
             this._muteTreeEvents = false;
         });
 
+        this._onObjectXrayed = this._viewer.scene.on('objectXRayed', (entity) => {
+          if (this._muteSceneEvents) {
+            return;
+          }
+          const objectId = entity.id;
+          const node = this._objectNodes[objectId];
+          if (!node) {
+            return; // Not in this tree
+          }
+    
+          this._muteTreeEvents = true;
+          const xrayed = entity.xrayed;
+          const updated = (xrayed !== node.xrayed);
+          if (!updated) {
+            return;
+          }
+          node.xrayed = xrayed;
+          const listItemElementId = 'node-' + node.nodeId;
+          const listItemElement = document.getElementById(listItemElementId);
+          if (listItemElement !== null) {
+            if (xrayed) {
+              listItemElement.classList.add('xrayed-node');
+            } else {
+              listItemElement.classList.remove('xrayed-node');
+            }
+          }
+    
+          this._muteTreeEvents = false;
+        });
+
         this.switchExpandHandler = (event) => {
             event.preventDefault();
             event.stopPropagation();
@@ -334,6 +364,7 @@ class ModelTreeView {
                 numEntities: 0,
                 numVisibleEntities: 0,
                 checked: false,
+                xrayed: false,
                 children: []
             };
             this._rootNodes.push(buildingNode);
@@ -352,6 +383,7 @@ class ModelTreeView {
                 numEntities: 0,
                 numVisibleEntities: 0,
                 checked: false,
+                xrayed: false,
                 children: []
             };
             buildingNode.children.push(storeyNode);
@@ -376,6 +408,7 @@ class ModelTreeView {
                             numEntities: 0,
                             numVisibleEntities: 0,
                             checked: false,
+                            xrayed: false,
                             children: []
                         };
                         storeyNode.children.push(typeNode);
@@ -391,6 +424,7 @@ class ModelTreeView {
                         numEntities: 0,
                         numVisibleEntities: 0,
                         checked: false,
+                        xrayed: false,
                         children: []
                     };
                     typeNode.children.push(node);
@@ -424,6 +458,7 @@ class ModelTreeView {
                 numEntities: 0,
                 numVisibleEntities: 0,
                 checked: false,
+                xrayed: false,
                 children: []
             };
             this._rootNodes.push(rootNode);
@@ -445,6 +480,7 @@ class ModelTreeView {
                             numEntities: 0,
                             numVisibleEntities: 0,
                             checked: false,
+                            xrayed: false,
                             children: []
                         };
                         rootNode.children.push(typeNode);
@@ -460,6 +496,7 @@ class ModelTreeView {
                         numEntities: 0,
                         numVisibleEntities: 0,
                         checked: false,
+                        xrayed: false,
                         children: []
                     };
                     typeNode.children.push(node);
@@ -492,6 +529,7 @@ class ModelTreeView {
             numEntities: 0,
             numVisibleEntities: 0,
             checked: false,
+            xrayed: false,
             children: []
         };
         if (parent) {
@@ -593,6 +631,7 @@ class ModelTreeView {
                     if (entity) {
                         const visible = entity.visible;
                         node.numEntities = 1;
+                        node.xrayed = entity.xrayed;
                         if (visible) {
                             node.numVisibleEntities = 1;
                             node.checked = true;
@@ -645,6 +684,9 @@ class ModelTreeView {
         const nodeElement = document.createElement('li');
         //const nodeId = this._objectToNodeID(node.objectId);
         const nodeId = node.nodeId;
+        if (node.xrayed) {
+          nodeElement.classList.add('xrayed-node');
+        }
         nodeElement.id = 'node-' + nodeId;
         if (node.children.length > 0) {
             const switchElementId = "switch-" + nodeId;
