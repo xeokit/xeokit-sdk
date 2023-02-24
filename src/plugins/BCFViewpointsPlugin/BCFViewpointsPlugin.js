@@ -396,6 +396,9 @@ class BCFViewpointsPlugin extends Plugin {
         for (let id in sectionPlanes) {
             if (sectionPlanes.hasOwnProperty(id)) {
                 let sectionPlane = sectionPlanes[id];
+                if (!sectionPlane.active) {
+                    continue;
+                }
 
                 let location = sectionPlane.pos;
 
