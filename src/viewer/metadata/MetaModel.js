@@ -110,8 +110,17 @@ class MetaModel {
          *
          * @property rootMetaObject
          * @type {MetaObject}
+         * @deprecated
          */
         this.rootMetaObject = rootMetaObject;
+
+        /**
+         * The root {@link MetaObject}s in this MetaModel's composition structure hierarchy.
+         *
+         * @property rootMetaObject
+         * @type {MetaObject[]}
+         */
+        this.rootMetaObjects = [rootMetaObject];
     }
 
     getJSON() {
