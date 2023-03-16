@@ -47,7 +47,7 @@ class Dot {
         dotClickableStyle.top = 0 + "px";
         dotClickableStyle.left = 0 + "px";
         dotClickableStyle["opacity"] = 0.0;
-        dotClickableStyle["pointer-events"] = "all";
+        dotClickableStyle["pointer-events"] = "none";
         if (cfg.onContextMenu) {
         //    dotClickableStyle["cursor"] = "context-menu";
         }
