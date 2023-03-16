@@ -773,7 +773,7 @@ class XKTLoaderPlugin extends Plugin {
         }
 
         options.excludeUnclassifiedObjects = (params.excludeUnclassifiedObjects !== undefined) ? (!!params.excludeUnclassifiedObjects) : this._excludeUnclassifiedObjects;
-        options.globalizeObjectIds = (params.globalizeObjectIds !== undefined) ? (!!params.globalizeObjectIds) : this._globalizeObjectIds;
+        options.globalizeObjectIds = (params.globalizeObjectIds !== undefined && params.globalizeObjectIds !== null) ? (!!params.globalizeObjectIds) : this._globalizeObjectIds;
 
         if (params.metaModelSrc || params.metaModelData) {
 
@@ -782,7 +782,7 @@ class XKTLoaderPlugin extends Plugin {
                 const metaModel = this.viewer.metaScene.createMetaModel(modelId, metaModelData, {
                     includeTypes: includeTypes,
                     excludeTypes: excludeTypes,
-                    globalizeObjectIds: this.globalizeObjectIds
+                    globalizeObjectIds: options.globalizeObjectIds
                 });
 
                 if (!metaModel) {

@@ -18,7 +18,7 @@ class MetaModel {
     /**
      * @private
      */
-    constructor(metaScene, id, projectId, revisionId, author, createdAt, creatingApplication, schema, propertySets, rootMetaObject) {
+    constructor(metaScene, id, projectId, revisionId, author, createdAt, creatingApplication, schema, propertySets) {
 
         /**
          * Globally-unique ID.
@@ -112,7 +112,7 @@ class MetaModel {
          * @type {MetaObject}
          * @deprecated
          */
-        this.rootMetaObject = rootMetaObject;
+        this.rootMetaObject = null;
 
         /**
          * The root {@link MetaObject}s in this MetaModel's composition structure hierarchy.
@@ -120,7 +120,7 @@ class MetaModel {
          * @property rootMetaObject
          * @type {MetaObject[]}
          */
-        this.rootMetaObjects = [rootMetaObject];
+        this.rootMetaObjects = [];
     }
 
     getJSON() {

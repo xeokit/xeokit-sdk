@@ -435,12 +435,15 @@
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a metadata structure tree view
+    // This will show everything as a single tree
     //------------------------------------------------------------------------------------------------------------------
 
     const treeView = new TreeViewPlugin(viewer, {
         containerElement: document.getElementById("treeViewContainer"),
         autoExpandDepth: 1 // Initially expand root node
     });
+
+    window.viewer = viewer;
 
 </script>
 </html>

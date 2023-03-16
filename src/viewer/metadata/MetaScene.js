@@ -147,7 +147,7 @@ class MetaScene {
         const creatingApplication = metaModelData.creatingApplication;
         const schema = metaModelData.schema;
 
-        var includeTypes;
+        let includeTypes;
         // if (options.includeTypes) {
         //     includeTypes = {};
         //     for (let i = 0, len = options.includeTypes.length; i < len; i++) {
@@ -155,7 +155,7 @@ class MetaScene {
         //     }
         // }
         //
-        var excludeTypes;
+        let excludeTypes;
         // if (options.excludeTypes) {
         //     excludeTypes = {};
         //     for (let i = 0, len = options.excludeTypes.length; i < len; i++) {
@@ -183,7 +183,7 @@ class MetaScene {
 
 
         // Filter out the parameters we'll create
-        
+
         for (let i = 0, len = newObjects.length; i < len; i++) {
             const newObject = newObjects[i];
             const type = newObject.type;
@@ -197,7 +197,7 @@ class MetaScene {
         }
 
         // Build list of params for metaobjects we'll create
-        
+
         for (let i = 0, len = filteredObjectsParams.length; i < len; i++) {
             let filteredObject = filteredObjectsParams[i];
             const existingObject = this.metaObjects[filteredObject.id];
@@ -231,6 +231,7 @@ class MetaScene {
             const children = null;
             const external = createObject.external;
             const metaObject = new MetaObject(metaModel, objectId, originalSystemId, name, type, propertySets, parent, children, external);
+            metaObject._parentId = createObject.parent;
             this.metaObjects[objectId] = metaObject;
             (this.metaObjectsByType[type] || (this.metaObjectsByType[type] = {}))[objectId] = metaObject;
             if (this._typeCounts[type] === undefined) {
@@ -250,12 +251,13 @@ class MetaScene {
         for (let i = 0, len = existingObjects.length; i < len; i++) {
             const existingObject = existingObjects[i];
             const objectId = existingObject.id;
-            if (existingObject.parent === undefined || existingObject.parent === null) {
+            if ((existingObject._parentId === undefined || existingObject._parentId === null) && !existingObject.parent) {
                 metaModel.rootMetaObject = existingObject; // Deprecated, and won't work for federated models
-                metaModel.rootMetaObjects.push(existingObject);
+                metaModel.rootMetaObjects[objectId] = existingObject;
                 this.rootMetaObjects[objectId] = existingObject;
-            } else if (existingObject.parent) {
-                const parentId = existingObject.parent;
+            } else if (existingObject._parentId) {
+                const parentId = existingObject._parentId;
+                existingObject._parentId = null;
                 let parentMetaObject = this.metaObjects[parentId];
                 if (parentMetaObject) {
                     existingObject.parent = parentMetaObject;
