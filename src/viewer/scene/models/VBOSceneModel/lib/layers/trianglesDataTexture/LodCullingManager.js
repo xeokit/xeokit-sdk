@@ -1,8 +1,8 @@
 import { DataTexturePeformanceModel }  from "../../../DataTexturePeformanceModel.js"
 
 // For JSDoc autocompletion
-import { PerformanceNode } from "../../PerformanceNode.js"
-import { Scene } from "../../../../scene/Scene.js"
+import { VBOSceneModelNode } from "../../VBOSceneModelNode.js"
+import { Scene } from "../../../../../scene/Scene.js"
 
 /**
  * Wheter the FPS tracker was already installed.
@@ -93,7 +93,7 @@ function attachFPSTracker (scene, cullingManager) {
          * - key: the number of triangles allowed for the objects in the bucket.
          * - value: all PerformanceNodes that have the number of triangles or more.
          * 
-         * @type {Map<number, Array<PerformanceNode>>}
+         * @type {Map<number, Array<VBOSceneModelNode>>}
          */
         this.nodesInLOD = {};
 

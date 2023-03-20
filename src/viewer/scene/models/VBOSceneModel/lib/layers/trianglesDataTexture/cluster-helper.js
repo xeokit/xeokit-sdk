@@ -3,8 +3,8 @@
  * @license MIT
  */
 
-import {math} from "../../../../math/math.js";
-import {geometryCompressionUtils} from "../../../../math/geometryCompressionUtils.js";
+import {math} from "../../../../../math/math.js";
+import {geometryCompressionUtils} from "../../../../../math/geometryCompressionUtils.js";
 import {RBush3D} from "./rbush3d.js";
 
 import {makeClusters} from "./xeokit-cluster.js"
@@ -91,7 +91,7 @@ function clusterizeV2 (entities, meshes) {
 
         entity.meshIds.forEach (meshId => {
             const mesh = meshes[meshId];
-            
+
             const bounds = geometryCompressionUtils.getPositionsBounds(mesh.positions);
 
             const min = geometryCompressionUtils.decompressPosition(bounds.min, mesh.positionsDecodeMatrix, []);

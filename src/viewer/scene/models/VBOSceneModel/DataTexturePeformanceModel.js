@@ -1,17 +1,17 @@
-import {Component} from "../Component.js";
-import {math} from "../math/math.js";
-import {buildEdgeIndices} from '../math/buildEdgeIndices.js';
-import {WEBGL_INFO} from '../webglInfo.js';
-import {PerformanceMesh} from './lib/PerformanceMesh.js';
-import {PerformanceNode} from './lib/PerformanceNode.js';
+import {Component} from "../../Component.js";
+import {math} from "../../math/math.js";
+import {buildEdgeIndices} from '../../math/buildEdgeIndices.js';
+import {WEBGL_INFO} from '../../webglInfo.js';
+import {VBOSceneModelMesh} from './lib/VBOSceneModelMesh.js';
+import {VBOSceneModelNode} from './lib/VBOSceneModelNode.js';
 import {getScratchMemory, putScratchMemory} from "./lib/ScratchMemory.js";
 import {prepareMeshGeometry, TrianglesDataTextureLayer} from './lib/layers/trianglesDataTexture/TrianglesDataTextureLayer.js';
 import {TrianglesInstancingLayer} from './lib/layers/trianglesInstancing/TrianglesInstancingLayer.js';
 
 import {ENTITY_FLAGS} from './lib/ENTITY_FLAGS.js';
-import {utils} from "../utils.js";
-import {RenderFlags} from "../webgl/RenderFlags.js";
-import {worldToRTCPositions} from "../math/rtcCoords.js";
+import {utils} from "../../utils.js";
+import {RenderFlags} from "../../webgl/RenderFlags.js";
+import {worldToRTCPositions} from "../../math/rtcCoords.js";
 
 import { LodCullingManager } from "./lib/layers/trianglesDataTexture/LodCullingManager.js";
 import { ViewFrustumCullingManager } from "./lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js";
@@ -962,7 +962,7 @@ class DataTexturePeformanceModel extends Component {
         this._layerList = [];
 
         /**
-         * @type {Array<PerformanceNode>}
+         * @type {Array<VBOSceneModelNode>}
          */
         this._nodeList = [];
 
@@ -978,12 +978,12 @@ class DataTexturePeformanceModel extends Component {
         this._scratchMemory = getScratchMemory();
 
         /**
-         * @type {Map<string, PerformanceMesh>}
+         * @type {Map<string, VBOSceneModelMesh>}
          */
         this._meshes = {};
         
         /**
-         * @type {Map<string, PerformanceNode>}
+         * @type {Map<string, VBOSceneModelNode>}
          */
         this._nodes = {};
 
@@ -1821,6 +1821,11 @@ class DataTexturePeformanceModel extends Component {
      * be transformed relative to this origin.
      */
     createGeometry(cfg) {
+        if (cfg.positionsCompressed && !cfg.positions)
+        {
+            cfg.positions = cfg.positionsCompressed;
+        }
+
         const geometryId = cfg.id;
 
         if (geometryId === undefined || geometryId === null) {
@@ -1918,6 +1923,11 @@ class DataTexturePeformanceModel extends Component {
      * @param {Number} [cfg.opacity=1] Opacity in range ````[0..1]````.
      */
     createMesh(cfg) {
+        if (cfg.positionsCompressed && !cfg.positions)
+        {
+            cfg.positions = cfg.positionsCompressed;
+        }
+
         if (this._vfcManager && !this._vfcManager.finalized) {
             if (cfg.color) {
                 cfg.color = cfg.color.slice ();
@@ -2032,7 +2042,7 @@ class DataTexturePeformanceModel extends Component {
         const metallic = (cfg.metallic !== undefined && cfg.metallic !== null) ? Math.floor(cfg.metallic * 255) : 0;
         const roughness = (cfg.roughness !== undefined && cfg.roughness !== null) ? Math.floor(cfg.roughness * 255) : 255;
 
-        const mesh = new PerformanceMesh(this, id, color, opacity);
+        const mesh = new VBOSceneModelMesh(this, id, color, opacity);
 
         const pickId = mesh.pickId;
 
@@ -2063,6 +2073,7 @@ class DataTexturePeformanceModel extends Component {
             portionId = layer.createPortion(
                 preparedGeometryCfg,
                 {
+                    origin: cfg.origin,
                     geometryId: geometryId,
                     color: color,
                     metallic: metallic,
@@ -2274,7 +2285,7 @@ class DataTexturePeformanceModel extends Component {
             }
         }
 
-        const node = new PerformanceNode(this, cfg.isObject, id, meshes, flags, aabb); // Internally sets PerformanceModelMesh#parent to this PerformanceModelNode
+        const node = new VBOSceneModelNode(this, cfg.isObject, id, meshes, flags, aabb); // Internally sets PerformanceModelMesh#parent to this PerformanceModelNode
         this._nodeList.push(node);
         this._nodes[id] = node;
         this.numEntities++;
@@ -2687,7 +2698,7 @@ class DataTexturePeformanceModel extends Component {
     }
 
     /**
-     * Called by PerformanceMesh.drawPickDepths()
+     * Called by VBOSceneModelMesh.drawPickDepths()
      * @private
      */
     drawPickDepths(frameCtx) {
@@ -2702,7 +2713,7 @@ class DataTexturePeformanceModel extends Component {
     }
 
     /**
-     * Called by PerformanceMesh.drawPickNormals()
+     * Called by VBOSceneModelMesh.drawPickNormals()
      * @private
      */
     drawPickNormals(frameCtx) {

@@ -1,7 +1,7 @@
-import {Program} from "../../../../../webgl/Program.js";
-import {createRTCViewMat, getPlaneRTCPos} from "../../../../../math/rtcCoords.js";
-import {math} from "../../../../../math/math.js";
-import {WEBGL_INFO} from "../../../../../webglInfo.js";
+import {Program} from "../../../../../../webgl/Program.js";
+import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
+import {math} from "../../../../../../math/math.js";
+import {WEBGL_INFO} from "../../../../../../webglInfo.js";
 import {RENDER_PASSES} from "../../../RENDER_PASSES.js";
 
 const tempVec3a = math.vec3();

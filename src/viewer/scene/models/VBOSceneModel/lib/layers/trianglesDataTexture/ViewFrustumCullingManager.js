@@ -1,11 +1,10 @@
 import { clusterizeV2 } from "./cluster-helper.js";
-import { math } from "../../../../math/math.js";
+import { math } from "../../../../../math/math.js";
 
 // For JSDoc autocompletion
 import { DataTexturePeformanceModel }  from "../../../DataTexturePeformanceModel.js"
-import { Camera } from "../../../../camera/Camera.js"
 import { RBush3D } from "./rbush3d.js";
-import { PerformanceNode } from "../../PerformanceNode.js";
+import { VBOSceneModelNode } from "../../VBOSceneModelNode.js";
 
 let tempVec3 = math.vec3 ();
 
@@ -266,10 +265,6 @@ const VISIBILITY_CHECK_ENVOLVES_V = (1 << 14);
         }
 
         if (!this._camera) {
-            /**
-             * @type {Camera}
-             * @private
-             */
             this._camera = model.scene.camera;
         }
 
@@ -326,7 +321,7 @@ const VISIBILITY_CHECK_ENVOLVES_V = (1 << 14);
         });
 
         /**
-         * @type {Array<PerformanceNode>}
+         * @type {Array<VBOSceneModelNode>}
          * @private
          */
         this._internalNodesList = internalNodesList;

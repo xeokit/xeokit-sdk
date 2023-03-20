@@ -1,6 +1,6 @@
-import {Program} from "../../../../../webgl/Program.js";
-import {math} from "../../../../../math/math.js";
-import {getPlaneRTCPos} from "../../../../../math/rtcCoords.js";
+import {Program} from "../../../../../../webgl/Program.js";
+import {math} from "../../../../../../math/math.js";
+import {getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
 
 const tempVec3a = math.vec3();
 

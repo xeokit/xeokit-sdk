@@ -1,4 +1,4 @@
-import {WEBGL_INFO} from "../../../../webglInfo.js";
+import {WEBGL_INFO} from "../../../../../webglInfo.js";
 
 const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
 

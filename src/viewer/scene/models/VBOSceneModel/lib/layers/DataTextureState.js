@@ -1,10 +1,9 @@
-import { createRTCViewMat } from "../../../math/rtcCoords.js";
-import { Float16Array, isFloat16Array, getFloat16, setFloat16, hfround, } from "./float16.js";
+import { createRTCViewMat } from "../../../../math/rtcCoords.js";
 
 // Imports used to complete the JSDocs arguments to methods
-import { Program } from "../../../webgl/Program.js"
-import { Camera } from "../../../camera/Camera.js"
-import { Scene } from "../../../scene/Scene.js"
+import { Program } from "../../../../webgl/Program.js"
+import { Camera } from "../../../../camera/Camera.js"
+import { Scene } from "../../../../scene/Scene.js"
 
 const identityMatrix = [ 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 ];
 
