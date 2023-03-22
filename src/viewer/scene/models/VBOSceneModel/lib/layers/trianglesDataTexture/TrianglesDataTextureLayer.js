@@ -22,7 +22,7 @@ import {
  * 
  * Limits the per-object texture height in the layer.
  */
-const MAX_NUMBER_OF_OBJECTS_IN_LAYER = (1 << 12);
+const MAX_NUMBER_OF_OBJECTS_IN_LAYER = (1 << 16);
 
 /**
  * 4096 is max data texture height
