@@ -29,7 +29,7 @@ const MAX_NUMBER_OF_OBJECTS_IN_LAYER = (1 << 12);
  * 
  * Limits the aggregated geometry texture height in the layer.
  */
-const MAX_DATA_TEXTURE_HEIGHT = (1 << 11);
+const MAX_DATA_TEXTURE_HEIGHT = (1 << 12);
 
 /**
  * Align `indices` and `edgeIndices` memory layout to 8 elements.
@@ -210,15 +210,15 @@ class TrianglesDataTextureLayer {
                 numVertices += bucket.positions.length / 3;
             });
         
-            if ((state.numVertices + numVertices) > MAX_DATA_TEXTURE_HEIGHT * 1024 ||
-                (maxIndicesOfAnyBits + numIndices) > MAX_DATA_TEXTURE_HEIGHT * 1024)
+            if ((state.numVertices + numVertices) > MAX_DATA_TEXTURE_HEIGHT * 4096 ||
+                (maxIndicesOfAnyBits + numIndices) > MAX_DATA_TEXTURE_HEIGHT * 4096)
             {
                 dataTextureRamStats.cannotCreatePortion.becauseTextureSize++;
             }
 
             retVal &&=
-                (state.numVertices + numVertices) <= MAX_DATA_TEXTURE_HEIGHT * 1024 &&
-                (maxIndicesOfAnyBits + numIndices) <= MAX_DATA_TEXTURE_HEIGHT * 1024;
+                (state.numVertices + numVertices) <= MAX_DATA_TEXTURE_HEIGHT * 4096 &&
+                (maxIndicesOfAnyBits + numIndices) <= MAX_DATA_TEXTURE_HEIGHT * 4096;
         }
 
         // if (!retVal)
@@ -747,52 +747,80 @@ class TrianglesDataTextureLayer {
         );
 
         // portion Id texture for edges
-        textureState.texturePerEdgeIdPortionIds8Bits = this.dataTextureGenerator.generateTextureForPackedPortionIds (
-            gl,
-            buffer.perEdgeNumberPortionId8Bits
-        );
+        if (buffer.perEdgeNumberPortionId8Bits.length > 0)
+        {
+            textureState.texturePerEdgeIdPortionIds8Bits = this.dataTextureGenerator.generateTextureForPackedPortionIds (
+                gl,
+                buffer.perEdgeNumberPortionId8Bits
+            );
+        }
 
-        textureState.texturePerEdgeIdPortionIds16Bits = this.dataTextureGenerator.generateTextureForPackedPortionIds (
-            gl,
-            buffer.perEdgeNumberPortionId16Bits
-        );
+        if (buffer.perEdgeNumberPortionId16Bits.length > 0)
+        {
+            textureState.texturePerEdgeIdPortionIds16Bits = this.dataTextureGenerator.generateTextureForPackedPortionIds (
+               gl,
+               buffer.perEdgeNumberPortionId16Bits
+           );
+        }
 
-        textureState.texturePerEdgeIdPortionIds32Bits = this.dataTextureGenerator.generateTextureForPackedPortionIds (
-            gl,
-            buffer.perEdgeNumberPortionId32Bits
-        );
+
+        if (buffer.perEdgeNumberPortionId32Bits.length > 0)
+        {
+            textureState.texturePerEdgeIdPortionIds32Bits = this.dataTextureGenerator.generateTextureForPackedPortionIds (
+                gl,
+                buffer.perEdgeNumberPortionId32Bits
+            );
+        }
 
         // indices texture
-        textureState.texturePerPolygonIdIndices8Bits = this.dataTextureGenerator.generateTextureFor8BitIndices (
-            gl,
-            buffer.indices8Bits
-        );
+        if (buffer.indices8Bits.length > 0)
+        {
+            textureState.texturePerPolygonIdIndices8Bits = this.dataTextureGenerator.generateTextureFor8BitIndices (
+                gl,
+                buffer.indices8Bits
+            );
+        }
 
-        textureState.texturePerPolygonIdIndices16Bits = this.dataTextureGenerator.generateTextureFor16BitIndices (
-            gl,
-            buffer.indices16Bits
-        );
+        if (buffer.indices16Bits.length > 0)
+        {
+            textureState.texturePerPolygonIdIndices16Bits = this.dataTextureGenerator.generateTextureFor16BitIndices (
+                gl,
+                buffer.indices16Bits
+            );
+        }
 
-        textureState.texturePerPolygonIdIndices32Bits = this.dataTextureGenerator.generateTextureFor32BitIndices (
-            gl,
-            buffer.indices32Bits
-        );
+        if (buffer.indices32Bits.length > 0)
+        {
+            textureState.texturePerPolygonIdIndices32Bits = this.dataTextureGenerator.generateTextureFor32BitIndices (
+                gl,
+                buffer.indices32Bits
+            );
+        }
         
         // edge indices texture
-        textureState.texturePerPolygonIdEdgeIndices8Bits = this.dataTextureGenerator.generateTextureFor8BitsEdgeIndices (
-            gl,
-            buffer.edgeIndices8Bits
-        );
+        if (buffer.edgeIndices8Bits.length > 0)
+        {
+            textureState.texturePerPolygonIdEdgeIndices8Bits = this.dataTextureGenerator.generateTextureFor8BitsEdgeIndices (
+                gl,
+                buffer.edgeIndices8Bits
+            );
+        }
         
-        textureState.texturePerPolygonIdEdgeIndices16Bits = this.dataTextureGenerator.generateTextureFor16BitsEdgeIndices (
-            gl,
-            buffer.edgeIndices16Bits
-        );
+        if (buffer.edgeIndices16Bits.length > 0)
+        {
+            textureState.texturePerPolygonIdEdgeIndices16Bits = this.dataTextureGenerator.generateTextureFor16BitsEdgeIndices (
+                gl,
+                buffer.edgeIndices16Bits
+            );
+        }
         
-        textureState.texturePerPolygonIdEdgeIndices32Bits = this.dataTextureGenerator.generateTextureFor32BitsEdgeIndices (
-            gl,
-            buffer.edgeIndices32Bits
-        );
+        if (buffer.edgeIndices32Bits.length > 0)
+        {
+            textureState.texturePerPolygonIdEdgeIndices32Bits = this.dataTextureGenerator.generateTextureFor32BitsEdgeIndices (
+                gl,
+                buffer.edgeIndices32Bits
+            );
+        }
         
         // if (buffer.metallicRoughness.length > 0) {
         //     const metallicRoughness = new Uint8Array(buffer.metallicRoughness);

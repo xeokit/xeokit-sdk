@@ -950,7 +950,7 @@ class DataTextureGenerator
             };
         }
 
-        const textureWidth = 1024;
+        const textureWidth = 4096;
         const textureHeight = Math.ceil (indices.length / 3 / textureWidth);
 
         if (textureHeight == 0)
@@ -1011,7 +1011,7 @@ class DataTextureGenerator
                 textureHeight: 0,
             };
         }
-        const textureWidth = 1024;
+        const textureWidth = 4096;
         const textureHeight = Math.ceil (indices.length / 3 / textureWidth);
 
         if (textureHeight == 0)
@@ -1073,7 +1073,7 @@ class DataTextureGenerator
             };
         }
 
-        const textureWidth = 1024;
+        const textureWidth = 4096;
         const textureHeight = Math.ceil (indices.length / 3 / textureWidth);
 
         if (textureHeight == 0)
@@ -1135,7 +1135,7 @@ class DataTextureGenerator
             };
         }
 
-        const textureWidth = 1024;
+        const textureWidth = 4096;
         const textureHeight = Math.ceil (edgeIndices.length / 2 / textureWidth);
 
         if (textureHeight == 0)
@@ -1197,7 +1197,7 @@ class DataTextureGenerator
             };
         }
 
-        const textureWidth = 1024;
+        const textureWidth = 4096;
         const textureHeight = Math.ceil (edgeIndices.length / 2 / textureWidth);
 
         if (textureHeight == 0)
@@ -1259,7 +1259,7 @@ class DataTextureGenerator
             };
         }
 
-        const textureWidth = 1024;
+        const textureWidth = 4096;
         const textureHeight = Math.ceil (edgeIndices.length / 2 / textureWidth);
 
         if (textureHeight == 0)
@@ -1321,7 +1321,7 @@ class DataTextureGenerator
      */
     generateTextureForPositions (gl, positions) {
         const numVertices = positions.length / 3;
-        const textureWidth = 1024;
+        const textureWidth = 4096;
         const textureHeight =  Math.ceil (numVertices / textureWidth);
 
         if (textureHeight == 0)
@@ -1387,7 +1387,7 @@ class DataTextureGenerator
             };
         }
         const lenArray = portionIdsArray.length;
-        const textureWidth = 1024;
+        const textureWidth = 4096;
         const textureHeight = Math.ceil (lenArray / textureWidth);
 
         if (textureHeight == 0)
