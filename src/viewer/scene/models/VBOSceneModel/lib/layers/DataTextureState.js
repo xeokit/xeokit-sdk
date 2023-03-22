@@ -18,6 +18,7 @@ const dataTextureRamStats = {
     numberOfGeometries: 0,
     numberOfPortions: 0,
     numberOfLayers: 0,
+    numberOfTextures: 0, 
     totalPolygons: 0,
     totalPolygons8Bits: 0,
     totalPolygons16Bits: 0,
@@ -688,7 +689,8 @@ class DataTextureGenerator
 
         const texArray = new Uint8Array (4 * textureWidth * textureHeight);
 
-        dataTextureRamStats.sizeDataColorsAndFlags +=texArray.byteLength;
+        dataTextureRamStats.sizeDataColorsAndFlags += texArray.byteLength;
+        dataTextureRamStats.numberOfTextures++;
 
         for (var i = 0; i < textureHeight; i++)
         {
@@ -810,6 +812,7 @@ class DataTextureGenerator
         var texArray = new Float32Array(3 * textureWidth * textureHeight);
 
         dataTextureRamStats.sizeDataTextureOffsets += texArray.byteLength;
+        dataTextureRamStats.numberOfTextures++;
 
         for (var i = 0; i < offsets.length; i++)
         {
@@ -881,7 +884,8 @@ class DataTextureGenerator
 
         var texArray = new Float32Array(4 * textureWidth * textureHeight);
 
-        dataTextureRamStats.sizeDataPositionDecodeMatrices +=texArray.byteLength;
+        dataTextureRamStats.sizeDataPositionDecodeMatrices += texArray.byteLength;
+        dataTextureRamStats.numberOfTextures++;
 
         for (var i = 0; i < positionDecodeMatrices.length; i++)
         {
@@ -957,7 +961,8 @@ class DataTextureGenerator
         const texArraySize = textureWidth * textureHeight * 3;
         const texArray = new Uint8Array (texArraySize);
 
-        dataTextureRamStats.sizeDataTextureIndices +=texArray.byteLength;
+        dataTextureRamStats.sizeDataTextureIndices += texArray.byteLength;
+        dataTextureRamStats.numberOfTextures++;
 
         texArray.fill(0);
         texArray.set(indices, 0)
@@ -1017,7 +1022,8 @@ class DataTextureGenerator
         const texArraySize = textureWidth * textureHeight * 3;
         const texArray = new Uint16Array (texArraySize);
 
-        dataTextureRamStats.sizeDataTextureIndices +=texArray.byteLength;
+        dataTextureRamStats.sizeDataTextureIndices += texArray.byteLength;
+        dataTextureRamStats.numberOfTextures++;
 
         texArray.fill(0);
         texArray.set(indices, 0)
@@ -1078,7 +1084,8 @@ class DataTextureGenerator
         const texArraySize = textureWidth * textureHeight * 3;
         const texArray = new Uint32Array (texArraySize);
 
-        dataTextureRamStats.sizeDataTextureIndices +=texArray.byteLength;
+        dataTextureRamStats.sizeDataTextureIndices += texArray.byteLength;
+        dataTextureRamStats.numberOfTextures++;
 
         texArray.fill(0);
         texArray.set(indices, 0)
@@ -1139,7 +1146,8 @@ class DataTextureGenerator
         const texArraySize = textureWidth * textureHeight * 2;
         const texArray = new Uint8Array (texArraySize);
 
-        dataTextureRamStats.sizeDataTextureEdgeIndices +=texArray.byteLength;
+        dataTextureRamStats.sizeDataTextureEdgeIndices += texArray.byteLength;
+        dataTextureRamStats.numberOfTextures++;
 
         texArray.fill(0);
         texArray.set(edgeIndices, 0)
@@ -1200,7 +1208,8 @@ class DataTextureGenerator
         const texArraySize = textureWidth * textureHeight * 2;
         const texArray = new Uint16Array (texArraySize);
 
-        dataTextureRamStats.sizeDataTextureEdgeIndices +=texArray.byteLength;
+        dataTextureRamStats.sizeDataTextureEdgeIndices += texArray.byteLength;
+        dataTextureRamStats.numberOfTextures++;
 
         texArray.fill(0);
         texArray.set(edgeIndices, 0)
@@ -1261,7 +1270,8 @@ class DataTextureGenerator
         const texArraySize = textureWidth * textureHeight * 2;
         const texArray = new Uint32Array (texArraySize);
 
-        dataTextureRamStats.sizeDataTextureEdgeIndices +=texArray.byteLength;
+        dataTextureRamStats.sizeDataTextureEdgeIndices += texArray.byteLength;
+        dataTextureRamStats.numberOfTextures++;
 
         texArray.fill(0);
         texArray.set(edgeIndices, 0)
@@ -1322,7 +1332,8 @@ class DataTextureGenerator
         const texArraySize = textureWidth * textureHeight * 3;
         const texArray = new Uint16Array (texArraySize);
 
-        dataTextureRamStats.sizeDataTexturePositions +=texArray.byteLength;
+        dataTextureRamStats.sizeDataTexturePositions += texArray.byteLength;
+        dataTextureRamStats.numberOfTextures++;
 
         texArray.fill(0);
 
@@ -1393,6 +1404,7 @@ class DataTextureGenerator
         );
 
         dataTextureRamStats.sizeDataTexturePortionIds += texArray.byteLength;
+        dataTextureRamStats.numberOfTextures++;
 
         const texture = gl.createTexture();
 
