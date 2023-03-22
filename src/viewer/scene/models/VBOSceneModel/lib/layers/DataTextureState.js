@@ -865,11 +865,10 @@ class DataTextureGenerator
      * @param {WebGL2RenderingContext} gl
      * @param {ArrayLike<Matrix4x4>} positionDecodeMatrices Array of positions decode matrices for all objects in the layer
      * @param {ArrayLike<Matrix4x4>} instanceMatrices Array of geometry instancing matrices for all objects in the layer. Null if the objects are not instanced.
-     * @param {ArrayLike<Matrix4x4>} instancesNormalMatrices Array of normals instancing matrices for all objects in the layer. Null if the objects are not instanced.
      * 
      * @returns {BindableDataTexture}
      */
-    generateTextureForPositionsDecodeMatrices (gl, positionDecodeMatrices, instanceMatrices, instancesNormalMatrices) {
+    generateTextureForPositionsDecodeMatrices (gl, positionDecodeMatrices, instanceMatrices) {
         const textureHeight =  positionDecodeMatrices.length;
 
         if (textureHeight == 0)
@@ -877,8 +876,8 @@ class DataTextureGenerator
             throw "texture height == 0";
         }
 
-        // 3 matrices per row
-        const textureWidth = 4 * 3;
+        // 2 matrices per row
+        const textureWidth = 4 * 2;
 
         var texArray = new Float32Array(4 * textureWidth * textureHeight);
 
@@ -889,19 +888,13 @@ class DataTextureGenerator
             // 4x4 values
             texArray.set (
                 positionDecodeMatrices [i],
-                i * 48
+                i * 32
             );
 
             // 4x4 values
             texArray.set (
                 instanceMatrices [i],
-                i * 48 + 16
-            );
-            
-            // 4x4 values
-            texArray.set (
-                instancesNormalMatrices [i],
-                i * 48 + 32
+                i * 32 + 16
             );
         }
 

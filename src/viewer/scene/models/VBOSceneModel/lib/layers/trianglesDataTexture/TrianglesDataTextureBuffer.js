@@ -26,7 +26,6 @@ class TrianglesDataTextureBuffer {
 
         this.perObjectPositionsDecodeMatrices = []; // chipmunk
         this.perObjectInstancePositioningMatrices = [];
-        this.perObjectInstanceNormalsMatrices = [];
 
         this.perObjectVertexBases = [];
         this.perObjectIndexBaseOffsets = [];

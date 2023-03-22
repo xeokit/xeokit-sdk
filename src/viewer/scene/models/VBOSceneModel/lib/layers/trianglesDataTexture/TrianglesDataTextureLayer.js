@@ -450,20 +450,8 @@ class TrianglesDataTextureLayer {
             buffer.perObjectInstancePositioningMatrices.push (
                 meshMatrix
             );
-
-            // Mesh instance normal matrix
-            {
-                // Note: order of inverse and transpose doesn't matter
-                let transposedMat = math.transposeMat4(meshMatrix, math.mat4()); // TODO: Use cached matrix
-                let normalMatrix = math.inverseMat4(transposedMat);
-
-                buffer.perObjectInstanceNormalsMatrices.push (
-                    normalMatrix
-                );
-            }
         } else {
             buffer.perObjectInstancePositioningMatrices.push (identityMatrix);
-            buffer.perObjectInstanceNormalsMatrices.push (identityMatrix);
         }
 
         // const positions = cfg.positions;
@@ -733,8 +721,7 @@ class TrianglesDataTextureLayer {
         textureState.texturePerObjectIdPositionsDecodeMatrix = this.dataTextureGenerator.generateTextureForPositionsDecodeMatrices (
             gl,
             buffer.perObjectPositionsDecodeMatrices,
-            buffer.perObjectInstancePositioningMatrices,
-            buffer.perObjectInstanceNormalsMatrices
+            buffer.perObjectInstancePositioningMatrices
         ); 
 
         // position coordinates texture
