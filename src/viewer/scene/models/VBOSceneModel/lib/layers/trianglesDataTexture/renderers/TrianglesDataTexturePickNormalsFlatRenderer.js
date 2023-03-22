@@ -373,9 +373,10 @@ class TrianglesDataTexturePickNormalsFlatRenderer {
         src.push("} else {") 
         src.push("  objectIndex = ((packedObjectId.g & 15) << 8) + packedObjectId.b;")
         src.push("}")
+        src.push("ivec2 objectIndexCoords = ivec2(objectIndex % 512, objectIndex / 512);");
 
         // get vertex base
-        src.push("ivec4 packedVertexBase = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(4, objectIndex), 0));"); // chipmunk
+        src.push("ivec4 packedVertexBase = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*7+4, objectIndexCoords.y), 0));"); // chipmunk // chipmunk
 
         src.push("int h_index = polygonIndex & 4095;")
         src.push("int v_index = polygonIndex >> 12;")
@@ -389,8 +390,8 @@ class TrianglesDataTexturePickNormalsFlatRenderer {
         src.push("mat4 positionsDecodeMatrix = mat4 (texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(0, objectIndex), 0), texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(1, objectIndex), 0), texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(2, objectIndex), 0), texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(3, objectIndex), 0));")
 
         // get flags & flags2
-        src.push("uvec4 flags = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(2, objectIndex), 0);"); // chipmunk
-        src.push("uvec4 flags2 = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(3, objectIndex), 0);"); // chipmunk
+        src.push("uvec4 flags = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*7+2, objectIndexCoords.y), 0);"); // chipmunk
+        src.push("uvec4 flags2 = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*7+3, objectIndexCoords.y), 0);"); // chipmunk
         
         // get position
         src.push("vec3 position1 = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.r, indexPositionV.r), 0));")

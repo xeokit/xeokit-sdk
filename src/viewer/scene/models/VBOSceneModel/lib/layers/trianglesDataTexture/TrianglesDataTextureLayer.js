@@ -1142,8 +1142,8 @@ class TrianglesDataTextureLayer {
         gl.texSubImage2D(
             gl.TEXTURE_2D,
             0, // level
-            0, // xoffset
-            portionId, // yoffset
+            (portionId % 512) * 7, // xoffset
+            Math.floor (portionId / 512), // yoffset
             1, // width
             1, //height
             gl.RGBA_INTEGER,
@@ -1267,8 +1267,8 @@ class TrianglesDataTextureLayer {
         gl.texSubImage2D(
             gl.TEXTURE_2D,
             0, // level
-            2, // xoffset
-            portionId, // yoffset
+            (portionId % 512) * 7 + 2, // xoffset
+            Math.floor (portionId / 512), // yoffset
             1, // width
             1, //height
             gl.RGBA_INTEGER,
@@ -1322,8 +1322,8 @@ class TrianglesDataTextureLayer {
         gl.texSubImage2D(
             gl.TEXTURE_2D,
             0, // level
-            3, // xoffset
-            portionId, // yoffset
+            (portionId % 512) * 7 + 3, // xoffset
+            Math.floor (portionId / 512), // yoffset
             1, // width
             1, //height
             gl.RGBA_INTEGER,

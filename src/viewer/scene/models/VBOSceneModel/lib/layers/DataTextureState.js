@@ -667,17 +667,24 @@ class DataTextureGenerator
      * @returns {BindableDataTexture}
      */
     generateTextureForColorsAndFlags (gl, colors, pickColors, vertexBases, indexBaseOffsets, edgeIndexBaseOffsets) {
+        const numPortions = colors.length;
+
         // The number of rows in the texture is the number of
         // objects in the layer.
 
-        const textureHeight = colors.length;
+        this.numPortions = numPortions;
+
+        const textureWidth = 512 * 7;
+        const textureHeight =  Math.ceil (numPortions / (textureWidth / 7));
+
+        console.log ({textureWidth, textureHeight, numPortions});
 
         if (textureHeight == 0)
         {
             throw "texture height == 0";
         }
 
-        // 4 columns per texture row:
+        // 7 columns per texture row:
         // - col0: (RGBA) object color RGBA
         // - col1: (packed Uint32 as RGBA) object pick color
         // - col2: (packed 4 bytes as RGBA) object flags
@@ -685,14 +692,13 @@ class DataTextureGenerator
         // - col4: (packed Uint32 bytes as RGBA) vertex base
         // - col5: (packed Uint32 bytes as RGBA) index base offset
         // - col6: (packed Uint32 bytes as RGBA) edge index base offset
-        const textureWidth = 7;
 
         const texArray = new Uint8Array (4 * textureWidth * textureHeight);
 
         dataTextureRamStats.sizeDataColorsAndFlags += texArray.byteLength;
         dataTextureRamStats.numberOfTextures++;
 
-        for (var i = 0; i < textureHeight; i++)
+        for (let i = 0; i < numPortions; i++)
         {
             // object color
             texArray.set (

@@ -257,10 +257,11 @@ class TrianglesDataTexturePickDepthRenderer {
         src.push("int v_packed_object_id_index = (polygonIndex >> 3) >> 12;")
 
         src.push("int objectIndex = int(texelFetch(uTexturePerPolygonIdPortionIds, ivec2(h_packed_object_id_index, v_packed_object_id_index), 0).r);");
+        src.push("ivec2 objectIndexCoords = ivec2(objectIndex % 512, objectIndex / 512);");
 
         // get flags & flags2
-        src.push("uvec4 flags = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(2, objectIndex), 0);"); // chipmunk
-        src.push("uvec4 flags2 = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(3, objectIndex), 0);"); // chipmunk
+        src.push("uvec4 flags = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*7+2, objectIndexCoords.y), 0);"); // chipmunk
+        src.push("uvec4 flags2 = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*7+3, objectIndexCoords.y), 0);"); // chipmunk
         
         // flags.w = NOT_RENDERED | PICK
         // renderPass = PICK
@@ -271,9 +272,9 @@ class TrianglesDataTexturePickDepthRenderer {
         src.push("} else {");
 
         // get vertex base
-        src.push("ivec4 packedVertexBase = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(4, objectIndex), 0));");
+        src.push("ivec4 packedVertexBase = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*7+4, objectIndexCoords.y), 0));"); // chipmunk
 
-        src.push("ivec4 packedIndexBaseOffset = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(5, objectIndex), 0));");
+        src.push("ivec4 packedIndexBaseOffset = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*7+5, objectIndexCoords.y), 0));"); // chipmunk
 
         src.push("int indexBaseOffset = (packedIndexBaseOffset.r << 24) + (packedIndexBaseOffset.g << 16) + (packedIndexBaseOffset.b << 8) + packedIndexBaseOffset.a;");
 
@@ -299,7 +300,7 @@ class TrianglesDataTexturePickDepthRenderer {
         src.push("vec3 position = positions[gl_VertexID % 3];");
         
         // get color
-        src.push("uvec4 color = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(0, objectIndex), 0);"); // chipmunk
+        src.push("uvec4 color = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*7+0, objectIndexCoords.y), 0);"); // chipmunk
 
         src.push(`if (color.a == 0u) {`);
         src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
