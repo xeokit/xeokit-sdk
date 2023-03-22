@@ -25,7 +25,7 @@ import {
 const MAX_NUMBER_OF_OBJECTS_IN_LAYER = (1 << 12);
 
 /**
- * 2048 is max data texture height
+ * 4096 is max data texture height
  * 
  * Limits the aggregated geometry texture height in the layer.
  */
@@ -714,7 +714,7 @@ class TrianglesDataTextureLayer {
         // per-object XYZ offsets
         textureState.texturePerObjectIdOffsets = this.dataTextureGenerator.generateTextureForObjectOffsets (
             gl,
-            buffer.perObjectOffsets,
+            this._numPortions
         );
 
         // per-object positions decode matrices texture

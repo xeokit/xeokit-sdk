@@ -418,9 +418,9 @@ class TrianglesDataTextureColorRenderer {
         src.push("worldPosition.w = 1.0;");
 
         // get XYZ offset
-        src.push("vec3 offset = texelFetch (uTexturePerObjectIdOffsets, ivec2(0, objectIndex), 0).rgb;");
+        src.push("vec4 offset = vec4(texelFetch (uTexturePerObjectIdOffsets, objectIndexCoords, 0).rgb, 0.0);");
 
-        src.push("worldPosition.xyz = worldPosition.xyz + offset;");
+        src.push("worldPosition.xyz = worldPosition.xyz + offset.xyz;");
 
         src.push("vec4 viewPosition = viewMatrix * worldPosition; ");
 

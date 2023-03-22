@@ -803,29 +803,20 @@ class DataTextureGenerator
      * 
      * @returns {BindableDataTexture}
      */
-    generateTextureForObjectOffsets (gl, offsets) {
-        const textureHeight =  offsets.length;
+    generateTextureForObjectOffsets (gl, numOffsets) {
+        const textureWidth = 512;
+        const textureHeight = Math.ceil (numOffsets / textureWidth);
 
         if (textureHeight == 0)
         {
             throw "texture height == 0";
         }
 
-        const textureWidth = 1;
-
-        var texArray = new Float32Array(3 * textureWidth * textureHeight);
+        var texArray = new Float32Array(3 * textureWidth * textureHeight).fill(0);
 
         dataTextureRamStats.sizeDataTextureOffsets += texArray.byteLength;
         dataTextureRamStats.numberOfTextures++;
 
-        for (var i = 0; i < offsets.length; i++)
-        {
-            // object offset
-            texArray.set (
-                offsets [i],
-                i * 3
-            );
-        }
 
         const texture = gl.createTexture();
 
