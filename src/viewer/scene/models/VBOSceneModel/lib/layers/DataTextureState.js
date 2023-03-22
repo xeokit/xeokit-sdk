@@ -876,15 +876,16 @@ class DataTextureGenerator
      * @returns {BindableDataTexture}
      */
     generateTextureForPositionsDecodeMatrices (gl, positionDecodeMatrices, instanceMatrices) {
-        const textureHeight =  positionDecodeMatrices.length;
+        const numMatrices = positionDecodeMatrices.length;
 
-        if (textureHeight == 0)
+        if (numMatrices == 0)
         {
-            throw "texture height == 0";
+            throw "num decode+entity matrices == 0";
         }
 
-        // 2 matrices per row
-        const textureWidth = 4 * 2;
+        // in one row we can fit 512 matrices        
+        const textureWidth = 512 * 8;
+        const textureHeight =  Math.ceil (numMatrices / (textureWidth / 8));
 
         var texArray = new Float32Array(4 * textureWidth * textureHeight);
 
