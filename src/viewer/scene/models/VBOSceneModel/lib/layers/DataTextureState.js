@@ -677,8 +677,6 @@ class DataTextureGenerator
         const textureWidth = 512 * 7;
         const textureHeight =  Math.ceil (numPortions / (textureWidth / 7));
 
-        console.log ({textureWidth, textureHeight, numPortions});
-
         if (textureHeight == 0)
         {
             throw "texture height == 0";
