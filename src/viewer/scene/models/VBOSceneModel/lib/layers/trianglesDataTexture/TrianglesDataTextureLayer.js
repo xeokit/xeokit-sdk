@@ -73,7 +73,6 @@ class TrianglesDataTextureLayer {
      * @param cfg.positionsDecodeMatrix
      * @param cfg.origin
      * @param cfg.scratchMemory
-     * @param cfg.solid
      */
     constructor(model, cfg) {
         this._layerNumber = _numberOfLayers++;
@@ -83,7 +82,7 @@ class TrianglesDataTextureLayer {
          * State sorting key.
          * @type {string}
          */
-        this.sortId = "TrianglesDataTextureLayer" + (cfg.solid ? "-solid" : "-surface");
+        this.sortId = `TrianglesDataTextureLayer-${this._layerNumber}`;
 
         /**
          * Index of this TrianglesDataTextureLayer in {@link PerformanceModel#_layerList}.
@@ -160,12 +159,6 @@ class TrianglesDataTextureLayer {
          * @type {*|Float64Array}
          */
         this.aabb = math.collapseAABB3();
-
-        /**
-         * When true, this layer contains solid triangle meshes, otherwise this layer contains surface triangle meshes
-         * @type {boolean}
-         */
-        this.solid = !!cfg.solid;
     }
 
     /**
@@ -287,7 +280,8 @@ class TrianglesDataTextureLayer {
                 geometryCfg.positionsDecodeMatrix,
                 instancing ? objectCfg.origin : geometryCfg.origin,
                 aabb,
-                instancing
+                instancing,
+                geometryCfg.solid
             );
 
             math.expandAABB3(objectAABB, aabb);
@@ -426,7 +420,7 @@ class TrianglesDataTextureLayer {
     /**
      * @private
      */
-    createSubPortionObject(cfg, geometrySubPortionData, positions, positionsDecodeMatrix, origin, worldAABB, instancing) {
+    createSubPortionObject(cfg, geometrySubPortionData, positions, positionsDecodeMatrix, origin, worldAABB, instancing, solid) {
         const color = cfg.color;
         const metallic = cfg.metallic;
         const roughness = cfg.roughness;
@@ -553,6 +547,8 @@ class TrianglesDataTextureLayer {
         }
 
         math.expandAABB3(this.aabb, worldAABB);
+
+        buffer.perObjectSolid.push (solid);
 
         if (colors) {
             buffer.perObjectColors.push ([
@@ -708,7 +704,8 @@ class TrianglesDataTextureLayer {
             buffer.perObjectPickColors,
             buffer.perObjectVertexBases,
             buffer.perObjectIndexBaseOffsets,
-            buffer.perObjectEdgeIndexBaseOffsets
+            buffer.perObjectEdgeIndexBaseOffsets,
+            buffer.perObjectSolid
         );
 
         // per-object XYZ offsets
@@ -1128,7 +1125,7 @@ class TrianglesDataTextureLayer {
         // object colors
         textureState.texturePerObjectIdColorsAndFlags._textureData.set (
             tempUint8Array4,
-            portionId * 28
+            portionId * 32
         );
 
         if (this._deferredSetFlagsActive)
@@ -1142,7 +1139,7 @@ class TrianglesDataTextureLayer {
         gl.texSubImage2D(
             gl.TEXTURE_2D,
             0, // level
-            (portionId % 512) * 7, // xoffset
+            (portionId % 512) * 8, // xoffset
             Math.floor (portionId / 512), // yoffset
             1, // width
             1, //height
@@ -1253,7 +1250,7 @@ class TrianglesDataTextureLayer {
         // object flags
         textureState.texturePerObjectIdColorsAndFlags._textureData.set (
             tempUint8Array4,
-            portionId * 28 + 8
+            portionId * 32 + 8
         );
 
         if (this._deferredSetFlagsActive)
@@ -1267,7 +1264,7 @@ class TrianglesDataTextureLayer {
         gl.texSubImage2D(
             gl.TEXTURE_2D,
             0, // level
-            (portionId % 512) * 7 + 2, // xoffset
+            (portionId % 512) * 8 + 2, // xoffset
             Math.floor (portionId / 512), // yoffset
             1, // width
             1, //height
@@ -1308,7 +1305,7 @@ class TrianglesDataTextureLayer {
         // object flags2
         textureState.texturePerObjectIdColorsAndFlags._textureData.set (
             tempUint8Array4,
-            portionId * 28 + 12
+            portionId * 32 + 12
         );
         
         if (this._deferredSetFlagsActive)
@@ -1322,7 +1319,7 @@ class TrianglesDataTextureLayer {
         gl.texSubImage2D(
             gl.TEXTURE_2D,
             0, // level
-            (portionId % 512) * 7 + 3, // xoffset
+            (portionId % 512) * 8 + 3, // xoffset
             Math.floor (portionId / 512), // yoffset
             1, // width
             1, //height
@@ -1422,7 +1419,7 @@ class TrianglesDataTextureLayer {
     }
 
     _updateBackfaceCull(renderFlags, frameCtx) {
-        const backfaces = this.model.backfaces || (!this.solid) || renderFlags.sectioned;
+        const backfaces = this.model.backfaces || renderFlags.sectioned;
         if (frameCtx.backfaces !== backfaces) {
             const gl = frameCtx.gl;
             if (backfaces) {

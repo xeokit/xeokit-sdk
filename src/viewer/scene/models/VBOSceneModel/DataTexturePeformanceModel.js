@@ -1856,7 +1856,6 @@ class DataTexturePeformanceModel extends Component {
                     {
                         origin,
                         layerIndex: 0,
-                        solid: primitive !== "surface"
                     },
                     cfg
                 );
@@ -2027,9 +2026,6 @@ class DataTexturePeformanceModel extends Component {
 
                 // chipmunk: allow to have different origins per-mesh
                 origin: cfg.origin,
-
-                // chipmunk: TODO, encode as a property for each object in the per-object texture, and if needed adjust the vertices clockwise sense in the shader
-                solid: true,
             });
             this._layerList.push(layer);
             this._currentDataTextureLayer = layer;
@@ -2054,6 +2050,8 @@ class DataTexturePeformanceModel extends Component {
         const pickColor = new Uint8Array([r, g, b, a]); // Quantized pick color
 
         const aabb = math.collapseAABB3();
+
+        preparedGeometryCfg.solid = preparedGeometryCfg.primitive == "solid";
 
         if (instancing) {
 

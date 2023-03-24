@@ -22,6 +22,8 @@ class TrianglesDataTextureBuffer {
         this.perObjectColors = [];
         this.perObjectPickColors = [];
 
+        this.perObjectSolid = [];
+
         this.perObjectOffsets = [];
 
         this.perObjectPositionsDecodeMatrices = []; // chipmunk

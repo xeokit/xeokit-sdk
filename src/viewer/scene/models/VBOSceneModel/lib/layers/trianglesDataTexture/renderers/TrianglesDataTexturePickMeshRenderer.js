@@ -53,6 +53,14 @@ class TrianglesDataTexturePickMeshRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
+        const originCameraEye = [
+            camera.eye[0] - origin[0],
+            camera.eye[1] - origin[1],
+            camera.eye[2] - origin[2],
+        ];
+
+        gl.uniform3fv(this._uCameraEyeRtc, originCameraEye);
+
         if (scene.logarithmicDepthBufferEnabled) {
             const logDepthBufFC = 2.0 / (Math.log(camera.project.far + 1.0) / Math.LN2); // TODO: Far from pick project matrix?
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
@@ -166,6 +174,7 @@ class TrianglesDataTexturePickMeshRenderer {
         this._uTextureCameraMatrices = "uTextureCameraMatrices"; // chipmunk
         this._uTextureModelMatrices = "uTextureModelMatrices"; // chipmunk
         this._uTexturePerObjectIdOffsets = "uTexturePerObjectIdOffsets"; // chipmunk
+        this._uCameraEyeRtc = program.getLocation("uCameraEyeRtc"); // chipmunk
     }
 
     _bindProgram(frameCtx) {
@@ -223,6 +232,7 @@ class TrianglesDataTexturePickMeshRenderer {
         src.push("uniform mediump usampler2D uTexturePerPolygonIdPortionIds;"); // chipmunk
         src.push("uniform highp sampler2D uTextureCameraMatrices;"); // chipmunk
         src.push("uniform highp sampler2D uTextureModelMatrices;"); // chipmunk
+        src.push("uniform vec3 uCameraEyeRtc;"); // chipmunk
 
         src.push("vec3 positions[3];")
 
@@ -264,8 +274,8 @@ class TrianglesDataTexturePickMeshRenderer {
         src.push("ivec2 objectIndexCoords = ivec2(objectIndex % 512, objectIndex / 512);");
 
         // get flags & flags2
-        src.push("uvec4 flags = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*7+2, objectIndexCoords.y), 0);"); // chipmunk
-        src.push("uvec4 flags2 = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*7+3, objectIndexCoords.y), 0);"); // chipmunk
+        src.push("uvec4 flags = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);"); // chipmunk
+        src.push("uvec4 flags2 = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);"); // chipmunk
         
         // flags.w = NOT_RENDERED | PICK
         // renderPass = PICK
@@ -276,9 +286,9 @@ class TrianglesDataTexturePickMeshRenderer {
         src.push("} else {");
 
         // get vertex base
-        src.push("ivec4 packedVertexBase = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*7+4, objectIndexCoords.y), 0));"); // chipmunk
+        src.push("ivec4 packedVertexBase = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+4, objectIndexCoords.y), 0));"); // chipmunk
 
-        src.push("ivec4 packedIndexBaseOffset = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*7+5, objectIndexCoords.y), 0));"); // chipmunk
+        src.push("ivec4 packedIndexBaseOffset = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+5, objectIndexCoords.y), 0));"); // chipmunk
 
         src.push("int indexBaseOffset = (packedIndexBaseOffset.r << 24) + (packedIndexBaseOffset.g << 16) + (packedIndexBaseOffset.b << 8) + packedIndexBaseOffset.a;");
 
@@ -296,13 +306,15 @@ class TrianglesDataTexturePickMeshRenderer {
 
         src.push("positionsDecodeMatrix = entityMatrix * positionsDecodeMatrix;")
         
+        src.push("uint solid = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+7, objectIndexCoords.y), 0).r;"); // chipmunk
+
         // get position
         src.push("positions[0] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.r, indexPositionV.r), 0));")
         src.push("positions[1] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.g, indexPositionV.g), 0));")
         src.push("positions[2] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.b, indexPositionV.b), 0));")
 
         // get color
-        src.push("uvec4 color = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*7+0, objectIndexCoords.y), 0);"); // chipmunk
+        src.push("uvec4 color = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);"); // chipmunk
 
         src.push(`if (color.a == 0u) {`);
         src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
@@ -310,9 +322,26 @@ class TrianglesDataTexturePickMeshRenderer {
         src.push("};");
 
         // get pick-color
-        src.push("vPickColor = vec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*7+1, objectIndexCoords.y), 0)) / 255.0;");
 
-        src.push("vec3 position = positions[gl_VertexID % 3];");
+        // when the geometry is not solid, if needed, flip the triangle winding
+        src.push("vec3 position;");
+
+        src.push("if (solid != 1u) {");
+            src.push("vec3 normal = normalize(cross(positions[2] - positions[0], positions[1] - positions[0]));");
+            src.push("vec3 triangleCenter = (worldMatrix*positionsDecodeMatrix*vec4((positions[0] + positions[1] + positions[2]) / 3.0, 1)).xyz;")
+            src.push("vec3 worldNormal = normalize((transpose(inverse(worldMatrix*positionsDecodeMatrix)) * vec4(normal, 1)).xyz);");
+            src.push("vec3 cameraToTriangleDirection = normalize(triangleCenter - uCameraEyeRtc);")
+            src.push("if (dot(cameraToTriangleDirection, worldNormal) < 0.0) {");
+                src.push("position = positions[2 - (gl_VertexID % 3)];");
+            src.push("} else {");
+                src.push("position = positions[gl_VertexID % 3];");
+            src.push("}");
+        src.push("} else {")
+                src.push("position = positions[gl_VertexID % 3];");
+        src.push("}");
+
+        src.push("vPickColor = vec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0)) / 255.0;");
+
         
         src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
 
@@ -320,6 +349,7 @@ class TrianglesDataTexturePickMeshRenderer {
         src.push("vec4 offset = vec4(texelFetch (uTexturePerObjectIdOffsets, objectIndexCoords, 0).rgb, 0.0);");
 
         src.push("worldPosition.xyz = worldPosition.xyz + offset.xyz;");
+
 
         src.push("vec4 viewPosition = viewMatrix * worldPosition; ");
 

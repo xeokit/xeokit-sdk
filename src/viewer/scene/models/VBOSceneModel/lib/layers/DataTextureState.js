@@ -663,10 +663,11 @@ class DataTextureGenerator
      * @param {ArrayLike<int>} vertexBases Array of position-index-bases foteh all objects in the layer
      * @param {ArrayLike<int>} indexBaseOffsets For triangles: array of offests between the (gl_VertexID / 3) and the position where the indices start in the texture layer
      * @param {ArrayLike<int>} edgeIndexBaseOffsets For edges: Array of offests between the (gl_VertexID / 2) and the position where the edge indices start in the texture layer
+     * @param {ArrayLike<boolean>} solid Array is-solid flag for all objects in the layer
      * 
      * @returns {BindableDataTexture}
      */
-    generateTextureForColorsAndFlags (gl, colors, pickColors, vertexBases, indexBaseOffsets, edgeIndexBaseOffsets) {
+    generateTextureForColorsAndFlags (gl, colors, pickColors, vertexBases, indexBaseOffsets, edgeIndexBaseOffsets, solid) {
         const numPortions = colors.length;
 
         // The number of rows in the texture is the number of
@@ -674,15 +675,15 @@ class DataTextureGenerator
 
         this.numPortions = numPortions;
 
-        const textureWidth = 512 * 7;
-        const textureHeight =  Math.ceil (numPortions / (textureWidth / 7));
+        const textureWidth = 512 * 8;
+        const textureHeight =  Math.ceil (numPortions / (textureWidth / 8));
 
         if (textureHeight == 0)
         {
             throw "texture height == 0";
         }
 
-        // 7 columns per texture row:
+        // 8 columns per texture row:
         // - col0: (RGBA) object color RGBA
         // - col1: (packed Uint32 as RGBA) object pick color
         // - col2: (packed 4 bytes as RGBA) object flags
@@ -690,6 +691,7 @@ class DataTextureGenerator
         // - col4: (packed Uint32 bytes as RGBA) vertex base
         // - col5: (packed Uint32 bytes as RGBA) index base offset
         // - col6: (packed Uint32 bytes as RGBA) edge index base offset
+        // - col7: (packed 4 bytes as RGBA) is-solid flag for objects
 
         const texArray = new Uint8Array (4 * textureWidth * textureHeight);
 
@@ -701,13 +703,13 @@ class DataTextureGenerator
             // object color
             texArray.set (
                 colors [i],
-                i * 28 + 0
+                i * 32 + 0
             );
 
             // object pick color
             texArray.set (
                 pickColors [i],
-                i * 28 + 4
+                i * 32 + 4
             );
 
             // object flags
@@ -715,7 +717,7 @@ class DataTextureGenerator
                 [
                     0, 0, 0, 0
                 ],
-                i * 28 + 8
+                i * 32 + 8
             );
 
             // object flags2
@@ -723,7 +725,7 @@ class DataTextureGenerator
                 [
                     0, 0, 0, 0
                 ],
-                i * 28 + 12
+                i * 32 + 12
             );
 
             // vertex base
@@ -734,7 +736,7 @@ class DataTextureGenerator
                     (vertexBases[i] >> 8) & 255,
                     (vertexBases[i]) & 255,
                 ],
-                i * 28 + 16
+                i * 32 + 16
             );
 
             // triangles index base offset
@@ -745,7 +747,7 @@ class DataTextureGenerator
                     (indexBaseOffsets[i] >> 8) & 255,
                     (indexBaseOffsets[i]) & 255,
                 ],
-                i * 28 + 20
+                i * 32 + 20
             );
 
             // edge index base offset
@@ -756,7 +758,18 @@ class DataTextureGenerator
                     (edgeIndexBaseOffsets[i] >> 8) & 255,
                     (edgeIndexBaseOffsets[i]) & 255,
                 ],
-                i * 28 + 24
+                i * 32 + 24
+            );
+
+            // is-solid flag
+            texArray.set (
+                [
+                    solid[i] ? 1 : 0,
+                    0,
+                    0,
+                    0,
+                ],
+                i * 32 + 28
             );
         }
 
