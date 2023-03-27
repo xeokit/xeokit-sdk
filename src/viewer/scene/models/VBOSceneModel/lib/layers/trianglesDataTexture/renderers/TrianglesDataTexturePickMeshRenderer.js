@@ -322,27 +322,23 @@ class TrianglesDataTexturePickMeshRenderer {
         src.push("};");
 
         // get pick-color
-
-        // when the geometry is not solid, if needed, flip the triangle winding
-        src.push("vec3 position;");
-
-        src.push("if (solid != 1u) {");
-            src.push("vec3 normal = normalize(cross(positions[2] - positions[0], positions[1] - positions[0]));");
-            src.push("vec3 triangleCenter = (worldMatrix*positionsDecodeMatrix*vec4((positions[0] + positions[1] + positions[2]) / 3.0, 1)).xyz;")
-            src.push("vec3 worldNormal = normalize((transpose(inverse(worldMatrix*positionsDecodeMatrix)) * vec4(normal, 1)).xyz);");
-            src.push("vec3 cameraToTriangleDirection = normalize(triangleCenter - uCameraEyeRtc);")
-            src.push("if (dot(cameraToTriangleDirection, worldNormal) < 0.0) {");
-                src.push("position = positions[2 - (gl_VertexID % 3)];");
-            src.push("} else {");
-                src.push("position = positions[gl_VertexID % 3];");
-            src.push("}");
-        src.push("} else {")
-                src.push("position = positions[gl_VertexID % 3];");
-        src.push("}");
-
         src.push("vPickColor = vec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0)) / 255.0;");
 
-        
+        // get normal
+        src.push("vec3 normal = normalize(cross(positions[2] - positions[0], positions[1] - positions[0]));");
+
+        src.push("vec3 position;");
+        src.push("position = positions[gl_VertexID % 3];");
+
+        // when the geometry is not solid, if needed, flip the triangle winding
+        src.push("if (solid != 1u) {");
+            src.push("vec3 uCameraEyeRtcInQuantizedSpace = (inverse(worldMatrix * positionsDecodeMatrix) * vec4(uCameraEyeRtc, 1)).xyz;")
+
+            src.push("if (dot(position.xyz - uCameraEyeRtcInQuantizedSpace, normal) < 0.0) {");
+                src.push("position = positions[2 - (gl_VertexID % 3)];");
+            src.push("}");
+        src.push("}");
+
         src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
 
         // get XYZ offset
