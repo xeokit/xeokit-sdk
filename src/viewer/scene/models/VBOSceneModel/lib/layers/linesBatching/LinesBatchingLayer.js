@@ -791,7 +791,7 @@ class LinesBatchingLayer {
         }
         if (state.indicesBuf) {
             state.indicesBuf.destroy();
-            state.indicessBuf = null;
+            state.indicesBuf = null;
         }
         state.destroy();
     }
