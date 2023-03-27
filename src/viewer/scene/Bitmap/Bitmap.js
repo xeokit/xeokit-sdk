@@ -1,10 +1,9 @@
 import {Component} from '../Component.js';
-import {Mesh} from "../mesh";
-import {Node} from "../nodes";
-import {PhongMaterial, Texture} from "../materials";
-import {buildPlaneGeometry, ReadableGeometry} from "../geometry";
-import {math} from "../math/";
-import {worldToRTCPos} from "../math/rtcCoords.js";
+import {Mesh} from "../mesh/Mesh.js";
+import {Node} from "../nodes/Node.js";
+import {PhongMaterial, Texture} from "../materials/index.js";
+import {buildPlaneGeometry, ReadableGeometry} from "../geometry/index.js";
+import {math} from "../math/math.js";
 
 /**
  *  A plane-shaped 3D object containing a bitmap image.
