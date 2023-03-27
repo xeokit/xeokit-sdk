@@ -1,7 +1,7 @@
 import {Dot} from "../lib/html/Dot.js";
 import {Component} from "../../viewer/scene/Component.js";
 import {math} from "../../viewer/scene/math/math.js";
-import {Marker} from "../../viewer";
+import {Marker} from "../../viewer.js";
 
 /**
  * Creates {@link DistanceMeasurement}s from mouse and touch input.

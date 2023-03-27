@@ -5,8 +5,8 @@ import {VBOSceneModel} from "../../viewer/scene/models/VBOSceneModel/VBOSceneMod
 import {Plugin} from "../../viewer/Plugin.js";
 import {WebIFCDefaultDataSource} from "./WebIFCDefaultDataSource.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
-import {math} from "../../viewer";
-import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords";
+import {math} from "../../viewer.js";
+import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords.js";
 
 /**
  * {@link Viewer} plugin that uses [web-ifc](https://github.com/tomvandig/web-ifc) to load BIM models directly from IFC files.

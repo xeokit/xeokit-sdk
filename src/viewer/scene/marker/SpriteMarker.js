@@ -1,7 +1,7 @@
-import {Mesh} from "../mesh";
-import {ReadableGeometry} from "../geometry";
-import {PhongMaterial, Texture} from "../materials";
-import {math} from "../math";
+import {Mesh} from "../mesh/Mesh.js";
+import {ReadableGeometry} from "../geometry/ReadableGeometry.js";
+import {PhongMaterial, Texture} from "../materials/index.js";
+import {math} from "../math/math.js";
 import {Marker} from "./Marker.js";
 
 /**

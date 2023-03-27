@@ -2,7 +2,7 @@
  * @private
  */
 
-import {LinearEncoding, sRGBEncoding} from "../../constants/constants";
+import {LinearEncoding, sRGBEncoding} from "../../constants/constants.js";
 
 const DrawShaderSource = function (mesh) {
     if (mesh._material._state.type === "LambertMaterial") {
