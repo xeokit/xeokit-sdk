@@ -59,15 +59,25 @@ class TrianglesDataTextureColorRenderer {
             this._uTexturePerObjectIdOffsets
         );
 
-        gl.uniform1i(this._uRenderPass, renderPass);
+        let cameraEye = camera.eye;
+
+        if (frameCtx.pickViewMatrix) {
+            textureState.bindPickCameraTexture (
+                this._program,
+                this._uTextureCameraMatrices
+            );
+            cameraEye = frameCtx.pickOrigin || cameraEye;
+        }
 
         const originCameraEye = [
-            camera.eye[0] - origin[0],
-            camera.eye[1] - origin[1],
-            camera.eye[2] - origin[2],
+            cameraEye[0] - origin[0],
+            cameraEye[1] - origin[1],
+            cameraEye[2] - origin[2],
         ];
 
         gl.uniform3fv(this._uCameraEyeRtc, originCameraEye);
+
+        gl.uniform1i(this._uRenderPass, renderPass);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
@@ -318,11 +328,12 @@ class TrianglesDataTextureColorRenderer {
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
             src.push("out float vFragDepth;");
-            src.push("bool isPerspectiveMatrix(mat4 m) {");
-            src.push("    return (m[2][3] == - 1.0);");
-            src.push("}");
             src.push("out float isPerspective;");
         }
+        
+        src.push("bool isPerspectiveMatrix(mat4 m) {");
+        src.push("    return (m[2][3] == - 1.0);");
+        src.push("}");
 
         src.push("uniform vec4 lightAmbient;");
 
@@ -426,17 +437,25 @@ class TrianglesDataTextureColorRenderer {
         src.push("vec3 position;");
         src.push("position = positions[gl_VertexID % 3];");
 
+        src.push("vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*positionsDecodeMatrix)) * vec4(normal,1)).xyz);");
+
         // when the geometry is not solid, if needed, flip the triangle winding
         src.push("if (solid != 1u) {");
-            src.push("vec3 uCameraEyeRtcInQuantizedSpace = (inverse(worldMatrix * positionsDecodeMatrix) * vec4(uCameraEyeRtc, 1)).xyz;")
-            // src.push("vColor = vec4(vec3(1, -1, 0)*dot(normalize(position.xyz - uCameraEyeRtcInQuantizedSpace), normal), 1);")
-            src.push("if (dot(position.xyz - uCameraEyeRtcInQuantizedSpace, normal) < 0.0) {");
-                src.push("position = positions[2 - (gl_VertexID % 3)];");
-                src.push("normal = -normal;");
+            src.push("if (isPerspectiveMatrix(projMatrix)) {");
+                src.push("vec3 uCameraEyeRtcInQuantizedSpace = (inverse(worldMatrix * positionsDecodeMatrix) * vec4(uCameraEyeRtc, 1)).xyz;")
+                // src.push("vColor = vec4(vec3(1, -1, 0)*dot(normalize(position.xyz - uCameraEyeRtcInQuantizedSpace), normal), 1);")
+                src.push("if (dot(position.xyz - uCameraEyeRtcInQuantizedSpace, normal) < 0.0) {");
+                    src.push("position = positions[2 - (gl_VertexID % 3)];");
+                    src.push("viewNormal = -viewNormal;");
+                src.push("}");
+            src.push("} else {");
+                // src.push("vColor = vec4(vec3(1, -1, 0)*viewNormal.z, 1);")
+                src.push("if (viewNormal.z < 0.0) {");
+                    src.push("position = positions[2 - (gl_VertexID % 3)];");
+                    src.push("viewNormal = -viewNormal;");
+                src.push("}");
             src.push("}");
         src.push("}");
-
-        src.push("vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*positionsDecodeMatrix)) * vec4(normal,1)).xyz);");
 
         src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
 

@@ -927,7 +927,7 @@ const Renderer = function (scene, options) {
             pickResult.reset();
 
             updateDrawlist();
-
+    
             let look;
             let pickViewMatrix = null;
             let pickProjMatrix = null;
@@ -981,11 +981,32 @@ const Renderer = function (scene, options) {
                 canvasPos[1] = canvas.clientHeight * 0.5;
             }
 
+            if (null !== pickViewMatrix)
+            {
+                // debugger;
+
+                // data-textures: update the pick-camera-matrices of all DataTexturePeformanceModel's
+                for (let type in drawableTypeInfo) {
+                    if (drawableTypeInfo.hasOwnProperty(type)) {
+                        const drawableList = drawableTypeInfo[type].drawableList;    
+                        for (let i = 0, len = drawableList.length; i < len; i++) {
+                            const drawable = drawableList[i];
+                            if (drawable.constructor.name == 'DataTexturePeformanceModel') {
+                                drawable.pickCameraTexture._updateViewMatrix (
+                                    pickViewMatrix,
+                                    pickProjMatrix
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+
             const pickBuffer = renderBufferManager.getRenderBuffer("pick");
 
             pickBuffer.bind();
 
-            const pickable = gpuPickPickable(pickBuffer, canvasPos, pickViewMatrix, pickProjMatrix, params);
+            const pickable = gpuPickPickable(pickBuffer, canvasPos, pickViewMatrix, pickProjMatrix, params, pickResult);
 
             if (!pickable) {
                 pickBuffer.unbind();
@@ -1063,11 +1084,12 @@ const Renderer = function (scene, options) {
         };
     })();
 
-    function gpuPickPickable(pickBuffer, canvasPos, pickViewMatrix, pickProjMatrix, params) {
+    function gpuPickPickable(pickBuffer, canvasPos, pickViewMatrix, pickProjMatrix, params, pickResult) {
 
         frameCtx.reset();
         frameCtx.backfaces = true;
         frameCtx.frontface = true; // "ccw"
+        frameCtx.pickOrigin = pickResult.origin;
         frameCtx.pickViewMatrix = pickViewMatrix;
         frameCtx.pickProjMatrix = pickProjMatrix;
         frameCtx.pickInvisible = !!params.pickInvisible;
@@ -1129,6 +1151,7 @@ const Renderer = function (scene, options) {
         frameCtx.reset();
         frameCtx.backfaces = true;
         frameCtx.frontface = true; // "ccw"
+        frameCtx.pickOrigin = pickResult.origin;
         frameCtx.pickViewMatrix = pickViewMatrix; // Can be null
         frameCtx.pickProjMatrix = pickProjMatrix; // Can be null
         // frameCtx.pickInvisible = !!params.pickInvisible;
@@ -1169,6 +1192,7 @@ const Renderer = function (scene, options) {
             frameCtx.reset();
             frameCtx.backfaces = true;
             frameCtx.frontface = true; // "ccw"
+            frameCtx.pickOrigin = pickResult.origin;
             frameCtx.pickViewMatrix = pickViewMatrix;
             frameCtx.pickProjMatrix = pickProjMatrix;
             frameCtx.pickZNear = nearAndFar[0];
@@ -1244,6 +1268,7 @@ const Renderer = function (scene, options) {
         frameCtx.reset();
         frameCtx.backfaces = true;
         frameCtx.frontface = true; // "ccw"
+        frameCtx.pickOrigin = pickResult.origin;
         frameCtx.pickViewMatrix = pickViewMatrix;
         frameCtx.pickProjMatrix = pickProjMatrix;
 

@@ -330,6 +330,15 @@ class DataTextureState
         this.textureCameraMatrices = null;
 
         /**
+         * Texture that holds the camera matrices, specific to ray-picking
+         * - columns: each column in the texture is a camera matrix column.
+         * - row: each row is a different camera matrix.
+         * 
+         * @type BindableDataTexture
+         */
+        this.texturePickCameraMatrices = null;
+
+        /**
          * Texture that holds the model matrices
          * - columns: each column in the texture is a model matrix column.
          * - row: each row is a different model matrix.
@@ -424,6 +433,20 @@ class DataTextureState
     /**
      * 
      * @param {Program} glProgram 
+     * @param {string} cameraMatricesShaderName 
+     */
+    bindPickCameraTexture (glProgram, cameraMatricesShaderName)
+    {
+        this.texturePickCameraMatrices.bindTexture (
+            glProgram,
+            cameraMatricesShaderName, 
+            4 // webgl texture unit
+        );
+    }
+
+    /**
+     * 
+     * @param {Program} glProgram 
      * @param {string} portionIdsShaderName 
      * @param {string} polygonIndicesShaderName 
      * @param {8|16|32} textureBitness 
@@ -507,7 +530,7 @@ class DataTextureGenerator
      * 
      * @returns {BindableDataTexture}
      */
-    generateCameraDataTexture (gl, camera, scene, origin)
+    generateCameraDataTexture (gl, camera, scene, origin, followCameraUpdate = true)
     {
         const textureWidth = 4;
         const textureHeight = 3; // space for 3 matrices
@@ -531,13 +554,7 @@ class DataTextureGenerator
 
         let cameraDirty = true;
 
-        const onCameraMatrix = () => {
-            if (!cameraDirty) {
-                return;
-            }
-
-            cameraDirty = false;
-            
+        cameraTexture._updateViewMatrix = (viewMatrix, projMatrix) => {
             gl.bindTexture (gl.TEXTURE_2D, cameraTexture._texture);
 
             // Camera's "view matrix"
@@ -550,7 +567,7 @@ class DataTextureGenerator
                 1,
                 gl.RGBA,
                 gl.FLOAT,
-                new Float32Array ((origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix)
+                new Float32Array ((origin) ? createRTCViewMat(viewMatrix, origin) : viewMatrix)
             );
 
             // Camera's "view normal matrix"
@@ -576,15 +593,28 @@ class DataTextureGenerator
                 1,
                 gl.RGBA,
                 gl.FLOAT,
-                new Float32Array (camera.project.matrix)
+                new Float32Array (projMatrix)
             );
         };
 
-        camera.on ("matrix", () => cameraDirty = true);
+        if (followCameraUpdate)
+        {
+            const onCameraMatrix = () => {
+                if (!cameraDirty) {
+                    return;
+                }
 
-        scene.on ("rendering", onCameraMatrix);
+                cameraDirty = false;
 
-        onCameraMatrix ();
+                cameraTexture._updateViewMatrix (camera.viewMatrix, camera.project.matrix);
+            };
+
+            camera.on ("matrix", () => cameraDirty = true);
+
+            scene.on ("rendering", onCameraMatrix);
+            
+            onCameraMatrix ();
+        }
 
         return cameraTexture;
     }

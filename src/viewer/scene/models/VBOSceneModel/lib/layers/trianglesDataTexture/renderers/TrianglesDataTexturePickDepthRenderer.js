@@ -51,15 +51,25 @@ class TrianglesDataTexturePickDepthRenderer {
             this._uTexturePerObjectIdOffsets
         );
 
-        gl.uniform1i(this._uRenderPass, renderPass);
+        let cameraEye = camera.eye;
+
+        if (frameCtx.pickViewMatrix) {
+            textureState.bindPickCameraTexture (
+                this._program,
+                this._uTextureCameraMatrices
+            );
+            cameraEye = frameCtx.pickOrigin || cameraEye;
+        }
 
         const originCameraEye = [
-            camera.eye[0] - origin[0],
-            camera.eye[1] - origin[1],
-            camera.eye[2] - origin[2],
+            cameraEye[0] - origin[0],
+            cameraEye[1] - origin[1],
+            cameraEye[2] - origin[2],
         ];
 
         gl.uniform3fv(this._uCameraEyeRtc, originCameraEye);
+
+        gl.uniform1i(this._uRenderPass, renderPass);
 
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
 
@@ -237,11 +247,12 @@ class TrianglesDataTexturePickDepthRenderer {
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
             src.push("out float vFragDepth;");
-            src.push("bool isPerspectiveMatrix(mat4 m) {");
-            src.push("    return (m[2][3] == - 1.0);");
-            src.push("}");
             src.push("out float isPerspective;");
         }
+
+        src.push("bool isPerspectiveMatrix(mat4 m) {");
+        src.push("    return (m[2][3] == - 1.0);");
+        src.push("}");
 
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
@@ -325,10 +336,16 @@ class TrianglesDataTexturePickDepthRenderer {
 
         // when the geometry is not solid, if needed, flip the triangle winding
         src.push("if (solid != 1u) {");
-            src.push("vec3 uCameraEyeRtcInQuantizedSpace = (inverse(worldMatrix * positionsDecodeMatrix) * vec4(uCameraEyeRtc, 1)).xyz;")
-
-            src.push("if (dot(position.xyz - uCameraEyeRtcInQuantizedSpace, normal) < 0.0) {");
-                src.push("position = positions[2 - (gl_VertexID % 3)];");
+            src.push("if (isPerspectiveMatrix(projMatrix)) {");
+                src.push("vec3 uCameraEyeRtcInQuantizedSpace = (inverse(worldMatrix * positionsDecodeMatrix) * vec4(uCameraEyeRtc, 1)).xyz;")
+                src.push("if (dot(position.xyz - uCameraEyeRtcInQuantizedSpace, normal) < 0.0) {");
+                    src.push("position = positions[2 - (gl_VertexID % 3)];");
+                src.push("}");
+            src.push("} else {");
+                src.push("vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*positionsDecodeMatrix)) * vec4(normal,1)).xyz);");
+                src.push("if (viewNormal.z < 0.0) {");
+                    src.push("position = positions[2 - (gl_VertexID % 3)];");
+                src.push("}");
             src.push("}");
         src.push("}");
 

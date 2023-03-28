@@ -54,6 +54,13 @@ class TrianglesDataTextureEdgesColorRenderer {
             this._uTexturePerObjectIdOffsets
         );
 
+        if (frameCtx.pickViewMatrix) {
+            textureState.bindPickCameraTexture (
+                this._program,
+                this._uTextureCameraMatrices
+            );
+        }
+
         gl.uniform1i(this._uRenderPass, renderPass);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
