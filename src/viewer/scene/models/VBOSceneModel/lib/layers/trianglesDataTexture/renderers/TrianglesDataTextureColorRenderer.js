@@ -436,7 +436,7 @@ class TrianglesDataTextureColorRenderer {
             src.push("}");
         src.push("}");
 
-        src.push("vec3 viewNormal = -normalize((transpose(inverse(viewMatrix)) * vec4(normal,1)).xyz);");
+        src.push("vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*positionsDecodeMatrix)) * vec4(normal,1)).xyz);");
 
         src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
 
