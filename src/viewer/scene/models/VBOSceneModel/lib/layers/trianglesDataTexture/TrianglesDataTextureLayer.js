@@ -844,7 +844,12 @@ class TrianglesDataTextureLayer {
                 this.model.scene,
                 this._state.origin.slice ()
             );
+        }
 
+        textureState.textureCameraMatrices = this.model.cameraTexture;
+
+        if (!this.model.pickCameraTexture)
+        {
             this.model.pickCameraTexture = this.dataTextureGenerator.generateCameraDataTexture (
                 this.model.scene.canvas.gl,
                 this.model.scene.camera,
@@ -854,7 +859,6 @@ class TrianglesDataTextureLayer {
             );
         }
 
-        textureState.textureCameraMatrices = this.model.cameraTexture;
         textureState.texturePickCameraMatrices = this.model.pickCameraTexture;
 
         // Mark the data-texture-state as finalized
