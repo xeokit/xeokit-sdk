@@ -991,10 +991,12 @@ const Renderer = function (scene, options) {
                         for (let i = 0, len = drawableList.length; i < len; i++) {
                             const drawable = drawableList[i];
                             if (drawable instanceof DataTexturePeformanceModel) {
-                                drawable.pickCameraTexture._updateViewMatrix (
-                                    pickViewMatrix,
-                                    pickProjMatrix
-                                );
+                                if (drawable.pickCameraTexture) {
+                                    drawable.pickCameraTexture._updateViewMatrix (
+                                        pickViewMatrix,
+                                        pickProjMatrix
+                                    );
+                                }
                             }
                         }
                     }
