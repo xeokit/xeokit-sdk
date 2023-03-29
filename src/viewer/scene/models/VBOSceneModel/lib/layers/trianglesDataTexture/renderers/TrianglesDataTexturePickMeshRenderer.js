@@ -257,8 +257,8 @@ class TrianglesDataTexturePickMeshRenderer {
         src.push("}");
 
         if (clipping) {
-            src.push("out vec4 vWorldPosition;");
-            src.push("out int vFlags2;");
+            src.push("smooth out vec4 vWorldPosition;");
+            src.push("flat out uvec4 vFlags2;");
         }
 
         src.push("out vec4 vPickColor;");
@@ -402,7 +402,7 @@ class TrianglesDataTexturePickMeshRenderer {
         }
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
-            src.push("in int vFlags2;");
+            src.push("flat in uvec4 vFlags2;");
             for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");

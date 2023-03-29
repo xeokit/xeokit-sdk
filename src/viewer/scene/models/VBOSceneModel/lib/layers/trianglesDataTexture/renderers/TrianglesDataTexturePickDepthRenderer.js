@@ -256,7 +256,7 @@ class TrianglesDataTexturePickDepthRenderer {
 
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
-            src.push("out int vFlags2;");
+            src.push("flat out uint vFlags2;");
         }
         src.push("out vec4 vViewPosition;");
         src.push("void main(void) {");
@@ -360,7 +360,7 @@ class TrianglesDataTexturePickDepthRenderer {
 
         if (clipping) {
             src.push("      vWorldPosition = worldPosition;");
-            src.push("      vFlags2 = flags2;");
+            src.push("      vFlags2 = flags2.r;");
         }
         src.push("vViewPosition = viewPosition;");
         src.push("vec4 clipPos = projMatrix * viewPosition;");
@@ -402,7 +402,7 @@ class TrianglesDataTexturePickDepthRenderer {
 
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
-            src.push("in int vFlags2;");
+            src.push("flat in uint vFlags2;");
             for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
@@ -421,7 +421,7 @@ class TrianglesDataTexturePickDepthRenderer {
         src.push("out vec4 outPackedDepth;");        
         src.push("void main(void) {");
         if (clipping) {
-            src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
+            src.push("  bool clippable = vFlags2 > 0u;");
             src.push("  if (clippable) {");
             src.push("      float dist = 0.0;");
             for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {

@@ -239,7 +239,7 @@ class TrianglesDataTextureEdgesColorRenderer {
 
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
-            src.push("out int vFlags2;");
+            src.push("flat out uint vFlags2;");
         }
         src.push("out vec4 vColor;");
 
@@ -321,7 +321,7 @@ class TrianglesDataTextureEdgesColorRenderer {
 
         if (clipping) {
             src.push("  vWorldPosition = worldPosition;");
-            src.push("  vFlags2 = flags2;");
+            src.push("  vFlags2 = flags2.r;");
         }
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
@@ -362,7 +362,7 @@ class TrianglesDataTextureEdgesColorRenderer {
         }
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
-            src.push("in int vFlags2;");
+            src.push("flat in uint vFlags2;");
             for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
@@ -373,7 +373,7 @@ class TrianglesDataTextureEdgesColorRenderer {
         src.push("out vec4 outColor;");
         src.push("void main(void) {");
         if (clipping) {
-            src.push("  bool clippable = vFlags2 > 0;");
+            src.push("  bool clippable = vFlags2 > 0u;");
             src.push("  if (clippable) {");
             src.push("  float dist = 0.0;");
             for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {

@@ -330,7 +330,7 @@ class TrianglesDataTextureColorRenderer {
             src.push("out float vFragDepth;");
             src.push("out float isPerspective;");
         }
-        
+
         src.push("bool isPerspectiveMatrix(mat4 m) {");
         src.push("    return (m[2][3] == - 1.0);");
         src.push("}");
@@ -357,7 +357,7 @@ class TrianglesDataTextureColorRenderer {
         
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
-            src.push("out int vFlags2;");
+            src.push("flat out uint vFlags2;");
         }
         
         src.push("out vec4 vColor;");
@@ -445,15 +445,15 @@ class TrianglesDataTextureColorRenderer {
                 src.push("vec3 uCameraEyeRtcInQuantizedSpace = (inverse(worldMatrix * positionsDecodeMatrix) * vec4(uCameraEyeRtc, 1)).xyz;")
                 // src.push("vColor = vec4(vec3(1, -1, 0)*dot(normalize(position.xyz - uCameraEyeRtcInQuantizedSpace), normal), 1);")
                 src.push("if (dot(position.xyz - uCameraEyeRtcInQuantizedSpace, normal) < 0.0) {");
-                    src.push("position = positions[2 - (gl_VertexID % 3)];");
-                    src.push("viewNormal = -viewNormal;");
-                src.push("}");
+                        src.push("position = positions[2 - (gl_VertexID % 3)];");
+                        src.push("viewNormal = -viewNormal;");
+                    src.push("}");
             src.push("} else {");
                 // src.push("vColor = vec4(vec3(1, -1, 0)*viewNormal.z, 1);")
                 src.push("if (viewNormal.z < 0.0) {");
-                    src.push("position = positions[2 - (gl_VertexID % 3)];");
-                    src.push("viewNormal = -viewNormal;");
-                src.push("}");
+                        src.push("position = positions[2 - (gl_VertexID % 3)];");
+                        src.push("viewNormal = -viewNormal;");
+                    src.push("}");
             src.push("}");
         src.push("}");
 
@@ -556,7 +556,7 @@ class TrianglesDataTextureColorRenderer {
         }
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
-            src.push("in int vFlags2;");
+            src.push("flat in uint vFlags2;");
             for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
@@ -568,7 +568,7 @@ class TrianglesDataTextureColorRenderer {
         src.push("void main(void) {");
 
         if (clipping) {
-            src.push("  bool clippable = vFlags2 > 0;");
+            src.push("  bool clippable = vFlags2 > 0u;");
             src.push("  if (clippable) {");
             src.push("  float dist = 0.0;");
             for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {

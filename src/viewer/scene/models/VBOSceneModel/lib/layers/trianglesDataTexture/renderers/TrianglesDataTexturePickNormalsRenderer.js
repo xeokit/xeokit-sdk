@@ -250,7 +250,7 @@ class TrianglesDataTexturePickNormalsRenderer {
 
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
-            src.push("out int vFlags2;");
+            src.push("flat out uint vFlags2;");
         }
 
         src.push("out vec3 vWorldNormal;");
@@ -390,8 +390,8 @@ class TrianglesDataTexturePickNormalsRenderer {
             src.push("in float vFragDepth;");
         }
         if (clipping) {
-            src.push("varying vec4 vWorldPosition;");
-            src.push("varying vec4 vFlags2;");
+            src.push("in vec4 vWorldPosition;");
+            src.push("flat in uint vFlags2;");
             for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
@@ -402,7 +402,7 @@ class TrianglesDataTexturePickNormalsRenderer {
         src.push("out vec4 outNormal;");
         src.push("void main(void) {");
         if (clipping) {
-            src.push("  bool clippable = (vFlags2 > 0.0);");
+            src.push("  bool clippable = vFlags2 > 0u;");
             src.push("  if (clippable) {");
             src.push("      float dist = 0.0;");
             for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
