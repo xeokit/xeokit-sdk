@@ -25,7 +25,7 @@ class TrianglesDataTextureOcclusionRenderer {
     }
 
     drawLayer(frameCtx, dataTextureLayer, renderPass) {
-
+        return; // TODO
         const model = dataTextureLayer.model;
         const scene = model.scene;
         const gl = scene.canvas.gl;

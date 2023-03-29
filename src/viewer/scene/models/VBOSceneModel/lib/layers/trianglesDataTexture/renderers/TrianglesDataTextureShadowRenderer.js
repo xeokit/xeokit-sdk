@@ -26,6 +26,7 @@ class TrianglesDataTextureShadowRenderer {
     }
 
     drawLayer(frameCtx, dataTextureLayer) {
+        return; // TODO
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const state = dataTextureLayer._state;
