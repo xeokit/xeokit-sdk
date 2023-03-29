@@ -5,7 +5,7 @@ import {VBOSceneModel} from "../../viewer/scene/models/VBOSceneModel/VBOSceneMod
 import {Plugin} from "../../viewer/Plugin.js";
 import {WebIFCDefaultDataSource} from "./WebIFCDefaultDataSource.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
-import {math} from "../../viewer.js";
+import {math} from "../../viewer/index.js";
 import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords.js";
 
 /**

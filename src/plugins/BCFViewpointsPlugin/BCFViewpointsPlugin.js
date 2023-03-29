@@ -1,7 +1,7 @@
 import {Plugin} from "../../viewer/Plugin.js";
 import {SectionPlane} from "../../viewer/scene/sectionPlane/SectionPlane.js";
-import {Bitmap} from "../../viewer/scene/Bitmap.js";
-import {LineSet} from "../../viewer/scene/LineSet.js";
+import {Bitmap} from "../../viewer/scene/Bitmap/index.js";
+import {LineSet} from "../../viewer/scene/LineSet/index.js";
 
 import {math} from "../../viewer/scene/math/math.js";
 
