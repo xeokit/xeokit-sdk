@@ -983,8 +983,6 @@ const Renderer = function (scene, options) {
 
             if (null !== pickViewMatrix)
             {
-                // debugger;
-
                 // data-textures: update the pick-camera-matrices of all DataTexturePeformanceModel's
                 for (let type in drawableTypeInfo) {
                     if (drawableTypeInfo.hasOwnProperty(type)) {
