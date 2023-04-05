@@ -66,8 +66,15 @@ class PivotController {
             this._pivotCanvasPos[0] = Math.floor((1 + this._pivotProjPos[0] / this._pivotProjPos[3]) * canvasWidth / 2);
             this._pivotCanvasPos[1] = Math.floor((1 - this._pivotProjPos[1] / this._pivotProjPos[3]) * canvasHeight / 2);
 
-            const canvasElem = canvas.canvas;
-            const canvasBoundingRect = canvasElem.getBoundingClientRect();
+            // data-textures: avoid to do continuous DOM layout calculations            
+            let canvasBoundingRect = canvas._lastBoundingClientRect;
+
+            if (!canvasBoundingRect || canvas._canvasSizeChanged)
+            {
+                const canvasElem = canvas.canvas;
+
+                canvasBoundingRect = canvas._lastBoundingClientRect = canvasElem.getBoundingClientRect ();
+            }
 
             if (this._pivotElement) {
                 this._pivotElement.style.left = (Math.floor(canvasBoundingRect.left + this._pivotCanvasPos[0]) - (this._pivotElement.clientWidth / 2) + window.scrollX) + "px";

@@ -12,7 +12,7 @@ const tempVec3a = math.vec3();
  */
 const createRTCViewMat = (function () {
 
-    const tempMat = new Float32Array(16);
+    const tempMat = new Float64Array(16);
     const rtcCenterWorld = new Float64Array(4);
     const rtcCenterView = new Float64Array(4);
 
@@ -24,7 +24,7 @@ const createRTCViewMat = (function () {
         rtcCenterWorld[3] = 1;
         math.transformVec4(viewMat, rtcCenterWorld, rtcCenterView);
         math.setMat4Translation(viewMat, rtcCenterView, rtcViewMat);
-        return rtcViewMat;
+        return rtcViewMat.slice ();
     }
 }());
 
