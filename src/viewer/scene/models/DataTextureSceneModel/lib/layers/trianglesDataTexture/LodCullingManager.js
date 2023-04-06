@@ -25,46 +25,98 @@ function attachFPSTracker (scene, cullingManager) {
     if (!_attachedFPSTracker) {
         _attachedFPSTracker = true;
 
-        const MAX_NUM_TICKS = 10;
+        const MAX_NUM_TICKS = 4;
         let tickTimeArray = new Array (MAX_NUM_TICKS);
         let numTick = 0;
 
         let currentFPS = -1;
 
-        scene.on ("tick", function (tickEvent) {
-            let cullApplied = false;
+        let preRenderTime = Date.now();
+        let deltaTime = 0;
 
-            if (currentFPS != -1)
-            {
-                // Call LOD-culling tasks
-                for (let i = 0, len = _fpsTrackingManagers.length; i < len; i++)
-                {
-                    cullApplied |= _fpsTrackingManagers[i].applyLodCulling (currentFPS);
-                }
-            }
-
-            // If culling was applied, do not count this frame towards FPS stats
-            if (cullApplied)
+        // Apply LOD-culling before rendering the scene
+        scene.on("rendering", function () {
+            if (currentFPS == -1)
             {
                 return;
             }
 
-            tickTimeArray[numTick % MAX_NUM_TICKS] = tickEvent.deltaTime;
-
-            let sumTickTimes = 0;
-
-            if (numTick > MAX_NUM_TICKS)
+            // Call LOD-culling tasks
+            for (let i = 0, len = _fpsTrackingManagers.length; i < len; i++)
             {
-                for (let i = 0; i < MAX_NUM_TICKS; i++)
-                {
-                    sumTickTimes += tickTimeArray[i];
-                }
-        
-                currentFPS = MAX_NUM_TICKS / sumTickTimes * 1000;
+                _fpsTrackingManagers[i].applyLodCulling (currentFPS);
             }
-
-            numTick++;
         });
+
+        // Once the scene has dispached the GL draw* commands, the rendering will
+        // happen in asynchornous mode.
+
+        // A way to measure the frame-rate, is the time that passes:
+        // - since all render commands are sent to the GPU
+        //   (the "scene.rendered" event)
+        // - until the next animation-frame callback is called
+        //   (when the callback passed to "requestAnimationFrame" is called)
+
+        // One advantqage of this method is that the frame-rate tracking will
+        // track mostly the GPU-time: if traditional mechanisms based on xeokit events
+        // were used instead, the frame-rate counter would also measure possibly
+        // the user-side code during dispatching of events.
+
+        // This mechanism here is not ideal but at least makes sure to track the
+        // frame-rate in such a way that is directly proportional to the time spent
+        // drawing geometry on the GPU. And this makes the metric quite good for the
+        // prupose of the LOD mechanism!
+        scene.on("rendered", function () {
+            preRenderTime = Date.now ();
+
+            window.requestAnimationFrame(function () {
+                numTick++;
+
+                const newTime = Date.now();
+                deltaTime = newTime - preRenderTime;
+    
+                preRenderTime = newTime;
+    
+                tickTimeArray[numTick % MAX_NUM_TICKS] = deltaTime;
+    
+                let sumTickTimes = 0;
+    
+                if (numTick > MAX_NUM_TICKS)
+                {
+                    for (let i = 0; i < MAX_NUM_TICKS; i++)
+                    {
+                        sumTickTimes += tickTimeArray[i];
+                    }
+            
+                    currentFPS = MAX_NUM_TICKS / sumTickTimes * 1000;
+                }    
+            });
+        });
+
+        // If the camera stays quiet for more than 3 scene ticks, completely
+        // reset the LOD culling mechanism
+        {
+            let sceneTick = 0;
+
+            let lastTickCameraMoved = sceneTick ;
+
+            scene.camera.on ("matrix", function () {
+                lastTickCameraMoved = sceneTick ;
+            });
+
+            scene.on ("tick", function () {
+                if ((sceneTick  - lastTickCameraMoved) > 3)
+                {
+                    // Call LOD-culling tasks
+                    for (let i = 0, len = _fpsTrackingManagers.length; i < len; i++)
+                    {
+                        _fpsTrackingManagers[i].resetLodCulling ();
+                    }
+                }
+
+                sceneTick++;
+            });
+        }
     }
 
     _fpsTrackingManagers.push (cullingManager);
@@ -296,14 +348,14 @@ class LodCullingManager {
     {
         let lodState = this.lodState;
         const model = this.model;
-
+        
         model.beginDeferredFlagsInAllLayers ();
 
         let retVal = false;
 
         if (currentFPS < lodState.targetFps)
         {
-            if (++lodState.consecutiveFramesWithoutTargetFps > 8)
+            if (++lodState.consecutiveFramesWithoutTargetFps > 0)
             {
                 lodState.consecutiveFramesWithoutTargetFps = 0;
                 retVal = this._increaseLODLevelIndex();
@@ -311,7 +363,7 @@ class LodCullingManager {
         }
         else if (currentFPS > (lodState.targetFps + 4))
         {
-            if (++lodState.consecutiveFramesWithTargetFps > 20)
+            if (++lodState.consecutiveFramesWithTargetFps > 1)
             {
                 lodState.consecutiveFramesWithTargetFps = 0;
                 retVal = this._decreaseLODLevelIndex();
@@ -322,6 +374,29 @@ class LodCullingManager {
 
         if (retVal) {
             console.log ("LOD level = " + lodState.lodLevelIndex);
+        }
+
+        return retVal;
+    }
+
+    resetLodCulling ()
+    {
+        const model = this.model;
+        
+        model.beginDeferredFlagsInAllLayers ();
+
+        let retVal = false;
+
+        let decreasedLevel = false;
+
+        do {
+            retVal |= (decreasedLevel = this._decreaseLODLevelIndex());
+        } while (decreasedLevel);
+
+        model.commitDeferredFlagsInAllLayers ();   
+
+        if (retVal) {
+            console.log ("LOD resetted");
         }
 
         return retVal;
