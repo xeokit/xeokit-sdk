@@ -1,4 +1,4 @@
-import { DataTexturePeformanceModel }  from "../../../DataTexturePeformanceModel.js"
+import { DataTextureSceneModel }  from "../../../DataTextureSceneModel.js"
 
 // For JSDoc autocompletion
 import { VBOSceneModelNode } from "../../VBOSceneModelNode.js"
@@ -147,7 +147,7 @@ function attachFPSTracker (scene, cullingManager) {
     }
 
     /**
-     * @param {DataTexturePeformanceModel} model
+     * @param {DataTextureSceneModel} model
      */
     initializeLodState (model) {
         if (model._nodeList.length == 0)
@@ -201,13 +201,13 @@ function attachFPSTracker (scene, cullingManager) {
 
 class LodCullingManager {
     /**
-     * @param {DataTexturePeformanceModel} model 
+     * @param {DataTextureSceneModel} model
      * @param {Array<number>} lodLevels 
      * @param {number} targetFps 
      */
     constructor (model, lodLevels, targetFps) {
         /**
-         * @type {DataTexturePeformanceModel}
+         * @type {DataTextureSceneModel}
          */
         this.model = model;
 

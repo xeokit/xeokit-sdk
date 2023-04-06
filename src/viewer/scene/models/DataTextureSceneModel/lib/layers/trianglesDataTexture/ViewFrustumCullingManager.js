@@ -2,7 +2,7 @@ import { clusterizeV2 } from "./cluster-helper.js";
 import { math } from "../../../../../math/math.js";
 
 // For JSDoc autocompletion
-import { DataTexturePeformanceModel }  from "../../../DataTexturePeformanceModel.js"
+import { DataTextureSceneModel }  from "../../../DataTextureSceneModel.js"
 import { RBush3D } from "./rbush3d.js";
 import { VBOSceneModelNode } from "../../VBOSceneModelNode.js";
 
@@ -209,7 +209,7 @@ const VISIBILITY_CHECK_ENVOLVES_V = (1 << 14);
     }
 
     /**
-     * @param {DataTexturePeformanceModel} model
+     * @param {DataTextureSceneModel} model
      * @param {*} fnForceFinalizeLayer 
      */
     finalize (model, fnForceFinalizeLayer) {
@@ -245,7 +245,7 @@ const VISIBILITY_CHECK_ENVOLVES_V = (1 << 14);
     }
 
     /**
-     * @param {DataTexturePeformanceModel} model
+     * @param {DataTextureSceneModel} model
      */
     applyViewFrustumCulling (model) {
         if (!this.finalized) {
@@ -641,7 +641,7 @@ const VISIBILITY_CHECK_ENVOLVES_V = (1 << 14);
 
 class ViewFrustumCullingManager {
     /**
-     * @param {DataTexturePeformanceModel} model
+     * @param {DataTextureSceneModel} model
      */
     constructor (model) {
         /**

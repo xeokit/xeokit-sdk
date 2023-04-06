@@ -1,6 +1,6 @@
 import {utils} from "../../viewer/scene/utils.js"
 import {VBOSceneModel} from "../../viewer/scene/models/VBOSceneModel/VBOSceneModel.js";
-import {DataTexturePeformanceModel} from "../../viewer/scene/models/VBOSceneModel/DataTexturePeformanceModel.js";
+import {DataTextureSceneModel} from "../../viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {XKTDefaultDataSource} from "./XKTDefaultDataSource.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
@@ -738,7 +738,7 @@ class XKTLoaderPlugin extends Plugin {
         let sceneModel;
 
         if (!!params.useDataTextures) {
-            sceneModel = new DataTexturePeformanceModel(this.viewer.scene, utils.apply(params, {
+            sceneModel = new DataTextureSceneModel(this.viewer.scene, utils.apply(params, {
                 isModel: true,
                 origin: params.origin,
                 targetLodFps: params.useDataTextures.targetLodFps || false,

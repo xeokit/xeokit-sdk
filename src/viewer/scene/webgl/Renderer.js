@@ -10,7 +10,7 @@ import {createRTCViewMat} from "../math/rtcCoords.js";
 import {SAODepthLimitedBlurRenderer} from "./sao/SAODepthLimitedBlurRenderer.js";
 import {RenderBufferManager} from "./RenderBufferManager.js";
 import {getExtension} from "./getExtension.js";
-import {DataTexturePeformanceModel} from "../models/VBOSceneModel/DataTexturePeformanceModel.js"
+import {DataTextureSceneModel} from "../models/DataTextureSceneModel/DataTextureSceneModel.js"
 
 /**
  * @private
@@ -984,13 +984,13 @@ const Renderer = function (scene, options) {
 
             if (null !== pickViewMatrix)
             {
-                // data-textures: update the pick-camera-matrices of all DataTexturePeformanceModel's
+                // data-textures: update the pick-camera-matrices of all DataTextureSceneModel's
                 for (let type in drawableTypeInfo) {
                     if (drawableTypeInfo.hasOwnProperty(type)) {
                         const drawableList = drawableTypeInfo[type].drawableList;    
                         for (let i = 0, len = drawableList.length; i < len; i++) {
                             const drawable = drawableList[i];
-                            if (drawable instanceof DataTexturePeformanceModel) {
+                            if (drawable instanceof DataTextureSceneModel) {
                                 if (drawable.pickCameraTexture) {
                                     drawable.pickCameraTexture._updateViewMatrix (
                                         pickViewMatrix,
