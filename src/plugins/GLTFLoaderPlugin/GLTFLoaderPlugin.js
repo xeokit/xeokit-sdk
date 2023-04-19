@@ -301,7 +301,7 @@ class GLTFLoaderPlugin extends Plugin {
 
                 params.readableGeometry = false;
 
-                params.handleGLTFNode = (modelId, glTFNode, actions) => {
+                params.handlenode = (modelId, glTFNode, actions) => {
 
                     const name = glTFNode.name;
 
@@ -373,7 +373,7 @@ class GLTFLoaderPlugin extends Plugin {
 
         } else {
 
-            params.handleGLTFNode = (modelId, glTFNode, actions) => {
+            params.handlenode = (modelId, glTFNode, actions) => {
 
                 const name = glTFNode.name;
 

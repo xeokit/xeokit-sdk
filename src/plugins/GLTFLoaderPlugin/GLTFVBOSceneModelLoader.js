@@ -494,6 +494,7 @@ function loadNode(ctx, node, depth, matrix) {
         let createEntity;
         if (ctx.handlenode) {
             const actions = {};
+
             if (!ctx.handlenode(ctx.sceneModel.id, node, actions)) {
                 return;
             }
@@ -592,17 +593,17 @@ function loadNode(ctx, node, depth, matrix) {
                 sceneModel.createMesh(meshCfg);
                 deferredMeshIds.push(meshCfg.id);
             }
-            // if (createEntity) {
-            //     sceneModel.createEntity(utils.apply(createEntity, {
-            //         meshIds: deferredMeshIds,
-            //         isObject: true
-            //     }));
-            // } else {
-            //     sceneModel.createEntity({
-            //         meshIds: deferredMeshIds,
-            //         isObject: true
-            //     });
-            // }
+         if (createEntity) {
+             sceneModel.createEntity(utils.apply(createEntity, {
+                 meshIds: deferredMeshIds,
+                 isObject: true
+             }));
+         } else {
+             sceneModel.createEntity({
+                 meshIds: deferredMeshIds,
+                 isObject: true
+             });
+         }
         }
     }
 

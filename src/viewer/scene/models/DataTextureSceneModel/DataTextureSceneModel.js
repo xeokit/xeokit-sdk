@@ -1363,7 +1363,7 @@ class DataTextureSceneModel extends Component {
                 continue;
             }
             if (mesh.parent) {
-                this.error("Mesh with ID " + meshId + " already belongs to object with ID " + mesh.parent.id + " - ignoring this mesh");
+                // this.error("Mesh with ID " + meshId + " already belongs to object with ID " + mesh.parent.id + " - ignoring this mesh");
                 continue;
             }
             meshes.push(mesh);
