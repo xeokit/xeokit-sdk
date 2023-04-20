@@ -372,7 +372,7 @@ const Renderer = function (scene, options) {
 
                     const drawable = drawableList[i];
 
-                    if (drawable.culled === true || drawable.visible === false || !drawable.drawDepth) {
+                    if (drawable.culled === true || drawable.visible === false || !drawable.drawDepth || !drawable.saoEnabled) {
                         continue;
                     }
 

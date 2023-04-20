@@ -225,7 +225,7 @@ class DataTextureSceneModel extends Component {
         this._opacity = 1.0;
         this._colorize = [1, 1, 1];
 
-        this._saoEnabled = (cfg.saoEnabled !== false);
+        this._saoEnabled = false;
 
         this._pbrEnabled = (!!cfg.pbrEnabled);
 
