@@ -183,7 +183,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     import {Viewer, XKTLoaderPlugin, NavCubePlugin, TreeViewPlugin, FastNavPlugin} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
-    //    import {Viewer, XKTLoaderPlugin, NavCubePlugin, TreeViewPlugin, FastNavPlugin} from "../dist/xeokit-sdk.es.js";
+//    import {Viewer, XKTLoaderPlugin, NavCubePlugin, TreeViewPlugin, FastNavPlugin} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera, tweak x-ray and highlight materials
@@ -195,9 +195,9 @@
         saoEnabled: false
     });
 
-    viewer.camera.eye = [102.07185264355974, 45.23873322531372, -54.1001537318987]
-    viewer.camera.look = [35.0291287591034, -3.5295781673428905, -20.312957533628705]
-    viewer.camera.up = [-0.48646319926706455, 0.8385999559445908, 0.24516049773277654]
+    viewer.scene.camera.eye = [-66.26, 105.84, -281.92];
+    viewer.scene.camera.look = [42.45, 49.62, -43.59];
+    viewer.scene.camera.up = [0.05, 0.95, 0.15];
 
     new FastNavPlugin(viewer);
 
@@ -231,15 +231,39 @@
 
     const sceneModel = xktLoader.load({
         id: "myModel",
-        src: "../assets/models/xkt/v8/ifc/OTCConferenceCenter.ifc.xkt",
+        src: "../assets/models/xkt/v8/ifc/HolterTower.ifc.xkt",
         excludeTypes: ["IfcSpace"],
         edges: true,
         useDataTextures: {
             enableViewFrustumCulling: true,
-            //     // For this model, set the target frame-rate to 15 fps for LOD mechanism
-            targetLodFps: 45,
+            targetLodFps: 40,
         }
     });
+
+    xktLoader.load({
+        id: "myModel2",
+        src: "../assets/models/xkt/v8/ifc/HolterTower.ifc.xkt",
+        excludeTypes: ["IfcSpace"],
+        edges: true,
+        position: [120, 0, 0],
+        useDataTextures: {
+            enableViewFrustumCulling: true,
+            targetLodFps: 40,
+        }
+    });
+
+    xktLoader.load({
+        id: "myModel3",
+        src: "../assets/models/xkt/v8/ifc/HolterTower.ifc.xkt",
+        excludeTypes: ["IfcSpace"],
+        edges: true,
+        position: [-120, 0, 0],
+        useDataTextures: {
+            enableViewFrustumCulling: true,
+            targetLodFps: 40,
+        }
+    });
+
 
     const t0 = performance.now();
     document.getElementById("time").innerHTML = "Loading model...";
