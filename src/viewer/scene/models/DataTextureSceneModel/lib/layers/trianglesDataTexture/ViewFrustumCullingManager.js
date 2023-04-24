@@ -268,7 +268,7 @@ const VISIBILITY_CHECK_ENVOLVES_V = (1 << 14);
             this._camera = model.scene.camera;
         }
 
-        this._ensureFrustumPropsUpdated ();
+        this._ensureFrustumPropsUpdated (model);
 
         this._initializeCullingDataIfNeeded (model);
 
@@ -447,9 +447,11 @@ const VISIBILITY_CHECK_ENVOLVES_V = (1 << 14);
     }
 
     /**
+     * @param {DataTextureSceneModel} model
+     * 
      * @private
      */
-    _ensureFrustumPropsUpdated ()
+    _ensureFrustumPropsUpdated (model)
     {
         // Assuming "min" for fovAxis
         const min = Math.min (
@@ -478,10 +480,33 @@ const VISIBILITY_CHECK_ENVOLVES_V = (1 << 14);
         //     return;
         // }
 
+        // Adjust camera eye/look to take into account the `model.worldMatrix`:
+        //  - the entities' AABBs don't take it into account
+        //  - and they can't, since `model.worldMatrix` is dynamic
+        // So, instead of transformating the positions of the r*tree's AABBs,
+        // apply the inverse transform to the camera eye/look, since the culling
+        // result is equivalent.
+        const invWorldMatrix = math.inverseMat4(
+            model.worldMatrix,
+            math.mat4()
+        );
+
+        const modelCamEye = math.transformVec3(
+            this._camera.eye,
+            invWorldMatrix,
+            [ 0, 0, 0 ]
+        );
+
+        const modelCamLook = math.transformVec3(
+            this._camera.look,
+            invWorldMatrix,
+            [ 0, 0, 0 ]
+        );
+
         this._frustumProps.forward = math.normalizeVec3 (
             math.subVec3 (
-                this._camera.look,
-                this._camera.eye,
+                modelCamLook,
+                modelCamEye,
                 [ 0, 0, 0]
             ),
             [ 0, 0, 0]
@@ -501,7 +526,7 @@ const VISIBILITY_CHECK_ENVOLVES_V = (1 << 14);
             [ 0, 0, 0 ]
         );
 
-        this._frustumProps.eye = this._camera.eye.slice ();
+        this._frustumProps.eye = modelCamEye.slice ();
 
         this._frustumProps.CAM_FACTOR_1 = this._frustumProps.fov / 2 * this._frustumProps.wMultiply / _180_DIV_MATH_PI;
         this._frustumProps.CAM_FACTOR_2 = this._frustumProps.fov / 2 * this._frustumProps.hMultiply / _180_DIV_MATH_PI;
