@@ -1744,18 +1744,24 @@ class TrianglesDataTextureLayer {
  * 
  * @returns {object} The mesh information enrichened with `.preparedBuckets` key.
  */
-function prepareMeshGeometry (geometryCfg) {
+function prepareMeshGeometry (geometryCfg, enableVertexWelding) {
     let uniquePositions, uniqueIndices, uniqueEdgeIndices;
 
-    [
-        uniquePositions,
-        uniqueIndices,
-        uniqueEdgeIndices,
-    ] = uniquifyPositions.uniquifyPositions ({
-        positions: geometryCfg.positions,
-        indices: geometryCfg.indices,
-        edgeIndices: geometryCfg.edgeIndices
-    });
+    if (enableVertexWelding) {
+        [
+            uniquePositions,
+            uniqueIndices,
+            uniqueEdgeIndices,
+        ] = uniquifyPositions.uniquifyPositions ({
+            positions: geometryCfg.positions,
+            indices: geometryCfg.indices,
+            edgeIndices: geometryCfg.edgeIndices
+        });
+    } else {
+        uniquePositions = geometryCfg.positions;
+        uniqueIndices = geometryCfg.indices;
+        uniqueEdgeIndices = geometryCfg.edgeIndices;
+    }
 
     let numUniquePositions = uniquePositions.length / 3;
 
