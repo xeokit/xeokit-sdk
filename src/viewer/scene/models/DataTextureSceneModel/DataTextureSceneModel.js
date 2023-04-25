@@ -63,6 +63,7 @@ class DataTextureSceneModel extends Component {
      * @param {Boolean} [cfg.pbrEnabled=false] Indicates if physically-based rendering (PBR) will apply to the dataTexturePerformanceModel. Only works when {@link Scene#pbrEnabled} is also ````true````.
      * @param {Number} [cfg.edgeThreshold=10] When xraying, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
      * @param {Boolean} [cfg.disableVertexWelding] Disable vertex welding when loading geometry into the GPU. Default is ```false```.
+     * @param {Boolean} [cfg.disableIndexRebucketing] Disable index rebucketing when loading geometry into the GPU. Default is ```false```.
      */
     constructor(owner, cfg = {}) {
         super(owner, cfg);
@@ -79,6 +80,15 @@ class DataTextureSceneModel extends Component {
          * @type {Boolean}
          */
         this._enableVertexWelding = !cfg.disableVertexWelding;
+
+        /**
+         * Enable demotion of index bitness then loading geometry into the ```TrianglesDataTextureLayer```.
+         * 
+         * The rebucketing is applied per-geometry.
+         * 
+         * @type {Boolean}
+         */
+        this._enableIndexRebucketing = !cfg.disableIndexRebucketing;
 
         this._targetLodFps = cfg.targetLodFps;
 
@@ -1135,7 +1145,8 @@ class DataTextureSceneModel extends Component {
 
             preparedGeometryCfg = prepareMeshGeometry (
                 geometryCfg,
-                this._enableVertexWelding
+                this._enableVertexWelding,
+                this._enableIndexRebucketing
             );
 
             if (instancing) {

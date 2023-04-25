@@ -1744,7 +1744,7 @@ class TrianglesDataTextureLayer {
  * 
  * @returns {object} The mesh information enrichened with `.preparedBuckets` key.
  */
-function prepareMeshGeometry (geometryCfg, enableVertexWelding) {
+function prepareMeshGeometry (geometryCfg, enableVertexWelding, enableIndexRebucketing) {
     let uniquePositions, uniqueIndices, uniqueEdgeIndices;
 
     if (enableVertexWelding) {
@@ -1763,26 +1763,29 @@ function prepareMeshGeometry (geometryCfg, enableVertexWelding) {
         uniqueEdgeIndices = geometryCfg.edgeIndices;
     }
 
-    let numUniquePositions = uniquePositions.length / 3;
+    let buckets;
 
-    let buckets = rebucketPositions (
-        {
+    if (enableIndexRebucketing) {
+        let numUniquePositions = uniquePositions.length / 3;
+
+        buckets = rebucketPositions (
+            {
+                positions: uniquePositions,
+                indices: uniqueIndices,
+                edgeIndices: uniqueEdgeIndices,
+            },
+            (numUniquePositions > (1<< 16)) ? 16 : 8,
+            // true
+        );    
+    } else {
+        buckets = [{
             positions: uniquePositions,
             indices: uniqueIndices,
             edgeIndices: uniqueEdgeIndices,
-        },
-        (numUniquePositions > (1<< 16)) ? 16 : 8,
-        // true
-    );
+        }];
+    }
 
     geometryCfg.preparedBuckets = buckets;
-
-    // chipmunk
-    // geometryCfg.preparedBuckets = [{
-    //     positions: uniquePositions,
-    //     indices: uniqueIndices,
-    //     edgeIndices: uniqueEdgeIndices,
-    // }];
 
     return geometryCfg;
 }
