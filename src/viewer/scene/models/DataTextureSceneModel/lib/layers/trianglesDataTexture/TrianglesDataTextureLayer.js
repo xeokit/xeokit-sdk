@@ -1744,39 +1744,48 @@ class TrianglesDataTextureLayer {
  * 
  * @returns {object} The mesh information enrichened with `.preparedBuckets` key.
  */
-function prepareMeshGeometry (geometryCfg) {
+function prepareMeshGeometry (geometryCfg, enableVertexWelding, enableIndexRebucketing) {
     let uniquePositions, uniqueIndices, uniqueEdgeIndices;
 
-    [
-        uniquePositions,
-        uniqueIndices,
-        uniqueEdgeIndices,
-    ] = uniquifyPositions.uniquifyPositions ({
-        positions: geometryCfg.positions,
-        indices: geometryCfg.indices,
-        edgeIndices: geometryCfg.edgeIndices
-    });
+    if (enableVertexWelding) {
+        [
+            uniquePositions,
+            uniqueIndices,
+            uniqueEdgeIndices,
+        ] = uniquifyPositions.uniquifyPositions ({
+            positions: geometryCfg.positions,
+            indices: geometryCfg.indices,
+            edgeIndices: geometryCfg.edgeIndices
+        });
+    } else {
+        uniquePositions = geometryCfg.positions;
+        uniqueIndices = geometryCfg.indices;
+        uniqueEdgeIndices = geometryCfg.edgeIndices;
+    }
 
-    let numUniquePositions = uniquePositions.length / 3;
+    let buckets;
 
-    let buckets = rebucketPositions (
-        {
+    if (enableIndexRebucketing) {
+        let numUniquePositions = uniquePositions.length / 3;
+
+        buckets = rebucketPositions (
+            {
+                positions: uniquePositions,
+                indices: uniqueIndices,
+                edgeIndices: uniqueEdgeIndices,
+            },
+            (numUniquePositions > (1<< 16)) ? 16 : 8,
+            // true
+        );    
+    } else {
+        buckets = [{
             positions: uniquePositions,
             indices: uniqueIndices,
             edgeIndices: uniqueEdgeIndices,
-        },
-        (numUniquePositions > (1<< 16)) ? 16 : 8,
-        // true
-    );
+        }];
+    }
 
     geometryCfg.preparedBuckets = buckets;
-
-    // chipmunk
-    // geometryCfg.preparedBuckets = [{
-    //     positions: uniquePositions,
-    //     indices: uniqueIndices,
-    //     edgeIndices: uniqueEdgeIndices,
-    // }];
 
     return geometryCfg;
 }
