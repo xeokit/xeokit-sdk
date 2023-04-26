@@ -264,7 +264,7 @@ class TrianglesDataTextureColorRenderer {
                 tempVec4[2] = sao.blendCutoff;
                 tempVec4[3] = sao.blendFactor;
                 gl.uniform4fv(this._uSAOParams, tempVec4);
-                this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 0);
+                this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 10);
             }
         }
 
