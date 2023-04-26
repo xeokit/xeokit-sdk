@@ -264,7 +264,7 @@ class TrianglesDataTextureColorRenderer {
                 tempVec4[2] = sao.blendCutoff;
                 tempVec4[3] = sao.blendFactor;
                 gl.uniform4fv(this._uSAOParams, tempVec4);
-                this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 0);
+                this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 10);
             }
         }
 
@@ -595,7 +595,7 @@ class TrianglesDataTextureColorRenderer {
             src.push("   float blendCutoff       = uSAOParams[2];");
             src.push("   float blendFactor       = uSAOParams[3];");
             src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
-            src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBToFloat(texture2D(uOcclusionTexture, uv))) * blendFactor;");
+            src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBToFloat(texture(uOcclusionTexture, uv))) * blendFactor;");
             src.push("   outColor            = vec4(vColor.rgb * ambient, 1.0);");
         } else {
             src.push("   outColor            = vColor;");
