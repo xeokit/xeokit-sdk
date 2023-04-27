@@ -7,7 +7,7 @@ const tempIntRGB = new Uint16Array([0, 0, 0]);
 /**
  * @private
  */
-class VBOSceneModelNode {
+class DataTextureSceneModelNode {
 
     /**
      * @private
@@ -17,7 +17,7 @@ class VBOSceneModelNode {
         this._isObject = isObject;
 
         /**
-         * The {@link Scene} that contains this VBOSceneModelNode.
+         * The {@link Scene} that contains this DataTextureSceneModelNode.
          *
          * @property scene
          * @type {Scene}
@@ -26,7 +26,7 @@ class VBOSceneModelNode {
         this.scene = model.scene;
 
         /**
-         * The VBOSceneModel that contains this VBOSceneModelNode.
+         * The VBOSceneModel that contains this DataTextureSceneModelNode.
          * @property model
          * @type {VBOSceneModel}
          * @final
@@ -34,7 +34,7 @@ class VBOSceneModelNode {
         this.model = model;
 
         /**
-         * The PerformanceModelMesh instances contained by this VBOSceneModelNode
+         * The PerformanceModelMesh instances contained by this DataTextureSceneModelNode
          * @property meshes
          * @type {{Array of PerformanceModelMesh}}
          * @final
@@ -50,7 +50,7 @@ class VBOSceneModelNode {
         }
 
         /**
-         * ID of this VBOSceneModelNode, unique within the {@link Scene}.
+         * ID of this DataTextureSceneModelNode, unique within the {@link Scene}.
          * @property id
          * @type {String|Number}
          * @final
@@ -88,7 +88,7 @@ class VBOSceneModelNode {
     //------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Returns true to indicate that VBOSceneModelNode is an {@link Entity}.
+     * Returns true to indicate that DataTextureSceneModelNode is an {@link Entity}.
      * @type {Boolean}
      */
     get isEntity() {
@@ -96,7 +96,7 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Always returns ````false```` because a VBOSceneModelNode can never represent a model.
+     * Always returns ````false```` because a DataTextureSceneModelNode can never represent a model.
      *
      * @type {Boolean}
      */
@@ -105,9 +105,9 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Returns ````true```` if this VBOSceneModelNode represents an object.
+     * Returns ````true```` if this DataTextureSceneModelNode represents an object.
      *
-     * When ````true```` the VBOSceneModelNode will be registered by {@link VBOSceneModelNode#id} in
+     * When ````true```` the DataTextureSceneModelNode will be registered by {@link DataTextureSceneModelNode#id} in
      * {@link Scene#objects} and may also have a {@link MetaObject} with matching {@link MetaObject#id}.
      *
      * @type {Boolean}
@@ -117,7 +117,7 @@ class VBOSceneModelNode {
     }
 
     /**
-     * World-space 3D axis-aligned bounding box (AABB) of this VBOSceneModelNode.
+     * World-space 3D axis-aligned bounding box (AABB) of this DataTextureSceneModelNode.
      *
      * Represented by a six-element Float64Array containing the min/max extents of the
      * axis-aligned volume, ie. ````[xmin, ymin,zmin,xmax,ymax, zmax]````.
@@ -129,7 +129,7 @@ class VBOSceneModelNode {
     }
 
     /**
-     * The approximate number of triangles in this VBOSceneModelNode.
+     * The approximate number of triangles in this DataTextureSceneModelNode.
      *
      * @type {Number}
      */
@@ -138,12 +138,12 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Gets if this VBOSceneModelNode is visible.
+     * Gets if this DataTextureSceneModelNode is visible.
      *
-     * Only rendered when {@link VBOSceneModelNode#visible} is ````true```` and {@link VBOSceneModelNode#culled} is ````false````.
+     * Only rendered when {@link DataTextureSceneModelNode#visible} is ````true```` and {@link DataTextureSceneModelNode#culled} is ````false````.
      *
-     * When both {@link VBOSceneModelNode#isObject} and {@link VBOSceneModelNode#visible} are ````true```` the VBOSceneModelNode will be
-     * registered by {@link VBOSceneModelNode#id} in {@link Scene#visibleObjects}.
+     * When both {@link DataTextureSceneModelNode#isObject} and {@link DataTextureSceneModelNode#visible} are ````true```` the DataTextureSceneModelNode will be
+     * registered by {@link DataTextureSceneModelNode#id} in {@link Scene#visibleObjects}.
      *
      * @type {Boolean}
      */
@@ -152,12 +152,12 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Sets if this VBOSceneModelNode is visible.
+     * Sets if this DataTextureSceneModelNode is visible.
      *
-     * Only rendered when {@link VBOSceneModelNode#visible} is ````true```` and {@link VBOSceneModelNode#culled} is ````false````.
+     * Only rendered when {@link DataTextureSceneModelNode#visible} is ````true```` and {@link DataTextureSceneModelNode#culled} is ````false````.
      *
-     * When both {@link VBOSceneModelNode#isObject} and {@link VBOSceneModelNode#visible} are ````true```` the VBOSceneModelNode will be
-     * registered by {@link VBOSceneModelNode#id} in {@link Scene#visibleObjects}.
+     * When both {@link DataTextureSceneModelNode#isObject} and {@link DataTextureSceneModelNode#visible} are ````true```` the DataTextureSceneModelNode will be
+     * registered by {@link DataTextureSceneModelNode#id} in {@link Scene#visibleObjects}.
      *
      * @type {Boolean}
      */
@@ -180,10 +180,10 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Gets if this VBOSceneModelNode is highlighted.
+     * Gets if this DataTextureSceneModelNode is highlighted.
      *
-     * When both {@link VBOSceneModelNode#isObject} and {@link VBOSceneModelNode#highlighted} are ````true```` the VBOSceneModelNode will be
-     * registered by {@link VBOSceneModelNode#id} in {@link Scene#highlightedObjects}.
+     * When both {@link DataTextureSceneModelNode#isObject} and {@link DataTextureSceneModelNode#highlighted} are ````true```` the DataTextureSceneModelNode will be
+     * registered by {@link DataTextureSceneModelNode#id} in {@link Scene#highlightedObjects}.
      *
      * @type {Boolean}
      */
@@ -192,10 +192,10 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Sets if this VBOSceneModelNode is highlighted.
+     * Sets if this DataTextureSceneModelNode is highlighted.
      *
-     * When both {@link VBOSceneModelNode#isObject} and {@link VBOSceneModelNode#highlighted} are ````true```` the VBOSceneModelNode will be
-     * registered by {@link VBOSceneModelNode#id} in {@link Scene#highlightedObjects}.
+     * When both {@link DataTextureSceneModelNode#isObject} and {@link DataTextureSceneModelNode#highlighted} are ````true```` the DataTextureSceneModelNode will be
+     * registered by {@link DataTextureSceneModelNode#id} in {@link Scene#highlightedObjects}.
      *
      * @type {Boolean}
      */
@@ -218,10 +218,10 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Gets if this VBOSceneModelNode is xrayed.
+     * Gets if this DataTextureSceneModelNode is xrayed.
      *
-     * When both {@link VBOSceneModelNode#isObject} and {@link VBOSceneModelNode#xrayed} are ````true```` the VBOSceneModelNode will be
-     * registered by {@link VBOSceneModelNode#id} in {@link Scene#xrayedObjects}.
+     * When both {@link DataTextureSceneModelNode#isObject} and {@link DataTextureSceneModelNode#xrayed} are ````true```` the DataTextureSceneModelNode will be
+     * registered by {@link DataTextureSceneModelNode#id} in {@link Scene#xrayedObjects}.
      *
      * @type {Boolean}
      */
@@ -230,10 +230,10 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Sets if this VBOSceneModelNode is xrayed.
+     * Sets if this DataTextureSceneModelNode is xrayed.
      *
-     * When both {@link VBOSceneModelNode#isObject} and {@link VBOSceneModelNode#xrayed} are ````true```` the VBOSceneModelNode will be
-     * registered by {@link VBOSceneModelNode#id} in {@link Scene#xrayedObjects}.
+     * When both {@link DataTextureSceneModelNode#isObject} and {@link DataTextureSceneModelNode#xrayed} are ````true```` the DataTextureSceneModelNode will be
+     * registered by {@link DataTextureSceneModelNode#id} in {@link Scene#xrayedObjects}.
      *
      * @type {Boolean}
      */
@@ -256,10 +256,10 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Sets if this VBOSceneModelNode is selected.
+     * Sets if this DataTextureSceneModelNode is selected.
      *
-     * When both {@link VBOSceneModelNode#isObject} and {@link VBOSceneModelNode#selected} are ````true```` the VBOSceneModelNode will be
-     * registered by {@link VBOSceneModelNode#id} in {@link Scene#selectedObjects}.
+     * When both {@link DataTextureSceneModelNode#isObject} and {@link DataTextureSceneModelNode#selected} are ````true```` the DataTextureSceneModelNode will be
+     * registered by {@link DataTextureSceneModelNode#id} in {@link Scene#selectedObjects}.
      *
      * @type {Boolean}
      */
@@ -268,10 +268,10 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Gets if this VBOSceneModelNode is selected.
+     * Gets if this DataTextureSceneModelNode is selected.
      *
-     * When both {@link VBOSceneModelNode#isObject} and {@link VBOSceneModelNode#selected} are ````true```` the VBOSceneModelNode will be
-     * registered by {@link VBOSceneModelNode#id} in {@link Scene#selectedObjects}.
+     * When both {@link DataTextureSceneModelNode#isObject} and {@link DataTextureSceneModelNode#selected} are ````true```` the DataTextureSceneModelNode will be
+     * registered by {@link DataTextureSceneModelNode#id} in {@link Scene#selectedObjects}.
      *
      * @type {Boolean}
      */
@@ -294,7 +294,7 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Gets if this VBOSceneModelNode's edges are enhanced.
+     * Gets if this DataTextureSceneModelNode's edges are enhanced.
      *
      * @type {Boolean}
      */
@@ -303,7 +303,7 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Sets if this VBOSceneModelNode's edges are enhanced.
+     * Sets if this DataTextureSceneModelNode's edges are enhanced.
      *
      * @type {Boolean}
      */
@@ -341,9 +341,9 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Gets if this VBOSceneModelNode is culled.
+     * Gets if this DataTextureSceneModelNode is culled.
      *
-     * Only rendered when {@link VBOSceneModelNode#visible} is ````true```` and {@link VBOSceneModelNode#culled} is ````false````.
+     * Only rendered when {@link DataTextureSceneModelNode#visible} is ````true```` and {@link DataTextureSceneModelNode#culled} is ````false````.
      *
      * @type {Boolean}
      */
@@ -353,9 +353,9 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Sets if this VBOSceneModelNode is culled.
+     * Sets if this DataTextureSceneModelNode is culled.
      *
-     * Only rendered when {@link VBOSceneModelNode#visible} is ````true```` and {@link VBOSceneModelNode#culled} is ````false````.
+     * Only rendered when {@link DataTextureSceneModelNode#visible} is ````true```` and {@link DataTextureSceneModelNode#culled} is ````false````.
      *
      * @type {Boolean}
      */
@@ -383,7 +383,7 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Gets if this VBOSceneModelNode is clippable.
+     * Gets if this DataTextureSceneModelNode is clippable.
      *
      * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
      *
@@ -394,7 +394,7 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Sets if this VBOSceneModelNode is clippable.
+     * Sets if this DataTextureSceneModelNode is clippable.
      *
      * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
      *
@@ -416,7 +416,7 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Gets if this VBOSceneModelNode is included in boundary calculations.
+     * Gets if this DataTextureSceneModelNode is included in boundary calculations.
      *
      * @type {Boolean}
      */
@@ -425,7 +425,7 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Sets if this VBOSceneModelNode is included in boundary calculations.
+     * Sets if this DataTextureSceneModelNode is included in boundary calculations.
      *
      * @type {Boolean}
      */
@@ -444,7 +444,7 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Gets if this VBOSceneModelNode is pickable.
+     * Gets if this DataTextureSceneModelNode is pickable.
      *
      * Picking is done via calls to {@link Scene#pick}.
      *
@@ -455,7 +455,7 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Sets if this VBOSceneModelNode is pickable.
+     * Sets if this DataTextureSceneModelNode is pickable.
      *
      * Picking is done via calls to {@link Scene#pick}.
      *
@@ -476,7 +476,7 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Gets the VBOSceneModelNode's RGB colorize color.
+     * Gets the DataTextureSceneModelNode's RGB colorize color.
      *
      * Each element of the color is in range ````[0..1]````.
      *
@@ -494,7 +494,7 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Sets the VBOSceneModelNode's RGB colorize color.
+     * Sets the DataTextureSceneModelNode's RGB colorize color.
      *
      * Each element of the color is in range ````[0..1]````.
      *
@@ -522,7 +522,7 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Gets the VBOSceneModelNode's opacity factor.
+     * Gets the DataTextureSceneModelNode's opacity factor.
      *
      * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
      *
@@ -537,7 +537,7 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Sets the VBOSceneModelNode's opacity factor, multiplies by the VBOSceneModelNode's rendered fragment alphas.
+     * Sets the DataTextureSceneModelNode's opacity factor, multiplies by the DataTextureSceneModelNode's rendered fragment alphas.
      *
      * This is a factor in range ````[0..1]````.
      *
@@ -577,7 +577,7 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Gets the VBOSceneModelNode's 3D World-space offset.
+     * Gets the DataTextureSceneModelNode's 3D World-space offset.
      *
      * Default value is ````[0,0,0]````.
      *
@@ -588,9 +588,9 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Sets the VBOSceneModelNode's 3D World-space offset.
+     * Sets the DataTextureSceneModelNode's 3D World-space offset.
      *
-     * The offset dynamically translates the VBOSceneModelNode in World-space.
+     * The offset dynamically translates the DataTextureSceneModelNode in World-space.
      *
      * Default value is ````[0, 0, 0]````.
      *
@@ -624,7 +624,7 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Gets if this VBOSceneModelNode casts shadows.
+     * Gets if this DataTextureSceneModelNode casts shadows.
      *
      * @type {Boolean}
      */
@@ -633,7 +633,7 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Sets if to this VBOSceneModelNode casts shadows.
+     * Sets if to this DataTextureSceneModelNode casts shadows.
      *
      * @type {Boolean}
      */
@@ -642,7 +642,7 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Whether or not this VBOSceneModelNode can have shadows cast upon it
+     * Whether or not this DataTextureSceneModelNode can have shadows cast upon it
      *
      * @type {Boolean}
      */
@@ -651,7 +651,7 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Whether or not this VBOSceneModelNode can have shadows cast upon it
+     * Whether or not this DataTextureSceneModelNode can have shadows cast upon it
      *
      * @type {Boolean}
      */
@@ -660,7 +660,7 @@ class VBOSceneModelNode {
     }
 
     /**
-     * Gets if Scalable Ambient Obscurance (SAO) will apply to this VBOSceneModelNode.
+     * Gets if Scalable Ambient Obscurance (SAO) will apply to this DataTextureSceneModelNode.
      *
      * SAO is configured by the Scene's {@link SAO} component.
      *
@@ -734,4 +734,4 @@ class VBOSceneModelNode {
 
 }
 
-export {VBOSceneModelNode};
+export {DataTextureSceneModelNode};

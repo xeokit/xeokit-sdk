@@ -1,7 +1,7 @@
 import { DataTextureSceneModel }  from "../../../DataTextureSceneModel.js"
 
 // For JSDoc autocompletion
-import { VBOSceneModelNode } from "../../VBOSceneModelNode.js"
+import { DataTextureSceneModelNode } from "../../DataTextureSceneModelNode.js"
 import { Scene } from "../../../../../scene/Scene.js"
 
 /**
@@ -145,7 +145,7 @@ function attachFPSTracker (scene, cullingManager) {
          * - key: the number of triangles allowed for the objects in the bucket.
          * - value: all PerformanceNodes that have the number of triangles or more.
          * 
-         * @type {Map<number, Array<VBOSceneModelNode>>}
+         * @type {Map<number, Array<DataTextureSceneModelNode>>}
          */
         this.nodesInLOD = {};
 

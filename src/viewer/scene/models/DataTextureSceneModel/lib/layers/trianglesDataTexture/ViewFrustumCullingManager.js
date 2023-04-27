@@ -4,7 +4,7 @@ import { math } from "../../../../../math/math.js";
 // For JSDoc autocompletion
 import { DataTextureSceneModel }  from "../../../DataTextureSceneModel.js"
 import { RBush3D } from "./rbush3d.js";
-import { VBOSceneModelNode } from "../../VBOSceneModelNode.js";
+import { DataTextureSceneModelNode } from "../../DataTextureSceneModelNode.js";
 
 let tempVec3 = math.vec3 ();
 
@@ -321,7 +321,7 @@ const VISIBILITY_CHECK_ENVOLVES_V = (1 << 14);
         });
 
         /**
-         * @type {Array<VBOSceneModelNode>}
+         * @type {Array<DataTextureSceneModelNode>}
          * @private
          */
         this._internalNodesList = internalNodesList;

@@ -2,8 +2,8 @@ import {Component} from "../../Component.js";
 import {math} from "../../math/math.js";
 import {buildEdgeIndices} from '../../math/buildEdgeIndices.js';
 import {WEBGL_INFO} from '../../webglInfo.js';
-import {VBOSceneModelMesh} from './lib/VBOSceneModelMesh.js';
-import {VBOSceneModelNode} from './lib/VBOSceneModelNode.js';
+import {DataTextureSceneModelMesh} from './lib/DataTextureSceneModelMesh.js';
+import {DataTextureSceneModelNode} from './lib/DataTextureSceneModelNode.js';
 import {prepareMeshGeometry, TrianglesDataTextureLayer} from './lib/layers/trianglesDataTexture/TrianglesDataTextureLayer.js';
 
 import {ENTITY_FLAGS} from './lib/ENTITY_FLAGS.js';
@@ -107,7 +107,7 @@ class DataTextureSceneModel extends Component {
         this._layerList = [];
 
         /**
-         * @type {Array<VBOSceneModelNode>}
+         * @type {Array<DataTextureSceneModelNode>}
          */
         this._nodeList = [];
 
@@ -121,12 +121,12 @@ class DataTextureSceneModel extends Component {
         this._preparedInstancingGeometries = {};
 
         /**
-         * @type {Map<string, VBOSceneModelMesh>}
+         * @type {Map<string, DataTextureSceneModelMesh>}
          */
         this._meshes = {};
         
         /**
-         * @type {Map<string, VBOSceneModelNode>}
+         * @type {Map<string, DataTextureSceneModelNode>}
          */
         this._nodes = {};
 
@@ -1184,7 +1184,7 @@ class DataTextureSceneModel extends Component {
         const metallic = (cfg.metallic !== undefined && cfg.metallic !== null) ? Math.floor(cfg.metallic * 255) : 0;
         const roughness = (cfg.roughness !== undefined && cfg.roughness !== null) ? Math.floor(cfg.roughness * 255) : 255;
 
-        const mesh = new VBOSceneModelMesh(this, id, color, opacity);
+        const mesh = new DataTextureSceneModelMesh(this, id, color, opacity);
 
         const pickId = mesh.pickId;
 
@@ -1429,7 +1429,7 @@ class DataTextureSceneModel extends Component {
             }
         }
 
-        const node = new VBOSceneModelNode(this, cfg.isObject, id, meshes, flags, aabb); // Internally sets PerformanceModelMesh#parent to this PerformanceModelNode
+        const node = new DataTextureSceneModelNode(this, cfg.isObject, id, meshes, flags, aabb); // Internally sets PerformanceModelMesh#parent to this PerformanceModelNode
         this._nodeList.push(node);
         this._nodes[id] = node;
         this.numEntities++;
@@ -1842,7 +1842,7 @@ class DataTextureSceneModel extends Component {
     }
 
     /**
-     * Called by VBOSceneModelMesh.drawPickDepths()
+     * Called by DataTextureSceneModelMesh.drawPickDepths()
      * @private
      */
     drawPickDepths(frameCtx) {
@@ -1857,7 +1857,7 @@ class DataTextureSceneModel extends Component {
     }
 
     /**
-     * Called by VBOSceneModelMesh.drawPickNormals()
+     * Called by DataTextureSceneModelMesh.drawPickNormals()
      * @private
      */
     drawPickNormals(frameCtx) {

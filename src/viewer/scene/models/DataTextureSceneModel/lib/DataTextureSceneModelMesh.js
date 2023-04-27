@@ -4,7 +4,7 @@ import {math} from "../../../math/math.js";
  * @private
  * @implements Pickable
  */
-class VBOSceneModelMesh {
+class DataTextureSceneModelMesh {
 
     constructor(model, id, color, opacity, layer = null, portionId = 0) {
 
@@ -20,9 +20,9 @@ class VBOSceneModelMesh {
         this.model = model;
 
         /**
-         * The VBOSceneModelNode that contains this PerformanceModelMesh.
+         * The DataTextureSceneModelNode that contains this PerformanceModelMesh.
          *
-         * A PerformanceModelMesh always belongs to exactly one VBOSceneModelNode.
+         * A PerformanceModelMesh always belongs to exactly one DataTextureSceneModelNode.
          *
          * @property object
          * @type {VBOSceneModelNode}
@@ -31,9 +31,9 @@ class VBOSceneModelMesh {
         this.object = null;
 
         /**
-         * The VBOSceneModelNode that contains this PerformanceModelMesh.
+         * The DataTextureSceneModelNode that contains this PerformanceModelMesh.
          *
-         * A PerformanceModelMesh always belongs to exactly one VBOSceneModelNode.
+         * A PerformanceModelMesh always belongs to exactly one DataTextureSceneModelNode.
          *
          * @property object
          * @type {VBOSceneModelNode}
@@ -81,7 +81,7 @@ class VBOSceneModelMesh {
         this.numTriangles = 0;
 
         /**
-         * 3D origin of the VBOSceneModelMesh's vertex positions, if they are in relative-to-center (RTC) coordinates.
+         * 3D origin of the DataTextureSceneModelMesh's vertex positions, if they are in relative-to-center (RTC) coordinates.
          *
          * When this is defined, then the positions are RTC, which means that they are relative to this position.
          *
@@ -273,4 +273,4 @@ class VBOSceneModelMesh {
     }
 }
 
-export {VBOSceneModelMesh};
+export {DataTextureSceneModelMesh};
