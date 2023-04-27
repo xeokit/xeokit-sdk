@@ -782,7 +782,7 @@ class DistanceMeasurement extends Component {
     }
 
     /**
-     * Sets if the wires, dots ad labels will fire "mouseOver" "mouseLeave" and "contextMenu" events.
+     * Sets if the wires, dots ad labels will fire "mouseOver" "mouseLeave" and "contextMenu" events, or ignore mouse events altogether.
      *
      * @type {Boolean}
      */

@@ -37,6 +37,7 @@ class Wire {
         wireStyle['-o-transform'] = 'rotate(0deg)';
         wireStyle['transform'] = 'rotate(0deg)';
         wireStyle["opacity"] = 1.0;
+        wireStyle["pointer-events"] = "none";
         if (cfg.onContextMenu) {
          //   wireStyle["cursor"] = "context-menu";
         }
