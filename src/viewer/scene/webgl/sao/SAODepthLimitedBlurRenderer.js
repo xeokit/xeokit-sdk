@@ -203,7 +203,7 @@ class SAODepthLimitedBlurRenderer {
         const positions = new Float32Array([1, 1, 0, -1, 1, 0, -1, -1, 0, 1, -1, 0]);
 
         // Mitigation: if Uint8Array is used, the geometry is corrupted on OSX when using Chrome with data-textures
-        const indices = new Uint16Array([0, 1, 2, 0, 2, 3]);
+        const indices = new Uint32Array([0, 1, 2, 0, 2, 3]);
 
         this._positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, positions, positions.length, 3, gl.STATIC_DRAW);
         this._uvBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, uv, uv.length, 2, gl.STATIC_DRAW);
