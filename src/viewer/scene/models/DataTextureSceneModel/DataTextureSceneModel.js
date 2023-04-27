@@ -4,7 +4,6 @@ import {buildEdgeIndices} from '../../math/buildEdgeIndices.js';
 import {WEBGL_INFO} from '../../webglInfo.js';
 import {VBOSceneModelMesh} from './lib/VBOSceneModelMesh.js';
 import {VBOSceneModelNode} from './lib/VBOSceneModelNode.js';
-import {getScratchMemory, putScratchMemory} from "./lib/ScratchMemory.js";
 import {prepareMeshGeometry, TrianglesDataTextureLayer} from './lib/layers/trianglesDataTexture/TrianglesDataTextureLayer.js';
 
 import {ENTITY_FLAGS} from './lib/ENTITY_FLAGS.js';
@@ -120,8 +119,6 @@ class DataTextureSceneModel extends Component {
         this._instancingGeometries = {};
 
         this._preparedInstancingGeometries = {};
-
-        this._scratchMemory = getScratchMemory();
 
         /**
          * @type {Map<string, VBOSceneModelMesh>}
@@ -1169,7 +1166,6 @@ class DataTextureSceneModel extends Component {
         {
             layer = new TrianglesDataTextureLayer(this, {
                 layerIndex: 0, // This is set in #finalize()
-                scratchMemory: this._scratchMemory,
 
                 // chipmunk
                 // positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
@@ -1894,7 +1890,6 @@ class DataTextureSceneModel extends Component {
         if (this._isModel) {
             this.scene._deregisterModel(this);
         }
-        putScratchMemory();
         super.destroy();
     }
 }

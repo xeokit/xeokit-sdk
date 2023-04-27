@@ -70,7 +70,6 @@ class TrianglesDataTextureLayer {
      * @param cfg.layerIndex
      * @param cfg.positionsDecodeMatrix
      * @param cfg.origin
-     * @param cfg.scratchMemory
      */
     constructor(model, cfg) {
         this._layerNumber = _numberOfLayers++;
@@ -91,7 +90,6 @@ class TrianglesDataTextureLayer {
         this._dataTextureRenderers = getDataTextureRenderers(model.scene);
         this.model = model;
         this._buffer = new TrianglesDataTextureBuffer();
-        this._scratchMemory = cfg.scratchMemory;
 
         /**
          * @type {DataTextureState}
