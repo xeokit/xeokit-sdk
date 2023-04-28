@@ -1,5 +1,7 @@
 import {Plugin} from "../../viewer/Plugin.js";
 
+const treeViews = [];
+
 /**
  * @desc A {@link Viewer} plugin that provides an HTML tree view to navigate the IFC elements in models.
  * <br>
@@ -378,6 +380,16 @@ export class TreeViewPlugin extends Plugin {
             return;
         }
 
+        for (let i = 0; ; i++) {
+            if (!treeViews[i]) {
+                treeViews[i] = this;
+                this._index = i;
+                this._id = `tree-${i}`;
+                break;
+            }
+        }
+
+
         this._containerElement = cfg.containerElement;
         this._metaModels = {};
         this._autoAddModels = (cfg.autoAddModels !== false);
@@ -390,6 +402,7 @@ export class TreeViewPlugin extends Plugin {
         this._muteTreeEvents = false;
         this._rootNodes = [];
         this._objectNodes = {}; // Object ID -> Node
+        this._nodeNodes = {}; // Node ID -> Node
         this._rootName = cfg.rootName;
         this._sortNodes = cfg.sortNodes;
         this._pruneEmptyNodes = cfg.pruneEmptyNodes;
@@ -420,7 +433,7 @@ export class TreeViewPlugin extends Plugin {
             } else {
                 node.numVisibleEntities--;
             }
-            const checkbox = document.getElementById(node.nodeId);
+            const checkbox = document.getElementById(`checkbox-${node.nodeId}`);
             if (checkbox) {
                 checkbox.checked = visible;
             }
@@ -432,7 +445,7 @@ export class TreeViewPlugin extends Plugin {
                 } else {
                     parent.numVisibleEntities--;
                 }
-                const parentCheckbox = document.getElementById(parent.nodeId);
+                const parentCheckbox = document.getElementById(`checkbox-${parent.nodeId}`);
                 if (parentCheckbox) {
                     const newChecked = (parent.numVisibleEntities > 0);
                     if (newChecked !== parentCheckbox.checked) {
@@ -460,7 +473,7 @@ export class TreeViewPlugin extends Plugin {
                 return;
             }
             node.xrayed = xrayed;
-            const listItemElementId = 'node-' + node.nodeId;
+            const listItemElementId = node.nodeId;
             const listItemElement = document.getElementById(listItemElementId);
             if (listItemElement !== null) {
                 if (xrayed) {
@@ -493,14 +506,13 @@ export class TreeViewPlugin extends Plugin {
             this._muteSceneEvents = true;
             const checkbox = event.target;
             const visible = checkbox.checked;
-            const nodeId = checkbox.id;
-            const checkedObjectId = nodeId;
-            const checkedNode = this._objectNodes[checkedObjectId];
+            const nodeId = checkbox.id.replace('checkbox-', '');
+            const checkedNode = this._nodeNodes[nodeId];
             const objects = this._viewer.scene.objects;
             let numUpdated = 0;
             this._withNodeTree(checkedNode, (node) => {
                 const objectId = node.objectId;
-                const checkBoxId = node.nodeId;
+                const checkBoxId = `checkbox-${node.nodeId}`;
                 const entity = objects[objectId];
                 const isLeaf = (node.children.length === 0);
                 node.numVisibleEntities = visible ? node.numEntities : 0;
@@ -519,7 +531,7 @@ export class TreeViewPlugin extends Plugin {
             let parent = checkedNode.parent;
             while (parent) {
                 parent.checked = visible;
-                const checkbox2 = document.getElementById(parent.nodeId); // Parent checkboxes are always in DOM
+                const checkbox2 = document.getElementById(`checkbox-${parent.nodeId}`); // Parent checkboxes are always in DOM
                 if (visible) {
                     parent.numVisibleEntities += numUpdated;
                 } else {
@@ -696,7 +708,7 @@ export class TreeViewPlugin extends Plugin {
                 this._expandSwitchElement(switchElement);
             }
         }
-        const listItemElementId = 'node-' + nodeId;
+        const listItemElementId = nodeId;
         const listItemElement = document.getElementById(listItemElementId);
         listItemElement.scrollIntoView({block: "center"});
         listItemElement.classList.add("highlighted-node");
@@ -796,6 +808,7 @@ export class TreeViewPlugin extends Plugin {
             this._viewer.scene.off(this._onObjectVisibility);
             this._destroyed = true;
         }
+        delete treeViews[this._index];
         super.destroy();
     }
 
@@ -807,6 +820,7 @@ export class TreeViewPlugin extends Plugin {
 
         this._rootNodes = [];
         this._objectNodes = {};
+        this._nodeNodes = {};
         this._validate();
         if (this.valid || (this._hierarchy !== "storeys")) {
             this._createEnabledNodes();
@@ -962,7 +976,7 @@ export class TreeViewPlugin extends Plugin {
         const objectId = metaObject.id;
         if (metaObjectType === "IfcBuilding") {
             buildingNode = {
-                nodeId: objectId,
+                nodeId: `${this._id}-${objectId}`,
                 objectId: objectId,
                 title: this._rootName || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
                 type: metaObjectType,
@@ -975,13 +989,14 @@ export class TreeViewPlugin extends Plugin {
             };
             this._rootNodes.push(buildingNode);
             this._objectNodes[buildingNode.objectId] = buildingNode;
+            this._nodeNodes[buildingNode.nodeId] = buildingNode;
         } else if (metaObjectType === "IfcBuildingStorey") {
             if (!buildingNode) {
                 this.error("Failed to build storeys hierarchy for model '" + this.metaModel.id + "' - model does not have an IfcBuilding object, or is not an IFC model");
                 return;
             }
             storeyNode = {
-                nodeId: objectId,
+                nodeId: `${this._id}-${objectId}`,
                 objectId: objectId,
                 title: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
                 type: metaObjectType,
@@ -994,6 +1009,7 @@ export class TreeViewPlugin extends Plugin {
             };
             buildingNode.children.push(storeyNode);
             this._objectNodes[storeyNode.objectId] = storeyNode;
+            this._nodeNodes[storeyNode.nodeId] = storeyNode;
             typeNodes = {};
         } else {
             if (storeyNode) {
@@ -1003,11 +1019,9 @@ export class TreeViewPlugin extends Plugin {
                     typeNodes = typeNodes || {};
                     let typeNode = typeNodes[metaObjectType];
                     if (!typeNode) {
-                        const typeNodeObjectId = storeyNode.objectId + "." + metaObjectType;
-                        const typeNodeNodeId = typeNodeObjectId;
                         typeNode = {
-                            nodeId: typeNodeNodeId,
-                            objectId: typeNodeObjectId,
+                            nodeId: `${this._id}-${storeyNode.objectId}-${metaObjectType}`,
+                            objectId: `${storeyNode.objectId}-${metaObjectType}`,
                             title: metaObjectType,
                             type: metaObjectType,
                             parent: storeyNode,
@@ -1018,11 +1032,12 @@ export class TreeViewPlugin extends Plugin {
                             children: []
                         };
                         storeyNode.children.push(typeNode);
-                        this._objectNodes[typeNodeObjectId] = typeNode;
+                        this._objectNodes[typeNode.objectId] = typeNode;
+                        this._nodeNodes[typeNode.nodeId] = typeNode;
                         typeNodes[metaObjectType] = typeNode;
                     }
                     const node = {
-                        nodeId: objectId,
+                        nodeId: `${this._id}-${objectId}`,
                         objectId: objectId,
                         title: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
                         type: metaObjectType,
@@ -1035,6 +1050,7 @@ export class TreeViewPlugin extends Plugin {
                     };
                     typeNode.children.push(node);
                     this._objectNodes[node.objectId] = node;
+                    this._nodeNodes[node.nodeId] = node;
                 }
             }
         }
@@ -1063,7 +1079,7 @@ export class TreeViewPlugin extends Plugin {
         const objectId = metaObject.id;
         if (!metaObject.parent) {
             rootNode = {
-                nodeId: objectId,
+                nodeId: `${this._id}-${objectId}`,
                 objectId: objectId,
                 title: this._rootName || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
                 type: metaObjectType,
@@ -1076,6 +1092,7 @@ export class TreeViewPlugin extends Plugin {
             };
             this._rootNodes.push(rootNode);
             this._objectNodes[rootNode.objectId] = rootNode;
+            this._nodeNodes[rootNode.nodeId] = rootNode;
             typeNodes = {};
         } else {
             if (rootNode) {
@@ -1085,8 +1102,8 @@ export class TreeViewPlugin extends Plugin {
                     let typeNode = typeNodes[metaObjectType];
                     if (!typeNode) {
                         typeNode = {
-                            nodeId: rootNode.objectId + "." + metaObjectType,
-                            objectId: rootNode.objectId + "." + metaObjectType,
+                            nodeId: `${this._id}-${rootNode.objectId}-${metaObjectType}`,
+                            objectId: `${rootNode.objectId}-${metaObjectType}`,
                             title: metaObjectType,
                             type: metaObjectType,
                             parent: rootNode,
@@ -1098,10 +1115,11 @@ export class TreeViewPlugin extends Plugin {
                         };
                         rootNode.children.push(typeNode);
                         this._objectNodes[typeNode.objectId] = typeNode;
+                        this._nodeNodes[typeNode.nodeId] = typeNode;
                         typeNodes[metaObjectType] = typeNode;
                     }
                     const node = {
-                        nodeId: objectId,
+                        nodeId: `${this._id}-${objectId}`,
                         objectId: objectId,
                         title: (metaObjectName && metaObjectName !== "" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
                         type: metaObjectType,
@@ -1114,6 +1132,7 @@ export class TreeViewPlugin extends Plugin {
                     };
                     typeNode.children.push(node);
                     this._objectNodes[node.objectId] = node;
+                    this._nodeNodes[node.nodeId] = node;
                 }
             }
         }
@@ -1141,7 +1160,7 @@ export class TreeViewPlugin extends Plugin {
         const children = metaObject.children;
         const objectId = metaObject.id;
         const node = {
-            nodeId: objectId,
+            nodeId: `${this._id}-${objectId}`,
             objectId: objectId,
             title: (!parent) ? (this._rootName || metaObjectName) : (metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
             type: metaObjectType,
@@ -1158,7 +1177,7 @@ export class TreeViewPlugin extends Plugin {
             this._rootNodes.push(node);
         }
         this._objectNodes[node.objectId] = node;
-
+        this._nodeNodes[node.nodeId] = node;
         if (children) {
             for (let i = 0, len = children.length; i < len; i++) {
                 const childMetaObject = children[i];
@@ -1306,7 +1325,7 @@ export class TreeViewPlugin extends Plugin {
         if (node.xrayed) {
             nodeElement.classList.add('xrayed-node');
         }
-        nodeElement.id = 'node-' + nodeId;
+        nodeElement.id = nodeId;
         if (node.children.length > 0) {
             const switchElementId = "switch-" + nodeId;
             const switchElement = document.createElement('a');
@@ -1318,7 +1337,7 @@ export class TreeViewPlugin extends Plugin {
             nodeElement.appendChild(switchElement);
         }
         const checkbox = document.createElement('input');
-        checkbox.id = nodeId;
+        checkbox.id = `checkbox-${nodeId}`;
         checkbox.type = "checkbox";
         checkbox.checked = node.checked;
         checkbox.style["pointer-events"] = "all";
@@ -1354,9 +1373,8 @@ export class TreeViewPlugin extends Plugin {
         if (expanded) {
             return;
         }
-        const nodeId = parentElement.id.replace('node-', '');
-        const objectId = nodeId;
-        const switchNode = this._objectNodes[objectId];
+        const nodeId = parentElement.id;
+        const switchNode = this._nodeNodes[nodeId];
         const childNodes = switchNode.children;
         const nodeElements = childNodes.map((node) => {
             return this._createNodeElement(node);
