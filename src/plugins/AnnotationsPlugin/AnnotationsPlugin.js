@@ -379,6 +379,8 @@ class AnnotationsPlugin extends Plugin {
      * @param {String} [cfg.id="Annotations"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {String} [cfg.markerHTML] HTML text template for Annotation markers. Defaults to ````<div></div>````. Ignored on {@link Annotation}s configured with a ````markerElementId````.
      * @param {String} [cfg.labelHTML] HTML text template for Annotation labels. Defaults to ````<div></div>````.  Ignored on {@link Annotation}s configured with a ````labelElementId````.
+     * @param {Number} [cfg.markerZIndex] Custom value for Annotation markers z-index. Defaults to ````90005 + Math.floor(this._viewPos[2]) + 1````.
+     * @param {Number} [cfg.labelZIndex] Custom value for Annotation labels z-index. Defaults to ````90005 + Math.floor(this._viewPos[2]) + 1````.
      * @param {HTMLElement} [cfg.container] Container DOM element for markers and labels. Defaults to ````document.body````.
      * @param {{String:(String|Number)}} [cfg.values={}] Map of default values to insert into the HTML templates for the marker and label.
      * @param {Number}  [cfg.surfaceOffset=0.3] The amount by which each {@link Annotation} is offset from the surface of
@@ -387,10 +389,12 @@ class AnnotationsPlugin extends Plugin {
     constructor(viewer, cfg) {
 
         super("Annotations", viewer);
-
+        const randomZIndex = 90005 + Math.floor(this._viewPos[2]) + 1;
         this._labelHTML = cfg.labelHTML || "<div></div>";
         this._markerHTML = cfg.markerHTML || "<div></div>";
         this._container = cfg.container || document.body;
+        this._markerZIndex = cfg.markerZIndex || randomZIndex;
+        this._labelZIndex = cfg.labelZIndex || randomZIndex;
         this._values = cfg.values || {};
 
         /**
@@ -466,6 +470,8 @@ class AnnotationsPlugin extends Plugin {
      * @param {Number[]} [params.look] Optional World-space position for {@link Camera#look}, used when this Annotation is associated with a {@link Camera} position.
      * @param {Number[]} [params.up] Optional World-space position for {@link Camera#up}, used when this Annotation is associated with a {@link Camera} position.
      * @param {String} [params.projection] Optional projection type for {@link Camera#projection}, used when this Annotation is associated with a {@link Camera} position.
+     * @param {Number} [cfg.markerZIndex] Custom value for Annotation markers z-index. Defaults to ````90005 + Math.floor(this._viewPos[2]) + 1````.
+     * @param {Number} [cfg.labelZIndex] Custom value for Annotation labels z-index. Defaults to ````90005 + Math.floor(this._viewPos[2]) + 1````.
      * @returns {Annotation} The new {@link Annotation}.
      */
     createAnnotation(params) {
@@ -517,7 +523,9 @@ class AnnotationsPlugin extends Plugin {
             markerElement: markerElement,
             labelElement: labelElement,
             markerHTML: params.markerHTML || this._markerHTML,
+            markerZIndex : params.markerZIndex || this._markerZIndex,
             labelHTML: params.labelHTML || this._labelHTML,
+            labelZIndex : params.labelZIndex || this._labelZIndex,
             occludable: params.occludable,
             values: utils.apply(params.values, utils.apply(this._values, {})),
             markerShown: params.markerShown,
