@@ -95,6 +95,8 @@ class NavCubePlugin extends Plugin {
      * @param {Boolean} [cfg.fitVisible=false] Sets whether the axis, corner and edge-aligned views will fit the
      * view to the entire {@link Scene} or just to visible object-{@link Entity}s. Entitys are visible objects when {@link Entity#isObject} and {@link Entity#visible} are both ````true````.
      * @param {Boolean} [cfg.synchProjection=false] Sets whether the NavCube switches between perspective and orthographic projections in synchrony with the {@link Camera}. When ````false````, the NavCube will always be rendered with perspective projection.
+     * @param {Boolean} [cfg.isProjectNorth] sets whether the NavCube switches between true north and project north - using the project north offset angle.
+     * @param {number} [cfg.projectNorthOffsetAngle] sets the NavCube project north offset angle - when the {@link isProjectNorth} is true.
      */
     constructor(viewer, cfg = {}) {
 
@@ -140,6 +142,9 @@ class NavCubePlugin extends Plugin {
 
         var self = this;
 
+        this.setIsProjectNorth(cfg.isProjectNorth);
+        this.setProjectNorthOffsetAngle(cfg.projectNorthOffsetAngle);
+
         this._synchCamera = (function () {
             var matrix = math.rotationMat4c(-90 * math.DEGTORAD, 1, 0, 0);
             var eyeLookVec = math.vec3();
@@ -160,6 +165,9 @@ class NavCubePlugin extends Plugin {
                     self._navCubeCamera.look = [0, 0, 0];
                     self._navCubeCamera.eye = eyeLookVec;
                     self._navCubeCamera.up = up;
+                }
+                if (self._isProjectNorth && self._projectNorthOffsetAngle) {
+                    self._navCubeCamera.orbitYaw(self._projectNorthOffsetAngle);
                 }
             };
         }());
@@ -641,6 +649,42 @@ class NavCubePlugin extends Plugin {
      */
     getSynchProjection() {
         return this._synchProjection;
+    }
+
+    /**
+     * Sets whether the NavCube switches between project north and true north
+     *
+     * @param {Boolean} isProjectNorth Set ````true```` to use project north offset
+     */
+    setIsProjectNorth(isProjectNorth = false) {
+        this._isProjectNorth = isProjectNorth;
+    }
+
+    /**
+     * Gets whether the NavCube switches between project north and true north
+     *
+     * @return {Boolean} isProjectNorth when ````true```` - use project north offset
+     */
+    getIsProjectNorth() {
+        return this._isProjectNorth;
+    }
+
+    /**
+     * Sets the NavCube project north offset angle (used when {@link isProjectNorth} is ````true````
+     *
+     * @param {number} projectNorthOffsetAngle Set the vector offset for project north
+     */
+    setProjectNorthOffsetAngle(projectNorthOffsetAngle) {
+        this._projectNorthOffsetAngle = projectNorthOffsetAngle;
+    }
+
+    /**
+     * Gets the offset angle between project north and true north
+     *
+     * @return {number} projectNorthOffsetAngle
+     */
+    getProjectNorthOffsetAngle() {
+        return this._projectNorthOffsetAngle;
     }
 
     /**
