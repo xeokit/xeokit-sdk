@@ -349,8 +349,6 @@ class LodCullingManager {
         let lodState = this.lodState;
         const model = this.model;
         
-        model.beginDeferredFlagsInAllLayers ();
-
         let retVal = false;
 
         if (currentFPS < lodState.targetFps)
@@ -370,8 +368,6 @@ class LodCullingManager {
             }
         }
 
-        model.commitDeferredFlagsInAllLayers ();
-
         if (retVal) {
             console.log ("LOD level = " + lodState.lodLevelIndex);
         }
@@ -383,8 +379,6 @@ class LodCullingManager {
     {
         const model = this.model;
         
-        model.beginDeferredFlagsInAllLayers ();
-
         let retVal = false;
 
         let decreasedLevel = false;
@@ -392,8 +386,6 @@ class LodCullingManager {
         do {
             retVal |= (decreasedLevel = this._decreaseLODLevelIndex());
         } while (decreasedLevel);
-
-        model.commitDeferredFlagsInAllLayers ();   
 
         if (retVal) {
             console.log ("LOD resetted");

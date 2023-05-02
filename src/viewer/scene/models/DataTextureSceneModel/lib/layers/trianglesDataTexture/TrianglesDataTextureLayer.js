@@ -15,6 +15,8 @@ import {
     DataTextureGenerator
 } from "../DataTextureState.js"
 
+import { DataTextureSceneModel } from '../../../DataTextureSceneModel.js';
+
 /**
  * 12-bits allowed for object ids.
  * 
@@ -37,6 +39,12 @@ const MAX_DATA_TEXTURE_HEIGHT = (1 << 12);
  * `triangle-index` or `edge-index`.
  */
 const INDICES_EDGE_INDICES_ALIGNEMENT_SIZE = 8;
+
+/**
+ * Number of maximum allowed per-object flags update per render frame
+ * before switching to batch update mode.
+ */
+const MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE = 10;
 
 const identityMatrix = math.identityMat4();
 const tempMat4 = math.mat4();
@@ -65,7 +73,7 @@ let _numberOfLayers = 0;
  */
 class TrianglesDataTextureLayer {
     /**
-     * @param model
+     * @param {DataTextureSceneModel} model
      * @param cfg
      * @param cfg.layerIndex
      * @param cfg.positionsDecodeMatrix
@@ -155,6 +163,12 @@ class TrianglesDataTextureLayer {
          * @type {*|Float64Array}
          */
         this.aabb = math.collapseAABB3();
+
+        /**
+         * The number of updates in the current frame;
+         * @type {number}
+         */
+        this.numUpdatesInFrame = 0;
     }
 
     /**
@@ -866,6 +880,18 @@ class TrianglesDataTextureLayer {
 
         this._finalized = true;
     }
+
+    attachToRenderingEvent() {
+        const self = this;
+
+        this.model.scene.on ("rendering", function () {
+            if (self._deferredSetFlagsDirty)
+            {
+                self.commitDeferredFlags();
+            }
+            self.numUpdatesInFrame = 0;
+        });
+    }
         
     isEmpty() {
         return this._numPortions == 0;
@@ -1016,6 +1042,8 @@ class TrianglesDataTextureLayer {
      * In massive "set-flags" scenarios like VFC or LOD mechanisms, the combina-
      * tion of `beginDeferredFlags` + `commitDeferredFlags`brings a speed-up of
      * up to 80x when e.g. objects are massively (un)culled 🚀.
+     * 
+     * @private
      */
     beginDeferredFlags ()
     {
@@ -1027,6 +1055,8 @@ class TrianglesDataTextureLayer {
      * 
      * Invoking this method will update the colors+flags texture data with new
      * flags/flags2 set since the previous invocation of `beginDeferredFlags`.
+     * 
+     * @private
      */
     commitDeferredFlags ()
     {
@@ -1141,6 +1171,11 @@ class TrianglesDataTextureLayer {
         {
             this._deferredSetFlagsDirty = true;
             return;
+        }
+        
+        if (++this.numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE)
+        {
+            this.beginDeferredFlags();
         }
 
         gl.bindTexture (gl.TEXTURE_2D, textureState.texturePerObjectIdColorsAndFlags._texture);
@@ -1268,6 +1303,11 @@ class TrianglesDataTextureLayer {
             return;
         }
 
+        if (++this.numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE)
+        {
+            this.beginDeferredFlags();
+        }
+
         gl.bindTexture (gl.TEXTURE_2D, textureState.texturePerObjectIdColorsAndFlags._texture);
 
         gl.texSubImage2D(
@@ -1321,6 +1361,11 @@ class TrianglesDataTextureLayer {
         {
             this._deferredSetFlagsDirty = true;
             return;
+        }
+
+        if (++this.numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE)
+        {
+            this.beginDeferredFlags();
         }
         
         gl.bindTexture (gl.TEXTURE_2D, textureState.texturePerObjectIdColorsAndFlags._texture);
@@ -1378,6 +1423,11 @@ class TrianglesDataTextureLayer {
         {
             this._deferredSetFlagsDirty = true;
             return;
+        }
+
+        if (++this.numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE)
+        {
+            this.beginDeferredFlags();
         }
         
         gl.bindTexture (gl.TEXTURE_2D, textureState.texturePerObjectIdOffsets._texture);

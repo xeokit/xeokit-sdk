@@ -354,16 +354,12 @@ const VISIBILITY_CHECK_ENVOLVES_V = (1 << 14);
         const internalNodesList = this._internalNodesList;
         const lastVisibleFrameOfNodes = this._lastVisibleFrameOfNodes;
 
-        model.beginDeferredFlagsInAllLayers ();
-
         for (let i = 0, len = internalNodesList.length; i < len; i++)
         {
             if (internalNodesList[i]) {
                 internalNodesList[i].culledVFC = lastVisibleFrameOfNodes[i] !== cullFrame;
             }
         }
-
-        model.commitDeferredFlagsInAllLayers ();
     }
 
     /**
