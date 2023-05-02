@@ -1448,8 +1448,6 @@ class DataTextureSceneModel extends Component {
             return;
         }
 
-        this.beginDeferredFlagsInAllLayers ();
-
         if (this._vfcManager) {
             this._vfcManager.finalize (
                 function () {
@@ -1478,9 +1476,7 @@ class DataTextureSceneModel extends Component {
             node._finalize2();
         }
 
-
         // Sort layers to reduce WebGL shader switching when rendering them
-
         this._layerList.sort((a, b) => {
             if (a.sortId < b.sortId) {
                 return -1;
@@ -1496,8 +1492,6 @@ class DataTextureSceneModel extends Component {
             layer.layerIndex = i;
         }
 
-        this.commitDeferredFlagsInAllLayers ();
-
         this.glRedraw();
 
         this.scene._aabbDirty = true;
@@ -1511,6 +1505,11 @@ class DataTextureSceneModel extends Component {
                 [ 2000, 600, 150, 80, 20 ],
                 this._targetLodFps
             );
+        }
+
+        for (let i = 0, len = this._layerList.length; i < len; i++) {
+            const layer = this._layerList[i];
+            layer.attachToRenderingEvent();
         }
     }
 
@@ -1551,33 +1550,6 @@ class DataTextureSceneModel extends Component {
             if (layerVisible) {
                 renderFlags.visibleLayers[renderFlags.numVisibleLayers++] = layerIndex;
             }
-        }
-    }
-
-    /**
-     * This will start a "set-flags transaction" in all Layers of this Model.
-     */
-    beginDeferredFlagsInAllLayers ()
-    {
-        for (let i = 0, len = this._layerList.length; i < len; i++)
-        {
-            const layer = this._layerList[i];
-
-            layer.beginDeferredFlags ();
-        }
-    }
-    
-    /**
-     * This will commit any previously started "set-flags transaction" in all
-     * Layers of this Model.
-     */
-    commitDeferredFlagsInAllLayers ()
-    {
-        for (let i = 0, len = this._layerList.length; i < len; i++)
-        {
-            const layer = this._layerList[i];
-
-            layer.commitDeferredFlags ();
         }
     }
 
