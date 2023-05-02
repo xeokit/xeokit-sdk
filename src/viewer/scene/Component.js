@@ -162,7 +162,6 @@ class Component {
                 throw "Invalid param: owner must be a Component"
             }
             this._owner = owner;
-            this._renderer = this.scene._renderer;
         }
 
         this._dontClear = !!cfg.dontClear; // Prevent Scene#clear from destroying this component
