@@ -281,6 +281,7 @@ class ContextMenu {
      * @param {Object} [cfg.context] The context, which is passed into the item callbacks. This can also be dynamically set on {@link ContextMenu#context}. This must be set before calling {@link ContextMenu#show}.
      * @param {Boolean} [cfg.enabled=true] Whether this ````ContextMenu```` is initially enabled. {@link ContextMenu#show} does nothing while this is ````false````.
      * @param {Boolean} [cfg.hideOnMouseDown=true] Whether this ````ContextMenu```` automatically hides whenever we mouse-down or tap anywhere in the page.
+     * @param {Boolean} [cfg.hideOnAction=true] Whether this ````ContextMenu```` automatically hides after we select a menu item. Se false if we want the menu to remain shown and show any updates to its item titles, after we've selected an item.
      */
     constructor(cfg = {}) {
 
@@ -318,6 +319,8 @@ class ContextMenu {
         if (cfg.items) {
             this.items = cfg.items;
         }
+
+        this._hideOnAction = (cfg.hideOnAction !== false);
 
         this.context = cfg.context;
         this.enabled = cfg.enabled !== false;
@@ -747,7 +750,6 @@ class ContextMenu {
 
                             item.itemElement.addEventListener("click", (event) => {
                                 event.preventDefault();
-                                self.hide();
                                 if (!self._context) {
                                     return;
                                 }
@@ -757,9 +759,13 @@ class ContextMenu {
                                 if (item.doAction) {
                                     item.doAction(self._context);
                                 }
+                                if (this._hideOnAction) {
+                                    self.hide();
+                                } else {
+                                    self._updateItemsTitles();
+                                    self._updateItemsEnabledStatus();
+                                }
                             });
-
-
                             item.itemElement.addEventListener("mouseenter", (event) => {
                                 event.preventDefault();
                                 if (item.enabled === false) {
