@@ -64,9 +64,9 @@ export default class Tile {
       math.lenVec3(halfZVector) *
       2;
 
-    this.children = tileData.children.map(
+    this.children = tileData.children?.map(
       child => new Tile(tileset, child, this)
-    );
+    ) ?? [];
 
     tileset.tiles.add(this);
   }

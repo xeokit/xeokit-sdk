@@ -37,7 +37,7 @@ declare namespace TSL {
     geometricError: number;
     content: { uri: string };
     boundingVolume: { box: OrientedBoundingBox };
-    children: TileData[];
+    children?: TileData[];
     refine: refineOption;
   }
 
