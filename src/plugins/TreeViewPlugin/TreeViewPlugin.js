@@ -910,8 +910,8 @@ export class TreeViewPlugin extends Plugin {
         this._containerElement.appendChild(ul);
 
         const rootMetaObjects = this._viewer.metaScene.rootMetaObjects;
-        for (let i = 0, len = rootMetaObjects.length; i < len; i++) {
-            const rootMetaObject = rootMetaObjects[i];
+        for (let objectId in rootMetaObjects) {
+            const rootMetaObject = rootMetaObjects[objectId];
             const metaObjectType = rootMetaObject.type;
             const metaObjectName = rootMetaObject.name;
             const rootName = ((metaObjectName && metaObjectName !== ""
@@ -934,8 +934,8 @@ export class TreeViewPlugin extends Plugin {
 
     _findEmptyNodes() {
         const rootMetaObjects = this._viewer.metaScene.rootMetaObjects;
-        for (let i = 0, len = rootMetaObjects.length; i < len; i++) {
-            this._findEmptyNodes2(rootMetaObjects[i]);
+        for (let objectId in rootMetaObjects) {
+            this._findEmptyNodes2(rootMetaObjects[objectId]);
         }
     }
 
