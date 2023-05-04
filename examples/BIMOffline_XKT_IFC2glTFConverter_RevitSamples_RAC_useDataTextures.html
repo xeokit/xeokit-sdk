@@ -182,8 +182,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, NavCubePlugin, TreeViewPlugin, FastNavPlugin} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
-    //    import {Viewer, XKTLoaderPlugin, NavCubePlugin, TreeViewPlugin, FastNavPlugin} from "../dist/xeokit-sdk.es.js";
+        import {Viewer, XKTLoaderPlugin, NavCubePlugin, TreeViewPlugin, FastNavPlugin} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera, tweak x-ray and highlight materials
@@ -192,7 +191,7 @@
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true,
-        saoEnabled: false
+        saoEnabled: true
     });
 
     viewer.camera.eye = [102.07185264355974, 45.23873322531372, -54.1001537318987]
@@ -231,13 +230,14 @@
 
     const sceneModel = xktLoader.load({
         id: "myModel",
-        src: "../assets/models/xkt/v8/ifc/OTCConferenceCenter.ifc.xkt",
+        src: "../assets/models/xkt/v9/ifc/rac_advanced_sample_project.IFC2glTFConverter.ifc.xkt",
         excludeTypes: ["IfcSpace"],
         edges: true,
         useDataTextures: {
             enableViewFrustumCulling: true,
-            //     // For this model, set the target frame-rate to 15 fps for LOD mechanism
-            targetLodFps: 45,
+            targetLodFps: 20,
+            disableVertexWelding: true,
+            disableIndexRebucketing: true
         }
     });
 

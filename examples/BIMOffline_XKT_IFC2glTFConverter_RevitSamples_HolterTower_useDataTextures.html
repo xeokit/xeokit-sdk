@@ -183,7 +183,6 @@
     //------------------------------------------------------------------------------------------------------------------
 
     import {Viewer, XKTLoaderPlugin, NavCubePlugin, TreeViewPlugin, FastNavPlugin} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
-//    import {Viewer, XKTLoaderPlugin, NavCubePlugin, TreeViewPlugin, FastNavPlugin} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera, tweak x-ray and highlight materials
@@ -229,41 +228,22 @@
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
+    const edges = false;
+    const saoEnabled = true;
+
     const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../assets/models/xkt/v8/ifc/HolterTower.ifc.xkt",
         excludeTypes: ["IfcSpace"],
-        edges: true,
+        edges,
+        saoEnabled,
         useDataTextures: {
             enableViewFrustumCulling: true,
-            targetLodFps: 40,
+            targetLodFps: 20,
+            disableVertexWelding: true,
+            disableIndexRebucketing: true
         }
     });
-
-    xktLoader.load({
-        id: "myModel2",
-        src: "../assets/models/xkt/v8/ifc/HolterTower.ifc.xkt",
-        excludeTypes: ["IfcSpace"],
-        edges: true,
-        position: [120, 0, 0],
-        useDataTextures: {
-            enableViewFrustumCulling: true,
-            targetLodFps: 40,
-        }
-    });
-
-    xktLoader.load({
-        id: "myModel3",
-        src: "../assets/models/xkt/v8/ifc/HolterTower.ifc.xkt",
-        excludeTypes: ["IfcSpace"],
-        edges: true,
-        position: [-120, 0, 0],
-        useDataTextures: {
-            enableViewFrustumCulling: true,
-            targetLodFps: 40,
-        }
-    });
-
 
     const t0 = performance.now();
     document.getElementById("time").innerHTML = "Loading model...";
