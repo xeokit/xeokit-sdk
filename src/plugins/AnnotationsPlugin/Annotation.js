@@ -193,12 +193,12 @@ class Annotation extends Marker {
         const canvasPos = this.canvasPos;
         this._marker.style.left = (Math.floor(left + canvasPos[0]) - 12) + "px";
         this._marker.style.top = (Math.floor(top + canvasPos[1]) - 12) + "px";
-        this._marker.style["z-index"] = cfg._markerZIndex;
+        this._marker.style["z-index"] = 90005 + Math.floor(this._viewPos[2]) + 1;
         const offsetX = 20;
         const offsetY = -17;
         this._label.style.left = 20 + Math.floor(left + canvasPos[0] + offsetX) + "px";
         this._label.style.top = Math.floor(top + canvasPos[1] + offsetY) + "px";
-        this._label.style["z-index"] = cfg._labelZIndex;
+        this._label.style["z-index"] = 90005 + Math.floor(this._viewPos[2]) + 1;
     }
 
     /**
