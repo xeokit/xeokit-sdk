@@ -325,14 +325,6 @@ class Viewer {
 
         const needFinishSnapshot = (!this._snapshotBegun);
 
-        if (!this._snapshotBegun) {
-            this.beginSnapshot();
-        }
-
-        if (!params.includeGizmos) {
-            this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
-        }
-
         const resize = (params.width !== undefined && params.height !== undefined);
         const canvas = this.scene.canvas.canvas;
         const saveWidth = canvas.clientWidth;
@@ -344,8 +336,16 @@ class Viewer {
         const height = params.height ? Math.floor(params.height) : canvas.height;
 
         if (resize) {
-            canvas.style.width = width + "px";
-            canvas.style.height = height + "px";
+            canvas.width = width;
+            canvas.height = height;
+        }
+
+        if (!this._snapshotBegun) {
+            this.beginSnapshot();
+        }
+
+        if (!params.includeGizmos) {
+            this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
         }
 
         this.scene._renderer.renderSnapshot();
@@ -353,8 +353,6 @@ class Viewer {
         const imageDataURI = this.scene._renderer.readSnapshot(params);
 
         if (resize) {
-            canvas.style.width = saveCssWidth;
-            canvas.style.height = saveCssHeight;
             canvas.width = saveWidth;
             canvas.height = saveHeight;
 

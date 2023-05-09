@@ -1400,8 +1400,11 @@ const Renderer = function (scene, options) {
      *
      * Exit snapshot mode using endSnapshot().
      */
-    this.beginSnapshot = function () {
+    this.beginSnapshot = function (params={}) {
         const snapshotBuffer = renderBufferManager.getRenderBuffer("snapshot");
+        if (params.width && params.height) {
+            snapshotBuffer.setSize([params.width, params.height]);
+        }
         snapshotBuffer.bind();
         snapshotBuffer.clear();
         snapshotBound = true;
