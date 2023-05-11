@@ -10,6 +10,10 @@ import {buildCylinderGeometry} from "../../viewer/scene/geometry/builders/buildC
 import {CubeTextureCanvas} from "./CubeTextureCanvas.js";
 import {ClampToEdgeWrapping} from "../../viewer/scene/constants/constants.js";
 
+const tempVec3a = math.vec3();
+const tempVec3b = math.vec3();
+const tempMat4a = math.mat4();
+
 /**
  * {@link Viewer} plugin that lets us look at the entire {@link Scene} from along a chosen axis or diagonal.
  *
@@ -147,11 +151,10 @@ class NavCubePlugin extends Plugin {
 
         const rotateTrueNorth = (function () {
             const trueNorthMatrix = math.mat4();
-            const resultVec = math.vec3();
-            return function (dir, vec) {
+            return function (dir, vec, dest) {
                 math.identityMat4(trueNorthMatrix);
                 math.rotationMat4v(dir * self._projectNorthOffsetAngle * math.DEGTORAD, [0, 1, 0], trueNorthMatrix);
-                return math.transformVec3(trueNorthMatrix, vec, resultVec)
+                return math.transformVec3(trueNorthMatrix, vec, dest)
             }
         }())
 
@@ -167,7 +170,8 @@ class NavCubePlugin extends Plugin {
                 eyeLookVec = math.mulVec3Scalar(math.normalizeVec3(math.subVec3(eye, look, eyeLookVec)), 5);
 
                 if (self._isProjectNorth && self._projectNorthOffsetAngle) {
-                    eyeLookVec = rotateTrueNorth(-1, eyeLookVec);
+                    eyeLookVec = rotateTrueNorth(-1, eyeLookVec, tempVec3a);
+                    up = rotateTrueNorth(-1, up, tempVec3b);
                 }
 
                 if (self._zUp) { // +Z up
@@ -388,10 +392,11 @@ class NavCubePlugin extends Plugin {
                                 }
                                 var dir = self._cubeTextureCanvas.getAreaDir(areaId);
                                 if (dir) {
-                                    if (self._isProjectNorth && self._projectNorthOffsetAngle) {
-                                        dir = rotateTrueNorth(+1, dir);
-                                    }
                                     var up = self._cubeTextureCanvas.getAreaUp(areaId);
+                                    if (self._isProjectNorth && self._projectNorthOffsetAngle) {
+                                        dir = rotateTrueNorth(+1, dir, tempVec3a);
+                                        up = rotateTrueNorth(+1, up, tempVec3b);
+                                    }
                                     flyTo(dir, up, function () {
                                         if (lastAreaId >= 0) {
                                             self._cubeTextureCanvas.setAreaHighlighted(lastAreaId, false);
