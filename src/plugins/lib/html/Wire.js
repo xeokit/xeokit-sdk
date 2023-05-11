@@ -86,6 +86,12 @@ class Wire {
             });
         }
 
+        if (cfg.onMouseWheel) {
+            wireClickable.addEventListener('wheel', (event) => {
+                cfg.onMouseWheel(event, this);
+            });
+        }
+
         if (cfg.onContextMenu) {
             wireClickable.addEventListener('contextmenu', (event) => {
                 cfg.onContextMenu(event, this);

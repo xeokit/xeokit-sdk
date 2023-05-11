@@ -57,6 +57,12 @@ class Label {
             });
         }
 
+        if (cfg.onMouseWheel) {
+            label.addEventListener('wheel', (event) => {
+                cfg.onMouseWheel(event, this);
+            });
+        }
+
         if (cfg.onContextMenu) {
             label.addEventListener('contextmenu', (event) => {
                 cfg.onContextMenu(event, this);

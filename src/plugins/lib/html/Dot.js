@@ -65,6 +65,12 @@ class Dot {
             });
         }
 
+        if (cfg.onMouseWheel) {
+            dotClickable.addEventListener('wheel', (event) => {
+                cfg.onMouseWheel(event, this);
+            });
+        }
+
         if (cfg.onContextMenu) {
             dotClickable.addEventListener('contextmenu', (event) => {
                 cfg.onContextMenu(event, this);
