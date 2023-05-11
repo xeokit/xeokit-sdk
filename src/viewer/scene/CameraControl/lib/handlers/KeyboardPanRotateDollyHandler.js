@@ -36,9 +36,6 @@ class KeyboardPanRotateDollyHandler {
             if (!(configs.active && configs.pointerEnabled) || (!scene.input.keyboardEnabled)) {
                 return;
             }
-            if (!states.mouseover) {
-                return;
-            }
             keyDownMap[keyCode] = false;
 
             if (keyCode === input.KEY_SHIFT) {
