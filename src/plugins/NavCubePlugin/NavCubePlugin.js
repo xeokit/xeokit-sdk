@@ -145,6 +145,16 @@ class NavCubePlugin extends Plugin {
         this.setIsProjectNorth(cfg.isProjectNorth);
         this.setProjectNorthOffsetAngle(cfg.projectNorthOffsetAngle);
 
+        const rotateTrueNorth = (function () {
+            const trueNorthMatrix = math.mat4();
+            const resultVec = math.vec3();
+            return function (dir, vec) {
+                math.identityMat4(trueNorthMatrix);
+                math.rotationMat4v(dir * self._projectNorthOffsetAngle * math.DEGTORAD, [0, 1, 0], trueNorthMatrix);
+                return math.transformVec3(trueNorthMatrix, vec, resultVec)
+            }
+        }())
+
         this._synchCamera = (function () {
             var matrix = math.rotationMat4c(-90 * math.DEGTORAD, 1, 0, 0);
             var eyeLookVec = math.vec3();
@@ -155,6 +165,11 @@ class NavCubePlugin extends Plugin {
                 var look = viewer.camera.look;
                 var up = viewer.camera.up;
                 eyeLookVec = math.mulVec3Scalar(math.normalizeVec3(math.subVec3(eye, look, eyeLookVec)), 5);
+
+                if (self._isProjectNorth && self._projectNorthOffsetAngle) {
+                    eyeLookVec = rotateTrueNorth(-1, eyeLookVec);
+                }
+
                 if (self._zUp) { // +Z up
                     math.transformVec3(matrix, eyeLookVec, eyeLookVecCube);
                     math.transformVec3(matrix, up, upCube);
@@ -165,9 +180,6 @@ class NavCubePlugin extends Plugin {
                     self._navCubeCamera.look = [0, 0, 0];
                     self._navCubeCamera.eye = eyeLookVec;
                     self._navCubeCamera.up = up;
-                }
-                if (self._isProjectNorth && self._projectNorthOffsetAngle) {
-                    self._navCubeCamera.orbitYaw(self._projectNorthOffsetAngle);
                 }
             };
         }());
@@ -376,6 +388,9 @@ class NavCubePlugin extends Plugin {
                                 }
                                 var dir = self._cubeTextureCanvas.getAreaDir(areaId);
                                 if (dir) {
+                                    if (self._isProjectNorth && self._projectNorthOffsetAngle) {
+                                        dir = rotateTrueNorth(+1, dir);
+                                    }
                                     var up = self._cubeTextureCanvas.getAreaUp(areaId);
                                     flyTo(dir, up, function () {
                                         if (lastAreaId >= 0) {
