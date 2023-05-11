@@ -56,10 +56,25 @@
 </body>
 <script type="module">
 
-    import {Viewer, NavCubePlugin, XKTLoaderPlugin} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
+    import {Viewer, NavCubePlugin, XKTLoaderPlugin, LocaleService} from  "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     const viewer = new Viewer({
-        canvasId: "myCanvas"
+        canvasId: "myCanvas",
+        localeService: new LocaleService({
+            messages: {
+                "en": {
+                    "NavCube": {
+                        "front": "South",
+                        "back": "North",
+                        "top": "Top",
+                        "bottom": "Bottom",
+                        "left": "West",
+                        "right": "East"
+                    }
+                }
+            },
+            locale: "en"
+        })
     });
 
     viewer.camera.eye = [-3.933, 2.855, 27.018];
