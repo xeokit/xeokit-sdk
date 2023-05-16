@@ -111,6 +111,8 @@ class Program {
                 location = gl.getUniformLocation(this.handle, uName);
                 if ((u.type === gl.SAMPLER_2D) || (u.type === gl.SAMPLER_CUBE) || (u.type === 35682)) {
                     this.samplers[uName] = new Sampler(gl, location);
+                } else if (gl instanceof WebGL2RenderingContext && (u.type === gl.UNSIGNED_INT_SAMPLER_2D || u.type === gl.INT_SAMPLER_2D)) {
+                    this.samplers[uName] = new Sampler(gl, location);
                 } else {
                     this.uniforms[uName] = location;
                 }

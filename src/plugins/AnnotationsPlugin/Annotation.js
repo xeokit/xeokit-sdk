@@ -165,6 +165,9 @@ class Annotation extends Marker {
             this._marker.addEventListener("mouseleave", () => {
                 this.plugin.fire("markerMouseLeave", this);
             });
+            this._marker.addEventListener('wheel', (event) => {
+                this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new WheelEvent('wheel', event));
+            });
         }
         if (!this._labelExternal) {
             if (this._label) {
@@ -180,6 +183,9 @@ class Annotation extends Marker {
             this._label = labelFragment.firstChild;
             this._container.appendChild(this._label);
             this._label.style.visibility = (this._markerShown && this._labelShown) ? "visible" : "hidden";
+            this._label.addEventListener('wheel', (event) => {
+                this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new WheelEvent('wheel', event));
+            });
         }
     }
 

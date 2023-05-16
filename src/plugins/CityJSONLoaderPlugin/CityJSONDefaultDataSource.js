@@ -1,4 +1,4 @@
-import {utils} from "../../viewer";
+import {utils} from "../../viewer/index.js";
 
 /**
  * Default data access strategy for {@link CityJSONLoaderPlugin}.

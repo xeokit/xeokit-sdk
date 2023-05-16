@@ -52,22 +52,22 @@ class TrianglesInstancingSilhouetteRenderer {
             const material = scene.xrayMaterial._state;
             const fillColor = material.fillColor;
             const fillAlpha = material.fillAlpha;
-            gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
+            gl.uniform4f(this._uSilhouetteColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
 
         } else if (renderPass === RENDER_PASSES.SILHOUETTE_HIGHLIGHTED) {
             const material = scene.highlightMaterial._state;
             const fillColor = material.fillColor;
             const fillAlpha = material.fillAlpha;
-            gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
+            gl.uniform4f(this._uSilhouetteColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
 
         } else if (renderPass === RENDER_PASSES.SILHOUETTE_SELECTED) {
             const material = scene.selectedMaterial._state;
             const fillColor = material.fillColor;
             const fillAlpha = material.fillAlpha;
-            gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
+            gl.uniform4f(this._uSilhouetteColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
 
         } else {
-            gl.uniform4fv(this._uColor, math.vec3([1, 1, 1]));
+            gl.uniform4fv(this._uSilhouetteColor, math.vec3([1, 1, 1]));
         }
 
         gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
@@ -122,6 +122,11 @@ class TrianglesInstancingSilhouetteRenderer {
             gl.vertexAttribDivisor(this._aOffset.location, 1);
         }
 
+        if (this._aColor) {
+            this._aColor.bindArrayBuffer(state.colorsBuf);
+            gl.vertexAttribDivisor(this._aColor.location, 1);
+        }
+
         geometry.indicesBuf.bind();
 
         gl.drawElementsInstanced(gl.TRIANGLES, geometry.indicesBuf.numItems, geometry.indicesBuf.itemType, 0, state.numInstances);
@@ -136,6 +141,9 @@ class TrianglesInstancingSilhouetteRenderer {
         }
         if (this._aOffset) {
             gl.vertexAttribDivisor(this._aOffset.location, 0);
+        }
+        if (this._aColor) {
+            gl.vertexAttribDivisor(this._aColor.location, 0);
         }
     }
 
@@ -159,7 +167,7 @@ class TrianglesInstancingSilhouetteRenderer {
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
-        this._uColor = program.getLocation("color");
+        this._uSilhouetteColor = program.getLocation("silhouetteColor");
         this._uSectionPlanes = [];
 
         const clips = sectionPlanesState.sectionPlanes;
@@ -175,6 +183,8 @@ class TrianglesInstancingSilhouetteRenderer {
         this._aOffset = program.getAttribute("offset");
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");
+        this._aColor = program.getAttribute("color");
+
         this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
         this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");
         this._aModelMatrixCol2 = program.getAttribute("modelMatrixCol2");
@@ -213,7 +223,7 @@ class TrianglesInstancingSilhouetteRenderer {
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
         src.push("#version 300 es");
-        src.push("// Instancing fill vertex shader");
+        src.push("// Instancing silhouette vertex shader");
         
         src.push("uniform int renderPass;");
 
@@ -223,6 +233,7 @@ class TrianglesInstancingSilhouetteRenderer {
         }
         src.push("in vec4 flags;");
         src.push("in vec4 flags2;");
+        src.push("in vec4 color;");
 
         src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
         src.push("in vec4 modelMatrixCol1;");
@@ -232,6 +243,7 @@ class TrianglesInstancingSilhouetteRenderer {
         src.push("uniform mat4 viewMatrix;");
         src.push("uniform mat4 projMatrix;");
         src.push("uniform mat4 positionsDecodeMatrix;");
+        src.push("uniform vec4 silhouetteColor;");
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
@@ -242,12 +254,12 @@ class TrianglesInstancingSilhouetteRenderer {
             src.push("out float isPerspective;");
         }
 
-        src.push("uniform vec4 color;");
-
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
             src.push("out vec4 vFlags2;");
         }
+
+        src.push("out vec4 vColor;");
 
         src.push("void main(void) {");
 
@@ -270,6 +282,7 @@ class TrianglesInstancingSilhouetteRenderer {
             src.push("vWorldPosition = worldPosition;");
             src.push("vFlags2 = flags2;");
         }
+        src.push("vColor = vec4(silhouetteColor.r, silhouetteColor.g, silhouetteColor.b, min(silhouetteColor.a, float(color.a) / 255.0));");
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
            src.push("vFragDepth = 1.0 + clipPos.w;");
@@ -310,7 +323,7 @@ class TrianglesInstancingSilhouetteRenderer {
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
-        src.push("uniform vec4 color;");
+        src.push("in vec4 vColor;");
         src.push("out vec4 outColor;");
         src.push("void main(void) {");
         if (clipping) {
@@ -328,7 +341,7 @@ class TrianglesInstancingSilhouetteRenderer {
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
-        src.push("outColor = color;");
+        src.push("outColor = vColor;");
         src.push("}");
         return src;
     }

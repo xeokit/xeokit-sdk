@@ -49,7 +49,7 @@ import {
     UnsignedByteType,
     RGBA_BPTC_Format,
     sRGBEncoding,
-    _SRGBAFormat,
+    // _SRGBAFormat,
     RepeatWrapping,
     ClampToEdgeWrapping,
     NearestFilter,

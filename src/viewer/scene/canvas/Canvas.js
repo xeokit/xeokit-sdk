@@ -72,7 +72,7 @@ class Canvas extends Component {
          */
         this.transparent = !!cfg.transparent;
 
-        // chipmunk
+        // data-textures: avoid to continuos DOM layout calculations
         this.optimizeResizeDetection = true;
 
         /**
@@ -453,10 +453,59 @@ class Canvas extends Component {
             this.fire("webglContextFailed", true, true);
         }
 
+        // data-textures: avoid to re-bind same texture 
+        {
+            const gl = this.gl;
+
+            let lastTextureUnit = "__";
+
+            let originalActiveTexture = gl.activeTexture;
+
+            gl.activeTexture = function (arg1) {
+                if (lastTextureUnit === arg1) {
+                    return;
+                }
+
+                lastTextureUnit = arg1;
+
+                originalActiveTexture.call (this, arg1);
+            };
+
+            let lastBindTexture = {};
+
+            let originalBindTexture = gl.bindTexture;
+
+            let avoidedRebinds = 0;
+
+            gl.bindTexture = function (arg1, arg2) {
+                if (lastBindTexture[lastTextureUnit] === arg2)
+                {
+                    avoidedRebinds++;
+                    return;
+                }
+
+                lastBindTexture[lastTextureUnit] = arg2;
+
+                originalBindTexture.call (this, arg1, arg2);
+            }
+
+            // setInterval (
+            //     () => {
+            //         console.log (`${avoidedRebinds} avoided texture binds/sec`);
+            //         avoidedRebinds = 0;
+            //     },
+            //     1000
+            // );
+        }
+        
         if (this.gl) {
             // Setup extension (if necessary) and hints for fragment shader derivative functions
             if (this.webgl2) {
                 this.gl.hint(this.gl.FRAGMENT_SHADER_DERIVATIVE_HINT, this.gl.FASTEST);
+
+                    // data-textures: not using standard-derivatives
+                    if (!(this.gl instanceof WebGL2RenderingContext)) {
+                    }
             }
         }
     }

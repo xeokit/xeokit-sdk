@@ -1,5 +1,4 @@
 import {math} from "../../../math/math.js";
-import {PickResult} from "../../../webgl/PickResult.js";
 
 /**
  *

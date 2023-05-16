@@ -37,6 +37,7 @@ class Wire {
         wireStyle['-o-transform'] = 'rotate(0deg)';
         wireStyle['transform'] = 'rotate(0deg)';
         wireStyle["opacity"] = 1.0;
+        wireStyle["pointer-events"] = "none";
         if (cfg.onContextMenu) {
          //   wireStyle["cursor"] = "context-menu";
         }
@@ -82,6 +83,12 @@ class Wire {
         if (cfg.onMouseLeave) {
             wireClickable.addEventListener('mouseleave', (event) => {
                 cfg.onMouseLeave(event, this);
+            });
+        }
+
+        if (cfg.onMouseWheel) {
+            wireClickable.addEventListener('wheel', (event) => {
+                cfg.onMouseWheel(event, this);
             });
         }
 

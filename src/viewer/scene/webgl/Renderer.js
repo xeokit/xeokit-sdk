@@ -10,6 +10,7 @@ import {createRTCViewMat} from "../math/rtcCoords.js";
 import {SAODepthLimitedBlurRenderer} from "./sao/SAODepthLimitedBlurRenderer.js";
 import {RenderBufferManager} from "./RenderBufferManager.js";
 import {getExtension} from "./getExtension.js";
+import {DataTextureSceneModel} from "../models/DataTextureSceneModel/DataTextureSceneModel.js"
 
 /**
  * @private
@@ -371,7 +372,7 @@ const Renderer = function (scene, options) {
 
                     const drawable = drawableList[i];
 
-                    if (drawable.culled === true || drawable.visible === false || !drawable.drawDepth) {
+                    if (drawable.culled === true || drawable.visible === false || !drawable.drawDepth || !drawable.saoEnabled) {
                         continue;
                     }
 
@@ -465,8 +466,9 @@ const Renderer = function (scene, options) {
         shadowRenderBuf.unbind();
     }
 
-    const drawColor = (function () { // Draws the drawables in drawableListSorted
-
+    function drawColor (params)
+    {
+    // const drawColor = (function () { // Draws the drawables in drawableListSorted
         const normalDrawSAOBin = [];
         const normalEdgesOpaqueBin = [];
         const normalFillTransparentBin = [];
@@ -487,7 +489,8 @@ const Renderer = function (scene, options) {
         const selectedFillTransparentBin = [];
         const selectedEdgesTransparentBin = [];
 
-        return function (params) {
+        // return function (params) {
+        {
 
             const ambientColorAndIntensity = scene._lightsState.getAmbientColorAndIntensity();
 
@@ -892,8 +895,10 @@ const Renderer = function (scene, options) {
             if (unbindOutputFrameBuffer) {
                 unbindOutputFrameBuffer(params.pass);
             }
-        };
-    })();
+        // };
+        }
+    }
+    // })();
 
     /**
      * Picks an Entity.
@@ -923,7 +928,7 @@ const Renderer = function (scene, options) {
             pickResult.reset();
 
             updateDrawlist();
-
+    
             let look;
             let pickViewMatrix = null;
             let pickProjMatrix = null;
@@ -977,11 +982,32 @@ const Renderer = function (scene, options) {
                 canvasPos[1] = canvas.clientHeight * 0.5;
             }
 
+            if (null !== pickViewMatrix)
+            {
+                // data-textures: update the pick-camera-matrices of all DataTextureSceneModel's
+                for (let type in drawableTypeInfo) {
+                    if (drawableTypeInfo.hasOwnProperty(type)) {
+                        const drawableList = drawableTypeInfo[type].drawableList;    
+                        for (let i = 0, len = drawableList.length; i < len; i++) {
+                            const drawable = drawableList[i];
+                            if (drawable instanceof DataTextureSceneModel) {
+                                if (drawable.pickCameraTexture) {
+                                    drawable.pickCameraTexture._updateViewMatrix (
+                                        pickViewMatrix,
+                                        pickProjMatrix
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             const pickBuffer = renderBufferManager.getRenderBuffer("pick");
 
             pickBuffer.bind();
 
-            const pickable = gpuPickPickable(pickBuffer, canvasPos, pickViewMatrix, pickProjMatrix, params);
+            const pickable = gpuPickPickable(pickBuffer, canvasPos, pickViewMatrix, pickProjMatrix, params, pickResult);
 
             if (!pickable) {
                 pickBuffer.unbind();
@@ -1059,11 +1085,12 @@ const Renderer = function (scene, options) {
         };
     })();
 
-    function gpuPickPickable(pickBuffer, canvasPos, pickViewMatrix, pickProjMatrix, params) {
+    function gpuPickPickable(pickBuffer, canvasPos, pickViewMatrix, pickProjMatrix, params, pickResult) {
 
         frameCtx.reset();
         frameCtx.backfaces = true;
         frameCtx.frontface = true; // "ccw"
+        frameCtx.pickOrigin = pickResult.origin;
         frameCtx.pickViewMatrix = pickViewMatrix;
         frameCtx.pickProjMatrix = pickProjMatrix;
         frameCtx.pickInvisible = !!params.pickInvisible;
@@ -1125,6 +1152,7 @@ const Renderer = function (scene, options) {
         frameCtx.reset();
         frameCtx.backfaces = true;
         frameCtx.frontface = true; // "ccw"
+        frameCtx.pickOrigin = pickResult.origin;
         frameCtx.pickViewMatrix = pickViewMatrix; // Can be null
         frameCtx.pickProjMatrix = pickProjMatrix; // Can be null
         // frameCtx.pickInvisible = !!params.pickInvisible;
@@ -1165,6 +1193,7 @@ const Renderer = function (scene, options) {
             frameCtx.reset();
             frameCtx.backfaces = true;
             frameCtx.frontface = true; // "ccw"
+            frameCtx.pickOrigin = pickResult.origin;
             frameCtx.pickViewMatrix = pickViewMatrix;
             frameCtx.pickProjMatrix = pickProjMatrix;
             frameCtx.pickZNear = nearAndFar[0];
@@ -1240,6 +1269,7 @@ const Renderer = function (scene, options) {
         frameCtx.reset();
         frameCtx.backfaces = true;
         frameCtx.frontface = true; // "ccw"
+        frameCtx.pickOrigin = pickResult.origin;
         frameCtx.pickViewMatrix = pickViewMatrix;
         frameCtx.pickProjMatrix = pickProjMatrix;
 
@@ -1370,8 +1400,11 @@ const Renderer = function (scene, options) {
      *
      * Exit snapshot mode using endSnapshot().
      */
-    this.beginSnapshot = function () {
+    this.beginSnapshot = function (params={}) {
         const snapshotBuffer = renderBufferManager.getRenderBuffer("snapshot");
+        if (params.width && params.height) {
+            snapshotBuffer.setSize([params.width, params.height]);
+        }
         snapshotBuffer.bind();
         snapshotBuffer.clear();
         snapshotBound = true;

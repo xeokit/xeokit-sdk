@@ -29,9 +29,9 @@ class Dot {
         dotStyle.left = 0 + "px";
         dotStyle["box-shadow"] = "0 2px 5px 0 #182A3D;";
         dotStyle["opacity"] = 1.0;
-        dotStyle["pointer-events"] = "all";
+        dotStyle["pointer-events"] = "none";
         if (cfg.onContextMenu) {
-     //       dotStyle["cursor"] = "context-menu";
+          //  dotStyle["cursor"] = "context-menu";
         }
         parentElement.appendChild(dot);
 
@@ -47,9 +47,9 @@ class Dot {
         dotClickableStyle.top = 0 + "px";
         dotClickableStyle.left = 0 + "px";
         dotClickableStyle["opacity"] = 0.0;
-        dotClickableStyle["pointer-events"] = "all";
+        dotClickableStyle["pointer-events"] = "none";
         if (cfg.onContextMenu) {
-        //    dotClickableStyle["cursor"] = "context-menu";
+          //  dotClickableStyle["cursor"] = "context-menu";
         }
         parentElement.appendChild(dotClickable);
 
@@ -62,6 +62,12 @@ class Dot {
         if (cfg.onMouseLeave) {
             dotClickable.addEventListener('mouseleave', (event) => {
                 cfg.onMouseLeave(event, this);
+            });
+        }
+
+        if (cfg.onMouseWheel) {
+            dotClickable.addEventListener('wheel', (event) => {
+                cfg.onMouseWheel(event, this);
             });
         }
 
@@ -111,7 +117,6 @@ class Dot {
 
     setClickable(clickable) {
         this._dotClickable.style["pointer-events"] = (!!clickable) ? "all" : "none";
-        this._dot.style["pointer-events"] = (!!clickable) ? "all" : "none";
     }
 
     setHighlighted(highlighted) {

@@ -26,8 +26,15 @@ class MetaObject {
          *
          * @property metaModel
          * @type {MetaModel}
+         * @deprecated
          */
         this.metaModel = metaModel;
+
+        /**
+         * The MetaModels that share this MetaObject.
+         * @type {MetaModel[]}
+         */
+        this.metaModels = [metaModel];
 
         /**
          * Globally-unique ID.

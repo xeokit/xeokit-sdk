@@ -2,9 +2,9 @@ import {utils} from "../../viewer/scene/utils.js";
 import {VBOSceneModel} from "../../viewer/scene/models/VBOSceneModel/VBOSceneModel.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {LASDefaultDataSource} from "./LASDefaultDataSource.js";
-import {math} from "../../viewer";
-import {parse} from '../../../node_modules/@loaders.gl/core/dist/esm/index.js';
-import {LASLoader} from '../../../node_modules/@loaders.gl/las/dist/esm/las-loader.js';
+import {math} from "../../viewer/index.js";
+import {parse} from '@loaders.gl/core';
+import {LASLoader} from '@loaders.gl/las/dist/esm/las-loader.js';
 
 /**
  * {@link Viewer} plugin that loads lidar point cloud geometry from LAS files.

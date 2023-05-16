@@ -52,22 +52,22 @@ class TrianglesBatchingSilhouetteRenderer {
             const material = scene.xrayMaterial._state;
             const fillColor = material.fillColor;
             const fillAlpha = material.fillAlpha;
-            gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
+            gl.uniform4f(this._uSilhouetteColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
 
         } else if (renderPass === RENDER_PASSES.SILHOUETTE_HIGHLIGHTED) {
             const material = scene.highlightMaterial._state;
             const fillColor = material.fillColor;
             const fillAlpha = material.fillAlpha;
-            gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
+            gl.uniform4f(this._uSilhouetteColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
 
         } else if (renderPass === RENDER_PASSES.SILHOUETTE_SELECTED) {
             const material = scene.selectedMaterial._state;
             const fillColor = material.fillColor;
             const fillAlpha = material.fillAlpha;
-            gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
+            gl.uniform4f(this._uSilhouetteColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
 
         } else {
-            gl.uniform4fv(this._uColor, defaultColor);
+            gl.uniform4fv(this._uSilhouetteColor, defaultColor);
         }
 
         const viewMat = (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix;
@@ -115,6 +115,10 @@ class TrianglesBatchingSilhouetteRenderer {
             this._aFlags2.bindArrayBuffer(state.flags2Buf);
         }
 
+        if (this._aColor) {
+            this._aColor.bindArrayBuffer(state.colorsBuf);
+        }
+
         state.indicesBuf.bind();
 
         gl.drawElements(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
@@ -139,7 +143,7 @@ class TrianglesBatchingSilhouetteRenderer {
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
-        this._uColor = program.getLocation("color");
+        this._uSilhouetteColor = program.getLocation("silhouetteColor");
         this._uSectionPlanes = [];
 
         for (let i = 0, len = scene._sectionPlanesState.sectionPlanes.length; i < len; i++) {
@@ -154,6 +158,7 @@ class TrianglesBatchingSilhouetteRenderer {
         this._aOffset = program.getAttribute("offset");
         this._aFlags = program.getAttribute("flags");
         this._aFlags2 = program.getAttribute("flags2");
+        this._aColor = program.getAttribute("color");
 
         if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
@@ -201,11 +206,12 @@ class TrianglesBatchingSilhouetteRenderer {
         }
         src.push("in vec4 flags;");
         src.push("in vec4 flags2;");
+        src.push("in vec4 color;");
         src.push("uniform mat4 worldMatrix;");
         src.push("uniform mat4 viewMatrix;");
         src.push("uniform mat4 projMatrix;");
         src.push("uniform mat4 positionsDecodeMatrix;");
-        src.push("uniform vec4 color;");
+        src.push("uniform vec4 silhouetteColor;");
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
@@ -220,6 +226,8 @@ class TrianglesBatchingSilhouetteRenderer {
             src.push("out vec4 vWorldPosition;");
             src.push("out vec4 vFlags2;");
         }
+
+        src.push("out vec4 vColor;");
 
         src.push("void main(void) {");
 
@@ -239,6 +247,7 @@ class TrianglesBatchingSilhouetteRenderer {
             src.push("vWorldPosition = worldPosition;");
             src.push("vFlags2 = flags2;");
         }
+        src.push("vColor = vec4(silhouetteColor.r, silhouetteColor.g, silhouetteColor.b, min(silhouetteColor.a, float(color.a) / 255.0));");
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
            src.push("vFragDepth = 1.0 + clipPos.w;");
@@ -281,7 +290,7 @@ class TrianglesBatchingSilhouetteRenderer {
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
-        src.push("uniform vec4 color;");
+        src.push("in vec4 vColor;");
         src.push("out vec4 outColor;");
         src.push("void main(void) {");
         if (clipping) {
@@ -299,7 +308,7 @@ class TrianglesBatchingSilhouetteRenderer {
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
-        src.push("outColor = color;");
+        src.push("outColor = vColor;");
         src.push("}");
         return src;
     }

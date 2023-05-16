@@ -72,11 +72,16 @@ class DistanceMeasurement extends Component {
             cfg.onContextMenu(event, this);
         } : null;
 
+        const onMouseWheel = (event) => {
+            this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new WheelEvent('wheel', event));
+        };
+
         this._originDot = new Dot(this._container, {
             fillColor: this._color,
             zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2 : undefined,
             onMouseOver,
             onMouseLeave,
+            onMouseWheel,
             onContextMenu
         });
 
@@ -85,6 +90,7 @@ class DistanceMeasurement extends Component {
             zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2 : undefined,
             onMouseOver,
             onMouseLeave,
+            onMouseWheel,
             onContextMenu
         });
 
@@ -95,6 +101,7 @@ class DistanceMeasurement extends Component {
             zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1 : undefined,
             onMouseOver,
             onMouseLeave,
+            onMouseWheel,
             onContextMenu
         });
 
@@ -105,6 +112,7 @@ class DistanceMeasurement extends Component {
             zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1 : undefined,
             onMouseOver,
             onMouseLeave,
+            onMouseWheel,
             onContextMenu
         });
 
@@ -115,6 +123,7 @@ class DistanceMeasurement extends Component {
             zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1 : undefined,
             onMouseOver,
             onMouseLeave,
+            onMouseWheel,
             onContextMenu
         });
 
@@ -125,6 +134,7 @@ class DistanceMeasurement extends Component {
             zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1 : undefined,
             onMouseOver,
             onMouseLeave,
+            onMouseWheel,
             onContextMenu
         });
 
@@ -135,6 +145,7 @@ class DistanceMeasurement extends Component {
             zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 4 : undefined,
             onMouseOver,
             onMouseLeave,
+            onMouseWheel,
             onContextMenu
         });
 
@@ -145,6 +156,7 @@ class DistanceMeasurement extends Component {
             zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 3 : undefined,
             onMouseOver,
             onMouseLeave,
+            onMouseWheel,
             onContextMenu
         });
 
@@ -155,6 +167,7 @@ class DistanceMeasurement extends Component {
             zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 3 : undefined,
             onMouseOver,
             onMouseLeave,
+            onMouseWheel,
             onContextMenu
         });
 
@@ -165,6 +178,7 @@ class DistanceMeasurement extends Component {
             zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 3 : undefined,
             onMouseOver,
             onMouseLeave,
+            onMouseWheel,
             onContextMenu
         });
 
@@ -782,7 +796,7 @@ class DistanceMeasurement extends Component {
     }
 
     /**
-     * Sets if the wires, dots ad labels will fire "mouseOver" "mouseLeave" and "contextMenu" events.
+     * Sets if the wires, dots ad labels will fire "mouseOver" "mouseLeave" and "contextMenu" events, or ignore mouse events altogether.
      *
      * @type {Boolean}
      */

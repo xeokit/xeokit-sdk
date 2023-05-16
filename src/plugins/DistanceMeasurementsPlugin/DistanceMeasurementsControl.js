@@ -1,7 +1,7 @@
 import {Dot} from "../lib/html/Dot.js";
 import {Component} from "../../viewer/scene/Component.js";
 import {math} from "../../viewer/scene/math/math.js";
-import {Marker} from "../../viewer";
+import {Marker} from "../../viewer/index.js";
 
 /**
  * Creates {@link DistanceMeasurement}s from mouse and touch input.
@@ -30,7 +30,8 @@ class DistanceMeasurementsControl extends Component {
         this._active = false;
 
         // Mouse input uses a combo of events that requires us to track
-        // the current DistanceMeasurement under construction. This is not used for touch input.
+        // the current DistanceMeasurement under construction. This is not used for touch input, which
+        // just uses touch-move-release to make a measurement.
         this._currentDistanceMeasurementByMouse = null;
 
         this._currentDistanceMeasurementByMouseInittouchState = {
@@ -218,6 +219,7 @@ class DistanceMeasurementsControl extends Component {
 
         this._onPickedNothing = cameraControl.on("pickedNothing", event => {
             if (this._currentDistanceMeasurementByMouse) {
+                this.fire("measurementCancel", this._currentDistanceMeasurementByMouse);
                 this._currentDistanceMeasurementByMouse.destroy();
                 this._currentDistanceMeasurementByMouse = null;
             }
@@ -260,7 +262,7 @@ class DistanceMeasurementsControl extends Component {
                         case SECOND_TOUCH_EXPECTED:
                             startDot.setVisible(false);
                             this._touchStartMarker.worldPos = pickResult.worldPos;
-                           const measurement = plugin.createMeasurement({
+                            const measurement = plugin.createMeasurement({
                                 id: math.createUUID(),
                                 origin: {
                                     entity: mouseHoverEntity,
@@ -274,6 +276,7 @@ class DistanceMeasurementsControl extends Component {
                             });
                             measurement.clickable = true;
                             touchState = FIRST_TOUCH_EXPECTED;
+                            this.fire("measurementEnd", measurement);
                             break;
                     }
                 } else {
@@ -315,7 +318,11 @@ class DistanceMeasurementsControl extends Component {
         canvas.removeEventListener("touchstart", this._onCanvasTouchStart);
         canvas.removeEventListener("touchend", this._onCanvasTouchEnd);
 
-        this._currentDistanceMeasurementByMouse = null;
+        if (this._currentDistanceMeasurementByMouse) {
+            this.fire("measurementCancel", this._currentDistanceMeasurementByMouse);
+            this._currentDistanceMeasurementByMouse.destroy();
+            this._currentDistanceMeasurementByMouse = null;
+        }
 
         this._active = false;
     }
@@ -332,6 +339,7 @@ class DistanceMeasurementsControl extends Component {
             return;
         }
         if (this._currentDistanceMeasurementByMouse) {
+            this.fire("measurementCancel", this._currentDistanceMeasurementByMouse);
             this._currentDistanceMeasurementByMouse.destroy();
             this._currentDistanceMeasurementByMouse = null;
         }

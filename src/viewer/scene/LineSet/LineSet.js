@@ -1,9 +1,8 @@
 import {Component} from '../Component.js';
-import {Mesh} from "../mesh";
-import {PhongMaterial} from "../materials";
-import {math} from "../math/";
-import {worldToRTCPos} from "../math/rtcCoords.js";
-import {VBOGeometry} from "../geometry";
+import {Mesh} from "../mesh/Mesh.js";
+import {PhongMaterial} from "../materials/PhongMaterial.js";
+import {math} from "../math/math.js";
+import {VBOGeometry} from "../geometry/VBOGeometry.js";
 
 /**
  * A set of 3D line segments.

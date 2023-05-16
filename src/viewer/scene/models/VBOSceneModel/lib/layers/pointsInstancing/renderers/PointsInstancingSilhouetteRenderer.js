@@ -162,7 +162,7 @@ class PointsInstancingSilhouetteRenderer {
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
-        this._uColor = program.getLocation("color");
+        this._uColor = program.getLocation("silhouetteColor");
         this._uSectionPlanes = [];
 
         const clips = sectionPlanesState.sectionPlanes;
@@ -231,6 +231,7 @@ class PointsInstancingSilhouetteRenderer {
         }
         src.push("in vec4 flags;");
         src.push("in vec4 flags2;");
+        src.push("in vec4 color;");
 
         src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
         src.push("in vec4 modelMatrixCol1;");
@@ -251,12 +252,13 @@ class PointsInstancingSilhouetteRenderer {
             src.push("out float vFragDepth;");
         }
 
-        src.push("uniform vec4 color;");
+        src.push("uniform vec4 silhouetteColor;");
 
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
             src.push("out vec4 vFlags2;");
         }
+        src.push("out vec4 vColor;");
 
         src.push("void main(void) {");
 
@@ -283,6 +285,7 @@ class PointsInstancingSilhouetteRenderer {
         if (scene.logarithmicDepthBufferEnabled) {
            src.push("vFragDepth = 1.0 + clipPos.w;");
         }
+        src.push("vColor = vec4(float(silhouetteColor.r) / 255.0, float(silhouetteColor.g) / 255.0, float(silhouetteColor.b) / 255.0, float(color.a) / 255.0);");
         src.push("gl_Position = clipPos;");
         if (pointsMaterial.perspectivePoints) {
             src.push("gl_PointSize = (nearPlaneHeight * pointSize) / clipPos.w;");
@@ -323,7 +326,7 @@ class PointsInstancingSilhouetteRenderer {
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
-        src.push("uniform vec4 color;");
+        src.push("in vec4 vColor;");
         src.push("out vec4 outColor;");
         src.push("void main(void) {");
         if (scene.pointsMaterial.roundPoints) {
@@ -348,7 +351,7 @@ class PointsInstancingSilhouetteRenderer {
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("gl_FragDepth = log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
-        src.push("outColor = color;");
+        src.push("outColor = vColor;");
         src.push("}");
         return src;
     }
