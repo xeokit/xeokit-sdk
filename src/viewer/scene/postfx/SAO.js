@@ -176,11 +176,7 @@ class SAO extends Component {
 
         super(owner, cfg);
 
-        const ua = navigator.userAgent.match(/(opera|chrome|safari|firefox|msie|mobile)\/?\s*(\.?\d+(\.\d+)*)/i);
-        const isSafari = (ua && ua[1].toLowerCase() === "safari");
-
-        this._supported = (!isSafari) &&
-            WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_standard_derivatives"]; // For computing normals in SAO fragment shader
+        this._supported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_standard_derivatives"]; // For computing normals in SAO fragment shader
 
         this.enabled = cfg.enabled;
         this.kernelRadius = cfg.kernelRadius;

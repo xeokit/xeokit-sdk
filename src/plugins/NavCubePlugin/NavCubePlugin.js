@@ -8,7 +8,11 @@ import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
 import {Texture} from "../../viewer/scene/materials/Texture.js";
 import {buildCylinderGeometry} from "../../viewer/scene/geometry/builders/buildCylinderGeometry.js";
 import {CubeTextureCanvas} from "./CubeTextureCanvas.js";
-import {ClampToEdgeWrapping} from "../../viewer/scene/constants/constants";
+import {ClampToEdgeWrapping} from "../../viewer/scene/constants/constants.js";
+
+const tempVec3a = math.vec3();
+const tempVec3b = math.vec3();
+const tempMat4a = math.mat4();
 
 /**
  * {@link Viewer} plugin that lets us look at the entire {@link Scene} from along a chosen axis or diagonal.
@@ -95,6 +99,8 @@ class NavCubePlugin extends Plugin {
      * @param {Boolean} [cfg.fitVisible=false] Sets whether the axis, corner and edge-aligned views will fit the
      * view to the entire {@link Scene} or just to visible object-{@link Entity}s. Entitys are visible objects when {@link Entity#isObject} and {@link Entity#visible} are both ````true````.
      * @param {Boolean} [cfg.synchProjection=false] Sets whether the NavCube switches between perspective and orthographic projections in synchrony with the {@link Camera}. When ````false````, the NavCube will always be rendered with perspective projection.
+     * @param {Boolean} [cfg.isProjectNorth] sets whether the NavCube switches between true north and project north - using the project north offset angle.
+     * @param {number} [cfg.projectNorthOffsetAngle] sets the NavCube project north offset angle - when the {@link isProjectNorth} is true.
      */
     constructor(viewer, cfg = {}) {
 
@@ -140,6 +146,18 @@ class NavCubePlugin extends Plugin {
 
         var self = this;
 
+        this.setIsProjectNorth(cfg.isProjectNorth);
+        this.setProjectNorthOffsetAngle(cfg.projectNorthOffsetAngle);
+
+        const rotateTrueNorth = (function () {
+            const trueNorthMatrix = math.mat4();
+            return function (dir, vec, dest) {
+                math.identityMat4(trueNorthMatrix);
+                math.rotationMat4v(dir * self._projectNorthOffsetAngle * math.DEGTORAD, [0, 1, 0], trueNorthMatrix);
+                return math.transformVec3(trueNorthMatrix, vec, dest)
+            }
+        }())
+
         this._synchCamera = (function () {
             var matrix = math.rotationMat4c(-90 * math.DEGTORAD, 1, 0, 0);
             var eyeLookVec = math.vec3();
@@ -150,6 +168,12 @@ class NavCubePlugin extends Plugin {
                 var look = viewer.camera.look;
                 var up = viewer.camera.up;
                 eyeLookVec = math.mulVec3Scalar(math.normalizeVec3(math.subVec3(eye, look, eyeLookVec)), 5);
+
+                if (self._isProjectNorth && self._projectNorthOffsetAngle) {
+                    eyeLookVec = rotateTrueNorth(-1, eyeLookVec, tempVec3a);
+                    up = rotateTrueNorth(-1, up, tempVec3b);
+                }
+
                 if (self._zUp) { // +Z up
                     math.transformVec3(matrix, eyeLookVec, eyeLookVecCube);
                     math.transformVec3(matrix, up, upCube);
@@ -369,6 +393,10 @@ class NavCubePlugin extends Plugin {
                                 var dir = self._cubeTextureCanvas.getAreaDir(areaId);
                                 if (dir) {
                                     var up = self._cubeTextureCanvas.getAreaUp(areaId);
+                                    if (self._isProjectNorth && self._projectNorthOffsetAngle) {
+                                        dir = rotateTrueNorth(+1, dir, tempVec3a);
+                                        up = rotateTrueNorth(+1, up, tempVec3b);
+                                    }
                                     flyTo(dir, up, function () {
                                         if (lastAreaId >= 0) {
                                             self._cubeTextureCanvas.setAreaHighlighted(lastAreaId, false);
@@ -641,6 +669,42 @@ class NavCubePlugin extends Plugin {
      */
     getSynchProjection() {
         return this._synchProjection;
+    }
+
+    /**
+     * Sets whether the NavCube switches between project north and true north
+     *
+     * @param {Boolean} isProjectNorth Set ````true```` to use project north offset
+     */
+    setIsProjectNorth(isProjectNorth = false) {
+        this._isProjectNorth = isProjectNorth;
+    }
+
+    /**
+     * Gets whether the NavCube switches between project north and true north
+     *
+     * @return {Boolean} isProjectNorth when ````true```` - use project north offset
+     */
+    getIsProjectNorth() {
+        return this._isProjectNorth;
+    }
+
+    /**
+     * Sets the NavCube project north offset angle (used when {@link isProjectNorth} is ````true````
+     *
+     * @param {number} projectNorthOffsetAngle Set the vector offset for project north
+     */
+    setProjectNorthOffsetAngle(projectNorthOffsetAngle) {
+        this._projectNorthOffsetAngle = projectNorthOffsetAngle;
+    }
+
+    /**
+     * Gets the offset angle between project north and true north
+     *
+     * @return {number} projectNorthOffsetAngle
+     */
+    getProjectNorthOffsetAngle() {
+        return this._projectNorthOffsetAngle;
     }
 
     /**

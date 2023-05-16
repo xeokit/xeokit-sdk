@@ -127,9 +127,17 @@ class Texture2D {
         let generateMipMap = false;
 
         gl.bindTexture(this.target, this.texture);
+
+        const bak1 = gl.getParameter(gl.UNPACK_FLIP_Y_WEBGL);
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, this.flipY);
+
+        const bak2 = gl.getParameter(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL);
         gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, this.premultiplyAlpha);
+
+        const bak3 = gl.getParameter(gl.UNPACK_ALIGNMENT);
         gl.pixelStorei(gl.UNPACK_ALIGNMENT, this.unpackAlignment);
+
+        const bak4 = gl.getParameter(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL);;
         gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, gl.NONE);
 
         const minFilter = convertConstant(gl, this.minFilter);
@@ -185,6 +193,11 @@ class Texture2D {
         }
 
         gl.bindTexture(this.target, null);
+
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, bak1);
+        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, bak2);
+        gl.pixelStorei(gl.UNPACK_ALIGNMENT, bak3);
+        gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, bak4);
     }
 
     setCompressedData({mipmaps, props = {}}) {

@@ -1,6 +1,5 @@
 import {MetaModel} from "./MetaModel.js";
 import {MetaObject} from "./MetaObject.js";
-import {math} from "../scene/math/math.js";
 import {PropertySet} from "./PropertySet.js";
 
 /**
@@ -58,6 +57,13 @@ class MetaScene {
          * @type {{String:MetaObject}}
          */
         this.metaObjectsByType = {};
+
+        /**
+         * The root {@link MetaObject}s belonging to this MetaScene, each mapped to its {@link MetaObject#id}.
+         *
+         * @type {{String:MetaObject}}
+         */
+        this.rootMetaObjects = {};
 
         /**
          * Tracks number of MetaObjects of each type.
@@ -141,7 +147,7 @@ class MetaScene {
         const creatingApplication = metaModelData.creatingApplication;
         const schema = metaModelData.schema;
 
-        var includeTypes;
+        let includeTypes;
         // if (options.includeTypes) {
         //     includeTypes = {};
         //     for (let i = 0, len = options.includeTypes.length; i < len; i++) {
@@ -149,7 +155,7 @@ class MetaScene {
         //     }
         // }
         //
-        var excludeTypes;
+        let excludeTypes;
         // if (options.excludeTypes) {
         //     excludeTypes = {};
         //     for (let i = 0, len = options.excludeTypes.length; i < len; i++) {
@@ -169,42 +175,14 @@ class MetaScene {
             this.propertySets[propertySetId] = propertySet;
         }
 
+        const filteredObjectsParams = []; // Params for each new metaobject that passes our filters
+        const existingObjects = []; // List of our metaobjects that are already existing, to which we'll also append new metaobjects we'll create
+        const createObjectsParams = []; // List of params for metaobjects we'll create
+
         const rootMetaObjects = [];
 
-        for (let i = 0, len = newObjects.length; i < len; i++) {
-            const newObject = newObjects[i];
-            if (newObject.parent === undefined || newObject.parent === null) {
-                rootMetaObjects.push(newObject);
-            }
-        }
 
-        if (rootMetaObjects.length === 0) {
-            this.scene.error("Cyclic containment hierarchy found in metamodel - will flatten the hierarchy and insert fake 'Model' root");
-            const fakeRoot = {
-                "id": modelId + ".fakeRoot",
-                "name": modelId,
-                "type": "Model",
-                "parent": null
-            };
-            for (let i = 0, len = newObjects.length; i < len; i++) {
-                newObjects[i].parent = fakeRoot.id;
-            }
-            newObjects.push(fakeRoot);
-        }
-
-        if (rootMetaObjects.length > 1) {
-            this.scene.error("Multiple containment hierarchy root found in metamodel - will insert fake 'Model' root");
-            const fakeRoot = {
-                "id": modelId + ".fakeRoot",
-                "name": modelId,
-                "type": "Model",
-                "parent": null
-            };
-            newObjects.push(fakeRoot);
-            for (let i = 0, len = rootMetaObjects.length; i < len; i++) {
-                rootMetaObjects[i].parent = fakeRoot.id;
-            }
-        }
+        // Filter out the parameters we'll create
 
         for (let i = 0, len = newObjects.length; i < len; i++) {
             const newObject = newObjects[i];
@@ -215,13 +193,34 @@ class MetaScene {
             if (includeTypes && !includeTypes[type]) {
                 continue;
             }
-            const objectId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, newObject.id) : newObject.id;
-            const originalSystemId = newObject.id;
-            const name = newObject.name;
+            filteredObjectsParams.push(newObject);
+        }
+
+        // Build list of params for metaobjects we'll create
+
+        for (let i = 0, len = filteredObjectsParams.length; i < len; i++) {
+            let filteredObject = filteredObjectsParams[i];
+            const existingObject = this.metaObjects[filteredObject.id];
+            if (existingObject) {
+                existingObject.metaModels.push(metaModel);
+                existingObjects.push(existingObject);
+                continue;
+            }
+            createObjectsParams.push(filteredObject);
+        }
+
+        // Create metaobjects in the creation list, add them to list of existing metaobjects
+
+        for (let i = 0, len = createObjectsParams.length; i < len; i++) {
+            const createObject = createObjectsParams[i];
+            const type = createObject.type;
+            const objectId = createObject.id;
+            const originalSystemId = createObject.id;
+            const name = createObject.name;
             const propertySets = [];
-            if (newObject.propertySetIds && newObject.propertySetIds.length > 0) {
-                for (let j = 0, lenj = newObject.propertySetIds.length; j < lenj; j++) {
-                    const propertySetId = newObject.propertySetIds[j];
+            if (createObject.propertySetIds && createObject.propertySetIds.length > 0) {
+                for (let j = 0, lenj = createObject.propertySetIds.length; j < lenj; j++) {
+                    const propertySetId = createObject.propertySetIds[j];
                     const propertySet = metaModel.propertySets[propertySetId];
                     if (propertySet) {
                         propertySets.push(propertySet)
@@ -230,8 +229,9 @@ class MetaScene {
             }
             const parent = null;
             const children = null;
-            const external = newObject.external;
+            const external = createObject.external;
             const metaObject = new MetaObject(metaModel, objectId, originalSystemId, name, type, propertySets, parent, children, external);
+            metaObject._parentId = createObject.parent;
             this.metaObjects[objectId] = metaObject;
             (this.metaObjectsByType[type] || (this.metaObjectsByType[type] = {}))[objectId] = metaObject;
             if (this._typeCounts[type] === undefined) {
@@ -239,24 +239,30 @@ class MetaScene {
             } else {
                 this._typeCounts[type]++;
             }
+            existingObjects.push(metaObject);
+            if (createObject.parent === undefined || createObject.parent === null) {
+                rootMetaObjects.push(createObject);
+            }
         }
 
-        for (let i = 0, len = newObjects.length; i < len; i++) {
-            const newObject = newObjects[i];
-            const objectId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, newObject.id) : newObject.id;
-            const metaObject = this.metaObjects[objectId];
-            if (!metaObject) {
-                continue;
-            }
-            if (newObject.parent === undefined || newObject.parent === null) {
-                metaModel.rootMetaObject = metaObject;
-            } else if (newObject.parent) {
-                const parentId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, newObject.parent) : newObject.parent;
+        // Ensure that metaobjects in the existing metaobject list are all attached to their parents,
+        // or registered as root metaobjects
+
+        for (let i = 0, len = existingObjects.length; i < len; i++) {
+            const existingObject = existingObjects[i];
+            const objectId = existingObject.id;
+            if ((existingObject._parentId === undefined || existingObject._parentId === null) && !existingObject.parent) {
+                metaModel.rootMetaObject = existingObject; // Deprecated, and won't work for federated models
+                metaModel.rootMetaObjects[objectId] = existingObject;
+                this.rootMetaObjects[objectId] = existingObject;
+            } else if (existingObject._parentId) {
+                const parentId = existingObject._parentId;
+                existingObject._parentId = null;
                 let parentMetaObject = this.metaObjects[parentId];
                 if (parentMetaObject) {
-                    metaObject.parent = parentMetaObject;
+                    existingObject.parent = parentMetaObject;
                     parentMetaObject.children = parentMetaObject.children || [];
-                    parentMetaObject.children.push(metaObject);
+                    parentMetaObject.children.push(existingObject);
                 }
             }
         }

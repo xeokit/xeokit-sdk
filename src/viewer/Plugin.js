@@ -1,4 +1,4 @@
-import {Map} from "./scene";
+import {Map} from "./scene/utils/Map.js";
 
 /**
  @desc Base class for {@link Viewer} plugin classes.

@@ -62,11 +62,16 @@ class AngleMeasurement extends Component {
             cfg.onContextMenu(event, this);
         } : null;
 
+        const onMouseWheel = (event) => {
+            this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new WheelEvent('wheel', event));
+        };
+
         this._originDot = new Dot(this._container, {
             fillColor: this._color,
             zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined,
             onMouseOver,
             onMouseLeave,
+            onMouseWheel,
             onContextMenu
         });
         this._cornerDot = new Dot(this._container, {
@@ -74,6 +79,7 @@ class AngleMeasurement extends Component {
             zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined,
             onMouseOver,
             onMouseLeave,
+            onMouseWheel,
             onContextMenu
         });
         this._targetDot = new Dot(this._container, {
@@ -81,6 +87,7 @@ class AngleMeasurement extends Component {
             zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined,
             onMouseOver,
             onMouseLeave,
+            onMouseWheel,
             onContextMenu
         });
 
@@ -90,6 +97,7 @@ class AngleMeasurement extends Component {
             zIndex: plugin.zIndex,
             onMouseOver,
             onMouseLeave,
+            onMouseWheel,
             onContextMenu
         });
         this._targetWire = new Wire(this._container, {
@@ -98,6 +106,7 @@ class AngleMeasurement extends Component {
             zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined,
             onMouseOver,
             onMouseLeave,
+            onMouseWheel,
             onContextMenu
         });
 
@@ -108,6 +117,7 @@ class AngleMeasurement extends Component {
             zIndex: plugin.zIndex + 2,
             onMouseOver,
             onMouseLeave,
+            onMouseWheel,
             onContextMenu
         });
 
