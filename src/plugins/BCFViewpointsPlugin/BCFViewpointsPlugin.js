@@ -399,7 +399,6 @@ class BCFViewpointsPlugin extends Plugin {
                 if (!sectionPlane.active) {
                     continue;
                 }
-
                 let location = sectionPlane.pos;
 
                 let direction;
