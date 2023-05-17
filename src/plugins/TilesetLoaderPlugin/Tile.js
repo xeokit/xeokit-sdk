@@ -186,6 +186,7 @@ export default class Tile {
               },
             ],
           },
+          saoEnabled: false,
         });
 
         model.once("loaded", () => {
