@@ -179,8 +179,12 @@ class Wire {
     }
 
     destroy(visible) {
-        this._wire.parentElement.removeChild(this._wire);
-        this._wireClickable.parentElement.removeChild(this._wireClickable);
+        if (this._wire.parentElement) {
+            this._wire.parentElement.removeChild(this._wire);
+        }
+        if (this._wireClickable.parentElement) {
+            this._wireClickable.parentElement.removeChild(this._wireClickable);
+        }
     }
 }
 

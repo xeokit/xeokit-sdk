@@ -32,7 +32,7 @@ class Label {
         style["pointer-events"] = "all";
         style["opacity"] = 1.0;
         if (cfg.onContextMenu) {
-          //  style["cursor"] = "context-menu";
+            //  style["cursor"] = "context-menu";
         }
         label.innerText = "";
 
@@ -146,7 +146,9 @@ class Label {
     }
 
     destroy() {
-        this._label.parentElement.removeChild(this._label);
+        if (this._label.parentElement) {
+            this._label.parentElement.removeChild(this._label);
+        }
     }
 }
 

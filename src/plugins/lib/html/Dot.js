@@ -133,8 +133,12 @@ class Dot {
     
     destroy() {
         this.setVisible(false);
-        this._dot.parentElement.removeChild(this._dot);
-        this._dotClickable.parentElement.removeChild(this._dotClickable);
+        if (this._dot.parentElement) {
+            this._dot.parentElement.removeChild(this._dot);
+        }
+        if (this._dotClickable.parentElement) {
+            this._dotClickable.parentElement.removeChild(this._dotClickable);
+        }
     }
 }
 
