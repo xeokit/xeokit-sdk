@@ -15,8 +15,6 @@ class PointsBatchingBuffer {
         this.colors = [];
         this.intensities = [];
         this.pickColors = [];
-        this.flags = [];
-        this.flags2 = [];
         this.offsets = [];
     }
 }
