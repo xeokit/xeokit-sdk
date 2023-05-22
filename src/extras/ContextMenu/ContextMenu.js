@@ -581,7 +581,7 @@ class ContextMenu {
     }
 
     _getNextId() { // Returns a unique ID
-        return "ContextMenu_" + this._id + "" + this._nextId++; // Start ID with alpha chars to make a valid DOM element selector
+        return "ContextMenu_" + this._id + "_" + this._nextId++; // Start ID with alpha chars to make a valid DOM element selector
     }
 
     _createUI() { // Builds DOM elements for the entire menu tree
