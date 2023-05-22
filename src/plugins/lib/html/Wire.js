@@ -67,7 +67,7 @@ class Wire {
         wireClickableStyle['-o-transform'] = 'rotate(0deg)';
         wireClickableStyle['transform'] = 'rotate(0deg)';
         wireClickableStyle["opacity"] = 0.0;
-        wireClickableStyle["pointer-events"] = "all";
+        wireClickableStyle["pointer-events"] = "none";
         if (cfg.onContextMenu) {
             //wireClickableStyle["cursor"] = "context-menu";
         }
