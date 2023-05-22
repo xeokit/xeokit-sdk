@@ -492,7 +492,7 @@ class TrianglesInstancingLayer {
             this._numPickableLayerPortions--;
             this.model.numPickableLayerPortions--;
         }
-        this._setFlags2(portionId, flags, meshTransparent);
+        this._setFlags(portionId, flags, meshTransparent);
     }
 
     setCulled(portionId, flags, meshTransparent) {
