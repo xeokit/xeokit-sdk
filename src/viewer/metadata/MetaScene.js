@@ -1,6 +1,7 @@
 import {MetaModel} from "./MetaModel.js";
 import {MetaObject} from "./MetaObject.js";
 import {PropertySet} from "./PropertySet.js";
+import {math} from "../scene/math/math.js";
 
 /**
  * @desc Metadata corresponding to a {@link Scene}.
@@ -214,7 +215,7 @@ class MetaScene {
         for (let i = 0, len = createObjectsParams.length; i < len; i++) {
             const createObject = createObjectsParams[i];
             const type = createObject.type;
-            const objectId = createObject.id;
+            const objectId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, createObject.id) : createObject.id;
             const originalSystemId = createObject.id;
             const name = createObject.name;
             const propertySets = [];
@@ -250,13 +251,13 @@ class MetaScene {
 
         for (let i = 0, len = existingObjects.length; i < len; i++) {
             const existingObject = existingObjects[i];
-            const objectId = existingObject.id;
+            const objectId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, existingObject.id) : existingObject.id;
             if ((existingObject._parentId === undefined || existingObject._parentId === null) && !existingObject.parent) {
                 metaModel.rootMetaObject = existingObject; // Deprecated, and won't work for federated models
                 metaModel.rootMetaObjects[objectId] = existingObject;
                 this.rootMetaObjects[objectId] = existingObject;
             } else if (existingObject._parentId) {
-                const parentId = existingObject._parentId;
+                const parentId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, existingObject._parentId) : existingObject._parentId;
                 existingObject._parentId = null;
                 let parentMetaObject = this.metaObjects[parentId];
                 if (parentMetaObject) {

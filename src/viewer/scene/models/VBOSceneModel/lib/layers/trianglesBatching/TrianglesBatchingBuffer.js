@@ -17,8 +17,6 @@ class TrianglesBatchingBuffer {
         this.metallicRoughness = [];
         this.normals = [];
         this.pickColors = [];
-        this.flags = [];
-        this.flags2 = [];
         this.offsets = [];
         this.indices = [];
         this.edgeIndices = [];

@@ -67,7 +67,7 @@ class Wire {
         wireClickableStyle['-o-transform'] = 'rotate(0deg)';
         wireClickableStyle['transform'] = 'rotate(0deg)';
         wireClickableStyle["opacity"] = 0.0;
-        wireClickableStyle["pointer-events"] = "all";
+        wireClickableStyle["pointer-events"] = "none";
         if (cfg.onContextMenu) {
             //wireClickableStyle["cursor"] = "context-menu";
         }
@@ -179,8 +179,12 @@ class Wire {
     }
 
     destroy(visible) {
-        this._wire.parentElement.removeChild(this._wire);
-        this._wireClickable.parentElement.removeChild(this._wireClickable);
+        if (this._wire.parentElement) {
+            this._wire.parentElement.removeChild(this._wire);
+        }
+        if (this._wireClickable.parentElement) {
+            this._wireClickable.parentElement.removeChild(this._wireClickable);
+        }
     }
 }
 
