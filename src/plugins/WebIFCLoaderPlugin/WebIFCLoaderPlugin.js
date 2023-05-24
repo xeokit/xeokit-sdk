@@ -618,10 +618,15 @@ class WebIFCLoaderPlugin extends Plugin {
         }
 
         this.on("initialized", () => {
-            if (params.src) {
-                this._loadModel(params.src, params, options, sceneModel);
-            } else {
-                this._parseModel(params.ifc, params, options, sceneModel);
+            try {
+                if (params.src) {
+                    this._loadModel(params.src, params, options, sceneModel);
+                } else {
+                    this._parseModel(params.ifc, params, options, sceneModel);
+                }
+            } catch (e) {
+                this.error(e);
+                sceneModel.fire("error", e);
             }
         });
 
