@@ -60,7 +60,6 @@ class PointsBatchingLayer {
             offsetsBuf: null,
             colorsBuf: null,
             flagsBuf: null,
-            flags2Buf: null,
             positionsDecodeMatrix: math.mat4(),
             origin: null
         });
@@ -341,13 +340,10 @@ class PointsBatchingLayer {
         }
 
         if (buffer.positions.length > 0) { // Because we build flags arrays here, get their length from the positions array
-            const flagsLength = (buffer.positions.length / 3) * 4;
-            const flags = new Uint8Array(flagsLength);
-            const flags2 = new Uint8Array(flagsLength);
+            const flagsLength = buffer.positions.length / 3;
+            const flags = new Float32Array(flagsLength);
             let notNormalized = false;
-            let normalized = true;
-            state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, flags, flags.length, 4, gl.DYNAMIC_DRAW, notNormalized);
-            state.flags2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, flags2, flags2.length, 4, gl.DYNAMIC_DRAW, normalized);
+            state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, flags, flags.length, 1, gl.DYNAMIC_DRAW, notNormalized);
         }
 
         if (buffer.pickColors.length > 0) {
@@ -401,7 +397,6 @@ class PointsBatchingLayer {
             this.model.numTransparentLayerPortions++;
         }
         this._setFlags(portionId, flags, meshTransparent);
-        this._setFlags2(portionId, flags);
     }
 
     setVisible(portionId, flags, transparent) {
@@ -478,7 +473,7 @@ class PointsBatchingLayer {
             this._numClippableLayerPortions--;
             this.model.numClippableLayerPortions--;
         }
-        this._setFlags2(portionId, flags);
+        this._setFlags(portionId, flags);
     }
 
     setCulled(portionId, flags, transparent) {
@@ -556,9 +551,9 @@ class PointsBatchingLayer {
         const portionsIdx = portionId * 2;
         const vertexBase = this._portions[portionsIdx];
         const numVerts = this._portions[portionsIdx + 1];
-        const firstFlag = vertexBase * 4;
-        const lenFlags = numVerts * 4;
-        const tempArray = this._scratchMemory.getUInt8Array(lenFlags);
+        const firstFlag = vertexBase;
+        const lenFlags = numVerts;
+        const tempArray = this._scratchMemory.getFloat32Array(lenFlags);
 
         const visible = !!(flags & ENTITY_FLAGS.VISIBLE);
         const xrayed = !!(flags & ENTITY_FLAGS.XRAYED);
@@ -567,70 +562,48 @@ class PointsBatchingLayer {
         const pickable = !!(flags & ENTITY_FLAGS.PICKABLE);
         const culled = !!(flags & ENTITY_FLAGS.CULLED);
 
-        // Normal fill
-
-        let f0;
+        let colorFlag;
         if (!visible || culled || xrayed
             || (highlighted && !this.model.scene.highlightMaterial.glowThrough)
             || (selected && !this.model.scene.selectedMaterial.glowThrough) ) {
-            f0 = RENDER_PASSES.NOT_RENDERED;
+            colorFlag = RENDER_PASSES.NOT_RENDERED;
         } else {
             if (transparent) {
-                f0 = RENDER_PASSES.COLOR_TRANSPARENT;
+                colorFlag = RENDER_PASSES.COLOR_TRANSPARENT;
             } else {
-                f0 = RENDER_PASSES.COLOR_OPAQUE;
+                colorFlag = RENDER_PASSES.COLOR_OPAQUE;
             }
         }
 
-        // Emphasis fill
-
-        let f1;
+        let silhouetteFlag;
         if (!visible || culled) {
-            f1 = RENDER_PASSES.NOT_RENDERED;
+            silhouetteFlag = RENDER_PASSES.NOT_RENDERED;
         } else if (selected) {
-            f1 = RENDER_PASSES.SILHOUETTE_SELECTED;
+            silhouetteFlag = RENDER_PASSES.SILHOUETTE_SELECTED;
         } else if (highlighted) {
-            f1 = RENDER_PASSES.SILHOUETTE_HIGHLIGHTED;
+            silhouetteFlag = RENDER_PASSES.SILHOUETTE_HIGHLIGHTED;
         } else if (xrayed) {
-            f1 = RENDER_PASSES.SILHOUETTE_XRAYED;
+            silhouetteFlag = RENDER_PASSES.SILHOUETTE_XRAYED;
         } else {
-            f1 = RENDER_PASSES.NOT_RENDERED;
+            silhouetteFlag = RENDER_PASSES.NOT_RENDERED;
         }
 
-        // Pick
+        let pickFlag = (visible && !culled && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
 
-        let f3 = (visible && !culled && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
+        const clippableFlag = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 1 : 0;
 
-        for (let i = 0; i < lenFlags; i += 4) {
-            tempArray[i + 0] = f0; // x - normal fill
-            tempArray[i + 1] = f1; // y - emphasis fill
-            tempArray[i + 2] = 0; // z - edges - don't care
-            tempArray[i + 3] = f3; // w - pick
+        for (let i = 0; i < lenFlags; i++) {
+            let vertFlag = 0;
+            vertFlag |= colorFlag;
+            vertFlag |= silhouetteFlag << 4;
+            // no edges
+            vertFlag |= pickFlag << 12;
+            vertFlag |= clippableFlag << 16;
+    
+            tempArray[i] = vertFlag;
         }
 
-        this._state.flagsBuf.setData(tempArray, firstFlag, lenFlags);
-    }
-
-    _setFlags2(portionId, flags) {
-
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-
-        const portionsIdx = portionId * 2;
-        const vertexBase = this._portions[portionsIdx];
-        const numVerts = this._portions[portionsIdx + 1];
-        const firstFlag = vertexBase * 4;
-        const lenFlags = numVerts * 4;
-        const tempArray = this._scratchMemory.getUInt8Array(lenFlags);
-
-        const clippable = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 255 : 0;
-
-        for (let i = 0; i < lenFlags; i += 4) {
-            tempArray[i + 0] = clippable;
-        }
-
-        this._state.flags2Buf.setData(tempArray, firstFlag, lenFlags);
+        this._state.flagsBuf.setData(tempArray, firstFlag);
     }
 
     setOffset(portionId, offset) {
@@ -788,10 +761,6 @@ class PointsBatchingLayer {
         if (state.flagsBuf) {
             state.flagsBuf.destroy();
             state.flagsBuf = null;
-        }
-        if (state.flags2Buf) {
-            state.flags2Buf.destroy();
-            state.flags2Buf = null;
         }
         if (state.pickColorsBuf) {
             state.pickColorsBuf.destroy();
