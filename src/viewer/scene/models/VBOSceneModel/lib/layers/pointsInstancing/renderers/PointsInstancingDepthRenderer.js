@@ -95,11 +95,6 @@ class PointsInstancingDepthRenderer {
         this._aFlags.bindArrayBuffer(state.flagsBuf);
         gl.vertexAttribDivisor(this._aFlags.location, 1);
 
-        if (this._aFlags2) {
-            this._aFlags2.bindArrayBuffer(state.flags2Buf);
-            gl.vertexAttribDivisor(this._aFlags2.location, 1);
-        }
-
         gl.uniform1f(this._uPointSize, pointsMaterial.pointSize);
         const nearPlaneHeight = (scene.camera.projection === "ortho") ? 1.0 : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0)));
         gl.uniform1f(this._uNearPlaneHeight, nearPlaneHeight);
@@ -110,10 +105,6 @@ class PointsInstancingDepthRenderer {
         gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 0);
         gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 0);
         gl.vertexAttribDivisor(this._aFlags.location, 0);
-
-        if (this._aFlags2) { // Won't be in shader when not clipping
-            gl.vertexAttribDivisor(this._aFlags2.location, 0);
-        }
 
         if (this._aOffset) {
             gl.vertexAttribDivisor(this._aOffset.location, 0);
@@ -154,7 +145,6 @@ class PointsInstancingDepthRenderer {
         this._aPosition = program.getAttribute("position");
         this._aOffset = program.getAttribute("offset");
         this._aFlags = program.getAttribute("flags");
-        this._aFlags2 = program.getAttribute("flags2");
         this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
         this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");
         this._aModelMatrixCol2 = program.getAttribute("modelMatrixCol2");
@@ -203,8 +193,7 @@ class PointsInstancingDepthRenderer {
         if (scene.entityOffsetsEnabled) {
             src.push("in vec3 offset;");
         }
-        src.push("in vec4 flags;");
-        src.push("in vec4 flags2;");
+        src.push("in float flags;");
         src.push("in vec4 modelMatrixCol0;");
         src.push("in vec4 modelMatrixCol1;");
         src.push("in vec4 modelMatrixCol2;");
@@ -224,14 +213,15 @@ class PointsInstancingDepthRenderer {
         }
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
-            src.push("out vec4 vFlags2;");
+            src.push("out float vFlags;");
         }
         src.push("void main(void) {");
 
-        // flags.x = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
+        // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
         // renderPass = COLOR_OPAQUE
 
-        src.push(`if (int(flags.x) != renderPass) {`);
+        src.push(`int colorFlag = int(flags) & 0xF;`);
+        src.push(`if (colorFlag != renderPass) {`);
         src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
 
         src.push("} else {");
@@ -244,7 +234,7 @@ class PointsInstancingDepthRenderer {
 
         if (clipping) {
             src.push("vWorldPosition = worldPosition;");
-            src.push("vFlags2 = flags2;");
+            src.push("vFlags = flags;");
         }
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
@@ -285,7 +275,7 @@ class PointsInstancingDepthRenderer {
         }
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
-            src.push("in vec4 vFlags2;");
+            src.push("in float vFlags;");
             for (i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
@@ -317,7 +307,7 @@ class PointsInstancingDepthRenderer {
         }
 
         if (clipping) {
-            src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
+            src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
             src.push("  if (clippable) {");
             src.push("  float dist = 0.0;");
             for (i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
