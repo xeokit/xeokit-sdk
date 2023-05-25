@@ -101,10 +101,6 @@ class TrianglesBatchingPickNormalsRenderer {
             this._aFlags.bindArrayBuffer(state.flagsBuf);
         }
 
-        if (this._aFlags2) {
-            this._aFlags2.bindArrayBuffer(state.flags2Buf);
-        }
-
         state.indicesBuf.bind();
 
         gl.drawElements(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
@@ -144,7 +140,6 @@ class TrianglesBatchingPickNormalsRenderer {
         this._aOffset = program.getAttribute("offset");
         this._aNormal = program.getAttribute("normal");
         this._aFlags = program.getAttribute("flags");
-        this._aFlags2 = program.getAttribute("flags2");
 
         if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
@@ -175,8 +170,7 @@ class TrianglesBatchingPickNormalsRenderer {
             src.push("in vec3 offset;");
         }
         src.push("in vec3 normal;");
-        src.push("in vec4 flags;");
-        src.push("in vec4 flags2;");
+        src.push("in float flags;");
         src.push("uniform bool pickInvisible;");
         src.push("uniform mat4 worldMatrix;");
         src.push("uniform mat4 viewMatrix;");
@@ -199,14 +193,15 @@ class TrianglesBatchingPickNormalsRenderer {
         src.push("}");
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
-            src.push("out vec4 vFlags2;");
+            src.push("out float vFlags;");
         }
         src.push("out vec3 vWorldNormal;");
         src.push("out vec4 outColor;");
         src.push("void main(void) {");
-        // flags.w = NOT_RENDERED | PICK
+        // pickFlag = NOT_RENDERED | PICK
         // renderPass = PICK
-        src.push(`if (int(flags.w) != renderPass) {`);
+        src.push(`int pickFlag = int(flags) >> 12 & 0xF;`);
+        src.push(`if (pickFlag != renderPass) {`);
         src.push("      gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
         src.push("  } else {");
         src.push("      vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
@@ -218,7 +213,7 @@ class TrianglesBatchingPickNormalsRenderer {
         src.push("      vWorldNormal = worldNormal;");
         if (clipping) {
             src.push("      vWorldPosition = worldPosition;");
-            src.push("      vFlags2 = flags2;");
+            src.push("      vFlags = flags;");
         }
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
@@ -253,7 +248,7 @@ class TrianglesBatchingPickNormalsRenderer {
         }
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
-            src.push("in vec4 vFlags2;");
+            src.push("in float vFlags;");
             for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
@@ -264,7 +259,7 @@ class TrianglesBatchingPickNormalsRenderer {
         src.push("out vec4 outColor;");
         src.push("void main(void) {");
         if (clipping) {
-            src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
+            src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
             src.push("  if (clippable) {");
             src.push("      float dist = 0.0;");
             for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
