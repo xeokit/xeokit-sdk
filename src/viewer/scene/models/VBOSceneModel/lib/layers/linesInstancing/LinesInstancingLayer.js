@@ -431,6 +431,9 @@ class LinesInstancingLayer {
         this._setFlags(portionId, flags, transparent);
     }
 
+    /**
+     * flags are 4bits values encoded on a 32bit base. color flag on the first 4 bits, silhouette flag on the next 4 bits and so on for edge, pick and clippable.
+     */
     _setFlags(portionId, flags, meshTransparent) {
 
         if (!this._finalized) {
