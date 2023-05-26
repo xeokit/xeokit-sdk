@@ -83,9 +83,6 @@ class TrianglesBatchingNormalsRenderer {
         this._aNormal.bindArrayBuffer(state.normalsBuf);
         this._aColor.bindArrayBuffer(state.colorsBuf);// Needed for masking out transparent entities using alpha channel
         this._aFlags.bindArrayBuffer(state.flagsBuf);
-        if (this._aFlags2) {
-            this._aFlags2.bindArrayBuffer(state.flags2Buf);
-        }
         state.indicesBuf.bind();
 
         gl.drawElements(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
@@ -128,10 +125,6 @@ class TrianglesBatchingNormalsRenderer {
         this._aColor = program.getAttribute("color");
         this._aFlags = program.getAttribute("flags");
 
-        if (this._aFlags2) { // Won't be in shader when not clipping
-            this._aFlags2 = program.getAttribute("flags2");
-        }
-
         if ( scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
@@ -173,8 +166,7 @@ class TrianglesBatchingNormalsRenderer {
         }
         src.push("in vec3 normal;");
         src.push("in vec4 color;");
-        src.push("in vec4 flags;");
-        src.push("in vec4 flags2;");
+        src.push("in float flags;");
         src.push("uniform mat4 worldMatrix;");
         src.push("uniform mat4 worldNormalMatrix;");
         src.push("uniform mat4 viewMatrix;");
@@ -198,15 +190,16 @@ class TrianglesBatchingNormalsRenderer {
         src.push("}");
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
-            src.push("out vec4 vFlags2;");
+            src.push("out float vFlags;");
         }
         src.push("out vec3 vViewNormal;");
         src.push("void main(void) {");
 
-        // flags.x = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
+        // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
         // renderPass = COLOR_OPAQUE
 
-        src.push(`if (int(flags.x) != renderPass) {`);
+        src.push(`int colorFlag = int(flags) & 0xF;`);
+        src.push(`if (colorFlag != renderPass) {`);
         src.push("      gl_Position = vec4(0.0, 0.0, 0.0, 0.0);");
 
         src.push("  } else {");
@@ -219,7 +212,7 @@ class TrianglesBatchingNormalsRenderer {
         src.push("      vec3 viewNormal     = normalize((viewNormalMatrix * worldNormal).xyz);");
         if (clipping) {
             src.push("      vWorldPosition  = worldPosition;");
-            src.push("      vFlags2         = flags2;");
+            src.push("      vFlags         = flags;");
         }
         src.push("      vViewNormal = viewNormal;");
         src.push("vec4 clipPos = projMatrix * viewPosition;");
@@ -259,7 +252,7 @@ class TrianglesBatchingNormalsRenderer {
 
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
-            src.push("in vec4 vFlags2;");
+            src.push("in float vFlags;");
             for (let i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
@@ -274,7 +267,7 @@ class TrianglesBatchingNormalsRenderer {
 
         src.push("void main(void) {");
         if (clipping) {
-            src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
+            src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
             src.push("  if (clippable) {");
             src.push("      float dist = 0.0;");
             for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {

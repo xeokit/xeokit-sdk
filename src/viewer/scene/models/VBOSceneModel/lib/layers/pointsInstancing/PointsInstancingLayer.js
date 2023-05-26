@@ -7,6 +7,7 @@ import {ArrayBuf} from "../../../../../webgl/ArrayBuf.js";
 import {getPointsInstancingRenderers} from "./PointsInstancingRenderers.js";
 
 const tempUint8Vec4 = new Uint8Array(4);
+const tempFloat32 = new Float32Array(1);
 const tempVec4a = math.vec4([0, 0, 0, 1]);
 const tempVec4b = math.vec4([0, 0, 0, 1]);
 const tempVec4c = math.vec4([0, 0, 0, 1]);
@@ -200,14 +201,12 @@ class PointsInstancingLayer {
             throw "Already finalized";
         }
         const gl = this.model.scene.canvas.gl;
-        const flagsLength = this._pickColors.length;
+        const flagsLength = this._pickColors.length / 4;
         if (flagsLength > 0) {
             // Because we only build flags arrays here, 
             // get their length from the colors array
             let notNormalized = false;
-            let normalized = true;
-            this._state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(flagsLength), flagsLength, 4, gl.DYNAMIC_DRAW, notNormalized);
-            this._state.flags2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(flagsLength), flagsLength, 4, gl.DYNAMIC_DRAW, normalized);
+            this._state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(flagsLength), flagsLength, 1, gl.DYNAMIC_DRAW, notNormalized);
         }
         if (this.model.scene.entityOffsetsEnabled) {
             if (this._offsets.length > 0) {
@@ -274,7 +273,6 @@ class PointsInstancingLayer {
             this.model.numTransparentLayerPortions++;
         }
         this._setFlags(portionId, flags, meshTransparent);
-        this._setFlags2(portionId, flags);
     }
 
     setVisible(portionId, flags, meshTransparent) {
@@ -358,7 +356,7 @@ class PointsInstancingLayer {
             this._numClippableLayerPortions--;
             this.model.numClippableLayerPortions--;
         }
-        this._setFlags2(portionId, flags);
+        this._setFlags(portionId, flags);
     }
 
     setCollidable(portionId, flags) {
@@ -378,7 +376,7 @@ class PointsInstancingLayer {
             this._numPickableLayerPortions--;
             this.model.numPickableLayerPortions--;
         }
-        this._setFlags2(portionId, flags, meshTransparent);
+        this._setFlags(portionId, flags, meshTransparent);
     }
 
     setCulled(portionId, flags, meshTransparent) {
@@ -402,7 +400,7 @@ class PointsInstancingLayer {
         tempUint8Vec4[0] = color[0];
         tempUint8Vec4[1] = color[1];
         tempUint8Vec4[2] = color[2];
-        this._state.colorsBuf.setData(tempUint8Vec4, portionId * 3, 3);
+        this._state.colorsBuf.setData(tempUint8Vec4, portionId * 3);
     }
 
     setTransparent(portionId, flags, transparent) {
@@ -429,23 +427,26 @@ class PointsInstancingLayer {
     //     tempFloat32Vec4[2] = matrix[8];
     //     tempFloat32Vec4[3] = matrix[12];
     //
-    //     this._state.modelMatrixCol0Buf.setData(tempFloat32Vec4, offset, 4);
+    //     this._state.modelMatrixCol0Buf.setData(tempFloat32Vec4, offset);
     //
     //     tempFloat32Vec4[0] = matrix[1];
     //     tempFloat32Vec4[1] = matrix[5];
     //     tempFloat32Vec4[2] = matrix[9];
     //     tempFloat32Vec4[3] = matrix[13];
     //
-    //     this._state.modelMatrixCol1Buf.setData(tempFloat32Vec4, offset, 4);
+    //     this._state.modelMatrixCol1Buf.setData(tempFloat32Vec4, offset);
     //
     //     tempFloat32Vec4[0] = matrix[2];
     //     tempFloat32Vec4[1] = matrix[6];
     //     tempFloat32Vec4[2] = matrix[10];
     //     tempFloat32Vec4[3] = matrix[14];
     //
-    //     this._state.modelMatrixCol2Buf.setData(tempFloat32Vec4, offset, 4);
+    //     this._state.modelMatrixCol2Buf.setData(tempFloat32Vec4, offset);
     // }
 
+    /**
+     * flags are 4bits values encoded on a 32bit base. color flag on the first 4 bits, silhouette flag on the next 4 bits and so on for edge, pick and clippable.
+     */
     _setFlags(portionId, flags, meshTransparent) {
 
         if (!this._finalized) {
@@ -460,79 +461,65 @@ class PointsInstancingLayer {
         const pickable = !!(flags & ENTITY_FLAGS.PICKABLE);
         const culled = !!(flags & ENTITY_FLAGS.CULLED);
 
-        // Normal fill
-
-        let f0;
+        let colorFlag;
         if (!visible || culled || xrayed
             || (highlighted && !this.model.scene.highlightMaterial.glowThrough)
             || (selected && !this.model.scene.selectedMaterial.glowThrough) ) {
-            f0 = RENDER_PASSES.NOT_RENDERED;
+            colorFlag = RENDER_PASSES.NOT_RENDERED;
         } else {
             if (meshTransparent) {
-                f0 = RENDER_PASSES.COLOR_TRANSPARENT;
+                colorFlag = RENDER_PASSES.COLOR_TRANSPARENT;
             } else {
-                f0 = RENDER_PASSES.COLOR_OPAQUE;
+                colorFlag = RENDER_PASSES.COLOR_OPAQUE;
             }
         }
 
-        // Emphasis fill
-
-        let f1;
+        let silhouetteFlag;
         if (!visible || culled) {
-            f1 = RENDER_PASSES.NOT_RENDERED;
+            silhouetteFlag = RENDER_PASSES.NOT_RENDERED;
         } else if (selected) {
-            f1 = RENDER_PASSES.SILHOUETTE_SELECTED;
+            silhouetteFlag = RENDER_PASSES.SILHOUETTE_SELECTED;
         } else if (highlighted) {
-            f1 = RENDER_PASSES.SILHOUETTE_HIGHLIGHTED;
+            silhouetteFlag = RENDER_PASSES.SILHOUETTE_HIGHLIGHTED;
         } else if (xrayed) {
-            f1 = RENDER_PASSES.SILHOUETTE_XRAYED;
+            silhouetteFlag = RENDER_PASSES.SILHOUETTE_XRAYED;
         } else {
-            f1 = RENDER_PASSES.NOT_RENDERED;
+            silhouetteFlag = RENDER_PASSES.NOT_RENDERED;
         }
 
-        // Edges
-
-        let f2 = 0;
+        let edgeFlag = 0;
         if (!visible || culled) {
-            f2 = RENDER_PASSES.NOT_RENDERED;
+            edgeFlag = RENDER_PASSES.NOT_RENDERED;
         } else if (selected) {
-            f2 = RENDER_PASSES.EDGES_SELECTED;
+            edgeFlag = RENDER_PASSES.EDGES_SELECTED;
         } else if (highlighted) {
-            f2 = RENDER_PASSES.EDGES_HIGHLIGHTED;
+            edgeFlag = RENDER_PASSES.EDGES_HIGHLIGHTED;
         } else if (xrayed) {
-            f2 = RENDER_PASSES.EDGES_XRAYED;
+            edgeFlag = RENDER_PASSES.EDGES_XRAYED;
         } else if (edges) {
             if (meshTransparent) {
-                f2 = RENDER_PASSES.EDGES_COLOR_TRANSPARENT;
+                edgeFlag = RENDER_PASSES.EDGES_COLOR_TRANSPARENT;
             } else {
-                f2 = RENDER_PASSES.EDGES_COLOR_OPAQUE;
+                edgeFlag = RENDER_PASSES.EDGES_COLOR_OPAQUE;
             }
         } else {
-            f2 = RENDER_PASSES.NOT_RENDERED;
+            edgeFlag = RENDER_PASSES.NOT_RENDERED;
         }
 
-        // Pick
+        let pickFlag = (visible && !culled && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
 
-        let f3 = (visible && !culled && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
+        const clippableFlag = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 255 : 0;
 
-        tempUint8Vec4[0] = f0; // x - normal fill
-        tempUint8Vec4[1] = f1; // y - emphasis fill
-        tempUint8Vec4[2] = f2; // z - edges
-        tempUint8Vec4[3] = f3; // w - pick
+        let vertFlag = 0;
+        vertFlag |= colorFlag;
+        vertFlag |= silhouetteFlag << 4;
+        vertFlag |= edgeFlag << 8;
+        vertFlag |= pickFlag << 12;
+        vertFlag |= clippableFlag << 16;
 
-        this._state.flagsBuf.setData(tempUint8Vec4, portionId * 4, 4);
-    }
+        tempFloat32[0] = vertFlag;
 
-    _setFlags2(portionId, flags) {
-
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-
-        const clippable = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 255 : 0;
-        tempUint8Vec4[0] = clippable;
-
-        this._state.flags2Buf.setData(tempUint8Vec4, portionId * 4, 4);
+        this._state.flagsBuf.setData(tempFloat32, portionId);
     }
 
     setOffset(portionId, offset) {
@@ -546,7 +533,7 @@ class PointsInstancingLayer {
         tempVec3fa[0] = offset[0];
         tempVec3fa[1] = offset[1];
         tempVec3fa[2] = offset[2];
-        this._state.offsetsBuf.setData(tempVec3fa, portionId * 3, 3);
+        this._state.offsetsBuf.setData(tempVec3fa, portionId * 3);
     }
 
     // ---------------------- NORMAL RENDERING -----------------------------------
@@ -672,10 +659,6 @@ class PointsInstancingLayer {
         if (state.flagsBuf) {
             state.flagsBuf.destroy();
             state.flagsBuf = null;
-        }
-        if (state.flags2Buf) {
-            state.flags2Buf.destroy();
-            state.flags2Buf = null;
         }
         if (state.offsetsBuf) {
             state.offsetsBuf.destroy();

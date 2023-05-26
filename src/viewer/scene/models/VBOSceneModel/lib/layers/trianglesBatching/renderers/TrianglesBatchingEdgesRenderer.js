@@ -106,9 +106,6 @@ class TrianglesBatchingEdgesRenderer {
         if (this._aFlags) {
             this._aFlags.bindArrayBuffer(state.flagsBuf);
         }
-        if (this._aFlags2) {
-            this._aFlags2.bindArrayBuffer(state.flags2Buf);
-        }
         state.edgeIndicesBuf.bind();
 
         gl.drawElements(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0);
@@ -147,7 +144,6 @@ class TrianglesBatchingEdgesRenderer {
         this._aPosition = program.getAttribute("position");
         this._aOffset = program.getAttribute("offset");
         this._aFlags = program.getAttribute("flags");
-        this._aFlags2 = program.getAttribute("flags2");
 
         if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
@@ -194,8 +190,7 @@ class TrianglesBatchingEdgesRenderer {
         if (scene.entityOffsetsEnabled) {
             src.push("in vec3 offset;");
         }
-        src.push("in vec4 flags;");
-        src.push("in vec4 flags2;");
+        src.push("in float flags;");
 
         src.push("uniform mat4 worldMatrix;");
         src.push("uniform mat4 viewMatrix;");
@@ -213,16 +208,17 @@ class TrianglesBatchingEdgesRenderer {
 
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
-            src.push("out vec4 vFlags2;");
+            src.push("out float vFlags;");
         }
 
         src.push("out vec4 vColor;");
         src.push("void main(void) {");
 
-        // flags.z = NOT_RENDERED | EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
+        // edgeFlag = NOT_RENDERED | EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
         // renderPass = EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
 
-        src.push(`if (int(flags.z) != renderPass) {`);
+        src.push(`int edgeFlag = int(flags) >> 8 & 0xF;`);
+        src.push(`if (edgeFlag != renderPass) {`);
         src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
 
         src.push("} else {");
@@ -235,7 +231,7 @@ class TrianglesBatchingEdgesRenderer {
 
         if (clipping) {
             src.push("  vWorldPosition = worldPosition;");
-            src.push("  vFlags2 = flags2;");
+            src.push("  vFlags = flags;");
         }
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
@@ -272,7 +268,7 @@ class TrianglesBatchingEdgesRenderer {
         }
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
-            src.push("in vec4 vFlags2;");
+            src.push("in float vFlags;");
             for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
@@ -283,7 +279,7 @@ class TrianglesBatchingEdgesRenderer {
         src.push("out vec4 outColor;");
         src.push("void main(void) {");
         if (clipping) {
-            src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
+            src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
             src.push("  if (clippable) {");
             src.push("  float dist = 0.0;");
             for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
