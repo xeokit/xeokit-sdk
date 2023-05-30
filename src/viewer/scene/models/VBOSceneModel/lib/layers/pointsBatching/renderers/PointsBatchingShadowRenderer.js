@@ -48,9 +48,6 @@ class PointsBatchingShadowRenderer {
         if (this._aFlags) {
             this._aFlags.bindArrayBuffer(state.flagsBuf);
         }
-        if (this._aFlags2) {
-            this._aFlags2.bindArrayBuffer(state.flags2Buf);
-        }
         if (this._aOffset) {
             this._aOffset.bindArrayBuffer(state.offsetsBuf);
         }
@@ -114,7 +111,6 @@ class PointsBatchingShadowRenderer {
         this._aOffset = program.getAttribute("offset");
         this._aColor = program.getAttribute("color");
         this._aFlags = program.getAttribute("flags");
-        this._aFlags2 = program.getAttribute("flags2");
         this._uPointSize = program.getLocation("pointSize");
     }
 
@@ -146,18 +142,18 @@ class PointsBatchingShadowRenderer {
             src.push("in vec3 offset;");
         }
         src.push("in vec4 color;");
-        src.push("in vec4 flags;");
-        src.push("in vec4 flags2;");
+        src.push("in float flags;");
         src.push("uniform mat4 shadowViewMatrix;");
         src.push("uniform mat4 shadowProjMatrix;");
         src.push("uniform mat4 positionsDecodeMatrix;");
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
-            src.push("out vec4 vFlags2;");
+            src.push("out float vFlags;");
         }
         src.push("out vec4 vViewPosition;");
         src.push("void main(void) {");
-        src.push("  bool visible        = (float(flags.x) > 0.0);");
+        src.push("  int colorFlag       = int(flags) & 0xF;");
+        src.push("  bool visible        = (colorFlag > 0);");
         src.push("  bool transparent    = ((float(color.a) / 255.0) < 1.0);");
         src.push("  if (!visible || transparent) {");
         src.push("      gl_Position = vec4(0.0, 0.0, 0.0, 0.0);");
@@ -169,7 +165,7 @@ class PointsBatchingShadowRenderer {
         src.push("      vec4 viewPosition  = shadowViewMatrix * worldPosition; ");
         if (clipping) {
             src.push("      vWorldPosition = worldPosition;");
-            src.push("      vFlags2 = flags2;");
+            src.push("      vFlags = flags;");
         }
         src.push("      vViewPosition = viewPosition;");
         src.push("      gl_Position = shadowProjMatrix * viewPosition;");
@@ -194,7 +190,7 @@ class PointsBatchingShadowRenderer {
         src.push("#endif");
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
-            src.push("in vec4 vFlags2;");
+            src.push("in float vFlags;");
             for (let i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
@@ -213,7 +209,7 @@ class PointsBatchingShadowRenderer {
         src.push("out vec4 outColor;");
         src.push("void main(void) {");
         if (clipping) {
-            src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
+            src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
             src.push("  if (clippable) {");
             src.push("      float dist = 0.0;");
             for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {

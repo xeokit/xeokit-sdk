@@ -113,11 +113,6 @@ class PointsInstancingSilhouetteRenderer {
         this._aFlags.bindArrayBuffer(state.flagsBuf, gl.UNSIGNED_BYTE, true);
         gl.vertexAttribDivisor(this._aFlags.location, 1);
 
-        if (this._aFlags2) {
-            this._aFlags2.bindArrayBuffer(state.flags2Buf, gl.UNSIGNED_BYTE, true);
-            gl.vertexAttribDivisor(this._aFlags2.location, 1);
-        }
-
         if (this._aOffset) {
             this._aOffset.bindArrayBuffer(state.offsetsBuf);
             gl.vertexAttribDivisor(this._aOffset.location, 1);
@@ -134,9 +129,6 @@ class PointsInstancingSilhouetteRenderer {
         gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 0);
 
         gl.vertexAttribDivisor(this._aFlags.location, 0);
-        if (this._aFlags2) {
-            gl.vertexAttribDivisor(this._aFlags2.location, 0);
-        }
         if (this._aOffset) {
             gl.vertexAttribDivisor(this._aOffset.location, 0);
         }
@@ -177,7 +169,6 @@ class PointsInstancingSilhouetteRenderer {
         this._aPosition = program.getAttribute("position");
         this._aOffset = program.getAttribute("offset");
         this._aFlags = program.getAttribute("flags");
-        this._aFlags2 = program.getAttribute("flags2");
         this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
         this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");
         this._aModelMatrixCol2 = program.getAttribute("modelMatrixCol2");
@@ -229,8 +220,7 @@ class PointsInstancingSilhouetteRenderer {
         if (scene.entityOffsetsEnabled) {
             src.push("in vec3 offset;");
         }
-        src.push("in vec4 flags;");
-        src.push("in vec4 flags2;");
+        src.push("in float flags;");
         src.push("in vec4 color;");
 
         src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
@@ -256,16 +246,17 @@ class PointsInstancingSilhouetteRenderer {
 
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
-            src.push("out vec4 vFlags2;");
+            src.push("out float vFlags;");
         }
         src.push("out vec4 vColor;");
 
         src.push("void main(void) {");
 
-        // flags.y = NOT_RENDERED | SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | | SILHOUETTE_XRAYED
+        // silhouetteFlag = NOT_RENDERED | SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | | SILHOUETTE_XRAYED
         // renderPass = SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | | SILHOUETTE_XRAYED
 
-        src.push(`if (int(flags.y) != renderPass) {`);
+        src.push(`int silhouetteFlag = int(flags) >> 4 & 0xF;`);
+        src.push(`if (silhouetteFlag != renderPass) {`);
         src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
 
         src.push("} else {");
@@ -279,7 +270,7 @@ class PointsInstancingSilhouetteRenderer {
 
         if (clipping) {
             src.push("vWorldPosition = worldPosition;");
-            src.push("vFlags2 = flags2;");
+            src.push("vFlags = flags;");
         }
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
@@ -319,7 +310,7 @@ class PointsInstancingSilhouetteRenderer {
         }
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
-            src.push("in vec4 vFlags2;");
+            src.push("in float vFlags;");
             for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
@@ -337,7 +328,7 @@ class PointsInstancingSilhouetteRenderer {
             src.push("  }");
         }
         if (clipping) {
-            src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
+            src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
             src.push("  if (clippable) {");
             src.push("  float dist = 0.0;");
             for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {

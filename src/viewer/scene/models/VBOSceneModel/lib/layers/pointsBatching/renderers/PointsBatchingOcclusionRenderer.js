@@ -1,7 +1,6 @@
 import {Program} from "../../../../../../webgl/Program.js";
 import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
 import {math} from "../../../../../../math/math.js";
-import {WEBGL_INFO} from "../../../../../../webglInfo.js";
 
 const tempVec3a = math.vec3();
 
@@ -85,10 +84,6 @@ class PointsBatchingOcclusionRenderer {
 
         this._aFlags.bindArrayBuffer(state.flagsBuf);
 
-        if (this._aFlags2) { // Won't be in shader when not clipping
-            this._aFlags2.bindArrayBuffer(state.flags2Buf);
-        }
-
         gl.uniform1f(this._uPointSize, pointsMaterial.pointSize);
         const nearPlaneHeight = (scene.camera.projection === "ortho") ? 1.0 : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0)));
         gl.uniform1f(this._uNearPlaneHeight, nearPlaneHeight);
@@ -128,7 +123,6 @@ class PointsBatchingOcclusionRenderer {
         this._aPosition = program.getAttribute("position");
         this._aOffset = program.getAttribute("offset");
         this._aFlags = program.getAttribute("flags");
-        this._aFlags2 = program.getAttribute("flags2");
 
         this._uPointSize = program.getLocation("pointSize");
         this._uNearPlaneHeight = program.getLocation("nearPlaneHeight");
@@ -173,8 +167,7 @@ class PointsBatchingOcclusionRenderer {
         if (scene.entityOffsetsEnabled) {
             src.push("in vec3 offset;");
         }
-        src.push("in vec4 flags;");
-        src.push("in vec4 flags2;");
+        src.push("in float flags;");
 
         src.push("uniform mat4 worldMatrix;");
         src.push("uniform mat4 viewMatrix;");
@@ -192,15 +185,16 @@ class PointsBatchingOcclusionRenderer {
         }
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
-            src.push("out vec4 vFlags2;");
+            src.push("out float vFlags;");
         }
         src.push("void main(void) {");
 
-        // flags.x = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
+        // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
         // renderPass = COLOR_OPAQUE
         // Only opaque objects can be occluders
 
-        src.push(`if (int(flags.x) != renderPass) {`);
+        src.push(`int colorFlag = int(flags) & 0xF;`);
+        src.push(`if (colorFlag != renderPass) {`);
         src.push("      gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
 
         src.push("  } else {");
@@ -212,7 +206,7 @@ class PointsBatchingOcclusionRenderer {
         src.push("      vec4 viewPosition  = viewMatrix * worldPosition; ");
         if (clipping) {
             src.push("      vWorldPosition = worldPosition;");
-            src.push("      vFlags2 = flags2;");
+            src.push("      vFlags = flags;");
         }
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
@@ -251,7 +245,7 @@ class PointsBatchingOcclusionRenderer {
         }
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
-            src.push("in vec4 vFlags2;");
+            src.push("in float vFlags;");
             for (let i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
@@ -268,7 +262,7 @@ class PointsBatchingOcclusionRenderer {
             src.push("  }");
         }
         if (clipping) {
-            src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
+            src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
             src.push("  if (clippable) {");
             src.push("      float dist = 0.0;");
             for (let i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {

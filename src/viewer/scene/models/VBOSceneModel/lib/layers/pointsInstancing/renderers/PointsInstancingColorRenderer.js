@@ -95,11 +95,6 @@ class PointsInstancingColorRenderer {
         this._aFlags.bindArrayBuffer(state.flagsBuf);
         gl.vertexAttribDivisor(this._aFlags.location, 1);
 
-        if (this._aFlags2) {
-            this._aFlags2.bindArrayBuffer(state.flags2Buf);
-            gl.vertexAttribDivisor(this._aFlags2.location, 1);
-        }
-
         if (this._aOffset) {
             this._aOffset.bindArrayBuffer(state.offsetsBuf);
             gl.vertexAttribDivisor(this._aOffset.location, 1);
@@ -118,10 +113,6 @@ class PointsInstancingColorRenderer {
         gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 0);
 
         gl.vertexAttribDivisor(this._aFlags.location, 0);
-
-        if (this._aFlags2) { // Won't be in shader when not clipping
-            gl.vertexAttribDivisor(this._aFlags2.location, 0);
-        }
 
         if (this._aOffset) {
             gl.vertexAttribDivisor(this._aOffset.location, 0);
@@ -164,7 +155,6 @@ class PointsInstancingColorRenderer {
         this._aPosition = program.getAttribute("position");
         this._aColor = program.getAttribute("color");
         this._aFlags = program.getAttribute("flags");
-        this._aFlags2 = program.getAttribute("flags2");
         this._aOffset = program.getAttribute("offset");
 
         this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
@@ -221,8 +211,7 @@ class PointsInstancingColorRenderer {
 
         src.push("in vec3 position;");
         src.push("in vec4 color;");
-        src.push("in vec4 flags;");
-        src.push("in vec4 flags2;");
+        src.push("in float flags;");
 
         if (scene.entityOffsetsEnabled) {
             src.push("in vec3 offset;");
@@ -253,16 +242,17 @@ class PointsInstancingColorRenderer {
 
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
-            src.push("out vec4 vFlags2;");
+            src.push("out float vFlags;");
         }
         src.push("out vec4 vColor;");
 
         src.push("void main(void) {");
 
-        // flags.x = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
-        // renderPass = COLOR_OPAQUE | COLOR_TRANSPARENT
+        // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
+        // renderPass = COLOR_OPAQUE
 
-        src.push(`if (int(flags.x) != renderPass) {`);
+        src.push(`int colorFlag = int(flags) & 0xF;`);
+        src.push(`if (colorFlag != renderPass) {`);
         src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
 
         src.push("} else {");
@@ -286,7 +276,7 @@ class PointsInstancingColorRenderer {
 
         if (clipping) {
             src.push("vWorldPosition = worldPosition;");
-            src.push("vFlags2 = flags2;");
+            src.push("vFlags = flags;");
         }
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
@@ -332,7 +322,7 @@ class PointsInstancingColorRenderer {
         }
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
-            src.push("in vec4 vFlags2;");
+            src.push("in float vFlags;");
             for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
@@ -350,7 +340,7 @@ class PointsInstancingColorRenderer {
             src.push("  }");
         }
         if (clipping) {
-            src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
+            src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
             src.push("  if (clippable) {");
             src.push("  float dist = 0.0;");
             for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
