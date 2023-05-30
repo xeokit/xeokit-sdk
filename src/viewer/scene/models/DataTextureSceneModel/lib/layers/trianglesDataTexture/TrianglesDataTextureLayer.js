@@ -1653,6 +1653,16 @@ class TrianglesDataTextureLayer {
         }
     }
 
+    drawVertexDepths(renderFlags, frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        this._updateBackfaceCull(renderFlags, frameCtx);
+        if (this._dataTextureRenderers.vertexDepthRenderer) {
+            this._dataTextureRenderers.vertexDepthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        }
+    }
+
     drawPickNormals(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;

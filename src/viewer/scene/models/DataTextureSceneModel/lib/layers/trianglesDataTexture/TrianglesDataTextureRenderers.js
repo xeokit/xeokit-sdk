@@ -4,6 +4,7 @@ import {TrianglesDataTextureEdgesRenderer} from "./renderers/TrianglesDataTextur
 import {TrianglesDataTextureEdgesColorRenderer} from "./renderers/TrianglesDataTextureEdgesColorRenderer.js";
 import {TrianglesDataTexturePickMeshRenderer} from "./renderers/TrianglesDataTexturePickMeshRenderer.js";
 import {TrianglesDataTexturePickDepthRenderer} from "./renderers/TrianglesDataTexturePickDepthRenderer.js";
+import {TrianglesDataTextureVertexDepthRenderer} from "./renderers/TrianglesDataTextureVertexDepthRenderer.js";
 import {TrianglesDataTexturePickNormalsRenderer} from "./renderers/TrianglesDataTexturePickNormalsRenderer.js";
 import {TrianglesDataTextureOcclusionRenderer} from "./renderers/TrianglesDataTextureOcclusionRenderer.js";
 import {TrianglesDataTextureDepthRenderer} from "./renderers/TrianglesDataTextureDepthRenderer.js";
@@ -183,6 +184,13 @@ class TrianglesDataTextureRenderers {
         return this._pickDepthRenderer;
     }
 
+    get vertexDepthRenderer() {
+        if (!this._vertexDepthRenderer) {
+            this._vertexDepthRenderer = new TrianglesDataTextureVertexDepthRenderer(this._scene);
+        }
+        return this._vertexDepthRenderer;
+    }
+
     get occlusionRenderer() {
         if (!this._occlusionRenderer) {
             this._occlusionRenderer = new TrianglesDataTextureOcclusionRenderer(this._scene);
@@ -236,6 +244,9 @@ class TrianglesDataTextureRenderers {
         }
         if (this._pickDepthRenderer) {
             this._pickDepthRenderer.destroy();
+        }
+        if (this._vertexDepthRenderer) {
+            this._vertexDepthRenderer.destroy();
         }
         if (this._pickNormalsRenderer) {
             this._pickNormalsRenderer.destroy();
