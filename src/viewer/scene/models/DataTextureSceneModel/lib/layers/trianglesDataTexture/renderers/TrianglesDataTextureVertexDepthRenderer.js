@@ -27,6 +27,9 @@ class TrianglesDataTextureVertexDepthRenderer {
         const model = dataTextureLayer.model;
         const scene = model.scene;
         const camera = scene.camera;
+        /**
+         * @type {WebGL2RenderingContext}
+         */
         const gl = scene.canvas.gl;
         const state = dataTextureLayer._state;
         const textureState = state.textureState;
@@ -114,7 +117,7 @@ class TrianglesDataTextureVertexDepthRenderer {
                 8 // 8 bits indices
             );
 
-            gl.drawArrays(gl.TRIANGLES, 0, state.numIndices8Bits);
+            gl.drawArrays(gl.POINTS, 0, state.numIndices8Bits);
         }
 
         if (state.numIndices16Bits > 0)
@@ -126,7 +129,7 @@ class TrianglesDataTextureVertexDepthRenderer {
                 16 // 16 bits indices
             );
 
-            gl.drawArrays(gl.TRIANGLES, 0, state.numIndices16Bits);
+            gl.drawArrays(gl.POINTS, 0, state.numIndices16Bits);
         }
         
         if (state.numIndices32Bits > 0)
@@ -138,7 +141,7 @@ class TrianglesDataTextureVertexDepthRenderer {
                 32 // 32 bits indices
             );
 
-            gl.drawArrays(gl.TRIANGLES, 0, state.numIndices32Bits);
+            gl.drawArrays(gl.POINTS, 0, state.numIndices32Bits);
         }
 
         frameCtx.drawElements++;
@@ -319,37 +322,11 @@ class TrianglesDataTextureVertexDepthRenderer {
         src.push("positions[0] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.r, indexPositionV.r), 0));")
         src.push("positions[1] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.g, indexPositionV.g), 0));")
         src.push("positions[2] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.b, indexPositionV.b), 0));")
+
+        src.push("vec3 position = positions[gl_VertexID % 3];")
+
         
-        // get color
-        src.push("uvec4 color = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);"); // chipmunk
-
-        src.push(`if (color.a == 0u) {`);
-        src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
-        src.push("   return;");
-        src.push("};");
-
-        // get normal
-        src.push("vec3 normal = normalize(cross(positions[2] - positions[0], positions[1] - positions[0]));");
-
-        src.push("vec3 position;");
-        src.push("position = positions[gl_VertexID % 3];");
-
-        // when the geometry is not solid, if needed, flip the triangle winding
-        src.push("if (solid != 1u) {");
-            src.push("if (isPerspectiveMatrix(projMatrix)) {");
-                src.push("vec3 uCameraEyeRtcInQuantizedSpace = (inverse(worldMatrix * positionsDecodeMatrix) * vec4(uCameraEyeRtc, 1)).xyz;")
-                src.push("if (dot(position.xyz - uCameraEyeRtcInQuantizedSpace, normal) < 0.0) {");
-                    src.push("position = positions[2 - (gl_VertexID % 3)];");
-                src.push("}");
-            src.push("} else {");
-                src.push("vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*positionsDecodeMatrix)) * vec4(normal,1)).xyz);");
-                src.push("if (viewNormal.z < 0.0) {");
-                    src.push("position = positions[2 - (gl_VertexID % 3)];");
-                src.push("}");
-            src.push("}");
-        src.push("}");
-
-        src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
+        src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1)); ");
 
         // get XYZ offset
         src.push("vec4 offset = vec4(texelFetch (uTexturePerObjectIdOffsets, objectIndexCoords, 0).rgb, 0.0);");
@@ -418,7 +395,7 @@ class TrianglesDataTextureVertexDepthRenderer {
         src.push("  return res;");
         src.push("}");
         
-        src.push("out vec4 outPackedDepth;");        
+        src.push("out highp uvec4 outCoords;");        
         src.push("void main(void) {");
         if (clipping) {
             src.push("  bool clippable = vFlags2 > 0u;");
@@ -435,8 +412,9 @@ class TrianglesDataTextureVertexDepthRenderer {
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
-        src.push("    float zNormalizedDepth = abs((pickZNear + vViewPosition.z) / (pickZFar - pickZNear));");
-        src.push("    outPackedDepth = packDepth(zNormalizedDepth); ");  // Must be linear depth
+        src.push("    float zNormalizedDepth = abs((pickZNear + vViewPosition.z) / (pickZFar - pickZNear));"); // Get linear depth
+        src.push("    outCoords = uvec4((vec3(vViewPosition.xy / vViewPosition.w +1.0, gl_FragCoord.z))*100000000.0, 0.0); ");
+        // src.push("    outCoords = uvec4(1, 2, 3, 4); ");
         src.push("}");
         return src;
     }
@@ -453,4 +431,4 @@ class TrianglesDataTextureVertexDepthRenderer {
     }
 }
 
-export {TrianglesDataTexturePickDepthRenderer};
+export {TrianglesDataTextureVertexDepthRenderer};
