@@ -265,6 +265,11 @@ class VBOSceneModelMesh {
         return this.parent;
     }
 
+    /** @private */
+    getEachVertex(callback) {
+        this._layer.getEachVertex(this._portionId, callback);
+    }
+
     /**
      * @private
      */

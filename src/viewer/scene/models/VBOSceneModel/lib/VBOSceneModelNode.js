@@ -671,6 +671,17 @@ class VBOSceneModelNode {
         return this.model.saoEnabled;
     }
 
+    /**
+     * Gets the World, View and Canvas-space positions of each vertex in a callback.
+     *
+     * @param callback
+     */
+    getEachVertex(callback) {
+        for (let i = 0, len = this.meshes.length; i < len; i++) {
+            this.meshes[i].getEachVertex(callback)
+        }
+    }
+
     _getFlag(flag) {
         return !!(this._flags & flag);
     }

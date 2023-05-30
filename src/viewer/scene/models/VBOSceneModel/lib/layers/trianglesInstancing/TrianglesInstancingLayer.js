@@ -21,6 +21,8 @@ const tempVec3e = math.vec3();
 const tempVec3f = math.vec3();
 const tempVec3g = math.vec3();
 
+const tempVec2a = math.vec2([0, 0]);
+
 /**
  * @private
  */
@@ -669,6 +671,41 @@ class TrianglesInstancingLayer {
         tempVec3fa[2] = offset[2];
         if (this._state.offsetsBuf) {
             this._state.offsetsBuf.setData(tempVec3fa, portionId * 3, 3);
+        }
+    }
+
+    getEachVertex(portionId, callback) {
+        if (!this.model.scene.pickSurfacePrecisionEnabled) {
+            return false;
+        }
+        const state = this._state;
+        const geometry = state.geometry;
+        const portion = this._portions[portionId];
+        if (!portion) {
+            this.model.error("portion not found: " + portionId);
+            return;
+        }
+        const positions = geometry.quantizedPositions;
+        const origin = state.origin;
+        const offset = portion.offset;
+        const offsetX = origin[0] + offset[0];
+        const offsetY = origin[1] + offset[1];
+        const offsetZ = origin[2] + offset[2];
+        const worldPos = tempVec4a;
+        const portionMatrix = portion.matrix;
+        const modelMatrix = this.model.worldMatrix;
+        const positionsDecodeMatrix = geometry.positionsDecodeMatrix;
+        for (let i = 0, len = positions.length; i < len; i += 3) {
+            worldPos[0] = positions[i];
+            worldPos[1] = positions[i + 1];
+            worldPos[2] = positions[i + 2];
+            math.decompressPosition(worldPos, positionsDecodeMatrix);
+            math.transformPoint3(portionMatrix, worldPos);
+            math.transformPoint3(modelMatrix, worldPos);
+            worldPos[0] += offsetX;
+            worldPos[1] += offsetY;
+            worldPos[2] += offsetZ;
+            callback(worldPos);
         }
     }
 

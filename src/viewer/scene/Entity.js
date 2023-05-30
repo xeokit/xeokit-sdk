@@ -484,6 +484,14 @@ class Entity {
     }
 
     /**
+     * Gets the World, View and Canvas-space positions of each vertex in a callback.
+     *
+     * @param callback
+     */
+    getEachVertex(callback) {
+    }
+
+    /**
      * Destroys this Entity.
      */
     destroy() {
