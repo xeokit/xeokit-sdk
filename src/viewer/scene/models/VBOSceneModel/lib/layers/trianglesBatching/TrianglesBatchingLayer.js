@@ -83,7 +83,6 @@ class TrianglesBatchingLayer {
             uvBuf: null,
             metallicRoughnessBuf: null,
             flagsBuf: null,
-            flags2Buf: null,
             indicesBuf: null,
             edgeIndicesBuf: null,
             positionsDecodeMatrix: math.mat4(),
@@ -496,13 +495,10 @@ class TrianglesBatchingLayer {
         }
 
         if (buffer.positions.length > 0) { // Because we build flags arrays here, get their length from the positions array
-            const flagsLength = (buffer.positions.length / 3) * 4;
-            const flags = new Uint8Array(flagsLength);
-            const flags2 = new Uint8Array(flagsLength);
-            let notNormalized = false;
-            let normalized = true;
-            state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, flags, flags.length, 4, gl.DYNAMIC_DRAW, notNormalized);
-            state.flags2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, flags2, flags2.length, 4, gl.DYNAMIC_DRAW, normalized);
+            const flagsLength = (buffer.positions.length / 3);
+            const flags = new Float32Array(flagsLength);
+            const notNormalized = false;
+            state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, flags, flags.length, 1, gl.DYNAMIC_DRAW, notNormalized);
         }
 
         if (buffer.pickColors.length > 0) {
@@ -587,12 +583,10 @@ class TrianglesBatchingLayer {
         }
         const deferred = true;
         this._setFlags(portionId, flags, meshTransparent, deferred);
-        this._setFlags2(portionId, flags, deferred);
     }
 
     flushInitFlags() {
         this._setDeferredFlags();
-        this._setDeferredFlags2();
     }
 
     setVisible(portionId, flags, transparent) {
@@ -676,7 +670,7 @@ class TrianglesBatchingLayer {
             this._numClippableLayerPortions--;
             this.model.numClippableLayerPortions--;
         }
-        this._setFlags2(portionId, flags);
+        this._setFlags(portionId, flags);
     }
 
     setCulled(portionId, flags, transparent) {
@@ -750,6 +744,9 @@ class TrianglesBatchingLayer {
         this._setFlags(portionId, flags, transparent);
     }
 
+    /**
+     * flags are 4bits values encoded on a 32bit base. color flag on the first 4 bits, silhouette flag on the next 4 bits and so on for edge, pick and clippable.
+     */
     _setFlags(portionId, flags, transparent, deferred = false) {
 
         if (!this._finalized) {
@@ -760,8 +757,8 @@ class TrianglesBatchingLayer {
         const portion = this._portions[portionsIdx];
         const vertsBaseIndex = portion.vertsBaseIndex;
         const numVerts = portion.numVerts;
-        const firstFlag = vertsBaseIndex * 4;
-        const lenFlags = numVerts * 4;
+        const firstFlag = vertsBaseIndex;
+        const lenFlags = numVerts;
 
         const visible = !!(flags & ENTITY_FLAGS.VISIBLE);
         const xrayed = !!(flags & ENTITY_FLAGS.XRAYED);
@@ -771,79 +768,81 @@ class TrianglesBatchingLayer {
         const pickable = !!(flags & ENTITY_FLAGS.PICKABLE);
         const culled = !!(flags & ENTITY_FLAGS.CULLED);
 
-        // Color
-
-        let f0;
+        let colorFlag;
         if (!visible || culled || xrayed
             || (highlighted && !this.model.scene.highlightMaterial.glowThrough)
             || (selected && !this.model.scene.selectedMaterial.glowThrough)) {
-            f0 = RENDER_PASSES.NOT_RENDERED;
+            colorFlag = RENDER_PASSES.NOT_RENDERED;
         } else {
             if (transparent) {
-                f0 = RENDER_PASSES.COLOR_TRANSPARENT;
+                colorFlag = RENDER_PASSES.COLOR_TRANSPARENT;
             } else {
-                f0 = RENDER_PASSES.COLOR_OPAQUE;
+                colorFlag = RENDER_PASSES.COLOR_OPAQUE;
             }
         }
 
-        // Silhouette
-
-        let f1;
+        let silhouetteFlag;
         if (!visible || culled) {
-            f1 = RENDER_PASSES.NOT_RENDERED;
+            silhouetteFlag = RENDER_PASSES.NOT_RENDERED;
         } else if (selected) {
-            f1 = RENDER_PASSES.SILHOUETTE_SELECTED;
+            silhouetteFlag = RENDER_PASSES.SILHOUETTE_SELECTED;
         } else if (highlighted) {
-            f1 = RENDER_PASSES.SILHOUETTE_HIGHLIGHTED;
+            silhouetteFlag = RENDER_PASSES.SILHOUETTE_HIGHLIGHTED;
         } else if (xrayed) {
-            f1 = RENDER_PASSES.SILHOUETTE_XRAYED;
+            silhouetteFlag = RENDER_PASSES.SILHOUETTE_XRAYED;
         } else {
-            f1 = RENDER_PASSES.NOT_RENDERED;
+            silhouetteFlag = RENDER_PASSES.NOT_RENDERED;
         }
 
-        // Edges
-
-        let f2 = 0;
+        let edgeFlag = 0;
         if (!visible || culled) {
-            f2 = RENDER_PASSES.NOT_RENDERED;
+            edgeFlag = RENDER_PASSES.NOT_RENDERED;
         } else if (selected) {
-            f2 = RENDER_PASSES.EDGES_SELECTED;
+            edgeFlag = RENDER_PASSES.EDGES_SELECTED;
         } else if (highlighted) {
-            f2 = RENDER_PASSES.EDGES_HIGHLIGHTED;
+            edgeFlag = RENDER_PASSES.EDGES_HIGHLIGHTED;
         } else if (xrayed) {
-            f2 = RENDER_PASSES.EDGES_XRAYED;
+            edgeFlag = RENDER_PASSES.EDGES_XRAYED;
         } else if (edges) {
             if (transparent) {
-                f2 = RENDER_PASSES.EDGES_COLOR_TRANSPARENT;
+                edgeFlag = RENDER_PASSES.EDGES_COLOR_TRANSPARENT;
             } else {
-                f2 = RENDER_PASSES.EDGES_COLOR_OPAQUE;
+                edgeFlag = RENDER_PASSES.EDGES_COLOR_OPAQUE;
             }
         } else {
-            f2 = RENDER_PASSES.NOT_RENDERED;
+            edgeFlag = RENDER_PASSES.NOT_RENDERED;
         }
 
-        // Pick
+        let pickFlag = (visible && !culled && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
 
-        let f3 = (visible && !culled && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
+        const clippableFlag = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 1 : 0;
 
         if (deferred) {
             // Avoid zillions of individual WebGL bufferSubData calls - buffer them to apply in one shot
             if (!this._deferredFlagValues) {
-                this._deferredFlagValues = new Uint8Array(this._numVerts * 4);
+                this._deferredFlagValues = new Float32Array(this._numVerts);
             }
-            for (let i = firstFlag, len = (firstFlag + lenFlags); i < len; i += 4) {
-                this._deferredFlagValues[i + 0] = f0;
-                this._deferredFlagValues[i + 1] = f1;
-                this._deferredFlagValues[i + 2] = f2;
-                this._deferredFlagValues[i + 3] = f3;
+            for (let i = firstFlag, len = (firstFlag + lenFlags); i < len; i++) {
+                let vertFlag = 0;
+                vertFlag |= colorFlag;
+                vertFlag |= silhouetteFlag << 4;
+                vertFlag |= edgeFlag << 8;
+                vertFlag |= pickFlag << 12;
+                vertFlag |= clippableFlag << 16;
+
+                this._deferredFlagValues[i] = vertFlag;
             }
         } else if (this._state.flagsBuf) {
-            const tempArray = this._scratchMemory.getUInt8Array(lenFlags);
-            for (let i = 0; i < lenFlags; i += 4) {
-                tempArray[i + 0] = f0; // x - normal fill
-                tempArray[i + 1] = f1; // y - emphasis fill
-                tempArray[i + 2] = f2; // z - edges
-                tempArray[i + 3] = f3; // w - pick
+            const tempArray = this._scratchMemory.getFloat32Array(lenFlags);
+            for (let i = 0; i < lenFlags; i++) {
+                let vertFlag = 0;
+                vertFlag |= colorFlag;
+                vertFlag |= silhouetteFlag << 4;
+                vertFlag |= edgeFlag << 8;
+                vertFlag |= pickFlag << 12;
+                vertFlag |= clippableFlag << 16;
+
+                tempArray[i] = vertFlag;
             }
             this._state.flagsBuf.setData(tempArray, firstFlag, lenFlags);
         }
@@ -853,43 +852,6 @@ class TrianglesBatchingLayer {
         if (this._deferredFlagValues) {
             this._state.flagsBuf.setData(this._deferredFlagValues);
             this._deferredFlagValues = null;
-        }
-    }
-
-    _setFlags2(portionId, flags, deferred = false) {
-
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-
-        const portionsIdx = portionId;
-        const portion = this._portions[portionsIdx];
-        const vertsBaseIndex = portion.vertsBaseIndex;
-        const numVerts = portion.numVerts;
-        const firstFlag = vertsBaseIndex * 4;
-        const lenFlags = numVerts * 4;
-        const clippable = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 255 : 0;
-
-        if (deferred) {
-            if (!this._setDeferredFlag2Values) {
-                this._setDeferredFlag2Values = new Uint8Array(this._numVerts * 4);
-            }
-            for (let i = firstFlag, len = (firstFlag + lenFlags); i < len; i += 4) {
-                this._setDeferredFlag2Values[i] = clippable;
-            }
-        } else if (this._state.flags2Buf) {
-            const tempArray = this._scratchMemory.getUInt8Array(lenFlags);
-            for (let i = 0; i < lenFlags; i += 4) {
-                tempArray[i + 0] = clippable;
-            }
-            this._state.flags2Buf.setData(tempArray, firstFlag, lenFlags);
-        }
-    }
-
-    _setDeferredFlags2() {
-        if (this._setDeferredFlag2Values) {
-            this._state.flags2Buf.setData(this._setDeferredFlag2Values);
-            this._setDeferredFlag2Values = null;
         }
     }
 
@@ -1330,10 +1292,6 @@ class TrianglesBatchingLayer {
         if (state.flagsBuf) {
             state.flagsBuf.destroy();
             state.flagsBuf = null;
-        }
-        if (state.flags2Buf) {
-            state.flags2Buf.destroy();
-            state.flags2Buf = null;
         }
         if (state.pickColorsBuf) {
             state.pickColorsBuf.destroy();

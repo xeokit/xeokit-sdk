@@ -115,10 +115,6 @@ class LinesBatchingSilhouetteRenderer {
             this._aFlags.bindArrayBuffer(state.flagsBuf);
         }
 
-        if (this._aFlags2) {
-            this._aFlags2.bindArrayBuffer(state.flags2Buf);
-        }
-
         state.indicesBuf.bind();
 
         gl.drawElements(gl.LINES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
@@ -157,7 +153,6 @@ class LinesBatchingSilhouetteRenderer {
         this._aPosition = program.getAttribute("position");
         this._aOffset = program.getAttribute("offset");
         this._aFlags = program.getAttribute("flags");
-        this._aFlags2 = program.getAttribute("flags2");
 
         if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
@@ -203,8 +198,7 @@ class LinesBatchingSilhouetteRenderer {
         if (scene.entityOffsetsEnabled) {
             src.push("in vec3 offset;");
         }
-        src.push("in vec4 flags;");
-        src.push("in vec4 flags2;");
+        src.push("in float flags;");
         src.push("uniform mat4 worldMatrix;");
         src.push("uniform mat4 viewMatrix;");
         src.push("uniform mat4 projMatrix;");
@@ -218,15 +212,16 @@ class LinesBatchingSilhouetteRenderer {
 
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
-            src.push("out vec4 vFlags2;");
+            src.push("out float vFlags;");
         }
 
         src.push("void main(void) {");
 
-        // flags.y = NOT_RENDERED | SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | SILHOUETTE_XRAYED
+        // silhouetteFlag = NOT_RENDERED | SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | | SILHOUETTE_XRAYED
         // renderPass = SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | | SILHOUETTE_XRAYED
 
-        src.push(`if (int(flags.y) != renderPass) {`);
+        src.push(`int silhouetteFlag = int(flags) >> 4 & 0xF;`);
+        src.push(`if (silhouetteFlag != renderPass) {`);
         src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
         src.push("} else {");
 
@@ -237,7 +232,7 @@ class LinesBatchingSilhouetteRenderer {
         src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
         if (clipping) {
             src.push("vWorldPosition = worldPosition;");
-            src.push("vFlags2 = flags2;");
+            src.push("vFlags = flags;");
         }
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
@@ -271,7 +266,7 @@ class LinesBatchingSilhouetteRenderer {
         }
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
-            src.push("in vec4 vFlags2;");
+            src.push("in float vFlags;");
             for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
@@ -282,7 +277,7 @@ class LinesBatchingSilhouetteRenderer {
         src.push("out vec4 outColor;");
         src.push("void main(void) {");
         if (clipping) {
-            src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
+            src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
             src.push("  if (clippable) {");
             src.push("  float dist = 0.0;");
             for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
