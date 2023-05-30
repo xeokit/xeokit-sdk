@@ -21,6 +21,9 @@ const Renderer = function (scene, options) {
 
     const frameCtx = new FrameContext(scene);
     const canvas = scene.canvas.canvas;
+    /**
+     * @type {WebGL2RenderingContext}
+     */
     const gl = scene.canvas.gl;
     const canvasTransparent = (!!options.transparent);
     const alphaDepthMask = options.alphaDepthMask;
