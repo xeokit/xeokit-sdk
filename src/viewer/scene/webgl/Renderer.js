@@ -8,6 +8,7 @@ import {OcclusionTester} from "./occlusion/OcclusionTester.js";
 import {SAOOcclusionRenderer} from "./sao/SAOOcclusionRenderer.js";
 import {createRTCViewMat} from "../math/rtcCoords.js";
 import {SAODepthLimitedBlurRenderer} from "./sao/SAODepthLimitedBlurRenderer.js";
+import {RenderBuffer} from "./RenderBuffer.js";
 import {RenderBufferManager} from "./RenderBufferManager.js";
 import {getExtension} from "./getExtension.js";
 import {DataTextureSceneModel} from "../models/DataTextureSceneModel/DataTextureSceneModel.js"
@@ -1258,6 +1259,153 @@ const Renderer = function (scene, options) {
             }
 
             pickResult.worldPos = worldPos;
+        }
+    })();
+
+    window.picky = (function ()
+    {
+        const tempVec4a = math.vec4();
+        const tempVec4b = math.vec4();
+        const tempVec4c = math.vec4();
+        const tempVec4d = math.vec4();
+        const tempVec4e = math.vec4();
+        const tempMat4a = math.mat4();
+        const tempMat4b = math.mat4();
+        const tempMat4c = math.mat4();
+
+        return function (canvasPos) {
+            // console.log (canvasPos);
+            // console.log ({gl, ext:gl.getExtension("EXT_color_buffer_float)")});
+            const nearAndFar = [
+                scene.camera.project.near,
+                scene.camera.project.far
+            ];
+
+            frameCtx.reset();
+            frameCtx.backfaces = true;
+            frameCtx.frontface = true; // "ccw"
+            // frameCtx.pickOrigin = pickResult.origin;
+            // frameCtx.pickViewMatrix = pickViewMatrix;
+            // frameCtx.pickProjMatrix = pickProjMatrix;
+            frameCtx.pickZNear = nearAndFar[0];
+            frameCtx.pickZFar = nearAndFar[1];
+
+            /**
+             * @type {RenderBuffer}
+             */
+            let vertexPickBuffer = renderBufferManager.getRenderBuffer("uniquePickColors-aabs", {
+                depthTexture: true,
+                size: [
+                    1,
+                    1,
+                ]
+            });
+    
+            const bakEye = scene.camera.eye.slice ();
+            const bakLook = scene.camera.look.slice ();
+            const bakUp = scene.camera.up.slice ();
+            const bakFov = scene.camera.perspective.fov;
+
+            const SNAP_RADIUS_PIXELS = 20;
+
+            {
+                const _screenPos = [ 0, 0, 0, 0 ];
+                const _viewPos = [ 0, 0, 0, 0 ];
+                const _worldPos = [ 0, 0, 0, 0 ];
+
+                scene.camera.perspective.unproject(
+                    [ canvasPos[0], canvasPos[1] ],
+                    1.0, // we can use any distance here
+                    _screenPos,
+                    _viewPos,
+                    _worldPos
+                );
+
+                // console.log ({_worldPos});
+
+                scene.camera.look = _worldPos.slice(0, 3);
+
+                // assuming scene.viewer.camera.perspective._fovAxis == "min"
+                const minCanvasRes = Math.min(
+                    canvas.clientWidth,
+                    canvas.clientHeight
+                );
+
+                const fovPerPixel = scene.camera.perspective.fov / minCanvasRes;
+
+                scene.camera.perspective.fov = fovPerPixel * SNAP_RADIUS_PIXELS * 2;
+            }
+
+            scene.render(true);
+
+            vertexPickBuffer.bind (gl.RGBA32UI);
+
+            {
+                // console.log ({size: vertexPickBuffer.size});
+                gl.viewport(0, 0, vertexPickBuffer.size[0], vertexPickBuffer.size[1]);
+
+                gl.enable(gl.DEPTH_TEST);
+                gl.frontFace(gl.CCW);
+                gl.disable(gl.CULL_FACE);
+                gl.depthMask(true);
+                gl.disable(gl.BLEND);
+                
+                gl.clear(gl.DEPTH_BUFFER_BIT);
+                gl.clearBufferuiv(gl.COLOR, 0, new Uint32Array([0, 0, 0, 0 ]));
+            }
+
+            // if (false)
+            {
+                for (let type in drawableTypeInfo) {
+                    if (drawableTypeInfo.hasOwnProperty(type)) {
+        
+                        const drawableInfo = drawableTypeInfo[type];
+                        const drawableList = drawableInfo.drawableList;
+        
+                        for (let i = 0, len = drawableList.length; i < len; i++) {
+        
+                            const drawable = drawableList[i];
+        
+                            if (drawable.culled === true || drawable.visible === false || !drawable.pickable) {
+                                continue;
+                            }
+        
+                            if (!(drawable instanceof DataTextureSceneModel)) {
+                                continue;
+                            }
+        
+                            drawable.drawVertexDepths(frameCtx);
+        
+                            // if (drawable.renderFlags.colorOpaque) {
+                            //     drawable.drawDepth(frameCtx);
+                            // }
+                        }
+                    }
+                }        
+            }
+
+            const deltaCoords = vertexPickBuffer.read(0, 0, gl.RGBA_INTEGER, gl.UNSIGNED_INT, Uint32Array, 4);
+            // console.log (JSON.stringify(Array.from(deltaCoords)));
+
+            vertexPickBuffer.unbind ();
+
+            {
+                scene.camera.eye = bakEye;
+                scene.camera.look = bakLook;
+                scene.camera.up = bakUp;
+                scene.camera.perspective.fov = bakFov;
+            }
+
+            scene.render(true);
+
+            const retVal = [
+                ((deltaCoords[0] / 100000000) - 1) * SNAP_RADIUS_PIXELS*2,
+                ((deltaCoords[1] / 100000000) - 1) * SNAP_RADIUS_PIXELS*2,
+            ];
+
+            console.log (JSON.stringify(Array.from(retVal)));
+
+            return retVal;
         }
     })();
 
