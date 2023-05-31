@@ -14,6 +14,7 @@ const tempMat4b = math.mat4();
 const tempVec4a = math.vec4([0, 0, 0, 1]);
 const tempVec4b = math.vec4([0, 0, 0, 1]);
 const tempVec4c = math.vec4([0, 0, 0, 1]);
+const tempVec2a = math.vec2([0, 0]);
 const tempOBB3 = math.OBB3();
 
 const tempVec3a = math.vec3();
@@ -884,6 +885,37 @@ class TrianglesBatchingLayer {
             portion.offset[0] = offset[0];
             portion.offset[1] = offset[1];
             portion.offset[2] = offset[2];
+        }
+    }
+
+    getEachVertex(portionId, callback) {
+        if (!this.model.scene.pickSurfacePrecisionEnabled) {
+            return;
+        }
+        const state = this._state;
+        const portion = this._portions[portionId];
+        if (!portion) {
+            this.model.error("portion not found: " + portionId);
+            return;
+        }
+        const positions = portion.quantizedPositions;
+        const origin = state.origin;
+        const offset = portion.offset;
+        const offsetX = origin[0] + offset[0];
+        const offsetY = origin[1] + offset[1];
+        const offsetZ = origin[2] + offset[2];
+        const worldPos = tempVec4a;
+        for (let i = 0, len = positions.length; i < len; i += 3) {
+            worldPos[0] = positions[i];
+            worldPos[1] = positions[i + 1];
+            worldPos[2] = positions[i + 2];
+            worldPos[3] = 1.0;
+            math.decompressPosition(worldPos, state.positionsDecodeMatrix);
+            math.transformPoint4(this.model.worldMatrix, worldPos);
+            worldPos[0] += offsetX;
+            worldPos[1] += offsetY;
+            worldPos[2] += offsetZ;
+            callback(worldPos);
         }
     }
 
