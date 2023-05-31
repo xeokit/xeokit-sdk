@@ -1,4 +1,4 @@
-import * as WebIFC from "web-ifc/web-ifc-api.js";
+import * as WebIFC from "web-ifc";
 
 import {utils} from "../../viewer/scene/utils.js"
 import {VBOSceneModel} from "../../viewer/scene/models/VBOSceneModel/VBOSceneModel.js";

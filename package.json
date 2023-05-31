@@ -52,7 +52,7 @@
     "@loaders.gl/gltf": "^3.2.6",
     "@loaders.gl/las": "^3.2.6",
     "html2canvas": "^1.4.1",
-    "web-ifc": "^0.0.35"
+    "web-ifc": "^0.0.41"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",
