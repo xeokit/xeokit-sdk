@@ -6,7 +6,7 @@
   "main": "./dist/xeokit-sdk.cjs.js",
   "types": "./types/index.d.ts",
   "scripts": {
-    "build": "rollup --config rollup.config.js; cp node_modules/web-ifc/web-ifc.wasm dist/.",
+    "build": "rollup --config rollup.config.js; rollup --config rollup.minified.config.js; cp node_modules/web-ifc/web-ifc.wasm dist/.",
     "test": "percy exec -- node ./snapshots.js",
     "docs": "rm -Rf ./docs/*; ./node_modules/.bin/esdoc",
     "typedocs": "rm -Rf ./docs/*; typedoc --tsconfig tsconfig.json",
