@@ -9,22 +9,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     <style>
 
-
-        .viewer-ruler-wire-highlighted {
-            border: 2px solid white !important;
-        }
-
-        .viewer-ruler-label-highlighted {
-            border: 2px solid white !important;
-        }
-
-        .viewer-ruler-dot-highlighted {
-            border: 2px solid white !important;
-        }
-
         #snapshot {
-            padding:0;
-            margin:0;
+            padding: 0;
+            margin: 0;
             position: absolute;
             height: 40%;
             width: 40%;
@@ -85,7 +72,11 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
+    import {
+        Viewer,
+        XKTLoaderPlugin,
+        DistanceMeasurementsPlugin
+    } from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera
@@ -114,7 +105,7 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create some DistanceMeasurements
+    // Create two DistanceMeasurements
     //------------------------------------------------------------------------------------------------------------------
 
     const distanceMeasurements = new DistanceMeasurementsPlugin(viewer, {
@@ -150,20 +141,8 @@
         wireVisible: true
     });
 
-    distanceMeasurements.on("mouseOver", (e) => {
-        e.measurement.setHighlighted(true);
-    });
-
-    distanceMeasurements.on("mouseLeave", (e) => {
-
-        e.measurement.setHighlighted(false);
-    });
-
-
-    var canvas = viewer.scene.canvas;
-
     //------------------------------------------------------------------------------------------------------------------
-    // When model loaded, start capturing PNG screenshots
+    // When model loaded, start capturing PNG screenshots while orbiting the model
     //------------------------------------------------------------------------------------------------------------------
 
     const img = document.getElementById("snapshot");
@@ -171,6 +150,11 @@
     sceneModel.on("loaded", () => {
 
         const nextFrame = () => {
+
+            // This method will get a snapshot image, composed of
+            // an image of the viewer canvas, overlaid with an image
+            // of the HTML container element belonging to each installed
+            // Viewer plugin.
 
             viewer.getSnapshotWithPlugins({
                 format: "png",
@@ -182,9 +166,11 @@
                 img.src = imageData;
 
                 viewer.camera.orbitYaw(5);
+
                 setTimeout(nextFrame, 200);
-            })
+            });
         };
+
         nextFrame();
     });
 

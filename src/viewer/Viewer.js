@@ -388,6 +388,10 @@ class Viewer {
      * Gets a snapshot of this Viewer's {@link Scene} as a Base64-encoded image which includes
      * the HTML elements created by various plugins.
      *
+     * The snapshot image is composed of an image of the viewer canvas, overlaid with an image
+     * of the HTML container element belonging to each installed Viewer plugin. Each container
+     * element is only rendered once, so it's OK for plugins to share the same container.
+     *
      * #### Usage:
      *
      * ````javascript
