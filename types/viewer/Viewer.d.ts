@@ -199,6 +199,34 @@ export declare class Viewer {
   getSnapshot(params: { width?: number, height?: number, format?: "jpeg" | "png"| "bmp", includeGizmos?: boolean }): string;
 
   /**
+   * Gets a snapshot of this Viewer's {@link Scene} as a Base64-encoded image which includes
+   * the HTML elements created by various plugins.
+   *
+   * The snapshot image is composed of an image of the viewer canvas, overlaid with an image
+   * of the HTML container element belonging to each installed Viewer plugin. Each container
+   * element is only rendered once, so it's OK for plugins to share the same container.
+   *
+   * #### Usage:
+   *
+   * ````javascript
+   * viewer.getSnapshotWithPlugins({
+   *    width: 500,
+   *    height: 500,
+   *    format: "png"
+   * }).then((imageData)=>{
+   *
+   * });
+   * ````
+   * @param {*} [params] Capture options.
+   * @param {Number} [params.width] Desired width of result in pixels - defaults to width of canvas.
+   * @param {Number} [params.height] Desired height of result in pixels - defaults to height of canvas.
+   * @param {String} [params.format="jpeg"] Desired format; "jpeg", "png" or "bmp".
+   * @param {Boolean} [params.includeGizmos=false] When true, will include gizmos like {@link SectionPlane} in the snapshot.
+   * @returns {Promise} Promise which returns a string-encoded image data URI.
+   */
+  getSnapshotWithPlugins(params: { width?: number, height?: number, format?: "jpeg" | "png"| "bmp", includeGizmos?: boolean }): Promise<String>;
+  
+  /**
    * Exits snapshot mode.
    *
    * Switches rendering back to the main canvas.
