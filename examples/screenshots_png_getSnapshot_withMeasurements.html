@@ -166,35 +166,26 @@
     // When model loaded, start capturing PNG screenshots
     //------------------------------------------------------------------------------------------------------------------
 
+    const img = document.getElementById("snapshot");
+
     sceneModel.on("loaded", () => {
 
-        const screenshotsDiv = document.getElementById("snapshots");
-
-        let numScreenshots = 0;
-
-        setInterval(() => {
-
-            viewer.camera.orbitYaw(5);
-
-            const canvas = viewer.scene.canvas;
-            const canvasElement = canvas.canvas;
-            const aspect = canvasElement.height / canvasElement.width;
-            const width = 1000;
-            const height = Math.floor(width * aspect);
+        const nextFrame = () => {
 
             viewer.getSnapshotWithPlugins({
                 format: "png",
-                // width: width,
-                // height: height
-            }).then((imageData) => {
-                const img = document.getElementById("snapshot");
-                // img.style.width = width + "px";
-                // img.style.height = height + "px";
-                img.src = imageData;
-                img.style.background = "lightblue";
-            })
+                width: img.width * 2, // Upscale snapshot resolution 2x
+                height: img.height * 2
 
-        }, 300);
+            }).then((imageData) => {
+
+                img.src = imageData;
+
+                viewer.camera.orbitYaw(5);
+                setTimeout(nextFrame, 200);
+            })
+        };
+        nextFrame();
     });
 
 </script>
