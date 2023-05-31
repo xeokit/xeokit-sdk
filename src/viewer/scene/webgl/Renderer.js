@@ -1436,6 +1436,19 @@ const Renderer = function (scene, options) {
     };
 
     /**
+     * Returns an HTMLCanvas containing an image of the snapshot canvas.
+     *
+     * - The HTMLCanvas has a CanvasRenderingContext2D.
+     * - Expects the caller to draw more things on the HTMLCanvas (annotations etc).
+     *
+     * @returns {HTMLCanvasElement}
+     */
+    this.readSnapshotAsCanvas = function () {
+        const snapshotBuffer = renderBufferManager.getRenderBuffer("snapshot");
+        return snapshotBuffer.readImageAsCanvas();
+    };
+
+    /**
      * Exists snapshot mode.
      *
      * Switches rendering back to the main canvas.

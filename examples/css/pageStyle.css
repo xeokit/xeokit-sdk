@@ -27,6 +27,15 @@ body {
     background-image: linear-gradient(lightblue, white);
 }
 
+#myCanvas-small {
+    width: 200px;
+    height: 200px;
+    left:200px;
+    position: absolute;
+    background: lightblue;
+    background-image: linear-gradient(lightblue, white);
+}
+
 .slideout-sidebar {
     background: white;
     position: fixed;
