@@ -43,7 +43,7 @@ class TrianglesDataTextureVertexDepthRenderer {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram();
         }
-        
+
         textureState.bindCommonTextures (
             this._program,
             this._uTexturePerObjectIdPositionsDecodeMatrix, 
@@ -71,6 +71,9 @@ class TrianglesDataTextureVertexDepthRenderer {
         ];
 
         gl.uniform3fv(this._uCameraEyeRtc, originCameraEye);
+
+        gl.uniform2fv(this._u_vectorA, frameCtx._vectorA);
+        gl.uniform2fv(this._u_invVectorAB, frameCtx._invVectorAB);
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
@@ -108,40 +111,42 @@ class TrianglesDataTextureVertexDepthRenderer {
             }
         }
 
-        if (state.numIndices8Bits > 0)
+        const glMode = (frameCtx._snapMode == "edge") ? gl.LINES : gl.POINTS;
+
+        if (state.numEdgeIndices8Bits > 0)
         {
-            textureState.bindTriangleIndicesTextures(
+            textureState.bindEdgeIndicesTextures(
                 this._program,
-                this._uTexturePerPolygonIdPortionIds, 
-                this._uTexturePerPolygonIdIndices, 
-                8 // 8 bits indices
+                this._uTexturePerEdgeIdPortionIds, 
+                this._uTexturePerPolygonIdEdgeIndices, 
+                8 // 8 bits edge indices
             );
 
-            gl.drawArrays(gl.POINTS, 0, state.numIndices8Bits);
+            gl.drawArrays(glMode, 0, state.numEdgeIndices8Bits);
         }
 
-        if (state.numIndices16Bits > 0)
+        if (state.numEdgeIndices16Bits > 0)
         {
-            textureState.bindTriangleIndicesTextures(
+            textureState.bindEdgeIndicesTextures(
                 this._program,
-                this._uTexturePerPolygonIdPortionIds, 
-                this._uTexturePerPolygonIdIndices, 
-                16 // 16 bits indices
+                this._uTexturePerEdgeIdPortionIds, 
+                this._uTexturePerPolygonIdEdgeIndices, 
+                16 // 16 bits edge indices
             );
 
-            gl.drawArrays(gl.POINTS, 0, state.numIndices16Bits);
+            gl.drawArrays(glMode, 0, state.numEdgeIndices16Bits);
         }
-        
-        if (state.numIndices32Bits > 0)
+
+        if (state.numEdgeIndices32Bits > 0)
         {
-            textureState.bindTriangleIndicesTextures(
+            textureState.bindEdgeIndicesTextures(
                 this._program,
-                this._uTexturePerPolygonIdPortionIds, 
-                this._uTexturePerPolygonIdIndices, 
-                32 // 32 bits indices
+                this._uTexturePerEdgeIdPortionIds, 
+                this._uTexturePerPolygonIdEdgeIndices, 
+                32 // 32 bits edge indices
             );
 
-            gl.drawArrays(gl.POINTS, 0, state.numIndices32Bits);
+            gl.drawArrays(glMode, 0, state.numEdgeIndices32Bits);
         }
 
         frameCtx.drawElements++;
@@ -185,13 +190,14 @@ class TrianglesDataTextureVertexDepthRenderer {
         this._uTexturePerObjectIdPositionsDecodeMatrix = "uTexturePerObjectIdPositionsDecodeMatrix"; // chipmunk
         this._uTexturePerObjectIdColorsAndFlags = "uTexturePerObjectIdColorsAndFlags"; // chipmunk
         this._uTexturePerVertexIdCoordinates = "uTexturePerVertexIdCoordinates"; // chipmunk
-        this._uTexturePerPolygonIdNormals = "uTexturePerPolygonIdNormals"; // chipmunk
-        this._uTexturePerPolygonIdIndices = "uTexturePerPolygonIdIndices"; // chipmunk
-        this._uTexturePerPolygonIdPortionIds = "uTexturePerPolygonIdPortionIds"; // chipmunk
+        this._uTexturePerPolygonIdEdgeIndices = "uTexturePerPolygonIdEdgeIndices"; // chipmunk
+        this._uTexturePerEdgeIdPortionIds = "uTexturePerEdgeIdPortionIds"; // chipmunk
         this._uTextureCameraMatrices = "uTextureCameraMatrices"; // chipmunk
         this._uTextureModelMatrices = "uTextureModelMatrices"; // chipmunk
         this._uTexturePerObjectIdOffsets = "uTexturePerObjectIdOffsets"; // chipmunk
         this._uCameraEyeRtc = program.getLocation("uCameraEyeRtc"); // chipmunk
+        this._u_vectorA = program.getLocation("_vectorA"); // chipmunk
+        this._u_invVectorAB = program.getLocation("_invVectorAB"); // chipmunk
     }
 
     _bindProgram() {
@@ -206,12 +212,12 @@ class TrianglesDataTextureVertexDepthRenderer {
     }
 
     _buildVertexShader() {
-
         const scene = this._scene;
-        const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
+        const sectionPlanesState = scene._sectionPlanesState;
+        const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
         src.push("#version 300 es");
-        src.push("// Triangles dataTexture pick depth vertex shader");
+        src.push("// Batched geometry edges drawing vertex shader");
 
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
@@ -233,17 +239,17 @@ class TrianglesDataTextureVertexDepthRenderer {
             src.push("in vec3 offset;");
         }
 
-        src.push("uniform bool pickInvisible;");
-
         src.push("uniform highp sampler2D uTexturePerObjectIdPositionsDecodeMatrix;"); // chipmunk
         src.push("uniform lowp usampler2D uTexturePerObjectIdColorsAndFlags;"); // chipmunk
         src.push("uniform highp sampler2D uTexturePerObjectIdOffsets;"); // chipmunk
         src.push("uniform mediump usampler2D uTexturePerVertexIdCoordinates;"); // chipmunk
-        src.push("uniform highp usampler2D uTexturePerPolygonIdIndices;"); // chipmunk
-        src.push("uniform mediump usampler2D uTexturePerPolygonIdPortionIds;"); // chipmunk
+        src.push("uniform highp usampler2D uTexturePerPolygonIdEdgeIndices;"); // chipmunk
+        src.push("uniform mediump usampler2D uTexturePerEdgeIdPortionIds;"); // chipmunk
         src.push("uniform highp sampler2D uTextureCameraMatrices;"); // chipmunk
         src.push("uniform highp sampler2D uTextureModelMatrices;"); // chipmunk
         src.push("uniform vec3 uCameraEyeRtc;"); // chipmunk
+        src.push("uniform vec2 _vectorA;"); // chipmunk
+        src.push("uniform vec2 _invVectorAB;"); // chipmunk
 
         src.push("vec3 positions[3];")
 
@@ -255,6 +261,12 @@ class TrianglesDataTextureVertexDepthRenderer {
 
         src.push("bool isPerspectiveMatrix(mat4 m) {");
         src.push("    return (m[2][3] == - 1.0);");
+        src.push("}");
+
+        src.push("vec2 remapClipPos(vec2 clipPos) {");
+        src.push("    float x = (2.0 * (clipPos.x - _vectorA.x) * _invVectorAB.x) - 1.0;");
+        src.push("    float y = 1.0 - (2.0 * (clipPos.y - _vectorA.y) * _invVectorAB.y);");
+        src.push("    return vec2(x, y);")
         src.push("}");
 
         if (clipping) {
@@ -274,73 +286,68 @@ class TrianglesDataTextureVertexDepthRenderer {
         src.push ("mat4 worldNormalMatrix = mat4 (texelFetch (uTextureModelMatrices, ivec2(0, 1), 0), texelFetch (uTextureModelMatrices, ivec2(1, 1), 0), texelFetch (uTextureModelMatrices, ivec2(2, 1), 0), texelFetch (uTextureModelMatrices, ivec2(3, 1), 0));");
         
         // constants
-        src.push("int polygonIndex = gl_VertexID / 3;")
+        src.push("int edgeIndex = gl_VertexID / 2;")
 
         // get packed object-id
-        src.push("int h_packed_object_id_index = (polygonIndex >> 3) & 4095;")
-        src.push("int v_packed_object_id_index = (polygonIndex >> 3) >> 12;")
+        src.push("int h_packed_object_id_index = (edgeIndex >> 3) & 4095;")
+        src.push("int v_packed_object_id_index = (edgeIndex >> 3) >> 12;")
 
-        src.push("int objectIndex = int(texelFetch(uTexturePerPolygonIdPortionIds, ivec2(h_packed_object_id_index, v_packed_object_id_index), 0).r);");
+        src.push("int objectIndex = int(texelFetch(uTexturePerEdgeIdPortionIds, ivec2(h_packed_object_id_index, v_packed_object_id_index), 0).r);");
         src.push("ivec2 objectIndexCoords = ivec2(objectIndex % 512, objectIndex / 512);");
 
         // get flags & flags2
         src.push("uvec4 flags = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);"); // chipmunk
         src.push("uvec4 flags2 = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);"); // chipmunk
         
-        // flags.w = NOT_RENDERED | PICK
-        // renderPass = PICK
-
-        src.push(`if (int(flags.w) != renderPass) {`);
-        src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
-        src.push("   return;"); // Cull vertex
-        src.push("} else {");
+        src.push("{");
 
         // get vertex base
         src.push("ivec4 packedVertexBase = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+4, objectIndexCoords.y), 0));"); // chipmunk
 
-        src.push("ivec4 packedIndexBaseOffset = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+5, objectIndexCoords.y), 0));"); // chipmunk
+        src.push("ivec4 packedEdgeIndexBaseOffset = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+6, objectIndexCoords.y), 0));");
 
-        src.push("int indexBaseOffset = (packedIndexBaseOffset.r << 24) + (packedIndexBaseOffset.g << 16) + (packedIndexBaseOffset.b << 8) + packedIndexBaseOffset.a;");
+        src.push("int edgeIndexBaseOffset = (packedEdgeIndexBaseOffset.r << 24) + (packedEdgeIndexBaseOffset.g << 16) + (packedEdgeIndexBaseOffset.b << 8) + packedEdgeIndexBaseOffset.a;");
 
-        src.push("int h_index = (polygonIndex - indexBaseOffset) & 4095;")
-        src.push("int v_index = (polygonIndex - indexBaseOffset) >> 12;")
+        src.push("int h_index = (edgeIndex - edgeIndexBaseOffset) & 4095;")
+        src.push("int v_index = (edgeIndex - edgeIndexBaseOffset) >> 12;")
 
-        src.push("ivec3 vertexIndices = ivec3(texelFetch(uTexturePerPolygonIdIndices, ivec2(h_index, v_index), 0));");
+        src.push("ivec3 vertexIndices = ivec3(texelFetch(uTexturePerPolygonIdEdgeIndices, ivec2(h_index, v_index), 0));");
         src.push("ivec3 uniqueVertexIndexes = vertexIndices + (packedVertexBase.r << 24) + (packedVertexBase.g << 16) + (packedVertexBase.b << 8) + packedVertexBase.a;")
         
-        src.push("ivec3 indexPositionH = uniqueVertexIndexes & 4095;")
-        src.push("ivec3 indexPositionV = uniqueVertexIndexes >> 12;")
+        src.push("int indexPositionH = uniqueVertexIndexes[gl_VertexID % 2] & 4095;")
+        src.push("int indexPositionV = uniqueVertexIndexes[gl_VertexID % 2] >> 12;")
 
         src.push("mat4 positionsDecodeMatrix = mat4 (texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0));")
         src.push("mat4 entityMatrix = mat4 (texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(objectIndexCoords.x*8+4, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(objectIndexCoords.x*8+5, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(objectIndexCoords.x*8+6, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(objectIndexCoords.x*8+7, objectIndexCoords.y), 0));")
 
         src.push("positionsDecodeMatrix = entityMatrix * positionsDecodeMatrix;")
-        
-        src.push("uint solid = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+7, objectIndexCoords.y), 0).r;"); // chipmunk
 
+        // get flags & flags2
+        src.push("uvec4 flags = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);"); // chipmunk
+        src.push("uvec4 flags2 = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);"); // chipmunk
+        
         // get position
-        src.push("positions[0] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.r, indexPositionV.r), 0));")
-        src.push("positions[1] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.g, indexPositionV.g), 0));")
-        src.push("positions[2] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.b, indexPositionV.b), 0));")
+        src.push("vec3 position = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH, indexPositionV), 0));")
 
-        src.push("vec3 position = positions[gl_VertexID % 3];")
-
-        
-        src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1)); ");
+        src.push("      vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
 
         // get XYZ offset
         src.push("vec4 offset = vec4(texelFetch (uTexturePerObjectIdOffsets, objectIndexCoords, 0).rgb, 0.0);");
 
         src.push("worldPosition.xyz = worldPosition.xyz + offset.xyz;");
 
-        src.push("vec4 viewPosition = viewMatrix * worldPosition; ");
+        src.push("      vec4 viewPosition  = viewMatrix * worldPosition; ");
 
         if (clipping) {
-            src.push("      vWorldPosition = worldPosition;");
-            src.push("      vFlags2 = flags2.r;");
+            src.push("  vWorldPosition = worldPosition;");
+            src.push("  vFlags2 = flags2.r;");
         }
         src.push("vViewPosition = viewPosition;");
         src.push("vec4 clipPos = projMatrix * viewPosition;");
+        src.push("clipPos.xyz /= clipPos.w;")
+        src.push("clipPos.w = 1.0;")
+        src.push("clipPos.xy = remapClipPos(clipPos.xy);");
+        src.push("vViewPosition = clipPos;");
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
@@ -413,7 +420,7 @@ class TrianglesDataTextureVertexDepthRenderer {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
         src.push("    float zNormalizedDepth = abs((pickZNear + vViewPosition.z) / (pickZFar - pickZNear));"); // Get linear depth
-        src.push("    outCoords = uvec4((vec3(vViewPosition.xy / vViewPosition.w +1.0, gl_FragCoord.z))*100000000.0, 0.0); ");
+        src.push("    outCoords = uvec4((vViewPosition.xyz + 1.0)*100000000.0, 0.0); ");
         // src.push("    outCoords = uvec4(1, 2, 3, 4); ");
         src.push("}");
         return src;
