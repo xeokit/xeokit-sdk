@@ -408,6 +408,17 @@ class Viewer {
      */
     getSnapshotWithPlugins(params = {}) {
 
+        // We use gl.readPixels to get the WebGL canvas snapshot in a new
+        // HTMLCanvas element, scaled to the target snapshot size, then
+        // use html2canvas to render each plugin's container element into
+        // that HTMLCanvas. Finally, we save the HTMLCanvas to a bitmap.
+
+        // We don't rely on html2canvas to up-scale our WebGL canvas
+        // when we want a higher-resolution snapshot, which would cause
+        // blurring. Instead, we manage the scale and redraw of the WebGL
+        // canvas ourselves, in order to allow the Viewer to render the
+        // right amount of pixels, for a sharper image.
+
         return new Promise((resolve, reject) => {
 
             const needFinishSnapshot = (!this._snapshotBegun);
@@ -432,7 +443,7 @@ class Viewer {
             }
 
             this.scene._renderer.renderSnapshot();
-            
+
             const snapshotCanvas = this.scene._renderer.readSnapshotAsCanvas();
 
             if (resize) {
@@ -443,7 +454,7 @@ class Viewer {
 
             const pluginToCapture = {};
             const pluginContainerElements = [];
-            
+
             const finishSnapshot = () => {
                 if (!params.includeGizmos) {
                     this.sendToPlugins("snapshotFinished");
@@ -478,7 +489,7 @@ class Viewer {
                 }
                 resolve(image.src);
             }
-            
+
             for (let i = 0, len = this._plugins.length; i < len; i++) { // Find plugin container elements
                 const plugin = this._plugins[i];
                 if (plugin.getContainerElement) {
@@ -498,10 +509,7 @@ class Viewer {
                     html2canvas(containerElement, {
                         canvas: snapshotCanvas,
                         backgroundColor: null,
-                        width: snapshotWidth,
-                        height: snapshotHeight,
-                         // width: saveWidth,
-                         // height: saveHeight
+                        scale: snapshotCanvas.width / containerElement.clientWidth
                     }).then(() => {
                         pluginContainerElements.pop();
                         if (pluginContainerElements.length === 0) {
