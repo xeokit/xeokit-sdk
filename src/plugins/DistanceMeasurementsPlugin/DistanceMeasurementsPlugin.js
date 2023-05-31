@@ -280,6 +280,14 @@ class DistanceMeasurementsPlugin extends Plugin {
     }
 
     /**
+     * Gets the plugin's HTML container element, if any.
+     * @returns {*|HTMLElement|HTMLElement}
+     */
+    getContainerElement() {
+        return this._container;
+    }
+
+    /**
      * @private
      */
     send(name, value) {
