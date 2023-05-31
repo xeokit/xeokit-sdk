@@ -55,12 +55,13 @@ class DataTextureSceneModel extends Component {
      * @param {Boolean} [cfg.edges=false] Indicates if the DataTextureSceneModel's edges are initially emphasized.
      * @param {Number[]} [cfg.colorize=[1.0,1.0,1.0]] DataTextureSceneModel's initial RGB colorize color, multiplies by the rendered fragment colors.
      * @param {Number} [cfg.opacity=1.0] DataTextureSceneModel's initial opacity factor, multiplies by the rendered fragment alpha.
-     * @param {Number} [cfg.backfaces=false] When we set this ````true````, then we force rendering of backfaces for this dataTexturePerformanceModel. When
+     * @param {Number} [cfg.backfaces=false] When we set this ````true````, then we force rendering of backfaces for this DataTextureModel. When
      * we leave this ````false````, then we allow the Viewer to decide when to render backfaces. In that case, the
      * Viewer will hide backfaces on watertight meshes, show backfaces on open meshes, and always show backfaces on meshes when we slice them open with {@link SectionPlane}s.
-     * @param {Boolean} [cfg.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to this dataTexturePerformanceModel. SAO is configured by the Scene's {@link SAO} component.
-     * @param {Boolean} [cfg.pbrEnabled=false] Indicates if physically-based rendering (PBR) will apply to the dataTexturePerformanceModel. Only works when {@link Scene#pbrEnabled} is also ````true````.
+     * @param {Boolean} [cfg.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to this DataTextureModel. SAO is configured by the Scene's {@link SAO} component.
      * @param {Number} [cfg.edgeThreshold=10] When xraying, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
+     * @param {Number} [cfg.targetLodFps] Optional target LoD FPS. When provided, will enable LoD culling for this DataTextureModel, with the given target FPS.
+     * @param {Boolean} [cfg.enableViewFrustumCulling=false] When true, will enable view frustum culling for the objects within this DataTextureModel.
      * @param {Boolean} [cfg.disableVertexWelding] Disable vertex welding when loading geometry into the GPU. Default is ```false```.
      * @param {Boolean} [cfg.disableIndexRebucketing] Disable index rebucketing when loading geometry into the GPU. Default is ```false```.
      */
@@ -244,7 +245,7 @@ class DataTextureSceneModel extends Component {
 
         this._saoEnabled = (cfg.saoEnabled !== false);
 
-        this._pbrEnabled = (!!cfg.pbrEnabled);
+        this._pbrEnabled = false;
 
         this._isModel = cfg.isModel;
         if (this._isModel) {
@@ -856,7 +857,7 @@ class DataTextureSceneModel extends Component {
     /**
      * Gets if physically-based rendering (PBR) is enabled for this DataTextureSceneModel.
      *
-     * Only works when {@link Scene#pbrEnabled} is also true.
+     * This will always be ````false````.
      *
      * @type {Boolean}
      */
