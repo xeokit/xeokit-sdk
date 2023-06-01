@@ -1360,9 +1360,9 @@ const Renderer = function (scene, options) {
         vertexPickBuffer.unbind ();
 
         const snappedCanvasPos = [
-            ((deltaCoords[0] / 100000000) - 1) * snapRadiusInPixels,
-            ((deltaCoords[1] / 100000000) - 1) * snapRadiusInPixels,
-            (deltaCoords[2] / 100000000) - 1
+            ((deltaCoords[0] / 1000000000) - 1) * snapRadiusInPixels,
+            ((deltaCoords[1] / 1000000000) - 1) * snapRadiusInPixels,
+            (deltaCoords[2] / 1000000000) - 1
         ];
 
         // If the render didn't snap, return null

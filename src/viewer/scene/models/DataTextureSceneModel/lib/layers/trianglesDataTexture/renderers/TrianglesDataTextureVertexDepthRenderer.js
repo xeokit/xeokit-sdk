@@ -420,7 +420,7 @@ class TrianglesDataTextureVertexDepthRenderer {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
         src.push("    float zNormalizedDepth = abs((pickZNear + vViewPosition.z) / (pickZFar - pickZNear));"); // Get linear depth
-        src.push("    outCoords = uvec4((vViewPosition.xyz + 1.0)*100000000.0, 0.0); ");
+        src.push("    outCoords = uvec4((vViewPosition.xyz + 1.0)*1000000000.0, 0.0); ");
         // src.push("    outCoords = uvec4(1, 2, 3, 4); ");
         src.push("}");
         return src;
