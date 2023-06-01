@@ -1271,6 +1271,7 @@ const Renderer = function (scene, options) {
      * @returns {[number, number]|null}
      */
     window.snapPick = function (canvasPos, snapRadiusInPixels = 50, snapMode = "vertex") {
+        // console.log (snapRadiusInPixels);
         // Update the frame context for the renderer
         const nearAndFar = [
             scene.camera.project.near,
@@ -1358,34 +1359,44 @@ const Renderer = function (scene, options) {
 
         vertexPickBuffer.unbind ();
 
-        const retVal = [
+        const snappedCanvasPos = [
             ((deltaCoords[0] / 100000000) - 1) * snapRadiusInPixels,
             ((deltaCoords[1] / 100000000) - 1) * snapRadiusInPixels,
             (deltaCoords[2] / 100000000) - 1
         ];
 
         // If the render didn't snap, return null
-        if (Math.abs(retVal[0]) >= snapRadiusInPixels || Math.abs(retVal[1]) >= snapRadiusInPixels)
+        if (Math.abs(snappedCanvasPos[0]) >= snapRadiusInPixels && Math.abs(snappedCanvasPos[1]) >= snapRadiusInPixels)
         {
             return null;
         }
 
-        // const worldPos = [ 0, 0, 0, 0 ];
+        snappedCanvasPos[0] = canvasPos[0] + snappedCanvasPos[0];
+        snappedCanvasPos[1] = canvasPos[1] - snappedCanvasPos[1];
 
-        // scene.camera.project.unproject(
-        //     [
-        //         canvasPos[0] + retVal[0],
-        //         canvasPos[1] + retVal[1]
-        //     ],
-        //     retVal[2],
-        //     [0, 0, 0, 0], // screen-pos (not used)
-        //     [0, 0, 0, 0], // view-pos (not used)
-        //     worldPos
-        // );
+        // console.log ("snappedCanvasPos");
+        // console.log (snappedCanvasPos);
 
-        // console.log (worldPos);
+        const worldPos = [ 0, 0, 0, 0 ];
 
-        return retVal;
+        scene.camera.project.unproject(
+            [
+                snappedCanvasPos[0],
+                snappedCanvasPos[1]
+            ],
+            snappedCanvasPos[2],
+            [0, 0, 0, 0], // screen-pos (not used)
+            [0, 0, 0, 0], // view-pos (not used)
+            worldPos
+        );
+
+        // console.log ("worldPos");
+        console.log (worldPos);
+
+        return {
+            canvasPos: snappedCanvasPos,
+            worldPos
+        };
     };
 
     function unpackDepth(depthZ) {
