@@ -75,6 +75,10 @@ class TrianglesDataTextureRenderers {
             this._pickDepthRenderer.destroy();
             this._pickDepthRenderer = null;
         }
+        if (this._vertexDepthRenderer && (!this._vertexDepthRenderer.getValid())) {
+            this._vertexDepthRenderer.destroy();
+            this._vertexDepthRenderer = null;
+        }
         if (this._pickNormalsRenderer && this._pickNormalsRenderer.getValid() === false) {
             this._pickNormalsRenderer.destroy();
             this._pickNormalsRenderer = null;
