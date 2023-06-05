@@ -5,6 +5,24 @@ import {math} from "../../../../../../math/math.js";
 const tempVec3a = math.vec3();
 
 /**
+ * Returns:
+ * - x != 0 => 1/x, 
+ * - x == 1 => 1
+ * 
+ * @param {number} x 
+ */
+function safeInv (x) {
+    const retVal = 1 / x;
+
+    if (isNaN(retVal) || !isFinite(retVal))
+    {
+        return 1;
+    }
+
+    return retVal;
+}
+
+/**
  * @private
  */
 class TrianglesDataTextureVertexDepthRenderer {
@@ -34,6 +52,26 @@ class TrianglesDataTextureVertexDepthRenderer {
         const state = dataTextureLayer._state;
         const textureState = state.textureState;
         const origin = dataTextureLayer._state.origin;
+
+        frameCtx._origin[0] = origin[0];
+        frameCtx._origin[1] = origin[1];
+        frameCtx._origin[2] = origin[2];
+
+        // >>> Calculate the coordinate scaler
+        const aabb = dataTextureLayer.aabb;
+
+        const MAX_INT = 2000000000;
+
+        const coordinateDivider = [
+            safeInv(aabb[3] - aabb[0]) * MAX_INT,
+            safeInv(aabb[4] - aabb[1]) * MAX_INT,
+            safeInv(aabb[5] - aabb[2]) * MAX_INT,
+        ];
+
+        frameCtx._coordinateScale[0] = safeInv(coordinateDivider[0]);
+        frameCtx._coordinateScale[1] = safeInv(coordinateDivider[1]);
+        frameCtx._coordinateScale[2] = safeInv(coordinateDivider[2]);
+        // <<< Calculate the coordinate scaler
 
         if (!this._program) {
             this._allocate();
@@ -74,6 +112,8 @@ class TrianglesDataTextureVertexDepthRenderer {
 
         gl.uniform2fv(this._u_vectorA, frameCtx._vectorA);
         gl.uniform2fv(this._u_invVectorAB, frameCtx._invVectorAB);
+        gl.uniform1i(this._u_layerNumber, frameCtx._layerNumber);
+        gl.uniform3fv(this._u_coordinateScaler, coordinateDivider);
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
@@ -198,6 +238,8 @@ class TrianglesDataTextureVertexDepthRenderer {
         this._uCameraEyeRtc = program.getLocation("uCameraEyeRtc"); // chipmunk
         this._u_vectorA = program.getLocation("_vectorA"); // chipmunk
         this._u_invVectorAB = program.getLocation("_invVectorAB"); // chipmunk
+        this._u_layerNumber = program.getLocation("_layerNumber"); // chipmunk
+        this._u_coordinateScaler = program.getLocation("_coordinateScaler"); // chipmunk
     }
 
     _bindProgram() {
@@ -274,6 +316,7 @@ class TrianglesDataTextureVertexDepthRenderer {
             src.push("flat out uint vFlags2;");
         }
         src.push("out vec4 vViewPosition;");
+        src.push("out highp vec3 relativeToOriginPosition;");
         src.push("void main(void) {");
 
         // camera matrices
@@ -336,6 +379,8 @@ class TrianglesDataTextureVertexDepthRenderer {
 
         src.push("worldPosition.xyz = worldPosition.xyz + offset.xyz;");
 
+        src.push("relativeToOriginPosition = worldPosition.xyz;")
+
         src.push("      vec4 viewPosition  = viewMatrix * worldPosition; ");
 
         if (clipping) {
@@ -384,6 +429,9 @@ class TrianglesDataTextureVertexDepthRenderer {
         src.push("uniform float pickZNear;");
         src.push("uniform float pickZFar;");
 
+        src.push("uniform int _layerNumber;"); // chipmunk
+        src.push("uniform vec3 _coordinateScaler;"); // chipmunk
+
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
             src.push("flat in uint vFlags2;");
@@ -394,6 +442,7 @@ class TrianglesDataTextureVertexDepthRenderer {
             }
         }
         src.push("in vec4 vViewPosition;");
+        src.push("in highp vec3 relativeToOriginPosition;");
         src.push("vec4 packDepth(const in float depth) {");
         src.push("  const vec4 bitShift = vec4(256.0*256.0*256.0, 256.0*256.0, 256.0, 1.0);");
         src.push("  const vec4 bitMask  = vec4(0.0, 1.0/256.0, 1.0/256.0, 1.0/256.0);");
@@ -402,7 +451,7 @@ class TrianglesDataTextureVertexDepthRenderer {
         src.push("  return res;");
         src.push("}");
         
-        src.push("out highp uvec4 outCoords;");        
+        src.push("out highp ivec4 outCoords;");        
         src.push("void main(void) {");
         if (clipping) {
             src.push("  bool clippable = vFlags2 > 0u;");
@@ -416,13 +465,14 @@ class TrianglesDataTextureVertexDepthRenderer {
             src.push("      if (dist > 0.0) { discard; }");
             src.push("  }");
         }
+
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
-        src.push("    float zNormalizedDepth = abs((pickZNear + vViewPosition.z) / (pickZFar - pickZNear));"); // Get linear depth
-        src.push("    outCoords = uvec4((vViewPosition.xyz + 1.0)*1000000000.0, 0.0); ");
-        // src.push("    outCoords = uvec4(1, 2, 3, 4); ");
+
+        src.push("outCoords = ivec4(relativeToOriginPosition.xyz*_coordinateScaler.xyz, _layerNumber);")
         src.push("}");
+
         return src;
     }
 

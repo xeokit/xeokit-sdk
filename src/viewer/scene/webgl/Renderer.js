@@ -1317,7 +1317,7 @@ const Renderer = function (scene, options) {
         frameCtx._snapMode = snapMode;
 
         // Bind and clear the 1x1 pixels render target
-        vertexPickBuffer.bind (gl.RGBA32UI);
+        vertexPickBuffer.bind (gl.RGBA32I);
 
         gl.viewport(0, 0, vertexPickBuffer.size[0], vertexPickBuffer.size[1]);
 
@@ -1328,9 +1328,11 @@ const Renderer = function (scene, options) {
         gl.disable(gl.BLEND);
         
         gl.clear(gl.DEPTH_BUFFER_BIT);
-        gl.clearBufferuiv(gl.COLOR, 0, new Uint32Array([0, 0, 0, 0 ]));
+        gl.clearBufferiv(gl.COLOR, 0, new Int32Array([0, 0, 0, -1 ]));
 
         // Invoke the "vertex depth" renderer
+        const layerParams = {};
+
         for (let type in drawableTypeInfo) {
             if (drawableTypeInfo.hasOwnProperty(type)) {
 
@@ -1349,52 +1351,42 @@ const Renderer = function (scene, options) {
                         continue;
                     }
 
+                    frameCtx._origin = [ 0, 0, 0];
+                    frameCtx._coordinateScale = [ 1, 1, 1];
+                    frameCtx._layerNumber = i;
+            
                     drawable.drawVertexDepths(frameCtx);
+
+                    layerParams[i] = {
+                        origin: frameCtx._origin.slice (),
+                        coordinateScale: frameCtx._coordinateScale.slice (),
+                    };
                 }
             }
         }
 
-        // Decode the snapped coordinates
-        const deltaCoords = vertexPickBuffer.read(0, 0, gl.RGBA_INTEGER, gl.UNSIGNED_INT, Uint32Array, 4);
+        // Read and decode the snapped coordinates
+        const snapPickResult = vertexPickBuffer.read(0, 0, gl.RGBA_INTEGER, gl.INT, Int32Array, 4);
 
         vertexPickBuffer.unbind ();
 
-        const snappedCanvasPos = [
-            ((deltaCoords[0] / 1000000000) - 1) * snapRadiusInPixels,
-            ((deltaCoords[1] / 1000000000) - 1) * snapRadiusInPixels,
-            (deltaCoords[2] / 1000000000) - 1
-        ];
-
-        // If the render didn't snap, return null
-        if (Math.abs(snappedCanvasPos[0]) >= snapRadiusInPixels && Math.abs(snappedCanvasPos[1]) >= snapRadiusInPixels)
+        if (snapPickResult[3] == -1)
         {
             return null;
         }
 
-        snappedCanvasPos[0] = canvasPos[0] + snappedCanvasPos[0];
-        snappedCanvasPos[1] = canvasPos[1] - snappedCanvasPos[1];
+        const pickedLayerParmas = layerParams[snapPickResult[3]];
 
-        // console.log ("snappedCanvasPos");
-        // console.log (snappedCanvasPos);
+        const origin = pickedLayerParmas.origin;
+        const scale = pickedLayerParmas.coordinateScale;
 
-        const worldPos = [ 0, 0, 0, 0 ];
-
-        scene.camera.project.unproject(
-            [
-                snappedCanvasPos[0],
-                snappedCanvasPos[1]
-            ],
-            snappedCanvasPos[2],
-            [0, 0, 0, 0], // screen-pos (not used)
-            [0, 0, 0, 0], // view-pos (not used)
-            worldPos
-        );
-
-        // console.log ("worldPos");
-        console.log (worldPos);
+        const worldPos = [
+            snapPickResult[0] * scale[0] + origin[0],
+            snapPickResult[1] * scale[1] + origin[1],
+            snapPickResult[2] * scale[2] + origin[2],
+        ];
 
         return {
-            canvasPos: snappedCanvasPos,
             worldPos
         };
     };
