@@ -5,6 +5,7 @@ import {TrianglesDataTextureEdgesColorRenderer} from "./renderers/TrianglesDataT
 import {TrianglesDataTexturePickMeshRenderer} from "./renderers/TrianglesDataTexturePickMeshRenderer.js";
 import {TrianglesDataTexturePickDepthRenderer} from "./renderers/TrianglesDataTexturePickDepthRenderer.js";
 import {TrianglesDataTextureVertexDepthRenderer} from "./renderers/TrianglesDataTextureVertexDepthRenderer.js";
+import {TrianglesDataTextureSnapPickZBufferInitializer} from "./renderers/TrianglesDataTextureSnapPickZBufferInitializer.js";
 import {TrianglesDataTexturePickNormalsRenderer} from "./renderers/TrianglesDataTexturePickNormalsRenderer.js";
 import {TrianglesDataTextureOcclusionRenderer} from "./renderers/TrianglesDataTextureOcclusionRenderer.js";
 import {TrianglesDataTextureDepthRenderer} from "./renderers/TrianglesDataTextureDepthRenderer.js";
@@ -78,6 +79,10 @@ class TrianglesDataTextureRenderers {
         if (this._vertexDepthRenderer && (!this._vertexDepthRenderer.getValid())) {
             this._vertexDepthRenderer.destroy();
             this._vertexDepthRenderer = null;
+        }
+        if (this._vertexDepthZBufferInitializer && (!this._vertexDepthZBufferInitializer.getValid())) {
+            this._vertexDepthZBufferInitializer.destroy();
+            this._vertexDepthZBufferInitializer = null;
         }
         if (this._pickNormalsRenderer && this._pickNormalsRenderer.getValid() === false) {
             this._pickNormalsRenderer.destroy();
@@ -195,6 +200,13 @@ class TrianglesDataTextureRenderers {
         return this._vertexDepthRenderer;
     }
 
+    get vertexDepthZBufferInitializer() {
+        if (!this._vertexDepthZBufferInitializer) {
+            this._vertexDepthZBufferInitializer = new TrianglesDataTextureSnapPickZBufferInitializer(this._scene);
+        }
+        return this._vertexDepthZBufferInitializer;
+    }
+
     get occlusionRenderer() {
         if (!this._occlusionRenderer) {
             this._occlusionRenderer = new TrianglesDataTextureOcclusionRenderer(this._scene);
@@ -251,6 +263,9 @@ class TrianglesDataTextureRenderers {
         }
         if (this._vertexDepthRenderer) {
             this._vertexDepthRenderer.destroy();
+        }
+        if (this._vertexDepthZBufferInitializer) {
+            this._vertexDepthZBufferInitializer.destroy();
         }
         if (this._pickNormalsRenderer) {
             this._pickNormalsRenderer.destroy();

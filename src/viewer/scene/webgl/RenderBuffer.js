@@ -178,11 +178,17 @@ class RenderBuffer {
          * @type {WebGL2RenderingContext}
          */
         const gl = this.gl;
-        // if (window._wow)
-        // {
-        //     debugger;
-        // }
         gl.readPixels(x, y, 1, 1, glFormat || gl.RGBA, glType || gl.UNSIGNED_BYTE, pix, 0);
+        return pix;
+    }
+
+    readArray(glFormat = null, glType = null, arrayType = Uint8Array, arrayMultiplier = 4) {
+        const pix = new arrayType(this.buffer.width*this.buffer.height * arrayMultiplier);
+        /**
+         * @type {WebGL2RenderingContext}
+         */
+        const gl = this.gl;
+        gl.readPixels(0, 0, this.buffer.width, this.buffer.height, glFormat || gl.RGBA, glType || gl.UNSIGNED_BYTE, pix, 0);
         return pix;
     }
 
