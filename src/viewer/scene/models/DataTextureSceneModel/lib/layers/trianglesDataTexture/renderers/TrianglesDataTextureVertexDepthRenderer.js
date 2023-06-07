@@ -401,6 +401,7 @@ class TrianglesDataTextureVertexDepthRenderer {
         src.push("gl_Position = clipPos;");
         src.push("  }");
         src.push("}");
+
         return src;
     }
 
@@ -436,24 +437,17 @@ class TrianglesDataTextureVertexDepthRenderer {
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
             src.push("flat in uint vFlags2;");
-            for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
+            for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
-        src.push("in vec4 vViewPosition;");
         src.push("in highp vec3 relativeToOriginPosition;");
-        src.push("vec4 packDepth(const in float depth) {");
-        src.push("  const vec4 bitShift = vec4(256.0*256.0*256.0, 256.0*256.0, 256.0, 1.0);");
-        src.push("  const vec4 bitMask  = vec4(0.0, 1.0/256.0, 1.0/256.0, 1.0/256.0);");
-        src.push("  vec4 res = fract(depth * bitShift);");
-        src.push("  res -= res.xxyz * bitMask;");
-        src.push("  return res;");
-        src.push("}");
         
         src.push("out highp ivec4 outCoords;");        
         src.push("void main(void) {");
+
         if (clipping) {
             src.push("  bool clippable = vFlags2 > 0u;");
             src.push("  if (clippable) {");

@@ -8,6 +8,24 @@ const tempVec4 = math.vec4();
 const tempVec3a = math.vec3();
 
 /**
+ * Returns:
+ * - x != 0 => 1/x, 
+ * - x == 1 => 1
+ * 
+ * @param {number} x 
+ */
+function safeInv (x) {
+    const retVal = 1 / x;
+
+    if (isNaN(retVal) || !isFinite(retVal))
+    {
+        return 1;
+    }
+
+    return retVal;
+}
+
+/**
  * @private
  */
 class TrianglesDataTextureSnapPickZBufferInitializer {
@@ -37,6 +55,26 @@ class TrianglesDataTextureSnapPickZBufferInitializer {
         const state = dataTextureLayer._state;
         const textureState = state.textureState;
         const origin = dataTextureLayer._state.origin;
+
+        frameCtx._origin[0] = origin[0];
+        frameCtx._origin[1] = origin[1];
+        frameCtx._origin[2] = origin[2];
+
+        // >>> Calculate the coordinate scaler
+        const aabb = dataTextureLayer.aabb;
+
+        const MAX_INT = 2000000000;
+
+        const coordinateDivider = [
+            safeInv(aabb[3] - aabb[0]) * MAX_INT,
+            safeInv(aabb[4] - aabb[1]) * MAX_INT,
+            safeInv(aabb[5] - aabb[2]) * MAX_INT,
+        ];
+
+        frameCtx._coordinateScale[0] = safeInv(coordinateDivider[0]);
+        frameCtx._coordinateScale[1] = safeInv(coordinateDivider[1]);
+        frameCtx._coordinateScale[2] = safeInv(coordinateDivider[2]);
+        // <<< Calculate the coordinate scaler
 
         if (!this._program) {
             this._allocate();
@@ -77,6 +115,9 @@ class TrianglesDataTextureSnapPickZBufferInitializer {
 
         gl.uniform2fv(this._u_vectorA, frameCtx._vectorA);
         gl.uniform2fv(this._u_invVectorAB, frameCtx._invVectorAB);
+        gl.uniform1i(this._u_layerNumber, frameCtx._layerNumber);
+        gl.uniform3fv(this._u_coordinateScaler, coordinateDivider);
+
         gl.uniform1i(this._uRenderPass, renderPass);
 
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
@@ -199,6 +240,8 @@ class TrianglesDataTextureSnapPickZBufferInitializer {
         this._uCameraEyeRtc = program.getLocation("uCameraEyeRtc"); // chipmunk
         this._u_vectorA = program.getLocation("_vectorA"); // chipmunk
         this._u_invVectorAB = program.getLocation("_invVectorAB"); // chipmunk
+        this._u_layerNumber = program.getLocation("_layerNumber"); // chipmunk
+        this._u_coordinateScaler = program.getLocation("_coordinateScaler"); // chipmunk
     }
 
     _bindProgram() {
@@ -275,6 +318,7 @@ class TrianglesDataTextureSnapPickZBufferInitializer {
             src.push("flat out uint vFlags2;");
         }
         src.push("out vec4 vViewPosition;");
+        src.push("out highp vec3 relativeToOriginPosition;");
         src.push("void main(void) {");
 
         // camera matrices
@@ -369,6 +413,8 @@ class TrianglesDataTextureSnapPickZBufferInitializer {
 
         src.push("worldPosition.xyz = worldPosition.xyz + offset.xyz;");
 
+        src.push("relativeToOriginPosition = worldPosition.xyz;")
+
         src.push("      vec4 viewPosition  = viewMatrix * worldPosition; ");
 
         if (clipping) {
@@ -418,6 +464,9 @@ class TrianglesDataTextureSnapPickZBufferInitializer {
         src.push("uniform float pickZNear;");
         src.push("uniform float pickZFar;");
 
+        src.push("uniform int _layerNumber;"); // chipmunk
+        src.push("uniform vec3 _coordinateScaler;"); // chipmunk
+
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
             src.push("flat in uint vFlags2;");
@@ -427,6 +476,7 @@ class TrianglesDataTextureSnapPickZBufferInitializer {
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
+        src.push("in highp vec3 relativeToOriginPosition;");
         
         src.push("out highp ivec4 outCoords;");        
         src.push("void main(void) {");
@@ -445,11 +495,10 @@ class TrianglesDataTextureSnapPickZBufferInitializer {
         }
 
         if (scene.logarithmicDepthBufferEnabled) {
-            // src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
-            src.push("    gl_FragDepth = log2( vFragDepth ) * logDepthBufFC * 0.5;");
+            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
 
-        src.push("outCoords = ivec4(0, 0, 0, -1);")
+        src.push("outCoords = ivec4(relativeToOriginPosition.xyz*_coordinateScaler.xyz, - _layerNumber);")
         src.push("}");
 
         return src;
