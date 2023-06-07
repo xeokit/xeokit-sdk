@@ -869,6 +869,45 @@ class Camera extends Component {
     }
 
     /**
+     * Get the 2D canvas position of a 3D world position.
+     * 
+     * @param {[number, number, number]} worldPos 
+     * @returns {[number, number]} the canvas position
+     */
+    projectWorldPos(_worldPos) {
+        const worldPos = [
+            _worldPos[0],
+            _worldPos[1],
+            _worldPos[2],
+            1,
+        ];
+
+        const viewPos = [ 0, 0, 0, 0 ];
+
+        math.mulMat4v4(this.viewMatrix, worldPos, viewPos);
+
+        const screenPos = [ 0, 0, 0, 0 ];
+
+        math.mulMat4v4(this.projMatrix, viewPos, screenPos);
+
+        math.mulVec3Scalar(screenPos, 1.0 / screenPos[3]);
+        screenPos[3] = 1.0;
+        screenPos[1] *= -1;
+
+        const canvas = this.scene.canvas.canvas;
+
+        const halfCanvasWidth = canvas.offsetWidth / 2.0;
+        const halfCanvasHeight = canvas.offsetHeight / 2.0;
+
+        const canvasPos = [
+            screenPos[0] * halfCanvasWidth + halfCanvasWidth,
+            screenPos[1] * halfCanvasHeight + halfCanvasHeight,
+        ]
+
+        return canvasPos;
+    }
+    
+    /**
      * Destroys this Camera.
      */
     destroy() {
