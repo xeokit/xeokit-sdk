@@ -1356,16 +1356,15 @@ const Renderer = function (scene, options) {
 
         return layerParams;
     }
+    
     /**
-     * 
      * @param {[number, number]} canvasPos 
      * @param {number} snapRadiusInPixels
      * @param {"vertex"|"edge"} snapMode 
      * 
-     * @returns {[number, number]|null}
+     * @returns {{worldPos:number[],snappedWorldPos:null|number[]}}
      */
-    window.snapPick = function (canvasPos, snapRadiusInPixels = 50, snapMode = "vertex") {
-        // console.log (snapRadiusInPixels);
+    this.snapPick = function (canvasPos, snapRadiusInPixels = 50, snapMode = "vertex") {
         // Update the frame context for the renderer
         const nearAndFar = [
             scene.camera.project.near,
@@ -1410,7 +1409,7 @@ const Renderer = function (scene, options) {
 
         frameCtx._snapMode = snapMode;
 
-        // Bind and clear the 1x1 pixels render target
+        // Bind and clear the snap render target
         vertexPickBuffer.bind (gl.RGBA32I);
 
         gl.viewport(0, 0, vertexPickBuffer.size[0], vertexPickBuffer.size[1]);
@@ -1424,13 +1423,15 @@ const Renderer = function (scene, options) {
         gl.clear(gl.DEPTH_BUFFER_BIT);
         gl.clearBufferiv(gl.COLOR, 0, new Int32Array([0, 0, 0, 0 ]));
 
-        // Invoke the "vertex depth" renderer
+        // >>> Invoke the renderers
 
         // a) init z-buffer
         const layerParamsSurface = snapPickInitZBuffer(frameCtx);
 
         // b) snap-pick
         const layerParamsSnap = snapPickDrawVertexDepths(frameCtx);
+
+        // <<< Invoke the renderers
 
         // Read and decode the snapped coordinates
         // const snapPickResult = vertexPickBuffer.read(0, 0, gl.RGBA_INTEGER, gl.INT, Int32Array, 4);
@@ -1440,6 +1441,7 @@ const Renderer = function (scene, options) {
 
         vertexPickBuffer.unbind ();
 
+        // result 1) regular hi-precision world position
         let worldPos = null;
 
         const middleX = snapRadiusInPixels;
@@ -1465,9 +1467,8 @@ const Renderer = function (scene, options) {
             ];
         }
 
+        // result 2) hi-precision snapped (to vertex/edge) world position
         let snapPickResult = [];
-
-        // console.log ({lenLen: snapPickResultArray.length / 4});
 
         for (let i = 0; i < snapPickResultArray.length; i+=4)
         {
@@ -1523,6 +1524,7 @@ const Renderer = function (scene, options) {
             ];
         }
 
+        // If neither regular pick or snap pick, return null
         if (null === worldPos && null == snappedWorldPos)
         {
             return null;
