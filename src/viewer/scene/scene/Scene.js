@@ -2163,6 +2163,21 @@ class Scene extends Component {
     }
 
     /**
+     * @param {Object} params Picking parameters.
+     * @param {Number[]} [params.canvasPos] Canvas-space coordinates. When ray-picking, this will override the **origin** and ** direction** parameters and will cause the ray to be fired through the canvas at this position, directly along the negative View-space Z-axis.
+     * @param {Number} [params.snapRadius=30] The snap radius, in canvas pixels
+     * @param {"vertex"|"edge"} [params.snapType="vertex"] Whether to snap to vertex or edge.
+     */
+    snapPick(params)
+    {
+        return this._renderer.snapPick(
+            params.canvasPos,
+            params.snapRadius || 30,
+            params.snapType || "vertex"
+        );
+    }
+
+    /**
      * Destroys all non-default {@link Component}s in this Scene.
      */
     clear() {
