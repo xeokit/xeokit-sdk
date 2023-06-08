@@ -29,6 +29,23 @@ class DistanceMeasurementsControl extends Component {
 
         this._active = false;
 
+        // Add a marker to the canvas
+        const markerDiv = document.createElement('div');
+        const canvas = this.scene.canvas.canvas;
+        canvas.parentNode.insertBefore(markerDiv, canvas);
+
+        markerDiv.style.background = "black";
+        markerDiv.style.border = "2px solid blue";
+        markerDiv.style.borderRadius = "10px";
+        markerDiv.style.width = "5px";
+        markerDiv.style.height = "5px";
+        markerDiv.style.margin = "-200px -200px";
+        markerDiv.style.zIndex = "100";
+        markerDiv.style.position = "absolute";
+        markerDiv.style.pointerEvents = "none";
+
+        this.markerDiv = markerDiv;
+
         // Mouse input uses a combo of events that requires us to track
         // the current DistanceMeasurement under construction. This is not used for touch input, which
         // just uses touch-move-release to make a measurement.
@@ -85,8 +102,11 @@ class DistanceMeasurementsControl extends Component {
 
     /**
      * Activates this DistanceMeasurementsControl, ready to respond to input.
+     * 
+     * @param {Object} cfg
+     * @param {Boolean} [cfg.snapToVertex=false]
      */
-    activate() {
+    activate(cfg) {
 
         if (this._active) {
             return;
@@ -119,11 +139,56 @@ class DistanceMeasurementsControl extends Component {
         const touchStartWorldPos = math.vec3();
 
         this._onMouseHoverSurface = cameraControl.on("hoverSurface", event => {
+
             // This gets fired for both mouse and touch input, but we don't care when handling touch
             mouseHoverEntity = event.entity;
-            mouseWorldPos.set(event.worldPos);
-            mouseCanvasPos.set(event.canvasPos);
+
+            let useSnapToVertex = false;
+
+            if (cfg.snapToVertex)
+            {
+                useSnapToVertex = null !== event.snappedWorldPos && null !== event.snappedCanvasPos;
+            }
+
+            if (useSnapToVertex)
+            {
+                mouseWorldPos.set(event.snappedWorldPos);
+                mouseCanvasPos.set(event.snappedCanvasPos);
+
+                if (touchState == FIRST_TOUCH_EXPECTED)
+                {
+                    this.markerDiv.style.marginLeft = `${event.snappedCanvasPos[0]-5}px`;
+                    this.markerDiv.style.marginTop = `${event.snappedCanvasPos[1]-5}px`;
+        
+                    this.markerDiv.style.background = "greenyellow";
+                    this.markerDiv.style.border = "2px solid green";
+                }
+            }
+            else
+            {
+                if (event.worldPos !== null && event.canvasPos !== null)
+                {
+                    mouseWorldPos.set(event.worldPos);
+                    mouseCanvasPos.set(event.canvasPos);
+
+                    if (touchState == FIRST_TOUCH_EXPECTED)
+                    {
+                        this.markerDiv.style.marginLeft = `${event.canvasPos[0]-5}px`;
+                        this.markerDiv.style.marginTop = `${event.canvasPos[1]-5}px`;
+            
+                        this.markerDiv.style.background = "pink";
+                        this.markerDiv.style.border = "2px solid red";
+                    }
+                }
+            }
+
+            if (touchState != FIRST_TOUCH_EXPECTED || !this.active) {
+                this.markerDiv.style.marginLeft = `-10000px`;
+                this.markerDiv.style.marginTop = `-10000px`;
+            }
+
             canvas.style.cursor = "pointer";
+
             if (this._currentDistanceMeasurementByMouse) {
                 this._currentDistanceMeasurementByMouse.wireVisible = this._currentDistanceMeasurementByMouseInittouchState.wireVisible;
                 this._currentDistanceMeasurementByMouse.axisVisible = this._currentDistanceMeasurementByMouseInittouchState.axisVisible && this.plugin.defaultAxisVisible;
@@ -209,6 +274,10 @@ class DistanceMeasurementsControl extends Component {
 
         this._onMouseHoverOff = cameraControl.on("hoverOff", event => {
             mouseHoverEntity = null;
+
+            this.markerDiv.style.marginLeft = `-100px`;
+            this.markerDiv.style.marginTop = `-100px`;
+
             if (this._currentDistanceMeasurementByMouse) {
                 this._currentDistanceMeasurementByMouse.wireVisible = false;
                 this._currentDistanceMeasurementByMouse.targetVisible = false;

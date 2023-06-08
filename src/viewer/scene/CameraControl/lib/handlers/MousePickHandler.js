@@ -70,25 +70,28 @@ class MousePickHandler {
 
                 if (pickController.pickResult) {
 
-                    const pickedEntityId = pickController.pickResult.entity.id;
+                    if (pickController.pickResult.entity)
+                    {
+                        const pickedEntityId = pickController.pickResult.entity.id;
 
-                    if (this._lastPickedEntityId !== pickedEntityId) {
+                        if (this._lastPickedEntityId !== pickedEntityId) {
 
-                        if (this._lastPickedEntityId !== undefined) {
+                            if (this._lastPickedEntityId !== undefined) {
 
-                            cameraControl.fire("hoverOut", { // Hovered off an entity
-                                entity: scene.objects[this._lastPickedEntityId]
-                            }, true);
+                                cameraControl.fire("hoverOut", { // Hovered off an entity
+                                    entity: scene.objects[this._lastPickedEntityId]
+                                }, true);
+                            }
+
+                            cameraControl.fire("hoverEnter", pickController.pickResult, true); // Hovering over a new entity
+
+                            this._lastPickedEntityId = pickedEntityId;
                         }
-
-                        cameraControl.fire("hoverEnter", pickController.pickResult, true); // Hovering over a new entity
-
-                        this._lastPickedEntityId = pickedEntityId;
                     }
 
                     cameraControl.fire("hover", pickController.pickResult, true);
 
-                    if (pickController.pickResult.worldPos) { // Hovering the surface of an entity
+                    if (pickController.pickResult.worldPos || pickController.pickResult.snappedWorldPos) { // Hovering the surface of an entity
                         cameraControl.fire("hoverSurface", pickController.pickResult, true);
                     }
 

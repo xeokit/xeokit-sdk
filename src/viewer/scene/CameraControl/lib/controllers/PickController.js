@@ -1,4 +1,9 @@
 import {math} from "../../../math/math.js";
+import { Scene } from "../../../scene/Scene.js";
+import { PickResult } from "../../../webgl/PickResult.js";
+
+const DEFAULT_SNAP_PICK_RADIUS = 45;
+const DEFAULT_SNAP_TYPE = "vertex";
 
 /**
  *
@@ -7,7 +12,9 @@ import {math} from "../../../math/math.js";
 class PickController {
 
     constructor(cameraControl, configs) {
-
+        /**
+         * @type {Scene}
+         */
         this._scene = cameraControl.scene;
 
         this._cameraControl = cameraControl;
@@ -93,8 +100,8 @@ class PickController {
         }
 
         if (this.schedulePickEntity) {
-            if (this.pickResult) {
-                const pickResultCanvasPos = this.pickResult.canvasPos;
+            if (this.pickResult && (this.pickResult.canvasPos || this.pickResult.snappedCanvasPos)) {
+                const pickResultCanvasPos = this.pickResult.canvasPos || this.pickResult.snappedCanvasPos;
                 if (pickResultCanvasPos[0] === this.pickCursorPos[0] && pickResultCanvasPos[1] === this.pickCursorPos[1]) {
                     this.picked = true;
                     this.pickedSurface = false;
@@ -113,6 +120,39 @@ class PickController {
                 pickSurfaceNormal: false,
                 canvasPos: this.pickCursorPos
             });
+
+            const snapPickResult = this._scene.snapPick({
+                canvasPos: this.pickCursorPos,
+                snapRadius: DEFAULT_SNAP_PICK_RADIUS,
+                snapType: DEFAULT_SNAP_TYPE,
+            });
+
+            if (null !== snapPickResult)
+            {
+                if (null == this.pickResult)
+                {
+                    this.pickResult = new PickResult();
+                }
+
+                if (snapPickResult && null !== snapPickResult.snappedWorldPos)
+                {
+                    this.pickResult.snappedWorldPos = snapPickResult.snappedWorldPos;
+                }
+                else
+                {
+                    this.pickResult.snappedWorldPos = null;
+                }
+
+                if (snapPickResult && null !== snapPickResult.snappedCanvasPos)
+                {
+                    this.pickResult.snappedCanvasPos = snapPickResult.snappedCanvasPos;
+                }
+                else
+                {
+                    this.pickResult.snappedCanvasPos = null;
+                }
+
+            }
 
             if (this.pickResult) {
                 this.picked = true;
@@ -143,25 +183,28 @@ class PickController {
             return;
         }
 
-        if (this.picked && this.pickResult && this.pickResult.entity) {
+        if (this.picked && this.pickResult && (this.pickResult.entity || this.pickResult.snappedWorldPos)) {
 
-            const pickedEntityId = this.pickResult.entity.id;
+            if (this.pickResult.entity)
+            {
+                const pickedEntityId = this.pickResult.entity.id;
 
-            if (this._lastPickedEntityId !== pickedEntityId) {
+                if (this._lastPickedEntityId !== pickedEntityId) {
 
-                if (this._lastPickedEntityId !== undefined) {
-                    this._cameraControl.fire("hoverOut", {
-                        entity: this._scene.objects[this._lastPickedEntityId]
-                    }, true);
+                    if (this._lastPickedEntityId !== undefined) {
+                        this._cameraControl.fire("hoverOut", {
+                            entity: this._scene.objects[this._lastPickedEntityId]
+                        }, true);
+                    }
+
+                    this._cameraControl.fire("hoverEnter", this.pickResult, true);
+                    this._lastPickedEntityId = pickedEntityId;
                 }
-
-                this._cameraControl.fire("hoverEnter", this.pickResult, true);
-                this._lastPickedEntityId = pickedEntityId;
             }
 
             this._cameraControl.fire("hover", this.pickResult, true);
 
-            if (this.pickResult.worldPos) {
+            if (this.pickResult.worldPos || this.pickResult.snappedWorldPos) {
                 this.pickedSurface = true;
                 this._cameraControl.fire("hoverSurface", this.pickResult, true);
             }

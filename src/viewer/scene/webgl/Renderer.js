@@ -1362,7 +1362,7 @@ const Renderer = function (scene, options) {
      * @param {number} snapRadiusInPixels
      * @param {"vertex"|"edge"} snapMode 
      * 
-     * @returns {{worldPos:number[],snappedWorldPos:null|number[]}}
+     * @returns {{worldPos:number[],snappedWorldPos:null|number[],snappedCanvasPos:null|number[]}}
      */
     this.snapPick = function (canvasPos, snapRadiusInPixels = 50, snapMode = "vertex") {
         // Update the frame context for the renderer
@@ -1419,6 +1419,7 @@ const Renderer = function (scene, options) {
         gl.disable(gl.CULL_FACE);
         gl.depthMask(true);
         gl.disable(gl.BLEND);
+        gl.depthFunc(gl.LESS);
         
         gl.clear(gl.DEPTH_BUFFER_BIT);
         gl.clearBufferiv(gl.COLOR, 0, new Int32Array([0, 0, 0, 0 ]));
@@ -1530,9 +1531,19 @@ const Renderer = function (scene, options) {
             return null;
         }
 
+        let snappedCanvasPos = null;
+
+        if (null !== snappedWorldPos)
+        {
+            snappedCanvasPos = scene.camera.projectWorldPos (
+                snappedWorldPos
+            );
+        }
+
         return {
             worldPos,
-            snappedWorldPos
+            snappedWorldPos,
+            snappedCanvasPos,
         };
     };
 
