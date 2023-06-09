@@ -1,5 +1,3 @@
-import {Canvas2Image} from "../libs/canvas2image.js";
-
 /**
  * @desc Represents a WebGL render buffer.
  * @private
@@ -197,42 +195,22 @@ class RenderBuffer {
     }
 
     readImage(params) {
-
         const gl = this.gl;
         const imageDataCache = this._getImageDataCache();
         const pixelData = imageDataCache.pixelData;
         const canvas = imageDataCache.canvas;
         const imageData = imageDataCache.imageData;
         const context = imageDataCache.context;
-
         gl.readPixels(0, 0, this.buffer.width, this.buffer.height, gl.RGBA, gl.UNSIGNED_BYTE, pixelData);
-
         imageData.data.set(pixelData);
         context.putImageData(imageData, 0, 0);
-
-        const imageWidth = params.width || canvas.width;
-        const imageHeight = params.height || canvas.height;
-        const format = params.format || "jpeg";
-        const flipy = true; // Account for WebGL texture flipping
-
-        let image;
-
-        switch (format) {
-            case "jpeg":
-                image = Canvas2Image.saveAsJPEG(canvas, true, imageWidth, imageHeight, flipy);
-                break;
-            case "png":
-                image = Canvas2Image.saveAsPNG(canvas, true, imageWidth, imageHeight, flipy);
-                break;
-            case "bmp":
-                image = Canvas2Image.saveAsBMP(canvas, true, imageWidth, imageHeight, flipy);
-                break;
-            default:
-                console.error("Unsupported image format: '" + format + "' - supported types are 'jpeg', 'bmp' and 'png' - defaulting to 'jpeg'");
-                image = Canvas2Image.saveAsJPEG(canvas, true, imageWidth, imageHeight, flipy);
+        let format = params.format || "png";
+        if (format !== "jpeg" && format !== "png" && format !== "bmp") {
+            console.error("Unsupported image format: '" + format + "' - supported types are 'jpeg', 'bmp' and 'png' - defaulting to 'png'");
+            format = "png";
         }
-
-        return image.src;
+        const flipy = true; // Account for WebGL texture flipping
+        return canvas.toDataURL(`image/${format}`);
     }
 
     _getImageDataCache() {

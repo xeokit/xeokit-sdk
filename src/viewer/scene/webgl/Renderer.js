@@ -1431,8 +1431,7 @@ const Renderer = function (scene, options) {
      */
     this.readSnapshot = function (params) {
         const snapshotBuffer = renderBufferManager.getRenderBuffer("snapshot");
-        const imageDataURI = snapshotBuffer.readImage(params);
-        return imageDataURI;
+        return snapshotBuffer.readImage(params);
     };
 
     /**
