@@ -14,6 +14,7 @@ const tempVec3e = math.vec3();
 const tempVec3f = math.vec3();
 const tempVec4a = math.vec4();
 const tempVec4b = math.vec4();
+const tempVec4c = math.vec4();
 const tempMat = math.mat4();
 const tempMatb = math.mat4();
 const eyeLookVec = math.vec3();
@@ -879,12 +880,12 @@ class Camera extends Component {
     projectWorldPos(worldPos) {
         const _worldPos = tempVec4a;
         const viewPos = tempVec4b;
-        const screenPos = tempVec4b;
+        const screenPos = tempVec4c;
         _worldPos[0] = worldPos[0];
         _worldPos[1] = worldPos[1];
         _worldPos[2] = worldPos[2];
         _worldPos[3] = 1;
-        math.mulMat4v4(this.viewMatrix, worldPos, viewPos);
+        math.mulMat4v4(this.viewMatrix, _worldPos, viewPos);
         math.mulMat4v4(this.projMatrix, viewPos, screenPos);
         math.mulVec3Scalar(screenPos, 1.0 / screenPos[3]);
         screenPos[3] = 1.0;

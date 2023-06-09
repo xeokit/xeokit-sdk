@@ -234,7 +234,9 @@ class DistanceMeasurementsPlugin extends Plugin {
 
         this._container = cfg.container || document.body;
 
-        this._control = new DistanceMeasurementsControl(this);
+        this._control = new DistanceMeasurementsControl(this, {
+            snapMode: cfg.snapMode
+        });
 
         this._measurements = {};
 

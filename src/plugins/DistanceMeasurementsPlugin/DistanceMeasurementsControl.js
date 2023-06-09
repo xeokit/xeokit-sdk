@@ -102,10 +102,10 @@ class DistanceMeasurementsControl extends Component {
      *
      * If set to "vertex", the DistanceMeasurementsPlugin will continuously snap the pointer to the nearest vertex as the user hovers over the model.
      *
-     * @param snapMode {Boolean}
+     * @param snapMode {String}
      */
     set snapMode(snapMode) {
-        if (!snapMode) {
+        if (snapMode === undefined || snapMode === null) {
             snapMode = "vertex";
         } else if (snapMode !== "vertex") {
             return;
@@ -179,7 +179,7 @@ class DistanceMeasurementsControl extends Component {
             let useSnapToVertex = false;
 
             if (this._snapToVertex) {
-                useSnapToVertex = null !== event.snappedWorldPos && null !== event.snappedCanvasPos;
+                useSnapToVertex = !!event.snappedWorldPos && !!event.snappedCanvasPos;
             }
 
             if (useSnapToVertex) {
