@@ -12,6 +12,8 @@ const tempVec3c = math.vec3();
 const tempVec3d = math.vec3();
 const tempVec3e = math.vec3();
 const tempVec3f = math.vec3();
+const tempVec4a = math.vec4();
+const tempVec4b = math.vec4();
 const tempMat = math.mat4();
 const tempMatb = math.mat4();
 const eyeLookVec = math.vec3();
@@ -866,6 +868,35 @@ class Camera extends Component {
      */
     get project() {
         return this._project;
+    }
+
+    /**
+     * Get the 2D canvas position of a 3D world position.
+     *
+     * @param {[number, number, number]} worldPos
+     * @returns {[number, number]} the canvas position
+     */
+    projectWorldPos(worldPos) {
+        const _worldPos = tempVec4a;
+        const viewPos = tempVec4b;
+        const screenPos = tempVec4b;
+        _worldPos[0] = worldPos[0];
+        _worldPos[1] = worldPos[1];
+        _worldPos[2] = worldPos[2];
+        _worldPos[3] = 1;
+        math.mulMat4v4(this.viewMatrix, worldPos, viewPos);
+        math.mulMat4v4(this.projMatrix, viewPos, screenPos);
+        math.mulVec3Scalar(screenPos, 1.0 / screenPos[3]);
+        screenPos[3] = 1.0;
+        screenPos[1] *= -1;
+        const canvas = this.scene.canvas.canvas;
+        const halfCanvasWidth = canvas.offsetWidth / 2.0;
+        const halfCanvasHeight = canvas.offsetHeight / 2.0;
+        const canvasPos = [
+            screenPos[0] * halfCanvasWidth + halfCanvasWidth,
+            screenPos[1] * halfCanvasHeight + halfCanvasHeight,
+        ]
+        return canvasPos;
     }
 
     /**

@@ -17,7 +17,7 @@ class DistanceMeasurementsControl extends Component {
     /**
      * @private
      */
-    constructor(plugin) {
+    constructor(plugin, cfg={}) {
 
         super(plugin.viewer.scene);
 
@@ -28,6 +28,25 @@ class DistanceMeasurementsControl extends Component {
         this.plugin = plugin;
 
         this._active = false;
+        this._snapMode = "off";
+        this._snapToVertex = false;
+
+        // Add a marker to the canvas
+        const markerDiv = document.createElement('div');
+        const canvas = this.scene.canvas.canvas;
+        canvas.parentNode.insertBefore(markerDiv, canvas);
+
+        markerDiv.style.background = "black";
+        markerDiv.style.border = "2px solid blue";
+        markerDiv.style.borderRadius = "10px";
+        markerDiv.style.width = "5px";
+        markerDiv.style.height = "5px";
+        markerDiv.style.margin = "-200px -200px";
+        markerDiv.style.zIndex = "100";
+        markerDiv.style.position = "absolute";
+        markerDiv.style.pointerEvents = "none";
+
+        this.markerDiv = markerDiv;
 
         // Mouse input uses a combo of events that requires us to track
         // the current DistanceMeasurement under construction. This is not used for touch input, which
@@ -44,8 +63,7 @@ class DistanceMeasurementsControl extends Component {
         }
 
         // Shows 2D canvas pos of touch start
-        this._touchStartDot = new Dot(plugin._container,
-            {
+        this._touchStartDot = new Dot(plugin._container, {
                 fillColor: plugin.defaultColor,
                 zIndex: plugin.zIndex + 1,
                 visible: false
@@ -73,6 +91,40 @@ class DistanceMeasurementsControl extends Component {
         // Event handles from Canvas element
         this._onCanvasTouchStart = null;
         this._onCanvasTouchEnd = null;
+
+        this.snapMode = cfg.snapMode;
+    }
+
+    /**
+     * Sets the pointer snapping behaviour.
+     *
+     * Accepted values are "off" and "vertex".
+     *
+     * If set to "vertex", the DistanceMeasurementsPlugin will continuously snap the pointer to the nearest vertex as the user hovers over the model.
+     *
+     * @param snapMode {Boolean}
+     */
+    set snapMode(snapMode) {
+        if (!snapMode) {
+            snapMode = "vertex";
+        } else if (snapMode !== "vertex") {
+            return;
+        }
+        this._snapMode = snapMode;
+        this._snapToVertex = (snapMode === "vertex");
+    }
+
+    /**
+     * Gets the pointer snapping behaviour.
+     *
+     * Accepted values are "off" and "vertex".
+     *
+     * If set to "vertex", the DistanceMeasurementsPlugin will continuously snap the pointer to the nearest vertex as the user hovers over the model.
+     *
+     * @returns {String}
+     */
+    get snapMode() {
+        return this._snapMode;
     }
 
     /** Gets if this DistanceMeasurementsControl is currently active, where it is responding to input.
@@ -85,6 +137,7 @@ class DistanceMeasurementsControl extends Component {
 
     /**
      * Activates this DistanceMeasurementsControl, ready to respond to input.
+     *
      */
     activate() {
 
@@ -119,11 +172,49 @@ class DistanceMeasurementsControl extends Component {
         const touchStartWorldPos = math.vec3();
 
         this._onMouseHoverSurface = cameraControl.on("hoverSurface", event => {
+
             // This gets fired for both mouse and touch input, but we don't care when handling touch
             mouseHoverEntity = event.entity;
-            mouseWorldPos.set(event.worldPos);
-            mouseCanvasPos.set(event.canvasPos);
+
+            let useSnapToVertex = false;
+
+            if (this._snapToVertex) {
+                useSnapToVertex = null !== event.snappedWorldPos && null !== event.snappedCanvasPos;
+            }
+
+            if (useSnapToVertex) {
+                mouseWorldPos.set(event.snappedWorldPos);
+                mouseCanvasPos.set(event.snappedCanvasPos);
+
+                if (touchState === FIRST_TOUCH_EXPECTED) {
+                    this.markerDiv.style.marginLeft = `${event.snappedCanvasPos[0]-5}px`;
+                    this.markerDiv.style.marginTop = `${event.snappedCanvasPos[1]-5}px`;
+        
+                    this.markerDiv.style.background = "greenyellow";
+                    this.markerDiv.style.border = "2px solid green";
+                }
+            } else {
+                if (event.worldPos !== null && event.canvasPos !== null) {
+                    mouseWorldPos.set(event.worldPos);
+                    mouseCanvasPos.set(event.canvasPos);
+
+                    if (touchState === FIRST_TOUCH_EXPECTED) {
+                        this.markerDiv.style.marginLeft = `${event.canvasPos[0]-5}px`;
+                        this.markerDiv.style.marginTop = `${event.canvasPos[1]-5}px`;
+            
+                        this.markerDiv.style.background = "pink";
+                        this.markerDiv.style.border = "2px solid red";
+                    }
+                }
+            }
+
+            if (touchState !== FIRST_TOUCH_EXPECTED || !this.active) {
+                this.markerDiv.style.marginLeft = `-10000px`;
+                this.markerDiv.style.marginTop = `-10000px`;
+            }
+
             canvas.style.cursor = "pointer";
+
             if (this._currentDistanceMeasurementByMouse) {
                 this._currentDistanceMeasurementByMouse.wireVisible = this._currentDistanceMeasurementByMouseInittouchState.wireVisible;
                 this._currentDistanceMeasurementByMouse.axisVisible = this._currentDistanceMeasurementByMouseInittouchState.axisVisible && this.plugin.defaultAxisVisible;
@@ -209,6 +300,10 @@ class DistanceMeasurementsControl extends Component {
 
         this._onMouseHoverOff = cameraControl.on("hoverOff", event => {
             mouseHoverEntity = null;
+
+            this.markerDiv.style.marginLeft = `-100px`;
+            this.markerDiv.style.marginTop = `-100px`;
+
             if (this._currentDistanceMeasurementByMouse) {
                 this._currentDistanceMeasurementByMouse.wireVisible = false;
                 this._currentDistanceMeasurementByMouse.targetVisible = false;

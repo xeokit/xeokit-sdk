@@ -1829,6 +1829,28 @@ class DataTextureSceneModel extends Component {
         }
     }
 
+    drawVertexDepths(frameCtx) {
+        if (this.numVisibleLayerPortions === 0) {
+            return;
+        }
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawVertexDepths(renderFlags, frameCtx);
+        }
+    }
+
+    drawVertexZBufferInitializer(frameCtx) {
+        if (this.numVisibleLayerPortions === 0) {
+            return;
+        }
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].drawVertexZBufferInitializer(renderFlags, frameCtx);
+        }
+    }
+
     /**
      * Called by DataTextureSceneModelMesh.drawPickNormals()
      * @private

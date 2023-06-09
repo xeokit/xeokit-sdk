@@ -2,6 +2,7 @@ import {math} from '../math/math.js';
 import {Component} from '../Component.js';
 import {VBOSceneModelNode} from "../models/VBOSceneModel/lib/VBOSceneModelNode.js";
 import {worldToRTCPos} from "../math/rtcCoords.js";
+import { DataTextureSceneModelNode } from '../models/DataTextureSceneModel/lib/DataTextureSceneModelNode.js';
 
 const tempVec4a = math.vec4();
 const tempVec4b = math.vec4();
@@ -208,7 +209,8 @@ class Marker extends Component {
         }
         this._entity = entity;
         if (this._entity) {
-            if (this._entity instanceof VBOSceneModelNode) {
+            if (this._entity instanceof VBOSceneModelNode ||
+                this._entity instanceof DataTextureSceneModelNode) {
                 this._onEntityModelDestroyed = this._entity.model.on("destroyed", () => { // VBOSceneModelNode does not fire events, and cannot exist beyond its VBOSceneModel
                     this._entity = null; // Marker now may become visible, if it was synched to invisible Entity
                     this._onEntityModelDestroyed = null;
