@@ -1039,10 +1039,6 @@ const Renderer = function (scene, options) {
                             pickResult.worldNormal = worldSurfaceNormal;
                         }
 
-                        // if (params.pickSurfaceNormal !== false) {
-                        //     gpuPickWorldNormal(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult);
-                        // }
-
                         pickResult.pickSurfacePrecision = true;
                     }
 
