@@ -3,6 +3,8 @@ import {CameraFlightAnimation} from "./scene/camera/CameraFlightAnimation.js";
 import {CameraControl} from "./scene/CameraControl/CameraControl.js";
 import {MetaScene} from "./metadata/MetaScene.js";
 import {LocaleService} from "./localization/LocaleService.js";
+import html2canvas from 'html2canvas/dist/html2canvas.esm.js';
+import {Canvas2Image} from "./scene/libs/canvas2image";
 
 /**
  * The 3D Viewer at the heart of the xeokit SDK.
@@ -324,14 +326,10 @@ class Viewer {
     getSnapshot(params = {}) {
 
         const needFinishSnapshot = (!this._snapshotBegun);
-
         const resize = (params.width !== undefined && params.height !== undefined);
         const canvas = this.scene.canvas.canvas;
         const saveWidth = canvas.clientWidth;
         const saveHeight = canvas.clientHeight;
-        const saveCssWidth = canvas.style.width;
-        const saveCssHeight = canvas.style.height;
-
         const width = params.width ? Math.floor(params.width) : canvas.width;
         const height = params.height ? Math.floor(params.height) : canvas.height;
 
@@ -346,6 +344,22 @@ class Viewer {
 
         if (!params.includeGizmos) {
             this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
+        }
+
+        const captured = {};
+        for (let i = 0, len = this._plugins.length; i < len; i++) {
+            const plugin = this._plugins[i];
+            if (plugin.getContainerElement) {
+                const container = plugin.getContainerElement();
+                if (container !== document.body) {
+                    if (!captured[container.id]) {
+                        captured[container.id] = true;
+                        html2canvas(container).then(function (canvas) {
+                            document.body.appendChild(canvas);
+                        });
+                    }
+                }
+            }
         }
 
         this.scene._renderer.renderSnapshot();
@@ -368,6 +382,149 @@ class Viewer {
         }
 
         return imageDataURI;
+    }
+
+    /**
+     * Gets a snapshot of this Viewer's {@link Scene} as a Base64-encoded image which includes
+     * the HTML elements created by various plugins.
+     *
+     * The snapshot image is composed of an image of the viewer canvas, overlaid with an image
+     * of the HTML container element belonging to each installed Viewer plugin. Each container
+     * element is only rendered once, so it's OK for plugins to share the same container.
+     *
+     * #### Usage:
+     *
+     * ````javascript
+     * viewer.getSnapshotWithPlugins({
+     *    width: 500,
+     *    height: 500,
+     *    format: "png"
+     * }).then((imageData)=>{
+     *
+     * });
+     * ````
+     * @param {*} [params] Capture options.
+     * @param {Number} [params.width] Desired width of result in pixels - defaults to width of canvas.
+     * @param {Number} [params.height] Desired height of result in pixels - defaults to height of canvas.
+     * @param {String} [params.format="jpeg"] Desired format; "jpeg", "png" or "bmp".
+     * @param {Boolean} [params.includeGizmos=false] When true, will include gizmos like {@link SectionPlane} in the snapshot.
+     * @returns {Promise} Promise which returns a string-encoded image data URI.
+     */
+    getSnapshotWithPlugins(params = {}) {
+
+        // We use gl.readPixels to get the WebGL canvas snapshot in a new
+        // HTMLCanvas element, scaled to the target snapshot size, then
+        // use html2canvas to render each plugin's container element into
+        // that HTMLCanvas. Finally, we save the HTMLCanvas to a bitmap.
+
+        // We don't rely on html2canvas to up-scale our WebGL canvas
+        // when we want a higher-resolution snapshot, which would cause
+        // blurring. Instead, we manage the scale and redraw of the WebGL
+        // canvas ourselves, in order to allow the Viewer to render the
+        // right amount of pixels, for a sharper image.
+
+        return new Promise((resolve, reject) => {
+
+            const needFinishSnapshot = (!this._snapshotBegun);
+            const resize = (params.width !== undefined && params.height !== undefined);
+            const canvas = this.scene.canvas.canvas;
+            const saveWidth = canvas.clientWidth;
+            const saveHeight = canvas.clientHeight;
+            const snapshotWidth = params.width ? Math.floor(params.width) : canvas.width;
+            const snapshotHeight = params.height ? Math.floor(params.height) : canvas.height;
+
+            if (resize) {
+                canvas.width = snapshotWidth;
+                canvas.height = snapshotHeight;
+            }
+
+            if (!this._snapshotBegun) {
+                this.beginSnapshot();
+            }
+
+            if (!params.includeGizmos) {
+                this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
+            }
+
+            this.scene._renderer.renderSnapshot();
+
+            const snapshotCanvas = this.scene._renderer.readSnapshotAsCanvas();
+
+            if (resize) {
+                canvas.width = saveWidth;
+                canvas.height = saveHeight;
+                this.scene.glRedraw();
+            }
+
+            const pluginToCapture = {};
+            const pluginContainerElements = [];
+
+            const finishSnapshot = () => {
+                if (!params.includeGizmos) {
+                    this.sendToPlugins("snapshotFinished");
+                }
+                if (needFinishSnapshot) {
+                    this.endSnapshot();
+                }
+                const imageWidth = snapshotCanvas.width;
+                const imageHeight = snapshotCanvas.height;
+                const format = params.format || "jpeg";
+                const flipy = false;
+                let image;
+                switch (format) {
+                    case "jpeg":
+                        image = Canvas2Image.saveAsJPEG(snapshotCanvas, true, imageWidth, imageHeight, flipy);
+                        break;
+                    case "png":
+                        image = Canvas2Image.saveAsPNG(snapshotCanvas, true, imageWidth, imageHeight, flipy);
+                        break;
+                    case "bmp":
+                        image = Canvas2Image.saveAsBMP(snapshotCanvas, true, imageWidth, imageHeight, flipy);
+                        break;
+                    default:
+                        this.error("[Viewer.getSnapshotWithPlugins] Unsupported image format: '" + format + "' - supported types are 'jpeg', 'bmp' and 'png' - defaulting to 'jpeg'");
+                        image = Canvas2Image.saveAsJPEG(snapshotCanvas, true, imageWidth, imageHeight, flipy);
+                }
+                if (!params.includeGizmos) {
+                    this.sendToPlugins("snapshotFinished");
+                }
+                if (needFinishSnapshot) {
+                    this.endSnapshot();
+                }
+                resolve(image.src);
+            }
+
+            for (let i = 0, len = this._plugins.length; i < len; i++) { // Find plugin container elements
+                const plugin = this._plugins[i];
+                if (plugin.getContainerElement) {
+                    const containerElement = plugin.getContainerElement();
+                    if (containerElement !== document.body) {
+                        if (!pluginToCapture[containerElement.id]) {
+                            pluginToCapture[containerElement.id] = true;
+                            pluginContainerElements.push(containerElement);
+                        }
+                    }
+                }
+            }
+
+            if (pluginContainerElements.length > 0) { // Render plugin container elements to the snapshot canvas
+                for (let i = 0, len = pluginContainerElements.length; i < len; i++) {
+                    const containerElement = pluginContainerElements[i];
+                    html2canvas(containerElement, {
+                        canvas: snapshotCanvas,
+                        backgroundColor: null,
+                        scale: snapshotCanvas.width / containerElement.clientWidth
+                    }).then(() => {
+                        pluginContainerElements.pop();
+                        if (pluginContainerElements.length === 0) {
+                            finishSnapshot();
+                        }
+                    });
+                }
+            } else {
+                finishSnapshot();
+            }
+        });
     }
 
     /**

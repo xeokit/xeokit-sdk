@@ -11,17 +11,17 @@
         #snapshot {
             position: absolute;
             left: 240px;
-            top: 20px;
+            top: 100px;
             height: 900px;
             width: 900px;
             background: lightblue;
         }
 
         #maincanvas {
-            width: 100px;
-            height: 100px;
+            width: 150px;
+            height: 150px;
             left:20px;
-            top: 20px;
+            top: 100px;
             position: absolute;
             background: lightblue;
             background-image: linear-gradient(lightblue, white);
@@ -100,8 +100,6 @@
 
     sceneModel.on("loaded", () => {
 
-        const screenshotImg = document.getElementById("snapshot");
-
         let numScreenshots = 0;
 
         setInterval(() => {
@@ -114,12 +112,12 @@
             viewer.camera.orbitPitch(2);
 
             const imageData = viewer.getSnapshot({
-                format: "jpeg",
+                format: "png",
                 width: 900,
                 height: 900
             });
 
-            screenshotImg.src = imageData;
+            document.getElementById("snapshot").src = imageData;
 
         }, 1000);
     });

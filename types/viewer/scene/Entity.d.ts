@@ -388,6 +388,13 @@ export declare abstract class Entity {
   get offset(): number[];
 
   /**
+   * Gets the World, View and Canvas-space positions of each vertex in a callback.
+   *
+   * @param callback
+   */
+  getEachVertex(callback: any): void;
+
+  /**
    * Destroys this Entity.
    */
   destroy(): void;

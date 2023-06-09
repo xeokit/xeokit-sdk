@@ -1003,9 +1003,11 @@ class TrianglesInstancingLayer {
             c[1] = quantizedPositions[ic + 1];
             c[2] = quantizedPositions[ic + 2];
 
-            math.decompressPosition(a, state.positionsDecodeMatrix);
-            math.decompressPosition(b, state.positionsDecodeMatrix);
-            math.decompressPosition(c, state.positionsDecodeMatrix);
+            const { positionsDecodeMatrix } = state.geometry;
+
+            math.decompressPosition(a, positionsDecodeMatrix);
+            math.decompressPosition(b, positionsDecodeMatrix);
+            math.decompressPosition(c, positionsDecodeMatrix);
 
             if (math.rayTriangleIntersect(rtcRayOrigin, rtcRayDir, a, b, c, closestIntersectPos)) {
 

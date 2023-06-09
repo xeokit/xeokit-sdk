@@ -1039,10 +1039,6 @@ const Renderer = function (scene, options) {
                             pickResult.worldNormal = worldSurfaceNormal;
                         }
 
-                        // if (params.pickSurfaceNormal !== false) {
-                        //     gpuPickWorldNormal(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult);
-                        // }
-
                         pickResult.pickSurfacePrecision = true;
                     }
 
@@ -1433,6 +1429,19 @@ const Renderer = function (scene, options) {
         const snapshotBuffer = renderBufferManager.getRenderBuffer("snapshot");
         const imageDataURI = snapshotBuffer.readImage(params);
         return imageDataURI;
+    };
+
+    /**
+     * Returns an HTMLCanvas containing an image of the snapshot canvas.
+     *
+     * - The HTMLCanvas has a CanvasRenderingContext2D.
+     * - Expects the caller to draw more things on the HTMLCanvas (annotations etc).
+     *
+     * @returns {HTMLCanvasElement}
+     */
+    this.readSnapshotAsCanvas = function () {
+        const snapshotBuffer = renderBufferManager.getRenderBuffer("snapshot");
+        return snapshotBuffer.readImageAsCanvas();
     };
 
     /**
