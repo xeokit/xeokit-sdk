@@ -8,6 +8,7 @@ import {OcclusionTester} from "./occlusion/OcclusionTester.js";
 import {SAOOcclusionRenderer} from "./sao/SAOOcclusionRenderer.js";
 import {createRTCViewMat} from "../math/rtcCoords.js";
 import {SAODepthLimitedBlurRenderer} from "./sao/SAODepthLimitedBlurRenderer.js";
+import {RenderBuffer} from "./RenderBuffer.js";
 import {RenderBufferManager} from "./RenderBufferManager.js";
 import {getExtension} from "./getExtension.js";
 import {DataTextureSceneModel} from "../models/DataTextureSceneModel/DataTextureSceneModel.js"
@@ -21,6 +22,9 @@ const Renderer = function (scene, options) {
 
     const frameCtx = new FrameContext(scene);
     const canvas = scene.canvas.canvas;
+    /**
+     * @type {WebGL2RenderingContext}
+     */
     const gl = scene.canvas.gl;
     const canvasTransparent = (!!options.transparent);
     const alphaDepthMask = options.alphaDepthMask;
@@ -1253,6 +1257,280 @@ const Renderer = function (scene, options) {
             pickResult.worldPos = worldPos;
         }
     })();
+
+    function willDrawSnapPickRenderer(drawable) {
+        if (drawable.culled === true || drawable.visible === false || !drawable.pickable) {
+            return false;
+        }
+
+        if (!(drawable instanceof DataTextureSceneModel)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function snapPickInitZBuffer(frameCtx) {
+        /**
+         * @type {Object.<number, {origin: number[], coordinateScale: number[]}>}
+         */
+        const layerParams = {};
+
+        for (let type in drawableTypeInfo) {
+            if (drawableTypeInfo.hasOwnProperty(type)) {
+
+                const drawableInfo = drawableTypeInfo[type];
+                const drawableList = drawableInfo.drawableList;
+
+                for (let i = 0, len = drawableList.length; i < len; i++) {
+
+                    const drawable = drawableList[i];
+
+                    const layerNumber = i + 1;
+
+                    if (!willDrawSnapPickRenderer(drawable)) {
+                        continue;
+                    }
+
+                    frameCtx._origin = [ 0, 0, 0];
+                    frameCtx._coordinateScale = [ 1, 1, 1];
+                    frameCtx._layerNumber = layerNumber;
+            
+                    drawable.drawVertexZBufferInitializer(frameCtx);
+
+                    layerParams[layerNumber] = {
+                        origin: frameCtx._origin.slice (),
+                        coordinateScale: frameCtx._coordinateScale.slice (),
+                    };
+                }
+            }
+        }
+
+        return layerParams;
+    }
+
+    function snapPickDrawVertexDepths(frameCtx) {
+        /**
+         * @type {Object.<number, {origin: number[], coordinateScale: number[]}>}
+         */
+        const layerParams = {};
+
+        for (let type in drawableTypeInfo) {
+            if (drawableTypeInfo.hasOwnProperty(type)) {
+
+                const drawableInfo = drawableTypeInfo[type];
+                const drawableList = drawableInfo.drawableList;
+
+                for (let i = 0, len = drawableList.length; i < len; i++) {
+
+                    const drawable = drawableList[i];
+
+                    const layerNumber = i + 1;
+
+                    if (!willDrawSnapPickRenderer(drawable)) {
+                        continue;
+                    }
+
+                    frameCtx._origin = [ 0, 0, 0];
+                    frameCtx._coordinateScale = [ 1, 1, 1];
+                    frameCtx._layerNumber = layerNumber;
+            
+                    drawable.drawVertexDepths(frameCtx);
+
+                    layerParams[layerNumber] = {
+                        origin: frameCtx._origin.slice (),
+                        coordinateScale: frameCtx._coordinateScale.slice (),
+                    };
+                }
+            }
+        }
+
+        return layerParams;
+    }
+    
+    /**
+     * @param {[number, number]} canvasPos 
+     * @param {number} snapRadiusInPixels
+     * @param {"vertex"|"edge"} snapMode 
+     * 
+     * @returns {{worldPos:number[],snappedWorldPos:null|number[],snappedCanvasPos:null|number[]}}
+     */
+    this.snapPick = function (canvasPos, snapRadiusInPixels = 50, snapMode = "vertex") {
+        // Update the frame context for the renderer
+        const nearAndFar = [
+            scene.camera.project.near,
+            scene.camera.project.far
+        ];
+
+        frameCtx.reset();
+        frameCtx.backfaces = true;
+        frameCtx.frontface = true; // "ccw"
+        frameCtx.pickZNear = nearAndFar[0];
+        frameCtx.pickZFar = nearAndFar[1];
+
+        /**
+         * @type {RenderBuffer}
+         */
+        let vertexPickBuffer = renderBufferManager.getRenderBuffer("uniquePickColors-aabs", {
+            depthTexture: true,
+            size: [
+                2 * snapRadiusInPixels + 1,
+                2 * snapRadiusInPixels + 1,
+            ]
+        });
+
+        // Initialize constants for the renderer in the frame context
+        function getClipPosX(pos, size) {
+            return 2 * (pos/size) - 1;
+        }
+
+        function getClipPosY(pos, size) {
+            return 1 - 2 * (pos/size);
+        }
+
+        frameCtx._vectorA = [
+            getClipPosX(canvasPos[0], gl.drawingBufferWidth),
+            getClipPosY(canvasPos[1], gl.drawingBufferHeight),
+        ];
+
+        frameCtx._invVectorAB = [
+            gl.drawingBufferWidth / (2 * snapRadiusInPixels),
+            gl.drawingBufferHeight / (2 * snapRadiusInPixels),
+        ];
+
+        frameCtx._snapMode = snapMode;
+
+        // Bind and clear the snap render target
+        vertexPickBuffer.bind (gl.RGBA32I);
+
+        gl.viewport(0, 0, vertexPickBuffer.size[0], vertexPickBuffer.size[1]);
+
+        gl.enable(gl.DEPTH_TEST);
+        gl.frontFace(gl.CCW);
+        gl.disable(gl.CULL_FACE);
+        gl.depthMask(true);
+        gl.disable(gl.BLEND);
+        gl.depthFunc(gl.LESS);
+        
+        gl.clear(gl.DEPTH_BUFFER_BIT);
+        gl.clearBufferiv(gl.COLOR, 0, new Int32Array([0, 0, 0, 0 ]));
+
+        // >>> Invoke the renderers
+
+        // a) init z-buffer
+        const layerParamsSurface = snapPickInitZBuffer(frameCtx);
+
+        // b) snap-pick
+        const layerParamsSnap = snapPickDrawVertexDepths(frameCtx);
+
+        // <<< Invoke the renderers
+
+        // Read and decode the snapped coordinates
+        // const snapPickResult = vertexPickBuffer.read(0, 0, gl.RGBA_INTEGER, gl.INT, Int32Array, 4);
+        const snapPickResultArray = vertexPickBuffer.readArray(gl.RGBA_INTEGER, gl.INT, Int32Array, 4);
+
+        // console.log (JSON.stringify(Array.from(snapPickResultArray)));
+
+        vertexPickBuffer.unbind ();
+
+        // result 1) regular hi-precision world position
+        let worldPos = null;
+
+        const middleX = snapRadiusInPixels;
+        const middleY = snapRadiusInPixels;
+
+        const middleIndex = (middleX * 4) + (middleY * vertexPickBuffer.size[0] * 4);
+
+        const pickResultMiddleXY = snapPickResultArray.slice (middleIndex, middleIndex + 4);
+
+        if (pickResultMiddleXY[3] !== 0) {
+            const pickedLayerParmasSurface = layerParamsSurface[Math.abs(pickResultMiddleXY[3])];
+
+            const origin = pickedLayerParmasSurface.origin;
+            const scale = pickedLayerParmasSurface.coordinateScale;
+
+            // console.log ({origin, scale});
+    
+            worldPos = [
+                pickResultMiddleXY[0] * scale[0] + origin[0],
+                pickResultMiddleXY[1] * scale[1] + origin[1],
+                pickResultMiddleXY[2] * scale[2] + origin[2],
+            ];
+        }
+
+        // result 2) hi-precision snapped (to vertex/edge) world position
+        let snapPickResult = [];
+
+        for (let i = 0; i < snapPickResultArray.length; i+=4) {
+            if (snapPickResultArray[i+3] > 0) {
+                const pixelNumber = Math.floor(i / 4);
+
+                const w = vertexPickBuffer.size[0];
+                const h = vertexPickBuffer.size[1];
+
+                const x = pixelNumber % w - Math.floor(w / 2);
+                const y = Math.floor(pixelNumber / w) - Math.floor(w / 2);
+
+                // console.log ({x, y});
+
+                const dist = (Math.sqrt(
+                    Math.pow(x, 2) + Math.pow(y, 2)
+                ));
+
+                snapPickResult.push({
+                    x,
+                    y,
+                    dist,
+                    result: [
+                        snapPickResultArray[i+0],
+                        snapPickResultArray[i+1],
+                        snapPickResultArray[i+2],
+                        snapPickResultArray[i+3],
+                    ]
+                });
+            }
+        }
+
+        let snappedWorldPos = null;
+
+        if (snapPickResult.length > 0) {
+            snapPickResult.sort((a, b) => {
+                return a.dist - b.dist
+            });
+
+            snapPickResult = snapPickResult[0].result;
+
+            const pickedLayerParmas = layerParamsSnap[snapPickResult[3]];
+
+            const origin = pickedLayerParmas.origin;
+            const scale = pickedLayerParmas.coordinateScale;
+
+            snappedWorldPos = [
+                snapPickResult[0] * scale[0] + origin[0],
+                snapPickResult[1] * scale[1] + origin[1],
+                snapPickResult[2] * scale[2] + origin[2],
+            ];
+        }
+
+        // If neither regular pick or snap pick, return null
+        if (null === worldPos && null == snappedWorldPos) {
+            return null;
+        }
+
+        let snappedCanvasPos = null;
+
+        if (null !== snappedWorldPos) {
+            snappedCanvasPos = scene.camera.projectWorldPos (
+                snappedWorldPos
+            );
+        }
+
+        return {
+            worldPos,
+            snappedWorldPos,
+            snappedCanvasPos,
+        };
+    };
 
     function unpackDepth(depthZ) {
         const vec = [depthZ[0] / 256.0, depthZ[1] / 256.0, depthZ[2] / 256.0, depthZ[3] / 256.0];
