@@ -17,7 +17,7 @@ class LinesBatchingColorRenderer {
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         return this._scene._sectionPlanesState.getHash();
@@ -31,7 +31,6 @@ class LinesBatchingColorRenderer {
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
         const origin = batchingLayer._state.origin;
-        const geometry = batchingLayer.geometry;
 
         if (!this._program) {
             this._allocate();
@@ -139,7 +138,7 @@ class LinesBatchingColorRenderer {
         }
     }
 
-    _bindProgram(frameCtx) {
+    _bindProgram() {
 
         const scene = this._scene;
         const gl = scene.canvas.gl;

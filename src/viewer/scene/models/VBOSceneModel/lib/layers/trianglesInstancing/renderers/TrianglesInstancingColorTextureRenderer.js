@@ -20,7 +20,7 @@ class TrianglesInstancingColorTextureRenderer {
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         const scene = this._scene;
@@ -236,7 +236,7 @@ class TrianglesInstancingColorTextureRenderer {
         }
     }
 
-    _bindProgram(frameCtx) {
+    _bindProgram() {
 
         const scene = this._scene;
         const gl = scene.canvas.gl;

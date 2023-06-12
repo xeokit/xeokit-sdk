@@ -1,7 +1,6 @@
 import {Program} from "../../../../../../webgl/Program.js";
 import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
 import {math} from "../../../../../../math/math.js";
-import {WEBGL_INFO} from "../../../../../../webglInfo.js";
 
 const tempVec3a = math.vec3();
 
@@ -18,7 +17,7 @@ class PointsBatchingPickMeshRenderer {
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         return this._scene._sectionPlanesState.getHash() + (this._scene.pointsMaterial.hash);
@@ -282,7 +281,7 @@ class PointsBatchingPickMeshRenderer {
             src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
             src.push("  if (clippable) {");
             src.push("      float dist = 0.0;");
-            for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
+            for (let i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
                 src.push("      if (sectionPlaneActive" + i + ") {");
                 src.push("          dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
                 src.push("      }");

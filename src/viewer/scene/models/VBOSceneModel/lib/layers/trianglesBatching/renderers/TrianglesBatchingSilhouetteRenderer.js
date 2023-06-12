@@ -11,7 +11,7 @@ const tempVec3a = math.vec3();
  */
 class TrianglesBatchingSilhouetteRenderer {
 
-    constructor(scene, primitiveType) {
+    constructor(scene) {
         this._scene = scene;
         this._hash = this._getHash();
         this._allocate();
@@ -19,7 +19,7 @@ class TrianglesBatchingSilhouetteRenderer {
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         return this._scene._sectionPlanesState.getHash();

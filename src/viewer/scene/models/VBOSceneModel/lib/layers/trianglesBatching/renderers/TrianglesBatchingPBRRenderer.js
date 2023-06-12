@@ -2,7 +2,6 @@ import {Program} from "../../../../../../webgl/Program.js";
 import {math} from "../../../../../../math/math.js";
 import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
 import {WEBGL_INFO} from "../../../../../../webglInfo.js";
-import {LinearEncoding, sRGBEncoding} from "../../../../../../constants/constants.js";
 
 const tempVec4 = math.vec4();
 const tempVec3a = math.vec3();
@@ -25,7 +24,7 @@ class TrianglesBatchingPBRRenderer {
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         const scene = this._scene;
@@ -268,9 +267,8 @@ class TrianglesBatchingPBRRenderer {
         }
     }
 
-    _bindProgram(frameCtx) {
+    _bindProgram() {
 
-        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const program = this._program;
