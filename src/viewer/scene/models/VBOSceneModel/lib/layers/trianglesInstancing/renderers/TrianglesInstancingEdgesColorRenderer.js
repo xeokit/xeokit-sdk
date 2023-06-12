@@ -1,5 +1,4 @@
 import {Program} from "../../../../../../webgl/Program.js";
-import {RENDER_PASSES} from "../../../RENDER_PASSES.js";
 import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
 import {math} from "../../../../../../math/math.js";
 
@@ -18,7 +17,7 @@ class TrianglesInstancingEdgesColorRenderer {
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         return this._scene._sectionPlanesState.getHash();

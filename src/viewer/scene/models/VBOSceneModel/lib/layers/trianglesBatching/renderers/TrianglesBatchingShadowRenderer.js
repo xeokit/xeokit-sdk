@@ -19,7 +19,7 @@ class TrianglesBatchingShadowRenderer {
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         return this._scene._sectionPlanesState.getHash();
@@ -58,7 +58,7 @@ class TrianglesBatchingShadowRenderer {
         if (numSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
             const baseIndex = batchingLayer.layerIndex * numSectionPlanes;
-            const renderFlags = model.renderFlags;
+            const renderFlags = batchingLayer.model.renderFlags;
             const origin = batchingLayer._state.origin;
             for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
                 const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];

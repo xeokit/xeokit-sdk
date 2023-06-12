@@ -19,7 +19,7 @@ class PointsInstancingPickMeshRenderer {
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         return this._scene._sectionPlanesState.getHash() + this._scene.pointsMaterial.hash;

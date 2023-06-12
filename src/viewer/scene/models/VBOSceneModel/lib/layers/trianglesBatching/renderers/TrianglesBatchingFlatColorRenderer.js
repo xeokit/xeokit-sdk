@@ -19,7 +19,7 @@ class TrianglesBatchingFlatColorRenderer {
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         const scene = this._scene;

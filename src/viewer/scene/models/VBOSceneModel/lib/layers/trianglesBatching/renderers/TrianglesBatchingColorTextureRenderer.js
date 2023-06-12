@@ -20,7 +20,7 @@ class TrianglesBatchingColorTextureRenderer {
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         const scene = this._scene;
@@ -219,9 +219,8 @@ class TrianglesBatchingColorTextureRenderer {
         }
     }
 
-    _bindProgram(frameCtx) {
+    _bindProgram() {
 
-        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const program = this._program;
