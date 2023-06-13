@@ -2716,6 +2716,12 @@ ${cfg.uv && cfg.uv.length > 0 ? 1 : 0}-${cfg.uvCompressed && cfg.uvCompressed.le
         mesh._portionId = portionId;
         mesh.aabb = aabb;
 
+        if (layer.getElementsCountAndOffset) {
+            const { count, offset } = layer.getElementsCountAndOffset(portionId);
+            mesh.pickElementsCount = count;
+            mesh.pickElementsOffset = offset
+        }
+
         this._meshes[id] = mesh;
     }
 

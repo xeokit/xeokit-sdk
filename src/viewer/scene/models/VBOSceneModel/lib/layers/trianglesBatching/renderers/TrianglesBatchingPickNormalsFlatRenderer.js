@@ -79,10 +79,6 @@ class TrianglesBatchingPickNormalsFlatRenderer {
             }
         }
 
-        //=============================================================
-        // TODO: Use drawElements count and offset to draw only one entity
-        //=============================================================
-
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
@@ -97,7 +93,10 @@ class TrianglesBatchingPickNormalsFlatRenderer {
 
         state.indicesBuf.bind();
 
-        gl.drawElements(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
+        const count = frameCtx.pickElementsCount || state.indicesBuf.numItems;
+        const offset = frameCtx.pickElementsOffset ? frameCtx.pickElementsOffset * state.indicesBuf.itemByteSize : 0;
+
+        gl.drawElements(gl.TRIANGLES, count, state.indicesBuf.itemType, offset);
     }
 
     _allocate() {
