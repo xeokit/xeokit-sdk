@@ -370,11 +370,11 @@ class TrianglesBatchingLayer {
             }
         }
 
-        if (indices) {
-            for (let i = 0, len = indices.length; i < len; i++) {
-                buffer.indices.push(vertsBaseIndex + indices[i]);
-            }
+
+        for (let i = 0, len = indices.length; i < len; i++) {
+            buffer.indices.push(vertsBaseIndex + indices[i]);
         }
+
 
         if (edgeIndices) {
             for (let i = 0, len = edgeIndices.length; i < len; i++) {
@@ -405,14 +405,16 @@ class TrianglesBatchingLayer {
 
         const portion = {
             vertsBaseIndex: vertsBaseIndex,
-            numVerts: numVerts
+            numVerts: numVerts,
+            indicesBaseIndex: buffer.indices.length - indices.length,
+            numIndices: indices.length,
         };
 
         if (scene.pickSurfacePrecisionEnabled) {
             // Quantized in-memory positions are initialized in finalize()
-            if (indices) {
-                portion.indices = indices;
-            }
+
+            portion.indices = indices;
+
             if (scene.entityOffsetsEnabled) {
                 portion.offset = new Float32Array(3);
             }
@@ -917,6 +919,19 @@ class TrianglesBatchingLayer {
             worldPos[2] += offsetZ;
             callback(worldPos);
         }
+    }
+
+    getElementsCountAndOffset(portionId) {
+        let count = null;
+        let offset = null;
+        const portion = this._portions[portionId];
+
+        if (portion) {
+            count = portion.numIndices;
+            offset = portion.indicesBaseIndex;
+        }
+
+        return { count, offset }
     }
 
     // ---------------------- COLOR RENDERING -----------------------------------
