@@ -751,7 +751,8 @@ class XKTLoaderPlugin extends Plugin {
                 isModel: true,
                 textureTranscoder: this._textureTranscoder,
                 maxGeometryBatchSize: this._maxGeometryBatchSize,
-                origin: params.origin
+                origin: params.origin,
+                targetLodFps: params.targetLodFps || false,
             }));
         }
 

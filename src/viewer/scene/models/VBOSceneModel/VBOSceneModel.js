@@ -20,6 +20,8 @@ import {SceneModel} from "../SceneModel.js";
 import {Texture2D} from "../../webgl/Texture2D.js";
 import {utils} from "../../utils.js";
 import {getKTX2TextureTranscoder} from "../../utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js";
+import {LodCullingManager} from "./lib/layers/LodCullingManager.js";
+
 import {
     ClampToEdgeWrapping,
     LinearEncoding,
@@ -1207,6 +1209,12 @@ class VBOSceneModel extends Component {
         this._numPoints = 0;
 
         this._edgeThreshold = cfg.edgeThreshold || 10;
+
+        /** @private */
+        this._targetLodFps = cfg.targetLodFps;
+
+        /** @private */
+        this._lodLevels = cfg.lodLevels || [ 2000, 1000, 500, 250];
 
         // Build static matrix
 
@@ -2953,6 +2961,14 @@ ${cfg.uv && cfg.uv.length > 0 ? 1 : 0}-${cfg.uvCompressed && cfg.uvCompressed.le
         this.glRedraw();
 
         this.scene._aabbDirty = true;
+
+        if (this._targetLodFps) {
+            this.lodCullingManager = new LodCullingManager (
+                this,
+                this._lodLevels,
+                this._targetLodFps
+            );
+        }
     }
 
     _rebuildAABB() {
