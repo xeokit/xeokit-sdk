@@ -894,7 +894,7 @@ class TrianglesDataTextureLayer {
     }
         
     isEmpty() {
-        return this._numPortions == 0;
+        return this._numPortions === 0;
     }
 
     initFlags(portionId, flags, meshTransparent) {
@@ -1650,6 +1650,26 @@ class TrianglesDataTextureLayer {
         this._updateBackfaceCull(renderFlags, frameCtx);
         if (this._dataTextureRenderers.pickDepthRenderer) {
             this._dataTextureRenderers.pickDepthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        }
+    }
+
+    drawVertexDepths(renderFlags, frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        this._updateBackfaceCull(renderFlags, frameCtx);
+        if (this._dataTextureRenderers.vertexDepthRenderer) {
+            this._dataTextureRenderers.vertexDepthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        }
+    }
+
+    drawVertexZBufferInitializer(renderFlags, frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        this._updateBackfaceCull(renderFlags, frameCtx);
+        if (this._dataTextureRenderers.vertexDepthZBufferInitializer) {
+            this._dataTextureRenderers.vertexDepthZBufferInitializer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }
     }
 

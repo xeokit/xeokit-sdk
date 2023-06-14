@@ -1,13 +1,34 @@
 import {Program} from "../../../../../../webgl/Program.js";
-import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
 import {math} from "../../../../../../math/math.js";
+import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
+import {WEBGL_INFO} from "../../../../../../webglInfo.js";
+import { Camera } from "../../../../../../camera/Camera.js";
 
+const tempVec4 = math.vec4();
 const tempVec3a = math.vec3();
+
+/**
+ * Returns:
+ * - x != 0 => 1/x, 
+ * - x == 1 => 1
+ * 
+ * @param {number} x 
+ */
+function safeInv (x) {
+    const retVal = 1 / x;
+
+    if (isNaN(retVal) || !isFinite(retVal))
+    {
+        return 1;
+    }
+
+    return retVal;
+}
 
 /**
  * @private
  */
-class TrianglesDataTexturePickMeshRenderer {
+class TrianglesDataTextureSnapPickZBufferInitializer {
 
     constructor(scene) {
         this._scene = scene;
@@ -27,20 +48,43 @@ class TrianglesDataTexturePickMeshRenderer {
         const model = dataTextureLayer.model;
         const scene = model.scene;
         const camera = scene.camera;
+        /**
+         * @type {WebGL2RenderingContext}
+         */
         const gl = scene.canvas.gl;
         const state = dataTextureLayer._state;
         const textureState = state.textureState;
         const origin = dataTextureLayer._state.origin;
 
+        frameCtx._origin[0] = origin[0];
+        frameCtx._origin[1] = origin[1];
+        frameCtx._origin[2] = origin[2];
+
+        // >>> Calculate the coordinate scaler
+        const aabb = dataTextureLayer.aabb;
+
+        const MAX_INT = 2000000000;
+
+        const coordinateDivider = [
+            safeInv(aabb[3] - aabb[0]) * MAX_INT,
+            safeInv(aabb[4] - aabb[1]) * MAX_INT,
+            safeInv(aabb[5] - aabb[2]) * MAX_INT,
+        ];
+
+        frameCtx._coordinateScale[0] = safeInv(coordinateDivider[0]);
+        frameCtx._coordinateScale[1] = safeInv(coordinateDivider[1]);
+        frameCtx._coordinateScale[2] = safeInv(coordinateDivider[2]);
+        // <<< Calculate the coordinate scaler
+
         if (!this._program) {
-            this._allocate(dataTextureLayer);
+            this._allocate();
         }
 
         if (frameCtx.lastProgramId !== this._program.id) {
             frameCtx.lastProgramId = this._program.id;
-            this._bindProgram(frameCtx);
+            this._bindProgram();
         }
-        
+
         textureState.bindCommonTextures (
             this._program,
             this._uTexturePerObjectIdPositionsDecodeMatrix, 
@@ -69,10 +113,20 @@ class TrianglesDataTexturePickMeshRenderer {
 
         gl.uniform3fv(this._uCameraEyeRtc, originCameraEye);
 
+        gl.uniform2fv(this._u_vectorA, frameCtx._vectorA);
+        gl.uniform2fv(this._u_invVectorAB, frameCtx._invVectorAB);
+        gl.uniform1i(this._u_layerNumber, frameCtx._layerNumber);
+        gl.uniform3fv(this._u_coordinateScaler, coordinateDivider);
+
         gl.uniform1i(this._uRenderPass, renderPass);
 
+        gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
+
+        gl.uniform1f(this._uPickZNear, frameCtx.pickZNear);
+        gl.uniform1f(this._uPickZFar, frameCtx.pickZFar);
+
         if (scene.logarithmicDepthBufferEnabled) {
-            const logDepthBufFC = 2.0 / (Math.log(camera.project.far + 1.0) / Math.LN2); // TODO: Far from pick project matrix?
+            const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2); // TODO: Far from pick project matrix?
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
 
@@ -165,11 +219,10 @@ class TrianglesDataTexturePickMeshRenderer {
                 dir: program.getLocation("sectionPlaneDir" + i)
             });
         }
-        
-        if (this._withSAO) {
-            this._uOcclusionTexture = "uOcclusionTexture";
-            this._uSAOParams = program.getLocation("uSAOParams");
-        }
+
+        this._aPackedVertexId = program.getAttribute("packedVertexId");
+        this._uPickZNear = program.getLocation("pickZNear");
+        this._uPickZFar = program.getLocation("pickZFar");
 
         if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
@@ -185,16 +238,14 @@ class TrianglesDataTexturePickMeshRenderer {
         this._uTextureModelMatrices = "uTextureModelMatrices"; // chipmunk
         this._uTexturePerObjectIdOffsets = "uTexturePerObjectIdOffsets"; // chipmunk
         this._uCameraEyeRtc = program.getLocation("uCameraEyeRtc"); // chipmunk
+        this._u_vectorA = program.getLocation("_vectorA"); // chipmunk
+        this._u_invVectorAB = program.getLocation("_invVectorAB"); // chipmunk
+        this._u_layerNumber = program.getLocation("_layerNumber"); // chipmunk
+        this._u_coordinateScaler = program.getLocation("_coordinateScaler"); // chipmunk
     }
 
-    _bindProgram(frameCtx) {
-
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-
+    _bindProgram() {
         this._program.bind();
-
-        gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
     }
 
     _buildShader() {
@@ -206,10 +257,11 @@ class TrianglesDataTexturePickMeshRenderer {
 
     _buildVertexShader() {
         const scene = this._scene;
-        const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
+        const sectionPlanesState = scene._sectionPlanesState;
+        const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
         src.push("#version 300 es");
-        src.push("// Batched geometry picking vertex shader");
+        src.push("// Triangles dataTexture draw vertex shader");
 
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
@@ -231,9 +283,6 @@ class TrianglesDataTexturePickMeshRenderer {
             src.push("in vec3 offset;");
         }
 
-        src.push("uniform bool pickInvisible;");
-        // src.push("uniform sampler2D uOcclusionTexture;"); // chipmunk
-
         src.push("uniform highp sampler2D uTexturePerObjectIdPositionsDecodeMatrix;"); // chipmunk
         src.push("uniform lowp usampler2D uTexturePerObjectIdColorsAndFlags;"); // chipmunk
         src.push("uniform highp sampler2D uTexturePerObjectIdOffsets;"); // chipmunk
@@ -243,6 +292,8 @@ class TrianglesDataTexturePickMeshRenderer {
         src.push("uniform highp sampler2D uTextureCameraMatrices;"); // chipmunk
         src.push("uniform highp sampler2D uTextureModelMatrices;"); // chipmunk
         src.push("uniform vec3 uCameraEyeRtc;"); // chipmunk
+        src.push("uniform vec2 _vectorA;"); // chipmunk
+        src.push("uniform vec2 _invVectorAB;"); // chipmunk
 
         src.push("vec3 positions[3];")
 
@@ -256,13 +307,18 @@ class TrianglesDataTexturePickMeshRenderer {
         src.push("    return (m[2][3] == - 1.0);");
         src.push("}");
 
+        src.push("vec2 remapClipPos(vec2 clipPos) {");
+        src.push("    float x = (clipPos.x - _vectorA.x) * _invVectorAB.x;");
+        src.push("    float y = (clipPos.y - _vectorA.y) * _invVectorAB.y;");
+        src.push("    return vec2(x, y);")
+        src.push("}");
+
         if (clipping) {
-            src.push("smooth out vec4 vWorldPosition;");
-            src.push("flat out uvec4 vFlags2;");
+            src.push("out vec4 vWorldPosition;");
+            src.push("flat out uint vFlags2;");
         }
-
-        src.push("out vec4 vPickColor;");
-
+        src.push("out vec4 vViewPosition;");
+        src.push("out highp vec3 relativeToOriginPosition;");
         src.push("void main(void) {");
 
         // camera matrices
@@ -273,7 +329,7 @@ class TrianglesDataTexturePickMeshRenderer {
         // model matrices
         src.push ("mat4 worldMatrix = mat4 (texelFetch (uTextureModelMatrices, ivec2(0, 0), 0), texelFetch (uTextureModelMatrices, ivec2(1, 0), 0), texelFetch (uTextureModelMatrices, ivec2(2, 0), 0), texelFetch (uTextureModelMatrices, ivec2(3, 0), 0));");
         src.push ("mat4 worldNormalMatrix = mat4 (texelFetch (uTextureModelMatrices, ivec2(0, 1), 0), texelFetch (uTextureModelMatrices, ivec2(1, 1), 0), texelFetch (uTextureModelMatrices, ivec2(2, 1), 0), texelFetch (uTextureModelMatrices, ivec2(3, 1), 0));");
-
+        
         // constants
         src.push("int polygonIndex = gl_VertexID / 3;")
 
@@ -288,13 +344,7 @@ class TrianglesDataTexturePickMeshRenderer {
         src.push("uvec4 flags = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);"); // chipmunk
         src.push("uvec4 flags2 = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);"); // chipmunk
         
-        // flags.w = NOT_RENDERED | PICK
-        // renderPass = PICK
-
-        src.push(`if (int(flags.w) != renderPass) {`);
-        src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
-        src.push("   return;"); // Cull vertex
-        src.push("} else {");
+        src.push("{");
 
         // get vertex base
         src.push("ivec4 packedVertexBase = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+4, objectIndexCoords.y), 0));"); // chipmunk
@@ -323,14 +373,11 @@ class TrianglesDataTexturePickMeshRenderer {
 
         // get color
         src.push("uvec4 color = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);"); // chipmunk
-
+        
         src.push(`if (color.a == 0u) {`);
         src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
         src.push("   return;");
         src.push("};");
-
-        // get pick-color
-        src.push("vPickColor = vec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0)) / 255.0;");
 
         // get normal
         src.push("vec3 normal = normalize(cross(positions[2] - positions[0], positions[1] - positions[0]));");
@@ -338,36 +385,47 @@ class TrianglesDataTexturePickMeshRenderer {
         src.push("vec3 position;");
         src.push("position = positions[gl_VertexID % 3];");
 
+        src.push("vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*positionsDecodeMatrix)) * vec4(normal,1)).xyz);");
+
         // when the geometry is not solid, if needed, flip the triangle winding
         src.push("if (solid != 1u) {");
             src.push("if (isPerspectiveMatrix(projMatrix)) {");
                 src.push("vec3 uCameraEyeRtcInQuantizedSpace = (inverse(worldMatrix * positionsDecodeMatrix) * vec4(uCameraEyeRtc, 1)).xyz;")
                 src.push("if (dot(position.xyz - uCameraEyeRtcInQuantizedSpace, normal) < 0.0) {");
-                    src.push("position = positions[2 - (gl_VertexID % 3)];");
-                src.push("}");
+                        src.push("position = positions[2 - (gl_VertexID % 3)];");
+                        src.push("viewNormal = -viewNormal;");
+                    src.push("}");
             src.push("} else {");
-                src.push("vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*positionsDecodeMatrix)) * vec4(normal,1)).xyz);");
                 src.push("if (viewNormal.z < 0.0) {");
-                    src.push("position = positions[2 - (gl_VertexID % 3)];");
-                src.push("}");
+                        src.push("position = positions[2 - (gl_VertexID % 3)];");
+                        src.push("viewNormal = -viewNormal;");
+                    src.push("}");
             src.push("}");
         src.push("}");
 
-        src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
+        src.push("      vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
 
         // get XYZ offset
         src.push("vec4 offset = vec4(texelFetch (uTexturePerObjectIdOffsets, objectIndexCoords, 0).rgb, 0.0);");
 
         src.push("worldPosition.xyz = worldPosition.xyz + offset.xyz;");
 
+        src.push("relativeToOriginPosition = worldPosition.xyz;")
 
-        src.push("vec4 viewPosition = viewMatrix * worldPosition; ");
+        src.push("      vec4 viewPosition  = viewMatrix * worldPosition; ");
 
         if (clipping) {
-            src.push("      vWorldPosition = worldPosition;");
-            src.push("      vFlags2 = flags2;");
+            src.push("  vWorldPosition = worldPosition;");
+            src.push("  vFlags2 = flags2.r;");
         }
+        src.push("vViewPosition = viewPosition;");
         src.push("vec4 clipPos = projMatrix * viewPosition;");
+        src.push("float tmp = clipPos.w;")
+        src.push("clipPos.xyzw /= tmp;")
+        src.push("clipPos.xy = remapClipPos(clipPos.xy);");
+        src.push("clipPos.z += 0.001;"); // small Z offset
+        src.push("clipPos.xyzw *= tmp;")
+        src.push("vViewPosition = clipPos;");
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
@@ -375,6 +433,7 @@ class TrianglesDataTexturePickMeshRenderer {
         src.push("gl_Position = clipPos;");
         src.push("  }");
         src.push("}");
+
         return src;
     }
 
@@ -384,7 +443,7 @@ class TrianglesDataTexturePickMeshRenderer {
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
         src.push ('#version 300 es');
-        src.push("// Batched geometry picking fragment shader");
+        src.push("// Triangles dataTexture draw fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -392,25 +451,35 @@ class TrianglesDataTexturePickMeshRenderer {
         src.push("precision mediump float;");
         src.push("precision mediump int;");
         src.push("#endif");
+
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("in float isPerspective;");
             src.push("uniform float logDepthBufFC;");
             src.push("in float vFragDepth;");
         }
+
+        src.push("uniform float pickZNear;");
+        src.push("uniform float pickZFar;");
+
+        src.push("uniform int _layerNumber;"); // chipmunk
+        src.push("uniform vec3 _coordinateScaler;"); // chipmunk
+
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
-            src.push("flat in uvec4 vFlags2;");
-            for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
+            src.push("flat in uint vFlags2;");
+            for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
-        src.push("in vec4 vPickColor;");
-        src.push("out vec4 outPickColor;");
+        src.push("in highp vec3 relativeToOriginPosition;");
+        
+        src.push("out highp ivec4 outCoords;");        
         src.push("void main(void) {");
+
         if (clipping) {
-            src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
+            src.push("  bool clippable = vFlags2 > 0u;");
             src.push("  if (clippable) {");
             src.push("      float dist = 0.0;");
             for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
@@ -421,12 +490,14 @@ class TrianglesDataTexturePickMeshRenderer {
             src.push("      if (dist > 0.0) { discard; }");
             src.push("  }");
         }
+
         if (scene.logarithmicDepthBufferEnabled) {
-            // src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
-            src.push("    gl_FragDepth = log2( vFragDepth ) * logDepthBufFC * 0.5;");
+            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
-        src.push("   outPickColor = vPickColor; ");
+
+        src.push("outCoords = ivec4(relativeToOriginPosition.xyz*_coordinateScaler.xyz, - _layerNumber);")
         src.push("}");
+
         return src;
     }
 
@@ -442,4 +513,4 @@ class TrianglesDataTexturePickMeshRenderer {
     }
 }
 
-export {TrianglesDataTexturePickMeshRenderer};
+export {TrianglesDataTextureSnapPickZBufferInitializer};

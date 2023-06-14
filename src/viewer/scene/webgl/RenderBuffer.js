@@ -1,5 +1,3 @@
-import {Canvas2Image} from "../libs/canvas2image.js";
-
 /**
  * @desc Represents a WebGL render buffer.
  * @private
@@ -28,8 +26,8 @@ class RenderBuffer {
         this.bound = false;
     }
 
-    bind() {
-        this._touch();
+    bind(internalformat = null) {
+        this._touch(internalformat);
         if (this.bound) {
             return;
         }
@@ -38,10 +36,18 @@ class RenderBuffer {
         this.bound = true;
     }
 
-    _touch() {
+    /**
+     *
+     * @param {number} internalformat
+     * @returns
+     */
+    _touch(internalformat = null) {
 
         let width;
         let height;
+        /**
+         * @type {WebGL2RenderingContext}
+         */
         const gl = this.gl;
 
         if (this.size) {
@@ -71,7 +77,12 @@ class RenderBuffer {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+
+        if (!internalformat) {
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+        } else {
+            gl.texStorage2D(gl.TEXTURE_2D, 1, internalformat, width, height);
+        }
 
         let depthTexture;
 
@@ -154,12 +165,19 @@ class RenderBuffer {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     }
 
-    read(pickX, pickY) {
+    read(pickX, pickY, glFormat = null, glType = null, arrayType = Uint8Array, arrayMultiplier = 4) {
         const x = pickX;
-        const y = this.gl.drawingBufferHeight - pickY;
-        const pix = new Uint8Array(4);
+        const y = (this.buffer.height || this.gl.drawingBufferHeight) - 1 - pickY;
+        const pix = new arrayType(arrayMultiplier);
         const gl = this.gl;
-        gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pix);
+        gl.readPixels(x, y, 1, 1, glFormat || gl.RGBA, glType || gl.UNSIGNED_BYTE, pix, 0);
+        return pix;
+    }
+
+    readArray(glFormat = null, glType = null, arrayType = Uint8Array, arrayMultiplier = 4) {
+        const pix = new arrayType(this.buffer.width*this.buffer.height * arrayMultiplier);
+        const gl = this.gl;
+        gl.readPixels(0, 0, this.buffer.width, this.buffer.height, glFormat || gl.RGBA, glType || gl.UNSIGNED_BYTE, pix, 0);
         return pix;
     }
 
@@ -197,67 +215,52 @@ class RenderBuffer {
     }
 
     readImage(params) {
-
         const gl = this.gl;
         const imageDataCache = this._getImageDataCache();
         const pixelData = imageDataCache.pixelData;
         const canvas = imageDataCache.canvas;
         const imageData = imageDataCache.imageData;
         const context = imageDataCache.context;
-
         gl.readPixels(0, 0, this.buffer.width, this.buffer.height, gl.RGBA, gl.UNSIGNED_BYTE, pixelData);
-
         imageData.data.set(pixelData);
         context.putImageData(imageData, 0, 0);
-
-        const imageWidth = params.width || canvas.width;
-        const imageHeight = params.height || canvas.height;
-        const format = params.format || "jpeg";
-        const flipy = true; // Account for WebGL texture flipping
-
-        let image;
-
-        switch (format) {
-            case "jpeg":
-                image = Canvas2Image.saveAsJPEG(canvas, true, imageWidth, imageHeight, flipy);
-                break;
-            case "png":
-                image = Canvas2Image.saveAsPNG(canvas, true, imageWidth, imageHeight, flipy);
-                break;
-            case "bmp":
-                image = Canvas2Image.saveAsBMP(canvas, true, imageWidth, imageHeight, flipy);
-                break;
-            default:
-                console.error("Unsupported image format: '" + format + "' - supported types are 'jpeg', 'bmp' and 'png' - defaulting to 'jpeg'");
-                image = Canvas2Image.saveAsJPEG(canvas, true, imageWidth, imageHeight, flipy);
+        let format = params.format || "png";
+        if (format !== "jpeg" && format !== "png" && format !== "bmp") {
+            console.error("Unsupported image format: '" + format + "' - supported types are 'jpeg', 'bmp' and 'png' - defaulting to 'png'");
+            format = "png";
         }
-
-        return image.src;
+        const flipy = true; // Account for WebGL texture flipping
+        return canvas.toDataURL(`image/${format}`);
     }
 
-    _getImageDataCache() {
+    _getImageDataCache(type = Uint8Array, multiplier = 4) {
+
         const bufferWidth = this.buffer.width;
         const bufferHeight = this.buffer.height;
+
         let imageDataCache = this._imageDataCache;
+
         if (imageDataCache) {
             if (imageDataCache.width !== bufferWidth || imageDataCache.height !== bufferHeight) {
                 this._imageDataCache = null;
                 imageDataCache = null;
             }
         }
+
         if (!imageDataCache) {
             const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
             canvas.width = bufferWidth;
             canvas.height = bufferHeight;
-            const context = canvas.getContext('2d');
             imageDataCache = {
-                pixelData: new Uint8Array(bufferWidth * bufferHeight * 4),
+                pixelData: new type(bufferWidth * bufferHeight * multiplier),
                 canvas: canvas,
                 context: context,
                 imageData: context.createImageData(bufferWidth, bufferHeight),
                 width: bufferWidth,
                 height: bufferHeight
             };
+
             this._imageDataCache = imageDataCache;
         }
         imageDataCache.context.resetTransform(); // Prevents strange scale-accumulation effect with html2canvas

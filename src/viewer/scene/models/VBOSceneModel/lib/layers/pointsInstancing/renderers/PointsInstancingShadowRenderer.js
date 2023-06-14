@@ -20,7 +20,7 @@ class PointsInstancingShadowRenderer {
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         return this._scene._sectionPlanesState.getHash();
@@ -45,7 +45,7 @@ class PointsInstancingShadowRenderer {
             this._bindProgram(frameCtx, instancingLayer);
         }
 
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometry.positionsDecodeMatrix); // TODO geometry is undefined
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, state.geometry.positionsDecodeMatrix);
 
         this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
         this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
@@ -142,7 +142,7 @@ class PointsInstancingShadowRenderer {
         this._uPointSize = program.getLocation("pointSize");
     }
 
-    _bindProgram(frameCtx, instancingLayer) {
+    _bindProgram(frameCtx) {
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const program = this._program;

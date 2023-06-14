@@ -4,7 +4,6 @@ import {CameraControl} from "./scene/CameraControl/CameraControl.js";
 import {MetaScene} from "./metadata/MetaScene.js";
 import {LocaleService} from "./localization/LocaleService.js";
 import html2canvas from 'html2canvas/dist/html2canvas.esm.js';
-import {Canvas2Image} from "./scene/libs/canvas2image";
 
 /**
  * The 3D Viewer at the heart of the xeokit SDK.
@@ -466,24 +465,10 @@ class Viewer {
                 if (needFinishSnapshot) {
                     this.endSnapshot();
                 }
-                const imageWidth = snapshotCanvas.width;
-                const imageHeight = snapshotCanvas.height;
-                const format = params.format || "jpeg";
-                const flipy = false;
-                let image;
-                switch (format) {
-                    case "jpeg":
-                        image = Canvas2Image.saveAsJPEG(snapshotCanvas, true, imageWidth, imageHeight, flipy);
-                        break;
-                    case "png":
-                        image = Canvas2Image.saveAsPNG(snapshotCanvas, true, imageWidth, imageHeight, flipy);
-                        break;
-                    case "bmp":
-                        image = Canvas2Image.saveAsBMP(snapshotCanvas, true, imageWidth, imageHeight, flipy);
-                        break;
-                    default:
-                        this.error("[Viewer.getSnapshotWithPlugins] Unsupported image format: '" + format + "' - supported types are 'jpeg', 'bmp' and 'png' - defaulting to 'jpeg'");
-                        image = Canvas2Image.saveAsJPEG(snapshotCanvas, true, imageWidth, imageHeight, flipy);
+                let format = params.format || "png";
+                if (format !== "jpeg" && format !== "png" && format !== "bmp") {
+                    console.error("Unsupported image format: '" + format + "' - supported types are 'jpeg', 'bmp' and 'png' - defaulting to 'png'");
+                    format = "png";
                 }
                 if (!params.includeGizmos) {
                     this.sendToPlugins("snapshotFinished");
@@ -491,7 +476,7 @@ class Viewer {
                 if (needFinishSnapshot) {
                     this.endSnapshot();
                 }
-                resolve(image.src);
+                resolve(snapshotCanvas.toDataURL(`image/${format}`));
             }
 
             for (let i = 0, len = this._plugins.length; i < len; i++) { // Find plugin container elements

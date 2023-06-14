@@ -21,8 +21,6 @@ const tempVec3e = math.vec3();
 const tempVec3f = math.vec3();
 const tempVec3g = math.vec3();
 
-const tempVec2a = math.vec2([0, 0]);
-
 /**
  * @private
  */

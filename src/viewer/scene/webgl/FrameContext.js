@@ -219,6 +219,22 @@ class FrameContext {
          */
         this.pickInvisible = false;
 
+        /**
+         * Used to draw only requested elements / indices.
+         *
+         * @property pickElementsCount
+         * @type {Number}
+         */
+        this.pickElementsCount = null;
+
+        /**
+         * Used to draw only requested elements / indices.
+         *
+         * @property pickElementsOffset
+         * @type {Number}
+         */
+        this.pickElementsOffset = null;
+
         /** The current line width.
          *
          * @property lineWidth

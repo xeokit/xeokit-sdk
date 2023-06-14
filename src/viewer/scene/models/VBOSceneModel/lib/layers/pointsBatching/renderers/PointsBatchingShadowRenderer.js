@@ -19,7 +19,7 @@ class PointsBatchingShadowRenderer {
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         return this._scene._sectionPlanesState.getHash();
@@ -29,7 +29,7 @@ class PointsBatchingShadowRenderer {
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const state = pointsBatchingLayer._state;
-        const pointsMaterial = scene.pointsMaterial._state;
+
         if (!this._program) {
             this._allocate();
         }
@@ -58,7 +58,7 @@ class PointsBatchingShadowRenderer {
         if (numSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
             const baseIndex = pointsBatchingLayer.layerIndex * numSectionPlanes;
-            const renderFlags = model.renderFlags;
+            const renderFlags = pointsBatchingLayer.model.renderFlags;
             const origin = pointsBatchingLayer._state.origin;
             for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
                 const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];

@@ -1,5 +1,5 @@
 import {Program} from "../../../../../../webgl/Program.js";
-import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
+import {getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
 import {math} from "../../../../../../math/math.js";
 
 const tempVec3a = math.vec3();
@@ -20,7 +20,7 @@ class TrianglesInstancingShadowRenderer {
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         return this._scene._sectionPlanesState.getHash();
@@ -141,7 +141,7 @@ class TrianglesInstancingShadowRenderer {
         this._aModelMatrixCol2 = program.getAttribute("modelMatrixCol2");
     }
 
-    _bindProgram(frameCtx, instancingLayer) {
+    _bindProgram(frameCtx) {
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const program = this._program;

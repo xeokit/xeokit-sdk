@@ -19,7 +19,7 @@ class TrianglesInstancingColorRenderer {
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         const scene = this._scene;
@@ -443,8 +443,6 @@ class TrianglesInstancingColorRenderer {
     _buildFragmentShader() {
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
-        let i;
-        let len;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
         src.push("#version 300 es");

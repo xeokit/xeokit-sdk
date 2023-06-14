@@ -17,7 +17,7 @@ class TrianglesBatchingPickNormalsRenderer {
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         return this._scene._sectionPlanesState.getHash();
@@ -81,10 +81,6 @@ class TrianglesBatchingPickNormalsRenderer {
             }
         }
 
-        //=============================================================
-        // TODO: Use drawElements count and offset to draw only one entity
-        //=============================================================
-
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
@@ -103,7 +99,10 @@ class TrianglesBatchingPickNormalsRenderer {
 
         state.indicesBuf.bind();
 
-        gl.drawElements(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
+        const count = frameCtx.pickElementsCount || state.indicesBuf.numItems;
+        const offset = frameCtx.pickElementsOffset ? frameCtx.pickElementsOffset * state.indicesBuf.itemByteSize : 0;
+
+        gl.drawElements(gl.TRIANGLES, count, state.indicesBuf.itemType, offset);
     }
 
     _allocate() {
@@ -262,7 +261,7 @@ class TrianglesBatchingPickNormalsRenderer {
             src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
             src.push("  if (clippable) {");
             src.push("      float dist = 0.0;");
-            for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
+            for (let i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
                 src.push("      if (sectionPlaneActive" + i + ") {");
                 src.push("          dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
                 src.push("      }");

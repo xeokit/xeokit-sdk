@@ -4,6 +4,7 @@ import { createRTCViewMat } from "../../../../math/rtcCoords.js";
 import { Program } from "../../../../webgl/Program.js"
 import { Camera } from "../../../../camera/Camera.js"
 import { Scene } from "../../../../scene/Scene.js"
+import { math } from "../../../../math/math.js";
 
 const identityMatrix = [ 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 ];
 
@@ -918,26 +919,26 @@ class DataTextureGenerator
         }
 
         // in one row we can fit 512 matrices        
-        const textureWidth = 512 * 8;
-        const textureHeight =  Math.ceil (numMatrices / (textureWidth / 8));
+        const textureWidth = 512 * 4;
+        const textureHeight =  Math.ceil (numMatrices / (textureWidth / 4));
 
         var texArray = new Float32Array(4 * textureWidth * textureHeight);
 
         dataTextureRamStats.sizeDataPositionDecodeMatrices += texArray.byteLength;
         dataTextureRamStats.numberOfTextures++;
 
+        const tmpMatrix = math.mat4();
+
         for (var i = 0; i < positionDecodeMatrices.length; i++)
         {
             // 4x4 values
             texArray.set (
-                positionDecodeMatrices [i],
-                i * 32
-            );
-
-            // 4x4 values
-            texArray.set (
-                instanceMatrices [i],
-                i * 32 + 16
+                math.mulMat4(
+                    instanceMatrices[i],
+                    positionDecodeMatrices[i],
+                    tmpMatrix
+                ),
+                i * 16
             );
         }
 
