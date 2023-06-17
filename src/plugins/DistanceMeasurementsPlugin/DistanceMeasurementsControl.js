@@ -17,7 +17,7 @@ class DistanceMeasurementsControl extends Component {
     /**
      * @private
      */
-    constructor(plugin, cfg={}) {
+    constructor(plugin, cfg = {}) {
 
         super(plugin.viewer.scene);
 
@@ -28,7 +28,7 @@ class DistanceMeasurementsControl extends Component {
         this.plugin = plugin;
 
         this._active = false;
-        this._snapMode = "off";
+        this.snapMode = "off";
         this._snapToVertex = false;
 
         // Add a marker to the canvas
@@ -64,10 +64,10 @@ class DistanceMeasurementsControl extends Component {
 
         // Shows 2D canvas pos of touch start
         this._touchStartDot = new Dot(plugin._container, {
-                fillColor: plugin.defaultColor,
-                zIndex: plugin.zIndex + 1,
-                visible: false
-            });
+            fillColor: plugin.defaultColor,
+            zIndex: plugin.zIndex + 1,
+            visible: false
+        });
 
         // Tracks 3D world pos of touch start, dynamically calculates 2D canvas pos
         this._touchStartMarker = new Marker(this, {
@@ -107,7 +107,7 @@ class DistanceMeasurementsControl extends Component {
     set snapMode(snapMode) {
         if (snapMode === undefined || snapMode === null) {
             snapMode = "vertex";
-        } else if (snapMode !== "vertex") {
+        } else if (snapMode !== "vertex" && snapMode !== "edge") {
             return;
         }
         this._snapMode = snapMode;
@@ -171,50 +171,89 @@ class DistanceMeasurementsControl extends Component {
         const touchEndCanvasPos = math.vec2();
         const touchStartWorldPos = math.vec3();
 
-        this._onMouseHoverSurface = cameraControl.on("hoverSurface", event => {
+        // this._onMouseHoverSurface = cameraControl.on("hoverSurface", event => {
+        //
+        //     // // This gets fired for both mouse and touch input, but we don't care when handling touch
+        //     // mouseHoverEntity = event.entity;
+        //     //
+        //     // let useSnapToVertex = false;
+        //     //
+        //     // if (this._snapToVertex) {
+        //     //     useSnapToVertex = !!event.snappedWorldPos && !!event.snappedCanvasPos;
+        //     // }
+        //     //
+        //     // if (useSnapToVertex) {
+        //     //     mouseWorldPos.set(event.snappedWorldPos);
+        //     //     mouseCanvasPos.set(event.snappedCanvasPos);
+        //     //
+        //     //     if (touchState === FIRST_TOUCH_EXPECTED) {
+        //     //         this.markerDiv.style.marginLeft = `${event.snappedCanvasPos[0] - 5}px`;
+        //     //         this.markerDiv.style.marginTop = `${event.snappedCanvasPos[1] - 5}px`;
+        //     //
+        //     //         this.markerDiv.style.background = "greenyellow";
+        //     //         this.markerDiv.style.border = "2px solid green";
+        //     //     }
+        //     // } else {
+        //     //     if (event.worldPos !== null && event.canvasPos !== null) {
+        //     //         mouseWorldPos.set(event.worldPos);
+        //     //         mouseCanvasPos.set(event.canvasPos);
+        //     //
+        //     //         if (touchState === FIRST_TOUCH_EXPECTED) {
+        //     //             this.markerDiv.style.marginLeft = `${event.canvasPos[0] - 5}px`;
+        //     //             this.markerDiv.style.marginTop = `${event.canvasPos[1] - 5}px`;
+        //     //
+        //     //             this.markerDiv.style.background = "pink";
+        //     //             this.markerDiv.style.border = "2px solid red";
+        //     //         }
+        //     //     }
+        //     // }
+        //     //
+        //     // if (touchState !== FIRST_TOUCH_EXPECTED || !this.active) {
+        //     //     this.markerDiv.style.marginLeft = `-10000px`;
+        //     //     this.markerDiv.style.marginTop = `-10000px`;
+        //     // }
+        //     //
+        //     // canvas.style.cursor = "pointer";
+        //     //
+        //     // if (this._currentDistanceMeasurementByMouse) {
+        //     //     this._currentDistanceMeasurementByMouse.wireVisible = this._currentDistanceMeasurementByMouseInittouchState.wireVisible;
+        //     //     this._currentDistanceMeasurementByMouse.axisVisible = this._currentDistanceMeasurementByMouseInittouchState.axisVisible && this.plugin.defaultAxisVisible;
+        //     //     this._currentDistanceMeasurementByMouse.xAxisVisible = this._currentDistanceMeasurementByMouseInittouchState.xAxisVisible && this.plugin.defaultXAxisVisible;
+        //     //     this._currentDistanceMeasurementByMouse.yAxisVisible = this._currentDistanceMeasurementByMouseInittouchState.yAxisVisible && this.plugin.defaultYAxisVisible;
+        //     //     this._currentDistanceMeasurementByMouse.zAxisVisible = this._currentDistanceMeasurementByMouseInittouchState.zAxisVisible && this.plugin.defaultZAxisVisible;
+        //     //     this._currentDistanceMeasurementByMouse.targetVisible = this._currentDistanceMeasurementByMouseInittouchState.targetVisible;
+        //     //     this._currentDistanceMeasurementByMouse.target.entity = mouseHoverEntity;
+        //     //     this._currentDistanceMeasurementByMouse.target.worldPos = mouseWorldPos;
+        //     // }
+        // });
 
-            // This gets fired for both mouse and touch input, but we don't care when handling touch
-            mouseHoverEntity = event.entity;
+        this._onSnapToVertex = cameraControl.on("snapToVertex", event => {
+            mouseWorldPos.set(event.snappedWorldPos);
+            mouseCanvasPos.set(event.snappedCanvasPos);
+            if (touchState === FIRST_TOUCH_EXPECTED) {
+                this.markerDiv.style.marginLeft = `${event.snappedCanvasPos[0] - 5}px`;
+                this.markerDiv.style.marginTop = `${event.snappedCanvasPos[1] - 5}px`;
 
-            let useSnapToVertex = false;
-
-            if (this._snapToVertex) {
-                useSnapToVertex = !!event.snappedWorldPos && !!event.snappedCanvasPos;
-            }
-
-            if (useSnapToVertex) {
-                mouseWorldPos.set(event.snappedWorldPos);
-                mouseCanvasPos.set(event.snappedCanvasPos);
-
-                if (touchState === FIRST_TOUCH_EXPECTED) {
-                    this.markerDiv.style.marginLeft = `${event.snappedCanvasPos[0]-5}px`;
-                    this.markerDiv.style.marginTop = `${event.snappedCanvasPos[1]-5}px`;
-        
-                    this.markerDiv.style.background = "greenyellow";
-                    this.markerDiv.style.border = "2px solid green";
-                }
+                this.markerDiv.style.background = "greenyellow";
+                this.markerDiv.style.border = "2px solid green";
             } else {
-                if (event.worldPos !== null && event.canvasPos !== null) {
-                    mouseWorldPos.set(event.worldPos);
+                if (event.canvasPos !== null) {
                     mouseCanvasPos.set(event.canvasPos);
 
                     if (touchState === FIRST_TOUCH_EXPECTED) {
-                        this.markerDiv.style.marginLeft = `${event.canvasPos[0]-5}px`;
-                        this.markerDiv.style.marginTop = `${event.canvasPos[1]-5}px`;
-            
+                        this.markerDiv.style.marginLeft = `${event.canvasPos[0] - 5}px`;
+                        this.markerDiv.style.marginTop = `${event.canvasPos[1] - 5}px`;
+
                         this.markerDiv.style.background = "pink";
                         this.markerDiv.style.border = "2px solid red";
                     }
                 }
             }
-
             if (touchState !== FIRST_TOUCH_EXPECTED || !this.active) {
                 this.markerDiv.style.marginLeft = `-10000px`;
                 this.markerDiv.style.marginTop = `-10000px`;
             }
-
             canvas.style.cursor = "pointer";
-
             if (this._currentDistanceMeasurementByMouse) {
                 this._currentDistanceMeasurementByMouse.wireVisible = this._currentDistanceMeasurementByMouseInittouchState.wireVisible;
                 this._currentDistanceMeasurementByMouse.axisVisible = this._currentDistanceMeasurementByMouseInittouchState.axisVisible && this.plugin.defaultAxisVisible;
@@ -222,8 +261,8 @@ class DistanceMeasurementsControl extends Component {
                 this._currentDistanceMeasurementByMouse.yAxisVisible = this._currentDistanceMeasurementByMouseInittouchState.yAxisVisible && this.plugin.defaultYAxisVisible;
                 this._currentDistanceMeasurementByMouse.zAxisVisible = this._currentDistanceMeasurementByMouseInittouchState.zAxisVisible && this.plugin.defaultZAxisVisible;
                 this._currentDistanceMeasurementByMouse.targetVisible = this._currentDistanceMeasurementByMouseInittouchState.targetVisible;
-                this._currentDistanceMeasurementByMouse.target.entity = mouseHoverEntity;
-                this._currentDistanceMeasurementByMouse.target.worldPos = mouseWorldPos;
+                //   this._currentDistanceMeasurementByMouse.target.entity = mouseHoverEntity;
+                //     this._currentDistanceMeasurementByMouse.target.worldPos = mouseWorldPos;
             }
         });
 
@@ -298,19 +337,19 @@ class DistanceMeasurementsControl extends Component {
             }
         });
 
-        this._onMouseHoverOff = cameraControl.on("hoverOff", event => {
-            mouseHoverEntity = null;
-
-            this.markerDiv.style.marginLeft = `-100px`;
-            this.markerDiv.style.marginTop = `-100px`;
-
-            if (this._currentDistanceMeasurementByMouse) {
-                this._currentDistanceMeasurementByMouse.wireVisible = false;
-                this._currentDistanceMeasurementByMouse.targetVisible = false;
-                this._currentDistanceMeasurementByMouse.axisVisible = false;
-            }
-            canvas.style.cursor = "default";
-        });
+        // this._onMouseHoverOff = cameraControl.on("hoverOff", event => {
+        //     mouseHoverEntity = null;
+        //
+        //     this.markerDiv.style.marginLeft = `-100px`;
+        //     this.markerDiv.style.marginTop = `-100px`;
+        //
+        //     if (this._currentDistanceMeasurementByMouse) {
+        //         this._currentDistanceMeasurementByMouse.wireVisible = false;
+        //         this._currentDistanceMeasurementByMouse.targetVisible = false;
+        //         this._currentDistanceMeasurementByMouse.axisVisible = false;
+        //     }
+        //     canvas.style.cursor = "default";
+        // });
 
         this._onPickedNothing = cameraControl.on("pickedNothing", event => {
             if (this._currentDistanceMeasurementByMouse) {

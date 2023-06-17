@@ -119,7 +119,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, ContextMenu, DistanceMeasurementsPlugin} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
+    import {Viewer, XKTLoaderPlugin, ContextMenu, DistanceMeasurementsPlugin} from "../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -145,7 +145,8 @@
         id: "myModel",
         //    src: "../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt",
         src: "../assets/models/xkt/v10/glb/HousePlan.notextures.glb.xkt",
-        edges: true,
+        edges: true
+        ,
         useDataTextures: {
             // enableViewFrustumCulling: true,
             // targetLodFps: 20
@@ -161,7 +162,7 @@
         defaultXAxisVisible: false,
         defaultYAxisVisible: false,
         defaultZAxisVisible: false,
-        snapMode: "vertex"
+        snapMode: "edge"
     });
 
     //------------------------------------------------------------------------------------------------------------------

@@ -25,6 +25,8 @@ const math = {
     MIN_DOUBLE: -Number.MAX_SAFE_INTEGER,
     MAX_DOUBLE: Number.MAX_SAFE_INTEGER,
 
+    MAX_INT: 1000000000,
+
     /**
      * The number of radiians in a degree (0.0174532925).
      * @property DEGTORAD
@@ -46,6 +48,21 @@ const math = {
 
     globalizeObjectId(modelId, objectId) {
         return (modelId + "#" + objectId)
+    },
+
+    /**
+     * Returns:
+     * - x != 0 => 1/x,
+     * - x == 1 => 1
+     *
+     * @param {number} x
+     */
+    safeInv(x) {
+        const retVal = 1 / x;
+        if (isNaN(retVal) || !isFinite(retVal)) {
+            return 1;
+        }
+        return retVal;
     },
 
     /**

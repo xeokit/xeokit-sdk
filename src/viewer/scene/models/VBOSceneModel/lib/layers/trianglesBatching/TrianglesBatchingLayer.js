@@ -8,6 +8,7 @@ import {geometryCompressionUtils} from "../../../../../math/geometryCompressionU
 import {getBatchingRenderers} from "./TrianglesBatchingRenderers.js";
 import {TrianglesBatchingBuffer} from "./TrianglesBatchingBuffer.js";
 import {quantizePositions, transformAndOctEncodeNormals} from "../../compression.js";
+import {getSnapBatchingRenderers} from "../snapBatching/SnapBatchingRenderers";
 
 const tempMat4 = math.mat4();
 const tempMat4b = math.mat4();
@@ -71,6 +72,8 @@ class TrianglesBatchingLayer {
         this.layerIndex = cfg.layerIndex;
 
         this._batchingRenderers = getBatchingRenderers(cfg.model.scene);
+        this._snapBatchingRenderers = getSnapBatchingRenderers(cfg.model.scene);
+
         this._buffer = new TrianglesBatchingBuffer(cfg.maxGeometryBatchSize);
         this._scratchMemory = cfg.scratchMemory;
 
@@ -1167,6 +1170,26 @@ class TrianglesBatchingLayer {
             this._batchingRenderers.pickNormalsFlatRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }
         // }
+    }
+
+    drawSnapInitDepthBuf(renderFlags, frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        this._updateBackfaceCull(renderFlags, frameCtx);
+        if (this._snapBatchingRenderers.snapDepthBufInitRenderer) {
+            this._snapBatchingRenderers.snapDepthBufInitRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        }
+    }
+
+    drawSnapDepths(renderFlags, frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        this._updateBackfaceCull(renderFlags, frameCtx);
+        if (this._snapBatchingRenderers.snapDepthRenderer) {
+            this._snapBatchingRenderers.snapDepthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        }
     }
 
     //------------------------------------------------------------------------------------------------

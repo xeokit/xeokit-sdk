@@ -4,8 +4,8 @@ import {TrianglesDataTextureEdgesRenderer} from "./renderers/TrianglesDataTextur
 import {TrianglesDataTextureEdgesColorRenderer} from "./renderers/TrianglesDataTextureEdgesColorRenderer.js";
 import {TrianglesDataTexturePickMeshRenderer} from "./renderers/TrianglesDataTexturePickMeshRenderer.js";
 import {TrianglesDataTexturePickDepthRenderer} from "./renderers/TrianglesDataTexturePickDepthRenderer.js";
-import {TrianglesDataTextureVertexDepthRenderer} from "./renderers/TrianglesDataTextureVertexDepthRenderer.js";
-import {TrianglesDataTextureSnapPickZBufferInitializer} from "./renderers/TrianglesDataTextureSnapPickZBufferInitializer.js";
+import {TrianglesDataTextureSnapDepthRenderer} from "./renderers/TrianglesDataTextureSnapDepthRenderer.js";
+import {TrianglesDataTextureSnapDepthBufInitRenderer} from "./renderers/TrianglesDataTextureSnapDepthBufInitRenderer.js";
 import {TrianglesDataTexturePickNormalsRenderer} from "./renderers/TrianglesDataTexturePickNormalsRenderer.js";
 import {TrianglesDataTextureOcclusionRenderer} from "./renderers/TrianglesDataTextureOcclusionRenderer.js";
 import {TrianglesDataTextureDepthRenderer} from "./renderers/TrianglesDataTextureDepthRenderer.js";
@@ -195,14 +195,14 @@ class TrianglesDataTextureRenderers {
 
     get vertexDepthRenderer() {
         if (!this._vertexDepthRenderer) {
-            this._vertexDepthRenderer = new TrianglesDataTextureVertexDepthRenderer(this._scene);
+            this._vertexDepthRenderer = new TrianglesDataTextureSnapDepthRenderer(this._scene);
         }
         return this._vertexDepthRenderer;
     }
 
     get vertexDepthZBufferInitializer() {
         if (!this._vertexDepthZBufferInitializer) {
-            this._vertexDepthZBufferInitializer = new TrianglesDataTextureSnapPickZBufferInitializer(this._scene);
+            this._vertexDepthZBufferInitializer = new TrianglesDataTextureSnapDepthBufInitRenderer(this._scene);
         }
         return this._vertexDepthZBufferInitializer;
     }

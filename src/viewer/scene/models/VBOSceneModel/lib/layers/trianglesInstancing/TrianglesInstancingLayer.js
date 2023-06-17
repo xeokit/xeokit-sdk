@@ -5,6 +5,7 @@ import {math} from "../../../../../math/math.js";
 import {RenderState} from "../../../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../../../webgl/ArrayBuf.js";
 import {getInstancingRenderers} from "./TrianglesInstancingRenderers.js";
+import {getSnapInstancingRenderers} from "../snapInstancing/SnapInstancingRenderers";
 
 const tempUint8Vec4 = new Uint8Array(4);
 const tempFloat32 = new Float32Array(1);
@@ -55,6 +56,7 @@ class TrianglesInstancingLayer {
         this.layerIndex = cfg.layerIndex;
 
         this._instancingRenderers = getInstancingRenderers(cfg.model.scene);
+        this._snapInstancingRenderers = getSnapInstancingRenderers(cfg.model.scene);
 
         this._aabb = math.collapseAABB3();
 
@@ -580,7 +582,7 @@ class TrianglesInstancingLayer {
         let colorFlag;
         if (!visible || culled || xrayed
             || (highlighted && !this.model.scene.highlightMaterial.glowThrough)
-            || (selected && !this.model.scene.selectedMaterial.glowThrough) ) {
+            || (selected && !this.model.scene.selectedMaterial.glowThrough)) {
             colorFlag = RENDER_PASSES.NOT_RENDERED;
         } else {
             if (meshTransparent) {
@@ -931,6 +933,26 @@ class TrianglesInstancingLayer {
         }
     }
 
+    drawSnapInitDepthBuf(renderFlags, frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        this._updateBackfaceCull(renderFlags, frameCtx);
+        if (this._snapInstancingRenderers.snapDepthBufInitRenderer) {
+            this._snapInstancingRenderers.snapDepthBufInitRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        }
+    }
+
+    drawSnapDepths(renderFlags, frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        this._updateBackfaceCull(renderFlags, frameCtx);
+        if (this._snapInstancingRenderers.snapDepthRenderer) {
+            this._snapInstancingRenderers.snapDepthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        }
+    }
+
     //-----------------------------------------------------------------------------------------
 
     precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) {
@@ -1001,7 +1023,7 @@ class TrianglesInstancingLayer {
             c[1] = quantizedPositions[ic + 1];
             c[2] = quantizedPositions[ic + 2];
 
-            const { positionsDecodeMatrix } = state.geometry;
+            const {positionsDecodeMatrix} = state.geometry;
 
             math.decompressPosition(a, positionsDecodeMatrix);
             math.decompressPosition(b, positionsDecodeMatrix);

@@ -1,7 +1,6 @@
 import {Program} from "../../../../../../webgl/Program.js";
 import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
 import {math} from "../../../../../../math/math.js";
-import {WEBGL_INFO} from "../../../../../../webglInfo.js";
 
 const tempVec3a = math.vec3();
 
@@ -55,7 +54,7 @@ class TrianglesDataTexturePickNormalsFlatRenderer {
                 }
             },
             1
-        ); // chipmunk
+        ); 
 
         var rr2 = this._program.bindTexture(
             this._uTexturePerVertexIdCoordinates, 
@@ -71,7 +70,7 @@ class TrianglesDataTexturePickNormalsFlatRenderer {
                 }
             },
             2
-        ); // chipmunk
+        ); 
 
         var rr3 = this._program.bindTexture(
             this._uTexturePerObjectIdColorsAndFlags,
@@ -87,7 +86,7 @@ class TrianglesDataTexturePickNormalsFlatRenderer {
                 }
             },
             3
-        ); // chipmunk
+        ); 
 
         gl.uniform1i(this._uRenderPass, renderPass);
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
@@ -146,7 +145,7 @@ class TrianglesDataTexturePickNormalsFlatRenderer {
                     }
                 },
                 4
-            ); // chipmunk
+            ); 
     
             var rr5 = this._program.bindTexture(
                 this._uTexturePerPolygonIdIndices, 
@@ -162,7 +161,7 @@ class TrianglesDataTexturePickNormalsFlatRenderer {
                     }
                 },
                 5
-            ); // chipmunk
+            ); 
 
             gl.drawArrays(gl.TRIANGLES, 0, state.numIndices8Bits);
         }
@@ -182,7 +181,7 @@ class TrianglesDataTexturePickNormalsFlatRenderer {
                     }
                 },
                 4
-            ); // chipmunk
+            ); 
     
             var rr5 = this._program.bindTexture(
                 this._uTexturePerPolygonIdIndices, 
@@ -198,7 +197,7 @@ class TrianglesDataTexturePickNormalsFlatRenderer {
                     }
                 },
                 5
-            ); // chipmunk
+            ); 
 
             gl.drawArrays(gl.TRIANGLES, 0, state.numIndices16Bits);
         }
@@ -218,7 +217,7 @@ class TrianglesDataTexturePickNormalsFlatRenderer {
                     }
                 },
                 4
-            ); // chipmunk
+            ); 
     
             var rr5 = this._program.bindTexture(
                 this._uTexturePerPolygonIdIndices, 
@@ -234,7 +233,7 @@ class TrianglesDataTexturePickNormalsFlatRenderer {
                     }
                 },
                 5
-            ); // chipmunk
+            ); 
 
             gl.drawArrays(gl.TRIANGLES, 0, state.numIndices32Bits);
         }
@@ -280,12 +279,12 @@ class TrianglesDataTexturePickNormalsFlatRenderer {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
 
-        this._uTexturePerObjectIdPositionsDecodeMatrix = "uTexturePerObjectIdPositionsDecodeMatrix"; // chipmunk
-        this._uTexturePerObjectIdColorsAndFlags = "uTexturePerObjectIdColorsAndFlags"; // chipmunk
-        this._uTexturePerVertexIdCoordinates = "uTexturePerVertexIdCoordinates"; // chipmunk
-        this._uTexturePerPolygonIdNormals = "uTexturePerPolygonIdNormals"; // chipmunk
-        this._uTexturePerPolygonIdIndices = "uTexturePerPolygonIdIndices"; // chipmunk
-        this._uTexturePerPolygonIdPortionIds = "uTexturePerPolygonIdPortionIds"; // chipmunk
+        this._uTexturePerObjectIdPositionsDecodeMatrix = "uTexturePerObjectIdPositionsDecodeMatrix"; 
+        this._uTexturePerObjectIdColorsAndFlags = "uTexturePerObjectIdColorsAndFlags"; 
+        this._uTexturePerVertexIdCoordinates = "uTexturePerVertexIdCoordinates"; 
+        this._uTexturePerPolygonIdNormals = "uTexturePerPolygonIdNormals"; 
+        this._uTexturePerPolygonIdIndices = "uTexturePerPolygonIdIndices"; 
+        this._uTexturePerPolygonIdPortionIds = "uTexturePerPolygonIdPortionIds"; 
     }
 
     _bindProgram() {
@@ -332,13 +331,13 @@ class TrianglesDataTexturePickNormalsFlatRenderer {
         src.push("uniform mat4 worldMatrix;");
         src.push("uniform mat4 viewMatrix;");
         src.push("uniform mat4 projMatrix;");
-        // src.push("uniform sampler2D uOcclusionTexture;"); // chipmunk
-        src.push("uniform sampler2D uTexturePerObjectIdPositionsDecodeMatrix;"); // chipmunk
-        src.push("uniform usampler2D uTexturePerObjectIdColorsAndFlags;"); // chipmunk
-        src.push("uniform usampler2D uTexturePerVertexIdCoordinates;"); // chipmunk
-        src.push("uniform usampler2D uTexturePerPolygonIdIndices;"); // chipmunk
-        src.push("uniform isampler2D uTexturePerPolygonIdNormals;"); // chipmunk
-        src.push("uniform usampler2D uTexturePerPolygonIdPortionIds;"); // chipmunk
+        // src.push("uniform sampler2D uOcclusionTexture;"); 
+        src.push("uniform sampler2D uTexturePerObjectIdPositionsDecodeMatrix;"); 
+        src.push("uniform usampler2D uTexturePerObjectIdColorsAndFlags;"); 
+        src.push("uniform usampler2D uTexturePerVertexIdCoordinates;"); 
+        src.push("uniform usampler2D uTexturePerPolygonIdIndices;"); 
+        src.push("uniform isampler2D uTexturePerPolygonIdNormals;"); 
+        src.push("uniform usampler2D uTexturePerPolygonIdPortionIds;"); 
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
@@ -376,7 +375,7 @@ class TrianglesDataTexturePickNormalsFlatRenderer {
         src.push("ivec2 objectIndexCoords = ivec2(objectIndex % 512, objectIndex / 512);");
 
         // get vertex base
-        src.push("ivec4 packedVertexBase = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+4, objectIndexCoords.y), 0));"); // chipmunk // chipmunk
+        src.push("ivec4 packedVertexBase = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+4, objectIndexCoords.y), 0));");  
 
         src.push("int h_index = polygonIndex & 4095;")
         src.push("int v_index = polygonIndex >> 12;")
@@ -390,8 +389,8 @@ class TrianglesDataTexturePickNormalsFlatRenderer {
         src.push("mat4 positionsDecodeMatrix = mat4 (texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));")
 
         // get flags & flags2
-        src.push("uvec4 flags = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);"); // chipmunk
-        src.push("uvec4 flags2 = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);"); // chipmunk
+        src.push("uvec4 flags = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);"); 
+        src.push("uvec4 flags2 = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);"); 
         
         // get position
         src.push("vec3 position1 = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.r, indexPositionV.r), 0));")

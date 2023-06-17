@@ -1,20 +1,20 @@
 import {Component} from "../../Component.js";
 import {math} from "../../math/math.js";
 import {buildEdgeIndices} from '../../math/buildEdgeIndices.js';
-import {WEBGL_INFO} from '../../webglInfo.js';
 import {DataTextureSceneModelMesh} from './lib/DataTextureSceneModelMesh.js';
 import {DataTextureSceneModelNode} from './lib/DataTextureSceneModelNode.js';
-import {prepareMeshGeometry, TrianglesDataTextureLayer} from './lib/layers/trianglesDataTexture/TrianglesDataTextureLayer.js';
+import {
+    prepareMeshGeometry,
+    TrianglesDataTextureLayer
+} from './lib/layers/trianglesDataTexture/TrianglesDataTextureLayer.js';
 
 import {ENTITY_FLAGS} from './lib/ENTITY_FLAGS.js';
 import {utils} from "../../utils.js";
 import {RenderFlags} from "../../webgl/RenderFlags.js";
 import {worldToRTCPositions} from "../../math/rtcCoords.js";
 
-import { LodCullingManager } from "./lib/layers/trianglesDataTexture/LodCullingManager.js";
-import { ViewFrustumCullingManager } from "./lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js";
-
-const instancedArraysSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["ANGLE_instanced_arrays"];
+import {LodCullingManager} from "./lib/layers/trianglesDataTexture/LodCullingManager.js";
+import {ViewFrustumCullingManager} from "./lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js";
 
 const tempVec3a = math.vec3();
 const tempMat4 = math.mat4();
@@ -74,18 +74,18 @@ class DataTextureSceneModel extends Component {
 
         /**
          * Enable welding vertices when loading geometry into the ```TrianglesDataTextureLayer```.
-         * 
+         *
          * The welding is applied per-geometry.
-         * 
+         *
          * @type {Boolean}
          */
         this._enableVertexWelding = !cfg.disableVertexWelding;
 
         /**
          * Enable demotion of index bitness then loading geometry into the ```TrianglesDataTextureLayer```.
-         * 
+         *
          * The rebucketing is applied per-geometry.
-         * 
+         *
          * @type {Boolean}
          */
         this._enableIndexRebucketing = !cfg.disableIndexRebucketing;
@@ -96,7 +96,7 @@ class DataTextureSceneModel extends Component {
             /**
              * @type {ViewFrustumCullingManager}
              */
-            this._vfcManager = new ViewFrustumCullingManager (this);
+            this._vfcManager = new ViewFrustumCullingManager(this);
         }
 
         this._aabb = math.collapseAABB3();
@@ -125,7 +125,7 @@ class DataTextureSceneModel extends Component {
          * @type {Map<string, DataTextureSceneModelMesh>}
          */
         this._meshes = {};
-        
+
         /**
          * @type {Map<string, DataTextureSceneModelNode>}
          */
@@ -965,8 +965,7 @@ class DataTextureSceneModel extends Component {
      * be transformed relative to this origin.
      */
     createGeometry(cfg) {
-        if (cfg.positionsCompressed && !cfg.positions)
-        {
+        if (cfg.positionsCompressed && !cfg.positions) {
             cfg.positions = cfg.positionsCompressed;
         }
 
@@ -1066,21 +1065,20 @@ class DataTextureSceneModel extends Component {
      * @param {Number} [cfg.opacity=1] Opacity in range ````[0..1]````.
      */
     createMesh(cfg) {
-        if (cfg.positionsCompressed && !cfg.positions)
-        {
+        if (cfg.positionsCompressed && !cfg.positions) {
             cfg.positions = cfg.positionsCompressed;
         }
 
         if (this._vfcManager && !this._vfcManager.finalized) {
             if (cfg.color) {
-                cfg.color = cfg.color.slice ();
+                cfg.color = cfg.color.slice();
             }
 
             if (cfg.positionsDecodeMatrix) {
-                cfg.positionsDecodeMatrix = cfg.positionsDecodeMatrix.slice ();
+                cfg.positionsDecodeMatrix = cfg.positionsDecodeMatrix.slice();
             }
 
-            this._vfcManager.addMesh (cfg);
+            this._vfcManager.addMesh(cfg);
 
             return;
         }
@@ -1110,68 +1108,48 @@ class DataTextureSceneModel extends Component {
          * This will be the prepared mesh geometry, with index rebucketting applied.
          */
         let preparedGeometryCfg = null;
-
-        if (!instancing || !(geometryId in this._preparedInstancingGeometries))
-        {
+        if (!instancing || !(geometryId in this._preparedInstancingGeometries)) {
             let primitive = geometryCfg.primitive || "triangles";
-
             if (primitive !== "triangles" && primitive !== "solid" && primitive !== "surface") {
                 this.error(`Unsupported value for 'primitive': '${primitive}' - supported values are 'triangles', 'solid' and 'surface'. Defaulting to 'triangles'.`);
                 primitive = "triangles";
             }
-
             let positions = geometryCfg.positions;
-
             if (!positions) {
                 this.error("Config missing: positions (no meshIds provided, so expecting geometry arrays instead)");
                 return null;
             }
-
             let indices = geometryCfg.indices;
             let edgeIndices = geometryCfg.edgeIndices;
-
             if (!geometryCfg.indices && primitive === "triangles") {
                 this.error("Config missing for triangles primitive: indices (no meshIds provided, so expecting geometry arrays instead)");
                 return null;
             }
-
             if (!edgeIndices) {
                 edgeIndices = buildEdgeIndices(positions, indices, null, this._edgeThreshold);
             }
-
             geometryCfg.edgeIndices = edgeIndices;
-
-            preparedGeometryCfg = prepareMeshGeometry (
-                geometryCfg,
-                this._enableVertexWelding,
-                this._enableIndexRebucketing
-            );
-
+            preparedGeometryCfg = prepareMeshGeometry(geometryCfg, this._enableVertexWelding, this._enableIndexRebucketing);
             if (instancing) {
                 this._preparedInstancingGeometries[geometryId] = preparedGeometryCfg;
             }
         } else {
             preparedGeometryCfg = this._preparedInstancingGeometries[geometryId];
         }
-        
+
         let layer = this._currentDataTextureLayer;
 
-        if (null !== layer && !layer.canCreatePortion(preparedGeometryCfg, instancing ? geometryId : null))
-        {
+        if (null !== layer && !layer.canCreatePortion(preparedGeometryCfg, instancing ? geometryId : null)) {
             layer.finalize();
             delete this._currentDataTextureLayer;
             layer = null;
         }
 
-        if (!layer)
-        {
+        if (!layer) {
             layer = new TrianglesDataTextureLayer(this, {
                 layerIndex: 0, // This is set in #finalize()
-
-                // chipmunk
                 // positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
-
-                // chipmunk: allow to have different origins per-mesh
+                // Allow to have different origins per-mesh
                 origin: cfg.origin,
             });
             this._layerList.push(layer);
@@ -1198,7 +1176,7 @@ class DataTextureSceneModel extends Component {
 
         const aabb = math.collapseAABB3();
 
-        preparedGeometryCfg.solid = preparedGeometryCfg.primitive == "solid";
+        preparedGeometryCfg.solid = preparedGeometryCfg.primitive === "solid";
 
         if (instancing) {
 
@@ -1284,9 +1262,8 @@ class DataTextureSceneModel extends Component {
 
                 case "triangles":
                 case "solid":
-                case "surface":                    
-                    portionId = layer.createPortion(utils.apply (
-                        {
+                case "surface":
+                    portionId = layer.createPortion(utils.apply({
                             origin: origin,
                             color: color,
                             metallic: metallic,
@@ -1308,9 +1285,11 @@ class DataTextureSceneModel extends Component {
 
                     mesh.numTriangles = numTriangles;
                     break;
+
                 case "lines":
                     throw "Not supported at the moment";
                     break;
+
                 case "points":
                     throw "Not supported at the moment";
                     break;
@@ -1322,7 +1301,7 @@ class DataTextureSceneModel extends Component {
 
             mesh.origin = origin;
         }
-        
+
         mesh.parent = null; // Will be set within PerformanceModelNode constructor
         mesh._layer = layer;
         mesh._portionId = portionId;
@@ -1357,7 +1336,7 @@ class DataTextureSceneModel extends Component {
     createEntity(cfg) {
 
         if (this._vfcManager && !this._vfcManager.finalized) {
-            this._vfcManager.addEntity (cfg);
+            this._vfcManager.addEntity(cfg);
             return;
         }
 
@@ -1448,35 +1427,27 @@ class DataTextureSceneModel extends Component {
         if (this.destroyed) {
             return;
         }
-
         if (this._vfcManager) {
-            this._vfcManager.finalize (
-                function () {
-                    if (!this._currentDataTextureLayer) {
-                        return;
-                    }
-
-                    this._currentDataTextureLayer.finalize();
-                    delete this._currentDataTextureLayer;
-                    this._currentDataTextureLayer = null;
+            this._vfcManager.finalize(() => {
+                if (!this._currentDataTextureLayer) {
+                    return;
                 }
-            );
+                this._currentDataTextureLayer.finalize();
+                delete this._currentDataTextureLayer;
+                this._currentDataTextureLayer = null;
+            });
         }
-        
         if (this._currentDataTextureLayer) {
-            this._currentDataTextureLayer.finalize ();
+            this._currentDataTextureLayer.finalize();
         }
-
         for (let i = 0, len = this._nodeList.length; i < len; i++) {
             const node = this._nodeList[i];
             node._finalize();
         }
-
         for (let i = 0, len = this._nodeList.length; i < len; i++) {
             const node = this._nodeList[i];
             node._finalize2();
         }
-
         // Sort layers to reduce WebGL shader switching when rendering them
         this._layerList.sort((a, b) => {
             if (a.sortId < b.sortId) {
@@ -1487,27 +1458,17 @@ class DataTextureSceneModel extends Component {
             }
             return 0;
         });
-
         for (let i = 0, len = this._layerList.length; i < len; i++) {
             const layer = this._layerList[i];
             layer.layerIndex = i;
         }
-
         this.glRedraw();
-
         this.scene._aabbDirty = true;
-
         this._instancingGeometries = {};
         this._preparedInstancingGeometries = {};
-
         if (this._targetLodFps) {
-            this.lodCullingManager = new LodCullingManager (
-                this,
-                [ 2000, 600, 150, 80, 20 ],
-                this._targetLodFps
-            );
+            this.lodCullingManager = new LodCullingManager(this, [2000, 600, 150, 80, 20], this._targetLodFps);
         }
-
         for (let i = 0, len = this._layerList.length; i < len; i++) {
             const layer = this._layerList[i];
             layer.attachToRenderingEvent();
@@ -1556,27 +1517,21 @@ class DataTextureSceneModel extends Component {
 
     /** @private */
     _getActiveSectionPlanesForLayer(layer) {
-
         const renderFlags = this.renderFlags;
         const sectionPlanes = this.scene._sectionPlanesState.sectionPlanes;
         const numSectionPlanes = sectionPlanes.length;
         const baseIndex = layer.layerIndex * numSectionPlanes;
-
         if (numSectionPlanes > 0) {
             for (let i = 0; i < numSectionPlanes; i++) {
-
                 const sectionPlane = sectionPlanes[i];
-
                 if (!sectionPlane.active) {
                     renderFlags.sectionPlanesActivePerLayer[baseIndex + i] = false;
-
                 } else {
                     renderFlags.sectionPlanesActivePerLayer[baseIndex + i] = true;
                     renderFlags.sectioned = true;
                 }
             }
         }
-
         return true;
     }
 
@@ -1829,28 +1784,6 @@ class DataTextureSceneModel extends Component {
         }
     }
 
-    drawVertexDepths(frameCtx) {
-        if (this.numVisibleLayerPortions === 0) {
-            return;
-        }
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawVertexDepths(renderFlags, frameCtx);
-        }
-    }
-
-    drawVertexZBufferInitializer(frameCtx) {
-        if (this.numVisibleLayerPortions === 0) {
-            return;
-        }
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawVertexZBufferInitializer(renderFlags, frameCtx);
-        }
-    }
-
     /**
      * Called by DataTextureSceneModelMesh.drawPickNormals()
      * @private
@@ -1863,6 +1796,30 @@ class DataTextureSceneModel extends Component {
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
             this._layerList[layerIndex].drawPickNormals(renderFlags, frameCtx);
+        }
+    }
+
+    drawSnapInitDepthBuf(frameCtx) {
+        if (this.numVisibleLayerPortions === 0) {
+            return;
+        }
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            const layer = this._layerList[layerIndex];
+            layer.drawSnapInitDepthBuf(renderFlags, frameCtx);
+        }
+    }
+
+    drawSnapDepths(frameCtx) {
+        if (this.numVisibleLayerPortions === 0) {
+            return;
+        }
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            const layer = this._layerList[layerIndex];
+            layer.drawSnapDepths(renderFlags, frameCtx);
         }
     }
 

@@ -1653,7 +1653,7 @@ class TrianglesDataTextureLayer {
         }
     }
 
-    drawVertexDepths(renderFlags, frameCtx) {
+    drawSnapDepths(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
@@ -1663,7 +1663,7 @@ class TrianglesDataTextureLayer {
         }
     }
 
-    drawVertexZBufferInitializer(renderFlags, frameCtx) {
+    drawSnapInitDepthBuf(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }

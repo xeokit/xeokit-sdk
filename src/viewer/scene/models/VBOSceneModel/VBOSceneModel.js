@@ -2153,7 +2153,7 @@ class VBOSceneModel extends Component {
             wrapS,
             wrapT,
             wrapR,
-           // flipY: cfg.flipY,
+            // flipY: cfg.flipY,
             encoding
         });
         if (cfg.preloadColor) {
@@ -3276,6 +3276,34 @@ ${cfg.uv && cfg.uv.length > 0 ? 1 : 0}-${cfg.uvCompressed && cfg.uvCompressed.le
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
             this._layerList[layerIndex].drawPickNormals(renderFlags, frameCtx);
+        }
+    }
+
+    drawSnapInitDepthBuf(frameCtx) {
+        if (this.numVisibleLayerPortions === 0) {
+            return;
+        }
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            const layer = this._layerList[layerIndex];
+            if (layer.drawSnapInitDepthBuf) {
+                layer.drawSnapInitDepthBuf(renderFlags, frameCtx);
+            }
+        }
+    }
+
+    drawSnapDepths(frameCtx) {
+        if (this.numVisibleLayerPortions === 0) {
+            return;
+        }
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            const layer = this._layerList[layerIndex];
+            if (layer.drawSnapDepths) {
+                layer.drawSnapDepths(renderFlags, frameCtx);
+            }
         }
     }
 

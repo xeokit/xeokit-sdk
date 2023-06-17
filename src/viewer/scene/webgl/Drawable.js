@@ -118,7 +118,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawColorOpaque(renderFlags, frameCtx) {
+    drawColorOpaque(frameCtx) {
     }
 
     /**
@@ -129,7 +129,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawColorTransparent(renderFlags, frameCtx) {
+    drawColorTransparent(frameCtx) {
     }
 
     // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
@@ -140,7 +140,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawDepth(renderFlags, frameCtx) {
+    drawDepth(frameCtx) {
     }
 
     /**
@@ -149,7 +149,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawNormals(renderFlags, frameCtx) {
+    drawNormals(frameCtx) {
     }
 
     // ---------------------- EMPHASIS RENDERING -----------------------------------
@@ -162,7 +162,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawSilhouetteXRayed(renderFlags, frameCtx) {
+    drawSilhouetteXRayed(frameCtx) {
     }
 
     /**
@@ -173,7 +173,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawSilhouetteHighlighted(renderFlags, frameCtx) {
+    drawSilhouetteHighlighted(frameCtx) {
     }
 
     /**
@@ -184,7 +184,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawSilhouetteSelected(renderFlags, frameCtx) {
+    drawSilhouetteSelected(frameCtx) {
     }
 
     // ---------------------- EDGES RENDERING -----------------------------------
@@ -197,7 +197,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawEdgesColorOpaque(renderFlags, frameCtx) {
+    drawEdgesColorOpaque(frameCtx) {
     }
 
     /**
@@ -208,7 +208,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawEdgesColorTransparent(renderFlags, frameCtx) {
+    drawEdgesColorTransparent(frameCtx) {
     }
 
     /**
@@ -219,7 +219,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawEdgesXRayed(renderFlags, frameCtx) {
+    drawEdgesXRayed(frameCtx) {
     }
 
     /**
@@ -230,7 +230,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawEdgesHighlighted(renderFlags, frameCtx) {
+    drawEdgesHighlighted(frameCtx) {
     }
 
     /**
@@ -241,7 +241,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawEdgesSelected(renderFlags, frameCtx) {
+    drawEdgesSelected(frameCtx) {
     }
 
     // ---------------------- OCCLUSION CULL RENDERING -----------------------------------
@@ -252,7 +252,7 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawOcclusion(renderFlags, frameCtx) {
+    drawOcclusion(frameCtx) {
     }
 
     // ---------------------- SHADOW BUFFER RENDERING -----------------------------------
@@ -263,8 +263,31 @@ class Drawable {
      * @param {FrameContext} frameCtx Renderer frame context.
      * @abstract
      */
-    drawShadow(renderFlags, frameCtx) {
+    drawShadow(frameCtx) {
     }
+
+    // ---------------------- SHADOW BUFFER RENDERING -----------------------------------
+
+    /**
+     * Initializes snap depth buffer.
+     *
+     * @param {FrameContext} frameCtx Renderer frame context.
+     * @abstract
+     */
+    drawSnapInitDepthBuf(frameCtx) {
+    }
+
+    // ---------------------- SHADOW BUFFER RENDERING -----------------------------------
+
+    /**
+     * Renders depths to snap depth buffer.
+     *
+     * @param {FrameContext} frameCtx Renderer frame context.
+     * @abstract
+     */
+    drawSnapDepths(frameCtx) {
+    }
+
 }
 
 export {Drawable};

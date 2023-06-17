@@ -26,19 +26,19 @@ class TrianglesDataTextureBuffer {
 
         this.perObjectOffsets = [];
 
-        this.perObjectPositionsDecodeMatrices = []; // chipmunk
+        this.perObjectPositionsDecodeMatrices = []; 
         this.perObjectInstancePositioningMatrices = [];
 
         this.perObjectVertexBases = [];
         this.perObjectIndexBaseOffsets = [];
         this.perObjectEdgeIndexBaseOffsets = [];
 
-        this.perTriangleNumberPortionId8Bits = []; // chipmunk
-        this.perTriangleNumberPortionId16Bits = []; // chipmunk
-        this.perTriangleNumberPortionId32Bits = []; // chipmunk
-        this.perEdgeNumberPortionId8Bits = []; // chipmunk
-        this.perEdgeNumberPortionId16Bits = []; // chipmunk
-        this.perEdgeNumberPortionId32Bits = []; // chipmunk
+        this.perTriangleNumberPortionId8Bits = []; 
+        this.perTriangleNumberPortionId16Bits = []; 
+        this.perTriangleNumberPortionId32Bits = []; 
+        this.perEdgeNumberPortionId8Bits = []; 
+        this.perEdgeNumberPortionId16Bits = []; 
+        this.perEdgeNumberPortionId32Bits = []; 
     }
 }
 
