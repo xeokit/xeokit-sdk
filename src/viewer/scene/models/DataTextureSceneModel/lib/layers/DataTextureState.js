@@ -919,8 +919,8 @@ class DataTextureGenerator
         }
 
         // in one row we can fit 512 matrices        
-        const textureWidth = 512 * 4;
-        const textureHeight =  Math.ceil (numMatrices / (textureWidth / 4));
+        const textureWidth = 512 * 3;
+        const textureHeight =  Math.ceil (numMatrices / (textureWidth / 3));
 
         var texArray = new Float32Array(4 * textureWidth * textureHeight);
 
@@ -928,17 +928,21 @@ class DataTextureGenerator
         dataTextureRamStats.numberOfTextures++;
 
         const tmpMatrix = math.mat4();
+        const tmpMatrix2 = math.mat4();
 
         for (var i = 0; i < positionDecodeMatrices.length; i++)
         {
             // 4x4 values
             texArray.set (
-                math.mulMat4(
-                    instanceMatrices[i],
-                    positionDecodeMatrices[i],
-                    tmpMatrix
-                ),
-                i * 16
+                math.transposeMat4(
+                    math.mulMat4(
+                        instanceMatrices[i],
+                        positionDecodeMatrices[i],
+                        tmpMatrix
+                    ),
+                    tmpMatrix2
+                ).slice(0, 12),
+                i * 12
             );
         }
 
