@@ -14,5 +14,6 @@ export * from "./nodes";
 export * from "./models";
 export * from "./scene/Scene";
 export * from "./sectionPlane";
+export * from "./stats";
 export * from "./viewport";
 export * from "./webgl";
