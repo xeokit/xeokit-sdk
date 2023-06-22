@@ -138,8 +138,8 @@ const core = new Core();
 
 const frame = function () {
     let time = Date.now();
-    if (lastTime > 0) { // Log FPS stats
-        elapsedTime = time - lastTime;
+    elapsedTime = time - lastTime;
+    if (lastTime > 0 && elapsedTime > 0) { // Log FPS stats
         var newFPS = 1000 / elapsedTime; // Moving average of FPS
         totalFPS += newFPS;
         fpsSamples.push(newFPS);
