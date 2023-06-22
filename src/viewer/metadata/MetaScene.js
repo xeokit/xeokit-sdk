@@ -315,6 +315,7 @@ class MetaScene {
                 delete this.propertySets[propertySetId];
             }
         }
+        delete this.rootMetaObjects[metaModel.rootMetaObject.id]
         delete this.metaModels[metaModel.id];
     }
 
