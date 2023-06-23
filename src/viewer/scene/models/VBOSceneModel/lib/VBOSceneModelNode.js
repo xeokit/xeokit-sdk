@@ -618,7 +618,10 @@ class VBOSceneModelNode {
         this._offsetAABB[4] = this._aabb[4] + this._offset[1];
         this._offsetAABB[5] = this._aabb[5] + this._offset[2];
         this.scene._aabbDirty = true;
-        this.scene._objectOffsetUpdated(this, offset);
+        this.scene._objectOffsetUpdated(
+            this,
+            offset.some((v) => v !== 0)
+        );
         this.model._aabbDirty = true;
         this.model.glRedraw();
     }
@@ -733,7 +736,9 @@ class VBOSceneModelNode {
                 this.scene._objectColorizeUpdated(this, false);
                 this.scene._objectOpacityUpdated(this, false);
             }
-            this.scene._objectOffsetUpdated(this, false);
+
+            if (this.offset.some((v) => v !== 0))
+                this.scene._objectOffsetUpdated(this, false);
         }
         for (let i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._destroy();

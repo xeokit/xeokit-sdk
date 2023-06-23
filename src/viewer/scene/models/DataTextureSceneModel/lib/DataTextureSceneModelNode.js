@@ -720,11 +720,10 @@ class DataTextureSceneModelNode {
             }
             if (this._opacityUpdated) {
                 this.scene._objectColorizeUpdated(this, false);
-            }
-            if (this._opacityUpdated) {
                 this.scene._objectOpacityUpdated(this, false);
             }
-            this.scene._objectOffsetUpdated(this, false);
+            if (this.offset.some((v) => v !== 0))
+                this.scene._objectOffsetUpdated(this, false);
         }
         for (let i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._destroy();

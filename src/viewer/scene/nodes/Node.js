@@ -1358,7 +1358,8 @@ class Node extends Component {
             }
             this.scene._objectColorizeUpdated(this, false);
             this.scene._objectOpacityUpdated(this, false);
-            this.scene._objectOffsetUpdated(this, false);
+            if (this.offset.some((v) => v !== 0))
+                this.scene._objectOffsetUpdated(this, false);
         }
         if (this._isModel) {
             this.scene._deregisterModel(this);
