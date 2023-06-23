@@ -720,7 +720,7 @@ class Mesh extends Component {
         visible = visible !== false;
         this._state.visible = visible;
         if (this._isObject) {
-            this.scene._objectVisibilityUpdated(this);
+            this.scene._objectVisibilityUpdated(this, visible);
         }
         this.glRedraw();
     }
@@ -756,7 +756,7 @@ class Mesh extends Component {
         }
         this._state.xrayed = xrayed;
         if (this._isObject) {
-            this.scene._objectXRayedUpdated(this);
+            this.scene._objectXRayedUpdated(this, xrayed);
         }
         this.glRedraw();
     }
@@ -792,7 +792,7 @@ class Mesh extends Component {
         }
         this._state.highlighted = highlighted;
         if (this._isObject) {
-            this.scene._objectHighlightedUpdated(this);
+            this.scene._objectHighlightedUpdated(this, highlighted);
         }
         this.glRedraw();
     }
@@ -828,7 +828,7 @@ class Mesh extends Component {
         }
         this._state.selected = selected;
         if (this._isObject) {
-            this.scene._objectSelectedUpdated(this);
+            this.scene._objectSelectedUpdated(this, selected);
         }
         this.glRedraw();
     }
@@ -1925,16 +1925,16 @@ class Mesh extends Component {
         if (this._isObject) {
             this.scene._deregisterObject(this);
             if (this._visible) {
-                this.scene._objectVisibilityUpdated(this, false);
+                this.scene._objectVisibilityUpdated(this, false, false);
             }
             if (this._xrayed) {
-                this.scene._objectXRayedUpdated(this, false);
+                this.scene._objectXRayedUpdated(this, false, false);
             }
             if (this._selected) {
-                this.scene._objectSelectedUpdated(this, false);
+                this.scene._objectSelectedUpdated(this, false, false);
             }
             if (this._highlighted) {
-                this.scene._objectHighlightedUpdated(this, false);
+                this.scene._objectHighlightedUpdated(this, false, false);
             }
             this.scene._objectColorizeUpdated(this, false);
             this.scene._objectOpacityUpdated(this, false);

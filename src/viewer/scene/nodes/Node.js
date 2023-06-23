@@ -1345,16 +1345,16 @@ class Node extends Component {
         if (this._isObject) {
             this.scene._deregisterObject(this);
             if (this._visible) {
-                this.scene._objectVisibilityUpdated(this, false);
+                this.scene._objectVisibilityUpdated(this, false, false);
             }
             if (this._xrayed) {
-                this.scene._objectXRayedUpdated(this, false);
+                this.scene._objectXRayedUpdated(this, false, false);
             }
             if (this._selected) {
-                this.scene._objectSelectedUpdated(this, false);
+                this.scene._objectSelectedUpdated(this, false, false);
             }
             if (this._highlighted) {
-                this.scene._objectHighlightedUpdated(this, false);
+                this.scene._objectHighlightedUpdated(this, false, false);
             }
             this.scene._objectColorizeUpdated(this, false);
             this.scene._objectOpacityUpdated(this, false);

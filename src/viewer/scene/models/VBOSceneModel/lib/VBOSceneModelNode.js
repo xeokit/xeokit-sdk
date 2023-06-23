@@ -174,7 +174,7 @@ class VBOSceneModelNode {
             this.meshes[i]._setVisible(this._flags);
         }
         if (this._isObject) {
-            this.model.scene._objectVisibilityUpdated(this);
+            this.model.scene._objectVisibilityUpdated(this, visible);
         }
         this.model.glRedraw();
     }
@@ -212,7 +212,7 @@ class VBOSceneModelNode {
             this.meshes[i]._setHighlighted(this._flags);
         }
         if (this._isObject) {
-            this.model.scene._objectHighlightedUpdated(this);
+            this.model.scene._objectHighlightedUpdated(this, highlighted);
         }
         this.model.glRedraw();
     }
@@ -250,7 +250,7 @@ class VBOSceneModelNode {
             this.meshes[i]._setXRayed(this._flags);
         }
         if (this._isObject) {
-            this.model.scene._objectXRayedUpdated(this);
+            this.model.scene._objectXRayedUpdated(this, xrayed);
         }
         this.model.glRedraw();
     }
@@ -288,7 +288,7 @@ class VBOSceneModelNode {
             this.meshes[i]._setSelected(this._flags);
         }
         if (this._isObject) {
-            this.model.scene._objectSelectedUpdated(this);
+            this.model.scene._objectSelectedUpdated(this, selected);
         }
         this.model.glRedraw();
     }
@@ -690,16 +690,16 @@ class VBOSceneModelNode {
         const scene = this.model.scene;
         if (this._isObject) {
             if (this.visible) {
-                scene._objectVisibilityUpdated(this);
+                scene._objectVisibilityUpdated(this, true);
             }
             if (this.highlighted) {
-                scene._objectHighlightedUpdated(this);
+                scene._objectHighlightedUpdated(this, true);
             }
             if (this.xrayed) {
-                scene._objectXRayedUpdated(this);
+                scene._objectXRayedUpdated(this, true);
             }
             if (this.selected) {
-                scene._objectSelectedUpdated(this);
+                scene._objectSelectedUpdated(this, true);
             }
         }
         for (let i = 0, len = this.meshes.length; i < len; i++) {
@@ -718,21 +718,19 @@ class VBOSceneModelNode {
         if (this._isObject) {
             scene._deregisterObject(this);
             if (this.visible) {
-                scene._objectVisibilityUpdated(this, false);
+                scene._objectVisibilityUpdated(this, false, false);
             }
             if (this.xrayed) {
-                scene._objectXRayedUpdated(this);
+                scene._objectXRayedUpdated(this, false);
             }
             if (this.selected) {
-                scene._objectSelectedUpdated(this);
+                scene._objectSelectedUpdated(this, false);
             }
             if (this.highlighted) {
-                scene._objectHighlightedUpdated(this);
+                scene._objectHighlightedUpdated(this, false);
             }
             if (this._opacityUpdated) {
                 this.scene._objectColorizeUpdated(this, false);
-            }
-            if (this._opacityUpdated) {
                 this.scene._objectOpacityUpdated(this, false);
             }
             this.scene._objectOffsetUpdated(this, false);
