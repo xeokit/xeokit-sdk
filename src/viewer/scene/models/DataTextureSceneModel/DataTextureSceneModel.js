@@ -1,20 +1,21 @@
 import {Component} from "../../Component.js";
 import {math} from "../../math/math.js";
-import {buildEdgeIndices} from '../../math/buildEdgeIndices.js';
 import {DataTextureSceneModelMesh} from './lib/DataTextureSceneModelMesh.js';
 import {DataTextureSceneModelNode} from './lib/DataTextureSceneModelNode.js';
 import {
-    prepareMeshGeometry,
     TrianglesDataTextureLayer
 } from './lib/layers/trianglesDataTexture/TrianglesDataTextureLayer.js';
 
 import {ENTITY_FLAGS} from './lib/ENTITY_FLAGS.js';
 import {utils} from "../../utils.js";
 import {RenderFlags} from "../../webgl/RenderFlags.js";
-import {worldToRTCPositions} from "../../math/rtcCoords.js";
 
 import {LodCullingManager} from "./lib/layers/trianglesDataTexture/LodCullingManager.js";
 import {ViewFrustumCullingManager} from "./lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js";
+import {buildEdgeIndices} from "../../math/buildEdgeIndices";
+import {rebucketPositions} from "./lib/layers/trianglesDataTexture/rebucketPositions";
+import {uniquifyPositions} from "./lib/layers/trianglesDataTexture/calculateUniquePositions";
+import {quantizePositions} from "./lib/compression";
 
 const tempVec3a = math.vec3();
 const tempMat4 = math.mat4();
@@ -66,10 +67,11 @@ class DataTextureSceneModel extends Component {
      * @param {Boolean} [cfg.disableIndexRebucketing] Disable index rebucketing when loading geometry into the GPU. Default is ```false```.
      */
     constructor(owner, cfg = {}) {
+
         super(owner, cfg);
 
         if (!(this.scene.canvas.gl instanceof WebGL2RenderingContext)) {
-            throw "Using a DataTextureSceneModel requires the usage of webgl2";
+            throw "DataTextureSceneModel requires webgl2";
         }
 
         /**
@@ -945,103 +947,75 @@ class DataTextureSceneModel extends Component {
      *
      * We can then supply the geometry ID to {@link DataTextureSceneModel#createMesh} when we want to create meshes that instance the geometry.
      *
-     * If provide a  ````positionsDecodeMatrix```` , then ````createGeometry()```` will assume
-     * that the ````positions```` and ````normals```` arrays are compressed. When compressed, ````positions```` will be
-     * quantized and in World-space, and ````normals```` will be oct-encoded and in World-space.
-     *
-     * Note that ````positions````, ````normals```` and ````indices```` are all required together.
-     *
      * @param {*} cfg Geometry properties.
      * @param {String|Number} cfg.id Mandatory ID for the geometry, to refer to with {@link DataTextureSceneModel#createMesh}.
      * @param {String} cfg.primitive The primitive type. Accepted values are 'points', 'lines', 'triangles', 'solid' and 'surface'.
-     * @param {Number[]} cfg.positions Flat array of positions.
-     * @param {Number[]} [cfg.normals] Flat array of normal vectors. Only used with 'triangles' primitives. When no normals are given, the geometry will be flat shaded using auto-generated face-aligned normals.
-     * @param {Number[]} [cfg.colors] Flat array of RGBA vertex colors as float values in range ````[0..1]````. Ignored when ````geometryId```` is given, overidden by ````color```` and ````colorsCompressed````.
+     * @param {Number[]} cfg.positionsCompressed Flat array of compressed positions.
      * @param {Number[]} [cfg.colorsCompressed] Flat array of RGBA vertex colors as unsigned short integers in range ````[0..255]````. Ignored when ````geometryId```` is given, overrides ````colors```` and is overriden by ````color````.
      * @param {Number[]} [cfg.indices] Array of indices. Not required for `points` primitives.
      * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Used only for Required for 'triangles' primitives. These are automatically generated internally if not supplied, using the ````edgeThreshold```` given to the ````DataTextureSceneModel```` constructor.
-     * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
+     * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positionsCompresse````.
      * @param {Number[]} [cfg.origin] Optional geometry origin, relative to {@link DataTextureSceneModel#origin}. When this is given, then every mesh created with {@link DataTextureSceneModel#createMesh} that uses this geometry will
      * be transformed relative to this origin.
      */
     createGeometry(cfg) {
-        if (cfg.positionsCompressed && !cfg.positions) {
-            cfg.positions = cfg.positionsCompressed;
-        }
-
         const geometryId = cfg.id;
-
         if (geometryId === undefined || geometryId === null) {
             this.error("Config missing: id");
             return;
         }
-        if (geometryId in this._instancingGeometries) {
+        if (geometryId in this._preparedInstancingGeometries) {
             this.error("Geometry already created: " + geometryId);
             return;
         }
-
         const primitive = cfg.primitive;
-
         if (primitive === undefined || primitive === null) {
             this.error("Config missing: primitive");
             return;
         }
-
+        if (!cfg.positionsCompressed && !cfg.positions) {
+            this.error("Config missing: positionsCompressed or positions");
+            return;
+        }
+        if (cfg.positionsCompressed) { // Pre-compressed
+            if (!cfg.positionsDecodeMatrix) {
+                this.error("Config missing: positionsDecodeMatrix");
+                return;
+            }
+        } else { // Compress
+            const aabb = math.collapseAABB3();
+            cfg.positionsDecodeMatrix = math.mat4();
+            math.expandAABB3Points3(aabb, cfg.positions);
+            cfg.positionsCompressed= quantizePositions(cfg.positions, aabb, cfg.positionsDecodeMatrix)
+        }
         const cfgOrigin = cfg.origin || cfg.rtcCenter;
         const origin = (cfgOrigin) ? math.addVec3(this._origin, cfgOrigin, tempVec3a) : this._origin;
-
         switch (primitive) {
             case "triangles":
             case "solid":
             case "surface":
-
-                this._instancingGeometries [cfg.id] = utils.apply(
-                    {
-                        origin,
-                        layerIndex: 0,
-                    },
-                    cfg
-                );
-                this._numTriangles += (cfg.indices ? Math.round(cfg.indices.length / 3) : 0);
+                if (!cfg.indices) {
+                    this.error(`Config missing: indices - required for primitive type "${primitive}"`);
+                    return;
+                }
+                const geometryCfg = utils.apply({origin, layerIndex: 0,}, cfg);
+                if (!geometryCfg.edgeIndices) {
+                    geometryCfg.edgeIndices = buildEdgeIndices(cfg.positionsCompressed, cfg.indices, null, 5.0);
+                }
+                this._instancingGeometries [cfg.id] = geometryCfg;
+                this._numTriangles += cfg.indices.length / 3;
+                const preparedGeometryCfg = prepareMeshGeometry(geometryCfg, this._enableVertexWelding, this._enableIndexRebucketing);
+                this._preparedInstancingGeometries[geometryId] = preparedGeometryCfg;
                 break;
             case "lines":
-                throw "Not supported at the moment";
-                break;
             case "points":
-                throw "Not supported at the moment";
-                break;
+                this.error(`Primitive type not supported: "${primitive}"`);
         }
-
         this.numGeometries++;
     }
 
     /**
      * Creates a mesh within this DataTextureSceneModel.
-     *
-     * A mesh can either share geometry with other meshes, or have its own unique geometry.
-     *
-     * To share a geometry with other meshes, provide the ID of a geometry created earlier
-     * with {@link DataTextureSceneModel#createGeometry}.
-     *
-     * To create unique geometry for the mesh, provide geometry data arrays.
-     *
-     * Internally, DataTextureSceneModel will batch all unique mesh geometries into the same arrays, which improves
-     * rendering performance.
-     *
-     * If you accompany the arrays with a  ````positionsDecodeMatrix```` , then ````createMesh()```` will assume
-     * that the ````positions```` and ````normals```` arrays are compressed. When compressed, ````positions```` will be
-     * quantized and in World-space, and ````normals```` will be oct-encoded and in World-space.
-     *
-     * If you accompany the arrays with an  ````origin````, then ````createMesh()```` will assume
-     * that the ````positions```` are in relative-to-center (RTC) coordinates, with ````origin```` being the origin of their
-     * RTC coordinate system.
-     *
-     * When providing either ````positionsDecodeMatrix```` or ````origin````, ````createMesh()```` will start a new
-     * batch each time either of those two parameters change since the last call. Therefore, to combine arrays into the
-     * minimum number of batches, it's best for performance to create your shared meshes in runs that have the same value
-     * for ````positionsDecodeMatrix```` and ````origin````.
-     *
-     * Note that ````positions````, ````normals```` and ````indices```` are all required together.
      *
      * @param {object} cfg Object properties.
      * @param {String} cfg.id Mandatory ID for the new mesh. Must not clash with any existing components within the {@link Scene}.
@@ -1065,98 +1039,69 @@ class DataTextureSceneModel extends Component {
      * @param {Number} [cfg.opacity=1] Opacity in range ````[0..1]````.
      */
     createMesh(cfg) {
-        if (cfg.positionsCompressed && !cfg.positions) {
-            cfg.positions = cfg.positionsCompressed;
-        }
-
-        if (this._vfcManager && !this._vfcManager.finalized) {
-            if (cfg.color) {
-                cfg.color = cfg.color.slice();
-            }
-
-            if (cfg.positionsDecodeMatrix) {
-                cfg.positionsDecodeMatrix = cfg.positionsDecodeMatrix.slice();
-            }
-
-            this._vfcManager.addMesh(cfg);
-
-            return;
-        }
-
-        let id = cfg.id;
+        const id = cfg.id;
         if (id === undefined || id === null) {
             this.error("Config missing: id");
             return;
         }
         if (this._meshes[id]) {
-            this.error("DataTextureSceneModel already has a Mesh with this ID: " + id + "");
+            this.error(`DataTextureSceneModel already has a Mesh with this ID: ${id}`);
             return;
         }
-
-        const geometryId = cfg.geometryId;
-        const instancing = (geometryId !== undefined);
-
-        let geometryCfg = null;
-
-        if (instancing) {
-            geometryCfg = this._instancingGeometries[geometryId];
-        } else {
-            geometryCfg = cfg;
-        }
-
-        /**
-         * This will be the prepared mesh geometry, with index rebucketting applied.
-         */
-        let preparedGeometryCfg = null;
-        if (!instancing || !(geometryId in this._preparedInstancingGeometries)) {
-            let primitive = geometryCfg.primitive || "triangles";
-            if (primitive !== "triangles" && primitive !== "solid" && primitive !== "surface") {
-                this.error(`Unsupported value for 'primitive': '${primitive}' - supported values are 'triangles', 'solid' and 'surface'. Defaulting to 'triangles'.`);
-                primitive = "triangles";
-            }
-            let positions = geometryCfg.positions;
-            if (!positions) {
-                this.error("Config missing: positions (no meshIds provided, so expecting geometry arrays instead)");
-                return null;
-            }
-            let indices = geometryCfg.indices;
-            let edgeIndices = geometryCfg.edgeIndices;
-            if (!geometryCfg.indices && primitive === "triangles") {
-                this.error("Config missing for triangles primitive: indices (no meshIds provided, so expecting geometry arrays instead)");
-                return null;
-            }
-            if (!edgeIndices) {
-                edgeIndices = buildEdgeIndices(positions, indices, null, this._edgeThreshold);
-            }
-            geometryCfg.edgeIndices = edgeIndices;
-            preparedGeometryCfg = prepareMeshGeometry(geometryCfg, this._enableVertexWelding, this._enableIndexRebucketing);
-            if (instancing) {
-                this._preparedInstancingGeometries[geometryId] = preparedGeometryCfg;
-            }
-        } else {
+        let geometryId = cfg.geometryId;
+        let preparedGeometryCfg;
+        if (geometryId !== null && geometryId !== undefined) {
             preparedGeometryCfg = this._preparedInstancingGeometries[geometryId];
+            if (!preparedGeometryCfg) {
+                this.error(`Geometry not found: ${geometryId}`);
+                return;
+            }
+        } else {
+            if (cfg.primitive === undefined || cfg.primitive === null) {
+                this.error("Config missing: primitive");
+                return;
+            }
+            if (!cfg.positionsCompressed && !cfg.positions) {
+                this.error("Config missing: positionsCompressed or positions");
+                return;
+            }
+            if (cfg.primitive !== "points" || !cfg.indices) {
+                this.error("Config missing: indices - required for points primitives");
+                return;
+            }
+            if (cfg.positionsCompressed && !cfg.positionsDecodeMatrix) {
+                this.error("Config missing: positionsDecodeMatrix - required with positionsCompressed");
+                return;
+            }
+            geometryId = math.createUUID();
+            this.createGeometry({
+                id: geometryId,
+                primitive: cfg.primitive,
+                positions: cfg.positions,
+                positionsCompressed: cfg.positionsCompressed,
+                positionsDecodeMatrix: cfg.positionsDecodeMatrix,
+                indices: cfg.indices
+            });
+            preparedGeometryCfg = this._preparedInstancingGeometries[geometryId];
+            cfg.geometryId = geometryId;
         }
-
+        const origin = cfg.origin;
+        cfg.color = cfg.color ? cfg.color.slice() : [255, 255, 255];
+        if (this._vfcManager && !this._vfcManager.finalized) {
+            this._vfcManager.addMesh(cfg); // To be created in #finalize()
+            return;
+        }
         let layer = this._currentDataTextureLayer;
-
-        if (null !== layer && !layer.canCreatePortion(preparedGeometryCfg, instancing ? geometryId : null)) {
+        if (null !== layer && !layer.canCreatePortion(preparedGeometryCfg, null)) {
             layer.finalize();
             delete this._currentDataTextureLayer;
             layer = null;
         }
-
         if (!layer) {
-            layer = new TrianglesDataTextureLayer(this, {
-                layerIndex: 0, // This is set in #finalize()
-                // positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
-                // Allow to have different origins per-mesh
-                origin: cfg.origin,
-            });
+            layer = new TrianglesDataTextureLayer(this, {layerIndex: 0, origin}); // layerIndex is set in #finalize()
             this._layerList.push(layer);
             this._currentDataTextureLayer = layer;
         }
-
-        let portionId;
 
         const color = (cfg.color) ? new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)]) : [255, 255, 255];
         const opacity = (cfg.opacity !== undefined && cfg.opacity !== null) ? Math.floor(cfg.opacity * 255) : 255;
@@ -1166,145 +1111,56 @@ class DataTextureSceneModel extends Component {
         const mesh = new DataTextureSceneModelMesh(this, id, color, opacity);
 
         const pickId = mesh.pickId;
-
         const a = pickId >> 24 & 0xFF;
         const b = pickId >> 16 & 0xFF;
         const g = pickId >> 8 & 0xFF;
         const r = pickId & 0xFF;
 
         const pickColor = new Uint8Array([r, g, b, a]); // Quantized pick color
-
         const aabb = math.collapseAABB3();
 
         preparedGeometryCfg.solid = preparedGeometryCfg.primitive === "solid";
 
-        if (instancing) {
+        let meshMatrix;
+        let worldMatrix = this._worldMatrixNonIdentity ? this._worldMatrix : null;
 
-            let meshMatrix;
-            let worldMatrix = this._worldMatrixNonIdentity ? this._worldMatrix : null;
-
-            if (cfg.matrix) {
-                meshMatrix = cfg.matrix;
-            } else {
-                const scale = cfg.scale || defaultScale;
-                const position = cfg.position || defaultPosition;
-                const rotation = cfg.rotation || defaultRotation;
-                math.eulerToQuaternion(rotation, "XYZ", defaultQuaternion);
-                meshMatrix = math.composeMat4(position, defaultQuaternion, scale, tempMat4);
-            }
-
-            portionId = layer.createPortion(
-                preparedGeometryCfg,
-                {
-                    origin: cfg.origin,
-                    geometryId: geometryId,
-                    color: color,
-                    metallic: metallic,
-                    roughness: roughness,
-                    opacity: opacity,
-                    meshMatrix: meshMatrix,
-                    worldMatrix: worldMatrix,
-                    aabb: aabb,
-                    pickColor: pickColor
-                }
-            );
-
-            math.expandAABB3(this._aabb, aabb);
-
-            this._numTriangles += preparedGeometryCfg.indices.length / 3;
-            mesh.numTriangles = preparedGeometryCfg.indices.length / 3;
-
-            mesh.origin = preparedGeometryCfg.origin;
-        } else { // Batching
-            let origin = null;
-
-            if (!cfg.positionsDecodeMatrix) { // TODO: Assumes we never quantize double-precision coordinates
-                const rtcCenter = math.vec3();
-                const rtcPositions = [];
-                const rtcNeeded = worldToRTCPositions(positions, rtcPositions, rtcCenter);
-                if (rtcNeeded) {
-                    positions = rtcPositions;
-                    origin = math.addVec3(this._origin, rtcCenter, rtcCenter);
-                }
-            }
-
-            const cfgOrigin = cfg.origin || cfg.rtcCenter;
-            if (cfgOrigin) {
-                if (!origin) {
-                    origin = cfgOrigin;
-                } else {
-                    origin = math.addVec3(this._origin, cfgOrigin, tempVec3a);
-                }
-            } else {
-                origin = this._origin;
-            }
-
-            // TODO: treat the possibility of different origins
-
-            const worldMatrix = this._worldMatrixNonIdentity ? this._worldMatrix : null;
-            let meshMatrix;
-
-            if (!cfg.positionsDecodeMatrix) {
-                if (cfg.matrix) {
-                    meshMatrix = cfg.matrix;
-                } else {
-                    const scale = cfg.scale || defaultScale;
-                    const position = cfg.position || defaultPosition;
-                    const rotation = cfg.rotation || defaultRotation;
-                    math.eulerToQuaternion(rotation, "XYZ", defaultQuaternion);
-                    meshMatrix = math.composeMat4(position, defaultQuaternion, scale, tempMat4);
-                }
-            }
-
-            let primitive = cfg.primitive || "triangles";
-
-            switch (primitive) {
-
-                case "triangles":
-                case "solid":
-                case "surface":
-                    portionId = layer.createPortion(utils.apply({
-                            origin: origin,
-                            color: color,
-                            metallic: metallic,
-                            roughness: roughness,
-                            colors: cfg.colors,
-                            colorsCompressed: cfg.colorsCompressed,
-                            opacity: opacity,
-                            meshMatrix: meshMatrix,
-                            worldMatrix: worldMatrix,
-                            aabb: aabb,
-                            pickColor: pickColor
-                        },
-                        preparedGeometryCfg
-                    ));
-
-                    const numTriangles = Math.round(preparedGeometryCfg.indices.length / 3);
-
-                    this._numTriangles += numTriangles;
-
-                    mesh.numTriangles = numTriangles;
-                    break;
-
-                case "lines":
-                    throw "Not supported at the moment";
-                    break;
-
-                case "points":
-                    throw "Not supported at the moment";
-                    break;
-            }
-
-            math.expandAABB3(this._aabb, aabb);
-
-            this.numGeometries++;
-
-            mesh.origin = origin;
+        if (cfg.matrix) {
+            meshMatrix = cfg.matrix;
+        } else {
+            const scale = cfg.scale || defaultScale;
+            const position = cfg.position || defaultPosition;
+            const rotation = cfg.rotation || defaultRotation;
+            math.eulerToQuaternion(rotation, "XYZ", defaultQuaternion);
+            meshMatrix = math.composeMat4(position, defaultQuaternion, scale, math.mat4());
         }
 
+        const portionId = layer.createPortion(preparedGeometryCfg, {
+            origin,
+            geometryId,
+            color,
+            metallic,
+            roughness,
+            opacity,
+            meshMatrix,
+            worldMatrix,
+            aabb,
+            pickColor
+        });
+
+        math.expandAABB3(this._aabb, aabb);
+
+        this._numTriangles += preparedGeometryCfg.indices.length / 3;
+        mesh.numTriangles = preparedGeometryCfg.indices.length / 3;
+
+        mesh.origin = preparedGeometryCfg.origin;
+        math.expandAABB3(this._aabb, aabb);
+        this.numGeometries++;
+        mesh.origin = origin;
+        // noinspection JSConstantReassignment
         mesh.parent = null; // Will be set within PerformanceModelNode constructor
         mesh._layer = layer;
         mesh._portionId = portionId;
+        // noinspection JSConstantReassignment
         mesh.aabb = aabb;
 
         this._meshes[id] = mesh;
@@ -1334,13 +1190,6 @@ class DataTextureSceneModel extends Component {
      * @returns {Entity}
      */
     createEntity(cfg) {
-
-        if (this._vfcManager && !this._vfcManager.finalized) {
-            this._vfcManager.addEntity(cfg);
-            return;
-        }
-
-        // Validate or generate Entity ID
         let id = cfg.id;
         if (id === undefined) {
             id = math.createUUID();
@@ -1348,10 +1197,13 @@ class DataTextureSceneModel extends Component {
             this.error("Scene already has a Component with this ID: " + id + " - will assign random ID");
             id = math.createUUID();
         }
-        // Collect PerformanceModelNode's PerformanceModelMeshes
         const meshIds = cfg.meshIds;
         if (meshIds === undefined) {
             this.error("Config missing: meshIds");
+            return;
+        }
+        if (this._vfcManager && !this._vfcManager.finalized) {
+            this._vfcManager.addEntity(cfg); // NB: Meshes won't exist yet
             return;
         }
         let meshes = [];
@@ -1359,16 +1211,15 @@ class DataTextureSceneModel extends Component {
             const meshId = meshIds[i];
             const mesh = this._meshes[meshId];
             if (!mesh) {
-                this.error("Mesh with this ID not found: " + meshId + " - ignoring this mesh");
+                this.error(`Mesh with this ID not found: "${meshId}" - ignoring this mesh`);
                 continue;
             }
             if (mesh.parent) {
-                this.error("Mesh with ID " + meshId + " already belongs to object with ID " + mesh.parent.id + " - ignoring this mesh");
+                this.error(`Mesh with ID "${meshId}" already belongs to object with ID "${mesh.parent.id}" - ignoring this mesh`);
                 continue;
             }
             meshes.push(mesh);
         }
-        // Create PerformanceModelNode flags
         let flags = 0;
         if (this._visible && cfg.visible !== false) {
             flags = flags | ENTITY_FLAGS.VISIBLE;
@@ -1397,8 +1248,6 @@ class DataTextureSceneModel extends Component {
         if (this._selected && cfg.selected !== false) {
             flags = flags | ENTITY_FLAGS.SELECTED;
         }
-
-        // Create PerformanceModelNode AABB
         let aabb;
         if (meshes.length === 1) {
             aabb = meshes[0].aabb;
@@ -1408,12 +1257,11 @@ class DataTextureSceneModel extends Component {
                 math.expandAABB3(aabb, meshes[i].aabb);
             }
         }
-
-        const node = new DataTextureSceneModelNode(this, cfg.isObject, id, meshes, flags, aabb); // Internally sets PerformanceModelMesh#parent to this PerformanceModelNode
+        const node = new DataTextureSceneModelNode(this, cfg.isObject, id, meshes, flags, aabb);
         this._nodeList.push(node);
         this._nodes[id] = node;
         this.numEntities++;
-        return node;
+        return node; // Entity
     }
 
     /**
@@ -1844,6 +1692,70 @@ class DataTextureSceneModel extends Component {
         }
         super.destroy();
     }
+}
+
+
+/**
+ * This function applies two steps to the provided mesh geometry data:
+ *
+ * - 1st, it reduces its `.positions` to unique positions, thus removing duplicate vertices. It will adjust the `.indices` and `.edgeIndices` array accordingly to the unique `.positions`.
+ *
+ * - 2nd, it tries to do an optimization called `index rebucketting`
+ *
+ *   _Rebucketting minimizes the amount of RAM usage for a given mesh geometry by trying do demote its needed index bitness._
+ *
+ *   - _for 32 bit indices, will try to demote them to 16 bit indices_
+ *   - _for 16 bit indices, will try to demote them to 8 bits indices_
+ *   - _8 bits indices are kept as-is_
+ *
+ *   The fact that 32/16/8 bits are needed for indices, depends on the number of maximumm indexable vertices within the mesh geometry: this is, the number of vertices in the mesh geometry.
+ *
+ * The function returns the same provided input `geometryCfg`, enrichened with the additional key `.preparedBukets`.
+ *
+ * @param {object} geometryCfg The mesh information containing `.positions`, `.indices`, `.edgeIndices` arrays.
+ *
+ * @returns {object} The mesh information enrichened with `.preparedBuckets` key.
+ */
+function prepareMeshGeometry (geometryCfg, enableVertexWelding, enableIndexRebucketing) {
+    let uniquePositions, uniqueIndices, uniqueEdgeIndices;
+    if (enableVertexWelding) {
+        [
+            uniquePositions,
+            uniqueIndices,
+            uniqueEdgeIndices,
+        ] = uniquifyPositions ({
+            positions: geometryCfg.positions,
+            indices: geometryCfg.indices,
+            edgeIndices: geometryCfg.edgeIndices
+        });
+    } else {
+        uniquePositions = geometryCfg.positions;
+        uniqueIndices = geometryCfg.indices;
+        uniqueEdgeIndices = geometryCfg.edgeIndices;
+    }
+    let buckets;
+    if (enableIndexRebucketing) {
+        let numUniquePositions = uniquePositions.length / 3;
+        buckets = rebucketPositions (
+            {
+                positions: uniquePositions,
+                indices: uniqueIndices,
+                edgeIndices: uniqueEdgeIndices,
+            },
+            (numUniquePositions > (1<< 16)) ? 16 : 8,
+            // true
+        );
+    } else {
+        buckets = [{
+            positions: uniquePositions,
+            indices: uniqueIndices,
+            edgeIndices: uniqueEdgeIndices,
+        }];
+    }
+
+    geometryCfg.preparedBuckets = buckets;
+
+    return geometryCfg;
 }
 
 export {DataTextureSceneModel};
