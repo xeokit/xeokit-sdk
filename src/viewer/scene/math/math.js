@@ -25,7 +25,7 @@ const math = {
     MIN_DOUBLE: -Number.MAX_SAFE_INTEGER,
     MAX_DOUBLE: Number.MAX_SAFE_INTEGER,
 
-    MAX_INT: 1000000000,
+    MAX_INT: 10000000,
 
     /**
      * The number of radiians in a degree (0.0174532925).
