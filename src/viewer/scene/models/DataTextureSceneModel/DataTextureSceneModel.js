@@ -979,7 +979,7 @@ class DataTextureSceneModel extends Component {
         }
         if (cfg.positionsCompressed) { // Pre-compressed
             if (!cfg.positionsDecodeMatrix) {
-                this.error("Config missing: positionsDecodeMatrix");
+                this.error(`Config missing: positionsDecodeMatrix`);
                 return;
             }
         } else { // Compress
