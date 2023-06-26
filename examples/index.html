@@ -509,7 +509,13 @@
             ["picking_setObjectsPickable", "Controlling what's pickable - only the blue object pickable"],
 
             ["picking_pickSurfacePrecision_VBOSceneModel_batching", "Full-precision surface picking with VBOSceneModel and batched geometries"],
-            ["picking_pickSurfacePrecision_VBOSceneModel_instancing", "Full-precision surface picking with VBOSceneModel and instanced geometries"]
+            ["picking_pickSurfacePrecision_VBOSceneModel_instancing", "Full-precision surface picking with VBOSceneModel and instanced geometries"],
+
+            ["picking_snapToVertex_VBOSceneModel_batching", "Snap-to-vertex picking with VBOSceneModel and batched geometries"],
+            ["picking_snapToVertex_VBOSceneModel_instancing", "Snap-to-vertex picking with VBOSceneModel and instanced geometries"],
+
+            ["picking_snapToVertex_DataTextureSceneModel_batching", "Snap-to-vertex picking with DataTexModel and batched geometries"],
+            ["picking_snapToVertex_DataTextureSceneModel_instancing", "Snap-to-vertex picking with DataTexModel and instanced geometries"]
         ],
 
         "Emphasizing Objects": [
@@ -645,7 +651,7 @@
 
         "VBOSceneModel": [
 
-            "#High-performance model representation component",
+            "#High-performance VBO-based model representation component",
 
             "#Geometry reuse",
 
@@ -682,11 +688,18 @@
             ["sceneRepresentation_VBOSceneModel_batching_SAO", "VBOSceneModel with batched triangle geometries and SAO"],
             ["sceneRepresentation_VBOSceneModel_batching_PBR", "VBOSceneModel with batched triangle geometries and PBR"],
 
-
             "#Classifying with metadata",
 
             ["sceneRepresentation_VBOSceneModel_metadata", "VBOSceneModel classified with metadata"],
             ["sceneRepresentation_VBOSceneModel_metadata_federated", "VBOSceneModel classified with federated metadata"]
+        ],
+
+        "DataTextureSceneModel": [
+
+            "#Memory-efficient data-texture-based model representation component",
+
+            ["sceneRepresentation_DataTextureSceneModel_instancing", "DataTextureSceneModel classified with metadata"],
+            ["sceneRepresentation_DataTextureSceneModel_batching", "DataTextureSceneModel classified with metadata"]
         ],
 
         "Scene Graphs": [
