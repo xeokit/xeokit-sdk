@@ -1040,8 +1040,8 @@ class Scene extends Component {
         this._objectIds = null; // Lazy regenerate
     }
 
-    _objectVisibilityUpdated(entity, notify = true) {
-        if (entity.visible) {
+    _objectVisibilityUpdated(entity, bool, notify = true) {
+        if (bool) {
             if (ASSERT_OBJECT_STATE_UPDATE && this.visibleObjects[entity.id]) {
                 console.error("Redundant object visibility update (visible=true)");
                 return;
@@ -1062,8 +1062,8 @@ class Scene extends Component {
         }
     }
 
-    _objectXRayedUpdated(entity, notify = true) {
-        if (entity.xrayed) {
+    _objectXRayedUpdated(entity, bool, notify = true) {
+        if (bool) {
             if (ASSERT_OBJECT_STATE_UPDATE && this.xrayedObjects[entity.id]) {
                 console.error("Redundant object xray update (xrayed=true)");
                 return;
@@ -1084,8 +1084,8 @@ class Scene extends Component {
         }
     }
 
-    _objectHighlightedUpdated(entity, notify = true) {
-        if (entity.highlighted) {
+    _objectHighlightedUpdated(entity, bool, notify = true) {
+        if (bool) {
             if (ASSERT_OBJECT_STATE_UPDATE && this.highlightedObjects[entity.id]) {
                 console.error("Redundant object highlight update (highlighted=true)");
                 return;
@@ -1106,8 +1106,8 @@ class Scene extends Component {
         }
     }
 
-    _objectSelectedUpdated(entity, notify = true) {
-        if (entity.selected) {
+    _objectSelectedUpdated(entity, bool, notify = true) {
+        if (bool) {
             if (ASSERT_OBJECT_STATE_UPDATE && this.selectedObjects[entity.id]) {
                 console.error("Redundant object select update (selected=true)");
                 return;
@@ -1128,8 +1128,8 @@ class Scene extends Component {
         }
     }
 
-    _objectColorizeUpdated(entity, colorized) {
-        if (colorized) {
+    _objectColorizeUpdated(entity, bool) {
+        if (bool) {
             this.colorizedObjects[entity.id] = entity;
             this._numColorizedObjects++;
         } else {
@@ -1139,8 +1139,8 @@ class Scene extends Component {
         this._colorizedObjectIds = null; // Lazy regenerate
     }
 
-    _objectOpacityUpdated(entity, opacityUpdated) {
-        if (opacityUpdated) {
+    _objectOpacityUpdated(entity, bool) {
+        if (bool) {
             this.opacityObjects[entity.id] = entity;
             this._numOpacityObjects++;
         } else {
