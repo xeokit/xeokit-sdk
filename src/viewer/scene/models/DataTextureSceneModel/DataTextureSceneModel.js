@@ -970,8 +970,7 @@ class DataTextureSceneModel extends Component {
         }
         const primitive = cfg.primitive;
         if (primitive === undefined || primitive === null) {
-            this.error("Config missing: primitive");
-            return;
+            cfg.primitive = "triangles";
         }
         if (!cfg.positionsCompressed && !cfg.positions) {
             this.error("Config missing: positionsCompressed or positions");
@@ -1058,15 +1057,14 @@ class DataTextureSceneModel extends Component {
             }
         } else {
             if (cfg.primitive === undefined || cfg.primitive === null) {
-                this.error("Config missing: primitive");
-                return;
+                cfg.primitive = "triangles";
             }
             if (!cfg.positionsCompressed && !cfg.positions) {
                 this.error("Config missing: positionsCompressed or positions");
                 return;
             }
-            if (cfg.primitive !== "points" || !cfg.indices) {
-                this.error("Config missing: indices - required for points primitives");
+            if (cfg.primitive !== "points" && !cfg.indices) {
+                this.error(`Config missing: indices - required for ${cfg.primitive} primitives`);
                 return;
             }
             if (cfg.positionsCompressed && !cfg.positionsDecodeMatrix) {
