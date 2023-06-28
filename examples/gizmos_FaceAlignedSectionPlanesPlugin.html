@@ -17,14 +17,21 @@
             z-index: 200000;
         }
 
-        #mySectionPlaneControlCanvas {
+        #mySectionPlaneControlDiv {
+            padding: 10px;
+            font-size: 20px;
+            color: rgba(0,0,0,1);
             background-color: #ffffff;
+            border: 1px solid black;
+            opacity: 0.8;
             position: absolute;
-            width: 250px;
-            height: 250px;
-            top: 70px;
-            right: 10px;
+            width: 200px;
+            height: calc(100vh - 300px);
+            top: 150px;
+            left: 50px;
             z-index: 200000;
+            border-radius: 10px;
+            box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
@@ -33,7 +40,7 @@
 <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
 <canvas id="mySectionPlanesOverviewCanvas"></canvas>
-<canvas id="mySectionPlaneControlCanvas"></canvas>
+<div id="mySectionPlaneControlDiv">Click and vertically drag the mouse here to move the SectionPlane</div>
 <div class="slideout-sidebar">
     <img class="info-icon" src="../assets/images/section_plane_icon.png"/>
     <h1>FaceAlignedSectionPlanesPlugin</h1>
@@ -71,7 +78,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, FaceAlignedSectionPlanesPlugin} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, XKTLoaderPlugin, FaceAlignedSectionPlanesPlugin} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer
@@ -82,9 +89,9 @@
         transparent: true
     });
 
-    viewer.camera.eye = [-5.02, 2.22, 15.09];
-    viewer.camera.look = [4.97, 2.79, 9.89];
-    viewer.camera.up = [-0.05, 0.99, 0.02];
+    viewer.camera.eye = [-3.933, 2.855, 27.018];
+    viewer.camera.look = [4.400, 3.724, 8.899];
+    viewer.camera.up = [-0.018, 0.999, 0.039];
 
     //------------------------------------------------------------------------------------------------------------------
     // Add a XKTModelsPlugin - we'll use this to load the model geometry
@@ -98,7 +105,7 @@
 
     const sectionPlanes = new FaceAlignedSectionPlanesPlugin(viewer, {
         overviewCanvasId: "mySectionPlanesOverviewCanvas",
-        controlCanvasId: "mySectionPlaneControlCanvas",
+        controlElementId: "mySectionPlaneControlDiv",
         overviewVisible: true
     });
 
@@ -117,32 +124,14 @@
     // Create a couple of cross-section planes
     //------------------------------------------------------------------------------------------------------------------
 
-    // sectionPlanes.createSectionPlane({
-    //     id: "mySectionPlane",
-    //     pos: [1.04, 1.95, 9.74],
-    //     dir: [1.0, 0.0, 0.0]
-    // });
-
-    viewer.scene.input.on("click", function (coords) {
-        let hit = viewer.scene.pick({
-            canvasPos: coords,
-            pickSurface: true  // <<------ This causes picking to find the intersection point on the entity
-        });
-        if (hit) {
-            if (hit.entity.isObject) { // Only create CrossSections on surfaces of model objects, not on gizmos etc
-
-                const sectionPlane = sectionPlanes.createSectionPlane({
-                    canvasPos: hit.canvasPos,
-                    pos: hit.worldPos,
-                    dir: [-hit.worldNormal[0], -hit.worldNormal[1], -hit.worldNormal[2]]
-                });
-
-                sectionPlanes.showControl(sectionPlane.id);
-            }
-        }
+    const sectionPlane = sectionPlanes.createSectionPlane({
+        id: "mySectionPlane",
+        pos: [1.8933897259414376, 3.8494953147158935, 16.297288643481703],
+        dir: [0.007873527603475804, 0.007873527603475804, -0.9999380056414271]
     });
 
-    window.viewer = viewer;
+    sectionPlanes.showControl(sectionPlane.id);
+
 </script>
 
 </html>
