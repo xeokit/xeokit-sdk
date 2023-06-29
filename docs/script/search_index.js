@@ -180,6 +180,30 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturebuffer",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer.html",
+    "<span>DataTextureBuffer</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html",
+    "<span>DataTextureGenerator</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html",
+    "<span>DataTextureSceneModel</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html",
+    "<span>DataTextureState</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/utils/loadingmanager.js~defaultloadingmanager",
     "variable/index.html#static-variable-DefaultLoadingManager",
     "<span>DefaultLoadingManager</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/utils/LoadingManager.js</span>",
@@ -243,6 +267,18 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/entity.js~entity",
     "class/src/viewer/scene/Entity.js~Entity.html",
     "<span>Entity</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/Entity.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/facealignedsectionplanesplugin/facealignedsectionplanescontrol.js~facealignedsectionplanescontrol",
+    "class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js~FaceAlignedSectionPlanesControl.html",
+    "<span>FaceAlignedSectionPlanesControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/facealignedsectionplanesplugin/facealignedsectionplanesplugin.js~facealignedsectionplanesplugin",
+    "class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html",
+    "<span>FaceAlignedSectionPlanesPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js</span>",
     "class"
   ],
   [
@@ -450,6 +486,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/lodcullingmanager.js~lodcullingmanager",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js~LodCullingManager.html",
+    "<span>LodCullingManager</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~luminancealphaformat",
     "variable/index.html#static-variable-LuminanceAlphaFormat",
     "<span>LuminanceAlphaFormat</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
@@ -519,12 +561,6 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/mementos/modelmemento.js~modelmemento",
     "class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html",
     "<span>ModelMemento</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/mementos/ModelMemento.js</span>",
-    "class"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/plugins/treeviewplugin/modeltreeview.js~modeltreeview",
-    "class/src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView.html",
-    "<span>ModelTreeView</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/ModelTreeView.js</span>",
     "class"
   ],
   [
@@ -1080,6 +1116,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/viewfrustumcullingmanager.js~viewfrustumcullingmanager",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js~ViewFrustumCullingManager.html",
+    "<span>ViewFrustumCullingManager</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/viewer.js~viewer",
     "class/src/viewer/Viewer.js~Viewer.html",
     "<span>Viewer</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/Viewer.js</span>",
@@ -1176,6 +1218,18 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/cluster-helper.js~clusterizev2",
+    "function/index.html#static-function-clusterizeV2",
+    "<span>clusterizeV2</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/cluster-helper.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatextureramstats",
+    "variable/index.html#static-variable-dataTextureRamStats",
+    "<span>dataTextureRamStats</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/load3dsgeometry.js~load3dsgeometry",
     "function/index.html#static-function-load3DSGeometry",
     "<span>load3DSGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/load3DSGeometry.js</span>",
@@ -1185,6 +1239,18 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/loadobjgeometry.js~loadobjgeometry",
     "function/index.html#static-function-loadOBJGeometry",
     "<span>loadOBJGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/loadOBJGeometry.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/xeokit-cluster.js~makeclusters",
+    "function/index.html#static-function-makeClusters",
+    "<span>makeClusters</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/xeokit-cluster.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/rebucketpositions.js~rebucketpositions",
+    "function/index.html#static-function-rebucketPositions",
+    "<span>rebucketPositions</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/rebucketPositions.js</span>",
     "function"
   ],
   [
@@ -1200,21 +1266,9 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/plugins/treeviewplugin/modelvalidation.js~validatemetamodelfortreeviewcontainmenthierarchy",
-    "function/index.html#static-function-validateMetaModelForTreeViewContainmentHierarchy",
-    "<span>validateMetaModelForTreeViewContainmentHierarchy</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/modelValidation.js</span>",
-    "function"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/plugins/treeviewplugin/modelvalidation.js~validatemetamodelfortreeviewstoreyshierarchy",
-    "function/index.html#static-function-validateMetaModelForTreeViewStoreysHierarchy",
-    "<span>validateMetaModelForTreeViewStoreysHierarchy</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/modelValidation.js</span>",
-    "function"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/plugins/treeviewplugin/modelvalidation.js~validatemetamodelfortreeviewtypeshierarchy",
-    "function/index.html#static-function-validateMetaModelForTreeViewTypesHierarchy",
-    "<span>validateMetaModelForTreeViewTypesHierarchy</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/modelValidation.js</span>",
+    "@xeokit/xeokit-sdk/src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/calculateuniquepositions.js~uniquifypositions",
+    "function/index.html#static-function-uniquifyPositions",
+    "<span>uniquifyPositions</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/calculateUniquePositions.js</span>",
     "function"
   ],
   [
@@ -1866,6 +1920,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementsplugin.js~anglemeasurementsplugin#getcontainerelement",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html#instance-method-getContainerElement",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin#getContainerElement",
+    "method"
+  ],
+  [
     "src/plugins/anglemeasurementsplugin/anglemeasurementsplugin.js~anglemeasurementsplugin#measurements",
     "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html#instance-get-measurements",
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin#measurements",
@@ -2019,6 +2079,12 @@ window.esdocSearchIndex = [
     "src/plugins/annotationsplugin/annotationsplugin.js~annotationsplugin#destroyannotation",
     "class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html#instance-method-destroyAnnotation",
     "src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin#destroyAnnotation",
+    "method"
+  ],
+  [
+    "src/plugins/annotationsplugin/annotationsplugin.js~annotationsplugin#getcontainerelement",
+    "class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html#instance-method-getContainerElement",
+    "src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin#getContainerElement",
     "method"
   ],
   [
@@ -2328,6 +2394,42 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#xaxisvisible",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-set-xAxisVisible",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#xAxisVisible",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#xaxisvisible",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-get-xAxisVisible",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#xAxisVisible",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#yaxisvisible",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-set-yAxisVisible",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#yAxisVisible",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#yaxisvisible",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-get-yAxisVisible",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#yAxisVisible",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#zaxisvisible",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-set-zAxisVisible",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#zAxisVisible",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#zaxisvisible",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-get-zAxisVisible",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#zAxisVisible",
+    "member"
+  ],
+  [
     "src/plugins/distancemeasurementsplugin/distancemeasurementscontrol.js",
     "file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js.html",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js",
@@ -2352,6 +2454,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrol.js~distancemeasurementscontrol#markerdiv",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html#instance-member-markerDiv",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl#markerDiv",
+    "member"
+  ],
+  [
     "src/plugins/distancemeasurementsplugin/distancemeasurementscontrol.js~distancemeasurementscontrol#plugin",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html#instance-member-plugin",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl#plugin",
@@ -2362,6 +2470,18 @@ window.esdocSearchIndex = [
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html#instance-method-reset",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl#reset",
     "method"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrol.js~distancemeasurementscontrol#snapmode",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html#instance-set-snapMode",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl#snapMode",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrol.js~distancemeasurementscontrol#snapmode",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html#instance-get-snapMode",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl#snapMode",
+    "member"
   ],
   [
     "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js",
@@ -2436,6 +2556,24 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#defaultxaxisvisible",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-member-defaultXAxisVisible",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#defaultXAxisVisible",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#defaultyaxisvisible",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-member-defaultYAxisVisible",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#defaultYAxisVisible",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#defaultzaxisvisible",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-member-defaultZAxisVisible",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#defaultZAxisVisible",
+    "member"
+  ],
+  [
     "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#destroy",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-method-destroy",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#destroy",
@@ -2445,6 +2583,12 @@ window.esdocSearchIndex = [
     "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#destroymeasurement",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-method-destroyMeasurement",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#destroyMeasurement",
+    "method"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#getcontainerelement",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-method-getContainerElement",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#getContainerElement",
     "method"
   ],
   [
@@ -2481,6 +2625,150 @@ window.esdocSearchIndex = [
     "src/plugins/distancemeasurementsplugin/index.js",
     "file/src/plugins/DistanceMeasurementsPlugin/index.js.html",
     "src/plugins/DistanceMeasurementsPlugin/index.js",
+    "file"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/facealignedsectionplanescontrol.js",
+    "file/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js.html",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js",
+    "file"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/facealignedsectionplanescontrol.js~facealignedsectionplanescontrol#getvisible",
+    "class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js~FaceAlignedSectionPlanesControl.html#instance-method-getVisible",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js~FaceAlignedSectionPlanesControl#getVisible",
+    "method"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/facealignedsectionplanescontrol.js~facealignedsectionplanescontrol#id",
+    "class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js~FaceAlignedSectionPlanesControl.html#instance-member-id",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js~FaceAlignedSectionPlanesControl#id",
+    "member"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/facealignedsectionplanescontrol.js~facealignedsectionplanescontrol#sectionplane",
+    "class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js~FaceAlignedSectionPlanesControl.html#instance-get-sectionPlane",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js~FaceAlignedSectionPlanesControl#sectionPlane",
+    "member"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/facealignedsectionplanescontrol.js~facealignedsectionplanescontrol#setculled",
+    "class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js~FaceAlignedSectionPlanesControl.html#instance-method-setCulled",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js~FaceAlignedSectionPlanesControl#setCulled",
+    "method"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/facealignedsectionplanescontrol.js~facealignedsectionplanescontrol#setvisible",
+    "class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js~FaceAlignedSectionPlanesControl.html#instance-method-setVisible",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js~FaceAlignedSectionPlanesControl#setVisible",
+    "method"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/facealignedsectionplanesplugin.js",
+    "file/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js.html",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js",
+    "file"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/facealignedsectionplanesplugin.js~facealignedsectionplanesplugin#clear",
+    "class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html#instance-method-clear",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin#clear",
+    "method"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/facealignedsectionplanesplugin.js~facealignedsectionplanesplugin#constructor",
+    "class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html#instance-constructor-constructor",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/facealignedsectionplanesplugin.js~facealignedsectionplanesplugin#createsectionplane",
+    "class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html#instance-method-createSectionPlane",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin#createSectionPlane",
+    "method"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/facealignedsectionplanesplugin.js~facealignedsectionplanesplugin#destroy",
+    "class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html#instance-method-destroy",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin#destroy",
+    "method"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/facealignedsectionplanesplugin.js~facealignedsectionplanesplugin#destroysectionplane",
+    "class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html#instance-method-destroySectionPlane",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin#destroySectionPlane",
+    "method"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/facealignedsectionplanesplugin.js~facealignedsectionplanesplugin#flipsectionplanes",
+    "class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html#instance-method-flipSectionPlanes",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin#flipSectionPlanes",
+    "method"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/facealignedsectionplanesplugin.js~facealignedsectionplanesplugin#getdragsensitivity",
+    "class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html#instance-method-getDragSensitivity",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin#getDragSensitivity",
+    "method"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/facealignedsectionplanesplugin.js~facealignedsectionplanesplugin#getoverviewvisible",
+    "class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html#instance-method-getOverviewVisible",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin#getOverviewVisible",
+    "method"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/facealignedsectionplanesplugin.js~facealignedsectionplanesplugin#getshowncontrol",
+    "class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html#instance-method-getShownControl",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin#getShownControl",
+    "method"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/facealignedsectionplanesplugin.js~facealignedsectionplanesplugin#hidecontrol",
+    "class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html#instance-method-hideControl",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin#hideControl",
+    "method"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/facealignedsectionplanesplugin.js~facealignedsectionplanesplugin#sectionplanes",
+    "class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html#instance-get-sectionPlanes",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin#sectionPlanes",
+    "member"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/facealignedsectionplanesplugin.js~facealignedsectionplanesplugin#setdragsensitivity",
+    "class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html#instance-method-setDragSensitivity",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin#setDragSensitivity",
+    "method"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/facealignedsectionplanesplugin.js~facealignedsectionplanesplugin#setoverviewvisible",
+    "class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html#instance-method-setOverviewVisible",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin#setOverviewVisible",
+    "method"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/facealignedsectionplanesplugin.js~facealignedsectionplanesplugin#showcontrol",
+    "class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html#instance-method-showControl",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin#showControl",
+    "method"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/overview.js",
+    "file/src/plugins/FaceAlignedSectionPlanesPlugin/Overview.js.html",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/Overview.js",
+    "file"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/plane.js",
+    "file/src/plugins/FaceAlignedSectionPlanesPlugin/Plane.js.html",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/Plane.js",
+    "file"
+  ],
+  [
+    "src/plugins/facealignedsectionplanesplugin/index.js",
+    "file/src/plugins/FaceAlignedSectionPlanesPlugin/index.js.html",
+    "src/plugins/FaceAlignedSectionPlanesPlugin/index.js",
     "file"
   ],
   [
@@ -2850,6 +3138,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/plugins/navcubeplugin/navcubeplugin.js~navcubeplugin#getisprojectnorth",
+    "class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html#instance-method-getIsProjectNorth",
+    "src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin#getIsProjectNorth",
+    "method"
+  ],
+  [
+    "src/plugins/navcubeplugin/navcubeplugin.js~navcubeplugin#getprojectnorthoffsetangle",
+    "class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html#instance-method-getProjectNorthOffsetAngle",
+    "src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin#getProjectNorthOffsetAngle",
+    "method"
+  ],
+  [
     "src/plugins/navcubeplugin/navcubeplugin.js~navcubeplugin#getsynchprojection",
     "class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html#instance-method-getSynchProjection",
     "src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin#getSynchProjection",
@@ -2889,6 +3189,18 @@ window.esdocSearchIndex = [
     "src/plugins/navcubeplugin/navcubeplugin.js~navcubeplugin#setfitvisible",
     "class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html#instance-method-setFitVisible",
     "src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin#setFitVisible",
+    "method"
+  ],
+  [
+    "src/plugins/navcubeplugin/navcubeplugin.js~navcubeplugin#setisprojectnorth",
+    "class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html#instance-method-setIsProjectNorth",
+    "src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin#setIsProjectNorth",
+    "method"
+  ],
+  [
+    "src/plugins/navcubeplugin/navcubeplugin.js~navcubeplugin#setprojectnorthoffsetangle",
+    "class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html#instance-method-setProjectNorthOffsetAngle",
+    "src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin#setProjectNorthOffsetAngle",
     "method"
   ],
   [
@@ -3324,42 +3636,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/plugins/treeviewplugin/modeltreeview.js",
-    "file/src/plugins/TreeViewPlugin/ModelTreeView.js.html",
-    "src/plugins/TreeViewPlugin/ModelTreeView.js",
-    "file"
-  ],
-  [
-    "src/plugins/treeviewplugin/modeltreeview.js~modeltreeview#errors",
-    "class/src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView.html#instance-member-errors",
-    "src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView#errors",
-    "member"
-  ],
-  [
-    "src/plugins/treeviewplugin/modeltreeview.js~modeltreeview#metamodel",
-    "class/src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView.html#instance-member-metaModel",
-    "src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView#metaModel",
-    "member"
-  ],
-  [
-    "src/plugins/treeviewplugin/modeltreeview.js~modeltreeview#switchcollapsehandler",
-    "class/src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView.html#instance-member-switchCollapseHandler",
-    "src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView#switchCollapseHandler",
-    "member"
-  ],
-  [
-    "src/plugins/treeviewplugin/modeltreeview.js~modeltreeview#switchexpandhandler",
-    "class/src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView.html#instance-member-switchExpandHandler",
-    "src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView#switchExpandHandler",
-    "member"
-  ],
-  [
-    "src/plugins/treeviewplugin/modeltreeview.js~modeltreeview#valid",
-    "class/src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView.html#instance-member-valid",
-    "src/plugins/TreeViewPlugin/ModelTreeView.js~ModelTreeView#valid",
-    "member"
-  ],
-  [
     "src/plugins/treeviewplugin/treeviewnode.js",
     "file/src/plugins/TreeViewPlugin/TreeViewNode.js.html",
     "src/plugins/TreeViewPlugin/TreeViewNode.js",
@@ -3450,6 +3726,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#errors",
+    "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-member-errors",
+    "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#errors",
+    "member"
+  ],
+  [
     "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#expandtodepth",
     "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-method-expandToDepth",
     "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#expandToDepth",
@@ -3465,12 +3747,6 @@ window.esdocSearchIndex = [
     "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#hierarchy",
     "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-get-hierarchy",
     "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#hierarchy",
-    "member"
-  ],
-  [
-    "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#modeltreeviews",
-    "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-get-modelTreeViews",
-    "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#modelTreeViews",
     "member"
   ],
   [
@@ -3492,6 +3768,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#valid",
+    "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-member-valid",
+    "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#valid",
+    "member"
+  ],
+  [
     "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#withnodetree",
     "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-method-withNodeTree",
     "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#withNodeTree",
@@ -3501,12 +3783,6 @@ window.esdocSearchIndex = [
     "src/plugins/treeviewplugin/index.js",
     "file/src/plugins/TreeViewPlugin/index.js.html",
     "src/plugins/TreeViewPlugin/index.js",
-    "file"
-  ],
-  [
-    "src/plugins/treeviewplugin/modelvalidation.js",
-    "file/src/plugins/TreeViewPlugin/modelValidation.js.html",
-    "src/plugins/TreeViewPlugin/modelValidation.js",
     "file"
   ],
   [
@@ -4128,6 +4404,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/viewer/viewer.js~viewer#getsnapshotwithplugins",
+    "class/src/viewer/Viewer.js~Viewer.html#instance-method-getSnapshotWithPlugins",
+    "src/viewer/Viewer.js~Viewer#getSnapshotWithPlugins",
+    "method"
+  ],
+  [
     "src/viewer/viewer.js~viewer#id",
     "class/src/viewer/Viewer.js~Viewer.html#instance-member-id",
     "src/viewer/Viewer.js~Viewer#id",
@@ -4338,6 +4620,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/metadata/metamodel.js~metamodel#rootmetaobjects",
+    "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-rootMetaObjects",
+    "src/viewer/metadata/MetaModel.js~MetaModel#rootMetaObjects",
+    "member"
+  ],
+  [
     "src/viewer/metadata/metamodel.js~metamodel#schema",
     "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-schema",
     "src/viewer/metadata/MetaModel.js~MetaModel#schema",
@@ -4389,6 +4677,12 @@ window.esdocSearchIndex = [
     "src/viewer/metadata/metaobject.js~metaobject#metamodel",
     "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-metaModel",
     "src/viewer/metadata/MetaObject.js~MetaObject#metaModel",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/metaobject.js~metaobject#metamodels",
+    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-metaModels",
+    "src/viewer/metadata/MetaObject.js~MetaObject#metaModels",
     "member"
   ],
   [
@@ -4497,6 +4791,12 @@ window.esdocSearchIndex = [
     "src/viewer/metadata/metascene.js~metascene#propertysets",
     "class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-member-propertySets",
     "src/viewer/metadata/MetaScene.js~MetaScene#propertySets",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/metascene.js~metascene#rootmetaobjects",
+    "class/src/viewer/metadata/MetaScene.js~MetaScene.html#instance-member-rootMetaObjects",
+    "src/viewer/metadata/MetaScene.js~MetaScene#rootMetaObjects",
     "member"
   ],
   [
@@ -5478,6 +5778,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/entity.js~entity#geteachvertex",
+    "class/src/viewer/scene/Entity.js~Entity.html#instance-method-getEachVertex",
+    "src/viewer/scene/Entity.js~Entity#getEachVertex",
+    "method"
+  ],
+  [
     "src/viewer/scene/entity.js~entity#highlighted",
     "class/src/viewer/scene/Entity.js~Entity.html#instance-set-highlighted",
     "src/viewer/scene/Entity.js~Entity#highlighted",
@@ -5998,6 +6304,12 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-get-project",
     "src/viewer/scene/camera/Camera.js~Camera#project",
     "member"
+  ],
+  [
+    "src/viewer/scene/camera/camera.js~camera#projectworldpos",
+    "class/src/viewer/scene/camera/Camera.js~Camera.html#instance-method-projectWorldPos",
+    "src/viewer/scene/camera/Camera.js~Camera#projectWorldPos",
+    "method"
   ],
   [
     "src/viewer/scene/camera/camera.js~camera#projection",
@@ -7738,12 +8050,6 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/input/Input.js~Input.html#instance-member-shiftDown",
     "src/viewer/scene/input/Input.js~Input#shiftDown",
     "member"
-  ],
-  [
-    "src/viewer/scene/libs/canvas2image.js",
-    "file/src/viewer/scene/libs/canvas2image.js.html",
-    "src/viewer/scene/libs/canvas2image.js",
-    "file"
   ],
   [
     "src/viewer/scene/libs/k3d.js",
@@ -10446,6 +10752,924 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#aabb",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-aabb",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#aabb",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#backfaces",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-backfaces",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#backfaces",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#backfaces",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-backfaces",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#backfaces",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#castsshadow",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-castsShadow",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#castsShadow",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#castsshadow",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-castsShadow",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#castsShadow",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#clippable",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-clippable",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#clippable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#clippable",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-clippable",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#clippable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#collidable",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-collidable",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#collidable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#collidable",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-collidable",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#collidable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#colorize",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-colorize",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#colorize",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#colorize",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-colorize",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#colorize",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#constructor",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-constructor-constructor",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#createentity",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-method-createEntity",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#createEntity",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#creategeometry",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-method-createGeometry",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#createGeometry",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#createmesh",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-method-createMesh",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#createMesh",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#culled",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-culled",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#culled",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#culled",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-culled",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#culled",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#destroy",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-method-destroy",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#drawvertexdepths",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-method-drawVertexDepths",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#drawVertexDepths",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#drawvertexzbufferinitializer",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-method-drawVertexZBufferInitializer",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#drawVertexZBufferInitializer",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#edgematerial",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-edgeMaterial",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#edgeMaterial",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#edges",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-edges",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#edges",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#edges",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-edges",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#edges",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#entitylist",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-entityList",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#entityList",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#finalize",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-method-finalize",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#finalize",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#highlightmaterial",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-highlightMaterial",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#highlightMaterial",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#highlighted",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-highlighted",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#highlighted",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#highlighted",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-highlighted",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#highlighted",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#isdrawable",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-isDrawable",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#isDrawable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#isentity",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-isEntity",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#isEntity",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#ismodel",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-isModel",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#isModel",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#isobject",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-isObject",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#isObject",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#isperformancemodel",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-isPerformanceModel",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#isPerformanceModel",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#lodcullingmanager",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-member-lodCullingManager",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#lodCullingManager",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#matrix",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-matrix",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#matrix",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#numlines",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-numLines",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#numLines",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#numpoints",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-numPoints",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#numPoints",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#numtriangles",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-numTriangles",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#numTriangles",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#objects",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-objects",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#objects",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#opacity",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-opacity",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#opacity",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#opacity",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-opacity",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#opacity",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#origin",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-origin",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#origin",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#pbrenabled",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-pbrEnabled",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#pbrEnabled",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#pickable",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-pickable",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#pickable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#pickable",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-pickable",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#pickable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#position",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-position",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#position",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#quaternion",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-quaternion",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#quaternion",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#receivesshadow",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-receivesShadow",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#receivesShadow",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#receivesshadow",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-receivesShadow",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#receivesShadow",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#rotation",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-rotation",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#rotation",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#saoenabled",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-saoEnabled",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#saoEnabled",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#scale",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-scale",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#scale",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#selected",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-selected",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#selected",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#selected",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-selected",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#selected",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#selectedmaterial",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-selectedMaterial",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#selectedMaterial",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#visible",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-visible",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#visible",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#visible",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-visible",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#visible",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#worldmatrix",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-worldMatrix",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#worldMatrix",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#worldnormalmatrix",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-worldNormalMatrix",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#worldNormalMatrix",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#xraymaterial",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-xrayMaterial",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#xrayMaterial",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#xrayed",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-xrayed",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#xrayed",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#xrayed",
+    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-xrayed",
+    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#xrayed",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/datatexturescenemodelmesh.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/DataTextureSceneModelMesh.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/DataTextureSceneModelMesh.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/datatexturescenemodelnode.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/DataTextureSceneModelNode.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/DataTextureSceneModelNode.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/entity_flags.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/ENTITY_FLAGS.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/ENTITY_FLAGS.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/render_passes.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/RENDER_PASSES.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/RENDER_PASSES.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturebuffer#constructor",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer.html#instance-constructor-constructor",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturebuffer#edgeindices",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer.html#instance-member-edgeIndices",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer#edgeIndices",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturebuffer#edgeindices16bits",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer.html#instance-member-edgeIndices16Bits",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer#edgeIndices16Bits",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturebuffer#edgeindices32bits",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer.html#instance-member-edgeIndices32Bits",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer#edgeIndices32Bits",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturebuffer#edgeindices8bits",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer.html#instance-member-edgeIndices8Bits",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer#edgeIndices8Bits",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturebuffer#indices16bits",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer.html#instance-member-indices16Bits",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer#indices16Bits",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturebuffer#indices32bits",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer.html#instance-member-indices32Bits",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer#indices32Bits",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturebuffer#indices8bits",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer.html#instance-member-indices8Bits",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer#indices8Bits",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturebuffer#positions",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer.html#instance-member-positions",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer#positions",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatecameradatatexture",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateCameraDataTexture",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateCameraDataTexture",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatepeformancemodeldatatexture",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generatePeformanceModelDataTexture",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generatePeformanceModelDataTexture",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatetexturefor16bitindices",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateTextureFor16BitIndices",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateTextureFor16BitIndices",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatetexturefor16bitsedgeindices",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateTextureFor16BitsEdgeIndices",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateTextureFor16BitsEdgeIndices",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatetexturefor32bitindices",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateTextureFor32BitIndices",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateTextureFor32BitIndices",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatetexturefor32bitsedgeindices",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateTextureFor32BitsEdgeIndices",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateTextureFor32BitsEdgeIndices",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatetexturefor8bitindices",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateTextureFor8BitIndices",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateTextureFor8BitIndices",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatetexturefor8bitsedgeindices",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateTextureFor8BitsEdgeIndices",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateTextureFor8BitsEdgeIndices",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatetextureforcolorsandflags",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateTextureForColorsAndFlags",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateTextureForColorsAndFlags",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatetextureforobjectoffsets",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateTextureForObjectOffsets",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateTextureForObjectOffsets",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatetextureforpackedportionids",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateTextureForPackedPortionIds",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateTextureForPackedPortionIds",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatetextureforpositions",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateTextureForPositions",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateTextureForPositions",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatetextureforpositionsdecodematrices",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateTextureForPositionsDecodeMatrices",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateTextureForPositionsDecodeMatrices",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#numportions",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-member-numPortions",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#numPortions",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#bindcommontextures",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-method-bindCommonTextures",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#bindCommonTextures",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#bindedgeindicestextures",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-method-bindEdgeIndicesTextures",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#bindEdgeIndicesTextures",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#bindpickcameratexture",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-method-bindPickCameraTexture",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#bindPickCameraTexture",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#bindtriangleindicestextures",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-method-bindTriangleIndicesTextures",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#bindTriangleIndicesTextures",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#constructor",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-constructor-constructor",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#edgeindicesperbitnesstextures",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-edgeIndicesPerBitnessTextures",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#edgeIndicesPerBitnessTextures",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#edgeindicesportionidsperbitnesstextures",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-edgeIndicesPortionIdsPerBitnessTextures",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#edgeIndicesPortionIdsPerBitnessTextures",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#finalize",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-method-finalize",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#finalize",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#indicesperbitnesstextures",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-indicesPerBitnessTextures",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#indicesPerBitnessTextures",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#indicesportionidsperbitnesstextures",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-indicesPortionIdsPerBitnessTextures",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#indicesPortionIdsPerBitnessTextures",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#texturecameramatrices",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-textureCameraMatrices",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#textureCameraMatrices",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#texturemodelmatrices",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-textureModelMatrices",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#textureModelMatrices",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperedgeidportionids16bits",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerEdgeIdPortionIds16Bits",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerEdgeIdPortionIds16Bits",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperedgeidportionids32bits",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerEdgeIdPortionIds32Bits",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerEdgeIdPortionIds32Bits",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperedgeidportionids8bits",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerEdgeIdPortionIds8Bits",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerEdgeIdPortionIds8Bits",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperobjectidcolorsandflags",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerObjectIdColorsAndFlags",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerObjectIdColorsAndFlags",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperobjectidoffsets",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerObjectIdOffsets",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerObjectIdOffsets",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperobjectidpositionsdecodematrix",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerObjectIdPositionsDecodeMatrix",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerObjectIdPositionsDecodeMatrix",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperpolygonidedgeindices16bits",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerPolygonIdEdgeIndices16Bits",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerPolygonIdEdgeIndices16Bits",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperpolygonidedgeindices32bits",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerPolygonIdEdgeIndices32Bits",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerPolygonIdEdgeIndices32Bits",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperpolygonidedgeindices8bits",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerPolygonIdEdgeIndices8Bits",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerPolygonIdEdgeIndices8Bits",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperpolygonidindices16bits",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerPolygonIdIndices16Bits",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerPolygonIdIndices16Bits",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperpolygonidindices32bits",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerPolygonIdIndices32Bits",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerPolygonIdIndices32Bits",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperpolygonidindices8bits",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerPolygonIdIndices8Bits",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerPolygonIdIndices8Bits",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperpolygonidportionids16bits",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerPolygonIdPortionIds16Bits",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerPolygonIdPortionIds16Bits",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperpolygonidportionids32bits",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerPolygonIdPortionIds32Bits",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerPolygonIdPortionIds32Bits",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperpolygonidportionids8bits",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerPolygonIdPortionIds8Bits",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerPolygonIdPortionIds8Bits",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#texturepervertexidcoordinates",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerVertexIdCoordinates",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerVertexIdCoordinates",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#texturepickcameramatrices",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePickCameraMatrices",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePickCameraMatrices",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/lodcullingmanager.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/lodcullingmanager.js~lodcullingmanager#applylodculling",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js~LodCullingManager.html#instance-method-applyLodCulling",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js~LodCullingManager#applyLodCulling",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/lodcullingmanager.js~lodcullingmanager#constructor",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js~LodCullingManager.html#instance-constructor-constructor",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js~LodCullingManager#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/lodcullingmanager.js~lodcullingmanager#model",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js~LodCullingManager.html#instance-member-model",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js~LodCullingManager#model",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/lodcullingmanager.js~lodcullingmanager#resetlodculling",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js~LodCullingManager.html#instance-method-resetLodCulling",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js~LodCullingManager#resetLodCulling",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/trianglesdatatexturebuffer.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/TrianglesDataTextureBuffer.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/TrianglesDataTextureBuffer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/trianglesdatatexturerenderers.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/TrianglesDataTextureRenderers.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/TrianglesDataTextureRenderers.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/viewfrustumcullingmanager.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/viewfrustumcullingmanager.js~viewfrustumcullingmanager#addentity",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js~ViewFrustumCullingManager.html#instance-method-addEntity",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js~ViewFrustumCullingManager#addEntity",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/viewfrustumcullingmanager.js~viewfrustumcullingmanager#addmesh",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js~ViewFrustumCullingManager.html#instance-method-addMesh",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js~ViewFrustumCullingManager#addMesh",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/viewfrustumcullingmanager.js~viewfrustumcullingmanager#constructor",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js~ViewFrustumCullingManager.html#instance-constructor-constructor",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js~ViewFrustumCullingManager#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/viewfrustumcullingmanager.js~viewfrustumcullingmanager#finalize",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js~ViewFrustumCullingManager.html#instance-method-finalize",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js~ViewFrustumCullingManager#finalize",
+    "method"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/viewfrustumcullingmanager.js~viewfrustumcullingmanager#finalized",
+    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js~ViewFrustumCullingManager.html#instance-member-finalized",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js~ViewFrustumCullingManager#finalized",
+    "member"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/calculateuniquepositions.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/calculateUniquePositions.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/calculateUniquePositions.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/cluster-helper.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/cluster-helper.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/cluster-helper.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/rbush3d.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/rbush3d.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/rbush3d.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/rebucketpositions.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/rebucketPositions.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/rebucketPositions.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatexturecolorqualityrenderer.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureColorQualityRenderer.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureColorQualityRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatexturecolorrenderer.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureColorRenderer.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureColorRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatexturedepthrenderer.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureDepthRenderer.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureDepthRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatextureedgescolorrenderer.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureEdgesColorRenderer.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureEdgesColorRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatextureedgesrenderer.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureEdgesRenderer.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureEdgesRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatexturenormalsrenderer.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureNormalsRenderer.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureNormalsRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatextureocclusionrenderer.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureOcclusionRenderer.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureOcclusionRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatexturepickdepthrenderer.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTexturePickDepthRenderer.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTexturePickDepthRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatexturepickmeshrenderer.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTexturePickMeshRenderer.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTexturePickMeshRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatexturepicknormalsflatrenderer.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTexturePickNormalsFlatRenderer.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTexturePickNormalsFlatRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatexturepicknormalsrenderer.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTexturePickNormalsRenderer.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTexturePickNormalsRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatextureshadowrenderer.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureShadowRenderer.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureShadowRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatexturesilhouetterenderer.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureSilhouetteRenderer.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureSilhouetteRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatexturesnappickzbufferinitializer.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureSnapPickZBufferInitializer.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureSnapPickZBufferInitializer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatexturevertexdepthrenderer.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureVertexDepthRenderer.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureVertexDepthRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/xeokit-cluster.js",
+    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/xeokit-cluster.js.html",
+    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/xeokit-cluster.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/models/performancemodel/performancemodel.js",
     "file/src/viewer/scene/models/PerformanceModel/PerformanceModel.js.html",
     "src/viewer/scene/models/PerformanceModel/PerformanceModel.js",
@@ -11265,6 +12489,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/models/vboscenemodel/lib/compression.js",
     "file/src/viewer/scene/models/VBOSceneModel/lib/compression.js.html",
     "src/viewer/scene/models/VBOSceneModel/lib/compression.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/models/vboscenemodel/lib/layers/float16.js",
+    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/float16.js.html",
+    "src/viewer/scene/models/VBOSceneModel/lib/layers/float16.js",
     "file"
   ],
   [
@@ -13071,6 +14301,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/scene/scene.js~scene#setobjectsxrayed",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-setObjectsXRayed",
     "src/viewer/scene/scene/Scene.js~Scene#setObjectsXRayed",
+    "method"
+  ],
+  [
+    "src/viewer/scene/scene/scene.js~scene#snappick",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-snapPick",
+    "src/viewer/scene/scene/Scene.js~Scene#snapPick",
     "method"
   ],
   [

@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 11489,
+  "end": 11657,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 494,
+      "line": 502,
       "column": 16
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 11489,
+    "end": 11657,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 494,
+        "line": 502,
         "column": 16
       }
     },
@@ -31,14 +31,14 @@
       {
         "type": "Identifier",
         "start": 1516,
-        "end": 11471,
+        "end": 11639,
         "loc": {
           "start": {
             "line": 36,
             "column": 0
           },
           "end": {
-            "line": 492,
+            "line": 500,
             "column": 1
           }
         },
@@ -64,14 +64,14 @@
         "body": {
           "type": "ClassBody",
           "start": 1529,
-          "end": 11471,
+          "end": 11639,
           "loc": {
             "start": {
               "line": 36,
               "column": 13
             },
             "end": {
-              "line": 492,
+              "line": 500,
               "column": 1
             }
           },
@@ -4066,16 +4066,16 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * Destroys this Entity.\n     ",
+                  "value": "*\n     * Gets the World, View and Canvas-space positions of each vertex in a callback.\n     *\n     * @param callback\n     ",
                   "start": 11406,
-                  "end": 11446,
+                  "end": 11532,
                   "loc": {
                     "start": {
                       "line": 486,
                       "column": 4
                     },
                     "end": {
-                      "line": 488,
+                      "line": 490,
                       "column": 7
                     }
                   }
@@ -4084,15 +4084,15 @@
             },
             {
               "type": "ClassMethod",
-              "start": 11451,
-              "end": 11469,
+              "start": 11537,
+              "end": 11568,
               "loc": {
                 "start": {
-                  "line": 489,
+                  "line": 491,
                   "column": 4
                 },
                 "end": {
-                  "line": 491,
+                  "line": 492,
                   "column": 5
                 }
               },
@@ -4100,15 +4100,129 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 11451,
-                "end": 11458,
+                "start": 11537,
+                "end": 11550,
                 "loc": {
                   "start": {
-                    "line": 489,
+                    "line": 491,
                     "column": 4
                   },
                   "end": {
-                    "line": 489,
+                    "line": 491,
+                    "column": 17
+                  },
+                  "identifierName": "getEachVertex"
+                },
+                "name": "getEachVertex",
+                "leadingComments": null
+              },
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 11551,
+                  "end": 11559,
+                  "loc": {
+                    "start": {
+                      "line": 491,
+                      "column": 18
+                    },
+                    "end": {
+                      "line": 491,
+                      "column": 26
+                    },
+                    "identifierName": "callback"
+                  },
+                  "name": "callback"
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 11561,
+                "end": 11568,
+                "loc": {
+                  "start": {
+                    "line": 491,
+                    "column": 28
+                  },
+                  "end": {
+                    "line": 492,
+                    "column": 5
+                  }
+                },
+                "body": [],
+                "directives": [],
+                "leadingComments": null,
+                "trailingComments": null
+              },
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * Gets the World, View and Canvas-space positions of each vertex in a callback.\n     *\n     * @param callback\n     ",
+                  "start": 11406,
+                  "end": 11532,
+                  "loc": {
+                    "start": {
+                      "line": 486,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 490,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * Destroys this Entity.\n     ",
+                  "start": 11574,
+                  "end": 11614,
+                  "loc": {
+                    "start": {
+                      "line": 494,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 496,
+                      "column": 7
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "ClassMethod",
+              "start": 11619,
+              "end": 11637,
+              "loc": {
+                "start": {
+                  "line": 497,
+                  "column": 4
+                },
+                "end": {
+                  "line": 499,
+                  "column": 5
+                }
+              },
+              "static": false,
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 11619,
+                "end": 11626,
+                "loc": {
+                  "start": {
+                    "line": 497,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 497,
                     "column": 11
                   },
                   "identifierName": "destroy"
@@ -4124,15 +4238,15 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 11461,
-                "end": 11469,
+                "start": 11629,
+                "end": 11637,
                 "loc": {
                   "start": {
-                    "line": 489,
+                    "line": 497,
                     "column": 14
                   },
                   "end": {
-                    "line": 491,
+                    "line": 499,
                     "column": 5
                   }
                 },
@@ -4143,15 +4257,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * Destroys this Entity.\n     ",
-                  "start": 11406,
-                  "end": 11446,
+                  "start": 11574,
+                  "end": 11614,
                   "loc": {
                     "start": {
-                      "line": 486,
+                      "line": 494,
                       "column": 4
                     },
                     "end": {
-                      "line": 488,
+                      "line": 496,
                       "column": 7
                     }
                   }
@@ -4166,15 +4280,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 11473,
-        "end": 11489,
+        "start": 11641,
+        "end": 11657,
         "loc": {
           "start": {
-            "line": 494,
+            "line": 502,
             "column": 0
           },
           "end": {
-            "line": 494,
+            "line": 502,
             "column": 16
           }
         },
@@ -4182,29 +4296,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 11481,
-            "end": 11487,
+            "start": 11649,
+            "end": 11655,
             "loc": {
               "start": {
-                "line": 494,
+                "line": 502,
                 "column": 8
               },
               "end": {
-                "line": 494,
+                "line": 502,
                 "column": 14
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 11481,
-              "end": 11487,
+              "start": 11649,
+              "end": 11655,
               "loc": {
                 "start": {
-                  "line": 494,
+                  "line": 502,
                   "column": 8
                 },
                 "end": {
-                  "line": 494,
+                  "line": 502,
                   "column": 14
                 },
                 "identifierName": "Entity"
@@ -4213,15 +4327,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 11481,
-              "end": 11487,
+              "start": 11649,
+              "end": 11655,
               "loc": {
                 "start": {
-                  "line": 494,
+                  "line": 502,
                   "column": 8
                 },
                 "end": {
-                  "line": 494,
+                  "line": 502,
                   "column": 14
                 },
                 "identifierName": "Entity"
@@ -4234,29 +4348,29 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 11473,
-        "end": 11489,
+        "start": 11641,
+        "end": 11657,
         "loc": {
           "start": {
-            "line": 494,
+            "line": 502,
             "column": 0
           },
           "end": {
-            "line": 494,
+            "line": 502,
             "column": 16
           }
         },
         "declaration": {
           "type": "ClassDeclaration",
           "start": 1516,
-          "end": 11471,
+          "end": 11639,
           "loc": {
             "start": {
               "line": 36,
               "column": 0
             },
             "end": {
-              "line": 492,
+              "line": 500,
               "column": 1
             }
           },
@@ -4282,14 +4396,14 @@
           "body": {
             "type": "ClassBody",
             "start": 1529,
-            "end": 11471,
+            "end": 11639,
             "loc": {
               "start": {
                 "line": 36,
                 "column": 13
               },
               "end": {
-                "line": 492,
+                "line": 500,
                 "column": 1
               }
             },
@@ -8284,16 +8398,16 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Destroys this Entity.\n     ",
+                    "value": "*\n     * Gets the World, View and Canvas-space positions of each vertex in a callback.\n     *\n     * @param callback\n     ",
                     "start": 11406,
-                    "end": 11446,
+                    "end": 11532,
                     "loc": {
                       "start": {
                         "line": 486,
                         "column": 4
                       },
                       "end": {
-                        "line": 488,
+                        "line": 490,
                         "column": 7
                       }
                     }
@@ -8302,15 +8416,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 11451,
-                "end": 11469,
+                "start": 11537,
+                "end": 11568,
                 "loc": {
                   "start": {
-                    "line": 489,
+                    "line": 491,
                     "column": 4
                   },
                   "end": {
-                    "line": 491,
+                    "line": 492,
                     "column": 5
                   }
                 },
@@ -8318,15 +8432,129 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 11451,
-                  "end": 11458,
+                  "start": 11537,
+                  "end": 11550,
                   "loc": {
                     "start": {
-                      "line": 489,
+                      "line": 491,
                       "column": 4
                     },
                     "end": {
-                      "line": 489,
+                      "line": 491,
+                      "column": 17
+                    },
+                    "identifierName": "getEachVertex"
+                  },
+                  "name": "getEachVertex",
+                  "leadingComments": null
+                },
+                "kind": "method",
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 11551,
+                    "end": 11559,
+                    "loc": {
+                      "start": {
+                        "line": 491,
+                        "column": 18
+                      },
+                      "end": {
+                        "line": 491,
+                        "column": 26
+                      },
+                      "identifierName": "callback"
+                    },
+                    "name": "callback"
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 11561,
+                  "end": 11568,
+                  "loc": {
+                    "start": {
+                      "line": 491,
+                      "column": 28
+                    },
+                    "end": {
+                      "line": 492,
+                      "column": 5
+                    }
+                  },
+                  "body": [],
+                  "directives": [],
+                  "leadingComments": null,
+                  "trailingComments": null
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * Gets the World, View and Canvas-space positions of each vertex in a callback.\n     *\n     * @param callback\n     ",
+                    "start": 11406,
+                    "end": 11532,
+                    "loc": {
+                      "start": {
+                        "line": 486,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 490,
+                        "column": 7
+                      }
+                    }
+                  }
+                ],
+                "trailingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * Destroys this Entity.\n     ",
+                    "start": 11574,
+                    "end": 11614,
+                    "loc": {
+                      "start": {
+                        "line": 494,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 496,
+                        "column": 7
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "ClassMethod",
+                "start": 11619,
+                "end": 11637,
+                "loc": {
+                  "start": {
+                    "line": 497,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 499,
+                    "column": 5
+                  }
+                },
+                "static": false,
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 11619,
+                  "end": 11626,
+                  "loc": {
+                    "start": {
+                      "line": 497,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 497,
                       "column": 11
                     },
                     "identifierName": "destroy"
@@ -8342,15 +8570,15 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 11461,
-                  "end": 11469,
+                  "start": 11629,
+                  "end": 11637,
                   "loc": {
                     "start": {
-                      "line": 489,
+                      "line": 497,
                       "column": 14
                     },
                     "end": {
-                      "line": 491,
+                      "line": 499,
                       "column": 5
                     }
                   },
@@ -8361,15 +8589,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Destroys this Entity.\n     ",
-                    "start": 11406,
-                    "end": 11446,
+                    "start": 11574,
+                    "end": 11614,
                     "loc": {
                       "start": {
-                        "line": 486,
+                        "line": 494,
                         "column": 4
                       },
                       "end": {
-                        "line": 488,
+                        "line": 496,
                         "column": 7
                       }
                     }
@@ -9049,16 +9277,32 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Destroys this Entity.\n     ",
+      "value": "*\n     * Gets the World, View and Canvas-space positions of each vertex in a callback.\n     *\n     * @param callback\n     ",
       "start": 11406,
-      "end": 11446,
+      "end": 11532,
       "loc": {
         "start": {
           "line": 486,
           "column": 4
         },
         "end": {
-          "line": 488,
+          "line": 490,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * Destroys this Entity.\n     ",
+      "start": 11574,
+      "end": 11614,
+      "loc": {
+        "start": {
+          "line": 494,
+          "column": 4
+        },
+        "end": {
+          "line": 496,
           "column": 7
         }
       }
@@ -16186,16 +16430,184 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Destroys this Entity.\n     ",
+      "value": "*\n     * Gets the World, View and Canvas-space positions of each vertex in a callback.\n     *\n     * @param callback\n     ",
       "start": 11406,
-      "end": 11446,
+      "end": 11532,
       "loc": {
         "start": {
           "line": 486,
           "column": 4
         },
         "end": {
-          "line": 488,
+          "line": 490,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "getEachVertex",
+      "start": 11537,
+      "end": 11550,
+      "loc": {
+        "start": {
+          "line": 491,
+          "column": 4
+        },
+        "end": {
+          "line": 491,
+          "column": 17
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 11550,
+      "end": 11551,
+      "loc": {
+        "start": {
+          "line": 491,
+          "column": 17
+        },
+        "end": {
+          "line": 491,
+          "column": 18
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "callback",
+      "start": 11551,
+      "end": 11559,
+      "loc": {
+        "start": {
+          "line": 491,
+          "column": 18
+        },
+        "end": {
+          "line": 491,
+          "column": 26
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 11559,
+      "end": 11560,
+      "loc": {
+        "start": {
+          "line": 491,
+          "column": 26
+        },
+        "end": {
+          "line": 491,
+          "column": 27
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 11561,
+      "end": 11562,
+      "loc": {
+        "start": {
+          "line": 491,
+          "column": 28
+        },
+        "end": {
+          "line": 491,
+          "column": 29
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 11567,
+      "end": 11568,
+      "loc": {
+        "start": {
+          "line": 492,
+          "column": 4
+        },
+        "end": {
+          "line": 492,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * Destroys this Entity.\n     ",
+      "start": 11574,
+      "end": 11614,
+      "loc": {
+        "start": {
+          "line": 494,
+          "column": 4
+        },
+        "end": {
+          "line": 496,
           "column": 7
         }
       }
@@ -16213,15 +16625,15 @@
         "binop": null
       },
       "value": "destroy",
-      "start": 11451,
-      "end": 11458,
+      "start": 11619,
+      "end": 11626,
       "loc": {
         "start": {
-          "line": 489,
+          "line": 497,
           "column": 4
         },
         "end": {
-          "line": 489,
+          "line": 497,
           "column": 11
         }
       }
@@ -16238,15 +16650,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 11458,
-      "end": 11459,
+      "start": 11626,
+      "end": 11627,
       "loc": {
         "start": {
-          "line": 489,
+          "line": 497,
           "column": 11
         },
         "end": {
-          "line": 489,
+          "line": 497,
           "column": 12
         }
       }
@@ -16263,15 +16675,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 11459,
-      "end": 11460,
+      "start": 11627,
+      "end": 11628,
       "loc": {
         "start": {
-          "line": 489,
+          "line": 497,
           "column": 12
         },
         "end": {
-          "line": 489,
+          "line": 497,
           "column": 13
         }
       }
@@ -16288,15 +16700,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 11461,
-      "end": 11462,
+      "start": 11629,
+      "end": 11630,
       "loc": {
         "start": {
-          "line": 489,
+          "line": 497,
           "column": 14
         },
         "end": {
-          "line": 489,
+          "line": 497,
           "column": 15
         }
       }
@@ -16313,15 +16725,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 11468,
-      "end": 11469,
+      "start": 11636,
+      "end": 11637,
       "loc": {
         "start": {
-          "line": 491,
+          "line": 499,
           "column": 4
         },
         "end": {
-          "line": 491,
+          "line": 499,
           "column": 5
         }
       }
@@ -16338,15 +16750,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 11470,
-      "end": 11471,
+      "start": 11638,
+      "end": 11639,
       "loc": {
         "start": {
-          "line": 492,
+          "line": 500,
           "column": 0
         },
         "end": {
-          "line": 492,
+          "line": 500,
           "column": 1
         }
       }
@@ -16366,15 +16778,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 11473,
-      "end": 11479,
+      "start": 11641,
+      "end": 11647,
       "loc": {
         "start": {
-          "line": 494,
+          "line": 502,
           "column": 0
         },
         "end": {
-          "line": 494,
+          "line": 502,
           "column": 6
         }
       }
@@ -16391,15 +16803,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 11480,
-      "end": 11481,
+      "start": 11648,
+      "end": 11649,
       "loc": {
         "start": {
-          "line": 494,
+          "line": 502,
           "column": 7
         },
         "end": {
-          "line": 494,
+          "line": 502,
           "column": 8
         }
       }
@@ -16417,15 +16829,15 @@
         "binop": null
       },
       "value": "Entity",
-      "start": 11481,
-      "end": 11487,
+      "start": 11649,
+      "end": 11655,
       "loc": {
         "start": {
-          "line": 494,
+          "line": 502,
           "column": 8
         },
         "end": {
-          "line": 494,
+          "line": 502,
           "column": 14
         }
       }
@@ -16442,15 +16854,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 11487,
-      "end": 11488,
+      "start": 11655,
+      "end": 11656,
       "loc": {
         "start": {
-          "line": 494,
+          "line": 502,
           "column": 14
         },
         "end": {
-          "line": 494,
+          "line": 502,
           "column": 15
         }
       }
@@ -16468,15 +16880,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 11488,
-      "end": 11489,
+      "start": 11656,
+      "end": 11657,
       "loc": {
         "start": {
-          "line": 494,
+          "line": 502,
           "column": 15
         },
         "end": {
-          "line": 494,
+          "line": 502,
           "column": 16
         }
       }
@@ -16494,15 +16906,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 11489,
-      "end": 11489,
+      "start": 11657,
+      "end": 11657,
       "loc": {
         "start": {
-          "line": 494,
+          "line": 502,
           "column": 16
         },
         "end": {
-          "line": 494,
+          "line": 502,
           "column": 16
         }
       }

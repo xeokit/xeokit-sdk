@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 100,
+  "end": 205,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 5,
-      "column": 0
+      "column": 65
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 100,
+    "end": 205,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 5,
-        "column": 0
+        "column": 65
       }
     },
     "sourceType": "module",
@@ -31,7 +31,7 @@
       {
         "type": "ExportAllDeclaration",
         "start": 1,
-        "end": 30,
+        "end": 33,
         "loc": {
           "start": {
             "line": 2,
@@ -39,48 +39,48 @@
           },
           "end": {
             "line": 2,
-            "column": 29
-          }
-        },
-        "source": {
-          "type": "StringLiteral",
-          "start": 15,
-          "end": 29,
-          "loc": {
-            "start": {
-              "line": 2,
-              "column": 14
-            },
-            "end": {
-              "line": 2,
-              "column": 28
-            }
-          },
-          "extra": {
-            "rawValue": "./SceneModel",
-            "raw": "\"./SceneModel\""
-          },
-          "value": "./SceneModel"
-        }
-      },
-      {
-        "type": "ExportAllDeclaration",
-        "start": 31,
-        "end": 63,
-        "loc": {
-          "start": {
-            "line": 3,
-            "column": 0
-          },
-          "end": {
-            "line": 3,
             "column": 32
           }
         },
         "source": {
           "type": "StringLiteral",
-          "start": 45,
-          "end": 62,
+          "start": 15,
+          "end": 32,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 14
+            },
+            "end": {
+              "line": 2,
+              "column": 31
+            }
+          },
+          "extra": {
+            "rawValue": "./SceneModel.js",
+            "raw": "\"./SceneModel.js\""
+          },
+          "value": "./SceneModel.js"
+        }
+      },
+      {
+        "type": "ExportAllDeclaration",
+        "start": 34,
+        "end": 83,
+        "loc": {
+          "start": {
+            "line": 3,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 49
+          }
+        },
+        "source": {
+          "type": "StringLiteral",
+          "start": 48,
+          "end": 82,
           "loc": {
             "start": {
               "line": 3,
@@ -88,20 +88,20 @@
             },
             "end": {
               "line": 3,
-              "column": 31
+              "column": 48
             }
           },
           "extra": {
-            "rawValue": "./VBOSceneModel",
-            "raw": "\"./VBOSceneModel\""
+            "rawValue": "./VBOSceneModel/VBOSceneModel.js",
+            "raw": "\"./VBOSceneModel/VBOSceneModel.js\""
           },
-          "value": "./VBOSceneModel"
+          "value": "./VBOSceneModel/VBOSceneModel.js"
         }
       },
       {
         "type": "ExportAllDeclaration",
-        "start": 64,
-        "end": 99,
+        "start": 84,
+        "end": 139,
         "loc": {
           "start": {
             "line": 4,
@@ -109,13 +109,13 @@
           },
           "end": {
             "line": 4,
-            "column": 35
+            "column": 55
           }
         },
         "source": {
           "type": "StringLiteral",
-          "start": 78,
-          "end": 98,
+          "start": 98,
+          "end": 138,
           "loc": {
             "start": {
               "line": 4,
@@ -123,14 +123,49 @@
             },
             "end": {
               "line": 4,
-              "column": 34
+              "column": 54
             }
           },
           "extra": {
-            "rawValue": "./PerformanceModel",
-            "raw": "\"./PerformanceModel\""
+            "rawValue": "./PerformanceModel/PerformanceModel.js",
+            "raw": "\"./PerformanceModel/PerformanceModel.js\""
           },
-          "value": "./PerformanceModel"
+          "value": "./PerformanceModel/PerformanceModel.js"
+        }
+      },
+      {
+        "type": "ExportAllDeclaration",
+        "start": 140,
+        "end": 205,
+        "loc": {
+          "start": {
+            "line": 5,
+            "column": 0
+          },
+          "end": {
+            "line": 5,
+            "column": 65
+          }
+        },
+        "source": {
+          "type": "StringLiteral",
+          "start": 154,
+          "end": 204,
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 14
+            },
+            "end": {
+              "line": 5,
+              "column": 64
+            }
+          },
+          "extra": {
+            "rawValue": "./DataTextureSceneModel/DataTextureSceneModel.js",
+            "raw": "\"./DataTextureSceneModel/DataTextureSceneModel.js\""
+          },
+          "value": "./DataTextureSceneModel/DataTextureSceneModel.js"
         }
       }
     ],
@@ -232,9 +267,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "./SceneModel",
+      "value": "./SceneModel.js",
       "start": 15,
-      "end": 29,
+      "end": 32,
       "loc": {
         "start": {
           "line": 2,
@@ -242,140 +277,6 @@
         },
         "end": {
           "line": 2,
-          "column": 28
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 29,
-      "end": 30,
-      "loc": {
-        "start": {
-          "line": 2,
-          "column": 28
-        },
-        "end": {
-          "line": 2,
-          "column": 29
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 31,
-      "end": 37,
-      "loc": {
-        "start": {
-          "line": 3,
-          "column": 0
-        },
-        "end": {
-          "line": 3,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "*",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": 10,
-        "updateContext": null
-      },
-      "value": "*",
-      "start": 38,
-      "end": 39,
-      "loc": {
-        "start": {
-          "line": 3,
-          "column": 7
-        },
-        "end": {
-          "line": 3,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 40,
-      "end": 44,
-      "loc": {
-        "start": {
-          "line": 3,
-          "column": 9
-        },
-        "end": {
-          "line": 3,
-          "column": 13
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./VBOSceneModel",
-      "start": 45,
-      "end": 62,
-      "loc": {
-        "start": {
-          "line": 3,
-          "column": 14
-        },
-        "end": {
-          "line": 3,
           "column": 31
         }
       }
@@ -393,15 +294,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 62,
-      "end": 63,
+      "start": 32,
+      "end": 33,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 2,
           "column": 31
         },
         "end": {
-          "line": 3,
+          "line": 2,
           "column": 32
         }
       }
@@ -421,8 +322,142 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 64,
-      "end": 70,
+      "start": 34,
+      "end": 40,
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 0
+        },
+        "end": {
+          "line": 3,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "*",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": 10,
+        "updateContext": null
+      },
+      "value": "*",
+      "start": 41,
+      "end": 42,
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 7
+        },
+        "end": {
+          "line": 3,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "from",
+      "start": 43,
+      "end": 47,
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 9
+        },
+        "end": {
+          "line": 3,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./VBOSceneModel/VBOSceneModel.js",
+      "start": 48,
+      "end": 82,
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 14
+        },
+        "end": {
+          "line": 3,
+          "column": 48
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 82,
+      "end": 83,
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 48
+        },
+        "end": {
+          "line": 3,
+          "column": 49
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 84,
+      "end": 90,
       "loc": {
         "start": {
           "line": 4,
@@ -448,8 +483,8 @@
         "updateContext": null
       },
       "value": "*",
-      "start": 71,
-      "end": 72,
+      "start": 91,
+      "end": 92,
       "loc": {
         "start": {
           "line": 4,
@@ -474,8 +509,8 @@
         "binop": null
       },
       "value": "from",
-      "start": 73,
-      "end": 77,
+      "start": 93,
+      "end": 97,
       "loc": {
         "start": {
           "line": 4,
@@ -500,9 +535,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "./PerformanceModel",
-      "start": 78,
-      "end": 98,
+      "value": "./PerformanceModel/PerformanceModel.js",
+      "start": 98,
+      "end": 138,
       "loc": {
         "start": {
           "line": 4,
@@ -510,7 +545,7 @@
         },
         "end": {
           "line": 4,
-          "column": 34
+          "column": 54
         }
       }
     },
@@ -527,16 +562,150 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 98,
-      "end": 99,
+      "start": 138,
+      "end": 139,
       "loc": {
         "start": {
           "line": 4,
-          "column": 34
+          "column": 54
         },
         "end": {
           "line": 4,
-          "column": 35
+          "column": 55
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 140,
+      "end": 146,
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "*",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": 10,
+        "updateContext": null
+      },
+      "value": "*",
+      "start": 147,
+      "end": 148,
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 7
+        },
+        "end": {
+          "line": 5,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "from",
+      "start": 149,
+      "end": 153,
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 9
+        },
+        "end": {
+          "line": 5,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./DataTextureSceneModel/DataTextureSceneModel.js",
+      "start": 154,
+      "end": 204,
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 14
+        },
+        "end": {
+          "line": 5,
+          "column": 64
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 204,
+      "end": 205,
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 64
+        },
+        "end": {
+          "line": 5,
+          "column": 65
         }
       }
     },
@@ -553,16 +722,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 100,
-      "end": 100,
+      "start": 205,
+      "end": 205,
       "loc": {
         "start": {
           "line": 5,
-          "column": 0
+          "column": 65
         },
         "end": {
           "line": 5,
-          "column": 0
+          "column": 65
         }
       }
     }
