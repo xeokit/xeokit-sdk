@@ -10,7 +10,7 @@ const tempVec3 = math.vec3();
 /**
  * FaceAlignedSectionPlanesPlugin is a {@link Viewer} plugin that creates and edits face-aligned {@link SectionPlane}s.
  *
- * [<img src="https://user-images.githubusercontent.com/83100/57724962-406e9a00-768c-11e9-9f1f-3d178a3ec11f.gif">](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_SectionPlanesPlugin)
+ * [<img src="https://xeokit.github.io/xeokit-sdk/assets/images/FaceAlignedSectionPlanesPlugin.gif">](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_FaceAlignedSectionPlanesPlugin)
  *
  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_FaceAlignedSectionPlanesPlugin)]
  *
@@ -18,10 +18,12 @@ const tempVec3 = math.vec3();
  *
  * * Use the FaceAlignedSectionPlanesPlugin to
  * create and edit {@link SectionPlane}s to slice portions off your models and reveal internal structures.
+ *
  * * As shown in the screen capture above, FaceAlignedSectionPlanesPlugin shows an overview of all your SectionPlanes (on the right, in
  * this example).
  * * Click a plane in the overview to activate a 3D control with which you can interactively
  * reposition its SectionPlane in the main canvas.
+ * * Configure the plugin with an HTML element that the user can click-and-drag on to reposition the SectionPlane for which the control is active.
  * * Use {@link BCFViewpointsPlugin} to save and load SectionPlanes in BCF viewpoints.
  *
  * ## Usage
@@ -44,7 +46,6 @@ const tempVec3 = math.vec3();
  * viewer.camera.look = [4.97, 2.79, 9.89];
  * viewer.camera.up = [-0.05, 0.99, 0.02];
  *
- *
  * // Add a GLTFLoaderPlugin
  *
  * const gltfLoader = new GLTFLoaderPlugin(viewer);
@@ -54,7 +55,8 @@ const tempVec3 = math.vec3();
  * const faceAlignedSectionPlanes = new FaceAlignedSectionPlanesPlugin(viewer, {
  *     overviewCanvasID: "myOverviewCanvas",
  *     overviewVisible: true,
- *     controlCanvasId: "myControlCanvas",
+ *     controlElementId: "myControlElement", // ID of element to capture drag events that move the SectionPlane
+ *     dragSensitivity: 1  // Sensitivity factor that governs the rate at which dragging moves the SectionPlane
  * });
  *
  * // Load a model
@@ -93,7 +95,7 @@ const tempVec3 = math.vec3();
  * mySectionPlane2.dir = [0.4, 0.0, 0.5];
  * ````
  */
-class FaceAlignedSectionPlanesPlugin extends Plugin {
+export class FaceAlignedSectionPlanesPlugin extends Plugin {
 
     /**
      * @constructor
@@ -102,7 +104,8 @@ class FaceAlignedSectionPlanesPlugin extends Plugin {
      * @param {String} [cfg.id="SectionPlanes"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {String} [cfg.overviewCanvasId] ID of a canvas element to display the overview.
      * @param {String} [cfg.overviewVisible=true] Initial visibility of the overview canvas.
-     * @param {String} cfg.controlCanvasId ID of a canvas element that Control catches drag events on to control the active SectionPlane.
+     * @param {String} cfg.controlElementId ID of an HTML element that catches drag events to move the active SectionPlane.
+     * @param {Number} [cfg.dragSensitivity=1] Sensitivity factor that governs the rate at which dragging on the control element moves SectionPlane.
      */
     constructor(viewer, cfg = {}) {
 
@@ -112,6 +115,7 @@ class FaceAlignedSectionPlanesPlugin extends Plugin {
         this._sectionPlanes = viewer.scene.sectionPlanes;
         this._controls = {};
         this._shownControlId = null;
+        this._dragSensitivity = cfg.dragSensitivity || 1;
 
         if (cfg.overviewCanvasId !== null && cfg.overviewCanvasId !== undefined) {
 
@@ -163,10 +167,14 @@ class FaceAlignedSectionPlanesPlugin extends Plugin {
             }
         }
 
-        if (cfg.controlCanvasId === null || cfg.controlCanvasId === undefined) {
-            this.error("Parameter expected: controlCanvasId");
+        if (cfg.controlElementId === null || cfg.controlElementId === undefined) {
+            this.error("Parameter expected: controlElementId");
         } else {
-            this._controlCanvas = document.getElementById(cfg.controlCanvasId);
+            this._controlCanvas = document.getElementById(cfg.controlElementId);
+            if (!this._controlCanvas) {
+                this.warn("Can't find control element: '" + cfg.controlElementId + "' - will create plugin without control element");
+
+            }
         }
 
         this._onSceneSectionPlaneCreated = viewer.scene.on("sectionPlaneCreated", (sectionPlane) => {
@@ -177,6 +185,24 @@ class FaceAlignedSectionPlanesPlugin extends Plugin {
 
             this._sectionPlaneCreated(sectionPlane);
         });
+    }
+
+    /**
+     * Sets the factor that governs how fast a SectionPlane moves as we drag on the control element.
+     *
+     * @param {Number} dragSensitivity  The dragging sensitivity factor.
+     */
+    setDragSensitivity(dragSensitivity) {
+      this._dragSensitivity = dragSensitivity || 1;
+    }
+
+    /**
+     * Gets the factor that governs how fast a SectionPlane moves as we drag on the control element.
+     *
+     * @return {Number} The dragging sensitivity factor.
+     */
+    getDragSensitivity() {
+        return this._dragSensitivity;
     }
 
     /**
@@ -408,5 +434,3 @@ class FaceAlignedSectionPlanesPlugin extends Plugin {
         this.viewer.scene.off(this._onSceneSectionPlaneCreated);
     }
 }
-
-export {FaceAlignedSectionPlanesPlugin}

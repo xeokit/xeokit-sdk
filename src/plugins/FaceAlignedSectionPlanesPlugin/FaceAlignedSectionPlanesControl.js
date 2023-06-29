@@ -23,9 +23,9 @@ export class FaceAlignedSectionPlanesControl {
     constructor(plugin) {
 
         /**
-         * ID of this faceAlignedSectionPlanesControl.
+         * ID of this FaceAlignedSectionPlanesControl.
          *
-         * faceAlignedSectionPlanesControl are mapped by this ID in {@link FaceAlignedSectionPlanesPlugin#controls}.
+         * FaceAlignedSectionPlanesControl are mapped by this ID in {@link FaceAlignedSectionPlanesPlugin#controls}.
          *
          * @property id
          * @type {String|Number}
@@ -35,7 +35,7 @@ export class FaceAlignedSectionPlanesControl {
         this._viewer = plugin.viewer;
         this._plugin = plugin;
         this._visible = false;
-        this._pos = math.vec3(); // Full-precision position of the center of the faceAlignedSectionPlanesControl
+        this._pos = math.vec3(); // Full-precision position of the center of the FaceAlignedSectionPlanesControl
         this._origin = math.vec3();
         this._rtcPos = math.vec3();
 
@@ -51,9 +51,9 @@ export class FaceAlignedSectionPlanesControl {
     }
 
     /**
-     * Called by FaceAlignedSectionPlanesPlugin to assign this faceAlignedSectionPlanesControl to a SectionPlane.
-     * FaceAlignedSectionPlanesPlugin keeps faceAlignedSectionPlanesControls in a reuse pool.
-     * Call with a null or undefined value to disconnect the faceAlignedSectionPlanesControl ffrom whatever SectionPlane it was assigned to.
+     * Called by FaceAlignedSectionPlanesPlugin to assign this FaceAlignedSectionPlanesControl to a SectionPlane.
+     * FaceAlignedSectionPlanesPlugin keeps FaceAlignedSectionPlanesControls in a reuse pool.
+     * Call with a null or undefined value to disconnect the FaceAlignedSectionPlanesControl ffrom whatever SectionPlane it was assigned to.
      * @private
      */
     _setSectionPlane(sectionPlane) {
@@ -83,7 +83,7 @@ export class FaceAlignedSectionPlanesControl {
     }
 
     /**
-     * Gets the {@link SectionPlane} controlled by this faceAlignedSectionPlanesControl.
+     * Gets the {@link SectionPlane} controlled by this FaceAlignedSectionPlanesControl.
      * @returns {SectionPlane} The SectionPlane.
      */
     get sectionPlane() {
@@ -115,7 +115,7 @@ export class FaceAlignedSectionPlanesControl {
     }
 
     /**
-     * Sets if this faceAlignedSectionPlanesControl is visible.
+     * Sets if this FaceAlignedSectionPlanesControl is visible.
      *
      * @type {Boolean}
      */
@@ -140,7 +140,7 @@ export class FaceAlignedSectionPlanesControl {
     }
 
     /**
-     * Gets if this faceAlignedSectionPlanesControl is visible.
+     * Gets if this FaceAlignedSectionPlanesControl is visible.
      *
      * @type {Boolean}
      */
@@ -149,8 +149,8 @@ export class FaceAlignedSectionPlanesControl {
     }
 
     /**
-     * Sets if this faceAlignedSectionPlanesControl is culled. This is called by FaceAlignedSectionPlanesPlugin to
-     * temporarily hide the faceAlignedSectionPlanesControl while a snapshot is being taken by Viewer#getSnapshot().
+     * Sets if this FaceAlignedSectionPlanesControl is culled. This is called by FaceAlignedSectionPlanesPlugin to
+     * temporarily hide the FaceAlignedSectionPlanesControl while a snapshot is being taken by Viewer#getSnapshot().
      * @param culled
      */
     setCulled(culled) {
@@ -170,7 +170,7 @@ export class FaceAlignedSectionPlanesControl {
     }
 
     /**
-     * Builds the Entities that represent this faceAlignedSectionPlanesControl.
+     * Builds the Entities that represent this FaceAlignedSectionPlanesControl.
      * @private
      */
     _createNodes() {
@@ -401,12 +401,6 @@ export class FaceAlignedSectionPlanesControl {
         var nextDragAction = null; // As we hover grabbed an arrow or hoop, self is the action we would do if we then dragged it.
         var dragAction = null; // Action we're doing while we drag an arrow or hoop.
         const lastCanvasPos = math.vec2();
-
-        const xBaseAxis = math.vec3([1, 0, 0]);
-        const yBaseAxis = math.vec3([0, 1, 0]);
-        const zBaseAxis = math.vec3([0, 0, 1]);
-
-        const canvas = this._viewer.scene.canvas.canvas;
         const camera = this._viewer.camera;
         const scene = this._viewer.scene;
 
@@ -476,12 +470,11 @@ export class FaceAlignedSectionPlanesControl {
             var mouseDownMiddle;
             var mouseDownRight;
             var down = false;
-            var lastAffordanceMesh;
 
             const drag = (delta) => {
                 const pos = this._sectionPlane.pos;
                 const dir = this._sectionPlane.dir;
-                math.addVec3(pos, math.mulVec3Scalar(dir, 0.1 * delta, math.vec3()));
+                math.addVec3(pos, math.mulVec3Scalar(dir, 0.1 * delta * this._plugin.getDragSensitivity(), math.vec3()));
                 this._sectionPlane.pos = pos;
             }
 
@@ -543,7 +536,6 @@ export class FaceAlignedSectionPlanesControl {
                         break;
                 }
                 down = false;
-                grabbed = false;
             });
 
             this._plugin._controlCanvas.addEventListener("wheel", this._canvasWheelListener = (e) => {
