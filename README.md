@@ -1,6 +1,5 @@
 # xeokit-sdk
 
-[![This project is using Percy.io for visual regression testing.](https://percy.io/static/images/percy-badge.svg)](https://percy.io/73524691/xeokit-sdk)
 [![npm version](https://badge.fury.io/js/%40xeokit%2Fxeokit-sdk.svg)](https://badge.fury.io/js/%40xeokit%2Fxeokit-sdk)
 [![](https://data.jsdelivr.com/v1/package/npm/@xeokit/xeokit-sdk/badge)](https://www.jsdelivr.com/package/npm/@xeokit/xeokit-sdk)
 

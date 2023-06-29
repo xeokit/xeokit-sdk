@@ -3,6 +3,7 @@ export * from "./AnnotationsPlugin/index.js";
 export * from "./AxisGizmoPlugin/index.js";
 export * from "./BCFViewpointsPlugin/index.js";
 export * from "./DistanceMeasurementsPlugin/index.js";
+export * from "./FaceAlignedSectionPlanesPlugin/index.js";
 export * from "./FastNavPlugin/index.js";
 export * from "./GLTFLoaderPlugin/index.js";
 export * from "./NavCubePlugin/index.js";
