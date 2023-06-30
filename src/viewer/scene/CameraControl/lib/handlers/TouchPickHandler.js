@@ -128,7 +128,7 @@ class TouchPickHandler {
             const touches = e.touches;
             const changedTouches = e.changedTouches;
 
-            const pickedSurfaceSubs = cameraControl.hasSubs("pickedSurface");
+            const pickedSurfaceSubs = cameraControl.hasSubs("pickedEntitySurface");
 
             if (states.longTouchTimeout !== null) {
                 clearTimeout(states.longTouchTimeout);
@@ -147,22 +147,22 @@ class TouchPickHandler {
 
                         getCanvasPosFromEvent(changedTouches[0], pickController.pickCursorPos);
                         pickController.schedulePickEntity = true;
-                        pickController.schedulePickSurface = pickedSurfaceSubs;
+                        pickController.schedulePickEntitySurface = pickedSurfaceSubs;
 
                         pickController.update();
 
-                        if (pickController.pickResult) {
+                        if (pickController.pickEntitySurfaceResult) {
 
-                            pickController.pickResult.touchInput = true;
+                            pickController.pickEntitySurfaceResult.touchInput = true;
 
-                            cameraControl.fire("doublePicked", pickController.pickResult);
+                            cameraControl.fire("doublePicked", pickController.pickEntitySurfaceResult);
 
-                            if (pickController.pickedSurface) {
-                                cameraControl.fire("doublePickedSurface", pickController.pickResult);
+                            if (pickController.pickedEntitySurface) {
+                                cameraControl.fire("doublePickedSurface", pickController.pickEntitySurfaceResult);
                             }
 
                             if (configs.doublePickFlyTo) {
-                                flyCameraTo(pickController.pickResult);
+                                flyCameraTo(pickController.pickEntitySurfaceResult);
                             }
                         } else {
                             cameraControl.fire("doublePickedNothing");
@@ -179,18 +179,18 @@ class TouchPickHandler {
 
                         getCanvasPosFromEvent(changedTouches[0], pickController.pickCursorPos);
                         pickController.schedulePickEntity = true;
-                        pickController.schedulePickSurface = pickedSurfaceSubs;
+                        pickController.schedulePickEntitySurface = pickedSurfaceSubs;
 
                         pickController.update();
 
-                        if (pickController.pickResult) {
+                        if (pickController.pickEntitySurfaceResult) {
 
-                            pickController.pickResult.touchInput = true;
+                            pickController.pickEntitySurfaceResult.touchInput = true;
 
-                            cameraControl.fire("picked", pickController.pickResult);
+                            cameraControl.fire("picked", pickController.pickEntitySurfaceResult);
 
-                            if (pickController.pickedSurface) {
-                                cameraControl.fire("pickedSurface", pickController.pickResult);
+                            if (pickController.pickedEntitySurface) {
+                                cameraControl.fire("pickedEntitySurface", pickController.pickEntitySurfaceResult);
                             }
 
                         } else {

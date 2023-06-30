@@ -14,7 +14,6 @@ import {TouchPanRotateAndDollyHandler} from "./lib/handlers/TouchPanRotateAndDol
 import {utils} from "../utils.js";
 import {math} from "../math/math.js";
 import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
-import {MouseSnapHandler} from "./lib/handlers/MouseSnapHandler";
 
 /**
  * @desc Controls the {@link Camera} with user input, and fires events when the user interacts with pickable {@link Entity}s.
@@ -37,12 +36,12 @@ import {MouseSnapHandler} from "./lib/handlers/MouseSnapHandler";
  *      + [Following the Pointer in Plan-View Mode](#--following-the-pointer-in-plan-view-mode--)
  *      + [Axis-Aligned Views in Plan-View Mode](#--axis-aligned-views-in-plan-view-mode--)
  * * [CameraControl Events](#cameracontrol-events)
- *      + ["hover"](#---hover---)
- *      + ["hoverOff"](#---hoveroff---)
+ *      + ["hoverOverEntity"](#---hover---)
+ *      + ["hoverNothing"](#---hoveroff---)
  *      + ["hoverEnter"](#---hoverenter---)
- *      + ["hoverOut"](#---hoverout---)
+ *      + ["hoverOutEntity"](#---hoverout---)
  *      + ["picked"](#---picked---)
- *      + ["pickedSurface"](#---pickedsurface---)
+ *      + ["pickedEntitySurface"](#---pickedEntitySurface---)
  *      + ["pickedNothing"](#---pickednothing---)
  *      + ["doublePicked"](#---doublepicked---)
  *      + ["doublePickedSurface"](#---doublepickedsurface---)
@@ -296,12 +295,12 @@ import {MouseSnapHandler} from "./lib/handlers/MouseSnapHandler";
  *
  * The first example shows how to save a handle to a subscription, which we can later use to unsubscribe.
  *
- * ## "hover"
+ * ## "hoverOverEntity"
  *
  * Event fired when the pointer moves while hovering over an Entity.
  *
  * ````javascript
- * const onHover = cameraControl.on("hover", (e) => {
+ * const onHover = cameraControl.on("hoverOverEntity", (e) => {
  *      const entity = e.entity; // Entity
  *      const canvasPos = e.canvasPos; // 2D canvas position
  * });
@@ -313,12 +312,12 @@ import {MouseSnapHandler} from "./lib/handlers/MouseSnapHandler";
  * cameraControl.off(onHover);
  * ````
  *
- * ## "hoverOff"
+ * ## "hoverNothing"
  *
  * Event fired when the pointer moves while hovering over empty space.
  *
  * ````javascript
- * cameraControl.on("hoverOff", (e) => {
+ * cameraControl.on("hoverNothing", (e) => {
  *      const canvasPos = e.canvasPos;
  * });
  * ````
@@ -334,12 +333,12 @@ import {MouseSnapHandler} from "./lib/handlers/MouseSnapHandler";
  * });
  * ````
  *
- * ## "hoverOut"
+ * ## "hoverOutEntity"
  *
  * Event fired when the pointer moves off an Entity.
  *
  * ````javascript
- * cameraControl.on("hoverOut", (e) => {
+ * cameraControl.on("hoverOutEntity", (e) => {
  *      const entity = e.entity;
  *      const canvasPos = e.canvasPos;
  * });
@@ -356,7 +355,7 @@ import {MouseSnapHandler} from "./lib/handlers/MouseSnapHandler";
  * });
  * ````
  *
- * ## "pickedSurface"
+ * ## "pickedEntitySurface"
  *
  * Event fired when we left-click or tap on the surface of an Entity.
  *
@@ -715,7 +714,6 @@ class CameraControl extends Component {
             new MousePanRotateDollyHandler(this.scene, this._controllers, this._configs, this._states, this._updates),
             new KeyboardAxisViewHandler(this.scene, this._controllers, this._configs, this._states, this._updates),
             new MousePickHandler(this.scene, this._controllers, this._configs, this._states, this._updates),
-            new MouseSnapHandler(this.scene, this._controllers, this._configs, this._states, this._updates),
             new TouchPickHandler(this.scene, this._controllers, this._configs, this._states, this._updates),
             new KeyboardPanRotateDollyHandler(this.scene, this._controllers, this._configs, this._states, this._updates)
         ];

@@ -78,11 +78,11 @@ class CameraUpdater {
                             if (configs.followPointer && states.followPointerDirty) {
 
                                 pickController.pickCursorPos = states.pointerCanvasPos;
-                                pickController.schedulePickSurface = true;
+                                pickController.schedulePickEntitySurface = true;
                                 pickController.update();
 
-                                if (pickController.pickResult && pickController.pickResult.worldPos) {
-                                    followPointerWorldPos = pickController.pickResult.worldPos;
+                                if (pickController.pickedEntitySurface) {
+                                    followPointerWorldPos = pickController.pickEntitySurfaceResult.worldPos;
                                     
                                 } else {
                                     dollyDistFactor = 1.0;

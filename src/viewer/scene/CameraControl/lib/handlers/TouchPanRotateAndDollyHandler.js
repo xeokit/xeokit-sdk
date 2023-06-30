@@ -70,14 +70,14 @@ class TouchPanRotateAndDollyHandler {
                 if (configs.followPointer) {
 
                     pickController.pickCursorPos = tapStartCanvasPos;
-                    pickController.schedulePickSurface = true;
+                    pickController.schedulePickEntitySurface = true;
                     pickController.update();
 
                     if (!configs.planView) {
 
-                        if (pickController.picked && pickController.pickedSurface && pickController.pickResult && pickController.pickResult.worldPos) {
+                        if (pickController.pickedEntity && pickController.pickedEntitySurface && pickController.pickEntitySurfaceResult && pickController.pickEntitySurfaceResult.worldPos) {
 
-                            pivotController.setPivotPos(pickController.pickResult.worldPos);
+                            pivotController.setPivotPos(pickController.pickEntitySurfaceResult.worldPos);
 
                             if (!configs.firstPerson && pivotController.startPivot()) {
                                 pivotController.showPivot();
@@ -223,7 +223,7 @@ class TouchPanRotateAndDollyHandler {
                     // We use only canvasHeight here so that aspect ratio does not distort speed
 
                     if (camera.projection === "perspective") {
-                        const pickedWorldPos = pickController.pickResult ? pickController.pickResult.worldPos : scene.center;
+                        const pickedWorldPos = pickController.pickEntitySurfaceResult ? pickController.pickEntitySurfaceResult.worldPos : scene.center;
 
                         const depth = Math.abs(math.lenVec3(math.subVec3(pickedWorldPos, scene.camera.eye, [])));
                         const targetDistance = depth * Math.tan((camera.perspective.fov / 2) * Math.PI / 180.0);

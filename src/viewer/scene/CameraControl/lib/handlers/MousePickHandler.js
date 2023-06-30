@@ -55,60 +55,49 @@ class MousePickHandler {
                 return;
             }
 
-            const hoverSubs = cameraControl.hasSubs("hover");
-            const hoverOutSubs = cameraControl.hasSubs("hoverOut");
-            const hoverOffSubs = cameraControl.hasSubs("hoverOff");
-            const hoverSurfaceSubs = cameraControl.hasSubs("hoverSurface");
+            const hoverOverEntitySubs = cameraControl.hasSubs("hoverOverEntity");
+            const hoverLeaveEntitySubs = cameraControl.hasSubs("hoverLeaveEntity");
+            const hoverNothingSubs = cameraControl.hasSubs("hoverNothing");
+            const hoverOverEntitySurfaceSubs = cameraControl.hasSubs("hoverOverEntitySurface");
+            const pickedVertexSubs = cameraControl.hasSubs("pickedVertex");
 
-            if (hoverSubs || hoverOutSubs || hoverOffSubs || hoverSurfaceSubs) {
+            if (hoverOverEntitySubs ||
+                hoverLeaveEntitySubs ||
+                hoverNothingSubs ||
+                hoverOverEntitySurfaceSubs ||
+                pickedVertexSubs) {
 
                 pickController.pickCursorPos = states.pointerCanvasPos;
-                pickController.schedulePickEntity = true;
-                pickController.schedulePickSurface = hoverSurfaceSubs;
+                pickController.schedulePickEntity = hoverOverEntitySubs;
+                pickController.schedulePickEntitySurface = hoverOverEntitySurfaceSubs;
+                pickController.schedulePickVertex = pickedVertexSubs;
 
                 pickController.update();
 
-                if (pickController.pickResult) {
-
-                    if (pickController.pickResult.entity) {
-                        const pickedEntityId = pickController.pickResult.entity.id;
-
-                        if (this._lastPickedEntityId !== pickedEntityId) {
-
-                            if (this._lastPickedEntityId !== undefined) {
-
-                                cameraControl.fire("hoverOut", { // Hovered off an entity
-                                    entity: scene.objects[this._lastPickedEntityId]
-                                }, true);
-                            }
-
-                            cameraControl.fire("hoverEnter", pickController.pickResult, true); // Hovering over a new entity
-
-                            this._lastPickedEntityId = pickedEntityId;
-                        }
-                    }
-
-                    cameraControl.fire("hover", pickController.pickResult, true);
-
-                    if (pickController.pickResult.worldPos || pickController.pickResult.snappedWorldPos) { // Hovering the surface of an entity
-                        cameraControl.fire("hoverSurface", pickController.pickResult, true);
-                    }
-
-                } else {
-
-                    if (this._lastPickedEntityId !== undefined) {
-
-                        cameraControl.fire("hoverOut", { // Hovered off an entity
-                            entity: scene.objects[this._lastPickedEntityId]
-                        }, true);
-
-                        this._lastPickedEntityId = undefined;
-                    }
-
-                    cameraControl.fire("hoverOff", { // Not hovering on any entity
-                        canvasPos: pickController.pickCursorPos
-                    }, true);
-                }
+                // if (pickController.pickedEntitySurface) {
+                //     const pickedEntityId = pickController.pickEntitySurfaceResult.entity.id;
+                //     if (this._lastPickedEntityId !== pickedEntityId) {
+                //         if (this._lastPickedEntityId !== undefined) {
+                //             cameraControl.fire("hoverLeaveEntity", { // Hovered off an entity
+                //                 entity: scene.objects[this._lastPickedEntityId]
+                //             }, true);
+                //         }
+                //         cameraControl.fire("hoverEnterEntity", pickController.pickEntitySurfaceResult, true); // Hovering over a new entity
+                //         this._lastPickedEntityId = pickedEntityId;
+                //     }
+                //     cameraControl.fire("hoverOverEntity", pickController.pickEntitySurfaceResult, true);
+                //     cameraControl.fire("hoverOverEntitySurface", pickController.pickEntitySurfaceResult, true);
+                // } else {
+                //     if (this._lastPickedEntityId !== undefined) {
+                //         cameraControl.fire("hoverLeaveEntity", { // Hovered off an entity
+                //             entity: scene.objects[this._lastPickedEntityId]
+                //         }, true);
+                //         this._lastPickedEntityId = undefined;
+                //     }
+                //     cameraControl.fire("hoverNothing", { // Not hovering on any entity
+                //         canvasPos: pickController.pickCursorPos
+                //     }, true);
+                // }
             }
         });
 
@@ -140,16 +129,13 @@ class MousePickHandler {
             states.mouseDownCursorY = states.pointerCanvasPos[1];
 
             if ((!configs.firstPerson) && configs.followPointer) {
-
                 pickController.pickCursorPos = states.pointerCanvasPos;
-                pickController.schedulePickSurface = true;
-
+                pickController.schedulePickEntitySurface = true;
                 pickController.update();
-
                 if (e.which === 1) {// Left button
-                    const pickResult = pickController.pickResult;
-                    if (pickResult && pickResult.worldPos) {
-                        pivotController.setPivotPos(pickResult.worldPos);
+                    if (pickController.pickedEntitySurface) {
+                        const pickEntitySurfaceResult = pickController.pickEntitySurfaceResult;
+                        pivotController.setPivotPos(pickEntitySurfaceResult.worldPos);
                         pivotController.startPivot();
                     } else {
                         if (configs.smartPivot) {
@@ -164,24 +150,19 @@ class MousePickHandler {
         });
 
         document.addEventListener('mouseup', this._documentMouseUpHandler = (e) => {
-
             if (e.which === 1) {
                 leftDown = false;
             }
-
             if (e.which === 3) {
                 rightDown = false;
             }
         });
 
         canvas.addEventListener('mouseup', this._canvasMouseUpHandler = (e) => {
-
             if (!(configs.active && configs.pointerEnabled)) {
                 return;
             }
-
             const leftButtonUp = (e.which === 1);
-
             if (!leftButtonUp) {
                 return;
             }
@@ -196,7 +177,7 @@ class MousePickHandler {
 
             const pickedSubs = cameraControl.hasSubs("picked");
             const pickedNothingSubs = cameraControl.hasSubs("pickedNothing");
-            const pickedSurfaceSubs = cameraControl.hasSubs("pickedSurface");
+            const pickedSurfaceSubs = cameraControl.hasSubs("pickedEntitySurface");
             const doublePickedSubs = cameraControl.hasSubs("doublePicked");
             const doublePickedSurfaceSubs = cameraControl.hasSubs("doublePickedSurface");
             const doublePickedNothingSubs = cameraControl.hasSubs("doublePickedNothing");
@@ -212,21 +193,21 @@ class MousePickHandler {
 
                     pickController.pickCursorPos = states.pointerCanvasPos;
                     pickController.schedulePickEntity = true;
-                    pickController.schedulePickSurface = pickedSurfaceSubs;
+                    pickController.schedulePickEntitySurface = pickedSurfaceSubs;
                     pickController.update();
 
-                    if (pickController.pickResult) {
-
-                        cameraControl.fire("picked", pickController.pickResult, true);
-
-                        if (pickController.pickedSurface) {
-                            cameraControl.fire("pickedSurface", pickController.pickResult, true);
-                        }
-                    } else {
-                        cameraControl.fire("pickedNothing", {
-                            canvasPos: states.pointerCanvasPos
-                        }, true);
-                    }
+                    // if (pickController.pickEntitySurfaceResult) {
+                    //
+                    //     cameraControl.fire("picked", pickController.pickEntitySurfaceResult, true);
+                    //
+                    //     if (pickController.pickedEntitySurface) {
+                    //         cameraControl.fire("pickedEntitySurface", pickController.pickEntitySurfaceResult, true);
+                    //     }
+                    // } else {
+                    //     cameraControl.fire("pickedNothing", {
+                    //         canvasPos: states.pointerCanvasPos
+                    //     }, true);
+                    // }
                 }
 
                 this._clicks = 0;
@@ -240,11 +221,11 @@ class MousePickHandler {
 
                 pickController.pickCursorPos = states.pointerCanvasPos;
                 pickController.schedulePickEntity = configs.doublePickFlyTo;
-                pickController.schedulePickSurface = pickedSurfaceSubs;
+                pickController.schedulePickEntitySurface = pickedSurfaceSubs;
                 pickController.update();
 
-                const firstClickPickResult = pickController.pickResult;
-                const firstClickPickSurface = pickController.pickedSurface;
+                const firstClickPickResult = pickController.pickEntitySurfaceResult;
+                const firstClickPickSurface = pickController.pickedEntitySurface;
 
                 this._timeout = setTimeout(() => {
 
@@ -254,7 +235,7 @@ class MousePickHandler {
 
                         if (firstClickPickSurface) {
 
-                            cameraControl.fire("pickedSurface", firstClickPickResult, true);
+                            cameraControl.fire("pickedEntitySurface", firstClickPickResult, true);
 
                             if ((!configs.firstPerson) && configs.followPointer) {
                                 controllers.pivotController.setPivotPos(firstClickPickResult.worldPos);
@@ -282,24 +263,24 @@ class MousePickHandler {
 
                 pickController.pickCursorPos = states.pointerCanvasPos;
                 pickController.schedulePickEntity = configs.doublePickFlyTo || doublePickedSubs || doublePickedSurfaceSubs;
-                pickController.schedulePickSurface = pickController.schedulePickEntity && doublePickedSurfaceSubs;
+                pickController.schedulePickEntitySurface = pickController.schedulePickEntity && doublePickedSurfaceSubs;
                 pickController.update();
 
-                if (pickController.pickResult) {
+                if (pickController.pickEntitySurfaceResult) {
 
-                    cameraControl.fire("doublePicked", pickController.pickResult, true);
+                    cameraControl.fire("doublePicked", pickController.pickEntitySurfaceResult, true);
 
-                    if (pickController.pickedSurface) {
-                        cameraControl.fire("doublePickedSurface", pickController.pickResult, true);
+                    if (pickController.pickedEntitySurface) {
+                        cameraControl.fire("doublePickedSurface", pickController.pickEntitySurfaceResult, true);
                     }
 
                     if (configs.doublePickFlyTo) {
 
-                        flyCameraTo(pickController.pickResult);
+                        flyCameraTo(pickController.pickEntitySurfaceResult);
 
                         if ((!configs.firstPerson) && configs.followPointer) {
 
-                            const pickedEntityAABB = pickController.pickResult.entity.aabb;
+                            const pickedEntityAABB = pickController.pickEntitySurfaceResult.entity.aabb;
                             const pickedEntityCenterPos = math.getAABB3Center(pickedEntityAABB);
 
                             controllers.pivotController.setPivotPos(pickedEntityCenterPos);
@@ -360,7 +341,6 @@ class MousePickHandler {
         }
     }
 }
-
 
 
 export {MousePickHandler};

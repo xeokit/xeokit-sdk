@@ -92,89 +92,60 @@ class MousePanRotateDollyHandler {
 
         function setMousedownPick() {
             pickController.pickCursorPos = states.pointerCanvasPos;
-            pickController.schedulePickSurface = true;
+            pickController.schedulePickEntitySurface = true;
             pickController.update();
-
-            if (pickController.picked && pickController.pickedSurface && pickController.pickResult && pickController.pickResult.worldPos) {
+            if (pickController.pickedEntitySurface) {
                 mouseDownPicked = true;
-                pickedWorldPos.set(pickController.pickResult.worldPos);
+                pickedWorldPos.set(pickController.pickEntitySurfaceResult.worldPos);
             } else {
                 mouseDownPicked = false;
             }
         }
 
         canvas.addEventListener("mousedown", this._mouseDownHandler = (e) => {
-
             if (!(configs.active && configs.pointerEnabled)) {
                 return;
             }
-
             switch (e.which) {
-
                 case 1: // Left button
-
                     if (keyDown[scene.input.KEY_SHIFT] || configs.planView) {
-
                         mouseDownLeft = true;
-
                         setMousedownState();
-
                     } else {
-
                         mouseDownLeft = true;
-
                         setMousedownState(false);
                     }
-
                     break;
-
                 case 2: // Middle/both buttons
-
                     mouseDownMiddle = true;
-
                     setMousedownState();
-
                     break;
-
                 case 3: // Right button
-
                     mouseDownRight = true;
-
                     if (configs.panRightClick) {
-
                         setMousedownState();
                     }
-
                     break;
-
                 default:
                     break;
             }
         });
 
         document.addEventListener("mousemove", this._documentMouseMoveHandler = () => {
-
             if (!(configs.active && configs.pointerEnabled)) {
                 return;
             }
-
             if (!mouseDownLeft && !mouseDownMiddle && !mouseDownRight) {
                 return;
             }
-
             // Scaling drag-rotate to canvas boundary
-
             const canvasBoundary = scene.canvas.boundary;
-
             const canvasWidth = canvasBoundary[2];
             const canvasHeight = canvasBoundary[3];
             const x = states.pointerCanvasPos[0];
             const y = states.pointerCanvasPos[1];
-
             const panning = keyDown[scene.input.KEY_SHIFT] || configs.planView || (!configs.panRightClick && mouseDownMiddle) || (configs.panRightClick && mouseDownRight);
-
             if (panning) {
-
                 const xPanDelta = (x - lastX);
                 const yPanDelta = (y - lastY);
 
@@ -216,15 +187,12 @@ class MousePanRotateDollyHandler {
         });
 
         canvas.addEventListener("mousemove", this._canvasMouseMoveHandler = (e) => {
-
             if (!(configs.active && configs.pointerEnabled)) {
                 return;
             }
-
             if (!states.mouseover) {
                 return;
             }
-
             mouseMovedOnCanvasSinceLastWheel = true;
         });
 
