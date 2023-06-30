@@ -122,6 +122,7 @@ class PickController {
             return;
         }
 
+        this.pickedNothing = false;
         this.pickedEntity = false;
         this.pickedEntitySurface = false;
         this.pickedVertex = false;
