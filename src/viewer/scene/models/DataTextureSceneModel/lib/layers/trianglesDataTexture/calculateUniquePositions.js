@@ -74,7 +74,7 @@ function setMaxNumberOfPositions (maxPositions)
  */
 function uniquifyPositions(mesh)
 {
-    let _positions = mesh.positions;
+    let _positions = mesh.positionsCompressed;
     let _indices = mesh.indices;
     let _edgeIndices = mesh.edgeIndices;
 

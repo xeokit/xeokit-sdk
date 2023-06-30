@@ -2,9 +2,7 @@ import {Component} from "../../Component.js";
 import {math} from "../../math/math.js";
 import {DataTextureSceneModelMesh} from './lib/DataTextureSceneModelMesh.js';
 import {DataTextureSceneModelNode} from './lib/DataTextureSceneModelNode.js';
-import {
-    TrianglesDataTextureLayer
-} from './lib/layers/trianglesDataTexture/TrianglesDataTextureLayer.js';
+import {TrianglesDataTextureLayer} from './lib/layers/trianglesDataTexture/TrianglesDataTextureLayer.js';
 
 import {ENTITY_FLAGS} from './lib/ENTITY_FLAGS.js';
 import {utils} from "../../utils.js";
@@ -985,7 +983,7 @@ class DataTextureSceneModel extends Component {
             const aabb = math.collapseAABB3();
             cfg.positionsDecodeMatrix = math.mat4();
             math.expandAABB3Points3(aabb, cfg.positions);
-            cfg.positionsCompressed= quantizePositions(cfg.positions, aabb, cfg.positionsDecodeMatrix)
+            cfg.positionsCompressed = quantizePositions(cfg.positions, aabb, cfg.positionsDecodeMatrix)
         }
         const cfgOrigin = cfg.origin || cfg.rtcCenter;
         const origin = (cfgOrigin) ? math.addVec3(this._origin, cfgOrigin, tempVec3a) : this._origin;
@@ -1714,33 +1712,33 @@ class DataTextureSceneModel extends Component {
  *
  * @returns {object} The mesh information enrichened with `.preparedBuckets` key.
  */
-function prepareMeshGeometry (geometryCfg, enableVertexWelding, enableIndexRebucketing) {
+function prepareMeshGeometry(geometryCfg, enableVertexWelding, enableIndexRebucketing) {
     let uniquePositions, uniqueIndices, uniqueEdgeIndices;
     if (enableVertexWelding) {
         [
             uniquePositions,
             uniqueIndices,
             uniqueEdgeIndices,
-        ] = uniquifyPositions ({
-            positions: geometryCfg.positions,
+        ] = uniquifyPositions({
+            positionsCompressed: geometryCfg.positionsCompressed,
             indices: geometryCfg.indices,
             edgeIndices: geometryCfg.edgeIndices
         });
     } else {
-        uniquePositions = geometryCfg.positions;
+        uniquePositions = geometryCfg.positionsCompressed;
         uniqueIndices = geometryCfg.indices;
         uniqueEdgeIndices = geometryCfg.edgeIndices;
     }
     let buckets;
     if (enableIndexRebucketing) {
         let numUniquePositions = uniquePositions.length / 3;
-        buckets = rebucketPositions (
+        buckets = rebucketPositions(
             {
                 positions: uniquePositions,
                 indices: uniqueIndices,
                 edgeIndices: uniqueEdgeIndices,
             },
-            (numUniquePositions > (1<< 16)) ? 16 : 8,
+            (numUniquePositions > (1 << 16)) ? 16 : 8,
             // true
         );
     } else {
