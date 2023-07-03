@@ -170,8 +170,8 @@ export class FaceAlignedSectionPlanesPlugin extends Plugin {
         if (cfg.controlElementId === null || cfg.controlElementId === undefined) {
             this.error("Parameter expected: controlElementId");
         } else {
-            this._controlCanvas = document.getElementById(cfg.controlElementId);
-            if (!this._controlCanvas) {
+            this._controlElement = document.getElementById(cfg.controlElementId);
+            if (!this._controlElement) {
                 this.warn("Can't find control element: '" + cfg.controlElementId + "' - will create plugin without control element");
 
             }

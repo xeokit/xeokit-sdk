@@ -465,20 +465,20 @@ export class FaceAlignedSectionPlanesControl {
             };
         })();
 
+        const drag = (delta) => {
+            const pos = this._sectionPlane.pos;
+            const dir = this._sectionPlane.dir;
+            math.addVec3(pos, math.mulVec3Scalar(dir, 0.1 * delta * this._plugin.getDragSensitivity(), math.vec3()));
+            this._sectionPlane.pos = pos;
+        }
+
         {
-            var mouseDownLeft;
-            var mouseDownMiddle;
-            var mouseDownRight;
-            var down = false;
+            let mouseDownLeft;
+            let mouseDownMiddle;
+            let mouseDownRight;
+            let down = false;
 
-            const drag = (delta) => {
-                const pos = this._sectionPlane.pos;
-                const dir = this._sectionPlane.dir;
-                math.addVec3(pos, math.mulVec3Scalar(dir, 0.1 * delta * this._plugin.getDragSensitivity(), math.vec3()));
-                this._sectionPlane.pos = pos;
-            }
-
-            this._plugin._controlCanvas.addEventListener("mousedown", this._canvasMouseDownListener = (e) => {
+            this._plugin._controlElement.addEventListener("mousedown", this._canvasMouseDownListener = (e) => {
                 e.preventDefault();
                 if (!this._visible) {
                     return;
@@ -499,7 +499,7 @@ export class FaceAlignedSectionPlanesControl {
                 }
             });
 
-            this._plugin._controlCanvas.addEventListener("mousemove", this._canvasMouseMoveListener = (e) => {
+            this._plugin._controlElement.addEventListener("mousemove", this._canvasMouseMoveListener = (e) => {
                 if (!this._visible) {
                     return;
                 }
@@ -514,7 +514,7 @@ export class FaceAlignedSectionPlanesControl {
                 lastCanvasPos[1] = y;
             });
 
-            this._plugin._controlCanvas.addEventListener("mouseup", this._canvasMouseUpListener = (e) => {
+            this._plugin._controlElement.addEventListener("mouseup", this._canvasMouseUpListener = (e) => {
                 if (!this._visible) {
                     return;
                 }
@@ -538,7 +538,7 @@ export class FaceAlignedSectionPlanesControl {
                 down = false;
             });
 
-            this._plugin._controlCanvas.addEventListener("wheel", this._canvasWheelListener = (e) => {
+            this._plugin._controlElement.addEventListener("wheel", this._canvasWheelListener = (e) => {
                 if (!this._visible) {
                     return;
                 }
@@ -548,6 +548,25 @@ export class FaceAlignedSectionPlanesControl {
                 }
                 drag(delta);
             });
+        }
+
+        {
+            let touchStartY, touchEndY;
+            this._plugin._controlElement.addEventListener("touchstart", this._handleTouchStart = (e) => {
+                touchStartY = e.touches[0].clientY;
+            }, false);
+            this._plugin._controlElement.addEventListener("touchmove", this._handleTouchMove = (e) => {
+                touchEndY = e.touches[0].clientY;
+
+                const deltaY = touchStartY - touchEndY;
+                if (Math.abs(deltaY) > 50) {
+                    drag(deltaY);
+                }
+            }, false);
+            this._plugin._controlElement.addEventListener("touchend", this._handleTouchEnd = (e) => {
+                touchStartY = null;
+                touchEndY = null;
+            }, false);
         }
     }
 
@@ -562,6 +581,7 @@ export class FaceAlignedSectionPlanesControl {
         const scene = viewer.scene;
         const canvas = scene.canvas.canvas;
         const camera = viewer.camera;
+        const controlElement = this._plugin._controlElement;
 
         scene.off(this._onSceneTick);
 
@@ -569,6 +589,10 @@ export class FaceAlignedSectionPlanesControl {
         canvas.removeEventListener("mousemove", this._canvasMouseMoveListener);
         canvas.removeEventListener("mouseup", this._canvasMouseUpListener);
         canvas.removeEventListener("wheel", this._canvasWheelListener);
+
+        controlElement.removeEventListener("touchstart", this._handleTouchStart);
+        controlElement.removeEventListener("touchmove",this._handleTouchMove);
+        controlElement.removeEventListener("touchend",this._handleTouchEnd);
 
         camera.off(this._onCameraViewMatrix);
         camera.off(this._onCameraProjMatrix);
