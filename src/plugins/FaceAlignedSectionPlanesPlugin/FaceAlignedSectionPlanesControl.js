@@ -404,6 +404,9 @@ export class FaceAlignedSectionPlanesControl {
         const camera = this._viewer.camera;
         const scene = this._viewer.scene;
 
+        let deltaUpdate = 0;
+        let waitForTick = false;
+
         { // Keep gizmo screen size constant
 
             const tempVec3a = math.vec3([0, 0, 0]);
@@ -421,6 +424,7 @@ export class FaceAlignedSectionPlanesControl {
 
             this._onSceneTick = scene.on("tick", () => {
 
+                waitForTick = false;
                 const dist = Math.abs(math.lenVec3(math.subVec3(scene.camera.eye, this._pos, tempVec3a)));
 
                 if (dist !== lastDist) {
@@ -437,6 +441,11 @@ export class FaceAlignedSectionPlanesControl {
                     const size = worldSize;
                     rootNode.scale = [size, size, size];
                     lastDist = dist;
+                }
+
+                if (deltaUpdate !== 0) {
+                    drag(deltaUpdate);
+                    deltaUpdate = 0;
                 }
             });
         }
@@ -465,7 +474,7 @@ export class FaceAlignedSectionPlanesControl {
             };
         })();
 
-        const drag = (delta) => {
+        const moveSectionPlane = (delta) => {
             const pos = this._sectionPlane.pos;
             const dir = this._sectionPlane.dir;
             math.addVec3(pos, math.mulVec3Scalar(dir, 0.1 * delta * this._plugin.getDragSensitivity(), math.vec3()));
@@ -493,7 +502,6 @@ export class FaceAlignedSectionPlanesControl {
                         lastCanvasPos[0] = canvasPos[0];
                         lastCanvasPos[1] = canvasPos[1];
                         break;
-
                     default:
                         break;
                 }
@@ -506,10 +514,13 @@ export class FaceAlignedSectionPlanesControl {
                 if (!down) {
                     return;
                 }
+                if (waitForTick) {    // Limit changes detection to one per frame
+                    return;
+                }
                 var canvasPos = getClickCoordsWithinElement(e);
                 const x = canvasPos[0];
                 const y = canvasPos[1];
-                drag(y - lastCanvasPos[1]);
+                moveSectionPlane(y - lastCanvasPos[1]);
                 lastCanvasPos[0] = x;
                 lastCanvasPos[1] = y;
             });
@@ -542,31 +553,52 @@ export class FaceAlignedSectionPlanesControl {
                 if (!this._visible) {
                     return;
                 }
-                var delta = Math.max(-1, Math.min(1, -e.deltaY * 40));
-                if (delta === 0) {
-                    return;
-                }
-                drag(delta);
+                deltaUpdate += Math.max(-1, Math.min(1, -e.deltaY * 40));
             });
         }
 
         {
             let touchStartY, touchEndY;
-            this._plugin._controlElement.addEventListener("touchstart", this._handleTouchStart = (e) => {
-                touchStartY = e.touches[0].clientY;
-            }, false);
-            this._plugin._controlElement.addEventListener("touchmove", this._handleTouchMove = (e) => {
-                touchEndY = e.touches[0].clientY;
+            let lastTouchY = null;
 
-                const deltaY = touchStartY - touchEndY;
-                if (Math.abs(deltaY) > 50) {
-                    drag(deltaY);
+            this._plugin._controlElement.addEventListener("touchstart", this._handleTouchStart = (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                if (!this._visible) {
+                    return;
                 }
-            }, false);
+                touchStartY = e.touches[0].clientY;
+                lastTouchY = touchStartY;
+                deltaUpdate = 0;
+            });
+
+            this._plugin._controlElement.addEventListener("touchmove", this._handleTouchMove = (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                if (!this._visible) {
+                    return;
+                }
+                if (waitForTick) {    // Limit changes detection to one per frame
+                    return;
+                }
+                waitForTick = true;
+                touchEndY = e.touches[0].clientY;
+                if (lastTouchY !== null) {
+                    deltaUpdate += touchEndY - lastTouchY;
+                }
+                lastTouchY = touchEndY;
+            });
+
             this._plugin._controlElement.addEventListener("touchend", this._handleTouchEnd = (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                if (!this._visible) {
+                    return;
+                }
                 touchStartY = null;
                 touchEndY = null;
-            }, false);
+                deltaUpdate = 0;
+            });
         }
     }
 
@@ -591,8 +623,8 @@ export class FaceAlignedSectionPlanesControl {
         canvas.removeEventListener("wheel", this._canvasWheelListener);
 
         controlElement.removeEventListener("touchstart", this._handleTouchStart);
-        controlElement.removeEventListener("touchmove",this._handleTouchMove);
-        controlElement.removeEventListener("touchend",this._handleTouchEnd);
+        controlElement.removeEventListener("touchmove", this._handleTouchMove);
+        controlElement.removeEventListener("touchend", this._handleTouchEnd);
 
         camera.off(this._onCameraViewMatrix);
         camera.off(this._onCameraProjMatrix);
