@@ -444,7 +444,7 @@ export class FaceAlignedSectionPlanesControl {
                 }
 
                 if (deltaUpdate !== 0) {
-                    drag(deltaUpdate);
+                    moveSectionPlane(deltaUpdate);
                     deltaUpdate = 0;
                 }
             });
