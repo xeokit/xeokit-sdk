@@ -6,9 +6,11 @@ import {RenderState} from "../../../../../webgl/RenderState.js";
 import {geometryCompressionUtils} from "../../../../../math/geometryCompressionUtils.js";
 import {getDataTextureRenderers} from "./TrianglesDataTextureRenderers.js";
 import {TrianglesDataTextureBuffer} from "./TrianglesDataTextureBuffer.js";
-import {DataTextureGenerator, dataTextureRamStats, DataTextureState} from "../DataTextureState.js"
+import {DataTextureState} from "../DataTextureState.js"
 
 import {DataTextureSceneModel} from '../../../DataTextureSceneModel.js';
+import {DataTextureGenerator} from "../DataTextureGenerator";
+import {dataTextureRamStats} from "./dataTextureRamStats";
 
 /**
  * 12-bits allowed for object ids.
@@ -40,8 +42,6 @@ const INDICES_EDGE_INDICES_ALIGNEMENT_SIZE = 8;
 const MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE = 10;
 
 const identityMatrix = math.identityMat4();
-const tempMat4 = math.mat4();
-const tempMat4b = math.mat4();
 const tempVec4a = math.vec4([0, 0, 0, 1]);
 const tempVec4b = math.vec4([0, 0, 0, 1]);
 const tempVec4c = math.vec4([0, 0, 0, 1]);
@@ -50,14 +50,6 @@ const tempOBB3 = math.OBB3();
 const tempUint8Array4 = new Uint8Array(4);
 
 const tempFloat32Array3 = new Float32Array(3);
-
-const tempVec3a = math.vec3();
-const tempVec3b = math.vec3();
-const tempVec3c = math.vec3();
-const tempVec3d = math.vec3();
-const tempVec3e = math.vec3();
-const tempVec3f = math.vec3();
-const tempVec3g = math.vec3();
 
 let _numberOfLayers = 0;
 
@@ -103,7 +95,7 @@ class TrianglesDataTextureLayer {
         this.dataTextureGenerator = new DataTextureGenerator();
 
         this._state = new RenderState({
-            origin: math.vec3(),
+            origin: math.vec3(cfg.origin),
             metallicRoughnessBuf: null,
             positionsDecodeMatrix: math.mat4(),
             textureState: this._dataTextureState,
@@ -193,11 +185,7 @@ class TrianglesDataTextureLayer {
             (instancingGeometryId + "#0") in this._instancedGeometrySubPortionData;
 
         if (!alreadyHasPortionGeometry) {
-            const maxIndicesOfAnyBits = Math.max(
-                state.numIndices8Bits,
-                state.numIndices16Bits,
-                state.numIndices32Bits,
-            );
+            const maxIndicesOfAnyBits = Math.max(state.numIndices8Bits, state.numIndices16Bits, state.numIndices32Bits,);
 
             let numVertices = 0;
             let numIndices = geometryCfg.indices.length / 3;
@@ -215,12 +203,6 @@ class TrianglesDataTextureLayer {
                 (state.numVertices + numVertices) <= MAX_DATA_TEXTURE_HEIGHT * 4096 &&
                 (maxIndicesOfAnyBits + numIndices) <= MAX_DATA_TEXTURE_HEIGHT * 4096;
         }
-
-        // if (!retVal)
-        // {
-        //     console.log ("Cannot create portion!");
-        // }
-
         return retVal;
     }
 
@@ -229,15 +211,15 @@ class TrianglesDataTextureLayer {
      *
      * Gives the portion the specified geometry, color and matrix.
      *
-     * @param cfg.positions Flat float Local-space positions array.
-     * @param [cfg.normals] Flat float normals array.
-     * @param [cfg.colors] Flat float colors array.
-     * @param cfg.indices  Flat int indices array.
-     * @param [cfg.edgeIndices] Flat int edges indices array.
-     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]
-     * @param cfg.metallic Metalness factor [0..255]
-     * @param cfg.roughness Roughness factor [0..255]
-     * @param cfg.opacity Opacity [0..255]
+     * @param geometryCfg.positions Flat float Local-space positions array.
+     * @param [geometryCfg.normals] Flat float normals array.
+     * @param [geometryCfg.colors] Flat float colors array.
+     * @param geometryCfg.indices  Flat int indices array.
+     * @param [geometryCfg.edgeIndices] Flat int edges indices array.
+     * @param geometryCfg.color Quantized RGB color [0..255,0..255,0..255,0..255]
+     * @param geometryCfg.metallic Metalness factor [0..255]
+     * @param geometryCfg.roughness Roughness factor [0..255]
+     * @param geometryCfg.opacity Opacity [0..255]
      * @param [cfg.meshMatrix] Flat float 4x4 matrix
      * @param [cfg.worldMatrix] Flat float 4x4 matrix
      * @param cfg.worldAABB Flat float AABB World-space AABB
@@ -248,51 +230,38 @@ class TrianglesDataTextureLayer {
         if (this._finalized) {
             throw "Already finalized";
         }
-
         const instancing = objectCfg !== null;
-
-        let portionId = this._subPortionIdMapping.length;
-
+        const portionId = this._subPortionIdMapping.length;
         const portionIdFanout = [];
         this._subPortionIdMapping.push(portionIdFanout);
-
         const objectAABB = instancing ? objectCfg.aabb : geometryCfg.aabb;
-
         geometryCfg.preparedBuckets.forEach((bucketGeometry, bucketIndex) => {
             let geometrySubPortionData;
-
             if (instancing) {
                 const key = geometryCfg.id + "#" + bucketIndex;
-
                 if (!(key in this._instancedGeometrySubPortionData)) {
                     this._instancedGeometrySubPortionData[key] = this.createSubPortionGeometry(bucketGeometry);
                 }
-
                 geometrySubPortionData = this._instancedGeometrySubPortionData[key];
             } else {
                 geometrySubPortionData = this.createSubPortionGeometry(bucketGeometry);
             }
-
             const aabb = math.collapseAABB3();
-
             const subPortionId = this.createSubPortionObject(
                 instancing ? objectCfg : geometryCfg,
                 geometrySubPortionData,
                 bucketGeometry.positions,
                 geometryCfg.positionsDecodeMatrix,
-                instancing ? objectCfg.origin : geometryCfg.origin,
+                objectCfg.origin,
+                //         math.addVec3( instancing ? objectCfg.origin : geometryCfg.origin, this._state.origin, math.vec3()),
                 aabb,
                 instancing,
                 geometryCfg.solid
             );
-
             math.expandAABB3(objectAABB, aabb);
-
             portionIdFanout.push(subPortionId);
         });
-
         this.model.numPortions++;
-
         return portionId;
     }
 
@@ -536,15 +505,15 @@ class TrianglesDataTextureLayer {
 
         // Adjust the world AABB with the object `origin`
 
-        if (origin) {
-            this._state.origin = origin;
-            worldAABB[0] += origin[0];
-            worldAABB[1] += origin[1];
-            worldAABB[2] += origin[2];
-            worldAABB[3] += origin[0];
-            worldAABB[4] += origin[1];
-            worldAABB[5] += origin[2];
-        }
+        // if (this._state.origin) {
+        //     const origin = this._state.origin;
+        worldAABB[0] += origin[0];
+        worldAABB[1] += origin[1];
+        worldAABB[2] += origin[2];
+        worldAABB[3] += origin[0];
+        worldAABB[4] += origin[1];
+        worldAABB[5] += origin[2];
+        // }
 
         math.expandAABB3(this.aabb, worldAABB);
 
@@ -676,6 +645,10 @@ class TrianglesDataTextureLayer {
 
         return subPortionId;
     }
+
+    // updatePickCameratexture(pickViewMatrix, pickCameraMatrix) {
+    //     this._dataTextureState.texturePickCameraMatrices._updateViewMatrix(pickViewMatrix, pickCameraMatrix);
+    // }
 
     /**
      * Builds data textures from the appended geometries and loads them into the GPU.
@@ -826,30 +799,26 @@ class TrianglesDataTextureLayer {
         textureState.textureModelMatrices = this.model._modelMatricesTexture;
 
         // Camera textures
-        if (!this.model.cameraTexture) {
-            this.model.cameraTexture = this.dataTextureGenerator.generateCameraDataTexture(
-                this.model.scene.canvas.gl,
-                this.model.scene.camera,
-                this.model.scene,
-                this._state.origin.slice()
-            );
-        }
 
-        textureState.textureCameraMatrices = this.model.cameraTexture;
+        textureState.cameraTexture = this.dataTextureGenerator.generateCameraDataTexture(
+            this.model.scene.canvas.gl,
+            this.model.scene.camera,
+            this.model.scene,
+            this._state.origin.slice()
+        );
 
-        if (!this.model.pickCameraTexture) {
-            this.model.pickCameraTexture = this.dataTextureGenerator.generateCameraDataTexture(
-                this.model.scene.canvas.gl,
-                this.model.scene.camera,
-                this.model.scene,
-                this._state.origin.slice(),
-                false
-            );
-        }
+        textureState.textureCameraMatrices = textureState.cameraTexture;
 
-        textureState.texturePickCameraMatrices = this.model.pickCameraTexture;
+        textureState.pickCameraTexture = this.dataTextureGenerator.generateCameraDataTexture(
+            this.model.scene.canvas.gl,
+            this.model.scene.camera,
+            this.model.scene,
+            this._state.origin.slice(),
+            false
+        );
 
-        // Mark the data-texture-state as finalized
+        textureState.texturePickCameraMatrices = textureState.pickCameraTexture;
+
         textureState.finalize();
 
         // Free up memory
@@ -860,13 +829,11 @@ class TrianglesDataTextureLayer {
     }
 
     attachToRenderingEvent() {
-        const self = this;
-
-        this.model.scene.on("rendering", function () {
-            if (self._deferredSetFlagsDirty) {
-                self.commitDeferredFlags();
+        this.model.scene.on("rendering",  () =>{
+            if (this._deferredSetFlagsDirty) {
+                this.commitDeferredFlags();
             }
-            self.numUpdatesInFrame = 0;
+            this.numUpdatesInFrame = 0;
         });
     }
 
@@ -1036,18 +1003,13 @@ class TrianglesDataTextureLayer {
      */
     commitDeferredFlags() {
         this._deferredSetFlagsActive = false;
-
         if (!this._deferredSetFlagsDirty) {
             return;
         }
-
         this._deferredSetFlagsDirty = false;
-
         const gl = this.model.scene.canvas.gl;
         const textureState = this._dataTextureState;
-
         gl.bindTexture(gl.TEXTURE_2D, textureState.texturePerObjectIdColorsAndFlags._texture);
-
         gl.texSubImage2D(
             gl.TEXTURE_2D,
             0, // level
@@ -1059,9 +1021,7 @@ class TrianglesDataTextureLayer {
             gl.UNSIGNED_BYTE,
             textureState.texturePerObjectIdColorsAndFlags._textureData
         );
-
         gl.bindTexture(gl.TEXTURE_2D, textureState.texturePerObjectIdOffsets._texture);
-
         gl.texSubImage2D(
             gl.TEXTURE_2D,
             0, // level
@@ -1079,7 +1039,6 @@ class TrianglesDataTextureLayer {
         if (!this._finalized) {
             throw "Not finalized";
         }
-
         if (flags & ENTITY_FLAGS.CULLED) {
             this._numCulledLayerPortions += this._subPortionIdMapping[portionId].length;
             this.model.numCulledLayerPortions++;
@@ -1112,7 +1071,6 @@ class TrianglesDataTextureLayer {
 
     setColor(portionId, color) {
         const subPortionMapping = this._subPortionIdMapping[portionId];
-
         for (let i = 0, len = subPortionMapping.length; i < len; i++) {
             this._subPortionSetColor(subPortionMapping[i], color);
         }
@@ -1125,33 +1083,23 @@ class TrianglesDataTextureLayer {
         if (!this._finalized) {
             throw "Not finalized";
         }
-
         // Color
         const textureState = this._dataTextureState;
         const gl = this.model.scene.canvas.gl;
-
         tempUint8Array4 [0] = color[0];
         tempUint8Array4 [1] = color[1];
         tempUint8Array4 [2] = color[2];
         tempUint8Array4 [3] = color[3];
-
         // object colors
-        textureState.texturePerObjectIdColorsAndFlags._textureData.set(
-            tempUint8Array4,
-            portionId * 32
-        );
-
+        textureState.texturePerObjectIdColorsAndFlags._textureData.set(tempUint8Array4, portionId * 32);
         if (this._deferredSetFlagsActive) {
             this._deferredSetFlagsDirty = true;
             return;
         }
-
         if (++this.numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
             this.beginDeferredFlags();
         }
-
         gl.bindTexture(gl.TEXTURE_2D, textureState.texturePerObjectIdColorsAndFlags._texture);
-
         gl.texSubImage2D(
             gl.TEXTURE_2D,
             0, // level
@@ -1163,7 +1111,6 @@ class TrianglesDataTextureLayer {
             gl.UNSIGNED_BYTE,
             tempUint8Array4
         );
-
         // gl.bindTexture (gl.TEXTURE_2D, null);
     }
 
@@ -1180,7 +1127,6 @@ class TrianglesDataTextureLayer {
 
     _setFlags(portionId, flags, transparent, deferred = false) {
         const subPortionMapping = this._subPortionIdMapping[portionId];
-
         for (let i = 0, len = subPortionMapping.length; i < len; i++) {
             this._subPortionSetFlags(subPortionMapping[i], flags, transparent);
         }
@@ -1254,32 +1200,22 @@ class TrianglesDataTextureLayer {
         // Pick
 
         let f3 = (visible && !culled && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
-
         const textureState = this._dataTextureState;
         const gl = this.model.scene.canvas.gl;
-
         tempUint8Array4 [0] = f0;
         tempUint8Array4 [1] = f1;
         tempUint8Array4 [2] = f2;
         tempUint8Array4 [3] = f3;
-
         // object flags
-        textureState.texturePerObjectIdColorsAndFlags._textureData.set(
-            tempUint8Array4,
-            portionId * 32 + 8
-        );
-
+        textureState.texturePerObjectIdColorsAndFlags._textureData.set(tempUint8Array4, portionId * 32 + 8);
         if (this._deferredSetFlagsActive) {
             this._deferredSetFlagsDirty = true;
             return;
         }
-
         if (++this.numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
             this.beginDeferredFlags();
         }
-
         gl.bindTexture(gl.TEXTURE_2D, textureState.texturePerObjectIdColorsAndFlags._texture);
-
         gl.texSubImage2D(
             gl.TEXTURE_2D,
             0, // level
@@ -1291,7 +1227,6 @@ class TrianglesDataTextureLayer {
             gl.UNSIGNED_BYTE,
             tempUint8Array4
         );
-
         // gl.bindTexture (gl.TEXTURE_2D, null);
     }
 
@@ -1300,7 +1235,6 @@ class TrianglesDataTextureLayer {
 
     _setFlags2(portionId, flags, deferred = false) {
         const subPortionMapping = this._subPortionIdMapping[portionId];
-
         for (let i = 0, len = subPortionMapping.length; i < len; i++) {
             this._subPortionSetFlags2(subPortionMapping[i], flags);
         }
@@ -1310,34 +1244,23 @@ class TrianglesDataTextureLayer {
         if (!this._finalized) {
             throw "Not finalized";
         }
-
         const clippable = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 255 : 0;
-
         const textureState = this._dataTextureState;
         const gl = this.model.scene.canvas.gl;
-
         tempUint8Array4 [0] = clippable;
         tempUint8Array4 [1] = 0;
         tempUint8Array4 [2] = 1;
         tempUint8Array4 [3] = 2;
-
         // object flags2
-        textureState.texturePerObjectIdColorsAndFlags._textureData.set(
-            tempUint8Array4,
-            portionId * 32 + 12
-        );
-
+        textureState.texturePerObjectIdColorsAndFlags._textureData.set(tempUint8Array4, portionId * 32 + 12);
         if (this._deferredSetFlagsActive) {
             this._deferredSetFlagsDirty = true;
             return;
         }
-
         if (++this.numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
             this.beginDeferredFlags();
         }
-
         gl.bindTexture(gl.TEXTURE_2D, textureState.texturePerObjectIdColorsAndFlags._texture);
-
         gl.texSubImage2D(
             gl.TEXTURE_2D,
             0, // level
@@ -1349,7 +1272,6 @@ class TrianglesDataTextureLayer {
             gl.UNSIGNED_BYTE,
             tempUint8Array4
         );
-
         // gl.bindTexture (gl.TEXTURE_2D, null);
     }
 
@@ -1359,7 +1281,6 @@ class TrianglesDataTextureLayer {
 
     setOffset(portionId, offset) {
         const subPortionMapping = this._subPortionIdMapping[portionId];
-
         for (let i = 0, len = subPortionMapping.length; i < len; i++) {
             this._subPortionSetOffset(subPortionMapping[i], offset);
         }
@@ -1373,31 +1294,21 @@ class TrianglesDataTextureLayer {
         //     this.model.error("Entity#offset not enabled for this Viewer"); // See Viewer entityOffsetsEnabled
         //     return;
         // }
-
         const textureState = this._dataTextureState;
         const gl = this.model.scene.canvas.gl;
-
         tempFloat32Array3 [0] = offset[0];
         tempFloat32Array3 [1] = offset[1];
         tempFloat32Array3 [2] = offset[2];
-
         // object offset
-        textureState.texturePerObjectIdOffsets._textureData.set(
-            tempFloat32Array3,
-            portionId * 3
-        );
-
+        textureState.texturePerObjectIdOffsets._textureData.set(tempFloat32Array3, portionId * 3);
         if (this._deferredSetFlagsActive) {
             this._deferredSetFlagsDirty = true;
             return;
         }
-
         if (++this.numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
             this.beginDeferredFlags();
         }
-
         gl.bindTexture(gl.TEXTURE_2D, textureState.texturePerObjectIdOffsets._texture);
-
         gl.texSubImage2D(
             gl.TEXTURE_2D,
             0, // level
@@ -1409,7 +1320,6 @@ class TrianglesDataTextureLayer {
             gl.FLOAT,
             tempFloat32Array3
         );
-
         // gl.bindTexture (gl.TEXTURE_2D, null);
     }
 

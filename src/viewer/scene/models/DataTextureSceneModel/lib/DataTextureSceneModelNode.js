@@ -6,6 +6,7 @@ const tempIntRGB = new Uint16Array([0, 0, 0]);
 
 /**
  * @private
+ * @implements ViewFrustumCullingNode
  */
 class DataTextureSceneModelNode {
 
@@ -34,16 +35,16 @@ class DataTextureSceneModelNode {
         this.model = model;
 
         /**
-         * The PerformanceModelMesh instances contained by this DataTextureSceneModelNode
+         * The DataTextureSceneModelMesh instances contained by this DataTextureSceneModelNode
          * @property meshes
-         * @type {{Array of PerformanceModelMesh}}
+         * @type {{Array of DataTextureSceneModelMesh}}
          * @final
          */
         this.meshes = meshes;
 
         this._numTriangles = 0;
 
-        for (var i = 0, len = this.meshes.length; i < len; i++) {  // TODO: tidier way? Refactor?
+        for (let i = 0, len = this.meshes.length; i < len; i++) {  // TODO: tidier way? Refactor?
             const mesh = this.meshes[i];
             mesh.parent = this;
             this._numTriangles += mesh.numTriangles;
@@ -76,7 +77,6 @@ class DataTextureSceneModelNode {
         this._culled = false;
         this._culledVFC = false;
         this._culledLOD = false;
-
 
         if (this._isObject) {
             model.scene._registerObject(this);
@@ -208,7 +208,7 @@ class DataTextureSceneModelNode {
         } else {
             this._flags = this._flags & ~ENTITY_FLAGS.HIGHLIGHTED;
         }
-        for (var i = 0, len = this.meshes.length; i < len; i++) {
+        for (let i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setHighlighted(this._flags);
         }
         if (this._isObject) {
@@ -316,7 +316,7 @@ class DataTextureSceneModelNode {
         } else {
             this._flags = this._flags & ~ENTITY_FLAGS.EDGES;
         }
-        for (var i = 0, len = this.meshes.length; i < len; i++) {
+        for (let i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setEdges(this._flags);
         }
         this.model.glRedraw();
@@ -328,7 +328,7 @@ class DataTextureSceneModelNode {
 
     set culledVFC(culled) {
         this._culledVFC = culled;
-        this.internalSetCulled ();
+        this._setCulled();
     }
 
     get culledLOD() {
@@ -337,7 +337,7 @@ class DataTextureSceneModelNode {
 
     set culledLOD(culled) {
         this._culledLOD = culled;
-        this.internalSetCulled ();
+        this._setCulled();
     }
 
     /**
@@ -361,13 +361,11 @@ class DataTextureSceneModelNode {
      */
     set culled(culled) {
         this._culled = culled;
-        this.internalSetCulled ();
+        this._setCulled();
     }
 
-    internalSetCulled()
-    {
-        let culled = !!(this._culled) || !!(this._culledLOD) || !!(this._culledVFC);
-
+    _setCulled() {
+        const culled = !!(this._culled) || !!(this._culledLOD) || !!(this._culledVFC);
         if (!!(this._flags & ENTITY_FLAGS.CULLED) === culled) {
             return; // Redundant update
         }
@@ -376,7 +374,7 @@ class DataTextureSceneModelNode {
         } else {
             this._flags = this._flags & ~ENTITY_FLAGS.CULLED;
         }
-        for (var i = 0, len = this.meshes.length; i < len; i++) {
+        for (let i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setCulled(this._flags);
         }
         this.model.glRedraw();
@@ -409,7 +407,7 @@ class DataTextureSceneModelNode {
         } else {
             this._flags = this._flags & ~ENTITY_FLAGS.CLIPPABLE;
         }
-        for (var i = 0, len = this.meshes.length; i < len; i++) {
+        for (let i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setClippable(this._flags);
         }
         this.model.glRedraw();
@@ -438,7 +436,7 @@ class DataTextureSceneModelNode {
         } else {
             this._flags = this._flags & ~ENTITY_FLAGS.COLLIDABLE;
         }
-        for (var i = 0, len = this.meshes.length; i < len; i++) {
+        for (let i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setCollidable(this._flags);
         }
     }
@@ -470,7 +468,7 @@ class DataTextureSceneModelNode {
         } else {
             this._flags = this._flags & ~ENTITY_FLAGS.PICKABLE;
         }
-        for (var i = 0, len = this.meshes.length; i < len; i++) {
+        for (let i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setPickable(this._flags);
         }
     }

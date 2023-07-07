@@ -643,7 +643,6 @@ const defaultTextureSetId = "defaultTextureSet";
  *
  * vboSceneModel.createGeometry({
  *     id: "box",
- *     origin: origin, // This geometry's positions, and the transforms of all meshes that instance the geometry, are relative to the RTC center
  *     primitive: "triangles",
  *     positions: [ 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1 ... ],
  *     normals: [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, ... ],
@@ -656,7 +655,8 @@ const defaultTextureSetId = "defaultTextureSet";
  *     position: [-4, -6, -4],
  *     scale: [1, 3, 1],
  *     rotation: [0, 0, 0],
- *     color: [1, 0.3, 0.3]
+ *     color: [1, 0.3, 0.3],
+ *     origin: origin
  * });
  *
  * vboSceneModel.createEntity({
@@ -670,7 +670,8 @@ const defaultTextureSetId = "defaultTextureSet";
  *     position: [4, -6, -4],
  *     scale: [1, 3, 1],
  *     rotation: [0, 0, 0],
- *     color: [0.3, 1.0, 0.3]
+ *     color: [0.3, 1.0, 0.3],
+ *     origin: origin
  * });
  *
  * vboSceneModel.createEntity({
@@ -684,7 +685,8 @@ const defaultTextureSetId = "defaultTextureSet";
  *     position: [4, -6, 4],
  *     scale: [1, 3, 1],
  *     rotation: [0, 0, 0],
- *     color: [0.3, 0.3, 1.0]
+ *     color: [0.3, 0.3, 1.0],
+ *     origin: origin
  * });
  *
  * vboSceneModel.createEntity({
@@ -698,7 +700,8 @@ const defaultTextureSetId = "defaultTextureSet";
  *     position: [-4, -6, 4],
  *     scale: [1, 3, 1],
  *     rotation: [0, 0, 0],
- *     color: [1.0, 1.0, 0.0]
+ *     color: [1.0, 1.0, 0.0],
+ *     origin: origin
  * });
  *
  * vboSceneModel.createEntity({
@@ -712,7 +715,8 @@ const defaultTextureSetId = "defaultTextureSet";
  *     position: [0, -3, 0],
  *     scale: [6, 0.5, 6],
  *     rotation: [0, 0, 0],
- *     color: [1.0, 0.3, 1.0]
+ *     color: [1.0, 0.3, 1.0],
+ *     origin: origin
  * });
  *
  * vboSceneModel.createEntity({

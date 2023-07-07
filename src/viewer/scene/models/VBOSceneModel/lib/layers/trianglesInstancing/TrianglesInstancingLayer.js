@@ -258,12 +258,6 @@ class TrianglesInstancingLayer {
 
         const portion = {};
 
-        if (this.model.scene.pickSurfacePrecisionEnabled) {
-            portion.matrix = meshMatrix.slice();
-            portion.inverseMatrix = null; // Lazy-computed in precisionRayPickSurface
-            portion.normalMatrix = null; // Lazy-computed in precisionRayPickSurface
-        }
-
         this._portions.push(portion);
 
         this._numPortions++;
@@ -658,41 +652,6 @@ class TrianglesInstancingLayer {
         }
     }
 
-    getEachVertex(portionId, callback) {
-        if (!this.model.scene.pickSurfacePrecisionEnabled) {
-            return false;
-        }
-        const state = this._state;
-        const geometry = state.geometry;
-        const portion = this._portions[portionId];
-        if (!portion) {
-            this.model.error("portion not found: " + portionId);
-            return;
-        }
-        const positions = geometry.quantizedPositions;
-        const origin = state.origin;
-        const offset = portion.offset;
-        const offsetX = origin[0] + offset[0];
-        const offsetY = origin[1] + offset[1];
-        const offsetZ = origin[2] + offset[2];
-        const worldPos = tempVec4a;
-        const portionMatrix = portion.matrix;
-        const modelMatrix = this.model.worldMatrix;
-        const positionsDecodeMatrix = geometry.positionsDecodeMatrix;
-        for (let i = 0, len = positions.length; i < len; i += 3) {
-            worldPos[0] = positions[i];
-            worldPos[1] = positions[i + 1];
-            worldPos[2] = positions[i + 2];
-            math.decompressPosition(worldPos, positionsDecodeMatrix);
-            math.transformPoint3(portionMatrix, worldPos);
-            math.transformPoint3(modelMatrix, worldPos);
-            worldPos[0] += offsetX;
-            worldPos[1] += offsetY;
-            worldPos[2] += offsetZ;
-            callback(worldPos);
-        }
-    }
-
     // ---------------------- COLOR RENDERING -----------------------------------
 
     drawColorOpaque(renderFlags, frameCtx) {
@@ -954,116 +913,6 @@ class TrianglesInstancingLayer {
     }
 
     //-----------------------------------------------------------------------------------------
-
-    precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) {
-
-        if (!this.model.scene.pickSurfacePrecisionEnabled) {
-            return false;
-        }
-
-        const geometry = this._state.geometry;
-        const state = this._state;
-        const portion = this._portions[portionId];
-
-        if (!portion) {
-            this.model.error("portion not found: " + portionId);
-            return false;
-        }
-
-        if (!portion.inverseMatrix) {
-            portion.inverseMatrix = math.inverseMat4(portion.matrix, math.mat4());
-        }
-
-        if (worldNormal && !portion.normalMatrix) {
-            portion.normalMatrix = math.transposeMat4(portion.inverseMatrix, math.mat4());
-        }
-
-        const quantizedPositions = geometry.quantizedPositions;
-        const indices = geometry.indices;
-        const origin = state.origin;
-        const offset = portion.offset;
-
-        const rtcRayOrigin = tempVec3a;
-        const rtcRayDir = tempVec3b;
-
-        rtcRayOrigin.set(origin ? math.subVec3(worldRayOrigin, origin, tempVec3c) : worldRayOrigin);  // World -> RTC
-        rtcRayDir.set(worldRayDir);
-
-        if (offset) {
-            math.subVec3(rtcRayOrigin, offset);
-        }
-
-        math.transformRay(this.model.worldNormalMatrix, rtcRayOrigin, rtcRayDir, rtcRayOrigin, rtcRayDir);
-
-        math.transformRay(portion.inverseMatrix, rtcRayOrigin, rtcRayDir, rtcRayOrigin, rtcRayDir);
-
-        const a = tempVec3d;
-        const b = tempVec3e;
-        const c = tempVec3f;
-
-        let gotIntersect = false;
-        let closestDist = 0;
-        const closestIntersectPos = tempVec3g;
-
-        for (let i = 0, len = indices.length; i < len; i += 3) {
-
-            const ia = indices[i + 0] * 3;
-            const ib = indices[i + 1] * 3;
-            const ic = indices[i + 2] * 3;
-
-            a[0] = quantizedPositions[ia];
-            a[1] = quantizedPositions[ia + 1];
-            a[2] = quantizedPositions[ia + 2];
-
-            b[0] = quantizedPositions[ib];
-            b[1] = quantizedPositions[ib + 1];
-            b[2] = quantizedPositions[ib + 2];
-
-            c[0] = quantizedPositions[ic];
-            c[1] = quantizedPositions[ic + 1];
-            c[2] = quantizedPositions[ic + 2];
-
-            const {positionsDecodeMatrix} = state.geometry;
-
-            math.decompressPosition(a, positionsDecodeMatrix);
-            math.decompressPosition(b, positionsDecodeMatrix);
-            math.decompressPosition(c, positionsDecodeMatrix);
-
-            if (math.rayTriangleIntersect(rtcRayOrigin, rtcRayDir, a, b, c, closestIntersectPos)) {
-
-                math.transformPoint3(portion.matrix, closestIntersectPos, closestIntersectPos);
-
-                math.transformPoint3(this.model.worldMatrix, closestIntersectPos, closestIntersectPos);
-
-                if (offset) {
-                    math.addVec3(closestIntersectPos, offset);
-                }
-
-                if (origin) {
-                    math.addVec3(closestIntersectPos, origin);
-                }
-
-                const dist = Math.abs(math.lenVec3(math.subVec3(closestIntersectPos, worldRayOrigin, [])));
-
-                if (!gotIntersect || dist > closestDist) {
-                    closestDist = dist;
-                    worldSurfacePos.set(closestIntersectPos);
-                    if (worldNormal) { // Not that wasteful to eagerly compute - unlikely to hit >2 surfaces on most geometry
-                        math.triangleNormal(a, b, c, worldNormal);
-                    }
-                    gotIntersect = true;
-                }
-            }
-        }
-
-        if (gotIntersect && worldNormal) {
-            math.transformVec3(portion.normalMatrix, worldNormal, worldNormal);
-            math.transformVec3(this.model.worldNormalMatrix, worldNormal, worldNormal);
-            math.normalizeVec3(worldNormal);
-        }
-
-        return gotIntersect;
-    }
 
     destroy() {
         const state = this._state;

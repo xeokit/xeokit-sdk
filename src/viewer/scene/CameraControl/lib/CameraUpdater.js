@@ -297,12 +297,9 @@ class CameraUpdater {
                 updates.dollyDelta *= configs.dollyInertia;
             }
 
-            pickController.fireEvents();
-
             document.body.style.cursor = cursorType;
         });
     }
-
 
     destroy() {
         this._scene.off(this._onTick);

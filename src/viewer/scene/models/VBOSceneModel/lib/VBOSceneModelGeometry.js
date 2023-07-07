@@ -30,10 +30,6 @@ export class VBOSceneModelGeometry {
      */
     constructor(id, model, cfg) {
 
-        ///////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////
-        // TODO: optional origin param, or create from positions automatically if required - then offset from mesh origin in createMesh
-
         /**
          * ID of this VBOSceneModelGeometry, unique within the VBOSceneModel.
          *
@@ -73,7 +69,6 @@ export class VBOSceneModelGeometry {
         this.uvBuf = null;
         this.colorsBuf = null;
 
-        const pickSurfacePrecisionEnabled = model.scene.pickSurfacePrecisionEnabled;
         const gl = model.scene.canvas.gl;
 
         if (cfg.positionsCompressed && cfg.positionsCompressed.length > 0) {
@@ -84,9 +79,6 @@ export class VBOSceneModelGeometry {
             math.expandAABB3Points3(localAABB, cfg.positionsCompressed);
             geometryCompressionUtils.decompressAABB(localAABB, this.positionsDecodeMatrix);
             math.AABB3ToOBB3(localAABB, this.obb);
-            if (pickSurfacePrecisionEnabled) {
-                this.quantizedPositions = cfg.positionsCompressed;
-            }
 
         } else if (cfg.positions && cfg.positions.length > 0) {
             const lenPositions = cfg.positions.length;
@@ -96,9 +88,6 @@ export class VBOSceneModelGeometry {
             const quantizedPositions = quantizePositions(cfg.positions, localAABB, this.positionsDecodeMatrix);
             let normalized = false;
             this.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, lenPositions, 3, gl.STATIC_DRAW, normalized);
-            if (pickSurfacePrecisionEnabled) {
-                this.quantizedPositions = quantizedPositions;
-            }
         }
 
         if (cfg.normalsCompressed && cfg.normalsCompressed.length > 0) {
@@ -141,9 +130,6 @@ export class VBOSceneModelGeometry {
 
         if (cfg.indices && cfg.indices.length > 0) {
             this.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(cfg.indices), cfg.indices.length, 1, gl.STATIC_DRAW);
-            if (pickSurfacePrecisionEnabled) {
-                this.indices = cfg.indices;
-            }
             this.numIndices = cfg.indices.length;
         }
 

@@ -213,9 +213,11 @@ class PickController {
                 this.pickVertexResult.snappedCanvasPos &&
                 this.pickVertexResult.snappedWorldPos) { // Vertex pick succeeded, so schedule event
                 this.pickedVertex = true;
+                this.pickedEntitySurface = false;
                 this._needFireEvents = true;
             }
             if (!this.pickedVertex) { // Vertex pick failed, attempt surface pick as fallback
+                this.schedulePickEntitySurface = false;
                 this.pickEntitySurfaceResult = this._scene.pick({
                     pickSurface: true,
                     pickSurfaceNormal: false,
@@ -225,7 +227,6 @@ class PickController {
                     this.pickEntitySurfaceResult.entity &&
                     this.pickEntitySurfaceResult.worldPos) { // Entity surface pick succeeded, so schedule event
                     this.pickedEntitySurface = true;
-                    this.schedulePickEntitySurface = false;
                     this._needFireEvents = true;
                 } else {
                     this.pickedNothing = true;
@@ -263,79 +264,86 @@ class PickController {
         this.schedulePickVertex = false;
         this.schedulePickEdge = false;
     }
-
-    fireEvents() {
-        if (!this._needFireEvents) {
-            return;
-        }
-        if (this.pickedNothing) {
-            this._cameraControl.fire("pickedNothing", {
-                canvasPos: this.pickedNothingResult.canvasPos
-            }, true);
-            this._cameraControl.fire("hoverNothing", {
-                canvasPos: this.pickedNothingResult.canvasPos
-            }, true);
-        } else {
-            let hoverLeaveEntityFired = false;
-            let hoverEnterEntityFired = false;
-            if (this.pickedEntity) {
-                this._cameraControl.fire("pickedEntity", this.pickEntityResult, true);
-                this._cameraControl.fire("hoverOverEntity", {
-                    entity: this.pickEntityResult.entity.id,
-                    canvasPos: this.pickEntityResult.canvasPos
-                }, true);
-                if (this._lastPickedEntityId !== null && this._lastPickedEntityId !== this.pickEntityResult.entity.id) { // Hover off old Entity
-                    this._cameraControl.fire("hoverLeaveEntity", {
-                        entity: this._scene.objects[this._lastPickedEntityId],
-                        canvasPos: this.pickEntityResult.canvasPos
-                    }, true);
-                    hoverLeaveEntityFired = true;
-                    this._lastPickedEntityId = this.pickEntityResult.entity.id;
-                }
-                if (this._lastPickedEntityId !== this.pickEntityResult.entity.id) { // Hover onto new Entity
-                    this._cameraControl.fire("hoverEnterEntity", {
-                        entity: this.pickEntityResult.entity,
-                        canvasPos: this.pickEntityResult.canvasPos
-                    }, true);
-                    hoverEnterEntityFired = true;
-                }
-                this._lastPickedEntityId = this.pickEntityResult.entity.id;
-            }
-            if (this.pickedEntitySurface) {
-                this._cameraControl.fire("pickedEntitySurface", this.pickEntitySurfaceResult, true);
-                this._cameraControl.fire("hoverOverEntitySurface", {
-                    entity: this.pickEntitySurfaceResult.entity.id,
-                    worldPos: this.pickEntitySurfaceResult.worldPos,
-                    canvasPos: this.pickEntitySurfaceResult.canvasPos
-                }, true);
-                if (this._lastPickedEntitySurfaceId !== null) {
-                    if (hoverLeaveEntityFired) {
-                        this._cameraControl.fire("hoverLeaveEntity", {
-                            entity: this._scene.objects[this._lastPickedEntitySurfaceId],
-                            canvasPos: this.pickEntitySurfaceResult.canvasPos
-                        }, true);
-                    }
-                    this._lastPickedEntitySurfaceId = null;
-                }
-                if (this._lastPickedEntitySurfaceId !== this.pickEntitySurfaceResult.entity.id) { // Hover onto new Entity
-                    if (hoverEnterEntityFired) {
-                        this._cameraControl.fire("hoverEnterEntity", {
-                            entity: this.pickEntitySurfaceResult.entity,
-                            canvasPos: this.pickEntitySurfaceResult.canvasPos
-                        }, true);
-                    }
-                }
-                this._lastPickedEntitySurfaceId = this.pickEntitySurfaceResult.entity.id;
-            }
-            if (this.pickedVertex) {
-                this._cameraControl.fire("pickedVertex", this.pickVertexResult, true);
-            }
-            if (this.pickedEdge) {
-                this._cameraControl.fire("pickedEdge", this.pickEdgeResult, true);
-            }
-        }
-        this._needFireEvents = false;
-    }
+    //
+    // fireEvents() {
+    //
+    //     if (!this._needFireEvents) {
+    //         return;
+    //     }
+    //
+    //     /////////////////////////////////////////////////////////
+    //     return;
+    //     ////////////////////////////////////////////////////////
+    //
+    //
+    //     if (this.pickedNothing) {
+    //         this._cameraControl.fire("pickedNothing", {
+    //             canvasPos: this.pickedNothingResult.canvasPos
+    //         }, true);
+    //         this._cameraControl.fire("hoverNothing", {
+    //             canvasPos: this.pickedNothingResult.canvasPos
+    //         }, true);
+    //     } else {
+    //         let hoverLeaveEntityFired = false;
+    //         let hoverEnterEntityFired = false;
+    //         if (this.pickedEntity) {
+    //             this._cameraControl.fire("pickedEntity", this.pickEntityResult, true);
+    //             this._cameraControl.fire("hoverOverEntity", {
+    //                 entity: this.pickEntityResult.entity.id,
+    //                 canvasPos: this.pickEntityResult.canvasPos
+    //             }, true);
+    //             if (this._lastPickedEntityId !== null && this._lastPickedEntityId !== this.pickEntityResult.entity.id) { // Hover off old Entity
+    //                 this._cameraControl.fire("hoverLeaveEntity", {
+    //                     entity: this._scene.objects[this._lastPickedEntityId],
+    //                     canvasPos: this.pickEntityResult.canvasPos
+    //                 }, true);
+    //                 hoverLeaveEntityFired = true;
+    //                 this._lastPickedEntityId = this.pickEntityResult.entity.id;
+    //             }
+    //             if (this._lastPickedEntityId !== this.pickEntityResult.entity.id) { // Hover onto new Entity
+    //                 this._cameraControl.fire("hoverEnterEntity", {
+    //                     entity: this.pickEntityResult.entity,
+    //                     canvasPos: this.pickEntityResult.canvasPos
+    //                 }, true);
+    //                 hoverEnterEntityFired = true;
+    //             }
+    //             this._lastPickedEntityId = this.pickEntityResult.entity.id;
+    //         }
+    //         // if (this.pickedEntitySurface && !this.pickedVertex) {
+    //         //     this._cameraControl.fire("pickedEntitySurface", this.pickEntitySurfaceResult, true);
+    //         //     this._cameraControl.fire("hoverOverEntitySurface", {
+    //         //         entity: this.pickEntitySurfaceResult.entity.id,
+    //         //         worldPos: this.pickEntitySurfaceResult.worldPos,
+    //         //         canvasPos: this.pickEntitySurfaceResult.canvasPos
+    //         //     }, true);
+    //         //     if (this._lastPickedEntitySurfaceId !== null) {
+    //         //         if (hoverLeaveEntityFired) {
+    //         //             this._cameraControl.fire("hoverLeaveEntity", {
+    //         //                 entity: this._scene.objects[this._lastPickedEntitySurfaceId],
+    //         //                 canvasPos: this.pickEntitySurfaceResult.canvasPos
+    //         //             }, true);
+    //         //         }
+    //         //         this._lastPickedEntitySurfaceId = null;
+    //         //     }
+    //         //     if (this._lastPickedEntitySurfaceId !== this.pickEntitySurfaceResult.entity.id) { // Hover onto new Entity
+    //         //         if (hoverEnterEntityFired) {
+    //         //             this._cameraControl.fire("hoverEnterEntity", {
+    //         //                 entity: this.pickEntitySurfaceResult.entity,
+    //         //                 canvasPos: this.pickEntitySurfaceResult.canvasPos
+    //         //             }, true);
+    //         //         }
+    //         //     }
+    //         //     this._lastPickedEntitySurfaceId = this.pickEntitySurfaceResult.entity.id;
+    //         // }
+    //         if (this.pickedVertex) {
+    //             this._cameraControl.fire("pickedVertex", this.pickVertexResult, true);
+    //         }
+    //         if (this.pickedEdge) {
+    //             this._cameraControl.fire("pickedEdge", this.pickEdgeResult, true);
+    //         }
+    //     }
+    //     this._needFireEvents = false;
+    // }
 
     destroy() {
     }

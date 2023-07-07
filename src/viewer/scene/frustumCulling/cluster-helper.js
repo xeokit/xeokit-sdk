@@ -3,50 +3,13 @@
  * @license MIT
  */
 
-import {math} from "../../../../../math/math.js";
-import {geometryCompressionUtils} from "../../../../../math/geometryCompressionUtils.js";
+import {math} from "../math/math.js";
+import {geometryCompressionUtils} from "../math/geometryCompressionUtils.js";
 import {RBush3D} from "./rbush3d.js";
 
 import {makeClusters} from "./xeokit-cluster.js"
 
-function generateAABB (aabbsForIndexes) {
-    const aabbsToLoad = [];
- 
-    for (let i = 0, len = aabbsForIndexes.length; i < len; i++) {
-        const item = aabbsForIndexes [i];
-
-        if (!item) {
-            continue;
-        }
-
-        aabbsToLoad.push ({
-            minX: item.aabb [0],
-            minY: item.aabb [1],
-            minZ: item.aabb [2],
-            maxX: item.aabb [3],
-            maxY: item.aabb [4],
-            maxZ: item.aabb [5],
-            entity: {
-                id: i,
-                xeokitId: item.entityId,
-                meshes: [
-                    {
-                        numTriangles: item.numTriangles,
-                    }
-                ]
-            },
-            numTriangles: item.numTriangles,
-        });
-    }
-
-    const aabbTree = new RBush3D (4);
-
-    aabbTree.load (aabbsToLoad);
-
-    return aabbTree;
-}
-
-function clusterizeV2 (entities, meshes) {
+export function clusterizeV2(entities, meshes) {
     // const meshesById = {};
     // meshes.forEach(mesh => meshesById[mesh.id] = mesh);
 
@@ -57,39 +20,37 @@ function clusterizeV2 (entities, meshes) {
     // const entityMeshes = inflatedData.entityMeshes;
     // const entityMeshIds = inflatedData.entityMeshIds;
     // const entityUsesInstancing = inflatedData.entityUsesInstancing;
-    
+
     // const numMeshes = meshPositions.length;
     // const numEntities = entityMeshes.length;
 
     const numMeshes = meshes.length;
     const numEntities = entities.length;
+    const aabbsForIndexes = [];
+    const instancedIndexes = [];
 
-    const _aabbsForIndexes = [];
-    const _instancedIndexes = [];
-
-    function entityUsesInstancing (entity) {
+    const entityUsesInstancing = (entity) => {
         for (let i = 0, len = entity.meshIds.length; i < len; i++) {
             if (meshes[entity.meshIds[i]].geometryId) {
                 return true;
             }
         }
-
         return false;
-    };
+    }
 
     for (let i = 0; i < numEntities; i++) {
         const entity = entities[i];
 
         // TODO
-        if (entityUsesInstancing (entity)) {
-            _instancedIndexes.push (i);
+        if (entityUsesInstancing(entity)) {
+            instancedIndexes.push(i);
             continue;
         }
 
         const aabbEntity = math.collapseAABB3();
         let numTriangles = 0
 
-        entity.meshIds.forEach (meshId => {
+        entity.meshIds.forEach(meshId => {
             const mesh = meshes[meshId];
 
             const bounds = geometryCompressionUtils.getPositionsBounds(mesh.positions);
@@ -108,40 +69,64 @@ function clusterizeV2 (entities, meshes) {
             math.expandAABB3Point3(aabbEntity, min);
             math.expandAABB3Point3(aabbEntity, max);
 
-            numTriangles += Math.round (mesh.indices.length / 3);
+            numTriangles += Math.round(mesh.indices.length / 3);
         });
 
-        _aabbsForIndexes [i] = {
+        aabbsForIndexes [i] = {
             aabb: aabbEntity,
             numTriangles,
             entityId: entity.id,
         };
     }
 
-    let _orderedEntityIds = [];
-    let _entityIdToClusterIdMapping = {};
+    let orderedEntityIds = [];
+    let entityIdToClusterIdMapping = {};
     let rTreeBasedAabbTree;
 
-    if (Object.keys(_aabbsForIndexes).length > 0)
-    {
-        rTreeBasedAabbTree = generateAABB (_aabbsForIndexes);
-
-        let generateClustersResult = makeClusters ({
+    if (Object.keys(aabbsForIndexes).length > 0) {
+        rTreeBasedAabbTree = generateAABB(aabbsForIndexes);
+        let generateClustersResult = makeClusters({
             aabbTree: rTreeBasedAabbTree,
         });
-        
-        _orderedEntityIds = generateClustersResult.orderedEntityIds;
-        _entityIdToClusterIdMapping = generateClustersResult.clusteringResult.entityIdToClusterIdMapping;
+        orderedEntityIds = generateClustersResult.orderedEntityIds;
+        entityIdToClusterIdMapping = generateClustersResult.clusteringResult.entityIdToClusterIdMapping;
     }
-
     // console.log (generateClustersResult);
-
-    return { 
-        orderedClusteredIndexes: _orderedEntityIds,
-        entityIdToClusterIdMapping: _entityIdToClusterIdMapping,
-        instancedIndexes: _instancedIndexes,
+    return {
+        orderedClusteredIndexes: orderedEntityIds,
+        entityIdToClusterIdMapping: entityIdToClusterIdMapping,
+        instancedIndexes: instancedIndexes,
         rTreeBasedAabbTree
     };
 }
 
-export {clusterizeV2}
+function generateAABB(aabbsForIndexes) {
+    const aabbsToLoad = [];
+    for (let i = 0, len = aabbsForIndexes.length; i < len; i++) {
+        const item = aabbsForIndexes [i];
+        if (!item) {
+            continue;
+        }
+        aabbsToLoad.push({
+            minX: item.aabb [0],
+            minY: item.aabb [1],
+            minZ: item.aabb [2],
+            maxX: item.aabb [3],
+            maxY: item.aabb [4],
+            maxZ: item.aabb [5],
+            entity: {
+                id: i,
+                xeokitId: item.entityId,
+                meshes: [
+                    {
+                        numTriangles: item.numTriangles,
+                    }
+                ]
+            },
+            numTriangles: item.numTriangles,
+        });
+    }
+    const aabbTree = new RBush3D(4);
+    aabbTree.load(aabbsToLoad);
+    return aabbTree;
+}

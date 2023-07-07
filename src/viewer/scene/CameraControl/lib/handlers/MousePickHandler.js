@@ -74,30 +74,37 @@ class MousePickHandler {
 
                 pickController.update();
 
-                // if (pickController.pickedEntitySurface) {
-                //     const pickedEntityId = pickController.pickEntitySurfaceResult.entity.id;
-                //     if (this._lastPickedEntityId !== pickedEntityId) {
-                //         if (this._lastPickedEntityId !== undefined) {
-                //             cameraControl.fire("hoverLeaveEntity", { // Hovered off an entity
-                //                 entity: scene.objects[this._lastPickedEntityId]
-                //             }, true);
-                //         }
-                //         cameraControl.fire("hoverEnterEntity", pickController.pickEntitySurfaceResult, true); // Hovering over a new entity
-                //         this._lastPickedEntityId = pickedEntityId;
-                //     }
-                //     cameraControl.fire("hoverOverEntity", pickController.pickEntitySurfaceResult, true);
-                //     cameraControl.fire("hoverOverEntitySurface", pickController.pickEntitySurfaceResult, true);
-                // } else {
-                //     if (this._lastPickedEntityId !== undefined) {
-                //         cameraControl.fire("hoverLeaveEntity", { // Hovered off an entity
-                //             entity: scene.objects[this._lastPickedEntityId]
-                //         }, true);
-                //         this._lastPickedEntityId = undefined;
-                //     }
-                //     cameraControl.fire("hoverNothing", { // Not hovering on any entity
-                //         canvasPos: pickController.pickCursorPos
-                //     }, true);
-                // }
+                if (pickController.pickedEntitySurface) {
+                    const pickedEntityId = pickController.pickEntitySurfaceResult.entity.id;
+                    if (this._lastPickedEntityId !== pickedEntityId) {
+                        if (this._lastPickedEntityId !== undefined) {
+                            cameraControl.fire("hoverLeaveEntity", { // Hovered off an entity
+                                entity: scene.objects[this._lastPickedEntityId]
+                            }, true);
+                        }
+                        cameraControl.fire("hoverEnterEntity", pickController.pickEntitySurfaceResult, true); // Hovering over a new entity
+                        this._lastPickedEntityId = pickedEntityId;
+                    }
+                    cameraControl.fire("hoverOverEntity", pickController.pickEntitySurfaceResult, true);
+                    cameraControl.fire("hoverOverEntitySurface", pickController.pickEntitySurfaceResult, true);
+                } else {
+                    if (this._lastPickedEntityId !== undefined) {
+                        cameraControl.fire("hoverLeaveEntity", { // Hovered off an entity
+                            entity: scene.objects[this._lastPickedEntityId]
+                        }, true);
+                        this._lastPickedEntityId = undefined;
+                    }
+                    cameraControl.fire("hoverNothing", { // Not hovering on any entity
+                        canvasPos: pickController.pickCursorPos
+                    }, true);
+                }
+
+                if (pickController.pickedVertex) {
+                    cameraControl.fire("pickedVertex", pickController.pickVertexResult, true);
+                }
+                if (pickController.pickedEdge) {
+                    cameraControl.fire("pickedEdge", pickController.pickEdgeResult, true);
+                }
             }
         });
 

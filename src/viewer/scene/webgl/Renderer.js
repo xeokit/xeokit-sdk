@@ -981,6 +981,11 @@ const Renderer = function (scene, options) {
             }
 
             if (null !== pickViewMatrix) {
+
+                //======================================================================================
+                // Fix me
+                //==========================================================================================
+
                 // data-textures: update the pick-camera-matrices of all DataTextureSceneModel's
                 for (let type in drawableTypeInfo) {
                     if (drawableTypeInfo.hasOwnProperty(type)) {
@@ -1020,60 +1025,35 @@ const Renderer = function (scene, options) {
 
             if (params.pickSurface) {
 
-                if (params.pickSurfacePrecision && scene.pickSurfacePrecisionEnabled) {
+                // GPU-based ray-picking
 
-                    // JavaScript-based ray-picking - slow and precise
+                if (pickable.canPickTriangle && pickable.canPickTriangle()) {
 
-                    if (params.canvasPos) {
-                        math.canvasPosToWorldRay(scene.canvas.canvas, pickViewMatrix, pickProjMatrix, canvasPos, worldRayOrigin, worldRayDir);
-                    }
+                    gpuPickTriangle(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult);
 
-                    if (pickable.precisionRayPickSurface(worldRayOrigin, worldRayDir, worldSurfacePos, worldSurfaceNormal)) {
+                    pickable.pickTriangleSurface(pickViewMatrix, pickProjMatrix, pickResult);
 
-                        pickResult.worldPos = worldSurfacePos;
-
-                        if (params.pickSurfaceNormal !== false) {
-                            pickResult.worldNormal = worldSurfaceNormal;
-                        }
-
-                        pickResult.pickSurfacePrecision = true;
-                    }
+                    pickResult.pickSurfacePrecision = false;
 
                 } else {
 
-                    // GPU-based ray-picking - fast and imprecise
+                    if (pickable.canPickWorldPos && pickable.canPickWorldPos()) {
 
-                    if (pickable.canPickTriangle && pickable.canPickTriangle()) {
+                        nearAndFar[0] = scene.camera.project.near;
+                        nearAndFar[1] = scene.camera.project.far;
 
-                        gpuPickTriangle(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult);
+                        gpuPickWorldPos(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult);
 
-                        pickable.pickTriangleSurface(pickViewMatrix, pickProjMatrix, pickResult);
+                        if (params.pickSurfaceNormal !== false) {
+                            gpuPickWorldNormal(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult);
+                        }
 
                         pickResult.pickSurfacePrecision = false;
-
-                    } else {
-
-                        if (pickable.canPickWorldPos && pickable.canPickWorldPos()) {
-
-                            nearAndFar[0] = scene.camera.project.near;
-                            nearAndFar[1] = scene.camera.project.far;
-
-                            gpuPickWorldPos(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult);
-
-                            if (params.pickSurfaceNormal !== false) {
-                                gpuPickWorldNormal(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult);
-                            }
-
-                            pickResult.pickSurfacePrecision = false;
-                        }
                     }
                 }
             }
-
             pickBuffer.unbind();
-
             pickResult.entity = pickedEntity;
-
             return pickResult;
         };
     })();
@@ -1493,7 +1473,7 @@ const Renderer = function (scene, options) {
         return {
             worldPos,
             snappedWorldPos,
-            snappedCanvasPos,
+            snappedCanvasPos
         };
     };
 

@@ -3,18 +3,19 @@ import {math} from "../../../math/math.js";
 /**
  * @private
  * @implements Pickable
+ * @implements ViewFrustumCullingMesh
  */
 class DataTextureSceneModelMesh {
 
     constructor(model, id, color, opacity, layer = null, portionId = 0) {
 
         /**
-         * The VBOSceneModel that contains this PerformanceModelMesh.
+         * The DataTextureSceneModel that contains this PerformanceModelMesh.
          *
-         * A PerformanceModelMesh always belongs to exactly one VBOSceneModel.
+         * A PerformanceModelMesh always belongs to exactly one DataTextureSceneModel.
          *
          * @property model
-         * @type {VBOSceneModel}
+         * @type {DataTextureSceneModel}
          * @final
          */
         this.model = model;
@@ -25,7 +26,7 @@ class DataTextureSceneModelMesh {
          * A PerformanceModelMesh always belongs to exactly one DataTextureSceneModelNode.
          *
          * @property object
-         * @type {VBOSceneModelNode}
+         * @type {DataTextureSceneModelNode}
          * @final
          */
         this.object = null;
@@ -36,7 +37,7 @@ class DataTextureSceneModelMesh {
          * A PerformanceModelMesh always belongs to exactly one DataTextureSceneModelNode.
          *
          * @property object
-         * @type {VBOSceneModelNode}
+         * @type {DataTextureSceneModelNode}
          * @final
          */
         this.parent = null;
@@ -68,14 +69,11 @@ class DataTextureSceneModelMesh {
          * @type {Float64Array}
          */
         this.aabb = math.AABB3();
-
         this._layer = layer;
         this._portionId = portionId;
-
         this._color = [color[0], color[1], color[2], opacity]; // [0..255]
         this._colorize = [color[0], color[1], color[2], opacity]; // [0..255]
         this._colorizing = false;
-
         this._transparent = (opacity < 255);
 
         this.numTriangles = 0;
@@ -259,7 +257,7 @@ class DataTextureSceneModelMesh {
 
     /**
      * @private
-     * @returns {VBOSceneModelNode}
+     * @returns {DataTextureSceneModelNode}
      */
     delegatePickedEntity() {
         return this.parent;

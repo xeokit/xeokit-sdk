@@ -820,7 +820,6 @@ class Scene extends Component {
         this.gammaFactor = cfg.gammaFactor;
 
         this._entityOffsetsEnabled = !!cfg.entityOffsetsEnabled;
-        this._pickSurfacePrecisionEnabled = !!cfg.pickSurfacePrecisionEnabled;
         this._logarithmicDepthBufferEnabled = !!cfg.logarithmicDepthBufferEnabled;
 
         this._pbrEnabled = !!cfg.pbrEnabled;
@@ -1223,7 +1222,7 @@ class Scene extends Component {
      * @returns {Boolean} True if precision picking is enabled.
      */
     get pickSurfacePrecisionEnabled() {
-        return this._pickSurfacePrecisionEnabled;
+        return false; // Removed
     }
 
     /**

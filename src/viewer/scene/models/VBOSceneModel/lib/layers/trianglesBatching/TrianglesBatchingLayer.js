@@ -411,16 +411,6 @@ class TrianglesBatchingLayer {
             numVerts: numVerts
         };
 
-        if (scene.pickSurfacePrecisionEnabled) {
-            // Quantized in-memory positions are initialized in finalize()
-            if (indices) {
-                portion.indices = indices;
-            }
-            if (scene.entityOffsetsEnabled) {
-                portion.offset = new Float32Array(3);
-            }
-        }
-
         this._portions.push(portion);
 
         this._numPortions++;
@@ -454,15 +444,6 @@ class TrianglesBatchingLayer {
                 : quantizePositions(buffer.positions, this._modelAABB, state.positionsDecodeMatrix); // BOTTLENECK
 
             state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, quantizedPositions.length, 3, gl.STATIC_DRAW);
-
-            if (this.model.scene.pickSurfacePrecisionEnabled) {
-                for (let i = 0, numPortions = this._portions.length; i < numPortions; i++) {
-                    const portion = this._portions[i];
-                    const start = portion.vertsBaseIndex * 3;
-                    const end = start + (portion.numVerts * 3);
-                    portion.quantizedPositions = quantizedPositions.slice(start, end);
-                }
-            }
         }
 
         if (buffer.normals.length > 0) {
@@ -884,43 +865,8 @@ class TrianglesBatchingLayer {
         if (this._state.offsetsBuf) {
             this._state.offsetsBuf.setData(tempArray, firstOffset, lenOffsets);
         }
-        if (this.model.scene.pickSurfacePrecisionEnabled) {
-            portion.offset[0] = offset[0];
-            portion.offset[1] = offset[1];
-            portion.offset[2] = offset[2];
-        }
     }
 
-    getEachVertex(portionId, callback) {
-        if (!this.model.scene.pickSurfacePrecisionEnabled) {
-            return;
-        }
-        const state = this._state;
-        const portion = this._portions[portionId];
-        if (!portion) {
-            this.model.error("portion not found: " + portionId);
-            return;
-        }
-        const positions = portion.quantizedPositions;
-        const origin = state.origin;
-        const offset = portion.offset;
-        const offsetX = origin[0] + offset[0];
-        const offsetY = origin[1] + offset[1];
-        const offsetZ = origin[2] + offset[2];
-        const worldPos = tempVec4a;
-        for (let i = 0, len = positions.length; i < len; i += 3) {
-            worldPos[0] = positions[i];
-            worldPos[1] = positions[i + 1];
-            worldPos[2] = positions[i + 2];
-            worldPos[3] = 1.0;
-            math.decompressPosition(worldPos, state.positionsDecodeMatrix);
-            math.transformPoint4(this.model.worldMatrix, worldPos);
-            worldPos[0] += offsetX;
-            worldPos[1] += offsetY;
-            worldPos[2] += offsetZ;
-            callback(worldPos);
-        }
-    }
 
     // ---------------------- COLOR RENDERING -----------------------------------
 
@@ -1193,102 +1139,6 @@ class TrianglesBatchingLayer {
     }
 
     //------------------------------------------------------------------------------------------------
-
-    precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) {
-
-        if (!this.model.scene.pickSurfacePrecisionEnabled) {
-            return false;
-        }
-
-        const state = this._state;
-        const portion = this._portions[portionId];
-
-        if (!portion) {
-            this.model.error("portion not found: " + portionId);
-            return false;
-        }
-
-        const positions = portion.quantizedPositions;
-        const indices = portion.indices;
-        const origin = state.origin;
-        const offset = portion.offset;
-
-        const rtcRayOrigin = tempVec3a;
-        const rtcRayDir = tempVec3b;
-
-        rtcRayOrigin.set(origin ? math.subVec3(worldRayOrigin, origin, tempVec3c) : worldRayOrigin);  // World -> RTC
-        rtcRayDir.set(worldRayDir);
-
-        if (offset) {
-            math.subVec3(rtcRayOrigin, offset);
-        }
-
-        math.transformRay(this.model.worldNormalMatrix, rtcRayOrigin, rtcRayDir, rtcRayOrigin, rtcRayDir); // RTC -> local
-
-        const a = tempVec3d;
-        const b = tempVec3e;
-        const c = tempVec3f;
-
-        let gotIntersect = false;
-        let closestDist = 0;
-        const closestIntersectPos = tempVec3g;
-
-        for (let i = 0, len = indices.length; i < len; i += 3) {
-
-            const ia = indices[i] * 3;
-            const ib = indices[i + 1] * 3;
-            const ic = indices[i + 2] * 3;
-
-            a[0] = positions[ia];
-            a[1] = positions[ia + 1];
-            a[2] = positions[ia + 2];
-
-            b[0] = positions[ib];
-            b[1] = positions[ib + 1];
-            b[2] = positions[ib + 2];
-
-            c[0] = positions[ic];
-            c[1] = positions[ic + 1];
-            c[2] = positions[ic + 2];
-
-            math.decompressPosition(a, state.positionsDecodeMatrix);
-            math.decompressPosition(b, state.positionsDecodeMatrix);
-            math.decompressPosition(c, state.positionsDecodeMatrix);
-
-            if (math.rayTriangleIntersect(rtcRayOrigin, rtcRayDir, a, b, c, closestIntersectPos)) {
-
-                math.transformPoint3(this.model.worldMatrix, closestIntersectPos, closestIntersectPos);
-
-                if (offset) {
-                    math.addVec3(closestIntersectPos, offset);
-                }
-
-                if (origin) {
-                    math.addVec3(closestIntersectPos, origin);
-                }
-
-                const dist = Math.abs(math.lenVec3(math.subVec3(closestIntersectPos, worldRayOrigin, [])));
-
-                if (!gotIntersect || dist > closestDist) {
-                    closestDist = dist;
-                    worldSurfacePos.set(closestIntersectPos);
-                    if (worldNormal) { // Not that wasteful to eagerly compute - unlikely to hit >2 surfaces on most geometry
-                        math.triangleNormal(a, b, c, worldNormal);
-                    }
-                    gotIntersect = true;
-                }
-            }
-        }
-
-        if (gotIntersect && worldNormal) {
-            math.transformVec3(this.model.worldNormalMatrix, worldNormal, worldNormal);
-            math.normalizeVec3(worldNormal);
-        }
-
-        return gotIntersect;
-    }
-
-    // ---------
 
     destroy() {
         const state = this._state;
