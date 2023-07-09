@@ -237,7 +237,8 @@ class DataTextureSceneModelMesh {
 
     /** @private */
     precisionRayPickSurface(worldRayOrigin, worldRayDir, worldSurfacePos, worldSurfaceNormal) {
-        return this._layer.precisionRayPickSurface ? this._layer.precisionRayPickSurface(this._portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldSurfaceNormal) : false;
+        return this._layer.precisionRayPickSurface ?
+            this._layer.precisionRayPickSurface(this._portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldSurfaceNormal) : false;
     }
 
     /** @private */

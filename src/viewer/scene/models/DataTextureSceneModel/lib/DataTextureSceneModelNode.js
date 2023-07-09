@@ -174,7 +174,7 @@ class DataTextureSceneModelNode {
             this.meshes[i]._setVisible(this._flags);
         }
         if (this._isObject) {
-            this.model.scene._objectVisibilityUpdated(this);
+            this.model.scene._objectVisibilityUpdated(this, visible);
         }
         this.model.glRedraw();
     }
@@ -212,7 +212,7 @@ class DataTextureSceneModelNode {
             this.meshes[i]._setHighlighted(this._flags);
         }
         if (this._isObject) {
-            this.model.scene._objectHighlightedUpdated(this);
+            this.model.scene._objectHighlightedUpdated(this, highlighted);
         }
         this.model.glRedraw();
     }
@@ -250,7 +250,7 @@ class DataTextureSceneModelNode {
             this.meshes[i]._setXRayed(this._flags);
         }
         if (this._isObject) {
-            this.model.scene._objectXRayedUpdated(this);
+            this.model.scene._objectXRayedUpdated(this, xrayed);
         }
         this.model.glRedraw();
     }
@@ -288,7 +288,7 @@ class DataTextureSceneModelNode {
             this.meshes[i]._setSelected(this._flags);
         }
         if (this._isObject) {
-            this.model.scene._objectSelectedUpdated(this);
+            this.model.scene._objectSelectedUpdated(this, selected);
         }
         this.model.glRedraw();
     }
@@ -317,7 +317,7 @@ class DataTextureSceneModelNode {
             this._flags = this._flags & ~ENTITY_FLAGS.EDGES;
         }
         for (let i = 0, len = this.meshes.length; i < len; i++) {
-            this.meshes[i]._setEdges(this._flags);
+            this.meshes[i]._setEdges(this._flags, edges);
         }
         this.model.glRedraw();
     }

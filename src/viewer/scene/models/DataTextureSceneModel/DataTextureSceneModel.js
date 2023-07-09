@@ -1847,12 +1847,16 @@ export class DataTextureSceneModel extends Component {
      *
      * @param {*} cfg Geometry properties.
      * @param {String|Number} cfg.id Mandatory ID for the geometry, to refer to with {@link DataTextureSceneModel#createMesh}.
-     * @param {String} cfg.primitive The primitive type. Accepted values are 'points', 'lines', 'triangles', 'solid' and 'surface'.
-     * @param {Number[]} cfg.positionsCompressed Flat array of compressed positions.
-     * @param {Number[]} [cfg.colorsCompressed] Flat array of RGBA vertex colors as unsigned short integers in range ````[0..255]````. Ignored when ````geometryId```` is given, overrides ````colors```` and is overriden by ````color````.
-     * @param {Number[]} [cfg.indices] Array of indices. Not required for `points` primitives.
-     * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Used only for Required for 'triangles' primitives. These are automatically generated internally if not supplied, using the ````edgeThreshold```` given to the ````DataTextureSceneModel```` constructor.
-     * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positionsCompresse````.
+     * @param {String} [cfg.primitive="triangles"]  Geometry primitive type. Ignored when ````geometryId```` is given. Accepted values are 'points', 'lines' and 'triangles'.
+     * @param {Number[]} [cfg.positions] Flat array of vertex positions. Alternative to ````positionsCompressed````.
+     * @param {Number[]} [cfg.positionsCompressed] Flat array of compressed vertex positions. Requires ````positionsDecodeMatrix````. Alternative to ````positions````.
+     * @param {Number[]} [cfg.colors] Flat array of RGB vertex colors as float values in range ````[0..1]````. Overriden by ````colorsCompressed````.
+     * @param {Number[]} [cfg.colorsCompressed] Flat array of RGB vertex colors as unsigned short integers in range ````[0..255]````. Overrides ````colors````.
+     * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
+     * @param {Number[]} [cfg.origin] Optional geometry origin, relative to {@link DataTextureSceneModel#origin}. When this is given,
+     * then ````positions```` or ````positionsCompressed```` are assumed to be relative to this.
+     * @param {Number[]} [cfg.indices] Array of primitive connectivity indices. Not required for "points" primitives.
+     * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Not required for "points" and "lines" primitives. Otherwise, auto-generated when omitted.
      */
     createGeometry(cfg) {
         const geometryId = cfg.id;
@@ -1872,7 +1876,15 @@ export class DataTextureSceneModel extends Component {
             this.error("Config missing: positionsCompressed or positions");
             return;
         }
-        if (cfg.positionsCompressed) { // Pre-compressed
+        if (cfg.positionsCompressed && cfg.positions) {
+            this.error("Only one of these expected: positionsCompressed or positions");
+            return;
+        }
+        if (cfg.primitive !== "points" && !cfg.indices) {
+            this.error(`Config missing: indices - required with ${cfg.primitive} primitives`);
+            return;
+        }
+        if (cfg.positionsCompressed) {
             if (!cfg.positionsDecodeMatrix) {
                 this.error(`Config missing: positionsDecodeMatrix`);
                 return;
@@ -1917,7 +1929,6 @@ export class DataTextureSceneModel extends Component {
      * @param {Number[]} [cfg.positions] Flat array of vertex positions. Ignored when ````geometryId```` is given.
      * @param {Number[]} [cfg.colors] Flat array of RGB vertex colors as float values in range ````[0..1]````. Ignored when ````geometryId```` is given, overriden by ````color```` and ````colorsCompressed````.
      * @param {Number[]} [cfg.colorsCompressed] Flat array of RGB vertex colors as unsigned short integers in range ````[0..255]````. Ignored when ````geometryId```` is given, overrides ````colors```` and is overriden by ````color````.
-     * @param {Number[]} [cfg.normals] Flat array of normal vectors. Only used with 'triangles' primitives. When no normals are given, the mesh will be flat shaded using auto-generated face-aligned normals.
      * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
      * @param {Number[]} [cfg.origin] Optional geometry origin, relative to {@link DataTextureSceneModel#origin}. When this is given, then ````positions```` are assumed to be relative to this.
      * @param {Number[]} [cfg.indices] Array of triangle indices. Ignored when ````geometryId```` is given.
@@ -2162,17 +2173,11 @@ export class DataTextureSceneModel extends Component {
             return;
         }
         if (this._vfcManager) {
-            this._vfcManager.finalize(() => {
-                for (let layerId in this._currentLayers) {
-                    this._currentLayers[layerId].finalize();
-                    delete this._currentLayers[layerId];
-                }
-            });
-        } else {
-            for (let layerId in this._currentLayers) {
-                this._currentLayers[layerId].finalize();
-                delete this._currentLayers[layerId];
-            }
+            this._vfcManager.finalize();
+        }
+        for (let layerId in this._currentLayers) {
+            this._currentLayers[layerId].finalize();
+            delete this._currentLayers[layerId];
         }
         for (let i = 0, len = this._nodeList.length; i < len; i++) {
             const node = this._nodeList[i];
