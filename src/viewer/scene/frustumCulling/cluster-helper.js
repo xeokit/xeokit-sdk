@@ -52,23 +52,17 @@ export function clusterizeV2(entities, meshes) {
 
         entity.meshIds.forEach(meshId => {
             const mesh = meshes[meshId];
-
             const bounds = geometryCompressionUtils.getPositionsBounds(mesh.positions);
-
             const min = geometryCompressionUtils.decompressPosition(bounds.min, mesh.positionsDecodeMatrix, []);
             const max = geometryCompressionUtils.decompressPosition(bounds.max, mesh.positionsDecodeMatrix, []);
-
             min[0] += mesh.origin[0];
             min[1] += mesh.origin[1];
             min[2] += mesh.origin[2];
-
             max[0] += mesh.origin[0];
             max[1] += mesh.origin[1];
             max[2] += mesh.origin[2];
-
             math.expandAABB3Point3(aabbEntity, min);
             math.expandAABB3Point3(aabbEntity, max);
-
             numTriangles += Math.round(mesh.indices.length / 3);
         });
 

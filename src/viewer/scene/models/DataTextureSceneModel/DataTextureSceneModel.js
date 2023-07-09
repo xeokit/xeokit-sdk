@@ -997,10 +997,7 @@ export class DataTextureSceneModel extends Component {
         this._targetLodFps = cfg.targetLodFps;
 
         if (cfg.enableViewFrustumCulling) {
-            /**
-             * @type {ViewFrustumCullingManager}
-             */
-            this._vfcManager = new ViewFrustumCullingManager(this);
+            this._vfcManager = new ViewFrustumCullingManager(this.scene, this);
         }
 
         this._aabb = math.collapseAABB3();
@@ -2206,7 +2203,7 @@ export class DataTextureSceneModel extends Component {
         this._instancingGeometries = {};
         this._preparedInstancingGeometries = {};
         if (this._targetLodFps) {
-            this.lodCullingManager = new LodCullingManager(this, [2000, 600, 150, 80, 20], this._targetLodFps);
+            this.lodCullingManager = new LodCullingManager(this.scene, this, [2000, 600, 150, 80, 20], this._targetLodFps);
         }
         for (let i = 0, len = this._layerList.length; i < len; i++) {
             const layer = this._layerList[i];
@@ -2569,6 +2566,9 @@ export class DataTextureSceneModel extends Component {
         this.scene._aabbDirty = true;
         if (this._isModel) {
             this.scene._deregisterModel(this);
+        }
+        if (this._vfcManager) {
+            this._vfcManager.destroy();
         }
         super.destroy();
     }

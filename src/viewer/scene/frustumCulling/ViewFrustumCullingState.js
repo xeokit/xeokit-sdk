@@ -1,12 +1,8 @@
 import {clusterizeV2} from "./cluster-helper";
 import {math} from "../math";
-
-// For JSDoc autocompletion
-//import {ViewFrustumCullingModel} from "../../../ViewFrustumCullingModel.js"
 import {RBush3D} from "./rbush3d.js";
-//import {ViewFrustumCullingNode} from "../../ViewFrustumCullingNode.js";
 
-let tempVec3 = math.vec3();
+const tempVec3 = math.vec3();
 
 /**
  * Number of bits per-dimension in the 2-dimensional LUT fast atan table
@@ -154,10 +150,10 @@ export class ViewFrustumCullingState {
     }
 
     /**
-     * @param {ViewFrustumCullingModel} model
+     * @param {SceneModel} sceneModel
      * @param {*} fnForceFinalizeLayer
      */
-    finalize(model, fnForceFinalizeLayer) {
+    finalize(sceneModel, fnForceFinalizeLayer) {
         if (this.finalized) {
             throw "Already finalized";
         }
@@ -165,14 +161,14 @@ export class ViewFrustumCullingState {
         for (let i = 0, len = this._orderedMeshList.length; i < len; i++) {
             const {clusterNumber, mesh} = this._orderedMeshList [i];
             if (lastClusterNumber !== -1 && lastClusterNumber !== clusterNumber) {
-                fnForceFinalizeLayer.call(model);
+                fnForceFinalizeLayer.call(sceneModel);
             }
-            model.createMesh(mesh);
+            sceneModel.createMesh(mesh);
             lastClusterNumber = clusterNumber;
         }
         // fnForceFinalizeLayer ();
         for (let i = 0, len = this._orderedEntityList.length; i < len; i++) {
-            model.createEntity(this._orderedEntityList[i])
+            sceneModel.createEntity(this._orderedEntityList[i])
         }
         // Free memory
         this._orderedMeshList = [];
@@ -181,9 +177,9 @@ export class ViewFrustumCullingState {
     }
 
     /**
-     * @param {ViewFrustumCullingModel} model
+     * @param {SceneModel} sceneModel
      */
-    applyViewFrustumCulling(model) {
+    applyViewFrustumCulling(sceneModel) {
         if (!this.finalized) {
             throw "Not finalized";
         }
@@ -191,27 +187,23 @@ export class ViewFrustumCullingState {
             return;
         }
         if (!this._canvasElement) {
-            /**
-             * @type {HTMLCanvasElement}
-             * @private
-             */
-            this._canvasElement = model.scene.canvas.canvas;
+            this._canvasElement = sceneModel.scene.canvas.canvas;
         }
         if (!this._camera) {
-            this._camera = model.scene.camera;
+            this._camera = sceneModel.scene.camera;
         }
-        this._ensureFrustumPropsUpdated(model);
-        this._initializeCullingDataIfNeeded(model);
+        this._ensureFrustumPropsUpdated(sceneModel);
+        this._initializeCullingDataIfNeeded(sceneModel);
         const visibleNodes = this._searchVisibleNodesWithFrustumCulling();
         // console.log (`visibleNodes: ${visibleNodes.length} / ${this._internalNodesList.length}`);
         this._cullFrame++;
         this._markVisibleFrameOfVisibleNodes(visibleNodes, this._cullFrame);
-        this._cullNonVisibleNodes(model, this._cullFrame);
+        this._cullNonVisibleNodes(sceneModel, this._cullFrame);
 
         // console.log (`${numIntersectionChecks} intersection checks`);
     }
 
-    _initializeCullingDataIfNeeded(model) {
+    _initializeCullingDataIfNeeded(sceneModel) {
         if (this._internalNodesList) {
             return;
         }
@@ -225,13 +217,8 @@ export class ViewFrustumCullingState {
         });
         const internalNodesList = new Array(maxEntityId + 1);
         allAabbNodes.forEach(aabbbNode => {
-            internalNodesList [aabbbNode.entity.id] = model._nodes[aabbbNode.entity.xeokitId];
+            internalNodesList [aabbbNode.entity.id] = sceneModel.objects[aabbbNode.entity.xeokitId];
         });
-
-        /**
-         * @type {Array<ViewFrustumCullingNode>}
-         * @private
-         */
         this._internalNodesList = internalNodesList;
         this._lastVisibleFrameOfNodes = new Array(internalNodesList.length);
         this._lastVisibleFrameOfNodes.fill(0);
@@ -248,7 +235,7 @@ export class ViewFrustumCullingState {
         }
     }
 
-    _cullNonVisibleNodes(model, cullFrame) {
+    _cullNonVisibleNodes(sceneModel, cullFrame) {
         const internalNodesList = this._internalNodesList;
         const lastVisibleFrameOfNodes = this._lastVisibleFrameOfNodes;
         for (let i = 0, len = internalNodesList.length; i < len; i++) {
@@ -268,7 +255,11 @@ export class ViewFrustumCullingState {
     _getPointsForBBox(bbox) {
         const points = [];
         for (let i = 0; i < 8; i++) {
-            points.push([(i & 1) ? bbox.maxX : bbox.minX, (i & 2) ? bbox.maxY : bbox.minY, (i & 4) ? bbox.maxZ : bbox.minZ,]);
+            points.push([
+                (i & 1) ? bbox.maxX : bbox.minX,
+                (i & 2) ? bbox.maxY : bbox.minY,
+                (i & 4) ? bbox.maxZ : bbox.minZ
+            ]);
         }
         return points;
     }
@@ -317,11 +308,11 @@ export class ViewFrustumCullingState {
     }
 
     /**
-     * @param {ViewFrustumCullingModel} model
+     * @param {SceneModel} sceneModel
      *
      * @private
      */
-    _ensureFrustumPropsUpdated(model) {
+    _ensureFrustumPropsUpdated(sceneModel) {
         const min = Math.min(this._canvasElement.width, this._canvasElement.height); // Assuming "min" for fovAxis
         this._frustumProps.wMultiply = this._canvasElement.width / min;
         this._frustumProps.hMultiply = this._canvasElement.height / min;
@@ -336,13 +327,13 @@ export class ViewFrustumCullingState {
         // {
         //     return;
         // }
-        // Adjust camera eye/look to take into account the `model.worldMatrix`:
+        // Adjust camera eye/look to take into account the `sceneModel.worldMatrix`:
         //  - the entities' AABBs don't take it into account
-        //  - and they can't, since `model.worldMatrix` is dynamic
+        //  - and they can't, since `sceneModel.worldMatrix` is dynamic
         // So, instead of transformating the positions of the r*tree's AABBs,
         // apply the inverse transform to the camera eye/look, since the culling
         // result is equivalent.
-        const invWorldMatrix = math.inverseMat4(model.worldMatrix, math.mat4());
+        const invWorldMatrix = math.inverseMat4(sceneModel.worldMatrix, math.mat4());
         const modelCamEye = math.transformVec3(this._camera.eye, invWorldMatrix, [0, 0, 0]);
         const modelCamLook = math.transformVec3(this._camera.look, invWorldMatrix, [0, 0, 0]);
         this._frustumProps.forward = math.normalizeVec3(math.subVec3(modelCamLook, modelCamEye, [0, 0, 0]), [0, 0, 0]);

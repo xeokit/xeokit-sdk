@@ -1,40 +1,44 @@
-// import {DataTextureSceneModel} from "../../../DataTextureSceneModel.js"
-//
-// // For JSDoc autocompletion
-// import {DataTextureSceneModelNode} from "../../DataTextureSceneModelNode.js"
-// import {Scene} from "../scene/Scene.js"
+import {LodState} from "./LodState";
 
 /**
- * Wheter the FPS tracker was already installed.
+ * Whether the FPS tracker was already installed.
  */
-let _attachedFPSTracker = false;
+let attachedFPSTracker = false;
 
 /**
  * The list of ````LodCullingManager````'s subscribed to FPS tracking.
  *
  * @type {Array <LodCullingManager>}
  */
-const _fpsTrackingManagers = [];
+const fpsTrackingManagers = [];
 
 export class LodCullingManager {
     /**
-     * @param {SceneModel} model
+     * @param {Scene} scene
+     * @param {SceneModel} sceneModel
      * @param {Array<number>} lodLevels
      * @param {number} targetFps
      */
-    constructor(model, lodLevels, targetFps) {
+    constructor(scene, sceneModel, lodLevels, targetFps) {
+
+        /**
+         * {@link Scene}
+         */
+        this.scene = scene;
+
         /**
          * @type {SceneModel}
          */
-        this.model = model;
+        this.sceneModel = sceneModel;
+
         /**
          * @private
          */
         this.lodState = new LodState(lodLevels, targetFps);
         //  console.time("initializeLodState");
-        this.lodState.initializeLodState(model);
+        this.lodState.initializeLodState(sceneModel);
         //    console.timeEnd("initializeLodState");
-        attachFPSTracker(this.model.scene, this);
+        attachFPSTracker(this.scene, this);
     }
 
     /**
@@ -47,9 +51,9 @@ export class LodCullingManager {
         if (lodState.lodLevelIndex === lodState.triangleLODLevels.length) {
             return false;
         }
-        const nodesInLOD = lodState.nodesInLOD [lodState.triangleLODLevels[lodState.lodLevelIndex]] || [];
-        for (let i = 0, len = nodesInLOD.length; i < len; i++) {
-            nodesInLOD[i].culledLOD = true;
+        const entitiesInLOD = lodState.entitiesInLOD [lodState.triangleLODLevels[lodState.lodLevelIndex]] || [];
+        for (let i = 0, len = entitiesInLOD.length; i < len; i++) {
+            entitiesInLOD[i].culledLOD = true;
         }
         lodState.lodLevelIndex++;
         return true;
@@ -65,9 +69,9 @@ export class LodCullingManager {
         if (lodState.lodLevelIndex === 0) {
             return false;
         }
-        const nodesInLOD = lodState.nodesInLOD [lodState.triangleLODLevels[lodState.lodLevelIndex - 1]] || [];
-        for (let i = 0, len = nodesInLOD.length; i < len; i++) {
-            nodesInLOD[i].culledLOD = false;
+        const entitiesInLOD = lodState.entitiesInLOD [lodState.triangleLODLevels[lodState.lodLevelIndex - 1]] || [];
+        for (let i = 0, len = entitiesInLOD.length; i < len; i++) {
+            entitiesInLOD[i].culledLOD = false;
         }
         lodState.lodLevelIndex--;
         return true;
@@ -124,8 +128,8 @@ export class LodCullingManager {
  * @param {LodCullingManager} cullingManager
  */
 function attachFPSTracker(scene, cullingManager) {
-    if (!_attachedFPSTracker) {
-        _attachedFPSTracker = true;
+    if (!attachedFPSTracker) {
+        attachedFPSTracker = true;
 
         const MAX_NUM_TICKS = 4;
         let tickTimeArray = new Array(MAX_NUM_TICKS);
@@ -140,8 +144,8 @@ function attachFPSTracker(scene, cullingManager) {
             if (currentFPS === -1) {
                 return;
             }
-            for (let i = 0, len = _fpsTrackingManagers.length; i < len; i++) {
-                _fpsTrackingManagers[i].applyLodCulling(currentFPS);
+            for (let i = 0, len = fpsTrackingManagers.length; i < len; i++) {
+                fpsTrackingManagers[i].applyLodCulling(currentFPS);
             }
         });
 
@@ -171,18 +175,13 @@ function attachFPSTracker(scene, cullingManager) {
                 numTick++;
                 const newTime = Date.now();
                 deltaTime = newTime - preRenderTime;
-
                 preRenderTime = newTime;
-
                 tickTimeArray[numTick % MAX_NUM_TICKS] = deltaTime;
-
                 let sumTickTimes = 0;
-
                 if (numTick > MAX_NUM_TICKS) {
                     for (let i = 0; i < MAX_NUM_TICKS; i++) {
                         sumTickTimes += tickTimeArray[i];
                     }
-
                     currentFPS = MAX_NUM_TICKS / sumTickTimes * 1000;
                 }
             });
@@ -201,8 +200,8 @@ function attachFPSTracker(scene, cullingManager) {
 
             scene.on("tick", () => {
                 if ((sceneTick - lastTickCameraMoved) > 3) {
-                    for (let i = 0, len = _fpsTrackingManagers.length; i < len; i++) {   // Call LOD-culling tasks
-                        _fpsTrackingManagers[i].resetLodCulling();
+                    for (let i = 0, len = fpsTrackingManagers.length; i < len; i++) {   // Call LOD-culling tasks
+                        fpsTrackingManagers[i].resetLodCulling();
                     }
                 }
                 sceneTick++;
@@ -210,130 +209,6 @@ function attachFPSTracker(scene, cullingManager) {
         }
     }
 
-    _fpsTrackingManagers.push(cullingManager);
+    fpsTrackingManagers.push(cullingManager);
 }
 
-/**
- * Data structure containing pre-initialized `LOD` data.
- *
- * Will be used by the rest of `LOD` related code.
- */
-class LodState {
-
-    /**
-     * @param {Array<number>} lodLevels The triangle counts for the LOD levels, for example ```[ 2000, 600, 150, 80, 20 ]```
-     * @param {number} targetFps The target FPS (_Frames Per Second_) for the dynamic culling of objects in the different LOD levels.
-     */
-    constructor(lodLevels, targetFps) {
-
-        /**
-         * An array ordered DESC with the number of triangles allowed in each LOD bucket.
-         *
-         * @type {Array<number>}
-         */
-        this.triangleLODLevels = lodLevels;
-
-        /**
-         * A computed dictionary for `triangle-number-buckets` where:
-         * - key: the number of triangles allowed for the objects in the bucket.
-         * - value: all PerformanceNodes that have the number of triangles or more.
-         *
-         * @type {Map<number, Array<DataTextureSceneModelNode>>}
-         */
-        this.nodesInLOD = {};
-
-        /**
-         * A computed dictionary for `triangle-number-buckets` where:
-         * - key: the number of triangles allowed for the objects in the bucket.
-         * - value: the sum of triangles counts for all PeformanceNodes in the bucket.
-         *
-         * @type {Map<number, number>}
-         */
-        this.triangleCountInLOD = {};
-
-        /**
-         * The target FPS for the `LOD` mechanism:
-         * - if real FPS are below this number, the next `LOD` level will be applied.
-         *
-         * - if real FPS are...
-         *   - above this number plus a margin
-         *   - and for some consecutive frames
-         *  ... then the previous `LOD` level will be applied.
-         *
-         * @type {number}
-         */
-        this.targetFps = targetFps;
-
-        // /**
-        //  * Not used at the moment.
-        //  */
-        // this.restoreTime = LOD_RESTORE_TIME;
-
-        /**
-         * Current `LOD` level. Starts at 0.
-         *
-         * @type {number}
-         */
-        this.lodLevelIndex = 0;
-
-        /**
-         * Number of consecutive frames in current `LOD` level where FPS was above `targetFps`
-         *
-         * @type {number}
-         */
-        this.consecutiveFramesWithTargetFps = 0;
-
-        /**
-         * Number of consecutive frames in current `LOD` level where FPS was below `targetFps`
-         *
-         * @type {number}
-         */
-        this.consecutiveFramesWithoutTargetFps = 0;
-    }
-
-    /**
-     * @param {SceneModel} model
-     */
-    initializeLodState(model) {
-        if (model._nodeList.length === 0) {
-            return;
-        }
-
-        //      const LOD_LEVELS = [ 2000, 600, 150, 80, 20 ];
-        //      const LOD_RESTORE_TIME = 600;
-        //      const LOD_TARGET_FPS = 20;
-        const nodeList = model._nodeList;
-
-        let nodesInLOD = {};
-        let triangleCountInLOD = {};
-
-        for (let i = 0, len = nodeList.length; i < len; i++) {
-            const node = nodeList[i];
-
-            let lodLevel, len;
-
-            for (lodLevel = 0, len = this.triangleLODLevels.length; lodLevel < len; lodLevel++) {
-                if (node.numTriangles >= this.triangleLODLevels [lodLevel]) {
-                    break;
-                }
-            }
-
-            var lodPolys = this.triangleLODLevels [lodLevel] || 0;
-
-            if (!(lodPolys in nodesInLOD)) {
-                nodesInLOD [lodPolys] = [];
-            }
-
-            nodesInLOD [lodPolys].push(node);
-
-            if (!(lodPolys in triangleCountInLOD)) {
-                triangleCountInLOD [lodPolys] = 0;
-            }
-
-            triangleCountInLOD [lodPolys] += node.numTriangles;
-        }
-
-        this.nodesInLOD = nodesInLOD;
-        this.triangleCountInLOD = triangleCountInLOD;
-    }
-}
