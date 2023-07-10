@@ -14,7 +14,6 @@ import {buildEdgeIndices} from "../../math/buildEdgeIndices";
 import {rebucketPositions} from "./lib/layers/trianglesDataTexture/rebucketPositions";
 import {uniquifyPositions} from "./lib/layers/trianglesDataTexture/calculateUniquePositions";
 import {quantizePositions} from "./lib/compression";
-import {LodCullingManager} from "../../lodCulling/LodCullingManager";
 import {ViewFrustumCullingManager} from "../../frustumCulling/ViewFrustumCullingManager";
 
 const tempVec3a = math.vec3();
@@ -932,7 +931,6 @@ const defaultQuaternion = math.identityQuaternion();
  * @implements {Drawable}
  * @implements {Entity}
  * @implements {SceneModel}
- * @implements {ViewFrustumCullingModel}
  */
 export class DataTextureSceneModel extends Component {
 
@@ -963,7 +961,6 @@ export class DataTextureSceneModel extends Component {
      * Viewer will hide backfaces on watertight meshes, show backfaces on open meshes, and always show backfaces on meshes when we slice them open with {@link SectionPlane}s.
      * @param {Boolean} [cfg.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) will apply to this DataTextureSceneModel. SAO is configured by the Scene's {@link SAO} component.
      * @param {Number} [cfg.edgeThreshold=10] When xraying, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
-     * @param {Number} [cfg.targetLodFps] Optional target LoD FPS. When provided, will enable LoD culling for this DataTextureSceneModel, with the given target FPS.
      * @param {Boolean} [cfg.enableViewFrustumCulling=false] When true, will enable view frustum culling for the objects within this DataTextureSceneModel.
      * @param {Boolean} [cfg.disableVertexWelding] Disable vertex welding when loading geometry into the GPU. Default is ```false```.
      * @param {Boolean} [cfg.disableIndexRebucketing] Disable index rebucketing when loading geometry into the GPU. Default is ```false```.
@@ -993,8 +990,6 @@ export class DataTextureSceneModel extends Component {
          * @type {Boolean}
          */
         this._enableIndexRebucketing = !cfg.disableIndexRebucketing;
-
-        this._targetLodFps = cfg.targetLodFps;
 
         if (cfg.enableViewFrustumCulling) {
             this._vfcManager = new ViewFrustumCullingManager(this.scene, this);
@@ -2202,8 +2197,8 @@ export class DataTextureSceneModel extends Component {
         this.scene._aabbDirty = true;
         this._instancingGeometries = {};
         this._preparedInstancingGeometries = {};
-        if (this._targetLodFps) {
-            this.lodCullingManager = new LodCullingManager(this.scene, this, [2000, 600, 150, 80, 20], this._targetLodFps);
+        if (this.scene.lod.enabled) {
+            this.lodCullingManager = this.scene.lod.getLODCullingManager(this);
         }
         for (let i = 0, len = this._layerList.length; i < len; i++) {
             const layer = this._layerList[i];
@@ -2567,8 +2562,11 @@ export class DataTextureSceneModel extends Component {
         if (this._isModel) {
             this.scene._deregisterModel(this);
         }
-        if (this._vfcManager) {
-            this._vfcManager.destroy();
+        // if (this._vfcManager) {
+        //     this._vfcManager.destroy();
+        // }
+        if (this.lodCullingManager) {
+            this.scene.lod.putLODCullingManager(this.lodCullingManager);
         }
         super.destroy();
     }

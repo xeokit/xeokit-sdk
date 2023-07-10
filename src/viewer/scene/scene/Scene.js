@@ -18,6 +18,7 @@ import {Metrics} from "../metriqs/Metriqs.js";
 import {SAO} from "../postfx/SAO.js";
 import {PointsMaterial} from "../materials/PointsMaterial.js";
 import {LinesMaterial} from "../materials/LinesMaterial.js";
+import {LOD} from "../lodCulling/LOD";
 
 // Enables runtime check for redundant calls to object state update methods, eg. Scene#_objectVisibilityUpdated
 const ASSERT_OBJECT_STATE_UPDATE = false;
@@ -867,6 +868,14 @@ class Scene extends Component {
 
         this._camera.on("dirty", () => {
             this._renderer.imageDirty();
+        });
+
+        /** Configures Level-of-Detail (LOD) culling for {@link SceneModel}s belonging to this Scene.
+         * @type {LOD}
+         * @final
+         */
+        this.lod = new LOD(this, {
+            enabled: cfg.lodEnabled
         });
     }
 

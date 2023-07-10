@@ -55,6 +55,8 @@ const Renderer = function (scene, options) {
     const saoOcclusionRenderer = new SAOOcclusionRenderer(scene);
     const saoDepthLimitedBlurRenderer = new SAODepthLimitedBlurRenderer(scene);
 
+    this.scene = scene;
+
     this._occlusionTester = null; // Lazy-created in #addMarker()
 
     this.capabilities = {
@@ -209,7 +211,8 @@ const Renderer = function (scene, options) {
      * @returns {Boolean}
      */
     this.needsRender = function () {
-        return (imageDirty || drawableListDirty || stateSortDirty);
+        const needsRender = (imageDirty || drawableListDirty || stateSortDirty);
+        return needsRender;
     }
 
     /**

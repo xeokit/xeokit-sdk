@@ -2,8 +2,10 @@
  * Data structure containing pre-initialized `LOD` data.
  *
  * Will be used by the rest of `LOD` related code.
+ *
+ * @private
  */
-export class LodState {
+export class LODState {
 
     /**
      * @param {Array<number>} lodLevels The triangle counts for the LOD levels, for example ```[ 2000, 600, 150, 80, 20 ]```
