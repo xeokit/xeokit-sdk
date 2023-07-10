@@ -725,7 +725,7 @@ class XKTLoaderPlugin extends Plugin {
      * all geometry instances into batches (````false````), and not use instancing to render them. Setting this ````false```` can significantly
      * improve Viewer performance for models that have excessive geometry reuse, but may also increases the amount of
      * browser and GPU memory used by the model. See [#769](https://github.com/xeokit/xeokit-sdk/issues/769) for more info.
-     * @param {Boolean} [params.useDataTextures=false] When we set this ````true````, an alternative memory representation of object geometry will be used that relies on data textures. At the expense of some rendering performance overhead, this will reduce the used RAM to around 25% respect to setting the option to ````false````.
+     * @param {Boolean} [params.useDataTextures=false] Set ````true```` to use a {@link DataTextureSceneModel} to represent the returned model.
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
      */
     load(params = {}) {
@@ -741,8 +741,6 @@ class XKTLoaderPlugin extends Plugin {
             sceneModel = new DataTextureSceneModel(this.viewer.scene, utils.apply(params, {
                 isModel: true,
                 origin: params.origin,
-                targetLodFps: params.useDataTextures.targetLodFps || false,
-                enableViewFrustumCulling: params.useDataTextures.enableViewFrustumCulling || false,
                 disableVertexWelding: params.useDataTextures.disableVertexWelding || false,
                 disableIndexRebucketing: params.useDataTextures.disableIndexRebucketing || false,
             }));
