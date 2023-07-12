@@ -5,6 +5,7 @@
  @event picked
  */
 import {math} from '../math/math.js';
+import {createRTCViewMat} from '../math/rtcCoords.js';
 import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {DrawRenderer} from "./draw/DrawRenderer.js";
@@ -2063,11 +2064,8 @@ const pickTriangleSurface = (function () {
 
                 // Attempt to ray-pick the triangle in local space
 
-                let canvasPos;
-
                 if (pickResult.canvasPos) {
-                    canvasPos = pickResult.canvasPos;
-                    math.canvasPosToLocalRay(canvas.canvas, pickViewMatrix, pickProjMatrix, mesh.worldMatrix, canvasPos, localRayOrigin, localRayDir);
+                    math.canvasPosToLocalRay(canvas.canvas, mesh.origin ? createRTCViewMat(pickViewMatrix, mesh.origin) : pickViewMatrix, pickProjMatrix, mesh.worldMatrix, pickResult.canvasPos, localRayOrigin, localRayDir);
 
                 } else if (pickResult.origin && pickResult.direction) {
                     math.worldRayToLocalRay(mesh.worldMatrix, pickResult.origin, pickResult.direction, localRayOrigin, localRayDir);
@@ -2097,6 +2095,12 @@ const pickTriangleSurface = (function () {
                 worldPos[0] = tempVec4b[0];
                 worldPos[1] = tempVec4b[1];
                 worldPos[2] = tempVec4b[2];
+
+                if (pickResult.canvasPos && mesh.origin) {
+                    worldPos[0] += mesh.origin[0];
+                    worldPos[1] += mesh.origin[1];
+                    worldPos[2] += mesh.origin[2];
+                }
 
                 pickResult.worldPos = worldPos;
 
