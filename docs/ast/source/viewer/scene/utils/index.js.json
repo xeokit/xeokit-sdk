@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 191,
+  "end": 199,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 6,
-      "column": 38
+      "column": 46
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 191,
+    "end": 199,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 6,
-        "column": 38
+        "column": 46
       }
     },
     "sourceType": "module",
@@ -206,7 +206,7 @@
       {
         "type": "ExportAllDeclaration",
         "start": 153,
-        "end": 191,
+        "end": 199,
         "loc": {
           "start": {
             "line": 6,
@@ -214,13 +214,13 @@
           },
           "end": {
             "line": 6,
-            "column": 38
+            "column": 46
           }
         },
         "source": {
           "type": "StringLiteral",
           "start": 167,
-          "end": 190,
+          "end": 198,
           "loc": {
             "start": {
               "line": 6,
@@ -228,14 +228,14 @@
             },
             "end": {
               "line": 6,
-              "column": 37
+              "column": 45
             }
           },
           "extra": {
-            "rawValue": "./textureTranscoders/",
-            "raw": "\"./textureTranscoders/\""
+            "rawValue": "./textureTranscoders/index.js",
+            "raw": "\"./textureTranscoders/index.js\""
           },
-          "value": "./textureTranscoders/"
+          "value": "./textureTranscoders/index.js"
         }
       }
     ],
@@ -1007,9 +1007,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "./textureTranscoders/",
+      "value": "./textureTranscoders/index.js",
       "start": 167,
-      "end": 190,
+      "end": 198,
       "loc": {
         "start": {
           "line": 6,
@@ -1017,7 +1017,7 @@
         },
         "end": {
           "line": 6,
-          "column": 37
+          "column": 45
         }
       }
     },
@@ -1034,16 +1034,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 190,
-      "end": 191,
+      "start": 198,
+      "end": 199,
       "loc": {
         "start": {
           "line": 6,
-          "column": 37
+          "column": 45
         },
         "end": {
           "line": 6,
-          "column": 38
+          "column": 46
         }
       }
     },
@@ -1060,16 +1060,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 191,
-      "end": 191,
+      "start": 199,
+      "end": 199,
       "loc": {
         "start": {
           "line": 6,
-          "column": 38
+          "column": 46
         },
         "end": {
           "line": 6,
-          "column": 38
+          "column": 46
         }
       }
     }

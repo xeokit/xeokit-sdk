@@ -1,74 +1,274 @@
 [
   {
+    "name": "DataTextureState#bindCommonTextures",
+    "filePath": "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js",
+    "lines": [
+      {
+        "lineNumber": 378,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 379,
+        "line": "     * "
+      },
+      {
+        "lineNumber": 380,
+        "line": "     * @param {Program} glProgram "
+      },
+      {
+        "lineNumber": 381,
+        "line": "     * @param {string} objectMatricesTextureShaderName "
+      },
+      {
+        "lineNumber": 382,
+        "line": "     * @param {string} vertexTextureShaderName "
+      },
+      {
+        "lineNumber": 383,
+        "line": "     * @param {string} objectAttributesTextureShaderName "
+      },
+      {
+        "lineNumber": 384,
+        "line": "     * @param {string} cameraMatricesShaderName "
+      },
+      {
+        "lineNumber": 385,
+        "line": "     * @param {string} modelMatricesShaderName "
+      },
+      {
+        "lineNumber": 386,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 387,
+        "line": "    bindCommonTextures ("
+      }
+    ],
+    "codeParams": [
+      "glProgram",
+      "objectMatricesTextureShaderName",
+      "vertexTextureShaderName",
+      "objectAttributesTextureShaderName",
+      "cameraMatricesShaderName",
+      "modelMatricesShaderName",
+      "objectOffsetsShaderName"
+    ],
+    "docParams": [
+      "glProgram",
+      "objectMatricesTextureShaderName",
+      "vertexTextureShaderName",
+      "objectAttributesTextureShaderName",
+      "cameraMatricesShaderName",
+      "modelMatricesShaderName"
+    ]
+  },
+  {
+    "name": "DataTextureGenerator#generateCameraDataTexture",
+    "filePath": "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js",
+    "lines": [
+      {
+        "lineNumber": 517,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 518,
+        "line": "     * Generate and return a `camera data texture`."
+      },
+      {
+        "lineNumber": 519,
+        "line": "     * "
+      },
+      {
+        "lineNumber": 520,
+        "line": "     * The texture will automatically update its contents before each render when the camera matrix is dirty,"
+      },
+      {
+        "lineNumber": 521,
+        "line": "     * and to do so will use the following events:"
+      },
+      {
+        "lineNumber": 522,
+        "line": "     * "
+      },
+      {
+        "lineNumber": 523,
+        "line": "     * - `scene.rendering` event will be used to know that the camera texture should be updated"
+      },
+      {
+        "lineNumber": 524,
+        "line": "     * - `camera.matrix` event will be used to know that the camera matices changed"
+      },
+      {
+        "lineNumber": 525,
+        "line": "     * "
+      },
+      {
+        "lineNumber": 526,
+        "line": "     * @param {WebGL2RenderingContext} gl "
+      },
+      {
+        "lineNumber": 527,
+        "line": "     * @param {Camera} camera "
+      },
+      {
+        "lineNumber": 528,
+        "line": "     * @param {Scene} scene "
+      },
+      {
+        "lineNumber": 529,
+        "line": "     * @param {null|number[3]} origin "
+      },
+      {
+        "lineNumber": 530,
+        "line": "     * "
+      },
+      {
+        "lineNumber": 531,
+        "line": "     * @returns {BindableDataTexture}"
+      },
+      {
+        "lineNumber": 532,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 533,
+        "line": "    generateCameraDataTexture (gl, camera, scene, origin, followCameraUpdate = true)"
+      }
+    ],
+    "codeParams": [
+      "gl",
+      "camera",
+      "scene",
+      "origin",
+      "followCameraUpdate"
+    ],
+    "docParams": [
+      "gl",
+      "camera",
+      "scene",
+      "origin"
+    ]
+  },
+  {
+    "name": "DataTextureGenerator#generateTextureForObjectOffsets",
+    "filePath": "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js",
+    "lines": [
+      {
+        "lineNumber": 841,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 842,
+        "line": "     * This will generate a texture for all object offsets."
+      },
+      {
+        "lineNumber": 843,
+        "line": "     * "
+      },
+      {
+        "lineNumber": 844,
+        "line": "     * @param {WebGL2RenderingContext} gl"
+      },
+      {
+        "lineNumber": 845,
+        "line": "     * @param {int[]} offsets Array of int[3], one XYZ offset array for each object"
+      },
+      {
+        "lineNumber": 846,
+        "line": "     * "
+      },
+      {
+        "lineNumber": 847,
+        "line": "     * @returns {BindableDataTexture}"
+      },
+      {
+        "lineNumber": 848,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 849,
+        "line": "    generateTextureForObjectOffsets (gl, numOffsets) {"
+      }
+    ],
+    "codeParams": [
+      "gl",
+      "numOffsets"
+    ],
+    "docParams": [
+      "gl",
+      "offsets"
+    ]
+  },
+  {
     "name": "LinesBatchingLayer#createPortion",
     "filePath": "src/viewer/scene/models/VBOSceneModel/lib/layers/linesBatching/LinesBatchingLayer.js",
     "lines": [
       {
-        "lineNumber": 105,
+        "lineNumber": 104,
         "line": "    /**"
       },
       {
-        "lineNumber": 106,
+        "lineNumber": 105,
         "line": "     * Creates a new portion within this LinesBatchingLayer, returns the new portion ID."
       },
       {
-        "lineNumber": 107,
+        "lineNumber": 106,
         "line": "     *"
       },
       {
-        "lineNumber": 108,
+        "lineNumber": 107,
         "line": "     * Gives the portion the specified geometry, color and matrix."
       },
       {
-        "lineNumber": 109,
+        "lineNumber": 108,
         "line": "     *"
       },
       {
-        "lineNumber": 110,
+        "lineNumber": 109,
         "line": "     * @param cfg.positions Flat float Local-space positions array."
       },
       {
-        "lineNumber": 111,
+        "lineNumber": 110,
         "line": "     * @param cfg.positionsCompressed Flat quantized positions array - decompressed with TrianglesBatchingLayer positionsDecodeMatrix"
       },
       {
-        "lineNumber": 112,
+        "lineNumber": 111,
         "line": "     * @param cfg.indices  Flat int indices array."
       },
       {
-        "lineNumber": 113,
+        "lineNumber": 112,
         "line": "     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]"
       },
       {
-        "lineNumber": 114,
+        "lineNumber": 113,
         "line": "     * @param cfg.opacity Opacity [0..255]"
       },
       {
-        "lineNumber": 115,
+        "lineNumber": 114,
         "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
       },
       {
-        "lineNumber": 116,
+        "lineNumber": 115,
         "line": "     * @param [cfg.worldMatrix] Flat float 4x4 matrix"
       },
       {
-        "lineNumber": 117,
+        "lineNumber": 116,
         "line": "     * @param cfg.worldAABB Flat float AABB World-space AABB"
       },
       {
-        "lineNumber": 118,
+        "lineNumber": 117,
         "line": "     * @param cfg.pickColor Quantized pick color"
       },
       {
-        "lineNumber": 119,
+        "lineNumber": 118,
         "line": "     * @returns {number} Portion ID"
       },
       {
-        "lineNumber": 120,
+        "lineNumber": 119,
         "line": "     */"
       },
       {
-        "lineNumber": 121,
+        "lineNumber": 120,
         "line": "    createPortion(cfg) {"
       }
     ],
@@ -82,71 +282,71 @@
     "filePath": "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/PointsBatchingLayer.js",
     "lines": [
       {
-        "lineNumber": 114,
+        "lineNumber": 113,
         "line": "    /**"
       },
       {
-        "lineNumber": 115,
+        "lineNumber": 114,
         "line": "     * Creates a new portion within this PointsBatchingLayer, returns the new portion ID."
       },
       {
-        "lineNumber": 116,
+        "lineNumber": 115,
         "line": "     *"
       },
       {
-        "lineNumber": 117,
+        "lineNumber": 116,
         "line": "     * Gives the portion the specified geometry, color and matrix."
       },
       {
-        "lineNumber": 118,
+        "lineNumber": 117,
         "line": "     *"
       },
       {
-        "lineNumber": 119,
+        "lineNumber": 118,
         "line": "     * @param cfg.positions Flat float Local-space positions array."
       },
       {
-        "lineNumber": 120,
+        "lineNumber": 119,
         "line": "     * @param cfg.positionsCompressed Flat quantized positions array - decompressed with PointsBatchingLayer positionsDecodeMatrix"
       },
       {
-        "lineNumber": 121,
+        "lineNumber": 120,
         "line": "     * @param [cfg.colorsCompressed] Quantized RGB colors [0..255,0..255,0..255,0..255]"
       },
       {
-        "lineNumber": 122,
+        "lineNumber": 121,
         "line": "     * @param [cfg.colors] Flat float colors array."
       },
       {
-        "lineNumber": 123,
+        "lineNumber": 122,
         "line": "     * @param cfg.color Float RGB color [0..1,0..1,0..1]"
       },
       {
-        "lineNumber": 124,
+        "lineNumber": 123,
         "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
       },
       {
-        "lineNumber": 125,
+        "lineNumber": 124,
         "line": "     * @param [cfg.worldMatrix] Flat float 4x4 matrix"
       },
       {
-        "lineNumber": 126,
+        "lineNumber": 125,
         "line": "     * @param cfg.worldAABB Flat float AABB World-space AABB"
       },
       {
-        "lineNumber": 127,
+        "lineNumber": 126,
         "line": "     * @param cfg.pickColor Quantized pick color"
       },
       {
-        "lineNumber": 128,
+        "lineNumber": 127,
         "line": "     * @returns {number} Portion ID"
       },
       {
-        "lineNumber": 129,
+        "lineNumber": 128,
         "line": "     */"
       },
       {
-        "lineNumber": 130,
+        "lineNumber": 129,
         "line": "    createPortion(cfg) {"
       }
     ],
