@@ -8,8 +8,6 @@ import {ENTITY_FLAGS} from './lib/ENTITY_FLAGS.js';
 import {utils} from "../../utils.js";
 import {RenderFlags} from "../../webgl/RenderFlags.js";
 
-// import {LodCullingManager} from "./lib/layers/trianglesDataTexture/LodCullingManager.js";
-//import {ViewFrustumCullingManager} from "./lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js";
 import {buildEdgeIndices} from "../../math/buildEdgeIndices";
 import {rebucketPositions} from "./lib/layers/trianglesDataTexture/rebucketPositions";
 import {uniquifyPositions} from "./lib/layers/trianglesDataTexture/calculateUniquePositions";
@@ -45,9 +43,9 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * <br>
  *
- * It should be noted that while the terms "batching" and "instancing" are used in the DataTextureModel API, their usage is primarily superficial. They are
+ * It should be noted that while the terms "batching" and "instancing" are used in the DataTextureSceneModel API, their usage is primarily superficial. They are
  * employed to ensure the (mostly) seamless implementation of the {@link SceneModel} interface, which is also implemented by {@link VBOSceneModel}. However, internally, the
- * DataTextureModel adopts its own pointer-based reuse strategy to handle both geometry modes, as previously mentioned.
+ * DataTextureSceneModel adopts its own pointer-based reuse strategy to handle both geometry modes, as previously mentioned.
  *
  * # Overview
  *
@@ -61,11 +59,11 @@ const defaultQuaternion = math.identityQuaternion();
  *
  * # Contents
  *
- * - [DataTextureSceneModel](#performancemodel)
+ * - [DataTextureSceneModel](#DataTextureSceneModel)
  * - [GPU-Resident Geometry](#gpu-resident-geometry)
  * - [Picking](#picking)
  * - [Example 1: Geometry Instancing](#example-1--geometry-instancing)
- * - [Finalizing a DataTextureSceneModel](#finalizing-a-performancemodel)
+ * - [Finalizing a DataTextureSceneModel](#finalizing-a-DataTextureSceneModel)
  * - [Finding Entities](#finding-entities)
  * - [Example 2: Geometry Batching](#example-2--geometry-batching)
  * - [Classifying with Metadata](#classifying-with-metadata)

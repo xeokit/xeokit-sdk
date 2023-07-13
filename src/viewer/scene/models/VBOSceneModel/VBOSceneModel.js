@@ -71,11 +71,11 @@ const defaultTextureSetId = "defaultTextureSet";
  *
  * # Contents
  *
- * - [VBOSceneModel](#performancemodel)
+ * - [VBOSceneModel](#DataTextureSceneModel)
  * - [GPU-Resident Geometry](#gpu-resident-geometry)
  * - [Picking](#picking)
  * - [Example 1: Geometry Instancing](#example-1--geometry-instancing)
- * - [Finalizing a VBOSceneModel](#finalizing-a-performancemodel)
+ * - [Finalizing a VBOSceneModel](#finalizing-a-DataTextureSceneModel)
  * - [Finding Entities](#finding-entities)
  * - [Example 2: Geometry Batching](#example-2--geometry-batching)
  * - [Classifying with Metadata](#classifying-with-metadata)
@@ -2950,6 +2950,10 @@ ${cfg.uv && cfg.uv.length > 0 ? 1 : 0}-${cfg.uvCompressed && cfg.uvCompressed.le
 
         this.glRedraw();
 
+        if (this.scene.lod.enabled) {
+            this.lodCullingManager = this.scene.lod.getLODCullingManager(this);
+        }
+
         this.scene._aabbDirty = true;
     }
 
@@ -3345,6 +3349,9 @@ ${cfg.uv && cfg.uv.length > 0 ? 1 : 0}-${cfg.uvCompressed && cfg.uvCompressed.le
             this.scene._deregisterModel(this);
         }
         putScratchMemory();
+        if (this.lodCullingManager) {
+            this.scene.lod.putLODCullingManager(this.lodCullingManager);
+        }
         super.destroy();
     }
 }

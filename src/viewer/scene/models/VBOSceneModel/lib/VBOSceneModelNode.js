@@ -328,7 +328,7 @@ class VBOSceneModelNode {
 
     set culledVFC(culled) {
         this._culledVFC = culled;
-        this.internalSetCulled ();
+        this._setCulled ();
     }
 
     get culledLOD() {
@@ -337,7 +337,7 @@ class VBOSceneModelNode {
 
     set culledLOD(culled) {
         this._culledLOD = culled;
-        this.internalSetCulled ();
+        this._setCulled ();
     }
 
     /**
@@ -361,13 +361,11 @@ class VBOSceneModelNode {
      */
     set culled(culled) {
         this._culled = culled;
-        this.internalSetCulled ();
+        this._setCulled ();
     }
 
-    internalSetCulled()
-    {
+    _setCulled() {
         let culled = !!(this._culled) || !!(this._culledLOD) || !!(this._culledVFC);
-
         if (!!(this._flags & ENTITY_FLAGS.CULLED) === culled) {
             return; // Redundant update
         }

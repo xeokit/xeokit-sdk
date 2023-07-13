@@ -107,11 +107,11 @@ export class DataTextureGenerator {
      * Generate and return a `model data texture`.
      *
      * @param {WebGL2RenderingContext} gl
-     * @param {PerformanceModel} model
+     * @param {DataTextureSceneModel} model
      *
      * @returns {BindableDataTexture}
      */
-    generatePeformanceModelDataTexture(gl, model) {
+    generateModelTexture(gl, model) {
         const textureWidth = 4;
         const textureHeight = 2; // space for 2 matrices
         const texture = gl.createTexture();

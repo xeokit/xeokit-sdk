@@ -8,6 +8,7 @@ import {Component} from "../Component.js";
  * Implementations:
  *
  * * {@link VBOSceneModel} - WebGL2-based model representation that stores geometry as vertex buffer objects (VBOs).
+ * * {@link DataTextureSceneModel} - WebGL2-based model representation that stores geometry as data textures.
  *
  * @interface
  * @abstract

@@ -75,7 +75,7 @@ class TrianglesDataTextureLayer {
         this.sortId = `TrianglesDataTextureLayer-${this._layerNumber}`;
 
         /**
-         * Index of this TrianglesDataTextureLayer in {@link PerformanceModel#_layerList}.
+         * Index of this TrianglesDataTextureLayer in {@link DataTextureSceneModel#_layerList}.
          * @type {Number}
          */
         this.layerIndex = cfg.layerIndex;
@@ -528,7 +528,7 @@ class TrianglesDataTextureLayer {
             ]);
         } else if (color) {
             buffer.perObjectColors.push([
-                color[0], // Color is pre-quantized by PerformanceModel
+                color[0], // Color is pre-quantized by DataTextureSceneModel
                 color[1],
                 color[2],
                 opacity
@@ -791,7 +791,7 @@ class TrianglesDataTextureLayer {
 
         // Model matrices texture
         if (!this.model._modelMatricesTexture) {
-            this.model._modelMatricesTexture = this.dataTextureGenerator.generatePeformanceModelDataTexture(
+            this.model._modelMatricesTexture = this.dataTextureGenerator.generateModelTexture(
                 gl, this.model
             );
         }
