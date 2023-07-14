@@ -2818,6 +2818,7 @@ ${cfg.uv && cfg.uv.length > 0 ? 1 : 0}-${cfg.uvCompressed && cfg.uvCompressed.le
      * @param {Boolean} [cfg.highlighted=false] Indicates if the Entity is initially highlighted. Highlighted appearance is configured by {@link VBOSceneModel#highlightMaterial}.
      * @param {Boolean} [cfg.selected=false] Indicates if the Entity is initially selected. Selected appearance is configured by {@link VBOSceneModel#selectedMaterial}.
      * @param {Boolean} [cfg.edges=false] Indicates if the Entity's edges are initially emphasized. Edges appearance is configured by {@link VBOSceneModel#edgeMaterial}.
+     * @param {Boolean} [cfg.lodCullable=true] Indicates if the Entity can be LoD culled. LoD culling isconfigured by {@link LOD}.
      * @returns {Entity}
      */
     createEntity(cfg) {
@@ -2888,7 +2889,8 @@ ${cfg.uv && cfg.uv.length > 0 ? 1 : 0}-${cfg.uvCompressed && cfg.uvCompressed.le
                 math.expandAABB3(aabb, meshes[i].aabb);
             }
         }
-        const node = new VBOSceneModelNode(this, cfg.isObject, id, meshes, flags, aabb); // Internally sets PerformanceModelMesh#parent to this PerformanceModelNode
+        const lodCullable = (cfg.lodCullable !== false);
+        const node = new VBOSceneModelNode(this, cfg.isObject, id, meshes, flags, aabb, lodCullable); // Internally sets PerformanceModelMesh#parent to this PerformanceModelNode
         this._nodeList.push(node);
         this._nodes[id] = node;
         this.numEntities++;

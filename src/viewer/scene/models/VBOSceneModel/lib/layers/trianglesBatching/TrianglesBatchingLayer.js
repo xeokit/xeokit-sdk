@@ -797,7 +797,7 @@ class TrianglesBatchingLayer {
             edgeFlag = RENDER_PASSES.NOT_RENDERED;
         }
 
-        let pickFlag = (visible && !culled && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
+        let pickFlag = (visible && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
 
         const clippableFlag = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 1 : 0;
 
@@ -1079,7 +1079,7 @@ class TrianglesBatchingLayer {
     //---- PICKING ----------------------------------------------------------------------------------------------------
 
     drawPickMesh(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+        if (this._numVisibleLayerPortions === 0) {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
@@ -1089,7 +1089,7 @@ class TrianglesBatchingLayer {
     }
 
     drawPickDepths(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+        if (this._numVisibleLayerPortions === 0) {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
@@ -1099,7 +1099,7 @@ class TrianglesBatchingLayer {
     }
 
     drawPickNormals(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+        if ( this._numVisibleLayerPortions === 0) {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);

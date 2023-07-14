@@ -1199,7 +1199,7 @@ class TrianglesDataTextureLayer {
 
         // Pick
 
-        let f3 = (visible && !culled && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
+        let f3 = (visible && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
         const textureState = this._dataTextureState;
         const gl = this.model.scene.canvas.gl;
         tempUint8Array4 [0] = f0;
@@ -1510,7 +1510,7 @@ class TrianglesDataTextureLayer {
     //---- PICKING ----------------------------------------------------------------------------------------------------
 
     drawPickMesh(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+        if (this._numVisibleLayerPortions === 0) {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
@@ -1520,7 +1520,7 @@ class TrianglesDataTextureLayer {
     }
 
     drawPickDepths(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+        if (this._numVisibleLayerPortions === 0) {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);

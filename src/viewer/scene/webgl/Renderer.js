@@ -1092,7 +1092,7 @@ const Renderer = function (scene, options) {
 
                     const drawable = drawableList[i];
 
-                    if (!drawable.drawPickMesh || drawable.culled === true || (params.pickInvisible !== true && drawable.visible === false) || drawable.pickable === false) {
+                    if (!drawable.drawPickMesh || (params.pickInvisible !== true && drawable.visible === false) || drawable.pickable === false) {
                         continue;
                     }
                     if (includeEntityIds && !includeEntityIds[drawable.id]) { // TODO: push this logic into drawable

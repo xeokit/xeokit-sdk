@@ -12,7 +12,7 @@ class VBOSceneModelNode {
     /**
      * @private
      */
-    constructor(model, isObject, id, meshes, flags, aabb) {
+    constructor(model, isObject, id, meshes, flags, aabb, lodCullable) {
 
         this._isObject = isObject;
 
@@ -73,6 +73,7 @@ class VBOSceneModelNode {
         this._colorizeUpdated = false;
         this._opacityUpdated = false;
 
+        this._lodCullable = lodCullable;
         this._culled = false;
         this._culledVFC = false;
         this._culledLOD = false;
@@ -365,7 +366,7 @@ class VBOSceneModelNode {
     }
 
     _setCulled() {
-        let culled = !!(this._culled) || !!(this._culledLOD) || !!(this._culledVFC);
+        let culled = !!(this._culled) || !!(this._culledLOD && this._lodCullable) || !!(this._culledVFC);
         if (!!(this._flags & ENTITY_FLAGS.CULLED) === culled) {
             return; // Redundant update
         }
