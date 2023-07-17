@@ -153,21 +153,23 @@ class MetaScene {
 
         // Create global Property Sets
 
-        for (let i = 0, len = metaModelData.propertySets.length; i < len; i++) {
-            const propertySetData = metaModelData.propertySets[i];
-            let propertySet = this.propertySets[propertySetData.id];
-            if (!propertySet) {
-                propertySet = new PropertySet({
-                    id: propertySetData.id,
-                    originalSystemId: propertySetData.originalSystemId,
-                    type: propertySetData.type,
-                    name: propertySetData.name,
-                    properties: propertySetData.properties
-                });
-                this.propertySets[propertySet.id] = propertySet;
+        if (metaModelData.propertySets) {
+            for (let i = 0, len = metaModelData.propertySets.length; i < len; i++) {
+                const propertySetData = metaModelData.propertySets[i];
+                let propertySet = this.propertySets[propertySetData.id];
+                if (!propertySet) {
+                    propertySet = new PropertySet({
+                        id: propertySetData.id,
+                        originalSystemId: propertySetData.originalSystemId,
+                        type: propertySetData.type,
+                        name: propertySetData.name,
+                        properties: propertySetData.properties
+                    });
+                    this.propertySets[propertySet.id] = propertySet;
+                }
+                propertySet.metaModels.push(metaModel);
+                metaModel.propertySets.push(propertySet);
             }
-            propertySet.metaModels.push(metaModel);
-            metaModel.propertySets.push(propertySet);
         }
 
         // Create MetaObjects
@@ -175,27 +177,29 @@ class MetaScene {
         // Save root MetaObjects on MetaModel
         // Save root MetaObjects on MetaScene
 
-        for (let i = 0, len = metaModelData.metaObjects.length; i < len; i++) {
-            const metaObjectData = metaModelData.metaObjects[i];
-            const type = metaObjectData.type;
-            const id = metaObjectData.id;
-            let metaObject = this.metaObjects[id];
-            if (!metaObject) {
-                metaObject = new MetaObject({
-                    id,
-                    parentId: metaObjectData.parent,
-                    type,
-                    name: metaObjectData.name,
-                    propertySetIds: metaObjectData.propertySetIds
-                });
-                this.metaObjects[id] = metaObject;
+        if (metaModelData.metaObjects) {
+            for (let i = 0, len = metaModelData.metaObjects.length; i < len; i++) {
+                const metaObjectData = metaModelData.metaObjects[i];
+                const type = metaObjectData.type;
+                const id = metaObjectData.id;
+                let metaObject = this.metaObjects[id];
+                if (!metaObject) {
+                    metaObject = new MetaObject({
+                        id,
+                        parentId: metaObjectData.parent,
+                        type,
+                        name: metaObjectData.name,
+                        propertySetIds: metaObjectData.propertySetIds
+                    });
+                    this.metaObjects[id] = metaObject;
+                }
+                metaObject.metaModels.push(metaModel);
+                if (!metaObjectData.parent) {
+                    metaModel.rootMetaObjects.push(metaObject);
+                    this.rootMetaObjects[id] = metaObject;
+                }
+                metaModel.metaObjects.push(metaObject);
             }
-            metaObject.metaModels.push(metaModel);
-            if (!metaObjectData.parent) {
-                metaModel.rootMetaObjects.push(metaObject);
-                this.rootMetaObjects[id] = metaObject;
-            }
-            metaModel.metaObjects.push(metaObject);
         }
 
         // Re-link entire MetaObject parent/child hierarchy
@@ -292,41 +296,45 @@ class MetaScene {
 
         // Remove global PropertySets
 
-        for (let i = 0, len = metaModel.propertySets.length; i < len; i++) {
-            const propertySet = metaModel.propertySets[i];
-            if (propertySet.metaModels.length === 1) { // Property set owned by one model, delete
-                delete this.propertySets[propertySet.id];
-            } else {
-                const newMetaModels = [];
-                for (let j = 0, lenj = propertySet.metaModels.length; j < lenj; j++) {
-                    if (propertySet.metaModels[i].id !== id) {
-                        newMetaModels.push(propertySet.metaModels[i]);
+        if (metaModel.propertySets) {
+            for (let i = 0, len = metaModel.propertySets.length; i < len; i++) {
+                const propertySet = metaModel.propertySets[i];
+                if (propertySet.metaModels.length === 1) { // Property set owned by one model, delete
+                    delete this.propertySets[propertySet.id];
+                } else {
+                    const newMetaModels = [];
+                    for (let j = 0, lenj = propertySet.metaModels.length; j < lenj; j++) {
+                        if (propertySet.metaModels[i].id !== id) {
+                            newMetaModels.push(propertySet.metaModels[i]);
+                        }
                     }
+                    propertySet.metaModels = newMetaModels;
                 }
-                propertySet.metaModels = newMetaModels;
             }
         }
 
         // Remove MetaObjects
 
-        for (let i = 0, len = metaModel.metaObjects.length; i < len; i++) {
-            const metaObject = metaModel.metaObjects[i];
-            const type = metaObject.type;
-            const id = metaObject.id;
-            if (metaObject.metaModels.length === 1) { // MetaObject owned by one model, delete
-                delete this.metaObjects[id];
-                if (!metaObject.parent) {
-                    delete this.rootMetaObjects[id];
-                }
-            } else {
-                const newMetaModels = [];
-                const metaModelId = metaModel.id;
-                for (let i = 0, len = metaObject.metaModels.length; i < len; i++) {
-                    if (metaObject.metaModels[i].id !== metaModelId) {
-                        newMetaModels.push(metaObject.metaModels[i]);
+        if (metaModel.metaObjects) {
+            for (let i = 0, len = metaModel.metaObjects.length; i < len; i++) {
+                const metaObject = metaModel.metaObjects[i];
+                const type = metaObject.type;
+                const id = metaObject.id;
+                if (metaObject.metaModels.length === 1) { // MetaObject owned by one model, delete
+                    delete this.metaObjects[id];
+                    if (!metaObject.parent) {
+                        delete this.rootMetaObjects[id];
                     }
+                } else {
+                    const newMetaModels = [];
+                    const metaModelId = metaModel.id;
+                    for (let i = 0, len = metaObject.metaModels.length; i < len; i++) {
+                        if (metaObject.metaModels[i].id !== metaModelId) {
+                            newMetaModels.push(metaObject.metaModels[i]);
+                        }
+                    }
+                    metaObject.metaModels = newMetaModels;
                 }
-                metaObject.metaModels = newMetaModels;
             }
         }
 
