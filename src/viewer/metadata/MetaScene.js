@@ -233,39 +233,45 @@ class MetaScene {
     }
 
     _globalizeIDs(modelId, metaModelData, options) {
+
         const globalize = !!options.globalizeObjectIds;
-        for (let i = 0, len = metaModelData.metaObjects.length; i < len; i++) {
-            const metaObjectData = metaModelData.metaObjects[i];
 
-            // Globalize MetaObject IDs and parent IDs
+        if (metaModelData.metaObjects) {
+            for (let i = 0, len = metaModelData.metaObjects.length; i < len; i++) {
+                const metaObjectData = metaModelData.metaObjects[i];
 
-            metaObjectData.originalSystemId = metaObjectData.id;
-            metaObjectData.originalParentSystemId = metaObjectData.parent;
-            if (globalize) {
-                metaObjectData.id = math.globalizeObjectId(modelId, metaObject.id);
-                metaObjectData.parent = math.globalizeObjectId(modelId, metaObject.parent);
-            }
+                // Globalize MetaObject IDs and parent IDs
 
-            // Globalize MetaObject property set IDs
-
-            const propertySetIds = metaObjectData.propertySetIds;
-            if (propertySetIds) {
-                const propertySetGlobalIds = [];
-                for (let j = 0, lenj = propertySetIds.length; j < lenj; j++) {
-                    propertySetGlobalIds.push(math.globalizeObjectId(modelId, propertySetIds[j]));
+                metaObjectData.originalSystemId = metaObjectData.id;
+                metaObjectData.originalParentSystemId = metaObjectData.parent;
+                if (globalize) {
+                    metaObjectData.id = math.globalizeObjectId(modelId, metaObject.id);
+                    metaObjectData.parent = math.globalizeObjectId(modelId, metaObject.parent);
                 }
-                metaObjectData.propertySetIds = propertySetGlobalIds;
-                metaObjectData.originalSystemPropertySetIds = propertySetIds;
+
+                // Globalize MetaObject property set IDs
+
+                const propertySetIds = metaObjectData.propertySetIds;
+                if (propertySetIds) {
+                    const propertySetGlobalIds = [];
+                    for (let j = 0, lenj = propertySetIds.length; j < lenj; j++) {
+                        propertySetGlobalIds.push(math.globalizeObjectId(modelId, propertySetIds[j]));
+                    }
+                    metaObjectData.propertySetIds = propertySetGlobalIds;
+                    metaObjectData.originalSystemPropertySetIds = propertySetIds;
+                }
             }
         }
 
         // Globalize global PropertySet IDs
 
-        for (let i = 0, len = metaModelData.propertySets.length; i < len; i++) {
-            const propertySet = metaModelData.propertySets[i];
-            propertySet.originalSystemId = propertySet.id;
-            if (globalize) {
-                propertySet.id = math.globalizeObjectId(modelId, propertySet.id);
+        if (metaModelData.propertySets) {
+            for (let i = 0, len = metaModelData.propertySets.length; i < len; i++) {
+                const propertySet = metaModelData.propertySets[i];
+                propertySet.originalSystemId = propertySet.id;
+                if (globalize) {
+                    propertySet.id = math.globalizeObjectId(modelId, propertySet.id);
+                }
             }
         }
     }
