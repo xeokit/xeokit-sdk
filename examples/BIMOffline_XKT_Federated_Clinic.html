@@ -25,27 +25,27 @@
         /* TreeViewPlugin */
         /* ----------------------------------------------------------------------------------------------------------*/
 
-         #treeViewContainer {
-             pointer-events: all;
-             height: 100%;
-             overflow-y: scroll;
-             overflow-x: hidden;
-             position: absolute;
-             background-color: rgba(255, 255, 255, 0.2);
-             color: black;
-             top: 80px;
-             z-index: 200000;
-             float: left;
-             left: 0;
-             padding-left: 10px;
-             font-family: 'Roboto', sans-serif;
-             font-size: 15px;
-             user-select: none;
-             -ms-user-select: none;
-             -moz-user-select: none;
-             -webkit-user-select: none;
-             width: 350px;
-         }
+        #treeViewContainer {
+            pointer-events: all;
+            height: 100%;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: black;
+            top: 140px;
+            z-index: 200000;
+            float: left;
+            left: 0;
+            padding-left: 10px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            width: 350px;
+        }
 
         #treeViewContainer ul {
             list-style: none;
@@ -175,6 +175,38 @@
             font-weight: normal;
         }
 
+        .buttons {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+
+            margin: 0;
+            position: absolute;
+            left: 40px;
+            top: 40px;
+        }
+
+        button {
+            margin: 5px;
+        }
+
+        /* Style for disabled buttons */
+        button[disabled] {
+            opacity: 0.8;
+            cursor: not-allowed;
+        }
+
+        #stats {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            position: absolute;
+            left: 40px;
+            top: 80px;
+        }
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
@@ -184,11 +216,21 @@
 <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
 <canvas id="myNavCubeCanvas"></canvas>
+<div class="buttons">
+    <button id="button0">Load model 1</button>
+    <button id="button1">Load model 2</button>
+    <button id="button2">Load model 3</button>
+    <button id="button3">Load model 4</button>
+</div>
+<div id="stats">
+
+</div>
 <div id="treeViewContainer"></div>
 <div class="slideout-sidebar">
     <img class="info-icon" src="../assets/images/bim_icon.png"/>
     <h1>XKTLoaderPlugin</h1>
     <h2>Loading a Federated IFC4 Model from the File System</h2>
+
     <h3>Stats</h3>
     <ul>
         <li>
@@ -234,9 +276,9 @@
         saoEnabled: true
     });
 
-    viewer.scene.camera.eye=[26.543735598689356, 29.295147183337072, 36.20021104566069];
-    viewer.scene.camera.look=[-23.51624377290216, -8.263137541594404, -21.650089870476542];
-    viewer.scene.camera.up=[-0.2883721466119999, 0.897656342963939, -0.3332485483764247];
+    viewer.scene.camera.eye = [26.543735598689356, 29.295147183337072, 36.20021104566069];
+    viewer.scene.camera.look = [-23.51624377290216, -8.263137541594404, -21.650089870476542];
+    viewer.scene.camera.up = [-0.2883721466119999, 0.897656342963939, -0.3332485483764247];
 
     new FastNavPlugin(viewer);
 
@@ -244,47 +286,99 @@
 
     var t0 = performance.now();
 
-    document.getElementById("time").innerHTML = "Loading model 1 of 7";
 
-    const plumbing1 = xktLoader.load({
-        id: "plumbing1",
-        src: "../assets/models/xkt/v10/federated/Clinic/model.glb.xkt",
-        edges: true
-    });
-
-    plumbing1.on("loaded", () => {
-
-        document.getElementById("time").innerHTML = "Loading model 2 of 7";
-
-        const plumbing2 = xktLoader.load({
-            id: "plumbing2",
+    const models = [
+        {
+            src: "../assets/models/xkt/v10/federated/Clinic/model.glb.xkt",
+            id: "model0",
+            loaded: false
+        },
+        {
             src: "../assets/models/xkt/v10/federated/Clinic/model_1.glb.xkt",
-            edges: true
-        });
+            id: "model1",
+            loaded: false
+        },
+        {
+            src: "../assets/models/xkt/v10/federated/Clinic/model_2.glb.xkt",
+            id: "model2",
+            loaded: false
+        },
+        {
+            src: "../assets/models/xkt/v10/federated/Clinic/model_3.glb.xkt",
+            id: "model3",
+            loaded: false
+        }
+    ]
 
-        plumbing2.on("loaded", () => {
-
-            document.getElementById("time").innerHTML = "Loading model 3 of 7";
-
-            const plumbing3 = xktLoader.load({
-                id: "plumbing3",
-                src: "../assets/models/xkt/v10/federated/Clinic/model_2.glb.xkt",
-                edges: true
-            });
-
-            plumbing3.on("loaded", () => {
-
-                document.getElementById("time").innerHTML = "Loading model 4 of 7";
-
-                const plumbing4 = xktLoader.load({
-                    id: "plumbing4",
-                    src: "../assets/models/xkt/v10/federated/Clinic/model_3.glb.xkt",
-                    edges: true
-                });
-            });
-        });
+    const button0 = document.getElementById('button0');
+    button0.addEventListener('click', function () {
+        toggleText(this, 0);
     });
 
+    const button1 = document.getElementById('button1');
+    button1.addEventListener('click', function () {
+        toggleText(this, 1);
+    });
+
+    const button2 = document.getElementById('button2');
+    button2.addEventListener('click', function () {
+        toggleText(this, 2);
+    });
+
+    const button3 = document.getElementById('button3');
+    button3.addEventListener('click', function () {
+        toggleText(this, 3);
+    });
+
+    function toggleText(button, index) {
+        const model = models[index];
+        const id = model.id;
+        const src = model.src;
+        if (button.textContent === 'Unload ' + id) {
+            setButtonsEnabled(false);
+            const model = viewer.scene.models[id];
+            if (model && model.finalized) {
+                model.destroy();
+                button.textContent = 'Load ' + id;
+                model.loaded = false;
+                setButtonsEnabled(true);
+                updateStats();
+            }
+        } else {
+            setButtonsEnabled(false);
+            const sceneModel = xktLoader.load({id, src, edges: true});
+            sceneModel.once("loaded", () => {
+                button.textContent = 'Unload ' + id;
+                model.loaded = true;
+                setButtonsEnabled(true);
+                updateStats();
+            });
+        }
+    }
+
+    function setButtonsEnabled(enabled) {
+        button0.disabled = !enabled;
+        button1.disabled = !enabled;
+        button2.disabled = !enabled;
+        button3.disabled = !enabled;
+    }
+
+    function updateStats() {
+        const stats = document.getElementById('stats');
+        stats.innerText = "Num objects = " +
+            Object.values(viewer.metaScene.metaObjects).length +
+            "\nNum property sets = " + Object.values(viewer.metaScene.propertySets).length;
+        console.log("-----------------------------------------------------")
+        const metaObjectsByType = viewer.metaScene.metaObjectsByType;
+        let anyMetaObjects = false;
+        for (let type in metaObjectsByType) {
+            anyMetaObjects = true;
+            console.log(type + ": " + Object.values(metaObjectsByType[type]).length);
+        }
+        if (!anyMetaObjects) {
+            console.log("No objects.");
+        }
+    }
 
     //----------------------------------------------------------------------------------------------------------------------
     // Create a tree view
@@ -293,7 +387,7 @@
     const treeView = new TreeViewPlugin(viewer, {
         containerElement: document.getElementById("treeViewContainer"),
         hierarchy: "types",
-        autoExpandDepth: 0 // Don't initially expand nodes (default)
+        autoExpandDepth: 1
     });
 
     const treeViewContextMenu = new ContextMenu({
