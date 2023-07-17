@@ -1137,6 +1137,12 @@ class VBOSceneModel extends Component {
         this.renderFlags = new RenderFlags();
 
         /**
+         * True when this model has been finalized after a successful call to finalize().
+         * @type {boolean}
+         */
+        this.finalized = false;
+
+        /**
          * @private
          */
         this.numGeometries = 0; // Number of geometries created with createGeometry()
@@ -2953,6 +2959,8 @@ ${cfg.uv && cfg.uv.length > 0 ? 1 : 0}-${cfg.uvCompressed && cfg.uvCompressed.le
         this.glRedraw();
 
         this.scene._aabbDirty = true;
+
+        this.finalized = true;
     }
 
     _rebuildAABB() {

@@ -35,6 +35,12 @@ class PropertySet {
         this.originalSystemId = originalSystemId;
 
         /**
+         * The MetaModels that share this PropertySet.
+         * @type {MetaModel[]}
+         */
+        this.metaModels = [];
+
+        /**
          * Human-readable name of this PropertySet.
          *
          * @property name
