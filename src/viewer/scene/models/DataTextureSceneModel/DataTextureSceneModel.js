@@ -202,6 +202,12 @@ class DataTextureSceneModel extends Component {
 
         this._edgeThreshold = cfg.edgeThreshold || 10;
 
+        /**
+         * True when this model has been finalized after a successful call to finalize().
+         * @type {boolean}
+         */
+        this.finalized = false;
+
         this.visible = cfg.visible;
         this.culled = cfg.culled;
         this.pickable = cfg.pickable;
@@ -1512,6 +1518,8 @@ class DataTextureSceneModel extends Component {
             const layer = this._layerList[i];
             layer.attachToRenderingEvent();
         }
+
+        this.finalized = true;
     }
 
     _rebuildAABB() {

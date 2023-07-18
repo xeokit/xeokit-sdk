@@ -18,7 +18,7 @@ class MetaModel {
     /**
      * @private
      */
-    constructor(metaScene, id, projectId, revisionId, author, createdAt, creatingApplication, schema, propertySets) {
+    constructor(params) {
 
         /**
          * Globally-unique ID.
@@ -30,14 +30,14 @@ class MetaModel {
          * @property id
          * @type {String|Number}
          */
-        this.id = id;
+        this.id = params.id;
 
         /**
          * The project ID
          * @property projectId
          * @type {String|Number}
          */
-        this.projectId = projectId;
+        this.projectId = params.projectId;
 
         /**
          * The revision ID, if available.
@@ -47,7 +47,7 @@ class MetaModel {
          * @property revisionId
          * @type {String|Number}
          */
-        this.revisionId = revisionId;
+        this.revisionId = params.revisionId;
 
         /**
          * The model author, if available.
@@ -57,7 +57,7 @@ class MetaModel {
          * @property author
          * @type {String}
          */
-        this.author = author;
+        this.author = params.author;
 
         /**
          * The date the model was created, if available.
@@ -67,7 +67,7 @@ class MetaModel {
          * @property createdAt
          * @type {String}
          */
-        this.createdAt = createdAt;
+        this.createdAt = params.createdAt;
 
         /**
          * The application that created the model, if available.
@@ -77,7 +77,7 @@ class MetaModel {
          * @property creatingApplication
          * @type {String}
          */
-        this.creatingApplication = creatingApplication;
+        this.creatingApplication = params.creatingApplication;
 
         /**
          * The model schema version, if available.
@@ -87,7 +87,7 @@ class MetaModel {
          * @property schema
          * @type {String}
          */
-        this.schema = schema;
+        this.schema = params.schema;
 
         /**
          * Metadata on the {@link Scene}.
@@ -95,15 +95,15 @@ class MetaModel {
          * @property metaScene
          * @type {MetaScene}
          */
-        this.metaScene = metaScene;
+        this.metaScene = params.metaScene;
 
         /**
          * The {@link PropertySet}s in this MetaModel.
          *
          * @property propertySets
-         * @type {{String:PropertySet}}
+         * @type  {PropertySet[]}
          */
-        this.propertySets = propertySets;
+        this.propertySets = [];
 
         /**
          * The root {@link MetaObject} in this MetaModel's composition structure hierarchy.
@@ -121,6 +121,20 @@ class MetaModel {
          * @type {MetaObject[]}
          */
         this.rootMetaObjects = [];
+
+        /**
+         * The {@link MetaObject}s in this MetaModel, each mapped to its ID.
+         *
+         * @property metaObjects
+         * @type  {MetaObject[]}
+         */
+        this.metaObjects=[];
+
+        /**
+         * Connectivity graph.
+         * @type {{}}
+         */
+        this.graph = params.graph || {};
     }
 
     getJSON() {

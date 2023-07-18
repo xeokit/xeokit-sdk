@@ -67,12 +67,6 @@ class MetaScene {
         this.rootMetaObjects = {};
 
         /**
-         * Tracks number of MetaObjects of each type.
-         * @private
-         */
-        this._typeCounts = {};
-
-        /**
          * Subscriptions to events sent with {@link fire}.
          * @private
          */
@@ -139,137 +133,151 @@ class MetaScene {
      */
     createMetaModel(modelId, metaModelData, options = {}) {
 
-        const projectId = metaModelData.projectId || "none";
-        const revisionId = metaModelData.revisionId || "none";
-        const newPropertySets = metaModelData.propertySets || [];
-        const newObjects = metaModelData.metaObjects || [];
-        const author = metaModelData.author;
-        const createdAt = metaModelData.createdAt;
-        const creatingApplication = metaModelData.creatingApplication;
-        const schema = metaModelData.schema;
+        this._globalizeIDs(modelId, metaModelData, options)
 
-        let includeTypes;
-        // if (options.includeTypes) {
-        //     includeTypes = {};
-        //     for (let i = 0, len = options.includeTypes.length; i < len; i++) {
-        //         includeTypes[options.includeTypes[i]] = true;
-        //     }
-        // }
-        //
-        let excludeTypes;
-        // if (options.excludeTypes) {
-        //     excludeTypes = {};
-        //     for (let i = 0, len = options.excludeTypes.length; i < len; i++) {
-        //         includeTypes[options.excludeTypes[i]] = true;
-        //     }
-        // }
+        // Create MetaModel
 
-        const metaModel = new MetaModel(this, modelId, projectId, revisionId, author, createdAt, creatingApplication, schema, [], null);
+        const metaModel = new MetaModel({
+            metaScene: this,
+            id: modelId,
+            projectId: metaModelData.projectId || "none",
+            revisionId: metaModelData.revisionId || "none",
+            author: metaModelData.author || "none",
+            createdAt: metaModelData.createdAt || "none",
+            creatingApplication: metaModelData.creatingApplication || "none",
+            schema: metaModelData.schema || "none",
+            propertySets: []
+        });
 
         this.metaModels[modelId] = metaModel;
 
-        for (let i = 0, len = newPropertySets.length; i < len; i++) {
-            const propertySetCfg = newPropertySets[i];
-            const propertySetId = propertySetCfg.id;
-            const propertySet = new PropertySet(propertySetId, propertySetCfg.originalSystemId, propertySetCfg.name, propertySetCfg.type, propertySetCfg.properties);
-            metaModel.propertySets[propertySetId] = propertySet;
-            this.propertySets[propertySetId] = propertySet;
-        }
+        // Create global Property Sets
 
-        const filteredObjectsParams = []; // Params for each new metaobject that passes our filters
-        const existingObjects = []; // List of our metaobjects that are already existing, to which we'll also append new metaobjects we'll create
-        const createObjectsParams = []; // List of params for metaobjects we'll create
-
-        const rootMetaObjects = [];
-
-
-        // Filter out the parameters we'll create
-
-        for (let i = 0, len = newObjects.length; i < len; i++) {
-            const newObject = newObjects[i];
-            const type = newObject.type;
-            if (excludeTypes && excludeTypes[type]) {
-                continue;
-            }
-            if (includeTypes && !includeTypes[type]) {
-                continue;
-            }
-            filteredObjectsParams.push(newObject);
-        }
-
-        // Build list of params for metaobjects we'll create
-
-        for (let i = 0, len = filteredObjectsParams.length; i < len; i++) {
-            let filteredObject = filteredObjectsParams[i];
-            const existingObject = this.metaObjects[filteredObject.id];
-            if (existingObject) {
-                existingObject.metaModels.push(metaModel);
-                existingObjects.push(existingObject);
-                continue;
-            }
-            createObjectsParams.push(filteredObject);
-        }
-
-        // Create metaobjects in the creation list, add them to list of existing metaobjects
-
-        for (let i = 0, len = createObjectsParams.length; i < len; i++) {
-            const createObject = createObjectsParams[i];
-            const type = createObject.type;
-            const objectId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, createObject.id) : createObject.id;
-            const originalSystemId = createObject.id;
-            const name = createObject.name;
-            const propertySets = [];
-            if (createObject.propertySetIds && createObject.propertySetIds.length > 0) {
-                for (let j = 0, lenj = createObject.propertySetIds.length; j < lenj; j++) {
-                    const propertySetId = createObject.propertySetIds[j];
-                    const propertySet = metaModel.propertySets[propertySetId];
-                    if (propertySet) {
-                        propertySets.push(propertySet)
-                    }
+        if (metaModelData.propertySets) {
+            for (let i = 0, len = metaModelData.propertySets.length; i < len; i++) {
+                const propertySetData = metaModelData.propertySets[i];
+                let propertySet = this.propertySets[propertySetData.id];
+                if (!propertySet) {
+                    propertySet = new PropertySet({
+                        id: propertySetData.id,
+                        originalSystemId: propertySetData.originalSystemId,
+                        type: propertySetData.type,
+                        name: propertySetData.name,
+                        properties: propertySetData.properties
+                    });
+                    this.propertySets[propertySet.id] = propertySet;
                 }
-            }
-            const parent = null;
-            const children = null;
-            const external = createObject.external;
-            const metaObject = new MetaObject(metaModel, objectId, originalSystemId, name, type, propertySets, parent, children, external);
-            metaObject._parentId = createObject.parent;
-            this.metaObjects[objectId] = metaObject;
-            (this.metaObjectsByType[type] || (this.metaObjectsByType[type] = {}))[objectId] = metaObject;
-            if (this._typeCounts[type] === undefined) {
-                this._typeCounts[type] = 1;
-            } else {
-                this._typeCounts[type]++;
-            }
-            existingObjects.push(metaObject);
-            if (createObject.parent === undefined || createObject.parent === null) {
-                rootMetaObjects.push(createObject);
+                propertySet.metaModels.push(metaModel);
+                metaModel.propertySets.push(propertySet);
             }
         }
 
-        // Ensure that metaobjects in the existing metaobject list are all attached to their parents,
-        // or registered as root metaobjects
+        // Create MetaObjects
+        // Don't re-create reused MetaObjects
+        // Save root MetaObjects on MetaModel
+        // Save root MetaObjects on MetaScene
 
-        for (let i = 0, len = existingObjects.length; i < len; i++) {
-            const existingObject = existingObjects[i];
-            const objectId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, existingObject.id) : existingObject.id;
-            if ((existingObject._parentId === undefined || existingObject._parentId === null) && !existingObject.parent) {
-                metaModel.rootMetaObject = existingObject; // Deprecated, and won't work for federated models
-                metaModel.rootMetaObjects[objectId] = existingObject;
-                this.rootMetaObjects[objectId] = existingObject;
-            } else if (existingObject._parentId) {
-                const parentId = options.globalizeObjectIds ? math.globalizeObjectId(modelId, existingObject._parentId) : existingObject._parentId;
-                existingObject._parentId = null;
-                let parentMetaObject = this.metaObjects[parentId];
+        if (metaModelData.metaObjects) {
+            for (let i = 0, len = metaModelData.metaObjects.length; i < len; i++) {
+                const metaObjectData = metaModelData.metaObjects[i];
+                const type = metaObjectData.type;
+                const id = metaObjectData.id;
+                let metaObject = this.metaObjects[id];
+                if (!metaObject) {
+                    metaObject = new MetaObject({
+                        id,
+                        parentId: metaObjectData.parent,
+                        type,
+                        name: metaObjectData.name,
+                        propertySetIds: metaObjectData.propertySetIds
+                    });
+                    this.metaObjects[id] = metaObject;
+                }
+                metaObject.metaModels.push(metaModel);
+                if (!metaObjectData.parent) {
+                    metaModel.rootMetaObjects.push(metaObject);
+                    this.rootMetaObjects[id] = metaObject;
+                }
+                metaModel.metaObjects.push(metaObject);
+            }
+        }
+
+        // Re-link entire MetaObject parent/child hierarchy
+
+        for (let objectId in this.metaObjects) {
+            const metaObject = this.metaObjects[objectId];
+            if (metaObject.children) {
+                metaObject.children = [];
+            }
+        }
+
+        for (let objectId in this.metaObjects) {
+            const metaObject = this.metaObjects[objectId];
+            if (metaObject.parentId) {
+                const parentMetaObject = this.metaObjects[metaObject.parentId];
                 if (parentMetaObject) {
-                    existingObject.parent = parentMetaObject;
-                    parentMetaObject.children = parentMetaObject.children || [];
-                    parentMetaObject.children.push(existingObject);
+                    metaObject.parent = parentMetaObject;
+                    (parentMetaObject.children || (parentMetaObject.children = [])).push(metaObject);
                 }
             }
+        }
+
+        // Create MetaObjects-by-type lookup
+
+        this.metaObjectsByType = {};
+        for (let objectId in this.metaObjects) {
+            const metaObject = this.metaObjects[objectId];
+            const type = metaObject.type;
+            (this.metaObjectsByType[type] || (this.metaObjectsByType[type] = {}))[objectId] = metaObject;
         }
 
         this.fire("metaModelCreated", modelId);
+
         return metaModel;
+    }
+
+    _globalizeIDs(modelId, metaModelData, options) {
+
+        const globalize = !!options.globalizeObjectIds;
+
+        if (metaModelData.metaObjects) {
+            for (let i = 0, len = metaModelData.metaObjects.length; i < len; i++) {
+                const metaObjectData = metaModelData.metaObjects[i];
+
+                // Globalize MetaObject IDs and parent IDs
+
+                metaObjectData.originalSystemId = metaObjectData.id;
+                metaObjectData.originalParentSystemId = metaObjectData.parent;
+                if (globalize) {
+                    metaObjectData.id = math.globalizeObjectId(modelId, metaObject.id);
+                    metaObjectData.parent = math.globalizeObjectId(modelId, metaObject.parent);
+                }
+
+                // Globalize MetaObject property set IDs
+
+                const propertySetIds = metaObjectData.propertySetIds;
+                if (propertySetIds) {
+                    const propertySetGlobalIds = [];
+                    for (let j = 0, lenj = propertySetIds.length; j < lenj; j++) {
+                        propertySetGlobalIds.push(math.globalizeObjectId(modelId, propertySetIds[j]));
+                    }
+                    metaObjectData.propertySetIds = propertySetGlobalIds;
+                    metaObjectData.originalSystemPropertySetIds = propertySetIds;
+                }
+            }
+        }
+
+        // Globalize global PropertySet IDs
+
+        if (metaModelData.propertySets) {
+            for (let i = 0, len = metaModelData.propertySets.length; i < len; i++) {
+                const propertySet = metaModelData.propertySets[i];
+                propertySet.originalSystemId = propertySet.id;
+                if (globalize) {
+                    propertySet.id = math.globalizeObjectId(modelId, propertySet.id);
+                }
+            }
+        }
     }
 
     /**
@@ -280,43 +288,90 @@ class MetaScene {
      * @param {String} id ID of the target {@link MetaModel}.
      */
     destroyMetaModel(id) {
+
         const metaModel = this.metaModels[id];
         if (!metaModel) {
             return;
         }
-        this._removeMetaModel(metaModel);
-        this.fire("metaModelDestroyed", id);
-    }
 
-    _removeMetaModel(metaModel) {
-        const metaObjects = this.metaObjects;
-        const metaObjectsByType = this.metaObjectsByType;
-        let visit = (metaObject) => {
-            delete metaObjects[metaObject.id];
-            const types = metaObjectsByType[metaObject.type];
-            if (types && types[metaObject.id]) {
-                delete types[metaObject.id];
-                if (--this._typeCounts[metaObject.type] === 0) {
-                    delete this._typeCounts[metaObject.type];
-                    delete metaObjectsByType[metaObject.type];
+        // Remove global PropertySets
+
+        if (metaModel.propertySets) {
+            for (let i = 0, len = metaModel.propertySets.length; i < len; i++) {
+                const propertySet = metaModel.propertySets[i];
+                if (propertySet.metaModels.length === 1) { // Property set owned by one model, delete
+                    delete this.propertySets[propertySet.id];
+                } else {
+                    const newMetaModels = [];
+                    for (let j = 0, lenj = propertySet.metaModels.length; j < lenj; j++) {
+                        if (propertySet.metaModels[i].id !== id) {
+                            newMetaModels.push(propertySet.metaModels[i]);
+                        }
+                    }
+                    propertySet.metaModels = newMetaModels;
                 }
-            }
-            const children = metaObject.children;
-            if (children) {
-                for (let i = 0, len = children.length; i < len; i++) {
-                    const childMetaObject = children[i];
-                    visit(childMetaObject);
-                }
-            }
-        };
-        visit(metaModel.rootMetaObject);
-        for (let propertySetId in metaModel.propertySets) {
-            if (metaModel.propertySets.hasOwnProperty(propertySetId)) {
-                delete this.propertySets[propertySetId];
             }
         }
-        delete this.rootMetaObjects[metaModel.rootMetaObject.id]
-        delete this.metaModels[metaModel.id];
+
+        // Remove MetaObjects
+
+        if (metaModel.metaObjects) {
+            for (let i = 0, len = metaModel.metaObjects.length; i < len; i++) {
+                const metaObject = metaModel.metaObjects[i];
+                const type = metaObject.type;
+                const id = metaObject.id;
+                if (metaObject.metaModels.length === 1) { // MetaObject owned by one model, delete
+                    delete this.metaObjects[id];
+                    if (!metaObject.parent) {
+                        delete this.rootMetaObjects[id];
+                    }
+                } else {
+                    const newMetaModels = [];
+                    const metaModelId = metaModel.id;
+                    for (let i = 0, len = metaObject.metaModels.length; i < len; i++) {
+                        if (metaObject.metaModels[i].id !== metaModelId) {
+                            newMetaModels.push(metaObject.metaModels[i]);
+                        }
+                    }
+                    metaObject.metaModels = newMetaModels;
+                }
+            }
+        }
+
+        // Re-link entire MetaObject parent/child hierarchy
+
+        for (let objectId in this.metaObjects) {
+            const metaObject = this.metaObjects[objectId];
+            if (metaObject.children) {
+                metaObject.children = [];
+            }
+        }
+
+        this.metaObjectsByType = {};
+
+        for (let objectId in this.metaObjects) {
+            const metaObject = this.metaObjects[objectId];
+            const type = metaObject.type;
+            if (metaObject.children) {
+                metaObject.children = null;
+            }
+            (this.metaObjectsByType[type] || (this.metaObjectsByType[type] = {}))[objectId] = metaObject;
+        }
+
+        for (let objectId in this.metaObjects) {
+            const metaObject = this.metaObjects[objectId];
+            if (metaObject.parentId) {
+                const parentMetaObject = this.metaObjects[metaObject.parentId];
+                if (parentMetaObject) {
+                    metaObject.parent = parentMetaObject;
+                    (parentMetaObject.children || (parentMetaObject.children = [])).push(metaObject);
+                }
+            }
+        }
+
+        delete this.metaModels[id];
+
+        this.fire("metaModelDestroyed", id);
     }
 
     /**
@@ -339,12 +394,13 @@ class MetaScene {
      * @returns {String[]} Array of {@link MetaObject#id}s.
      */
     getObjectIDsInSubtree(id, includeTypes, excludeTypes) {
+
         const list = [];
         const metaObject = this.metaObjects[id];
         const includeMask = (includeTypes && includeTypes.length > 0) ? arrayToMap(includeTypes) : null;
         const excludeMask = (excludeTypes && excludeTypes.length > 0) ? arrayToMap(excludeTypes) : null;
 
-        function visit(metaObject) {
+        const visit = (metaObject) => {
             if (!metaObject) {
                 return;
             }
