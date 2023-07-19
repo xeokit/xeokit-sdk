@@ -263,8 +263,8 @@ class MetaScene {
                 metaObjectData.originalSystemId = metaObjectData.id;
                 metaObjectData.originalParentSystemId = metaObjectData.parent;
                 if (globalize) {
-                    metaObjectData.id = math.globalizeObjectId(modelId, metaObject.id);
-                    metaObjectData.parent = math.globalizeObjectId(modelId, metaObject.parent);
+                    metaObjectData.id = math.globalizeObjectId(modelId, metaObjectData.id);
+                    metaObjectData.parent = math.globalizeObjectId(modelId, metaObjectData.parent);
                 }
 
                 // Globalize MetaObject property set IDs
