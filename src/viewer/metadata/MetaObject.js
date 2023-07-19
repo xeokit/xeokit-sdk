@@ -83,7 +83,13 @@ class MetaObject {
         this.type = params.type;
 
         /**
-         * Optional {@link PropertySet}s used by this MetaObject.
+         * IDs of PropertySets associated with this MetaObject.
+         * @type {[]|*}
+         */
+        this.propertySetIds = params.propertySetIds;
+
+        /**
+         * The {@link PropertySet}s associated with this MetaObject.
          *
          * @property propertySets
          * @type {PropertySet[]}

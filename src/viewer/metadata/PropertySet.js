@@ -14,7 +14,7 @@ class PropertySet {
     /**
      * @private
      */
-    constructor(id, originalSystemId, name, type, properties) {
+    constructor(params) {
 
         /**
          * Globally-unique ID for this PropertySet.
@@ -24,7 +24,7 @@ class PropertySet {
          * @property id
          * @type {String}
          */
-        this.id = id;
+        this.id = params.id;
 
         /**
          * ID of the corresponding object within the originating system, if any.
@@ -32,7 +32,7 @@ class PropertySet {
          * @type {String}
          * @abstract
          */
-        this.originalSystemId = originalSystemId;
+        this.originalSystemId = params.originalSystemId;
 
         /**
          * The MetaModels that share this PropertySet.
@@ -46,7 +46,7 @@ class PropertySet {
          * @property name
          * @type {String}
          */
-        this.name = name;
+        this.name = params.name;
 
         /**
          * Type of this PropertySet.
@@ -54,7 +54,7 @@ class PropertySet {
          * @property type
          * @type {String}
          */
-        this.type = type;
+        this.type = params.type;
 
         /**
          * Properties within this PropertySet.
@@ -64,7 +64,8 @@ class PropertySet {
          */
         this.properties = [];
 
-        if (properties) {
+        if (params.properties) {
+            const properties = params.properties;
             for (let i = 0, len = properties.length; i < len; i++) {
                 const property = properties[i];
                 this.properties.push(new Property(property.name,  property.value, property.type, property.valueType, property.description));
