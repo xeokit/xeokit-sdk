@@ -320,7 +320,7 @@ class Viewer {
      * @param {Number} [params.height] Desired height of result in pixels - defaults to height of canvas.
      * @param {String} [params.format="jpeg"] Desired format; "jpeg", "png" or "bmp".
      * @param {Boolean} [params.includeGizmos=false] When true, will include gizmos like {@link SectionPlane} in the snapshot.
-     * @param {Boolean} [params.capture=false] When true, will get plugins container that are not document.body and will append an canvas on document.body with the representation of the container draw on it.
+     * @param {Boolean} [params.capture=false] When true, will get plugins container that are not document.body and will append an canvas on document.body with the representation of the container drawn on it.
      * @returns {String} String-encoded image data URI.
      */
     getSnapshot(params = {}) {
