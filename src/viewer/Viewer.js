@@ -320,6 +320,7 @@ class Viewer {
      * @param {Number} [params.height] Desired height of result in pixels - defaults to height of canvas.
      * @param {String} [params.format="jpeg"] Desired format; "jpeg", "png" or "bmp".
      * @param {Boolean} [params.includeGizmos=false] When true, will include gizmos like {@link SectionPlane} in the snapshot.
+     * @param {Boolean} [params.capture=false] When true, will get plugins container that are not document.body and will append an canvas on document.body with the representation of the container draw on it.
      * @returns {String} String-encoded image data URI.
      */
     getSnapshot(params = {}) {
@@ -345,17 +346,19 @@ class Viewer {
             this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
         }
 
-        const captured = {};
-        for (let i = 0, len = this._plugins.length; i < len; i++) {
-            const plugin = this._plugins[i];
-            if (plugin.getContainerElement) {
-                const container = plugin.getContainerElement();
-                if (container !== document.body) {
-                    if (!captured[container.id]) {
-                        captured[container.id] = true;
-                        html2canvas(container).then(function (canvas) {
-                            document.body.appendChild(canvas);
-                        });
+        if (params.capture) {
+            const captured = {};
+            for (let i = 0, len = this._plugins.length; i < len; i++) {
+                const plugin = this._plugins[i];
+                if (plugin.getContainerElement) {
+                    const container = plugin.getContainerElement();
+                    if (container !== document.body) {
+                        if (!captured[container.id]) {
+                            captured[container.id] = true;
+                            html2canvas(container).then(function (canvas) {
+                                document.body.appendChild(canvas);
+                            });
+                        }
                     }
                 }
             }
