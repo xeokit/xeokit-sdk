@@ -182,7 +182,7 @@ class MetaScene {
                 const metaObjectData = metaModelData.metaObjects[i];
                 const type = metaObjectData.type;
                 const id = metaObjectData.id;
-                const propertySetIds = metaObjectData.propertySets | metaObjectData.propertySetIds;
+                const propertySetIds = metaObjectData.propertySets || metaObjectData.propertySetIds;
                 let metaObject = this.metaObjects[id];
                 if (!metaObject) {
                     metaObject = new MetaObject({
