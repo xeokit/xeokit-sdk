@@ -182,6 +182,7 @@ class MetaScene {
                 const metaObjectData = metaModelData.metaObjects[i];
                 const type = metaObjectData.type;
                 const id = metaObjectData.id;
+                const propertySetIds = metaObjectData.propertySets | metaObjectData.propertySetIds;
                 let metaObject = this.metaObjects[id];
                 if (!metaObject) {
                     metaObject = new MetaObject({
@@ -189,7 +190,7 @@ class MetaScene {
                         parentId: metaObjectData.parent,
                         type,
                         name: metaObjectData.name,
-                        propertySetIds: metaObjectData.propertySetIds
+                        propertySetIds
                     });
                     this.metaObjects[id] = metaObject;
                 }
@@ -208,6 +209,19 @@ class MetaScene {
             const metaObject = this.metaObjects[objectId];
             if (metaObject.children) {
                 metaObject.children = [];
+            }
+
+            // Re-link each MetaObject's property sets
+
+            if (metaObject.propertySets) {
+                metaObject.propertySets = [];
+            }
+            if (metaObject.propertySetIds) {
+                for (let i = 0, len = metaObject.propertySetIds.length; i < len; i++) {
+                    const propertySetId = metaObject.propertySetIds[i];
+                    const propertySet = this.propertySets[propertySetId];
+                    metaObject.propertySets.push(propertySet);
+                }
             }
         }
 
@@ -255,14 +269,18 @@ class MetaScene {
 
                 // Globalize MetaObject property set IDs
 
-                const propertySetIds = metaObjectData.propertySetIds;
-                if (propertySetIds) {
-                    const propertySetGlobalIds = [];
-                    for (let j = 0, lenj = propertySetIds.length; j < lenj; j++) {
-                        propertySetGlobalIds.push(math.globalizeObjectId(modelId, propertySetIds[j]));
+                if (globalize) {
+                    const propertySetIds = metaObjectData.propertySetIds;
+                    if (propertySetIds) {
+                        const propertySetGlobalIds = [];
+                        for (let j = 0, lenj = propertySetIds.length; j < lenj; j++) {
+                            propertySetGlobalIds.push(math.globalizeObjectId(modelId, propertySetIds[j]));
+                        }
+                        metaObjectData.propertySetIds = propertySetGlobalIds;
+                        metaObjectData.originalSystemPropertySetIds = propertySetIds;
                     }
-                    metaObjectData.propertySetIds = propertySetGlobalIds;
-                    metaObjectData.originalSystemPropertySetIds = propertySetIds;
+                } else {
+                    metaObjectData.originalSystemPropertySetIds = metaObjectData.propertySetIds;
                 }
             }
         }
@@ -344,6 +362,19 @@ class MetaScene {
             const metaObject = this.metaObjects[objectId];
             if (metaObject.children) {
                 metaObject.children = [];
+            }
+
+            // Re-link each MetaObject's property sets
+
+            if (metaObject.propertySets) {
+                metaObject.propertySets = [];
+            }
+            if (metaObject.propertySetIds) {
+                for (let i = 0, len = metaObject.propertySetIds.length; i < len; i++) {
+                    const propertySetId = metaObject.propertySetIds[i];
+                    const propertySet = this.propertySets[propertySetId];
+                    metaObject.propertySets.push(propertySet);
+                }
             }
         }
 
