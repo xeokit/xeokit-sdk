@@ -1,6 +1,6 @@
 import {Program} from "../../../../../../webgl/Program.js";
 import {math} from "../../../../../../math/math.js";
-import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
+import {getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
 
 const tempVec4 = math.vec4();
 const tempVec3a = math.vec3();
@@ -29,7 +29,6 @@ class TrianglesBatchingColorRenderer {
     drawLayer(frameCtx, batchingLayer, renderPass) {
 
         const scene = this._scene;
-        const camera = scene.camera;
         const model = batchingLayer.model;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
@@ -48,12 +47,6 @@ class TrianglesBatchingColorRenderer {
         }
 
         gl.uniform1i(this._uRenderPass, renderPass);
-
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
-        gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
-
-        gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
-        gl.uniformMatrix4fv(this._uWorldNormalMatrix, false, model.worldNormalMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
@@ -78,8 +71,6 @@ class TrianglesBatchingColorRenderer {
                 }
             }
         }
-
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
 
@@ -122,12 +113,12 @@ class TrianglesBatchingColorRenderer {
         const program = this._program;
 
         this._uRenderPass = program.getLocation("renderPass");
-        this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-        this._uWorldMatrix = program.getLocation("worldMatrix");
-        this._uWorldNormalMatrix = program.getLocation("worldNormalMatrix");
-        this._uViewMatrix = program.getLocation("viewMatrix");
-        this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
-        this._uProjMatrix = program.getLocation("projMatrix");
+
+        gl.uniformBlockBinding(
+            program.handle,
+            gl.getUniformBlockIndex(program.handle, "Matrices"),
+            0 // layer.matricesUniformBlockBufferBindingPoint
+        );
 
         this._uLightAmbient = program.getLocation("lightAmbient");
         this._uLightColor = [];
@@ -196,8 +187,6 @@ class TrianglesBatchingColorRenderer {
         const project = scene.camera.project;
 
         program.bind();
-
-        gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix)
 
         if (this._uLightAmbient) {
             gl.uniform4fv(this._uLightAmbient, scene._lightsState.getAmbientColorAndIntensity());
@@ -270,13 +259,14 @@ class TrianglesBatchingColorRenderer {
             src.push("in vec3 offset;");
         }
 
-        src.push("uniform mat4 worldMatrix;");
-        src.push("uniform mat4 worldNormalMatrix;");
-
-        src.push("uniform mat4 viewMatrix;");
-        src.push("uniform mat4 projMatrix;");
-        src.push("uniform mat4 viewNormalMatrix;");
-        src.push("uniform mat4 positionsDecodeMatrix;");
+        src.push("uniform Matrices {");
+        src.push("    mat4 worldMatrix;");
+        src.push("    mat4 viewMatrix;");
+        src.push("    mat4 projMatrix;");
+        src.push("    mat4 positionsDecodeMatrix;");
+        src.push("    mat4 worldNormalMatrix;");
+        src.push("    mat4 viewNormalMatrix;");
+        src.push("};");
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");

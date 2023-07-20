@@ -1,5 +1,5 @@
 import {Program} from "../../../../../../webgl/Program.js";
-import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
+import {getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
 import {math} from "../../../../../../math/math.js";
 
 const tempVec3a = math.vec3();
@@ -27,7 +27,6 @@ class TrianglesBatchingPickDepthRenderer {
 
         const model = batchingLayer.model;
         const scene = model.scene;
-        const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
         const origin = batchingLayer._state.origin;
@@ -44,13 +43,6 @@ class TrianglesBatchingPickDepthRenderer {
         gl.uniform1i(this._uRenderPass, renderPass);
 
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
-
-        const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
-        const viewMatrix = origin ? createRTCViewMat(pickViewMatrix, origin) : pickViewMatrix;
-
-        gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
-        gl.uniformMatrix4fv(this._uViewMatrix, false, viewMatrix);
-        gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
 
         gl.uniform1f(this._uPickZNear, frameCtx.pickZNear);
         gl.uniform1f(this._uPickZFar, frameCtx.pickZFar);
@@ -83,8 +75,6 @@ class TrianglesBatchingPickDepthRenderer {
                 }
             }
         }
-
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
 
@@ -120,10 +110,14 @@ class TrianglesBatchingPickDepthRenderer {
 
         this._uRenderPass = program.getLocation("renderPass");
         this._uPickInvisible = program.getLocation("pickInvisible");
-        this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-        this._uWorldMatrix = program.getLocation("worldMatrix");
-        this._uViewMatrix = program.getLocation("viewMatrix");
-        this._uProjMatrix = program.getLocation("projMatrix");
+
+        
+        gl.uniformBlockBinding(
+            program.handle,
+            gl.getUniformBlockIndex(program.handle, "Matrices"),
+            0 // layer.matricesUniformBlockBufferBindingPoint
+        );
+
         this._uSectionPlanes = [];
 
         for (let i = 0, len = scene._sectionPlanesState.sectionPlanes.length; i < len; i++) {
@@ -176,10 +170,12 @@ class TrianglesBatchingPickDepthRenderer {
 
         src.push("uniform bool pickInvisible;");
 
-        src.push("uniform mat4 worldMatrix;");
-        src.push("uniform mat4 viewMatrix;");
-        src.push("uniform mat4 projMatrix;");
-        src.push("uniform mat4 positionsDecodeMatrix;");
+        src.push("uniform Matrices {");
+        src.push("    mat4 worldMatrix;");
+        src.push("    mat4 viewMatrix;");
+        src.push("    mat4 projMatrix;");
+        src.push("    mat4 positionsDecodeMatrix;");
+        src.push("};");
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");

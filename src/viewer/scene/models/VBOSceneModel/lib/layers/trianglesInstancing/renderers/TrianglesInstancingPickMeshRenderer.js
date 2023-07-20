@@ -1,5 +1,5 @@
 import {Program} from "../../../../../../webgl/Program.js";
-import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
+import {getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
 import {math} from "../../../../../../math/math.js";
 
 const tempVec3a = math.vec3();
@@ -49,20 +49,10 @@ class TrianglesInstancingPickMeshRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
-        const rtcPickViewMatrix = (origin) ? createRTCViewMat(pickViewMatrix, origin) : pickViewMatrix;
-
-        gl.uniformMatrix4fv(this._uViewMatrix, false, rtcPickViewMatrix);
-        gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
-
-        gl.uniformMatrix4fv(this._uProjMatrix, false, frameCtx.pickProjMatrix);
-
         if (scene.logarithmicDepthBufferEnabled) {
             const logDepthBufFC = 2.0 / (Math.log(camera.project.far + 1.0) / Math.LN2); // TODO: Far from pick project matrix?
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
-
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometry.positionsDecodeMatrix);
 
         this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
         this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
@@ -142,10 +132,13 @@ class TrianglesInstancingPickMeshRenderer {
         const program = this._program;
 
         this._uPickInvisible = program.getLocation("pickInvisible");
-        this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-        this._uWorldMatrix = program.getLocation("worldMatrix");
-        this._uViewMatrix = program.getLocation("viewMatrix");
-        this._uProjMatrix = program.getLocation("projMatrix");
+
+        gl.uniformBlockBinding(
+            program.handle,
+            gl.getUniformBlockIndex(program.handle, "Matrices"),
+            0 // layer.matricesUniformBlockBufferBindingPoint
+        );
+
         this._uSectionPlanes = [];
 
         const clips = sectionPlanesState.sectionPlanes;
@@ -211,10 +204,13 @@ class TrianglesInstancingPickMeshRenderer {
         src.push("in vec4 modelMatrixCol2;");
 
         src.push("uniform bool pickInvisible;");
-        src.push("uniform mat4 worldMatrix;");
-        src.push("uniform mat4 viewMatrix;");
-        src.push("uniform mat4 projMatrix;");
-        src.push("uniform mat4 positionsDecodeMatrix;");
+
+        src.push("uniform Matrices {");
+        src.push("    mat4 worldMatrix;");
+        src.push("    mat4 viewMatrix;");
+        src.push("    mat4 projMatrix;");
+        src.push("    mat4 positionsDecodeMatrix;");
+        src.push("};");
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");

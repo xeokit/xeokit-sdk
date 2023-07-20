@@ -1,6 +1,6 @@
 import {Program} from "../../../../../../webgl/Program.js";
 import {RENDER_PASSES} from "../../../RENDER_PASSES.js";
-import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
+import {getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
 import {math} from "../../../../../../math/math.js";
 
 const tempVec3a = math.vec3();
@@ -29,7 +29,6 @@ class TrianglesInstancingEdgesRenderer {
 
         const model = instancingLayer.model;
         const scene = model.scene;
-        const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const geometry = state.geometry;
@@ -71,9 +70,6 @@ class TrianglesInstancingEdgesRenderer {
             gl.uniform4fv(this._uColor, defaultColor);
         }
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
-        gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
-
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
@@ -97,8 +93,6 @@ class TrianglesInstancingEdgesRenderer {
                 }
             }
         }
-
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometry.positionsDecodeMatrix);
 
         this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
         this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
@@ -153,10 +147,13 @@ class TrianglesInstancingEdgesRenderer {
 
         this._uRenderPass = program.getLocation("renderPass");
         this._uColor = program.getLocation("color");
-        this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-        this._uWorldMatrix = program.getLocation("worldMatrix");
-        this._uViewMatrix = program.getLocation("viewMatrix");
-        this._uProjMatrix = program.getLocation("projMatrix");
+
+        gl.uniformBlockBinding(
+            program.handle,
+            gl.getUniformBlockIndex(program.handle, "Matrices"),
+            0 // layer.matricesUniformBlockBufferBindingPoint
+        );
+
         this._uSectionPlanes = [];
 
         const clips = sectionPlanesState.sectionPlanes;
@@ -187,8 +184,6 @@ class TrianglesInstancingEdgesRenderer {
         const project = scene.camera.project;
 
         this._program.bind();
-
-        gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
 
         if ( scene.logarithmicDepthBufferEnabled) {
             const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
@@ -221,10 +216,13 @@ class TrianglesInstancingEdgesRenderer {
         src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
         src.push("in vec4 modelMatrixCol1;");
         src.push("in vec4 modelMatrixCol2;");
-        src.push("uniform mat4 worldMatrix;");
-        src.push("uniform mat4 viewMatrix;");
-        src.push("uniform mat4 projMatrix;");
-        src.push("uniform mat4 positionsDecodeMatrix;");
+
+        src.push("uniform Matrices {");
+        src.push("    mat4 worldMatrix;");
+        src.push("    mat4 viewMatrix;");
+        src.push("    mat4 projMatrix;");
+        src.push("    mat4 positionsDecodeMatrix;");
+        src.push("};");
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");

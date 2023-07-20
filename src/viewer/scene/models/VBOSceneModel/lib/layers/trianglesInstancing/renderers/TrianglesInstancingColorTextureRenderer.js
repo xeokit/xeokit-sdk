@@ -1,6 +1,6 @@
 import {Program} from "../../../../../../webgl/Program.js";
 import {math} from "../../../../../../math/math.js";
-import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
+import {getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
 import {WEBGL_INFO} from "../../../../../../webglInfo.js";
 
 const tempVec4 = math.vec4();
@@ -32,7 +32,6 @@ class TrianglesInstancingColorTextureRenderer {
         const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
         const model = instancingLayer.model;
         const scene = model.scene;
-        const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const geometry = state.geometry;
@@ -52,9 +51,6 @@ class TrianglesInstancingColorTextureRenderer {
         }
 
         gl.uniform1i(this._uRenderPass, renderPass);
-
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
-        gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
@@ -79,8 +75,6 @@ class TrianglesInstancingColorTextureRenderer {
                 }
             }
         }
-
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometry.positionsDecodeMatrix);
 
         if (this._uUVDecodeMatrix) {
             gl.uniformMatrix3fv(this._uUVDecodeMatrix, false, geometry.uvDecodeMatrix);
@@ -164,13 +158,13 @@ class TrianglesInstancingColorTextureRenderer {
 
         this._uRenderPass = program.getLocation("renderPass");
 
-        this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
+        gl.uniformBlockBinding(
+            program.handle,
+            gl.getUniformBlockIndex(program.handle, "Matrices"),
+            0 // layer.matricesUniformBlockBufferBindingPoint
+        );
+
         this._uUVDecodeMatrix = program.getLocation("uvDecodeMatrix");
-
-        this._uWorldMatrix = program.getLocation("worldMatrix");
-
-        this._uViewMatrix = program.getLocation("viewMatrix");
-        this._uProjMatrix = program.getLocation("projMatrix");
 
         this._uGammaFactor = program.getLocation("gammaFactor");
 
@@ -246,8 +240,6 @@ class TrianglesInstancingColorTextureRenderer {
 
         this._program.bind();
 
-        gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
-
         if (this._uLightAmbient) {
             gl.uniform4fv(this._uLightAmbient, scene._lightsState.getAmbientColorAndIntensity());
         }
@@ -308,10 +300,13 @@ class TrianglesInstancingColorTextureRenderer {
         src.push("in vec4 modelMatrixCol1;");
         src.push("in vec4 modelMatrixCol2;");
 
-        src.push("uniform mat4 worldMatrix;");
-        src.push("uniform mat4 viewMatrix;");
-        src.push("uniform mat4 projMatrix;");
-        src.push("uniform mat4 positionsDecodeMatrix;");
+        src.push("uniform Matrices {");
+        src.push("    mat4 worldMatrix;");
+        src.push("    mat4 viewMatrix;");
+        src.push("    mat4 projMatrix;");
+        src.push("    mat4 positionsDecodeMatrix;");
+        src.push("};");
+
         src.push("uniform mat3 uvDecodeMatrix;")
 
         if (scene.logarithmicDepthBufferEnabled) {
