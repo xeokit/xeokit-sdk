@@ -52,9 +52,17 @@ export function clusterizeV2(entities, meshes) {
 
         entity.meshIds.forEach(meshId => {
             const mesh = meshes[meshId];
-            const bounds = geometryCompressionUtils.getPositionsBounds(mesh.positions);
-            const min = geometryCompressionUtils.decompressPosition(bounds.min, mesh.positionsDecodeMatrix, []);
-            const max = geometryCompressionUtils.decompressPosition(bounds.max, mesh.positionsDecodeMatrix, []);
+            let min;
+            let max;
+            if (mesh.positionsCompressed) {
+                const bounds = geometryCompressionUtils.getPositionsBounds(mesh.positionsCompressed);
+                min = geometryCompressionUtils.decompressPosition(bounds.min, mesh.positionsDecodeMatrix, []);
+                max = geometryCompressionUtils.decompressPosition(bounds.max, mesh.positionsDecodeMatrix, []);
+            } else {
+                const bounds = geometryCompressionUtils.getPositionsBounds(mesh.positions);
+                min = bounds.min;
+                max = bounds.max;
+            }
             min[0] += mesh.origin[0];
             min[1] += mesh.origin[1];
             min[2] += mesh.origin[2];

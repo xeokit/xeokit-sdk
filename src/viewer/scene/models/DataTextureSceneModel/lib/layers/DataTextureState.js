@@ -199,6 +199,7 @@ export class DataTextureState {
      * @param {string} objectAttributesTextureShaderName
      * @param {string} cameraMatricesShaderName
      * @param {string} modelMatricesShaderName
+     * @param objectOffsetsShaderName
      */
     bindCommonTextures(
         glProgram,

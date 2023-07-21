@@ -13,8 +13,8 @@ export class LOD extends Component {
 
         this._scene = scene;
         this._lodLevels = [2000, 600, 150, 80, 20];
-        this._lodCullingManagers = {};
-        this._lodCullingManagerList = [];
+        this._lodManagers = {};
+        this._lodManagerList = [];
 
         this.enabled = cfg.enabled;
         this.targetFPS = cfg.targetFPS;
@@ -38,8 +38,8 @@ export class LOD extends Component {
             if (currentFPS === -1) {
                 return;
             }
-            for (let i = 0, len = this._lodCullingManagerList.length; i < len; i++) {
-                this._lodCullingManagerList[i].applyLodCulling(currentFPS);
+            for (let i = 0, len = this._lodManagerList.length; i < len; i++) {
+                this._lodManagerList[i].applyLodCulling(currentFPS);
             }
         });
 
@@ -67,8 +67,8 @@ export class LOD extends Component {
 
         this._scene.on("tick", () => {
             if ((sceneTick - lastTickCameraMoved) > 3) {
-                for (let i = 0, len = this._lodCullingManagerList.length; i < len; i++) {   // Call LOD-culling tasks
-                    this._lodCullingManagerList[i].resetLodCulling();
+                for (let i = 0, len = this._lodManagerList.length; i < len; i++) {   // Call LOD-culling tasks
+                    this._lodManagerList[i].resetLodCulling();
                 }
             }
             sceneTick++;
@@ -135,20 +135,20 @@ export class LOD extends Component {
      * Called within SceneModel constructors
      * @private
      */
-    getLODCullingManager(sceneModel) {
-        const lodCullingManager = new LODCullingManager(this.scene, sceneModel, this._lodLevels, this._targetFPS);
-        this._lodCullingManagers[lodCullingManager.id] = lodCullingManager;
-        this._lodCullingManagerList = Object.values(this._lodCullingManagers);
-        return lodCullingManager;
+    getLODManager(sceneModel) {
+        const lodManager = new LODCullingManager(this.scene, sceneModel, this._lodLevels, this._targetFPS);
+        this._lodManagers[lodManager.id] = lodManager;
+        this._lodManagerList = Object.values(this._lodManagers);
+        return lodManager;
     }
 
     /**
      * Called within SceneModel destructors
      * @private
      */
-    putLODCullingManager(lodCullingManager) {
-        delete this._lodCullingManagers[lodCullingManager.id];
-        this._lodCullingManagerList = Object.values(this._lodCullingManagers);
+    putLODManager(lodManager) {
+        delete this._lodManagers[lodManager.id];
+        this._lodManagerList = Object.values(this._lodManagers);
     }
 
     /**

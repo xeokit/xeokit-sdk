@@ -12,7 +12,7 @@ import {buildEdgeIndices} from "../../math/buildEdgeIndices";
 import {rebucketPositions} from "./lib/layers/trianglesDataTexture/rebucketPositions";
 import {uniquifyPositions} from "./lib/layers/trianglesDataTexture/calculateUniquePositions";
 import {quantizePositions} from "./lib/compression";
-import {ViewFrustumCullingManager} from "../../frustumCulling/ViewFrustumCullingManager";
+import {VFCManager} from "../../vfc/VFCManager";
 
 const tempVec3a = math.vec3();
 const tempMat4 = math.mat4();
@@ -989,8 +989,8 @@ export class DataTextureSceneModel extends Component {
          */
         this._enableIndexRebucketing = !cfg.disableIndexRebucketing;
 
-        if (cfg.enableViewFrustumCulling) {
-            this._vfcManager = new ViewFrustumCullingManager(this.scene, this);
+        if (this.scene.vfc.enabled) {
+            this._vfcManager = new VFCManager(this.scene, this);
         }
 
         this._aabb = math.collapseAABB3();
@@ -2163,7 +2163,8 @@ export class DataTextureSceneModel extends Component {
             return;
         }
         if (this._vfcManager) {
-            this._vfcManager.finalize();
+            this._vfcManager.finalize(()=> {// Makes deferred calls to #createEntity() and #createMesh()
+            });
         }
         for (let layerId in this._currentLayers) {
             this._currentLayers[layerId].finalize();
@@ -2196,7 +2197,7 @@ export class DataTextureSceneModel extends Component {
         this._instancingGeometries = {};
         this._preparedInstancingGeometries = {};
         if (this.scene.lod.enabled) {
-            this.lodCullingManager = this.scene.lod.getLODCullingManager(this);
+            this._lodManager = this.scene.lod.getLODManager(this);
         }
         for (let i = 0, len = this._layerList.length; i < len; i++) {
             const layer = this._layerList[i];
@@ -2476,6 +2477,18 @@ export class DataTextureSceneModel extends Component {
     }
 
     /** @private */
+    setPickMatrices(pickViewMatrix, pickProjMatrix) {
+        if (this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        const renderFlags = this.renderFlags;
+        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
+            const layerIndex = renderFlags.visibleLayers[i];
+            this._layerList[layerIndex].setPickMatrices(pickViewMatrix, pickProjMatrix);
+        }
+    }
+
+    /** @private */
     drawPickMesh(frameCtx) {
         if (this.numVisibleLayerPortions === 0) {
             return;
@@ -2560,11 +2573,11 @@ export class DataTextureSceneModel extends Component {
         if (this._isModel) {
             this.scene._deregisterModel(this);
         }
-        // if (this._vfcManager) {
-        //     this._vfcManager.destroy();
-        // }
-        if (this.lodCullingManager) {
-            this.scene.lod.putLODCullingManager(this.lodCullingManager);
+        if (this._vfcManager) {
+            this.scene.vfc.putVFCManager(this._vfcManager);
+        }
+        if (this._lodManager) {
+            this.scene.lod.putLODManager(this._lodManager);
         }
         super.destroy();
     }

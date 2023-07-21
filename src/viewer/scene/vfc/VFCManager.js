@@ -1,6 +1,6 @@
-import {ViewFrustumCullingState} from "./ViewFrustumCullingState";
+import {VFCState} from "./VFCState";
 
-export class ViewFrustumCullingManager {
+export class VFCManager {
 
     constructor(scene, sceneModel) {
         this.sceneModel = sceneModel;
@@ -28,17 +28,17 @@ export class ViewFrustumCullingManager {
             throw "Already finalized";
         }
         this.finalized = true;
-        this.vfcState = new ViewFrustumCullingState();
-        this.vfcState.initializeVfcState(this.entities, this.meshes);
-        this.vfcState.finalize(this.sceneModel, fnForceFinalizeLayer);
+        this.VFCState = new VFCState();
+        this.VFCState.initializeVFCState(this.entities, this.meshes);
+        this.VFCState.finalize(this.sceneModel, fnForceFinalizeLayer);
         this._onSceneRendering = this.sceneModel.scene.on("rendering", () => this.applyViewFrustumCulling.call(this));
     }
 
     applyViewFrustumCulling() {
         if (!this.finalized) {
-            throw "Not finalized";
+            return;
         }
-        this.vfcState.applyViewFrustumCulling(this.sceneModel);
+        this.VFCState.applyViewFrustumCulling(this.sceneModel);
     }
 
     destroy() {

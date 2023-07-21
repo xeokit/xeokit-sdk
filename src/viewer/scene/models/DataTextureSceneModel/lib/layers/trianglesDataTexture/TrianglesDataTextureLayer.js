@@ -647,7 +647,7 @@ class TrianglesDataTextureLayer {
     }
 
     // updatePickCameratexture(pickViewMatrix, pickCameraMatrix) {
-    //     this._dataTextureState.texturePickCameraMatrices._updateViewMatrix(pickViewMatrix, pickCameraMatrix);
+    //     this._dataTextureState.texturePickCameraMatrices.updateViewMatrix(pickViewMatrix, pickCameraMatrix);
     // }
 
     /**
@@ -809,15 +809,11 @@ class TrianglesDataTextureLayer {
 
         textureState.textureCameraMatrices = textureState.cameraTexture;
 
-        textureState.pickCameraTexture = this.dataTextureGenerator.generateCameraDataTexture(
+        textureState.texturePickCameraMatrices = this.dataTextureGenerator.generatePickCameraDataTexture(
             this.model.scene.canvas.gl,
             this.model.scene.camera,
-            this.model.scene,
-            this._state.origin.slice(),
-            false
+            this._state.origin.slice()
         );
-
-        textureState.texturePickCameraMatrices = textureState.pickCameraTexture;
 
         textureState.finalize();
 
@@ -829,7 +825,7 @@ class TrianglesDataTextureLayer {
     }
 
     attachToRenderingEvent() {
-        this.model.scene.on("rendering",  () =>{
+        this.model.scene.on("rendering", () => {
             if (this._deferredSetFlagsDirty) {
                 this.commitDeferredFlags();
             }
@@ -1508,6 +1504,13 @@ class TrianglesDataTextureLayer {
     }
 
     //---- PICKING ----------------------------------------------------------------------------------------------------
+
+    setPickMatrices(pickViewMatrix, pickProjMatrix) {
+        if (this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        this._dataTextureState.texturePickCameraMatrices.updateViewMatrix(pickViewMatrix, pickProjMatrix);
+    }
 
     drawPickMesh(renderFlags, frameCtx) {
         if (this._numVisibleLayerPortions === 0) {

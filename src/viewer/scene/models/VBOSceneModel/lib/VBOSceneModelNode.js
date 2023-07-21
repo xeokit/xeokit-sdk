@@ -73,7 +73,7 @@ class VBOSceneModelNode {
         this._colorizeUpdated = false;
         this._opacityUpdated = false;
 
-        this._lodCullable = lodCullable;
+        this._lodCullable = (!!lodCullable);
         this._culled = false;
         this._culledVFC = false;
         this._culledLOD = false;

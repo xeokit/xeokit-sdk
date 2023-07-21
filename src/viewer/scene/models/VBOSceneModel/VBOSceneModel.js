@@ -1251,6 +1251,10 @@ class VBOSceneModel extends Component {
             this._viewMatrixDirty = true;
         });
 
+        if (this.scene.vfc.enabled) {
+            this._vfcManager = this.scene.vfc.getVFCManager(this);
+        }
+
         this._createDefaultTextureSet();
 
         this.visible = cfg.visible;
@@ -2405,6 +2409,11 @@ class VBOSceneModel extends Component {
 
         if (sharingGeometry) {
 
+            if (this._vfcManager && !this._vfcManager.finalized) {
+                this._vfcManager.addMesh(cfg); // To be created in #finalize()
+                return;
+            }
+
             let meshMatrix;
             let worldMatrix = this._worldMatrixNonIdentity ? this._worldMatrix : null;
 
@@ -2478,7 +2487,10 @@ class VBOSceneModel extends Component {
                 this.error("Config expected: indices (no meshIds provided, so expecting geometry arrays instead)");
                 return null;
             }
-
+            if (this._vfcManager && !this._vfcManager.finalized) {
+                this._vfcManager.addMesh(cfg); // To be created in #finalize()
+                return;
+            }
             let indices = cfg.indices;
             let edgeIndices = cfg.edgeIndices;
             let origin = (cfg.origin || cfg.rtcCenter) ? math.addVec3(this._origin, cfg.origin || cfg.rtcCenter, tempVec3a) : this._origin;
@@ -2836,6 +2848,10 @@ ${cfg.uv && cfg.uv.length > 0 ? 1 : 0}-${cfg.uvCompressed && cfg.uvCompressed.le
             this.error("Config missing: meshIds");
             return;
         }
+        if (this._vfcManager && !this._vfcManager.finalized) {
+            this._vfcManager.addEntity(cfg); // NB: Meshes won't exist yet
+            return;
+        }
         let meshes = [];
         for (let i = 0, len = meshIds.length; i < len; i++) {
             const meshId = meshIds[i];
@@ -2910,6 +2926,12 @@ ${cfg.uv && cfg.uv.length > 0 ? 1 : 0}-${cfg.uvCompressed && cfg.uvCompressed.le
             return;
         }
 
+        if (this._vfcManager) {
+            this._vfcManager.finalize(()=>{// Makes deferred calls to #createEntity() and #createMesh()
+
+            });
+        }
+
         for (const layerId in this._instancingLayers) {
             if (this._instancingLayers.hasOwnProperty(layerId)) {
                 this._instancingLayers[layerId].finalize();
@@ -2953,7 +2975,7 @@ ${cfg.uv && cfg.uv.length > 0 ? 1 : 0}-${cfg.uvCompressed && cfg.uvCompressed.le
         this.glRedraw();
 
         if (this.scene.lod.enabled) {
-            this.lodCullingManager = this.scene.lod.getLODCullingManager(this);
+            this._lodManager = this.scene.lod.getLODManager(this);
         }
 
         this.scene._aabbDirty = true;
@@ -3351,8 +3373,11 @@ ${cfg.uv && cfg.uv.length > 0 ? 1 : 0}-${cfg.uvCompressed && cfg.uvCompressed.le
             this.scene._deregisterModel(this);
         }
         putScratchMemory();
-        if (this.lodCullingManager) {
-            this.scene.lod.putLODCullingManager(this.lodCullingManager);
+        if (this._lodManager) {
+            this.scene.lod.putLODManager(this._lodManager);
+        }
+        if (this._vfcManager) {
+            this.scene.vfc.putVFCManager(this._vfcManager);
         }
         super.destroy();
     }

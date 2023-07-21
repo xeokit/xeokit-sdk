@@ -64,7 +64,7 @@ const VISIBILITY_CHECK_ENVOLVES_V = (1 << 14);
  *
  * Will be used by the rest of `View Frustum Culling` related code.
  */
-export class ViewFrustumCullingState {
+export class VFCState {
 
     constructor() {
 
@@ -114,7 +114,7 @@ export class ViewFrustumCullingState {
      * @param {Array<object>} entityList
      * @param {Array<object>} meshList
      */
-    initializeVfcState(entityList, meshList) {
+    initializeVFCState(entityList, meshList) {
         if (this.finalized) {
             throw "Already finalized";
         }
@@ -195,12 +195,9 @@ export class ViewFrustumCullingState {
         this._ensureFrustumPropsUpdated(sceneModel);
         this._initializeCullingDataIfNeeded(sceneModel);
         const visibleNodes = this._searchVisibleNodesWithFrustumCulling();
-        // console.log (`visibleNodes: ${visibleNodes.length} / ${this._internalNodesList.length}`);
         this._cullFrame++;
         this._markVisibleFrameOfVisibleNodes(visibleNodes, this._cullFrame);
         this._cullNonVisibleNodes(sceneModel, this._cullFrame);
-
-        // console.log (`${numIntersectionChecks} intersection checks`);
     }
 
     _initializeCullingDataIfNeeded(sceneModel) {

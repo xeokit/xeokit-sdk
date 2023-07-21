@@ -892,7 +892,7 @@
 			"x-tcl" : [ "tcl", "tk" ],
 			"x-tex" : [ "tex", "ltx", "sty", "cls" ],
 			"x-vcalendar" : "vcs",
-			"x-vcard" : "vcf",
+			"x-vcard" : "vfc",
 			"n3" : "n3",
 			"prs.lines.tag" : "dsc",
 			"sgml" : [ "sgml", "sgm" ],

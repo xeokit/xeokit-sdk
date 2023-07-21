@@ -33,10 +33,9 @@ export class DataTextureGenerator {
      * @param {Camera} camera
      * @param {Scene} scene
      * @param {null|number[3]} origin
-     * @param followCameraUpdate
      * @returns {BindableDataTexture}
      */
-    generateCameraDataTexture(gl, camera, scene, origin, followCameraUpdate = true) {
+    generateCameraDataTexture(gl, camera, scene, origin) {
         const textureWidth = 4;
         const textureHeight = 3; // space for 3 matrices
         const texture = gl.createTexture();
@@ -46,7 +45,7 @@ export class DataTextureGenerator {
         gl.bindTexture(gl.TEXTURE_2D, null);
         const cameraTexture = new BindableDataTexture(gl, texture, textureWidth, textureHeight);
         let cameraDirty = true;
-        cameraTexture._updateViewMatrix = (viewMatrix, projMatrix) => {
+        cameraTexture.updateViewMatrix = (viewMatrix, projMatrix) => {
             gl.bindTexture(gl.TEXTURE_2D, cameraTexture._texture);
             // Camera's "view matrix"
             gl.texSubImage2D(
@@ -87,19 +86,78 @@ export class DataTextureGenerator {
                 new Float32Array(projMatrix)
             );
         };
+        const onCameraMatrix = () => {
+            if (!cameraDirty) {
+                return;
+            }
+            cameraDirty = false;
+            cameraTexture.updateViewMatrix(camera.viewMatrix, camera.project.matrix);
+        };
+        camera.on("matrix", () => cameraDirty = true);
+        scene.on("rendering", onCameraMatrix);
+        onCameraMatrix();
+        return cameraTexture;
+    }
 
-        if (followCameraUpdate) {
-            const onCameraMatrix = () => {
-                if (!cameraDirty) {
-                    return;
-                }
-                cameraDirty = false;
-                cameraTexture._updateViewMatrix(camera.viewMatrix, camera.project.matrix);
-            };
-            camera.on("matrix", () => cameraDirty = true);
-            scene.on("rendering", onCameraMatrix);
-            onCameraMatrix();
-        }
+    /**
+     * Generate and return a texture containing camera view and projection
+     * matrices for picking, relative to the given RTC coordinate system origin.
+     *
+     * @param {WebGL2RenderingContext} gl
+     * @param {Camera} camera
+     * @param {null|number[3]} origin
+     * @returns {BindableDataTexture}
+     */
+    generatePickCameraDataTexture(gl, camera, origin) {
+        const textureWidth = 4;
+        const textureHeight = 3; // space for 3 matrices
+        const texture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGBA32F, textureWidth, textureHeight);
+        this.disableBindedTextureFiltering(gl);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+        const cameraTexture = new BindableDataTexture(gl, texture, textureWidth, textureHeight);
+        cameraTexture.updateViewMatrix = (viewMatrix, projMatrix) => {
+            gl.bindTexture(gl.TEXTURE_2D, cameraTexture._texture);
+            // Camera's "view matrix"
+            gl.texSubImage2D(
+                gl.TEXTURE_2D,
+                0,
+                0,
+                0, // 1st matrix: pick camera view matrix
+                4,
+                1,
+                gl.RGBA,
+                gl.FLOAT,
+                new Float32Array((origin) ? createRTCViewMat(viewMatrix, origin) : viewMatrix)
+            );
+
+            // Camera's "view normal matrix"
+            gl.texSubImage2D(
+                gl.TEXTURE_2D,
+                0,
+                0,
+                1, // 2nd matrix: pick camera view normal matrix
+                4,
+                1,
+                gl.RGBA,
+                gl.FLOAT,
+                new Float32Array(camera.viewNormalMatrix)
+            );
+
+            // Camera's "project matrix"
+            gl.texSubImage2D(
+                gl.TEXTURE_2D,
+                0,
+                0,
+                2, // 3rd matrix: pick camera project matrix
+                4,
+                1,
+                gl.RGBA,
+                gl.FLOAT,
+                new Float32Array(projMatrix)
+            );
+        };
         return cameraTexture;
     }
 

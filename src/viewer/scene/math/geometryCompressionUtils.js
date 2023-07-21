@@ -10,8 +10,8 @@ import {math} from "./math.js";
  * @returns {{min: Float32Array, max: Float32Array}}
  */
 function getPositionsBounds(array) {
-    const min = new Float32Array(3);
-    const max = new Float32Array(3);
+    const min = new Float64Array(3);
+    const max = new Float64Array(3);
     let i, j;
     for (i = 0; i < 3; i++) {
         min[i] = Number.MAX_VALUE;

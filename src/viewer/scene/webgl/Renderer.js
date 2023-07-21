@@ -983,26 +983,13 @@ const Renderer = function (scene, options) {
                 canvasPos[1] = canvas.clientHeight * 0.5;
             }
 
-            if (null !== pickViewMatrix) {
-
-                //======================================================================================
-                // Fix me
-                //==========================================================================================
-
-                // data-textures: update the pick-camera-matrices of all DataTextureSceneModel's
-                for (let type in drawableTypeInfo) {
-                    if (drawableTypeInfo.hasOwnProperty(type)) {
-                        const drawableList = drawableTypeInfo[type].drawableList;
-                        for (let i = 0, len = drawableList.length; i < len; i++) {
-                            const drawable = drawableList[i];
-                            if (drawable instanceof DataTextureSceneModel) {
-                                if (drawable.pickCameraTexture) {
-                                    drawable.pickCameraTexture._updateViewMatrix(
-                                        pickViewMatrix,
-                                        pickProjMatrix
-                                    );
-                                }
-                            }
+            for (let type in drawableTypeInfo) {
+                if (drawableTypeInfo.hasOwnProperty(type)) {
+                    const drawableList = drawableTypeInfo[type].drawableList;
+                    for (let i = 0, len = drawableList.length; i < len; i++) {
+                        const drawable = drawableList[i];
+                        if (drawable.setPickMatrices) { // Eg. DataTextureSceneModel, which needs pre-loading into texture
+                            drawable.setPickMatrices(pickViewMatrix, pickProjMatrix);
                         }
                     }
                 }
