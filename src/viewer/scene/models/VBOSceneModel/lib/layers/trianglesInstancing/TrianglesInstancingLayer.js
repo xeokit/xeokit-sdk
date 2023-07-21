@@ -5,6 +5,7 @@ import {math} from "../../../../../math/math.js";
 import {RenderState} from "../../../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../../../webgl/ArrayBuf.js";
 import {getInstancingRenderers} from "./TrianglesInstancingRenderers.js";
+import { createRTCViewMat } from '../../../../../math/rtcCoords.js';
 
 const tempUint8Vec4 = new Uint8Array(4);
 const tempFloat32 = new Float32Array(1);
@@ -119,6 +120,24 @@ class TrianglesInstancingLayer {
          * @type {boolean}
          */
         this.solid = !!cfg.solid;
+
+        /**
+         * Matrices Uniform Block Buffer
+         * 
+         * In shaders, matrices in the Matrices Uniform Block MUST be set in this order:
+         *  - worldMatrix
+         *  - viewMatrix
+         *  - projMatrix
+         *  - positionsDecodeMatrix
+         *  - worldNormalMatrix
+         *  - viewNormalMatrix
+         */
+
+        this.matricesUniformBlockBufferBindingPoint = 0;
+
+        this._matricesUniformBlockBuffer = this.model.scene.canvas.gl.createBuffer();
+        this._matricesUniformBlockBufferData = new Float32Array(4 * 4 * 6); // there is 6 mat4
+
     }
 
     /**
@@ -691,9 +710,44 @@ class TrianglesInstancingLayer {
         }
     }
 
+    beforeEachDraw(frameCtx) {
+        const model = this.model;
+        const { canvas, camera } = model.scene;
+        const gl = canvas.gl;
+        const { viewNormalMatrix, project } = camera;
+        const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix
+        const { worldMatrix, worldNormalMatrix } = model;
+        const { origin, geometry } = this._state;
+        const { positionsDecodeMatrix } = geometry;
+
+        let offset = 0;
+        const mat4Size = 4 * 4;
+
+        // Order matters ! worldMatrix, viewMatrix, projMatrix, positionsDecodeMatrix, worldNormalMatrix & viewNormalMatrix
+        this._matricesUniformBlockBufferData.set(worldMatrix, 0);
+        this._matricesUniformBlockBufferData.set(
+            (origin) ? createRTCViewMat(viewMatrix, origin) : viewMatrix,
+            offset += mat4Size,
+            );
+        this._matricesUniformBlockBufferData.set(frameCtx.pickProjMatrix || project.matrix, offset += mat4Size);
+        this._matricesUniformBlockBufferData.set(positionsDecodeMatrix, offset += mat4Size);
+        this._matricesUniformBlockBufferData.set(worldNormalMatrix, offset += mat4Size);
+        this._matricesUniformBlockBufferData.set(viewNormalMatrix, offset += mat4Size);
+        
+        gl.bindBuffer(gl.UNIFORM_BUFFER, this._matricesUniformBlockBuffer);
+        gl.bufferData(gl.UNIFORM_BUFFER, this._matricesUniformBlockBufferData, gl.DYNAMIC_DRAW);
+
+        gl.bindBufferBase(
+            gl.UNIFORM_BUFFER,
+            this.matricesUniformBlockBufferBindingPoint,
+            this._matricesUniformBlockBuffer);
+    }
+
     // ---------------------- COLOR RENDERING -----------------------------------
 
     drawColorOpaque(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
@@ -750,6 +804,8 @@ class TrianglesInstancingLayer {
     }
 
     drawColorTransparent(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
@@ -776,6 +832,8 @@ class TrianglesInstancingLayer {
     // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
 
     drawDepth(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
@@ -786,6 +844,8 @@ class TrianglesInstancingLayer {
     }
 
     drawNormals(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
@@ -798,6 +858,8 @@ class TrianglesInstancingLayer {
     // ---------------------- SILHOUETTE RENDERING -----------------------------------
 
     drawSilhouetteXRayed(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
@@ -808,6 +870,8 @@ class TrianglesInstancingLayer {
     }
 
     drawSilhouetteHighlighted(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
@@ -818,6 +882,8 @@ class TrianglesInstancingLayer {
     }
 
     drawSilhouetteSelected(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
@@ -830,6 +896,8 @@ class TrianglesInstancingLayer {
     // ---------------------- EDGES RENDERING -----------------------------------
 
     drawEdgesColorOpaque(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
             return;
         }
@@ -839,6 +907,8 @@ class TrianglesInstancingLayer {
     }
 
     drawEdgesColorTransparent(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
             return;
         }
@@ -848,6 +918,8 @@ class TrianglesInstancingLayer {
     }
 
     drawEdgesXRayed(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
@@ -857,6 +929,8 @@ class TrianglesInstancingLayer {
     }
 
     drawEdgesHighlighted(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
@@ -866,6 +940,8 @@ class TrianglesInstancingLayer {
     }
 
     drawEdgesSelected(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
@@ -877,6 +953,8 @@ class TrianglesInstancingLayer {
     // ---------------------- OCCLUSION CULL RENDERING -----------------------------------
 
     drawOcclusion(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
@@ -890,6 +968,8 @@ class TrianglesInstancingLayer {
     // ---------------------- SHADOW BUFFER RENDERING -----------------------------------
 
     drawShadow(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
@@ -902,6 +982,8 @@ class TrianglesInstancingLayer {
     //---- PICKING ----------------------------------------------------------------------------------------------------
 
     drawPickMesh(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
@@ -912,6 +994,8 @@ class TrianglesInstancingLayer {
     }
 
     drawPickDepths(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
@@ -922,6 +1006,8 @@ class TrianglesInstancingLayer {
     }
 
     drawPickNormals(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }

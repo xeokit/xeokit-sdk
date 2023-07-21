@@ -1,5 +1,5 @@
 import {Program} from "../../../../../../webgl/Program.js";
-import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
+import {getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
 import {math} from "../../../../../../math/math.js";
 
 const tempVec3a = math.vec3();
@@ -27,7 +27,6 @@ class TrianglesInstancingDepthRenderer {
 
         const model = instancingLayer.model;
         const scene = model.scene;
-        const camera = scene.camera;
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const geometry = state.geometry;
@@ -46,9 +45,6 @@ class TrianglesInstancingDepthRenderer {
         }
 
         gl.uniform1i(this._uRenderPass, renderPass);
-
-        gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
@@ -81,8 +77,6 @@ class TrianglesInstancingDepthRenderer {
         gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 1);
         gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 1);
         gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 1);
-
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometry.positionsDecodeMatrix);
 
         this._aPosition.bindArrayBuffer(geometry.positionsBuf);
 
@@ -124,10 +118,11 @@ class TrianglesInstancingDepthRenderer {
 
         this._uRenderPass = program.getLocation("renderPass");
 
-        this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-        this._uWorldMatrix = program.getLocation("worldMatrix");
-        this._uViewMatrix = program.getLocation("viewMatrix");
-        this._uProjMatrix = program.getLocation("projMatrix");
+        gl.uniformBlockBinding(
+            program.handle,
+            gl.getUniformBlockIndex(program.handle, "Matrices"),
+            0 // layer.matricesUniformBlockBufferBindingPoint
+        );
 
         this._uSectionPlanes = [];
 
@@ -159,8 +154,6 @@ class TrianglesInstancingDepthRenderer {
 
         this._program.bind();
 
-        gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
-
         if (scene.logarithmicDepthBufferEnabled) {
             const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
@@ -191,10 +184,14 @@ class TrianglesInstancingDepthRenderer {
         src.push("in vec4 modelMatrixCol0;");
         src.push("in vec4 modelMatrixCol1;");
         src.push("in vec4 modelMatrixCol2;");
-        src.push("uniform mat4 worldMatrix;");
-        src.push("uniform mat4 viewMatrix;");
-        src.push("uniform mat4 projMatrix;");
-        src.push("uniform mat4 positionsDecodeMatrix;");
+
+        src.push("uniform Matrices {");
+        src.push("    mat4 worldMatrix;");
+        src.push("    mat4 viewMatrix;");
+        src.push("    mat4 projMatrix;");
+        src.push("    mat4 positionsDecodeMatrix;");
+        src.push("};");
+
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
             src.push("out float vFragDepth;");
