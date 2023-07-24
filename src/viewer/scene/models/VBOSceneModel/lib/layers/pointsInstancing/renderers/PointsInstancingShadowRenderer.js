@@ -1,113 +1,14 @@
 import {Program} from "../../../../../../webgl/Program.js";
-import {getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
-import {math} from "../../../../../../math/math.js";
-
-const tempVec3a = math.vec3();
+import {VBOSceneModelPointInstancingRenderer} from "../../VBOSceneModelRenderers.js";
 
 /**
  * Renders InstancingLayer fragment depths to a shadow map.
  *
  * @private
  */
-class PointsInstancingShadowRenderer {
-
-    constructor(scene) {
-        this._scene = scene;
-        this._hash = this._getHash();
-        this._lastLightId = null;
-        this._allocate();
-    }
-
-    getValid() {
-        return this._hash === this._getHash();
-    }
-
+class PointsInstancingShadowRenderer extends VBOSceneModelPointInstancingRenderer {
     _getHash() {
         return this._scene._sectionPlanesState.getHash();
-    }
-
-    drawLayer( frameCtx, instancingLayer) {
-
-        const model = instancingLayer.model;
-        const scene = model.scene;
-        const gl = scene.canvas.gl;
-        const state = instancingLayer._state;
-
-        if (!this._program) {
-            this._allocate();
-            if (this.errors) {
-                return;
-            }
-        }
-
-        if (frameCtx.lastProgramId !== this._program.id) {
-            frameCtx.lastProgramId = this._program.id;
-            this._bindProgram(frameCtx, instancingLayer);
-        }
-
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, state.geometry.positionsDecodeMatrix);
-
-        this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
-        this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
-        this._aModelMatrixCol2.bindArrayBuffer(state.modelMatrixCol2Buf);
-
-        gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 1);
-        gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 1);
-        gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 1);
-
-        this._aPosition.bindArrayBuffer(state.positionsBuf);
-
-        if (this._aOffset) {
-            this._aOffset.bindArrayBuffer(state.offsetsBuf);
-            gl.vertexAttribDivisor(this._aOffset.location, 1);
-        }
-
-        this._aColor.bindArrayBuffer(state.colorsBuf);
-        gl.vertexAttribDivisor(this._aColor.location, 1);
-
-        this._aFlags.bindArrayBuffer(state.flagsBuf);
-        gl.vertexAttribDivisor(this._aFlags.location, 1);
-
-        // TODO: Section planes need to be set if RTC center has changed since last RTC center recorded on frameCtx
-
-        const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
-        if (numSectionPlanes > 0) {
-            const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-            const baseIndex = instancingLayer.layerIndex * numSectionPlanes;
-            const renderFlags = model.renderFlags;
-            const origin = instancingLayer._state.origin;
-            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
-                const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
-                if (sectionPlaneUniforms) {
-                    const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                    if (active) {
-                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (origin) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
-                            gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
-                        } else {
-                            gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-                        }
-                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
-                    }
-                }
-            }
-        }
-
-        gl.uniform1f(this._uPointSize, 10);
-
-        gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
-
-        gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 0);
-        gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 0);
-        gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 0);
-        gl.vertexAttribDivisor(this._aColor.location, 0);
-        gl.vertexAttribDivisor(this._aFlags.location, 0);
-
-        if (this._aOffset) {
-            gl.vertexAttribDivisor(this._aOffset.location, 0);
-        }
     }
 
     _allocate() {
@@ -265,17 +166,6 @@ class PointsInstancingShadowRenderer {
         src.push("    outColor = vec4(packNormalToRGB(vViewNormal), 1.0); ");
         src.push("}");
         return src;
-    }
-
-    webglContextRestored() {
-        this._program = null;
-    }
-
-    destroy() {
-        if (this._program) {
-            this._program.destroy();
-        }
-        this._program = null;
     }
 }
 

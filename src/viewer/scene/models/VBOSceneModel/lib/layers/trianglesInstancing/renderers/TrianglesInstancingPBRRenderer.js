@@ -1,11 +1,6 @@
 import {Program} from "../../../../../../webgl/Program.js";
-import {math} from "../../../../../../math/math.js";
-import {getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
-import {WEBGL_INFO} from "../../../../../../webglInfo.js";
 import {LinearEncoding, sRGBEncoding} from "../../../../../../constants/constants.js";
-
-const tempVec4 = math.vec4();
-const tempVec3a = math.vec3();
+import {VBOSceneModelTriangleInstancingRenderer} from "../../VBOSceneModelRenderer.js";
 
 const TEXTURE_DECODE_FUNCS = {};
 TEXTURE_DECODE_FUNCS[LinearEncoding] = "linearToLinear";
@@ -14,174 +9,14 @@ TEXTURE_DECODE_FUNCS[sRGBEncoding] = "sRGBToLinear";
 /**
  * @private
  */
-class TrianglesInstancingPBRRenderer {
-
-    constructor(scene, withSAO) {
-        this._scene = scene;
-        this._withSAO = withSAO;
-        this._hash = this._getHash();
-        this._allocate();
-    }
-
-    getValid() {
-        return this._hash === this._getHash();
-    }
-
+class TrianglesInstancingPBRRenderer extends VBOSceneModelTriangleInstancingRenderer {
     _getHash() {
         const scene = this._scene;
         return [scene.gammaOutput, scene._lightsState.getHash(), scene._sectionPlanesState.getHash(), (this._withSAO ? "sao" : "nosao")].join(";");
     }
 
-    drawLayer(frameCtx, instancingLayer, renderPass) {
-
-        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
-
-        const model = instancingLayer.model;
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-        const state = instancingLayer._state;
-        const origin = state.origin;
-        const textureSet = state.textureSet;
-        const geometry = state.geometry;
-        const lightsState = scene._lightsState;
-
-        if (!this._program) {
-            this._allocate();
-            if (this.errors) {
-                return;
-            }
-        }
-
-        if (frameCtx.lastProgramId !== this._program.id) {
-            frameCtx.lastProgramId = this._program.id;
-            this._bindProgram(frameCtx);
-        }
-
-        gl.uniform1i(this._uRenderPass, renderPass);
-
-        const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
-        if (numSectionPlanes > 0) {
-            const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-            const baseIndex = instancingLayer.layerIndex * numSectionPlanes;
-            const renderFlags = model.renderFlags;
-            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
-                const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
-                if (sectionPlaneUniforms) {
-                    const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                    if (active) {
-                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (origin) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
-                            gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
-                        } else {
-                            gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-                        }
-                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
-                    }
-                }
-            }
-        }
-
-        if (this._uUVDecodeMatrix) {
-            gl.uniformMatrix3fv(this._uUVDecodeMatrix, false, geometry.uvDecodeMatrix);
-        }
-
-        this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
-        this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
-        this._aModelMatrixCol2.bindArrayBuffer(state.modelMatrixCol2Buf);
-
-        gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 1);
-        gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 1);
-        gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 1);
-
-        this._aModelNormalMatrixCol0.bindArrayBuffer(state.modelNormalMatrixCol0Buf);
-        this._aModelNormalMatrixCol1.bindArrayBuffer(state.modelNormalMatrixCol1Buf);
-        this._aModelNormalMatrixCol2.bindArrayBuffer(state.modelNormalMatrixCol2Buf);
-
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol0.location, 1);
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol1.location, 1);
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol2.location, 1);
-
-        this._aPosition.bindArrayBuffer(geometry.positionsBuf);
-        this._aNormal.bindArrayBuffer(geometry.normalsBuf);
-
-        if (this._aUV) {
-            this._aUV.bindArrayBuffer(geometry.uvBuf);
-        }
-        this._aColor.bindArrayBuffer(state.colorsBuf);
-        gl.vertexAttribDivisor(this._aColor.location, 1);
-
-        this._aMetallicRoughness.bindArrayBuffer(state.metallicRoughnessBuf);
-        gl.vertexAttribDivisor(this._aMetallicRoughness.location, 1);
-
-        this._aFlags.bindArrayBuffer(state.flagsBuf);
-        gl.vertexAttribDivisor(this._aFlags.location, 1);
-
-        if (this._aOffset) {
-            this._aOffset.bindArrayBuffer(state.offsetsBuf);
-            gl.vertexAttribDivisor(this._aOffset.location, 1);
-        }
-
-        if (lightsState.reflectionMaps.length > 0 && lightsState.reflectionMaps[0].texture && this._uReflectionMap) {
-            this._program.bindTexture(this._uReflectionMap, lightsState.reflectionMaps[0].texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            frameCtx.bindTexture++;
-        }
-
-        if (lightsState.lightMaps.length > 0 && lightsState.lightMaps[0].texture && this._uLightMap) {
-            this._program.bindTexture(this._uLightMap, lightsState.lightMaps[0].texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            frameCtx.bindTexture++;
-        }
-
-        if (this._withSAO) {
-            const sao = scene.sao;
-            const saoEnabled = sao.possible;
-            if (saoEnabled) {
-                const viewportWidth = gl.drawingBufferWidth;
-                const viewportHeight = gl.drawingBufferHeight;
-                tempVec4[0] = viewportWidth;
-                tempVec4[1] = viewportHeight;
-                tempVec4[2] = sao.blendCutoff;
-                tempVec4[3] = sao.blendFactor;
-                gl.uniform4fv(this._uSAOParams, tempVec4);
-                this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, frameCtx.textureUnit);
-                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                frameCtx.bindTexture++;
-            }
-        }
-
-        if (textureSet) {
-            this._program.bindTexture(this._uBaseColorMap, textureSet.colorTexture.texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            this._program.bindTexture(this._uMetallicRoughMap, textureSet.metallicRoughnessTexture.texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            this._program.bindTexture(this._uEmissiveMap, textureSet.emissiveTexture.texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            this._program.bindTexture(this._uNormalMap, textureSet.normalsTexture.texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-        }
-
-        geometry.indicesBuf.bind();
-
-        gl.drawElementsInstanced(gl.TRIANGLES, geometry.indicesBuf.numItems, geometry.indicesBuf.itemType, 0, state.numInstances);
-
-        frameCtx.drawElements++;
-
-        gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 0);
-        gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 0);
-        gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 0);
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol0.location, 0);
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol1.location, 0);
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol2.location, 0);
-        gl.vertexAttribDivisor(this._aColor.location, 0);
-        gl.vertexAttribDivisor(this._aMetallicRoughness.location, 0);
-        gl.vertexAttribDivisor(this._aFlags.location, 0);
-
-        if (this._aOffset) {
-            gl.vertexAttribDivisor(this._aOffset.location, 0);
-        }
+    drawLayer(frameCtx, layer, renderPass) {
+        super.drawLayer(frameCtx, layer, renderPass, { incrementDrawState: true });
     }
 
     _allocate() {
@@ -883,17 +718,6 @@ class TrianglesInstancingPBRRenderer {
 
         src.push("}");
         return src;
-    }
-
-    webglContextRestored() {
-        this._program = null;
-    }
-
-    destroy() {
-        if (this._program) {
-            this._program.destroy();
-        }
-        this._program = null;
     }
 }
 

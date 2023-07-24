@@ -1,93 +1,16 @@
 import {Program} from "../../../../../../webgl/Program.js";
 import {math} from "../../../../../../math/math.js";
-import {getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
+import { VBOSceneModelTriangleBatchingRenderer } from "../../VBOSceneModelRenderer.js";
 
 const tempVec4 = math.vec4();
-const tempVec3a = math.vec3();
 
 /**
  * @private
  */
-class TrianglesBatchingFlatColorRenderer {
-
-    constructor(scene, withSAO) {
-        this._scene = scene;
-        this._withSAO = withSAO;
-        this._hash = this._getHash();
-        this._allocate();
-    }
-
-    getValid() {
-        return this._hash === this._getHash();
-    }
-
+class TrianglesBatchingFlatColorRenderer extends VBOSceneModelTriangleBatchingRenderer {
     _getHash() {
         const scene = this._scene;
         return [scene._lightsState.getHash(), scene._sectionPlanesState.getHash(), (this._withSAO ? "sao" : "nosao")].join(";");
-    }
-
-    drawLayer(frameCtx, batchingLayer, renderPass) {
-
-        const scene = this._scene;
-        const model = batchingLayer.model;
-        const gl = scene.canvas.gl;
-        const state = batchingLayer._state;
-        const origin = batchingLayer._state.origin;
-
-        if (!this._program) {
-            this._allocate();
-            if (this.errors) {
-                return;
-            }
-        }
-
-        if (frameCtx.lastProgramId !== this._program.id) {
-            frameCtx.lastProgramId = this._program.id;
-            this._bindProgram(frameCtx);
-        }
-
-        gl.uniform1i(this._uRenderPass, renderPass);
-
-        const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
-        if (numSectionPlanes > 0) {
-            const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-            const baseIndex = batchingLayer.layerIndex * numSectionPlanes;
-            const renderFlags = model.renderFlags;
-            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
-                const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
-                const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                if (active) {
-                    const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                    if (origin) {
-                        const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
-                        gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
-                    } else {
-                        gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-                    }
-                    gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
-                }
-            }
-        }
-
-
-        this._aPosition.bindArrayBuffer(state.positionsBuf);
-
-        if (this._aColor) {
-            this._aColor.bindArrayBuffer(state.colorsBuf);
-        }
-
-        if (this._aFlags) {
-            this._aFlags.bindArrayBuffer(state.flagsBuf);
-        }
-
-        if (this._aOffset) {
-            this._aOffset.bindArrayBuffer(state.offsetsBuf);
-        }
-
-        state.indicesBuf.bind();
-
-        gl.drawElements(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
     }
 
     _allocate() {
@@ -462,17 +385,6 @@ class TrianglesBatchingFlatColorRenderer {
 
         src.push("}");
         return src;
-    }
-
-    webglContextRestored() {
-        this._program = null;
-    }
-
-    destroy() {
-        if (this._program) {
-            this._program.destroy();
-        }
-        this._program = null;
     }
 }
 

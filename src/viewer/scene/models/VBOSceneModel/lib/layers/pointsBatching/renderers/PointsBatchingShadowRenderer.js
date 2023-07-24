@@ -1,85 +1,14 @@
 import {Program} from "../../../../../../webgl/Program.js";
-import {math} from "../../../../../../math/math.js";
-import {getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
-
-const tempVec3a = math.vec3();
+import {VBOSceneModelPointBatchingRenderer} from "../../VBOSceneModelRenderers.js";
 
 /**
  * Renders pointsBatchingLayer fragment depths to a shadow map.
  *
  * @private
  */
-class PointsBatchingShadowRenderer {
-
-    constructor(scene) {
-        this._scene = scene;
-        this._hash = this._getHash();
-        this._allocate();
-    }
-
-    getValid() {
-        return this._hash === this._getHash();
-    }
-
+class PointsBatchingShadowRenderer extends VBOSceneModelPointBatchingRenderer {
     _getHash() {
         return this._scene._sectionPlanesState.getHash();
-    }
-
-    drawLayer(frameCtx, pointsBatchingLayer) {
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-        const state = pointsBatchingLayer._state;
-
-        if (!this._program) {
-            this._allocate();
-        }
-        if (frameCtx.lastProgramId !== this._program.id) {
-            frameCtx.lastProgramId = this._program.id;
-            this._bindProgram(frameCtx);
-        }
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, pointsBatchingLayer._state.positionsDecodeMatrix);
-        if (scene.logarithmicDepthBufferEnabled) {
-            gl.uniform1f(this._uZFar, scene.camera.project.far)
-        }
-        this._aPosition.bindArrayBuffer(state.positionsBuf);
-        if (this._aColor) { // Needed for masking out transparent entities using alpha channel
-            this._aColor.bindArrayBuffer(state.colorsBuf);
-        }
-        if (this._aFlags) {
-            this._aFlags.bindArrayBuffer(state.flagsBuf);
-        }
-        if (this._aOffset) {
-            this._aOffset.bindArrayBuffer(state.offsetsBuf);
-        }
-
-        // TODO: Section planes need to be set if RTC center has changed since last RTC center recorded on frameCtx
-
-        const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
-        if (numSectionPlanes > 0) {
-            const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-            const baseIndex = pointsBatchingLayer.layerIndex * numSectionPlanes;
-            const renderFlags = pointsBatchingLayer.model.renderFlags;
-            const origin = pointsBatchingLayer._state.origin;
-            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
-                const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
-                if (sectionPlaneUniforms) {
-                    const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                    if (active) {
-                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (origin) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
-                            gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
-                        } else {
-                            gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-                        }
-                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
-                    }
-                }
-            }
-        }
-
-        gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
     }
 
     _allocate() {
@@ -223,17 +152,6 @@ class PointsBatchingShadowRenderer {
         src.push("    outColor = encodeFloat( gl_FragCoord.z); ");
         src.push("}");
         return src;
-    }
-
-    webglContextRestored() {
-        this._program = null;
-    }
-
-    destroy() {
-        if (this._program) {
-            this._program.destroy();
-        }
-        this._program = null;
     }
 }
 

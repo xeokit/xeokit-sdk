@@ -1,118 +1,11 @@
 import {Program} from "../../../../../../webgl/Program.js";
-import {getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
-import {math} from "../../../../../../math/math.js";
-
-const tempVec3a = math.vec3();
-
+import {VBOSceneModelTriangleInstancingRenderer} from "../../VBOSceneModelRenderer.js";
 /**
  * @private
  */
-class TrianglesInstancingPickDepthRenderer {
-
-    constructor(scene) {
-        this._scene = scene;
-        this._hash = this._getHash();
-        this._allocate();
-    }
-
-    getValid() {
-        return this._hash === this._getHash();
-    }
-
+class TrianglesInstancingPickDepthRenderer extends VBOSceneModelTriangleInstancingRenderer {
     _getHash() {
         return this._scene._sectionPlanesState.getHash();
-    }
-
-    drawLayer(frameCtx, instancingLayer, renderPass) {
-
-        const model = instancingLayer.model;
-        const scene = model.scene;
-        const gl = scene.canvas.gl;
-        const state = instancingLayer._state;
-        const geometry = state.geometry;
-        const origin = instancingLayer._state.origin;
-
-        if (!this._program) {
-            this._allocate(instancingLayer);
-            if (this.errors) {
-                return;
-            }
-        }
-
-        if (frameCtx.lastProgramId !== this._program.id) {
-            frameCtx.lastProgramId = this._program.id;
-            this._bindProgram();
-        }
-
-        gl.uniform1i(this._uRenderPass, renderPass);
-
-        gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
-
-        gl.uniform1f(this._uPickZNear, frameCtx.pickZNear);
-        gl.uniform1f(this._uPickZFar, frameCtx.pickZFar);
-
-        if (scene.logarithmicDepthBufferEnabled) {
-            const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2); // TODO: Far from pick project matrix
-            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
-        }
-
-        const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
-        if (numSectionPlanes > 0) {
-            const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-            const baseIndex = instancingLayer.layerIndex * numSectionPlanes;
-            const renderFlags = model.renderFlags;
-            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
-                const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
-                if (sectionPlaneUniforms) {
-                    const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                    if (active) {
-                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (origin) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
-                            gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
-                        } else {
-                            gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-                        }
-                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
-                    }
-                }
-            }
-        }
-
-        this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
-        this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
-        this._aModelMatrixCol2.bindArrayBuffer(state.modelMatrixCol2Buf);
-
-        gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 1);
-        gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 1);
-        gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 1);
-
-        this._aPosition.bindArrayBuffer(geometry.positionsBuf);
-
-        this._aFlags.bindArrayBuffer(state.flagsBuf);
-        gl.vertexAttribDivisor(this._aFlags.location, 1);
-
-        if (this._aOffset) {
-            this._aOffset.bindArrayBuffer(state.offsetsBuf);
-            gl.vertexAttribDivisor(this._aOffset.location, 1);
-        }
-
-        geometry.indicesBuf.bind();
-
-        gl.drawElementsInstanced(gl.TRIANGLES, geometry.indicesBuf.numItems, geometry.indicesBuf.itemType, 0, state.numInstances);
-
-        // Cleanup
-
-        gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 0);
-        gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 0);
-        gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 0);
-
-        gl.vertexAttribDivisor(this._aFlags.location, 0);
-
-        if (this._aOffset) {
-            gl.vertexAttribDivisor(this._aOffset.location, 0);
-        }
     }
 
     _allocate() {
@@ -318,17 +211,6 @@ class TrianglesInstancingPickDepthRenderer {
         src.push("    outColor = packDepth(zNormalizedDepth); "); // Must be linear depth
         src.push("}");
         return src;
-    }
-
-    webglContextRestored() {
-        this._program = null;
-    }
-
-    destroy() {
-        if (this._program) {
-            this._program.destroy();
-        }
-        this._program = null;
     }
 }
 

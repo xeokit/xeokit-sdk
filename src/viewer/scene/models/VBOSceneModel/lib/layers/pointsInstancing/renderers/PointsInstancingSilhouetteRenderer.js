@@ -1,137 +1,16 @@
 import {Program} from "../../../../../../webgl/Program.js";
-import {RENDER_PASSES} from "../../../RENDER_PASSES.js";
-import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
-import {math} from "../../../../../../math/math.js";
-
-const tempVec3a = math.vec3();
+import {VBOSceneModelPointInstancingRenderer} from "../../VBOSceneModelRenderers.js";
 
 /**
  * @private
  */
-class PointsInstancingSilhouetteRenderer {
-
-    constructor(scene) {
-        this._scene = scene;
-        this._hash = this._getHash();
-        this._allocate();
-    }
-
-    getValid() {
-        return this._hash === this._getHash();
-    }
-
+class PointsInstancingSilhouetteRenderer extends VBOSceneModelPointInstancingRenderer {
     _getHash() {
         return this._scene._sectionPlanesState.getHash() + this._scene.pointsMaterial.hash;
     }
 
     drawLayer(frameCtx, instancingLayer, renderPass) {
-
-        const model = instancingLayer.model;
-        const scene = model.scene;
-        const camera = scene.camera;
-        const gl = scene.canvas.gl;
-        const state = instancingLayer._state;
-        const origin = instancingLayer._state.origin;
-        const pointsMaterial = scene.pointsMaterial._state;
-        const geometry = instancingLayer.geometry;
-
-        if (!this._program) {
-            this._allocate(instancingLayer.model.scene);
-            if (this.errors) {
-                return;
-            }
-        }
-
-        if (frameCtx.lastProgramId !== this._program.id) {
-            frameCtx.lastProgramId = this._program.id;
-            this._bindProgram();
-        }
-
-        gl.uniform1i(this._uRenderPass, renderPass);
-
-        if (renderPass === RENDER_PASSES.SILHOUETTE_XRAYED) {
-            const material = scene.xrayMaterial._state;
-            const fillColor = material.fillColor;
-            const fillAlpha = material.fillAlpha;
-            gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
-
-        } else if (renderPass === RENDER_PASSES.SILHOUETTE_HIGHLIGHTED) {
-            const material = scene.highlightMaterial._state;
-            const fillColor = material.fillColor;
-            const fillAlpha = material.fillAlpha;
-            gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
-
-        } else if (renderPass === RENDER_PASSES.SILHOUETTE_SELECTED) {
-            const material = scene.selectedMaterial._state;
-            const fillColor = material.fillColor;
-            const fillAlpha = material.fillAlpha;
-            gl.uniform4f(this._uColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
-
-        } else {
-            gl.uniform4fv(this._uColor, math.vec3([1, 1, 1]));
-        }
-
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
-        gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
-
-        const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
-        if (numSectionPlanes > 0) {
-            const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-            const baseIndex = instancingLayer.layerIndex * numSectionPlanes;
-            const renderFlags = model.renderFlags;
-            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
-                const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
-                if (sectionPlaneUniforms) {
-                    const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                    if (active) {
-                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (origin) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
-                            gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
-                        } else {
-                            gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-                        }
-                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
-                    }
-                }
-            }
-        }
-
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometry.positionsDecodeMatrix);
-
-        this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
-        this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
-        this._aModelMatrixCol2.bindArrayBuffer(state.modelMatrixCol2Buf);
-
-        gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 1);
-        gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 1);
-        gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 1);
-
-        this._aPosition.bindArrayBuffer(geometry.positionsBuf);
-
-        this._aFlags.bindArrayBuffer(state.flagsBuf, gl.UNSIGNED_BYTE, true);
-        gl.vertexAttribDivisor(this._aFlags.location, 1);
-
-        if (this._aOffset) {
-            this._aOffset.bindArrayBuffer(state.offsetsBuf);
-            gl.vertexAttribDivisor(this._aOffset.location, 1);
-        }
-
-        gl.uniform1f(this._uPointSize, pointsMaterial.pointSize);
-        const nearPlaneHeight = (scene.camera.projection === "ortho") ? 1.0 : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0)));
-        gl.uniform1f(this._uNearPlaneHeight, nearPlaneHeight);
-
-        gl.drawArraysInstanced(gl.POINTS, 0, geometry.positionsBuf.numItems, state.numInstances);
-
-        gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 0); // TODO: Is this needed
-        gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 0);
-        gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 0);
-
-        gl.vertexAttribDivisor(this._aFlags.location, 0);
-        if (this._aOffset) {
-            gl.vertexAttribDivisor(this._aOffset.location, 0);
-        }
+        super.drawLayer(frameCtx, instancingLayer, renderPass, { colorUniform: true });
     }
 
     _allocate() {
@@ -345,17 +224,6 @@ class PointsInstancingSilhouetteRenderer {
         src.push("outColor = vColor;");
         src.push("}");
         return src;
-    }
-
-    webglContextRestored() {
-        this._program = null;
-    }
-
-    destroy() {
-        if (this._program) {
-            this._program.destroy();
-        }
-        this._program = null;
     }
 }
 
