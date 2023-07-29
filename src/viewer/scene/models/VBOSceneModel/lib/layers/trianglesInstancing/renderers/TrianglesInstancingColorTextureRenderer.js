@@ -110,20 +110,6 @@ class TrianglesInstancingColorTextureRenderer {
 
         geometry.indicesBuf.bind();
 
-        gl.drawElementsInstanced(gl.TRIANGLES, geometry.indicesBuf.numItems, geometry.indicesBuf.itemType, 0, state.numInstances);
-
-        frameCtx.drawElements++;
-
-        gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 0);
-        gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 0);
-        gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 0);
-        gl.vertexAttribDivisor(this._aColor.location, 0);
-        gl.vertexAttribDivisor(this._aFlags.location, 0);
-
-        if (this._aOffset) {
-            gl.vertexAttribDivisor(this._aOffset.location, 0);
-        }
-
         if (textureSet) {
             if (textureSet.colorTexture) {
                 this._program.bindTexture(this._uColorMap, textureSet.colorTexture.texture, frameCtx.textureUnit);
@@ -145,6 +131,22 @@ class TrianglesInstancingColorTextureRenderer {
                 this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 0);
             }
         }
+
+        gl.drawElementsInstanced(gl.TRIANGLES, geometry.indicesBuf.numItems, geometry.indicesBuf.itemType, 0, state.numInstances);
+
+        frameCtx.drawElements++;
+
+        gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 0);
+        gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 0);
+        gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 0);
+        gl.vertexAttribDivisor(this._aColor.location, 0);
+        gl.vertexAttribDivisor(this._aFlags.location, 0);
+
+        if (this._aOffset) {
+            gl.vertexAttribDivisor(this._aOffset.location, 0);
+        }
+
+
     }
 
     _allocate() {
