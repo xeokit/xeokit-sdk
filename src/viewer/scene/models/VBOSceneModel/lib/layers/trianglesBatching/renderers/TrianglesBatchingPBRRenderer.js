@@ -104,7 +104,7 @@ class TrianglesBatchingPBRRenderer extends VBOSceneModelTriangleBatchingRenderer
         this._aMetallicRoughness = program.getAttribute("metallicRoughness");
         this._aFlags = program.getAttribute("flags");
 
-        this._uBaseColorMap = "uBaseColorMap";
+        this._uColorMap = "uColorMap";
         this._uMetallicRoughMap = "uMetallicRoughMap";
         this._uEmissiveMap = "uEmissiveMap";
         this._uNormalMap = "uNormalMap";
@@ -333,7 +333,7 @@ class TrianglesBatchingPBRRenderer extends VBOSceneModelTriangleBatchingRenderer
             src.push("in float vFragDepth;");
         }
 
-        src.push("uniform sampler2D uBaseColorMap;");
+        src.push("uniform sampler2D uColorMap;");
         src.push("uniform sampler2D uMetallicRoughMap;");
         src.push("uniform sampler2D uEmissiveMap;");
         src.push("uniform sampler2D uNormalMap;");
@@ -627,9 +627,9 @@ class TrianglesBatchingPBRRenderer extends VBOSceneModelTriangleBatchingRenderer
         src.push("float roughness = float(vMetallicRoughness.g) / 255.0;");
         src.push("float dielectricSpecular = 0.16 * specularF0 * specularF0;");
 
-        src.push("vec4 baseColorTexel = sRGBToLinear(texture(uBaseColorMap, vUV));");
-        src.push("baseColor *= baseColorTexel.rgb;");
-     //    src.push("opacity *= baseColorTexel.a;");
+        src.push("vec4 colorTexel = sRGBToLinear(texture(uColorMap, vUV));");
+        src.push("baseColor *= colorTexel.rgb;");
+     //    src.push("opacity *= colorTexel.a;");
 
         src.push("vec3 metalRoughTexel = texture(uMetallicRoughMap, vUV).rgb;");
         src.push("metallic *= metalRoughTexel.b;");

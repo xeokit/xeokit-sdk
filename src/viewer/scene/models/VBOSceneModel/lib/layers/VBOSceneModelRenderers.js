@@ -96,11 +96,14 @@ class VBOSceneModelRenderer {
 
         this.setSectionPlanesStateUniforms(layer);
 
-        // TODO this line found in point batching shadow renderer
-        // gl.uniform1f(this._uZFar, scene.camera.project.far)
-        if (this._uLogDepthBufFC && scene.logarithmicDepthBufferEnabled) {
-            const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2); // TODO: Far from pick project matrix?
-            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
+        if (scene.logarithmicDepthBufferEnabled) {
+            if (this._uLogDepthBufFC ) {
+                const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2); // TODO: Far from pick project matrix?
+                gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
+            }
+            if (this._uZFar) {
+                gl.uniform1f(this._uZFar, scene.camera.project.far)
+            }
         }
 
         if (this._uPickInvisible) {
@@ -185,8 +188,6 @@ class VBOSceneModelRenderer {
         }
 
         if (this._aFlags) {
-            // TODO this ligne found in some (few)
-            // this._aFlags.bindArrayBuffer(state.flagsBuf, gl.UNSIGNED_BYTE, true);
             this._aFlags.bindArrayBuffer(state.flagsBuf);
             if (this._instancing) {
                 gl.vertexAttribDivisor(this._aFlags.location, 1);
@@ -217,9 +218,6 @@ class VBOSceneModelRenderer {
             } = textureSet;
 
             if (colorTexture) {
-                // TODO find this line in triangle instancing PBR Renderer
-                // this._program.bindTexture(this._uBaseColorMap, colorTexture.texture, frameCtx.textureUnit);
-                // => _uBaseColorMap instead of _uColorMap next line
                 this._program.bindTexture(this._uColorMap, colorTexture.texture, frameCtx.textureUnit);
                 frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
             }
