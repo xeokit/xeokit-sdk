@@ -4,9 +4,6 @@ import {VBOSceneModelTriangleInstancingEdgesRenderer} from "../../VBOSceneModelR
  * @private
  */
 class TrianglesInstancingEdgesRenderer extends VBOSceneModelTriangleInstancingEdgesRenderer {
-    _getHash() {
-        return this._scene._sectionPlanesState.getHash();
-    }
 
     drawLayer(frameCtx, instancingLayer, renderPass) {
         super.drawLayer(frameCtx, instancingLayer, renderPass, { colorUniform: true });

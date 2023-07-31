@@ -4,9 +4,6 @@ import {VBOSceneModelLineInstancingRenderer} from "../../VBOSceneModelRenderers.
  * @private
  */
 class LinesInstancingSilhouetteRenderer extends VBOSceneModelLineInstancingRenderer {
-    _getHash() {
-        return this._scene._sectionPlanesState.getHash();
-    }
 
     drawLayer(frameCtx, instancingLayer, renderPass) {
         super.drawLayer(frameCtx, instancingLayer, renderPass, { colorUniform: true });

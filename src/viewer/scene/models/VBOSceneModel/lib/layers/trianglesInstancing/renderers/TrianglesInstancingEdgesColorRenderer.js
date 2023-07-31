@@ -4,9 +4,6 @@ import { VBOSceneModelTriangleInstancingEdgesRenderer } from "../../VBOSceneMode
  * @private
  */
 class TrianglesInstancingEdgesColorRenderer extends VBOSceneModelTriangleInstancingEdgesRenderer {
-    _getHash() {
-        return this._scene._sectionPlanesState.getHash();
-    }
 
     _buildVertexShader() {
         const scene = this._scene;

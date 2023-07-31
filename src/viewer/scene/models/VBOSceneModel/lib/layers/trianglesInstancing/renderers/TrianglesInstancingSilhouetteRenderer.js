@@ -4,9 +4,6 @@ import {VBOSceneModelTriangleInstancingRenderer} from "../../VBOSceneModelRender
  * @private
  */
 class TrianglesInstancingSilhouetteRenderer extends VBOSceneModelTriangleInstancingRenderer {
-    _getHash() {
-        return this._scene._sectionPlanesState.getHash();
-    }
 
     drawLayer(frameCtx, instancingLayer, renderPass) {
         // TODO color uniform true ???

@@ -6,9 +6,6 @@ import {VBOSceneModelPointBatchingRenderer} from "../../VBOSceneModelRenderers.j
  * @private
  */
 class PointsBatchingShadowRenderer extends VBOSceneModelPointBatchingRenderer {
-    _getHash() {
-        return this._scene._sectionPlanesState.getHash();
-    }
 
     _buildVertexShader() {
         const scene = this._scene;

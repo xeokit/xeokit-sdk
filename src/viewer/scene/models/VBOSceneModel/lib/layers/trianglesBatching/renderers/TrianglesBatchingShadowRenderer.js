@@ -6,9 +6,6 @@ import {VBOSceneModelTriangleBatchingRenderer} from "../../VBOSceneModelRenderer
  * @private
  */
 class TrianglesBatchingShadowRenderer extends VBOSceneModelTriangleBatchingRenderer {
-    _getHash() {
-        return this._scene._sectionPlanesState.getHash();
-    }
 
     _buildVertexShader() {
         const scene = this._scene;

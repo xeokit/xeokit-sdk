@@ -22,11 +22,11 @@ class VBOSceneModelRenderer {
     }
 
     /**
-     * Must be overrided by subclasses.
+     * Should be overrided by subclasses if it does not only "depend" on section planes state.
      * @returns { string }
      */
     _getHash() {
-        return "";
+        return this._scene._sectionPlanesState.getHash();
     }
 
     _buildShader() {

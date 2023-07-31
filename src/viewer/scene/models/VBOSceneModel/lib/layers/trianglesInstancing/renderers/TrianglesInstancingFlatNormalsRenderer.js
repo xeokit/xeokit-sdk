@@ -4,9 +4,6 @@ import {VBOSceneModelTriangleInstancingRenderer} from "../../VBOSceneModelRender
  * @private
  */
 class TrianglesInstancingFlatNormalsRenderer extends VBOSceneModelTriangleInstancingRenderer {
-    _getHash() {
-        return this._scene._sectionPlanesState.getHash();
-    }
 
     _buildVertexShader() {
         const scene = this._scene;

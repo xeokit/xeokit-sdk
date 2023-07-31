@@ -6,9 +6,6 @@ import {VBOSceneModelPointInstancingRenderer} from "../../VBOSceneModelRenderers
  * @private
  */
 class PointsInstancingShadowRenderer extends VBOSceneModelPointInstancingRenderer {
-    _getHash() {
-        return this._scene._sectionPlanesState.getHash();
-    }
 
     _buildVertexShader() {
         const scene = this._scene;

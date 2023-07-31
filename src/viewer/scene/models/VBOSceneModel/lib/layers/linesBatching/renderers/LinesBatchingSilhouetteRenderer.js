@@ -4,9 +4,6 @@ import {VBOSceneModelLineBatchingRenderer} from "../../VBOSceneModelRenderers.js
  * @private
  */
 class LinesBatchingSilhouetteRenderer extends VBOSceneModelLineBatchingRenderer {
-    _getHash() {
-        return this._scene._sectionPlanesState.getHash();
-    }
 
     drawLayer(frameCtx, batchingLayer, renderPass) {
         super.drawLayer(frameCtx, batchingLayer, renderPass, { colorUniform: true });

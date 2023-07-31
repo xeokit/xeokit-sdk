@@ -4,9 +4,6 @@ import {VBOSceneModelTriangleBatchingEdgesRenderer} from "../../VBOSceneModelRen
  * @private
  */
 class TrianglesBatchingEdgesRenderer extends VBOSceneModelTriangleBatchingEdgesRenderer {
-    _getHash() {
-        return this._scene._sectionPlanesState.getHash();
-    }
 
     drawLayer(frameCtx, batchingLayer, renderPass) {
         super.drawLayer(frameCtx, batchingLayer, renderPass, { colorUniform: true });
