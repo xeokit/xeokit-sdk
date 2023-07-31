@@ -1,4 +1,3 @@
-import {Program} from "../../../../../../webgl/Program.js";
 import {VBOSceneModelTriangleInstancingRenderer} from "../../VBOSceneModelRenderers.js";
 /**
  * Renders InstancingLayer fragment depths to a shadow map.
@@ -8,37 +7,6 @@ import {VBOSceneModelTriangleInstancingRenderer} from "../../VBOSceneModelRender
 class TrianglesInstancingShadowRenderer extends VBOSceneModelTriangleInstancingRenderer {
     _getHash() {
         return this._scene._sectionPlanesState.getHash();
-    }
-
-    _allocate() {
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-        const sectionPlanesState = scene._sectionPlanesState;
-        this._program = new Program(gl, this._buildShader());
-        if (this._program.errors) {
-            this.errors = this._program.errors;
-            return;
-        }
-        const program = this._program;
-        this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-        this._uShadowViewMatrix = program.getLocation("shadowViewMatrix");
-        this._uShadowProjMatrix = program.getLocation("shadowProjMatrix");
-        this._uSectionPlanes = [];
-        const clips = sectionPlanesState.sectionPlanes;
-        for (let i = 0, len = clips.length; i < len; i++) {
-            this._uSectionPlanes.push({
-                active: program.getLocation("sectionPlaneActive" + i),
-                pos: program.getLocation("sectionPlanePos" + i),
-                dir: program.getLocation("sectionPlaneDir" + i)
-            });
-        }
-        this._aPosition = program.getAttribute("position");
-        this._aOffset = program.getAttribute("offset");
-        this._aColor = program.getAttribute("color");
-        this._aFlags = program.getAttribute("flags");
-        this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
-        this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");
-        this._aModelMatrixCol2 = program.getAttribute("modelMatrixCol2");
     }
 
     _bindProgram(frameCtx) {

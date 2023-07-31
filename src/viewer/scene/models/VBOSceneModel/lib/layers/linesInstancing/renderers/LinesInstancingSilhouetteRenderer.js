@@ -1,4 +1,3 @@
-import {Program} from "../../../../../../webgl/Program.js";
 import {VBOSceneModelLineInstancingRenderer} from "../../VBOSceneModelRenderers.js";
 
 /**
@@ -11,47 +10,6 @@ class LinesInstancingSilhouetteRenderer extends VBOSceneModelLineInstancingRende
 
     drawLayer(frameCtx, instancingLayer, renderPass) {
         super.drawLayer(frameCtx, instancingLayer, renderPass, { colorUniform: true });
-    }
-
-    _allocate() {
-
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-        const sectionPlanesState = scene._sectionPlanesState;
-
-        this._program = new Program(gl, this._buildShader());
-
-        if (this._program.errors) {
-            this.errors = this._program.errors;
-            return;
-        }
-
-        const program = this._program;
-
-        this._uRenderPass = program.getLocation("renderPass");
-
-        this._uColor = program.getLocation("color");
-        this._uSectionPlanes = [];
-
-        const clips = sectionPlanesState.sectionPlanes;
-        for (let i = 0, len = clips.length; i < len; i++) {
-            this._uSectionPlanes.push({
-                active: program.getLocation("sectionPlaneActive" + i),
-                pos: program.getLocation("sectionPlanePos" + i),
-                dir: program.getLocation("sectionPlaneDir" + i)
-            });
-        }
-
-        this._aPosition = program.getAttribute("position");
-        this._aOffset = program.getAttribute("offset");
-        this._aFlags = program.getAttribute("flags");
-        this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
-        this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");
-        this._aModelMatrixCol2 = program.getAttribute("modelMatrixCol2");
-
-        if (scene.logarithmicDepthBufferEnabled) {
-            this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
-        }
     }
 
     _bindProgram() {

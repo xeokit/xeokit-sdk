@@ -1,4 +1,3 @@
-import {Program} from "../../../../../../webgl/Program.js";
 import {VBOSceneModelPointBatchingRenderer} from "../../VBOSceneModelRenderers.js";
 
 /**
@@ -9,44 +8,6 @@ import {VBOSceneModelPointBatchingRenderer} from "../../VBOSceneModelRenderers.j
 class PointsBatchingShadowRenderer extends VBOSceneModelPointBatchingRenderer {
     _getHash() {
         return this._scene._sectionPlanesState.getHash();
-    }
-
-    _allocate() {
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-        const sectionPlanesState = scene._sectionPlanesState;
-        this._program = new Program(gl, this._buildShader());
-        if (this._program.errors) {
-            this.errors = this._program.errors;
-            return;
-        }
-        const program = this._program;
-
-        gl.uniformBlockBinding(
-            program.handle,
-            gl.getUniformBlockIndex(program.handle, "Matrices"),
-            0 // layer.matricesUniformBlockBufferBindingPoint
-        );
-
-        this._uShadowViewMatrix = program.getLocation("shadowViewMatrix");
-        this._uShadowProjMatrix = program.getLocation("shadowProjMatrix");
-        if (scene.logarithmicDepthBufferEnabled) {
-            this._uZFar = program.getLocation("zFar");
-        }
-        this._uSectionPlanes = [];
-        const sectionPlanes = sectionPlanesState.sectionPlanes;
-        for (let i = 0, len = sectionPlanes.length; i < len; i++) {
-            this._uSectionPlanes.push({
-                active: program.getLocation("sectionPlaneActive" + i),
-                pos: program.getLocation("sectionPlanePos" + i),
-                dir: program.getLocation("sectionPlaneDir" + i)
-            });
-        }
-        this._aPosition = program.getAttribute("position");
-        this._aOffset = program.getAttribute("offset");
-        this._aColor = program.getAttribute("color");
-        this._aFlags = program.getAttribute("flags");
-        this._uPointSize = program.getLocation("pointSize");
     }
 
     _bindProgram(frameCtx) {

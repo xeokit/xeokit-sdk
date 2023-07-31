@@ -1,4 +1,3 @@
-import {Program} from "../../../../../../webgl/Program.js";
 import {VBOSceneModelLineBatchingRenderer} from "../../VBOSceneModelRenderers.js";
 
 /**
@@ -11,49 +10,6 @@ class LinesBatchingSilhouetteRenderer extends VBOSceneModelLineBatchingRenderer 
 
     drawLayer(frameCtx, batchingLayer, renderPass) {
         super.drawLayer(frameCtx, batchingLayer, renderPass, { colorUniform: true });
-    }
-
-    _allocate() {
-
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-
-        this._program = new Program(gl, this._buildShader());
-
-        if (this._program.errors) {
-            this.errors = this._program.errors;
-            return;
-        }
-
-        const program = this._program;
-
-        this._uRenderPass = program.getLocation("renderPass");
-
-        this._uColor = program.getLocation("color");
-
-        gl.uniformBlockBinding(
-            program.handle,
-            gl.getUniformBlockIndex(program.handle, "Matrices"),
-            0 // layer.matricesUniformBlockBufferBindingPoint
-        );
-
-        this._uSectionPlanes = [];
-
-        for (let i = 0, len = scene._sectionPlanesState.sectionPlanes.length; i < len; i++) {
-            this._uSectionPlanes.push({
-                active: program.getLocation("sectionPlaneActive" + i),
-                pos: program.getLocation("sectionPlanePos" + i),
-                dir: program.getLocation("sectionPlaneDir" + i)
-            });
-        }
-
-        this._aPosition = program.getAttribute("position");
-        this._aOffset = program.getAttribute("offset");
-        this._aFlags = program.getAttribute("flags");
-
-        if (scene.logarithmicDepthBufferEnabled) {
-            this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
-        }
     }
 
     _bindProgram() {

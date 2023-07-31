@@ -1,5 +1,4 @@
-import {Program} from "../../../../../../webgl/Program.js";
-import { VBOSceneModelTriangleBatchingRenderer } from "../../VBOSceneModelRenderers.js";
+import {VBOSceneModelTriangleBatchingRenderer} from "../../VBOSceneModelRenderers.js";
 
 /**
  * Renders BatchingLayer fragment depths to a shadow map.
@@ -9,37 +8,6 @@ import { VBOSceneModelTriangleBatchingRenderer } from "../../VBOSceneModelRender
 class TrianglesBatchingShadowRenderer extends VBOSceneModelTriangleBatchingRenderer {
     _getHash() {
         return this._scene._sectionPlanesState.getHash();
-    }
-
-    _allocate() {
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-        const sectionPlanesState = scene._sectionPlanesState;
-        this._program = new Program(gl, this._buildShader());
-        if (this._program.errors) {
-            this.errors = this._program.errors;
-            return;
-        }
-        const program = this._program;
-        this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-        this._uShadowViewMatrix = program.getLocation("shadowViewMatrix");
-        this._uShadowProjMatrix = program.getLocation("shadowProjMatrix");
-        if (scene.logarithmicDepthBufferEnabled) {
-            this._uZFar = program.getLocation("zFar");
-        }
-        this._uSectionPlanes = [];
-        const sectionPlanes = sectionPlanesState.sectionPlanes;
-        for (let i = 0, len = sectionPlanes.length; i < len; i++) {
-            this._uSectionPlanes.push({
-                active: program.getLocation("sectionPlaneActive" + i),
-                pos: program.getLocation("sectionPlanePos" + i),
-                dir: program.getLocation("sectionPlaneDir" + i)
-            });
-        }
-        this._aPosition = program.getAttribute("position");
-        this._aOffset = program.getAttribute("offset");
-        this._aColor = program.getAttribute("color");
-        this._aFlags = program.getAttribute("flags");
     }
 
     _bindProgram(frameCtx) {
