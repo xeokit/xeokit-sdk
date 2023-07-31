@@ -297,7 +297,6 @@ class VBOSceneModelRenderer {
                 const color = material[colorKey];
                 const alpha = material[alphaKey];
                 gl.uniform4f(this._uColor, color[0], color[1], color[2], alpha);
-                // TODO may be uSilhouetteColor in triangleInstancingSilhouetteRenderer...
     
             } else {
                 gl.uniform4fv(this._uColor, this._edges ? edgesDefaultColor : defaultColor);

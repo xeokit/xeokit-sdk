@@ -35,7 +35,7 @@ class TrianglesBatchingSilhouetteRenderer extends VBOSceneModelTriangleBatchingR
             0 // layer.matricesUniformBlockBufferBindingPoint
         );
 
-        this._uSilhouetteColor = program.getLocation("silhouetteColor");
+        this._uColor = program.getLocation("silhouetteColor");
         this._uSectionPlanes = [];
 
         for (let i = 0, len = scene._sectionPlanesState.sectionPlanes.length; i < len; i++) {

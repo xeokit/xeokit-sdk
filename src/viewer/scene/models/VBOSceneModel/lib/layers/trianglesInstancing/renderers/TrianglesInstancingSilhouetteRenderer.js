@@ -37,7 +37,7 @@ class TrianglesInstancingSilhouetteRenderer extends VBOSceneModelTriangleInstanc
             0 // layer.matricesUniformBlockBufferBindingPoint
         );
 
-        this._uSilhouetteColor = program.getLocation("silhouetteColor");
+        this._uColor = program.getLocation("silhouetteColor");
         this._uSectionPlanes = [];
 
         const clips = sectionPlanesState.sectionPlanes;
