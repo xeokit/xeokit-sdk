@@ -52,13 +52,6 @@ class TrianglesBatchingShadowRenderer extends VBOSceneModelTriangleBatchingRende
         this._lastLightId = null;
     }
 
-    _buildShader() {
-        return {
-            vertex: this._buildVertexShader(),
-            fragment: this._buildFragmentShader()
-        };
-    }
-
 
     _buildVertexShader() {
         const scene = this._scene;

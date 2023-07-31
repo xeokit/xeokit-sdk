@@ -64,13 +64,6 @@ class TrianglesBatchingDepthRenderer extends VBOSceneModelTriangleBatchingRender
         }
     }
 
-    _buildShader() {
-        return {
-            vertex: this._buildVertexShader(),
-            fragment: this._buildFragmentShader()
-        };
-    }
-
     _buildVertexShader() {
         const scene = this._scene;
         const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;

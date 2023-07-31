@@ -85,13 +85,6 @@ class PointsInstancingColorRenderer extends VBOSceneModelPointInstancingRenderer
         }
     }
 
-    _buildShader() {
-        return {
-            vertex: this._buildVertexShader(),
-            fragment: this._buildFragmentShader()
-        };
-    }
-
     _buildVertexShader() {
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;

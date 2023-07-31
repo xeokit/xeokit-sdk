@@ -72,13 +72,6 @@ class PointsInstancingPickMeshRenderer extends VBOSceneModelPointInstancingRende
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
     }
 
-    _buildShader() {
-        return {
-            vertex: this._buildVertexShader(),
-            fragment: this._buildFragmentShader()
-        };
-    }
-
     _buildVertexShader() {
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;

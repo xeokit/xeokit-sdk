@@ -75,13 +75,6 @@ class PointsBatchingSilhouetteRenderer extends VBOSceneModelPointBatchingRendere
         }
     }
 
-    _buildShader() {
-        return {
-            vertex: this._buildVertexShader(),
-            fragment: this._buildFragmentShader()
-        };
-    }
-
     _buildVertexShader() {
 
         const scene = this._scene;
