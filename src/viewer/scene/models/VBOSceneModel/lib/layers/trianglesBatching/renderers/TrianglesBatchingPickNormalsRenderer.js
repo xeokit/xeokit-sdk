@@ -8,10 +8,6 @@ class TrianglesBatchingPickNormalsRenderer extends VBOSceneModelTriangleBatching
         return this._scene._sectionPlanesState.getHash();
     }
 
-    _bindProgram() {
-        this._program.bind();
-    }
-
     _buildVertexShader() {
         const scene = this._scene;
         const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;

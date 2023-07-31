@@ -8,10 +8,6 @@ class TrianglesInstancingPickNormalsRenderer extends VBOSceneModelTriangleInstan
         return this._scene._sectionPlanesState.getHash();
     }
 
-    _bindProgram() {
-        this._program.bind();
-    }
-
     _buildVertexShader() {
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;

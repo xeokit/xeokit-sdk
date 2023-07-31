@@ -203,6 +203,76 @@ class VBOSceneModelRenderer {
         this._uNearPlaneHeight = program.getLocation("nearPlaneHeight");
     }
 
+    _bindProgram(frameCtx) {
+        const scene = this._scene;
+        const gl = scene.canvas.gl;
+        const program = this._program;
+        const lightsState = scene._lightsState;
+        const lights = lightsState.lights;
+        const project = scene.camera.project;
+
+        program.bind();
+
+        if (this._uLightAmbient) {
+            gl.uniform4fv(this._uLightAmbient, lightsState.getAmbientColorAndIntensity());
+        }
+
+        for (let i = 0, len = lights.length; i < len; i++) {
+
+            const light = lights[i];
+
+            if (this._uLightColor[i]) {
+                gl.uniform4f(this._uLightColor[i], light.color[0], light.color[1], light.color[2], light.intensity);
+            }
+            if (this._uLightPos[i]) {
+                gl.uniform3fv(this._uLightPos[i], light.pos);
+                if (this._uLightAttenuation[i]) {
+                    gl.uniform1f(this._uLightAttenuation[i], light.attenuation);
+                }
+            }
+            if (this._uLightDir[i]) {
+                gl.uniform3fv(this._uLightDir[i], light.dir);
+            }
+        }
+
+        if (this._withSAO) {
+            const sao = scene.sao;
+            const saoEnabled = sao.possible;
+            if (saoEnabled) {
+                const viewportWidth = gl.drawingBufferWidth;
+                const viewportHeight = gl.drawingBufferHeight;
+                tempVec4[0] = viewportWidth;
+                tempVec4[1] = viewportHeight;
+                tempVec4[2] = sao.blendCutoff;
+                tempVec4[3] = sao.blendFactor;
+                gl.uniform4fv(this._uSAOParams, tempVec4);
+                this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 0);
+            }
+        }
+
+        if (scene.logarithmicDepthBufferEnabled) {
+            const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
+            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
+        }
+
+        if (this._uGammaFactor) {
+            gl.uniform1f(this._uGammaFactor, scene.gammaFactor);
+        }
+
+        if (this._uPickInvisible) {
+            gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
+        }
+
+
+        if (this._uShadowViewMatrix) {
+            gl.uniformMatrix4fv(this._uShadowViewMatrix, false, frameCtx.shadowViewMatrix);
+        }
+
+        if (this._uShadowProjMatrix) {
+            gl.uniformMatrix4fv(this._uShadowProjMatrix, false, frameCtx.shadowProjMatrix);
+        }
+    }
+
     drawLayer(frameCtx, layer, renderPass, { colorUniform = false, incrementDrawState = false } = {}) {
         const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
 

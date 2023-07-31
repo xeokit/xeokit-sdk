@@ -9,16 +9,6 @@ class TrianglesInstancingShadowRenderer extends VBOSceneModelTriangleInstancingR
         return this._scene._sectionPlanesState.getHash();
     }
 
-    _bindProgram(frameCtx) {
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-        const program = this._program;
-        program.bind();
-        gl.uniformMatrix4fv(this._uShadowViewMatrix, false, frameCtx.shadowViewMatrix);
-        gl.uniformMatrix4fv(this._uShadowProjMatrix, false, frameCtx.shadowProjMatrix);
-        this._lastLightId = null;
-    }
-
     _buildVertexShader() {
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;

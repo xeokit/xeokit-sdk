@@ -8,10 +8,6 @@ class PointsBatchingPickDepthRenderer extends VBOSceneModelPointBatchingRenderer
         return this._scene._sectionPlanesState.getHash() + (this._scene.pointsMaterial.hash);
     }
 
-    _bindProgram() {
-        this._program.bind();
-    }
-
     _buildVertexShader() {
         const scene = this._scene;
         const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;

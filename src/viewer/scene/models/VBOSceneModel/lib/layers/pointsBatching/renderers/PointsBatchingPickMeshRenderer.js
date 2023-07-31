@@ -8,13 +8,6 @@ class PointsBatchingPickMeshRenderer extends VBOSceneModelPointBatchingRenderer 
         return this._scene._sectionPlanesState.getHash() + (this._scene.pointsMaterial.hash);
     }
 
-    _bindProgram(frameCtx) {
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-        this._program.bind();
-        gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
-    }
-
     _buildVertexShader() {
 
         const scene = this._scene;

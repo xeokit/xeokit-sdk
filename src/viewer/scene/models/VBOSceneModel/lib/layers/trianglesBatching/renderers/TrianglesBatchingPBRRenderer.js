@@ -17,49 +17,6 @@ class TrianglesBatchingPBRRenderer extends VBOSceneModelTriangleBatchingRenderer
         super.drawLayer(frameCtx, layer, renderPass, { incrementDrawState: true });
     }
 
-    _bindProgram() {
-
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-        const program = this._program;
-        const lightsState = scene._lightsState;
-        const lights = lightsState.lights;
-        const project = scene.camera.project;
-
-        program.bind();
-
-        if (this._uLightAmbient) {
-            gl.uniform4fv(this._uLightAmbient, scene._lightsState.getAmbientColorAndIntensity());
-        }
-
-        for (let i = 0, len = lights.length; i < len; i++) {
-
-            const light = lights[i];
-
-            if (this._uLightColor[i]) {
-                gl.uniform4f(this._uLightColor[i], light.color[0], light.color[1], light.color[2], light.intensity);
-            }
-            if (this._uLightPos[i]) {
-                gl.uniform3fv(this._uLightPos[i], light.pos);
-                if (this._uLightAttenuation[i]) {
-                    gl.uniform1f(this._uLightAttenuation[i], light.attenuation);
-                }
-            }
-            if (this._uLightDir[i]) {
-                gl.uniform3fv(this._uLightDir[i], light.dir);
-            }
-        }
-
-        if (scene.logarithmicDepthBufferEnabled) {
-            const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
-            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
-        }
-
-        if (this._uGammaFactor) {
-            gl.uniform1f(this._uGammaFactor, scene.gammaFactor);
-        }
-    }
-
     _buildVertexShader() {
 
         const scene = this._scene;

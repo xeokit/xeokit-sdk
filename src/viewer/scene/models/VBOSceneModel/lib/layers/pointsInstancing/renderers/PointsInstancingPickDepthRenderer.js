@@ -8,11 +8,6 @@ class PointsInstancingPickDepthRenderer extends VBOSceneModelPointInstancingRend
         return this._scene._sectionPlanesState.getHash() + this._scene.pointsMaterial.hash;
     }
 
-    _bindProgram() {
-        this._program.bind();
-
-    }
-
     _buildVertexShader() {
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;

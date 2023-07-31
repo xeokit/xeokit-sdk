@@ -12,23 +12,6 @@ class PointsBatchingColorRenderer extends VBOSceneModelPointBatchingRenderer {
         super.drawLayer(frameCtx, layer, renderPass, { incrementDrawState: true });
     }
 
-    _bindProgram() {
-
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-        const program = this._program;
-        const project = scene.camera.project;
-
-        program.bind();
-
-        gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix)
-
-        if (scene.logarithmicDepthBufferEnabled) {
-            const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
-            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
-        }
-    }
-
     _buildVertexShader() {
 
         const scene = this._scene;

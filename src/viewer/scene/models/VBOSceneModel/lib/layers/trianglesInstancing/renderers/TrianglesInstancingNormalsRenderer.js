@@ -8,20 +8,6 @@ class TrianglesInstancingNormalsRenderer extends VBOSceneModelTriangleInstancing
         return this._scene._sectionPlanesState.getHash();
     }
 
-    _bindProgram() {
-
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-        const project = scene.camera.project;
-
-        this._program.bind();
-
-        if ( scene.logarithmicDepthBufferEnabled) {
-            const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
-            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
-        }
-    }
-
     _buildVertexShader() {
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;

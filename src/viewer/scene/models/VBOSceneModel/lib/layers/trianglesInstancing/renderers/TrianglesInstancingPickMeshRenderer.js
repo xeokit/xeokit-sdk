@@ -8,17 +8,6 @@ class TrianglesInstancingPickMeshRenderer extends VBOSceneModelTriangleInstancin
         return this._scene._sectionPlanesState.getHash();
     }
 
-    _bindProgram(frameCtx) {
-
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-        const program = this._program;
-
-        program.bind();
-
-        gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
-    }
-
     _buildVertexShader() {
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
