@@ -21,7 +21,13 @@ class PointsInstancingShadowRenderer extends VBOSceneModelPointInstancingRendere
             return;
         }
         const program = this._program;
-        this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
+
+        gl.uniformBlockBinding(
+            program.handle,
+            gl.getUniformBlockIndex(program.handle, "Matrices"),
+            0 // layer.matricesUniformBlockBufferBindingPoint
+        );
+
         this._uShadowViewMatrix = program.getLocation("shadowViewMatrix");
         this._uShadowProjMatrix = program.getLocation("shadowProjMatrix");
         this._uSectionPlanes = [];
@@ -78,7 +84,14 @@ class PointsInstancingShadowRenderer extends VBOSceneModelPointInstancingRendere
         src.push("in vec4 modelMatrixCol2;");
         src.push("uniform mat4 shadowViewMatrix;");
         src.push("uniform mat4 shadowProjMatrix;");
-        src.push("uniform mat4 positionsDecodeMatrix;");
+
+        src.push("uniform Matrices {");
+        src.push("    mat4 worldMatrix;");
+        src.push("    mat4 viewMatrix;");
+        src.push("    mat4 projMatrix;");
+        src.push("    mat4 positionsDecodeMatrix;");
+        src.push("};");
+
         src.push("uniform float pointSize;");
         if (clipping) {
             src.push("out vec4 vWorldPosition;");

@@ -1,10 +1,10 @@
 import {Program} from "../../../../../../webgl/Program.js";
-import VBOSceneModelRenderer from "../../VBOSceneModelRenderer.js";
+import { VBOSceneModelTriangleBatchingRenderer } from "../../VBOSceneModelRenderers.js";
 
 /**
  * @private
  */
-class TrianglesBatchingPickNormalsRenderer extends VBOSceneModelRenderer {
+class TrianglesBatchingPickNormalsRenderer extends VBOSceneModelTriangleBatchingRenderer {
     _getHash() {
         return this._scene._sectionPlanesState.getHash();
     }

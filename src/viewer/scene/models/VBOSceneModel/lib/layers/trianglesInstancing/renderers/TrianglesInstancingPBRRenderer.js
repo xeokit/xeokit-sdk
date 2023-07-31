@@ -1,6 +1,6 @@
 import {Program} from "../../../../../../webgl/Program.js";
 import {LinearEncoding, sRGBEncoding} from "../../../../../../constants/constants.js";
-import {VBOSceneModelTriangleInstancingRenderer} from "../../VBOSceneModelRenderer.js";
+import {VBOSceneModelTriangleInstancingRenderer} from "../../VBOSceneModelRenderers.js";
 
 const TEXTURE_DECODE_FUNCS = {};
 TEXTURE_DECODE_FUNCS[LinearEncoding] = "linearToLinear";
@@ -417,7 +417,14 @@ class TrianglesInstancingPBRRenderer extends VBOSceneModelTriangleInstancingRend
             src.push("in vec3 vWorldNormal;");
         }
 
-        src.push("uniform mat4 viewMatrix;");
+        src.push("uniform Matrices {");
+        src.push("    mat4 worldMatrix;");
+        src.push("    mat4 viewMatrix;");
+        src.push("    mat4 projMatrix;");
+        src.push("    mat4 positionsDecodeMatrix;");
+        src.push("    mat4 worldNormalMatrix;");
+        src.push("    mat4 viewNormalMatrix;");
+        src.push("};");
 
         // CONSTANT DEFINITIONS
 

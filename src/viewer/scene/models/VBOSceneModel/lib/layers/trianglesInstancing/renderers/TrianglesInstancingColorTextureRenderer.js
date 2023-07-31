@@ -1,5 +1,5 @@
 import {Program} from "../../../../../../webgl/Program.js";
-import {VBOSceneModelTriangleInstancingRenderer} from "../../VBOSceneModelRenderer.js";
+import {VBOSceneModelTriangleInstancingRenderer} from "../../VBOSceneModelRenderers.js";
 
 /**
  * @private
@@ -300,7 +300,13 @@ class TrianglesInstancingColorTextureRenderer extends VBOSceneModelTriangleInsta
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
-        src.push("uniform mat4 viewMatrix;");
+        src.push("uniform Matrices {");
+        src.push("    mat4 worldMatrix;");
+        src.push("    mat4 viewMatrix;");
+        src.push("    mat4 projMatrix;");
+        src.push("    mat4 positionsDecodeMatrix;");
+        src.push("};");
+
         src.push("uniform vec4 lightAmbient;");
         for (i = 0, len = lightsState.lights.length; i < len; i++) {
             const light = lightsState.lights[i];

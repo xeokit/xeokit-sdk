@@ -1,6 +1,6 @@
 import {Program} from "../../../../../../webgl/Program.js";
 
-import { VBOSceneModelTriangleBatchingRenderer } from "../../VBOSceneModelRenderer.js";
+import { VBOSceneModelTriangleBatchingRenderer } from "../../VBOSceneModelRenderers.js";
 
 // const TEXTURE_DECODE_FUNCS = {};
 // TEXTURE_DECODE_FUNCS[LinearEncoding] = "linearToLinear";
@@ -349,7 +349,14 @@ class TrianglesBatchingPBRRenderer extends VBOSceneModelTriangleBatchingRenderer
             src.push("in vec3 vWorldNormal;");
         }
 
-        src.push("uniform mat4 viewMatrix;");
+        src.push("uniform Matrices {");
+        src.push("    mat4 worldMatrix;");
+        src.push("    mat4 viewMatrix;");
+        src.push("    mat4 projMatrix;");
+        src.push("    mat4 positionsDecodeMatrix;");
+        src.push("    mat4 worldNormalMatrix;");
+        src.push("    mat4 viewNormalMatrix;");
+        src.push("};");
 
         if (lightsState.reflectionMaps.length > 0) {
             src.push("uniform samplerCube reflectionMap;");

@@ -29,10 +29,7 @@ class LinesInstancingSilhouetteRenderer extends VBOSceneModelLineInstancingRende
         const program = this._program;
 
         this._uRenderPass = program.getLocation("renderPass");
-        this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-        this._uWorldMatrix = program.getLocation("worldMatrix");
-        this._uViewMatrix = program.getLocation("viewMatrix");
-        this._uProjMatrix = program.getLocation("projMatrix");
+
         this._uColor = program.getLocation("color");
         this._uSectionPlanes = [];
 

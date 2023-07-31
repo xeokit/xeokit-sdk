@@ -1,5 +1,5 @@
 import {Program} from "../../../../../../webgl/Program.js";
-import { VBOSceneModelTriangleBatchingRenderer } from "../../VBOSceneModelRenderer.js";
+import { VBOSceneModelTriangleBatchingRenderer } from "../../VBOSceneModelRenderers.js";
 
 /**
  * @private
@@ -291,7 +291,12 @@ class TrianglesBatchingColorTextureRenderer extends VBOSceneModelTriangleBatchin
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
-        src.push("uniform mat4 viewMatrix;");
+        src.push("uniform Matrices {");
+        src.push("    mat4 worldMatrix;");
+        src.push("    mat4 viewMatrix;");
+        src.push("    mat4 projMatrix;");
+        src.push("    mat4 positionsDecodeMatrix;");
+        src.push("};");
         src.push("uniform vec4 lightAmbient;");
         for (let i = 0, len = lightsState.lights.length; i < len; i++) {
             const light = lightsState.lights[i];

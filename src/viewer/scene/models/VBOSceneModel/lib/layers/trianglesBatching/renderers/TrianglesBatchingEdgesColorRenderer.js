@@ -1,10 +1,10 @@
 import {Program} from "../../../../../../webgl/Program.js";
-import {VBOSceneModelTriangleInstancingEdgesRenderer} from "../../VBOSceneModelRenderers.js";
+import { VBOSceneModelTriangleBatchingEdgesRenderer } from "../../VBOSceneModelRenderers.js";
 
 /**
  * @private
  */
-class TrianglesBatchingEdgesColorRenderer extends VBOSceneModelTriangleInstancingEdgesRenderer {
+class TrianglesBatchingEdgesColorRenderer extends VBOSceneModelTriangleBatchingEdgesRenderer {
     _getHash() {
         return this._scene._sectionPlanesState.getHash();
     }

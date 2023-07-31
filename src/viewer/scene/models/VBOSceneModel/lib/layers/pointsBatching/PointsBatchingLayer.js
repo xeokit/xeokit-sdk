@@ -8,6 +8,7 @@ import {geometryCompressionUtils} from "../../../../../math/geometryCompressionU
 import {getPointsBatchingRenderers} from "./PointsBatchingRenderers.js";
 import {PointsBatchingBuffer} from "./PointsBatchingBuffer.js";
 import {quantizePositions} from "../../compression.js";
+import { createRTCViewMat } from '../../../../../math/rtcCoords.js';
 
 const tempVec3a = math.vec4();
 const tempVec3b = math.vec4();
@@ -96,6 +97,21 @@ class PointsBatchingLayer {
          * @type {*|Float64Array}
          */
         this.aabb = math.collapseAABB3();
+
+        /**
+         * Matrices Uniform Block Buffer
+         * 
+         * In shaders, matrices in the Matrices Uniform Block MUST be set in this order:
+         *  - worldMatrix
+         *  - viewMatrix
+         *  - projMatrix
+         *  - positionsDecodeMatrix
+         */
+
+        this.matricesUniformBlockBufferBindingPoint = 0;
+
+        this._matricesUniformBlockBuffer = this.model.scene.canvas.gl.createBuffer();
+        this._matricesUniformBlockBufferData = new Float32Array(4 * 4 * 4); // there is 4 mat4
     }
 
     /**
@@ -634,9 +650,41 @@ class PointsBatchingLayer {
         this._state.offsetsBuf.setData(tempArray, firstOffset, lenOffsets);
     }
 
+    beforeEachDraw(frameCtx) {
+        const model = this.model;
+        const { canvas, camera } = model.scene;
+        const gl = canvas.gl;
+        const { project } = camera;
+        const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix
+        const { worldMatrix } = model;
+        const { origin, positionsDecodeMatrix } = this._state;
+
+        let offset = 0;
+        const mat4Size = 4 * 4;
+
+        // Order matters ! worldMatrix, viewMatrix, projMatrix, positionsDecodeMatrix
+        this._matricesUniformBlockBufferData.set(worldMatrix, 0);
+        this._matricesUniformBlockBufferData.set(
+            (origin) ? createRTCViewMat(viewMatrix, origin) : viewMatrix,
+            offset += mat4Size,
+            );
+        this._matricesUniformBlockBufferData.set(frameCtx.pickProjMatrix || project.matrix, offset += mat4Size);
+        this._matricesUniformBlockBufferData.set(positionsDecodeMatrix, offset += mat4Size);
+        
+        gl.bindBuffer(gl.UNIFORM_BUFFER, this._matricesUniformBlockBuffer);
+        gl.bufferData(gl.UNIFORM_BUFFER, this._matricesUniformBlockBufferData, gl.DYNAMIC_DRAW);
+
+        gl.bindBufferBase(
+            gl.UNIFORM_BUFFER,
+            this.matricesUniformBlockBufferBindingPoint,
+            this._matricesUniformBlockBuffer);
+    }
+
     //-- NORMAL RENDERING ----------------------------------------------------------------------------------------------
 
     drawColorOpaque(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
@@ -646,6 +694,8 @@ class PointsBatchingLayer {
     }
 
     drawColorTransparent(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
@@ -665,6 +715,8 @@ class PointsBatchingLayer {
     // -- EMPHASIS RENDERING -------------------------------------------------------------------------------------------
 
     drawSilhouetteXRayed(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
             return;
         }
@@ -674,6 +726,8 @@ class PointsBatchingLayer {
     }
 
     drawSilhouetteHighlighted(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
             return;
         }
@@ -683,6 +737,8 @@ class PointsBatchingLayer {
     }
 
     drawSilhouetteSelected(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
             return;
         }
@@ -711,6 +767,8 @@ class PointsBatchingLayer {
     //---- PICKING ----------------------------------------------------------------------------------------------------
 
     drawPickMesh(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
@@ -720,6 +778,8 @@ class PointsBatchingLayer {
     }
 
     drawPickDepths(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }
@@ -734,6 +794,8 @@ class PointsBatchingLayer {
     //---- OCCLUSION TESTING -------------------------------------------------------------------------------------------
 
     drawOcclusion(renderFlags, frameCtx) {
+        this.beforeEachDraw(frameCtx);
+
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
         }

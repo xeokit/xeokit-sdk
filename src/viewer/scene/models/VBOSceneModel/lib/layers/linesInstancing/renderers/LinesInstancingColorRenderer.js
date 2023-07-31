@@ -29,12 +29,11 @@ class LinesInstancingColorRenderer extends VBOSceneModelLineInstancingRenderer {
 
         this._uRenderPass = program.getLocation("renderPass");
 
-        this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-
-        this._uWorldMatrix = program.getLocation("worldMatrix");
-
-        this._uViewMatrix = program.getLocation("viewMatrix");
-        this._uProjMatrix = program.getLocation("projMatrix");
+        gl.uniformBlockBinding(
+            program.handle,
+            gl.getUniformBlockIndex(program.handle, "Matrices"),
+            0 // layer.matricesUniformBlockBufferBindingPoint
+        );
 
         this._uSectionPlanes = [];
 
@@ -102,10 +101,12 @@ class LinesInstancingColorRenderer extends VBOSceneModelLineInstancingRenderer {
         src.push("in vec4 modelMatrixCol1;");
         src.push("in vec4 modelMatrixCol2;");
 
-        src.push("uniform mat4 worldMatrix;");
-        src.push("uniform mat4 viewMatrix;");
-        src.push("uniform mat4 projMatrix;");
-        src.push("uniform mat4 positionsDecodeMatrix;");
+        src.push("uniform Matrices {");
+        src.push("    mat4 worldMatrix;");
+        src.push("    mat4 viewMatrix;");
+        src.push("    mat4 projMatrix;");
+        src.push("    mat4 positionsDecodeMatrix;");
+        src.push("};");
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");

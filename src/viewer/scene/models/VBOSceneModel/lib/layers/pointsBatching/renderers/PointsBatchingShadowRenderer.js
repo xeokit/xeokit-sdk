@@ -21,7 +21,13 @@ class PointsBatchingShadowRenderer extends VBOSceneModelPointBatchingRenderer {
             return;
         }
         const program = this._program;
-        this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
+
+        gl.uniformBlockBinding(
+            program.handle,
+            gl.getUniformBlockIndex(program.handle, "Matrices"),
+            0 // layer.matricesUniformBlockBufferBindingPoint
+        );
+
         this._uShadowViewMatrix = program.getLocation("shadowViewMatrix");
         this._uShadowProjMatrix = program.getLocation("shadowProjMatrix");
         if (scene.logarithmicDepthBufferEnabled) {
@@ -72,7 +78,15 @@ class PointsBatchingShadowRenderer extends VBOSceneModelPointBatchingRenderer {
         }
         src.push("in vec4 color;");
         src.push("in float flags;");
-        src.push("uniform mat4 shadowViewMatrix;");
+
+        src.push("uniform Matrices {");
+        src.push("    mat4 worldMatrix;");
+        src.push("    mat4 viewMatrix;");
+        src.push("    mat4 projMatrix;");
+        src.push("    mat4 positionsDecodeMatrix;");
+        src.push("};");
+
+
         src.push("uniform mat4 shadowProjMatrix;");
         src.push("uniform mat4 positionsDecodeMatrix;");
         if (clipping) {

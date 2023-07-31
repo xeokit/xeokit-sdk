@@ -1,5 +1,5 @@
 import {Program} from "../../../../../../webgl/Program.js";
-import { VBOSceneModelTriangleBatchingRenderer } from "../../VBOSceneModelRenderer.js";
+import { VBOSceneModelTriangleBatchingRenderer } from "../../VBOSceneModelRenderers.js";
 
 /**
  * Renders BatchingLayer fragment depths to a shadow map.

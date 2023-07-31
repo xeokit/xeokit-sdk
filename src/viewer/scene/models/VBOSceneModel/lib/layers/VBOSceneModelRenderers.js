@@ -4,14 +4,14 @@ import {stats} from "../../../../stats.js"
 import {WEBGL_INFO} from "../../../../webglInfo.js";
 import {RENDER_PASSES} from "../RENDER_PASSES.js";
 
-const defaultColor = new Float32Array([1, 1, 1]);
-const edgesDefaultColor = new Float32Array([0, 0, 0]);
+const defaultColor = new Float32Array([1, 1, 1, 1]);
+const edgesDefaultColor = new Float32Array([0, 0, 0, 1]);
 
 const tempVec4 = math.vec4();
 const tempVec3a = math.vec3();
 
 class VBOSceneModelRenderer {
-    constructor(scene, withSAO = false, { instancing = false, edges = false }) {
+    constructor(scene, withSAO = false, { instancing = false, edges = false } = {}) {
         this._scene = scene;
         this._withSAO = withSAO;
         this._instancing = instancing;
@@ -181,8 +181,8 @@ class VBOSceneModelRenderer {
         }
 
         if (this._aColor) {
-            this._aColor.bindArrayBuffer(state.colorsBuf);
-            if (this._instancing) {
+            this._aColor.bindArrayBuffer(state.colorsBuf ? state.colorsBuf : geometry.colorsBuf);
+            if (this._instancing && geometry && !geometry.colorsBuf) {
                 gl.vertexAttribDivisor(this._aColor.location, 1);
             }
         }
@@ -217,29 +217,24 @@ class VBOSceneModelRenderer {
                 occlusionTexture,
             } = textureSet;
 
-            if (colorTexture) {
+            if (this._uColorMap && colorTexture) {
                 this._program.bindTexture(this._uColorMap, colorTexture.texture, frameCtx.textureUnit);
                 frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
             }
-            if (metallicRoughnessTexture) {
+            if (this._uMetallicRoughMap && metallicRoughnessTexture) {
                 this._program.bindTexture(this._uMetallicRoughMap, metallicRoughnessTexture.texture, frameCtx.textureUnit);
                 frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
             }
-            if (emissiveTexture) {
+            if (this._uEmissiveMap && emissiveTexture) {
                 this._program.bindTexture(this._uEmissiveMap, emissiveTexture.texture, frameCtx.textureUnit);
                 frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
             }
-            if (normalsTexture) {
+            if (this._uNormalMap && normalsTexture) {
                 this._program.bindTexture(this._uNormalMap, normalsTexture.texture, frameCtx.textureUnit);
                 frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
             }
-            if (normalsTexture) {
-                this._program.bindTexture(this._uNormalMap, normalsTexture.texture, frameCtx.textureUnit);
-                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            }
-
-            if (occlusionTexture) {
-                this._program.bindTexture(this._uAOMap, textureSet.occlusionTexture.texture, frameCtx.textureUnit);
+            if (this._uAOMap && occlusionTexture) {
+                this._program.bindTexture(this._uAOMap, occlusionTexture.texture, frameCtx.textureUnit);
                 frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
             }
 
@@ -278,19 +273,19 @@ class VBOSceneModelRenderer {
             const colorKey = this._edges ? "edgeColor" : "fillColor";
             const alphaKey = this._edges ? "edgeAlpha" : "fillAlpha";
 
-            if (renderPass === RENDER_PASSES.EDGES_XRAYED) {
+            if (renderPass === RENDER_PASSES[`${this._edges ? "EDGES" : "SILHOUETTE"}_XRAYED`]) {
                 const material = scene.xrayMaterial._state;
                 const color = material[colorKey];
                 const alpha = material[alphaKey];
                 gl.uniform4f(this._uColor, color[0], color[1], color[2], alpha);
     
-            } else if (renderPass === RENDER_PASSES.EDGES_HIGHLIGHTED) {
+            } else if (renderPass === RENDER_PASSES[`${this._edges ? "EDGES" : "SILHOUETTE"}_HIGHLIGHTED`]) {
                 const material = scene.highlightMaterial._state;
                 const color = material[colorKey];
                 const alpha = material[alphaKey];
                 gl.uniform4f(this._uColor, color[0], color[1], color[2], alpha);
     
-            } else if (renderPass === RENDER_PASSES.EDGES_SELECTED) {
+            } else if (renderPass === RENDER_PASSES[`${this._edges ? "EDGES" : "SILHOUETTE"}_SELECTED`]) {
                 const material = scene.selectedMaterial._state;
                 const color = material[colorKey];
                 const alpha = material[alphaKey];
@@ -305,20 +300,23 @@ class VBOSceneModelRenderer {
             if (this._edges) {
                 geometry.edgeIndicesBuf.bind();
             } else {
-                geometry.indicesBuf.bind();
+                if (geometry.indicesBuf) {
+                    geometry.indicesBuf.bind();
+                }
             }
         } else {
             if (this._edges) {
                 state.edgeIndicesBuf.bind();
             } else {
-                state.indicesBuf.bind();
+                if (state.indicesBuf) {
+                    state.indicesBuf.bind();
+                }
             }
         }
 
         this._draw({ geometry, state, frameCtx, incrementDrawState });
 
         if (this._instancing) {
-            // TODO "Is this needed" added in the code by some... :P may be removed
             gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 0);
             gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 0);
             gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 0);
@@ -336,6 +334,9 @@ class VBOSceneModelRenderer {
             }
             if (this._aColor) {
                 gl.vertexAttribDivisor(this._aColor.location, 0);
+            }
+            if  (this._aPickColor) {
+                gl.vertexAttribDivisor(this._aPickColor.location, 0);
             }
             if (this._aOffset) {
                 gl.vertexAttribDivisor(this._aOffset.location, 0);
@@ -393,8 +394,8 @@ class VBOSceneModelTriangleBatchingEdgesRenderer extends VBOSceneModelTriangleBa
 
 
 class VBOSceneModelTriangleInstancingRenderer extends VBOSceneModelRenderer {
-    constructor(scene, withSAO, { instancing = false, edges = false } = {}) {
-        super(scene, withSAO, { instancing, edges });
+    constructor(scene, withSAO, { edges = false } = {}) {
+        super(scene, withSAO, { instancing: true, edges });
     }
 
     _draw(drawCfg) {

@@ -1,5 +1,5 @@
 import {Program} from "../../../../../../webgl/Program.js";
-import {VBOSceneModelTriangleInstancingRenderer} from "../../VBOSceneModelRenderer.js";
+import {VBOSceneModelTriangleInstancingRenderer} from "../../VBOSceneModelRenderers.js";
 /**
  * @private
  */
