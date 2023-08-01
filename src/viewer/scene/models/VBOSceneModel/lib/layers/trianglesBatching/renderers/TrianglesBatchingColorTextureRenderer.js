@@ -33,12 +33,7 @@ class TrianglesBatchingColorTextureRenderer extends VBOSceneModelTriangleBatchin
             src.push("in vec3 offset;");
         }
 
-        src.push("uniform Matrices {");
-        src.push("    mat4 worldMatrix;");
-        src.push("    mat4 viewMatrix;");
-        src.push("    mat4 projMatrix;");
-        src.push("    mat4 positionsDecodeMatrix;");
-        src.push("};");
+        this._addMatricesUniformBlockLines(src);
 
         src.push("uniform mat3 uvDecodeMatrix;")
 
@@ -155,12 +150,7 @@ class TrianglesBatchingColorTextureRenderer extends VBOSceneModelTriangleBatchin
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
-        src.push("uniform Matrices {");
-        src.push("    mat4 worldMatrix;");
-        src.push("    mat4 viewMatrix;");
-        src.push("    mat4 projMatrix;");
-        src.push("    mat4 positionsDecodeMatrix;");
-        src.push("};");
+        this._addMatricesUniformBlockLines(src);
         src.push("uniform vec4 lightAmbient;");
         for (let i = 0, len = lightsState.lights.length; i < len; i++) {
             const light = lightsState.lights[i];

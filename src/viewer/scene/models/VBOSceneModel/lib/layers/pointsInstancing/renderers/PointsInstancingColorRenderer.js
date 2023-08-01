@@ -35,12 +35,7 @@ class PointsInstancingColorRenderer extends VBOSceneModelPointInstancingRenderer
         src.push("in vec4 modelMatrixCol1;");
         src.push("in vec4 modelMatrixCol2;");
 
-        src.push("uniform Matrices {");
-        src.push("    mat4 worldMatrix;");
-        src.push("    mat4 viewMatrix;");
-        src.push("    mat4 projMatrix;");
-        src.push("    mat4 positionsDecodeMatrix;");
-        src.push("};");
+        this._addMatricesUniformBlockLines(src);
 
         src.push("uniform float pointSize;");
         if (pointsMaterial.perspectivePoints) {

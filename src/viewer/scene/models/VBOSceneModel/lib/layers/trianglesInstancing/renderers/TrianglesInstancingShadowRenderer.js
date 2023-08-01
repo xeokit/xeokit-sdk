@@ -24,7 +24,9 @@ class TrianglesInstancingShadowRenderer extends VBOSceneModelTriangleInstancingR
         src.push("in vec4 modelMatrixCol2;");
         src.push("uniform mat4 shadowViewMatrix;");
         src.push("uniform mat4 shadowProjMatrix;");
-        src.push("uniform mat4 positionsDecodeMatrix;");
+
+        this._addMatricesUniformBlockLines(src);
+
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
             src.push("out float vFlags;");

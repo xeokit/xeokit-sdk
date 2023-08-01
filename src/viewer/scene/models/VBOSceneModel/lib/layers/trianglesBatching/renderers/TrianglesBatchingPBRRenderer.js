@@ -57,14 +57,7 @@ class TrianglesBatchingPBRRenderer extends VBOSceneModelTriangleBatchingRenderer
             src.push("in vec3 offset;");
         }
 
-        src.push("uniform Matrices {");
-        src.push("    mat4 worldMatrix;");
-        src.push("    mat4 viewMatrix;");
-        src.push("    mat4 projMatrix;");
-        src.push("    mat4 positionsDecodeMatrix;");
-        src.push("    mat4 worldNormalMatrix;");
-        src.push("    mat4 viewNormalMatrix;");
-        src.push("};");
+        this._addMatricesUniformBlockLines(src, true);
 
         src.push("uniform mat3 uvDecodeMatrix;")
 
@@ -196,14 +189,7 @@ class TrianglesBatchingPBRRenderer extends VBOSceneModelTriangleBatchingRenderer
             src.push("in vec3 vWorldNormal;");
         }
 
-        src.push("uniform Matrices {");
-        src.push("    mat4 worldMatrix;");
-        src.push("    mat4 viewMatrix;");
-        src.push("    mat4 projMatrix;");
-        src.push("    mat4 positionsDecodeMatrix;");
-        src.push("    mat4 worldNormalMatrix;");
-        src.push("    mat4 viewNormalMatrix;");
-        src.push("};");
+        this._addMatricesUniformBlockLines(src, true);
 
         if (lightsState.reflectionMaps.length > 0) {
             src.push("uniform samplerCube reflectionMap;");

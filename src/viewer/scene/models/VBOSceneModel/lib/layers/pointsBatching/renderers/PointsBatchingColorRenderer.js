@@ -32,12 +32,7 @@ class PointsBatchingColorRenderer extends VBOSceneModelPointBatchingRenderer {
             src.push("in vec3 offset;");
         }
 
-        src.push("uniform Matrices {");
-        src.push("    mat4 worldMatrix;");
-        src.push("    mat4 viewMatrix;");
-        src.push("    mat4 projMatrix;");
-        src.push("    mat4 positionsDecodeMatrix;");
-        src.push("};");
+        this._addMatricesUniformBlockLines(src);
 
         src.push("uniform float pointSize;");
         if (pointsMaterial.perspectivePoints) {

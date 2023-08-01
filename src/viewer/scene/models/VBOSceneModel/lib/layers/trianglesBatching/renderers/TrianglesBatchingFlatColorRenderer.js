@@ -27,12 +27,7 @@ class TrianglesBatchingFlatColorRenderer extends VBOSceneModelTriangleBatchingRe
             src.push("in vec3 offset;");
         }
 
-        src.push("uniform Matrices {");
-        src.push("    mat4 worldMatrix;");
-        src.push("    mat4 viewMatrix;");
-        src.push("    mat4 projMatrix;");
-        src.push("    mat4 positionsDecodeMatrix;");
-        src.push("};");
+        this._addMatricesUniformBlockLines(src);
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
@@ -132,12 +127,7 @@ class TrianglesBatchingFlatColorRenderer extends VBOSceneModelTriangleBatchingRe
             }
         }
 
-        src.push("uniform Matrices {");
-        src.push("    mat4 worldMatrix;");
-        src.push("    mat4 viewMatrix;");
-        src.push("    mat4 projMatrix;");
-        src.push("    mat4 positionsDecodeMatrix;");
-        src.push("};");
+        this._addMatricesUniformBlockLines(src);
 
         src.push("uniform vec4 lightAmbient;");
         for (let i = 0, len = lightsState.lights.length; i < len; i++) {

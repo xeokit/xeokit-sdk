@@ -25,12 +25,7 @@ class PointsBatchingPickDepthRenderer extends VBOSceneModelPointBatchingRenderer
 
         src.push("uniform bool pickInvisible;");
 
-        src.push("uniform Matrices {");
-        src.push("    mat4 worldMatrix;");
-        src.push("    mat4 viewMatrix;");
-        src.push("    mat4 projMatrix;");
-        src.push("    mat4 positionsDecodeMatrix;");
-        src.push("};");
+        this._addMatricesUniformBlockLines(src);
 
         src.push("uniform float pointSize;");
         if (pointsMaterial.perspectivePoints) {

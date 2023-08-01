@@ -26,12 +26,7 @@ class PointsInstancingShadowRenderer extends VBOSceneModelPointInstancingRendere
         src.push("uniform mat4 shadowViewMatrix;");
         src.push("uniform mat4 shadowProjMatrix;");
 
-        src.push("uniform Matrices {");
-        src.push("    mat4 worldMatrix;");
-        src.push("    mat4 viewMatrix;");
-        src.push("    mat4 projMatrix;");
-        src.push("    mat4 positionsDecodeMatrix;");
-        src.push("};");
+        this._addMatricesUniformBlockLines(src);
 
         src.push("uniform float pointSize;");
         if (clipping) {

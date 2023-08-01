@@ -44,14 +44,7 @@ class TrianglesInstancingColorRenderer extends VBOSceneModelTriangleInstancingRe
         src.push("in vec4 modelNormalMatrixCol1;");
         src.push("in vec4 modelNormalMatrixCol2;");
 
-        src.push("uniform Matrices {");
-        src.push("    mat4 worldMatrix;");
-        src.push("    mat4 viewMatrix;");
-        src.push("    mat4 projMatrix;");
-        src.push("    mat4 positionsDecodeMatrix;");
-        src.push("    mat4 worldNormalMatrix;");
-        src.push("    mat4 viewNormalMatrix;");
-        src.push("};");
+        this._addMatricesUniformBlockLines(src, true);
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");

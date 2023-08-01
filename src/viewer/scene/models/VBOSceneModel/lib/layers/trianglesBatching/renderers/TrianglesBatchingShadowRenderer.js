@@ -21,7 +21,9 @@ class TrianglesBatchingShadowRenderer extends VBOSceneModelTriangleBatchingRende
         src.push("in float flags;");
         src.push("uniform mat4 shadowViewMatrix;");
         src.push("uniform mat4 shadowProjMatrix;");
-        src.push("uniform mat4 positionsDecodeMatrix;");
+
+        this._addMatricesUniformBlockLines(src);
+
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
             src.push("out float vFlags;");

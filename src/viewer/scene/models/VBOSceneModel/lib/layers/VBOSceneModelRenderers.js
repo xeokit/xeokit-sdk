@@ -36,6 +36,21 @@ class VBOSceneModelRenderer {
         };
     }
 
+    _addMatricesUniformBlockLines(src, normals = false) {
+        src.push("uniform Matrices {");
+        src.push("    mat4 worldMatrix;");
+        src.push("    mat4 viewMatrix;");
+        src.push("    mat4 projMatrix;");
+        src.push("    mat4 positionsDecodeMatrix;");
+        if (normals) {
+            src.push("    mat4 worldNormalMatrix;");
+            src.push("    mat4 viewNormalMatrix;");
+        }
+        src.push("};");
+
+        return src;
+    }
+
     getValid() {
         return this._hash === this._getHash();
     }

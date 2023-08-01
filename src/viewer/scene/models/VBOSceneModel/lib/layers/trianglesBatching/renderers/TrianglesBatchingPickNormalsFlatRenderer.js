@@ -20,12 +20,7 @@ class TrianglesBatchingPickNormalsFlatRenderer extends VBOSceneModelTriangleBatc
         src.push("in float flags;");
         src.push("uniform bool pickInvisible;");
 
-        src.push("uniform Matrices {");
-        src.push("    mat4 worldMatrix;");
-        src.push("    mat4 viewMatrix;");
-        src.push("    mat4 projMatrix;");
-        src.push("    mat4 positionsDecodeMatrix;");
-        src.push("};");
+        this._addMatricesUniformBlockLines(src);
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
