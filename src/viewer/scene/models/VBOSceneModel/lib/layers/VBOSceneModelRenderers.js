@@ -1,4 +1,4 @@
-import {getPlaneRTCPos} from "../../../../math/rtcCoords.js";
+import {createRTCViewMat, getPlaneRTCPos} from "../../../../math/rtcCoords.js";
 import {math} from "../../../../math/math.js";
 import {Program} from "../../../../webgl/Program.js";
 import {stats} from "../../../../stats.js"
@@ -18,6 +18,23 @@ class VBOSceneModelRenderer {
         this._instancing = instancing;
         this._edges = edges;
         this._hash = this._getHash();
+
+        /**
+         * Matrices Uniform Block Buffer
+         * 
+         * In shaders, matrices in the Matrices Uniform Block MUST be set in this order:
+         *  - worldMatrix
+         *  - viewMatrix
+         *  - projMatrix
+         *  - positionsDecodeMatrix
+         *  - worldNormalMatrix
+         *  - viewNormalMatrix
+         */
+        this._matricesUniformBlockBufferBindingPoint = 0;
+
+        this._matricesUniformBlockBuffer = this._scene.canvas.gl.createBuffer();
+        this._matricesUniformBlockBufferData = new Float32Array(4 * 4 * 6); // there is 6 mat4
+
         this._allocate();
     }
 
@@ -34,6 +51,14 @@ class VBOSceneModelRenderer {
             vertex: this._buildVertexShader(),
             fragment: this._buildFragmentShader()
         };
+    }
+
+    _buildVertexShader() {
+        return [""];
+    }
+
+    _buildFragmentShader() {
+        return [""];
     }
 
     _addMatricesUniformBlockLines(src, normals = false) {
@@ -293,10 +318,15 @@ class VBOSceneModelRenderer {
 
         const scene = this._scene;
         const gl = scene.canvas.gl;
-        const state = layer._state;
-        const { textureSet, geometry } = state;
+        const { _state: state, model } = layer;
+        const { textureSet, geometry, origin } = state;
+        const { positionsDecodeMatrix } = this._instancing ? geometry : state;
         const lightsState = scene._lightsState;
         const pointsMaterial = scene.pointsMaterial;
+        const { camera } = model.scene;
+        const { viewNormalMatrix, project } = camera;
+        const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix
+        const { worldMatrix, worldNormalMatrix } = model;
 
         if (!this._program) {
             this._allocate();
@@ -309,6 +339,28 @@ class VBOSceneModelRenderer {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram(frameCtx);
         }
+
+        let offset = 0;
+        const mat4Size = 4 * 4;
+
+        this._matricesUniformBlockBufferData.set(worldMatrix, 0);
+        this._matricesUniformBlockBufferData.set(
+            (origin) ? createRTCViewMat(viewMatrix, origin) : viewMatrix,
+            offset += mat4Size,
+            );
+        this._matricesUniformBlockBufferData.set(frameCtx.pickProjMatrix || project.matrix, offset += mat4Size);
+        this._matricesUniformBlockBufferData.set(positionsDecodeMatrix, offset += mat4Size);
+        this._matricesUniformBlockBufferData.set(worldNormalMatrix, offset += mat4Size);
+        this._matricesUniformBlockBufferData.set(viewNormalMatrix, offset += mat4Size);
+        
+        gl.bindBuffer(gl.UNIFORM_BUFFER, this._matricesUniformBlockBuffer);
+        gl.bufferData(gl.UNIFORM_BUFFER, this._matricesUniformBlockBufferData, gl.DYNAMIC_DRAW);
+
+        gl.bindBufferBase(
+            gl.UNIFORM_BUFFER,
+            this.matricesUniformBlockBufferBindingPoint,
+            this._matricesUniformBlockBuffer);
+
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
