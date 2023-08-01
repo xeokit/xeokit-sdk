@@ -139,7 +139,7 @@ class VBOSceneModelRenderer {
         gl.uniformBlockBinding(
             program.handle,
             gl.getUniformBlockIndex(program.handle, "Matrices"),
-            0 // layer.matricesUniformBlockBufferBindingPoint
+            this._matricesUniformBlockBufferBindingPoint
         );
 
         this._uShadowViewMatrix = program.getLocation("shadowViewMatrix");
