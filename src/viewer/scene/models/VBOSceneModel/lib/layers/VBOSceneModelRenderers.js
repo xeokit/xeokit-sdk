@@ -35,6 +35,11 @@ class VBOSceneModelRenderer {
         this._matricesUniformBlockBuffer = this._scene.canvas.gl.createBuffer();
         this._matricesUniformBlockBufferData = new Float32Array(4 * 4 * 6); // there is 6 mat4
 
+        /**
+         * A Vertex Array Object by Layer
+         */
+        this._vaoCache = new WeakMap();
+
         this._allocate();
     }
 
@@ -313,6 +318,103 @@ class VBOSceneModelRenderer {
         }
     }
 
+    _makeVAO(layerState) {
+        const gl = this._scene.canvas.gl;
+        const vao = gl.createVertexArray();
+        gl.bindVertexArray(vao);
+
+        const { geometry } = layerState;
+
+        if (this._instancing) {
+            this._aModelMatrixCol0.bindArrayBuffer(layerState.modelMatrixCol0Buf);
+            this._aModelMatrixCol1.bindArrayBuffer(layerState.modelMatrixCol1Buf);
+            this._aModelMatrixCol2.bindArrayBuffer(layerState.modelMatrixCol2Buf);
+    
+            gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 1);
+            gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 1);
+            gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 1);
+    
+            if (this._aModelNormalMatrixCol0) {
+                this._aModelNormalMatrixCol0.bindArrayBuffer(layerState.modelNormalMatrixCol0Buf);
+                gl.vertexAttribDivisor(this._aModelNormalMatrixCol0.location, 1);
+            }
+            if (this._aModelNormalMatrixCol1) {
+                this._aModelNormalMatrixCol1.bindArrayBuffer(layerState.modelNormalMatrixCol1Buf);
+                gl.vertexAttribDivisor(this._aModelNormalMatrixCol1.location, 1);
+            }
+            if (this._aModelNormalMatrixCol2) {
+                this._aModelNormalMatrixCol2.bindArrayBuffer(layerState.modelNormalMatrixCol2Buf);
+                gl.vertexAttribDivisor(this._aModelNormalMatrixCol2.location, 1);
+            }
+    
+        }
+
+        this._aPosition.bindArrayBuffer(this._instancing ? geometry.positionsBuf : layerState.positionsBuf);
+
+        if (this._aUV) {
+            this._aUV.bindArrayBuffer(this._instancing ? geometry.uvBuf : layerState.uvBuf);
+        }
+
+        if (this._aNormal) {
+            this._aNormal.bindArrayBuffer(this._instancing ? geometry.normalsBuf : layerState.normalsBuf);
+        }
+
+        if (this._aMetallicRoughness) {
+            this._aMetallicRoughness.bindArrayBuffer(layerState.metallicRoughnessBuf);
+            if (this._instancing) {
+                gl.vertexAttribDivisor(this._aMetallicRoughness.location, 1);
+            }
+        }
+
+        if (this._aColor) {
+            this._aColor.bindArrayBuffer(layerState.colorsBuf ? layerState.colorsBuf : geometry.colorsBuf);
+            if (this._instancing && geometry && !geometry.colorsBuf) {
+                gl.vertexAttribDivisor(this._aColor.location, 1);
+            }
+        }
+
+        if (this._aFlags) {
+            this._aFlags.bindArrayBuffer(layerState.flagsBuf);
+            if (this._instancing) {
+                gl.vertexAttribDivisor(this._aFlags.location, 1);
+            }
+        }
+
+        if (this._aOffset) {
+            this._aOffset.bindArrayBuffer(layerState.offsetsBuf);
+            if (this._instancing) {
+                gl.vertexAttribDivisor(this._aOffset.location, 1);
+            }
+        }
+
+        if (this._aPickColor) {
+            this._aPickColor.bindArrayBuffer(layerState.pickColorsBuf);
+            if (this._instancing) {
+                gl.vertexAttribDivisor(this._aPickColor.location, 1);
+            }
+        }
+
+        if (this._instancing) {
+            if (this._edges) {
+                geometry.edgeIndicesBuf.bind();
+            } else {
+                if (geometry.indicesBuf) {
+                    geometry.indicesBuf.bind();
+                }
+            }
+        } else {
+            if (this._edges) {
+                layerState.edgeIndicesBuf.bind();
+            } else {
+                if (layerState.indicesBuf) {
+                    layerState.indicesBuf.bind();
+                }
+            }
+        }
+
+        return vao;
+    }
+
     drawLayer(frameCtx, layer, renderPass, { colorUniform = false, incrementDrawState = false } = {}) {
         const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
 
@@ -338,6 +440,12 @@ class VBOSceneModelRenderer {
         if (frameCtx.lastProgramId !== this._program.id) {
             frameCtx.lastProgramId = this._program.id;
             this._bindProgram(frameCtx);
+        }
+
+        if (this._vaoCache.has(layer)) {
+            gl.bindVertexArray(this._vaoCache.get(layer));
+        } else {
+            this._vaoCache.set(layer, this._makeVAO(state))
         }
 
         let offset = 0;
@@ -407,75 +515,6 @@ class VBOSceneModelRenderer {
         if (this._uNearPlaneHeight) {
             const nearPlaneHeight = (scene.camera.projection === "ortho") ? 1.0 : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0)));
             gl.uniform1f(this._uNearPlaneHeight, nearPlaneHeight);
-        }
-
-        if (this._instancing) {
-            this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
-            this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
-            this._aModelMatrixCol2.bindArrayBuffer(state.modelMatrixCol2Buf);
-    
-            gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 1);
-            gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 1);
-            gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 1);
-    
-            if (this._aModelNormalMatrixCol0) {
-                this._aModelNormalMatrixCol0.bindArrayBuffer(state.modelNormalMatrixCol0Buf);
-                gl.vertexAttribDivisor(this._aModelNormalMatrixCol0.location, 1);
-            }
-            if (this._aModelNormalMatrixCol1) {
-                this._aModelNormalMatrixCol1.bindArrayBuffer(state.modelNormalMatrixCol1Buf);
-                gl.vertexAttribDivisor(this._aModelNormalMatrixCol1.location, 1);
-            }
-            if (this._aModelNormalMatrixCol2) {
-                this._aModelNormalMatrixCol2.bindArrayBuffer(state.modelNormalMatrixCol2Buf);
-                gl.vertexAttribDivisor(this._aModelNormalMatrixCol2.location, 1);
-            }
-    
-        }
-
-        this._aPosition.bindArrayBuffer(this._instancing ? geometry.positionsBuf : state.positionsBuf);
-
-        if (this._aUV) {
-            this._aUV.bindArrayBuffer(this._instancing ? geometry.uvBuf : state.uvBuf);
-        }
-
-        if (this._aNormal) {
-            this._aNormal.bindArrayBuffer(this._instancing ? geometry.normalsBuf : state.normalsBuf);
-        }
-
-        if (this._aMetallicRoughness) {
-            this._aMetallicRoughness.bindArrayBuffer(state.metallicRoughnessBuf);
-            if (this._instancing) {
-                gl.vertexAttribDivisor(this._aMetallicRoughness.location, 1);
-            }
-        }
-
-        if (this._aColor) {
-            this._aColor.bindArrayBuffer(state.colorsBuf ? state.colorsBuf : geometry.colorsBuf);
-            if (this._instancing && geometry && !geometry.colorsBuf) {
-                gl.vertexAttribDivisor(this._aColor.location, 1);
-            }
-        }
-
-        if (this._aFlags) {
-            this._aFlags.bindArrayBuffer(state.flagsBuf);
-            if (this._instancing) {
-                gl.vertexAttribDivisor(this._aFlags.location, 1);
-            }
-        }
-
-        if (this._aOffset) {
-            this._aOffset.bindArrayBuffer(state.offsetsBuf);
-            if (this._instancing) {
-                gl.vertexAttribDivisor(this._aOffset.location, 1);
-            }
-        }
-
-        if (this._aPickColor) {
-            this._aPickColor.bindArrayBuffer(state.pickColorsBuf);
-            if (this._instancing) {
-                gl.vertexAttribDivisor(this._aPickColor.location, 1);
-            }
         }
 
         if (textureSet) {
@@ -566,52 +605,9 @@ class VBOSceneModelRenderer {
             }
         }
 
-        if (this._instancing) {
-            if (this._edges) {
-                geometry.edgeIndicesBuf.bind();
-            } else {
-                if (geometry.indicesBuf) {
-                    geometry.indicesBuf.bind();
-                }
-            }
-        } else {
-            if (this._edges) {
-                state.edgeIndicesBuf.bind();
-            } else {
-                if (state.indicesBuf) {
-                    state.indicesBuf.bind();
-                }
-            }
-        }
-
         this._draw({ geometry, state, frameCtx, incrementDrawState });
 
-        if (this._instancing) {
-            gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 0);
-            gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 0);
-            gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 0);
-            
-            gl.vertexAttribDivisor(this._aFlags.location, 0);
-
-            if (this._aModelNormalMatrixCol0) {
-                gl.vertexAttribDivisor(this._aModelNormalMatrixCol0.location, 0);
-            }
-            if (this._aModelNormalMatrixCol1) {
-                gl.vertexAttribDivisor(this._aModelNormalMatrixCol1.location, 0);
-            }
-            if (this._aModelNormalMatrixCol2) {
-                gl.vertexAttribDivisor(this._aModelNormalMatrixCol2.location, 0);
-            }
-            if (this._aColor) {
-                gl.vertexAttribDivisor(this._aColor.location, 0);
-            }
-            if  (this._aPickColor) {
-                gl.vertexAttribDivisor(this._aPickColor.location, 0);
-            }
-            if (this._aOffset) {
-                gl.vertexAttribDivisor(this._aOffset.location, 0);
-            }
-        }
+        gl.bindVertexArray(null);
     }
 
     webglContextRestored() {
