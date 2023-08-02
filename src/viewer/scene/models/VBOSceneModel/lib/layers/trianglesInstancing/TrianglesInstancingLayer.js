@@ -5,6 +5,7 @@ import {math} from "../../../../../math/math.js";
 import {RenderState} from "../../../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../../../webgl/ArrayBuf.js";
 import {getInstancingRenderers} from "./TrianglesInstancingRenderers.js";
+import { createRTCViewMat } from '../../../../../math/rtcCoords.js';
 
 const tempUint8Vec4 = new Uint8Array(4);
 const tempFloat32 = new Float32Array(1);

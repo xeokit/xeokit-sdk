@@ -35,12 +35,6 @@ class PointsInstancingLayer {
         this.model = cfg.model;
 
         /**
-         * Shared geometry
-         * @type {VBOSceneModelGeometry}
-         */
-        this.geometry = cfg.geometry;
-
-        /**
          * Shared material
          * @type {VBOSceneModelGeometry}
          */
@@ -64,7 +58,8 @@ class PointsInstancingLayer {
         this._state = new RenderState({
             obb: math.OBB3(),
             numInstances: 0,
-            origin: cfg.origin ? math.vec3(cfg.origin) : null
+            origin: cfg.origin ? math.vec3(cfg.origin) : null,
+            geometry: cfg.geometry,
         });
 
         // These counts are used to avoid unnecessary render passes

@@ -1,11 +1,5 @@
-import {Program} from "../../../../../../webgl/Program.js";
-import {math} from "../../../../../../math/math.js";
-import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
-import {WEBGL_INFO} from "../../../../../../webglInfo.js";
 import {LinearEncoding, sRGBEncoding} from "../../../../../../constants/constants.js";
-
-const tempVec4 = math.vec4();
-const tempVec3a = math.vec3();
+import {VBOSceneModelTriangleInstancingRenderer} from "../../VBOSceneModelRenderers.js";
 
 const TEXTURE_DECODE_FUNCS = {};
 TEXTURE_DECODE_FUNCS[LinearEncoding] = "linearToLinear";
@@ -14,339 +8,14 @@ TEXTURE_DECODE_FUNCS[sRGBEncoding] = "sRGBToLinear";
 /**
  * @private
  */
-class TrianglesInstancingPBRRenderer {
-
-    constructor(scene, withSAO) {
-        this._scene = scene;
-        this._withSAO = withSAO;
-        this._hash = this._getHash();
-        this._allocate();
-    }
-
-    getValid() {
-        return this._hash === this._getHash();
-    }
-
+class TrianglesInstancingPBRRenderer extends VBOSceneModelTriangleInstancingRenderer {
     _getHash() {
         const scene = this._scene;
         return [scene.gammaOutput, scene._lightsState.getHash(), scene._sectionPlanesState.getHash(), (this._withSAO ? "sao" : "nosao")].join(";");
     }
 
-    drawLayer(frameCtx, instancingLayer, renderPass) {
-
-        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
-
-        const model = instancingLayer.model;
-        const scene = this._scene;
-        const camera = scene.camera;
-        const gl = scene.canvas.gl;
-        const state = instancingLayer._state;
-        const origin = state.origin;
-        const textureSet = state.textureSet;
-        const geometry = state.geometry;
-        const lightsState = scene._lightsState;
-
-        if (!this._program) {
-            this._allocate();
-            if (this.errors) {
-                return;
-            }
-        }
-
-        if (frameCtx.lastProgramId !== this._program.id) {
-            frameCtx.lastProgramId = this._program.id;
-            this._bindProgram(frameCtx);
-        }
-
-        gl.uniform1i(this._uRenderPass, renderPass);
-
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
-        gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
-
-        gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
-        gl.uniformMatrix4fv(this._uWorldNormalMatrix, false, model.worldNormalMatrix);
-
-        const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
-        if (numSectionPlanes > 0) {
-            const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-            const baseIndex = instancingLayer.layerIndex * numSectionPlanes;
-            const renderFlags = model.renderFlags;
-            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
-                const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
-                if (sectionPlaneUniforms) {
-                    const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                    if (active) {
-                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (origin) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
-                            gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
-                        } else {
-                            gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-                        }
-                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
-                    }
-                }
-            }
-        }
-
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometry.positionsDecodeMatrix);
-
-        if (this._uUVDecodeMatrix) {
-            gl.uniformMatrix3fv(this._uUVDecodeMatrix, false, geometry.uvDecodeMatrix);
-        }
-
-        this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
-        this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
-        this._aModelMatrixCol2.bindArrayBuffer(state.modelMatrixCol2Buf);
-
-        gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 1);
-        gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 1);
-        gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 1);
-
-        this._aModelNormalMatrixCol0.bindArrayBuffer(state.modelNormalMatrixCol0Buf);
-        this._aModelNormalMatrixCol1.bindArrayBuffer(state.modelNormalMatrixCol1Buf);
-        this._aModelNormalMatrixCol2.bindArrayBuffer(state.modelNormalMatrixCol2Buf);
-
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol0.location, 1);
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol1.location, 1);
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol2.location, 1);
-
-        this._aPosition.bindArrayBuffer(geometry.positionsBuf);
-        this._aNormal.bindArrayBuffer(geometry.normalsBuf);
-
-        if (this._aUV) {
-            this._aUV.bindArrayBuffer(geometry.uvBuf);
-        }
-        this._aColor.bindArrayBuffer(state.colorsBuf);
-        gl.vertexAttribDivisor(this._aColor.location, 1);
-
-        this._aMetallicRoughness.bindArrayBuffer(state.metallicRoughnessBuf);
-        gl.vertexAttribDivisor(this._aMetallicRoughness.location, 1);
-
-        this._aFlags.bindArrayBuffer(state.flagsBuf);
-        gl.vertexAttribDivisor(this._aFlags.location, 1);
-
-        if (this._aOffset) {
-            this._aOffset.bindArrayBuffer(state.offsetsBuf);
-            gl.vertexAttribDivisor(this._aOffset.location, 1);
-        }
-
-        if (lightsState.reflectionMaps.length > 0 && lightsState.reflectionMaps[0].texture && this._uReflectionMap) {
-            this._program.bindTexture(this._uReflectionMap, lightsState.reflectionMaps[0].texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            frameCtx.bindTexture++;
-        }
-
-        if (lightsState.lightMaps.length > 0 && lightsState.lightMaps[0].texture && this._uLightMap) {
-            this._program.bindTexture(this._uLightMap, lightsState.lightMaps[0].texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            frameCtx.bindTexture++;
-        }
-
-        if (this._withSAO) {
-            const sao = scene.sao;
-            const saoEnabled = sao.possible;
-            if (saoEnabled) {
-                const viewportWidth = gl.drawingBufferWidth;
-                const viewportHeight = gl.drawingBufferHeight;
-                tempVec4[0] = viewportWidth;
-                tempVec4[1] = viewportHeight;
-                tempVec4[2] = sao.blendCutoff;
-                tempVec4[3] = sao.blendFactor;
-                gl.uniform4fv(this._uSAOParams, tempVec4);
-                this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, frameCtx.textureUnit);
-                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                frameCtx.bindTexture++;
-            }
-        }
-
-        if (textureSet) {
-            this._program.bindTexture(this._uBaseColorMap, textureSet.colorTexture.texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            this._program.bindTexture(this._uMetallicRoughMap, textureSet.metallicRoughnessTexture.texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            this._program.bindTexture(this._uEmissiveMap, textureSet.emissiveTexture.texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            this._program.bindTexture(this._uNormalMap, textureSet.normalsTexture.texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-        }
-
-        geometry.indicesBuf.bind();
-
-        gl.drawElementsInstanced(gl.TRIANGLES, geometry.indicesBuf.numItems, geometry.indicesBuf.itemType, 0, state.numInstances);
-
-        frameCtx.drawElements++;
-
-        gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 0);
-        gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 0);
-        gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 0);
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol0.location, 0);
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol1.location, 0);
-        gl.vertexAttribDivisor(this._aModelNormalMatrixCol2.location, 0);
-        gl.vertexAttribDivisor(this._aColor.location, 0);
-        gl.vertexAttribDivisor(this._aMetallicRoughness.location, 0);
-        gl.vertexAttribDivisor(this._aFlags.location, 0);
-
-        if (this._aOffset) {
-            gl.vertexAttribDivisor(this._aOffset.location, 0);
-        }
-    }
-
-    _allocate() {
-
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-        const lightsState = scene._lightsState;
-
-        this._program = new Program(gl, this._buildShader());
-
-        if (this._program.errors) {
-            this.errors = this._program.errors;
-            return;
-        }
-
-        const program = this._program;
-
-        this._uRenderPass = program.getLocation("renderPass");
-
-        this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-        this._uUVDecodeMatrix = program.getLocation("uvDecodeMatrix");
-        this._uWorldMatrix = program.getLocation("worldMatrix");
-        this._uWorldNormalMatrix = program.getLocation("worldNormalMatrix");
-
-        this._uViewMatrix = program.getLocation("viewMatrix");
-        this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
-        this._uProjMatrix = program.getLocation("projMatrix");
-
-        this._uGammaFactor = program.getLocation("gammaFactor");
-
-        this._uLightAmbient = program.getLocation("lightAmbient");
-        this._uLightColor = [];
-        this._uLightDir = [];
-        this._uLightPos = [];
-        this._uLightAttenuation = [];
-
-        const lights = lightsState.lights;
-        let light;
-
-        for (var i = 0, len = lights.length; i < len; i++) {
-            light = lights[i];
-            switch (light.type) {
-                case "dir":
-                    this._uLightColor[i] = program.getLocation("lightColor" + i);
-                    this._uLightPos[i] = null;
-                    this._uLightDir[i] = program.getLocation("lightDir" + i);
-                    break;
-                case "point":
-                    this._uLightColor[i] = program.getLocation("lightColor" + i);
-                    this._uLightPos[i] = program.getLocation("lightPos" + i);
-                    this._uLightDir[i] = null;
-                    this._uLightAttenuation[i] = program.getLocation("lightAttenuation" + i);
-                    break;
-                case "spot":
-                    this._uLightColor[i] = program.getLocation("lightColor" + i);
-                    this._uLightPos[i] = program.getLocation("lightPos" + i);
-                    this._uLightDir[i] = program.getLocation("lightDir" + i);
-                    this._uLightAttenuation[i] = program.getLocation("lightAttenuation" + i);
-                    break;
-            }
-        }
-
-        if (lightsState.reflectionMaps.length > 0) {
-            this._uReflectionMap = "reflectionMap";
-        }
-
-        if (lightsState.lightMaps.length > 0) {
-            this._uLightMap = "lightMap";
-        }
-
-        this._uSectionPlanes = [];
-
-        for (let i = 0, len = scene._sectionPlanesState.sectionPlanes.length; i < len; i++) {
-            this._uSectionPlanes.push({
-                active: program.getLocation("sectionPlaneActive" + i),
-                pos: program.getLocation("sectionPlanePos" + i),
-                dir: program.getLocation("sectionPlaneDir" + i)
-            });
-        }
-
-        this._aPosition = program.getAttribute("position");
-        this._aNormal = program.getAttribute("normal");
-        this._aUV = program.getAttribute("uv");
-        this._aColor = program.getAttribute("color");
-        this._aMetallicRoughness = program.getAttribute("metallicRoughness");
-        this._aFlags = program.getAttribute("flags");
-        this._aOffset = program.getAttribute("offset");
-
-        this._uBaseColorMap = "uBaseColorMap";
-        this._uMetallicRoughMap = "uMetallicRoughMap";
-        this._uEmissiveMap = "uEmissiveMap";
-        this._uNormalMap = "uNormalMap";
-
-        this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
-        this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");
-        this._aModelMatrixCol2 = program.getAttribute("modelMatrixCol2");
-
-        this._aModelNormalMatrixCol0 = program.getAttribute("modelNormalMatrixCol0");
-        this._aModelNormalMatrixCol1 = program.getAttribute("modelNormalMatrixCol1");
-        this._aModelNormalMatrixCol2 = program.getAttribute("modelNormalMatrixCol2");
-
-        this._uOcclusionTexture = "uOcclusionTexture";
-        this._uSAOParams = program.getLocation("uSAOParams");
-
-        if (scene.logarithmicDepthBufferEnabled) {
-            this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
-        }
-    }
-
-    _bindProgram() {
-
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-        const lightsState = scene._lightsState;
-        const lights = lightsState.lights;
-        const project = scene.camera.project;
-
-        this._program.bind();
-
-        gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
-
-        if (this._uLightAmbient) {
-            gl.uniform4fv(this._uLightAmbient, scene._lightsState.getAmbientColorAndIntensity());
-        }
-
-        for (let i = 0, len = lights.length; i < len; i++) {
-            const light = lights[i];
-            if (this._uLightColor[i]) {
-                gl.uniform4f(this._uLightColor[i], light.color[0], light.color[1], light.color[2], light.intensity);
-            }
-            if (this._uLightPos[i]) {
-                gl.uniform3fv(this._uLightPos[i], light.pos);
-                if (this._uLightAttenuation[i]) {
-                    gl.uniform1f(this._uLightAttenuation[i], light.attenuation);
-                }
-            }
-            if (this._uLightDir[i]) {
-                gl.uniform3fv(this._uLightDir[i], light.dir);
-            }
-        }
-
-        if (scene.logarithmicDepthBufferEnabled) {
-            const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
-            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
-        }
-
-        if (this._uGammaFactor) {
-            gl.uniform1f(this._uGammaFactor, scene.gammaFactor);
-        }
-    }
-
-    _buildShader() {
-        return {
-            vertex: this._buildVertexShader(),
-            fragment: this._buildFragmentShader()
-        };
+    drawLayer(frameCtx, layer, renderPass) {
+        super.drawLayer(frameCtx, layer, renderPass, { incrementDrawState: true });
     }
 
     _buildVertexShader() {
@@ -382,12 +51,8 @@ class TrianglesInstancingPBRRenderer {
         src.push("in vec4 modelNormalMatrixCol1;");
         src.push("in vec4 modelNormalMatrixCol2;");
 
-        src.push("uniform mat4 worldMatrix;");
-        src.push("uniform mat4 worldNormalMatrix;");
-        src.push("uniform mat4 viewMatrix;");
-        src.push("uniform mat4 viewNormalMatrix;");
-        src.push("uniform mat4 projMatrix;");
-        src.push("uniform mat4 positionsDecodeMatrix;");
+        this._addMatricesUniformBlockLines(src, true);
+
         src.push("uniform mat3 uvDecodeMatrix;")
 
         if (scene.logarithmicDepthBufferEnabled) {
@@ -505,7 +170,7 @@ class TrianglesInstancingPBRRenderer {
             src.push("in float vFragDepth;");
         }
 
-        src.push("uniform sampler2D uBaseColorMap;");
+        src.push("uniform sampler2D uColorMap;");
         src.push("uniform sampler2D uMetallicRoughMap;");
         src.push("uniform sampler2D uEmissiveMap;");
         src.push("uniform sampler2D uNormalMap;");
@@ -591,7 +256,7 @@ class TrianglesInstancingPBRRenderer {
             src.push("in vec3 vWorldNormal;");
         }
 
-        src.push("uniform mat4 viewMatrix;");
+        this._addMatricesUniformBlockLines(src, true);
 
         // CONSTANT DEFINITIONS
 
@@ -801,9 +466,9 @@ class TrianglesInstancingPBRRenderer {
         src.push("float roughness = float(vMetallicRoughness.g) / 255.0;");
         src.push("float dielectricSpecular = 0.16 * specularF0 * specularF0;");
 
-        src.push("vec4 baseColorTexel = sRGBToLinear(texture(uBaseColorMap, vUV));");
-        src.push("baseColor *= baseColorTexel.rgb;");
-        // src.push("opacity = baseColorTexel.a;");
+        src.push("vec4 colorTexel = sRGBToLinear(texture(uColorMap, vUV));");
+        src.push("baseColor *= colorTexel.rgb;");
+        // src.push("opacity = colorTexel.a;");
 
         src.push("vec3 metalRoughTexel = texture(uMetallicRoughMap, vUV).rgb;");
         src.push("metallic *= metalRoughTexel.b;");
@@ -892,17 +557,6 @@ class TrianglesInstancingPBRRenderer {
 
         src.push("}");
         return src;
-    }
-
-    webglContextRestored() {
-        this._program = null;
-    }
-
-    destroy() {
-        if (this._program) {
-            this._program.destroy();
-        }
-        this._program = null;
     }
 }
 

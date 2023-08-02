@@ -1,211 +1,13 @@
-import {Program} from "../../../../../../webgl/Program.js";
-import {RENDER_PASSES} from "../../../RENDER_PASSES.js";
-import {createRTCViewMat, getPlaneRTCPos} from "../../../../../../math/rtcCoords.js";
-import {math} from "../../../../../../math/math.js";
-
-const tempVec3a = math.vec3();
+import {VBOSceneModelTriangleInstancingRenderer} from "../../VBOSceneModelRenderers.js";
 
 /**
  * @private
  */
-class TrianglesInstancingSilhouetteRenderer {
-
-    constructor(scene) {
-        this._scene = scene;
-        this._hash = this._getHash();
-        this._allocate();
-    }
-
-    getValid() {
-        return this._hash === this._getHash();
-    }
-
-    _getHash() {
-        return this._scene._sectionPlanesState.getHash();
-    }
+class TrianglesInstancingSilhouetteRenderer extends VBOSceneModelTriangleInstancingRenderer {
 
     drawLayer(frameCtx, instancingLayer, renderPass) {
-
-        const model = instancingLayer.model;
-        const scene = model.scene;
-        const camera = scene.camera;
-        const gl = scene.canvas.gl;
-        const state = instancingLayer._state;
-        const geometry = state.geometry;
-        const origin = instancingLayer._state.origin;
-
-        if (!this._program) {
-            this._allocate(instancingLayer.model.scene);
-            if (this.errors) {
-                return;
-            }
-        }
-
-        if (frameCtx.lastProgramId !== this._program.id) {
-            frameCtx.lastProgramId = this._program.id;
-            this._bindProgram();
-        }
-
-        gl.uniform1i(this._uRenderPass, renderPass);
-
-        if (renderPass === RENDER_PASSES.SILHOUETTE_XRAYED) {
-            const material = scene.xrayMaterial._state;
-            const fillColor = material.fillColor;
-            const fillAlpha = material.fillAlpha;
-            gl.uniform4f(this._uSilhouetteColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
-
-        } else if (renderPass === RENDER_PASSES.SILHOUETTE_HIGHLIGHTED) {
-            const material = scene.highlightMaterial._state;
-            const fillColor = material.fillColor;
-            const fillAlpha = material.fillAlpha;
-            gl.uniform4f(this._uSilhouetteColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
-
-        } else if (renderPass === RENDER_PASSES.SILHOUETTE_SELECTED) {
-            const material = scene.selectedMaterial._state;
-            const fillColor = material.fillColor;
-            const fillAlpha = material.fillAlpha;
-            gl.uniform4f(this._uSilhouetteColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
-
-        } else {
-            gl.uniform4fv(this._uSilhouetteColor, math.vec3([1, 1, 1]));
-        }
-
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
-        gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
-
-        const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
-        if (numSectionPlanes > 0) {
-            const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-            const baseIndex = instancingLayer.layerIndex * numSectionPlanes;
-            const renderFlags = model.renderFlags;
-            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
-                const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
-                if (sectionPlaneUniforms) {
-                    const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                    if (active) {
-                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (origin) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
-                            gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
-                        } else {
-                            gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-                        }
-                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
-                    }
-                }
-            }
-        }
-
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometry.positionsDecodeMatrix);
-
-        this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
-        this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
-        this._aModelMatrixCol2.bindArrayBuffer(state.modelMatrixCol2Buf);
-
-        gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 1);
-        gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 1);
-        gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 1);
-
-        this._aPosition.bindArrayBuffer(geometry.positionsBuf);
-
-        this._aFlags.bindArrayBuffer(state.flagsBuf, gl.UNSIGNED_BYTE, true);
-        gl.vertexAttribDivisor(this._aFlags.location, 1);
-
-        if (this._aOffset) {
-            this._aOffset.bindArrayBuffer(state.offsetsBuf);
-            gl.vertexAttribDivisor(this._aOffset.location, 1);
-        }
-
-        if (this._aColor) {
-            this._aColor.bindArrayBuffer(state.colorsBuf);
-            gl.vertexAttribDivisor(this._aColor.location, 1);
-        }
-
-        geometry.indicesBuf.bind();
-
-        gl.drawElementsInstanced(gl.TRIANGLES, geometry.indicesBuf.numItems, geometry.indicesBuf.itemType, 0, state.numInstances);
-
-        gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 0); // TODO: Is this needed
-        gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 0);
-        gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 0);
-
-        gl.vertexAttribDivisor(this._aFlags.location, 0);
-        if (this._aOffset) {
-            gl.vertexAttribDivisor(this._aOffset.location, 0);
-        }
-        if (this._aColor) {
-            gl.vertexAttribDivisor(this._aColor.location, 0);
-        }
-    }
-
-    _allocate() {
-
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-        const sectionPlanesState = scene._sectionPlanesState;
-
-        this._program = new Program(gl, this._buildShader());
-
-        if (this._program.errors) {
-            this.errors = this._program.errors;
-            return;
-        }
-
-        const program = this._program;
-
-        this._uRenderPass = program.getLocation("renderPass");
-        this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-        this._uWorldMatrix = program.getLocation("worldMatrix");
-        this._uViewMatrix = program.getLocation("viewMatrix");
-        this._uProjMatrix = program.getLocation("projMatrix");
-        this._uSilhouetteColor = program.getLocation("silhouetteColor");
-        this._uSectionPlanes = [];
-
-        const clips = sectionPlanesState.sectionPlanes;
-        for (let i = 0, len = clips.length; i < len; i++) {
-            this._uSectionPlanes.push({
-                active: program.getLocation("sectionPlaneActive" + i),
-                pos: program.getLocation("sectionPlanePos" + i),
-                dir: program.getLocation("sectionPlaneDir" + i)
-            });
-        }
-
-        this._aPosition = program.getAttribute("position");
-        this._aOffset = program.getAttribute("offset");
-        this._aFlags = program.getAttribute("flags");
-        this._aColor = program.getAttribute("color");
-
-        this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
-        this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");
-        this._aModelMatrixCol2 = program.getAttribute("modelMatrixCol2");
-
-        if ( scene.logarithmicDepthBufferEnabled) {
-            this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
-        }
-    }
-
-    _bindProgram() {
-
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-        const project = scene.camera.project;
-
-        this._program.bind();
-
-        gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
-
-        if ( scene.logarithmicDepthBufferEnabled) {
-            const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
-            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
-        }
-    }
-
-    _buildShader() {
-        return {
-            vertex: this._buildVertexShader(),
-            fragment: this._buildFragmentShader()
-        };
+        // TODO color uniform true ???
+        super.drawLayer(frameCtx, instancingLayer, renderPass, { colorUniform: true });
     }
 
     _buildVertexShader() {
@@ -229,10 +31,8 @@ class TrianglesInstancingSilhouetteRenderer {
         src.push("in vec4 modelMatrixCol1;");
         src.push("in vec4 modelMatrixCol2;");
 
-        src.push("uniform mat4 worldMatrix;");
-        src.push("uniform mat4 viewMatrix;");
-        src.push("uniform mat4 projMatrix;");
-        src.push("uniform mat4 positionsDecodeMatrix;");
+        this._addMatricesUniformBlockLines(src);
+
         src.push("uniform vec4 silhouetteColor;");
 
         if (scene.logarithmicDepthBufferEnabled) {
@@ -335,17 +135,6 @@ class TrianglesInstancingSilhouetteRenderer {
         src.push("outColor = vColor;");
         src.push("}");
         return src;
-    }
-
-    webglContextRestored() {
-        this._program = null;
-    }
-
-    destroy() {
-        if (this._program) {
-            this._program.destroy();
-        }
-        this._program = null;
     }
 }
 

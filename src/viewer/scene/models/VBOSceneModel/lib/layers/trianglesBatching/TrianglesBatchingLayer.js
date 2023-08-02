@@ -14,7 +14,6 @@ const tempMat4b = math.mat4();
 const tempVec4a = math.vec4([0, 0, 0, 1]);
 const tempVec4b = math.vec4([0, 0, 0, 1]);
 const tempVec4c = math.vec4([0, 0, 0, 1]);
-const tempVec2a = math.vec2([0, 0]);
 const tempOBB3 = math.OBB3();
 
 const tempVec3a = math.vec3();

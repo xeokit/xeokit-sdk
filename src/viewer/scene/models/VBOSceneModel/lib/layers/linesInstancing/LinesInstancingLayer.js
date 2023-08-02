@@ -6,7 +6,6 @@ import {RenderState} from "../../../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../../../webgl/ArrayBuf.js";
 import {getInstancingRenderers} from "./LinesInstancingRenderers.js";
 
-
 const tempUint8Vec4 = new Uint8Array(4);
 const tempFloat32 = new Float32Array(1);
 
@@ -38,12 +37,6 @@ class LinesInstancingLayer {
         this.model = cfg.model;
 
         /**
-         * Shared geometry
-         * @type {VBOSceneModelGeometry}
-         */
-        this.geometry = cfg.geometry;
-
-        /**
          * Shared material
          * @type {VBOSceneModelGeometry}
          */
@@ -68,7 +61,8 @@ class LinesInstancingLayer {
         this._state = new RenderState({
             obb: math.OBB3(),
             numInstances: 0,
-            origin: null
+            origin: null,
+            geometry: cfg.geometry,
         });
 
         // These counts are used to avoid unnecessary render passes
