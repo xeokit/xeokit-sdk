@@ -2050,12 +2050,8 @@ class VBOSceneModel extends Component {
             this.error("Geometry already created: " + geometryId);
             return;
         }
-        const primitive = cfg.primitive;
-        if (primitive === undefined || primitive === null) {
-            this.error("Param expected: primitive");
-            return;
-        }
-        if (primitive !== "points" && primitive !== "lines" && primitive !== "triangles" && primitive !== "solid" && primitive !== "surface") {
+       cfg.primitive = cfg.primitive || "triangles";
+        if (cfg.primitive !== "points" && cfg.primitive !== "lines" && cfg.primitive !== "triangles" && cfg.primitive !== "solid" && cfg.primitive !== "surface") {
             this.error(`Unsupported value for 'primitive': '${primitive}' - supported values are 'points', 'lines', 'triangles', 'solid' and 'surface'. Defaulting to 'triangles'.`);
             return;
         }
@@ -2071,8 +2067,8 @@ class VBOSceneModel extends Component {
             this.error("Param expected: `uvDecodeMatrix` (required for `uvCompressed')");
             return null;
         }
-        if (!cfg.indices && primitive !== "points") {
-            this.error(`Param expected: indices (required for '${primitive}' primitive type)`);
+        if (!cfg.indices && cfg.primitive !== "points") {
+            this.error(`Param expected: indices (required for '${cfg.primitive}' primitive type)`);
             return null;
         }
         const geometry = new VBOSceneModelGeometry(geometryId, this, cfg);
