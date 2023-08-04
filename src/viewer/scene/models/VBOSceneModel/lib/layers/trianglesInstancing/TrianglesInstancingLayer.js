@@ -221,20 +221,36 @@ class TrianglesInstancingLayer {
         this._pickColors.push(pickColor[3]);
 
         // Expand AABB
-
         math.collapseAABB3(worldAABB);
-        const obb = this._state.geometry.obb;
-        const lenPositions = obb.length;
-        for (let i = 0; i < lenPositions; i += 4) {
-            tempVec4a[0] = obb[i + 0];
-            tempVec4a[1] = obb[i + 1];
-            tempVec4a[2] = obb[i + 2];
-            math.transformPoint4(meshMatrix, tempVec4a, tempVec4b);
+
+        let lenPositions;
+        let positions;
+
+        if (this._state.geometry._positionsCompressed) {
+            lenPositions = this._state.geometry._positionsCompressed.length;
+            positions = this._state.geometry._positionsCompressed;
+        } else {
+            lenPositions = this._state.geometry._positions.length;
+            positions = this._state.geometry._positions;
+        }
+
+        for (let i = 0; i < lenPositions; i += 3) {
+            if (this._state.geometry._positionsCompressed) {
+                tempVec4a[0] = positions[i + 0];
+                tempVec4a[1] = positions[i + 1];
+                tempVec4a[2] = positions[i + 2];
+                math.transformPoint4(this._state.geometry._positionsDecodeMatrix, tempVec4a, tempVec4b);
+            } else {
+                tempVec4b[0] = positions[i + 0];
+                tempVec4b[1] = positions[i + 1];
+                tempVec4b[2] = positions[i + 2];
+            }
+            math.transformPoint4(meshMatrix, tempVec4b, tempVec4a);
             if (worldMatrix) {
-                math.transformPoint4(worldMatrix, tempVec4b, tempVec4c);
+                math.transformPoint4(worldMatrix, tempVec4a, tempVec4c);
                 math.expandAABB3Point3(worldAABB, tempVec4c);
             } else {
-                math.expandAABB3Point3(worldAABB, tempVec4b);
+                math.expandAABB3Point3(worldAABB, tempVec4a);
             }
         }
 
