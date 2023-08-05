@@ -463,89 +463,18 @@ class TrianglesDataTextureLayer {
         // const vertsIndex = positionsIndex / 3;
 
         // Expand the world AABB with the concrete location of the object
-        if (instancing) {
-            const localAABB = math.collapseAABB3();
-            math.expandAABB3Points3(localAABB, positions);
-            geometryCompressionUtils.decompressAABB(localAABB, positionsDecodeMatrix);
-            const geometryOBB = math.AABB3ToOBB3(localAABB);
-    
-            for (let i = 0, len = geometryOBB.length;  i < len; i += 4) {
-                tempVec4a[0] = geometryOBB[i + 0];
-                tempVec4a[1] = geometryOBB[i + 1];
-                tempVec4a[2] = geometryOBB[i + 2];
+        for (let i = 0, len = positions.length;  i < len; i += 3) {
+            tempVec4a[0] = positions[i + 0];
+            tempVec4a[1] = positions[i + 1];
+            tempVec4a[2] = positions[i + 2];
 
-                math.transformPoint4(meshMatrix, tempVec4a, tempVec4b);
-
-                if (worldMatrix) {
-                    math.transformPoint4(worldMatrix, tempVec4b, tempVec4c);
-                    math.expandAABB3Point3(worldAABB, tempVec4c);
-                } else {
-                    math.expandAABB3Point3(worldAABB, tempVec4b);
-                }
-            }
-        } else if (positionsDecodeMatrix) {
-            const bounds = geometryCompressionUtils.getPositionsBounds(positions);
-
-            const min = geometryCompressionUtils.decompressPosition(bounds.min, positionsDecodeMatrix, []);
-            const max = geometryCompressionUtils.decompressPosition(bounds.max, positionsDecodeMatrix, []);
-
-            worldAABB[0] = min[0];
-            worldAABB[1] = min[1];
-            worldAABB[2] = min[2];
-            worldAABB[3] = max[0];
-            worldAABB[4] = max[1];
-            worldAABB[5] = max[2];
-
-            if (worldMatrix) {
-                math.AABB3ToOBB3(worldAABB, tempOBB3);
-                math.transformOBB3(worldMatrix, tempOBB3);
-                math.OBB3ToAABB3(tempOBB3, worldAABB);
-            }
-
-        } else {
-            if (meshMatrix) {
-                for (let i = 0, len = positions.length; i < len; i += 3) {
-
-                    tempVec4a[0] = positions[i + 0];
-                    tempVec4a[1] = positions[i + 1];
-                    tempVec4a[2] = positions[i + 2];
-
-                    math.transformPoint4(meshMatrix, tempVec4a, tempVec4b);
-
-                    positions[i + 0] = tempVec4b[0];
-                    positions[i + 1] = tempVec4b[1];
-                    positions[i + 2] = tempVec4b[2];
-
-                    math.expandAABB3Point3(this._modelAABB, tempVec4b);
-
-                    if (worldMatrix) {
-                        math.transformPoint4(worldMatrix, tempVec4b, tempVec4c);
-                        math.expandAABB3Point3(worldAABB, tempVec4c);
-                    } else {
-                        math.expandAABB3Point3(worldAABB, tempVec4b);
-                    }
-                }
-            } else {
-                for (let i = 0, len = positions.length; i < len; i += 3) {
-
-                    tempVec4a[0] = positions[i + 0];
-                    tempVec4a[1] = positions[i + 1];
-                    tempVec4a[2] = positions[i + 2];
-
-                    math.expandAABB3Point3(this._modelAABB, tempVec4a);
-
-                    if (worldMatrix) {
-                        math.transformPoint4(worldMatrix, tempVec4a, tempVec4b);
-                        math.expandAABB3Point3(worldAABB, tempVec4b);
-                    } else {
-                        math.expandAABB3Point3(worldAABB, tempVec4a);
-                    }
-                }
-            }
+            math.transformPoint4(positionsDecodeMatrix || identityMatrix, tempVec4a, tempVec4b);
+            math.transformPoint4(meshMatrix || identityMatrix, tempVec4b, tempVec4a);
+            math.transformPoint4(worldMatrix || identityMatrix, tempVec4a, tempVec4b);
+            math.expandAABB3Point3(worldAABB, tempVec4b);
         }
 
         // Adjust the world AABB with the object `origin`
-
         if (origin) {
             this._state.origin = origin;
             worldAABB[0] += origin[0];
