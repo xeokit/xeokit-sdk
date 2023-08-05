@@ -2072,6 +2072,14 @@ class VBOSceneModel extends Component {
             return null;
         }
         const geometry = new VBOSceneModelGeometry(geometryId, this, cfg);
+
+        // Temporarily store the positions so the TrianglesInstancingLayer
+        // can properly initilize the AABB's in case the instancing matrices
+        // are not TRS-separable and have some shear factor
+        geometry._positions = cfg.positions;
+        geometry._positionsCompressed = cfg.positionsCompressed;
+        geometry._positionsDecodeMatrix = cfg.positionsDecodeMatrix;
+
         this._geometries[geometryId] = geometry;
         this._numTriangles += (cfg.indices ? Math.round(cfg.indices.length / 3) : 0);
         this.numGeometries++;
@@ -2910,6 +2918,17 @@ ${cfg.uv && cfg.uv.length > 0 ? 1 : 0}-${cfg.uvCompressed && cfg.uvCompressed.le
 
         if (this.destroyed) {
             return;
+        }
+
+        // Free up temporary data used by the TrianglesInstancingLayer
+        // for AABB initizalization purposes
+        for (const geometryId in this._geometries)
+        {
+            if (this._geometries.hasOwnProperty(geometryId)) {
+                delete this._geometries[geometryId]._positions;
+                delete this._geometries[geometryId]._positionsCompressed;
+                delete this._geometries[geometryId]._positionsDecodeMatrix;
+            }
         }
 
         for (const layerId in this._instancingLayers) {
