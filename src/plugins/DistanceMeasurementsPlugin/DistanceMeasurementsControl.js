@@ -17,7 +17,7 @@ class DistanceMeasurementsControl extends Component {
     /**
      * @private
      */
-    constructor(plugin, cfg={}) {
+    constructor(plugin, cfg = {}) {
 
         super(plugin.viewer.scene);
 
@@ -64,10 +64,10 @@ class DistanceMeasurementsControl extends Component {
 
         // Shows 2D canvas pos of touch start
         this._touchStartDot = new Dot(plugin._container, {
-                fillColor: plugin.defaultColor,
-                zIndex: plugin.zIndex + 1,
-                visible: false
-            });
+            fillColor: plugin.defaultColor,
+            zIndex: plugin.zIndex + 1,
+            visible: false
+        });
 
         // Tracks 3D world pos of touch start, dynamically calculates 2D canvas pos
         this._touchStartMarker = new Marker(this, {
@@ -152,11 +152,14 @@ class DistanceMeasurementsControl extends Component {
         const input = scene.input;
         const startDot = this._touchStartDot;
 
-        const pickSurfacePrecisionEnabled = scene.pickSurfacePrecisionEnabled;
-
         let mouseHoverEntity = null;
-        const mouseWorldPos = math.vec3();
-        const mouseCanvasPos = math.vec2();
+
+        const surfaceWorldPos = math.vec3();
+        const surfaceCanvasPos = math.vec2();
+
+        const snappedWorldPos = math.vec3();
+        const snappedCanvasPos = math.vec2();
+
 
         let lastMouseCanvasX;
         let lastMouseCanvasY;
@@ -171,41 +174,24 @@ class DistanceMeasurementsControl extends Component {
         const touchEndCanvasPos = math.vec2();
         const touchStartWorldPos = math.vec3();
 
-        this._onMouseHoverSurface = cameraControl.on("hoverSurface", event => {
+        let snapped = false;
+
+        this._onMouseHoverSurface = cameraControl.on("hoverOverEntitySurface", event => {
+
+            snapped = false;
 
             // This gets fired for both mouse and touch input, but we don't care when handling touch
-            mouseHoverEntity = event.entity;
+            mouseHoverEntity = true;
 
-            let useSnapToVertex = false;
+            surfaceWorldPos.set(event.worldPos);
+            surfaceCanvasPos.set(event.canvasPos);
 
-            if (this._snapToVertex) {
-                useSnapToVertex = !!event.snappedWorldPos && !!event.snappedCanvasPos;
-            }
+            if (touchState === FIRST_TOUCH_EXPECTED) {
+                this.markerDiv.style.marginLeft = `${event.canvasPos[0] - 5}px`;
+                this.markerDiv.style.marginTop = `${event.canvasPos[1] - 5}px`;
 
-            if (useSnapToVertex) {
-                mouseWorldPos.set(event.snappedWorldPos);
-                mouseCanvasPos.set(event.snappedCanvasPos);
-
-                if (touchState === FIRST_TOUCH_EXPECTED) {
-                    this.markerDiv.style.marginLeft = `${event.snappedCanvasPos[0]-5}px`;
-                    this.markerDiv.style.marginTop = `${event.snappedCanvasPos[1]-5}px`;
-        
-                    this.markerDiv.style.background = "greenyellow";
-                    this.markerDiv.style.border = "2px solid green";
-                }
-            } else {
-                if (event.worldPos !== null && event.canvasPos !== null) {
-                    mouseWorldPos.set(event.worldPos);
-                    mouseCanvasPos.set(event.canvasPos);
-
-                    if (touchState === FIRST_TOUCH_EXPECTED) {
-                        this.markerDiv.style.marginLeft = `${event.canvasPos[0]-5}px`;
-                        this.markerDiv.style.marginTop = `${event.canvasPos[1]-5}px`;
-            
-                        this.markerDiv.style.background = "pink";
-                        this.markerDiv.style.border = "2px solid red";
-                    }
-                }
+                this.markerDiv.style.background = "greenyellow";
+                this.markerDiv.style.border = "2px solid green";
             }
 
             if (touchState !== FIRST_TOUCH_EXPECTED || !this.active) {
@@ -222,36 +208,80 @@ class DistanceMeasurementsControl extends Component {
                 this._currentDistanceMeasurementByMouse.yAxisVisible = this._currentDistanceMeasurementByMouseInittouchState.yAxisVisible && this.plugin.defaultYAxisVisible;
                 this._currentDistanceMeasurementByMouse.zAxisVisible = this._currentDistanceMeasurementByMouseInittouchState.zAxisVisible && this.plugin.defaultZAxisVisible;
                 this._currentDistanceMeasurementByMouse.targetVisible = this._currentDistanceMeasurementByMouseInittouchState.targetVisible;
-                this._currentDistanceMeasurementByMouse.target.entity = mouseHoverEntity;
-                this._currentDistanceMeasurementByMouse.target.worldPos = mouseWorldPos;
+                this._currentDistanceMeasurementByMouse.target.worldPos = surfaceWorldPos.slice();
+            }
+        });
+
+        this._onMouseHoverSurface = cameraControl.on("pickedVertex", event => {
+
+            console.log("pickedVertex");
+
+            snapped = true;
+
+            // This gets fired for both mouse and touch input, but we don't care when handling touch
+            mouseHoverEntity = true;
+
+            snappedWorldPos.set(event.snappedWorldPos);
+            snappedCanvasPos.set(event.snappedCanvasPos);
+
+            if (touchState === FIRST_TOUCH_EXPECTED) {
+                this.markerDiv.style.marginLeft = `${event.snappedCanvasPos[0] - 5}px`;
+                this.markerDiv.style.marginTop = `${event.snappedCanvasPos[1] - 5}px`;
+
+                this.markerDiv.style.background = "greenyellow";
+                this.markerDiv.style.border = "2px solid green";
+            }
+            // } else {
+            //     if (event.worldPos !== null && event.canvasPos !== null) {
+            //         surfaceWorldPos.set(event.worldPos);
+            //         surfaceCanvasPos.set(event.canvasPos);
+            //
+            //         if (touchState === FIRST_TOUCH_EXPECTED) {
+            //             this.markerDiv.style.marginLeft = `${event.canvasPos[0]-5}px`;
+            //             this.markerDiv.style.marginTop = `${event.canvasPos[1]-5}px`;
+            //
+            //             this.markerDiv.style.background = "pink";
+            //             this.markerDiv.style.border = "2px solid red";
+            //         }
+            //     }
+            // }
+
+            if (touchState !== FIRST_TOUCH_EXPECTED || !this.active) {
+                this.markerDiv.style.marginLeft = `-10000px`;
+                this.markerDiv.style.marginTop = `-10000px`;
+            }
+
+            canvas.style.cursor = "pointer";
+
+            if (this._currentDistanceMeasurementByMouse) {
+                this._currentDistanceMeasurementByMouse.wireVisible = this._currentDistanceMeasurementByMouseInittouchState.wireVisible;
+                this._currentDistanceMeasurementByMouse.axisVisible = this._currentDistanceMeasurementByMouseInittouchState.axisVisible && this.plugin.defaultAxisVisible;
+                this._currentDistanceMeasurementByMouse.xAxisVisible = this._currentDistanceMeasurementByMouseInittouchState.xAxisVisible && this.plugin.defaultXAxisVisible;
+                this._currentDistanceMeasurementByMouse.yAxisVisible = this._currentDistanceMeasurementByMouseInittouchState.yAxisVisible && this.plugin.defaultYAxisVisible;
+                this._currentDistanceMeasurementByMouse.zAxisVisible = this._currentDistanceMeasurementByMouseInittouchState.zAxisVisible && this.plugin.defaultZAxisVisible;
+                this._currentDistanceMeasurementByMouse.targetVisible = this._currentDistanceMeasurementByMouseInittouchState.targetVisible;
+                this._currentDistanceMeasurementByMouse.target.worldPos = surfaceWorldPos;
             }
         });
 
         this._onInputMouseDown = input.on("mousedown", (coords) => {
+            console.log("mousedown");
             lastMouseCanvasX = coords[0];
             lastMouseCanvasY = coords[1];
         });
 
         this._onInputMouseUp = input.on("mouseup", (coords) => {
+            console.log("mouseup snapped = " + snapped);
             if (coords[0] > lastMouseCanvasX + mouseCanvasClickTolerance ||
                 coords[0] < lastMouseCanvasX - mouseCanvasClickTolerance ||
                 coords[1] > lastMouseCanvasY + mouseCanvasClickTolerance ||
                 coords[1] < lastMouseCanvasY - mouseCanvasClickTolerance) {
                 return;
             }
+            const worldPos = snapped ? snappedWorldPos.slice() : surfaceWorldPos.slice();
             if (this._currentDistanceMeasurementByMouse) {
                 if (mouseHoverEntity) {
-                    if (pickSurfacePrecisionEnabled) {
-                        const pickResult = scene.pick({
-                            canvasPos: mouseCanvasPos,
-                            pickSurface: true,
-                            pickSurfacePrecision: true
-                        });
-                        if (pickResult && pickResult.worldPos) {
-                            this._currentDistanceMeasurementByMouse.target.worldPos = pickResult.worldPos;
-                        }
-                        this._currentDistanceMeasurementByMouse.approximate = false;
-                    }
+                    this._currentDistanceMeasurementByMouse.target.worldPos = worldPos;
                     this._currentDistanceMeasurementByMouse.clickable = true;
                     this.fire("measurementEnd", this._currentDistanceMeasurementByMouse);
                     this._currentDistanceMeasurementByMouse = null;
@@ -262,25 +292,13 @@ class DistanceMeasurementsControl extends Component {
                 }
             } else {
                 if (mouseHoverEntity) {
-                    if (pickSurfacePrecisionEnabled) {
-                        const pickResult = scene.pick({
-                            canvasPos: mouseCanvasPos,
-                            pickSurface: true,
-                            pickSurfacePrecision: true
-                        });
-                        if (pickResult && pickResult.worldPos) {
-                            mouseWorldPos.set(pickResult.worldPos);
-                        }
-                    }
                     this._currentDistanceMeasurementByMouse = plugin.createMeasurement({
                         id: math.createUUID(),
                         origin: {
-                            entity: mouseHoverEntity,
-                            worldPos: mouseWorldPos
+                            worldPos: worldPos.slice()
                         },
                         target: {
-                            entity: mouseHoverEntity,
-                            worldPos: mouseWorldPos
+                            worldPos: worldPos.slice()
                         },
                         approximate: true
                     });
@@ -298,9 +316,10 @@ class DistanceMeasurementsControl extends Component {
             }
         });
 
-        this._onMouseHoverOff = cameraControl.on("hoverOff", event => {
+        this._onMouseHoverOff = cameraControl.on("hoverNothing", event => {
+            console.log("hoverNothing");
             mouseHoverEntity = null;
-
+            snapped = false;
             this.markerDiv.style.marginLeft = `-100px`;
             this.markerDiv.style.marginTop = `-100px`;
 
@@ -313,74 +332,73 @@ class DistanceMeasurementsControl extends Component {
         });
 
         this._onPickedNothing = cameraControl.on("pickedNothing", event => {
-            if (this._currentDistanceMeasurementByMouse) {
-                this.fire("measurementCancel", this._currentDistanceMeasurementByMouse);
-                this._currentDistanceMeasurementByMouse.destroy();
-                this._currentDistanceMeasurementByMouse = null;
-            }
-            startDot.setVisible(false);
-            touchState = FIRST_TOUCH_EXPECTED;
+            console.log("pickedNothing");
+            // if (this._currentDistanceMeasurementByMouse) {
+            //     this.fire("measurementCancel", this._currentDistanceMeasurementByMouse);
+            //     this._currentDistanceMeasurementByMouse.destroy();
+            //     this._currentDistanceMeasurementByMouse = null;
+            // }
+            // startDot.setVisible(false);
+            // touchState = FIRST_TOUCH_EXPECTED;
         });
 
-        canvas.addEventListener("touchstart", this._onCanvasTouchStart = (event) => {
-            const touches = event.touches;
-            const changedTouches = event.changedTouches;
-            if (touches.length === 1 && changedTouches.length === 1) {
-                getCanvasPosFromEvent(touches[0], touchStartCanvasPos);
-            }
-        }, {passive: true});
-
-        canvas.addEventListener("touchend", this._onCanvasTouchEnd = (event) => {
-            const touches = event.touches;
-            const changedTouches = event.changedTouches;
-            if (touches.length === 0 && changedTouches.length === 1) {
-                getCanvasPosFromEvent(changedTouches[0], touchEndCanvasPos);
-                if (touchEndCanvasPos[0] > touchStartCanvasPos[0] + touchCanvasClickTolerance ||
-                    touchEndCanvasPos[0] < touchStartCanvasPos[0] - touchCanvasClickTolerance ||
-                    touchEndCanvasPos[1] > touchStartCanvasPos[1] + touchCanvasClickTolerance ||
-                    touchEndCanvasPos[1] < touchStartCanvasPos[1] - touchCanvasClickTolerance) {
-                    return; // User is repositioning the camera or model
-                }
-                const pickResult = scene.pick({
-                    canvasPos: touchEndCanvasPos,
-                    pickSurface: true,
-                    pickSurfacePrecision: pickSurfacePrecisionEnabled
-                });
-                if (pickResult && pickResult.worldPos) {
-                    switch (touchState) {
-                        case FIRST_TOUCH_EXPECTED:
-                            startDot.setVisible(true);
-                            this._touchStartMarker.worldPos = pickResult.worldPos;
-                            touchStartWorldPos.set(pickResult.worldPos);
-                            touchState = SECOND_TOUCH_EXPECTED;
-                            break;
-                        case SECOND_TOUCH_EXPECTED:
-                            startDot.setVisible(false);
-                            this._touchStartMarker.worldPos = pickResult.worldPos;
-                            const measurement = plugin.createMeasurement({
-                                id: math.createUUID(),
-                                origin: {
-                                    entity: mouseHoverEntity,
-                                    worldPos: touchStartWorldPos
-                                },
-                                target: {
-                                    entity: mouseHoverEntity,
-                                    worldPos: pickResult.worldPos
-                                },
-                                approximate: (!pickSurfacePrecisionEnabled)
-                            });
-                            measurement.clickable = true;
-                            touchState = FIRST_TOUCH_EXPECTED;
-                            this.fire("measurementEnd", measurement);
-                            break;
-                    }
-                } else {
-                    startDot.setVisible(false);
-                    touchState = FIRST_TOUCH_EXPECTED;
-                }
-            }
-            //  event.stopPropagation();
-        }, {passive: true});
+        // canvas.addEventListener("touchstart", this._onCanvasTouchStart = (event) => {
+        //     const touches = event.touches;
+        //     const changedTouches = event.changedTouches;
+        //     if (touches.length === 1 && changedTouches.length === 1) {
+        //         getCanvasPosFromEvent(touches[0], touchStartCanvasPos);
+        //     }
+        // }, {passive: true});
+        //
+        // canvas.addEventListener("touchend", this._onCanvasTouchEnd = (event) => {
+        //     const touches = event.touches;
+        //     const changedTouches = event.changedTouches;
+        //     if (touches.length === 0 && changedTouches.length === 1) {
+        //         getCanvasPosFromEvent(changedTouches[0], touchEndCanvasPos);
+        //         if (touchEndCanvasPos[0] > touchStartCanvasPos[0] + touchCanvasClickTolerance ||
+        //             touchEndCanvasPos[0] < touchStartCanvasPos[0] - touchCanvasClickTolerance ||
+        //             touchEndCanvasPos[1] > touchStartCanvasPos[1] + touchCanvasClickTolerance ||
+        //             touchEndCanvasPos[1] < touchStartCanvasPos[1] - touchCanvasClickTolerance) {
+        //             return; // User is repositioning the camera or model
+        //         }
+        //         const pickResult = scene.pick({
+        //             canvasPos: touchEndCanvasPos,
+        //             pickSurface: true,
+        //             pickSurfacePrecision: pickSurfacePrecisionEnabled
+        //         });
+        //         if (pickResult && pickResult.worldPos) {
+        //             switch (touchState) {
+        //                 case FIRST_TOUCH_EXPECTED:
+        //                     startDot.setVisible(true);
+        //                     this._touchStartMarker.worldPos = pickResult.worldPos;
+        //                     touchStartWorldPos.set(pickResult.worldPos);
+        //                     touchState = SECOND_TOUCH_EXPECTED;
+        //                     break;
+        //                 case SECOND_TOUCH_EXPECTED:
+        //                     startDot.setVisible(false);
+        //                     this._touchStartMarker.worldPos = pickResult.worldPos;
+        //                     const measurement = plugin.createMeasurement({
+        //                         id: math.createUUID(),
+        //                         origin: {
+        //                             worldPos: touchStartWorldPos
+        //                         },
+        //                         target: {
+        //                             worldPos: pickResult.worldPos
+        //                         },
+        //                         approximate: (!pickSurfacePrecisionEnabled)
+        //                     });
+        //                     measurement.clickable = true;
+        //                     touchState = FIRST_TOUCH_EXPECTED;
+        //                     this.fire("measurementEnd", measurement);
+        //                     break;
+        //             }
+        //         } else {
+        //             startDot.setVisible(false);
+        //             touchState = FIRST_TOUCH_EXPECTED;
+        //         }
+        //     }
+        //     //  event.stopPropagation();
+        // }, {passive: true});
 
         this._active = true;
     }

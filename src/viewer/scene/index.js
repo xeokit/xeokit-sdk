@@ -11,7 +11,7 @@ export * from "./mementos/index.js";
 export * from "./mesh/index.js";
 export * from "./nodes/index.js";
 export * from "./paths/index.js";
-export * from "./models/index.js";
+export * from "./model/index.js";
 export * from "./sectionPlane/index.js";
 export * from "./skybox/index.js";
 export * from "./utils/index.js";

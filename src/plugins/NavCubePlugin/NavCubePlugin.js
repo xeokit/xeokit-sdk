@@ -188,7 +188,7 @@ class NavCubePlugin extends Plugin {
             };
         }());
 
-        this._cubeTextureCanvas = new CubeTextureCanvas(viewer, cfg);
+        this._cubeTextureCanvas = new CubeTextureCanvas(viewer, navCubeScene, cfg);
 
         this._cubeSampler = new Texture(navCubeScene, {
             image: this._cubeTextureCanvas.getImage(),

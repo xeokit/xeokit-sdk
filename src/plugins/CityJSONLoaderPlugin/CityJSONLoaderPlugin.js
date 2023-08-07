@@ -1,8 +1,5 @@
-import {utils} from "../../viewer/scene/utils.js";
-import {VBOSceneModel} from "../../viewer/scene/models/VBOSceneModel/VBOSceneModel.js";
-import {Plugin} from "../../viewer/Plugin.js";
+import {math, Plugin, SceneModel, utils} from "../../viewer/index.js";
 import {CityJSONDefaultDataSource} from "./CityJSONDefaultDataSource.js";
-import {math} from "../../viewer/index.js";
 
 import {earcut} from '../lib/earcut.js';
 
@@ -177,8 +174,9 @@ class CityJSONLoaderPlugin extends Plugin {
             delete params.id;
         }
 
-        const sceneModel = new VBOSceneModel(this.viewer.scene, utils.apply(params, {
-            isModel: true
+        const sceneModel = new SceneModel(this.viewer.scene, utils.apply(params, {
+            isModel: true,
+            edges: true
         }));
 
         if (!params.src && !params.cityJSON) {

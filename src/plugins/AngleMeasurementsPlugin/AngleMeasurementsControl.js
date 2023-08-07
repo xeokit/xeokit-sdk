@@ -88,7 +88,7 @@ class AngleMeasurementsControl extends Component {
         const touchEndCanvasPos = math.vec2();
         const touchStartWorldPos = math.vec3();
 
-        this._onMouseHoverSurface = cameraControl.on("hoverSurface", event => {
+        this._onMouseHoverSurface = cameraControl.on("hoverOverEntitySurface", event => {
             isMouseHoveringEntity = true;
             mouseHoverEntity = event.entity;
             mouseWorldPos.set(event.worldPos);
@@ -222,7 +222,7 @@ class AngleMeasurementsControl extends Component {
             }
         });
 
-        this._onHoverNothing = cameraControl.on("hoverOff", event => {
+        this._onHoverNothing = cameraControl.on("hoverNothing", event => {
 
             isMouseHoveringEntity = false;
             if (this._currentAngleMeasurement) {

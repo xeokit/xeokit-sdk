@@ -1,9 +1,8 @@
-import {utils} from "../../viewer/scene/utils.js"
-import {VBOSceneModel} from "../../viewer/scene/models/VBOSceneModel/VBOSceneModel.js";
-import {Plugin} from "../../viewer/Plugin.js";
-import {GLTFVBOSceneModelLoader} from "./GLTFVBOSceneModelLoader.js";
-import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
+import {Plugin, SceneModel, utils} from "../../viewer/index.js"
+import {GLTFSceneModelLoader} from "./GLTFSceneModelLoader.js";
+
 import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
+import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults";
 
 /**
  * {@link Viewer} plugin that loads models from [glTF](https://www.khronos.org/gltf/).
@@ -174,7 +173,7 @@ class GLTFLoaderPlugin extends Plugin {
 
         super("GLTFLoader", viewer, cfg);
 
-        this._sceneModelLoader = new GLTFVBOSceneModelLoader(this, cfg);
+        this._sceneModelLoader = new GLTFSceneModelLoader(this, cfg);
 
         this.dataSource = cfg.dataSource;
         this.objectDefaults = cfg.objectDefaults;
@@ -256,8 +255,9 @@ class GLTFLoaderPlugin extends Plugin {
             delete params.id;
         }
 
-        const sceneModel = new VBOSceneModel(this.viewer.scene, utils.apply(params, {
-            isModel: true
+        const sceneModel = new SceneModel(this.viewer.scene, utils.apply(params, {
+            isModel: true,
+            forceDTX: true
         }));
 
         const modelId = sceneModel.id;  // In case ID was auto-generated

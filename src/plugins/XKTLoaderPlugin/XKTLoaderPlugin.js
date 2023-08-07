@@ -1,6 +1,5 @@
 import {utils} from "../../viewer/scene/utils.js"
-import {VBOSceneModel} from "../../viewer/scene/models/VBOSceneModel/VBOSceneModel.js";
-import {DataTextureSceneModel} from "../../viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js";
+import {SceneModel} from "../../viewer/scene/model/index.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {XKTDefaultDataSource} from "./XKTDefaultDataSource.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
@@ -450,7 +449,7 @@ class XKTLoaderPlugin extends Plugin {
      * improve Viewer performance for models that have a lot of geometry reuse, but may also increase the amount of
      * browser and GPU memory they require. See [#769](https://github.com/xeokit/xeokit-sdk/issues/769) for more info.
      * @param {Number} [cfg.maxGeometryBatchSize=50000000] Maximum geometry batch size, as number of vertices. This is optionally supplied
-     * to limit the size of the batched geometry arrays that {@link VBOSceneModel} internally creates for batched geometries.
+     * to limit the size of the batched geometry arrays that {@link SceneModel} internally creates for batched geometries.
      * A low value means less heap allocation/de-allocation while loading batched geometries, but more draw calls and
      * slower rendering speed. A high value means larger heap allocation/de-allocation while loading, but less draw calls
      * and faster rendering speed. It's recommended to keep this somewhere roughly between ````50000```` and ````50000000```.
@@ -460,7 +459,7 @@ class XKTLoaderPlugin extends Plugin {
     constructor(viewer, cfg = {}) {
 
         super("XKTLoader", viewer, cfg);
-        
+
         this._maxGeometryBatchSize = cfg.maxGeometryBatchSize;
 
         this.textureTranscoder = cfg.textureTranscoder;
@@ -725,7 +724,7 @@ class XKTLoaderPlugin extends Plugin {
      * all geometry instances into batches (````false````), and not use instancing to render them. Setting this ````false```` can significantly
      * improve Viewer performance for models that have excessive geometry reuse, but may also increases the amount of
      * browser and GPU memory used by the model. See [#769](https://github.com/xeokit/xeokit-sdk/issues/769) for more info.
-     * @param {Boolean} [params.useDataTextures=false] When we set this ````true````, an alternative memory representation of object geometry will be used that relies on data textures. At the expense of some rendering performance overhead, this will reduce the used RAM to around 25% respect to setting the option to ````false````.
+     * @param {Boolean} [params.forceDTX=false] Set ````true```` to use data textures to represent the returned model.
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
      */
     load(params = {}) {
@@ -735,25 +734,14 @@ class XKTLoaderPlugin extends Plugin {
             delete params.id;
         }
 
-        let sceneModel;
-
-        if (!!params.useDataTextures) {
-            sceneModel = new DataTextureSceneModel(this.viewer.scene, utils.apply(params, {
-                isModel: true,
-                origin: params.origin,
-                targetLodFps: params.useDataTextures.targetLodFps || false,
-                enableViewFrustumCulling: params.useDataTextures.enableViewFrustumCulling || false,
-                disableVertexWelding: params.useDataTextures.disableVertexWelding || false,
-                disableIndexRebucketing: params.useDataTextures.disableIndexRebucketing || false,
-            }));
-        } else {
-            sceneModel = new VBOSceneModel(this.viewer.scene, utils.apply(params, {
-                isModel: true,
-                textureTranscoder: this._textureTranscoder,
-                maxGeometryBatchSize: this._maxGeometryBatchSize,
-                origin: params.origin
-            }));
-        }
+        const sceneModel = new SceneModel(this.viewer.scene, utils.apply(params, {
+            isModel: true,
+            textureTranscoder: this._textureTranscoder,
+            maxGeometryBatchSize: this._maxGeometryBatchSize,
+            origin: params.origin,
+            disableVertexWelding: params.disableVertexWelding || false,
+            disableIndexRebucketing: params.disableIndexRebucketing || false,
+        }));
 
         const modelId = sceneModel.id;  // In case ID was auto-generated
 
@@ -767,7 +755,7 @@ class XKTLoaderPlugin extends Plugin {
         const excludeTypes = params.excludeTypes || this._excludeTypes;
         const objectDefaults = params.objectDefaults || this._objectDefaults;
 
-        options.reuseGeometries = (params.reuseGeometries !== null && params.reuseGeometries !== undefined ) ? params.reuseGeometries : (this._reuseGeometries !== false);
+        options.reuseGeometries = (params.reuseGeometries !== null && params.reuseGeometries !== undefined) ? params.reuseGeometries : (this._reuseGeometries !== false);
 
         if (includeTypes) {
             options.includeTypesMap = {};
