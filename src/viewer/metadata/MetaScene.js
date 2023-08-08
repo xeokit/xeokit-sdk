@@ -160,7 +160,7 @@ class MetaScene {
                 if (!propertySet) {
                     propertySet = new PropertySet({
                         id: propertySetData.id,
-                        originalSystemId: propertySetData.originalSystemId,
+                        originalSystemId: propertySetData.originalSystemId || propertySetData.id,
                         type: propertySetData.type,
                         name: propertySetData.name,
                         properties: propertySetData.properties
