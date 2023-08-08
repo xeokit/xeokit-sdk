@@ -14,21 +14,19 @@
 <canvas id="myCanvas"></canvas>
 <div class="slideout-sidebar">
     <img class="info-icon" src="../assets/images/performance_model_icon.png"/>
-    <h1>VBOSceneModel</h1>
-    <h2>VBOSceneModel with geometry reuse and auto-generated normals</h2>
-    <p>In this example, we're programmatically building a simple model, while
-        reusing the same geometry for each object.</p>
-    <p>Reusing geometry speeds up rendering and reduces the memory footprint.</p>
-    <h3>Components Used</h3>
+    <h1>SceneModel</h1>
+    <p>Geometry instancing example</p>
     <ul>
         <li>
-            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
                target="_other">Viewer</a>
         </li>
         <li>
-            <a href="../docs/class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html"
-               target="_other">VBOSceneModel</a>
+            <a href="../../docs/class/src/viewer/scene/models/SceneModel/SceneModel.js~SceneModel.html"
+               target="_other">SceneModel</a>
         </li>
+
+
     </ul>
 </div>
 </body>
@@ -39,7 +37,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, VBOSceneModel} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
+    import {Viewer, SceneModel, DistanceMeasurementsPlugin} from "../../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -54,13 +52,20 @@
     viewer.scene.camera.look = [0, -5.75, 0];
     viewer.scene.camera.up = [0.37, 0.91, -0.11];
 
+    const distanceMeasurements = new DistanceMeasurementsPlugin(viewer, {
+        defaultXAxisVisible: false,
+        defaultYAxisVisible: false,
+        defaultZAxisVisible: false,
+        snapMode: "vertex"
+    });
+
     //------------------------------------------------------------------------------------------------------------------
-    // Build a VBOSceneModel representing a table with four legs, using geometry instancing
+    // Build a SceneModel representing a table with four legs, using geometry instancing
     //------------------------------------------------------------------------------------------------------------------
 
-    const vboSceneModel = new VBOSceneModel(viewer.scene, {
+    const sceneModel = new SceneModel(viewer.scene, {
         id: "table",
-        isModel: true, // <--------------------- Represents a model, registers VBOSceneModel by ID on viewer.scene.models
+        isModel: true, // <--------------------- Represents a model, registers SceneModel by ID on viewer.scene.models
         position: [0, 0, 0],
         scale: [1, 1, 1],
         rotation: [0, 0, 0],
@@ -68,11 +73,11 @@
     });
 
     //--------------------------------------------------------
-    // Create a reusable geometry within the VBOSceneModel
+    // Create a reusable geometry within the SceneModel
     // We'll instance this geometry by five meshes
     //--------------------------------------------------------
 
-    vboSceneModel.createGeometry({
+    sceneModel.createGeometry({
 
         id: "myBoxGeometry",
 
@@ -89,6 +94,16 @@
             -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, // v1-v6-v7-v2 left
             -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1,// v7-v4-v3-v2 bottom
             1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1 // v4-v7-v6-v1 back
+        ],
+
+        // Normal vectors, one for each vertex
+        normals: [
+            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1,// v0-v1-v2-v3 front
+            1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,// v0-v3-v4-v5 right
+            0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,// v0-v5-v6-v1 top
+            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0,// v1-v6-v7-v2 left
+            0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,// v7-v4-v3-v2 bottom
+            0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1// v4-v7-v6-v5 back
         ],
 
         // Indices - these organise the positions and and normals
@@ -111,7 +126,7 @@
     // Red table leg object
     //--------------------------------------------------------
 
-    vboSceneModel.createMesh({
+    sceneModel.createMesh({
         id: "redLegMesh",
         geometryId: "myBoxGeometry",
         position: [-4, -6, -4],
@@ -120,7 +135,7 @@
         color: [1, 0.3, 0.3]
     });
 
-    vboSceneModel.createEntity({
+    sceneModel.createEntity({
         id: "redLeg",
         meshIds: ["redLegMesh"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
@@ -130,7 +145,7 @@
     // Green table leg object
     //--------------------------------------------------------
 
-    vboSceneModel.createMesh({
+    sceneModel.createMesh({
         id: "greenLegMesh",
         geometryId: "myBoxGeometry",
         position: [4, -6, -4],
@@ -139,7 +154,7 @@
         color: [0.3, 1.0, 0.3]
     });
 
-    vboSceneModel.createEntity({
+    sceneModel.createEntity({
         id: "greenLeg",
         meshIds: ["greenLegMesh"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
@@ -149,7 +164,7 @@
     // Blue table leg
     //--------------------------------------------------------
 
-    vboSceneModel.createMesh({
+    sceneModel.createMesh({
         id: "blueLegMesh",
         geometryId: "myBoxGeometry",
         position: [4, -6, 4],
@@ -158,7 +173,7 @@
         color: [0.3, 0.3, 1.0]
     });
 
-    vboSceneModel.createEntity({
+    sceneModel.createEntity({
         id: "blueLeg",
         meshIds: ["blueLegMesh"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
@@ -168,7 +183,7 @@
     // Yellow table leg
     //--------------------------------------------------------
 
-    vboSceneModel.createMesh({
+    sceneModel.createMesh({
         id: "yellowLegMesh",
         geometryId: "myBoxGeometry",
         position: [-4, -6, 4],
@@ -177,7 +192,7 @@
         color: [1.0, 1.0, 0.0]
     });
 
-    vboSceneModel.createEntity({
+    sceneModel.createEntity({
         id: "yellowLeg",
         meshIds: ["yellowLegMesh"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
@@ -187,7 +202,7 @@
     // Purple table top
     //--------------------------------------------------------
 
-    vboSceneModel.createMesh({
+    sceneModel.createMesh({
         id: "purpleTableTopMesh",
         geometryId: "myBoxGeometry",
         position: [0, -3, 0],
@@ -196,66 +211,59 @@
         color: [1.0, 0.3, 1.0]
     });
 
-    vboSceneModel.createEntity({
+    sceneModel.createEntity({
         id: "purpleTableTop",
         meshIds: ["purpleTableTopMesh"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
     });
 
     //--------------------------------------------------------
-    // Finalize this VBOSceneModel.
+    // Finalize this SceneModel.
     //
     // Internally, this builds any geometry batches or instanced
     // arrays that are currently under construction.
     //--------------------------------------------------------
 
-    vboSceneModel.finalize();
+    sceneModel.finalize();
 
     //------------------------------------------------------------------------------------------------------------------
-    // Find Entity instances by their IDs
+    // Mouse hover to snap to vertices
     //------------------------------------------------------------------------------------------------------------------
 
-    // Get the whole table model
-    var table = viewer.scene.models["table"];
+    const markerDiv = document.createElement('div');
+    const canvas = viewer.scene.canvas.canvas;
+    canvas.parentNode.insertBefore(markerDiv, canvas);
 
-    // Get some leg objects
-    var redLeg = viewer.scene.objects["redLeg"];
-    var greenLeg = viewer.scene.objects["greenLeg"];
-    var blueLeg = viewer.scene.objects["blueLeg"];
+    markerDiv.style.background = "black";
+    markerDiv.style.border = "2px solid blue";
+    markerDiv.style.borderRadius = "20px";
+    markerDiv.style.width = "10px";
+    markerDiv.style.height = "10px";
+    markerDiv.style.margin = "-200px -200px";
+    markerDiv.style.zIndex = "100";
+    markerDiv.style.position = "absolute";
+    markerDiv.style.pointerEvents = "none";
 
-    //------------------------------------------------------------------------------------------------------------------
-    // Mouse over Entities to highlight them
-    //------------------------------------------------------------------------------------------------------------------
+    viewer.scene.input.on("mousemove", function (canvasPos) {
 
-    var lastEntity = null;
-
-    viewer.scene.input.on("mousemove", function (coords) {
-
-        var hit = viewer.scene.pick({
-            canvasPos: coords
+        const snapPickResult = viewer.scene.snapPick({
+            canvasPos: canvasPos,
+            snapRadius: 30,
+            snapType: "edge",
         });
 
-        if (hit) {
-
-            if (!lastEntity || hit.entity.id !== lastEntity.id) {
-
-                if (lastEntity) {
-                    lastEntity.highlighted = false;
-                }
-
-                lastEntity = hit.entity;
-                hit.entity.highlighted = true;
-            }
+        if (snapPickResult && snapPickResult.snappedCanvasPos) {
+            markerDiv.style.marginLeft = `${snapPickResult.snappedCanvasPos[0] - 10}px`;
+            markerDiv.style.marginTop = `${snapPickResult.snappedCanvasPos[1] - 10}px`;
+            markerDiv.style.background = "greenyellow";
+            markerDiv.style.border = "3px solid green";
         } else {
-
-            if (lastEntity) {
-                lastEntity.highlighted = false;
-                lastEntity = null;
-            }
+            markerDiv.style.marginLeft = `${canvasPos[0] - 10}px`;
+            markerDiv.style.marginTop = `${canvasPos[1] - 10}px`;
+            markerDiv.style.background = "white";
+            markerDiv.style.border = "1px solid black";
         }
     });
-
-    window.sceneModel = vboSceneModel;
 
 </script>
 </html>

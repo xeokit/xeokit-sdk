@@ -226,11 +226,44 @@
 
     sceneModel.finalize();
 
-    window.sceneModel = sceneModel;
+    //------------------------------------------------------------------------------------------------------------------
+    // Mouse hover to snap to vertices
+    //------------------------------------------------------------------------------------------------------------------
 
-    distanceMeasurements.control.activate();
+    const markerDiv = document.createElement('div');
+    const canvas = viewer.scene.canvas.canvas;
+    canvas.parentNode.insertBefore(markerDiv, canvas);
 
-    window.viewer = viewer;
+    markerDiv.style.background = "black";
+    markerDiv.style.border = "2px solid blue";
+    markerDiv.style.borderRadius = "20px";
+    markerDiv.style.width = "10px";
+    markerDiv.style.height = "10px";
+    markerDiv.style.margin = "-200px -200px";
+    markerDiv.style.zIndex = "100";
+    markerDiv.style.position = "absolute";
+    markerDiv.style.pointerEvents = "none";
+
+    viewer.scene.input.on("mousemove", function (canvasPos) {
+
+        const snapPickResult = viewer.scene.snapPick({
+            canvasPos: canvasPos,
+            snapRadius: 30,
+            snapType: "vertex",
+        });
+
+        if (snapPickResult && snapPickResult.snappedCanvasPos) {
+            markerDiv.style.marginLeft = `${snapPickResult.snappedCanvasPos[0] - 10}px`;
+            markerDiv.style.marginTop = `${snapPickResult.snappedCanvasPos[1] - 10}px`;
+            markerDiv.style.background = "greenyellow";
+            markerDiv.style.border = "3px solid green";
+        } else {
+            markerDiv.style.marginLeft = `${canvasPos[0] - 10}px`;
+            markerDiv.style.marginTop = `${canvasPos[1] - 10}px`;
+            markerDiv.style.background = "white";
+            markerDiv.style.border = "1px solid black";
+        }
+    });
 
 </script>
 </html>

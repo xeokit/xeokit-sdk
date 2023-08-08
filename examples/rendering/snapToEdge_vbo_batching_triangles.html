@@ -14,17 +14,16 @@
 <canvas id="myCanvas"></canvas>
 <div class="slideout-sidebar">
     <img class="info-icon" src="../assets/images/performance_model_icon.png"/>
-    <h1>Picking VBOSceneModel Surfaces with Full Precision</h1>
-    <h2>Hover over objects to ray-pick them using the 'pickSurfacePrecision' option</h2>
-    <h3>Components Used</h3>
+    <h1>SceneModel</h1>
+    <p>Geometry batching example</p>
     <ul>
         <li>
-            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
                target="_other">Viewer</a>
         </li>
         <li>
-            <a href="../docs/class/src/viewer/scene/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html"
-               target="_other">VBOSceneModel</a>
+            <a href="../../docs/class/src/viewer/scene/models/SceneModel/SceneModel.js~SceneModel.html"
+               target="_other">SceneModel</a>
         </li>
     </ul>
 </div>
@@ -36,16 +35,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {
-        Viewer,
-        VBOSceneModel,
-        Node,
-        Mesh,
-        VBOGeometry,
-        PhongMaterial,
-        math,
-        buildSphereGeometry
-    } from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
+    import {Viewer, SceneModel} from "../../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -53,24 +43,20 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
-        transparent: true,
-        pickSurfacePrecisionEnabled: true
+        transparent: true
     });
 
     viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
     viewer.scene.camera.look = [0, -5.75, 0];
     viewer.scene.camera.up = [0.37, 0.91, -0.11];
 
-    viewer.cameraControl.followPointer = true;
-    viewer.cameraControl.smartPivot = true;
-
     //------------------------------------------------------------------------------------------------------------------
-    // Create a VBOSceneModel representing a table with four legs, using geometry batching
+    // Create a SceneModel representing a table with four legs, using geometry batching
     //------------------------------------------------------------------------------------------------------------------
 
-    const vboSceneModel = new VBOSceneModel(viewer.scene, {
+    const sceneModel = new SceneModel(viewer.scene, {
         id: "table",
-        isModel: true, // <--------------------- Represents a model, registers VBOSceneModel by ID on viewer.scene.models
+        isModel: true, // <--------------------- Represents a model, registers SceneModel by ID on viewer.scene.models
         position: [0, 0, 0],
         scale: [1, 1, 1],
         rotation: [0, 0, 0],
@@ -82,7 +68,7 @@
     // Each object is comprised of a mesh, which belongs to a node
     //-----------------------------------------------------------
 
-    vboSceneModel.createMesh({
+    sceneModel.createMesh({
         id: "redLegMesh",
 
         // The primitive type - allowed values are "points", "lines" and "triangles".
@@ -130,7 +116,7 @@
         color: [1, 0.3, 0.3]
     });
 
-    vboSceneModel.createEntity({
+    sceneModel.createEntity({
         id: "redLeg",
         meshIds: ["redLegMesh"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
@@ -140,7 +126,7 @@
     // Green table leg object
     //--------------------------------------------------------
 
-    vboSceneModel.createMesh({
+    sceneModel.createMesh({
         id: "greenLegMesh",
         primitive: "triangles",
         positions: [
@@ -162,7 +148,7 @@
         color: [0.3, 1.0, 0.3]
     });
 
-    vboSceneModel.createEntity({
+    sceneModel.createEntity({
         id: "greenLeg",
         meshIds: ["greenLegMesh"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
@@ -172,7 +158,7 @@
     // Blue table leg object
     //--------------------------------------------------------
 
-    vboSceneModel.createMesh({
+    sceneModel.createMesh({
         id: "blueLegMesh",
         positions: [
             1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
@@ -194,7 +180,7 @@
         color: [0.3, 0.3, 1.0]
     });
 
-    vboSceneModel.createEntity({
+    sceneModel.createEntity({
         id: "blueLeg",
         meshIds: ["blueLegMesh"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
@@ -204,7 +190,7 @@
     // Yellow table leg object
     //--------------------------------------------------------
 
-    vboSceneModel.createMesh({
+    sceneModel.createMesh({
         id: "yellowLegMesh",
         positions: [
             1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
@@ -225,7 +211,7 @@
         color: [1.0, 1.0, 0.0]
     });
 
-    vboSceneModel.createEntity({
+    sceneModel.createEntity({
         id: "yellowLeg",
         meshIds: ["yellowLegMesh"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
@@ -235,7 +221,7 @@
     // Purple table top object
     //--------------------------------------------------------
 
-    vboSceneModel.createMesh({
+    sceneModel.createMesh({
         id: "purpleTableTopMesh",
         positions: [
             1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
@@ -256,110 +242,60 @@
         color: [1.0, 0.3, 1.0]
     });
 
-    vboSceneModel.createEntity({
+    sceneModel.createEntity({
         id: "purpleTableTop",
         meshIds: ["purpleTableTopMesh"],
         isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
     });
 
     //------------------------------------------------------------
-    // Finalize the VBOSceneModel.
+    // Finalize the SceneModel.
     //
     // Internally, this builds any geometry batches or instanced
     // arrays that are currently under construction within it.
     //------------------------------------------------------------
 
-    vboSceneModel.finalize();
+    sceneModel.finalize();
 
 
     //------------------------------------------------------------------------------------------------------------------
-    // Dynamically pick surfaces of model with the pointer, show pick intersection with red sphere
+    // Mouse hover to snap to vertices
     //------------------------------------------------------------------------------------------------------------------
 
-    //------------------------------------------------------------------------------------------------------------------
-    // Display an indicator wherever the pointer picks a surface
-    //------------------------------------------------------------------------------------------------------------------
+    const markerDiv = document.createElement('div');
+    const canvas = viewer.scene.canvas.canvas;
+    canvas.parentNode.insertBefore(markerDiv, canvas);
 
-    var hitHelper = new (function () {
+    markerDiv.style.background = "black";
+    markerDiv.style.border = "2px solid blue";
+    markerDiv.style.borderRadius = "20px";
+    markerDiv.style.width = "10px";
+    markerDiv.style.height = "10px";
+    markerDiv.style.margin = "-200px -200px";
+    markerDiv.style.zIndex = "100";
+    markerDiv.style.position = "absolute";
+    markerDiv.style.pointerEvents = "none";
 
-        const zeroVec = new Float64Array([0, 0, -1]);
-        const quat = new Float64Array(4);
+    viewer.scene.input.on("mousemove", function (canvasPos) {
 
-        var node = new Node(viewer.scene, {
-            pickable: false,
-            visible: true,
-            position: [0, 0, 0],
-
-            children: [
-                new Mesh(viewer.scene, {
-                    geometry: new VBOGeometry(viewer.scene, buildSphereGeometry({radius: .2})),
-                    material: new PhongMaterial(viewer.scene, {emissive: [1, 0, 0], diffuse: [0, 0, 0]}),
-                    pickable: false
-                }),
-                new Mesh(viewer.scene, {
-                    geometry: new VBOGeometry(viewer.scene, {
-                        primitive: "lines",
-                        positions: [
-                            0.0, 0.0, 0.0, 0.0, 0.0, -2.0
-                        ],
-                        indices: [0, 1]
-                    }),
-                    material: new PhongMaterial(viewer.scene, {emissive: [1, 1, 0], diffuse: [0, 0, 0], lineWidth: 4}),
-                    pickable: false
-                })
-            ]
+        const snapPickResult = viewer.scene.snapPick({
+            canvasPos: canvasPos,
+            snapRadius: 30,
+            snapType: "edge",
         });
 
-        this.show = function (hit) {
-            node.position = hit.worldPos;
-            node.visible = true;
-
-            (this._dir = this._dir || math.vec3()).set(hit.worldNormal || [0, 0, 1]);
-            math.vec3PairToQuaternion(zeroVec, this._dir, quat);
-            node.quaternion = quat;
-        };
-
-        this.hide = function () {
-            node.visible = false;
-        };
-    })();
-
-    var lastEntity = null;
-    var lastColorize = null;
-
-    viewer.scene.input.on("mousemove", function (coords) {
-
-        var hit = viewer.scene.pick({
-            canvasPos: coords,
-            pickSurface: true,  // <<------ This causes picking to find the intersection point on the entity
-            pickSurfacePrecision: true // <<------ Do precise picking (can be slow - actually not the best for hovering)
-        });
-
-        if (hit) {
-
-            if (!lastEntity || hit.entity.id !== lastEntity.id) {
-
-                if (lastEntity) {
-                    lastEntity.colorize = lastColorize;
-                }
-
-                lastEntity = hit.entity;
-                lastColorize = hit.entity.colorize.slice();
-
-                hit.entity.colorize = [0.0, 1.0, 0.0, 1.0];
-            }
-
-            hitHelper.show(hit);
-
+        if (snapPickResult && snapPickResult.snappedCanvasPos) {
+            markerDiv.style.marginLeft = `${snapPickResult.snappedCanvasPos[0] - 10}px`;
+            markerDiv.style.marginTop = `${snapPickResult.snappedCanvasPos[1] - 10}px`;
+            markerDiv.style.background = "greenyellow";
+            markerDiv.style.border = "3px solid green";
         } else {
-
-            if (lastEntity) {
-                lastEntity.colorize = lastColorize;
-                lastEntity = null;
-
-                hitHelper.hide();
-            }
+            markerDiv.style.marginLeft = `${canvasPos[0] - 10}px`;
+            markerDiv.style.marginTop = `${canvasPos[1] - 10}px`;
+            markerDiv.style.background = "white";
+            markerDiv.style.border = "1px solid black";
         }
     });
+
 </script>
 </html>
