@@ -1167,10 +1167,10 @@ export class SceneModel extends Component {
 
         console.log("Creating SceneModel");
 
-        this._forceDTX = !!cfg.forceDTX;
+        this._dtxEnabled = this.scene.dtx.enabled && !!cfg.dtxEnabled;
 
         this._enableVertexWelding = true;
-        this._enableIndexRebucketing = true;
+        this._enableIndexBucketing = true;
 
         this._vboBatchingLayerScratchMemory = getScratchMemory();
         this._textureTranscoder = cfg.textureTranscoder || getKTX2TextureTranscoder(this.scene.viewer);
@@ -1996,7 +1996,7 @@ export class SceneModel extends Component {
      *
      * @type {Boolean}
      */
-    get colorTextureEnabledcolorTextureEnabled() {
+    get colorTextureEnabled() {
         return this._colorTextureEnabled;
     }
 
@@ -2496,7 +2496,7 @@ export class SceneModel extends Component {
 
             // Batched geometry
 
-            const useDTX = !!this._forceDTX; // Data textures - disabled by default for now
+            const useDTX = !!this._dtxEnabled; // Data textures - disabled by default for now
 
             if (cfg.primitive === undefined || cfg.primitive === null) {
                 cfg.primitive = "triangles";
@@ -2584,7 +2584,9 @@ export class SceneModel extends Component {
                     }
                 }
 
-                cfg.buckets = createDTXBuckets(cfg, this._enableVertexWelding, this._enableIndexRebucketing);
+                cfg.buckets = createDTXBuckets(cfg,
+                    this.scene.dtx.vertexWeldingEnabled && this._enableVertexWelding,
+                    this.scene.dtx.indexBucketingEnabled && this._enableIndexBucketing);
 
             } else {
 
@@ -2627,26 +2629,12 @@ export class SceneModel extends Component {
                     }
                 }
 
-                // if (cfg.positions) {
-                //     const aabb = math.collapseAABB3();
-                //     cfg.positionsDecodeMatrix = math.mat4();
-                //     math.expandAABB3Points3(aabb, cfg.positions);
-                //     cfg.positionsCompressed = quantizePositions(cfg.positions, aabb, cfg.positionsDecodeMatrix)
-                // }
-
                 if (!cfg.edgeIndices && (cfg.primitive === "triangles" || cfg.primitive === "solid" || cfg.primitive === "surface")) {
                     if (cfg.positions) {
                         cfg.edgeIndices = buildEdgeIndices(cfg.positions, cfg.indices, null, 2.0);
                     } else {
                         cfg.edgeIndices = buildEdgeIndices(cfg.positionsCompressed, cfg.indices, cfg.positionsDecodeMatrix, 2.0);
                     }
-                }
-
-                if (cfg.uv) {
-                    const bounds = geometryCompressionUtils.getUVBounds(cfg.uv);
-                    const result = geometryCompressionUtils.compressUVs(cfg.uv, bounds.min, bounds.max);
-                    cfg.uvCompressed = result.quantized;
-                    cfg.uvDecodeMatrix = result.decodeMatrix;
                 }
 
                 // if (cfg.normals) { // HACK
@@ -2688,7 +2676,7 @@ export class SceneModel extends Component {
                 cfg.meshMatrix = math.composeMat4(position, DEFAULT_QUATERNION, scale, math.mat4());
             }
 
-            const useDTX = !!this._forceDTX; // Data textures - disabled by default for now
+            const useDTX = !!this._dtxEnabled; // Data textures - disabled by default for now
 
             if (useDTX) {
 
@@ -2705,7 +2693,9 @@ export class SceneModel extends Component {
 
                 let buckets = this._dtxBuckets[cfg.geometryId];
                 if (!buckets) {
-                    buckets = createDTXBuckets(cfg.geometry, this._enableVertexWelding, this._enableIndexRebucketing);
+                    buckets = createDTXBuckets(cfg.geometry,
+                        this.scene.dtx.vertexWeldingEnabled && this._enableVertexWelding,
+                        this.scene.dtx.indexBucketingEnabled && this._enableIndexBucketing);
                     this._dtxBuckets[cfg.geometryId] = buckets;
                 }
                 cfg.buckets = buckets;
@@ -2813,7 +2803,8 @@ export class SceneModel extends Component {
 
     _getNumPrimitives(cfg) {
         let countIndices = 0;
-        switch (cfg.primitive) {
+        const primitive = cfg.geometry ? cfg.geometry.primitive : cfg.primitive;
+        switch (primitive) {
             case "triangles":
             case "solid":
             case "surface":
@@ -2839,14 +2830,15 @@ export class SceneModel extends Component {
                         }
                         break;
                     case VBO_BATCHED:
-                        countIndices += cfg.positions? cfg.positions.length: cfg.positionsCompressed.length;
+                        countIndices += cfg.positions ? cfg.positions.length : cfg.positionsCompressed.length;
                         break;
                     case VBO_INSTANCED:
-                        countIndices += cfg.positions? cfg.positions.length: cfg.positionsCompressed.length;
+                        countIndices += cfg.positions ? cfg.positions.length : cfg.positionsCompressed.length;
                         break;
                 }
                 return Math.round(countIndices);
             case "lines":
+            case "line-strip":
                 switch (cfg.type) {
                     case DTX:
                         for (let i = 0, len = cfg.buckets.length; i < len; i++) {
@@ -3976,10 +3968,10 @@ export class SceneModel extends Component {
  * @param {object} geometry The mesh information containing `.positions`, `.indices`, `.edgeIndices` arrays.
  *
  * @param enableVertexWelding
- * @param enableIndexRebucketing
+ * @param enableIndexBucketing
  * @returns {object} The mesh information enrichened with `.buckets` key.
  */
-function createDTXBuckets(geometry, enableVertexWelding, enableIndexRebucketing) {
+function createDTXBuckets(geometry, enableVertexWelding, enableIndexBucketing) {
     let uniquePositionsCompressed, uniqueIndices, uniqueEdgeIndices;
     if (enableVertexWelding) {
         [
@@ -3997,7 +3989,7 @@ function createDTXBuckets(geometry, enableVertexWelding, enableIndexRebucketing)
         uniqueEdgeIndices = geometry.edgeIndices;
     }
     let buckets;
-    if (enableIndexRebucketing) {
+    if (enableIndexBucketing) {
         let numUniquePositions = uniquePositionsCompressed.length / 3;
         buckets = rebucketPositions(
             {
