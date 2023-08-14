@@ -2657,6 +2657,11 @@ export class SceneModel extends Component {
 
             // Reused geometry
 
+            if (cfg.positions || cfg.positionsCompressed || cfg.indices || cfg.edgeIndices || cfg.normals || cfg.normalsCompressed || cfg.uv || cfg.uvCompressed || cfg.positionsDecodeMatrix) {
+                this.error(`Mesh geometry parameters not expected when instancing a geometry (not expected: positions, positionsCompressed, indices, edgeIndices, normals, normalsCompressed, uv, uvCompressed, positionsDecodeMatrix)`);
+                return;
+            }
+
             cfg.geometry = this._geometries[cfg.geometryId];
             if (!cfg.geometry) {
                 this.error(`[createMesh] Geometry not found: ${cfg.geometryId} - ensure that you create it first with createGeometry()`);
