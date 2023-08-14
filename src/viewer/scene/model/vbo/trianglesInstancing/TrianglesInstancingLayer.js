@@ -5,6 +5,7 @@ import {math} from "../../../math/math.js";
 import {RenderState} from "../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../webgl/ArrayBuf.js";
 import {getInstancingRenderers} from "./TrianglesInstancingRenderers.js";
+import {getSnapInstancingRenderers} from "../snapInstancing/SnapInstancingRenderers";
 
 const tempUint8Vec4 = new Uint8Array(4);
 const tempFloat32 = new Float32Array(1);
@@ -57,6 +58,7 @@ class TrianglesInstancingLayer {
         this.layerIndex = cfg.layerIndex;
 
         this._instancingRenderers = getInstancingRenderers(cfg.model.scene);
+        this._snapInstancingRenderers = getSnapInstancingRenderers(cfg.model.scene);
 
         this._aabb = math.collapseAABB3();
 
@@ -728,7 +730,7 @@ class TrianglesInstancingLayer {
         const offsetZ = origin[2] + offset[2];
         const worldPos = tempVec4a;
         const portionMatrix = portion.matrix;
-        const modelMatrix = this.model.sceneModelMatrix;
+        const sceneModelPatrix = this.model.sceneModelMatrix;
         const positionsDecodeMatrix = state.positionsDecodeMatrix;
         for (let i = 0, len = positions.length; i < len; i += 3) {
             worldPos[0] = positions[i];
@@ -736,7 +738,7 @@ class TrianglesInstancingLayer {
             worldPos[2] = positions[i + 2];
             math.decompressPosition(worldPos, positionsDecodeMatrix);
             math.transformPoint3(portionMatrix, worldPos);
-            math.transformPoint3(modelMatrix, worldPos);
+            math.transformPoint3(sceneModelPatrix, worldPos);
             worldPos[0] += offsetX;
             worldPos[1] += offsetY;
             worldPos[2] += offsetZ;
@@ -980,6 +982,26 @@ class TrianglesInstancingLayer {
         this._updateBackfaceCull(renderFlags, frameCtx);
         if (this._instancingRenderers.pickNormalsRenderer) {
             this._instancingRenderers.pickNormalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        }
+    }
+
+    drawSnapInitDepthBuf(renderFlags, frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        this._updateBackfaceCull(renderFlags, frameCtx);
+        if (this._snapInstancingRenderers.snapDepthBufInitRenderer) {
+            this._snapInstancingRenderers.snapDepthBufInitRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        }
+    }
+
+    drawSnapDepths(renderFlags, frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        this._updateBackfaceCull(renderFlags, frameCtx);
+        if (this._snapInstancingRenderers.snapDepthRenderer) {
+            this._snapInstancingRenderers.snapDepthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }
     }
 

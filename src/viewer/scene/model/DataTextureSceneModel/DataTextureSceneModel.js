@@ -88,7 +88,7 @@ class DataTextureSceneModel extends Component {
          * 
          * @type {Boolean}
          */
-        this._enableIndexRebucketing = !cfg.disableIndexRebucketing;
+        this._enableIndexBucketing = !cfg.disableIndexRebucketing;
 
         this._targetLodFps = cfg.targetLodFps;
 
@@ -1150,7 +1150,7 @@ class DataTextureSceneModel extends Component {
             preparedGeometryCfg = prepareMeshGeometry (
                 geometryCfg,
                 this._enableVertexWelding,
-                this._enableIndexRebucketing
+                this._enableIndexBucketing
             );
 
             if (instancing) {

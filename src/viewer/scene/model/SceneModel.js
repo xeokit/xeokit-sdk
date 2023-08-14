@@ -2643,11 +2643,13 @@ export class SceneModel extends Component {
 
                 // Texture
 
-                cfg.textureSetId = cfg.textureSetId || DEFAULT_TEXTURE_SET_ID;
-                cfg.textureSet = this._textureSets[cfg.textureSetId];
-                if (!cfg.textureSet) {
-                    this.error(`[createMesh] Texture set not found: ${cfg.textureSetId} - ensure that you create it first with createTextureSet()`);
-                    return;
+               // cfg.textureSetId = cfg.textureSetId || DEFAULT_TEXTURE_SET_ID;
+                if (cfg.textureSetId) {
+                    cfg.textureSet = this._textureSets[cfg.textureSetId];
+                    if (!cfg.textureSet) {
+                        this.error(`[createMesh] Texture set not found: ${cfg.textureSetId} - ensure that you create it first with createTextureSet()`);
+                        return;
+                    }
                 }
             }
 
@@ -2715,11 +2717,13 @@ export class SceneModel extends Component {
 
                 // Texture
 
-                cfg.textureSetId = cfg.textureSetId || DEFAULT_TEXTURE_SET_ID;
-                cfg.textureSet = this._textureSets[cfg.textureSetId];
-                if (!cfg.textureSet) {
-                    this.error(`[createMesh] Texture set not found: ${cfg.textureSetId} - ensure that you create it first with createTextureSet()`);
-                    return;
+             //   cfg.textureSetId = cfg.textureSetId || DEFAULT_TEXTURE_SET_ID;
+                if (cfg.textureSetId) {
+                    cfg.textureSet = this._textureSets[cfg.textureSetId];
+                    // if (!cfg.textureSet) {
+                    //     this.error(`[createMesh] Texture set not found: ${cfg.textureSetId} - ensure that you create it first with createTextureSet()`);
+                    //     return;
+                    // }
                 }
 
                 // OBB
@@ -2879,16 +2883,17 @@ export class SceneModel extends Component {
     _getVBOBatchingLayer(cfg) {
         const model = this;
         const origin = cfg.origin;
+        const positionsDecodeHash = cfg.positionsDecodeMatrix || cfg.positionsDecodeBoundary ?
+            this._createHashStringFromMatrix(cfg.positionsDecodeMatrix || cfg.positionsDecodeBoundary)
+            : "-";
         const textureSetId = cfg.textureSetId || "";
-        const layerId = `${origin[0]}.${origin[1]}.${origin[2]}.${cfg.primitive}.${cfg.positionsDecodeMatrix
-        || cfg.positionsDecodeBoundary ? this._createHashStringFromMatrix(cfg.positionsDecodeMatrix || cfg.positionsDecodeBoundary) : "-"}`;
+        const layerId = `${origin[0]}.${origin[1]}.${origin[2]}.${cfg.primitive}.${positionsDecodeHash}.${textureSetId}`;
         let vboBatchingLayer = this._vboBatchingLayers[layerId];
         if (vboBatchingLayer) {
             return vboBatchingLayer;
         }
         let textureSet = cfg.textureSet;
         while (!vboBatchingLayer) {
-            console.log("new VBO batching layer");
             switch (cfg.primitive) {
                 case "triangles":
                     vboBatchingLayer = new TrianglesBatchingLayer({
@@ -3879,6 +3884,10 @@ export class SceneModel extends Component {
         }
     }
 
+    /**
+     * @private
+     * @param frameCtx
+     */
     drawSnapInitDepthBuf(frameCtx) {
         if (this.numVisibleLayerPortions === 0) {
             return;
@@ -3893,6 +3902,10 @@ export class SceneModel extends Component {
         }
     }
 
+    /**
+     * @private
+     * @param frameCtx
+     */
     drawSnapDepths(frameCtx) {
         if (this.numVisibleLayerPortions === 0) {
             return;

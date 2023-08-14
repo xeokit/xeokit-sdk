@@ -257,6 +257,8 @@ class VBOSceneModelRenderer {
 
         program.bind();
 
+        frameCtx.textureUnit = 0;
+
         if (this._uLightAmbient) {
             gl.uniform4fv(this._uLightAmbient, lightsState.getAmbientColorAndIntensity());
         }
@@ -364,7 +366,6 @@ class VBOSceneModelRenderer {
         }
 
         if (this._aColor) {
-
             this._aColor.bindArrayBuffer(state.colorsBuf ? state.colorsBuf : state.colorsBuf);
             if (this._instancing && state.geometry && state.colorsBuf) {
                 gl.vertexAttribDivisor(this._aColor.location, 1);

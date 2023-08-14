@@ -1812,7 +1812,7 @@ class TrianglesDataTextureLayer {
  * 
  * @returns {object} The mesh information enrichened with `.preparedBuckets` key.
  */
-function prepareMeshGeometry (geometryCfg, enableVertexWelding, enableIndexRebucketing) {
+function prepareMeshGeometry (geometryCfg, enableVertexWelding, enableIndexBucketing) {
     let uniquePositions, uniqueIndices, uniqueEdgeIndices;
 
     if (enableVertexWelding) {
@@ -1833,7 +1833,7 @@ function prepareMeshGeometry (geometryCfg, enableVertexWelding, enableIndexRebuc
 
     let buckets;
 
-    if (enableIndexRebucketing) {
+    if (enableIndexBucketing) {
         let numUniquePositions = uniquePositions.length / 3;
 
         buckets = rebucketPositions (
