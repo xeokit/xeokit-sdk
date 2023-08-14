@@ -54,6 +54,7 @@ class Viewer {
      * @param {Boolean} [cfg.pbrEnabled=false] Whether to enable physically-based rendering.
      * @param {Boolean} [cfg.lodEnabled=false] Whether to enable Level-of-Detail (LOD) culling. See {@link LOD} for more info.
      * @param {Boolean} [cfg.vfcEnabled=false] Whether to enable View Frustum Culling (VFC) culling. See {@link VFC} for more info.
+     * @param {Boolean} [cfg.dtxEnabled=false]  Sets whether data texture scene representation and rendering (DTX) is enabled for all subsequently created {@link @SceneModel}s.
      * @param {LocaleService} [cfg.localeService=null] Optional locale-based translation service.
      */
     constructor(cfg) {
@@ -112,7 +113,8 @@ class Viewer {
             pbrEnabled: (!!cfg.pbrEnabled),
             lodEnabled: (!!cfg.lodEnabled),
             vfcCulling: (!!cfg.vfcEnabled),
-            colorTextureEnabled: (cfg.colorTextureEnabled !== false)
+            colorTextureEnabled: (cfg.colorTextureEnabled !== false),
+            dtxEnabled: (!!cfg.dtxEnabled)
         });
 
         /**
