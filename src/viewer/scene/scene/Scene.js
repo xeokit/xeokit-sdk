@@ -20,6 +20,7 @@ import {PointsMaterial} from "../materials/PointsMaterial.js";
 import {LinesMaterial} from "../materials/LinesMaterial.js";
 import {LOD} from "../lod/LOD.js";
 import {VFC} from "../vfc/VFC";
+import {DTX} from "../dtx/DTX";
 
 // Enables runtime check for redundant calls to object state update methods, eg. Scene#_objectVisibilityUpdated
 const ASSERT_OBJECT_STATE_UPDATE = false;
@@ -814,6 +815,14 @@ class Scene extends Component {
             enabled: cfg.saoEnabled
         });
 
+        /** Configures data texture-based (DTX) model representation and rendering mode for this Scene.
+         * @type {DTX}
+         * @final
+         */
+        this.dtx = new DTX(this, {
+            enabled: cfg.dtxEnabled
+        });
+
         this.ticksPerRender = cfg.ticksPerRender;
         this.ticksPerOcclusionTest = cfg.ticksPerOcclusionTest;
         this.passes = cfg.passes;
@@ -827,6 +836,7 @@ class Scene extends Component {
 
         this._pbrEnabled = !!cfg.pbrEnabled;
         this._colorTextureEnabled = (cfg.colorTextureEnabled !== false);
+        this._dtxEnabled = !!cfg.dtxEnabled;
 
         // Register Scene on xeokit
         // Do this BEFORE we add components below
