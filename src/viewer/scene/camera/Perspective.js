@@ -78,6 +78,8 @@ class Perspective extends Component {
 
         this.glRedraw();
 
+        this.camera._updateScheduled = true;
+
         this.fire("matrix", this._state.matrix);
     }
 
