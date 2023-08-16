@@ -13,7 +13,7 @@
 <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
 <div class="slideout-sidebar">
-    <img class="info-icon" src="../assets/images/performance_model_icon.png"/>
+    <img class="info-icon" src="../../assets/images/performance_model_icon.png"/>
     <h1>SceneModel</h1>
     <h2>Geometry batching and RTC coordinates</h2>
     <p>In this example, we're programmatically building a simple model using xeokit's SceneModel component, while
@@ -54,6 +54,15 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
+    // Enable data texture model representation for
+    // all subsequently created SceneModels (unless they override it to be disabled)
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.dtx.enabled = true; // Default is false
+    viewer.scene.dtx.indexBucketingEnabled = true; // Default
+    viewer.scene.dtx.vertexWeldingEnabled = true; // Default
+
+    //------------------------------------------------------------------------------------------------------------------
     // Create a SceneModel representing a table with four legs, using geometry batching
     //------------------------------------------------------------------------------------------------------------------
 
@@ -63,7 +72,7 @@
         scale: [1, 1, 1],
         rotation: [0, 0, 0],
         edges: true,
-        forceDTX: true
+        dtxEnabled: true
     });
 
     //-----------------------------------------------------------
@@ -112,10 +121,37 @@
         sceneModel.createGeometry({
             id: geometryId,
             primitive: "triangles",
-            positions: [
-                1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1,
-                1, 1, 1, 1, 1, -1, -1, 1, -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1,
-                -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1
+            positionsCompressed: [
+                16381,60484,16381,
+                5460,60484,16381,
+                5460,0,16381,
+                16381, 0,16381,
+                16381, 60484,16381,
+                16381, 0,16381,
+                16381,0, 5460,
+                16381,60484, 5460,
+                16381,60484, 16381,
+                16381,60484, 5460,
+                5460,60484, 5460,
+                5460,60484, 16381,
+                5460,60484, 16381,
+                5460,60484, 5460,
+                5460,0, 5460,
+                5460,0, 16381,
+                5460,0, 5460,
+                16381,0, 5460,
+                16381,0, 16381,
+                5460,0, 16381,
+                16381,0, 5460,
+                5460,0, 5460,
+                5460,60484, 5460,
+                16381,60484, 5460
+            ],
+            positionsDecodeMatrix: [
+                0.00003052270125906143, 0, 0, 0,
+                0, 0.00003052270125906143, 0, 0,
+                0, 0, 0.00003052270125906143, 0,
+                -1, -1, -1, 1
             ],
             indices: [
                 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15,

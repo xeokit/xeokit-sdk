@@ -46,6 +46,15 @@
         transparent: true
     });
 
+    //------------------------------------------------------------------------------------------------------------------
+    // Enable data texture model representation for
+    // all subsequently created SceneModels (unless they override it to be disabled)
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.dtx.enabled = true; // Default is false
+    viewer.scene.dtx.indexBucketingEnabled = true; // Default
+    viewer.scene.dtx.vertexWeldingEnabled = true; // Default
+
     viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
     viewer.scene.camera.look = [0, -5.75, 0];
     viewer.scene.camera.up = [0.37, 0.91, -0.11];
@@ -80,7 +89,7 @@
         scale: [1, 1, 1],
         rotation: [0, 0, 0],
         edges: true,
-        forceDTX: true
+        dtxEnabled: true
     });
 
     for (let i = 0, len = origins.length; i < len; i++) {

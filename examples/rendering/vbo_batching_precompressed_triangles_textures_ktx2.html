@@ -13,7 +13,7 @@
 <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
 <div class="slideout-sidebar">
-    <img class="info-icon" src="../assets/images/performance_model_icon.png"/>
+    <img class="info-icon" src="../../assets/images/performance_model_icon.png"/>
     <h1>SceneModel</h1>
     <h2>Non-realistic rendering, no geometry reuse, triangle primitives</h2>
     <p>
@@ -42,7 +42,8 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
-        transparent: true
+        transparent: true,
+        colorTextureEnabled: true
     });
 
     viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
@@ -54,7 +55,8 @@
         position: [0, 0, 0],
         scale: [1, 1, 1],
         rotation: [0, 0, 0],
-        edges: true
+        edges: true,
+        colorTextureEnabled: true
     });
 
     sceneModel.createTexture({
@@ -117,14 +119,14 @@
             0, 1, 1, 1, 1, 0, 0, 0,// v7-v4-v3-v2 bottom
             0, 1, 1, 1, 1, 0, 0, 0 // v4-v7-v6-v1 back
         ],
-        normals: [
-            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1,// v0-v1-v2-v3 front
-            1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,// v0-v3-v4-v5 right
-            0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,// v0-v5-v6-v1 top
-            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0,// v1-v6-v7-v2 left
-            0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,// v7-v4-v3-v2 bottom
-            0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1// v4-v7-v6-v5 back
-        ],
+        // normals: [
+        //     0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1,// v0-v1-v2-v3 front
+        //     1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,// v0-v3-v4-v5 right
+        //     0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,// v0-v5-v6-v1 top
+        //     -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0,// v1-v6-v7-v2 left
+        //     0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,// v7-v4-v3-v2 bottom
+        //     0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1// v4-v7-v6-v5 back
+        // ],
         indices: [
             0, 1, 2, 0, 2, 3,            // front
             4, 5, 6, 4, 6, 7,            // right

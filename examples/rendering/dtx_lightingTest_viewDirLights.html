@@ -83,7 +83,7 @@
 <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
 <div class="slideout-sidebar">
-    <img class="info-icon" src="../assets/images/lighting_icon.png"/>
+    <img class="info-icon" src="../../assets/images/lighting_icon.png"/>
     <h1>DirLight</h1>
     <h2>Directional View-space lighting test for various scene representations</h2>
     <p>In this example, we're programmatically building a scene, using both the scene graph and SceneModel scene
@@ -153,6 +153,15 @@
         canvasId: "myCanvas",
         transparent: true
     });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Enable data texture model representation for
+    // all subsequently created SceneModels (unless they override it to be disabled)
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.dtx.enabled = true; // Default is false
+    viewer.scene.dtx.indexBucketingEnabled = true; // Default
+    viewer.scene.dtx.vertexWeldingEnabled = true; // Default
 
     viewer.camera.eye = [-30.23, 12.26, 22.10];
     viewer.camera.look = [10, -5.75, 10];
@@ -348,7 +357,7 @@
         scale: [1, 1, 1],
         rotation: [0, 0, 0],
         edges: true,
-        forceDTX: true
+        dtxEnabled: true
     });
 
     performanceModelBatched.createMesh({

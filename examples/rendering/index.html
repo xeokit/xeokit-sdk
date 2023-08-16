@@ -261,9 +261,11 @@
             "#Vertex buffer object geometry batching",
 
             ["vbo_batching_precompressed_triangles", "SceneModel using VBOs, no geometry reuse, pre-compressed geometry, triangle primitives"],
+            ["vbo_batching_precompressed_triangles_rtc", "SceneModel using VBOs, no geometry reuse, pre-compressed geometry, triangle primitives, RTC coordinates"],
             ["vbo_batching_precompressed_triangles_textures_jpg", "SceneModel using VBOs, no geometry reuse, pre-compressed geometry, triangle primitives, JPEG texture"],
             ["vbo_batching_precompressed_triangles_textures_ktx2", "SceneModel using VBOs, no geometry reuse, pre-compressed geometry, triangle primitives, KTX2 texture"],
             ["vbo_batching_autocompressed_triangles", "SceneModel using VBOs, no geometry reuse, auto-compressed, triangle primitives"],
+            ["vbo_batching_autocompressed_triangles_rtc", "SceneModel using VBOs, no geometry reuse, auto-compressed, triangle primitives, RTC coordinates"],
             ["vbo_batching_autocompressed_triangles_textures_jpg", "SceneModel using VBOs, geometry reuse, auto-compressed, triangle primitives, JPEG texture"],
             ["vbo_batching_autocompressed_triangles_textures_ktx2", "SceneModel using VBOs, geometry reuse, auto-compressed, triangle primitives, KTX2 texture"]
         ],
@@ -273,9 +275,11 @@
             "#Vertex buffer object geometry instancing",
 
             ["vbo_instancing_precompressed_triangles", "SceneModel using VBOs, geometry reuse, pre-compressed geometry, triangle primitives"],
+            ["vbo_instancing_precompressed_triangles_rtc", "SceneModel using VBOs, no geometry reuse, pre-compressed geometry, triangle primitives, RTC coordinates"],
             ["vbo_instancing_precompressed_triangles_textures_jpg", "SceneModel using VBOs, geometry reuse, pre-compressed geometry, triangle primitives, JPEG texture"],
             ["vbo_instancing_precompressed_triangles_textures_ktx2", "SceneModel using VBOs, geometry reuse, pre-compressed geometry,  triangle primitives, KTX2 texture"],
             ["vbo_instancing_autocompressed_triangles", "SceneModel using VBOs, geometry reuse, auto-compressed, triangle primitives"],
+            ["vbo_instancing_autocompressed_triangles_rtc", "SceneModel using VBOs, geometry reuse, auto-compressed, triangle primitives, RTC"],
             ["vbo_instancing_autocompressed_triangles_textures_jpg", "SceneModel using VBOs, geometry reuse, autocompressed coordinates, triangle primitives, JPEG texture"],
             ["vbo_instancing_autocompressed_triangles_textures_ktx2", "SceneModel using VBOs, geometry reuse, autocompressed coordinates,  triangle primitives, KTX2 texture"]
         ],
@@ -296,33 +300,37 @@
             ["dtx_instancing_autocompressed_triangles", "SceneModel using data textures, geometry reuse, auto-compressed, triangle primitives"]
         ],
 
-        "RTC": [
+        // "RTC": [
+        //
+        //     "#RTC + VBO + Pre-quancompressed",
+        //
+        //     ["vbo_batching_precompressed_triangles_rtc", "SceneModel using VBOs, no geometry reuse, pre-compressed geometry, triangle primitives, RTC coordinates"],
+        //
+        //     ["rtc_vbo_batching_autocompressed_triangles", "Lighting VBO view directional"],
+        //
+        //     "#RTC + DTX + Uncompressed",
+        //
+        //     ["vbo_instancing_autocompressed_triangles_rtc", "SceneModel using VBOs, geometry reuse, auto-compressed, triangle primitives, RTC coordinates"],
+        //
+        //     ["rtc_dtx_batching_autocompressed_triangles", "Lighting VBO view directional"],
+        //     ["rtc_dtx_instancing_autocompressed_triangles", "Lighting VBO view directional"],
+        //     ["rtc_dtx_instancing_precompressed_triangles", "Lighting VBO view directional"],
+        //
+        //     ["dtx_instancing_precompressed_triangles_rtc", "SceneModel using date textures, geometry reuse, pre-compressed geometry, triangle primitives, RTC coordinates"],
+        //
+        //     ["dtx_instancing_autocompressed_triangles_rtc", "SceneModel using data textures, geometry reuse, auto-compressed, triangle primitives, RTC coordinates"],
+        //
+        //     ["dtx_batching_rtc_sectionPlanes", "SceneModel using data texture, no geometry reuse, auto-compressed, triangle primitives, RTC coordinates, section planes"],
+        //
+        //     ["dtx_batching_autocompressed_triangles_rtc", "SceneModel using data texture, no geometry reuse, auto-compressed, triangle primitives, RTC coordinates"],
+        //     ["dtx_batching_precompressed_triangles_rtc", "SceneModel using data texture, no geometry reuse, pre-compressed geometry, triangle primitives, RTC coordinates"]
+        // ],
 
-            "#RTC + VBO + Pre-quancompressed",
+        "worldMatrix": [
 
-            ["vbo_batching_precompressed_triangles_rtc", "SceneModel using VBOs, no geometry reuse, pre-compressed geometry, triangle primitives, RTC coordinates"],
-            ["vbo_instancing_precompressed_triangles_rtc", "SceneModel using VBOs, no geometry reuse, pre-compressed geometry, triangle primitives, RTC coordinates"],
-
-            ["rtc_vbo_batching_autocompressed_triangles", "Lighting VBO view directional"],
-
-            "#RTC + DTX + Uncompressed",
-
-            ["vbo_instancing_autocompressed_triangles_rtc", "SceneModel using VBOs, geometry reuse, auto-compressed, triangle primitives, RTC coordinates"],
-
-            ["rtc_dtx_batching_autocompressed_triangles", "Lighting VBO view directional"],
-            ["rtc_dtx_instancing_autocompressed_triangles", "Lighting VBO view directional"],
-            ["rtc_dtx_instancing_precompressed_triangles", "Lighting VBO view directional"],
-
-            ["dtx_instancing_precompressed_triangles_rtc", "SceneModel using date textures, geometry reuse, pre-compressed geometry, triangle primitives, RTC coordinates"],
-
-            ["dtx_instancing_autocompressed_triangles_rtc", "SceneModel using data textures, geometry reuse, auto-compressed, triangle primitives, RTC coordinates"],
-
-            ["vbo_batching_autocompressed_triangles_rtc", "SceneModel using VBOs, no geometry reuse, auto-compressed, triangle primitives, RTC coordinates"],
-            ["dtx_batching_rtc_sectionPlanes", "SceneModel using data texture, no geometry reuse, auto-compressed, triangle primitives, RTC coordinates, section planes"],
-
-            ["dtx_batching_autocompressed_triangles_rtc", "SceneModel using data texture, no geometry reuse, auto-compressed, triangle primitives, RTC coordinates"],
-            ["dtx_batching_precompressed_triangles_rtc", "SceneModel using data texture, no geometry reuse, pre-compressed geometry, triangle primitives, RTC coordinates"]
+            ["worldMatrix_vbo_batching_autocompressed_triangles", ""]
         ],
+
 
         "Effects": [
 
@@ -365,6 +373,17 @@
             "#Lighting tests",
 
             ["lighting_vbo_view_dir", "Various scene representations with directional view-space lights"]
+        ],
+
+        "LoD": [
+
+            "#Level-of-Detail culling",
+
+            ["lod_dtx_instancing_autocompressed_triangles", "SceneModel using DTX, geometry reuse, autocompressed geometry, triangles and LoD culling"],
+            ["lod_dtx_batching_autocompressed_triangles", "SceneModel using DTX, no geometry reuse, autocompressed geometry, triangles and LoD culling"],
+
+            ["lod_vbo_instancing_autocompressed_triangles", "SceneModel using VBO, geometry reuse, autocompressed geometry, triangles and LoD culling"],
+            ["lod_vbo_batching_autocompressed_triangles", "SceneModel using VBO, no geometry reuse, autocompressed geometry, triangles and LoD culling"]
         ],
 
         "Snap-picking": [

@@ -13,7 +13,7 @@
 <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
 <div class="slideout-sidebar">
-    <img class="info-icon" src="../assets/images/performance_model_icon.png"/>
+    <img class="info-icon" src="../../assets/images/performance_model_icon.png"/>
     <h1>SceneModel</h1>
     <h2>Geometry instancing benchmark</h2>
     <p>In this example, we're building a large model using xeokit's SceneModel component and geometry instancing.</p>
@@ -60,13 +60,14 @@
     viewer.scene.camera.look = [-106.46, -434.89, -171.60];
     viewer.scene.camera.up = [0.32, 0.92, 0.11];
 
-    viewer.scene.highlightMaterial.edges = false;
+    //------------------------------------------------------------------------------------------------------------------
+    // Enable data texture model representation for
+    // all subsequently created SceneModels (unless they override it to be disabled)
+    //------------------------------------------------------------------------------------------------------------------
 
-    viewer.scene.gammaInput = false;
-    viewer.scene.gammaOutput = false;
-
-    viewer.cameraControl.followPointer = true;
-    viewer.cameraControl.smartPivot = true;
+    viewer.scene.dtx.enabled = true; // Default is false
+    viewer.scene.dtx.indexBucketingEnabled = true; // Default
+    viewer.scene.dtx.vertexWeldingEnabled = true; // Default
 
     //------------------------------------------------------------------------------------------------------------------
     // Generate the buildings
@@ -81,7 +82,7 @@
         scale: [1, 1, 1],
         rotation: [0, 0, 0],
         edges: false,
-        forceDTX: true,
+        dtxEnabled: true,
         colorTextureEnabled: false
     });
 
