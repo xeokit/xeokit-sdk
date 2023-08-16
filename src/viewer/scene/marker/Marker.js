@@ -1,8 +1,6 @@
 import {math} from '../math/math.js';
 import {Component} from '../Component.js';
-import {SceneModelEntity} from "../model/SceneModelEntity.js";
 import {worldToRTCPos} from "../math/rtcCoords.js";
-import { DataTextureSceneModelNode } from '../model/DataTextureSceneModel/lib/DataTextureSceneModelNode.js';
 
 const tempVec4a = math.vec4();
 const tempVec4b = math.vec4();
