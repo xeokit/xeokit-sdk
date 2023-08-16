@@ -67,51 +67,7 @@ const DTX = 2;
  * techniques, in isolation. If some bug occurs in SceneModel, we use these tests to debug, but they also
  * serve to demonstrate how to use the capabilities of SceneModel programmatically.
  *
- * ## Data Textures
- *
- * These examples cause SceneModel to use *data textures* to represent and render models. Data textures
- * have the advantage of extremely low memory footprint, but require a fairly high-end GPU. These
- * work well for huge models on mobile phones and tablets that have a high-spec GPU.
- *
- * * [Data textures, inline geometry, uncompressed, triangles](./../examples/#SceneModel_dtx_batch_unquantized_triangles)
- * * [Data textures, inline geometry, pre-compressed, triangles](./../examples/#SceneModel_dtx_batch_quantized_triangles)
- * * [Data textures, reused geometry, uncompressed, triangles](./../examples/#SceneModel_dtx_instancing_unquantized_triangles)
- * * [Data textures, reused geometry, pre-compressed, triangles](./../examples/#SceneModel_dtx_instancing_quantized_triangles)
- *
- * ## Data Textures with RTC Geometry
- *
- * These relative-to-center (RTC) examples test SceneModel's data texture mode with "tiled" geometry coordinates, which are specified as offsets from
- * tile centers ("origins"). This feature is useful for defining models that are geographically huge, while using the minimal (single precision)
- * storage for the coordinates.
- *
- * * [Data textures, inline geometry, uncompressed, triangles, RTC coordinates, ](./../examples/#SceneModel_dtx_batch_unquantized_triangles_rtc)
- * * [Data textures, inline geometry, pre-compressed, triangles, RTC coordinates, ](./../examples/#SceneModel_dtx_batch_quantized_triangles_rtc)
- * * [Data textures, reused geometry, uncompressed, triangles, RTC coordinates](./../examples/#SceneModel_dtx_instancing_unquantized_triangles_rtc)
- * * [Data textures, reused geometry, pre-compressed, triangles, RTC coordinates](./../examples/#SceneModel_dtx_instancing_quantized_triangles_rtc)
- *
- * ## VBOs
- *
- * These examples cause SceneModel to use the conventional *vertex buffer objects* (VBOs) to render and
- * represent and render models. These perform better that data textures on low-spec GPUs.
- *
- * * [VBOs, inline geometry, uncompressed, triangles](./../examples/#SceneModel_vbo_batch_unquantized_triangles)
- * * [VBOs, inline geometry, pre-compressed, triangles](./../examples/#SceneModel_vbo_batch_quantized_triangles)
- * * [VBOs, reused geometry, uncompressed, triangles](./../examples/#SceneModel_vbo_instancing_unquantized_triangles)
- * * [VBOs, reused geometry, pre-compressed, triangles](./../examples/#SceneModel_vbo_instancing_quantized_triangles)
- *
- * ## VBOs with RTC Geometry
- *
- * * [VBOs, inline geometry, uncompressed, triangles, RTC coordinates, ](./../examples/#SceneModel_vbo_batch_unquantized_triangles_rtc)
- * * [VBOs, inline geometry, pre-compressed, triangles, RTC coordinates, ](./../examples/#SceneModel_vbo_batch_quantized_triangles_rtc)
- * * [VBOs, reused geometry, uncompressed, triangles, RTC coordinates](./../examples/#SceneModel_vbo_instancing_unquantized_triangles_rtc)
- * * [VBOs, reused geometry, pre-compressed, triangles, RTC coordinates](./../examples/#SceneModel_vbo_instancing_quantized_triangles_rtc)
- *
- * ## VBOs with textures:
- *
- * * [VBOs, reused geometry, pre-compressed, triangles, JPEG textures](./../examples#SceneModel_vbo_instancing_quantized_triangles_textures_jpg)
- * * [VBOs, reused geometry, pre-compressed, triangles, KTX2 textures](./../examples#SceneModel_vbo_instancing_quantized_triangles_textures_ktx2)
- * * [VBOs, reused geometry, uncompressed, triangles, JPEG textures](./../examples#SceneModel_vbo_instancing_unquantized_triangles_textures_jpg)
- * * [VBOs, reused geometry, uncompressed, triangles, KTX2 textures"](./../#SceneModel_vbo_instancing_unquantized_triangles_textures_ktx2)
+ * TODO
  *
  * # Overview
  *
