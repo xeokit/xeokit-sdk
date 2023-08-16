@@ -333,7 +333,6 @@ export class TrianglesDataTextureSnapDepthRenderer {
         src.push("gl_Position = clipPos;");
         src.push("  }");
         src.push("}");
-
         return src;
     }
 

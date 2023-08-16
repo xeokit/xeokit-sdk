@@ -3,7 +3,7 @@ import { Scene } from "../../../scene/Scene.js";
 import { PickResult } from "../../../webgl/PickResult.js";
 
 const DEFAULT_SNAP_PICK_RADIUS = 45;
-const DEFAULT_SNAP_TYPE = "vertex";
+const DEFAULT_SNAP_MODE = "vertex";
 
 /**
  *
@@ -124,7 +124,7 @@ class PickController {
             const snapPickResult = this._scene.snapPick({
                 canvasPos: this.pickCursorPos,
                 snapRadius: DEFAULT_SNAP_PICK_RADIUS,
-                snapType: DEFAULT_SNAP_TYPE,
+                snapMode: DEFAULT_SNAP_MODE,
             });
 
             if (null !== snapPickResult) {
