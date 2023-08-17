@@ -657,10 +657,8 @@ export class TrianglesDataTextureLayer {
         this._bucketGeometries = {};
 
         this._finalized = true;
-    }
 
-    attachToRenderingEvent() {
-        this.model.scene.on("rendering", () => {
+        this._onSceneRendering = this.model.scene.on("rendering", () => {
             if (this._deferredSetFlagsDirty) {
                 this.commitDeferredFlags();
             }
@@ -821,7 +819,7 @@ export class TrianglesDataTextureLayer {
      * @private
      */
     beginDeferredFlags() {
-       // this._deferredSetFlagsActive = true;
+        this._deferredSetFlagsActive = true;
     }
 
     /**
@@ -1031,7 +1029,7 @@ export class TrianglesDataTextureLayer {
         tempUint8Array4 [1] = f1;
         tempUint8Array4 [2] = f2;
         tempUint8Array4 [3] = f3;
-        // object flags
+        //   object flags
         textureState.texturePerObjectIdColorsAndFlags._textureData.set(tempUint8Array4, subPortionId * 32 + 8);
         if (this._deferredSetFlagsActive) {
             this._deferredSetFlagsDirty = true;
@@ -1392,11 +1390,16 @@ export class TrianglesDataTextureLayer {
     }
 
     destroy() {
+        if (this._destroyed) {
+            return;
+        }
         const state = this._state;
         if (state.metallicRoughnessBuf) {
             state.metallicRoughnessBuf.destroy();
             state.metallicRoughnessBuf = null;
         }
+        this.model.scene.off(this._onSceneRendering);
         state.destroy();
+        this._destroyed = true;
     }
 }
