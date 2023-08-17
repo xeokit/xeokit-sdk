@@ -110,7 +110,7 @@ export class TrianglesDataTextureLayer {
         this._numCulledLayerPortions = 0;
 
         this._modelAABB = math.collapseAABB3(); // Model-space AABB
-        this._portions = [];
+        this._subPortions = [];
 
         this._finalized = false;
 
@@ -129,9 +129,9 @@ export class TrianglesDataTextureLayer {
          * @type {Array<Array<int>>}
          * @private
          */
-        this._bucketPortionIdMapping = [];
+        this._portionToSubPortionsMap = [];
 
-        this._bucketPortionGeometries = {};
+        this._bucketGeometries = {};
 
         /**
          * The axis-aligned World-space boundary of this TrianglesDataTextureLayer's positions.
@@ -149,34 +149,37 @@ export class TrianglesDataTextureLayer {
     /**
      * Returns wheter the ```TrianglesDataTextureLayer``` has room for more portions.
      *
-     * @param {object} cfg An object containing the geometrical data (`positions`, `indices`, `edgeIndices`) for the portion.
+     * @param {object} portionCfg An object containing the geometrical data (`positions`, `indices`, `edgeIndices`) for the portion.
      * @returns {Boolean} Wheter the requested portion can be created
      */
-    canCreatePortion(cfg) {
+    canCreatePortion(portionCfg) {
         if (this._finalized) {
             throw "Already finalized";
         }
-        const state = this._state;
-        const numNewPortions = cfg.buckets.length;
+        const numNewPortions = portionCfg.buckets.length;
         if ((this._numPortions + numNewPortions) > MAX_NUMBER_OF_OBJECTS_IN_LAYER) {
             dataTextureRamStats.cannotCreatePortion.because10BitsObjectId++;
         }
         let retVal = (this._numPortions + numNewPortions) <= MAX_NUMBER_OF_OBJECTS_IN_LAYER;
-        const alreadyHasPortionGeometry = cfg.geometryId && (cfg.geometryId + "#0") in this._bucketPortionGeometries;
+        const bucketIndex = 0; // TODO: Is this a bug?
+        const bucketGeometryId = portionCfg.geometryId !== undefined && portionCfg.geometryId !== null
+            ? `${portionCfg.geometryId}#${bucketIndex}`
+            : `${portionCfg.id}#${bucketIndex}`;
+        const alreadyHasPortionGeometry = this._bucketGeometries[bucketGeometryId];
         if (!alreadyHasPortionGeometry) {
-            const maxIndicesOfAnyBits = Math.max(state.numIndices8Bits, state.numIndices16Bits, state.numIndices32Bits,);
+            const maxIndicesOfAnyBits = Math.max(this._state.numIndices8Bits, this._state.numIndices16Bits, this._state.numIndices32Bits,);
             let numVertices = 0;
             let numIndices = 0;
-            cfg.buckets.forEach(bucket => {
+            portionCfg.buckets.forEach(bucket => {
                 numVertices += bucket.positionsCompressed.length / 3;
-                 numIndices += bucket.indices.length / 3;
+                numIndices += bucket.indices.length / 3;
             });
-            if ((state.numVertices + numVertices) > MAX_DATA_TEXTURE_HEIGHT * 4096 ||
+            if ((this._state.numVertices + numVertices) > MAX_DATA_TEXTURE_HEIGHT * 4096 ||
                 (maxIndicesOfAnyBits + numIndices) > MAX_DATA_TEXTURE_HEIGHT * 4096) {
                 dataTextureRamStats.cannotCreatePortion.becauseTextureSize++;
             }
             retVal &&=
-                (state.numVertices + numVertices) <= MAX_DATA_TEXTURE_HEIGHT * 4096 &&
+                (this._state.numVertices + numVertices) <= MAX_DATA_TEXTURE_HEIGHT * 4096 &&
                 (maxIndicesOfAnyBits + numIndices) <= MAX_DATA_TEXTURE_HEIGHT * 4096;
         }
         return retVal;
@@ -187,52 +190,55 @@ export class TrianglesDataTextureLayer {
      *
      * Gives the portion the specified geometry, color and matrix.
      *
-     * @param cfg.positionsCompressed Flat float Local-space positionsCompressed array.
-     * @param [cfg.normals] Flat float normals array.
-     * @param [cfg.colors] Flat float colors array.
-     * @param cfg.indices  Flat int indices array.
-     * @param [cfg.edgeIndices] Flat int edges indices array.
-     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]
-     * @param cfg.metallic Metalness factor [0..255]
-     * @param cfg.roughness Roughness factor [0..255]
-     * @param cfg.opacity Opacity [0..255]
-     * @param [cfg.meshMatrix] Flat float 4x4 matrix
-     * @param [cfg.sceneModelMatrix] Flat float 4x4 matrix
-     * @param cfg.worldAABB Flat float AABB World-space AABB
-     * @param cfg.pickColor Quantized pick color
+     * @param portionCfg.positionsCompressed Flat float Local-space positionsCompressed array.
+     * @param [portionCfg.normals] Flat float normals array.
+     * @param [portionCfg.colors] Flat float colors array.
+     * @param portionCfg.indices  Flat int indices array.
+     * @param [portionCfg.edgeIndices] Flat int edges indices array.
+     * @param portionCfg.color Quantized RGB color [0..255,0..255,0..255,0..255]
+     * @param portionCfg.metallic Metalness factor [0..255]
+     * @param portionCfg.roughness Roughness factor [0..255]
+     * @param portionCfg.opacity Opacity [0..255]
+     * @param [portionCfg.meshMatrix] Flat float 4x4 matrix
+     * @param [portionCfg.sceneModelMatrix] Flat float 4x4 matrix
+     * @param portionCfg.worldAABB Flat float AABB World-space AABB
+     * @param portionCfg.pickColor Quantized pick color
      * @returns {number} Portion ID
      */
-    createPortion(cfg) {
+    createPortion(portionCfg) {
+
         if (this._finalized) {
             throw "Already finalized";
         }
-        const portionId = this._bucketPortionIdMapping.length;
-        const portionIdFanout = [];
-        this._bucketPortionIdMapping.push(portionIdFanout);
-        const portionAABB = cfg.worldAABB;
-        cfg.buckets.forEach((bucket, bucketIndex) => {
-            const key = `${cfg.id}#${bucketIndex}`;
-            let bucketPortionGeometry = this._bucketPortionGeometries[key];
-            if (!bucketPortionGeometry) {
-                bucketPortionGeometry = this._createBucketPortionGeometry(bucket);
-                this._bucketPortionGeometries[key] = bucketPortionGeometry;
+
+        const subPortionIds = [];
+        const portionAABB = portionCfg.worldAABB;
+
+        portionCfg.buckets.forEach((bucket, bucketIndex) => {
+
+            const bucketGeometryId = portionCfg.geometryId !== undefined && portionCfg.geometryId !== null
+                ? `${portionCfg.geometryId}#${bucketIndex}`
+                : `${portionCfg.id}#${bucketIndex}`;
+
+            let bucketGeometry = this._bucketGeometries[bucketGeometryId];
+            if (!bucketGeometry) {
+                bucketGeometry = this._createBucketGeometry(bucket);
+                this._bucketGeometries[bucketGeometryId] = bucketGeometry;
             }
-            const bucketPortionAABB = math.collapseAABB3();
-            const bucketPortionId = this._createBucketPortion(
-                cfg,
-                bucketPortionGeometry,
-                bucket,
-                //         math.addVec3( instancing ? objectCfg.origin : cfg.origin, this._state.origin, math.vec3()),
-                bucketPortionAABB
-            );
-            math.expandAABB3(portionAABB, bucketPortionAABB);
-            portionIdFanout.push(bucketPortionId);
+            const subPortionAABB = math.collapseAABB3();
+            const subPortionId = this._createSubPortion(portionCfg, bucketGeometry, bucket, subPortionAABB);
+            math.expandAABB3(portionAABB, subPortionAABB);
+            subPortionIds.push(subPortionId);
         });
+
+        const portionId = this._portionToSubPortionsMap.length;
+        this._portionToSubPortionsMap.push(subPortionIds);
         this.model.numPortions++;
+
         return portionId;
     }
 
-    _createBucketPortionGeometry(bucket) {
+    _createBucketGeometry(bucket) {
 
         // Indices alignement
         // This will make every mesh consume a multiple of INDICES_EDGE_INDICES_ALIGNEMENT_SIZE
@@ -317,7 +323,7 @@ export class TrianglesDataTextureLayer {
 
         dataTextureRamStats.numberOfGeometries++;
 
-        return {
+        const bucketGeometry = {
             vertexBase,
             numVertices,
             numTriangles,
@@ -325,28 +331,30 @@ export class TrianglesDataTextureLayer {
             indicesBase,
             edgeIndicesBase
         };
+
+        return bucketGeometry;
     }
 
-    _createBucketPortion(cfg, bucketPortionGeometry, bucket, bucketPortionAABB) {
-        
-        const color = cfg.color;
-        const metallic = cfg.metallic;
-        const roughness = cfg.roughness;
-        const colors = cfg.colors;
-        const opacity = cfg.opacity;
-        const meshMatrix = cfg.meshMatrix;
-        const sceneModelMatrix = cfg.sceneModelMatrix;
-        const pickColor = cfg.pickColor;
+    _createSubPortion(portionCfg, bucketGeometry, bucket, subPortionAABB) {
+
+        const color = portionCfg.color;
+        const metallic = portionCfg.metallic;
+        const roughness = portionCfg.roughness;
+        const colors = portionCfg.colors;
+        const opacity = portionCfg.opacity;
+        const meshMatrix = portionCfg.meshMatrix;
+        const sceneModelMatrix = portionCfg.sceneModelMatrix;
+        const pickColor = portionCfg.pickColor;
 
         const scene = this.model.scene;
         const buffer = this._buffer;
 
         const state = this._state;
 
-        buffer.perObjectPositionsDecodeMatrices.push(cfg.positionsDecodeMatrix);
+        buffer.perObjectPositionsDecodeMatrices.push(portionCfg.positionsDecodeMatrix);
         buffer.perObjectInstancePositioningMatrices.push(meshMatrix);
 
-        // const positionsCompressed = cfg.positionsCompressed;
+        // const positionsCompressed = portionCfg.positionsCompressed;
         // const positionsIndex = buffer.positionsCompressed.length;
         // const vertsIndex = positionsIndex / 3;
 
@@ -354,37 +362,36 @@ export class TrianglesDataTextureLayer {
 
         const localAABB = math.collapseAABB3();
         math.expandAABB3Points3(localAABB, bucket.positionsCompressed);
-        geometryCompressionUtils.decompressAABB(localAABB, cfg.positionsDecodeMatrix);
+        geometryCompressionUtils.decompressAABB(localAABB, portionCfg.positionsDecodeMatrix);
         const geometryOBB = math.AABB3ToOBB3(localAABB);
 
         for (let i = 0, len = geometryOBB.length; i < len; i += 4) {
             tempVec4a[0] = geometryOBB[i + 0];
             tempVec4a[1] = geometryOBB[i + 1];
             tempVec4a[2] = geometryOBB[i + 2];
+            tempVec4a[3] = 1.0;
             math.transformPoint4(meshMatrix, tempVec4a, tempVec4b);
             if (sceneModelMatrix) {
                 math.transformPoint4(sceneModelMatrix, tempVec4b, tempVec4c);
-                math.expandAABB3Point3(bucketPortionAABB, tempVec4c);
+                math.expandAABB3Point3(subPortionAABB, tempVec4c);
             } else {
-                math.expandAABB3Point3(bucketPortionAABB, tempVec4b);
+                math.expandAABB3Point3(subPortionAABB, tempVec4b);
             }
         }
 
-        // Adjust the world AABB with the object `origin`
-
         // if (this._state.origin) {
         const origin = this._state.origin;
-        bucketPortionAABB[0] += origin[0];
-        bucketPortionAABB[1] += origin[1];
-        bucketPortionAABB[2] += origin[2];
-        bucketPortionAABB[3] += origin[0];
-        bucketPortionAABB[4] += origin[1];
-        bucketPortionAABB[5] += origin[2];
+        subPortionAABB[0] += origin[0];
+        subPortionAABB[1] += origin[1];
+        subPortionAABB[2] += origin[2];
+        subPortionAABB[3] += origin[0];
+        subPortionAABB[4] += origin[1];
+        subPortionAABB[5] += origin[2];
         // }
 
-        math.expandAABB3(this.aabb, bucketPortionAABB);
+        math.expandAABB3(this.aabb, subPortionAABB);
 
-        buffer.perObjectSolid.push(!!cfg.solid);
+        buffer.perObjectSolid.push(!!portionCfg.solid);
 
         if (colors) {
             buffer.perObjectColors.push([colors[0] * 255, colors[1] * 255, colors[2] * 255, 255]);
@@ -393,89 +400,89 @@ export class TrianglesDataTextureLayer {
         }
 
         buffer.perObjectPickColors.push(pickColor);
-        buffer.perObjectVertexBases.push(bucketPortionGeometry.vertexBase);
+        buffer.perObjectVertexBases.push(bucketGeometry.vertexBase);
 
         {
             let currentNumIndices;
-            if (bucketPortionGeometry.numVertices <= (1 << 8)) {
+            if (bucketGeometry.numVertices <= (1 << 8)) {
                 currentNumIndices = state.numIndices8Bits;
-            } else if (bucketPortionGeometry.numVertices <= (1 << 16)) {
+            } else if (bucketGeometry.numVertices <= (1 << 16)) {
                 currentNumIndices = state.numIndices16Bits;
             } else {
                 currentNumIndices = state.numIndices32Bits;
             }
-            buffer.perObjectIndexBaseOffsets.push(currentNumIndices / 3 - bucketPortionGeometry.indicesBase);
+            buffer.perObjectIndexBaseOffsets.push(currentNumIndices / 3 - bucketGeometry.indicesBase);
         }
 
         {
             let currentNumEdgeIndices;
-              if (bucketPortionGeometry.numVertices <= (1 << 8)) {
+            if (bucketGeometry.numVertices <= (1 << 8)) {
                 currentNumEdgeIndices = state.numEdgeIndices8Bits;
-            } else if (bucketPortionGeometry.numVertices <= (1 << 16)) {
+            } else if (bucketGeometry.numVertices <= (1 << 16)) {
                 currentNumEdgeIndices = state.numEdgeIndices16Bits;
             } else {
                 currentNumEdgeIndices = state.numEdgeIndices32Bits;
             }
-            buffer.perObjectEdgeIndexBaseOffsets.push(currentNumEdgeIndices / 2 - bucketPortionGeometry.edgeIndicesBase);
+            buffer.perObjectEdgeIndexBaseOffsets.push(currentNumEdgeIndices / 2 - bucketGeometry.edgeIndicesBase);
         }
 
-        const bucketPortionId = this._portions.length;
-        if (bucketPortionGeometry.numTriangles > 0) {
-            let numIndices = bucketPortionGeometry.numTriangles * 3;
+        const subPortionId = this._subPortions.length;
+        if (bucketGeometry.numTriangles > 0) {
+            let numIndices = bucketGeometry.numTriangles * 3;
             let indicesPortionIdBuffer;
-            if (bucketPortionGeometry.numVertices <= (1 << 8)) {
+            if (bucketGeometry.numVertices <= (1 << 8)) {
                 indicesPortionIdBuffer = buffer.perTriangleNumberPortionId8Bits;
                 state.numIndices8Bits += numIndices;
-                dataTextureRamStats.totalPolygons8Bits += bucketPortionGeometry.numTriangles;
-            } else if (bucketPortionGeometry.numVertices <= (1 << 16)) {
+                dataTextureRamStats.totalPolygons8Bits += bucketGeometry.numTriangles;
+            } else if (bucketGeometry.numVertices <= (1 << 16)) {
                 indicesPortionIdBuffer = buffer.perTriangleNumberPortionId16Bits;
                 state.numIndices16Bits += numIndices;
-                dataTextureRamStats.totalPolygons16Bits += bucketPortionGeometry.numTriangles;
+                dataTextureRamStats.totalPolygons16Bits += bucketGeometry.numTriangles;
             } else {
                 indicesPortionIdBuffer = buffer.perTriangleNumberPortionId32Bits;
                 state.numIndices32Bits += numIndices;
-                dataTextureRamStats.totalPolygons32Bits += bucketPortionGeometry.numTriangles;
+                dataTextureRamStats.totalPolygons32Bits += bucketGeometry.numTriangles;
             }
-            dataTextureRamStats.totalPolygons += bucketPortionGeometry.numTriangles;
-            for (let i = 0; i < bucketPortionGeometry.numTriangles; i += INDICES_EDGE_INDICES_ALIGNEMENT_SIZE) {
-                indicesPortionIdBuffer.push(bucketPortionId);
+            dataTextureRamStats.totalPolygons += bucketGeometry.numTriangles;
+            for (let i = 0; i < bucketGeometry.numTriangles; i += INDICES_EDGE_INDICES_ALIGNEMENT_SIZE) {
+                indicesPortionIdBuffer.push(subPortionId);
             }
         }
 
-        if (bucketPortionGeometry.numEdges > 0) {
-            let numEdgeIndices = bucketPortionGeometry.numEdges * 2;
+        if (bucketGeometry.numEdges > 0) {
+            let numEdgeIndices = bucketGeometry.numEdges * 2;
             let edgeIndicesPortionIdBuffer;
-            if (bucketPortionGeometry.numVertices <= (1 << 8)) {
+            if (bucketGeometry.numVertices <= (1 << 8)) {
                 edgeIndicesPortionIdBuffer = buffer.perEdgeNumberPortionId8Bits;
                 state.numEdgeIndices8Bits += numEdgeIndices;
-                dataTextureRamStats.totalEdges8Bits += bucketPortionGeometry.numEdges;
-            } else if (bucketPortionGeometry.numVertices <= (1 << 16)) {
+                dataTextureRamStats.totalEdges8Bits += bucketGeometry.numEdges;
+            } else if (bucketGeometry.numVertices <= (1 << 16)) {
                 edgeIndicesPortionIdBuffer = buffer.perEdgeNumberPortionId16Bits;
                 state.numEdgeIndices16Bits += numEdgeIndices;
-                dataTextureRamStats.totalEdges16Bits += bucketPortionGeometry.numEdges;
+                dataTextureRamStats.totalEdges16Bits += bucketGeometry.numEdges;
             } else {
                 edgeIndicesPortionIdBuffer = buffer.perEdgeNumberPortionId32Bits;
                 state.numEdgeIndices32Bits += numEdgeIndices;
-                dataTextureRamStats.totalEdges32Bits += bucketPortionGeometry.numEdges;
+                dataTextureRamStats.totalEdges32Bits += bucketGeometry.numEdges;
             }
-            dataTextureRamStats.totalEdges += bucketPortionGeometry.numEdges;
-            for (let i = 0; i < bucketPortionGeometry.numEdges; i += INDICES_EDGE_INDICES_ALIGNEMENT_SIZE) {
-                edgeIndicesPortionIdBuffer.push(bucketPortionId);
+            dataTextureRamStats.totalEdges += bucketGeometry.numEdges;
+            for (let i = 0; i < bucketGeometry.numEdges; i += INDICES_EDGE_INDICES_ALIGNEMENT_SIZE) {
+                edgeIndicesPortionIdBuffer.push(subPortionId);
             }
         }
 
         buffer.perObjectOffsets.push([0, 0, 0]);
 
-        this._portions.push({
+        this._subPortions.push({
             // vertsBase: vertsIndex,
-            numVertices: bucketPortionGeometry.numTriangles
+            numVertices: bucketGeometry.numTriangles
         });
 
         this._numPortions++;
 
         dataTextureRamStats.numberOfPortions++;
 
-        return bucketPortionId;
+        return subPortionId;
     }
 
     // updatePickCameratexture(pickViewMatrix, pickCameraMatrix) {
@@ -647,7 +654,7 @@ export class TrianglesDataTextureLayer {
 
         // Free up memory
         this._buffer = null;
-        this._bucketPortionGeometries = {};
+        this._bucketGeometries = {};
 
         this._finalized = true;
     }
@@ -814,7 +821,7 @@ export class TrianglesDataTextureLayer {
      * @private
      */
     beginDeferredFlags() {
-        this._deferredSetFlagsActive = true;
+       // this._deferredSetFlagsActive = true;
     }
 
     /**
@@ -864,10 +871,10 @@ export class TrianglesDataTextureLayer {
             throw "Not finalized";
         }
         if (flags & ENTITY_FLAGS.CULLED) {
-            this._numCulledLayerPortions += this._bucketPortionIdMapping[portionId].length;
+            this._numCulledLayerPortions += this._portionToSubPortionsMap[portionId].length;
             this.model.numCulledLayerPortions++;
         } else {
-            this._numCulledLayerPortions -= this._bucketPortionIdMapping[portionId].length;
+            this._numCulledLayerPortions -= this._portionToSubPortionsMap[portionId].length;
             this.model.numCulledLayerPortions--;
         }
         this._setFlags(portionId, flags, transparent);
@@ -894,13 +901,13 @@ export class TrianglesDataTextureLayer {
     }
 
     setColor(portionId, color) {
-        const subPortionMapping = this._bucketPortionIdMapping[portionId];
-        for (let i = 0, len = subPortionMapping.length; i < len; i++) {
-            this._subPortionSetColor(subPortionMapping[i], color);
+        const subPortionIds = this._portionToSubPortionsMap[portionId];
+        for (let i = 0, len = subPortionIds.length; i < len; i++) {
+            this._subPortionSetColor(subPortionIds[i], color);
         }
     }
 
-    _subPortionSetColor(portionId, color) {
+    _subPortionSetColor(subPortionId, color) {
         if (!this._finalized) {
             throw "Not finalized";
         }
@@ -912,7 +919,7 @@ export class TrianglesDataTextureLayer {
         tempUint8Array4 [2] = color[2];
         tempUint8Array4 [3] = color[3];
         // object colors
-        textureState.texturePerObjectIdColorsAndFlags._textureData.set(tempUint8Array4, portionId * 32);
+        textureState.texturePerObjectIdColorsAndFlags._textureData.set(tempUint8Array4, subPortionId * 32);
         if (this._deferredSetFlagsActive) {
             this._deferredSetFlagsDirty = true;
             return;
@@ -924,8 +931,8 @@ export class TrianglesDataTextureLayer {
         gl.texSubImage2D(
             gl.TEXTURE_2D,
             0, // level
-            (portionId % 512) * 8, // xoffset
-            Math.floor(portionId / 512), // yoffset
+            (subPortionId % 512) * 8, // xoffset
+            Math.floor(subPortionId / 512), // yoffset
             1, // width
             1, //height
             gl.RGBA_INTEGER,
@@ -947,13 +954,13 @@ export class TrianglesDataTextureLayer {
     }
 
     _setFlags(portionId, flags, transparent, deferred = false) {
-        const subPortionMapping = this._bucketPortionIdMapping[portionId];
-        for (let i = 0, len = subPortionMapping.length; i < len; i++) {
-            this._subPortionSetFlags(subPortionMapping[i], flags, transparent);
+        const subPortionIds = this._portionToSubPortionsMap[portionId];
+        for (let i = 0, len = subPortionIds.length; i < len; i++) {
+            this._subPortionSetFlags(subPortionIds[i], flags, transparent);
         }
     }
 
-    _subPortionSetFlags(portionId, flags, transparent, deferred = false) {
+    _subPortionSetFlags(subPortionId, flags, transparent, deferred = false) {
         if (!this._finalized) {
             throw "Not finalized";
         }
@@ -1025,7 +1032,7 @@ export class TrianglesDataTextureLayer {
         tempUint8Array4 [2] = f2;
         tempUint8Array4 [3] = f3;
         // object flags
-        textureState.texturePerObjectIdColorsAndFlags._textureData.set(tempUint8Array4, portionId * 32 + 8);
+        textureState.texturePerObjectIdColorsAndFlags._textureData.set(tempUint8Array4, subPortionId * 32 + 8);
         if (this._deferredSetFlagsActive) {
             this._deferredSetFlagsDirty = true;
             return;
@@ -1037,8 +1044,8 @@ export class TrianglesDataTextureLayer {
         gl.texSubImage2D(
             gl.TEXTURE_2D,
             0, // level
-            (portionId % 512) * 8 + 2, // xoffset
-            Math.floor(portionId / 512), // yoffset
+            (subPortionId % 512) * 8 + 2, // xoffset
+            Math.floor(subPortionId / 512), // yoffset
             1, // width
             1, //height
             gl.RGBA_INTEGER,
@@ -1052,13 +1059,13 @@ export class TrianglesDataTextureLayer {
     }
 
     _setFlags2(portionId, flags, deferred = false) {
-        const subPortionMapping = this._bucketPortionIdMapping[portionId];
-        for (let i = 0, len = subPortionMapping.length; i < len; i++) {
-            this._subPortionSetFlags2(subPortionMapping[i], flags);
+        const subPortionIds = this._portionToSubPortionsMap[portionId];
+        for (let i = 0, len = subPortionIds.length; i < len; i++) {
+            this._subPortionSetFlags2(subPortionIds[i], flags);
         }
     }
 
-    _subPortionSetFlags2(portionId, flags, deferred = false) {
+    _subPortionSetFlags2(subPortionId, flags, deferred = false) {
         if (!this._finalized) {
             throw "Not finalized";
         }
@@ -1070,7 +1077,7 @@ export class TrianglesDataTextureLayer {
         tempUint8Array4 [2] = 1;
         tempUint8Array4 [3] = 2;
         // object flags2
-        textureState.texturePerObjectIdColorsAndFlags._textureData.set(tempUint8Array4, portionId * 32 + 12);
+        textureState.texturePerObjectIdColorsAndFlags._textureData.set(tempUint8Array4, subPortionId * 32 + 12);
         if (this._deferredSetFlagsActive) {
             this._deferredSetFlagsDirty = true;
             return;
@@ -1082,8 +1089,8 @@ export class TrianglesDataTextureLayer {
         gl.texSubImage2D(
             gl.TEXTURE_2D,
             0, // level
-            (portionId % 512) * 8 + 3, // xoffset
-            Math.floor(portionId / 512), // yoffset
+            (subPortionId % 512) * 8 + 3, // xoffset
+            Math.floor(subPortionId / 512), // yoffset
             1, // width
             1, //height
             gl.RGBA_INTEGER,
@@ -1098,13 +1105,13 @@ export class TrianglesDataTextureLayer {
     }
 
     setOffset(portionId, offset) {
-        const subPortionMapping = this._bucketPortionIdMapping[portionId];
-        for (let i = 0, len = subPortionMapping.length; i < len; i++) {
-            this._subPortionSetOffset(subPortionMapping[i], offset);
+        const subPortionIds = this._portionToSubPortionsMap[portionId];
+        for (let i = 0, len = subPortionIds.length; i < len; i++) {
+            this._subPortionSetOffset(subPortionIds[i], offset);
         }
     }
 
-    _subPortionSetOffset(portionId, offset) {
+    _subPortionSetOffset(subPortionId, offset) {
         if (!this._finalized) {
             throw "Not finalized";
         }
@@ -1118,7 +1125,7 @@ export class TrianglesDataTextureLayer {
         tempFloat32Array3 [1] = offset[1];
         tempFloat32Array3 [2] = offset[2];
         // object offset
-        textureState.texturePerObjectIdOffsets._textureData.set(tempFloat32Array3, portionId * 3);
+        textureState.texturePerObjectIdOffsets._textureData.set(tempFloat32Array3, subPortionId * 3);
         if (this._deferredSetFlagsActive) {
             this._deferredSetFlagsDirty = true;
             return;
@@ -1131,7 +1138,7 @@ export class TrianglesDataTextureLayer {
             gl.TEXTURE_2D,
             0, // level
             0, // x offset
-            portionId, // yoffset
+            subPortionId, // yoffset
             1, // width
             1, // height
             gl.RGB,

@@ -2438,6 +2438,9 @@ export class SceneModel extends Component {
             return;
         }
 
+        // cfg.normalsCompressed = null;
+        // cfg.normals = null;
+
         if (this._scheduledMeshes[cfg.id]) {
             this.error(`[createMesh] SceneModel already has a mesh with this ID: ${cfg.id}`);
             return;
@@ -2624,13 +2627,13 @@ export class SceneModel extends Component {
                 return;
             }
 
-            cfg.origin = cfg.origin ? math.addVec3(this._origin, cfg.origin, tempVec3a) : this._origin;
+            cfg.origin = math.vec3(cfg.origin ? math.addVec3(this._origin, cfg.origin, tempVec3a) : this._origin);
             cfg.positionsDecodeMatrix = cfg.geometry.positionsDecodeMatrix;
 
             // Matrix
 
             if (cfg.matrix) {
-                cfg.meshMatrix = cfg.matrix;
+                cfg.meshMatrix = cfg.matrix.slice();
             } else {
                 const scale = cfg.scale || DEFAULT_SCALE;
                 const position = cfg.position || DEFAULT_POSITION;
@@ -2741,7 +2744,7 @@ export class SceneModel extends Component {
             cfg.positionsDecodeMatrix = cfg.positionsDecodeMatrix.slice();
         }
         cfg.solid = (cfg.primitive === "solid");
-        mesh.origin = cfg.origin;
+        mesh.origin = math.vec3(cfg.origin);
         switch (cfg.type) {
             case DTX:
                 cfg.meshMatrix = cfg.meshMatrix.slice();
@@ -3463,7 +3466,6 @@ export class SceneModel extends Component {
      * Once finalized, you can't add anything more to this SceneModel.
      */
     finalize() {
-
         if (this.destroyed) {
             return;
         }
@@ -3471,21 +3473,12 @@ export class SceneModel extends Component {
             this._vfcManager.finalize(() => {// Makes deferred calls to #_createEntity() and #_createMesh()
             });
         }
-        for (const layerId in this._dtxLayers) {
-            if (this._dtxLayers.hasOwnProperty(layerId)) {
-                this._dtxLayers[layerId].finalize();
-            }
+        for (let i = 0, len = this._layerList.length; i < len; i++) {
+            const layer = this._layerList[i];
+            layer.finalize();
         }
-        for (const layerId in this._vboInstancingLayers) {
-            if (this._vboInstancingLayers.hasOwnProperty(layerId)) {
-                this._vboInstancingLayers[layerId].finalize();
-            }
-        }
-        for (let layerId in this._vboBatchingLayers) {
-            if (this._vboBatchingLayers.hasOwnProperty(layerId)) {
-                this._vboBatchingLayers[layerId].finalize();
-            }
-        }
+        this._dtxLayers = {};
+        this._vboInstancingLayers = {};
         this._vboBatchingLayers = {};
         for (let i = 0, len = this._entityList.length; i < len; i++) {
             const node = this._entityList[i];
@@ -3511,7 +3504,6 @@ export class SceneModel extends Component {
         }
         this.glRedraw();
         this.scene._aabbDirty = true;
-
         if (this.scene.lod.enabled) {
             this._lodManager = this.scene.lod.getLODManager(this);
         }
@@ -3891,14 +3883,21 @@ export class SceneModel extends Component {
             }
         }
         this._vboBatchingLayers = {};
+        for (let layerId in this._vboInstancingLayers) {
+            if (this._vboInstancingLayers.hasOwnProperty(layerId)) {
+                this._vboInstancingLayers[layerId].destroy();
+            }
+        }
+        this._vboInstancingLayers = {};
         this.scene.camera.off(this._onCameraViewMatrix);
         for (let i = 0, len = this._layerList.length; i < len; i++) {
             this._layerList[i].destroy();
         }
+        this._layerList = [];
         for (let i = 0, len = this._entityList.length; i < len; i++) {
             this._entityList[i]._destroy();
         }
-        Object.entries(this._geometries).forEach(([key, geometry]) => {
+        Object.entries(this._geometries).forEach(([id, geometry]) => {
             geometry.destroy();
         });
         this._geometries = {};
