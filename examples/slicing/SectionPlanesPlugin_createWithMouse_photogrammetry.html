@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <style>
+        #mySectionPlanesOverviewCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 70px;
+            right: 10px;
+            z-index: 200000;
+        }
+    </style>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<canvas id="mySectionPlanesOverviewCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/section_plane_icon.png"/>
+    <h1>SectionPlanesPlugin</h1>
+    <h2>Click objects to create section planes.</h2>
+    <h3>Components used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
+               target="_other">GLTFLoaderPlugin</a>
+
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html"
+               target="_other">SectionPlanesPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="https://sketchfab.com/matousekfoto"
+               target="_other">Model source</a>
+        </li>
+    </ul>
+</div>
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer, GLTFLoaderPlugin, SectionPlanesPlugin, math} from "../../dist/xeokit-sdk.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true,
+        colorTextureEnabled: true
+    });
+
+    viewer.camera.eye = [-3.351107502463288, 3.9321259279903114, 4.030067755126885];
+    viewer.camera.look = [-0.687950493700225, 0.9435747389607769, 0.21646512460703526];
+    viewer.camera.up = [0.309485261773766, 0.8413154758004762, -0.4431784549404927];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Add a GLTFLoaderPlugin - we'll use this to load the model geometry
+    //------------------------------------------------------------------------------------------------------------------
+
+    const gltfLoader = new GLTFLoaderPlugin(viewer);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Add a SectionPlanesPlugin - we'll use this to create cross-section planes
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sectionPlanes = new SectionPlanesPlugin(viewer, {
+        overviewCanvasId: "mySectionPlanesOverviewCanvas",
+        overviewVisible: true
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load the .gltf model
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sceneModel = gltfLoader.load({
+        id: "myModel",
+        src: "../../assets/models/gltf/skatepark/scene.gltf",
+        colorTextureEnabled: true
+    });
+
+    sceneModel.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(sceneModel);
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Use the AnnotationsPlugin to create an annotation wherever we click on an object
+    //------------------------------------------------------------------------------------------------------------------
+
+    var i = 1;
+
+    viewer.scene.input.on("mouseclicked", (coords) => {
+
+        var pickResult = viewer.scene.pick({
+            canvasPos: coords,
+            pickSurface: true  // <<------ This causes picking to find the intersection point on the entity
+        });
+
+        if (pickResult && pickResult.worldNormal) { // Disallow SectionPlanes on point clouds, because points don't have normals
+
+            const sectionPlane = sectionPlanes.createSectionPlane({
+                pos: pickResult.worldPos,
+                dir: math.mulVec3Scalar(pickResult.worldNormal, -1)
+            });
+
+            sectionPlanes.showControl(sectionPlane.id);
+
+            i++;
+        }
+    });
+
+    window.viewer = viewer;
+
+</script>
+
+</html>

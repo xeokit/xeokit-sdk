@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/gltf_logo.png"/>
+    <h1>GLTFLoaderPlugin</h1>
+    <h2>Physically-based rendering of a binary glTF test model</h2>
+    <p>In this example, we're using a <a
+            href="../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
+            target="_other">GLTFLoaderPlugin</a> to load the <a
+            href="https://sketchfab.com/bimcc"
+            target="_other">House Plan</a> demo model from
+        binary glTF (.glb).</p>
+    <h3>Components used</h3>
+    <ul>
+        <li>
+            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
+               target="_other">GLTFLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../docs/class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html"
+               target="_other">FastNavPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="https://sketchfab.com/bimcc"
+               target="_other">Model source</a>
+        </li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    import {Viewer, GLTFLoaderPlugin, ReflectionMap, FastNavPlugin, sRGBEncoding} from "../../dist/xeokit-sdk.es.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true,
+        pbrEnabled: true
+    });
+
+    viewer.camera.eye = [1394.38, 3.78, -247.05];
+    viewer.camera.look = [1391.46, 0.89, -244.24];
+    viewer.camera.up = [-0.41, 0.81, 0.40];
+
+    viewer.scene.gammaInput = true;
+    viewer.scene.gammaOutput = true;
+    viewer.scene.gammaFactor = 2.4;
+
+    viewer.scene.sao.enabled = true; // Higher-quality SAO settings
+    viewer.scene.sao.numSamples = 100;
+    viewer.scene.sao.kernelRadius = 170;
+    viewer.scene.sao.intensity = 0.2;
+
+    const fastNavPlugin = new FastNavPlugin(viewer, {
+        hideEdges: true,
+        hideSAO: true,
+        hideColorTexture: false,
+        hidePBR: false,
+        hideTransparentObjects: false,
+        scaleCanvasResolution: false,
+        scaleCanvasResolutionFactor: 0.5,
+        delayBeforeRestore: true,
+        delayBeforeRestoreSeconds: 0.4
+    });
+
+    new ReflectionMap(viewer.scene, {
+        src: [
+            "../../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PX.png",
+            "../../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NX.png",
+            "../../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PY.png",
+            "../../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NY.png",
+            "../../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
+            "../../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
+        ],
+        encoding: sRGBEncoding
+    });
+
+    const gltfLoader = new GLTFLoaderPlugin(viewer);
+
+    const sceneModel = gltfLoader.load({
+        id: "myHousePlan",
+        src: "../../assets/models/gltf/HousePlan/glTF-Binary/HousePlan.glb",
+        edges: true
+    });
+
+    sceneModel.on("loaded", ()=>{
+        viewer.cameraFlight.jumpTo(sceneModel);
+    });
+
+</script>
+</html>
