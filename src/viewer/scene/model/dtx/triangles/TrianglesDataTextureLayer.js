@@ -53,6 +53,8 @@ export class TrianglesDataTextureLayer {
 
     constructor(model, cfg) {
 
+        console.log("Creating TrianglesDataTextureLayer");
+
         this._layerNumber = _numberOfLayers++;
 
         dataTextureRamStats.numberOfLayers++;

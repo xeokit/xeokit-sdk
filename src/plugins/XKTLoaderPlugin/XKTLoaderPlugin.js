@@ -724,7 +724,10 @@ class XKTLoaderPlugin extends Plugin {
      * all geometry instances into batches (````false````), and not use instancing to render them. Setting this ````false```` can significantly
      * improve Viewer performance for models that have excessive geometry reuse, but may also increases the amount of
      * browser and GPU memory used by the model. See [#769](https://github.com/xeokit/xeokit-sdk/issues/769) for more info.
-     * @param {Boolean} [params.dtxEnabled=false] Set ````true```` to use data textures (DTX), where appropriate, to represent the returned model. Set false to always use vertex buffer objects (VBOs). Note that DTX is only applicable to non-textured triangle meshes, and that VBOs are always used for meshes that have textures, line segments, or point primitives.
+     * @param {Boolean} [params.dtxEnabled=true] When ````true```` (default) use data textures (DTX), where appropriate, to
+     * represent the returned model. Set false to always use vertex buffer objects (VBOs). Note that DTX is only applicable
+     * to non-textured triangle meshes, and that VBOs are always used for meshes that have textures, line segments, or point
+     * primitives. Only works while {@link DTX#enabled} is also ````true````.
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
      */
     load(params = {}) {

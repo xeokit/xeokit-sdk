@@ -1116,6 +1116,10 @@ export class SceneModel extends Component {
      * to convert transcoded texture data. Only required when we'll be providing transcoded data
      * to {@link SceneModel#createTexture}. We assume that all transcoded texture data added to a  ````SceneModel````
      * will then in a format supported by this transcoder.
+     * @param {Boolean} [params.dtxEnabled=true] When ````true```` (default) use data textures (DTX), where appropriate, to
+     * represent the returned model. Set false to always use vertex buffer objects (VBOs). Note that DTX is only applicable
+     * to non-textured triangle meshes, and that VBOs are always used for meshes that have textures, line segments, or point
+     * primitives. Only works while {@link DTX#enabled} is also ````true````.
      */
     constructor(owner, cfg = {}) {
 
@@ -1123,7 +1127,7 @@ export class SceneModel extends Component {
 
         console.log("Creating SceneModel");
 
-        this._dtxEnabled = this.scene.dtx.enabled && !!cfg.dtxEnabled;
+        this._dtxEnabled = this.scene.dtx.enabled && (cfg.dtxEnabled !== false);
 
         this._enableVertexWelding = true;
         this._enableIndexBucketing = true;

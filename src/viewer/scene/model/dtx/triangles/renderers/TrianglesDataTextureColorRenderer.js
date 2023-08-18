@@ -101,39 +101,33 @@ export class TrianglesDataTextureColorRenderer {
             }
         }
 
-        if (state.numIndices8Bits > 0)
-        {
+        if (state.numIndices8Bits > 0) {
             textureState.bindTriangleIndicesTextures(
                 this._program,
                 this._uTexturePerPolygonIdPortionIds, 
                 this._uTexturePerPolygonIdIndices, 
                 8 // 8 bits indices
             );
-
             gl.drawArrays(gl.TRIANGLES, 0, state.numIndices8Bits);
         }
 
-        if (state.numIndices16Bits > 0)
-        {
+        if (state.numIndices16Bits > 0) {
             textureState.bindTriangleIndicesTextures(
                 this._program,
                 this._uTexturePerPolygonIdPortionIds, 
                 this._uTexturePerPolygonIdIndices, 
                 16 // 16 bits indices
             );
-
             gl.drawArrays(gl.TRIANGLES, 0, state.numIndices16Bits);
         }
         
-        if (state.numIndices32Bits > 0)
-        {
+        if (state.numIndices32Bits > 0) {
             textureState.bindTriangleIndicesTextures(
                 this._program,
                 this._uTexturePerPolygonIdPortionIds, 
                 this._uTexturePerPolygonIdIndices, 
                 32 // 32 bits indices
             );
-
             gl.drawArrays(gl.TRIANGLES, 0, state.numIndices32Bits);
         }
 
