@@ -7,7 +7,7 @@
     <title>xeokit Example</title>
     <link href="../css/pageStyle.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
-    <script src="libs/dat.gui.min.js" type="text/javascript"></script>
+    <script src="../libs/dat.gui.min.js" type="text/javascript"></script>
     <link href="../css/dat-gui-light-style.css" rel="stylesheet"/>
     <style>
         .xeokit-camera-pivot-marker {
@@ -81,7 +81,7 @@
     viewer.scene.camera.look = [637290.78125, 851209.90625, 510.70001220703125];
     viewer.scene.camera.up = [0.273790165300491, 0.686401912000719, 0.673714598763072];
 
-    viewer.scene.camera.project.far = 100000;
+    viewer.scene.camera.project.far = 10000000;
 
     const pivotElement = document.createRange().createContextualFragment("<div class='xeokit-camera-pivot-marker'></div>").firstChild;
     document.body.appendChild(pivotElement);
