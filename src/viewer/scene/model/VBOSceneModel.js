@@ -3,8 +3,8 @@ import {SceneModel} from "./../index.js";
 /**
  * @desc A high-performance model representation for efficient rendering and low memory usage.
  *
- * * PerformanceModel was replaced with {@link SceneModel} in ````xeokit-sdk v2.4````.
- * * PerformanceModel currently extends {@link SceneModel}, in order to maintain backward-compatibility until we remove PerformanceModel.
+ * * VBOSceneModel was replaced with {@link SceneModel} in ````xeokit-sdk v2.4````.
+ * * VBOSceneModel currently extends {@link SceneModel}, in order to maintain backward-compatibility until we remove VBOSceneModel.
  * * See {@link SceneModel} for API details.
  *
  * @deprecated
@@ -12,7 +12,7 @@ import {SceneModel} from "./../index.js";
  * @implements {Entity}
  * @extends {SceneModel}
  */
-class PerformanceModel extends SceneModel {
+class VBOSceneModel extends SceneModel {
 
     /**
      * See {@link VBOSceneModel} for details.
@@ -25,4 +25,4 @@ class PerformanceModel extends SceneModel {
     }
 }
 
-export {PerformanceModel};
+export {VBOSceneModel};

@@ -20,7 +20,6 @@ import {PointsMaterial} from "../materials/PointsMaterial.js";
 import {LinesMaterial} from "../materials/LinesMaterial.js";
 import {LOD} from "../lod/LOD.js";
 import {VFC} from "../vfc/VFC";
-import {DTX} from "../dtx/DTX";
 
 // Enables runtime check for redundant calls to object state update methods, eg. Scene#_objectVisibilityUpdated
 const ASSERT_OBJECT_STATE_UPDATE = false;
@@ -815,14 +814,6 @@ class Scene extends Component {
             enabled: cfg.saoEnabled
         });
 
-        /** Configures data texture-based (DTX) model representation and rendering mode for this Scene.
-         * @type {DTX}
-         * @final
-         */
-        this.dtx = new DTX(this, {
-            enabled: cfg.dtxEnabled
-        });
-
         this.ticksPerRender = cfg.ticksPerRender;
         this.ticksPerOcclusionTest = cfg.ticksPerOcclusionTest;
         this.passes = cfg.passes;
@@ -834,6 +825,7 @@ class Scene extends Component {
         this._entityOffsetsEnabled = !!cfg.entityOffsetsEnabled;
         this._logarithmicDepthBufferEnabled = !!cfg.logarithmicDepthBufferEnabled;
 
+        this._dtxEnabled = (cfg.dtxEnabled !== false);
         this._pbrEnabled = !!cfg.pbrEnabled;
         this._colorTextureEnabled = (cfg.colorTextureEnabled !== false);
         this._dtxEnabled = !!cfg.dtxEnabled;
@@ -1286,6 +1278,36 @@ class Scene extends Component {
      */
     get pbrEnabled() {
         return this._pbrEnabled;
+    }
+
+    /**
+     * Sets whether data texture scene representation (DTX) is enabled for the {@link Scene}.
+     *
+     * Even when enabled, DTX will only work if supported.
+     *
+     * Default value is ````false````.
+     *
+     * @type {Boolean}
+     */
+    set dtxEnabled(value) {
+        value = !!value;
+        if (this._dtxEnabled === value) {
+            return;
+        }
+        this._dtxEnabled = value;
+    }
+
+    /**
+     * Gets whether data texture-based scene representation (DTX) is enabled for the {@link Scene}.
+     *
+     * Even when enabled, DTX will only apply if supported.
+     *
+     * Default value is ````false````.
+     *
+     * @type {Boolean}
+     */
+    get dtxEnabled() {
+        return this._dtxEnabled;
     }
 
     /**

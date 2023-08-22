@@ -259,10 +259,11 @@ class SnapInstancingDepthRenderer {
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
             src.push("out float vFragDepth;");
+            src.push("bool isPerspectiveMatrix(mat4 m) {");
+            src.push("    return (m[2][3] == - 1.0);");
+            src.push("}");
+            src.push("out float isPerspective;");
         }
-        src.push("bool isPerspectiveMatrix(mat4 m) {");
-        src.push("    return (m[2][3] == - 1.0);");
-        src.push("}");
         src.push("vec2 remapClipPos(vec2 clipPos) {");
         src.push("    float x = (clipPos.x - snapVectorA.x) * snapInvVectorAB.x;");
         src.push("    float y = (clipPos.y - snapVectorA.y) * snapInvVectorAB.y;");

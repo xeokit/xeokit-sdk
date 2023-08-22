@@ -278,8 +278,6 @@ export class TrianglesDataTextureSilhouetteRenderer {
         src.push("    return (m[2][3] == - 1.0);");
         src.push("}");
 
-        src.push("out float isPerspective;");
-
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
             src.push("flat out uint vFlags2;");

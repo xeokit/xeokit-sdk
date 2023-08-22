@@ -193,7 +193,7 @@ export class SnapBatchingDepthBufInitRenderer {
         const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
         src.push ('#version 300 es');
-        src.push("// SnapBatchingDepthBufInitRenderer vertex shader");
+        src.push("// VBO SnapBatchingDepthBufInitRenderer vertex shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -225,6 +225,7 @@ export class SnapBatchingDepthBufInitRenderer {
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
             src.push("out float vFragDepth;");
+            src.push("out float isPerspective;");
         }
         src.push("bool isPerspectiveMatrix(mat4 m) {");
         src.push("    return (m[2][3] == - 1.0);");
@@ -278,7 +279,7 @@ export class SnapBatchingDepthBufInitRenderer {
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
         src.push ('#version 300 es');
-        src.push("// SnapBatchingDepthBufInitRenderer fragment shader");
+        src.push("// VBO SnapBatchingDepthBufInitRenderer fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
