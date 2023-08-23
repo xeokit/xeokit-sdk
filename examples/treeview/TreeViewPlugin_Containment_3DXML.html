@@ -185,7 +185,7 @@
 <canvas id="myNavCubeCanvas"></canvas>
 <div id="treeViewContainer"></div>
 <div class="slideout-sidebar">
-    <img class="info-icon" src="../../assets/images/solidworks.png"/>
+    <img class="info-icon" src="../../../assets/images/solidworks.png"/>
     <h1>XML3DLoaderPlugin</h1>
     <h2>Tree view with 3DXML model</h2>
     <h3>Stats</h3>
@@ -305,12 +305,12 @@
 
     new ReflectionMap(viewer.scene, {
         src: [
-            "../../assets/textures/reflect/desertRoad/px.png",
-            "../../assets/textures/reflect/desertRoad/nx.png",
-            "../../assets/textures/reflect/desertRoad/py.png",
-            "../../assets/textures/reflect/desertRoad/ny.png",
-            "../../assets/textures/reflect/desertRoad/pz.png",
-            "../../assets/textures/reflect/desertRoad/nz.png"
+            "../../../assets/textures/reflect/desertRoad/px.png",
+            "../../../assets/textures/reflect/desertRoad/nx.png",
+            "../../../assets/textures/reflect/desertRoad/py.png",
+            "../../../assets/textures/reflect/desertRoad/ny.png",
+            "../../../assets/textures/reflect/desertRoad/pz.png",
+            "../../../assets/textures/reflect/desertRoad/nz.png"
         ],
         encoding: "sRGB"
     });
@@ -325,7 +325,7 @@
 
     const sceneModel = xml3dLoader.load({
         id: "myModel",
-        src: "../../assets/models/xml3d/3dpreview.3dxml",
+        src: "../../../assets/models/xml3d/3dpreview.3dxml",
         materialType: "SpecularMaterial", // <<----------- Create physically-based SpecularMaterials
         edges: true,
         createMetaModel: true
