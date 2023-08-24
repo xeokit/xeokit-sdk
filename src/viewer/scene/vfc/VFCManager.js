@@ -1,5 +1,8 @@
 import {VFCState} from "./VFCState";
 
+/**
+ * @private
+ */
 export class VFCManager {
 
     constructor(scene, sceneModel) {

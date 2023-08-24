@@ -1,6 +1,5 @@
 import {clusterizeV2} from "./cluster-helper";
 import {math} from "../math";
-import {RBush3D} from "./rbush3d.js";
 
 const tempVec3 = math.vec3();
 
@@ -63,43 +62,21 @@ const VISIBILITY_CHECK_ENVOLVES_V = (1 << 14);
  * Data structure containing pre-initialized `View Frustum Culling` data.
  *
  * Will be used by the rest of `View Frustum Culling` related code.
+ *
+ * @private
  */
 export class VFCState {
 
     constructor() {
 
-        /**
-         * The pre-computed AABB tree that will be used for efficient View Frustum Culling.
-         *
-         * @type {RBush3D}
-         * @private
-         */
         this._aabbTree = null;
-
-        /**
-         * @type {Array<{mesh: object, clusterNumber: number}>}
-         * @private
-         */
         this._orderedMeshList = [];
-
-        /**
-         * @type {Array<object>}
-         * @private
-         */
         this._orderedEntityList = [];
-
-        /**
-         * @private
-         */
         this._frustumProps = {
             dirty: true,
             wMultiply: 1.0,
             hMultiply: 1.0,
         };
-
-        /**
-         * @private
-         */
         this._cullFrame = 0;
 
         /**
@@ -129,7 +106,10 @@ export class VFCState {
                 const meshIndex = entity.meshIds[j];
                 meshList[meshIndex].id = this._orderedMeshList.length;
                 newMeshIds.push(this._orderedMeshList.length);
-                this._orderedMeshList.push({clusterNumber: clusterNumber, mesh: meshList[meshIndex]});
+                this._orderedMeshList.push({
+                    clusterNumber: clusterNumber,
+                    mesh: meshList[meshIndex]
+                });
             }
             entity.meshIds = newMeshIds;
             this._orderedEntityList.push(entity);
@@ -252,11 +232,7 @@ export class VFCState {
     _getPointsForBBox(bbox) {
         const points = [];
         for (let i = 0; i < 8; i++) {
-            points.push([
-                (i & 1) ? bbox.maxX : bbox.minX,
-                (i & 2) ? bbox.maxY : bbox.minY,
-                (i & 4) ? bbox.maxZ : bbox.minZ
-            ]);
+            points.push(new Float32Array([(i & 1) ? bbox.maxX : bbox.minX, (i & 2) ? bbox.maxY : bbox.minY, (i & 4) ? bbox.maxZ : bbox.minZ]));
         }
         return points;
     }
@@ -331,8 +307,8 @@ export class VFCState {
         // apply the inverse transform to the camera eye/look, since the culling
         // result is equivalent.
         const invWorldMatrix = math.inverseMat4(sceneModel.worldMatrix, math.mat4());
-        const modelCamEye = math.transformVec3(this._camera.eye, invWorldMatrix, [0, 0, 0]);
-        const modelCamLook = math.transformVec3(this._camera.look, invWorldMatrix, [0, 0, 0]);
+        const modelCamEye = math.transformVec3(invWorldMatrix, this._camera.eye, [0, 0, 0]);
+        const modelCamLook = math.transformVec3(invWorldMatrix, this._camera.look, [0, 0, 0]);
         this._frustumProps.forward = math.normalizeVec3(math.subVec3(modelCamLook, modelCamEye, [0, 0, 0]), [0, 0, 0]);
         this._frustumProps.up = math.normalizeVec3(this._camera.up, [0, 0, 0]);
         this._frustumProps.right = math.normalizeVec3(math.cross3Vec3(this._frustumProps.forward, this._frustumProps.up, [0, 0, 0]), [0, 0, 0]);
