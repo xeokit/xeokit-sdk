@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/bim_icon.png"/>
+    <h1>WebIFCLoaderPlugin</h1>
+    <h2>Using model metadata to X-ray some objects.</h2>
+    <p><a href="../../docs/class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html"
+          target="_other">WebIFCLoaderPlugin</a> is the easiest way to load IFC models into a xeokit Viewer.</p>
+    <p>WebIFCLoaderPlugin loads IFC STEP files and parses them within the browser using <a
+            href="https://github.com/tomvandig/web-ifc"
+            target="_other">web-ifc</a>, to create 3D objects within the
+        Viewer.</p>
+
+    <p>This example loads an IFC model, then X-rays the bottom IfcBuildingStorey.</p>
+
+    <h3>Limitations</h3>
+    <p>Loading and parsing huge IFC STEP files can be slow, and can overwhelm the browser, however. To view your
+        largest IFC models, we recommend instead pre-converting those to xeokit's compressed native .XKT format, then
+        loading them with <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+                             target="_other">XKTLoaderPlugin</a>.</p>
+    <h3>Stats</h3>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+    </ul>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html"
+               target="_other">WebIFCLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/metadata/MetaScene.js~MetaScene.html"
+               target="_other">MetaScene</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
+               target="_other">Model source</a>
+        </li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer, WebIFCLoaderPlugin} from "../../dist/xeokit-sdk.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // 1. Create a Viewer,
+    // 2. Arrange the camera,
+    // 3. Tweak the xray material
+    //------------------------------------------------------------------------------------------------------------------
+
+    // 1
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    // 2
+    viewer.camera.eye = [-3.933, 2.855, 27.018];
+    viewer.camera.look = [4.400, 3.724, 8.899];
+    viewer.camera.up = [-0.018, 0.999, 0.039];
+
+    // 3
+    viewer.scene.xrayMaterial.fillColor = [0.0, 0.0, 1.0];
+    viewer.scene.xrayMaterial.edgeColor = [0.0, 0.0, 0.0];
+    viewer.scene.xrayMaterial.fillAlpha = 0.05;
+    viewer.scene.xrayMaterial.edgeAlpha = 0.3;
+
+
+    //------------------------------------------------------------------------------------------------------------------
+    // 1. Create an XKT loader plugin,
+    // 2. Load a XKT model
+    //------------------------------------------------------------------------------------------------------------------
+
+    // 1
+    const ifcLoader = new WebIFCLoaderPlugin(viewer, {
+        //wasmPath: "../dist/" // <<------- Path to web-ifc.wasm, which does the IFC parsing for us
+        wasmPath: "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/"
+    });
+
+    // 2
+    const sceneModel = ifcLoader.load({                                     // Creates a Node representing the model
+        id: "myModel",
+        src: "../../assets/models/ifc/Duplex.ifc",
+        excludeTypes: ["IfcSpace"],
+        edges: true
+    });
+
+    const t0 = performance.now();
+
+    document.getElementById("time").innerHTML = "Loading model...";
+
+    sceneModel.on("loaded", ()=>{
+        viewer.cameraFlight.jumpTo(sceneModel);
+    });
+
+    sceneModel.on("loaded", function () {
+        const t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
+
+        //--------------------------------------------------------------------------------------------------------------
+        // 1. Find metadata on the bottom storey
+        // 2. X-ray all the objects except for the bottom storey
+        // 3. Fit the bottom storey in view
+        //--------------------------------------------------------------------------------------------------------------
+
+        // 1
+        const metaModel = viewer.metaScene.metaModels["myModel"];       // MetaModel with ID "myModel"
+
+        debugger;
+        const metaObject
+            = viewer.metaScene.metaObjects["1xS3BCk291UvhgP2dvNsgp"];   // MetaObject with ID "1xS3BCk291UvhgP2dvNsgp"
+
+        const name = metaObject.name;                                   // "01 eerste verdieping"
+        const type = metaObject.type;                                   // "IfcBuildingStorey"
+        const parent = metaObject.parent;                               // MetaObject with type "IfcBuilding"
+        const children = metaObject.children;                           // Array of child MetaObjects
+        const objectId = metaObject.id;                                 // "1xS3BCk291UvhgP2dvNsgp"
+        const objectIds = viewer.metaScene.getObjectIDsInSubtree(objectId);   // IDs of leaf sub-objects
+        const aabb = viewer.scene.getAABB(objectIds);                   // Axis-aligned boundary of the leaf sub-objects
+
+        // 2
+        viewer.scene.setObjectsXRayed(viewer.scene.objectIds, true);
+        viewer.scene.setObjectsXRayed(objectIds, false);
+
+        // 3
+        viewer.cameraFlight.flyTo(aabb);
+    });
+
+</script>
+</html>
