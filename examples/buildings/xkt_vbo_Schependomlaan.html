@@ -127,23 +127,10 @@
 <canvas id="myNavCubeCanvas"></canvas>
 <div id="treeViewContainer"></div>
 <div class="slideout-sidebar">
-    <img class="info-icon" style="width:280px; padding-bottom:10px;" src="../../assets/images/cityJSONLogo.svg"/>
+    <img class="info-icon" style="width:280px; padding-bottom:10px;" src="../../assets/images/bim_icon.png"/>
     <h1>XKTLoaderPlugin</h1>
-    <h2>Loading a CityJSON  model</h2>
-    <p><a href="https://www.cityjson.org">CityJSON</a> is a JSON-based encoding for a subset of the CityGML data model,
-        which is an open standardised data model and exchange format to store digital 3D models of cities and
-        landscapes.</p>
-    <h2>Limitations</h2>
-    <p><a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
-          target="_other">XKTLoaderPlugin</a> is the most straightforward way to view CityJSON models with xeokit,
-        since it
-        loads
-        the CityJSON file directly off the file system, without needing it to be pre-converted.</p>
-    <p>Loading and parsing huge CityJSON files can be slow, and can overwhelm the browser, however. To view your
-        largest CityJSON models, we recommend instead pre-converting those to xeokit's compressed native .XKT format, then
-        loading them with <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
-                             target="_other">XKTLoaderPlugin</a>.</p>
-    <h3>Stats</h3>
+    <h2>Loading an XKT model</h2>
+     <h3>Stats</h3>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
@@ -177,7 +164,7 @@
 
 <script type="module">
 
-    import {Viewer, XKTLoaderPlugin, NavCubePlugin, TreeViewPlugin} from "../../dist/xeokit-sdk.es.js";
+    import {Viewer, XKTLoaderPlugin, NavCubePlugin, TreeViewPlugin, FastNavPlugin} from "../../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -202,6 +189,18 @@
         containerElement: document.getElementById("treeViewContainer"),
         hierarchy: "types",
         autoExpandDepth: 1
+    });
+
+    new FastNavPlugin(viewer, {
+        hideEdges: true,
+        hideSAO: true,
+        hideColorTexture: false,
+        hidePBR: false,
+        hideTransparentObjects: false,
+        scaleCanvasResolution: false,
+        scaleCanvasResolutionFactor: 0.5,
+        delayBeforeRestore: true,
+        delayBeforeRestoreSeconds: 0.4
     });
 
     const xktLoader = new XKTLoaderPlugin(viewer);

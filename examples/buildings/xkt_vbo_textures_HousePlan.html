@@ -127,23 +127,10 @@
 <canvas id="myNavCubeCanvas"></canvas>
 <div id="treeViewContainer"></div>
 <div class="slideout-sidebar">
-    <img class="info-icon" style="width:280px; padding-bottom:10px;" src="../../assets/images/cityJSONLogo.svg"/>
+    <img class="info-icon" style="width:280px; padding-bottom:10px;" src="../../assets/images/bim_icon.png"/>
     <h1>XKTLoaderPlugin</h1>
-    <h2>Loading a CityJSON  model</h2>
-    <p><a href="https://www.cityjson.org">CityJSON</a> is a JSON-based encoding for a subset of the CityGML data model,
-        which is an open standardised data model and exchange format to store digital 3D models of cities and
-        landscapes.</p>
-    <h2>Limitations</h2>
-    <p><a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
-          target="_other">XKTLoaderPlugin</a> is the most straightforward way to view CityJSON models with xeokit,
-        since it
-        loads
-        the CityJSON file directly off the file system, without needing it to be pre-converted.</p>
-    <p>Loading and parsing huge CityJSON files can be slow, and can overwhelm the browser, however. To view your
-        largest CityJSON models, we recommend instead pre-converting those to xeokit's compressed native .XKT format, then
-        loading them with <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
-                             target="_other">XKTLoaderPlugin</a>.</p>
-    <h3>Stats</h3>
+    <h2>Loading an XKT model</h2>
+      <h3>Stats</h3>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
@@ -202,12 +189,12 @@
 
     new ReflectionMap(viewer.scene, {
         src: [
-            "../../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PX.png",
-            "../../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NX.png",
-            "../../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PY.png",
-            "../../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NY.png",
-            "../../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
-            "../../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
+            "../../assetstextures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PX.png",
+            "../../assetstextures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NX.png",
+            "../../assetstextures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PY.png",
+            "../../assetstextures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NY.png",
+            "../../assetstextures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
+            "../../assetstextures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
         ],
         encoding: sRGBEncoding
     });

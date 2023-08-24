@@ -130,8 +130,7 @@
     <img class="info-icon" style="width:280px; padding-bottom:10px;" src="../../assets/images/bim_icon.png"/>
     <h1>XKTLoaderPlugin</h1>
     <h2>Loading an XKT model</h2>
-
-    <h3>Stats</h3>
+     <h3>Stats</h3>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
@@ -170,8 +169,7 @@
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true,
-        saoEnabled: true,
-        dtxEnabled: true // Enable data texture model representation
+        saoEnabled: true
     });
 
     viewer.scene.camera.eye = [14.915582703146043, 14.396781491179095, 5.431098754133695];
@@ -190,11 +188,11 @@
     new FastNavPlugin(viewer, {
         hideEdges: true,
         hideSAO: true,
-        hideColorTexture: true,
-        hidePBR: true,
+        hideColorTexture: false,
+        hidePBR: false,
         hideTransparentObjects: false,
-        // scaleCanvasResolution: true,
-        // scaleCanvasResolutionFactor: 0.5,
+        scaleCanvasResolution: false,
+        scaleCanvasResolutionFactor: 0.5,
         delayBeforeRestore: true,
         delayBeforeRestoreSeconds: 0.4
     });
@@ -209,9 +207,9 @@
 
     const sceneModel = xktLoader.load({
         id: "myModel",
-        src: "../../assets/models/xkt/v8/ifc/HolterTower.ifc.xkt",
+        src: "../../assets/models/xkt/v9/ifc/rac_advanced_sample_project.IFC2glTFConverter.ifc.xkt",
         saoEnabled: true,
-        edges: true,
+        edges: false,
         dtxEnabled: true
     });
 

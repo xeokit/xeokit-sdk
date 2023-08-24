@@ -17,7 +17,7 @@
     <h1>GLTFLoaderPlugin</h1>
     <h2>Physically-based rendering of a binary glTF test model</h2>
     <p>In this example, we're using a <a
-            href="../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
+            href="../../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
             target="_other">GLTFLoaderPlugin</a> to load the <a
             href="https://sketchfab.com/bimcc"
             target="_other">House Plan</a> demo model from
@@ -25,15 +25,15 @@
     <h3>Components used</h3>
     <ul>
         <li>
-            <a href="../docs/class/src/viewer/Viewer.js~Viewer.html"
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
                target="_other">Viewer</a>
         </li>
         <li>
-            <a href="../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
+            <a href="../../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
                target="_other">GLTFLoaderPlugin</a>
         </li>
         <li>
-            <a href="../docs/class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html"
+            <a href="../../docs/class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html"
                target="_other">FastNavPlugin</a>
         </li>
     </ul>
@@ -69,7 +69,7 @@
     viewer.scene.sao.kernelRadius = 170;
     viewer.scene.sao.intensity = 0.2;
 
-    const fastNavPlugin = new FastNavPlugin(viewer, {
+    new FastNavPlugin(viewer, {
         hideEdges: true,
         hideSAO: true,
         hideColorTexture: false,
@@ -83,12 +83,12 @@
 
     new ReflectionMap(viewer.scene, {
         src: [
-            "../../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PX.png",
-            "../../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NX.png",
-            "../../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PY.png",
-            "../../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NY.png",
-            "../../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
-            "../../assets/textures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
+            "../../assetstextures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PX.png",
+            "../../assetstextures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NX.png",
+            "../../assetstextures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PY.png",
+            "../../assetstextures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NY.png",
+            "../../assetstextures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_PZ.png",
+            "../../assetstextures/light/Uffizi_Gallery/Uffizi_Gallery_Irradiance_NZ.png"
         ],
         encoding: sRGBEncoding
     });
@@ -101,7 +101,7 @@
         edges: true
     });
 
-    sceneModel.on("loaded", ()=>{
+    sceneModel.on("loaded", () => {
         viewer.cameraFlight.jumpTo(sceneModel);
     });
 

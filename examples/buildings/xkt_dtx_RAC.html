@@ -127,22 +127,9 @@
 <canvas id="myNavCubeCanvas"></canvas>
 <div id="treeViewContainer"></div>
 <div class="slideout-sidebar">
-    <img class="info-icon" style="width:280px; padding-bottom:10px;" src="../../assets/images/cityJSONLogo.svg"/>
+    <img class="info-icon" style="width:280px; padding-bottom:10px;" src="../../assets/images/bim_icon.png"/>
     <h1>XKTLoaderPlugin</h1>
-    <h2>Loading a CityJSON  model</h2>
-    <p><a href="https://www.cityjson.org">CityJSON</a> is a JSON-based encoding for a subset of the CityGML data model,
-        which is an open standardised data model and exchange format to store digital 3D models of cities and
-        landscapes.</p>
-    <h2>Limitations</h2>
-    <p><a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
-          target="_other">XKTLoaderPlugin</a> is the most straightforward way to view CityJSON models with xeokit,
-        since it
-        loads
-        the CityJSON file directly off the file system, without needing it to be pre-converted.</p>
-    <p>Loading and parsing huge CityJSON files can be slow, and can overwhelm the browser, however. To view your
-        largest CityJSON models, we recommend instead pre-converting those to xeokit's compressed native .XKT format, then
-        loading them with <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
-                             target="_other">XKTLoaderPlugin</a>.</p>
+    <h2>Loading an XKT model</h2>
     <h3>Stats</h3>
     <ul>
         <li>
@@ -182,15 +169,9 @@
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true,
-        saoEnabled: true
+        saoEnabled: true,
+        dtxEnabled: true // Enable data texture model representation
     });
-
-    // Enable data texture model representation for
-    // all subsequently created SceneModels (unless they override it to be disabled)
-
-    viewer.scene.dtx.enabled = true; // Default is false
-    viewer.scene.dtx.indexBucketingEnabled = true; // Default
-    viewer.scene.dtx.vertexWeldingEnabled = true; // Default
 
     viewer.scene.camera.eye = [14.915582703146043, 14.396781491179095, 5.431098754133695];
     viewer.scene.camera.look = [6.599999999999998, 8.34099990051474, -4.159999575600315];

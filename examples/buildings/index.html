@@ -247,7 +247,7 @@
 <div class="page-title" id="page-title"></div>
 <div class="viewSourceButton" id="viewSourceButton"><i class="fas fa-2x fa-code"></i></div>
 <div class="content-overlay" id="viewer-overlay"></div>
-<iframe class="content-container" id="viewer" src="./default.html"></iframe>
+<iframe class="content-container" id="viewer" src="../default.html"></iframe>
 <div class="slideout-sidebar">
     <div id="index"><h1><a href="http://xeokit.io">xeokit</a> / <a href="../">Examples</a> / Buildings</h1></div>
 </div>
@@ -262,6 +262,12 @@
 
             ["xkt_vbo_IfcOpenHouse4", "IFC4 OpenHouse model loaded from XKT into SceneModel"],
             ["xkt_vbo_Schependomlaan", "IFC4 Schependomlaan model loaded from XKT into SceneModel"],
+            ["xkt_vbo_Duplex", "IFC4 Duplex model loaded from XKT into SceneModel"],
+            ["xkt_vbo_HolterTower", "IFC4 Holter Tower model loaded from XKT into SceneModel"],
+            ["xkt_vbo_MAP", "IFC4 MAP model loaded from XKT into SceneModel"],
+            ["xkt_vbo_RAC", "IFC4 RAC model loaded from XKT into SceneModel"],
+            ["xkt_vbo_RME", "IFC4 Duplex model loaded from XKT into SceneModel"],
+            ["xkt_vbo_WaterLock", "IFC4 WaterLock model loaded from XKT into SceneModel"],
             ["xkt_vbo_textures_HousePlan", "House Plan model with textures loaded from XKT into SceneModel"],
 
             "#XKT + DTX",
@@ -305,7 +311,16 @@
             ["glTF_Duplex_transform", "IFC4 Duplex house model loaded from glTF into SceneModel using GLTFLoaderPlugin"],
             ["glTF_embedded_MAP", "IFC4 MAP model loaded from glTF into SceneModel using GLTFLoaderPlugin"],
             ["glTF_Schependomlaan", "IFC2x3 Schependomlaan house model loaded from glTF into SceneModel using GLTFLoaderPlugin"]
+        ],
+
+        "Positioning Models": [
+
+            "#Positioning models geographically",
+
+            ["positioning_cartesianCoordinates", "Loading IFC with WebIFCLoaderPlugin, positioning the model at distant Cartesian coordinates"],
+            ["positioning_geodesicCoordinates", "Loading IFC with WebIFCLoaderPlugin, positioning the model with geodesic coordinates"]
         ]
+
     };
 
     const list = document.getElementById('index');
