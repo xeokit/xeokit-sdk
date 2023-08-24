@@ -247,9 +247,9 @@
 <div class="page-title" id="page-title"></div>
 <div class="viewSourceButton" id="viewSourceButton"><i class="fas fa-2x fa-code"></i></div>
 <div class="content-overlay" id="viewer-overlay"></div>
-<iframe class="content-container" id="viewer" src="./default.html"></iframe>
+<iframe class="content-container" id="viewer" src="../default.html"></iframe>
 <div class="slideout-sidebar">
-    <div id="index"><h1><a href="http://xeokit.io">xeokit</a> / <a href="../">Examples</a> / BCF</h1></div>
+    <div id="index"><h1><a href="http://xeokit.io">xeokit</a> / <a href="../">Examples</a> / Slicing</h1></div>
 </div>
 </body>
 <script>
@@ -257,15 +257,17 @@
     const files = {
 
         "Slicing Models": [
+
             "#Slicing objects with arbitrary cutting planes",
-            ["SectionPlanesPlugin", "IFC2x3 BIM model with section planes"],
+
+            ["SectionPlanesPlugin_imageInSectionPlane", "Plan view image embedded in section plane"],
+            ["SectionPlanesPlugin_Duplex", "IFC2x3 BIM model with section planes"],
             ["SectionPlanesPlugin_ortho_OTCConferenceCenter", "Section plane with orthographic camera"],
             ["SectionPlanesPlugin_createWithMouse", "Click on the model to create a section plane"],
             ["SectionPlanesPlugin_createWithMouse_photogrammetry", "Click on the model to create a section plane"],
             ["SectionPlanesPlugin_getSnapshot", "Capture PNG screenshot, with section plane editing control excluded"],
             ["SectionPlanesPlugin_getSnapshot_includeGizmos", "Capture PNG screenshot, with section plane editing control included"],
             ["SectionPlanesPlugin_flipSectionPlanes", "Demonstrates ability to globally flip SectionPlane clipping direction"],
-            ["ImagePlane_imageInSectionPlane", "Plan view image embedded in section plane"],
 
             "#Slicing objects with face-aligned cutting planes",
             ["FaceAlignedSectionPlanesPlugin", "IFC2x3 BIM model with face-aligned section planes"]

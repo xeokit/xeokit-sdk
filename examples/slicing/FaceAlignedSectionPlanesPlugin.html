@@ -16,6 +16,23 @@
             right: 10px;
             z-index: 200000;
         }
+
+        #mySectionPlaneControlDiv {
+            padding: 10px;
+            font-size: 20px;
+            color: rgba(0,0,0,1);
+            background-color: #ffffff;
+            border: 1px solid black;
+            opacity: 0.8;
+            position: absolute;
+            width: 200px;
+            height: calc(100vh - 300px);
+            top: 150px;
+            left: 50px;
+            z-index: 200000;
+            border-radius: 10px;
+            box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -23,11 +40,15 @@
 <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
 <canvas id="mySectionPlanesOverviewCanvas"></canvas>
+<div id="mySectionPlaneControlDiv">Click and vertically drag the mouse here to move the SectionPlane</div>
 <div class="slideout-sidebar">
     <img class="info-icon" src="../../assets/images/section_plane_icon.png"/>
-    <h1>SectionPlanesPlugin</h1>
+    <h1>FaceAlignedSectionPlanesPlugin</h1>
     <h2>Slices models open to reveal internal structures</h2>
-    <p>This example loads an IFC2x3 BIM model, then with programmatically creates section planes to slice it.</p>
+    <p>This example loads an IFC2x3 BIM model, then with programmatically creates face-aligned section planes
+        to slice it.</p>
+    <p>To edit the SectionPlane's position, ensure that you select it by clicking it in the
+        overview canvas, then drag vertically with mouse or touch input in the control area.</p>
     <h3>Components used</h3>
     <ul>
         <li>
@@ -40,8 +61,8 @@
 
         </li>
         <li>
-            <a href="../../docs/class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html"
-               target="_other">SectionPlanesPlugin</a>
+            <a href="../../docs/class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html"
+               target="_other">FaceAlignedSectionPlanesPlugin</a>
         </li>
     </ul>
     <h3>Resources</h3>
@@ -60,7 +81,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin} from "../../dist/xeokit-sdk.es.js";
+    import {Viewer, XKTLoaderPlugin, FaceAlignedSectionPlanesPlugin} from "../../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer
@@ -71,14 +92,9 @@
         transparent: true
     });
 
-    viewer.camera.eye = [-5.02, 2.22, 15.09];
-    viewer.camera.look = [4.97, 2.79, 9.89];
-    viewer.camera.up = [-0.05, 0.99, 0.02];
-    viewer.camera.project.fov = 45;
-
-    viewer.camera.zoom(5);
-
-    viewer.cameraControl.followPointer = true;
+    viewer.camera.eye = [-3.933, 2.855, 27.018];
+    viewer.camera.look = [4.400, 3.724, 8.899];
+    viewer.camera.up = [-0.018, 0.999, 0.039];
 
     //------------------------------------------------------------------------------------------------------------------
     // Add a XKTModelsPlugin - we'll use this to load the model geometry
@@ -87,16 +103,20 @@
     const xktLoader = new XKTLoaderPlugin(viewer);
 
     //------------------------------------------------------------------------------------------------------------------
-    // Add a SectionPlanesPlugin - we'll use this to create cross-section planes
+    // Add a FaceAlignedSectionPlanesPlugin - we'll use this to create cross-section planes
     //------------------------------------------------------------------------------------------------------------------
 
-    const sectionPlanes = new SectionPlanesPlugin(viewer, {
+    const sectionPlanes = new FaceAlignedSectionPlanesPlugin(viewer, {
         overviewCanvasId: "mySectionPlanesOverviewCanvas",
-        overviewVisible: true
+        controlElementId: "mySectionPlaneControlDiv",
+        overviewVisible: true,
+        dragSensitivity: 1
     });
 
+    sectionPlanes.setDragSensitivity(1); // Set sensitivity of drag and touch input
+
     //------------------------------------------------------------------------------------------------------------------
-    // Load the .xkt model and IFC metadata
+    // Load the .xkt model
     //------------------------------------------------------------------------------------------------------------------
 
     const sceneModel = xktLoader.load({
@@ -107,41 +127,22 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a couple of cross-section planes
+    // Create a SectionPlane
     //------------------------------------------------------------------------------------------------------------------
 
-    sectionPlanes.createSectionPlane({
+    const sectionPlane = sectionPlanes.createSectionPlane({
         id: "mySectionPlane",
-        pos: [1.04, 1.95, 9.74],
-        dir: [1.0, 0.0, 0.0]
+        pos: [1.8933897259414376, 3.8494953147158935, 16.297288643481703],
+        dir: [0.007873527603475804, 0.007873527603475804, -0.9999380056414271]
     });
 
-    sectionPlanes.createSectionPlane({
-        id: "mySectionPlane2",
-        pos: [2.30, 4.46, 14.93],
-        dir: [0.0, -0.09, -0.79]
-    });
+    //------------------------------------------------------------------------------------------------------------------
+    // Activate the drag control element for the SectionPlane
+    //------------------------------------------------------------------------------------------------------------------
 
-    // viewer.scene.input.on("mouseup", function (coords) {
-    //     var hit = viewer.scene.pick({
-    //         canvasPos: coords,
-    //         pickSurface: true  // <<------ This causes picking to find the intersection point on the entity
-    //     });
-    //     if (hit) {
-    //         if (hit.entity.isObject) { // Only create CrossSections on surfaces of model objects, not on gizmos etc
-    //
-    //             const sectionPlane = sectionPlanes.createSectionPlane({
-    //                 canvasPos: hit.canvasPos,
-    //                 pos: hit.worldPos,
-    //                 dir: [-hit.worldNormal[0], -hit.worldNormal[1], -hit.worldNormal[2]]
-    //             });
-    //
-    //             sectionPlanes.showControl(sectionPlane.id);
-    //         }
-    //     }
-    // });
 
-    window.viewer = viewer;
+    sectionPlanes.showControl(sectionPlane.id);
+
 </script>
 
 </html>
