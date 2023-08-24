@@ -2599,10 +2599,6 @@ export class SceneModel extends Component {
                     }
                 }
 
-                // if (cfg.normals) { // HACK
-                //     cfg.normals = null;
-                // }
-
                 // Texture
 
                // cfg.textureSetId = cfg.textureSetId || DEFAULT_TEXTURE_SET_ID;
@@ -2699,19 +2695,7 @@ export class SceneModel extends Component {
 
         cfg.numPrimitives = this._getNumPrimitives(cfg);
 
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // For VCF cull
-        //  cfg.aabb = cfg.worldAABB; /// Hack for VBOInstancing layer
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////
-
         if (this._vfcManager && !this._vfcManager.finalized) {
-            // if (cfg.color) {
-            //     cfg.color = cfg.color.slice ();
-            // }
-            // if (cfg.positionsDecodeMatrix) {
-            //     cfg.positionsDecodeMatrix = cfg.positionsDecodeMatrix.slice ();
-            // }
             this._vfcManager.addMesh(cfg);
         } else {
             cfg.meshMatrix = cfg.meshMatrix.slice();

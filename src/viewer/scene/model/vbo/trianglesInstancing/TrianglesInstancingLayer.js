@@ -335,10 +335,10 @@ class TrianglesInstancingLayer {
             state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, geometry.positionsCompressed, geometry.positionsCompressed.length, 3, gl.STATIC_DRAW, normalized);
             state.positionsDecodeMatrix = math.mat4(geometry.positionsDecodeMatrix);
         }
-        if (geometry.normalsCompressed && geometry.normalsCompressed.length > 0) {
-            const normalized = true; // For oct-encoded UInt8
-            state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, geometry.normalsCompressed, geometry.normalsCompressed.length, 3, gl.STATIC_DRAW, normalized);
-        }
+        // if (geometry.normalsCompressed && geometry.normalsCompressed.length > 0) {
+        //     const normalized = true; // For oct-encoded UInt8
+        //     state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, geometry.normalsCompressed, geometry.normalsCompressed.length, 3, gl.STATIC_DRAW, normalized);
+        // }
         if (geometry.colorsCompressed && geometry.colorsCompressed.length > 0) {
             const colorsCompressed = new Uint8Array(geometry.colorsCompressed);
             const notNormalized = false;

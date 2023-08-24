@@ -465,7 +465,7 @@ class VBOSceneModelRenderer {
 
         gl.bindBufferBase(
             gl.UNIFORM_BUFFER,
-            this.matricesUniformBlockBufferBindingPoint,
+            this._matricesUniformBlockBufferBindingPoint,
             this._matricesUniformBlockBuffer);
 
 
