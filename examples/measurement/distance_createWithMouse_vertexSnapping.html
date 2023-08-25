@@ -85,7 +85,7 @@
 <canvas id="myCanvas"></canvas>
 <div class="slideout-sidebar">
     <img class="info-icon" src="../../assets/images/measure_distance_icon.png"/>
-    <h1>DistanceMeasurementPlugin</h1>
+    <h1>DistanceMeasurementPlugin with vertex-snapping</h1>
     <h2>Click on the model to create distance measurements</h2>
     <p>In this example, we're loading a BIM model from the file system, then creating distance measurements wherever the
         user clicks on the model.</p>
@@ -126,14 +126,21 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const viewer = new Viewer({
-        canvasId: "myCanvas"
+        canvasId: "myCanvas",
+        dtxEnabled: true
     });
 
     viewer.camera.eye = [-3.93, 2.85, 27.01];
     viewer.camera.look = [4.40, 3.72, 8.89];
     viewer.camera.up = [-0.01, 0.99, 0.039];
 
-    viewer.cameraControl.followPointer = true;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Vertex-snapping mode
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.cameraControl.snapMode = "vertex"; // Snap to nearest vertex
+    viewer.cameraControl.snapRadius = 30; // 30 pixels snapping radius
 
     //------------------------------------------------------------------------------------------------------------------
     // Load a model
@@ -143,7 +150,8 @@
 
     const sceneModel = xktLoader.load({
         id: "myModel",
-        src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt",
+      //  src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt",
+        src: "../../assets/models/xkt/v8/ifc/HolterTower.ifc.xkt",
         edges: true
     });
 
