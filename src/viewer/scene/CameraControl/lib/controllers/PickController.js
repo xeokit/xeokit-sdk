@@ -1,6 +1,6 @@
 import {math} from "../../../math/math.js";
-import { Scene } from "../../../scene/Scene.js";
-import { PickResult } from "../../../webgl/PickResult.js";
+import {Scene} from "../../../scene/Scene.js";
+import {PickResult} from "../../../webgl/PickResult.js";
 
 const DEFAULT_SNAP_PICK_RADIUS = 45;
 const DEFAULT_SNAP_MODE = "vertex";
@@ -36,6 +36,12 @@ class PickController {
          * @type {boolean}
          */
         this.schedulePickSurface = false;
+
+        /**
+         * Set true to schedule snap-picking with surface picking as a fallback - used for measurement.
+         * @type {boolean}
+         */
+        this.scheduleSnapOrPick = false;
 
         /**
          * The canvas position at which to do the next scheduled pick.
@@ -81,9 +87,28 @@ class PickController {
 
         this.picked = false;
         this.pickedSurface = false;
+        this.snappedOrPicked = false;
+        this.hoveredSnappedOrSurfaceOff = false;
+
         this._needFireEvents = false;
 
         const hasHoverSurfaceSubs = this._cameraControl.hasSubs("hoverSurface");
+
+        if (this.scheduleSnapOrPick) {
+            const snapPickResult = this._scene.snapPick({
+                canvasPos: this.pickCursorPos,
+                snapRadius: this._configs.snapRadius,
+                snapMode: this._configs.snapMode,
+            });
+            if (snapPickResult && snapPickResult.snappedWorldPos) {
+                this.snapPickResult = snapPickResult;
+                this.snappedOrPicked = true;
+                this._needFireEvents = true;
+            }else {
+                this.schedulePickSurface = true; // Fallback
+                this.snapPickResult = null;
+            }
+        }
 
         if (this.schedulePickSurface) {
             if (this.pickResult && this.pickResult.worldPos) {
@@ -94,6 +119,12 @@ class PickController {
                     this._needFireEvents = hasHoverSurfaceSubs;
                     this.schedulePickEntity = false;
                     this.schedulePickSurface = false;
+                    if (this.scheduleSnapOrPick) {
+                        this.snappedOrPicked = true;
+                    } else {
+                        this.hoveredSnappedOrSurfaceOff = true;
+                    }
+                    this.scheduleSnapOrPick = false;
                     return;
                 }
             }
@@ -113,41 +144,22 @@ class PickController {
             }
         }
 
-        if (this.schedulePickSurface) {
-
+        if (this.schedulePickSurface || (this.scheduleSnapOrPick && !this.snapPickResult)) {
             this.pickResult = this._scene.pick({
                 pickSurface: true,
                 pickSurfaceNormal: false,
                 canvasPos: this.pickCursorPos
             });
-
-            const snapPickResult = this._scene.snapPick({
-                canvasPos: this.pickCursorPos,
-                snapRadius: DEFAULT_SNAP_PICK_RADIUS,
-                snapMode: DEFAULT_SNAP_MODE,
-            });
-
-            if (null !== snapPickResult) {
-                if (null == this.pickResult) {
-                    this.pickResult = new PickResult();
-                }
-
-                if (snapPickResult && null !== snapPickResult.snappedWorldPos) {
-                    this.pickResult.snappedWorldPos = snapPickResult.snappedWorldPos;
-                } else {
-                    this.pickResult.snappedWorldPos = null;
-                }
-
-                if (snapPickResult && null !== snapPickResult.snappedCanvasPos) {
-                    this.pickResult.snappedCanvasPos = snapPickResult.snappedCanvasPos;
-                } else {
-                    this.pickResult.snappedCanvasPos = null;
-                }
-            }
-
             if (this.pickResult) {
                 this.picked = true;
-                this.pickedSurface = true;
+                if (this.scheduleSnapOrPick) {
+                    this.snappedOrPicked = true;
+                } else {
+                    this.pickedSurface = true;
+                }
+                this._needFireEvents = true;
+            }else   if (this.scheduleSnapOrPick) {
+                this.hoveredSnappedOrSurfaceOff = true;
                 this._needFireEvents = true;
             }
 
@@ -164,6 +176,7 @@ class PickController {
             }
         }
 
+        this.scheduleSnapOrPick = false;
         this.schedulePickEntity = false;
         this.schedulePickSurface = false;
     }
@@ -174,10 +187,30 @@ class PickController {
             return;
         }
 
-        if (this.picked && this.pickResult && (this.pickResult.entity || this.pickResult.snappedWorldPos)) {
+        if (this.hoveredSnappedOrSurfaceOff) {
+            this._cameraControl.fire("hoverSnapOrSurfaceOff", {
+                canvasPos: this.pickCursorPos
+            }, true);
+        }
 
-            if (this.pickResult.entity)
-            {
+        if (this.snappedOrPicked) {
+            if (this.snapPickResult) {
+                const pickResult = new PickResult();
+                pickResult.worldPos = this.snapPickResult.snappedWorldPos;
+                pickResult.canvasPos = this.snapPickResult.snappedCanvasPos;
+                this._cameraControl.fire("hoverSnapOrSurface", pickResult, true);
+                this.snapPickResult = null;
+            } else {
+                this._cameraControl.fire("hoverSnapOrSurface", this.pickResult, true);
+            }
+        } else {
+
+        }
+
+        if (this.picked && this.pickResult && (this.pickResult.entity || this.pickResult.worldPos)) {
+
+            if (this.pickResult.entity) {
+
                 const pickedEntityId = this.pickResult.entity.id;
 
                 if (this._lastPickedEntityId !== pickedEntityId) {
@@ -195,7 +228,7 @@ class PickController {
 
             this._cameraControl.fire("hover", this.pickResult, true);
 
-            if (this.pickResult.worldPos || this.pickResult.snappedWorldPos) {
+            if (this.pickResult.worldPos) {
                 this.pickedSurface = true;
                 this._cameraControl.fire("hoverSurface", this.pickResult, true);
             }
