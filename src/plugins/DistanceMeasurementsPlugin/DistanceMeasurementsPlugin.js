@@ -225,8 +225,6 @@ class DistanceMeasurementsPlugin extends Plugin {
      * @param {boolean} [cfg.defaultZAxisVisible=true] The default value of the DistanceMeasurements `zAxisVisible` property.
      * @param {string} [cfg.defaultColor=#00BBFF] The default color of the length dots, wire and label.
      * @param {number} [cfg.zIndex] If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
-     * @param {boolean} [cfg.snapMode="off"] If set to "vertex", the {@link DistanceMeasurementsPlugin} will continuously snap the pointer to the nearest vertex as the user hovers over the model.
-     *
      */
     constructor(viewer, cfg = {}) {
 
@@ -235,7 +233,6 @@ class DistanceMeasurementsPlugin extends Plugin {
         this._container = cfg.container || document.body;
 
         this._control = new DistanceMeasurementsControl(this, {
-            snapMode: cfg.snapMode
         });
 
         this._measurements = {};
