@@ -33,6 +33,23 @@ class AngleMeasurementsControl extends Component {
         this._state = FINDING_ORIGIN;
         this._currentAngleMeasurement = null;
 
+        // Add a marker to the canvas
+        const markerDiv = document.createElement('div');
+        const canvas = this.scene.canvas.canvas;
+        canvas.parentNode.insertBefore(markerDiv, canvas);
+
+        markerDiv.style.background = "black";
+        markerDiv.style.border = "2px solid blue";
+        markerDiv.style.borderRadius = "10px";
+        markerDiv.style.width = "5px";
+        markerDiv.style.height = "5px";
+        markerDiv.style.margin = "-200px -200px";
+        markerDiv.style.zIndex = "100";
+        markerDiv.style.position = "absolute";
+        markerDiv.style.pointerEvents = "none";
+
+        this.markerDiv = markerDiv;
+
         // Event handles from CameraControl
         this._onMouseHoverSurface = null;
         this._onHoverNothing = null;
@@ -72,9 +89,7 @@ class AngleMeasurementsControl extends Component {
         const canvas = scene.canvas.canvas;
         const input = scene.input;
 
-        const pickSurfacePrecisionEnabled = scene.pickSurfacePrecisionEnabled;
-
-        let isMouseHoveringEntity = false;
+        let mouseHovering = false;
         let mouseHoverEntity = null;
         let mouseWorldPos = math.vec3();
         const mouseHoverCanvasPos = math.vec2();
@@ -88,31 +103,41 @@ class AngleMeasurementsControl extends Component {
         const touchEndCanvasPos = math.vec2();
         const touchStartWorldPos = math.vec3();
 
-        this._onMouseHoverSurface = cameraControl.on("hoverOverEntitySurface", event => {
-            isMouseHoveringEntity = true;
+        this._onMouseHoverSurface = cameraControl.on("hoverSnapOrSurface", event => {
+            mouseHovering = true;
             mouseHoverEntity = event.entity;
             mouseWorldPos.set(event.worldPos);
             mouseHoverCanvasPos.set(event.canvasPos);
-            if (this._currentAngleMeasurement) {
-                switch (this._state) {
-                    case FINDING_CORNER:
+            switch (this._state) {
+                case FINDING_ORIGIN:
+                    this.markerDiv.style.marginLeft = `${event.canvasPos[0] - 5}px`;
+                    this.markerDiv.style.marginTop = `${event.canvasPos[1] - 5}px`;
+                    this.markerDiv.style.background = "pink";
+                    this.markerDiv.style.border = "2px solid red";
+                    break;
+                case FINDING_CORNER:
+                    if (this._currentAngleMeasurement) {
                         this._currentAngleMeasurement.originWireVisible = true;
                         this._currentAngleMeasurement.targetWireVisible = false;
                         this._currentAngleMeasurement.cornerVisible = true;
                         this._currentAngleMeasurement.angleVisible = false;
-                        this._currentAngleMeasurement.corner.entity = event.entity;
                         this._currentAngleMeasurement.corner.worldPos = event.worldPos;
-                        canvas.style.cursor = "pointer";
-                        break;
-                    case FINDING_TARGET:
+                    }
+                    this.markerDiv.style.marginLeft = `-10000px`;
+                    this.markerDiv.style.marginTop = `-10000px`;
+                    canvas.style.cursor = "pointer";
+                    break;
+                case FINDING_TARGET:
+                    if (this._currentAngleMeasurement) {
                         this._currentAngleMeasurement.targetWireVisible = true;
                         this._currentAngleMeasurement.targetVisible = true;
                         this._currentAngleMeasurement.angleVisible = true;
-                        this._currentAngleMeasurement.target.entity = event.entity;
                         this._currentAngleMeasurement.target.worldPos = event.worldPos;
-                        canvas.style.cursor = "pointer";
-                        break;
-                }
+                    }
+                    this.markerDiv.style.marginLeft = `-10000px`;
+                    this.markerDiv.style.marginTop = `-10000px`;
+                    canvas.style.cursor = "pointer";
+                    break;
             }
         });
 
@@ -130,17 +155,7 @@ class AngleMeasurementsControl extends Component {
             }
             switch (this._state) {
                 case FINDING_ORIGIN:
-                    if (isMouseHoveringEntity) {
-                        if (pickSurfacePrecisionEnabled) {
-                            const pickResult = scene.pick({
-                                canvasPos: mouseHoverCanvasPos,
-                                pickSurface: true,
-                                pickSurfacePrecision: pickSurfacePrecisionEnabled
-                            });
-                            if (pickResult && pickResult.worldPos) {
-                                worldPos.set(pickResult.worldPos);
-                            }
-                        }
+                    if (mouseHovering) {
                         this._currentAngleMeasurement = this.plugin.createMeasurement({
                             id: math.createUUID(),
                             origin: {
@@ -168,17 +183,7 @@ class AngleMeasurementsControl extends Component {
                     }
                     break;
                 case FINDING_CORNER:
-                    if (isMouseHoveringEntity) {
-                        if (pickSurfacePrecisionEnabled) {
-                            const pickResult = scene.pick({
-                                canvasPos: mouseHoverCanvasPos,
-                                pickSurface: true,
-                                pickSurfacePrecision: true
-                            });
-                            if (pickResult && pickResult.worldPos) {
-                                this._currentAngleMeasurement.corner.worldPos = pickResult.worldPos;
-                            }
-                        }
+                    if (mouseHovering) {
                         this._currentAngleMeasurement.targetWireVisible = false;
                         this._currentAngleMeasurement.targetVisible = true;
                         this._currentAngleMeasurement.angleVisible = true;
@@ -193,18 +198,7 @@ class AngleMeasurementsControl extends Component {
                     }
                     break;
                 case FINDING_TARGET:
-                    if (isMouseHoveringEntity) {
-                        if (pickSurfacePrecisionEnabled) {
-                            const pickResult = scene.pick({
-                                canvasPos: mouseHoverCanvasPos,
-                                pickSurface: true,
-                                pickSurfacePrecision: true
-                            });
-                            if (pickResult && pickResult.worldPos) {
-                                this._currentAngleMeasurement.target.worldPos = pickResult.worldPos;
-                                this._currentAngleMeasurement.approximate = false;
-                            }
-                        }
+                    if (mouseHovering) {
                         this._currentAngleMeasurement.targetVisible = true;
                         this._currentAngleMeasurement.angleVisible = true;
                         this.fire("measurementEnd", this._currentAngleMeasurement);
@@ -222,9 +216,10 @@ class AngleMeasurementsControl extends Component {
             }
         });
 
-        this._onHoverNothing = cameraControl.on("hoverNothing", event => {
-
-            isMouseHoveringEntity = false;
+        this._onMouseHoverOff = cameraControl.on("hoverSnapOrSurfaceOff", event => {
+            mouseHovering = false;
+            this.markerDiv.style.marginLeft = `-100px`;
+            this.markerDiv.style.marginTop = `-100px`;
             if (this._currentAngleMeasurement) {
                 switch (this._state) {
                     case FINDING_ORIGIN:
@@ -269,8 +264,7 @@ class AngleMeasurementsControl extends Component {
                 }
                 const pickResult = scene.pick({
                     canvasPos: touchEndCanvasPos,
-                    pickSurface: true,
-                    pickSurfacePrecision: false
+                    pickSurface: true
                 });
                 if (pickResult && pickResult.worldPos) {
                     switch (this._state) {
