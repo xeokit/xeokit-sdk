@@ -1,6 +1,7 @@
 import {math} from '../math/math.js';
 import {Component} from '../Component.js';
 import {worldToRTCPos} from "../math/rtcCoords.js";
+import {SceneModelEntity} from "../model/SceneModelEntity";
 
 const tempVec4a = math.vec4();
 const tempVec4b = math.vec4();
@@ -207,8 +208,8 @@ class Marker extends Component {
         }
         this._entity = entity;
         if (this._entity) {
-            if (this._entity instanceof SceneModelNode) {
-                this._onEntityModelDestroyed = this._entity.model.on("destroyed", () => { // SceneModelNode does not fire events, and cannot exist beyond its VBOSceneModel
+            if (this._entity instanceof SceneModelEntity) {
+                this._onEntityModelDestroyed = this._entity.model.on("destroyed", () => { // SceneModelEntity does not fire events, and cannot exist beyond its VBOSceneModel
                     this._entity = null; // Marker now may become visible, if it was synched to invisible Entity
                     this._onEntityModelDestroyed = null;
                 });
