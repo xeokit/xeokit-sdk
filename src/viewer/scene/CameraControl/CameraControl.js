@@ -643,7 +643,7 @@ class CameraControl extends Component {
             smartPivot: false,
             doubleClickTimeFrame: 250,
             
-            snapMode: DEFAULT_SNAP_MODE,
+            snapMode: "vertex",
             snapRadius: DEFAULT_SNAP_PICK_RADIUS,
 
             // Rotation
