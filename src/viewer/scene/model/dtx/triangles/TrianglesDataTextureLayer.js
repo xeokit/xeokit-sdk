@@ -1361,6 +1361,16 @@ export class TrianglesDataTextureLayer {
         }
     }
 
+    drawSnapInitDepthBuf(renderFlags, frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        this._updateBackfaceCull(renderFlags, frameCtx);
+        if (this._dataTextureRenderers.snapDepthBufInitRenderer) {
+            this._dataTextureRenderers.snapDepthBufInitRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        }
+    }
+
     drawSnapDepths(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
             return;
@@ -1368,16 +1378,6 @@ export class TrianglesDataTextureLayer {
         this._updateBackfaceCull(renderFlags, frameCtx);
         if (this._dataTextureRenderers.vertexDepthRenderer) {
             this._dataTextureRenderers.vertexDepthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
-        }
-    }
-
-    drawSnapInitDepthBuf(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
-            return;
-        }
-        this._updateBackfaceCull(renderFlags, frameCtx);
-        if (this._dataTextureRenderers.vertexDepthZBufferInitializer) {
-            this._dataTextureRenderers.vertexDepthZBufferInitializer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }
     }
 

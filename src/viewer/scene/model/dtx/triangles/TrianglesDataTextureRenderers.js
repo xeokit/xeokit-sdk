@@ -80,9 +80,9 @@ class TrianglesDataTextureRenderers {
             this._vertexDepthRenderer.destroy();
             this._vertexDepthRenderer = null;
         }
-        if (this._vertexDepthZBufferInitializer && (!this._vertexDepthZBufferInitializer.getValid())) {
-            this._vertexDepthZBufferInitializer.destroy();
-            this._vertexDepthZBufferInitializer = null;
+        if (this._snapDepthBufInitRenderer && (!this._snapDepthBufInitRenderer.getValid())) {
+            this._snapDepthBufInitRenderer.destroy();
+            this._snapDepthBufInitRenderer = null;
         }
         if (this._pickNormalsRenderer && this._pickNormalsRenderer.getValid() === false) {
             this._pickNormalsRenderer.destroy();
@@ -200,11 +200,11 @@ class TrianglesDataTextureRenderers {
         return this._vertexDepthRenderer;
     }
 
-    get vertexDepthZBufferInitializer() {
-        if (!this._vertexDepthZBufferInitializer) {
-            this._vertexDepthZBufferInitializer = new TrianglesDataTextureSnapDepthBufInitRenderer(this._scene);
+    get snapDepthBufInitRenderer() {
+        if (!this._snapDepthBufInitRenderer) {
+            this._snapDepthBufInitRenderer = new TrianglesDataTextureSnapDepthBufInitRenderer(this._scene);
         }
-        return this._vertexDepthZBufferInitializer;
+        return this._snapDepthBufInitRenderer;
     }
 
     get occlusionRenderer() {
@@ -264,8 +264,8 @@ class TrianglesDataTextureRenderers {
         if (this._vertexDepthRenderer) {
             this._vertexDepthRenderer.destroy();
         }
-        if (this._vertexDepthZBufferInitializer) {
-            this._vertexDepthZBufferInitializer.destroy();
+        if (this._snapDepthBufInitRenderer) {
+            this._snapDepthBufInitRenderer.destroy();
         }
         if (this._pickNormalsRenderer) {
             this._pickNormalsRenderer.destroy();
