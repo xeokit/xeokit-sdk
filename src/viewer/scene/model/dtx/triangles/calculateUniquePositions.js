@@ -15,7 +15,7 @@ let comparePositions = null;
 function compareVertex(a, b) {
     let res;
     for (let i = 0; i < 3; i++) {
-        if (0 != (res = comparePositions[a * 3 + i] - comparePositions[b * 3 + i])) {
+        if (0 !== (res = comparePositions[a * 3 + i] - comparePositions[b * 3 + i])) {
             return res;
         }
     }
