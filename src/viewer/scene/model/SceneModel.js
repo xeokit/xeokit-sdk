@@ -53,6 +53,8 @@ const DEFAULT_EMISSIVE_TEXTURE_ID = "defaultEmissiveTexture";
 const DEFAULT_OCCLUSION_TEXTURE_ID = "defaultOcclusionTexture";
 const DEFAULT_TEXTURE_SET_ID = "defaultTextureSet";
 
+const defaultCompressedColor = new Uint8Array([255, 255, 255]);
+
 const VBO_INSTANCED = 0;
 const VBO_BATCHED = 1;
 const DTX = 2;
@@ -2491,7 +2493,8 @@ export class SceneModel extends Component {
                 this.error("Unexpected params: 'matrix', 'rotation', 'scale', 'position' not allowed with 'positionsCompressed'");
                 return null;
             }
-            cfg.origin = cfg.origin ? math.addVec3(this._origin, cfg.origin, tempVec3a) : this._origin;
+
+            cfg.origin = cfg.origin ? math.addVec3(this._origin, cfg.origin, math.vec3()) : this._origin;
 
             // Matrix
 
@@ -2502,7 +2505,7 @@ export class SceneModel extends Component {
                 const position = cfg.position || DEFAULT_POSITION;
                 const rotation = cfg.rotation || DEFAULT_ROTATION;
                 math.eulerToQuaternion(rotation, "XYZ", DEFAULT_QUATERNION);
-                cfg.meshMatrix = math.composeMat4(position, DEFAULT_QUATERNION, scale, tempMat4);
+                cfg.meshMatrix = math.composeMat4(position, DEFAULT_QUATERNION, scale, math.mat4());
             }
             if (cfg.positionsDecodeBoundary) {
                 cfg.positionsDecodeMatrix = createPositionsDecodeMatrix(cfg.positionsDecodeBoundary, math.mat4());
@@ -2515,7 +2518,10 @@ export class SceneModel extends Component {
 
                 // NPR
 
-                cfg.color = (cfg.color) ? new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)]) : [255, 255, 255];
+                cfg.color = (cfg.color) ?
+                    new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)])
+                    : defaultCompressedColor;
+
                 cfg.opacity = (cfg.opacity !== undefined && cfg.opacity !== null) ? Math.floor(cfg.opacity * 255) : 255;
 
                 if (cfg.positions) {
@@ -2547,7 +2553,7 @@ export class SceneModel extends Component {
                 }
 
                 if (!cfg.buckets) {
-                    cfg.buckets = createDTXBuckets(cfg,this._enableVertexWelding && this._enableIndexBucketing);
+                    cfg.buckets = createDTXBuckets(cfg, this._enableVertexWelding && this._enableIndexBucketing);
                 }
 
             } else {
@@ -2578,16 +2584,11 @@ export class SceneModel extends Component {
                 // Geometry
 
                 if (cfg.positions) {
-
-                    const rtcCenter = math.vec3();
                     const rtcPositions = [];
-                    const rtcNeeded = worldToRTCPositions(cfg.positions, rtcPositions, rtcCenter);
-                    if (rtcNeeded) {
-
-                        // RTC
-
+                    const rtcNeeded = worldToRTCPositions(cfg.positions, rtcPositions, tempVec3a);
+                    if (rtcNeeded) {// RTC
                         cfg.positions = rtcPositions;
-                        cfg.origin = math.addVec3(cfg.origin, rtcCenter, rtcCenter);
+                        cfg.origin = math.addVec3(cfg.origin, tempVec3a, math.vec3());
                     }
                 }
 
@@ -2601,7 +2602,7 @@ export class SceneModel extends Component {
 
                 // Texture
 
-               // cfg.textureSetId = cfg.textureSetId || DEFAULT_TEXTURE_SET_ID;
+                // cfg.textureSetId = cfg.textureSetId || DEFAULT_TEXTURE_SET_ID;
                 if (cfg.textureSetId) {
                     cfg.textureSet = this._textureSets[cfg.textureSetId];
                     if (!cfg.textureSet) {
@@ -2626,7 +2627,7 @@ export class SceneModel extends Component {
                 return;
             }
 
-            cfg.origin = math.vec3(cfg.origin ? math.addVec3(this._origin, cfg.origin, tempVec3a) : this._origin);
+            cfg.origin = cfg.origin ? math.addVec3(this._origin, cfg.origin, math.vec3()) : this._origin;
             cfg.positionsDecodeMatrix = cfg.geometry.positionsDecodeMatrix;
 
             // Matrix
@@ -2651,7 +2652,7 @@ export class SceneModel extends Component {
 
                 // NPR
 
-                cfg.color = (cfg.color) ? new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)]) : [255, 255, 255];
+                cfg.color = (cfg.color) ? new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)]) : defaultCompressedColor;
                 cfg.opacity = (cfg.opacity !== undefined && cfg.opacity !== null) ? Math.floor(cfg.opacity * 255) : 255;
 
                 // Buckets
@@ -2671,14 +2672,14 @@ export class SceneModel extends Component {
 
                 // PBR
 
-                cfg.color = (cfg.color) ? new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)]) : [255, 255, 255];
+                cfg.color = (cfg.color) ? new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)]) : defaultCompressedColor;
                 cfg.opacity = (cfg.opacity !== undefined && cfg.opacity !== null) ? Math.floor(cfg.opacity * 255) : 255;
                 cfg.metallic = (cfg.metallic !== undefined && cfg.metallic !== null) ? Math.floor(cfg.metallic * 255) : 0;
                 cfg.roughness = (cfg.roughness !== undefined && cfg.roughness !== null) ? Math.floor(cfg.roughness * 255) : 255;
 
                 // Texture
 
-             //   cfg.textureSetId = cfg.textureSetId || DEFAULT_TEXTURE_SET_ID;
+                //   cfg.textureSetId = cfg.textureSetId || DEFAULT_TEXTURE_SET_ID;
                 if (cfg.textureSetId) {
                     cfg.textureSet = this._textureSets[cfg.textureSetId];
                     // if (!cfg.textureSet) {
@@ -2717,37 +2718,27 @@ export class SceneModel extends Component {
 
         cfg.pickColor = new Uint8Array([r, g, b, a]); // Quantized pick color
         cfg.worldAABB = math.collapseAABB3();
-
         cfg.aabb = cfg.worldAABB; /// Hack for VBOInstancing layer
-        // cfg.opacity = 255;
-        //cfg.sceneModelMatrix = math.identityMat4()
-        // cfg.meshMatrix = math.identityMat4();
-        if (cfg.color) {
-            cfg.color = cfg.color.slice();
-        }
-        if (cfg.positionsDecodeMatrix) {
-            cfg.positionsDecodeMatrix = cfg.positionsDecodeMatrix.slice();
-        }
+        // if (cfg.color) {
+        //     cfg.color = cfg.color.slice();
+        // }
+        // if (cfg.positionsDecodeMatrix) {
+        //     cfg.positionsDecodeMatrix = cfg.positionsDecodeMatrix.slice();
+        // }
         cfg.solid = (cfg.primitive === "solid");
         mesh.origin = math.vec3(cfg.origin);
         switch (cfg.type) {
             case DTX:
-                cfg.meshMatrix = cfg.meshMatrix.slice();
-                //cfg.meshMatrix = null;
                 mesh.layer = this._getDTXLayer(cfg);
-                mesh.portionId = mesh.layer.createPortion(cfg);
                 break;
             case VBO_BATCHED:
-                // cfg.meshMatrix = cfg.meshMatrix.slice();
-                // cfg.sceneModelMatrix = cfg.sceneModelMatrix.slice();
                 mesh.layer = this._getVBOBatchingLayer(cfg);
-                mesh.portionId = mesh.layer.createPortion(cfg);
                 break;
             case VBO_INSTANCED:
                 mesh.layer = this._getVBOInstancingLayer(cfg);
-                mesh.portionId = mesh.layer.createPortion(cfg);
                 break;
         }
+        mesh.portionId = mesh.layer.createPortion(cfg);
         mesh.aabb = cfg.worldAABB;
         mesh.numPrimitives = cfg.numPrimitives;
         math.expandAABB3(this._aabb, mesh.aabb);

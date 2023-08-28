@@ -44,6 +44,10 @@ const tempVec4c = math.vec4([0, 0, 0, 1]);
 const tempUint8Array4 = new Uint8Array(4);
 const tempFloat32Array3 = new Float32Array(3);
 
+const tempAABB3 = math.AABB3();
+const tempAABB3b = math.AABB3();
+const tempOBB3 = math.OBB3();
+
 let _numberOfLayers = 0;
 
 /**
@@ -53,7 +57,7 @@ export class TrianglesDataTextureLayer {
 
     constructor(model, cfg) {
 
-        console.log("Creating TrianglesDataTextureLayer");
+       // console.log("Creating TrianglesDataTextureLayer");
 
         this._layerNumber = _numberOfLayers++;
 
@@ -224,10 +228,10 @@ export class TrianglesDataTextureLayer {
 
             let bucketGeometry = this._bucketGeometries[bucketGeometryId];
             if (!bucketGeometry) {
-                bucketGeometry = this._createBucketGeometry(bucket);
+                bucketGeometry = this._createBucketGeometry(portionCfg, bucket);
                 this._bucketGeometries[bucketGeometryId] = bucketGeometry;
             }
-            const subPortionAABB = math.collapseAABB3();
+            const subPortionAABB = math.collapseAABB3(tempAABB3b);
             const subPortionId = this._createSubPortion(portionCfg, bucketGeometry, bucket, subPortionAABB);
             math.expandAABB3(portionAABB, subPortionAABB);
             subPortionIds.push(subPortionId);
@@ -240,7 +244,7 @@ export class TrianglesDataTextureLayer {
         return portionId;
     }
 
-    _createBucketGeometry(bucket) {
+    _createBucketGeometry(portionCfg, bucket) {
 
         // Indices alignement
         // This will make every mesh consume a multiple of INDICES_EDGE_INDICES_ALIGNEMENT_SIZE
@@ -325,13 +329,18 @@ export class TrianglesDataTextureLayer {
 
         dataTextureRamStats.numberOfGeometries++;
 
+        const localAABB = math.collapseAABB3(tempAABB3);
+        math.expandAABB3Points3(localAABB, bucket.positionsCompressed);
+        geometryCompressionUtils.decompressAABB(localAABB, portionCfg.positionsDecodeMatrix);
+
         const bucketGeometry = {
             vertexBase,
             numVertices,
             numTriangles,
             numEdges,
             indicesBase,
-            edgeIndicesBase
+            edgeIndicesBase,
+            obb: math.AABB3ToOBB3(localAABB) // NB: Memory cost while loading
         };
 
         return bucketGeometry;
@@ -362,10 +371,10 @@ export class TrianglesDataTextureLayer {
 
         // Expand the world AABB with the concrete location of the object
 
-        const localAABB = math.collapseAABB3();
+        const localAABB = math.collapseAABB3(tempAABB3);
         math.expandAABB3Points3(localAABB, bucket.positionsCompressed);
         geometryCompressionUtils.decompressAABB(localAABB, portionCfg.positionsDecodeMatrix);
-        const geometryOBB = math.AABB3ToOBB3(localAABB);
+        const geometryOBB = bucketGeometry.obb;
 
         for (let i = 0, len = geometryOBB.length; i < len; i += 4) {
             tempVec4a[0] = geometryOBB[i + 0];
@@ -473,7 +482,7 @@ export class TrianglesDataTextureLayer {
             }
         }
 
-        buffer.perObjectOffsets.push([0, 0, 0]);
+     //   buffer.perObjectOffsets.push([0, 0, 0]);
 
         this._subPortions.push({
             // vertsBase: vertsIndex,
