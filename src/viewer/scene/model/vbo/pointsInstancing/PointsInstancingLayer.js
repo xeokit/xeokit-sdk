@@ -231,6 +231,7 @@ class PointsInstancingLayer {
             this._state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._pickColors), this._pickColors.length, 4, gl.STATIC_DRAW, normalized);
             this._pickColors = []; // Release memory
         }
+        this._state.geometry = null;
         this._finalized = true;
     }
 

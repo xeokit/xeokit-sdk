@@ -7,7 +7,7 @@ import {utils} from '../../utils.js';
  *
  * Creating a {@link Mesh} with a sphere-shaped {@link ReadableGeometry} :
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#geometry_builders_buildSphereGeometry)]
+ * [[Run this example](/examples/#geometry_builders_buildSphereGeometry)]
  *
  * ````javascript
  * import {Viewer, Mesh, buildSphereGeometry, ReadableGeometry, PhongMaterial, Texture} from "xeokit-sdk.es.js";

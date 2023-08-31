@@ -292,7 +292,6 @@ class LinesBatchingLayer {
     finalize() {
 
         if (this._finalized) {
-            this.model.error("Already finalized");
             return;
         }
 

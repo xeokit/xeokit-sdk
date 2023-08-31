@@ -30,7 +30,7 @@ const identityMat = math.identityMat4();
  *
  * We can also update properties of our object-Meshes via calls to {@link Scene#setObjectsHighlighted} etc.
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneGraph)]
+ * [[Run this example](/examples/#sceneRepresentation_SceneGraph)]
  *
  * ````javascript
  * import {Viewer, Mesh, Node, PhongMaterial} from "xeokit-sdk.es.js";

@@ -25,7 +25,14 @@ export class TrianglesDataTextureOcclusionRenderer {
     }
 
     drawLayer(frameCtx, dataTextureLayer, renderPass) {
-        return; // TODO
+
+        return;
+
+        ///////////////////////////////////////////////////////////////////
+        // TODO
+        ////////////////////////////////////////////////////////////////////
+
+
         const model = dataTextureLayer.model;
         const scene = model.scene;
         const gl = scene.canvas.gl;

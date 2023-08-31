@@ -420,8 +420,7 @@ class VBOSceneModelRenderer {
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const {_state: state, model} = layer;
-        const {textureSet, geometry, origin} = state;
-        const {positionsDecodeMatrix} = this._instancing ? geometry : state;
+        const {textureSet, geometry, origin, positionsDecodeMatrix} = state;
         const lightsState = scene._lightsState;
         const pointsMaterial = scene.pointsMaterial;
         const {camera} = model.scene;

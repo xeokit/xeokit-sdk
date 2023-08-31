@@ -63,6 +63,7 @@ class LinesInstancingLayer {
             numInstances: 0,
             origin: null,
             geometry: cfg.geometry,
+            positionsDecodeMatrix: cfg.geometry.positionsDecodeMatrix, // So we can null the geometry for GC
             positionsBuf: null,
             colorsBuf: null,
             flagsBuf: null,
@@ -246,6 +247,7 @@ class LinesInstancingLayer {
             this._modelMatrixCol1 = [];
             this._modelMatrixCol2 = [];
         }
+        this._state.geometry = null;
         this._finalized = true;
     }
 

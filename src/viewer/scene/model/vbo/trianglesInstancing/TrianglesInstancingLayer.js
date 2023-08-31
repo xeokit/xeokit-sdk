@@ -69,7 +69,7 @@ class TrianglesInstancingLayer {
             geometry: cfg.geometry,
             textureSet: cfg.textureSet,
             pbrSupported: false, // Set in #finalize if we have enough to support quality rendering
-
+            positionsDecodeMatrix: cfg.geometry.positionsDecodeMatrix, // So we can null the geometry for GC
             colorsBuf: null,
             metallicRoughnessBuf: null,
             flagsBuf: null,
@@ -242,19 +242,20 @@ class TrianglesInstancingLayer {
 
         // Expand AABB
 
-        math.collapseAABB3(worldAABB);
-        const obb = this._state.geometry.obb;
-        const lenPositions = obb.length;
-        for (let i = 0; i < lenPositions; i += 4) {
-            tempVec4a[0] = obb[i + 0];
-            tempVec4a[1] = obb[i + 1];
-            tempVec4a[2] = obb[i + 2];
-            math.transformPoint4(meshMatrix, tempVec4a, tempVec4b);
+        const lenPositions = this._state.geometry.positionsCompressed.length;
+        const positions = this._state.geometry.positionsCompressed;
+        const positionsDecodeMatrix = this._state.geometry.positionsDecodeMatrix;
+        for (let i = 0; i < lenPositions; i += 3) {
+            tempVec4a[0] = positions[i + 0];
+            tempVec4a[1] = positions[i + 1];
+            tempVec4a[2] = positions[i + 2];
+            math.transformPoint4(positionsDecodeMatrix, tempVec4a, tempVec4b);
+            math.transformPoint4(meshMatrix, tempVec4b, tempVec4a);
             if (sceneModelMatrix) {
-                math.transformPoint4(sceneModelMatrix, tempVec4b, tempVec4c);
+                math.transformPoint4(sceneModelMatrix, tempVec4a, tempVec4c);
                 math.expandAABB3Point3(worldAABB, tempVec4c);
             } else {
-                math.expandAABB3Point3(worldAABB, tempVec4b);
+                math.expandAABB3Point3(worldAABB, tempVec4a);
             }
         }
 
@@ -293,7 +294,7 @@ class TrianglesInstancingLayer {
     finalize() {
 
         if (this._finalized) {
-            throw "Already finalized";
+            return;
         }
 
         const state = this._state;
@@ -396,6 +397,8 @@ class TrianglesInstancingLayer {
             = !!state.uvBuf
             && !!textureSet
             && !!textureSet.colorTexture;
+
+        this._state.geometry = null;
 
         this._finalized = true;
     }
@@ -1164,6 +1167,7 @@ class TrianglesInstancingLayer {
             state.pickColorsBuf = null;
         }
         state.destroy();
+        this._state = null;
     }
 }
 

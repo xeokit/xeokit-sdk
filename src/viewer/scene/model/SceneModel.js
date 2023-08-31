@@ -37,7 +37,6 @@ import {TrianglesDataTextureLayer} from "./dtx/triangles/TrianglesDataTextureLay
 import {SceneModelEntity} from "./SceneModelEntity";
 import {geometryCompressionUtils} from "../math/geometryCompressionUtils";
 
-
 const tempVec3a = math.vec3();
 const tempMat4 = math.mat4();
 
@@ -1127,7 +1126,7 @@ export class SceneModel extends Component {
 
         this._dtxEnabled = this.scene.dtxEnabled && (cfg.dtxEnabled !== false);
 
-        this._enableVertexWelding = true;
+        this._enableVertexWelding = false; // Not needed for most objects, and very expensive, so disabled
         this._enableIndexBucketing = true;
 
         this._vboBatchingLayerScratchMemory = getScratchMemory();
@@ -1155,7 +1154,6 @@ export class SceneModel extends Component {
         this._entities = {};
 
         this._scheduledMeshes = {}
-        this._scheduledEntities = [];
 
         /** @private **/
         this.renderFlags = new RenderFlags();
@@ -2443,9 +2441,6 @@ export class SceneModel extends Component {
             return;
         }
 
-        // cfg.normalsCompressed = null;
-        // cfg.normals = null;
-
         if (this._scheduledMeshes[cfg.id]) {
             this.error(`[createMesh] SceneModel already has a mesh with this ID: ${cfg.id}`);
             return;
@@ -2679,7 +2674,6 @@ export class SceneModel extends Component {
 
                 // Texture
 
-                //   cfg.textureSetId = cfg.textureSetId || DEFAULT_TEXTURE_SET_ID;
                 if (cfg.textureSetId) {
                     cfg.textureSet = this._textureSets[cfg.textureSetId];
                     // if (!cfg.textureSet) {
@@ -2719,12 +2713,6 @@ export class SceneModel extends Component {
         cfg.pickColor = new Uint8Array([r, g, b, a]); // Quantized pick color
         cfg.worldAABB = math.collapseAABB3();
         cfg.aabb = cfg.worldAABB; /// Hack for VBOInstancing layer
-        // if (cfg.color) {
-        //     cfg.color = cfg.color.slice();
-        // }
-        // if (cfg.positionsDecodeMatrix) {
-        //     cfg.positionsDecodeMatrix = cfg.positionsDecodeMatrix.slice();
-        // }
         cfg.solid = (cfg.primitive === "solid");
         mesh.origin = math.vec3(cfg.origin);
         switch (cfg.type) {
@@ -3131,6 +3119,10 @@ export class SceneModel extends Component {
             const layer = this._layerList[i];
             layer.finalize();
         }
+        this._geometries = {};
+        this._dtxBuckets = {};
+        this._textures = {};
+        this._textureSets = {};
         this._dtxLayers = {};
         this._vboInstancingLayers = {};
         this._vboBatchingLayers = {};
@@ -3551,10 +3543,11 @@ export class SceneModel extends Component {
         for (let i = 0, len = this._entityList.length; i < len; i++) {
             this._entityList[i]._destroy();
         }
-        Object.entries(this._geometries).forEach(([id, geometry]) => {
-            geometry.destroy();
-        });
+        // Object.entries(this._geometries).forEach(([id, geometry]) => {
+        //     geometry.destroy();
+        // });
         this._geometries = {};
+        this._dtxBuckets = {};
         this._textures = {};
         this._textureSets = {};
         this._meshes = {};

@@ -7,7 +7,7 @@ import {utils} from '../../utils.js';
  *
  * Creating a {@link Mesh} with a GridGeometry and a {@link PhongMaterial}:
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#geometry_builders_buildGridGeometry)]
+ * [[Run this example](/examples/#geometry_builders_buildGridGeometry)]
  *
  * ````javascript
  * import {Viewer, Mesh, buildGridGeometry, VBOGeometry, PhongMaterial, Texture} from "xeokit-sdk.es.js";

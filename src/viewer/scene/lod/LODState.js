@@ -5,6 +5,8 @@
  *
  * @private
  */
+import {math} from "../math";
+
 export class LODState {
 
     /**
@@ -87,9 +89,20 @@ export class LODState {
             return;
         }
         const entitiesInLOD = {};
-            const primCountInLOD = {};
+        const primCountInLOD = {};
+        const maxSize = 15;
+        const minComplexity = 10;
+
         for (let i = 0, len = entityList.length; i < len; i++) {
             const entity = entityList[i];
+            const entityComplexity = entity.numPrimitives;
+            const entitySize = math.getAABB3Diag(entity.aabb);
+// //            const isCullable = ((minComplexity <= entityComplexity) && (entitySize <= maxSize));
+//             const isCullable = ( (entitySize <= maxSize));
+//
+//             if (!isCullable) {
+//                 continue;
+//             }
             let lodLevel = 0, len;
             for (lodLevel = 0, len = this.primLODLevels.length; lodLevel < len; lodLevel++) {
                 if (entity.numPrimitives >= this.primLODLevels [lodLevel]) {

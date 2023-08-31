@@ -414,7 +414,7 @@ class Viewer {
      * @param {Boolean} [params.includeGizmos=false] When true, will include gizmos like {@link SectionPlane} in the snapshot.
      * @returns {Promise} Promise which returns a string-encoded image data URI.
      */
-    getSnapshotWithPlugins(params = {}) {
+    async getSnapshotWithPlugins(params = {}) {
 
         // We use gl.readPixels to get the WebGL canvas snapshot in a new
         // HTMLCanvas element, scaled to the target snapshot size, then

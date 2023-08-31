@@ -15,7 +15,7 @@ import {Marker} from "./Marker.js";
  *
  * ## Usage
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#markers_SpriteMarker)]
+ * [[Run this example](/examples/#markers_SpriteMarker)]
  *
  * ```` javascript
  * import {Viewer, SpriteMarker } from "./https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
