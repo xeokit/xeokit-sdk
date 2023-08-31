@@ -43,8 +43,8 @@
 <canvas id="myCanvas"></canvas>
 <canvas id="myNavCubeCanvas"></canvas>
 <div class="slideout-sidebar">
-    <h1>Lyon city model loading into SceneModels with data textures</h1>
-    <p>XKT model with double-precision geometry, rendered <b>with</b> data texture scene representation enabled</p><br>
+    <h1>Logarithmic depth buffer enabled</h1>
+    <p>XKT model with double-precision geometry, rendered <b>with</b> logarithmic buffer enabled</p><br>
     <h3>Stats</h3>
     <ul>
         <li>
@@ -86,7 +86,8 @@
         Mesh,
         ReadableGeometry,
         buildPlaneGeometry,
-        FastNavPlugin
+        FastNavPlugin,
+        DistanceMeasurementsPlugin
     } from "../../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
@@ -225,6 +226,14 @@
     });
 
     //----------------------------------------------------------------------------------------------------------------------
+    // Create distance measurements plugin
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const distanceMeasurements = new DistanceMeasurementsPlugin(viewer, {
+        defaultAxisVisible: false // <<------------ Hide axis wires
+    });
+
+    //----------------------------------------------------------------------------------------------------------------------
     // Load nine CityGML models
     //----------------------------------------------------------------------------------------------------------------------
 
@@ -333,6 +342,8 @@
                                         const t1 = performance.now();
 
                                         document.getElementById("time").innerHTML = "Loaded 9 models in " + Math.floor((t1 - t0)) / 1000 + " seconds<br>Objects: " + numEntities;
+
+                                        distanceMeasurements.control.activate();
 
                                     });
                                 });

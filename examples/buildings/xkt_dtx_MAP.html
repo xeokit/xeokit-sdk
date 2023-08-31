@@ -174,9 +174,9 @@
         dtxEnabled: true // Enable data texture model representation
     });
 
-    viewer.scene.camera.eye = [1841969.51891174, 32.85520321202093, -5173303.450844458];
-    viewer.scene.camera.look = [1842022.2889441466, 10.494778407622398, -5173301.847852234];
-    viewer.scene.camera.up = [0.38982027605708386, 0.9208148185796347, 0.01184154799565952];
+    viewer.scene.camera.eye=[1841982.9384371885, 10.031355126263318, -5173286.744630201];
+    viewer.scene.camera.look=[1842009.4968455553, 9.685518291306686, -5173295.851503017];
+    viewer.scene.camera.up=[0.011650847910481935, 0.9999241456889114, -0.003995073374452514];
 
     new NavCubePlugin(viewer, {
         canvasId: "myNavCubeCanvas",
@@ -214,10 +214,6 @@
         saoEnabled: true,
         edges: true,
         dtxEnabled: true
-    });
-
-    sceneModel.on("loaded", ()=>{
-        viewer.cameraFlight.jumpTo(sceneModel);
     });
 
     const t0 = performance.now();

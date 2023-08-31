@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>xeokit Example</title>
     <link href="../css/pageStyle.css" rel="stylesheet"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     <style>
 
         /* ----------------------------------------------------------------------------------------------------------*/
@@ -118,6 +117,8 @@
         }
 
     </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
 <body>
 <input type="checkbox" id="info-button"/>
@@ -126,21 +127,10 @@
 <canvas id="myNavCubeCanvas"></canvas>
 <div id="treeViewContainer"></div>
 <div class="slideout-sidebar">
-    <img class="info-icon" src="../../assets/images/bim_icon.png"/>
-    <h1>WebIFCLoaderPlugin</h1>
-    <h2>Loading an IFC File</h2>
-    <p><a href="../../docs/class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html"
-          target="_other">WebIFCLoaderPlugin</a> is the easiest way to load IFC models into a xeokit Viewer.</p>
-    <p>WebIFCLoaderPlugin loads IFC STEP files and parses them within the browser using <a
-            href="https://github.com/tomvandig/web-ifc"
-            target="_other">web-ifc</a>, to create 3D objects within the
-        Viewer.</p>
-    <h3>Limitations</h3>
-    <p>Loading and parsing huge IFC STEP files can be slow, and can overwhelm the browser, however. To view your
-        largest IFC models, we recommend instead pre-converting those to xeokit's compressed native .XKT format, then
-        loading them with <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
-                             target="_other">XKTLoaderPlugin</a>.</p>
-    <h3>Stats</h3>
+    <img class="info-icon" style="width:280px; padding-bottom:10px;" src="../../assets/images/bim_icon.png"/>
+    <h1>XKTLoaderPlugin</h1>
+    <h2>Loading an XKT model</h2>
+      <h3>Stats</h3>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
@@ -153,8 +143,8 @@
                target="_other">Viewer</a>
         </li>
         <li>
-            <a href="../../docs/class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html"
-               target="_other">WebIFCLoaderPlugin</a>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
         </li>
         <li>
             <a href="../../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html"
@@ -167,27 +157,26 @@
     </ul>
     <h3>Resources</h3>
     <ul>
-        <li>
-            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
-               target="_other">Model source</a>
-        </li>
+        <li><a href="https://www.cityjson.org/" target="_other">Model source</a></li>
     </ul>
 </div>
 </body>
 
 <script type="module">
 
-    import {Viewer, WebIFCLoaderPlugin, NavCubePlugin, TreeViewPlugin} from "../../dist/xeokit-sdk.es.js";
+    import {Viewer, XKTLoaderPlugin, NavCubePlugin, ReflectionMap,sRGBEncoding,TreeViewPlugin} from "../../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true,
-        dtxEnabled: true // Enable data texture model representation
+        saoEnabled: false,
+        pbrEnabled: true,
+        colorTextureEnabled: true
     });
 
-    viewer.camera.eye = [-3.933, 2.855, 27.018];
-    viewer.camera.look = [4.400, 3.724, 8.899];
-    viewer.camera.up = [-0.018, 0.999, 0.039];
+    viewer.scene.camera.eye = [14.915582703146043, 14.396781491179095, 5.431098754133695];
+    viewer.scene.camera.look = [6.599999999999998, 8.34099990051474, -4.159999575600315];
+    viewer.scene.camera.up = [-0.2820584034861215, 0.9025563895259413, -0.3253229483893775];
 
     new NavCubePlugin(viewer, {
         canvasId: "myNavCubeCanvas",
@@ -200,21 +189,16 @@
 
     new TreeViewPlugin(viewer, {
         containerElement: document.getElementById("treeViewContainer"),
-        autoExpandDepth: 3 // Initially expand the root tree node
+        hierarchy: "types",
+        autoExpandDepth: 1
     });
 
-    const ifcLoader = new WebIFCLoaderPlugin(viewer, {
-        //wasmPath: "../dist/" // <<------- Path to web-ifc.wasm, which does the IFC parsing for us
-        wasmPath: "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/"
-    });
+    const xktLoader = new XKTLoaderPlugin(viewer);
 
-    const sceneModel = ifcLoader.load({
+    const sceneModel = xktLoader.load({
         id: "myModel",
-        src: "../../assets/models/ifc/Duplex.ifc",
-        loadMetadata: true, // Default
-        excludeTypes: ["IfcSpace"],
-        edges: true,
-        dtxEnabled: true
+        src: "../../assets/models/xkt/v10/glb/HousePlan.notextures.glb.xkt",
+        edges: false
     });
 
     sceneModel.on("loaded", ()=>{
@@ -227,6 +211,8 @@
         const t1 = performance.now();
         document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
     });
+
+    window.viewer = viewer;
 
 </script>
 </html>

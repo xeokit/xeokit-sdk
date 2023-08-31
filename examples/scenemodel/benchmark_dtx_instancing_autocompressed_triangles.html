@@ -203,7 +203,7 @@
         if (!done) {
             setTimeout(run);
         } else {
-            pleaseWait.innerHTML += "preparing model..";
+       //     pleaseWait.innerHTML += "preparing model..";
             sceneModel.finalize();
             const pleaseWait = document.getElementById("pleaseWait");
             pleaseWait.parentElement.removeChild(pleaseWait);

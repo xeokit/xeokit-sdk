@@ -249,26 +249,32 @@
 <div class="content-overlay" id="viewer-overlay"></div>
 <iframe class="content-container" id="viewer" src="../default.html"></iframe>
 <div class="slideout-sidebar">
-    <div id="index"><h1><a href="http://xeokit.io">xeokit</a> / <a href="../">Examples</a> / web-ifc</h1></div>
+    <div id="index"><h1><a href="http://xeokit.io">xeokit</a> / <a href="../">Examples</a> / Bookmarking</h1></div>
 </div>
 </body>
 <script>
 
     const files = {
 
-        "web-ifc": [
+        "BCF Viewpoints": [
 
-            "#web-ifc + VBOs",
+            "#Saving and loading BCF viewpoints for BIM software interoperability",
+            ["saveViewpoint", "Saving viewer state as a BCF viewpoint"],
+            ["loadViewpoint", "Loading viewer state from a BCF viewpoint"],
+            ["loadViewpoint_defaultInvisible", "Loading a BCF viewpoint with defaultInvisible"],
+            ["saveViewpoint_MultipleModels", "Saving a BCF viewpoint for multiple models"],
+            ["loadViewpoint_MultipleModels", "Loading a BCF viewpoint for multiple models"],
+            ["saveViewpoint_ortho", "Saving a BCF viewpoint for an orthographic camera"],
+            ["loadViewpoint_ortho", "Loading a BCF viewpoint for an orthographic camera"],
+            ["loadViewpoint_withSectionPlanesPlugin", "Loading a BCF viewpoint with SectionPlanesPlugin"],
+            ["saveViewpoint_BitmapsAndLines", "Saving a BCF viewpoint with bitmaps and lines"]
+        ],
 
-            ["web-ifc_vbo_Duplex", "IFC4 Duplex model loaded from IFC into SceneModel using WebIFCLoaderPlugin"],
-            ["web-ifc_vbo_ignoreMetadata", "IFC4 RAC model loaded from IFC into SceneModel using WebIFCLoaderPlugin, without metadata"],
-            ["web-ifc_vbo_isolateStorey", "IFC4 Duplex model single storey loaded from IFC into SceneModel using WebIFCLoaderPlugin"],
-            ["web-ifc_vbo_MAPGroundFloor", "IFC4 MAP model ground floor loaded from IFC into SceneModel using WebIFCLoaderPlugin"],
+        "Mementos": [
 
-            "#web-ifc + DTX",
+            "#Saving and restoring viewer state",
 
-            ["web-ifc_dtx_Duplex", "IFC4 Duplex model loaded from IFC into SceneModel using WebIFCLoaderPlugin, DTX enabled"],
-            ["web-ifc_dtx_MAPGroundFloor", "IFC4 MAP model ground floor loaded from IFC into SceneModel using WebIFCLoaderPlugin, DTX enabled"]
+            ["mementos_ObjectsMemento", "Saving and restoring object states - demo with random states"]
         ]
     };
 

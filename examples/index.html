@@ -3,112 +3,713 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Link Table</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>xeokit SDK Examples</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        /* Custom CSS for column width */
-        .thumbnail-column {
-            width: 400px;
+        .card {
+            transition: transform 0.2s; /* Add smooth transition effect */
+        }
+
+        .card:hover {
+            transform: scale(1.05); /* Slightly enlarge the card on hover */
+        }
+
+        .card {
+            display: block;
+            width: 100%;
+            height: 100%;
+            min-height: 400px;
+            text-decoration: none;
+        }
+
+        .card h4.card-title {
+            color: inherit;
+        }
+
+        .card p.card-text {
+            color: inherit;
+        }
+
+        .thumbnail {
+
+            max-width: 100%;
+            min-height: 200px;
+            max-height: 200px; /* Adjust this value for the desired height */
+            object-fit: cover; /* Maintain aspect ratio and cover thumbnail area */
+        }
+
+        a.card-link {
+            font-size: 18px;
+            color: inherit;
+            text-decoration: none;
+            display: block;
+        }
+
+
+        .card-title {
+            color: black;
+        }
+
+        .card:hover .card-title {
+            color: blue;
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
+
+<script>
+
+    window.onload = function () {
+        var jsonUrl = '/package.json';
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var jsonData = JSON.parse(xhr.responseText);
+                    const version = jsonData.version;
+                    var jsonDataDiv = document.getElementById('version');
+                    jsonDataDiv.innerHTML = version;
+                }
+            }
+        };
+        xhr.open('GET', jsonUrl, true);
+        xhr.send();
+    };
+
+    /**
+     * Enables existing links in documentation for previous xeokit releases to resolve, more or less,
+     * to examples within this newer arrangement (since v2.4).
+     */
+    const legacyLinks = {
+
+        "BIMOffline_XKT_RevitSamples_RAC": "./buildings/#xkt_vbo_RAC",
+        "BIMOffline_XKT_RevitSamples_RME": "./buildings/#xkt_vbo_RAC",
+        "loading_XKT_MAP_pointCloud": "./lidar/#xkt_MAP",
+        "BIMOffline_XKT_HolterTower": "./buildings/#xkt_vbo_HolterTower",
+        "BIMOffline_XKT_Duplex": "./buildings/#xkt_vbo_Duplex",
+        "BIMOffline_XKT_Schependomlaan": "./buildings/#xkt_vbo_Schependomlaan",
+        "BIMOffline_XKT_OTCConferenceCenter": "./buildings/#xkt_vbo_OTCConferenceCenter",
+        "BIMOffline_XKT_WestRiverSideHospital": "..\/buildings/#xkt_vbo_HolterTower",
+        "BIMOffline_XKT_DoublePrecision_MAP": "./buildings/#xkt_vbo_MAP",
+        "BIMOffline_XKT_DoublePrecision_Lyon": "./cities/#XKT_Lyon",
+        "BIMOffline_XKT_WaterLock": "./buildings/#xkt_vbo_WaterLock",
+        "BIMOffline_XKT_Federated_Clinic": "./buildings/#xkt_vbo_federated_Clinic",
+        "BIMOffline_XKT_ArchiCADSamples_DemoProjekt": "./buildings/#xkt_vbo_DemoProjekt",
+        "BIMOffline_XKT_includeTypes": ".",
+        "BIMOffline_XKT_objectDefaults": ".",
+        "BIMOffline_XKT_metadata_Schependomlaan": "./buildings/#xkt_vbo_Schependomlaan",
+        "BIMOffline_XKT_metadata_moveStoreys": ".",
+        "BIMOffline_XKT_authorMetadata": ".",
+        "BIMOffline_XKT_Duplex_originalIFCColors": ".",
+
+        "loading_XKT_Duplex": "./buildings/#xkt_vbo_Duplex",
+        "loading_XKT_ConvenienceStore": "./buildings/#xkt_vbo_HolterTower",
+        "loading_XKT_Duplex_originalIFCColors": ".",
+        "loading_XKT_Duplex_transform": ".",
+        "loading_XKT_Schependomlaan": "./buildings/#xkt_vbo_Schependomlaan",
+        "loading_XKT_Schependomlaan_transform": "./buildings/#xkt_vbo_Schependomlaan",
+        "loading_XKT_OTCConferenceCenter": "./buildings/#xkt_vbo_OTCConferenceCenter",
+        "loading_XKT_WestRiverSideHospital": "./buildings/#xkt_vbo_HolterTower",
+        "loading_XKT_APHS": "./buildings/#xkt_dtx_APHS",
+        "loading_XKT_dataSource": ".",
+        "loading_XKT_concurrently": ".",
+        "loading_XKT_maxGeometryBatchSize_50M": "../cities/#XKT_Lyon",
+        "loading_XKT_maxGeometryBatchSize_20K": "../cities/#XKT_Lyon",
+        "loading_XKT_jitter_singlePrecision_MAP": "./misc/#jitter_singlePrecision_MAP",
+        "loading_XKT_jitter_fullPrecision_MAP": "./buildings/#xkt_vbo_MAP",
+        "loading_XKT_jitter_fullPrecision_MAP_annotations": ".",
+        "loading_XKT_forceBackfaces": ".",
+        "loading_XKT_DamagedHelmet": ".",
+        "loading_XKT_HousePlan": "./buildings/#xkt_vbo_HousePlan",
+        "loading_XKT_HousePlan_NoTextures": "./buildings/#xkt_vbo_HousePlan",
+        "loading_XKT_BoxTextured": ".",
+        "loading_XKT_Roadworks": "./lidar/#glb_Roadworks",
+
+        "BIMOffline_WebIFCLoaderPlugin_Duplex": "./buildings/#web-ifc_vbo_Duplex",
+        "BIMOffline_WebIFCLoaderPlugin_ignoreMetadata": "./buildings/#web-ifc_vbo_ignoreMetadata",
+        "loading_CityJSON_NewYork": "./cities/#CityJSON_NewYork",
+        "BIMOffline_WebIFCLoaderPlugin_isolateStorey": "./buildings/#web-ifc_vbo_isolateStorey",
+        "BIMOffline_WebIFCLoaderPlugin_MAPGroundFloor": "./buildings/#web-ifc_vbo_MAPGroundFloor",
+
+        "loading_CityJSON_Railway": "./cities/#CityJSON_Railway",
+        "loading_CityJSONLoaderPlugin_NewYork": "./cities/#CityJSON_NewYork",
+        "loading_CityJSONLoaderPlugin_Railway": "./cities/#CityJSON_Railway",
+        "loading_LAZ_Autzen": "./lidar/#laz_Autzen",
+        "loading_LAZ_IndoorScan": "./lidar/#laz_IndoorScan",
+        "loading_LASLoaderPlugin_Autzen": "./lidar/#las_Autzen",
+        "loading_LASLoaderPlugin_IndoorScan": "./lidar/#las_IndoorScan",
+        "loading_3DXML_Widget": "./cad/#3DXML_Widget",
+        "loading_3DXML_materialType_Metallic": "./cad/#3DXML_Widget",
+        "loading_3DXML_materialType_Specular": "./cad/#3DXML_Widget",
+        "loading_3DXML_materialType_Phong": "./cad/#3DXML_Widget",
+        "loading_3DXML_TreeView": "./navigation/#TreeViewPlugin_Containment_3DXML",
+        "loading_STL_SpurGear": "./cad/#STL_SpurGear",
+        "loading_STL_dataSource": "./cad/#STL_dataSource",
+        "loading_STL_dataAsParam": "./cad/#STL_dataAsParam",
+        "loading_STL_doublePrecision": "./cad/#STL_doublePrecision",
+        "loading_glTF_Duplex_transform": ".",
+        "loading_glTF_Schependomlaan": ".",
+        "loading_glTF_dataSource": ".",
+        "loading_glTF_embedded_Box": ".",
+        "loading_glTF_embedded_MAP": ".",
+        "loading_glb_HousePlan": ".",
+        "loading_glb_VianneyHouse": "./buildings/#glTF_VianneyHouse",
+        "loading_glb_SkatePark": "./lidar/#glb_SkatePark",
+        "loading_glb_2CylinderEngine": ".",
+        "loading_glb_Box": ".",
+        "loading_glb_BoxTextured": ".",
+        "loading_glb_DamagedHelmet": ".",
+        "loading_glTF_Roadworks": "./lidar/#glb_Roadworks",
+        "loading_glTF_binary_Roadworks": "./lidar/#glb_Roadworks",
+        "loading_OBJ_SportsCar": "./cad/#OBJ_SportsCar",
+        "loading_MultipleModels": ".",
+
+        "positioningModels_WebIFCLoaderPlugin_cartesianCoordinates": "./buildings/#positioning_cartesianCoordinates",
+        "positioningModels_WebIFCLoaderPlugin_geodesicCoordinates": "./buildings/#positioning_geodesicCoordinates",
+
+        "CameraControl_orbit_Duplex": "./navigation/#CameraControl_orbit_Duplex",
+        "CameraControl_orbit_Duplex_smallCanvas": "./navigation/#CameraControl_orbit_Duplex_smallCanvas",
+        "CameraControl_orbit_HolterTower": "./navigation/#CameraControl_orbit_HolterTower",
+        "CameraControl_orbit_OTCConferenceCenter": "./navigation/#CameraControl_orbit_OTCConferenceCenter",
+        "CameraControl_orbit_MAP": "./navigation/#CameraControl_orbit_MAP",
+        "CameraControl_orbit_Lyon": "./navigation/#CameraControl_orbit_Lyon",
+        "CameraControl_orbit_WaterLock": "./navigation/#CameraControl_orbit_WaterLock",
+        "CameraControl_firstPerson_Duplex": "./navigation/#CameraControl_firstPerson_Duplex",
+        "CameraControl_firstPerson_HolterTower": "./navigation/#CameraControl_firstPerson_HolterTower",
+        "CameraControl_firstPerson_MAP": "./navigation/#CameraControl_firstPerson_MAP",
+        "CameraControl_planView_Schependomlaan": "./navigation/#CameraControl_planView_Schependomlaan",
+        "camera_CameraPathAnimation": "./navigation/#camera_CameraPathAnimation",
+        "camera_fitToModel": "./navigation/#camera_fitToModel",
+        "camera_CameraFlightAnimation_projection": "./navigation/#camera_CameraFlightAnimation_projection",
+        "CameraControl_keyMap": "./navigation/#CameraControl_keyMap",
+        "CameraControl_pivotMarker": "./navigation/#CameraControl_pivotMarker",
+        "CameraControl_keyboardEventsElement": "./navigation/#CameraControl_keyboardEventsElement",
+
+        "localization_NavCubePlugin": "./viewer/#localization_NavCubePlugin",
+        "localization_NavCubePlugin_defaultLocaleService": "./viewer/#localization_NavCubePlugin_defaultLocaleService",
+
+        "annotations_clickShowLabels": "./annotations/#annotations_clickShowLabels",
+        "annotations_hoverShowLabels": "./annotations/#annotations_hoverShowLabels",
+        "annotations_clickFlyToPosition": "./annotations/#annotations_clickFlyToPosition",
+        "annotations_createWithMouse": "./annotations/#annotations_createWithMouse",
+        "annotations_createAtCenterOfClickedObject": "./annotations/#annotations_createAtCenterOfClickedObject",
+        "annotations_externalElements": "./annotations/#annotations_externalElements",
+        "annotations_occlusionDisabled": "./annotations/#annotations_occlusionDisabled",
+
+        "markers_SpriteMarker": "./annotations/#markers_SpriteMarker",
+
+        "measurements_angle_modelWithMeasurements": "./measurement/#angle_modelWithMeasurements",
+        "measurements_angle_createWithMouse": "./measurement/#angle_createWithMouse",
+        "measurements_angle_createWithMouse_photogrammetry": "./measurement/#angle_modelWithMeasurements",
+        "measurements_angle_createWithMouse_precision": "./measurement/#angle_modelWithMeasurements",
+        "measurements_distance_modelWithMeasurements": "./measurement/#distance_modelWithMeasurements",
+        "measurements_distance_modelWithMeasurements_hideAxisWires": "./measurement/#distance_modelWithMeasurements_hideAxisWires",
+        "measurements_distance_createWithMouse": "./measurements/#distance_createWithMouse_vertexSnapping",
+        "measurements_distance_createWithMouse_snapToVertex": "./measurements/#distance_createWithMouse_vertexSnapping",
+        "measurements_distance_createWithMouse_photogrammetry": "./measurements/#distance_createWithMouse_vertexSnapping",
+        "measurements_distance_createWithMouse_precision": "./measurements/#distance_createWithMouse_vertexSnapping",
+        "measurements_distance_unitsAndScale": "./measurements/#distance_unitsAndScale",
+
+        "BCF_SaveViewpoint": "./bookmarking/#BCF_SaveViewpoint",
+        "BCF_LoadViewpoint": "./bookmarking/#BCF_LoadViewpoint",
+        "BCF_LoadViewpoint_defaultInvisible": "./bookmarking/#BCF_LoadViewpoint_defaultInvisible",
+        "BCF_SaveViewpoint_MultipleModels": "./bookmarking/#BCF_SaveViewpoint_MultipleModels",
+        "BCF_LoadViewpoint_MultipleModels": "./bookmarking/#BCF_LoadViewpoint_MultipleModels",
+        "BCF_SaveViewpoint_ortho": "./bookmarking/#BCF_SaveViewpoint_ortho",
+        "BCF_LoadViewpoint_ortho": "./bookmarking/#BCF_LoadViewpoint_ortho",
+
+        "picking_canvas_mesh_colorize": "./emphasising/#colorize",
+        "picking_canvas_mesh_colorize_click": "./emphasising/#colorize",
+        "picking_canvas_mesh_opacity": "./emphasising/#opacity",
+        "picking_canvas_mesh_highlight": "./emphasising/#highlight",
+        "picking_canvas_mesh_highlight_transparent": "./emphasising/#highlight_transparentCanvas",
+        "picking_canvas_mesh_select": "./picking/#hover_entity",
+        "picking_canvas_mesh_select_transparent": "./emphasising/#select_transparentCanvas",
+        "picking_canvas_mesh_xray": "./emphasising/#xray",
+        "picking_canvas_mesh_xray_transparent": "./emphasising/#xray_transparentCanvas",
+        "picking_canvas_surface": ".",
+        "picking_canvas_doubleClick": ".",
+        "picking_ray_mesh": ".",
+        "picking_ray_surface": ".",
+        "picking_ray_matrix": ".",
+        "picking_setObjectsPickable": ".",
+        "picking_pickSurfacePrecision_VBOSceneModel_batching": ".",
+        "picking_pickSurfacePrecision_VBOSceneModel_instancing": ".",
+
+        "emphasis_colorize_throughXRay": ".",
+        "emphasis_selected_throughXRay": ".",
+        "emphasis_selectedAndHighlighted_throughTransparent_Duplex": ".",
+
+        "gizmos_SectionPlanesPlugin": "./slicing/#SectionPlanesPlugin_Duplex",
+        "gizmos_SectionPlanesPlugin_ortho_OTCConferenceCenter": "./slicing/#SectionPlanesPlugin_ortho_OTCConferenceCenter",
+        "gizmos_SectionPlanesPlugin_createWithMouse": "./slicing/#SectionPlanesPlugin_createWithMouse",
+        "gizmos_SectionPlanesPlugin_createWithMouse_photogrammetry": "./slicing/#SectionPlanesPlugin_createWithMouse_photogrammetry",
+        "gizmos_SectionPlanesPlugin_getSnapshot": "./slicing/#getSnapshot_png",
+        "gizmos_SectionPlanesPlugin_getSnapshot_includeGizmos": "./slicing/#getSnapshot_includeSectionPlaneControl",
+        "gizmos_SectionPlanesPlugin_flipSectionPlanes": "./slicing/#SectionPlanesPlugin_flipSectionPlanes",
+
+        "ImagePlane_imageInSectionPlane": ".",
+        "gizmos_FaceAlignedSectionPlanesPlugin": ".",
+        "storeyViews_StoreyViewsPlugin_showStoreyObjects": ".",
+        "storeyViews_StoreyViewsPlugin_gotoStoreyCamera": ".",
+        "storeyViews_StoreyViewsPlugin_gotoStoreyCamera2": ".",
+        "storeyViews_StoreyViewsPlugin_createStoreyMap": ".",
+        "storeyViews_StoreyViewsPlugin_createStoreyMap_height": ".",
+        "storeyViews_StoreyViewsPlugin_pickStoreyMap": ".",
+        "storeyViews_StoreyViewsPlugin_recipe1": ".",
+        "storeyViews_StoreyViewsPlugin_recipe2": ".",
+        "storeyViews_StoreyViewsPlugin_recipe3": ".",
+        "storeyViews_StoreyViewsPlugin_recipe4": ".",
+
+        "TreeViewPlugin_Containment": "./navigation/#TreeViewPlugin_Containment",
+        "TreeViewPlugin_Containment_MultipleModels": "./navigation/#TreeViewPlugin_Containment_Federated",
+        "TreeViewPlugin_Types": "./navigation/#TreeViewPlugin_Types",
+        "TreeViewPlugin_Storeys": "./navigation/#TreeViewPlugin_Storeys",
+        "TreeViewPlugin_Storeys_validate": "./navigation/#TreeViewPlugin_Types",
+        "TreeViewPlugin_options_rootName": "./navigation/#TreeViewPlugin_options_rootName",
+
+        "ContextMenu_Canvas_TreeViewPlugin_Custom": "./navigation/#ContextMenu_Canvas_TreeViewPlugin_Custom",
+        "ContextMenu_dynamicItemTitles": "./navigation/#ContextMenu_dynamicItemTitles",
+        "ContextMenu_dynamicItemVisibilities": "./navigation/#ContextMenu_dynamicItemVisibilities",
+        "ContextMenu_subMenus": "./navigation/#ContextMenu_subMenus",
+
+        "postEffects_SAO_Schependomlaan": "./viewer/#sao_ConferenceCenter",
+        "postEffects_SAO_OTCConferenceCenter": "./viewer/#sao_ConferenceCenter",
+        "postEffects_SAO_Duplex": "./viewer/#sao_ConferenceCenter",
+
+        "gizmos_NavCubePlugin": "./navigation/#NavCubePlugin",
+        "gizmos_NavCubePlugin_customColors": "./navigation/#NavCubePlugin_customColors",
+        "gizmos_NavCubePlugin_trueNorth": "./navigation/#NavCubePlugin_trueNorth",
+        "gizmos_AxisGizmoPlugin": "./navigation/#AxisGizmoPlugin",
+
+        "screenshots_png_getSnapshot": "./snapshots/getSnapshot_png",
+        "screenshots_png_getSnapshot_hires": "./snapshots/getSnapshot_png_hires",
+        "screenshots_png_getSnapshot_withMeasurements": "./snapshots/getSnapshot_excludeSectionPlaneControl",
+        "geometry_VBOGeometry": ".",
+        "geometry_ReadableGeometry": ".",
+        "geometry_builders_buildBoxGeometry": "./geometry/#buildBoxGeometry",
+        "geometry_builders_buildBoxLinesGeometry": "./geometry/#buildBoxLinesGeometry",
+        "geometry_builders_buildGridGeometry": "./geometry/#buildGridGeometry",
+        "geometry_builders_buildCylinderGeometry": "./geometry/#buildCylinderGeometry",
+        "geometry_builders_buildSphereGeometry": "./geometry/#buildSphereGeometry",
+        "geometry_builders_buildTorusGeometry": "./geometry/#buildTorusGeometry",
+        "geometry_builders_buildVectorTextGeometry": "./geometry/#buildVectorTextGeometry",
+        "geometry_loaders_loadOBJGeometry": ".",
+        "geometry_loaders_load3DSGeometry": ".",
+        "lights_AmbientLight": ".",
+        "lights_DirLight_view": ".",
+        "lights_DirLight_world": ".",
+        "lights_PointLight_view": ".",
+        "lights_PointLight_world": ".",
+        "sceneRepresentation_lightingTest_viewDirLights": ".",
+        "sceneRepresentation_lightingTest_worldDirLights": ".",
+        "sceneRepresentation_lightingTest_viewPointLights": ".",
+        "sceneRepresentation_lightingTest_worldPointLights": ".",
+        "materials_PhongMaterial": ".",
+        "materials_MetallicMaterial": ".",
+        "materials_LambertMaterial": ".",
+        "materials_EdgeMaterial": ".",
+        "materials_EmphasisMaterial": ".",
+        "materials_Texture": ".",
+        "materials_Fresnel": ".",
+        "materials_PointsMaterial": ".",
+        "materials_LinesMaterial": ".",
+        "sceneRepresentation_VBOSceneModel_instancing": "./scenemodel/#vbo_instancing_autocompressed_triangles",
+        "sceneRepresentation_VBOSceneModel_instancing_autoNormals": ".",
+        "sceneRepresentation_VBOSceneModel_instancing_textures": "./scenemodel/#vbo_instancing_autocompressed_triangles_textures_jpg",
+        "sceneRepresentation_VBOSceneModel_instancing_textures_pbr": ".",
+        "sceneRepresentation_VBOSceneModel_instancing_geometries": ".",
+        "sceneRepresentation_VBOSceneModel_instancing_points": ".",
+        "sceneRepresentation_VBOSceneModel_instancing_lines": ".",
+        "sceneRepresentation_VBOSceneModel_instancing_transform": ".",
+        "sceneRepresentation_VBOSceneModel_instancing_benchmark": ".",
+        "sceneRepresentation_VBOSceneModel_instancing_origin": ".",
+        "sceneRepresentation_VBOSceneModel_instancing_origin_SAO": ".",
+        "sceneRepresentation_VBOSceneModel_instancing_SAO": ".",
+        "sceneRepresentation_VBOSceneModel_instancing_PBR": ".",
+        "sceneRepresentation_VBOSceneModel_instancing_PBR_spheres": ".",
+        "sceneRepresentation_VBOSceneModel_batching": "./scenemodel/#vbo_batching_autocompressed_triangles",
+        "sceneRepresentation_VBOSceneModel_batching_autoNormals": ".",
+        "sceneRepresentation_VBOSceneModel_batching_textures": "./scenemodel/#vbo_batching_autocompressed_triangles_textures_jpg",
+        "sceneRepresentation_VBOSceneModel_batching_textures_pbr": ".",
+        "sceneRepresentation_VBOSceneModel_batching_textures_ktx2": ".",
+        "sceneRepresentation_VBOSceneModel_batching_points": ".",
+        "sceneRepresentation_VBOSceneModel_batching_lines": ".",
+        "sceneRepresentation_VBOSceneModel_batching_annotations": ".",
+        "sceneRepresentation_VBOSceneModel_batching_transform": ".",
+        "sceneRepresentation_VBOSceneModel_batching_benchmark": ".",
+        "sceneRepresentation_VBOSceneModel_batching_origin": ".",
+        "sceneRepresentation_VBOSceneModel_batching_origin_SAO": ".",
+        "sceneRepresentation_VBOSceneModel_batching_SAO": ".",
+        "sceneRepresentation_VBOSceneModel_batching_PBR": ".",
+        "sceneRepresentation_VBOSceneModel_metadata": ".",
+        "sceneRepresentation_VBOSceneModel_metadata_federated": ".",
+        "sceneRepresentation_SceneGraph": ".",
+        "sceneRepresentation_SceneGraph_ReadableGeometry": ".",
+        "sceneRepresentation_SceneGraph_VBOGeometry": ".",
+        "sceneRepresentation_SceneGraph_metadata": ".",
+        "sceneRepresentation_SceneGraph_origin": ".",
+        "ImagePlane_groundPlane": "./misc/#ImagePlane_groundPlane",
+        "ImagePlane_groundPlane_narrow": "./misc/#ImagePlane_groundPlane_narrow",
+        "Bitmap_storeyPlan": "./misc/#Bitmap_storeyPlan",
+        "LineSet_grid": "./misc/#LineSet_grid",
+        "billboarding_Mesh_spherical": "./misc/#billboarding_Mesh_spherical",
+        "billboarding_Mesh_cylindrical": "./misc/#billboarding_Mesh_cylindrical",
+        "logDepthBuf_XKT_Lyon": "./viewer/#logDepthBuf_XKT_Lyon",
+        "logDepthBuf_XKT_Lyon_logDepthBufDisabled": "./viewer/#logDepthBuf_XKT_Lyon_logDepthBufDisabled",
+        "logDepthBuf_SceneGraph_RTC": "./viewer/#logDepthBuf_SceneGraph_RTC",
+        "logDepthBuf_SceneGraph_RTC_logDepthBufDisabled": "./viewer/#logDepthBuf_SceneGraph_RTC_logDepthBufDisabled",
+        "logDepthBuf_VBOSceneModel_batching_RTC": "./viewer/#logDepthBuf_VBOSceneModel_batching_RTC",
+        "logDepthBuf_VBOSceneModel_batching_RTC_annotations": "./viewer/#logDepthBuf_VBOSceneModel_batching_RTC_annotations",
+        "logDepthBuf_VBOSceneModel_batching_RTC_logDepthBufDisabled": "./viewer/#logDepthBuf_VBOSceneModel_batching_RTC_logDepthBufDisabled",
+        "logDepthBuf_VBOSceneModel_instancing_RTC": "./viewer/#logDepthBuf_VBOSceneModel_instancing_RTC",
+        "logDepthBuf_VBOSceneModel_instancing_RTC_logDepthBufDisabled": "./viewer/#logDepthBuf_VBOSceneModel_instancing_RTC_logDepthBufDisabled",
+        "mementos_ObjectsMemento": "./misc/#mementos_ObjectsMemento",
+        "performance_FastNavPlugin": ".",
+        "performance_ViewCullPlugin": ".",
+        "performance_ViewCullPlugin_CameraPathAnimation": ".",
+        "spinner_custom": "../misc/#spinner_custom",
+        "techniques_nonInteractiveQuality": ".",
+        "techniques_findComplexEntities": ".",
+        "Configs_disableDoublePrecision": ".",
+        "viewer_createDestroyRepeat": ".",
+        "viewer_createDestroyRepeatNewCanvas": ".",
+        "viewer_disableAntialiasing": "."
+    }
+
+    const windowHash = window.location.hash;
+    if (windowHash !== '') {
+        const legacyLinkId = windowHash.substring(1);
+        const legacyLink = legacyLinks[legacyLinkId] || ".";
+        window.location = legacyLink;
+    }
+
+    let loggedUnmappedExamples = false;
+    for (let key in legacyLinks) {
+        if (legacyLinks[key] === ".") {
+            if (!loggedUnmappedExamples) {
+                console.log("\nWARNING: Unmapped legacy examples:\n\n");
+                loggedUnmappedExamples = true;
+            }
+            console.log(key);
+        }
+    }
+
+</script>
 <div class="container mt-5">
-    <h1>xeokit SDK Examples</h1>
-    <h4>v2.4.9</h4> <hr>
+    <h2 class="mb-3"><a href="">xeokit SDK</a> Examples</h2>
+    <p id="version">&nbsp;</p>
+    <br><br>
 
-    <p>A collection of live examples to show how to use the xeokit SDK</p>
-    <hr>
+    <h2>Viewing Models</h2>
     <br>
-    <table class="table table-bordered">
-        <tbody>
 
-        <tr>
-            <td class="thumbnail-column"><a href="./buildings/#xkt_dtx_MAP"><img src="http://xeokit.io/img/docs/XKTLoaderPlugin/XKTLoaderPlugin.png" alt="Thumbnail 1" class="img-thumbnail rounded"></a></td>
-            <td>
-                <h3>Viewing Buildings</h3>
-                Viewing building models loaded from various file formats, including IFC, glTF, GLB and XKT.
-                <br><br>
-                <a href="./buildings">Run examples &gt;&gt;</a>
-            </td>
-        </tr>
-        <tr>
-            <td class="thumbnail-column"><a href="./cities/#XKT_Lyon"><img src="https://xeokit.io/img/docs/CityJSONLoaderPlugin/CityJSONLoaderPlugin.png" alt="Thumbnail 1" class="img-thumbnail rounded"></a></td>
-            <td><h3>Viewing Cities</h3>
-                Viewing city models loaded from various file formats, including IFC, glTF, CityJSONand XKT.
-                <br><br>
-                <a href="./cities">Run examples &gt;&gt;</a>
-            </td>
-        </tr>
-        <tr>
-            <td class="thumbnail-column"><img src="https://xeokit.github.io/xeokit-sdk/assets/images/autzen.png" alt="Thumbnail 1" class="img-thumbnail rounded"></td>
-            <td><h3>Viewing LiDAR Scans</h3>
-                Viewing LiDAR scans, loaded from various formats, including LAS, LAZ, glTF, GLB and XKT.
-                <br><br>
-                <a href="./bcf">Run examples &gt;&gt;</a>
-            </td>
-        </tr> <tr>
-            <td class="thumbnail-column"><img src="http://xeokit.github.io/xeokit-sdk/assets/images/BCFViewpointsPlugin.png" alt="Thumbnail 1" class="img-thumbnail rounded"></td>
-            <td><h3>Exchanging BCF Viewpoints</h3>
-                Exchanging BCF-encoded viewpoints between a xeokit Viewer and other BIM software,
-                in
-                order to use the Viewer to report and view issues in BIM models.
-                <br><br>
-                <a href="./bcf">Run examples &gt;&gt;</a>
-            </td>
-        </tr>
-        <tr>
-            <td class="thumbnail-column"><img src="https://xeokit.io/img/docs/XML3DLoaderPlugin/XML3DPluginTreeView.png" alt="Thumbnail 1" class="img-thumbnail rounded"></td>
-            <td><a href="./treeview">Tree views</a>
-                Creating tree view UIs to navigate objects within models.
-                <br><br>
-                <a href="./bcf">Run examples &gt;&gt;</a>
-            </td>
-        </tr>
-        <tr>
-            <td class="thumbnail-column"><img src="../../assets/images/bcf_logo.png" alt="Thumbnail 1" class="img-thumbnail rounded"></td>
-            <td><h3>Rendering tests</h3></a>
-                Low-level tests for xeokit's model definition and rendering functionality.
-                <br><br>
-                <a href="./bcf">Run examples &gt;&gt;</a>
-            </td>
-        </tr>
-        <tr>
-            <td class="thumbnail-column"><img src="../../assets/images/bcf_logo.png" alt="Thumbnail 1" class="img-thumbnail rounded"></td>
-            <td><a href="./slicing">Section planes</a>
-                Slicing models with section planes to view internal structures.
-                <br><br>
-                <a href="./bcf">Run examples &gt;&gt;</a>
-            </td>
-        </tr>
-        <tr>
-            <td class="thumbnail-column"><img src="https://user-images.githubusercontent.com/83100/63047331-867a0a80-bed4-11e9-892f-398740013c5f.gif" alt="Thumbnail 1" class="img-thumbnail rounded"></td>
-            <td><a href="./slicing">Measuring Models</a>
-                Slicing models with section planes to view internal structures.
-                <br><br>
-                <a href="./bcf">Run examples &gt;&gt;</a>
-            </td>
-        </tr>
-        <tr>
-            <td class="thumbnail-column"><img src="../../assets/images/bcf_logo.png" alt="Thumbnail 1" class="img-thumbnail rounded"></td>
-            <td><a href="./snapshots">Canvas snapshots</a>
-                Capturing snapshots of a xeokit viewer to PNG and JPEG images.
-                <br><br>
-                <a href="./bcf">Run examples &gt;&gt;</a>
-            </td>
-        </tr>
+    <div class="row">
+        <div class="col-md-4 mb-4">
 
-        <tr>
-            <td class="thumbnail-column"><img src="../../assets/images/bcf_logo.png" alt="Thumbnail 1" class="img-thumbnail rounded"></td>
-            <td><a href="./geometry">Generating geometry</a>
-                Using xeokit's geometry generation functions to build vector text, boxes, cylinders, spheres, grids etc.
-                <br><br>
-                <a href="./bcf">Run examples &gt;&gt;</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+            <!-- Buildings -->
+
+            <a href="./buildings" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail" src="../assets/images/holterTower.png" alt="Thumbnail 1">
+                    <div class="card-body">
+                        <h4 class="card-title">Viewing Building Models</h4>
+                        <p class="card-text">Using the xeokit SDK to view building models loaded from IFC, glTF and
+                            XKT.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 mb-4">
+
+            <!-- Cities -->
+
+            <a href="./cities" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail" src="../assets/images/lyon_city.png" alt="Thumbnail 2">
+                    <div class="card-body">
+                        <h4 class="card-title">Viewing City Models</h4>
+                        <p class="card-text">Using the xeokit SDK to view city models loaded from glTF, CityJSON, CityGML and
+                            XKT.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 mb-4">
+
+            <!-- LiDAR -->
+
+            <a href="./lidar" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail" src="../assets/images/mapPointCloud.png"
+                         alt="Thumbnail 3">
+                    <div class="card-body">
+                        <h4 class="card-title">Viewing LiDAR Scans</h4>
+                        <p class="card-text">Using the xeokit SDK to view LiDAR scans loaded from LAS, LAZ, glTF and
+                            XKT.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 mb-4">
+
+            <!-- CAD -->
+
+            <a href="./cad" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail"
+                         src="https://github.com/xeokit/xeokit.io/blob/master/img/gear-300x200.gif?raw=true"
+                         alt="Thumbnail 1">
+                    <div class="card-body">
+                        <h4 class="card-title">Viewing CAD Models</h4>
+                        <p class="card-text">Using the xeokit SDK to view CAD models loaded from 3DXML, glTF, STL and
+                            XKT.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Navigating Models -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./navigation" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail"
+                         src="../assets/images/treeview.png"
+                         alt="Thumbnail 3">
+                    <div class="card-body">
+                        <h4 class="card-title">Navigating Models</h4>
+                        <p class="card-text">Components for navigating models: TreeView, NavCube, ContextMenu,
+                            AxisGizmo, CameraControl, CameraPathAnimation etc.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Bookmarking -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./bookmarking" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail" src="../assets/images/BCFViewpointsPlugin.png"
+                         alt="Thumbnail 3">
+                    <div class="card-body">
+                        <h4 class="card-title">Bookmarking Model Views</h4>
+                        <p class="card-text">Saving and loading bookmarks, including how to exchange Building
+                            Collaboration Viewpoints (BCF)
+                            with other BIM software.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Snapshots -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./snapshots" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail" src="../assets/images/xktWithTextures.png"
+                         alt="Thumbnail 3">
+                    <div class="card-body">
+                        <h4 class="card-title">Capturing Snapshots</h4>
+                        <p class="card-text">How to capture JPEG and PNG snapshots of a xeokit SDK viewer.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Customizing the Viewer -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./viewer" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail" src="../assets/images/i1n8.png"
+                         alt="Thumbnail 3">
+                    <div class="card-body">
+                        <h4 class="card-title">Customizing the Viewer</h4>
+                        <p class="card-text">Configuring language translations, customizing the loading spinner,
+                            enabling ambient
+                            shadows, enabling the
+                            logarathmic depth buffer, and more.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Performance -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./performance" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail"
+                         src="http://xeokit.io/img/docs/TreeViewPlugin/TreeViewPlugin.png"
+                         alt="Thumbnail 3">
+                    <div class="card-body">
+                        <h4 class="card-title">Accelerating Performance</h4>
+                        <p class="card-text">How to make the xeokit SDK viewer work at peak performance, using view
+                            frustum culling, LoD culling, resolution scaling and more.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <br><br>
+    <h2>Interacting with Objects</h2>
+    <br>
+
+    <div class="row">
+
+        <!-- Measuring Objects -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./measurement" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail"
+                         src="../assets/images/distanceMeasurements.png"
+                         alt="Thumbnail 1">
+                    <div class="card-body">
+                        <h4 class="card-title">Measuring Objects</h4>
+                        <p class="card-text">Measuring angles and distances on models.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Slicing Objects -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./slicing" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail"
+                         src="../assets/images/sectionPlane.png"
+                         alt="Thumbnail 3">
+                    <div class="card-body">
+                        <h4 class="card-title">Slicing Objects</h4>
+                        <p class="card-text">Slicing models with interactive section planes to reveal internal
+                            structures.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+        <!-- Picking Objects -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./picking" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail"
+                         src="http://xeokit.io/img/docs/TreeViewPlugin/TreeViewPlugin.png" alt="Thumbnail 3">
+                    <div class="card-body">
+                        <h4 class="card-title">Picking Objects</h4>
+                        <p class="card-text">How to pick objects in a xeokit Viewer, interactively or
+                            programmatically.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Emphasising Objects -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./emphasising" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail"
+                         src="https://github.com/xeokit/xeokit.io/blob/master/img/docs/PerformanceModel/PerformanceModel.png?raw=true"
+                         alt="Thumbnail 2">
+                    <div class="card-body">
+                        <h4 class="card-title">Emphasising Objects</h4>
+                        <p class="card-text">Changing the appearance of selected objects: colorizing, highlighting
+                            and
+                            X-raying.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Labelling Objects -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./annotations" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail"
+                         src="../assets/images/annotations.png"
+                         alt="Thumbnail 3">
+                    <div class="card-body">
+                        <h4 class="card-title">Labelling Objects</h4>
+                        <p class="card-text">Attaching fully-customizable HTML annotations to the surfaces of model
+                            objects.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <br><br>
+    <h2>Programmatically Creating Scene Elements</h2>
+    <br>
+
+    <div class="row">
+
+        <!-- Geometry -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./geometry" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail"
+                         src="../assets/images/geometry.png" alt="Thumbnail 2">
+                    <div class="card-body">
+                        <h4 class="card-title">Generating Geometries</h4>
+                        <p class="card-text">Using xeokit's geometry generator functions to build various
+                            shapes.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- SceneModel Tests -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./scenemodel" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail"
+                         src="../assets/images/sceneModelTextured.png"
+                         alt="Thumbnail 2">
+                    <div class="card-body">
+                        <h4 class="card-title">SceneModel Tests</h4>
+                        <p class="card-text">Low-level examples for various features of the xeokit SDK's core
+                            scene
+                            representation.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Misc -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./misc" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail" src="../assets/images/pbrXKT.png"
+                         alt="Thumbnail 3">
+                    <div class="card-body">
+                        <h4 class="card-title">Miscelleneous</h4>
+                        <p class="card-text">Creating billboards, image planes, line segments, sprites and more.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+    </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Include Bootstrap JS and jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

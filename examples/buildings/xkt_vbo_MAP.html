@@ -172,9 +172,9 @@
         saoEnabled: true
     });
 
-    viewer.scene.camera.eye = [14.915582703146043, 14.396781491179095, 5.431098754133695];
-    viewer.scene.camera.look = [6.599999999999998, 8.34099990051474, -4.159999575600315];
-    viewer.scene.camera.up = [-0.2820584034861215, 0.9025563895259413, -0.3253229483893775];
+    viewer.scene.camera.eye=[1841982.9384371885, 10.031355126263318, -5173286.744630201];
+    viewer.scene.camera.look=[1842009.4968455553, 9.685518291306686, -5173295.851503017];
+    viewer.scene.camera.up=[0.011650847910481935, 0.9999241456889114, -0.003995073374452514];
 
     new NavCubePlugin(viewer, {
         canvasId: "myNavCubeCanvas",
@@ -199,10 +199,6 @@
         saoEnabled: true,
         edges: false,
         dtxEnabled: true
-    });
-
-    sceneModel.on("loaded", ()=>{
-        viewer.cameraFlight.jumpTo(sceneModel);
     });
 
     const t0 = performance.now();

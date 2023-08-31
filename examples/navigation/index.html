@@ -249,19 +249,73 @@
 <div class="content-overlay" id="viewer-overlay"></div>
 <iframe class="content-container" id="viewer" src="../default.html"></iframe>
 <div class="slideout-sidebar">
-    <div id="index"><h1><a href="http://xeokit.io">xeokit</a> / <a href="../">Examples</a> / Context Menus</h1></div>
+    <div id="index"><h1><a href="http://xeokit.io">xeokit</a> / <a href="../">Examples</a> / Navigating Models</h1></div>
 </div>
 </body>
 <script>
     const files = {
 
-        "Context Menus": [
+        "AxisGizmo": [
+            "#Showing the coordinate axis",
+            ["AxisGizmoPlugin", "Axis gnomon gizmo (see bottom left)"]
+        ],
+
+        "CameraControl": [
+            "# Orbiting",
+            ["CameraControl_orbit_Duplex", "Orbiting camera navigation"],
+            ["CameraControl_orbit_Duplex_smallCanvas", "Orbiting camera navigation, with small canvas"],
+            ["CameraControl_orbit_HolterTower", "Orbiting camera navigation"],
+            ["CameraControl_orbit_OTCConferenceCenter", "Orbiting camera navigation"],
+            ["CameraControl_orbit_MAP", "Orbiting camera with a model placed at [1842022, 10, -5173301]"],
+            ["CameraControl_orbit_Lyon", "Orbiting camera navigation with a CityJSON model"],
+            ["CameraControl_orbit_WaterLock", "Orbiting camera navigation"],
+            "# First-person",
+            ["CameraControl_firstPerson_Duplex", "First-person navigation"],
+            ["CameraControl_firstPerson_HolterTower", "First-person navigation"],
+            ["CameraControl_firstPerson_MAP", "First-person navigation with model placed at [1842022, 10, -5173301]"],
+            "# Plan view",
+            ["CameraControl_planView_Schependomlaan", "Plan view navigation"],
+            "# Animation",
+            ["camera_CameraPathAnimation", "Animating the camera along a path"],
+            ["camera_fitToModel", "Arranging the camera to fit the model in view"],
+            ["camera_CameraFlightAnimation_projection", "Smooth transition between projections"],
+            "# Configuration",
+            ["CameraControl_keyMap", "Custom key bindings for camera navigation"],
+            ["CameraControl_pivotMarker", "Configuring a pivot marker for camera navigation"],
+            ["CameraControl_keyboardEventsElement", "Specifying where we listen for keyboard events"]
+        ],
+
+        "ContextMenu": [
             "#Creating pop-up context menus",
             ["ContextMenu_Canvas_TreeViewPlugin_Custom", "Right-click or long-touch to open a context menu"],
             ["ContextMenu_dynamicItemTitles", "Right-click or long-touch to open a context menu with dynamic titles"],
             ["ContextMenu_dynamicItemVisibilities", "Right-click or long-touch to open a context menu with dynamically-visible options"],
             ["ContextMenu_subMenus", "Right-click or long-touch on the model to open a multi-level context menu"],
         ],
+
+        "NavCube": [
+            "#Axis navigation gizmo",
+            ["NavCubePlugin", "NavCubePlugin - camera navigation helper"],
+            ["NavCubePlugin_customColors", "NavCubePlugin - custom colors"],
+            ["NavCubePlugin_trueNorth", "NavCubePlugin Configured to Align with True North"],
+            ["localization_NavCubePlugin", "NavCubePlugin Localization"],
+        ],
+
+        "TreeView": [
+            "#TreeViewPlugin containment hierarchy mode",
+            ["TreeViewPlugin_Containment", "TreeViewPlugin 'containment' hierarchy"],
+            ["TreeViewPlugin_Containment_Federated", "TreeViewPlugin 'containment' hierarchy with federated models"],
+            ["TreeViewPlugin_Containment_3DXML", "TreeViewPlugin 'containment' hierarchy with CAD model loaded from 3DXML"],
+            ["TreeViewPlugin_Containment_SceneModel", "TreeViewPlugin 'containment' hierarchy with programmatically-built SceneModel"],
+            ["TreeViewPlugin_Containment_SceneModel_Federated", "TreeViewPlugin 'containment' hierarchy with combined programmatically-built SceneModels"],
+            "#TreeViewPlugin types hierarchy mode",
+            ["TreeViewPlugin_Types", "TreeViewPlugin 'types' hierarchy"],
+            ["TreeViewPlugin_Types_Federated", "TreeViewPlugin 'types' hierarchy with federated models"],
+            "#TreeViewPlugin stories hierarchy mode",
+            ["TreeViewPlugin_Storeys", "TreeViewPlugin 'storeys' hierarchy"],
+            "#TreeViewPlugin special options",
+            ["TreeViewPlugin_options_rootName", "Configuring a custom label for tree view root"]
+        ]
     };
 
     const list = document.getElementById('index');

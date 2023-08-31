@@ -247,19 +247,34 @@
 <div class="page-title" id="page-title"></div>
 <div class="viewSourceButton" id="viewSourceButton"><i class="fas fa-2x fa-code"></i></div>
 <div class="content-overlay" id="viewer-overlay"></div>
-<iframe class="content-container" id="viewer" src="../../default.html"></iframe>
+<iframe class="content-container" id="viewer" src="../default.html"></iframe>
 <div class="slideout-sidebar">
-    <div id="index"><h1><a href="http://xeokit.io">xeokit</a> / <a href="../">Examples</a> / Localization</h1></div>
+    <div id="index"><h1><a href="http://xeokit.io">xeokit</a> / <a href="../">Examples</a> / Customizing the Viewer</h1></div>
 </div>
 </body>
 <script>
 
     const files = {
 
+        "Ambient Shadows": [
+            ["sao_ConferenceCenter", "Scalable Ambient Obscurrence - open right panel to play with parameters"]
+        ],
+
         "Localization": [
             "#Localizing xeokit components for different languages",
             ["localization_NavCubePlugin", "NavCubePlugin Localization"],
             ["localization_NavCubePlugin_defaultLocaleService", "NavCubePlugin Localization using Viewer's Default LocaleService"]
+        ],
+
+        "Logarithmic Depth Buffer": [
+            "#Improving rendering accuracy for mixed object scales",
+            ["logDepthBuf_perspective", "Enabling the logarithmic depth buffer, with perspective camera"],
+            ["logDepthBuf_ortho", "Enabling the logarithmic depth buffer, with orthographic camera"]
+        ],
+
+        "Spinner": [
+            "#CSS animation while models are loading",
+            ["spinner_custom", "Customizing the appearance of the loading spinner"]
         ]
     };
 

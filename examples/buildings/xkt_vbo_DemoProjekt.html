@@ -124,22 +124,11 @@
 <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
 <canvas id="myNavCubeCanvas"></canvas>
+<div id="treeViewContainer"></div>
 <div class="slideout-sidebar">
     <img class="info-icon" src="../../assets/images/bim_icon.png"/>
-    <h1>WebIFCLoaderPlugin</h1>
-    <h2>Loading an IFC File</h2>
-    <p><a href="../../docs/class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html"
-          target="_other">WebIFCLoaderPlugin</a> is the easiest way to load IFC models into a xeokit Viewer.</p>
-    <p>WebIFCLoaderPlugin loads IFC STEP files and parses them within the browser using <a
-            href="https://github.com/tomvandig/web-ifc"
-            target="_other">web-ifc</a>, to create 3D objects within the
-        Viewer.</p>
-
-    <h3>Limitations</h3>
-    <p>Loading and parsing huge IFC STEP files can be slow, and can overwhelm the browser, however. To view your
-        largest IFC models, we recommend instead pre-converting those to xeokit's compressed native .XKT format, then
-        loading them with <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
-                             target="_other">XKTLoaderPlugin</a>.</p>
+    <h1>XKTLoaderPlugin</h1>
+    <h2>Loading a BIM Model from the File System</h2>
     <h3>Stats</h3>
     <ul>
         <li>
@@ -153,8 +142,12 @@
                target="_other">Viewer</a>
         </li>
         <li>
-            <a href="../../docs/class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html"
-               target="_other">WebIFCLoaderPlugin</a>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html"
+               target="_other">TreeViewPlugin</a>
         </li>
         <li>
             <a href="../../docs/class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html"
@@ -164,7 +157,7 @@
     <h3>Resources</h3>
     <ul>
         <li>
-            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
+            <a href="https://knowledge.autodesk.com/support/revit-products/getting-started/caas/CloudHelp/cloudhelp/2020/ENU/Revit-GetStarted/files/GUID-61EF2F22-3A1F-4317-B925-1E85F138BE88-htm.html"
                target="_other">Model source</a>
         </li>
     </ul>
@@ -173,16 +166,31 @@
 
 <script type="module">
 
-    import {Viewer, WebIFCLoaderPlugin, NavCubePlugin} from "../../dist/xeokit-sdk.es.js";
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer, XKTLoaderPlugin, NavCubePlugin, TreeViewPlugin, FastNavPlugin} from "../../dist/xeokit-sdk.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera, tweak x-ray and highlight materials
+    //------------------------------------------------------------------------------------------------------------------
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
-        transparent: true
+        transparent: true,
+        saoEnabled: true
     });
 
     viewer.camera.eye = [102.07185264355974, 45.23873322531372, -54.1001537318987]
     viewer.camera.look = [35.0291287591034, -3.5295781673428905, -20.312957533628705]
     viewer.camera.up = [-0.48646319926706455, 0.8385999559445908, 0.24516049773277654]
+
+    new FastNavPlugin(viewer);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a NavCube
+    //------------------------------------------------------------------------------------------------------------------
 
     new NavCubePlugin(viewer, {
         canvasId: "myNavCubeCanvas",
@@ -193,20 +201,26 @@
         rightMargin: 10
     });
 
-    const ifcLoader = new WebIFCLoaderPlugin(viewer, {
-        //wasmPath: "../dist/" // <<------- Path to web-ifc.wasm, which does the IFC parsing for us
-        wasmPath: "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/"
+    //------------------------------------------------------------------------------------------------------------------
+    // Create an IFC structure tree view
+    //------------------------------------------------------------------------------------------------------------------
+
+    const treeView = new TreeViewPlugin(viewer, {
+        containerElement: document.getElementById("treeViewContainer"),
+        autoExpandDepth: 3 // Initially expand the root tree node
     });
 
-    const sceneModel = ifcLoader.load({
+    //------------------------------------------------------------------------------------------------------------------
+    // Load model and metadata
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const sceneModel = xktLoader.load({
         id: "myModel",
-        src: "../../assets/models/ifc/rac_advanced_sample_project.ifc",
-        loadMetadata: false, // <<------- Don't load IFC metadata
+        src: "../../assets/models/xkt/v10/glb/archicad-demoprojekt.xkt",
+        excludeTypes: ["IfcSpace"],
         edges: true
-    });
-
-    sceneModel.on("loaded", ()=>{
-        viewer.cameraFlight.jumpTo(sceneModel);
     });
 
     const t0 = performance.now();
