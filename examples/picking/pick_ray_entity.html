@@ -1,0 +1,194 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <h1>Picking Surfaces</h1>
+    <h2>Picking object surfaces using an arbitrarily-positioned ray</h2>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {
+        Viewer,
+        Mesh,
+        PhongMaterial,
+        ReadableGeometry,
+        buildSphereGeometry,
+        XKTLoaderPlugin
+    } from "../../dist/xeokit-sdk.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and tilt the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas"
+    });
+
+    viewer.camera.eye = [-9.54, 13.47, 29.97];
+    viewer.camera.look = [4.40, 3.72, 8.89];
+    viewer.camera.up = [0.21, 0.91, -0.31];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load a model and fit it to view
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const sceneModel = xktLoader.load({
+        id: "myModel",
+        src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        edges: true
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Display a red line segment to show the picking ray 
+    //------------------------------------------------------------------------------------------------------------------
+
+    var rayHelper = new (function () {
+
+        var origin = new Mesh(viewer.scene, {
+            geometry: new ReadableGeometry(viewer.scene, buildSphereGeometry({
+                radius: 0.3,
+                heightSegments: 60,
+                widthSegments: 60
+            })),
+            material: new PhongMaterial(viewer.scene, {emissive: [0, 1, 0], diffuse: [0, 0, 0]}),
+            position: [0, 0, 0],
+            pickable: false,
+            visible: true
+        });
+
+        var ray = new Mesh(viewer.scene, {
+            geometry: new ReadableGeometry(viewer.scene, {
+                primitive: "lines",
+                positions: [0, 0, 0, 0, 0, 0],
+                indices: [0, 1]
+            }),
+            material: new PhongMaterial(viewer.scene, {
+                emissive: [1, 0.3, 0.3],
+                diffuse: [0, 0, 0],
+                ambient: [0, 0, 0],
+                lineWidth: 2
+            }),
+            pickable: false
+        });
+
+        var rayPositions = new Float32Array(6);
+
+        this.setRay = function (pos, dir) {
+
+            origin.position = pos;
+
+            rayPositions[0] = pos[0]; // Origin
+            rayPositions[1] = pos[1];
+            rayPositions[2] = pos[2];
+            rayPositions[3] = pos[0] + dir[0]; // Direction
+            rayPositions[4] = pos[1] + dir[1];
+            rayPositions[5] = pos[2] + dir[2];
+
+            ray.geometry.positions = rayPositions;
+        };
+
+        this.setHighlighted = function (highlighted) {
+            ray.material.emissive = highlighted ? [0.5, 1.0, 0.5] : [0.5, 0.3, 0.3];
+            ray.material.lineWidth = highlighted ? 6 : 2;
+        };
+    })();
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Dynamically pick surfaces of model with the ray, show ray with helper, highlight picked meshes
+    //------------------------------------------------------------------------------------------------------------------
+
+    var rayOrigin = new Float32Array([-10, 0, 5.0]);
+    var rayDirection = new Float32Array([20, -10, -10]);
+
+    var xinc = 0.05;
+    var i = 0;
+
+    var lastEntity = null;
+    var lastColorize = null;
+
+    sceneModel.on("loaded", function () {
+
+        viewer.scene.on("tick", function () {
+
+            // Orbit the camera
+            //camera.orbitYaw(xinc < 0 ? 0.2 : -0.2);
+            // camera.orbitPitch(xinc < 0 ? 0.1 : -0.1);
+
+            rayOrigin[2] += xinc;
+            rayOrigin[1] = 10 + Math.sin(rayOrigin[2] * 2.0) * 5;
+
+            i++;
+
+            if (i < 0 || i > 450) {
+                xinc = -xinc;
+                i = 0;
+            }
+
+            rayHelper.setRay(rayOrigin, rayDirection);
+
+            var hit = viewer.scene.pick({
+                pickSurface: false,  // <<------ Default, pick whole entity
+                origin: rayOrigin,
+                direction: rayDirection
+            });
+
+            if (hit) {
+
+                if (!lastEntity || hit.entity.id !== lastEntity.id) {
+
+                    if (lastEntity) {
+                        lastEntity.colorize = lastColorize;
+                    }
+
+                    lastEntity = hit.entity;
+                    lastColorize = hit.entity.colorize.slice();
+
+                    hit.entity.colorize = [0.0, 1.0, 0.0, 1.0];
+
+                    rayHelper.setHighlighted(true);
+                }
+
+            } else {
+
+                if (lastEntity) {
+                    lastEntity.colorize = lastColorize;
+                    lastEntity = null;
+                }
+
+                rayHelper.setHighlighted(false);
+            }
+        });
+    });
+
+    window.viewer = viewer;
+
+</script>
+</html>

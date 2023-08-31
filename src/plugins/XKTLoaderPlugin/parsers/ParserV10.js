@@ -388,7 +388,7 @@ function load(viewer, options, inflatedData, sceneModel) {
                     const meshMatrixIndex = eachMeshMatricesPortion[meshIndex];
                     const meshMatrix = matrices.slice(meshMatrixIndex, meshMatrixIndex + 16);
 
-                    const geometryId = "geometry." + tileIndex + "." + geometryIndex; // These IDs are local to the VBOSceneModel
+                    const geometryId = "geometry." + tileIndex + "." + geometryIndex; // These IDs are local to the SceneModel
 
                     let geometryArrays = geometryArraysCache[geometryId];
 
@@ -427,12 +427,6 @@ function load(viewer, options, inflatedData, sceneModel) {
                                 geometryArrays.primitiveName = "lines";
                                 geometryArrays.geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
                                 geometryArrays.geometryIndices = indices.subarray(eachGeometryIndicesPortion [geometryIndex], atLastGeometry ? indices.length : eachGeometryIndicesPortion [geometryIndex + 1]);
-                                geometryValid = (geometryArrays.geometryPositions.length > 0 && geometryArrays.geometryIndices.length > 0);
-                                break;
-                            case 4:
-                                geometryArrays.primitiveName = "line-strip";
-                                geometryArrays.geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
-                                geometryArrays.geometryIndices = lineStripToLines(indices.subarray(eachGeometryIndicesPortion [geometryIndex], atLastGeometry ? indices.length : eachGeometryIndicesPortion [geometryIndex + 1]));
                                 geometryValid = (geometryArrays.geometryPositions.length > 0 && geometryArrays.geometryIndices.length > 0);
                                 break;
                             default:
@@ -584,12 +578,6 @@ function load(viewer, options, inflatedData, sceneModel) {
                             geometryIndices = indices.subarray(eachGeometryIndicesPortion [geometryIndex], atLastGeometry ? indices.length : eachGeometryIndicesPortion [geometryIndex + 1]);
                             geometryValid = (geometryPositions.length > 0 && geometryIndices.length > 0);
                             break;
-                        case 4:
-                            primitiveName = "lines-strip";
-                            geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
-                            geometryIndices = lineStripToLines(indices.subarray(eachGeometryIndicesPortion [geometryIndex], atLastGeometry ? indices.length : eachGeometryIndicesPortion [geometryIndex + 1]));
-                            geometryValid = (geometryPositions.length > 0 && geometryIndices.length > 0);
-                            break;
                         default:
                             continue;
                     }
@@ -629,18 +617,6 @@ function load(viewer, options, inflatedData, sceneModel) {
             }
         }
     }
-}
-
-function lineStripToLines(lineStrip) {
-    if (lineStrip.length < 2) {
-        return lineStrip;
-    }
-    const lines = [];
-    for (let i = 0; i < lineStrip.length - 1; i++) {
-        lines.push(lineStrip[i]);
-        lines.push(lineStrip[i + 1]);
-    }
-    return lines;
 }
 
 /** @private */

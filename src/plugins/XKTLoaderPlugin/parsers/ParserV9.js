@@ -294,7 +294,7 @@ function load(viewer, options, inflatedData, sceneModel) {
                     const meshMatrixIndex = eachMeshMatricesPortion[meshIndex];
                     const meshMatrix = matrices.slice(meshMatrixIndex, meshMatrixIndex + 16);
 
-                    const geometryId = "geometry." + tileIndex + "." + geometryIndex; // These IDs are local to the VBOSceneModel
+                    const geometryId = "geometry." + tileIndex + "." + geometryIndex; // These IDs are local to the SceneModel
 
                     let geometryArrays = geometryArraysCache[geometryId];
 

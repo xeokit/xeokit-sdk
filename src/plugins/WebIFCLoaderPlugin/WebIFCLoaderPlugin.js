@@ -1,7 +1,7 @@
 import * as WebIFC from "web-ifc";
 
 import {utils} from "../../viewer/scene/utils.js"
-import {VBOSceneModel} from "../../viewer/scene/models/VBOSceneModel/VBOSceneModel.js";
+import {SceneModel} from "../../viewer/scene/model/index.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {WebIFCDefaultDataSource} from "./WebIFCDefaultDataSource.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
@@ -567,6 +567,10 @@ class WebIFCLoaderPlugin extends Plugin {
      * @param {Boolean} [params.excludeUnclassifiedObjects=false] When loading metadata and this is ````true````, will only load {@link Entity}s that have {@link MetaObject}s (that are not excluded). This is useful when we don't want Entitys in the Scene that are not represented within IFC navigation components, such as {@link TreeViewPlugin}.
      * @param {Boolean} [params.globalizeObjectIds=false] Indicates whether to globalize each {@link Entity#id} and {@link MetaObject#id}, in case you need to prevent ID clashes with other models. See {@link WebIFCLoaderPlugin#globalizeObjectIds} for more info.
      * @param {Object} [params.stats] Collects model statistics.
+     * @param {Boolean} [params.dtxEnabled=true] When ````true```` (default) use data textures (DTX), where appropriate, to
+     * represent the returned model. Set false to always use vertex buffer objects (VBOs). Note that DTX is only applicable
+     * to non-textured triangle meshes, and that VBOs are always used for meshes that have textures, line segments, or point
+     * primitives. Only works while {@link DTX#enabled} is also ````true````.
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
      */
     load(params = {}) {
@@ -576,7 +580,7 @@ class WebIFCLoaderPlugin extends Plugin {
             delete params.id;
         }
 
-        const sceneModel = new VBOSceneModel(this.viewer.scene, utils.apply(params, {
+        const sceneModel = new SceneModel(this.viewer.scene, utils.apply(params, {
             isModel: true
         }));
 

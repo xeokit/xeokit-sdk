@@ -17,9 +17,9 @@ import {VBOGeometry} from "../geometry/VBOGeometry.js";
  * In the example below, we'll load the Schependomlaan model, then use
  * a ````LineSet```` to show a grid underneath the model.
  *
- * [<img src="http://xeokit.github.io/xeokit-sdk/assets/images/LineSet_grid.png">](http://xeokit.github.io/xeokit-sdk/examples/#LineSet_grid)
+ * [<img src="http://xeokit.github.io/xeokit-sdk/assets/images/LineSet_grid.png">](/examples/#LineSet_grid)
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#LineSet_grid)]
+ * [[Run this example](/examples/#LineSet_grid)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin, LineSet, buildGridGeometry} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";

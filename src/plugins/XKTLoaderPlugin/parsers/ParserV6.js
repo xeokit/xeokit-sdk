@@ -229,7 +229,7 @@ function load(viewer, options, inflatedData, sceneModel) {
 
                     // Create mesh for multi-use primitive - create (or reuse) geometry, create mesh using that geometry
 
-                    const geometryId = "geometry." + tileIndex + "." + primitiveIndex; // These IDs are local to the VBOSceneModel
+                    const geometryId = "geometry." + tileIndex + "." + primitiveIndex; // These IDs are local to the SceneModel
 
                     if (!geometryCreated[geometryId]) {
 
@@ -237,7 +237,7 @@ function load(viewer, options, inflatedData, sceneModel) {
                             id: geometryId,
                             primitive: "triangles",
                             positionsCompressed: primitivePositions,
-                            normalsCompressed: primitiveNormals,
+                         //   normalsCompressed: primitiveNormals,
                             indices: primitiveIndices,
                             edgeIndices: primitiveEdgeIndices,
                             positionsDecodeMatrix: reusedPrimitivesDecodeMatrix

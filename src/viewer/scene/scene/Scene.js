@@ -18,6 +18,8 @@ import {Metrics} from "../metriqs/Metriqs.js";
 import {SAO} from "../postfx/SAO.js";
 import {PointsMaterial} from "../materials/PointsMaterial.js";
 import {LinesMaterial} from "../materials/LinesMaterial.js";
+import {LOD} from "../lod/LOD.js";
+import {VFC} from "../vfc/VFC";
 
 // Enables runtime check for redundant calls to object state update methods, eg. Scene#_objectVisibilityUpdated
 const ASSERT_OBJECT_STATE_UPDATE = false;
@@ -338,6 +340,7 @@ class Scene extends Component {
      * @param {Viewer} viewer The Viewer this Scene belongs to.
      * @param {Object} cfg Scene configuration.
      * @param {String} [cfg.canvasId]  ID of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
+     * @param {String} [cfg.lodEnabled]  ID of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @param {HTMLElement} [cfg.keyboardEventsElement] Optional reference to HTML element on which key events should be handled. Defaults to the HTML Document.
      * @throws {String} Throws an exception when both canvasId or canvasElement are missing or they aren't pointing to a valid HTMLCanvasElement.
@@ -820,11 +823,12 @@ class Scene extends Component {
         this.gammaFactor = cfg.gammaFactor;
 
         this._entityOffsetsEnabled = !!cfg.entityOffsetsEnabled;
-        this._pickSurfacePrecisionEnabled = !!cfg.pickSurfacePrecisionEnabled;
         this._logarithmicDepthBufferEnabled = !!cfg.logarithmicDepthBufferEnabled;
 
+        this._dtxEnabled = (cfg.dtxEnabled !== false);
         this._pbrEnabled = !!cfg.pbrEnabled;
         this._colorTextureEnabled = (cfg.colorTextureEnabled !== false);
+        this._dtxEnabled = !!cfg.dtxEnabled;
 
         // Register Scene on xeokit
         // Do this BEFORE we add components below
@@ -868,6 +872,22 @@ class Scene extends Component {
 
         this._camera.on("dirty", () => {
             this._renderer.imageDirty();
+        });
+
+        /** Configures Level-of-Detail (LOD) culling for {@link SceneModel}s belonging to this Scene.
+         * @type {LOD}
+         * @final
+         */
+        this.lod = new LOD(this, {
+            enabled: cfg.lodEnabled
+        });
+
+        /** Configures View Frustum Culling (VFC) for {@link SceneModel}s belonging to this Scene.
+         * @type {VFC}
+         * @final
+         */
+        this.vfc = new VFC(this, {
+            enabled: cfg.vfcEnabled
         });
     }
 
@@ -997,7 +1017,7 @@ class Scene extends Component {
         delete this.lineSets[lineSet.id];
         this.scene.fire("lineSetDestroyed", lineSet, true /* Don't retain event */);
     }
-    
+
     _lightDestroyed(light) {
         delete this.lights[light.id];
         this.scene._lightsState.removeLight(light._state);
@@ -1040,8 +1060,8 @@ class Scene extends Component {
         this._objectIds = null; // Lazy regenerate
     }
 
-    _objectVisibilityUpdated(entity, bool, notify = true) {
-        if (bool) {
+    _objectVisibilityUpdated(entity, notify = true) {
+        if (entity.visible) {
             if (ASSERT_OBJECT_STATE_UPDATE && this.visibleObjects[entity.id]) {
                 console.error("Redundant object visibility update (visible=true)");
                 return;
@@ -1062,8 +1082,8 @@ class Scene extends Component {
         }
     }
 
-    _objectXRayedUpdated(entity, bool, notify = true) {
-        if (bool) {
+    _objectXRayedUpdated(entity, notify = true) {
+        if (entity.xrayed) {
             if (ASSERT_OBJECT_STATE_UPDATE && this.xrayedObjects[entity.id]) {
                 console.error("Redundant object xray update (xrayed=true)");
                 return;
@@ -1080,12 +1100,12 @@ class Scene extends Component {
         }
         this._xrayedObjectIds = null; // Lazy regenerate
         if (notify) {
-          this.fire("objectXRayed", entity, true);
+            this.fire("objectXRayed", entity, true);
         }
     }
 
-    _objectHighlightedUpdated(entity, bool, notify = true) {
-        if (bool) {
+    _objectHighlightedUpdated(entity, notify = true) {
+        if (entity.highlighted) {
             if (ASSERT_OBJECT_STATE_UPDATE && this.highlightedObjects[entity.id]) {
                 console.error("Redundant object highlight update (highlighted=true)");
                 return;
@@ -1102,12 +1122,12 @@ class Scene extends Component {
         }
         this._highlightedObjectIds = null; // Lazy regenerate
         if (notify) {
-          this.fire("objectHighlighted", entity, true);
+            this.fire("objectHighlighted", entity, true);
         }
     }
 
-    _objectSelectedUpdated(entity, bool, notify = true) {
-        if (bool) {
+    _objectSelectedUpdated(entity, notify = true) {
+        if (entity.selected) {
             if (ASSERT_OBJECT_STATE_UPDATE && this.selectedObjects[entity.id]) {
                 console.error("Redundant object select update (selected=true)");
                 return;
@@ -1124,12 +1144,12 @@ class Scene extends Component {
         }
         this._selectedObjectIds = null; // Lazy regenerate
         if (notify) {
-          this.fire("objectSelected", entity, true);
+            this.fire("objectSelected", entity, true);
         }
     }
 
-    _objectColorizeUpdated(entity, bool) {
-        if (bool) {
+    _objectColorizeUpdated(entity, colorized) {
+        if (colorized) {
             this.colorizedObjects[entity.id] = entity;
             this._numColorizedObjects++;
         } else {
@@ -1139,8 +1159,8 @@ class Scene extends Component {
         this._colorizedObjectIds = null; // Lazy regenerate
     }
 
-    _objectOpacityUpdated(entity, bool) {
-        if (bool) {
+    _objectOpacityUpdated(entity, opacityUpdated) {
+        if (opacityUpdated) {
             this.opacityObjects[entity.id] = entity;
             this._numOpacityObjects++;
         } else {
@@ -1223,7 +1243,7 @@ class Scene extends Component {
      * @returns {Boolean} True if precision picking is enabled.
      */
     get pickSurfacePrecisionEnabled() {
-        return this._pickSurfacePrecisionEnabled;
+        return false; // Removed
     }
 
     /**
@@ -1258,6 +1278,36 @@ class Scene extends Component {
      */
     get pbrEnabled() {
         return this._pbrEnabled;
+    }
+
+    /**
+     * Sets whether data texture scene representation (DTX) is enabled for the {@link Scene}.
+     *
+     * Even when enabled, DTX will only work if supported.
+     *
+     * Default value is ````false````.
+     *
+     * @type {Boolean}
+     */
+    set dtxEnabled(value) {
+        value = !!value;
+        if (this._dtxEnabled === value) {
+            return;
+        }
+        this._dtxEnabled = value;
+    }
+
+    /**
+     * Gets whether data texture-based scene representation (DTX) is enabled for the {@link Scene}.
+     *
+     * Even when enabled, DTX will only apply if supported.
+     *
+     * Default value is ````false````.
+     *
+     * @type {Boolean}
+     */
+    get dtxEnabled() {
+        return this._dtxEnabled;
     }
 
     /**
@@ -2166,13 +2216,13 @@ class Scene extends Component {
      * @param {Object} params Picking parameters.
      * @param {Number[]} [params.canvasPos] Canvas-space coordinates. When ray-picking, this will override the **origin** and ** direction** parameters and will cause the ray to be fired through the canvas at this position, directly along the negative View-space Z-axis.
      * @param {Number} [params.snapRadius=30] The snap radius, in canvas pixels
-     * @param {"vertex"|"edge"} [params.snapType="vertex"] Whether to snap to vertex or edge.
+     * @param {"vertex"|"edge"} [params.snapMode="vertex"] Whether to snap to vertex or edge.
      */
     snapPick(params) {
         return this._renderer.snapPick(
             params.canvasPos,
             params.snapRadius || 30,
-            params.snapType || "vertex"
+            params.snapMode || "vertex"
         );
     }
 
@@ -2231,7 +2281,7 @@ class Scene extends Component {
             this.lineSets[ids[i]].destroy();
         }
     }
-    
+
     /**
      * Gets the collective axis-aligned boundary (AABB) of a batch of {@link Entity}s that represent objects.
      *

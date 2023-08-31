@@ -3,7 +3,7 @@ import {math} from "../../viewer/scene/math/math.js";
 /**
  * @private
  */
-function CubeTextureCanvas(viewer, cfg = {}) {
+function CubeTextureCanvas(viewer, navCubeScene, cfg = {}) {
 
     const cubeColor = "lightgrey";
     const cubeHighlightColor = cfg.hoverColor || "rgba(0,0,0,0.4)";
@@ -167,7 +167,7 @@ function CubeTextureCanvas(viewer, cfg = {}) {
             }
         }
 
-        viewer.scene.glRedraw();
+        navCubeScene.glRedraw();
     }
 
     const translateLabel = (function () {

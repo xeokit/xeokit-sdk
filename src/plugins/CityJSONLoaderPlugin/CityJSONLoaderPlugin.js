@@ -1,8 +1,5 @@
-import {utils} from "../../viewer/scene/utils.js";
-import {VBOSceneModel} from "../../viewer/scene/models/VBOSceneModel/VBOSceneModel.js";
-import {Plugin} from "../../viewer/Plugin.js";
+import {math, Plugin, SceneModel, utils} from "../../viewer/index.js";
 import {CityJSONDefaultDataSource} from "./CityJSONDefaultDataSource.js";
-import {math} from "../../viewer/index.js";
 
 import {earcut} from '../lib/earcut.js';
 
@@ -168,6 +165,10 @@ class CityJSONLoaderPlugin extends Plugin {
      * @param {Number[]} [params.rotation=[0,0,0]] The model's orientation, given as Euler angles in degrees, for each of the X, Y and Z axis.
      * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's world transform matrix. Overrides the position, scale and rotation parameters. Relative to ````origin````.
      * @param {Object} [params.stats] Collects model statistics.
+     * @param {Boolean} [params.dtxEnabled=true] When ````true```` (default) use data textures (DTX), where appropriate, to
+     * represent the returned model. Set false to always use vertex buffer objects (VBOs). Note that DTX is only applicable
+     * to non-textured triangle meshes, and that VBOs are always used for meshes that have textures, line segments, or point
+     * primitives. Only works while {@link DTX#enabled} is also ````true````.
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
      */
     load(params = {}) {
@@ -177,8 +178,9 @@ class CityJSONLoaderPlugin extends Plugin {
             delete params.id;
         }
 
-        const sceneModel = new VBOSceneModel(this.viewer.scene, utils.apply(params, {
-            isModel: true
+        const sceneModel = new SceneModel(this.viewer.scene, utils.apply(params, {
+            isModel: true,
+            edges: true
         }));
 
         if (!params.src && !params.cityJSON) {

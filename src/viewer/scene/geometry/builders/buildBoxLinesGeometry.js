@@ -7,7 +7,7 @@ import {utils} from '../../utils.js';
  *
  * In the example below we'll create a {@link Mesh} with a box-shaped {@link ReadableGeometry} that has lines primitives.
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#geometry_builders_buildBoxLinesGeometry)]
+ * [[Run this example](/examples/#geometry_builders_buildBoxLinesGeometry)]
  *
  * ````javascript
  * import {Viewer, Mesh, buildBoxLinesGeometry, ReadableGeometry, PhongMaterial} from "xeokit-sdk.es.js";

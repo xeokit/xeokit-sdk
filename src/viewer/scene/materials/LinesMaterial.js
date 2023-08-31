@@ -24,7 +24,7 @@ const PRESETS = {
  * In the example below, we'll customize the {@link Scene}'s global ````LinesMaterial````, then use
  * an {@link XKTLoaderPlugin} to load a model containing line segments.
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#materials_LinesMaterial)]
+ * [[Run this example](/examples/#materials_LinesMaterial)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin} from "xeokit-sdk.es.js";

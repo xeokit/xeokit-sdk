@@ -1,9 +1,8 @@
-import {utils} from "../../viewer/scene/utils.js"
-import {VBOSceneModel} from "../../viewer/scene/models/VBOSceneModel/VBOSceneModel.js";
-import {Plugin} from "../../viewer/Plugin.js";
-import {GLTFVBOSceneModelLoader} from "./GLTFVBOSceneModelLoader.js";
-import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
+import {Plugin, SceneModel, utils} from "../../viewer/index.js"
+import {GLTFSceneModelLoader} from "./GLTFSceneModelLoader.js";
+
 import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
+import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults";
 
 /**
  * {@link Viewer} plugin that loads models from [glTF](https://www.khronos.org/gltf/).
@@ -28,8 +27,8 @@ import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
  *
  * ## Usage
  *
- * In the example below we'll load a house plan model from a [binary glTF file](http://xeokit.github.io/xeokit-sdk/examples/models/gltf/schependomlaan/), along
- * with an accompanying JSON [IFC metadata file](http://xeokit.github.io/xeokit-sdk/examples/metaModels/schependomlaan/).
+ * In the example below we'll load a house plan model from a [binary glTF file](/examples/models/gltf/schependomlaan/), along
+ * with an accompanying JSON [IFC metadata file](/examples/metaModels/schependomlaan/).
  *
  * This will create a bunch of {@link Entity}s that represents the model and its objects, along with a {@link MetaModel} and {@link MetaObject}s
  * that hold their metadata.
@@ -174,7 +173,7 @@ class GLTFLoaderPlugin extends Plugin {
 
         super("GLTFLoader", viewer, cfg);
 
-        this._sceneModelLoader = new GLTFVBOSceneModelLoader(this, cfg);
+        this._sceneModelLoader = new GLTFSceneModelLoader(this, cfg);
 
         this.dataSource = cfg.dataSource;
         this.objectDefaults = cfg.objectDefaults;
@@ -247,6 +246,10 @@ class GLTFLoaderPlugin extends Plugin {
      * @param {Boolean} [params.colorTextureEnabled=true] Indicates if base color texture rendering is enabled for the model. Overridden by ````pbrEnabled````.  Only works when {@link Scene#colorTextureEnabled} is also ````true````.
      * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the glTF. When false, ignores backfaces.
      * @param {Number} [params.edgeThreshold=10] When xraying, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
+     * @param {Boolean} [params.dtxEnabled=true] When ````true```` (default) use data textures (DTX), where appropriate, to
+     * represent the returned model. Set false to always use vertex buffer objects (VBOs). Note that DTX is only applicable
+     * to non-textured triangle meshes, and that VBOs are always used for meshes that have textures, line segments, or point
+     * primitives. Only works while {@link DTX#enabled} is also ````true````.
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
      */
     load(params = {}) {
@@ -256,8 +259,9 @@ class GLTFLoaderPlugin extends Plugin {
             delete params.id;
         }
 
-        const sceneModel = new VBOSceneModel(this.viewer.scene, utils.apply(params, {
-            isModel: true
+        const sceneModel = new SceneModel(this.viewer.scene, utils.apply(params, {
+            isModel: true,
+            dtxEnabled: params.dtxEnabled
         }));
 
         const modelId = sceneModel.id;  // In case ID was auto-generated

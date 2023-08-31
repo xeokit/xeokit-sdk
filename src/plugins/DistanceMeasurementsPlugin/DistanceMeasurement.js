@@ -415,7 +415,7 @@ class DistanceMeasurement extends Component {
             // this._xAxisLabel.setVisible(this.axisVisible && this.xAxisVisible);
             // this._yAxisLabel.setVisible(this.axisVisible && this.yAxisVisible);
             // this._zAxisLabel.setVisible(this.axisVisible && this.zAxisVisible);
-           // this._lengthLabel.setVisible(false);
+            // this._lengthLabel.setVisible(false);
 
             this._originDot.setVisible(this._visible && this._originVisible);
             this._targetDot.setVisible(this._visible && this._targetVisible);
