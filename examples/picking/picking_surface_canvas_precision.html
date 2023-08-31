@@ -178,7 +178,7 @@
         XKTLoaderPlugin,
         DistanceMeasurementsPlugin,
         math,
-        VBOSceneModel
+        SceneModel
     } from "../../dist/xeokit-sdk.es.js";
     import {PickResult} from "../src/viewer/scene/webgl/PickResult.js";
     import {PickHitHelper} from "./libs/PickHitHelper.js";
@@ -196,9 +196,9 @@
     viewer.cameraControl.followPointer = true;
     viewer.cameraControl.smartPivot = true;
 
-    const vboSceneModel = new VBOSceneModel(viewer.scene, {
+    const vboSceneModel = new SceneModel(viewer.scene, {
         id: "table",
-        isModel: true, // <--------------------- Represents a model, registers VBOSceneModel by ID on viewer.scene.models
+        isModel: true, // <--------------------- Represents a model, registers SceneModel by ID on viewer.scene.models
         position: [0, 0, 0],
         scale: [1, 1, 1],
         rotation: [0, 0, 0],

@@ -14,7 +14,7 @@
 <canvas id="myCanvas"></canvas>
 <div class="slideout-sidebar">
     <img class="info-icon" src="../../assets/images/performance_model_icon.png"/>
-    <h1>Picking VBOSceneModel Surfaces with Full Precision</h1>
+    <h1>Picking SceneModel Surfaces with Full Precision</h1>
     <h2>Hover over objects to ray-pick them using the 'pickSurfacePrecision' option</h2>
     <h3>Components Used</h3>
     <ul>
@@ -23,8 +23,8 @@
                target="_other">Viewer</a>
         </li>
         <li>
-            <a href="../../docs/class/src/viewer/scene/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html"
-               target="_other">VBOSceneModel</a>
+            <a href="../../docs/class/src/viewer/scene/model/SceneModel.js~SceneModel.html"
+               target="_other">SceneModel</a>
         </li>
     </ul>
 </div>
@@ -38,7 +38,7 @@
 
     import {
         Viewer,
-        VBOSceneModel,
+        SceneModel,
         Node,
         Mesh,
         VBOGeometry,
@@ -65,16 +65,16 @@
     viewer.cameraControl.smartPivot = true;
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a VBOSceneModel representing a table with four legs, using geometry batching
+    // Create a SceneModel representing a table with four legs, using geometry batching
     //------------------------------------------------------------------------------------------------------------------
 
     //------------------------------------------------------------------------------------------------------------------
-    // Build a VBOSceneModel representing a table with four legs, using geometry instancing
+    // Build a SceneModel representing a table with four legs, using geometry instancing
     //------------------------------------------------------------------------------------------------------------------
 
-    const vboSceneModel = new VBOSceneModel(viewer.scene, {
+    const vboSceneModel = new SceneModel(viewer.scene, {
         id: "table",
-        isModel: true, // <--------------------- Represents a model, registers VBOSceneModel by ID on viewer.scene.models
+        isModel: true, // <--------------------- Represents a model, registers SceneModel by ID on viewer.scene.models
         position: [0, 0, 0],
         scale: [1, 1, 1],
         rotation: [0, 0, 0],
@@ -82,7 +82,7 @@
     });
 
     //--------------------------------------------------------
-    // Create a reusable geometry within the VBOSceneModel
+    // Create a reusable geometry within the SceneModel
     // We'll instance this geometry by five meshes
     //--------------------------------------------------------
 
@@ -227,7 +227,7 @@
     });
 
     //--------------------------------------------------------
-    // Finalize this VBOSceneModel.
+    // Finalize this SceneModel.
     //
     // Internally, this builds any geometry batches or instanced
     // arrays that are currently under construction.

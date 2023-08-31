@@ -61,23 +61,6 @@
 
 <script>
 
-    window.onload = function () {
-        var jsonUrl = '/package.json';
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    var jsonData = JSON.parse(xhr.responseText);
-                    const version = jsonData.version;
-                    var jsonDataDiv = document.getElementById('version');
-                    jsonDataDiv.innerHTML = version;
-                }
-            }
-        };
-        xhr.open('GET', jsonUrl, true);
-        xhr.send();
-    };
-
     /**
      * Enables existing links in documentation for previous xeokit releases to resolve, more or less,
      * to examples within this newer arrangement (since v2.4).
@@ -117,7 +100,7 @@
         "loading_XKT_concurrently": ".",
         "loading_XKT_maxGeometryBatchSize_50M": "./cities/#XKT_Lyon",
         "loading_XKT_maxGeometryBatchSize_20K": "./cities/#XKT_Lyon",
-        "loading_XKT_jitter_singlePrecision_MAP": "./misc/#jitter_singlePrecision_MAP",
+        "loading_XKT_jitter_singlePrecision_MAP": "./buildings/#jitter_singlePrecision_MAP",
         "loading_XKT_jitter_fullPrecision_MAP": "./buildings/#xkt_vbo_MAP",
         "loading_XKT_jitter_fullPrecision_MAP_annotations": ".",
         "loading_XKT_forceBackfaces": ".",
@@ -229,12 +212,12 @@
         "picking_canvas_mesh_select_transparent": "./emphasising/#select_transparentCanvas",
         "picking_canvas_mesh_xray": "./emphasising/#xray",
         "picking_canvas_mesh_xray_transparent": "./emphasising/#xray_transparentCanvas",
-        "picking_canvas_surface": ".",
-        "picking_canvas_doubleClick": ".",
-        "picking_ray_mesh": ".",
-        "picking_ray_surface": ".",
-        "picking_ray_matrix": ".",
-        "picking_setObjectsPickable": ".",
+        "picking_canvas_surface": "./picking/#pick_canvas_entity",
+        "picking_canvas_doubleClick": "./picking/#pick_canvas_entity",
+        "picking_ray_mesh": "./picking/#pick_ray_entity",
+        "picking_ray_surface": "./picking/#pick_ray_surface",
+        "picking_ray_matrix": "./picking/#pick_ray_matrix",
+        "picking_setObjectsPickable": "./picking/#pick_setObjectsPickable",
         "picking_pickSurfacePrecision_VBOSceneModel_batching": ".",
         "picking_pickSurfacePrecision_VBOSceneModel_instancing": ".",
 
@@ -250,7 +233,7 @@
         "gizmos_SectionPlanesPlugin_getSnapshot_includeGizmos": "./slicing/#getSnapshot_includeSectionPlaneControl",
         "gizmos_SectionPlanesPlugin_flipSectionPlanes": "./slicing/#SectionPlanesPlugin_flipSectionPlanes",
 
-        "ImagePlane_imageInSectionPlane": ".",
+        "ImagePlane_imageInSectionPlane": "./scenegraph/#ImagePlane_imageInSectionPlane",
         "gizmos_FaceAlignedSectionPlanesPlugin": ".",
         "storeyViews_StoreyViewsPlugin_showStoreyObjects": ".",
         "storeyViews_StoreyViewsPlugin_gotoStoreyCamera": ".",
@@ -287,36 +270,38 @@
         "screenshots_png_getSnapshot": "./snapshots/getSnapshot_png",
         "screenshots_png_getSnapshot_hires": "./snapshots/getSnapshot_png_hires",
         "screenshots_png_getSnapshot_withMeasurements": "./snapshots/getSnapshot_excludeSectionPlaneControl",
-        "geometry_VBOGeometry": ".",
-        "geometry_ReadableGeometry": ".",
-        "geometry_builders_buildBoxGeometry": "./geometry/#buildBoxGeometry",
-        "geometry_builders_buildBoxLinesGeometry": "./geometry/#buildBoxLinesGeometry",
-        "geometry_builders_buildGridGeometry": "./geometry/#buildGridGeometry",
-        "geometry_builders_buildCylinderGeometry": "./geometry/#buildCylinderGeometry",
-        "geometry_builders_buildSphereGeometry": "./geometry/#buildSphereGeometry",
-        "geometry_builders_buildTorusGeometry": "./geometry/#buildTorusGeometry",
-        "geometry_builders_buildVectorTextGeometry": "./geometry/#buildVectorTextGeometry",
+        "geometry_VBOGeometry": "./scenegraph/#geometry_VBOGeometry",
+        "geometry_ReadableGeometry": "./scenegraph/#geometry_ReadableGeometry",
+        "geometry_builders_buildBoxGeometry": "./scenegraph/#buildBoxGeometry",
+        "geometry_builders_buildBoxLinesGeometry": "./scenegraph/#buildBoxLinesGeometry",
+        "geometry_builders_buildGridGeometry": "./scenegraph/#buildGridGeometry",
+        "geometry_builders_buildCylinderGeometry": "./scenegraph/#buildCylinderGeometry",
+        "geometry_builders_buildSphereGeometry": "./scenegraph/#buildSphereGeometry",
+        "geometry_builders_buildTorusGeometry": "./scenegraph/#buildTorusGeometry",
+        "geometry_builders_buildVectorTextGeometry": "./scenegraph/#buildVectorTextGeometry",
         "geometry_loaders_loadOBJGeometry": ".",
         "geometry_loaders_load3DSGeometry": ".",
-        "lights_AmbientLight": ".",
-        "lights_DirLight_view": ".",
-        "lights_DirLight_world": ".",
-        "lights_PointLight_view": ".",
-        "lights_PointLight_world": ".",
-        "sceneRepresentation_lightingTest_viewDirLights": ".",
-        "sceneRepresentation_lightingTest_worldDirLights": ".",
-        "sceneRepresentation_lightingTest_viewPointLights": ".",
-        "sceneRepresentation_lightingTest_worldPointLights": ".",
-        "materials_PhongMaterial": ".",
-        "materials_MetallicMaterial": ".",
-        "materials_LambertMaterial": ".",
-        "materials_EdgeMaterial": ".",
-        "materials_EmphasisMaterial": ".",
-        "materials_Texture": ".",
-        "materials_Fresnel": ".",
-        "materials_PointsMaterial": ".",
-        "materials_LinesMaterial": ".",
+        "lights_AmbientLight": "./scenegraph/#lights_AmbientLight",
+        "lights_DirLight_view": "./scenegraph/#lights_DirLight_view",
+        "lights_DirLight_world": "./scenegraph/#lights_DirLight_world",
+        "lights_PointLight_view": "./scenegraph/#lights_PointLight_view",
+        "lights_PointLight_world": "./scenegraph/#lights_PointLight_world",
+        "sceneRepresentation_lightingTest_viewDirLights": "./scenegraph/#lightingTest_viewDirLights",
+        "sceneRepresentation_lightingTest_worldDirLights": "./scenegraph/#lightingTest_worldDirLights",
+        "sceneRepresentation_lightingTest_viewPointLights": "./scenegraph/#lightingTest_viewPointLights",
+        "sceneRepresentation_lightingTest_worldPointLights": "./scenegraph/#lightingTest_worldPointLights",
+        "materials_PhongMaterial": "./scenegraph/#materials_PhongMaterial",
+        "materials_MetallicMaterial": "./scenegraph/#materials_MetallicMaterial",
+        "materials_LambertMaterial": "./scenegraph/#materials_LambertMaterial",
+        "materials_EdgeMaterial": "./scenegraph/#materials_EdgeMaterial",
+        "materials_EmphasisMaterial": "./scenegraph/#materials_EmphasisMaterial",
+        "materials_Texture": "./scenegraph/#materials_Texture",
+        "materials_Fresnel": "./scenegraph/#materials_Fresnel",
+        "materials_PointsMaterial": "./scenegraph/#materials_PointsMaterial",
+        "materials_LinesMaterial": "./scenegraph/#materials_LinesMaterial",
         "sceneRepresentation_VBOSceneModel_instancing": "./scenemodel/#vbo_instancing_autocompressed_triangles",
+
+
         "sceneRepresentation_VBOSceneModel_instancing_autoNormals": ".",
         "sceneRepresentation_VBOSceneModel_instancing_textures": "./scenemodel/#vbo_instancing_autocompressed_triangles_textures_jpg",
         "sceneRepresentation_VBOSceneModel_instancing_textures_pbr": ".",
@@ -347,16 +332,17 @@
         "sceneRepresentation_VBOSceneModel_metadata": ".",
         "sceneRepresentation_VBOSceneModel_metadata_federated": ".",
         "sceneRepresentation_SceneGraph": ".",
-        "sceneRepresentation_SceneGraph_ReadableGeometry": ".",
-        "sceneRepresentation_SceneGraph_VBOGeometry": ".",
-        "sceneRepresentation_SceneGraph_metadata": ".",
-        "sceneRepresentation_SceneGraph_origin": ".",
-        "ImagePlane_groundPlane": "./viewer/#ImagePlane_groundPlane",
-        "ImagePlane_groundPlane_narrow": "./viewer/#ImagePlane_groundPlane_narrow",
-        "Bitmap_storeyPlan": "./viewer/#Bitmap_storeyPlan",
-        "LineSet_grid": "./viewer/#LineSet_grid",
-        "billboarding_Mesh_spherical": "./viewer/#billboarding_Mesh_spherical",
-        "billboarding_Mesh_cylindrical": "./viewer/#billboarding_Mesh_cylindrical",
+
+        "sceneRepresentation_SceneGraph_ReadableGeometry": "./scenegraph/#geometry_ReadableGeometry",
+        "sceneRepresentation_SceneGraph_VBOGeometry": "./scenegraph/#geometry_VBOGeometry",
+        "sceneRepresentation_SceneGraph_metadata": "./scenegraph/#sceneGraph_metadata",
+        "sceneRepresentation_SceneGraph_origin": "./scenegraph/#sceneGraph_rtc",
+        "ImagePlane_groundPlane": "./scenegraph/#ImagePlane_groundPlane",
+        "ImagePlane_groundPlane_narrow": "./scenegraph/#ImagePlane_groundPlane_narrow",
+        "Bitmap_storeyPlan": "./scenegraph/#Bitmap_storeyPlan",
+        "LineSet_grid": "./scenegraph/#LineSet_grid",
+        "billboarding_Mesh_spherical": "./scenegraph/#billboarding_Mesh_spherical",
+        "billboarding_Mesh_cylindrical": "./scenegraph/#billboarding_Mesh_cylindrical",
         "logDepthBuf_XKT_Lyon": "./viewer/#logDepthBuf_XKT_Lyon",
         "logDepthBuf_XKT_Lyon_logDepthBufDisabled": "./viewer/#logDepthBuf_XKT_Lyon_logDepthBufDisabled",
         "logDepthBuf_SceneGraph_RTC": "./viewer/#logDepthBuf_SceneGraph_RTC",
@@ -399,8 +385,9 @@
 
 </script>
 <div class="container mt-5">
-    <h2 class="mb-3"><a href="">xeokit SDK</a> Examples</h2>
-    <p id="version">&nbsp;</p>
+    <h2 class="mb-3"><a href="https://xeokit.io">xeokit SDK</a> Examples</h2>
+    <p><a href="https://badge.fury.io/js/%40xeokit%2Fxeokit-sdk" rel="nofollow"><img src="https://camo.githubusercontent.com/68c1fab0f43de359c265e78b3e1ad536d34e1ac5ee538f4fd059eb1d10ef296b/68747470733a2f2f62616467652e667572792e696f2f6a732f25343078656f6b697425324678656f6b69742d73646b2e737667" alt="npm version" data-canonical-src="https://badge.fury.io/js/%40xeokit%2Fxeokit-sdk.svg" style="max-width: 100%;"></a>
+        <a href="https://www.jsdelivr.com/package/npm/@xeokit/xeokit-sdk" rel="nofollow"><img src="https://camo.githubusercontent.com/0010862b1944135a705444366f1d80e9800590ac2ece248539f26ab6de8ceed1/68747470733a2f2f646174612e6a7364656c6976722e636f6d2f76312f7061636b6167652f6e706d2f4078656f6b69742f78656f6b69742d73646b2f6261646765" alt="" data-canonical-src="https://data.jsdelivr.com/v1/package/npm/@xeokit/xeokit-sdk/badge" style="max-width: 100%;"></a></p>
     <br><br>
 
     <h2>Viewing Models</h2>
@@ -431,7 +418,8 @@
                     <img class="card-img-top thumbnail" src="../assets/images/lyon_city.png" alt="Thumbnail 2">
                     <div class="card-body">
                         <h4 class="card-title">Viewing City Models</h4>
-                        <p class="card-text">Using the xeokit SDK to view city models loaded from glTF, CityJSON, CityGML and
+                        <p class="card-text">Using the xeokit SDK to view city models loaded from glTF, CityJSON,
+                            CityGML and
                             XKT.</p>
                     </div>
                 </div>
@@ -545,7 +533,7 @@
             <a href="./performance" class="card-link">
                 <div class="card">
                     <img class="card-img-top thumbnail"
-                         src="http://xeokit.io/img/docs/TreeViewPlugin/TreeViewPlugin.png"
+                         src="../assets/images/aphs.png"
                          alt="Thumbnail 3">
                     <div class="card-body">
                         <h4 class="card-title">Accelerating Performance</h4>
@@ -603,7 +591,7 @@
             <a href="./picking" class="card-link">
                 <div class="card">
                     <img class="card-img-top thumbnail"
-                         src="http://xeokit.io/img/docs/TreeViewPlugin/TreeViewPlugin.png" alt="Thumbnail 3">
+                         src="../assets/images/picking.png" alt="Thumbnail 3">
                     <div class="card-body">
                         <h4 class="card-title">Picking Objects</h4>
                         <p class="card-text">How to pick objects in a xeokit Viewer, interactively or
@@ -650,28 +638,12 @@
     </div>
 
     <br><br>
-    <h2>Programmatically Creating Scene Elements</h2>
+    <h2>Programming Scene Content</h2>
     <br>
 
     <div class="row">
 
-        <!-- Geometry -->
-
-        <div class="col-md-4 mb-4">
-            <a href="./geometry" class="card-link">
-                <div class="card">
-                    <img class="card-img-top thumbnail"
-                         src="../assets/images/geometry.png" alt="Thumbnail 2">
-                    <div class="card-body">
-                        <h4 class="card-title">Generating Geometries</h4>
-                        <p class="card-text">Programming with xeokit's geometry generator functions to build various
-                            shapes.</p>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <!-- SceneModel Tests -->
+        <!-- SceneModel Examples -->
 
         <div class="col-md-4 mb-4">
             <a href="./scenemodel" class="card-link">
@@ -680,25 +652,26 @@
                          src="../assets/images/sceneModelTextured.png"
                          alt="Thumbnail 2">
                     <div class="card-body">
-                        <h4 class="card-title">SceneModel Tests</h4>
-                        <p class="card-text">Low-level programming examples for various features of the xeokit SDK's core
-                            scene
-                            representation.</p>
+                        <h4 class="card-title">SceneModel Examples</h4>
+                        <p class="card-text">Low-level programming examples and tests for xeokit's high-performance
+                            model
+                            representation. Use these to build custom model loaders. Also useful to debug model viewing issues.</p>
                     </div>
                 </div>
             </a>
         </div>
 
-        <!-- Misc -->
+        <!-- Scene Graph -->
 
         <div class="col-md-4 mb-4">
-            <a href="./misc" class="card-link">
+            <a href="./scenegraph" class="card-link">
                 <div class="card">
-                    <img class="card-img-top thumbnail" src="../assets/images/pbrXKT.png"
-                         alt="Thumbnail 3">
+                    <img class="card-img-top thumbnail"
+                         src="../assets/images/geometry.png" alt="Thumbnail 2">
                     <div class="card-body">
-                        <h4 class="card-title">Miscelleneous</h4>
-                        <p class="card-text">Programming billboards, image planes, line segments, sprites and more.</p>
+                        <h4 class="card-title">Scene Graph Examples</h4>
+                        <p class="card-text">Creating custom scene elements using xeokit's scene graph; materials, transforms,
+                            geometries, billboards, sprites and more. Use these to build custom viewer gizmos.</p>
                     </div>
                 </div>
             </a>

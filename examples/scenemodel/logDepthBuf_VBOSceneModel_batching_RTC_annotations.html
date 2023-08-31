@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1" name="viewport">
-    <title>VBOSceneModel with batched, double-precision geometries, annotations, rendered with logarithmic depth
+    <title>SceneModel with batched, double-precision geometries, annotations, rendered with logarithmic depth
         buffer
         enabled</title>
         <link href="../css/pageStyle.css" rel="stylesheet"/>
@@ -115,7 +115,7 @@
 <canvas id="myNavCubeCanvas"></canvas>
 
 <div id="info" style="visibility:visible">
-    <h1>VBOSceneModel with batched, double-precision geometries, annotations, rendered with logarithmic depth buffer
+    <h1>SceneModel with batched, double-precision geometries, annotations, rendered with logarithmic depth buffer
         enabled</h1>
     <br>
     <ul>
@@ -128,8 +128,8 @@
                target="_other">AnnotationsPlugin</a>
         </li>
         <li>
-            <a href="../../docs/class/src/viewer/scene/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html"
-               target="_other">VBOSceneModel</a>
+            <a href="../../docs/class/src/viewer/scene/model/SceneModel.js~SceneModel.html"
+               target="_other">SceneModel</a>
         </li>
     </ul>
 </div>
@@ -142,7 +142,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, NavCubePlugin, math, VBOSceneModel, AnnotationsPlugin} from "../../dist/xeokit-sdk.es.js";
+    import {Viewer, NavCubePlugin, math, SceneModel, AnnotationsPlugin} from "../../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer with a logarithmic depth buffer
@@ -334,12 +334,12 @@
     // });
 
     //----------------------------------------------------------------------------------------------------------------------
-    // Programmatically build a VBOSceneModel
+    // Programmatically build a SceneModel
     // containing a bunch of table-shaped models,
     // without using geometry
     //----------------------------------------------------------------------------------------------------------------------
 
-    const vboSceneModel = new VBOSceneModel(viewer.scene, {
+    const vboSceneModel = new SceneModel(viewer.scene, {
         id: "table",
         isModel: true,
         position: [0, 0, 0],
@@ -363,7 +363,7 @@
     viewer.cameraFlight.jumpTo(viewer.scene);
 
     //------------------------------------------------------------------------------------------------------------------
-    // Creates a simple table-shaped model with the given VBOSceneModel,
+    // Creates a simple table-shaped model with the given SceneModel,
     // without reusing geometry, and centered at the given origin
     //------------------------------------------------------------------------------------------------------------------
 

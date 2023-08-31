@@ -249,12 +249,27 @@
 <div class="content-overlay" id="viewer-overlay"></div>
 <iframe class="content-container" id="viewer" src="../../default.html"></iframe>
 <div class="slideout-sidebar">
-    <div id="index"><h1><a href="http://xeokit.io">xeokit</a> / <a href="../">Examples</a> / Misc</h1></div>
+    <div id="index"><h1><a href="http://xeokit.io">xeokit</a> / <a href="../">Examples</a> / Scene Graph</h1></div>
 </div>
 </body>
 <script>
 
     const files = {
+
+        "Geometry": [
+
+            "#Creating and loading geometry",
+
+            ["geometry_VBOGeometry", "GPU-resident geometry"],
+            ["geometry_ReadableGeometry", "Browser-resident geometry"],
+            ["buildBoxGeometry", "Building box-shaped triangle mesh geometry"],
+            ["buildBoxLinesGeometry", "Building box-shaped wireframe geometry"],
+            ["buildCylinderGeometry", "Building cylinder-shaped triangle mesh geometry"],
+            ["buildGridGeometry", "Building grid-shaped wireframe geometry"],
+            ["buildPlaneGeometry", "Building plane-shaped triangle mesh geometry"],
+            ["buildTorusGeometry", "Building torus-shaped triangle mesh geometry"],
+            ["buildVectorTextGeometry", "Building vector text geometry"]
+        ],
 
         "ImagePlane": [
 
@@ -269,17 +284,60 @@
 
             "#Showing bitmaps within 3D scenes",
 
-            ["Bitmap_storeyPlan", "Creating a 2D storey plan with a Bitmap"],
-            ["BCF_SaveViewpoint", "Saving viewer state with bitmaps and lines as a BCF viewpoint"]
+            ["Bitmap_storeyPlan", "Creating a 2D storey plan with a Bitmap"]
 
+        ],
+
+        "Lighting": [
+
+            "#Light source components",
+
+            ["lights_AmbientLight", "Ambient light"],
+            ["lights_DirLight_view", "View-space directional lights"],
+            ["lights_DirLight_world", "World-space directional lights"],
+            ["lights_PointLight_view", "View-space point lights"],
+            ["lights_PointLight_world", "World-space point lights"],
+
+            "#Light source types with various scene representations",
+
+            ["lightingTest_viewDirLights", "View-space directional lights with various scene representations"],
+            ["lightingTest_worldDirLights", "World-space directional lights with various scene representations"],
+            ["lightingTest_viewPointLights", "View-space point lights with various scene representations"],
+            ["lightingTest_worldPointLights", "World-space point lights with various scene representations"],
         ],
 
         "LineSet": [
 
             "#Showing line segments within 3D scenes",
 
-            ["LineSet_grid", "Creating a ground grid with a LineSet"],
-            ["BCF_SaveViewpoint", "Saving viewer state with bitmaps and lines as a BCF viewpoint"]
+            ["LineSet_grid", "Creating a ground grid with a LineSet"]
+        ],
+
+        "Materials": [
+
+            "#Material components",
+
+            ["materials_PhongMaterial", "PhongMaterial"],
+            ["materials_MetallicMaterial", "Physically-based metallic/roughness material"],
+            ["materials_LambertMaterial", "LambertMaterial"],
+            ["materials_EdgeMaterial", "EdgeMaterial"],
+            ["materials_EmphasisMaterial", "EmphasisMaterial"],
+            ["materials_Texture", "Texture"],
+            ["materials_Fresnel", "Fresnel"],
+            ["materials_PointsMaterial", "PointsMaterial"],
+            ["materials_LinesMaterial", "LinesMaterial"]
+        ],
+
+        "Scene Graphs": [
+
+            "#Scene graph components",
+
+            ["sceneGraph", "Scene graph with animated transform hierarchy"],
+            ["sceneGraph_ReadableGeometry", "Scene graph with browser-resident geometry"],
+            ["sceneGraph_VBOGeometry", "Scene graph with GPU-resident geometry"],
+            ["sceneGraph_metadata", "Scene graph classified with metadata"],
+            ["sceneGraph_rtc", "Scene graph with RTC geometry coordinates"],
+            ["sceneGraph_rtc_sectionPlanes", "Scene graph with RTC geometry coordinates and section planes"]
         ],
 
         "Billboarding": [
@@ -290,15 +348,8 @@
             ["billboarding_Mesh_cylindrical", "Mesh with cylindrical billboard"]
         ],
 
-        "Experiments": [
-            "#Random experiments",
-            ["techniques_nonInteractiveQuality", "Disable edges and SAO while camera is moving"],
-            ["techniques_findComplexEntities", "Automatically detect and colorize small and complex entities"]
-        ],
 
-        "Misc": [
-            ["jitter_singlePrecision_MAP", "Demonstrates rounding jitter"]
-        ]
+
     };
 
     const list = document.getElementById('index');

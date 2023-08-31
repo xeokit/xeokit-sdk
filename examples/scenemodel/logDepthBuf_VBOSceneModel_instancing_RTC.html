@@ -47,7 +47,7 @@
 <canvas id="myNavCubeCanvas"></canvas>
 <div class="slideout-sidebar">
     <h1>Info</h1>
-    <p>VBOSceneModel with instanced, double-precision geometries, rendered <b>with</b> logarithmic depth buffer
+    <p>SceneModel with instanced, double-precision geometries, rendered <b>with</b> logarithmic depth buffer
         enabled</p>
     <h3>Components used</h3>
     <ul>
@@ -56,8 +56,8 @@
                target="_other">Viewer</a>
         </li>
         <li>
-            <a href="../../docs/class/src/viewer/scene/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html"
-               target="_other">VBOSceneModel</a>
+            <a href="../../docs/class/src/viewer/scene/model/SceneModel.js~SceneModel.html"
+               target="_other">SceneModel</a>
         </li>
     </ul>
 </div>
@@ -69,7 +69,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, NavCubePlugin, math, VBOSceneModel} from "../../dist/xeokit-sdk.es.js";
+    import {Viewer, NavCubePlugin, math, SceneModel} from "../../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer with a logarithmic depth buffer
@@ -157,12 +157,12 @@
     });
 
     //----------------------------------------------------------------------------------------------------------------------
-    // Programmatically build a VBOSceneModel
+    // Programmatically build a SceneModel
     // containing a bunch of table-shaped models, 
     // using instancing to reuse geometries
     //----------------------------------------------------------------------------------------------------------------------
 
-    const vboSceneModel = new VBOSceneModel(viewer.scene, {
+    const vboSceneModel = new SceneModel(viewer.scene, {
         id: "table",
         isModel: true,
         position: [0, 0, 0],
@@ -186,7 +186,7 @@
     viewer.cameraFlight.jumpTo(viewer.scene);
 
     //------------------------------------------------------------------------------------------------------------------
-    // Creates a simple table-shaped model with the given VBOSceneModel,
+    // Creates a simple table-shaped model with the given SceneModel,
     // reusing geometry amongst the meshes, and centered at the given origin
     //------------------------------------------------------------------------------------------------------------------
 
