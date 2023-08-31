@@ -1182,7 +1182,7 @@ class Control {
                 grabbed = true;
             });
 
-            this._onCameraControlHoverLeave = this._viewer.cameraControl.on("hoverOut", (hit) => {
+            this._onCameraControlHoverLeave = this._viewer.cameraControl.on("hoverOutEntity", (hit) => {
                 if (!this._visible) {
                     return;
                 }

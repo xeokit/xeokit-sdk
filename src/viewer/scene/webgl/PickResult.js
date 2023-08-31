@@ -135,7 +135,6 @@ class PickResult {
     
     /**
      * Picked triangle's vertex indices.
-     * Only defined when an entity and triangle was picked.
      * @property indices
      * @type {Int32Array}
      */
@@ -159,8 +158,7 @@ class PickResult {
     }
 
     /**
-     * Picked Local-space point on surface.
-     * Only defined when an entity and a point on its surface was picked.
+     * Picked Local-space point.
      * @property localPos
      * @type {Number[]}
      */
@@ -184,13 +182,12 @@ class PickResult {
     }
 
     /**
-     * Picked World-space point on surface.
-     * Only defined when an entity and a point on its surface was picked.
+     * Picked World-space point.
      * @property worldPos
      * @type {Number[]}
      */
     get worldPos() {
-        return this.entity && this._gotWorldPos ? this._worldPos : null;
+        return this._gotWorldPos ? this._worldPos : null;
     }
 
     /**
@@ -209,8 +206,7 @@ class PickResult {
     }
 
     /**
-     * Picked View-space point on surface.
-     * Only defined when an entity and a point on its surface was picked.
+     * Picked View-space point.
      * @property viewPos
      * @type {Number[]}
      */
@@ -235,7 +231,6 @@ class PickResult {
 
     /**
      * Barycentric coordinate within picked triangle.
-     * Only defined when an entity and a point on its surface was picked.
      * @property bary
      * @type {Number[]}
      */
@@ -260,7 +255,6 @@ class PickResult {
 
     /**
      * Normal vector at picked position on surface.
-     * Only defined when an entity and a point on its surface was picked.
      * @property worldNormal
      * @type {Number[]}
      */
@@ -285,7 +279,6 @@ class PickResult {
 
     /**
      * UV coordinates at picked position on surface.
-     * Only defined when an entity and a point on its surface was picked.
      * @property uv
      * @type {Number[]}
      */

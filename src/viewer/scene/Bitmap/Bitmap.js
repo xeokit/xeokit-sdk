@@ -17,9 +17,9 @@ import {math} from "../math/math.js";
  * In the example below, we'll load the Schependomlaan model, then use
  * an ````Bitmap```` to show a storey plan next to the model.
  *
- * [<img src="http://xeokit.github.io/xeokit-sdk/assets/images/Bitmap_storeyPlan.png">](http://xeokit.github.io/xeokit-sdk/examples/#Bitmap_storeyPlan)
+ * [<img src="http://xeokit.github.io/xeokit-sdk/assets/images/Bitmap_storeyPlan.png">](/examples/#Bitmap_storeyPlan)
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#Bitmap_grid)]
+ * [[Run this example](/examples/#Bitmap_grid)]
  *
  * ````javascript
  * import {Viewer, Bitmap, XKTLoaderPlugin} from "xeokit-sdk.es.js";

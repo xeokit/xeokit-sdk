@@ -39,7 +39,7 @@ const PRESETS = {
  *
  * Recall that {@link Mesh} is a concrete subtype of the abstract {@link Entity} base class.
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#materials_EdgeMaterial)]
+ * [[Run this example](/examples/#materials_EdgeMaterial)]
  *
  * ````javascript
  * import {Viewer, Mesh, buildSphereGeometry,

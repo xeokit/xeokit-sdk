@@ -1,0 +1,157 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/geolocation_icon.png"/>
+    <h1>WebIFCLoaderPlugin</h1>
+    <p>Loading an IFC model and positioning it at geodesic longitude and latitude</p>
+    <p>Note that the technique demonstrated here also works with all the other xeokit loader plugins, including <a
+            href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+            target="_other">XKTLoaderPlugin</a>.</p>
+    <h3>Stats</h3>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+    </ul>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html"
+               target="_other">WebIFCLoaderPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="https://www.notion.so/xeokit/Geographically-Positioning-Models-80828a6e522b415b8491dc7bbcc3ba93"
+               target="_other">Tutorial</a>
+        </li>
+        <li>
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
+               target="_other">Model source</a>
+        </li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    import {Viewer, WebIFCLoaderPlugin, math} from "../../dist/xeokit-sdk.es.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    // Set up viewer coordinate axis for mercator coordinate system, where +Z is "up"
+    viewer.camera.worldAxis = [
+        1, 0, 0, // Right +X
+        0, 0, 1, // Up +Z
+        0, -1, 0  // Forward -Y
+    ];
+
+    // Point camera forwards, along -Y axis
+    viewer.scene.camera.eye = [0, 1, 0];
+    viewer.scene.camera.look = [0, 0, 0];
+    viewer.scene.camera.up = [0, 0, 1];
+
+    // Make sure we don't clip our model
+    viewer.camera.project.far = 10000.0;
+
+    // Install plugin to load models from IFC files
+    const webIFCLoader = new WebIFCLoaderPlugin(viewer, {
+        wasmPath: "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/"
+    });
+
+    // Load a model, positioning it at the specified geodesic coordinates, which we'll first project to mercator
+    const sceneModel = webIFCLoader.load({
+        id: "myModel",
+        src: "../../assets/models/ifc/Duplex.ifc",
+        loadMetadata: false,
+        edges: true,
+        origin: projectLongLatToMercator(48.981900, 35.398470, 0.0),
+        rotation: [90, 0, 0]
+    });
+
+    // Fit model to view once loaded
+    const t0 = performance.now();
+    document.getElementById("time").innerHTML = "Loading model...";
+    sceneModel.on("loaded", () => {
+        const t1 = performance.now();
+        document.getElementById("time").innerHTML = `Model loaded in ${Math.floor(t1 - t0) / 1000.0} seconds<br>Objects: ${sceneModel.numEntities}`;
+        viewer.cameraFlight.jumpTo(viewer.scene);
+    });
+
+    // Projects geodesic longitude and latitude coordinates into our mercator coordinate system.
+    //
+    // Our mercator coordinate system is based onvEPSG:3857 (https://epsg.io/3857), with one
+    // difference, which is that the origin of our mercator coordinate space is at the north-west
+    // corner instead of the middle. For example, [0,0,0] is the north-west corner of our mercator
+    // world and [1,1,0] is the south-east corner. The Z dimension of our mercator world is conformal.
+    //
+    function projectLongLatToMercator(longitude, latitude, altitude = 0) {
+
+        const EARTH_RADIUS = 6371008.8; // Meters
+        const EARTH_CIRCUMFERENCE = 2 * Math.PI * EARTH_RADIUS; // Meters
+
+        function mercatorXfromLng(longitude) {
+            return (180 + longitude) / 360;
+        }
+
+        function mercatorYfromLat(latitude) {
+            return (180 - (180 / Math.PI * Math.log(Math.tan(Math.PI / 4
+                + latitude * Math.PI / 360)))) / 360;
+        }
+
+        function mercatorZfromAltitude(altitude, latitude) {
+            return altitude / circumferenceAtLatitude(latitude);
+        }
+
+        function circumferenceAtLatitude(latitude) {
+            return EARTH_CIRCUMFERENCE * Math.cos(latitude * Math.PI / 180);
+        }
+
+        function mercatorScaleAtLatitude(latitude) {
+            return 1 / Math.cos(latitude * Math.PI / 180);
+        }
+
+        function latFromMercatorY(y) {
+            const y2 = 180 - y * 360;
+            return 360 / Math.PI * Math.atan(Math.exp(y2 * Math.PI / 180)) - 90;
+        }
+
+        // Returns the distance of 1 meter in Mercator coordinate units at the given latitude.
+        function meterInMercatorCoordinateUnits(y) {
+            return 1 / EARTH_CIRCUMFERENCE * mercatorScaleAtLatitude(latFromMercatorY(y));
+        }
+
+        const mercator = math.vec3([
+            mercatorXfromLng(longitude),
+            mercatorYfromLat(latitude),
+            mercatorZfromAltitude(altitude, latitude)
+        ]);
+
+        const modelMercatorScale = meterInMercatorCoordinateUnits(mercator[1]);
+
+        math.mulVec3Scalar(mercator, 1 / modelMercatorScale);
+
+        return mercator;
+    }
+
+</script>
+</html>

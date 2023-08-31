@@ -141,7 +141,7 @@ function load(viewer, options, inflatedData, sceneModel) {
 
             // Primitive instanced by more than one entity, and has positions in Model-space
 
-            var geometryId = "geometry" + primitiveIndex; // These IDs are local to the VBOSceneModel
+            var geometryId = "geometry" + primitiveIndex; // These IDs are local to the SceneModel
 
             sceneModel.createGeometry({
                 id: geometryId,
@@ -158,7 +158,7 @@ function load(viewer, options, inflatedData, sceneModel) {
 
             // Primitive is used only by one entity, and has positions pre-transformed into World-space
 
-            const meshId = primitiveIndex; // These IDs are local to the VBOSceneModel
+            const meshId = primitiveIndex; // These IDs are local to the SceneModel
 
             const entityIndex = batchedPrimitiveEntityIndexes[primitiveIndex];
             const entityId = eachEntityId[entityIndex];

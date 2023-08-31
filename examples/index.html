@@ -1,992 +1,688 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>xeokit Examples</title>
-    <link href='https://fonts.googleapis.com/css?family=Exo+2:400,800,900,700,600,500|Roboto:100,300,400,500,700,900'
-          rel='stylesheet' type='text/css'>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
-    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xeokit SDK Examples</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
+        .card {
+            transition: transform 0.2s; /* Add smooth transition effect */
+        }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-            font-size: 1rem;
-            line-height: 1.50;
-            color: #212529;
-            background-color: #000000;
-            text-decoration: none;
-            word-spacing: normal;
-            text-align: left;
-            letter-spacing: 0;
-            -webkit-font-smoothing: antialiased;
-            overflow-y: hidden;
-            overflow-x: hidden;
-            margin: 0;
+        .card:hover {
+            transform: scale(1.05); /* Slightly enlarge the card on hover */
+        }
+
+        .card {
+            display: block;
             width: 100%;
             height: 100%;
-        }
-
-        #index {
-            position: absolute;
-            height: 100%;
-            background: #fdfdfd;
-            overflow: auto;
-            border-right: 2px solid #212529;
-            padding: 20px;
-            padding-bottom: 100px;
-            user-select: none;
-        }
-
-        #index a {
-            /*text-decoration: none;*/
-        }
-
-        #index h1 {
-            margin-top: 0;
-            margin-bottom: 0;
-            font-size: 1.8rem;
-            font-weight: normal;
-            text-decoration: none !important;
-        }
-
-        #index h1 a {
-            color: #212529;
-        }
-
-        #index h2 {
-            font-size: 1.4rem;
-            font-weight: normal;
-            padding-top: 20px;
-            padding-bottom: 10px;
+            min-height: 400px;
             text-decoration: none;
         }
 
-        #index .link {
-            margin-left: 0 !important;
-            padding-left: 0 !important;
-            padding-top: 1px;
+        .card h4.card-title {
+            color: inherit;
+        }
+
+        .card p.card-text {
+            color: inherit;
+        }
+
+        .thumbnail {
+
+            max-width: 100%;
+            min-height: 200px;
+            max-height: 200px; /* Adjust this value for the desired height */
+            object-fit: cover; /* Maintain aspect ratio and cover thumbnail area */
+        }
+
+        a.card-link {
+            font-size: 18px;
+            color: inherit;
             text-decoration: none;
-            font-weight: normal;
-            background: #fdfdfd;
-            cursor: pointer;
-            line-height: 1.5em;
-        }
-
-        #index .selected {
-            margin-left: -5px !important;
-            padding-left: 5px !important;
-            padding-top: 0;
-            padding-bottom: 0;
-            border: 1px solid #676767;
-            background: #FFFF44;
+            display: block;
         }
 
 
-        #index .commentFirst {
-            margin-left: 0 !important;
-            padding-left: 0 !important;
-            padding-top: 1px;
-            text-decoration: none;
-            font-weight: normal;
-            font-style: italic;
-            color: #8b8b8b;
-            cursor: pointer;
-            line-height: 1.5em;
-            margin-top: 10px;
-            margin-bottom: 10px;
+        .card-title {
+            color: black;
         }
 
-        #index .comment {
-            color: #8b8b8b;
-            margin-left: 0 !important;
-            padding-left: 0 !important;
-            padding-top: 1px;
-            text-decoration: none;
-            font-weight: normal;
-            font-style: italic;
-            cursor: pointer;
-            line-height: 1.5em;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        #index .link:hover {
+        .card:hover .card-title {
+            color: blue;
             text-decoration: underline;
         }
-
-        .content-container {
-            position: absolute;
-            z-index: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            margin: 0 auto;
-            overflow: hidden;
-            opacity: 1.0;
-            pointer-events: all;
-            transition: all 300ms ease-in-out;
-            background: lightblue;
-        }
-
-        .content-overlay {
-            position: absolute;
-            z-index: 7;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            margin: 0 auto;
-            overflow: hidden;
-            opacity: 1.0;
-            pointer-events: none;
-            transition: all 300ms ease-in-out;
-        }
-
-        .slideout-sidebar {
-            position: fixed;
-            top: 0;
-            left: -500px;
-            z-index: 10;
-            width: 460px;
-            height: 100%;
-            padding: 0;
-            transition: all 300ms ease-in-out;
-        }
-
-        #index_toggle {
-            display: none;
-        }
-
-        #index_toggle:hover {
-            cursor: pointer;
-        }
-
-        .index-button {
-            position: absolute;
-            font-size: 18px;
-            top: 15px;
-            left: 20px;
-            text-align: center;
-            vertical-align: middle;
-            -webkit-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            z-index: 5;
-            transition: all 300ms ease-in-out;
-        }
-
-        .index-button:hover {
-            cursor: pointer;
-            color: black;
-        }
-
-        .page-title {
-            position: absolute;
-            font-size: 1.6rem;
-            top: 17px;
-            left: 75px;
-            text-align: left;
-            -webkit-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            z-index: 5;
-            transition: all 300ms ease-in-out;
-            max-width: calc(100% - 450px);
-            pointer-events: none;
-        }
-
-        .viewSourceButton {
-            position: absolute;
-            left: 20px;
-            bottom: 15px;
-            z-index: 200;
-            transition: all 300ms ease-in-out;
-        }
-
-        .viewSourceButton:hover {
-            cursor: pointer;
-            opacity: 1;
-            color: black;
-        }
-
-        #index_toggle:checked ~ .slideout-sidebar {
-            left: 0;
-        }
-
-        #index_toggle:checked + .index-button {
-            left: 485px;
-            color: white;
-        }
-
-        #index_toggle:checked ~ .page-title {
-            left: 530px;
-            color: white;
-        }
-
-        #index_toggle:checked ~ .viewSourceButton {
-            left: 485px;
-        }
-
-        #index_toggle:checked ~ .content-container {
-            opacity: 0.4;
-            pointer-events: none;
-        }
-
-        #index_toggle:checked ~ .content-overlay {
-            pointer-events: all;
-        }
-
     </style>
 </head>
 <body>
-<input type="checkbox" id="index_toggle"/>
-<label for="index_toggle" class="index-button"><i class="fas fa-2x fa-bars"></i></label>
-<div class="page-title" id="page-title"></div>
-<div class="viewSourceButton" id="viewSourceButton"><i class="fas fa-2x fa-code"></i></div>
-<div class="content-overlay" id="viewer-overlay"></div>
-<iframe class="content-container" id="viewer" src="./default.html"></iframe>
-<div class="slideout-sidebar">
-    <div id="index"><h1><a href="http://xeokit.io">xeokit</a> / Examples</h1></div>
-</div>
-</body>
+
 <script>
 
-    const files = {
-
-        "Loading Models": [
-
-            "#Loading BIM models from the file system",
-
-            ["BIMOffline_XKT_RevitSamples_RAC", "Viewing an IFC4 BIM model exported from Revit"],
-            ["BIMOffline_XKT_RevitSamples_RME", "Viewing an IFC4 BIM model exported from Revit"],
-            ["BIMOffline_XKT_IFC2glTFConverter_RevitSamples_RAC_useDataTextures", "Viewing an IFC4 model from Revit, using DataTextureModel"],
-            ["BIMOffline_XKT_IFC2glTFConverter_RevitSamples_HolterTower_useDataTextures", "Viewing an IFC4 model from Revit, using DataTextureModel"],
-            ["BIMOffline_XKT_IFC2glTFConverter_Karhumaki_useDataTextures", "Viewing an IFC4 model containing 6913 objects, using DataTextureModel"],
-
-
-            ["loading_XKT_MAP_pointCloud", "Viewing a point cloud model with 2.6M points"],
-            ["BIMOffline_XKT_HolterTower", "Viewing an IFC4 BIM model"],
-            ["BIMOffline_XKT_Duplex", "Viewing an IFC2x3 BIM model"],
-            ["BIMOffline_XKT_Schependomlaan", "Viewing an IFC2x3 BIM model"],
-            ["BIMOffline_XKT_OTCConferenceCenter", "Viewing an IFC4 BIM model"],
-            ["BIMOffline_XKT_WestRiverSideHospital", "Viewing seven IFC4 BIM models"],
-            ["BIMOffline_XKT_DoublePrecision_MAP", "Viewing an IFC4 BIM model placed at [1842022, 10, -5173301]"],
-            ["BIMOffline_XKT_DoublePrecision_Lyon", "Viewing nine CityJSON models"],
-            ["BIMOffline_XKT_WaterLock", "Viewing a BIM model of a water lock"],
-            ["BIMOffline_XKT_Federated_Clinic", "Viewing a federated BIM model"],
-
-            ["BIMOffline_XKT_ArchiCADSamples_DemoProjekt", "Viewing a BIM model exported from ArchiCAD"],
-
-            // "# IFC models converted using IFC2glTFConverter from Creoox",
-            //
-            // ["BIMOffline_XKT_IFC2glTFConverter_HolterTower", "Viewing an IFC4 BIM model"],
-            // ["BIMOffline_XKT_IFC2glTFConverter_RevitSamples_RAC", "Viewing an IFC4 BIM model exported from Revit"],
-
-            "# ",
-
-            ["BIMOffline_XKT_includeTypes", "Loading only IfcWalls from an IFC4 BIM model"],
-            ["BIMOffline_XKT_objectDefaults", "Viewing an IFC2x3 BIM model, providing custom colors for IFC types"],
-            ["BIMOffline_XKT_metadata_Schependomlaan", "Using IFC metadata to X-ray an IfcBuildingStorey"],
-            ["BIMOffline_XKT_metadata_moveStoreys", "Using IFC metadata to separate IfcBuildingStoreys"],
-            ["BIMOffline_XKT_authorMetadata", "Viewing an IFC4 BIM model with authoring data"],
-            ["BIMOffline_XKT_Duplex_originalIFCColors", "Viewing an IFC2x3 BIM model, with colors loaded from file"],
-
-            "#",
-
-            ["loading_XKT_Duplex", "Viewing an IFC2x3 model"],
-            ["loading_XKT_ConvenienceStore", "Viewing an IFC4 model"],
-            ["loading_XKT_Duplex_originalIFCColors", "Viewing an IFC2x3 BIM model, colors loaded from file"],
-            ["loading_XKT_Duplex_transform", "Viewing multiple copies of an IFC2x3 model"],
-            ["loading_XKT_Schependomlaan", "Viewing an IFC2x3 model"],
-            ["loading_XKT_Schependomlaan_transform", "Viewing multiple copies of an IFC2x3 model"],
-            ["loading_XKT_OTCConferenceCenter", "Viewing an IFC4 model"],
-            ["loading_XKT_WestRiverSideHospital", "Viewing seven IFC4 models"],
-            ["loading_XKT_APHS", "Viewing a large IFC4 model"],
-
-            ["loading_XKT_dataSource", "Loading a model from XKT using a custom data source"],
-            ["loading_XKT_concurrently", "Loading multiple models from XKT concurrently"],
-            ["loading_XKT_maxGeometryBatchSize_50M", "Setting VBOSceneModel#maxGeometryBatchSize to 50000"],
-            ["loading_XKT_maxGeometryBatchSize_20K", "Setting VBOSceneModel#maxGeometryBatchSize to 20000"],
-            ["loading_XKT_jitter_singlePrecision_MAP", "Demonstrates rounding jitter"],
-            ["loading_XKT_jitter_fullPrecision_MAP", "Double-precision rendering to eliminate rounding jitter"],
-            ["loading_XKT_jitter_fullPrecision_MAP_annotations", "Annotations with double-precision rendering"],
-            ["loading_XKT_forceBackfaces", "Forcing front faces visible"],
-
-            "#Loading models with textures from XKT",
-
-            ["loading_XKT_DamagedHelmet", "Loading a model with textures from XKT"],
-            ["loading_XKT_HousePlan", "Loading a model with textures from XKT"],
-            ["loading_XKT_HousePlan_NoTextures", "Loading a model from XKT, ignoring textures"],
-            ["loading_XKT_BoxTextured", "Loading a simple model with textures from XKT"],
-
-            "#Loading photogrammetry scans from XKT",
-
-            ["loading_XKT_Roadworks", "Viewing an XKT roadworks scan captured to glTF on iPhone 12 Pro with Scaniverse"],
-
-            "#Loading IFC with WebIFCLoaderPlugin",
-
-            ["BIMOffline_WebIFCLoaderPlugin_Duplex", "Loading IFC with WebIFCLoaderPlugin"],
-            ["BIMOffline_WebIFCLoaderPlugin_ignoreMetadata", "Loading IFC with WebIFCLoaderPlugin"],
-            ["BIMOffline_WebIFCLoaderPlugin_isolateStorey", "Load IFC with WebIFCLoaderPlugin, isolate storey"],
-            ["BIMOffline_WebIFCLoaderPlugin_MAPGroundFloor", "Load IFC placed at [1842022, 10, -5173301] with WebIFCLoaderPlugin"],
-
-            "#Loading CityJSON models",
-
-            ["loading_CityJSON_NewYork", "Loading CityJSON placed at [300410, 5000100, -40809] with XKTLoaderPlugin"],
-            ["loading_CityJSON_Railway", "Loading CityJSON with XKTLoaderPlugin"],
-
-            "#Loading CityJSON models with CityJSONLoaderPlugin",
-
-            ["loading_CityJSONLoaderPlugin_NewYork", "Loading CityJSON placed at [300410, 5000100, -40809] with CityJSONLoaderPlugin"],
-            ["loading_CityJSONLoaderPlugin_Railway", "Loading CityJSON with CityJSONLoaderPlugin"],
-
-            "#Loading LAS point clouds via XKT format",
-
-            ["loading_LAZ_Autzen", "Loading LAS point cloud with 31M points, via XKT format"],
-            ["loading_LAZ_IndoorScan", "Loading indoor LAS point cloud, via XKT format"],
-
-            "#Loading point clouds from LAS files",
-
-            ["loading_LASLoaderPlugin_Autzen", "Loading LAS point cloud with 31M points"],
-            ["loading_LASLoaderPlugin_IndoorScan", "Loading indoor LAS point cloud"],
-
-            "#Loading SolidWorks CAD models",
-
-            ["loading_3DXML_Widget", "Viewing a SolidWorks 3DXML model"],
-            ["loading_3DXML_materialType_Metallic", "Viewing a SolidWorks 3DXML model with metallic/rough PBR"],
-            ["loading_3DXML_materialType_Specular", "Viewing a SolidWorks 3DXML model with specular/gloss PBR"],
-            ["loading_3DXML_materialType_Phong", "Viewing a SolidWorks 3DXML model with Blinn/Phong shading"],
-            ["loading_3DXML_TreeView", "Viewing a SolidWorks 3DXML model"],
-
-            "#Loading STL models",
-
-            ["loading_STL_SpurGear", "Viewing an STL model"],
-            ["loading_STL_dataSource", "Viewing an STL model, loaded from custom data source"],
-            ["loading_STL_dataAsParam", "Viewing an STL model"],
-            ["loading_STL_doublePrecision", "Viewing a double-precision STL model"],
-
-            "#Loading glTF models",
-
-            ["loading_glTF_Duplex_transform", "Viewing multiple copies of a glTF model"],
-            ["loading_glTF_Schependomlaan", "Viewing a glTF model"],
-            ["loading_glTF_dataSource", "Viewing a glTF model using a custom data source"],
-            ["loading_glTF_embedded_Box", "Loading an untextured box from gltf-Embedded format"],
-            ["loading_glTF_embedded_MAP", "Viewing an IFC4 glTF BIM model placed at [1842022, 10, -5173301]"],
-
-            //   "#Loading glTF with textures",
-
-            //   ["loading_glTF_BoxTextured", "Loading a textured box from gltf-Embedded format"],
-            //  ["loading_glTF_SkatePark", "Viewing a photogrammetry model with textures from gltf-Embedded format"],
-            //    ["loading_glTF_VianneyHouse", "Viewing a glTF model with textures from gltf-Embedded format"],
-
-            "#",
-
-            "#Loading Binary glTF",
-
-            ["loading_glb_HousePlan", "Viewing a binary glTF house model with textures"],
-            ["loading_glb_VianneyHouse", "Viewing a binary glTF house model with textures"],
-            ["loading_glb_SkatePark", "Viewing a binary glTF photogrammetry model"],
-            ["loading_glb_2CylinderEngine", "Viewing a binary glTF CAD model without textures"],
-            ["loading_glb_Box", "Viewing a simple binary glTF model without textures"],
-            ["loading_glb_BoxTextured", "Viewing a simple binary glTF model with textures"],
-            ["loading_glb_DamagedHelmet", "Physically-based rendering of a binary glTF test model"],
-
-            ["loading_glTF_Roadworks", "Viewing a glTF roadworks scan captured on iPhone 12 Pro with Scaniverse"],
-            ["loading_glTF_binary_Roadworks", "Viewing a binary glTF roadworks scan captured on iPhone 12 Pro with Scaniverse"],
-
-            "#Loading OBJ models",
-
-            ["loading_OBJ_SportsCar", "Viewing an OBJ model"],
-            "#Loading three different formats into the same viewer",
-            ["loading_MultipleModels", "Loading models from multiple formats"]
-        ],
-
-        "Positioning Models": [
-            "#Positioning models geographically",
-            ["positioningModels_WebIFCLoaderPlugin_cartesianCoordinates", "Loading IFC with WebIFCLoaderPlugin, positioning the model at distant Cartesian coordinates"],
-            ["positioningModels_WebIFCLoaderPlugin_geodesicCoordinates", "Loading IFC with WebIFCLoaderPlugin, positioning the model with geodesic coordinates"]
-        ],
-
-        "Camera Navigation": [
-
-            "# Orbiting",
-
-            ["CameraControl_orbit_Duplex", "Orbiting camera navigation"],
-            ["CameraControl_orbit_Duplex_smallCanvas", "Orbiting camera navigation, with small canvas"],
-            ["CameraControl_orbit_HolterTower", "Orbiting camera navigation"],
-            ["CameraControl_orbit_OTCConferenceCenter", "Orbiting camera navigation"],
-            ["CameraControl_orbit_MAP", "Orbiting camera with a model placed at [1842022, 10, -5173301]"],
-            ["CameraControl_orbit_Lyon", "Orbiting camera navigation with a CityJSON model"],
-            ["CameraControl_orbit_WaterLock", "Orbiting camera navigation"],
-
-            "# First-person",
-
-            ["CameraControl_firstPerson_Duplex", "First-person navigation"],
-            ["CameraControl_firstPerson_HolterTower", "First-person navigation"],
-            ["CameraControl_firstPerson_MAP", "First-person navigation with model placed at [1842022, 10, -5173301]"],
-
-            "# Plan view",
-
-            ["CameraControl_planView_Schependomlaan", "Plan view navigation"],
-
-            "# Animation",
-
-            ["camera_CameraPathAnimation", "Animating the camera along a path"],
-            ["camera_fitToModel", "Arranging the camera to fit the model in view"],
-            ["camera_CameraFlightAnimation_projection", "Smooth transition between projections"],
-
-            "# Configuration",
-
-            ["CameraControl_keyMap", "Custom key bindings for camera navigation"],
-            ["CameraControl_pivotMarker", "Configuring a pivot marker for camera navigation"],
-            ["CameraControl_keyboardEventsElement", "Specifying where we listen for keyboard events"]
-        ],
-
-        "Localization": [
-            "#Localizing xeokit components for different languages",
-            ["localization_NavCubePlugin", "NavCubePlugin Localization"],
-            ["localization_NavCubePlugin_defaultLocaleService", "NavCubePlugin Localization using Viewer's Default LocaleService"]
-        ],
-
-        "Annotating Models": [
-            "#Pinning 3D labels on models",
-            ["annotations_clickShowLabels", "Click annotation markers to show labels"],
-            ["annotations_hoverShowLabels", "Hover annotation markers to show labels"],
-            ["annotations_clickFlyToPosition", "Click annotation markers to go to vantage points"],
-            ["annotations_createWithMouse", "Click on the model to create annotations"],
-            ["annotations_createAtCenterOfClickedObject", "Click objects to create annotations at their centers"],
-            ["annotations_externalElements", "Annotations with externally-provided DOM elements"],
-            ["annotations_occlusionDisabled", "Annotations with occlusion culling disabled"],
-
-            "#Sprite markers",
-            ["markers_SpriteMarker", "Billboarded marker sprite"]
-        ],
-
-        "Measuring Models": [
-            "#Measuring angles",
-            ["measurements_angle_modelWithMeasurements", "IFC 2x3 BIM model with angle measurements"],
-            ["measurements_angle_createWithMouse", "Click or tap on the model to create angle measurements"],
-            ["measurements_angle_createWithMouse_photogrammetry", "Click or tap on the model to create angle measurements"],
-            ["measurements_angle_createWithMouse_precision", "Click or tap on the model to create full-precision angle measurements"],
-            "#Measuring distances",
-            ["measurements_distance_modelWithMeasurements", "IFC 2x3 BIM model with distance measurements"],
-            ["measurements_distance_modelWithMeasurements_hideAxisWires", "BIM model with distance measurements and axis-aligned wires hidden"],
-            ["measurements_distance_createWithMouse", "Click or tap on the model to create distance measurements"],
-            ["measurements_distance_createWithMouse_snapToVertex", "Click or tap on the model to create distance measurements, withsnap-to-vertex enabled"],
-            ["measurements_distance_createWithMouse_photogrammetry", "Click or tap on the model to create distance measurements"],
-            ["measurements_distance_createWithMouse_precision", "Click or tap on the model to create full-precision distance measurements"],
-            ["measurements_distance_unitsAndScale", "Click or tap on the model to create distance measurements"],
-        ],
-
-        "BCF Collaboration": [
-            "#Saving and loading BCF viewpoints for BIM software interoperability",
-            ["BCF_SaveViewpoint", "Saving viewer state as a BCF viewpoint"],
-            ["BCF_LoadViewpoint", "Loading viewer state from a BCF viewpoint"],
-            ["BCF_LoadViewpoint_defaultInvisible", "Loading a BCF viewpoint with defaultInvisible"],
-            ["BCF_SaveViewpoint_MultipleModels", "Saving a BCF viewpoint for multiple models"],
-            ["BCF_LoadViewpoint_MultipleModels", "Loading a BCF viewpoint for multiple models"],
-            ["BCF_SaveViewpoint_ortho", "Saving a BCF viewpoint for an orthographic camera"],
-            ["BCF_LoadViewpoint_ortho", "Loading a BCF viewpoint for an orthographic camera"],
-        ],
-
-        "Picking Objects": [
-            "#Interacting with objects using mouse and touch",
-            ["picking_canvas_mesh_colorize", "Hover over objects to colorize them"],
-            ["picking_canvas_mesh_colorize_click", "Click objects to colorize them"],
-            ["picking_canvas_mesh_opacity", "Click objects to make them transparent"],
-            ["picking_canvas_mesh_highlight", "Hover over objects to highlight them"],
-            ["picking_canvas_mesh_highlight_transparent", "Hover over objects to highlight them"],
-            ["picking_canvas_mesh_select", "Hover over objects to select them"],
-            ["picking_canvas_mesh_select_transparent", "Hover over objects to select them"],
-            ["picking_canvas_mesh_xray", "Hover over objects to X-ray them"],
-            ["picking_canvas_mesh_xray_transparent", "Hover over objects to X-ray them"],
-            ["picking_canvas_surface", "Hover over objects to ray-pick their surfaces"],
-            // "picking_canvas_click",
-            ["picking_canvas_doubleClick", "Double-click objects to highlight them"],
-            ["picking_ray_mesh", "Ray-picking objects with an arbitrary World-space ray"],
-            ["picking_ray_surface", "Ray-picking surfaces with an arbitrary World-space ray"],
-            ["picking_ray_matrix", "Ray-picking objects with an arbitrary World-space ray"],
-            ["picking_setObjectsPickable", "Controlling what's pickable - only the blue object pickable"],
-
-            ["picking_pickSurfacePrecision_VBOSceneModel_batching", "Full-precision surface picking with VBOSceneModel and batched geometries"],
-            ["picking_pickSurfacePrecision_VBOSceneModel_instancing", "Full-precision surface picking with VBOSceneModel and instanced geometries"]
-        ],
-
-        "Emphasizing Objects": [
-            ["emphasis_colorize_throughXRay", "Testing X-rayed object wrapping colorized object"],
-            ["emphasis_selected_throughXRay", "Testing X-rayed object wrapping selected object"],
-            ["emphasis_selectedAndHighlighted_throughTransparent_Duplex", "Testing X-rayed object wrapping colorized object, using Duplex model"]
-        ],
-
-        "Slicing Models": [
-            "#Slicing objects with arbitrary cutting planes",
-            ["gizmos_SectionPlanesPlugin", "IFC2x3 BIM model with section planes"],
-            ["gizmos_SectionPlanesPlugin_ortho_OTCConferenceCenter", "Section plane with orthographic camera"],
-            ["gizmos_SectionPlanesPlugin_createWithMouse", "Click on the model to create a section plane"],
-            ["gizmos_SectionPlanesPlugin_createWithMouse_photogrammetry", "Click on the model to create a section plane"],
-            ["gizmos_SectionPlanesPlugin_getSnapshot", "Capture PNG screenshot, with section plane editing control excluded"],
-            ["gizmos_SectionPlanesPlugin_getSnapshot_includeGizmos", "Capture PNG screenshot, with section plane editing control included"],
-            ["gizmos_SectionPlanesPlugin_flipSectionPlanes", "Demonstrates ability to globally flip SectionPlane clipping direction"],
-            ["ImagePlane_imageInSectionPlane", "Plan view image embedded in section plane"],
-
-            "#Slicing objects with face-aligned cutting planes",
-            ["gizmos_FaceAlignedSectionPlanesPlugin", "IFC2x3 BIM model with face-aligned section planes"]
-        ],
-
-        "Viewing Storeys": [
-            "#Visualizing and navigating building stories",
-            ["storeyViews_StoreyViewsPlugin_showStoreyObjects", "Creating an isolated view of objects in building storey"],
-            ["storeyViews_StoreyViewsPlugin_gotoStoreyCamera", "Creating an orthographic plan view of building storey"],
-            ["storeyViews_StoreyViewsPlugin_gotoStoreyCamera2", "Creating a perspective plan view of building storey"],
-            ["storeyViews_StoreyViewsPlugin_createStoreyMap", "Creating a building storey map image"],
-            ["storeyViews_StoreyViewsPlugin_createStoreyMap_height", "Creating a building storey map image"],
-            ["storeyViews_StoreyViewsPlugin_pickStoreyMap", "Click anywhere in the 2D storey plan to go there in 3D"],
-            ["storeyViews_StoreyViewsPlugin_recipe1", "Click anywhere in the storey map image to go there in the main view"],
-            ["storeyViews_StoreyViewsPlugin_recipe2", "Click anywhere in the storey map image to go there in the main view"],
-            ["storeyViews_StoreyViewsPlugin_recipe3", "Click anywhere in the storey map images to go there in the main view"],
-            ["storeyViews_StoreyViewsPlugin_recipe4", "Click anywhere in the 2D storey plan to go there in 3D"],
-        ],
-
-        "Object Tree Views": [
-            "#Creating tree views of model metadata",
-            ["TreeViewPlugin_Containment", "TreeViewPlugin 'containment' hierarchy"],
-            ["TreeViewPlugin_Containment_MultipleModels", "TreeViewPlugin 'containment' hierarchy with two models"],
-            ["TreeViewPlugin_Types", "TreeViewPlugin 'types' hierarchy"],
-            ["TreeViewPlugin_Storeys", "TreeViewPlugin 'storeys' hierarchy"],
-            ["TreeViewPlugin_Storeys_validate", "Tree view validation for invalid IFC metadata"],
-            ["TreeViewPlugin_options_rootName", "Configuring a custom label for tree view root"],
-            ["loading_3DXML_TreeView", "Tree view with 3DXML model exported from SolidWorks"]
-        ],
-
-        "Context Menus": [
-            "#Creating pop-up context menus",
-            ["ContextMenu_Canvas_TreeViewPlugin_Custom", "Right-click or long-touch to open a context menu"],
-            ["ContextMenu_dynamicItemTitles", "Right-click or long-touch to open a context menu with dynamic titles"],
-            ["ContextMenu_dynamicItemVisibilities", "Right-click or long-touch to open a context menu with dynamically-visible options"],
-            ["ContextMenu_subMenus", "Right-click or long-touch on the model to open a multi-level context menu"],
-        ],
-
-        "SAO": [
-            "#Scalable ambient obscurance is a rendering effect that emphasizes detail in models by darkening crevices",
-            ["postEffects_SAO_Schependomlaan", "Scalable ambient obscurance (SAO)"],
-            ["postEffects_SAO_OTCConferenceCenter", "Scalable ambient obscurance (SAO)"],
-            ["postEffects_SAO_Duplex", "Scalable ambient obscurance (SAO)"]
-        ],
-
-        "NavCube": [
-            "#Axis navigation gizmo",
-            ["gizmos_NavCubePlugin", "NavCubePlugin - camera navigation helper"],
-            ["gizmos_NavCubePlugin_customColors", "NavCubePlugin - custom colors"],
-            ["gizmos_NavCubePlugin_trueNorth", "NavCubePlugin Configured to Align with True North"]
-        ],
-
-        "AxisGizmo": [
-            "#Showing the coordinate axis",
-            ["gizmos_AxisGizmoPlugin", "Axis gnomon gizmo (see bottom left)"]
-        ],
-
-        "Screenshots": [
-            "#Capturing images from the viewer canvas",
-            ["screenshots_png_getSnapshot", "Dynamically capture PNG screenshots"],
-            ["gizmos_SectionPlanesPlugin_getSnapshot", "Capture PNG screenshot, with section plane included"],
-            ["gizmos_SectionPlanesPlugin_getSnapshot_includeGizmos", "Capture PNG screenshot, with section plane excluded"],
-            ["screenshots_png_getSnapshot_hires", "Capture high resolution screenshots"],
-            ["screenshots_png_getSnapshot_withMeasurements", "Capture measurements and annotations in screenshots"]
-        ],
-
-        "Geometry": [
-
-            "#Creating and loading geometry",
-
-            ["geometry_VBOGeometry", "GPU-resident geometry"],
-            ["geometry_ReadableGeometry", "Browser-resident geometry"],
-
-            ["geometry_builders_buildBoxGeometry", "Building a box-shaped triangle mesh geometry"],
-            ["geometry_builders_buildBoxLinesGeometry", "Building a box-shaped lines mesh geometry"],
-            ["geometry_builders_buildGridGeometry", "Building a grid lines geometry"],
-            ["geometry_builders_buildCylinderGeometry", "Building a cylinder-shaped triangle mesh geometry"],
-            ["geometry_builders_buildSphereGeometry", "Building a sphere-shaped triangle mesh geometry"],
-            ["geometry_builders_buildTorusGeometry", "Building a torus-shaped triangle mesh geometry"],
-            ["geometry_builders_buildVectorTextGeometry", "Building vector text geometry"],
-
-            ["geometry_loaders_loadOBJGeometry", "Loading geometry from OBJ"],
-            ["geometry_loaders_load3DSGeometry", "Loading geometry from 3DS"]
-        ],
-
-        "Lighting": [
-
-            "#Light source components",
-
-            ["lights_AmbientLight", "Ambient light"],
-            ["lights_DirLight_view", "View-space directional lights"],
-            ["lights_DirLight_world", "World-space directional lights"],
-            ["lights_PointLight_view", "View-space point lights"],
-            ["lights_PointLight_world", "World-space point lights"],
-
-            "#Light source types with various scene representations",
-
-            ["sceneRepresentation_lightingTest_viewDirLights", "View-space directional lights with various scene representations"],
-            ["sceneRepresentation_lightingTest_worldDirLights", "World-space directional lights with various scene representations"],
-            ["sceneRepresentation_lightingTest_viewPointLights", "View-space point lights with various scene representations"],
-            ["sceneRepresentation_lightingTest_worldPointLights", "World-space point lights with various scene representations"],
-        ],
-
-        "Materials": [
-
-            "#Material components",
-
-            ["materials_PhongMaterial", "PhongMaterial"],
-            ["materials_MetallicMaterial", "Physically-based metallic/roughness material"],
-            ["materials_LambertMaterial", "LambertMaterial"],
-            ["materials_EdgeMaterial", "EdgeMaterial"],
-            ["materials_EmphasisMaterial", "EmphasisMaterial"],
-            ["materials_Texture", "Texture"],
-            ["materials_Fresnel", "Fresnel"],
-            ["materials_PointsMaterial", "PointsMaterial"],
-            ["materials_LinesMaterial", "LinesMaterial"]
-        ],
-
-        "VBOSceneModel": [
-
-            "#High-performance model representation component",
-
-            "#Geometry reuse",
-
-            ["sceneRepresentation_VBOSceneModel_instancing", "VBOSceneModel with instanced triangle geometry"],
-            ["sceneRepresentation_VBOSceneModel_instancing_autoNormals", "VBOSceneModel with instanced triangle geometries and auto-generated normals"],
-            ["sceneRepresentation_VBOSceneModel_instancing_textures", "VBOSceneModel with instanced triangle geometry and textures"],
-            ["sceneRepresentation_VBOSceneModel_instancing_textures_pbr", "VBOSceneModel with instanced triangle geometry, textures and PBR"],
-            ["sceneRepresentation_VBOSceneModel_instancing_geometries", "VBOSceneModel with various types of instanced geometry"],
-            ["sceneRepresentation_VBOSceneModel_instancing_points", "VBOSceneModel with instanced point cloud geometry"],
-            ["sceneRepresentation_VBOSceneModel_instancing_lines", "VBOSceneModel with instanced line geometry"],
-            // "sceneRepresentation_VBOSceneModel_instancing_annotations",
-            ["sceneRepresentation_VBOSceneModel_instancing_transform", "VBOSceneModel with instanced triangle geometry"],
-            ["sceneRepresentation_VBOSceneModel_instancing_benchmark", "VBOSceneModel instanced triangle geometry benchmark"],
-            ["sceneRepresentation_VBOSceneModel_instancing_origin", "VBOSceneModel with instanced triangle geometry and RTC coordinates"],
-            ["sceneRepresentation_VBOSceneModel_instancing_origin_SAO", "VBOSceneModel with instanced triangle geometry, RTC coordinates and SAO"],
-            ["sceneRepresentation_VBOSceneModel_instancing_SAO", "VBOSceneModel with instanced triangle geometry and SAO"],
-            ["sceneRepresentation_VBOSceneModel_instancing_PBR", "VBOSceneModel with instanced triangle geometry and physically-based rendering"],
-            ["sceneRepresentation_VBOSceneModel_instancing_PBR_spheres", "VBOSceneModel with instanced triangle geometry and physically-based rendering"],
-
-            "#Geometry batching",
-
-            ["sceneRepresentation_VBOSceneModel_batching", "VBOSceneModel with batched triangle geometries"],
-            ["sceneRepresentation_VBOSceneModel_batching_autoNormals", "VBOSceneModel with batched triangle geometries and auto-generated normals"],
-            ["sceneRepresentation_VBOSceneModel_batching_textures", "VBOSceneModel with batched triangle geometries and textures"],
-            ["sceneRepresentation_VBOSceneModel_batching_textures_pbr", "VBOSceneModel with batched triangle geometries, textures, and PBR"],
-            ["sceneRepresentation_VBOSceneModel_batching_textures_ktx2", "VBOSceneModel with batched triangle geometries and compressed KTX2 textures"],
-            ["sceneRepresentation_VBOSceneModel_batching_points", "VBOSceneModel with batched point cloud geometries"],
-            ["sceneRepresentation_VBOSceneModel_batching_lines", "VBOSceneModel with batched line geometries"],
-            ["sceneRepresentation_VBOSceneModel_batching_annotations", "VBOSceneModel with batched triangle geometry and annotations"],
-            ["sceneRepresentation_VBOSceneModel_batching_transform", "VBOSceneModel with batched triangle geometry"],
-            ["sceneRepresentation_VBOSceneModel_batching_benchmark", "VBOSceneModel batched triangle geometry benchmark"],
-            ["sceneRepresentation_VBOSceneModel_batching_origin", "VBOSceneModel with batched triangle geometries and RTC coordinates"],
-            ["sceneRepresentation_VBOSceneModel_batching_origin_SAO", "VBOSceneModel with batched triangle geometries, RTC coordinates and SAO"],
-            ["sceneRepresentation_VBOSceneModel_batching_SAO", "VBOSceneModel with batched triangle geometries and SAO"],
-            ["sceneRepresentation_VBOSceneModel_batching_PBR", "VBOSceneModel with batched triangle geometries and PBR"],
-
-
-            "#Classifying with metadata",
-
-            ["sceneRepresentation_VBOSceneModel_metadata", "VBOSceneModel classified with metadata"],
-            ["sceneRepresentation_VBOSceneModel_metadata_federated", "VBOSceneModel classified with federated metadata"]
-        ],
-
-        "Scene Graphs": [
-
-            "#Scene graph components",
-
-            ["sceneRepresentation_SceneGraph", "Scene graph with animated transform hierarchy"],
-            ["sceneRepresentation_SceneGraph_ReadableGeometry", "Scene graph with browser-resident geometry"],
-            ["sceneRepresentation_SceneGraph_VBOGeometry", "Scene graph with GPU-resident geometry"],
-            ["sceneRepresentation_SceneGraph_metadata", "Scene graph classified with metadata"],
-            ["sceneRepresentation_SceneGraph_origin", "Scene graph with RTC geometry coordinates"]
-        ],
-
-        "ImagePlane": [
-
-            "#Showing bitmap images within 3D scenes",
-
-            ["ImagePlane_groundPlane", "Google satellite image embedded in ground plane"],
-            ["ImagePlane_groundPlane_narrow", "Google satellite image embedded in ground plane"],
-            ["ImagePlane_imageInSectionPlane", "Plan view image embedded in section plane"]
-        ],
-
-        "Bitmap": [
-
-            "#Showing bitmaps within 3D scenes",
-
-            ["Bitmap_storeyPlan", "Creating a 2D storey plan with a Bitmap"],
-            ["BCF_SaveViewpoint", "Saving viewer state with bitmaps and lines as a BCF viewpoint"]
-
-        ],
-
-        "LineSet": [
-
-            "#Showing line segments within 3D scenes",
-
-            ["LineSet_grid", "Creating a ground grid with a LineSet"],
-            ["BCF_SaveViewpoint", "Saving viewer state with bitmaps and lines as a BCF viewpoint"]
-        ],
-
-        "Billboarding": [
-
-            "#Keeping objects oriented towards the viewpoint",
-
-            ["billboarding_Mesh_spherical", "Mesh with spherical billboard"],
-            ["billboarding_Mesh_cylindrical", "Mesh with cylindrical billboard"]
-        ],
-
-        "Logarithmic Depth Buffer": [
-
-            "#Improving rendering accuracy for mixed object scales",
-
-            ["logDepthBuf_XKT_Lyon", "Enabling the logarithmic depth buffer"],
-            ["logDepthBuf_XKT_Lyon_logDepthBufDisabled", "Disabling the logarithmic depth buffer"],
-            ["logDepthBuf_SceneGraph_RTC", "Scene graph with RTC geometry and logarithmic depth buffer enabled"],
-            ["logDepthBuf_SceneGraph_RTC_logDepthBufDisabled", "Scene graph with RTC geometry and logarithmic depth buffer disabled"],
-            ["logDepthBuf_VBOSceneModel_batching_RTC", "VBOSceneModel RTC batched geometry with Logarithmic depth buffer enabled"],
-            ["logDepthBuf_VBOSceneModel_batching_RTC_annotations", "VBOSceneModel RTC batched geometry and annotations with Logarithmic depth buffer enabled"],
-            ["logDepthBuf_VBOSceneModel_batching_RTC_logDepthBufDisabled", "VBOSceneModel RTC batched geometry with Logarithmic depth buffer disabled"],
-            ["logDepthBuf_VBOSceneModel_instancing_RTC", "VBOSceneModel RTC instanced geometry with Logarithmic depth buffer enabled"],
-            ["logDepthBuf_VBOSceneModel_instancing_RTC_logDepthBufDisabled", "VBOSceneModel RTC instanced geometry with Logarithmic depth buffer disabled"],
-        ],
-
-        "Mementos": [
-
-            "#Saving and restoring viewer state",
-
-            ["mementos_ObjectsMemento", "Saving and restoring object states - demo with random states"]
-        ],
-
-        "Performance": [
-
-            "#Optimizing performance",
-
-            ["performance_FastNavPlugin", "FastNavPlugin - Fast lower-quality rendering while user interacts"],
-
-            "#Frustum culling",
-
-            ["performance_ViewCullPlugin", "ViewCullPlugin - culls objects outside the view frustum"],
-            ["performance_ViewCullPlugin_CameraPathAnimation", "ViewCullPlugin - culls objects outside the view frustum"],
-        ],
-
-        "Spinner": [
-            "#CSS animation while models are loading",
-            ["spinner_custom", "Customizing the appearance of the loading spinner"]
-        ],
-
-        "Experiments": [
-            "#Random experiments",
-            ["techniques_nonInteractiveQuality", "Disable edges and SAO while camera is moving"],
-            ["techniques_findComplexEntities", "Automatically detect and colorize small and complex entities"],
-            // ["DimensionsFootprintModel_example1", "Dimensions footprint experiment #1"],
-            // ["DimensionsFootprintModel_example2", "Dimensions footprint experiment #2"]
-        ],
-
-        "Configs": [
-            "#Configuring the xeokit-sdk",
-            ["Configs_disableDoublePrecision", "Disable double precision for extra performance"]
-        ],
-
-        "Viewer": [
-            "#General viewer techniques",
-            ["viewer_createDestroyRepeat", "Testing repeated viewer creation and deletion"],
-            ["viewer_createDestroyRepeatNewCanvas", "Testing repeated viewer creation and deletion, with new canvas each time"],
-            ["viewer_disableAntialiasing", "Disabling WebGL antialising"]
-        ]
-    };
-
-    const list = document.getElementById('index');
-    const viewer = document.getElementById('viewer');
-    const viewerOverlay = document.getElementById('viewer-overlay');
-
-    const container = document.createElement('div');
-    list.appendChild(container);
-
-    const viewSourceButton = document.getElementById('viewSourceButton');
-    viewSourceButton.addEventListener('click', function (event) {
-        window.open('https://github.com/xeokit/xeokit-sdk/blob/master/examples/' + selected + '.html');
-    }, false);
-
-    const indexToggle = document.getElementById("index_toggle");
-    const pageTitle = document.getElementById('page-title');
-
-    viewerOverlay.addEventListener('click', function (event) {
-        indexToggle.checked = false;
-    }, false);
-
-    // indexToggle.addEventListener('click', function (event) {
-    //     viewer.src="default.html";
-    // }, false);
-
-    const sectionDivs = {};
-    const divs = {};
-    const fileDescriptions = {};
-    let selected = null;
-    let index = 1;
-    var indexStr;
-
-    // Index
-
-    let div = document.createElement('h2');
-    div.textContent = "Index";
-
-    container.appendChild(div);
-    container.appendChild(document.createElement('hr'));
-
-    const sectionNames = Object.keys(files);
-    // sectionNames.sort((a, b) => {
-    //     if (a < b) {
-    //         return -1;
-    //     }
-    //     if (a > b) {
-    //         return 1;
-    //     }
-    //     return 0;
-    // });
-
-    for (let i = 0, len = sectionNames.length; i < len; i++) {
-        const sectionName = sectionNames[i];
-        const sectionFiles = files[sectionName];
-        var sectionDiv = document.createElement('div');
-        sectionDiv.className = 'link';
-        indexStr = "" + index++ + ".";
-        for (let i = indexStr.length, len = 5; i < len; i++) {
-            indexStr += ".";
-        }
-        sectionDiv.textContent = indexStr + sectionName;
-        sectionDiv.addEventListener('click', (function () {
-            const _sectionName = sectionName;
-            return function () {
-                sectionDivs[_sectionName].scrollIntoView();
+    /**
+     * Enables existing links in documentation for previous xeokit releases to resolve, more or less,
+     * to examples within this newer arrangement (since v2.4).
+     */
+    const legacyLinks = {
+
+        "BIMOffline_XKT_RevitSamples_RAC": "./buildings/#xkt_vbo_RAC",
+        "BIMOffline_XKT_RevitSamples_RME": "./buildings/#xkt_vbo_RAC",
+        "loading_XKT_MAP_pointCloud": "./lidar/#xkt_MAP",
+        "BIMOffline_XKT_HolterTower": "./buildings/#xkt_vbo_HolterTower",
+        "BIMOffline_XKT_Duplex": "./buildings/#xkt_vbo_Duplex",
+        "BIMOffline_XKT_Schependomlaan": "./buildings/#xkt_vbo_Schependomlaan",
+        "BIMOffline_XKT_OTCConferenceCenter": "./buildings/#xkt_vbo_OTCConferenceCenter",
+        "BIMOffline_XKT_WestRiverSideHospital": "..\/buildings/#xkt_vbo_HolterTower",
+        "BIMOffline_XKT_DoublePrecision_MAP": "./buildings/#xkt_vbo_MAP",
+        "BIMOffline_XKT_DoublePrecision_Lyon": "./cities/#XKT_Lyon",
+        "BIMOffline_XKT_WaterLock": "./buildings/#xkt_vbo_WaterLock",
+        "BIMOffline_XKT_Federated_Clinic": "./buildings/#xkt_vbo_federated_Clinic",
+        "BIMOffline_XKT_ArchiCADSamples_DemoProjekt": "./buildings/#xkt_vbo_DemoProjekt",
+        "BIMOffline_XKT_includeTypes": ".",
+        "BIMOffline_XKT_objectDefaults": ".",
+        "BIMOffline_XKT_metadata_Schependomlaan": "./buildings/#xkt_dtx_metadata_Schependomlaan",
+        "BIMOffline_XKT_metadata_moveStoreys": "./buildings/#xkt_dtx_metadata_moveStoreys",
+        "BIMOffline_XKT_authorMetadata": ".",
+        "BIMOffline_XKT_Duplex_originalIFCColors": ".",
+
+        "loading_XKT_Duplex": "./buildings/#xkt_vbo_Duplex",
+        "loading_XKT_ConvenienceStore": "./buildings/#xkt_vbo_HolterTower",
+        "loading_XKT_Duplex_originalIFCColors": ".",
+        "loading_XKT_Duplex_transform": ".",
+        "loading_XKT_Schependomlaan": "./buildings/#xkt_vbo_Schependomlaan",
+        "loading_XKT_Schependomlaan_transform": "./buildings/#xkt_vbo_Schependomlaan",
+        "loading_XKT_OTCConferenceCenter": "./buildings/#xkt_vbo_OTCConferenceCenter",
+        "loading_XKT_WestRiverSideHospital": "./buildings/#xkt_vbo_HolterTower",
+        "loading_XKT_APHS": "./buildings/#xkt_dtx_APHS",
+        "loading_XKT_dataSource": ".",
+        "loading_XKT_concurrently": ".",
+        "loading_XKT_maxGeometryBatchSize_50M": "./cities/#XKT_Lyon",
+        "loading_XKT_maxGeometryBatchSize_20K": "./cities/#XKT_Lyon",
+        "loading_XKT_jitter_singlePrecision_MAP": "./buildings/#jitter_singlePrecision_MAP",
+        "loading_XKT_jitter_fullPrecision_MAP": "./buildings/#xkt_vbo_MAP",
+        "loading_XKT_jitter_fullPrecision_MAP_annotations": ".",
+        "loading_XKT_forceBackfaces": ".",
+        "loading_XKT_DamagedHelmet": ".",
+        "loading_XKT_HousePlan": "./buildings/#xkt_vbo_HousePlan",
+        "loading_XKT_HousePlan_NoTextures": "./buildings/#xkt_vbo_HousePlan",
+        "loading_XKT_BoxTextured": ".",
+        "loading_XKT_Roadworks": "./lidar/#glb_Roadworks",
+
+        "BIMOffline_WebIFCLoaderPlugin_Duplex": "./buildings/#web-ifc_vbo_Duplex",
+        "BIMOffline_WebIFCLoaderPlugin_ignoreMetadata": "./buildings/#web-ifc_vbo_ignoreMetadata",
+        "loading_CityJSON_NewYork": "./cities/#CityJSON_NewYork",
+        "BIMOffline_WebIFCLoaderPlugin_isolateStorey": "./buildings/#web-ifc_vbo_isolateStorey",
+        "BIMOffline_WebIFCLoaderPlugin_MAPGroundFloor": "./buildings/#web-ifc_vbo_MAPGroundFloor",
+
+        "loading_CityJSON_Railway": "./cities/#CityJSON_Railway",
+        "loading_CityJSONLoaderPlugin_NewYork": "./cities/#CityJSON_NewYork",
+        "loading_CityJSONLoaderPlugin_Railway": "./cities/#CityJSON_Railway",
+        "loading_LAZ_Autzen": "./lidar/#laz_Autzen",
+        "loading_LAZ_IndoorScan": "./lidar/#laz_IndoorScan",
+        "loading_LASLoaderPlugin_Autzen": "./lidar/#las_Autzen",
+        "loading_LASLoaderPlugin_IndoorScan": "./lidar/#las_IndoorScan",
+        "loading_3DXML_Widget": "./cad/#3DXML_Widget",
+        "loading_3DXML_materialType_Metallic": "./cad/#3DXML_Widget",
+        "loading_3DXML_materialType_Specular": "./cad/#3DXML_Widget",
+        "loading_3DXML_materialType_Phong": "./cad/#3DXML_Widget",
+        "loading_3DXML_TreeView": "./navigation/#TreeViewPlugin_Containment_3DXML",
+        "loading_STL_SpurGear": "./cad/#STL_SpurGear",
+        "loading_STL_dataSource": "./cad/#STL_dataSource",
+        "loading_STL_dataAsParam": "./cad/#STL_dataAsParam",
+        "loading_STL_doublePrecision": "./cad/#STL_doublePrecision",
+        "loading_glTF_Duplex_transform": ".",
+        "loading_glTF_Schependomlaan": ".",
+        "loading_glTF_dataSource": ".",
+        "loading_glTF_embedded_Box": ".",
+        "loading_glTF_embedded_MAP": ".",
+        "loading_glb_HousePlan": ".",
+        "loading_glb_VianneyHouse": "./buildings/#glTF_VianneyHouse",
+        "loading_glb_SkatePark": "./lidar/#glb_SkatePark",
+        "loading_glb_2CylinderEngine": ".",
+        "loading_glb_Box": ".",
+        "loading_glb_BoxTextured": ".",
+        "loading_glb_DamagedHelmet": ".",
+        "loading_glTF_Roadworks": "./lidar/#glb_Roadworks",
+        "loading_glTF_binary_Roadworks": "./lidar/#glb_Roadworks",
+        "loading_OBJ_SportsCar": "./cad/#OBJ_SportsCar",
+        "loading_MultipleModels": ".",
+
+        "positioningModels_WebIFCLoaderPlugin_cartesianCoordinates": "./buildings/#positioning_cartesianCoordinates",
+        "positioningModels_WebIFCLoaderPlugin_geodesicCoordinates": "./buildings/#positioning_geodesicCoordinates",
+
+        "CameraControl_orbit_Duplex": "./navigation/#CameraControl_orbit_Duplex",
+        "CameraControl_orbit_Duplex_smallCanvas": "./navigation/#CameraControl_orbit_Duplex_smallCanvas",
+        "CameraControl_orbit_HolterTower": "./navigation/#CameraControl_orbit_HolterTower",
+        "CameraControl_orbit_OTCConferenceCenter": "./navigation/#CameraControl_orbit_OTCConferenceCenter",
+        "CameraControl_orbit_MAP": "./navigation/#CameraControl_orbit_MAP",
+        "CameraControl_orbit_Lyon": "./navigation/#CameraControl_orbit_Lyon",
+        "CameraControl_orbit_WaterLock": "./navigation/#CameraControl_orbit_WaterLock",
+        "CameraControl_firstPerson_Duplex": "./navigation/#CameraControl_firstPerson_Duplex",
+        "CameraControl_firstPerson_HolterTower": "./navigation/#CameraControl_firstPerson_HolterTower",
+        "CameraControl_firstPerson_MAP": "./navigation/#CameraControl_firstPerson_MAP",
+        "CameraControl_planView_Schependomlaan": "./navigation/#CameraControl_planView_Schependomlaan",
+        "camera_CameraPathAnimation": "./navigation/#camera_CameraPathAnimation",
+        "camera_fitToModel": "./navigation/#camera_fitToModel",
+        "camera_CameraFlightAnimation_projection": "./navigation/#camera_CameraFlightAnimation_projection",
+        "CameraControl_keyMap": "./navigation/#CameraControl_keyMap",
+        "CameraControl_pivotMarker": "./navigation/#CameraControl_pivotMarker",
+        "CameraControl_keyboardEventsElement": "./navigation/#CameraControl_keyboardEventsElement",
+
+        "localization_NavCubePlugin": "./viewer/#localization_NavCubePlugin",
+        "localization_NavCubePlugin_defaultLocaleService": "./viewer/#localization_NavCubePlugin_defaultLocaleService",
+
+        "annotations_clickShowLabels": "./annotations/#annotations_clickShowLabels",
+        "annotations_hoverShowLabels": "./annotations/#annotations_hoverShowLabels",
+        "annotations_clickFlyToPosition": "./annotations/#annotations_clickFlyToPosition",
+        "annotations_createWithMouse": "./annotations/#annotations_createWithMouse",
+        "annotations_createAtCenterOfClickedObject": "./annotations/#annotations_createAtCenterOfClickedObject",
+        "annotations_externalElements": "./annotations/#annotations_externalElements",
+        "annotations_occlusionDisabled": "./annotations/#annotations_occlusionDisabled",
+
+        "markers_SpriteMarker": "./annotations/#markers_SpriteMarker",
+
+        "measurements_angle_modelWithMeasurements": "./measurement/#angle_modelWithMeasurements",
+        "measurements_angle_createWithMouse": "./measurement/#angle_createWithMouse",
+        "measurements_angle_createWithMouse_photogrammetry": "./measurement/#angle_modelWithMeasurements",
+        "measurements_angle_createWithMouse_precision": "./measurement/#angle_modelWithMeasurements",
+        "measurements_distance_modelWithMeasurements": "./measurement/#distance_modelWithMeasurements",
+        "measurements_distance_modelWithMeasurements_hideAxisWires": "./measurement/#distance_modelWithMeasurements_hideAxisWires",
+        "measurements_distance_createWithMouse": "./measurements/#distance_createWithMouse_vertexSnapping",
+        "measurements_distance_createWithMouse_snapToVertex": "./measurements/#distance_createWithMouse_vertexSnapping",
+        "measurements_distance_createWithMouse_photogrammetry": "./measurements/#distance_createWithMouse_vertexSnapping",
+        "measurements_distance_createWithMouse_precision": "./measurements/#distance_createWithMouse_vertexSnapping",
+        "measurements_distance_unitsAndScale": "./measurements/#distance_unitsAndScale",
+
+        "BCF_SaveViewpoint": "./bookmarking/#BCF_SaveViewpoint",
+        "BCF_LoadViewpoint": "./bookmarking/#BCF_LoadViewpoint",
+        "BCF_LoadViewpoint_defaultInvisible": "./bookmarking/#BCF_LoadViewpoint_defaultInvisible",
+        "BCF_SaveViewpoint_MultipleModels": "./bookmarking/#BCF_SaveViewpoint_MultipleModels",
+        "BCF_LoadViewpoint_MultipleModels": "./bookmarking/#BCF_LoadViewpoint_MultipleModels",
+        "BCF_SaveViewpoint_ortho": "./bookmarking/#BCF_SaveViewpoint_ortho",
+        "BCF_LoadViewpoint_ortho": "./bookmarking/#BCF_LoadViewpoint_ortho",
+
+        "picking_canvas_mesh_colorize": "./emphasising/#colorize",
+        "picking_canvas_mesh_colorize_click": "./emphasising/#colorize",
+        "picking_canvas_mesh_opacity": "./emphasising/#opacity",
+        "picking_canvas_mesh_highlight": "./emphasising/#highlight",
+        "picking_canvas_mesh_highlight_transparent": "./emphasising/#highlight_transparentCanvas",
+        "picking_canvas_mesh_select": "./picking/#hover_entity",
+        "picking_canvas_mesh_select_transparent": "./emphasising/#select_transparentCanvas",
+        "picking_canvas_mesh_xray": "./emphasising/#xray",
+        "picking_canvas_mesh_xray_transparent": "./emphasising/#xray_transparentCanvas",
+        "picking_canvas_surface": "./picking/#pick_canvas_entity",
+        "picking_canvas_doubleClick": "./picking/#pick_canvas_entity",
+        "picking_ray_mesh": "./picking/#pick_ray_entity",
+        "picking_ray_surface": "./picking/#pick_ray_surface",
+        "picking_ray_matrix": "./picking/#pick_ray_matrix",
+        "picking_setObjectsPickable": "./picking/#pick_setObjectsPickable",
+        "picking_pickSurfacePrecision_VBOSceneModel_batching": ".",
+        "picking_pickSurfacePrecision_VBOSceneModel_instancing": ".",
+
+        "emphasis_colorize_throughXRay": ".",
+        "emphasis_selected_throughXRay": ".",
+        "emphasis_selectedAndHighlighted_throughTransparent_Duplex": ".",
+
+        "gizmos_SectionPlanesPlugin": "./slicing/#SectionPlanesPlugin_Duplex",
+        "gizmos_SectionPlanesPlugin_ortho_OTCConferenceCenter": "./slicing/#SectionPlanesPlugin_ortho_OTCConferenceCenter",
+        "gizmos_SectionPlanesPlugin_createWithMouse": "./slicing/#SectionPlanesPlugin_createWithMouse",
+        "gizmos_SectionPlanesPlugin_createWithMouse_photogrammetry": "./slicing/#SectionPlanesPlugin_createWithMouse_photogrammetry",
+        "gizmos_SectionPlanesPlugin_getSnapshot": "./slicing/#getSnapshot_png",
+        "gizmos_SectionPlanesPlugin_getSnapshot_includeGizmos": "./slicing/#getSnapshot_includeSectionPlaneControl",
+        "gizmos_SectionPlanesPlugin_flipSectionPlanes": "./slicing/#SectionPlanesPlugin_flipSectionPlanes",
+
+        "ImagePlane_imageInSectionPlane": "./scenegraph/#ImagePlane_imageInSectionPlane",
+        "gizmos_FaceAlignedSectionPlanesPlugin": ".",
+        "storeyViews_StoreyViewsPlugin_showStoreyObjects": ".",
+        "storeyViews_StoreyViewsPlugin_gotoStoreyCamera": ".",
+        "storeyViews_StoreyViewsPlugin_gotoStoreyCamera2": ".",
+        "storeyViews_StoreyViewsPlugin_createStoreyMap": ".",
+        "storeyViews_StoreyViewsPlugin_createStoreyMap_height": ".",
+        "storeyViews_StoreyViewsPlugin_pickStoreyMap": ".",
+        "storeyViews_StoreyViewsPlugin_recipe1": ".",
+        "storeyViews_StoreyViewsPlugin_recipe2": ".",
+        "storeyViews_StoreyViewsPlugin_recipe3": ".",
+        "storeyViews_StoreyViewsPlugin_recipe4": ".",
+
+        "TreeViewPlugin_Containment": "./navigation/#TreeViewPlugin_Containment",
+        "TreeViewPlugin_Containment_MultipleModels": "./navigation/#TreeViewPlugin_Containment_Federated",
+        "TreeViewPlugin_Types": "./navigation/#TreeViewPlugin_Types",
+        "TreeViewPlugin_Storeys": "./navigation/#TreeViewPlugin_Storeys",
+        "TreeViewPlugin_Storeys_validate": "./navigation/#TreeViewPlugin_Types",
+        "TreeViewPlugin_options_rootName": "./navigation/#TreeViewPlugin_options_rootName",
+
+        "ContextMenu_Canvas_TreeViewPlugin_Custom": "./navigation/#ContextMenu_Canvas_TreeViewPlugin_Custom",
+        "ContextMenu_dynamicItemTitles": "./navigation/#ContextMenu_dynamicItemTitles",
+        "ContextMenu_dynamicItemVisibilities": "./navigation/#ContextMenu_dynamicItemVisibilities",
+        "ContextMenu_subMenus": "./navigation/#ContextMenu_subMenus",
+
+        "postEffects_SAO_Schependomlaan": "./viewer/#sao_ConferenceCenter",
+        "postEffects_SAO_OTCConferenceCenter": "./viewer/#sao_ConferenceCenter",
+        "postEffects_SAO_Duplex": "./viewer/#sao_ConferenceCenter",
+
+        "gizmos_NavCubePlugin": "./navigation/#NavCubePlugin",
+        "gizmos_NavCubePlugin_customColors": "./navigation/#NavCubePlugin_customColors",
+        "gizmos_NavCubePlugin_trueNorth": "./navigation/#NavCubePlugin_trueNorth",
+        "gizmos_AxisGizmoPlugin": "./navigation/#AxisGizmoPlugin",
+
+        "screenshots_png_getSnapshot": "./snapshots/getSnapshot_png",
+        "screenshots_png_getSnapshot_hires": "./snapshots/getSnapshot_png_hires",
+        "screenshots_png_getSnapshot_withMeasurements": "./snapshots/getSnapshot_excludeSectionPlaneControl",
+        "geometry_VBOGeometry": "./scenegraph/#geometry_VBOGeometry",
+        "geometry_ReadableGeometry": "./scenegraph/#geometry_ReadableGeometry",
+        "geometry_builders_buildBoxGeometry": "./scenegraph/#buildBoxGeometry",
+        "geometry_builders_buildBoxLinesGeometry": "./scenegraph/#buildBoxLinesGeometry",
+        "geometry_builders_buildGridGeometry": "./scenegraph/#buildGridGeometry",
+        "geometry_builders_buildCylinderGeometry": "./scenegraph/#buildCylinderGeometry",
+        "geometry_builders_buildSphereGeometry": "./scenegraph/#buildSphereGeometry",
+        "geometry_builders_buildTorusGeometry": "./scenegraph/#buildTorusGeometry",
+        "geometry_builders_buildVectorTextGeometry": "./scenegraph/#buildVectorTextGeometry",
+        "geometry_loaders_loadOBJGeometry": ".",
+        "geometry_loaders_load3DSGeometry": ".",
+        "lights_AmbientLight": "./scenegraph/#lights_AmbientLight",
+        "lights_DirLight_view": "./scenegraph/#lights_DirLight_view",
+        "lights_DirLight_world": "./scenegraph/#lights_DirLight_world",
+        "lights_PointLight_view": "./scenegraph/#lights_PointLight_view",
+        "lights_PointLight_world": "./scenegraph/#lights_PointLight_world",
+        "sceneRepresentation_lightingTest_viewDirLights": "./scenegraph/#lightingTest_viewDirLights",
+        "sceneRepresentation_lightingTest_worldDirLights": "./scenegraph/#lightingTest_worldDirLights",
+        "sceneRepresentation_lightingTest_viewPointLights": "./scenegraph/#lightingTest_viewPointLights",
+        "sceneRepresentation_lightingTest_worldPointLights": "./scenegraph/#lightingTest_worldPointLights",
+        "materials_PhongMaterial": "./scenegraph/#materials_PhongMaterial",
+        "materials_MetallicMaterial": "./scenegraph/#materials_MetallicMaterial",
+        "materials_LambertMaterial": "./scenegraph/#materials_LambertMaterial",
+        "materials_EdgeMaterial": "./scenegraph/#materials_EdgeMaterial",
+        "materials_EmphasisMaterial": "./scenegraph/#materials_EmphasisMaterial",
+        "materials_Texture": "./scenegraph/#materials_Texture",
+        "materials_Fresnel": "./scenegraph/#materials_Fresnel",
+        "materials_PointsMaterial": "./scenegraph/#materials_PointsMaterial",
+        "materials_LinesMaterial": "./scenegraph/#materials_LinesMaterial",
+        "sceneRepresentation_VBOSceneModel_instancing": "./scenemodel/#vbo_instancing_autocompressed_triangles",
+
+
+        "sceneRepresentation_VBOSceneModel_instancing_autoNormals": ".",
+        "sceneRepresentation_VBOSceneModel_instancing_textures": "./scenemodel/#vbo_instancing_autocompressed_triangles_textures_jpg",
+        "sceneRepresentation_VBOSceneModel_instancing_textures_pbr": ".",
+        "sceneRepresentation_VBOSceneModel_instancing_geometries": ".",
+        "sceneRepresentation_VBOSceneModel_instancing_points": ".",
+        "sceneRepresentation_VBOSceneModel_instancing_lines": ".",
+        "sceneRepresentation_VBOSceneModel_instancing_transform": ".",
+        "sceneRepresentation_VBOSceneModel_instancing_benchmark": ".",
+        "sceneRepresentation_VBOSceneModel_instancing_origin": ".",
+        "sceneRepresentation_VBOSceneModel_instancing_origin_SAO": ".",
+        "sceneRepresentation_VBOSceneModel_instancing_SAO": ".",
+        "sceneRepresentation_VBOSceneModel_instancing_PBR": ".",
+        "sceneRepresentation_VBOSceneModel_instancing_PBR_spheres": ".",
+        "sceneRepresentation_VBOSceneModel_batching": "./scenemodel/#vbo_batching_autocompressed_triangles",
+        "sceneRepresentation_VBOSceneModel_batching_autoNormals": ".",
+        "sceneRepresentation_VBOSceneModel_batching_textures": "./scenemodel/#vbo_batching_autocompressed_triangles_textures_jpg",
+        "sceneRepresentation_VBOSceneModel_batching_textures_pbr": ".",
+        "sceneRepresentation_VBOSceneModel_batching_textures_ktx2": ".",
+        "sceneRepresentation_VBOSceneModel_batching_points": ".",
+        "sceneRepresentation_VBOSceneModel_batching_lines": ".",
+        "sceneRepresentation_VBOSceneModel_batching_annotations": ".",
+        "sceneRepresentation_VBOSceneModel_batching_transform": ".",
+        "sceneRepresentation_VBOSceneModel_batching_benchmark": ".",
+        "sceneRepresentation_VBOSceneModel_batching_origin": ".",
+        "sceneRepresentation_VBOSceneModel_batching_origin_SAO": ".",
+        "sceneRepresentation_VBOSceneModel_batching_SAO": ".",
+        "sceneRepresentation_VBOSceneModel_batching_PBR": ".",
+        "sceneRepresentation_VBOSceneModel_metadata": ".",
+        "sceneRepresentation_VBOSceneModel_metadata_federated": ".",
+        "sceneRepresentation_SceneGraph": ".",
+
+        "sceneRepresentation_SceneGraph_ReadableGeometry": "./scenegraph/#geometry_ReadableGeometry",
+        "sceneRepresentation_SceneGraph_VBOGeometry": "./scenegraph/#geometry_VBOGeometry",
+        "sceneRepresentation_SceneGraph_metadata": "./scenegraph/#sceneGraph_metadata",
+        "sceneRepresentation_SceneGraph_origin": "./scenegraph/#sceneGraph_rtc",
+        "ImagePlane_groundPlane": "./scenegraph/#ImagePlane_groundPlane",
+        "ImagePlane_groundPlane_narrow": "./scenegraph/#ImagePlane_groundPlane_narrow",
+        "Bitmap_storeyPlan": "./scenegraph/#Bitmap_storeyPlan",
+        "LineSet_grid": "./scenegraph/#LineSet_grid",
+        "billboarding_Mesh_spherical": "./scenegraph/#billboarding_Mesh_spherical",
+        "billboarding_Mesh_cylindrical": "./scenegraph/#billboarding_Mesh_cylindrical",
+        "logDepthBuf_XKT_Lyon": "./viewer/#logDepthBuf_XKT_Lyon",
+        "logDepthBuf_XKT_Lyon_logDepthBufDisabled": "./viewer/#logDepthBuf_XKT_Lyon_logDepthBufDisabled",
+        "logDepthBuf_SceneGraph_RTC": "./viewer/#logDepthBuf_SceneGraph_RTC",
+        "logDepthBuf_SceneGraph_RTC_logDepthBufDisabled": "./viewer/#logDepthBuf_SceneGraph_RTC_logDepthBufDisabled",
+        "logDepthBuf_VBOSceneModel_batching_RTC": "./viewer/#logDepthBuf_VBOSceneModel_batching_RTC",
+        "logDepthBuf_VBOSceneModel_batching_RTC_annotations": "./viewer/#logDepthBuf_VBOSceneModel_batching_RTC_annotations",
+        "logDepthBuf_VBOSceneModel_batching_RTC_logDepthBufDisabled": "./viewer/#logDepthBuf_VBOSceneModel_batching_RTC_logDepthBufDisabled",
+        "logDepthBuf_VBOSceneModel_instancing_RTC": "./viewer/#logDepthBuf_VBOSceneModel_instancing_RTC",
+        "logDepthBuf_VBOSceneModel_instancing_RTC_logDepthBufDisabled": "./viewer/#logDepthBuf_VBOSceneModel_instancing_RTC_logDepthBufDisabled",
+        "mementos_ObjectsMemento": "./viewer/#mementos_ObjectsMemento",
+        "performance_FastNavPlugin": "./performance/#FastNavPlugin_HolterTower",
+        "performance_ViewCullPlugin": "./performance/#viewCulling_HolterTower",
+        "performance_ViewCullPlugin_CameraPathAnimation": "./navigation/#camera_CameraPathAnimation",
+        "spinner_custom": "./viewer/#spinner_custom",
+        "techniques_nonInteractiveQuality": ".",
+        "techniques_findComplexEntities": ".",
+        "Configs_disableDoublePrecision": ".",
+        "viewer_createDestroyRepeat": ".",
+        "viewer_createDestroyRepeatNewCanvas": ".",
+        "viewer_disableAntialiasing": "."
+    }
+
+    const windowHash = window.location.hash;
+    if (windowHash !== '') {
+        const legacyLinkId = windowHash.substring(1);
+        const legacyLink = legacyLinks[legacyLinkId] || ".";
+        window.location = legacyLink;
+    }
+
+    let loggedUnmappedExamples = false;
+    for (let key in legacyLinks) {
+        if (legacyLinks[key] === ".") {
+            if (!loggedUnmappedExamples) {
+                console.log("\nWARNING: Unmapped legacy examples:\n\n");
+                loggedUnmappedExamples = true;
             }
-        })());
-        container.appendChild(sectionDiv);
-    }
-
-    container.appendChild(document.createElement('hr'));
-
-    _index = 1;
-
-    let clickedFile = null;
-
-    for (let i = 0, len = sectionNames.length; i < len; i++) {
-        const sectionName = sectionNames[i];
-        const sectionFiles = files[sectionName];
-        const sectionDiv = document.createElement('h2');
-        sectionDiv.textContent = _index++ + ". " + sectionName;
-        container.appendChild(sectionDiv);
-        sectionDivs[sectionName] = sectionDiv;
-        container.appendChild(document.createElement('hr'));
-
-        for (let i = 0; i < sectionFiles.length; i++) {
-
-            let sectionFile = sectionFiles[i];
-            let fileName;
-            let fileDesc;
-
-            if (!isString(sectionFile)) {
-                fileName = sectionFile[0];
-                fileDesc = sectionFile[1];
-            } else {
-                fileName = sectionFile;
-                fileDesc = sectionFile;
-            }
-
-            if (fileDesc.charAt(0) === "#") {
-                const commentDiv = document.createElement('div');
-                commentDiv.textContent = "// " + fileDesc.substring(1);
-                commentDiv.className = (i === 0 ? 'commentFirst' : 'comment');
-                container.appendChild(commentDiv);
-                continue;
-            }
-
-            const fileNameComponents = fileName.split('_');
-            fileNameComponents.shift();
-            const fileNamePath = fileNameComponents.join(' / ');
-            const fileNameDiv = document.createElement('div');
-            fileNameDiv.className = 'link';
-            fileNameDiv.textContent = fileNamePath; // expandCamel(name);
-            fileNameDiv.addEventListener('click', (function () {
-                const _file = fileName;
-                return function () {
-                    clickedFile = _file;
-                    window.location.hash = "#" + _file;
-                    viewer.src = "";
-                }
-            })());
-            container.appendChild(fileNameDiv);
-            divs[fileName] = fileNameDiv;
-            fileDescriptions[fileName] = fileDesc;
+            console.log(key);
         }
-    }
-
-    const paddingDiv = document.createElement('div');
-    paddingDiv.style["height"] = "50px";
-    container.appendChild(paddingDiv);
-
-    function expandCamel(str) {
-        return str.replace(/([A-Z])/g, function ($1) {
-            return " " + $1.toLowerCase();
-        });
-    }
-
-    if (window.location.hash !== '') {
-        load(window.location.hash.substring(1));
-    } else {
-        indexToggle.checked = true;
-    }
-
-    var hash = window.location.hash;
-
-    window.setInterval(function () {
-        if (window.location.hash !== hash || viewer.src === "") {
-            setTimeout(() => {
-                load(window.location.hash.substring(1));
-                hash = window.location.hash;
-            }, 300)
-
-            indexToggle.checked = false;
-        }
-    }, 70);
-
-    function scrollIntoView(div) {
-        document.getElementById("index").scrollTop = documentOffsetTop(div) - (window.innerHeight / 6);
-    }
-
-    function documentOffsetTop(div) {
-        return div.offsetTop + (div.offsetParent ? documentOffsetTop(div.offsetParent) : 0);
-    }
-
-    function load(file) {
-
-        pageTitle.innerText = fileDescriptions[file] || "Example not found - perhaps renamed?";
-
-        if (file.indexOf(".html", file.length - 5) !== -1) {
-            window.location = "./" + file + ".html";
-            return;
-        }
-
-        if (selected !== null) divs[selected].className = 'link';
-        divs[file].className = 'link selected';
-        window.location.hash = file;
-        viewer.src = file + '.html';
-        viewer.focus();
-        viewSourceButton.style.display = '';
-        selected = file;
-        if (clickedFile !== file) {
-            scrollIntoView(divs[file]);
-        }
-        clickedFile = null;
-    }
-
-    function isString(value) {
-        return (typeof value === 'string' || value instanceof String);
     }
 
 </script>
+<div class="container mt-5">
+    <h2 class="mb-3"><a href="https://xeokit.io">xeokit SDK</a> Examples</h2>
+    <p><a href="https://badge.fury.io/js/%40xeokit%2Fxeokit-sdk" rel="nofollow"><img src="https://camo.githubusercontent.com/68c1fab0f43de359c265e78b3e1ad536d34e1ac5ee538f4fd059eb1d10ef296b/68747470733a2f2f62616467652e667572792e696f2f6a732f25343078656f6b697425324678656f6b69742d73646b2e737667" alt="npm version" data-canonical-src="https://badge.fury.io/js/%40xeokit%2Fxeokit-sdk.svg" style="max-width: 100%;"></a>
+        <a href="https://www.jsdelivr.com/package/npm/@xeokit/xeokit-sdk" rel="nofollow"><img src="https://camo.githubusercontent.com/0010862b1944135a705444366f1d80e9800590ac2ece248539f26ab6de8ceed1/68747470733a2f2f646174612e6a7364656c6976722e636f6d2f76312f7061636b6167652f6e706d2f4078656f6b69742f78656f6b69742d73646b2f6261646765" alt="" data-canonical-src="https://data.jsdelivr.com/v1/package/npm/@xeokit/xeokit-sdk/badge" style="max-width: 100%;"></a></p>
+    <br><br>
+
+    <h2>Viewing Models</h2>
+    <br>
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+
+            <!-- Buildings -->
+
+            <a href="./buildings" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail" src="../assets/images/holterTower.png" alt="Thumbnail 1">
+                    <div class="card-body">
+                        <h4 class="card-title">Viewing Building Models</h4>
+                        <p class="card-text">Using the xeokit SDK to view building models loaded from IFC, glTF and
+                            XKT.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 mb-4">
+
+            <!-- Cities -->
+
+            <a href="./cities" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail" src="../assets/images/lyon_city.png" alt="Thumbnail 2">
+                    <div class="card-body">
+                        <h4 class="card-title">Viewing City Models</h4>
+                        <p class="card-text">Using the xeokit SDK to view city models loaded from glTF, CityJSON,
+                            CityGML and
+                            XKT.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 mb-4">
+
+            <!-- LiDAR -->
+
+            <a href="./lidar" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail" src="../assets/images/mapPointCloud.png"
+                         alt="Thumbnail 3">
+                    <div class="card-body">
+                        <h4 class="card-title">Viewing LiDAR Scans</h4>
+                        <p class="card-text">Using the xeokit SDK to view LiDAR scans loaded from LAS, LAZ, glTF and
+                            XKT.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 mb-4">
+
+            <!-- CAD -->
+
+            <a href="./cad" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail"
+                         src="https://github.com/xeokit/xeokit.io/blob/master/img/gear-300x200.gif?raw=true"
+                         alt="Thumbnail 1">
+                    <div class="card-body">
+                        <h4 class="card-title">Viewing CAD Models</h4>
+                        <p class="card-text">Using the xeokit SDK to view CAD models loaded from 3DXML, glTF, STL and
+                            XKT.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Navigating Models -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./navigation" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail"
+                         src="../assets/images/treeview.png"
+                         alt="Thumbnail 3">
+                    <div class="card-body">
+                        <h4 class="card-title">Navigating Models</h4>
+                        <p class="card-text">Components for navigating models: TreeView, NavCube, ContextMenu,
+                            AxisGizmo, CameraControl, CameraPathAnimation etc.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Bookmarking -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./bookmarking" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail" src="../assets/images/BCFViewpointsPlugin.png"
+                         alt="Thumbnail 3">
+                    <div class="card-body">
+                        <h4 class="card-title">Bookmarking Model Views</h4>
+                        <p class="card-text">Saving and loading bookmarks, including how to exchange Building
+                            Collaboration Viewpoints (BCF)
+                            with other BIM software.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Snapshots -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./snapshots" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail" src="../assets/images/xktWithTextures.png"
+                         alt="Thumbnail 3">
+                    <div class="card-body">
+                        <h4 class="card-title">Capturing Snapshots</h4>
+                        <p class="card-text">How to capture JPEG and PNG snapshots of a xeokit SDK viewer.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Customizing the Viewer -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./viewer" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail" src="../assets/images/i1n8.png"
+                         alt="Thumbnail 3">
+                    <div class="card-body">
+                        <h4 class="card-title">Customizing the Viewer</h4>
+                        <p class="card-text">Configuring language translations, customizing the loading spinner,
+                            enabling ambient
+                            shadows, enabling the
+                            logarathmic depth buffer, and more.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Performance -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./performance" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail"
+                         src="../assets/images/aphs.png"
+                         alt="Thumbnail 3">
+                    <div class="card-body">
+                        <h4 class="card-title">Accelerating Performance</h4>
+                        <p class="card-text">How to make the xeokit SDK viewer work at peak performance, using view
+                            frustum culling, LoD culling, resolution scaling and more.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <br><br>
+    <h2>Interacting with Objects</h2>
+    <br>
+
+    <div class="row">
+
+        <!-- Measuring Objects -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./measurement" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail"
+                         src="../assets/images/distanceMeasurements.png"
+                         alt="Thumbnail 1">
+                    <div class="card-body">
+                        <h4 class="card-title">Measuring Objects</h4>
+                        <p class="card-text">Measuring angles and distances on models.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Slicing Objects -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./slicing" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail"
+                         src="../assets/images/sectionPlane.png"
+                         alt="Thumbnail 3">
+                    <div class="card-body">
+                        <h4 class="card-title">Slicing Objects</h4>
+                        <p class="card-text">Slicing models with interactive section planes to reveal internal
+                            structures.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+        <!-- Picking Objects -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./picking" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail"
+                         src="../assets/images/picking.png" alt="Thumbnail 3">
+                    <div class="card-body">
+                        <h4 class="card-title">Picking Objects</h4>
+                        <p class="card-text">How to pick objects in a xeokit Viewer, interactively or
+                            programmatically.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Emphasising Objects -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./emphasising" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail"
+                         src="https://github.com/xeokit/xeokit.io/blob/master/img/docs/PerformanceModel/PerformanceModel.png?raw=true"
+                         alt="Thumbnail 2">
+                    <div class="card-body">
+                        <h4 class="card-title">Emphasising Objects</h4>
+                        <p class="card-text">Changing the appearance of selected objects: colorizing, highlighting
+                            and
+                            X-raying.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Labelling Objects -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./annotations" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail"
+                         src="../assets/images/annotations.png"
+                         alt="Thumbnail 3">
+                    <div class="card-body">
+                        <h4 class="card-title">Labelling Objects</h4>
+                        <p class="card-text">Pinning fully-customizable HTML labels to the surfaces of model
+                            objects.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <br><br>
+    <h2>Programming Scene Content</h2>
+    <br>
+
+    <div class="row">
+
+        <!-- SceneModel Examples -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./scenemodel" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail"
+                         src="../assets/images/sceneModelTextured.png"
+                         alt="Thumbnail 2">
+                    <div class="card-body">
+                        <h4 class="card-title">SceneModel Examples</h4>
+                        <p class="card-text">Low-level programming examples and tests for xeokit's high-performance
+                            model
+                            representation. Use these to build custom model loaders. Also useful to debug model viewing issues.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Scene Graph -->
+
+        <div class="col-md-4 mb-4">
+            <a href="./scenegraph" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail"
+                         src="../assets/images/geometry.png" alt="Thumbnail 2">
+                    <div class="card-body">
+                        <h4 class="card-title">Scene Graph Examples</h4>
+                        <p class="card-text">Creating custom scene elements using xeokit's scene graph; materials, transforms,
+                            geometries, billboards, sprites and more. Use these to build custom viewer gizmos.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+    </div>
+</div>
+
+<!-- Include Bootstrap JS and jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
 </html>

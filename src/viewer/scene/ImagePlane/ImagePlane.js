@@ -31,9 +31,9 @@ const tempQuat = math.vec4([0, 0, 0, 1]);
  *
  * <img src="http://xeokit.io/img/docs/ImagePlane/schependomlaanGoogleSatMapMed.png">
  *
- * [<img src="http://xeokit.io/img/docs/ImagePlane/ImagePlane.png">](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_groundPlane)
+ * [<img src="http://xeokit.io/img/docs/ImagePlane/ImagePlane.png">](/examples/#ImagePlane_groundPlane)
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_groundPlane)]
+ * [[Run this example](/examples/#ImagePlane_groundPlane)]
  *
  * ````javascript
  * import {Viewer, ImagePlane, XKTLoaderPlugin} from "xeokit-sdk.es.js";
@@ -81,9 +81,9 @@ const tempQuat = math.vec4([0, 0, 0, 1]);
  *
  * <img src="http://xeokit.io/img/docs/ImagePlane/schependomlaanPlanViewMed.png">
  *
- * [<img src="http://xeokit.io/img/docs/ImagePlane/ImagePlane_planView.png">](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_imageInSectionPlane)
+ * [<img src="http://xeokit.io/img/docs/ImagePlane/ImagePlane_planView.png">](/examples/#ImagePlane_imageInSectionPlane)
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_imageInSectionPlane)]
+ * [[Run this example](/examples/#ImagePlane_imageInSectionPlane)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, ImagePlane} from "xeokit-sdk.es.js";

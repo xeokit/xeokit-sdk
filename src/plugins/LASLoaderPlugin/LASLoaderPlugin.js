@@ -1,5 +1,5 @@
 import {utils} from "../../viewer/scene/utils.js";
-import {VBOSceneModel} from "../../viewer/scene/models/VBOSceneModel/VBOSceneModel.js";
+import {SceneModel} from "../../viewer/scene/model/index.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {LASDefaultDataSource} from "./LASDefaultDataSource.js";
 import {math} from "../../viewer/index.js";
@@ -281,7 +281,7 @@ class LASLoaderPlugin extends Plugin {
             delete params.id;
         }
 
-        const sceneModel = new VBOSceneModel(this.viewer.scene, utils.apply(params, {
+        const sceneModel = new SceneModel(this.viewer.scene, utils.apply(params, {
             isModel: true
         }));
 

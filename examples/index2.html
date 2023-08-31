@@ -1,0 +1,992 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Examples</title>
+    <link href='https://fonts.googleapis.com/css?family=Exo+2:400,800,900,700,600,500|Roboto:100,300,400,500,700,900'
+          rel='stylesheet' type='text/css'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
+
+    <style>
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-size: 1rem;
+            line-height: 1.50;
+            color: #212529;
+            background-color: #000000;
+            text-decoration: none;
+            word-spacing: normal;
+            text-align: left;
+            letter-spacing: 0;
+            -webkit-font-smoothing: antialiased;
+            overflow-y: hidden;
+            overflow-x: hidden;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #index {
+            position: absolute;
+            height: 100%;
+            background: #fdfdfd;
+            overflow: auto;
+            border-right: 2px solid #212529;
+            padding: 20px;
+            padding-bottom: 100px;
+            user-select: none;
+        }
+
+        #index a {
+            /*text-decoration: none;*/
+        }
+
+        #index h1 {
+            margin-top: 0;
+            margin-bottom: 0;
+            font-size: 1.8rem;
+            font-weight: normal;
+            text-decoration: none !important;
+        }
+
+        #index h1 a {
+            color: #212529;
+        }
+
+        #index h2 {
+            font-size: 1.4rem;
+            font-weight: normal;
+            padding-top: 20px;
+            padding-bottom: 10px;
+            text-decoration: none;
+        }
+
+        #index .link {
+            margin-left: 0 !important;
+            padding-left: 0 !important;
+            padding-top: 1px;
+            text-decoration: none;
+            font-weight: normal;
+            background: #fdfdfd;
+            cursor: pointer;
+            line-height: 1.5em;
+        }
+
+        #index .selected {
+            margin-left: -5px !important;
+            padding-left: 5px !important;
+            padding-top: 0;
+            padding-bottom: 0;
+            border: 1px solid #676767;
+            background: #FFFF44;
+        }
+
+
+        #index .commentFirst {
+            margin-left: 0 !important;
+            padding-left: 0 !important;
+            padding-top: 1px;
+            text-decoration: none;
+            font-weight: normal;
+            font-style: italic;
+            color: #8b8b8b;
+            cursor: pointer;
+            line-height: 1.5em;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        #index .comment {
+            color: #8b8b8b;
+            margin-left: 0 !important;
+            padding-left: 0 !important;
+            padding-top: 1px;
+            text-decoration: none;
+            font-weight: normal;
+            font-style: italic;
+            cursor: pointer;
+            line-height: 1.5em;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        #index .link:hover {
+            text-decoration: underline;
+        }
+
+        .content-container {
+            position: absolute;
+            z-index: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0 auto;
+            overflow: hidden;
+            opacity: 1.0;
+            pointer-events: all;
+            transition: all 300ms ease-in-out;
+            background: lightblue;
+        }
+
+        .content-overlay {
+            position: absolute;
+            z-index: 7;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0 auto;
+            overflow: hidden;
+            opacity: 1.0;
+            pointer-events: none;
+            transition: all 300ms ease-in-out;
+        }
+
+        .slideout-sidebar {
+            position: fixed;
+            top: 0;
+            left: -500px;
+            z-index: 10;
+            width: 460px;
+            height: 100%;
+            padding: 0;
+            transition: all 300ms ease-in-out;
+        }
+
+        #index_toggle {
+            display: none;
+        }
+
+        #index_toggle:hover {
+            cursor: pointer;
+        }
+
+        .index-button {
+            position: absolute;
+            font-size: 18px;
+            top: 15px;
+            left: 20px;
+            text-align: center;
+            vertical-align: middle;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            z-index: 5;
+            transition: all 300ms ease-in-out;
+        }
+
+        .index-button:hover {
+            cursor: pointer;
+            color: black;
+        }
+
+        .page-title {
+            position: absolute;
+            font-size: 1.6rem;
+            top: 17px;
+            left: 75px;
+            text-align: left;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            z-index: 5;
+            transition: all 300ms ease-in-out;
+            max-width: calc(100% - 450px);
+            pointer-events: none;
+        }
+
+        .viewSourceButton {
+            position: absolute;
+            left: 20px;
+            bottom: 15px;
+            z-index: 200;
+            transition: all 300ms ease-in-out;
+        }
+
+        .viewSourceButton:hover {
+            cursor: pointer;
+            opacity: 1;
+            color: black;
+        }
+
+        #index_toggle:checked ~ .slideout-sidebar {
+            left: 0;
+        }
+
+        #index_toggle:checked + .index-button {
+            left: 485px;
+            color: white;
+        }
+
+        #index_toggle:checked ~ .page-title {
+            left: 530px;
+            color: white;
+        }
+
+        #index_toggle:checked ~ .viewSourceButton {
+            left: 485px;
+        }
+
+        #index_toggle:checked ~ .content-container {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        #index_toggle:checked ~ .content-overlay {
+            pointer-events: all;
+        }
+
+    </style>
+</head>
+<body>
+<input type="checkbox" id="index_toggle"/>
+<label for="index_toggle" class="index-button"><i class="fas fa-2x fa-bars"></i></label>
+<div class="page-title" id="page-title"></div>
+<div class="viewSourceButton" id="viewSourceButton"><i class="fas fa-2x fa-code"></i></div>
+<div class="content-overlay" id="viewer-overlay"></div>
+<iframe class="content-container" id="viewer" src="./default.html"></iframe>
+<div class="slideout-sidebar">
+    <div id="index"><h1><a href="http://xeokit.io">xeokit</a> / Examples</h1></div>
+</div>
+</body>
+<script>
+
+    const files = {
+
+        "Loading Models": [
+
+            "#Loading BIM models from the file system",
+
+            ["BIMOffline_XKT_RevitSamples_RAC", "Viewing an IFC4 BIM model exported from Revit"],
+            ["BIMOffline_XKT_RevitSamples_RME", "Viewing an IFC4 BIM model exported from Revit"],
+            ["BIMOffline_XKT_IFC2glTFConverter_RevitSamples_RAC_useDataTextures", "Viewing an IFC4 model from Revit, using DataTextureModel"],
+            ["BIMOffline_XKT_IFC2glTFConverter_RevitSamples_HolterTower_useDataTextures", "Viewing an IFC4 model from Revit, using DataTextureModel"],
+            ["BIMOffline_XKT_IFC2glTFConverter_Karhumaki_useDataTextures", "Viewing an IFC4 model containing 6913 objects, using DataTextureModel"],
+
+
+            ["loading_XKT_MAP_pointCloud", "Viewing a point cloud model with 2.6M points"],
+            ["BIMOffline_XKT_HolterTower", "Viewing an IFC4 BIM model"],
+            ["BIMOffline_XKT_Duplex", "Viewing an IFC2x3 BIM model"],
+            ["BIMOffline_XKT_Schependomlaan", "Viewing an IFC2x3 BIM model"],
+            ["BIMOffline_XKT_OTCConferenceCenter", "Viewing an IFC4 BIM model"],
+            ["BIMOffline_XKT_WestRiverSideHospital", "Viewing seven IFC4 BIM models"],
+            ["BIMOffline_XKT_DoublePrecision_MAP", "Viewing an IFC4 BIM model placed at [1842022, 10, -5173301]"],
+            ["BIMOffline_XKT_DoublePrecision_Lyon", "Viewing nine CityJSON models"],
+            ["BIMOffline_XKT_WaterLock", "Viewing a BIM model of a water lock"],
+            ["BIMOffline_XKT_Federated_Clinic", "Viewing a federated BIM model"],
+
+            ["BIMOffline_XKT_ArchiCADSamples_DemoProjekt", "Viewing a BIM model exported from ArchiCAD"],
+
+            // "# IFC models converted using IFC2glTFConverter from Creoox",
+            //
+            // ["BIMOffline_XKT_IFC2glTFConverter_HolterTower", "Viewing an IFC4 BIM model"],
+            // ["BIMOffline_XKT_IFC2glTFConverter_RevitSamples_RAC", "Viewing an IFC4 BIM model exported from Revit"],
+
+            "# ",
+
+            ["BIMOffline_XKT_includeTypes", "Loading only IfcWalls from an IFC4 BIM model"],
+            ["BIMOffline_XKT_objectDefaults", "Viewing an IFC2x3 BIM model, providing custom colors for IFC types"],
+            ["BIMOffline_XKT_metadata_Schependomlaan", "Using IFC metadata to X-ray an IfcBuildingStorey"],
+            ["BIMOffline_XKT_metadata_moveStoreys", "Using IFC metadata to separate IfcBuildingStoreys"],
+            ["BIMOffline_XKT_authorMetadata", "Viewing an IFC4 BIM model with authoring data"],
+            ["BIMOffline_XKT_Duplex_originalIFCColors", "Viewing an IFC2x3 BIM model, with colors loaded from file"],
+
+            "#",
+
+            ["loading_XKT_Duplex", "Viewing an IFC2x3 model"],
+            ["loading_XKT_ConvenienceStore", "Viewing an IFC4 model"],
+            ["loading_XKT_Duplex_originalIFCColors", "Viewing an IFC2x3 BIM model, colors loaded from file"],
+            ["loading_XKT_Duplex_transform", "Viewing multiple copies of an IFC2x3 model"],
+            ["loading_XKT_Schependomlaan", "Viewing an IFC2x3 model"],
+            ["loading_XKT_Schependomlaan_transform", "Viewing multiple copies of an IFC2x3 model"],
+            ["loading_XKT_OTCConferenceCenter", "Viewing an IFC4 model"],
+            ["loading_XKT_WestRiverSideHospital", "Viewing seven IFC4 models"],
+            ["loading_XKT_APHS", "Viewing a large IFC4 model"],
+
+            ["loading_XKT_dataSource", "Loading a model from XKT using a custom data source"],
+            ["loading_XKT_concurrently", "Loading multiple models from XKT concurrently"],
+            ["loading_XKT_maxGeometryBatchSize_50M", "Setting VBOSceneModel#maxGeometryBatchSize to 50000"],
+            ["loading_XKT_maxGeometryBatchSize_20K", "Setting VBOSceneModel#maxGeometryBatchSize to 20000"],
+            ["loading_XKT_jitter_singlePrecision_MAP", "Demonstrates rounding jitter"],
+            ["loading_XKT_jitter_fullPrecision_MAP", "Double-precision rendering to eliminate rounding jitter"],
+            ["loading_XKT_jitter_fullPrecision_MAP_annotations", "Annotations with double-precision rendering"],
+            ["loading_XKT_forceBackfaces", "Forcing front faces visible"],
+
+            "#Loading models with textures from XKT",
+
+            ["loading_XKT_DamagedHelmet", "Loading a model with textures from XKT"],
+            ["loading_XKT_HousePlan", "Loading a model with textures from XKT"],
+            ["loading_XKT_HousePlan_NoTextures", "Loading a model from XKT, ignoring textures"],
+            ["loading_XKT_BoxTextured", "Loading a simple model with textures from XKT"],
+
+            "#Loading photogrammetry scans from XKT",
+
+            ["loading_XKT_Roadworks", "Viewing an XKT roadworks scan captured to glTF on iPhone 12 Pro with Scaniverse"],
+
+            "#Loading IFC with WebIFCLoaderPlugin",
+
+            ["BIMOffline_WebIFCLoaderPlugin_Duplex", "Loading IFC with WebIFCLoaderPlugin"],
+            ["BIMOffline_WebIFCLoaderPlugin_ignoreMetadata", "Loading IFC with WebIFCLoaderPlugin"],
+            ["BIMOffline_WebIFCLoaderPlugin_isolateStorey", "Load IFC with WebIFCLoaderPlugin, isolate storey"],
+            ["BIMOffline_WebIFCLoaderPlugin_MAPGroundFloor", "Load IFC placed at [1842022, 10, -5173301] with WebIFCLoaderPlugin"],
+
+            "#Loading CityJSON models",
+
+            ["loading_CityJSON_NewYork", "Loading CityJSON placed at [300410, 5000100, -40809] with XKTLoaderPlugin"],
+            ["loading_CityJSON_Railway", "Loading CityJSON with XKTLoaderPlugin"],
+
+            "#Loading CityJSON models with CityJSONLoaderPlugin",
+
+            ["loading_CityJSONLoaderPlugin_NewYork", "Loading CityJSON placed at [300410, 5000100, -40809] with CityJSONLoaderPlugin"],
+            ["loading_CityJSONLoaderPlugin_Railway", "Loading CityJSON with CityJSONLoaderPlugin"],
+
+            "#Loading LAS point clouds via XKT format",
+
+            ["loading_LAZ_Autzen", "Loading LAS point cloud with 31M points, via XKT format"],
+            ["loading_LAZ_IndoorScan", "Loading indoor LAS point cloud, via XKT format"],
+
+            "#Loading point clouds from LAS files",
+
+            ["loading_LASLoaderPlugin_Autzen", "Loading LAS point cloud with 31M points"],
+            ["loading_LASLoaderPlugin_IndoorScan", "Loading indoor LAS point cloud"],
+
+            "#Loading SolidWorks CAD models",
+
+            ["loading_3DXML_Widget", "Viewing a SolidWorks 3DXML model"],
+            ["loading_3DXML_materialType_Metallic", "Viewing a SolidWorks 3DXML model with metallic/rough PBR"],
+            ["loading_3DXML_materialType_Specular", "Viewing a SolidWorks 3DXML model with specular/gloss PBR"],
+            ["loading_3DXML_materialType_Phong", "Viewing a SolidWorks 3DXML model with Blinn/Phong shading"],
+            ["loading_3DXML_TreeView", "Viewing a SolidWorks 3DXML model"],
+
+            "#Loading STL models",
+
+            ["loading_STL_SpurGear", "Viewing an STL model"],
+            ["loading_STL_dataSource", "Viewing an STL model, loaded from custom data source"],
+            ["loading_STL_dataAsParam", "Viewing an STL model"],
+            ["loading_STL_doublePrecision", "Viewing a double-precision STL model"],
+
+            "#Loading glTF models",
+
+            ["loading_glTF_Duplex_transform", "Viewing multiple copies of a glTF model"],
+            ["loading_glTF_Schependomlaan", "Viewing a glTF model"],
+            ["loading_glTF_dataSource", "Viewing a glTF model using a custom data source"],
+            ["loading_glTF_embedded_Box", "Loading an untextured box from gltf-Embedded format"],
+            ["loading_glTF_embedded_MAP", "Viewing an IFC4 glTF BIM model placed at [1842022, 10, -5173301]"],
+
+            //   "#Loading glTF with textures",
+
+            //   ["loading_glTF_BoxTextured", "Loading a textured box from gltf-Embedded format"],
+            //  ["loading_glTF_SkatePark", "Viewing a photogrammetry model with textures from gltf-Embedded format"],
+            //    ["loading_glTF_VianneyHouse", "Viewing a glTF model with textures from gltf-Embedded format"],
+
+            "#",
+
+            "#Loading Binary glTF",
+
+            ["loading_glb_HousePlan", "Viewing a binary glTF house model with textures"],
+            ["loading_glb_VianneyHouse", "Viewing a binary glTF house model with textures"],
+            ["loading_glb_SkatePark", "Viewing a binary glTF photogrammetry model"],
+            ["loading_glb_2CylinderEngine", "Viewing a binary glTF CAD model without textures"],
+            ["loading_glb_Box", "Viewing a simple binary glTF model without textures"],
+            ["loading_glb_BoxTextured", "Viewing a simple binary glTF model with textures"],
+            ["loading_glb_DamagedHelmet", "Physically-based rendering of a binary glTF test model"],
+
+            ["loading_glTF_Roadworks", "Viewing a glTF roadworks scan captured on iPhone 12 Pro with Scaniverse"],
+            ["loading_glTF_binary_Roadworks", "Viewing a binary glTF roadworks scan captured on iPhone 12 Pro with Scaniverse"],
+
+            "#Loading OBJ models",
+
+            ["loading_OBJ_SportsCar", "Viewing an OBJ model"],
+            "#Loading three different formats into the same viewer",
+            ["loading_MultipleModels", "Loading models from multiple formats"]
+        ],
+
+        "Positioning Models": [
+            "#Positioning models geographically",
+            ["positioningModels_WebIFCLoaderPlugin_cartesianCoordinates", "Loading IFC with WebIFCLoaderPlugin, positioning the model at distant Cartesian coordinates"],
+            ["positioningModels_WebIFCLoaderPlugin_geodesicCoordinates", "Loading IFC with WebIFCLoaderPlugin, positioning the model with geodesic coordinates"]
+        ],
+
+        "Camera Navigation": [
+
+            "# Orbiting",
+
+            ["CameraControl_orbit_Duplex", "Orbiting camera navigation"],
+            ["CameraControl_orbit_Duplex_smallCanvas", "Orbiting camera navigation, with small canvas"],
+            ["CameraControl_orbit_HolterTower", "Orbiting camera navigation"],
+            ["CameraControl_orbit_OTCConferenceCenter", "Orbiting camera navigation"],
+            ["CameraControl_orbit_MAP", "Orbiting camera with a model placed at [1842022, 10, -5173301]"],
+            ["CameraControl_orbit_Lyon", "Orbiting camera navigation with a CityJSON model"],
+            ["CameraControl_orbit_WaterLock", "Orbiting camera navigation"],
+
+            "# First-person",
+
+            ["CameraControl_firstPerson_Duplex", "First-person navigation"],
+            ["CameraControl_firstPerson_HolterTower", "First-person navigation"],
+            ["CameraControl_firstPerson_MAP", "First-person navigation with model placed at [1842022, 10, -5173301]"],
+
+            "# Plan view",
+
+            ["CameraControl_planView_Schependomlaan", "Plan view navigation"],
+
+            "# Animation",
+
+            ["camera_CameraPathAnimation", "Animating the camera along a path"],
+            ["camera_fitToModel", "Arranging the camera to fit the model in view"],
+            ["camera_CameraFlightAnimation_projection", "Smooth transition between projections"],
+
+            "# Configuration",
+
+            ["CameraControl_keyMap", "Custom key bindings for camera navigation"],
+            ["CameraControl_pivotMarker", "Configuring a pivot marker for camera navigation"],
+            ["CameraControl_keyboardEventsElement", "Specifying where we listen for keyboard events"]
+        ],
+
+        "Localization": [
+            "#Localizing xeokit components for different languages",
+            ["localization_NavCubePlugin", "NavCubePlugin Localization"],
+            ["localization_NavCubePlugin_defaultLocaleService", "NavCubePlugin Localization using Viewer's Default LocaleService"]
+        ],
+
+        "Annotating Models": [
+            "#Pinning 3D labels on models",
+            ["annotations_clickShowLabels", "Click annotation markers to show labels"],
+            ["annotations_hoverShowLabels", "Hover annotation markers to show labels"],
+            ["annotations_clickFlyToPosition", "Click annotation markers to go to vantage points"],
+            ["annotations_createWithMouse", "Click on the model to create annotations"],
+            ["annotations_createAtCenterOfClickedObject", "Click objects to create annotations at their centers"],
+            ["annotations_externalElements", "Annotations with externally-provided DOM elements"],
+            ["annotations_occlusionDisabled", "Annotations with occlusion culling disabled"],
+
+            "#Sprite markers",
+            ["markers_SpriteMarker", "Billboarded marker sprite"]
+        ],
+
+        "Measuring Models": [
+            "#Measuring angles",
+            ["measurements_angle_modelWithMeasurements", "IFC 2x3 BIM model with angle measurements"],
+            ["measurements_angle_createWithMouse", "Click or tap on the model to create angle measurements"],
+            ["measurements_angle_createWithMouse_photogrammetry", "Click or tap on the model to create angle measurements"],
+            ["measurements_angle_createWithMouse_precision", "Click or tap on the model to create full-precision angle measurements"],
+            "#Measuring distances",
+            ["measurements_distance_modelWithMeasurements", "IFC 2x3 BIM model with distance measurements"],
+            ["measurements_distance_modelWithMeasurements_hideAxisWires", "BIM model with distance measurements and axis-aligned wires hidden"],
+            ["measurements_distance_createWithMouse", "Click or tap on the model to create distance measurements"],
+            ["measurements_distance_createWithMouse_snapToVertex", "Click or tap on the model to create distance measurements, withsnap-to-vertex enabled"],
+            ["measurements_distance_createWithMouse_photogrammetry", "Click or tap on the model to create distance measurements"],
+            ["measurements_distance_createWithMouse_precision", "Click or tap on the model to create full-precision distance measurements"],
+            ["measurements_distance_unitsAndScale", "Click or tap on the model to create distance measurements"],
+        ],
+
+        "BCF Collaboration": [
+            "#Saving and loading BCF viewpoints for BIM software interoperability",
+            ["BCF_SaveViewpoint", "Saving viewer state as a BCF viewpoint"],
+            ["BCF_LoadViewpoint", "Loading viewer state from a BCF viewpoint"],
+            ["BCF_LoadViewpoint_defaultInvisible", "Loading a BCF viewpoint with defaultInvisible"],
+            ["BCF_SaveViewpoint_MultipleModels", "Saving a BCF viewpoint for multiple models"],
+            ["BCF_LoadViewpoint_MultipleModels", "Loading a BCF viewpoint for multiple models"],
+            ["BCF_SaveViewpoint_ortho", "Saving a BCF viewpoint for an orthographic camera"],
+            ["BCF_LoadViewpoint_ortho", "Loading a BCF viewpoint for an orthographic camera"],
+        ],
+
+        "Picking Objects": [
+            "#Interacting with objects using mouse and touch",
+            ["picking_canvas_mesh_colorize", "Hover over objects to colorize them"],
+            ["picking_canvas_mesh_colorize_click", "Click objects to colorize them"],
+            ["picking_canvas_mesh_opacity", "Click objects to make them transparent"],
+            ["picking_canvas_mesh_highlight", "Hover over objects to highlight them"],
+            ["picking_canvas_mesh_highlight_transparent", "Hover over objects to highlight them"],
+            ["picking_canvas_mesh_select", "Hover over objects to select them"],
+            ["picking_canvas_mesh_select_transparent", "Hover over objects to select them"],
+            ["picking_canvas_mesh_xray", "Hover over objects to X-ray them"],
+            ["picking_canvas_mesh_xray_transparent", "Hover over objects to X-ray them"],
+            ["picking_canvas_surface", "Hover over objects to ray-pick their surfaces"],
+            // "picking_canvas_click",
+            ["picking_canvas_doubleClick", "Double-click objects to highlight them"],
+            ["picking_ray_mesh", "Ray-picking objects with an arbitrary World-space ray"],
+            ["picking_ray_surface", "Ray-picking surfaces with an arbitrary World-space ray"],
+            ["picking_ray_matrix", "Ray-picking objects with an arbitrary World-space ray"],
+            ["picking_setObjectsPickable", "Controlling what's pickable - only the blue object pickable"],
+
+            ["picking_pickSurfacePrecision_VBOSceneModel_batching", "Full-precision surface picking with VBOSceneModel and batched geometries"],
+            ["picking_pickSurfacePrecision_VBOSceneModel_instancing", "Full-precision surface picking with VBOSceneModel and instanced geometries"]
+        ],
+
+        "Emphasizing Objects": [
+            ["emphasis_colorize_throughXRay", "Testing X-rayed object wrapping colorized object"],
+            ["emphasis_selected_throughXRay", "Testing X-rayed object wrapping selected object"],
+            ["emphasis_selectedAndHighlighted_throughTransparent_Duplex", "Testing X-rayed object wrapping colorized object, using Duplex model"]
+        ],
+
+        "Slicing Models": [
+            "#Slicing objects with arbitrary cutting planes",
+            ["gizmos_SectionPlanesPlugin", "IFC2x3 BIM model with section planes"],
+            ["gizmos_SectionPlanesPlugin_ortho_OTCConferenceCenter", "Section plane with orthographic camera"],
+            ["gizmos_SectionPlanesPlugin_createWithMouse", "Click on the model to create a section plane"],
+            ["gizmos_SectionPlanesPlugin_createWithMouse_photogrammetry", "Click on the model to create a section plane"],
+            ["gizmos_SectionPlanesPlugin_getSnapshot", "Capture PNG screenshot, with section plane editing control excluded"],
+            ["gizmos_SectionPlanesPlugin_getSnapshot_includeGizmos", "Capture PNG screenshot, with section plane editing control included"],
+            ["gizmos_SectionPlanesPlugin_flipSectionPlanes", "Demonstrates ability to globally flip SectionPlane clipping direction"],
+            ["ImagePlane_imageInSectionPlane", "Plan view image embedded in section plane"],
+
+            "#Slicing objects with face-aligned cutting planes",
+            ["gizmos_FaceAlignedSectionPlanesPlugin", "IFC2x3 BIM model with face-aligned section planes"]
+        ],
+
+        "Viewing Storeys": [
+            "#Visualizing and navigating building stories",
+            ["storeyViews_StoreyViewsPlugin_showStoreyObjects", "Creating an isolated view of objects in building storey"],
+            ["storeyViews_StoreyViewsPlugin_gotoStoreyCamera", "Creating an orthographic plan view of building storey"],
+            ["storeyViews_StoreyViewsPlugin_gotoStoreyCamera2", "Creating a perspective plan view of building storey"],
+            ["storeyViews_StoreyViewsPlugin_createStoreyMap", "Creating a building storey map image"],
+            ["storeyViews_StoreyViewsPlugin_createStoreyMap_height", "Creating a building storey map image"],
+            ["storeyViews_StoreyViewsPlugin_pickStoreyMap", "Click anywhere in the 2D storey plan to go there in 3D"],
+            ["storeyViews_StoreyViewsPlugin_recipe1", "Click anywhere in the storey map image to go there in the main view"],
+            ["storeyViews_StoreyViewsPlugin_recipe2", "Click anywhere in the storey map image to go there in the main view"],
+            ["storeyViews_StoreyViewsPlugin_recipe3", "Click anywhere in the storey map images to go there in the main view"],
+            ["storeyViews_StoreyViewsPlugin_recipe4", "Click anywhere in the 2D storey plan to go there in 3D"],
+        ],
+
+        "Object Tree Views": [
+            "#Creating tree views of model metadata",
+            ["TreeViewPlugin_Containment", "TreeViewPlugin 'containment' hierarchy"],
+            ["TreeViewPlugin_Containment_MultipleModels", "TreeViewPlugin 'containment' hierarchy with two models"],
+            ["TreeViewPlugin_Types", "TreeViewPlugin 'types' hierarchy"],
+            ["TreeViewPlugin_Storeys", "TreeViewPlugin 'storeys' hierarchy"],
+            ["TreeViewPlugin_Storeys_validate", "Tree view validation for invalid IFC metadata"],
+            ["TreeViewPlugin_options_rootName", "Configuring a custom label for tree view root"],
+            ["loading_3DXML_TreeView", "Tree view with 3DXML model exported from SolidWorks"]
+        ],
+
+        "Context Menus": [
+            "#Creating pop-up context menus",
+            ["ContextMenu_Canvas_TreeViewPlugin_Custom", "Right-click or long-touch to open a context menu"],
+            ["ContextMenu_dynamicItemTitles", "Right-click or long-touch to open a context menu with dynamic titles"],
+            ["ContextMenu_dynamicItemVisibilities", "Right-click or long-touch to open a context menu with dynamically-visible options"],
+            ["ContextMenu_subMenus", "Right-click or long-touch on the model to open a multi-level context menu"],
+        ],
+
+        "SAO": [
+            "#Scalable ambient obscurance is a rendering effect that emphasizes detail in models by darkening crevices",
+            ["postEffects_SAO_Schependomlaan", "Scalable ambient obscurance (SAO)"],
+            ["postEffects_SAO_OTCConferenceCenter", "Scalable ambient obscurance (SAO)"],
+            ["postEffects_SAO_Duplex", "Scalable ambient obscurance (SAO)"]
+        ],
+
+        "NavCube": [
+            "#Axis navigation gizmo",
+            ["gizmos_NavCubePlugin", "NavCubePlugin - camera navigation helper"],
+            ["gizmos_NavCubePlugin_customColors", "NavCubePlugin - custom colors"],
+            ["gizmos_NavCubePlugin_trueNorth", "NavCubePlugin Configured to Align with True North"]
+        ],
+
+        "AxisGizmo": [
+            "#Showing the coordinate axis",
+            ["gizmos_AxisGizmoPlugin", "Axis gnomon gizmo (see bottom left)"]
+        ],
+
+        "Screenshots": [
+            "#Capturing images from the viewer canvas",
+            ["screenshots_png_getSnapshot", "Dynamically capture PNG screenshots"],
+            ["gizmos_SectionPlanesPlugin_getSnapshot", "Capture PNG screenshot, with section plane included"],
+            ["gizmos_SectionPlanesPlugin_getSnapshot_includeGizmos", "Capture PNG screenshot, with section plane excluded"],
+            ["screenshots_png_getSnapshot_hires", "Capture high resolution screenshots"],
+            ["screenshots_png_getSnapshot_withMeasurements", "Capture measurements and annotations in screenshots"]
+        ],
+
+        "Geometry": [
+
+            "#Creating and loading geometry",
+
+            ["geometry_VBOGeometry", "GPU-resident geometry"],
+            ["geometry_ReadableGeometry", "Browser-resident geometry"],
+
+            ["geometry_builders_buildBoxGeometry", "Building a box-shaped triangle mesh geometry"],
+            ["geometry_builders_buildBoxLinesGeometry", "Building a box-shaped lines mesh geometry"],
+            ["geometry_builders_buildGridGeometry", "Building a grid lines geometry"],
+            ["geometry_builders_buildCylinderGeometry", "Building a cylinder-shaped triangle mesh geometry"],
+            ["geometry_builders_buildSphereGeometry", "Building a sphere-shaped triangle mesh geometry"],
+            ["geometry_builders_buildTorusGeometry", "Building a torus-shaped triangle mesh geometry"],
+            ["geometry_builders_buildVectorTextGeometry", "Building vector text geometry"],
+
+            ["geometry_loaders_loadOBJGeometry", "Loading geometry from OBJ"],
+            ["geometry_loaders_load3DSGeometry", "Loading geometry from 3DS"]
+        ],
+
+        "Lighting": [
+
+            "#Light source components",
+
+            ["lights_AmbientLight", "Ambient light"],
+            ["lights_DirLight_view", "View-space directional lights"],
+            ["lights_DirLight_world", "World-space directional lights"],
+            ["lights_PointLight_view", "View-space point lights"],
+            ["lights_PointLight_world", "World-space point lights"],
+
+            "#Light source types with various scene representations",
+
+            ["sceneRepresentation_lightingTest_viewDirLights", "View-space directional lights with various scene representations"],
+            ["sceneRepresentation_lightingTest_worldDirLights", "World-space directional lights with various scene representations"],
+            ["sceneRepresentation_lightingTest_viewPointLights", "View-space point lights with various scene representations"],
+            ["sceneRepresentation_lightingTest_worldPointLights", "World-space point lights with various scene representations"],
+        ],
+
+        "Materials": [
+
+            "#Material components",
+
+            ["materials_PhongMaterial", "PhongMaterial"],
+            ["materials_MetallicMaterial", "Physically-based metallic/roughness material"],
+            ["materials_LambertMaterial", "LambertMaterial"],
+            ["materials_EdgeMaterial", "EdgeMaterial"],
+            ["materials_EmphasisMaterial", "EmphasisMaterial"],
+            ["materials_Texture", "Texture"],
+            ["materials_Fresnel", "Fresnel"],
+            ["materials_PointsMaterial", "PointsMaterial"],
+            ["materials_LinesMaterial", "LinesMaterial"]
+        ],
+
+        "VBOSceneModel": [
+
+            "#High-performance model representation component",
+
+            "#Geometry reuse",
+
+            ["sceneRepresentation_VBOSceneModel_instancing", "VBOSceneModel with instanced triangle geometry"],
+            ["sceneRepresentation_VBOSceneModel_instancing_autoNormals", "VBOSceneModel with instanced triangle geometries and auto-generated normals"],
+            ["sceneRepresentation_VBOSceneModel_instancing_textures", "VBOSceneModel with instanced triangle geometry and textures"],
+            ["sceneRepresentation_VBOSceneModel_instancing_textures_pbr", "VBOSceneModel with instanced triangle geometry, textures and PBR"],
+            ["sceneRepresentation_VBOSceneModel_instancing_geometries", "VBOSceneModel with various types of instanced geometry"],
+            ["sceneRepresentation_VBOSceneModel_instancing_points", "VBOSceneModel with instanced point cloud geometry"],
+            ["sceneRepresentation_VBOSceneModel_instancing_lines", "VBOSceneModel with instanced line geometry"],
+            // "sceneRepresentation_VBOSceneModel_instancing_annotations",
+            ["sceneRepresentation_VBOSceneModel_instancing_transform", "VBOSceneModel with instanced triangle geometry"],
+            ["sceneRepresentation_VBOSceneModel_instancing_benchmark", "VBOSceneModel instanced triangle geometry benchmark"],
+            ["sceneRepresentation_VBOSceneModel_instancing_origin", "VBOSceneModel with instanced triangle geometry and RTC coordinates"],
+            ["sceneRepresentation_VBOSceneModel_instancing_origin_SAO", "VBOSceneModel with instanced triangle geometry, RTC coordinates and SAO"],
+            ["sceneRepresentation_VBOSceneModel_instancing_SAO", "VBOSceneModel with instanced triangle geometry and SAO"],
+            ["sceneRepresentation_VBOSceneModel_instancing_PBR", "VBOSceneModel with instanced triangle geometry and physically-based rendering"],
+            ["sceneRepresentation_VBOSceneModel_instancing_PBR_spheres", "VBOSceneModel with instanced triangle geometry and physically-based rendering"],
+
+            "#Geometry batching",
+
+            ["sceneRepresentation_VBOSceneModel_batching", "VBOSceneModel with batched triangle geometries"],
+            ["sceneRepresentation_VBOSceneModel_batching_autoNormals", "VBOSceneModel with batched triangle geometries and auto-generated normals"],
+            ["sceneRepresentation_VBOSceneModel_batching_textures", "VBOSceneModel with batched triangle geometries and textures"],
+            ["sceneRepresentation_VBOSceneModel_batching_textures_pbr", "VBOSceneModel with batched triangle geometries, textures, and PBR"],
+            ["sceneRepresentation_VBOSceneModel_batching_textures_ktx2", "VBOSceneModel with batched triangle geometries and compressed KTX2 textures"],
+            ["sceneRepresentation_VBOSceneModel_batching_points", "VBOSceneModel with batched point cloud geometries"],
+            ["sceneRepresentation_VBOSceneModel_batching_lines", "VBOSceneModel with batched line geometries"],
+            ["sceneRepresentation_VBOSceneModel_batching_annotations", "VBOSceneModel with batched triangle geometry and annotations"],
+            ["sceneRepresentation_VBOSceneModel_batching_transform", "VBOSceneModel with batched triangle geometry"],
+            ["sceneRepresentation_VBOSceneModel_batching_benchmark", "VBOSceneModel batched triangle geometry benchmark"],
+            ["sceneRepresentation_VBOSceneModel_batching_origin", "VBOSceneModel with batched triangle geometries and RTC coordinates"],
+            ["sceneRepresentation_VBOSceneModel_batching_origin_SAO", "VBOSceneModel with batched triangle geometries, RTC coordinates and SAO"],
+            ["sceneRepresentation_VBOSceneModel_batching_SAO", "VBOSceneModel with batched triangle geometries and SAO"],
+            ["sceneRepresentation_VBOSceneModel_batching_PBR", "VBOSceneModel with batched triangle geometries and PBR"],
+
+
+            "#Classifying with metadata",
+
+            ["sceneRepresentation_VBOSceneModel_metadata", "VBOSceneModel classified with metadata"],
+            ["sceneRepresentation_VBOSceneModel_metadata_federated", "VBOSceneModel classified with federated metadata"]
+        ],
+
+        "Scene Graphs": [
+
+            "#Scene graph components",
+
+            ["sceneRepresentation_SceneGraph", "Scene graph with animated transform hierarchy"],
+            ["sceneRepresentation_SceneGraph_ReadableGeometry", "Scene graph with browser-resident geometry"],
+            ["sceneRepresentation_SceneGraph_VBOGeometry", "Scene graph with GPU-resident geometry"],
+            ["sceneRepresentation_SceneGraph_metadata", "Scene graph classified with metadata"],
+            ["sceneRepresentation_SceneGraph_origin", "Scene graph with RTC geometry coordinates"]
+        ],
+
+        "ImagePlane": [
+
+            "#Showing bitmap images within 3D scenes",
+
+            ["ImagePlane_groundPlane", "Google satellite image embedded in ground plane"],
+            ["ImagePlane_groundPlane_narrow", "Google satellite image embedded in ground plane"],
+            ["ImagePlane_imageInSectionPlane", "Plan view image embedded in section plane"]
+        ],
+
+        "Bitmap": [
+
+            "#Showing bitmaps within 3D scenes",
+
+            ["Bitmap_storeyPlan", "Creating a 2D storey plan with a Bitmap"],
+            ["BCF_SaveViewpoint", "Saving viewer state with bitmaps and lines as a BCF viewpoint"]
+
+        ],
+
+        "LineSet": [
+
+            "#Showing line segments within 3D scenes",
+
+            ["LineSet_grid", "Creating a ground grid with a LineSet"],
+            ["BCF_SaveViewpoint", "Saving viewer state with bitmaps and lines as a BCF viewpoint"]
+        ],
+
+        "Billboarding": [
+
+            "#Keeping objects oriented towards the viewpoint",
+
+            ["billboarding_Mesh_spherical", "Mesh with spherical billboard"],
+            ["billboarding_Mesh_cylindrical", "Mesh with cylindrical billboard"]
+        ],
+
+        "Logarithmic Depth Buffer": [
+
+            "#Improving rendering accuracy for mixed object scales",
+
+            ["logDepthBuf_XKT_Lyon", "Enabling the logarithmic depth buffer"],
+            ["logDepthBuf_XKT_Lyon_logDepthBufDisabled", "Disabling the logarithmic depth buffer"],
+            ["logDepthBuf_SceneGraph_RTC", "Scene graph with RTC geometry and logarithmic depth buffer enabled"],
+            ["logDepthBuf_SceneGraph_RTC_logDepthBufDisabled", "Scene graph with RTC geometry and logarithmic depth buffer disabled"],
+            ["logDepthBuf_VBOSceneModel_batching_RTC", "VBOSceneModel RTC batched geometry with Logarithmic depth buffer enabled"],
+            ["logDepthBuf_VBOSceneModel_batching_RTC_annotations", "VBOSceneModel RTC batched geometry and annotations with Logarithmic depth buffer enabled"],
+            ["logDepthBuf_VBOSceneModel_batching_RTC_logDepthBufDisabled", "VBOSceneModel RTC batched geometry with Logarithmic depth buffer disabled"],
+            ["logDepthBuf_VBOSceneModel_instancing_RTC", "VBOSceneModel RTC instanced geometry with Logarithmic depth buffer enabled"],
+            ["logDepthBuf_VBOSceneModel_instancing_RTC_logDepthBufDisabled", "VBOSceneModel RTC instanced geometry with Logarithmic depth buffer disabled"],
+        ],
+
+        "Mementos": [
+
+            "#Saving and restoring viewer state",
+
+            ["mementos_ObjectsMemento", "Saving and restoring object states - demo with random states"]
+        ],
+
+        "Performance": [
+
+            "#Optimizing performance",
+
+            ["performance_FastNavPlugin", "FastNavPlugin - Fast lower-quality rendering while user interacts"],
+
+            "#Frustum culling",
+
+            ["performance_ViewCullPlugin", "ViewCullPlugin - culls objects outside the view frustum"],
+            ["performance_ViewCullPlugin_CameraPathAnimation", "ViewCullPlugin - culls objects outside the view frustum"],
+        ],
+
+        "Spinner": [
+            "#CSS animation while models are loading",
+            ["spinner_custom", "Customizing the appearance of the loading spinner"]
+        ],
+
+        "Experiments": [
+            "#Random experiments",
+            ["techniques_nonInteractiveQuality", "Disable edges and SAO while camera is moving"],
+            ["techniques_findComplexEntities", "Automatically detect and colorize small and complex entities"],
+            // ["DimensionsFootprintModel_example1", "Dimensions footprint experiment #1"],
+            // ["DimensionsFootprintModel_example2", "Dimensions footprint experiment #2"]
+        ],
+
+        "Configs": [
+            "#Configuring the xeokit-sdk",
+            ["Configs_disableDoublePrecision", "Disable double precision for extra performance"]
+        ],
+
+        "Viewer": [
+            "#General viewer techniques",
+            ["viewer_createDestroyRepeat", "Testing repeated viewer creation and deletion"],
+            ["viewer_createDestroyRepeatNewCanvas", "Testing repeated viewer creation and deletion, with new canvas each time"],
+            ["viewer_disableAntialiasing", "Disabling WebGL antialising"]
+        ]
+    };
+
+    const list = document.getElementById('index');
+    const viewer = document.getElementById('viewer');
+    const viewerOverlay = document.getElementById('viewer-overlay');
+
+    const container = document.createElement('div');
+    list.appendChild(container);
+
+    const viewSourceButton = document.getElementById('viewSourceButton');
+    viewSourceButton.addEventListener('click', function (event) {
+        window.open('https://github.com/xeokit/xeokit-sdk/blob/master/examples/' + selected + '.html');
+    }, false);
+
+    const indexToggle = document.getElementById("index_toggle");
+    const pageTitle = document.getElementById('page-title');
+
+    viewerOverlay.addEventListener('click', function (event) {
+        indexToggle.checked = false;
+    }, false);
+
+    // indexToggle.addEventListener('click', function (event) {
+    //     viewer.src="default.html";
+    // }, false);
+
+    const sectionDivs = {};
+    const divs = {};
+    const fileDescriptions = {};
+    let selected = null;
+    let index = 1;
+    var indexStr;
+
+    // Index
+
+    let div = document.createElement('h2');
+    div.textContent = "Index";
+
+    container.appendChild(div);
+    container.appendChild(document.createElement('hr'));
+
+    const sectionNames = Object.keys(files);
+    // sectionNames.sort((a, b) => {
+    //     if (a < b) {
+    //         return -1;
+    //     }
+    //     if (a > b) {
+    //         return 1;
+    //     }
+    //     return 0;
+    // });
+
+    for (let i = 0, len = sectionNames.length; i < len; i++) {
+        const sectionName = sectionNames[i];
+        const sectionFiles = files[sectionName];
+        var sectionDiv = document.createElement('div');
+        sectionDiv.className = 'link';
+        indexStr = "" + index++ + ".";
+        for (let i = indexStr.length, len = 5; i < len; i++) {
+            indexStr += ".";
+        }
+        sectionDiv.textContent = indexStr + sectionName;
+        sectionDiv.addEventListener('click', (function () {
+            const _sectionName = sectionName;
+            return function () {
+                sectionDivs[_sectionName].scrollIntoView();
+            }
+        })());
+        container.appendChild(sectionDiv);
+    }
+
+    container.appendChild(document.createElement('hr'));
+
+    _index = 1;
+
+    let clickedFile = null;
+
+    for (let i = 0, len = sectionNames.length; i < len; i++) {
+        const sectionName = sectionNames[i];
+        const sectionFiles = files[sectionName];
+        const sectionDiv = document.createElement('h2');
+        sectionDiv.textContent = _index++ + ". " + sectionName;
+        container.appendChild(sectionDiv);
+        sectionDivs[sectionName] = sectionDiv;
+        container.appendChild(document.createElement('hr'));
+
+        for (let i = 0; i < sectionFiles.length; i++) {
+
+            let sectionFile = sectionFiles[i];
+            let fileName;
+            let fileDesc;
+
+            if (!isString(sectionFile)) {
+                fileName = sectionFile[0];
+                fileDesc = sectionFile[1];
+            } else {
+                fileName = sectionFile;
+                fileDesc = sectionFile;
+            }
+
+            if (fileDesc.charAt(0) === "#") {
+                const commentDiv = document.createElement('div');
+                commentDiv.textContent = "// " + fileDesc.substring(1);
+                commentDiv.className = (i === 0 ? 'commentFirst' : 'comment');
+                container.appendChild(commentDiv);
+                continue;
+            }
+
+            const fileNameComponents = fileName.split('_');
+            fileNameComponents.shift();
+            const fileNamePath = fileNameComponents.join(' / ');
+            const fileNameDiv = document.createElement('div');
+            fileNameDiv.className = 'link';
+            fileNameDiv.textContent = fileNamePath; // expandCamel(name);
+            fileNameDiv.addEventListener('click', (function () {
+                const _file = fileName;
+                return function () {
+                    clickedFile = _file;
+                    window.location = "index.html#" + _file;
+                    viewer.src = "";
+                }
+            })());
+            container.appendChild(fileNameDiv);
+            divs[fileName] = fileNameDiv;
+            fileDescriptions[fileName] = fileDesc;
+        }
+    }
+
+    const paddingDiv = document.createElement('div');
+    paddingDiv.style["height"] = "50px";
+    container.appendChild(paddingDiv);
+
+    function expandCamel(str) {
+        return str.replace(/([A-Z])/g, function ($1) {
+            return " " + $1.toLowerCase();
+        });
+    }
+
+    if (window.location.hash !== '') {
+        load(window.location.hash.substring(1));
+    } else {
+        indexToggle.checked = true;
+    }
+
+    var hash = window.location.hash;
+
+    window.setInterval(function () {
+        if (window.location.hash !== hash || viewer.src === "") {
+            setTimeout(() => {
+                load(window.location.hash.substring(1));
+                hash = window.location.hash;
+            }, 300)
+
+            indexToggle.checked = false;
+        }
+    }, 70);
+
+    function scrollIntoView(div) {
+        document.getElementById("index").scrollTop = documentOffsetTop(div) - (window.innerHeight / 6);
+    }
+
+    function documentOffsetTop(div) {
+        return div.offsetTop + (div.offsetParent ? documentOffsetTop(div.offsetParent) : 0);
+    }
+
+    function load(file) {
+
+        pageTitle.innerText = fileDescriptions[file] || "Example not found - perhaps renamed?";
+
+        if (file.indexOf(".html", file.length - 5) !== -1) {
+            window.location = "./" + file + ".html";
+            return;
+        }
+
+        if (selected !== null) divs[selected].className = 'link';
+        divs[file].className = 'link selected';
+        window.location.hash = file;
+        viewer.src = file + '.html';
+        viewer.focus();
+        viewSourceButton.style.display = '';
+        selected = file;
+        if (clickedFile !== file) {
+            scrollIntoView(divs[file]);
+        }
+        clickedFile = null;
+    }
+
+    function isString(value) {
+        return (typeof value === 'string' || value instanceof String);
+    }
+
+</script>
+</html>

@@ -12,7 +12,7 @@ import {Light} from './Light.js';
  *
  * In the example below we'll destroy the {@link Scene}'s default light sources then create an AmbientLight and a couple of {@link @DirLight}s:
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#lights_AmbientLight)]
+ * [[Run this example](/examples/#lights_AmbientLight)]
  *
  * ````javascript
  * import {Viewer, Mesh, buildTorusGeometry,

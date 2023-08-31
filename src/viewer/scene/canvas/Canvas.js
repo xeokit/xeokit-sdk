@@ -162,7 +162,7 @@ class Canvas extends Component {
                 }
             }
         });
-              
+
         resizeObserver.observe(this.canvas);
 
         // Publish canvas size and position changes on each scene tick
@@ -378,7 +378,7 @@ class Canvas extends Component {
             this.fire("webglContextFailed", true, true);
         }
 
-        // data-textures: avoid to re-bind same texture 
+        // data-textures: avoid to re-bind same texture
         {
             const gl = this.gl;
 
@@ -422,15 +422,15 @@ class Canvas extends Component {
             //     1000
             // );
         }
-        
+
         if (this.gl) {
             // Setup extension (if necessary) and hints for fragment shader derivative functions
             if (this.webgl2) {
                 this.gl.hint(this.gl.FRAGMENT_SHADER_DERIVATIVE_HINT, this.gl.FASTEST);
 
-                    // data-textures: not using standard-derivatives
-                    if (!(this.gl instanceof WebGL2RenderingContext)) {
-                    }
+                // data-textures: not using standard-derivatives
+                if (!(this.gl instanceof WebGL2RenderingContext)) {
+                }
             }
         }
     }
