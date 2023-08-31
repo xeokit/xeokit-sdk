@@ -64,7 +64,31 @@ export declare class CameraControl extends Component {
    * @param scope  Scope for the callback
    */
   on(event: "hoverOut", callback: (e: {entity: Entity; }) => void, scope?: any): string
-  
+
+  /**
+   * Event fired when the pointer either snaps to a vertex/edge, or moves while hovering over an Entity.
+   *
+   * Subscribe to this event when you want to get a snap-to-vertex/edge pick event if available, or
+   * the equivalent of "hoverSurface" as a fallback in case of no near vertex/edge available to snap to.
+   *
+   * @param event The hover event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+  on(event: "hoverSnapOrSurface", callback: (e: PickResult) => void, scope?: any): string
+
+  /**
+   * Event fired when the pointer moves while hovering over empty space and does not snap to any vertex or edge.
+   *
+   * Subscribe to this event when you want notification that the pointer is hovering over empty space and was
+   * not able to snap to a vertex or an edge.
+   *
+   * @param event The hoverOff event
+   * @param callback Called fired on the event
+   * @param scope  Scope for the callback
+   */
+  on(event: "hoverSnapOrSurfaceOff", callback: (e: {canvasPos: number[]; }) => void, scope?: any): string
+
   /**
    * Event fired when we left-click or tap on an Entity.
    * @param event The picked event
