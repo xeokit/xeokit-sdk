@@ -27,8 +27,8 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults";
  *
  * ## Usage
  *
- * In the example below we'll load a house plan model from a [binary glTF file](http://xeokit.github.io/xeokit-sdk/examples/models/gltf/schependomlaan/), along
- * with an accompanying JSON [IFC metadata file](http://xeokit.github.io/xeokit-sdk/examples/metaModels/schependomlaan/).
+ * In the example below we'll load a house plan model from a [binary glTF file](/examples/models/gltf/schependomlaan/), along
+ * with an accompanying JSON [IFC metadata file](/examples/metaModels/schependomlaan/).
  *
  * This will create a bunch of {@link Entity}s that represents the model and its objects, along with a {@link MetaModel} and {@link MetaObject}s
  * that hold their metadata.

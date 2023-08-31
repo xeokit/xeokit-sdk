@@ -13,7 +13,7 @@ const tempVec3c = math.vec3();
 /**
  * {@link Viewer} plugin that saves and loads BCF viewpoints as JSON objects.
  *
- * [<img src="http://xeokit.github.io/xeokit-sdk/assets/images/BCFViewpointsPlugin.png">](http://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint)
+ * [<img src="http://xeokit.github.io/xeokit-sdk/assets/images/BCFViewpointsPlugin.png">](/examples/#BCF_SaveViewpoint)
  *
  * * [[Example 1: Saving viewer state to a BCF viewpoint](https://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint)]
  * * [[Example 2: Loading viewer state from a BCF viewpoint](https://xeokit.github.io/xeokit-sdk/examples/#BCF_LoadViewpoint)]
@@ -277,7 +277,7 @@ const tempVec3c = math.vec3();
  * });
  * ````
  *
- * [[Run an example](http://xeokit.github.io/xeokit-sdk/examples/#BCF_LoadViewpoint_defaultInvisible)]
+ * [[Run an example](/examples/#BCF_LoadViewpoint_defaultInvisible)]
  *
  * ## Behaviour with XKTLoaderPlugin globalizeObjectIds
  *
