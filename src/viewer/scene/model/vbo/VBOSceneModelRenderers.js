@@ -367,7 +367,7 @@ class VBOSceneModelRenderer {
 
         if (this._aColor) {
             this._aColor.bindArrayBuffer(state.colorsBuf ? state.colorsBuf : state.colorsBuf);
-            if (this._instancing && state.geometry && state.colorsBuf) {
+            if (this._instancing && state.colorsBuf) {
                 gl.vertexAttribDivisor(this._aColor.location, 1);
             }
         }
@@ -420,7 +420,7 @@ class VBOSceneModelRenderer {
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const {_state: state, model} = layer;
-        const {textureSet, geometry, origin, positionsDecodeMatrix} = state;
+        const {textureSet, origin, positionsDecodeMatrix} = state;
         const lightsState = scene._lightsState;
         const pointsMaterial = scene.pointsMaterial;
         const {camera} = model.scene;
@@ -603,7 +603,7 @@ class VBOSceneModelRenderer {
             }
         }
 
-        this._draw({geometry, state, frameCtx, incrementDrawState});
+        this._draw({ state, frameCtx, incrementDrawState});
 
         gl.bindVertexArray(null);
     }
@@ -668,7 +668,6 @@ class VBOSceneModelTriangleInstancingRenderer extends VBOSceneModelRenderer {
         const {
             state,
             frameCtx,
-            geometry,
             incrementDrawState,
         } = drawCfg;
 
@@ -718,7 +717,6 @@ class VBOSceneModelPointInstancingRenderer extends VBOSceneModelRenderer {
         const {
             state,
             frameCtx,
-            geometry,
             incrementDrawState,
         } = drawCfg;
 
@@ -758,7 +756,6 @@ class VBOSceneModelLineInstancingRenderer extends VBOSceneModelRenderer {
 
         const {
             state,
-            geometry,
             frameCtx,
             incrementDrawState,
         } = drawCfg;
