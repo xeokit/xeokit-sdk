@@ -30,7 +30,6 @@ class SnapInstancingDepthRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const origin = instancingLayer._state.origin;
-        const geometry = state.geometry;
 
         frameCtx._origin[0] = origin[0];
         frameCtx._origin[1] = origin[1];
@@ -120,7 +119,7 @@ class SnapInstancingDepthRenderer {
             }
         }
 
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometry.positionsDecodeMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, state.positionsDecodeMatrix);
 
         this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
         this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
@@ -130,7 +129,7 @@ class SnapInstancingDepthRenderer {
         gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 1);
         gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 1);
 
-        this._aPosition.bindArrayBuffer(geometry.positionsBuf);
+        this._aPosition.bindArrayBuffer(state.positionsBuf);
 
         this._aFlags.bindArrayBuffer(state.flagsBuf);
         gl.vertexAttribDivisor(this._aFlags.location, 1);

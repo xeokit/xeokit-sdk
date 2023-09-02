@@ -30,7 +30,6 @@ class SnapInstancingDepthBufInitRenderer {
         const gl = scene.canvas.gl;
         const state = instancingLayer._state;
         const origin = instancingLayer._state.origin;
-        const geometry = state.geometry;
 
         frameCtx._origin[0] = origin[0];
         frameCtx._origin[1] = origin[1];
@@ -119,7 +118,7 @@ class SnapInstancingDepthBufInitRenderer {
             }
         }
 
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, geometry.positionsDecodeMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, state.positionsDecodeMatrix);
 
         this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
         this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
