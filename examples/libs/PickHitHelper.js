@@ -1,4 +1,4 @@
-import {buildSphereGeometry, Component, math, Node, Mesh, PhongMaterial, VBOGeometry} from "../../../dist/xeokit-sdk.es.js";
+import {buildSphereGeometry, Component, math, Node, Mesh, PhongMaterial, VBOGeometry} from "../../../dist/xeokit-sdk.min.es.js";
 
 const zeroVec = new Float64Array([0, 0, -1]);
 const quat = new Float64Array(4);

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>xeokit Example</title>
     <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     <style>
 
         /* ----------------------------------------------------------------------------------------------------------*/
@@ -117,8 +118,6 @@
         }
 
     </style>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
 </head>
 <body>
 <input type="checkbox" id="info-button"/>
@@ -127,22 +126,9 @@
 <canvas id="myNavCubeCanvas"></canvas>
 <div id="treeViewContainer"></div>
 <div class="slideout-sidebar">
-    <img class="info-icon" style="width:280px; padding-bottom:10px;" src="../../assets/images/cityJSONLogo.svg"/>
-    <h1>CityJSONLoaderPlugin</h1>
-    <h2>Loading a CityJSON  model</h2>
-    <p><a href="https://www.cityjson.org">CityJSON</a> is a JSON-based encoding for a subset of the CityGML data model,
-        which is an open standardised data model and exchange format to store digital 3D models of cities and
-        landscapes.</p>
-    <h2>Limitations</h2>
-    <p><a href="../../docs/class/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js~CityJSONLoaderPlugin.html"
-          target="_other">CityJSONLoaderPlugin</a> is the most straightforward way to view CityJSON models with xeokit,
-        since it
-        loads
-        the CityJSON file directly off the file system, without needing it to be pre-converted.</p>
-    <p>Loading and parsing huge CityJSON files can be slow, and can overwhelm the browser, however. To view your
-        largest CityJSON models, we recommend instead pre-converting those to xeokit's compressed native .XKT format, then
-        loading them with <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
-                             target="_other">XKTLoaderPlugin</a>.</p>
+    <img class="info-icon" src="../../assets/images/bim_icon.png"/>
+    <h1>XKTLoaderPlugin</h1>
+    <h2>Loading a BIM Model from the File System, Data Textures Enabled</h2>
     <h3>Stats</h3>
     <ul>
         <li>
@@ -156,8 +142,8 @@
                target="_other">Viewer</a>
         </li>
         <li>
-            <a href="../../docs/class/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js~CityJSONLoaderPlugin.html"
-               target="_other">CityJSONLoaderPlugin</a>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
         </li>
         <li>
             <a href="../../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html"
@@ -170,24 +156,42 @@
     </ul>
     <h3>Resources</h3>
     <ul>
-        <li><a href="https://www.cityjson.org/" target="_other">Model source</a></li>
+        <li>
+            <a href="https://knowledge.autodesk.com/support/revit-products/getting-started/caas/CloudHelp/cloudhelp/2020/ENU/Revit-GetStarted/files/GUID-61EF2F22-3A1F-4317-B925-1E85F138BE88-htm.html"
+               target="_other">Model source</a>
+        </li>
     </ul>
 </div>
 </body>
 
 <script type="module">
 
-    import {Viewer, CityJSONLoaderPlugin, NavCubePlugin, TreeViewPlugin} from "../../dist/xeokit-sdk.min.es.js";
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer, XKTLoaderPlugin, NavCubePlugin, TreeViewPlugin, FastNavPlugin} from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera, tweak x-ray and highlight materials
+    //------------------------------------------------------------------------------------------------------------------
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true,
-        saoEnabled: true
+        saoEnabled: true,
+        dtxEnabled: true
     });
 
-    viewer.scene.camera.eye = [14.915582703146043, 14.396781491179095, 5.431098754133695];
-    viewer.scene.camera.look = [6.599999999999998, 8.34099990051474, -4.159999575600315];
-    viewer.scene.camera.up = [-0.2820584034861215, 0.9025563895259413, -0.3253229483893775];
+    viewer.camera.eye = [102.07185264355974, 45.23873322531372, -54.1001537318987]
+    viewer.camera.look = [35.0291287591034, -3.5295781673428905, -20.312957533628705]
+    viewer.camera.up = [-0.48646319926706455, 0.8385999559445908, 0.24516049773277654]
+
+    new FastNavPlugin(viewer);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a NavCube
+    //------------------------------------------------------------------------------------------------------------------
 
     new NavCubePlugin(viewer, {
         canvasId: "myNavCubeCanvas",
@@ -198,20 +202,26 @@
         rightMargin: 10
     });
 
-    new TreeViewPlugin(viewer, {
+    //------------------------------------------------------------------------------------------------------------------
+    // Create an IFC structure tree view
+    //------------------------------------------------------------------------------------------------------------------
+
+    const treeView = new TreeViewPlugin(viewer, {
         containerElement: document.getElementById("treeViewContainer"),
-        hierarchy: "types",
-        autoExpandDepth: 1
+        autoExpandDepth: 3 // Initially expand the root tree node
     });
 
-    const cityJSONLoader = new CityJSONLoaderPlugin(viewer);
+    //------------------------------------------------------------------------------------------------------------------
+    // Load model and metadata
+    //------------------------------------------------------------------------------------------------------------------
 
-    const sceneModel = cityJSONLoader.load({
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const sceneModel = xktLoader.load({
         id: "myModel",
-        src: "../../assets/models/cityjson/LoD3_Railway.json",
-        saoEnabled: true,
-        edges: false,
-        rotation: [-90, 0, 0]
+        src: "../../assets/models/xkt/v10/glb/archicad-demoprojekt.xkt",
+        excludeTypes: ["IfcSpace"],
+        edges: true
     });
 
     const t0 = performance.now();
@@ -220,8 +230,6 @@
         const t1 = performance.now();
         document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
     });
-
-    window.viewer = viewer;
 
 </script>
 </html>
