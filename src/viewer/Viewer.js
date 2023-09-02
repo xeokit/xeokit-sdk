@@ -52,9 +52,6 @@ class Viewer {
      * that it does not clip huge models.
      * @param {Boolean} [cfg.colorTextureEnabled=true] Whether to enable base color texture rendering.
      * @param {Boolean} [cfg.pbrEnabled=false] Whether to enable physically-based rendering.
-     * @param {Boolean} [cfg.lodEnabled=false] Whether to enable Level-of-Detail (LOD) culling. See {@link LOD} for more info.
-     * @param {Boolean} [cfg.vfcEnabled=false] Whether to enable View Frustum Culling (VFC) culling. See {@link VFC} for more info.
-     * @param {Boolean} [cfg.dtxEnabled=false]  Sets whether data texture scene representation and rendering (DTX) is enabled for all subsequently created {@link @SceneModel}s.
      * @param {LocaleService} [cfg.localeService=null] Optional locale-based translation service.
      */
     constructor(cfg) {
@@ -109,12 +106,10 @@ class Viewer {
             saoEnabled: cfg.saoEnabled,
             alphaDepthMask: (cfg.alphaDepthMask !== false),
             entityOffsetsEnabled: (!!cfg.entityOffsetsEnabled),
+            pickSurfacePrecisionEnabled: (!!cfg.pickSurfacePrecisionEnabled),
             logarithmicDepthBufferEnabled: (!!cfg.logarithmicDepthBufferEnabled),
             pbrEnabled: (!!cfg.pbrEnabled),
-            lodEnabled: (!!cfg.lodEnabled),
-            vfcCulling: (!!cfg.vfcEnabled),
-            colorTextureEnabled: (cfg.colorTextureEnabled !== false),
-            dtxEnabled: (!!cfg.dtxEnabled)
+            colorTextureEnabled: (cfg.colorTextureEnabled !== false)
         });
 
         /**
@@ -427,94 +422,80 @@ class Viewer {
         // canvas ourselves, in order to allow the Viewer to render the
         // right amount of pixels, for a sharper image.
 
-        return new Promise((resolve, reject) => {
 
-            const needFinishSnapshot = (!this._snapshotBegun);
-            const resize = (params.width !== undefined && params.height !== undefined);
-            const canvas = this.scene.canvas.canvas;
-            const saveWidth = canvas.clientWidth;
-            const saveHeight = canvas.clientHeight;
-            const snapshotWidth = params.width ? Math.floor(params.width) : canvas.width;
-            const snapshotHeight = params.height ? Math.floor(params.height) : canvas.height;
+        const needFinishSnapshot = (!this._snapshotBegun);
+        const resize = (params.width !== undefined && params.height !== undefined);
+        const canvas = this.scene.canvas.canvas;
+        const saveWidth = canvas.clientWidth;
+        const saveHeight = canvas.clientHeight;
+        const snapshotWidth = params.width ? Math.floor(params.width) : canvas.width;
+        const snapshotHeight = params.height ? Math.floor(params.height) : canvas.height;
 
-            if (resize) {
-                canvas.width = snapshotWidth;
-                canvas.height = snapshotHeight;
-            }
+        if (resize) {
+            canvas.width = snapshotWidth;
+            canvas.height = snapshotHeight;
+        }
 
-            if (!this._snapshotBegun) {
-                this.beginSnapshot();
-            }
+        if (!this._snapshotBegun) {
+            this.beginSnapshot();
+        }
 
-            if (!params.includeGizmos) {
-                this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
-            }
+        if (!params.includeGizmos) {
+            this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
+        }
 
-            this.scene._renderer.renderSnapshot();
+        this.scene._renderer.renderSnapshot();
 
-            const snapshotCanvas = this.scene._renderer.readSnapshotAsCanvas();
+        const snapshotCanvas = this.scene._renderer.readSnapshotAsCanvas();
 
-            if (resize) {
-                canvas.width = saveWidth;
-                canvas.height = saveHeight;
-                this.scene.glRedraw();
-            }
+        if (resize) {
+            canvas.width = saveWidth;
+            canvas.height = saveHeight;
+            this.scene.glRedraw();
+        }
 
-            const pluginToCapture = {};
-            const pluginContainerElements = [];
+        const pluginToCapture = {};
+        const pluginContainerElements = [];
 
-            const finishSnapshot = () => {
-                if (!params.includeGizmos) {
-                    this.sendToPlugins("snapshotFinished");
-                }
-                if (needFinishSnapshot) {
-                    this.endSnapshot();
-                }
-                let format = params.format || "png";
-                if (format !== "jpeg" && format !== "png" && format !== "bmp") {
-                    console.error("Unsupported image format: '" + format + "' - supported types are 'jpeg', 'bmp' and 'png' - defaulting to 'png'");
-                    format = "png";
-                }
-                if (!params.includeGizmos) {
-                    this.sendToPlugins("snapshotFinished");
-                }
-                if (needFinishSnapshot) {
-                    this.endSnapshot();
-                }
-                resolve(snapshotCanvas.toDataURL(`image/${format}`));
-            }
-
-            for (let i = 0, len = this._plugins.length; i < len; i++) { // Find plugin container elements
-                const plugin = this._plugins[i];
-                if (plugin.getContainerElement) {
-                    const containerElement = plugin.getContainerElement();
-                    if (containerElement !== document.body) {
-                        if (!pluginToCapture[containerElement.id]) {
-                            pluginToCapture[containerElement.id] = true;
-                            pluginContainerElements.push(containerElement);
-                        }
+        for (let i = 0, len = this._plugins.length; i < len; i++) { // Find plugin container elements
+            const plugin = this._plugins[i];
+            if (plugin.getContainerElement) {
+                const containerElement = plugin.getContainerElement();
+                if (containerElement !== document.body) {
+                    if (!pluginToCapture[containerElement.id]) {
+                        pluginToCapture[containerElement.id] = true;
+                        pluginContainerElements.push(containerElement);
                     }
                 }
             }
+        }
 
-            if (pluginContainerElements.length > 0) { // Render plugin container elements to the snapshot canvas
-                for (let i = 0, len = pluginContainerElements.length; i < len; i++) {
-                    const containerElement = pluginContainerElements[i];
-                    html2canvas(containerElement, {
-                        canvas: snapshotCanvas,
-                        backgroundColor: null,
-                        scale: snapshotCanvas.width / containerElement.clientWidth
-                    }).then(() => {
-                        pluginContainerElements.pop();
-                        if (pluginContainerElements.length === 0) {
-                            finishSnapshot();
-                        }
-                    });
-                }
-            } else {
-                finishSnapshot();
-            }
-        });
+        for (let i = 0, len = pluginContainerElements.length; i < len; i++) {
+            const containerElement = pluginContainerElements[i];
+            await html2canvas(containerElement, {
+                canvas: snapshotCanvas,
+                backgroundColor: null,
+                scale: snapshotCanvas.width / containerElement.clientWidth
+            });
+        }
+        if (!params.includeGizmos) {
+            this.sendToPlugins("snapshotFinished");
+        }
+        if (needFinishSnapshot) {
+            this.endSnapshot();
+        }
+        let format = params.format || "png";
+        if (format !== "jpeg" && format !== "png" && format !== "bmp") {
+            console.error("Unsupported image format: '" + format + "' - supported types are 'jpeg', 'bmp' and 'png' - defaulting to 'png'");
+            format = "png";
+        }
+        if (!params.includeGizmos) {
+            this.sendToPlugins("snapshotFinished");
+        }
+        if (needFinishSnapshot) {
+            this.endSnapshot();
+        }
+        return snapshotCanvas.toDataURL(`image/${format}`);
     }
 
     /**
