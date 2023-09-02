@@ -8,21 +8,6 @@ export default {
             file: './dist/xeokit-sdk.es.js',
             format: 'es',
             name: 'bundle'
-        },
-        {
-            file: './dist/xeokit-sdk.cjs.js',
-            format: 'cjs',
-            name: 'bundle'
-        },
-        {
-            file: './dist/xeokit-sdk.es5.js',
-            format: 'es',
-            name: 'bundle',
-            plugins: [
-                getBabelOutputPlugin({
-                    presets: ['@babel/preset-env']
-                })
-            ]
         }
     ],
     plugins: [
