@@ -1123,8 +1123,6 @@ export class SceneModel extends Component {
 
         super(owner, cfg);
 
-        console.log("Creating SceneModel");
-
         this._dtxEnabled = this.scene.dtxEnabled && (cfg.dtxEnabled !== false);
 
         this._enableVertexWelding = false; // Not needed for most objects, and very expensive, so disabled
@@ -2456,7 +2454,7 @@ export class SceneModel extends Component {
 
             // Batched geometry
 
-            const useDTX = !!this._dtxEnabled; // Data textures - disabled by default for now
+            const useDTX = !!this._dtxEnabled;
 
             if (cfg.primitive === undefined || cfg.primitive === null) {
                 cfg.primitive = "triangles";
@@ -2796,6 +2794,7 @@ export class SceneModel extends Component {
                 return dtxLayer;
             }
         }
+        console.log(`[SceneModel ${this.id}]: creating TrianglesDataTextureLayer`);
         dtxLayer = new TrianglesDataTextureLayer(this, {layerIndex: 0, origin}); // layerIndex is set in #finalize()
         this._dtxLayers[layerId] = dtxLayer;
         this._layerList.push(dtxLayer);
@@ -2818,6 +2817,7 @@ export class SceneModel extends Component {
         while (!vboBatchingLayer) {
             switch (cfg.primitive) {
                 case "triangles":
+                    console.log(`[SceneModel ${this.id}]: creating TrianglesBatchingLayer`);
                     vboBatchingLayer = new TrianglesBatchingLayer({
                         model,
                         textureSet,
@@ -2832,6 +2832,7 @@ export class SceneModel extends Component {
                     });
                     break;
                 case "solid":
+                    console.log(`[SceneModel ${this.id}]: creating TrianglesBatchingLayer`);
                     vboBatchingLayer = new TrianglesBatchingLayer({
                         model,
                         textureSet,
@@ -2846,6 +2847,7 @@ export class SceneModel extends Component {
                     });
                     break;
                 case "surface":
+                    console.log(`[SceneModel ${this.id}]: creating TrianglesBatchingLayer`);
                     vboBatchingLayer = new TrianglesBatchingLayer({
                         model,
                         textureSet,
@@ -2860,6 +2862,7 @@ export class SceneModel extends Component {
                     });
                     break;
                 case "lines":
+                    console.log(`[SceneModel ${this.id}]: creating LinesBatchingLayer`);
                     vboBatchingLayer = new LinesBatchingLayer({
                         model,
                         layerIndex: 0, // This is set in #finalize()
@@ -2871,6 +2874,7 @@ export class SceneModel extends Component {
                     });
                     break;
                 case "points":
+                    console.log(`[SceneModel ${this.id}]: creating PointsBatchingLayer`);
                     vboBatchingLayer = new PointsBatchingLayer({
                         model,
                         layerIndex: 0, // This is set in #finalize()
@@ -2924,6 +2928,7 @@ export class SceneModel extends Component {
         while (!vboInstancingLayer) {
             switch (geometry.primitive) {
                 case "triangles":
+                    console.log(`[SceneModel ${this.id}]: creating TrianglesInstancingLayer`);
                     vboInstancingLayer = new TrianglesInstancingLayer({
                         model,
                         textureSet,
@@ -2934,6 +2939,7 @@ export class SceneModel extends Component {
                     });
                     break;
                 case "solid":
+                    console.log(`[SceneModel ${this.id}]: creating TrianglesInstancingLayer`);
                     vboInstancingLayer = new TrianglesInstancingLayer({
                         model,
                         textureSet,
@@ -2944,6 +2950,7 @@ export class SceneModel extends Component {
                     });
                     break;
                 case "surface":
+                    console.log(`[SceneModel ${this.id}]: creating TrianglesInstancingLayer`);
                     vboInstancingLayer = new TrianglesInstancingLayer({
                         model,
                         textureSet,
@@ -2954,6 +2961,7 @@ export class SceneModel extends Component {
                     });
                     break;
                 case "lines":
+                    console.log(`[SceneModel ${this.id}]: creating LinesInstancingLayer`);
                     vboInstancingLayer = new LinesInstancingLayer({
                         model,
                         textureSet,
@@ -2963,6 +2971,7 @@ export class SceneModel extends Component {
                     });
                     break;
                 case "points":
+                    console.log(`[SceneModel ${this.id}]: creating PointsInstancingLayer`);
                     vboInstancingLayer = new PointsInstancingLayer({
                         model,
                         textureSet,
