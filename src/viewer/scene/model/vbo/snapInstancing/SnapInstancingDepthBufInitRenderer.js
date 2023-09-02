@@ -139,11 +139,9 @@ class SnapInstancingDepthBufInitRenderer {
             gl.vertexAttribDivisor(this._aOffset.location, 1);
         }
 
-        // const glMode = (frameCtx.snapMode === "edge") ? gl.LINES : gl.POINTS;
-        // const primsBuf = (frameCtx.snapMode === "edge") ? state.edgeIndicesBuf : state.positionsBuf;
-        // gl.drawArraysInstanced(glMode, 0, primsBuf.numItems, state.numInstances);
-
-        gl.drawArraysInstanced(gl.TRIANGLES, 0, state.indicesBuf.numItems, state.numInstances);
+        state.indicesBuf.bind();
+        gl.drawElementsInstanced(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
+        state.indicesBuf.unbind();
 
         // Cleanup
         gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 0);
@@ -189,11 +187,11 @@ class SnapInstancingDepthBufInitRenderer {
         if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
-        this._uCameraEyeRtc = program.getLocation("uCameraEyeRtc"); 
-        this.uVectorA = program.getLocation("snapVectorA"); 
-        this.uInverseVectorAB = program.getLocation("snapInvVectorAB"); 
-        this._uLayerNumber = program.getLocation("layerNumber"); 
-        this._uCoordinateScaler = program.getLocation("coordinateScaler"); 
+        this._uCameraEyeRtc = program.getLocation("uCameraEyeRtc");
+        this.uVectorA = program.getLocation("snapVectorA");
+        this.uInverseVectorAB = program.getLocation("snapInvVectorAB");
+        this._uLayerNumber = program.getLocation("layerNumber");
+        this._uCoordinateScaler = program.getLocation("coordinateScaler");
     }
 
     _bindProgram() {
@@ -242,9 +240,9 @@ class SnapInstancingDepthBufInitRenderer {
         src.push("uniform mat4 viewMatrix;");
         src.push("uniform mat4 projMatrix;")
         src.push("uniform mat4 positionsDecodeMatrix;");
-        src.push("uniform vec3 uCameraEyeRtc;"); 
-        src.push("uniform vec2 snapVectorA;"); 
-        src.push("uniform vec2 snapInvVectorAB;"); 
+        src.push("uniform vec3 uCameraEyeRtc;");
+        src.push("uniform vec2 snapVectorA;");
+        src.push("uniform vec2 snapInvVectorAB;");
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
             src.push("out float vFragDepth;");
@@ -316,8 +314,8 @@ class SnapInstancingDepthBufInitRenderer {
             src.push("uniform float logDepthBufFC;");
             src.push("in float vFragDepth;");
         }
-        src.push("uniform int layerNumber;"); 
-        src.push("uniform vec3 coordinateScaler;"); 
+        src.push("uniform int layerNumber;");
+        src.push("uniform vec3 coordinateScaler;");
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
             src.push("in float vFlags;");
@@ -345,7 +343,7 @@ class SnapInstancingDepthBufInitRenderer {
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
-        src.push("outCoords = ivec4(relativeToOriginPosition.xyz*coordinateScaler.xyz, layerNumber);")
+        src.push("outCoords = ivec4(relativeToOriginPosition.xyz*coordinateScaler.xyz, -layerNumber);")
         src.push("}");
         return src;
     }
