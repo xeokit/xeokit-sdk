@@ -44,6 +44,7 @@ const DEFAULT_SCALE = math.vec3([1, 1, 1]);
 const DEFAULT_POSITION = math.vec3([0, 0, 0]);
 const DEFAULT_ROTATION = math.vec3([0, 0, 0]);
 const DEFAULT_QUATERNION = math.identityQuaternion();
+const DEFAULT_MATRIX = math.identityMat4();
 
 const DEFAULT_COLOR_TEXTURE_ID = "defaultColorTexture";
 const DEFAULT_METAL_ROUGH_TEXTURE_ID = "defaultMetalRoughTexture";
@@ -2491,20 +2492,22 @@ export class SceneModel extends Component {
 
             cfg.origin = cfg.origin ? math.addVec3(this._origin, cfg.origin, math.vec3()) : this._origin;
 
-            // Matrix
+            // MATRIX - optional for batching
 
             if (cfg.matrix) {
                 cfg.meshMatrix = cfg.matrix;
-            } else {
+            } else if (cfg.scale || cfg.rotation || cfg.position) {
                 const scale = cfg.scale || DEFAULT_SCALE;
                 const position = cfg.position || DEFAULT_POSITION;
                 const rotation = cfg.rotation || DEFAULT_ROTATION;
                 math.eulerToQuaternion(rotation, "XYZ", DEFAULT_QUATERNION);
                 cfg.meshMatrix = math.composeMat4(position, DEFAULT_QUATERNION, scale, math.mat4());
             }
+
             if (cfg.positionsDecodeBoundary) {
                 cfg.positionsDecodeMatrix = createPositionsDecodeMatrix(cfg.positionsDecodeBoundary, math.mat4());
             }
+
             if (useDTX) {
 
                 // DTX
@@ -2513,24 +2516,22 @@ export class SceneModel extends Component {
 
                 // NPR
 
-                cfg.color = (cfg.color) ?
-                    new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)])
-                    : defaultCompressedColor;
-
+                cfg.color = (cfg.color) ? new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)]) : defaultCompressedColor;
                 cfg.opacity = (cfg.opacity !== undefined && cfg.opacity !== null) ? Math.floor(cfg.opacity * 255) : 255;
+
+                // RTC
 
                 if (cfg.positions) {
                     const rtcCenter = math.vec3();
                     const rtcPositions = [];
                     const rtcNeeded = worldToRTCPositions(cfg.positions, rtcPositions, rtcCenter);
                     if (rtcNeeded) {
-
-                        // RTC
-
                         cfg.positions = rtcPositions;
                         cfg.origin = math.addVec3(cfg.origin, rtcCenter, rtcCenter);
                     }
                 }
+
+                // COMPRESSION
 
                 if (cfg.positions) {
                     const aabb = math.collapseAABB3();
@@ -2539,13 +2540,17 @@ export class SceneModel extends Component {
                     cfg.positionsCompressed = quantizePositions(cfg.positions, aabb, cfg.positionsDecodeMatrix)
                 }
 
+                // EDGES
+
                 if (!cfg.buckets && !cfg.edgeIndices && (cfg.primitive === "triangles" || cfg.primitive === "solid" || cfg.primitive === "surface")) {
-                    if (cfg.positions) {
+                    if (cfg.positions) { // Faster
                         cfg.edgeIndices = buildEdgeIndices(cfg.positions, cfg.indices, null, 2.0);
                     } else {
                         cfg.edgeIndices = buildEdgeIndices(cfg.positionsCompressed, cfg.indices, cfg.positionsDecodeMatrix, 2.0);
                     }
                 }
+
+                // BUCKETING
 
                 if (!cfg.buckets) {
                     cfg.buckets = createDTXBuckets(cfg, this._enableVertexWelding && this._enableIndexBucketing);
@@ -2564,28 +2569,18 @@ export class SceneModel extends Component {
                 cfg.metallic = (cfg.metallic !== undefined && cfg.metallic !== null) ? Math.floor(cfg.metallic * 255) : 0;
                 cfg.roughness = (cfg.roughness !== undefined && cfg.roughness !== null) ? Math.floor(cfg.roughness * 255) : 255;
 
-                // Matrix
-
-                if (cfg.matrix) {
-                    cfg.meshMatrix = cfg.matrix;
-                } else {
-                    const scale = cfg.scale || DEFAULT_SCALE;
-                    const position = cfg.position || DEFAULT_POSITION;
-                    const rotation = cfg.rotation || DEFAULT_ROTATION;
-                    math.eulerToQuaternion(rotation, "XYZ", DEFAULT_QUATERNION);
-                    cfg.meshMatrix = math.composeMat4(position, DEFAULT_QUATERNION, scale, math.mat4());
-                }
-
-                // Geometry
+                // RTC
 
                 if (cfg.positions) {
                     const rtcPositions = [];
                     const rtcNeeded = worldToRTCPositions(cfg.positions, rtcPositions, tempVec3a);
-                    if (rtcNeeded) {// RTC
+                    if (rtcNeeded) {
                         cfg.positions = rtcPositions;
                         cfg.origin = math.addVec3(cfg.origin, tempVec3a, math.vec3());
                     }
                 }
+
+                // EDGES
 
                 if (!cfg.buckets && !cfg.edgeIndices && (cfg.primitive === "triangles" || cfg.primitive === "solid" || cfg.primitive === "surface")) {
                     if (cfg.positions) {
@@ -2595,7 +2590,7 @@ export class SceneModel extends Component {
                     }
                 }
 
-                // Texture
+                // TEXTURE
 
                 // cfg.textureSetId = cfg.textureSetId || DEFAULT_TEXTURE_SET_ID;
                 if (cfg.textureSetId) {
@@ -2609,7 +2604,7 @@ export class SceneModel extends Component {
 
         } else {
 
-            // Reused geometry
+            // INSTANCING
 
             if (cfg.positions || cfg.positionsCompressed || cfg.indices || cfg.edgeIndices || cfg.normals || cfg.normalsCompressed || cfg.uv || cfg.uvCompressed || cfg.positionsDecodeMatrix) {
                 this.error(`Mesh geometry parameters not expected when instancing a geometry (not expected: positions, positionsCompressed, indices, edgeIndices, normals, normalsCompressed, uv, uvCompressed, positionsDecodeMatrix)`);
@@ -2625,7 +2620,7 @@ export class SceneModel extends Component {
             cfg.origin = cfg.origin ? math.addVec3(this._origin, cfg.origin, math.vec3()) : this._origin;
             cfg.positionsDecodeMatrix = cfg.geometry.positionsDecodeMatrix;
 
-            // Matrix
+            // MATRIX - always have a matrix for instancing
 
             if (cfg.matrix) {
                 cfg.meshMatrix = cfg.matrix.slice();
@@ -2650,7 +2645,7 @@ export class SceneModel extends Component {
                 cfg.color = (cfg.color) ? new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)]) : defaultCompressedColor;
                 cfg.opacity = (cfg.opacity !== undefined && cfg.opacity !== null) ? Math.floor(cfg.opacity * 255) : 255;
 
-                // Buckets
+                // BUCKETING - lazy generated, reused
 
                 let buckets = this._dtxBuckets[cfg.geometryId];
                 if (!buckets) {
@@ -2672,7 +2667,7 @@ export class SceneModel extends Component {
                 cfg.metallic = (cfg.metallic !== undefined && cfg.metallic !== null) ? Math.floor(cfg.metallic * 255) : 0;
                 cfg.roughness = (cfg.roughness !== undefined && cfg.roughness !== null) ? Math.floor(cfg.roughness * 255) : 255;
 
-                // Texture
+                // TEXTURE
 
                 if (cfg.textureSetId) {
                     cfg.textureSet = this._textureSets[cfg.textureSetId];
@@ -2682,7 +2677,7 @@ export class SceneModel extends Component {
                     // }
                 }
 
-                // OBB
+                // OBB - used for fast AABB calculation
 
                 createGeometryOBB(cfg.geometry)
             }
@@ -2691,9 +2686,8 @@ export class SceneModel extends Component {
         cfg.numPrimitives = this._getNumPrimitives(cfg);
 
         if (this._vfcManager && !this._vfcManager.finalized) {
-            this._vfcManager.addMesh(cfg);
+            this._vfcManager.addMesh(cfg); // Deferred so VFC manager can cluster meshes for GPU cache locality
         } else {
-            cfg.meshMatrix = cfg.meshMatrix.slice();
             this._createMesh(cfg);
         }
     }
@@ -2896,7 +2890,6 @@ export class SceneModel extends Component {
                 vboBatchingLayer.finalize();
                 delete this._vboBatchingLayers[layerId];
                 vboBatchingLayer = null;
-
             }
         }
         this._vboBatchingLayers[layerId] = vboBatchingLayer;
@@ -3127,12 +3120,12 @@ export class SceneModel extends Component {
         this._vboInstancingLayers = {};
         this._vboBatchingLayers = {};
         for (let i = 0, len = this._entityList.length; i < len; i++) {
-            const node = this._entityList[i];
-            node._finalize();
+            const entity = this._entityList[i];
+            entity._finalize();
         }
         for (let i = 0, len = this._entityList.length; i < len; i++) {
-            const node = this._entityList[i];
-            node._finalize2();
+            const entity = this._entityList[i];
+            entity._finalize2();
         }
         // Sort layers to reduce WebGL shader switching when rendering them
         this._layerList.sort((a, b) => {
@@ -3158,8 +3151,8 @@ export class SceneModel extends Component {
     _rebuildAABB() {
         math.collapseAABB3(this._aabb);
         for (let i = 0, len = this._entityList.length; i < len; i++) {
-            const node = this._entityList[i];
-            math.expandAABB3(this._aabb, node.aabb);
+            const entity = this._entityList[i];
+            math.expandAABB3(this._aabb, entity.aabb);
         }
         this._aabbDirty = false;
     }
@@ -3593,7 +3586,7 @@ export class SceneModel extends Component {
  */
 function createDTXBuckets(geometry, enableVertexWelding, enableIndexBucketing) {
     let uniquePositionsCompressed, uniqueIndices, uniqueEdgeIndices;
-    if (enableVertexWelding) {
+    if (enableVertexWelding) { // Expensive - careful!
         [
             uniquePositionsCompressed,
             uniqueIndices,
@@ -3611,8 +3604,7 @@ function createDTXBuckets(geometry, enableVertexWelding, enableIndexBucketing) {
     let buckets;
     if (enableIndexBucketing) {
         let numUniquePositions = uniquePositionsCompressed.length / 3;
-        buckets = rebucketPositions(
-            {
+        buckets = rebucketPositions({
                 positionsCompressed: uniquePositionsCompressed,
                 indices: uniqueIndices,
                 edgeIndices: uniqueEdgeIndices,
@@ -3630,10 +3622,6 @@ function createDTXBuckets(geometry, enableVertexWelding, enableIndexBucketing) {
     return buckets;
 }
 
-/**
- *
- * @param geometry
- */
 function createGeometryOBB(geometry) {
     geometry.obb = math.OBB3();
     if (geometry.positionsCompressed && geometry.positionsCompressed.length > 0) {
