@@ -188,17 +188,17 @@
     viewer.camera.look = [33.88, 177.99, -101.79];
     viewer.camera.up = [0.02, 0.99, 0.03];
 
-    viewer.cameraFlight.fitFOV = 15;
-
-    viewer.scene.xrayMaterial.fillAlpha = 0.1;
-    viewer.scene.xrayMaterial.fillColor = [0, 0, 0];
-    viewer.scene.xrayMaterial.edgeAlpha = 0.4;
-    viewer.scene.xrayMaterial.edgeColor = [0, 0, 0];
-
-    viewer.scene.highlightMaterial.fillAlpha = 0.3;
-    viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
-
-    new FastNavPlugin(viewer);
+    new FastNavPlugin(viewer, {
+        hideEdges: true,
+        hideSAO: true,
+        hideColorTexture: true,
+        hidePBR: true,
+        hideTransparentObjects: false,
+        scaleCanvasResolution: false,
+        scaleCanvasResolutionFactor: 0.5,
+        delayBeforeRestore: true,
+        delayBeforeRestoreSeconds: 0.4
+    });
 
     //------------------------------------------------------------------------------------------------------------------
     // Create an IFC structure tree view, configured to automatically add each model as it's loaded
