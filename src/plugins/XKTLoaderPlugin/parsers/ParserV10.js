@@ -429,6 +429,16 @@ function load(viewer, options, inflatedData, sceneModel) {
                                 geometryArrays.geometryIndices = indices.subarray(eachGeometryIndicesPortion [geometryIndex], atLastGeometry ? indices.length : eachGeometryIndicesPortion [geometryIndex + 1]);
                                 geometryValid = (geometryArrays.geometryPositions.length > 0 && geometryArrays.geometryIndices.length > 0);
                                 break;
+                            case 4:
+                                geometryArrays.primitiveName = "lines";
+                                geometryArrays.geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
+                                geometryArrays.geometryIndices = lineStripToLines(
+                                    geometryArrays.geometryPositions,
+                                    indices.subarray(eachGeometryIndicesPortion [geometryIndex], atLastGeometry
+                                        ? indices.length
+                                        : eachGeometryIndicesPortion [geometryIndex + 1]));
+                                geometryValid = (geometryArrays.geometryPositions.length > 0 && geometryArrays.geometryIndices.length > 0);
+                                break;
                             default:
                                 continue;
                         }
@@ -578,6 +588,16 @@ function load(viewer, options, inflatedData, sceneModel) {
                             geometryIndices = indices.subarray(eachGeometryIndicesPortion [geometryIndex], atLastGeometry ? indices.length : eachGeometryIndicesPortion [geometryIndex + 1]);
                             geometryValid = (geometryPositions.length > 0 && geometryIndices.length > 0);
                             break;
+                        case 4:
+                            primitiveName = "lines";
+                            geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
+                            geometryIndices = lineStripToLines(
+                                geometryPositions,
+                                indices.subarray(eachGeometryIndicesPortion [geometryIndex], atLastGeometry
+                                    ? indices.length
+                                    : eachGeometryIndicesPortion [geometryIndex + 1]));
+                            geometryValid = (geometryPositions.length > 0 && geometryIndices.length > 0);
+                            break;
                         default:
                             continue;
                     }
@@ -617,6 +637,22 @@ function load(viewer, options, inflatedData, sceneModel) {
             }
         }
     }
+}
+
+function lineStripToLines(lineStripPositions, lineStripIndices) {
+    const linesIndices = [];
+    if (lineStripIndices.length > 1) {
+        for (let i = 0, len = lineStripIndices.length - 1; i < len; i++) {
+            linesIndices.push(lineStripIndices[i]);
+            linesIndices.push(lineStripIndices[i + 1]);
+        }
+    } else if (lineStripPositions.length > 1) {
+        for (let i = 0, len = lineStripPositions.length - 1; i < len; i++) {
+            linesIndices.push(i);
+            linesIndices.push(i + 1);
+        }
+    }
+    return linesIndices;
 }
 
 /** @private */
