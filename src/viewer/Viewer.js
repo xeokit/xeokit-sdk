@@ -53,6 +53,10 @@ class Viewer {
      * @param {Boolean} [cfg.colorTextureEnabled=true] Whether to enable base color texture rendering.
      * @param {Boolean} [cfg.pbrEnabled=false] Whether to enable physically-based rendering.
      * @param {LocaleService} [cfg.localeService=null] Optional locale-based translation service.
+     * @param {Boolean} [cfg.dtxEnabled=false] Whether to enable data texture-based (DTX) scene representation within the Viewer. When this is true, the Viewer will use data textures to
+     * store geometry on the GPU for triangle meshes that don't have textures. This gives a much lower memory footprint for these types of model element. This mode may not perform well on low-end GPUs that are optimized
+     * to use textures to hold geometry data. Works great on most medium/high-end GPUs found in desktop computers, including the nVIDIA and Intel HD chipsets. Set this false to use the default vertex buffer object (VBO)
+     * mode for storing geometry, which is the standard technique used in most graphics engines, and will work adequately on most low-end GPUs.
      */
     constructor(cfg) {
 
@@ -109,7 +113,10 @@ class Viewer {
             pickSurfacePrecisionEnabled: (!!cfg.pickSurfacePrecisionEnabled),
             logarithmicDepthBufferEnabled: (!!cfg.logarithmicDepthBufferEnabled),
             pbrEnabled: (!!cfg.pbrEnabled),
-            colorTextureEnabled: (cfg.colorTextureEnabled !== false)
+            lodEnabled: (!!cfg.lodEnabled),
+            vfcCulling: (!!cfg.vfcEnabled),
+            colorTextureEnabled: (cfg.colorTextureEnabled !== false),
+            dtxEnabled: (!!cfg.dtxEnabled)
         });
 
         /**
