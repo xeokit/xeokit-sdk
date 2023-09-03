@@ -1142,7 +1142,7 @@ export class SceneModel extends Component {
         this._vboBatchingLayers = {};
         this._dtxLayers = {};
 
-        this._layerList = []; // For GL state efficiency when drawing, InstancingLayers are in first part, BatchingLayers are in second
+        this.layerList = []; // For GL state efficiency when drawing, InstancingLayers are in first part, BatchingLayers are in second
         this._entityList = [];
 
         this._geometries = {};
@@ -2797,7 +2797,7 @@ export class SceneModel extends Component {
         console.log(`[SceneModel ${this.id}]: creating TrianglesDataTextureLayer`);
         dtxLayer = new TrianglesDataTextureLayer(this, {layerIndex: 0, origin}); // layerIndex is set in #finalize()
         this._dtxLayers[layerId] = dtxLayer;
-        this._layerList.push(dtxLayer);
+        this.layerList.push(dtxLayer);
         return dtxLayer;
     }
 
@@ -2897,7 +2897,7 @@ export class SceneModel extends Component {
             }
         }
         this._vboBatchingLayers[layerId] = vboBatchingLayer;
-        this._layerList.push(vboBatchingLayer);
+        this.layerList.push(vboBatchingLayer);
         return vboBatchingLayer;
     }
 
@@ -2989,7 +2989,7 @@ export class SceneModel extends Component {
             // }
         }
         this._vboInstancingLayers[layerId] = vboInstancingLayer;
-        this._layerList.push(vboInstancingLayer);
+        this.layerList.push(vboInstancingLayer);
         return vboInstancingLayer;
     }
 
@@ -3117,8 +3117,8 @@ export class SceneModel extends Component {
             this._vfcManager.finalize(() => {// Makes deferred calls to #_createEntity() and #_createMesh()
             });
         }
-        for (let i = 0, len = this._layerList.length; i < len; i++) {
-            const layer = this._layerList[i];
+        for (let i = 0, len = this.layerList.length; i < len; i++) {
+            const layer = this.layerList[i];
             layer.finalize();
         }
         this._geometries = {};
@@ -3137,7 +3137,7 @@ export class SceneModel extends Component {
             entity._finalize2();
         }
         // Sort layers to reduce WebGL shader switching when rendering them
-        this._layerList.sort((a, b) => {
+        this.layerList.sort((a, b) => {
             if (a.sortId < b.sortId) {
                 return -1;
             }
@@ -3146,8 +3146,8 @@ export class SceneModel extends Component {
             }
             return 0;
         });
-        for (let i = 0, len = this._layerList.length; i < len; i++) {
-            const layer = this._layerList[i];
+        for (let i = 0, len = this.layerList.length; i < len; i++) {
+            const layer = this.layerList[i];
             layer.layerIndex = i;
         }
         this.glRedraw();
@@ -3186,10 +3186,10 @@ export class SceneModel extends Component {
      */
     _updateRenderFlagsVisibleLayers() {
         const renderFlags = this.renderFlags;
-        renderFlags.numLayers = this._layerList.length;
+        renderFlags.numLayers = this.layerList.length;
         renderFlags.numVisibleLayers = 0;
-        for (let layerIndex = 0, len = this._layerList.length; layerIndex < len; layerIndex++) {
-            const layer = this._layerList[layerIndex];
+        for (let layerIndex = 0, len = this.layerList.length; layerIndex < len; layerIndex++) {
+            const layer = this.layerList[layerIndex];
             const layerVisible = this._getActiveSectionPlanesForLayer(layer);
             if (layerVisible) {
                 renderFlags.visibleLayers[renderFlags.numVisibleLayers++] = layerIndex;
@@ -3297,7 +3297,7 @@ export class SceneModel extends Component {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawColorOpaque(renderFlags, frameCtx);
+            this.layerList[layerIndex].drawColorOpaque(renderFlags, frameCtx);
         }
     }
 
@@ -3306,7 +3306,7 @@ export class SceneModel extends Component {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawColorTransparent(renderFlags, frameCtx);
+            this.layerList[layerIndex].drawColorTransparent(renderFlags, frameCtx);
         }
     }
 
@@ -3315,7 +3315,7 @@ export class SceneModel extends Component {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawDepth(renderFlags, frameCtx);
+            this.layerList[layerIndex].drawDepth(renderFlags, frameCtx);
         }
     }
 
@@ -3324,7 +3324,7 @@ export class SceneModel extends Component {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawNormals(renderFlags, frameCtx);
+            this.layerList[layerIndex].drawNormals(renderFlags, frameCtx);
         }
     }
 
@@ -3333,7 +3333,7 @@ export class SceneModel extends Component {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawSilhouetteXRayed(renderFlags, frameCtx);
+            this.layerList[layerIndex].drawSilhouetteXRayed(renderFlags, frameCtx);
         }
     }
 
@@ -3342,7 +3342,7 @@ export class SceneModel extends Component {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawSilhouetteHighlighted(renderFlags, frameCtx);
+            this.layerList[layerIndex].drawSilhouetteHighlighted(renderFlags, frameCtx);
         }
     }
 
@@ -3351,7 +3351,7 @@ export class SceneModel extends Component {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawSilhouetteSelected(renderFlags, frameCtx);
+            this.layerList[layerIndex].drawSilhouetteSelected(renderFlags, frameCtx);
         }
     }
 
@@ -3360,7 +3360,7 @@ export class SceneModel extends Component {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawEdgesColorOpaque(renderFlags, frameCtx);
+            this.layerList[layerIndex].drawEdgesColorOpaque(renderFlags, frameCtx);
         }
     }
 
@@ -3369,7 +3369,7 @@ export class SceneModel extends Component {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawEdgesColorTransparent(renderFlags, frameCtx);
+            this.layerList[layerIndex].drawEdgesColorTransparent(renderFlags, frameCtx);
         }
     }
 
@@ -3378,7 +3378,7 @@ export class SceneModel extends Component {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawEdgesXRayed(renderFlags, frameCtx);
+            this.layerList[layerIndex].drawEdgesXRayed(renderFlags, frameCtx);
         }
     }
 
@@ -3387,7 +3387,7 @@ export class SceneModel extends Component {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawEdgesHighlighted(renderFlags, frameCtx);
+            this.layerList[layerIndex].drawEdgesHighlighted(renderFlags, frameCtx);
         }
     }
 
@@ -3396,7 +3396,7 @@ export class SceneModel extends Component {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawEdgesSelected(renderFlags, frameCtx);
+            this.layerList[layerIndex].drawEdgesSelected(renderFlags, frameCtx);
         }
     }
 
@@ -3410,7 +3410,7 @@ export class SceneModel extends Component {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawOcclusion(renderFlags, frameCtx);
+            this.layerList[layerIndex].drawOcclusion(renderFlags, frameCtx);
         }
     }
 
@@ -3424,7 +3424,7 @@ export class SceneModel extends Component {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawShadow(renderFlags, frameCtx);
+            this.layerList[layerIndex].drawShadow(renderFlags, frameCtx);
         }
     }
 
@@ -3436,7 +3436,7 @@ export class SceneModel extends Component {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            const layer = this._layerList[layerIndex];
+            const layer = this.layerList[layerIndex];
             if (layer.setPickMatrices) {
                 layer.setPickMatrices(pickViewMatrix, pickProjMatrix);
             }
@@ -3451,7 +3451,7 @@ export class SceneModel extends Component {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawPickMesh(renderFlags, frameCtx);
+            this.layerList[layerIndex].drawPickMesh(renderFlags, frameCtx);
         }
     }
 
@@ -3466,7 +3466,7 @@ export class SceneModel extends Component {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawPickDepths(renderFlags, frameCtx);
+            this.layerList[layerIndex].drawPickDepths(renderFlags, frameCtx);
         }
     }
 
@@ -3481,13 +3481,12 @@ export class SceneModel extends Component {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this._layerList[layerIndex].drawPickNormals(renderFlags, frameCtx);
+            this.layerList[layerIndex].drawPickNormals(renderFlags, frameCtx);
         }
     }
 
     /**
      * @private
-     * @param frameCtx
      */
     drawSnapInitDepthBuf(frameCtx) {
         if (this.numVisibleLayerPortions === 0) {
@@ -3496,16 +3495,22 @@ export class SceneModel extends Component {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            const layer = this._layerList[layerIndex];
+            const layer = this.layerList[layerIndex];
             if (layer.drawSnapInitDepthBuf) {
+                frameCtx.snapPickOrigin = [0, 0, 0];
+                frameCtx.snapPickCoordinateScale = [1, 1, 1];
+                frameCtx.snapPickLayerNumber++;
                 layer.drawSnapInitDepthBuf(renderFlags, frameCtx);
+                frameCtx.snapPickLayerParams[frameCtx.snapPickLayerNumber] = {
+                    origin: frameCtx.snapPickOrigin.slice(),
+                    coordinateScale: frameCtx.snapPickCoordinateScale.slice(),
+                };
             }
         }
     }
 
     /**
      * @private
-     * @param frameCtx
      */
     drawSnapDepths(frameCtx) {
         if (this.numVisibleLayerPortions === 0) {
@@ -3514,9 +3519,16 @@ export class SceneModel extends Component {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            const layer = this._layerList[layerIndex];
+            const layer = this.layerList[layerIndex];
             if (layer.drawSnapDepths) {
+                frameCtx.snapPickOrigin = [0, 0, 0];
+                frameCtx.snapPickCoordinateScale = [1, 1, 1];
+                frameCtx.snapPickLayerNumber++;
                 layer.drawSnapDepths(renderFlags, frameCtx);
+                frameCtx.snapPickLayerParams[frameCtx.snapPickLayerNumber] = {
+                    origin: frameCtx.snapPickOrigin.slice(),
+                    coordinateScale: frameCtx.snapPickCoordinateScale.slice(),
+                };
             }
         }
     }
@@ -3538,10 +3550,10 @@ export class SceneModel extends Component {
         }
         this._vboInstancingLayers = {};
         this.scene.camera.off(this._onCameraViewMatrix);
-        for (let i = 0, len = this._layerList.length; i < len; i++) {
-            this._layerList[i].destroy();
+        for (let i = 0, len = this.layerList.length; i < len; i++) {
+            this.layerList[i].destroy();
         }
-        this._layerList = [];
+        this.layerList = [];
         for (let i = 0, len = this._entityList.length; i < len; i++) {
             this._entityList[i]._destroy();
         }

@@ -10,7 +10,6 @@ import {createRTCViewMat} from "../math/rtcCoords.js";
 import {SAODepthLimitedBlurRenderer} from "./sao/SAODepthLimitedBlurRenderer.js";
 import {RenderBufferManager} from "./RenderBufferManager.js";
 import {getExtension} from "./getExtension.js";
-import {SceneModel} from "../model/SceneModel.js"
 
 /**
  * @private
@@ -1222,94 +1221,40 @@ const Renderer = function (scene, options) {
         }
     })();
 
-    function willDrawSnapPickRenderer(drawable) {
-        if (drawable.culled === true || drawable.visible === false || !drawable.pickable) {
-            return false;
-        }
-        if (!(drawable instanceof SceneModel)) {
-            return false;
-        }
-        return true;
-    }
-
     function snapInitDepthBuf(frameCtx) {
-
-        /**
-         * @type {Object.<number, {origin: number[], coordinateScale: number[]}>}
-         */
-        const layerParams = {};
-
+        frameCtx.snapPickLayerParams = {};
+        frameCtx.snapPickLayerNumber = 0;
         for (let type in drawableTypeInfo) {
-            if (drawableTypeInfo.hasOwnProperty(type)) {
-
-                const drawableInfo = drawableTypeInfo[type];
-                const drawableList = drawableInfo.drawableList;
-
-                for (let i = 0, len = drawableList.length; i < len; i++) {
-
-                    const drawable = drawableList[i];
-
-                    const layerNumber = i + 1;
-
-                    if (!willDrawSnapPickRenderer(drawable)) {
-                        continue;
+            const drawableInfo = drawableTypeInfo[type];
+            const drawableList = drawableInfo.drawableList;
+            for (let i = 0, len = drawableList.length; i < len; i++) {
+                const drawable = drawableList[i];
+                if (drawable.drawSnapInitDepthBuf) {
+                    if (!drawable.culled && drawable.visible && drawable.pickable) {
+                        drawable.drawSnapInitDepthBuf(frameCtx);
                     }
-
-                    frameCtx._origin = [0, 0, 0];
-                    frameCtx._coordinateScale = [1, 1, 1];
-                    frameCtx.layerNumber = layerNumber;
-
-                    drawable.drawSnapInitDepthBuf(frameCtx);
-
-                    layerParams[layerNumber] = {
-                        origin: frameCtx._origin.slice(),
-                        coordinateScale: frameCtx._coordinateScale.slice(),
-                    };
                 }
             }
         }
-
-        return layerParams;
+        return frameCtx.snapPickLayerParams;
     }
 
     function snapPickDrawSnapDepths(frameCtx) {
-
-        /**
-         * @type {Object.<number, {origin: number[], coordinateScale: number[]}>}
-         */
-        const layerParams = {};
-
+        frameCtx.snapPickLayerParams = {};
+        frameCtx.snapPickLayerNumber = 0;
         for (let type in drawableTypeInfo) {
-            if (drawableTypeInfo.hasOwnProperty(type)) {
-
-                const drawableInfo = drawableTypeInfo[type];
-                const drawableList = drawableInfo.drawableList;
-
-                for (let i = 0, len = drawableList.length; i < len; i++) {
-
-                    const drawable = drawableList[i];
-
-                    const layerNumber = i + 1;
-
-                    if (!willDrawSnapPickRenderer(drawable)) {
-                        continue;
+            const drawableInfo = drawableTypeInfo[type];
+            const drawableList = drawableInfo.drawableList;
+            for (let i = 0, len = drawableList.length; i < len; i++) {
+                const drawable = drawableList[i];
+                if (drawable.drawSnapDepths) {
+                    if (!drawable.culled && drawable.visible && drawable.pickable) {
+                        drawable.drawSnapDepths(frameCtx);
                     }
-
-                    frameCtx._origin = [0, 0, 0];
-                    frameCtx._coordinateScale = [1, 1, 1];
-                    frameCtx.layerNumber = layerNumber;
-
-                    drawable.drawSnapDepths(frameCtx);
-
-                    layerParams[layerNumber] = {
-                        origin: frameCtx._origin.slice(),
-                        coordinateScale: frameCtx._coordinateScale.slice(),
-                    };
                 }
             }
         }
-
-        return layerParams;
+        return frameCtx.snapPickLayerParams;
     }
 
     function getClipPosX(pos, size) {

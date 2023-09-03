@@ -1,4 +1,4 @@
-import {SceneModel} from "./../index.js";
+import {SceneModel} from "./SceneModel.js";
 
 /**
  * @desc A high-performance model representation for efficient rendering and low memory usage.
@@ -12,7 +12,7 @@ import {SceneModel} from "./../index.js";
  * @implements {Entity}
  * @extends {SceneModel}
  */
-class PerformanceModel extends SceneModel {
+export class PerformanceModel extends SceneModel {
 
     /**
      * See {@link VBOSceneModel} for details.
@@ -24,5 +24,3 @@ class PerformanceModel extends SceneModel {
         super(owner, cfg);
     }
 }
-
-export {PerformanceModel};

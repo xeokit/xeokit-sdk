@@ -31,9 +31,9 @@ class SnapInstancingDepthRenderer {
         const state = instancingLayer._state;
         const origin = instancingLayer._state.origin;
 
-        frameCtx._origin[0] = origin[0];
-        frameCtx._origin[1] = origin[1];
-        frameCtx._origin[2] = origin[2];
+        frameCtx.snapPickOrigin[0] = origin[0];
+        frameCtx.snapPickOrigin[1] = origin[1];
+        frameCtx.snapPickOrigin[2] = origin[2];
 
         const aabb = instancingLayer.aabb;
         const coordinateDivider = [
@@ -42,9 +42,9 @@ class SnapInstancingDepthRenderer {
             math.safeInv(aabb[5] - aabb[2]) * math.MAX_INT,
         ];
 
-        frameCtx._coordinateScale[0] = math.safeInv(coordinateDivider[0]);
-        frameCtx._coordinateScale[1] = math.safeInv(coordinateDivider[1]);
-        frameCtx._coordinateScale[2] = math.safeInv(coordinateDivider[2]);
+        frameCtx.snapPickCoordinateScale[0] = math.safeInv(coordinateDivider[0]);
+        frameCtx.snapPickCoordinateScale[1] = math.safeInv(coordinateDivider[1]);
+        frameCtx.snapPickCoordinateScale[2] = math.safeInv(coordinateDivider[2]);
 
         if (!this._program) {
             this._allocate(instancingLayer);
@@ -75,7 +75,7 @@ class SnapInstancingDepthRenderer {
 
         gl.uniform2fv(this.uVectorA, frameCtx.snapVectorA);
         gl.uniform2fv(this.uInverseVectorAB, frameCtx.snapInvVectorAB);
-        gl.uniform1i(this._uLayerNumber, frameCtx.layerNumber);
+        gl.uniform1i(this._uLayerNumber, frameCtx.snapPickLayerNumber);
         gl.uniform3fv(this._uCoordinateScaler, coordinateDivider);
 
         gl.uniform1i(this._uRenderPass, renderPass);
