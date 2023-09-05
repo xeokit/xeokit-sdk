@@ -1,0 +1,13 @@
+{
+  "inputFile": null,
+  "converterApplication": "convert2xkt",
+  "converterApplicationVersion": "v1.1.9",
+  "conversionDate": "10-08-2023- 02-05-01",
+  "outputDir": null,
+  "xktFiles": [
+    "model.glb.xkt",
+    "model_1.glb.xkt",
+    "model_2.glb.xkt",
+    "model_3.glb.xkt"
+  ]
+}
