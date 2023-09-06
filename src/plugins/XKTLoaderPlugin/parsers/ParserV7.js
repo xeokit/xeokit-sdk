@@ -118,7 +118,7 @@ function convertColorsRGBToRGBA(colorsRGB) {
     return colorsRGBA;
 }
 
-function load(viewer, options, inflatedData, sceneModel) {
+function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx) {
 
     const positions = inflatedData.positions;
     const normals = inflatedData.normals;
@@ -274,7 +274,7 @@ function load(viewer, options, inflatedData, sceneModel) {
                 const meshMetallic = eachMeshMaterial[(meshIndex * 6) + 4] / 255.0;
                 const meshRoughness = eachMeshMaterial[(meshIndex * 6) + 5] / 255.0;
 
-                const meshId = nextMeshId++;
+                const meshId = manifestCtx.nextMeshId++;
 
                 if (isReusedGeometry) {
 
@@ -427,10 +427,10 @@ function load(viewer, options, inflatedData, sceneModel) {
 /** @private */
 const ParserV7 = {
     version: 7,
-    parse: function (viewer, options, elements, sceneModel) {
+    parse: function (viewer, options, elements, sceneModel, metaModel, manifestCtx) {
         const deflatedData = extract(elements);
         const inflatedData = inflate(deflatedData);
-        load(viewer, options, inflatedData, sceneModel);
+        load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx);
     }
 };
 

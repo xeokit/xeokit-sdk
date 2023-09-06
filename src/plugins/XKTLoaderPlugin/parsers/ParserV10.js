@@ -113,7 +113,7 @@ const imagDataToImage = (function () {
     };
 })();
 
-function load(viewer, options, inflatedData, sceneModel) {
+function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx) {
 
     const metadata = inflatedData.metadata;
     const textureData = inflatedData.textureData;
@@ -151,23 +151,8 @@ function load(viewer, options, inflatedData, sceneModel) {
     const numEntities = eachEntityMeshesPortion.length;
     const numTiles = eachTileEntitiesPortion.length;
 
-    let nextMeshId = 0;
-
-    // Create metamodel, unless already loaded from external JSON file by XKTLoaderPlugin
-
-    const metaModelId = sceneModel.id;
-
-    if (!viewer.metaScene.metaModels[metaModelId]) {
-
-        viewer.metaScene.createMetaModel(metaModelId, metadata, {
-            includeTypes: options.includeTypes,
-            excludeTypes: options.excludeTypes,
-            globalizeObjectIds: options.globalizeObjectIds
-        });
-
-        sceneModel.once("destroyed", () => {
-            viewer.metaScene.destroyMetaModel(metaModelId);
-        });
+    if (metaModel) {
+        metaModel.loadData(metadata); // Can be empty
     }
 
     // Create textures
@@ -379,7 +364,7 @@ function load(viewer, options, inflatedData, sceneModel) {
                 const meshMetallic = eachMeshMaterialAttributes[(meshIndex * 6) + 4] / 255.0;
                 const meshRoughness = eachMeshMaterialAttributes[(meshIndex * 6) + 5] / 255.0;
 
-                const meshId = nextMeshId++;
+                const meshId = manifestCtx.nextMeshId++;
 
                 if (isReusedGeometry) {
 
@@ -434,10 +419,11 @@ function load(viewer, options, inflatedData, sceneModel) {
                                 geometryArrays.geometryPositions = positions.subarray(eachGeometryPositionsPortion [geometryIndex], atLastGeometry ? positions.length : eachGeometryPositionsPortion [geometryIndex + 1]);
                                 geometryArrays.geometryIndices = lineStripToLines(
                                     geometryArrays.geometryPositions,
-                                    indices.subarray(eachGeometryIndicesPortion [geometryIndex], atLastGeometry
-                                        ? indices.length
-                                        : eachGeometryIndicesPortion [geometryIndex + 1]));
-                                geometryValid = (geometryArrays.geometryPositions.length > 0 && geometryArrays.geometryIndices.length > 0);
+                                    indices.subarray(eachGeometryIndicesPortion [geometryIndex],
+                                        atLastGeometry
+                                            ? indices.length
+                                            : eachGeometryIndicesPortion [geometryIndex + 1]));
+                                 geometryValid = (geometryArrays.geometryPositions.length > 0 && geometryArrays.geometryIndices.length > 0);
                                 break;
                             default:
                                 continue;
@@ -639,15 +625,15 @@ function load(viewer, options, inflatedData, sceneModel) {
     }
 }
 
-function lineStripToLines(lineStripPositions, lineStripIndices) {
+function lineStripToLines(positions, indices) {
     const linesIndices = [];
-    if (lineStripIndices.length > 1) {
-        for (let i = 0, len = lineStripIndices.length - 1; i < len; i++) {
-            linesIndices.push(lineStripIndices[i]);
-            linesIndices.push(lineStripIndices[i + 1]);
+    if (indices.length > 1) {
+        for (let i = 0, len = indices.length - 1; i < len; i++) {
+            linesIndices.push(indices[i]);
+            linesIndices.push(indices[i + 1]);
         }
-    } else if (lineStripPositions.length > 1) {
-        for (let i = 0, len = lineStripPositions.length - 1; i < len; i++) {
+    } else if (positions.length > 1) {
+        for (let i = 0, len = (positions.length / 3) - 1; i < len; i++) {
             linesIndices.push(i);
             linesIndices.push(i + 1);
         }
@@ -658,10 +644,10 @@ function lineStripToLines(lineStripPositions, lineStripIndices) {
 /** @private */
 const ParserV10 = {
     version: 10,
-    parse: function (viewer, options, elements, sceneModel) {
+    parse: function (viewer, options, elements, sceneModel, metaModel, manifestCtx) {
         const deflatedData = extract(elements);
         const inflatedData = inflate(deflatedData);
-        load(viewer, options, inflatedData, sceneModel);
+        load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx);
     }
 };
 

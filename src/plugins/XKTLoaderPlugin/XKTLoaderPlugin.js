@@ -908,23 +908,6 @@ class XKTLoaderPlugin extends Plugin {
 
         if (params.metaModelSrc || params.metaModelData) {
 
-            const processMetaModelData = (metaModelData) => {
-
-                metaModel.loadData(metaModelData, {
-                    includeTypes: includeTypes,
-                    excludeTypes: excludeTypes,
-                    globalizeObjectIds: options.globalizeObjectIds
-                });
-
-                if (params.src) {
-                    this._loadModel(params.src, params, options, sceneModel);
-                } else {
-                    this._parseModel(params.xkt, params, options, sceneModel);
-                }
-
-                return true;
-            };
-
             if (params.metaModelSrc) {
 
                 const metaModelSrc = params.metaModelSrc;
@@ -933,37 +916,46 @@ class XKTLoaderPlugin extends Plugin {
                     if (sceneModel.destroyed) {
                         return;
                     }
-                    if (!processMetaModelData(metaModelData)) {
-                        error(`load(): Failed to load model metadata for model '${modelId} from '${metaModelSrc}' - metadata not valid`);
+                    metaModel.loadData(metaModelData, {
+                        includeTypes: includeTypes,
+                        excludeTypes: excludeTypes,
+                        globalizeObjectIds: options.globalizeObjectIds
+                    });
+                    if (params.src) {
+                        this._loadModel(params.src, params, options, sceneModel, null, manifestCtx, finish, error);
+                    } else {
+                        this._parseModel(params.xkt, params, options, sceneModel, null, manifestCtx);
+                        finish();
                     }
                 }, (errMsg) => {
                     error(`load(): Failed to load model metadata for model '${modelId} from  '${metaModelSrc}' - ${errMsg}`);
                 });
 
             } else if (params.metaModelData) {
-                if (!processMetaModelData(params.metaModelData)) {
-                    error(`load(): Failed to load model metadata for model '${modelId} from '${params.metaModelSrc}' - metadata not valid`);
+                metaModel.loadData(metaModelData, {
+                    includeTypes: includeTypes,
+                    excludeTypes: excludeTypes,
+                    globalizeObjectIds: options.globalizeObjectIds
+                });
+                if (params.src) {
+                    this._loadModel(params.src, params, options, sceneModel, null, manifestCtx, finish, error);
+                } else {
+                    this._parseModel(params.xkt, params, options, sceneModel, null, manifestCtx);
+                    finish();
                 }
             }
 
-            finish();
+
 
         } else {
 
             if (params.src) {
-
-                this._loadModel(params.src, params, options, sceneModel);
-                finish();
-
+                this._loadModel(params.src, params, options, sceneModel, metaModel, manifestCtx, finish, error);
             } else if (params.xkt) {
-
                 this._parseModel(params.xkt, params, options, sceneModel, metaModel, manifestCtx);
                 finish();
-
             } else if (params.manifestSrc) {
-
                 const baseDir = getBaseDirectory(params.manifestSrc)
-
                 const loadJSONs = (metaDataFiles, done, error) => {
                     let i = 0;
                     const loadNext = () => {
@@ -1024,18 +1016,11 @@ class XKTLoaderPlugin extends Plugin {
         return sceneModel;
     }
 
-    _loadModel(src, params, options, sceneModel, metaModel, manifestCtx) {
-        const spinner = this.viewer.scene.canvas.spinner;
-        spinner.processes++;
+    _loadModel(src, params, options, sceneModel, metaModel, manifestCtx, done, error) {
         this._dataSource.getXKT(params.src, (arrayBuffer) => {
                 this._parseModel(arrayBuffer, params, options, sceneModel, metaModel, manifestCtx);
-                spinner.processes--;
-            },
-            (errMsg) => {
-                spinner.processes--;
-                this.error(errMsg);
-                sceneModel.fire("error", errMsg);
-            });
+                done();
+            }, error);
     }
 
     _parseModel(arrayBuffer, params, options, sceneModel, metaModel, manifestCtx) {

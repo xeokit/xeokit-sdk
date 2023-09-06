@@ -65,7 +65,7 @@ const decompressColor = (function () {
     };
 })();
 
-function load(viewer, options, inflatedData, sceneModel) {
+function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx) {
 
     sceneModel.positionsCompression = "precompressed";
     sceneModel.normalsCompression = "precompressed";
@@ -269,10 +269,10 @@ function load(viewer, options, inflatedData, sceneModel) {
 /** @private */
 const ParserV4 = {
     version: 4,
-    parse: function (viewer, options, elements, sceneModel) {
+    parse: function (viewer, options, elements, sceneModel, metaModel, manifestCtx) {
         const deflatedData = extract(elements);
         const inflatedData = inflate(deflatedData);
-        load(viewer, options, inflatedData, sceneModel);
+        load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx);
     }
 };
 

@@ -72,7 +72,7 @@ const decompressColor = (function () {
     };
 })();
 
-function load(viewer, options, inflatedData, sceneModel) {
+function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx) {
 
     const positions = inflatedData.positions;
     const normals = inflatedData.normals;
@@ -101,8 +101,6 @@ function load(viewer, options, inflatedData, sceneModel) {
     const numPrimitiveInstances = primitiveInstances.length;
     const numEntities = eachEntityId.length;
     const numTiles = eachTileEntitiesPortion.length;
-
-    let nextMeshId = 0;
 
     // Count instances of each primitive
 
@@ -223,7 +221,7 @@ function load(viewer, options, inflatedData, sceneModel) {
                 const color = decompressColor(eachPrimitiveColorAndOpacity.subarray((primitiveIndex * 4), (primitiveIndex * 4) + 3));
                 const opacity = eachPrimitiveColorAndOpacity[(primitiveIndex * 4) + 3] / 255.0;
 
-                const meshId = nextMeshId++;
+                const meshId = manifestCtx.nextMeshId++;
 
                 if (isReusedPrimitive) {
 
@@ -291,10 +289,10 @@ function load(viewer, options, inflatedData, sceneModel) {
 /** @private */
 const ParserV6 = {
     version: 6,
-    parse: function (viewer, options, elements, sceneModel) {
+    parse: function (viewer, options, elements, sceneModel, metaModel, manifestCtx) {
         const deflatedData = extract(elements);
         const inflatedData = inflate(deflatedData);
-        load(viewer, options, inflatedData, sceneModel);
+        load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx);
     }
 };
 
