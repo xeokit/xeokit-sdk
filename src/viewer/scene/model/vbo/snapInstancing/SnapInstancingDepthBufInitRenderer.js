@@ -212,7 +212,7 @@ class SnapInstancingDepthBufInitRenderer {
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
         src.push ('#version 300 es');
-        src.push("// Points instancing snap vertex shader");
+        src.push("// SnapInstancingDepthBufInitRenderer vertex shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");

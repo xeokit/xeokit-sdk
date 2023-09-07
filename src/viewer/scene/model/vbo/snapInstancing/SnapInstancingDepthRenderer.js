@@ -224,7 +224,7 @@ class SnapInstancingDepthRenderer {
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
         src.push ('#version 300 es');
-        src.push("// Points instancing snap vertex shader");
+        src.push("// SnapInstancingDepthRenderer vertex shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -301,6 +301,7 @@ class SnapInstancingDepthRenderer {
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
         src.push("gl_Position = clipPos;");
+        src.push("gl_PointSize = 1.0;"); // Windows needs this?
         src.push("}");
         src.push("}");
         return src;
@@ -312,7 +313,7 @@ class SnapInstancingDepthRenderer {
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
         src.push ('#version 300 es');
-        src.push("// Points instancing pick depth fragment shader");
+        src.push("// SnapInstancingDepthRenderer fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -352,7 +353,7 @@ class SnapInstancingDepthRenderer {
             src.push("}");
         }
         if (scene.logarithmicDepthBufferEnabled) {
-            src.push("gl_FragDepth = log2( vFragDepth ) * logDepthBufFC * 0.5;");
+            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
         src.push("outCoords = ivec4(relativeToOriginPosition.xyz*coordinateScaler.xyz, layerNumber);")
         src.push("}");

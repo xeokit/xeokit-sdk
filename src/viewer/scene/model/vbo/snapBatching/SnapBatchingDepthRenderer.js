@@ -281,6 +281,7 @@ export class SnapBatchingDepthRenderer {
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
         src.push("gl_Position = clipPos;");
+        src.push("gl_PointSize = 1.0;"); // Windows needs this?
         src.push("  }");
         src.push("}");
         return src;
