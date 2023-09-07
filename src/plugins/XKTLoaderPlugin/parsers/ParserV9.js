@@ -109,7 +109,7 @@ const decompressColor = (function () {
     };
 })();
 
-function load(viewer, options, inflatedData, sceneModel) {
+function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx) {
 
     const metadata = inflatedData.metadata;
 
@@ -144,23 +144,8 @@ function load(viewer, options, inflatedData, sceneModel) {
     const numEntities = eachEntityMeshesPortion.length;
     const numTiles = eachTileEntitiesPortion.length;
 
-    let nextMeshId = 0;
-
-    // Create metamodel, unless already loaded from external JSON file by XKTLoaderPlugin
-
-    const metaModelId = sceneModel.id;
-
-    if (!viewer.metaScene.metaModels[metaModelId]) {
-
-        viewer.metaScene.createMetaModel(metaModelId, metadata, {
-            includeTypes: options.includeTypes,
-            excludeTypes: options.excludeTypes,
-            globalizeObjectIds: options.globalizeObjectIds
-        });
-
-        sceneModel.once("destroyed", () => {
-            viewer.metaScene.destroyMetaModel(metaModelId);
-        });
+    if (metaModel) {
+        metaModel.loadData(metadata); // Can be empty
     }
 
     // Count instances of each geometry
@@ -285,7 +270,7 @@ function load(viewer, options, inflatedData, sceneModel) {
                 const meshMetallic = eachMeshMaterial[(meshIndex * 6) + 4] / 255.0;
                 const meshRoughness = eachMeshMaterial[(meshIndex * 6) + 5] / 255.0;
 
-                const meshId = nextMeshId++;
+                const meshId = manifestCtx.nextMeshId++;
 
                 if (isReusedGeometry) {
 
@@ -517,10 +502,10 @@ function load(viewer, options, inflatedData, sceneModel) {
 /** @private */
 const ParserV9 = {
     version: 9,
-    parse: function (viewer, options, elements, sceneModel) {
+    parse: function (viewer, options, elements, sceneModel, metaModel, manifestCtx) {
         const deflatedData = extract(elements);
         const inflatedData = inflate(deflatedData);
-        load(viewer, options, inflatedData, sceneModel);
+        load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx);
     }
 };
 

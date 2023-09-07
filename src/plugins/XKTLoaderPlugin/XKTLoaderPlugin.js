@@ -1,5 +1,6 @@
 import {utils} from "../../viewer/scene/utils.js"
 import {SceneModel} from "../../viewer/scene/model/index.js";
+import {MetaModel} from "../../viewer/metadata/MetaModel.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {XKTDefaultDataSource} from "./XKTDefaultDataSource.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
@@ -14,6 +15,7 @@ import {ParserV7} from "./parsers/ParserV7.js";
 import {ParserV8} from "./parsers/ParserV8.js";
 import {ParserV9} from "./parsers/ParserV9.js";
 import {ParserV10} from "./parsers/ParserV10.js";
+
 
 const parsers = {};
 
@@ -35,7 +37,7 @@ parsers[ParserV10.version] = ParserV10;
  *
  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_OTCConferenceCenter)]
  *
- * ## Overview
+ * # Overview
  *
  * * XKTLoaderPlugin is the most efficient way to load high-detail models into xeokit.
  * * An *````.XKT````* file is a single BLOB containing a model, compressed using geometry quantization
@@ -48,14 +50,14 @@ parsers[ParserV10.version] = ParserV10;
  * * Set a custom data source for *````.XKT````* and IFC metadata files.
  * * Option to load multiple copies of the same model, without object ID clashes.
  *
- * ## Creating *````.XKT````* Files and Metadata
+ * # Creating *````.XKT````* Files and Metadata
  *
  * We have several sways to convert your files into XKT. See these tutorials for more info:
  *
  * * [Converting Models to XKT with convert2xkt](https://www.notion.so/xeokit/Converting-Models-to-XKT-with-convert2xkt-fa567843313f4db8a7d6535e76da9380) - how to convert various file formats (glTF, IFC, CityJSON, LAS/LAZ...) to XKT using our nodejs-based converter.
  * * [Converting IFC Models to XKT using 3rd-Party Open Source Tools](https://www.notion.so/xeokit/Converting-IFC-Models-to-XKT-using-3rd-Party-Open-Source-Tools-c373e48bc4094ff5b6e5c5700ff580ee) - how to convert IFC files to XKT using 3rd-party open source CLI tools.
  *
- * ## Scene representation
+ * # Scene representation
  *
  * When loading a model, XKTLoaderPlugin creates an {@link Entity} that represents the model, which
  * will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id}
@@ -63,7 +65,7 @@ parsers[ParserV10.version] = ParserV10;
  * model. Those Entities will have {@link Entity#isObject} set ````true```` and will be registered
  * by {@link Entity#id} in {@link Scene#objects}.
  *
- * ## Metadata
+ * # Metadata
  *
  * Since XKT V8, model metadata is included in the XKT file. If the XKT file has metadata, then loading it creates
  * model metadata components within the Viewer, namely a {@link MetaModel} corresponding to the model {@link Entity},
@@ -77,7 +79,7 @@ parsers[ParserV10.version] = ParserV10;
  * For XKT versions prior to V8, we provided the metadata to XKTLoaderPlugin as an accompanying JSON file to load. We can
  * still do that for all XKT versions, and for XKT V8+ it will override any metadata provided within the XKT file.
  *
- * ## Usage
+ * # Usage
  *
  * In the example below we'll load the Schependomlaan model from a [.XKT file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan).
  *
@@ -160,7 +162,7 @@ parsers[ParserV10.version] = ParserV10;
  * model.destroy();
  * ````
  *
- * ## Loading XKT files containing textures
+ * # Loading XKT files containing textures
  *
  * XKTLoaderPlugin uses a {@link KTX2TextureTranscoder} to load textures in XKT files (XKT v10+). An XKTLoaderPlugin has its own
  * default KTX2TextureTranscoder, configured to load the Basis Codec from the CDN. If we wish, we can override that with our own
@@ -205,7 +207,7 @@ parsers[ParserV10.version] = ParserV10;
  * });
  * ````
  *
- * ## Transforming
+ * # Transforming
  *
  * We have the option to rotate, scale and translate each  *````.XKT````* model as we load it.
  *
@@ -225,7 +227,7 @@ parsers[ParserV10.version] = ParserV10;
  * });
  * ````
  *
- * ## Including and excluding IFC types
+ * # Including and excluding IFC types
  *
  * We can also load only those objects that have the specified IFC types.
  *
@@ -255,7 +257,7 @@ parsers[ParserV10.version] = ParserV10;
  * });
  * ````
  *
- * ## Configuring initial IFC object appearances
+ * # Configuring initial IFC object appearances
  *
  * We can specify the custom initial appearance of loaded objects according to their IFC types.
  *
@@ -323,7 +325,7 @@ parsers[ParserV10.version] = ParserV10;
  * });
  * ````
  *
- * ## Configuring a custom data source
+ * # Configuring a custom data source
  *
  * By default, XKTLoaderPlugin will load *````.XKT````* files and metadata JSON over HTTP.
  *
@@ -375,7 +377,7 @@ parsers[ParserV10.version] = ParserV10;
  * });
  * ````
  *
- * ## Loading multiple copies of a model, without object ID clashes
+ * # Loading multiple copies of a model, without object ID clashes
  *
  * Sometimes we need to load two or more instances of the same model, without having clashes
  * between the IDs of the equivalent objects in the model instances.
@@ -428,6 +430,92 @@ parsers[ParserV10.version] = ParserV10;
  * ````javascript
  * myViewer.scene.setObjectVisibilities("myModel1#0BTBFw6f90Nfh9rP1dlXrb", true);
  *````
+ *
+ * # Loading a model from a manifest of XKT files
+ *
+ * The `ifc2gltf` tool from Creoox, which converts IFC files into glTF geometry and JSON metadata files, has the option to
+ * split its output into multiple pairs of glTF and JSON files, accompanied by a JSON manifest that lists the files.
+ *
+ * To integrate with that option, the `convert2xkt` tool, which converts glTF geometry and JSON metadata files into XKT files,
+ * also has the option to batch-convert the glTF+JSON files in the manifest, in one invocation.
+ *
+ * When we use this option, convert2xkt will output a bunch of XKT files, along with a JSON manifest file that lists those XKT files.
+ *
+ * Working down the pipeline, the XKTLoaderPlugin has the option batch-load all XKT files listed in that manifest
+ * into a xeokit Viewer in one load operation, combining the XKT files into a single SceneModel and MetaModel.
+ *
+ * You can learn more about this conversion and loading process, with splitting, batch converting and batch loading,
+ * in [this tutorial](https://www.notion.so/xeokit/Importing-Huge-IFC-Models-as-Multiple-XKT-Files-165fc022e94742cf966ee50003572259).
+ *
+ * To show how to use XKTLoaderPlugin to load a manifest of XKT files, let's imagine that we have a set of such XKT files. As
+ * described in the tutorial, they were converted by `ifc2gltf` from an IFC file into a set of glTF+JSON files, that were
+ * then converted by convert2xkt into this set of XKT files and a manifest, as shown below.
+ *
+ * ````bash
+ * ./
+ * ├── model_1.xkt
+ * ├── model_2.xkt
+ * ├── model_3.xkt
+ * ├── model_4..xkt
+ * └── model.xkt.manifest.json
+ * ````
+ *
+ * The `model.xkt.manifest.json` XKT manifest would look something like this:
+ *
+ * ````json
+ * {
+ *   "inputFile": null,
+ *   "converterApplication": "convert2xkt",
+ *   "converterApplicationVersion": "v1.1.9",
+ *   "conversionDate": "10-08-2023- 02-05-01",
+ *   "outputDir": null,
+ *   "xktFiles": [
+ *     "model_1.xkt",
+ *     "model_2.xkt",
+ *     "model_3.xkt",
+ *     "model_4.xkt"
+ *   ]
+ * }
+ * ````
+ *
+ * Now, to load all those XKT files into a single SceneModel and MetaModel in one operation, we pass a path to the XKT
+ * manifest to `XKTLoaderPlugin.load`, as shown in the example below:
+ *
+ * ````javascript
+ * import {
+ *   Viewer,
+ *   XKTLoaderPlugin,
+ *   TreeViewPlugin,
+ * } from "xeokit-sdk.es.js";
+ *
+ * constviewer = new Viewer({
+ *   canvasId: "myCanvas"
+ * });
+ *
+ * viewer.scene.camera.eye = [26.54, 29.29, 36.20,];
+ * viewer.scene.camera.look = [-23.51, -8.26, -21.65,];
+ * viewer.scene.camera.up = [-0.2, 0.89, -0.33,];
+ *
+ * const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ * const sceneModel = xktLoader.load({
+ *   manifestSrc: "model.xkt.manifest.json",
+ *   id: "myModel",
+ * });
+ *
+ * const metaModel = viewer.metaScene.metaModels[sceneModel.id];
+ *
+ * // Then when we need to, we can destroy the SceneModel
+ * // and MetaModel in one shot, like so:
+ *
+ * sceneModel.destroy();
+ * metaModel.destroy();
+ * ````
+ *
+ * The main advantage here, of splitting IFC files like this within the conversion and import pipeline,
+ * is to reduce the memory pressure on each of the `ifc2gltf`, `convert2xkt` and XKTLoaderPlugin components.
+ * They work much reliably (and faster) when processing smaller files (eg. 20MB) than when processing large files (eg. 500MB), where
+ * they have less trouble allocating the system memory they need for conversion and parsing.
  *
  * @class XKTLoaderPlugin
  */
@@ -737,20 +825,8 @@ class XKTLoaderPlugin extends Plugin {
             delete params.id;
         }
 
-        const sceneModel = new SceneModel(this.viewer.scene, utils.apply(params, {
-            isModel: true,
-            textureTranscoder: this._textureTranscoder,
-            maxGeometryBatchSize: this._maxGeometryBatchSize,
-            origin: params.origin,
-            disableVertexWelding: params.disableVertexWelding || false,
-            disableIndexRebucketing: params.disableIndexRebucketing || false,
-            dtxEnabled: params.dtxEnabled
-        }));
-
-        const modelId = sceneModel.id;  // In case ID was auto-generated
-
-        if (!params.src && !params.xkt) {
-            this.error("load() param expected: src or xkt");
+        if (!params.src && !params.xkt && !params.manifestSrc) {
+            this.error("load() param expected: src, xkt or manifestSrc");
             return sceneModel; // Return new empty model
         }
 
@@ -782,119 +858,182 @@ class XKTLoaderPlugin extends Plugin {
         options.excludeUnclassifiedObjects = (params.excludeUnclassifiedObjects !== undefined) ? (!!params.excludeUnclassifiedObjects) : this._excludeUnclassifiedObjects;
         options.globalizeObjectIds = (params.globalizeObjectIds !== undefined && params.globalizeObjectIds !== null) ? (!!params.globalizeObjectIds) : this._globalizeObjectIds;
 
+        const sceneModel = new SceneModel(this.viewer.scene, utils.apply(params, {
+            isModel: true,
+            textureTranscoder: this._textureTranscoder,
+            maxGeometryBatchSize: this._maxGeometryBatchSize,
+            origin: params.origin,
+            disableVertexWelding: params.disableVertexWelding || false,
+            disableIndexRebucketing: params.disableIndexRebucketing || false,
+            dtxEnabled: params.dtxEnabled
+        }));
+
+        const modelId = sceneModel.id;  // In case ID was auto-generated
+
+        const metaModel = new MetaModel({
+            metaScene: this.viewer.metaScene,
+            id: modelId
+        });
+
+        this.viewer.scene.canvas.spinner.processes++;
+
+        const finish = () => {
+            // this._createDefaultMetaModelIfNeeded(sceneModel, params, options);
+            sceneModel.finalize();
+            metaModel.finalize();
+            this.viewer.scene.canvas.spinner.processes--;
+            sceneModel.once("destroyed", () => {
+                this.viewer.metaScene.destroyMetaModel(metaModel.id);
+            });
+            sceneModel.scene.once("tick", () => {
+                if (sceneModel.destroyed) {
+                    return;
+                }
+                sceneModel.scene.fire("modelLoaded", sceneModel.id); // FIXME: Assumes listeners know order of these two events
+                sceneModel.fire("loaded", true, false); // Don't forget the event, for late subscribers
+            });
+        }
+
+        const error = (errMsg) => {
+            this.viewer.scene.canvas.spinner.processes--;
+            this.error(errMsg);
+            sceneModel.fire("error", errMsg);
+        }
+
+        const manifestCtx = {
+            nextMeshId: 0
+        };
+
         if (params.metaModelSrc || params.metaModelData) {
-
-            const processMetaModelData = (metaModelData) => {
-
-                const metaModel = this.viewer.metaScene.createMetaModel(modelId, metaModelData, {
-                    includeTypes: includeTypes,
-                    excludeTypes: excludeTypes,
-                    globalizeObjectIds: options.globalizeObjectIds
-                });
-
-                if (!metaModel) {
-                    return false;
-                }
-
-                if (params.src) {
-                    this._loadModel(params.src, params, options, sceneModel);
-                } else {
-                    this._parseModel(params.xkt, params, options, sceneModel);
-                }
-
-                sceneModel.once("destroyed", () => {
-                    this.viewer.metaScene.destroyMetaModel(sceneModel.id);
-                });
-
-                return true;
-            };
 
             if (params.metaModelSrc) {
 
                 const metaModelSrc = params.metaModelSrc;
 
-                this.viewer.scene.canvas.spinner.processes++;
-
                 this._dataSource.getMetaModel(metaModelSrc, (metaModelData) => {
-
                     if (sceneModel.destroyed) {
                         return;
                     }
-
-                    if (!processMetaModelData(metaModelData)) {
-
-                        this.error(`load(): Failed to load model metadata for model '${modelId} from '${metaModelSrc}' - metadata not valid`);
-
-                        sceneModel.fire("error", "Metadata not valid");
+                    metaModel.loadData(metaModelData, {
+                        includeTypes: includeTypes,
+                        excludeTypes: excludeTypes,
+                        globalizeObjectIds: options.globalizeObjectIds
+                    });
+                    if (params.src) {
+                        this._loadModel(params.src, params, options, sceneModel, null, manifestCtx, finish, error);
+                    } else {
+                        this._parseModel(params.xkt, params, options, sceneModel, null, manifestCtx);
+                        finish();
                     }
-
-                    this.viewer.scene.canvas.spinner.processes--;
-
                 }, (errMsg) => {
-
-                    this.error(`load(): Failed to load model metadata for model '${modelId} from  '${metaModelSrc}' - ${errMsg}`);
-
-                    sceneModel.fire("error", `Failed to load model metadata from  '${metaModelSrc}' - ${errMsg}`);
-
-                    this.viewer.scene.canvas.spinner.processes--;
+                    error(`load(): Failed to load model metadata for model '${modelId} from  '${metaModelSrc}' - ${errMsg}`);
                 });
 
             } else if (params.metaModelData) {
-
-                if (!processMetaModelData(params.metaModelData)) {
-
-                    this.error(`load(): Failed to load model metadata for model '${modelId} from '${params.metaModelSrc}' - metadata not valid`);
-
-                    sceneModel.fire("error", "Metadata not valid");
+                metaModel.loadData(metaModelData, {
+                    includeTypes: includeTypes,
+                    excludeTypes: excludeTypes,
+                    globalizeObjectIds: options.globalizeObjectIds
+                });
+                if (params.src) {
+                    this._loadModel(params.src, params, options, sceneModel, null, manifestCtx, finish, error);
+                } else {
+                    this._parseModel(params.xkt, params, options, sceneModel, null, manifestCtx);
+                    finish();
                 }
             }
 
+
+
         } else {
+
             if (params.src) {
-                this._loadModel(params.src, params, options, sceneModel);
-            } else {
-                this._parseModel(params.xkt, params, options, sceneModel);
+                this._loadModel(params.src, params, options, sceneModel, metaModel, manifestCtx, finish, error);
+            } else if (params.xkt) {
+                this._parseModel(params.xkt, params, options, sceneModel, metaModel, manifestCtx);
+                finish();
+            } else if (params.manifestSrc) {
+                const baseDir = getBaseDirectory(params.manifestSrc)
+                const loadJSONs = (metaDataFiles, done, error) => {
+                    let i = 0;
+                    const loadNext = () => {
+                        if (i >= metaDataFiles.length) {
+                            done();
+                        } else {
+                            this._dataSource.getMetaModel(`${baseDir}${metaDataFiles[i]}`, (metaModelData) => {
+                                metaModel.loadData(metaModelData, {
+                                    includeTypes: includeTypes,
+                                    excludeTypes: excludeTypes,
+                                    globalizeObjectIds: options.globalizeObjectIds
+                                });
+                                i++;
+                                loadNext();
+                            }, error);
+                        }
+                    }
+                    loadNext();
+                }
+
+                const loadXKTs = (xktFiles, done, error) => {
+                    let i = 0;
+                    const loadNext = () => {
+                        if (i >= xktFiles.length) {
+                            done();
+                        } else {
+                            this._dataSource.getXKT(`${baseDir}${xktFiles[i]}`, (arrayBuffer) => {
+                                this._parseModel(arrayBuffer, params, options, sceneModel, metaModel, manifestCtx);
+                                i++;
+                                loadNext();
+                            }, error);
+                        }
+                    }
+                    loadNext();
+                };
+
+                this._dataSource.getManifest(params.manifestSrc, (manifestData) => {
+                    if (sceneModel.destroyed) {
+                        return;
+                    }
+                    const xktFiles = manifestData.xktFiles;
+                    if (!xktFiles || xktFiles.length === 0) {
+                        error(`load(): Failed to load model manifest - manifest not valid`);
+                        return;
+                    }
+                    const metaModelFiles = manifestData.metaModelFiles;
+                    if (metaModelFiles) {
+                        loadJSONs(metaModelFiles, () => {
+                            loadXKTs(xktFiles, finish, error);
+                        }, error);
+                    } else {
+                        loadXKTs(xktFiles, finish, error);
+                    }
+                }, error);
             }
         }
 
         return sceneModel;
     }
 
-    _loadModel(src, params, options, sceneModel) {
-
-        const spinner = this.viewer.scene.canvas.spinner;
-
-        spinner.processes++;
-
+    _loadModel(src, params, options, sceneModel, metaModel, manifestCtx, done, error) {
         this._dataSource.getXKT(params.src, (arrayBuffer) => {
-                this._parseModel(arrayBuffer, params, options, sceneModel);
-                spinner.processes--;
-            },
-            (errMsg) => {
-                spinner.processes--;
-                this.error(errMsg);
-                sceneModel.fire("error", errMsg);
-            });
+                this._parseModel(arrayBuffer, params, options, sceneModel, metaModel, manifestCtx);
+                done();
+            }, error);
     }
 
-    _parseModel(arrayBuffer, params, options, sceneModel) {
-
+    _parseModel(arrayBuffer, params, options, sceneModel, metaModel, manifestCtx) {
         if (sceneModel.destroyed) {
             return;
         }
-
         const dataView = new DataView(arrayBuffer);
         const dataArray = new Uint8Array(arrayBuffer);
         const xktVersion = dataView.getUint32(0, true);
         const parser = parsers[xktVersion];
-
         if (!parser) {
             this.error("Unsupported .XKT file version: " + xktVersion + " - this XKTLoaderPlugin supports versions " + Object.keys(parsers));
             return;
         }
-
         this.log("Loading .xkt V" + xktVersion);
-
         const numElements = dataView.getUint32(4, true);
         const elements = [];
         let byteOffset = (numElements + 2) * 4;
@@ -903,71 +1042,64 @@ class XKTLoaderPlugin extends Plugin {
             elements.push(dataArray.subarray(byteOffset, byteOffset + elementSize));
             byteOffset += elementSize;
         }
-
-        parser.parse(this.viewer, options, elements, sceneModel);
-
-        sceneModel.finalize();
-
-        this._createDefaultMetaModelIfNeeded(sceneModel, params, options);
-
-        sceneModel.scene.once("tick", () => {
-            if (sceneModel.destroyed) {
-                return;
-            }
-            sceneModel.scene.fire("modelLoaded", sceneModel.id); // FIXME: Assumes listeners know order of these two events
-            sceneModel.fire("loaded", true, false); // Don't forget the event, for late subscribers
-        });
+        parser.parse(this.viewer, options, elements, sceneModel, metaModel, manifestCtx);
     }
 
-    _createDefaultMetaModelIfNeeded(sceneModel, params, options) {
+// _createDefaultMetaModelIfNeeded(sceneModel, params, options) {
+//
+//     const metaModelId = sceneModel.id;
+//
+//     if (!this.viewer.metaScene.metaModels[metaModelId]) {
+//
+//         const metaModelData = {
+//             metaObjects: []
+//         };
+//
+//         metaModelData.metaObjects.push({
+//             id: metaModelId,
+//             type: "default",
+//             name: metaModelId,
+//             parent: null
+//         });
+//
+//         const entityList = sceneModel.entityList;
+//
+//         for (let i = 0, len = entityList.length; i < len; i++) {
+//             const entity = entityList[i];
+//             if (entity.isObject) {
+//                 metaModelData.metaObjects.push({
+//                     id: entity.id,
+//                     type: "default",
+//                     name: entity.id,
+//                     parent: metaModelId
+//                 });
+//             }
+//         }
+//
+//         const src = params.src;
+//
+//         this.viewer.metaScene.createMetaModel(metaModelId, metaModelData, {
+//
+//             includeTypes: options.includeTypes,
+//             excludeTypes: options.excludeTypes,
+//             globalizeObjectIds: options.globalizeObjectIds,
+//
+//             getProperties: async (propertiesId) => {
+//                 return await this._dataSource.getProperties(src, propertiesId);
+//             }
+//         });
+//
+//         sceneModel.once("destroyed", () => {
+//             this.viewer.metaScene.destroyMetaModel(metaModelId);
+//         });
+//     }
+// }
+}
 
-        const metaModelId = sceneModel.id;
-
-        if (!this.viewer.metaScene.metaModels[metaModelId]) {
-
-            const metaModelData = {
-                metaObjects: []
-            };
-
-            metaModelData.metaObjects.push({
-                id: metaModelId,
-                type: "default",
-                name: metaModelId,
-                parent: null
-            });
-
-            const entityList = sceneModel.entityList;
-
-            for (let i = 0, len = entityList.length; i < len; i++) {
-                const entity = entityList[i];
-                if (entity.isObject) {
-                    metaModelData.metaObjects.push({
-                        id: entity.id,
-                        type: "default",
-                        name: entity.id,
-                        parent: metaModelId
-                    });
-                }
-            }
-
-            const src = params.src;
-
-            this.viewer.metaScene.createMetaModel(metaModelId, metaModelData, {
-
-                includeTypes: options.includeTypes,
-                excludeTypes: options.excludeTypes,
-                globalizeObjectIds: options.globalizeObjectIds,
-
-                getProperties: async (propertiesId) => {
-                    return await this._dataSource.getProperties(src, propertiesId);
-                }
-            });
-
-            sceneModel.once("destroyed", () => {
-                this.viewer.metaScene.destroyMetaModel(metaModelId);
-            });
-        }
-    }
+function getBaseDirectory(filePath) {
+    const pathArray = filePath.split('/');
+    pathArray.pop(); // Remove the file name or the last segment of the path
+    return pathArray.join('/') + '/';
 }
 
 export {XKTLoaderPlugin}

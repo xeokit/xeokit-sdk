@@ -553,7 +553,10 @@ export class TreeViewPlugin extends Plugin {
             const modelIds = Object.keys(this.viewer.metaScene.metaModels);
             for (let i = 0, len = modelIds.length; i < len; i++) {
                 const modelId = modelIds[i];
-                this.addModel(modelId);
+                const metaModel = this.viewer.metaScene.metaModels[modelId];
+                if (metaModel.finalized) {
+                    this.addModel(modelId);
+                }
             }
             this.viewer.scene.on("modelLoaded", (modelId) => {
                 if (this.viewer.metaScene.metaModels[modelId]) {

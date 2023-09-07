@@ -76,7 +76,7 @@ const decompressColor = (function () {
     };
 })();
 
-function load(viewer, options, inflatedData, sceneModel) {
+function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx) {
 
     sceneModel.positionsCompression = "precompressed";
     sceneModel.normalsCompression = "precompressed";
@@ -147,7 +147,7 @@ function load(viewer, options, inflatedData, sceneModel) {
             const jj = entityMeshIds [j];
 
             const lastMesh = (jj === (numMeshes - 1));
-            const meshId = entityId + ".mesh." + jj;
+            const meshId = manifestCtx.nextMeshId++;
 
             const color = decompressColor(meshColors.subarray((jj * 4), (jj * 4) + 3));
             const opacity = meshColors[(jj * 4) + 3] / 255.0;
@@ -218,10 +218,10 @@ function load(viewer, options, inflatedData, sceneModel) {
 /** @private */
 const ParserV2 = {
     version: 2,
-    parse: function (viewer, options, elements, sceneModel) {
+    parse: function (viewer, options, elements, sceneModel, metaModel, manifestCtx) {
         const deflatedData = extract(elements);
         const inflatedData = inflate(deflatedData);
-        load(viewer, options, inflatedData, sceneModel);
+        load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx);
     }
 };
 

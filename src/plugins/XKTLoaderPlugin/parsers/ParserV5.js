@@ -60,7 +60,7 @@ const decompressColor = (function () {
     };
 })();
 
-function load(viewer, options, inflatedData, sceneModel) {
+function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx) {
 
     sceneModel.positionsCompression = "disabled"; // Positions in XKT V4 are floats, which we never quantize, for precision with big models
     sceneModel.normalsCompression = "precompressed"; // Normals are oct-encoded though
@@ -234,10 +234,10 @@ function load(viewer, options, inflatedData, sceneModel) {
 /** @private */
 const ParserV5 = {
     version: 5,
-    parse: function (viewer, options, elements, sceneModel) {
+    parse: function (viewer, options, elements, sceneModel, metaModel, manifestCtx) {
         const deflatedData = extract(elements);
         const inflatedData = inflate(deflatedData);
-        load(viewer, options, inflatedData, sceneModel);
+        load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx);
     }
 };
 
