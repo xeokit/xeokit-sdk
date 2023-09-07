@@ -180,30 +180,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturebuffer",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer.html",
-    "<span>DataTextureBuffer</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js</span>",
-    "class"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html",
-    "<span>DataTextureGenerator</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js</span>",
-    "class"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html",
-    "<span>DataTextureSceneModel</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js</span>",
-    "class"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html",
-    "<span>DataTextureState</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js</span>",
-    "class"
-  ],
-  [
     "@xeokit/xeokit-sdk/src/viewer/scene/utils/loadingmanager.js~defaultloadingmanager",
     "variable/index.html#static-variable-DefaultLoadingManager",
     "<span>DefaultLoadingManager</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/utils/LoadingManager.js</span>",
@@ -402,6 +378,18 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/lod/lod.js~lod",
+    "class/src/viewer/scene/lod/LOD.js~LOD.html",
+    "<span>LOD</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/lod/LOD.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/lod/lodstate.js~lodstate",
+    "class/src/viewer/scene/lod/LODState.js~LODState.html",
+    "<span>LODState</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/lod/LODState.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/materials/lambertmaterial.js~lambertmaterial",
     "class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html",
     "<span>LambertMaterial</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/materials/LambertMaterial.js</span>",
@@ -483,12 +471,6 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/localization/localeservice.js~localeservice",
     "class/src/viewer/localization/LocaleService.js~LocaleService.html",
     "<span>LocaleService</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/localization/LocaleService.js</span>",
-    "class"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/lodcullingmanager.js~lodcullingmanager",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js~LodCullingManager.html",
-    "<span>LodCullingManager</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js</span>",
     "class"
   ],
   [
@@ -648,9 +630,9 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/models/performancemodel/performancemodel.js~performancemodel",
-    "class/src/viewer/scene/models/PerformanceModel/PerformanceModel.js~PerformanceModel.html",
-    "<span>PerformanceModel</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/PerformanceModel/PerformanceModel.js</span>",
+    "@xeokit/xeokit-sdk/src/viewer/scene/model/performancemodel.js~performancemodel",
+    "class/src/viewer/scene/model/PerformanceModel.js~PerformanceModel.html",
+    "<span>PerformanceModel</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/PerformanceModel.js</span>",
     "class"
   ],
   [
@@ -954,9 +936,9 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/models/scenemodel.js~scenemodel",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html",
-    "<span>SceneModel</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/SceneModel.js</span>",
+    "@xeokit/xeokit-sdk/src/viewer/scene/model/scenemodel.js~scenemodel",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html",
+    "<span>SceneModel</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/SceneModel.js</span>",
     "class"
   ],
   [
@@ -1104,21 +1086,75 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html",
-    "<span>VBOSceneModel</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js</span>",
+    "@xeokit/xeokit-sdk/src/viewer/scene/model/vboscenemodel.js~vboscenemodel",
+    "class/src/viewer/scene/model/VBOSceneModel.js~VBOSceneModel.html",
+    "<span>VBOSceneModel</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/VBOSceneModel.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/model/vbo/vboscenemodelrenderers.js~vboscenemodellinebatchingrenderer",
+    "class/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelLineBatchingRenderer.html",
+    "<span>VBOSceneModelLineBatchingRenderer</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/model/vbo/vboscenemodelrenderers.js~vboscenemodellineinstancingrenderer",
+    "class/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelLineInstancingRenderer.html",
+    "<span>VBOSceneModelLineInstancingRenderer</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/model/vbo/vboscenemodelrenderers.js~vboscenemodelpointbatchingrenderer",
+    "class/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelPointBatchingRenderer.html",
+    "<span>VBOSceneModelPointBatchingRenderer</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/model/vbo/vboscenemodelrenderers.js~vboscenemodelpointinstancingrenderer",
+    "class/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelPointInstancingRenderer.html",
+    "<span>VBOSceneModelPointInstancingRenderer</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/model/vbo/vboscenemodelrenderers.js~vboscenemodelrenderer",
+    "class/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelRenderer.html",
+    "<span>VBOSceneModelRenderer</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/model/vbo/vboscenemodelrenderers.js~vboscenemodeltrianglebatchingedgesrenderer",
+    "class/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelTriangleBatchingEdgesRenderer.html",
+    "<span>VBOSceneModelTriangleBatchingEdgesRenderer</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/model/vbo/vboscenemodelrenderers.js~vboscenemodeltrianglebatchingrenderer",
+    "class/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelTriangleBatchingRenderer.html",
+    "<span>VBOSceneModelTriangleBatchingRenderer</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/model/vbo/vboscenemodelrenderers.js~vboscenemodeltriangleinstancingedgesrenderer",
+    "class/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelTriangleInstancingEdgesRenderer.html",
+    "<span>VBOSceneModelTriangleInstancingEdgesRenderer</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/model/vbo/vboscenemodelrenderers.js~vboscenemodeltriangleinstancingrenderer",
+    "class/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelTriangleInstancingRenderer.html",
+    "<span>VBOSceneModelTriangleInstancingRenderer</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/vfc/vfc.js~vfc",
+    "class/src/viewer/scene/vfc/VFC.js~VFC.html",
+    "<span>VFC</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/vfc/VFC.js</span>",
     "class"
   ],
   [
     "@xeokit/xeokit-sdk/src/plugins/viewcullplugin/viewcullplugin.js~viewcullplugin",
     "class/src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin.html",
     "<span>ViewCullPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ViewCullPlugin/ViewCullPlugin.js</span>",
-    "class"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/viewfrustumcullingmanager.js~viewfrustumcullingmanager",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js~ViewFrustumCullingManager.html",
-    "<span>ViewFrustumCullingManager</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js</span>",
     "class"
   ],
   [
@@ -1218,15 +1254,15 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/cluster-helper.js~clusterizev2",
+    "@xeokit/xeokit-sdk/src/viewer/scene/vfc/cluster-helper.js~clusterizev2",
     "function/index.html#static-function-clusterizeV2",
-    "<span>clusterizeV2</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/cluster-helper.js</span>",
+    "<span>clusterizeV2</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/vfc/cluster-helper.js</span>",
     "function"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatextureramstats",
+    "@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/triangles/datatextureramstats.js~datatextureramstats",
     "variable/index.html#static-variable-dataTextureRamStats",
-    "<span>dataTextureRamStats</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js</span>",
+    "<span>dataTextureRamStats</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/triangles/dataTextureRamStats.js</span>",
     "variable"
   ],
   [
@@ -1242,15 +1278,15 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/xeokit-cluster.js~makeclusters",
+    "@xeokit/xeokit-sdk/src/viewer/scene/vfc/xeokit-cluster.js~makeclusters",
     "function/index.html#static-function-makeClusters",
-    "<span>makeClusters</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/xeokit-cluster.js</span>",
+    "<span>makeClusters</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/vfc/xeokit-cluster.js</span>",
     "function"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/rebucketpositions.js~rebucketpositions",
+    "@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/triangles/rebucketpositions.js~rebucketpositions",
     "function/index.html#static-function-rebucketPositions",
-    "<span>rebucketPositions</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/rebucketPositions.js</span>",
+    "<span>rebucketPositions</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/triangles/rebucketPositions.js</span>",
     "function"
   ],
   [
@@ -1266,9 +1302,9 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/calculateuniquepositions.js~uniquifypositions",
+    "@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/triangles/calculateuniquepositions.js~uniquifypositions",
     "function/index.html#static-function-uniquifyPositions",
-    "<span>uniquifyPositions</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/calculateUniquePositions.js</span>",
+    "<span>uniquifyPositions</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/triangles/calculateUniquePositions.js</span>",
     "function"
   ],
   [
@@ -1852,6 +1888,12 @@ window.esdocSearchIndex = [
     "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html#instance-method-deactivate",
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl#deactivate",
     "method"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementscontrol.js~anglemeasurementscontrol#markerdiv",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html#instance-member-markerDiv",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl#markerDiv",
+    "member"
   ],
   [
     "src/plugins/anglemeasurementsplugin/anglemeasurementscontrol.js~anglemeasurementscontrol#plugin",
@@ -2472,18 +2514,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrol.js~distancemeasurementscontrol#snapmode",
-    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html#instance-set-snapMode",
-    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl#snapMode",
-    "member"
-  ],
-  [
-    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrol.js~distancemeasurementscontrol#snapmode",
-    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html#instance-get-snapMode",
-    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl#snapMode",
-    "member"
-  ],
-  [
     "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js",
     "file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js",
@@ -2988,9 +3018,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/plugins/gltfloaderplugin/gltfvboscenemodelloader.js",
-    "file/src/plugins/GLTFLoaderPlugin/GLTFVBOSceneModelLoader.js.html",
-    "src/plugins/GLTFLoaderPlugin/GLTFVBOSceneModelLoader.js",
+    "src/plugins/gltfloaderplugin/gltfscenemodelloader.js",
+    "file/src/plugins/GLTFLoaderPlugin/GLTFSceneModelLoader.js.html",
+    "src/plugins/GLTFLoaderPlugin/GLTFSceneModelLoader.js",
     "file"
   ],
   [
@@ -3954,6 +3984,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/plugins/xktloaderplugin/xktdefaultdatasource.js~xktdefaultdatasource#getmanifest",
+    "class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html#instance-method-getManifest",
+    "src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource#getManifest",
+    "method"
+  ],
+  [
     "src/plugins/xktloaderplugin/xktdefaultdatasource.js~xktdefaultdatasource#getmetamodel",
     "class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html#instance-method-getMetaModel",
     "src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource#getMetaModel",
@@ -4566,6 +4602,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/metadata/metamodel.js~metamodel#constructor",
+    "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-constructor-constructor",
+    "src/viewer/metadata/MetaModel.js~MetaModel#constructor",
+    "method"
+  ],
+  [
     "src/viewer/metadata/metamodel.js~metamodel#createdat",
     "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-createdAt",
     "src/viewer/metadata/MetaModel.js~MetaModel#createdAt",
@@ -4578,15 +4620,45 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/metadata/metamodel.js~metamodel#finalize",
+    "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-method-finalize",
+    "src/viewer/metadata/MetaModel.js~MetaModel#finalize",
+    "method"
+  ],
+  [
+    "src/viewer/metadata/metamodel.js~metamodel#finalized",
+    "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-finalized",
+    "src/viewer/metadata/MetaModel.js~MetaModel#finalized",
+    "member"
+  ],
+  [
     "src/viewer/metadata/metamodel.js~metamodel#getjson",
     "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-method-getJSON",
     "src/viewer/metadata/MetaModel.js~MetaModel#getJSON",
     "method"
   ],
   [
+    "src/viewer/metadata/metamodel.js~metamodel#graph",
+    "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-graph",
+    "src/viewer/metadata/MetaModel.js~MetaModel#graph",
+    "member"
+  ],
+  [
     "src/viewer/metadata/metamodel.js~metamodel#id",
     "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-id",
     "src/viewer/metadata/MetaModel.js~MetaModel#id",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/metamodel.js~metamodel#loaddata",
+    "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-method-loadData",
+    "src/viewer/metadata/MetaModel.js~MetaModel#loadData",
+    "method"
+  ],
+  [
+    "src/viewer/metadata/metamodel.js~metamodel#metaobjects",
+    "class/src/viewer/metadata/MetaModel.js~MetaModel.html#instance-member-metaObjects",
+    "src/viewer/metadata/MetaModel.js~MetaModel#metaObjects",
     "member"
   ],
   [
@@ -4636,18 +4708,6 @@ window.esdocSearchIndex = [
     "file/src/viewer/metadata/MetaObject.js.html",
     "src/viewer/metadata/MetaObject.js",
     "file"
-  ],
-  [
-    "src/viewer/metadata/metaobject.js~metaobject#children",
-    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-children",
-    "src/viewer/metadata/MetaObject.js~MetaObject#children",
-    "member"
-  ],
-  [
-    "src/viewer/metadata/metaobject.js~metaobject#external",
-    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-external",
-    "src/viewer/metadata/MetaObject.js~MetaObject#external",
-    "member"
   ],
   [
     "src/viewer/metadata/metaobject.js~metaobject#getjson",
@@ -4701,6 +4761,18 @@ window.esdocSearchIndex = [
     "src/viewer/metadata/metaobject.js~metaobject#parent",
     "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-parent",
     "src/viewer/metadata/MetaObject.js~MetaObject#parent",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/metaobject.js~metaobject#parentid",
+    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-parentId",
+    "src/viewer/metadata/MetaObject.js~MetaObject#parentId",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/metaobject.js~metaobject#propertysetids",
+    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-propertySetIds",
+    "src/viewer/metadata/MetaObject.js~MetaObject#propertySetIds",
     "member"
   ],
   [
@@ -4863,6 +4935,12 @@ window.esdocSearchIndex = [
     "src/viewer/metadata/propertyset.js~propertyset#id",
     "class/src/viewer/metadata/PropertySet.js~PropertySet.html#instance-member-id",
     "src/viewer/metadata/PropertySet.js~PropertySet#id",
+    "member"
+  ],
+  [
+    "src/viewer/metadata/propertyset.js~propertyset#metamodels",
+    "class/src/viewer/metadata/PropertySet.js~PropertySet.html#instance-member-metaModels",
+    "src/viewer/metadata/PropertySet.js~PropertySet#metaModels",
     "member"
   ],
   [
@@ -5481,6 +5559,30 @@ window.esdocSearchIndex = [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#smartpivot",
     "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-smartPivot",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#smartPivot",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#snapmode",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-snapMode",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#snapMode",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#snapmode",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-snapMode",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#snapMode",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#snapradius",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-snapRadius",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#snapRadius",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#snapradius",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-snapRadius",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#snapRadius",
     "member"
   ],
   [
@@ -7038,12 +7140,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/viewer/scene/canvas/canvas.js~canvas#optimizeresizedetection",
-    "class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-member-optimizeResizeDetection",
-    "src/viewer/scene/canvas/Canvas.js~Canvas#optimizeResizeDetection",
-    "member"
-  ],
-  [
     "src/viewer/scene/canvas/canvas.js~canvas#readpixels",
     "class/src/viewer/scene/canvas/Canvas.js~Canvas.html#instance-method-readPixels",
     "src/viewer/scene/canvas/Canvas.js~Canvas#readPixels",
@@ -8379,6 +8475,108 @@ window.esdocSearchIndex = [
     "src/viewer/scene/lights/index.js",
     "file/src/viewer/scene/lights/index.js.html",
     "src/viewer/scene/lights/index.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/lod/lod.js",
+    "file/src/viewer/scene/lod/LOD.js.html",
+    "src/viewer/scene/lod/LOD.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/lod/lod.js~lod#enabled",
+    "class/src/viewer/scene/lod/LOD.js~LOD.html#instance-set-enabled",
+    "src/viewer/scene/lod/LOD.js~LOD#enabled",
+    "member"
+  ],
+  [
+    "src/viewer/scene/lod/lod.js~lod#enabled",
+    "class/src/viewer/scene/lod/LOD.js~LOD.html#instance-get-enabled",
+    "src/viewer/scene/lod/LOD.js~LOD#enabled",
+    "member"
+  ],
+  [
+    "src/viewer/scene/lod/lod.js~lod#targetfps",
+    "class/src/viewer/scene/lod/LOD.js~LOD.html#instance-set-targetFPS",
+    "src/viewer/scene/lod/LOD.js~LOD#targetFPS",
+    "member"
+  ],
+  [
+    "src/viewer/scene/lod/lod.js~lod#targetfps",
+    "class/src/viewer/scene/lod/LOD.js~LOD.html#instance-get-targetFPS",
+    "src/viewer/scene/lod/LOD.js~LOD#targetFPS",
+    "member"
+  ],
+  [
+    "src/viewer/scene/lod/lodcullingmanager.js",
+    "file/src/viewer/scene/lod/LODCullingManager.js.html",
+    "src/viewer/scene/lod/LODCullingManager.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/lod/lodstate.js",
+    "file/src/viewer/scene/lod/LODState.js.html",
+    "src/viewer/scene/lod/LODState.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/lod/lodstate.js~lodstate#consecutiveframeswithtargetfps",
+    "class/src/viewer/scene/lod/LODState.js~LODState.html#instance-member-consecutiveFramesWithTargetFps",
+    "src/viewer/scene/lod/LODState.js~LODState#consecutiveFramesWithTargetFps",
+    "member"
+  ],
+  [
+    "src/viewer/scene/lod/lodstate.js~lodstate#consecutiveframeswithouttargetfps",
+    "class/src/viewer/scene/lod/LODState.js~LODState.html#instance-member-consecutiveFramesWithoutTargetFps",
+    "src/viewer/scene/lod/LODState.js~LODState#consecutiveFramesWithoutTargetFps",
+    "member"
+  ],
+  [
+    "src/viewer/scene/lod/lodstate.js~lodstate#constructor",
+    "class/src/viewer/scene/lod/LODState.js~LODState.html#instance-constructor-constructor",
+    "src/viewer/scene/lod/LODState.js~LODState#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/lod/lodstate.js~lodstate#entitiesinlod",
+    "class/src/viewer/scene/lod/LODState.js~LODState.html#instance-member-entitiesInLOD",
+    "src/viewer/scene/lod/LODState.js~LODState#entitiesInLOD",
+    "member"
+  ],
+  [
+    "src/viewer/scene/lod/lodstate.js~lodstate#initializelodstate",
+    "class/src/viewer/scene/lod/LODState.js~LODState.html#instance-method-initializeLodState",
+    "src/viewer/scene/lod/LODState.js~LODState#initializeLodState",
+    "method"
+  ],
+  [
+    "src/viewer/scene/lod/lodstate.js~lodstate#lodlevelindex",
+    "class/src/viewer/scene/lod/LODState.js~LODState.html#instance-member-lodLevelIndex",
+    "src/viewer/scene/lod/LODState.js~LODState#lodLevelIndex",
+    "member"
+  ],
+  [
+    "src/viewer/scene/lod/lodstate.js~lodstate#primcountinlod",
+    "class/src/viewer/scene/lod/LODState.js~LODState.html#instance-member-primCountInLOD",
+    "src/viewer/scene/lod/LODState.js~LODState#primCountInLOD",
+    "member"
+  ],
+  [
+    "src/viewer/scene/lod/lodstate.js~lodstate#primlodlevels",
+    "class/src/viewer/scene/lod/LODState.js~LODState.html#instance-member-primLODLevels",
+    "src/viewer/scene/lod/LODState.js~LODState#primLODLevels",
+    "member"
+  ],
+  [
+    "src/viewer/scene/lod/lodstate.js~lodstate#targetfps",
+    "class/src/viewer/scene/lod/LODState.js~LODState.html#instance-member-targetFps",
+    "src/viewer/scene/lod/LODState.js~LODState#targetFps",
+    "member"
+  ],
+  [
+    "src/viewer/scene/lod/index.js",
+    "file/src/viewer/scene/lod/index.js.html",
+    "src/viewer/scene/lod/index.js",
     "file"
   ],
   [
@@ -10752,2133 +10950,1119 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js",
+    "src/viewer/scene/model/entity_flags.js",
+    "file/src/viewer/scene/model/ENTITY_FLAGS.js.html",
+    "src/viewer/scene/model/ENTITY_FLAGS.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#aabb",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-aabb",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#aabb",
-    "member"
+    "src/viewer/scene/model/performancemodel.js",
+    "file/src/viewer/scene/model/PerformanceModel.js.html",
+    "src/viewer/scene/model/PerformanceModel.js",
+    "file"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#backfaces",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-backfaces",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#backfaces",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#backfaces",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-backfaces",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#backfaces",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#castsshadow",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-castsShadow",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#castsShadow",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#castsshadow",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-castsShadow",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#castsShadow",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#clippable",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-clippable",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#clippable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#clippable",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-clippable",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#clippable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#collidable",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-collidable",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#collidable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#collidable",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-collidable",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#collidable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#colorize",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-colorize",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#colorize",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#colorize",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-colorize",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#colorize",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#constructor",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-constructor-constructor",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#constructor",
+    "src/viewer/scene/model/performancemodel.js~performancemodel#constructor",
+    "class/src/viewer/scene/model/PerformanceModel.js~PerformanceModel.html#instance-constructor-constructor",
+    "src/viewer/scene/model/PerformanceModel.js~PerformanceModel#constructor",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#createentity",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-method-createEntity",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#createEntity",
+    "src/viewer/scene/model/render_passes.js",
+    "file/src/viewer/scene/model/RENDER_PASSES.js.html",
+    "src/viewer/scene/model/RENDER_PASSES.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js",
+    "file/src/viewer/scene/model/SceneModel.js.html",
+    "src/viewer/scene/model/SceneModel.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#aabb",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-aabb",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#aabb",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#backfaces",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-backfaces",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#backfaces",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#backfaces",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-set-backfaces",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#backfaces",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#castsshadow",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-castsShadow",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#castsShadow",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#castsshadow",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-set-castsShadow",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#castsShadow",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#clippable",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-clippable",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#clippable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#clippable",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-set-clippable",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#clippable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#collidable",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-collidable",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#collidable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#collidable",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-set-collidable",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#collidable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#colortextureenabled",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-colorTextureEnabled",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#colorTextureEnabled",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#colorize",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-colorize",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#colorize",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#colorize",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-set-colorize",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#colorize",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#constructor",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-constructor-constructor",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#constructor",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#creategeometry",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-method-createGeometry",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#createGeometry",
+    "src/viewer/scene/model/scenemodel.js~scenemodel#createentity",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-method-createEntity",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#createEntity",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#createmesh",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-method-createMesh",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#createMesh",
+    "src/viewer/scene/model/scenemodel.js~scenemodel#creategeometry",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-method-createGeometry",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#createGeometry",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#culled",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-culled",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#culled",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#culled",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-culled",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#culled",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#destroy",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-method-destroy",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#destroy",
+    "src/viewer/scene/model/scenemodel.js~scenemodel#createmesh",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-method-createMesh",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#createMesh",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#drawvertexdepths",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-method-drawVertexDepths",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#drawVertexDepths",
+    "src/viewer/scene/model/scenemodel.js~scenemodel#createquantizationrange",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-method-createQuantizationRange",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#createQuantizationRange",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#drawvertexzbufferinitializer",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-method-drawVertexZBufferInitializer",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#drawVertexZBufferInitializer",
+    "src/viewer/scene/model/scenemodel.js~scenemodel#createtexture",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-method-createTexture",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#createTexture",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#edgematerial",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-edgeMaterial",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#edgeMaterial",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#edges",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-edges",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#edges",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#edges",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-edges",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#edges",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#entitylist",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-entityList",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#entityList",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#finalize",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-method-finalize",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#finalize",
+    "src/viewer/scene/model/scenemodel.js~scenemodel#createtextureset",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-method-createTextureSet",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#createTextureSet",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#highlightmaterial",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-highlightMaterial",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#highlightMaterial",
+    "src/viewer/scene/model/scenemodel.js~scenemodel#culled",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-culled",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#culled",
     "member"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#highlighted",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-highlighted",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#highlighted",
+    "src/viewer/scene/model/scenemodel.js~scenemodel#culled",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-set-culled",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#culled",
     "member"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#highlighted",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-highlighted",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#highlighted",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#isdrawable",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-isDrawable",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#isDrawable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#isentity",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-isEntity",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#isEntity",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#ismodel",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-isModel",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#isModel",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#isobject",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-isObject",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#isObject",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#isperformancemodel",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-isPerformanceModel",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#isPerformanceModel",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#lodcullingmanager",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-member-lodCullingManager",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#lodCullingManager",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#matrix",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-matrix",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#matrix",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#numlines",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-numLines",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#numLines",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#numpoints",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-numPoints",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#numPoints",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#numtriangles",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-numTriangles",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#numTriangles",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#objects",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-objects",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#objects",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#opacity",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-opacity",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#opacity",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#opacity",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-opacity",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#opacity",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#origin",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-origin",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#origin",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#pbrenabled",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-pbrEnabled",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#pbrEnabled",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#pickable",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-pickable",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#pickable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#pickable",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-pickable",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#pickable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#position",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-position",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#position",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#quaternion",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-quaternion",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#quaternion",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#receivesshadow",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-receivesShadow",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#receivesShadow",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#receivesshadow",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-receivesShadow",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#receivesShadow",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#rotation",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-rotation",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#rotation",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#saoenabled",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-saoEnabled",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#saoEnabled",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#scale",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-scale",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#scale",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#selected",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-selected",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#selected",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#selected",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-selected",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#selected",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#selectedmaterial",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-selectedMaterial",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#selectedMaterial",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#visible",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-visible",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#visible",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#visible",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-visible",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#visible",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#worldmatrix",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-worldMatrix",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#worldMatrix",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#worldnormalmatrix",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-worldNormalMatrix",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#worldNormalMatrix",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#xraymaterial",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-xrayMaterial",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#xrayMaterial",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#xrayed",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-get-xrayed",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#xrayed",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/datatexturescenemodel.js~datatexturescenemodel#xrayed",
-    "class/src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel.html#instance-set-xrayed",
-    "src/viewer/scene/models/DataTextureSceneModel/DataTextureSceneModel.js~DataTextureSceneModel#xrayed",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/datatexturescenemodelmesh.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/DataTextureSceneModelMesh.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/DataTextureSceneModelMesh.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/datatexturescenemodelnode.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/DataTextureSceneModelNode.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/DataTextureSceneModelNode.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/entity_flags.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/ENTITY_FLAGS.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/ENTITY_FLAGS.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/render_passes.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/RENDER_PASSES.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/RENDER_PASSES.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturebuffer#constructor",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer.html#instance-constructor-constructor",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer#constructor",
+    "src/viewer/scene/model/scenemodel.js~scenemodel#destroy",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-method-destroy",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#destroy",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturebuffer#edgeindices",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer.html#instance-member-edgeIndices",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer#edgeIndices",
+    "src/viewer/scene/model/scenemodel.js~scenemodel#edgematerial",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-edgeMaterial",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#edgeMaterial",
     "member"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturebuffer#edgeindices16bits",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer.html#instance-member-edgeIndices16Bits",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer#edgeIndices16Bits",
+    "src/viewer/scene/model/scenemodel.js~scenemodel#edges",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-edges",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#edges",
     "member"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturebuffer#edgeindices32bits",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer.html#instance-member-edgeIndices32Bits",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer#edgeIndices32Bits",
+    "src/viewer/scene/model/scenemodel.js~scenemodel#edges",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-set-edges",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#edges",
     "member"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturebuffer#edgeindices8bits",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer.html#instance-member-edgeIndices8Bits",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer#edgeIndices8Bits",
+    "src/viewer/scene/model/scenemodel.js~scenemodel#entitylist",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-entityList",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#entityList",
     "member"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturebuffer#indices16bits",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer.html#instance-member-indices16Bits",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer#indices16Bits",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturebuffer#indices32bits",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer.html#instance-member-indices32Bits",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer#indices32Bits",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturebuffer#indices8bits",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer.html#instance-member-indices8Bits",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer#indices8Bits",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturebuffer#positions",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer.html#instance-member-positions",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureBuffer#positions",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatecameradatatexture",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateCameraDataTexture",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateCameraDataTexture",
+    "src/viewer/scene/model/scenemodel.js~scenemodel#finalize",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-method-finalize",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#finalize",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatepeformancemodeldatatexture",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generatePeformanceModelDataTexture",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generatePeformanceModelDataTexture",
+    "src/viewer/scene/model/scenemodel.js~scenemodel#highlightmaterial",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-highlightMaterial",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#highlightMaterial",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#highlighted",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-highlighted",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#highlighted",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#highlighted",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-set-highlighted",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#highlighted",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#isdrawable",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-isDrawable",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#isDrawable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#isentity",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-isEntity",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#isEntity",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#ismodel",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-isModel",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#isModel",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#isobject",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-isObject",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#isObject",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#isperformancemodel",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-isPerformanceModel",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#isPerformanceModel",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#layerlist",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-member-layerList",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#layerList",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#matrix",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-matrix",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#matrix",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#numentities",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-member-numEntities",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#numEntities",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#numlines",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-numLines",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#numLines",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#numpoints",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-numPoints",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#numPoints",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#numtriangles",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-numTriangles",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#numTriangles",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#objects",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-objects",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#objects",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#opacity",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-opacity",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#opacity",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#opacity",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-set-opacity",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#opacity",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#origin",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-origin",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#origin",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#pbrenabled",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-pbrEnabled",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#pbrEnabled",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#pickable",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-pickable",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#pickable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#pickable",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-set-pickable",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#pickable",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#position",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-position",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#position",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#quaternion",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-quaternion",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#quaternion",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#receivesshadow",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-receivesShadow",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#receivesShadow",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#receivesshadow",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-set-receivesShadow",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#receivesShadow",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#rotation",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-rotation",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#rotation",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#saoenabled",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-saoEnabled",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#saoEnabled",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#scale",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-scale",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#scale",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#selected",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-selected",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#selected",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#selected",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-set-selected",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#selected",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#selectedmaterial",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-selectedMaterial",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#selectedMaterial",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#visible",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-visible",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#visible",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#visible",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-set-visible",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#visible",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#worldmatrix",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-worldMatrix",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#worldMatrix",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#worldnormalmatrix",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-worldNormalMatrix",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#worldNormalMatrix",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#xraymaterial",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-xrayMaterial",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#xrayMaterial",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#xrayed",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-xrayed",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#xrayed",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#xrayed",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-set-xrayed",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#xrayed",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodelentity.js",
+    "file/src/viewer/scene/model/SceneModelEntity.js.html",
+    "src/viewer/scene/model/SceneModelEntity.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/scenemodelmesh.js",
+    "file/src/viewer/scene/model/SceneModelMesh.js.html",
+    "src/viewer/scene/model/SceneModelMesh.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/scenemodeltexture.js",
+    "file/src/viewer/scene/model/SceneModelTexture.js.html",
+    "src/viewer/scene/model/SceneModelTexture.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/scenemodeltextureset.js",
+    "file/src/viewer/scene/model/SceneModelTextureSet.js.html",
+    "src/viewer/scene/model/SceneModelTextureSet.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vboscenemodel.js",
+    "file/src/viewer/scene/model/VBOSceneModel.js.html",
+    "src/viewer/scene/model/VBOSceneModel.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vboscenemodel.js~vboscenemodel#constructor",
+    "class/src/viewer/scene/model/VBOSceneModel.js~VBOSceneModel.html#instance-constructor-constructor",
+    "src/viewer/scene/model/VBOSceneModel.js~VBOSceneModel#constructor",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatetexturefor16bitindices",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateTextureFor16BitIndices",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateTextureFor16BitIndices",
+    "src/viewer/scene/model/compression.js",
+    "file/src/viewer/scene/model/compression.js.html",
+    "src/viewer/scene/model/compression.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/bindabledatatexture.js",
+    "file/src/viewer/scene/model/dtx/triangles/BindableDataTexture.js.html",
+    "src/viewer/scene/model/dtx/triangles/BindableDataTexture.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/datatexturegenerator.js",
+    "file/src/viewer/scene/model/dtx/triangles/DataTextureGenerator.js.html",
+    "src/viewer/scene/model/dtx/triangles/DataTextureGenerator.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/datatexturestate.js",
+    "file/src/viewer/scene/model/dtx/triangles/DataTextureState.js.html",
+    "src/viewer/scene/model/dtx/triangles/DataTextureState.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/trianglesdatatexturebuffer.js",
+    "file/src/viewer/scene/model/dtx/triangles/TrianglesDataTextureBuffer.js.html",
+    "src/viewer/scene/model/dtx/triangles/TrianglesDataTextureBuffer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/trianglesdatatexturerenderers.js",
+    "file/src/viewer/scene/model/dtx/triangles/TrianglesDataTextureRenderers.js.html",
+    "src/viewer/scene/model/dtx/triangles/TrianglesDataTextureRenderers.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/calculateuniquepositions.js",
+    "file/src/viewer/scene/model/dtx/triangles/calculateUniquePositions.js.html",
+    "src/viewer/scene/model/dtx/triangles/calculateUniquePositions.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/datatextureramstats.js",
+    "file/src/viewer/scene/model/dtx/triangles/dataTextureRamStats.js.html",
+    "src/viewer/scene/model/dtx/triangles/dataTextureRamStats.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/rebucketpositions.js",
+    "file/src/viewer/scene/model/dtx/triangles/rebucketPositions.js.html",
+    "src/viewer/scene/model/dtx/triangles/rebucketPositions.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturecolorqualityrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureColorQualityRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureColorQualityRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturecolorrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureColorRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureColorRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturedepthrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureDepthRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureDepthRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatextureedgescolorrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureEdgesColorRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureEdgesColorRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatextureedgesrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureEdgesRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureEdgesRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturenormalsrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureNormalsRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureNormalsRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatextureocclusionrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureOcclusionRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureOcclusionRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturepickdepthrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickDepthRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickDepthRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturepickmeshrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickMeshRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickMeshRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturepicknormalsflatrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickNormalsFlatRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickNormalsFlatRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturepicknormalsrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickNormalsRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickNormalsRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatextureshadowrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureShadowRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureShadowRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturesilhouetterenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureSilhouetteRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureSilhouetteRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturesnapdepthbufinitrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureSnapDepthBufInitRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureSnapDepthBufInitRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturesnapdepthrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureSnapDepthRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureSnapDepthRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/index.js",
+    "file/src/viewer/scene/model/index.js.html",
+    "src/viewer/scene/model/index.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/scratchmemory.js",
+    "file/src/viewer/scene/model/vbo/ScratchMemory.js.html",
+    "src/viewer/scene/model/vbo/ScratchMemory.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/vboscenemodelrenderers.js",
+    "file/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js.html",
+    "src/viewer/scene/model/vbo/VBOSceneModelRenderers.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/vboscenemodelrenderers.js~vboscenemodellineinstancingrenderer#constructor",
+    "class/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelLineInstancingRenderer.html#instance-constructor-constructor",
+    "src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelLineInstancingRenderer#constructor",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatetexturefor16bitsedgeindices",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateTextureFor16BitsEdgeIndices",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateTextureFor16BitsEdgeIndices",
+    "src/viewer/scene/model/vbo/vboscenemodelrenderers.js~vboscenemodelpointinstancingrenderer#constructor",
+    "class/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelPointInstancingRenderer.html#instance-constructor-constructor",
+    "src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelPointInstancingRenderer#constructor",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatetexturefor32bitindices",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateTextureFor32BitIndices",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateTextureFor32BitIndices",
+    "src/viewer/scene/model/vbo/vboscenemodelrenderers.js~vboscenemodelrenderer#constructor",
+    "class/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelRenderer.html#instance-constructor-constructor",
+    "src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelRenderer#constructor",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatetexturefor32bitsedgeindices",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateTextureFor32BitsEdgeIndices",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateTextureFor32BitsEdgeIndices",
+    "src/viewer/scene/model/vbo/vboscenemodelrenderers.js~vboscenemodelrenderer#destroy",
+    "class/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelRenderer.html#instance-method-destroy",
+    "src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelRenderer#destroy",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatetexturefor8bitindices",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateTextureFor8BitIndices",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateTextureFor8BitIndices",
+    "src/viewer/scene/model/vbo/vboscenemodelrenderers.js~vboscenemodelrenderer#drawlayer",
+    "class/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelRenderer.html#instance-method-drawLayer",
+    "src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelRenderer#drawLayer",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatetexturefor8bitsedgeindices",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateTextureFor8BitsEdgeIndices",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateTextureFor8BitsEdgeIndices",
+    "src/viewer/scene/model/vbo/vboscenemodelrenderers.js~vboscenemodelrenderer#errors",
+    "class/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelRenderer.html#instance-member-errors",
+    "src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelRenderer#errors",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/vbo/vboscenemodelrenderers.js~vboscenemodelrenderer#getvalid",
+    "class/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelRenderer.html#instance-method-getValid",
+    "src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelRenderer#getValid",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatetextureforcolorsandflags",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateTextureForColorsAndFlags",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateTextureForColorsAndFlags",
+    "src/viewer/scene/model/vbo/vboscenemodelrenderers.js~vboscenemodelrenderer#setsectionplanesstateuniforms",
+    "class/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelRenderer.html#instance-method-setSectionPlanesStateUniforms",
+    "src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelRenderer#setSectionPlanesStateUniforms",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatetextureforobjectoffsets",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateTextureForObjectOffsets",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateTextureForObjectOffsets",
+    "src/viewer/scene/model/vbo/vboscenemodelrenderers.js~vboscenemodelrenderer#webglcontextrestored",
+    "class/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelRenderer.html#instance-method-webglContextRestored",
+    "src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelRenderer#webglContextRestored",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatetextureforpackedportionids",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateTextureForPackedPortionIds",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateTextureForPackedPortionIds",
+    "src/viewer/scene/model/vbo/vboscenemodelrenderers.js~vboscenemodeltrianglebatchingedgesrenderer#constructor",
+    "class/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelTriangleBatchingEdgesRenderer.html#instance-constructor-constructor",
+    "src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelTriangleBatchingEdgesRenderer#constructor",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatetextureforpositions",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateTextureForPositions",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateTextureForPositions",
+    "src/viewer/scene/model/vbo/vboscenemodelrenderers.js~vboscenemodeltrianglebatchingrenderer#constructor",
+    "class/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelTriangleBatchingRenderer.html#instance-constructor-constructor",
+    "src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelTriangleBatchingRenderer#constructor",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#generatetextureforpositionsdecodematrices",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-method-generateTextureForPositionsDecodeMatrices",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#generateTextureForPositionsDecodeMatrices",
+    "src/viewer/scene/model/vbo/vboscenemodelrenderers.js~vboscenemodeltriangleinstancingedgesrenderer#constructor",
+    "class/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelTriangleInstancingEdgesRenderer.html#instance-constructor-constructor",
+    "src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelTriangleInstancingEdgesRenderer#constructor",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturegenerator#numportions",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator.html#instance-member-numPortions",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureGenerator#numPortions",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#bindcommontextures",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-method-bindCommonTextures",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#bindCommonTextures",
+    "src/viewer/scene/model/vbo/vboscenemodelrenderers.js~vboscenemodeltriangleinstancingrenderer#constructor",
+    "class/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelTriangleInstancingRenderer.html#instance-constructor-constructor",
+    "src/viewer/scene/model/vbo/VBOSceneModelRenderers.js~VBOSceneModelTriangleInstancingRenderer#constructor",
     "method"
   ],
   [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#bindedgeindicestextures",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-method-bindEdgeIndicesTextures",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#bindEdgeIndicesTextures",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#bindpickcameratexture",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-method-bindPickCameraTexture",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#bindPickCameraTexture",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#bindtriangleindicestextures",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-method-bindTriangleIndicesTextures",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#bindTriangleIndicesTextures",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#constructor",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-constructor-constructor",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#constructor",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#edgeindicesperbitnesstextures",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-edgeIndicesPerBitnessTextures",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#edgeIndicesPerBitnessTextures",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#edgeindicesportionidsperbitnesstextures",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-edgeIndicesPortionIdsPerBitnessTextures",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#edgeIndicesPortionIdsPerBitnessTextures",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#finalize",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-method-finalize",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#finalize",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#indicesperbitnesstextures",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-indicesPerBitnessTextures",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#indicesPerBitnessTextures",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#indicesportionidsperbitnesstextures",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-indicesPortionIdsPerBitnessTextures",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#indicesPortionIdsPerBitnessTextures",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#texturecameramatrices",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-textureCameraMatrices",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#textureCameraMatrices",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#texturemodelmatrices",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-textureModelMatrices",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#textureModelMatrices",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperedgeidportionids16bits",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerEdgeIdPortionIds16Bits",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerEdgeIdPortionIds16Bits",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperedgeidportionids32bits",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerEdgeIdPortionIds32Bits",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerEdgeIdPortionIds32Bits",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperedgeidportionids8bits",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerEdgeIdPortionIds8Bits",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerEdgeIdPortionIds8Bits",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperobjectidcolorsandflags",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerObjectIdColorsAndFlags",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerObjectIdColorsAndFlags",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperobjectidoffsets",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerObjectIdOffsets",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerObjectIdOffsets",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperobjectidpositionsdecodematrix",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerObjectIdPositionsDecodeMatrix",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerObjectIdPositionsDecodeMatrix",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperpolygonidedgeindices16bits",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerPolygonIdEdgeIndices16Bits",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerPolygonIdEdgeIndices16Bits",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperpolygonidedgeindices32bits",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerPolygonIdEdgeIndices32Bits",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerPolygonIdEdgeIndices32Bits",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperpolygonidedgeindices8bits",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerPolygonIdEdgeIndices8Bits",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerPolygonIdEdgeIndices8Bits",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperpolygonidindices16bits",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerPolygonIdIndices16Bits",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerPolygonIdIndices16Bits",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperpolygonidindices32bits",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerPolygonIdIndices32Bits",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerPolygonIdIndices32Bits",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperpolygonidindices8bits",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerPolygonIdIndices8Bits",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerPolygonIdIndices8Bits",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperpolygonidportionids16bits",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerPolygonIdPortionIds16Bits",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerPolygonIdPortionIds16Bits",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperpolygonidportionids32bits",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerPolygonIdPortionIds32Bits",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerPolygonIdPortionIds32Bits",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#textureperpolygonidportionids8bits",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerPolygonIdPortionIds8Bits",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerPolygonIdPortionIds8Bits",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#texturepervertexidcoordinates",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePerVertexIdCoordinates",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePerVertexIdCoordinates",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/datatexturestate.js~datatexturestate#texturepickcameramatrices",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState.html#instance-member-texturePickCameraMatrices",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js~DataTextureState#texturePickCameraMatrices",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/lodcullingmanager.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/lodcullingmanager.js~lodcullingmanager#applylodculling",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js~LodCullingManager.html#instance-method-applyLodCulling",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js~LodCullingManager#applyLodCulling",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/lodcullingmanager.js~lodcullingmanager#constructor",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js~LodCullingManager.html#instance-constructor-constructor",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js~LodCullingManager#constructor",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/lodcullingmanager.js~lodcullingmanager#model",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js~LodCullingManager.html#instance-member-model",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js~LodCullingManager#model",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/lodcullingmanager.js~lodcullingmanager#resetlodculling",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js~LodCullingManager.html#instance-method-resetLodCulling",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/LodCullingManager.js~LodCullingManager#resetLodCulling",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/trianglesdatatexturebuffer.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/TrianglesDataTextureBuffer.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/TrianglesDataTextureBuffer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/trianglesdatatexturerenderers.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/TrianglesDataTextureRenderers.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/TrianglesDataTextureRenderers.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/viewfrustumcullingmanager.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/viewfrustumcullingmanager.js~viewfrustumcullingmanager#addentity",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js~ViewFrustumCullingManager.html#instance-method-addEntity",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js~ViewFrustumCullingManager#addEntity",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/viewfrustumcullingmanager.js~viewfrustumcullingmanager#addmesh",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js~ViewFrustumCullingManager.html#instance-method-addMesh",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js~ViewFrustumCullingManager#addMesh",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/viewfrustumcullingmanager.js~viewfrustumcullingmanager#constructor",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js~ViewFrustumCullingManager.html#instance-constructor-constructor",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js~ViewFrustumCullingManager#constructor",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/viewfrustumcullingmanager.js~viewfrustumcullingmanager#finalize",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js~ViewFrustumCullingManager.html#instance-method-finalize",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js~ViewFrustumCullingManager#finalize",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/viewfrustumcullingmanager.js~viewfrustumcullingmanager#finalized",
-    "class/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js~ViewFrustumCullingManager.html#instance-member-finalized",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/ViewFrustumCullingManager.js~ViewFrustumCullingManager#finalized",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/calculateuniquepositions.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/calculateUniquePositions.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/calculateUniquePositions.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/cluster-helper.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/cluster-helper.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/cluster-helper.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/rbush3d.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/rbush3d.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/rbush3d.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/rebucketpositions.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/rebucketPositions.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/rebucketPositions.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatexturecolorqualityrenderer.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureColorQualityRenderer.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureColorQualityRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatexturecolorrenderer.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureColorRenderer.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureColorRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatexturedepthrenderer.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureDepthRenderer.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureDepthRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatextureedgescolorrenderer.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureEdgesColorRenderer.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureEdgesColorRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatextureedgesrenderer.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureEdgesRenderer.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureEdgesRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatexturenormalsrenderer.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureNormalsRenderer.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureNormalsRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatextureocclusionrenderer.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureOcclusionRenderer.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureOcclusionRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatexturepickdepthrenderer.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTexturePickDepthRenderer.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTexturePickDepthRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatexturepickmeshrenderer.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTexturePickMeshRenderer.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTexturePickMeshRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatexturepicknormalsflatrenderer.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTexturePickNormalsFlatRenderer.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTexturePickNormalsFlatRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatexturepicknormalsrenderer.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTexturePickNormalsRenderer.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTexturePickNormalsRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatextureshadowrenderer.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureShadowRenderer.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureShadowRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatexturesilhouetterenderer.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureSilhouetteRenderer.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureSilhouetteRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatexturesnappickzbufferinitializer.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureSnapPickZBufferInitializer.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureSnapPickZBufferInitializer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/renderers/trianglesdatatexturevertexdepthrenderer.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureVertexDepthRenderer.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/renderers/TrianglesDataTextureVertexDepthRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/datatexturescenemodel/lib/layers/trianglesdatatexture/xeokit-cluster.js",
-    "file/src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/xeokit-cluster.js.html",
-    "src/viewer/scene/models/DataTextureSceneModel/lib/layers/trianglesDataTexture/xeokit-cluster.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/performancemodel/performancemodel.js",
-    "file/src/viewer/scene/models/PerformanceModel/PerformanceModel.js.html",
-    "src/viewer/scene/models/PerformanceModel/PerformanceModel.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/performancemodel/performancemodel.js~performancemodel#constructor",
-    "class/src/viewer/scene/models/PerformanceModel/PerformanceModel.js~PerformanceModel.html#instance-constructor-constructor",
-    "src/viewer/scene/models/PerformanceModel/PerformanceModel.js~PerformanceModel#constructor",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/performancemodel/index.js",
-    "file/src/viewer/scene/models/PerformanceModel/index.js.html",
-    "src/viewer/scene/models/PerformanceModel/index.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js",
-    "file/src/viewer/scene/models/SceneModel.js.html",
-    "src/viewer/scene/models/SceneModel.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#aabb",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-aabb",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#aabb",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#backfaces",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-backfaces",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#backfaces",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#backfaces",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-set-backfaces",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#backfaces",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#castsshadow",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-castsShadow",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#castsShadow",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#castsshadow",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-set-castsShadow",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#castsShadow",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#clippable",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-clippable",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#clippable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#clippable",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-set-clippable",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#clippable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#collidable",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-collidable",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#collidable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#collidable",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-set-collidable",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#collidable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#colortextureenabled",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-colorTextureEnabled",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#colorTextureEnabled",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#colorize",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-colorize",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#colorize",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#colorize",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-set-colorize",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#colorize",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#createentity",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-method-createEntity",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#createEntity",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#creategeometry",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-method-createGeometry",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#createGeometry",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#createmesh",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-method-createMesh",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#createMesh",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#createtexture",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-method-createTexture",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#createTexture",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#createtextureset",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-method-createTextureSet",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#createTextureSet",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#culled",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-culled",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#culled",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#culled",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-set-culled",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#culled",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#destroy",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-method-destroy",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#destroy",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#edgematerial",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-edgeMaterial",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#edgeMaterial",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#edges",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-edges",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#edges",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#edges",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-set-edges",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#edges",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#entitylist",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-entityList",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#entityList",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#finalize",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-method-finalize",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#finalize",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#highlightmaterial",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-highlightMaterial",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#highlightMaterial",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#highlighted",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-highlighted",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#highlighted",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#highlighted",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-set-highlighted",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#highlighted",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#isdrawable",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-isDrawable",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#isDrawable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#isentity",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-isEntity",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#isEntity",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#ismodel",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-isModel",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#isModel",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#isobject",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-isObject",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#isObject",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#matrix",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-matrix",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#matrix",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#numlines",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-numLines",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#numLines",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#numpoints",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-numPoints",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#numPoints",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#numtriangles",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-numTriangles",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#numTriangles",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#objects",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-objects",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#objects",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#opacity",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-opacity",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#opacity",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#opacity",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-set-opacity",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#opacity",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#origin",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-origin",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#origin",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#pbrenabled",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-pbrEnabled",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#pbrEnabled",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#pickable",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-pickable",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#pickable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#pickable",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-set-pickable",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#pickable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#position",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-position",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#position",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#quaternion",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-quaternion",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#quaternion",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#receivesshadow",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-receivesShadow",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#receivesShadow",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#receivesshadow",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-set-receivesShadow",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#receivesShadow",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#rotation",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-rotation",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#rotation",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#saoenabled",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-saoEnabled",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#saoEnabled",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#scale",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-scale",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#scale",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#selected",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-selected",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#selected",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#selected",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-set-selected",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#selected",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#selectedmaterial",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-selectedMaterial",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#selectedMaterial",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#visible",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-visible",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#visible",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#visible",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-set-visible",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#visible",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#worldmatrix",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-worldMatrix",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#worldMatrix",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#worldnormalmatrix",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-worldNormalMatrix",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#worldNormalMatrix",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#xraymaterial",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-xrayMaterial",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#xrayMaterial",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#xrayed",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-get-xrayed",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#xrayed",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/scenemodel.js~scenemodel#xrayed",
-    "class/src/viewer/scene/models/SceneModel.js~SceneModel.html#instance-set-xrayed",
-    "src/viewer/scene/models/SceneModel.js~SceneModel#xrayed",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js",
-    "file/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js.html",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#aabb",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-aabb",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#aabb",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#backfaces",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-backfaces",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#backfaces",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#backfaces",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-set-backfaces",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#backfaces",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#castsshadow",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-castsShadow",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#castsShadow",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#castsshadow",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-set-castsShadow",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#castsShadow",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#clippable",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-clippable",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#clippable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#clippable",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-set-clippable",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#clippable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#collidable",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-collidable",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#collidable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#collidable",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-set-collidable",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#collidable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#colortextureenabled",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-colorTextureEnabled",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#colorTextureEnabled",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#colorize",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-colorize",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#colorize",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#colorize",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-set-colorize",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#colorize",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#constructor",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-constructor-constructor",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#constructor",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#createentity",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-method-createEntity",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#createEntity",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#creategeometry",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-method-createGeometry",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#createGeometry",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#createmesh",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-method-createMesh",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#createMesh",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#createtexture",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-method-createTexture",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#createTexture",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#createtextureset",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-method-createTextureSet",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#createTextureSet",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#culled",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-culled",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#culled",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#culled",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-set-culled",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#culled",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#destroy",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-method-destroy",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#destroy",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#edgematerial",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-edgeMaterial",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#edgeMaterial",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#edges",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-edges",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#edges",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#edges",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-set-edges",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#edges",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#entitylist",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-entityList",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#entityList",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#finalize",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-method-finalize",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#finalize",
-    "method"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#highlightmaterial",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-highlightMaterial",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#highlightMaterial",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#highlighted",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-highlighted",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#highlighted",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#highlighted",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-set-highlighted",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#highlighted",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#isdrawable",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-isDrawable",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#isDrawable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#isentity",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-isEntity",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#isEntity",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#ismodel",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-isModel",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#isModel",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#isobject",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-isObject",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#isObject",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#isperformancemodel",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-isPerformanceModel",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#isPerformanceModel",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#matrix",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-matrix",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#matrix",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#numlines",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-numLines",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#numLines",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#numpoints",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-numPoints",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#numPoints",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#numtriangles",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-numTriangles",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#numTriangles",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#objects",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-objects",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#objects",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#opacity",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-opacity",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#opacity",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#opacity",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-set-opacity",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#opacity",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#origin",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-origin",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#origin",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#pbrenabled",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-pbrEnabled",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#pbrEnabled",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#pickable",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-pickable",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#pickable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#pickable",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-set-pickable",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#pickable",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#position",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-position",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#position",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#quaternion",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-quaternion",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#quaternion",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#receivesshadow",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-receivesShadow",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#receivesShadow",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#receivesshadow",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-set-receivesShadow",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#receivesShadow",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#rotation",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-rotation",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#rotation",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#saoenabled",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-saoEnabled",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#saoEnabled",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#scale",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-scale",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#scale",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#selected",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-selected",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#selected",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#selected",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-set-selected",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#selected",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#selectedmaterial",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-selectedMaterial",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#selectedMaterial",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#visible",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-visible",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#visible",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#visible",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-set-visible",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#visible",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#worldmatrix",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-worldMatrix",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#worldMatrix",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#worldnormalmatrix",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-worldNormalMatrix",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#worldNormalMatrix",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#xraymaterial",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-xrayMaterial",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#xrayMaterial",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#xrayed",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-get-xrayed",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#xrayed",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/vboscenemodel.js~vboscenemodel#xrayed",
-    "class/src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel.html#instance-set-xrayed",
-    "src/viewer/scene/models/VBOSceneModel/VBOSceneModel.js~VBOSceneModel#xrayed",
-    "member"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/index.js",
-    "file/src/viewer/scene/models/VBOSceneModel/index.js.html",
-    "src/viewer/scene/models/VBOSceneModel/index.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/lib/entity_flags.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/ENTITY_FLAGS.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/ENTITY_FLAGS.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/lib/render_passes.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/RENDER_PASSES.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/RENDER_PASSES.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/lib/scratchmemory.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/ScratchMemory.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/ScratchMemory.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/lib/vboscenemodelgeometry.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/VBOSceneModelGeometry.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/VBOSceneModelGeometry.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/models/vboscenemodel/lib/vboscenemodelmesh.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/VBOSceneModelMesh.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/VBOSceneModelMesh.js",
+    "src/viewer/scene/model/vbo/float16.js",
+    "file/src/viewer/scene/model/vbo/float16.js.html",
+    "src/viewer/scene/model/vbo/float16.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/vboscenemodelnode.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/VBOSceneModelNode.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/VBOSceneModelNode.js",
+    "src/viewer/scene/model/vbo/linesbatching/linesbatchingbuffer.js",
+    "file/src/viewer/scene/model/vbo/linesBatching/LinesBatchingBuffer.js.html",
+    "src/viewer/scene/model/vbo/linesBatching/LinesBatchingBuffer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/vboscenemodeltexture.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/VBOSceneModelTexture.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/VBOSceneModelTexture.js",
+    "src/viewer/scene/model/vbo/linesbatching/linesbatchinglayer.js",
+    "file/src/viewer/scene/model/vbo/linesBatching/LinesBatchingLayer.js.html",
+    "src/viewer/scene/model/vbo/linesBatching/LinesBatchingLayer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/vboscenemodeltextureset.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/VBOSceneModelTextureSet.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/VBOSceneModelTextureSet.js",
+    "src/viewer/scene/model/vbo/linesbatching/linesbatchingrenderers.js",
+    "file/src/viewer/scene/model/vbo/linesBatching/LinesBatchingRenderers.js.html",
+    "src/viewer/scene/model/vbo/linesBatching/LinesBatchingRenderers.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/compression.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/compression.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/compression.js",
+    "src/viewer/scene/model/vbo/linesbatching/renderers/linesbatchingcolorrenderer.js",
+    "file/src/viewer/scene/model/vbo/linesBatching/renderers/LinesBatchingColorRenderer.js.html",
+    "src/viewer/scene/model/vbo/linesBatching/renderers/LinesBatchingColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/float16.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/float16.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/float16.js",
+    "src/viewer/scene/model/vbo/linesbatching/renderers/linesbatchingsilhouetterenderer.js",
+    "file/src/viewer/scene/model/vbo/linesBatching/renderers/LinesBatchingSilhouetteRenderer.js.html",
+    "src/viewer/scene/model/vbo/linesBatching/renderers/LinesBatchingSilhouetteRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/linesbatching/linesbatchingbuffer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/linesBatching/LinesBatchingBuffer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/linesBatching/LinesBatchingBuffer.js",
+    "src/viewer/scene/model/vbo/linesinstancing/linesinstancinglayer.js",
+    "file/src/viewer/scene/model/vbo/linesInstancing/LinesInstancingLayer.js.html",
+    "src/viewer/scene/model/vbo/linesInstancing/LinesInstancingLayer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/linesbatching/linesbatchinglayer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/linesBatching/LinesBatchingLayer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/linesBatching/LinesBatchingLayer.js",
+    "src/viewer/scene/model/vbo/linesinstancing/linesinstancingrenderers.js",
+    "file/src/viewer/scene/model/vbo/linesInstancing/LinesInstancingRenderers.js.html",
+    "src/viewer/scene/model/vbo/linesInstancing/LinesInstancingRenderers.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/linesbatching/linesbatchingrenderers.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/linesBatching/LinesBatchingRenderers.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/linesBatching/LinesBatchingRenderers.js",
+    "src/viewer/scene/model/vbo/linesinstancing/renderers/linesinstancingcolorrenderer.js",
+    "file/src/viewer/scene/model/vbo/linesInstancing/renderers/LinesInstancingColorRenderer.js.html",
+    "src/viewer/scene/model/vbo/linesInstancing/renderers/LinesInstancingColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/linesbatching/renderers/linesbatchingcolorrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/linesBatching/renderers/LinesBatchingColorRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/linesBatching/renderers/LinesBatchingColorRenderer.js",
+    "src/viewer/scene/model/vbo/linesinstancing/renderers/linesinstancingsilhouetterenderer.js",
+    "file/src/viewer/scene/model/vbo/linesInstancing/renderers/LinesInstancingSilhouetteRenderer.js.html",
+    "src/viewer/scene/model/vbo/linesInstancing/renderers/LinesInstancingSilhouetteRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/linesbatching/renderers/linesbatchingsilhouetterenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/linesBatching/renderers/LinesBatchingSilhouetteRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/linesBatching/renderers/LinesBatchingSilhouetteRenderer.js",
+    "src/viewer/scene/model/vbo/pointsbatching/pointsbatchingbuffer.js",
+    "file/src/viewer/scene/model/vbo/pointsBatching/PointsBatchingBuffer.js.html",
+    "src/viewer/scene/model/vbo/pointsBatching/PointsBatchingBuffer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/linesinstancing/linesinstancinglayer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/linesInstancing/LinesInstancingLayer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/linesInstancing/LinesInstancingLayer.js",
+    "src/viewer/scene/model/vbo/pointsbatching/pointsbatchinglayer.js",
+    "file/src/viewer/scene/model/vbo/pointsBatching/PointsBatchingLayer.js.html",
+    "src/viewer/scene/model/vbo/pointsBatching/PointsBatchingLayer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/linesinstancing/linesinstancingrenderers.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/linesInstancing/LinesInstancingRenderers.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/linesInstancing/LinesInstancingRenderers.js",
+    "src/viewer/scene/model/vbo/pointsbatching/pointsbatchingrenderers.js",
+    "file/src/viewer/scene/model/vbo/pointsBatching/PointsBatchingRenderers.js.html",
+    "src/viewer/scene/model/vbo/pointsBatching/PointsBatchingRenderers.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/linesinstancing/renderers/linesinstancingcolorrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/linesInstancing/renderers/LinesInstancingColorRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/linesInstancing/renderers/LinesInstancingColorRenderer.js",
+    "src/viewer/scene/model/vbo/pointsbatching/renderers/pointsbatchingcolorrenderer.js",
+    "file/src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingColorRenderer.js.html",
+    "src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/linesinstancing/renderers/linesinstancingsilhouetterenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/linesInstancing/renderers/LinesInstancingSilhouetteRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/linesInstancing/renderers/LinesInstancingSilhouetteRenderer.js",
+    "src/viewer/scene/model/vbo/pointsbatching/renderers/pointsbatchingocclusionrenderer.js",
+    "file/src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingOcclusionRenderer.js.html",
+    "src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingOcclusionRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/pointsbatching/pointsbatchingbuffer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/PointsBatchingBuffer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/PointsBatchingBuffer.js",
+    "src/viewer/scene/model/vbo/pointsbatching/renderers/pointsbatchingpickdepthrenderer.js",
+    "file/src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingPickDepthRenderer.js.html",
+    "src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingPickDepthRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/pointsbatching/pointsbatchinglayer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/PointsBatchingLayer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/PointsBatchingLayer.js",
+    "src/viewer/scene/model/vbo/pointsbatching/renderers/pointsbatchingpickmeshrenderer.js",
+    "file/src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingPickMeshRenderer.js.html",
+    "src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingPickMeshRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/pointsbatching/pointsbatchingrenderers.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/PointsBatchingRenderers.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/PointsBatchingRenderers.js",
+    "src/viewer/scene/model/vbo/pointsbatching/renderers/pointsbatchingshadowrenderer.js",
+    "file/src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingShadowRenderer.js.html",
+    "src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingShadowRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/pointsbatching/renderers/pointsbatchingcolorrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/renderers/PointsBatchingColorRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/renderers/PointsBatchingColorRenderer.js",
+    "src/viewer/scene/model/vbo/pointsbatching/renderers/pointsbatchingsilhouetterenderer.js",
+    "file/src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingSilhouetteRenderer.js.html",
+    "src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingSilhouetteRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/pointsbatching/renderers/pointsbatchingocclusionrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/renderers/PointsBatchingOcclusionRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/renderers/PointsBatchingOcclusionRenderer.js",
+    "src/viewer/scene/model/vbo/pointsinstancing/pointsinstancinglayer.js",
+    "file/src/viewer/scene/model/vbo/pointsInstancing/PointsInstancingLayer.js.html",
+    "src/viewer/scene/model/vbo/pointsInstancing/PointsInstancingLayer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/pointsbatching/renderers/pointsbatchingpickdepthrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/renderers/PointsBatchingPickDepthRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/renderers/PointsBatchingPickDepthRenderer.js",
+    "src/viewer/scene/model/vbo/pointsinstancing/pointsinstancingrenderers.js",
+    "file/src/viewer/scene/model/vbo/pointsInstancing/PointsInstancingRenderers.js.html",
+    "src/viewer/scene/model/vbo/pointsInstancing/PointsInstancingRenderers.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/pointsbatching/renderers/pointsbatchingpickmeshrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/renderers/PointsBatchingPickMeshRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/renderers/PointsBatchingPickMeshRenderer.js",
+    "src/viewer/scene/model/vbo/pointsinstancing/renderers/pointsinstancingcolorrenderer.js",
+    "file/src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingColorRenderer.js.html",
+    "src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/pointsbatching/renderers/pointsbatchingshadowrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/renderers/PointsBatchingShadowRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/renderers/PointsBatchingShadowRenderer.js",
+    "src/viewer/scene/model/vbo/pointsinstancing/renderers/pointsinstancingdepthrenderer.js",
+    "file/src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingDepthRenderer.js.html",
+    "src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingDepthRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/pointsbatching/renderers/pointsbatchingsilhouetterenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/renderers/PointsBatchingSilhouetteRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/renderers/PointsBatchingSilhouetteRenderer.js",
+    "src/viewer/scene/model/vbo/pointsinstancing/renderers/pointsinstancingocclusionrenderer.js",
+    "file/src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingOcclusionRenderer.js.html",
+    "src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingOcclusionRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/pointsinstancing/pointsinstancinglayer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/PointsInstancingLayer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/PointsInstancingLayer.js",
+    "src/viewer/scene/model/vbo/pointsinstancing/renderers/pointsinstancingpickdepthrenderer.js",
+    "file/src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingPickDepthRenderer.js.html",
+    "src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingPickDepthRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/pointsinstancing/pointsinstancingrenderers.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/PointsInstancingRenderers.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/PointsInstancingRenderers.js",
+    "src/viewer/scene/model/vbo/pointsinstancing/renderers/pointsinstancingpickmeshrenderer.js",
+    "file/src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingPickMeshRenderer.js.html",
+    "src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingPickMeshRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/pointsinstancing/renderers/pointsinstancingcolorrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/renderers/PointsInstancingColorRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/renderers/PointsInstancingColorRenderer.js",
+    "src/viewer/scene/model/vbo/pointsinstancing/renderers/pointsinstancingshadowrenderer.js",
+    "file/src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingShadowRenderer.js.html",
+    "src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingShadowRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/pointsinstancing/renderers/pointsinstancingdepthrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/renderers/PointsInstancingDepthRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/renderers/PointsInstancingDepthRenderer.js",
+    "src/viewer/scene/model/vbo/pointsinstancing/renderers/pointsinstancingsilhouetterenderer.js",
+    "file/src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingSilhouetteRenderer.js.html",
+    "src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingSilhouetteRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/pointsinstancing/renderers/pointsinstancingocclusionrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/renderers/PointsInstancingOcclusionRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/renderers/PointsInstancingOcclusionRenderer.js",
+    "src/viewer/scene/model/vbo/snapbatching/snapbatchingdepthbufinitrenderer.js",
+    "file/src/viewer/scene/model/vbo/snapBatching/SnapBatchingDepthBufInitRenderer.js.html",
+    "src/viewer/scene/model/vbo/snapBatching/SnapBatchingDepthBufInitRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/pointsinstancing/renderers/pointsinstancingpickdepthrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/renderers/PointsInstancingPickDepthRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/renderers/PointsInstancingPickDepthRenderer.js",
+    "src/viewer/scene/model/vbo/snapbatching/snapbatchingdepthrenderer.js",
+    "file/src/viewer/scene/model/vbo/snapBatching/SnapBatchingDepthRenderer.js.html",
+    "src/viewer/scene/model/vbo/snapBatching/SnapBatchingDepthRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/pointsinstancing/renderers/pointsinstancingpickmeshrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/renderers/PointsInstancingPickMeshRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/renderers/PointsInstancingPickMeshRenderer.js",
+    "src/viewer/scene/model/vbo/snapbatching/snapbatchingrenderers.js",
+    "file/src/viewer/scene/model/vbo/snapBatching/SnapBatchingRenderers.js.html",
+    "src/viewer/scene/model/vbo/snapBatching/SnapBatchingRenderers.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/pointsinstancing/renderers/pointsinstancingshadowrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/renderers/PointsInstancingShadowRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/renderers/PointsInstancingShadowRenderer.js",
+    "src/viewer/scene/model/vbo/snapinstancing/snapinstancingdepthbufinitrenderer.js",
+    "file/src/viewer/scene/model/vbo/snapInstancing/SnapInstancingDepthBufInitRenderer.js.html",
+    "src/viewer/scene/model/vbo/snapInstancing/SnapInstancingDepthBufInitRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/pointsinstancing/renderers/pointsinstancingsilhouetterenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/renderers/PointsInstancingSilhouetteRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsInstancing/renderers/PointsInstancingSilhouetteRenderer.js",
+    "src/viewer/scene/model/vbo/snapinstancing/snapinstancingdepthrenderer.js",
+    "file/src/viewer/scene/model/vbo/snapInstancing/SnapInstancingDepthRenderer.js.html",
+    "src/viewer/scene/model/vbo/snapInstancing/SnapInstancingDepthRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesbatching/trianglesbatchingbuffer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/TrianglesBatchingBuffer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/TrianglesBatchingBuffer.js",
+    "src/viewer/scene/model/vbo/snapinstancing/snapinstancingrenderers.js",
+    "file/src/viewer/scene/model/vbo/snapInstancing/SnapInstancingRenderers.js.html",
+    "src/viewer/scene/model/vbo/snapInstancing/SnapInstancingRenderers.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesbatching/trianglesbatchinglayer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/TrianglesBatchingLayer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/TrianglesBatchingLayer.js",
+    "src/viewer/scene/model/vbo/trianglesbatching/trianglesbatchingbuffer.js",
+    "file/src/viewer/scene/model/vbo/trianglesBatching/TrianglesBatchingBuffer.js.html",
+    "src/viewer/scene/model/vbo/trianglesBatching/TrianglesBatchingBuffer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesbatching/trianglesbatchingrenderers.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/TrianglesBatchingRenderers.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/TrianglesBatchingRenderers.js",
+    "src/viewer/scene/model/vbo/trianglesbatching/trianglesbatchinglayer.js",
+    "file/src/viewer/scene/model/vbo/trianglesBatching/TrianglesBatchingLayer.js.html",
+    "src/viewer/scene/model/vbo/trianglesBatching/TrianglesBatchingLayer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingcolorrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingColorRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingColorRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesbatching/trianglesbatchingrenderers.js",
+    "file/src/viewer/scene/model/vbo/trianglesBatching/TrianglesBatchingRenderers.js.html",
+    "src/viewer/scene/model/vbo/trianglesBatching/TrianglesBatchingRenderers.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingcolortexturerenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingColorTextureRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingColorTextureRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingcolorrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingColorRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingdepthrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingDepthRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingDepthRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingcolortexturerenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingColorTextureRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingColorTextureRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingedgescolorrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingEdgesColorRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingEdgesColorRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingdepthrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingDepthRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingDepthRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingedgesrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingEdgesRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingEdgesRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingedgescolorrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingEdgesColorRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingEdgesColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingflatcolorrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingFlatColorRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingFlatColorRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingedgesrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingEdgesRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingEdgesRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingnormalsrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingNormalsRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingNormalsRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingflatcolorrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingFlatColorRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingFlatColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingocclusionrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingOcclusionRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingOcclusionRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingnormalsrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingNormalsRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingNormalsRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingpbrrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPBRRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPBRRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingocclusionrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingOcclusionRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingOcclusionRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingpickdepthrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickDepthRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickDepthRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingpbrrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPBRRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPBRRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingpickmeshrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickMeshRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickMeshRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingpickdepthrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPickDepthRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPickDepthRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingpicknormalsflatrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickNormalsFlatRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickNormalsFlatRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingpickmeshrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPickMeshRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPickMeshRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingpicknormalsrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickNormalsRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingPickNormalsRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingpicknormalsflatrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPickNormalsFlatRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPickNormalsFlatRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingshadowrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingShadowRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingShadowRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingpicknormalsrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPickNormalsRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPickNormalsRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesbatching/renderers/trianglesbatchingsilhouetterenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingSilhouetteRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/renderers/TrianglesBatchingSilhouetteRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingshadowrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingShadowRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingShadowRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesinstancing/trianglesinstancinglayer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/TrianglesInstancingLayer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/TrianglesInstancingLayer.js",
+    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingsilhouetterenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingSilhouetteRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingSilhouetteRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesinstancing/trianglesinstancingrenderers.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/TrianglesInstancingRenderers.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/TrianglesInstancingRenderers.js",
+    "src/viewer/scene/model/vbo/trianglesinstancing/trianglesinstancinglayer.js",
+    "file/src/viewer/scene/model/vbo/trianglesInstancing/TrianglesInstancingLayer.js.html",
+    "src/viewer/scene/model/vbo/trianglesInstancing/TrianglesInstancingLayer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingcolorrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingColorRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingColorRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesinstancing/trianglesinstancingrenderers.js",
+    "file/src/viewer/scene/model/vbo/trianglesInstancing/TrianglesInstancingRenderers.js.html",
+    "src/viewer/scene/model/vbo/trianglesInstancing/TrianglesInstancingRenderers.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingcolortexturerenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingColorTextureRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingColorTextureRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingcolorrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingColorRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingdepthrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingDepthRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingDepthRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingcolortexturerenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingColorTextureRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingColorTextureRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingedgescolorrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingEdgesColorRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingEdgesColorRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingdepthrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingDepthRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingDepthRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingedgesrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingEdgesRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingEdgesRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingedgescolorrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingEdgesColorRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingEdgesColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingflatcolorrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingFlatColorRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingFlatColorRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingedgesrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingEdgesRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingEdgesRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingflatnormalsrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingFlatNormalsRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingFlatNormalsRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingflatcolorrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingFlatColorRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingFlatColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingnormalsrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingNormalsRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingNormalsRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingflatnormalsrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingFlatNormalsRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingFlatNormalsRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingocclusionrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingOcclusionRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingOcclusionRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingnormalsrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingNormalsRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingNormalsRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingpbrrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPBRRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPBRRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingocclusionrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingOcclusionRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingOcclusionRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingpickdepthrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickDepthRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickDepthRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingpbrrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPBRRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPBRRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingpickmeshrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickMeshRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickMeshRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingpickdepthrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPickDepthRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPickDepthRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingpicknormalsflatrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickNormalsFlatRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickNormalsFlatRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingpickmeshrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPickMeshRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPickMeshRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingpicknormalsrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickNormalsRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingPickNormalsRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingpicknormalsflatrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPickNormalsFlatRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPickNormalsFlatRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingshadowrenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingShadowRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingShadowRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingpicknormalsrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPickNormalsRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPickNormalsRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/vboscenemodel/lib/layers/trianglesinstancing/renderers/trianglesinstancingsilhouetterenderer.js",
-    "file/src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingSilhouetteRenderer.js.html",
-    "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesInstancing/renderers/TrianglesInstancingSilhouetteRenderer.js",
+    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingshadowrenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingShadowRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingShadowRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/models/index.js",
-    "file/src/viewer/scene/models/index.js.html",
-    "src/viewer/scene/models/index.js",
+    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingsilhouetterenderer.js",
+    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingSilhouetteRenderer.js.html",
+    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingSilhouetteRenderer.js",
     "file"
   ],
   [
@@ -13932,6 +13116,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/viewer/scene/scene/scene.js~scene#dtxenabled",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-set-dtxEnabled",
+    "src/viewer/scene/scene/Scene.js~Scene#dtxEnabled",
+    "member"
+  ],
+  [
+    "src/viewer/scene/scene/scene.js~scene#dtxenabled",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-dtxEnabled",
+    "src/viewer/scene/scene/Scene.js~Scene#dtxEnabled",
+    "member"
+  ],
+  [
     "src/viewer/scene/scene/scene.js~scene#edgematerial",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-edgeMaterial",
     "src/viewer/scene/scene/Scene.js~Scene#edgeMaterial",
@@ -14043,6 +13239,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/scene/scene.js~scene#loading",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-loading",
     "src/viewer/scene/scene/Scene.js~Scene#loading",
+    "member"
+  ],
+  [
+    "src/viewer/scene/scene/scene.js~scene#lod",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-lod",
+    "src/viewer/scene/scene/Scene.js~Scene#lod",
     "member"
   ],
   [
@@ -14343,6 +13545,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/scene/scene.js~scene#types",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-types",
     "src/viewer/scene/scene/Scene.js~Scene#types",
+    "member"
+  ],
+  [
+    "src/viewer/scene/scene/scene.js~scene#vfc",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-vfc",
+    "src/viewer/scene/scene/Scene.js~Scene#vfc",
     "member"
   ],
   [
@@ -14919,6 +14127,60 @@ window.esdocSearchIndex = [
     "src/viewer/scene/utils/texturetranscoders/index.js",
     "file/src/viewer/scene/utils/textureTranscoders/index.js.html",
     "src/viewer/scene/utils/textureTranscoders/index.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/vfc/vfc.js",
+    "file/src/viewer/scene/vfc/VFC.js.html",
+    "src/viewer/scene/vfc/VFC.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/vfc/vfc.js~vfc#enabled",
+    "class/src/viewer/scene/vfc/VFC.js~VFC.html#instance-set-enabled",
+    "src/viewer/scene/vfc/VFC.js~VFC#enabled",
+    "member"
+  ],
+  [
+    "src/viewer/scene/vfc/vfc.js~vfc#enabled",
+    "class/src/viewer/scene/vfc/VFC.js~VFC.html#instance-get-enabled",
+    "src/viewer/scene/vfc/VFC.js~VFC#enabled",
+    "member"
+  ],
+  [
+    "src/viewer/scene/vfc/vfcmanager.js",
+    "file/src/viewer/scene/vfc/VFCManager.js.html",
+    "src/viewer/scene/vfc/VFCManager.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/vfc/vfcstate.js",
+    "file/src/viewer/scene/vfc/VFCState.js.html",
+    "src/viewer/scene/vfc/VFCState.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/vfc/cluster-helper.js",
+    "file/src/viewer/scene/vfc/cluster-helper.js.html",
+    "src/viewer/scene/vfc/cluster-helper.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/vfc/index.js",
+    "file/src/viewer/scene/vfc/index.js.html",
+    "src/viewer/scene/vfc/index.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/vfc/rbush3d.js",
+    "file/src/viewer/scene/vfc/rbush3d.js.html",
+    "src/viewer/scene/vfc/rbush3d.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/vfc/xeokit-cluster.js",
+    "file/src/viewer/scene/vfc/xeokit-cluster.js.html",
+    "src/viewer/scene/vfc/xeokit-cluster.js",
     "file"
   ],
   [

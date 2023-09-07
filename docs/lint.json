@@ -1,193 +1,76 @@
 [
   {
-    "name": "DataTextureState#bindCommonTextures",
-    "filePath": "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js",
+    "name": "MetaModel#loadData",
+    "filePath": "src/viewer/metadata/MetaModel.js",
     "lines": [
       {
-        "lineNumber": 378,
+        "lineNumber": 156,
         "line": "    /**"
       },
       {
-        "lineNumber": 379,
-        "line": "     * "
+        "lineNumber": 157,
+        "line": "     * Load metamodel data into this MetaModel."
       },
       {
-        "lineNumber": 380,
-        "line": "     * @param {Program} glProgram "
+        "lineNumber": 158,
+        "line": "     * @param metaModelData"
       },
       {
-        "lineNumber": 381,
-        "line": "     * @param {string} objectMatricesTextureShaderName "
-      },
-      {
-        "lineNumber": 382,
-        "line": "     * @param {string} vertexTextureShaderName "
-      },
-      {
-        "lineNumber": 383,
-        "line": "     * @param {string} objectAttributesTextureShaderName "
-      },
-      {
-        "lineNumber": 384,
-        "line": "     * @param {string} cameraMatricesShaderName "
-      },
-      {
-        "lineNumber": 385,
-        "line": "     * @param {string} modelMatricesShaderName "
-      },
-      {
-        "lineNumber": 386,
+        "lineNumber": 159,
         "line": "     */"
       },
       {
-        "lineNumber": 387,
-        "line": "    bindCommonTextures ("
+        "lineNumber": 160,
+        "line": "    loadData(metaModelData, options={}) {"
       }
     ],
     "codeParams": [
-      "glProgram",
-      "objectMatricesTextureShaderName",
-      "vertexTextureShaderName",
-      "objectAttributesTextureShaderName",
-      "cameraMatricesShaderName",
-      "modelMatricesShaderName",
-      "objectOffsetsShaderName"
+      "metaModelData",
+      "options"
     ],
     "docParams": [
-      "glProgram",
-      "objectMatricesTextureShaderName",
-      "vertexTextureShaderName",
-      "objectAttributesTextureShaderName",
-      "cameraMatricesShaderName",
-      "modelMatricesShaderName"
-    ]
-  },
-  {
-    "name": "DataTextureGenerator#generateCameraDataTexture",
-    "filePath": "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js",
-    "lines": [
-      {
-        "lineNumber": 517,
-        "line": "    /**"
-      },
-      {
-        "lineNumber": 518,
-        "line": "     * Generate and return a `camera data texture`."
-      },
-      {
-        "lineNumber": 519,
-        "line": "     * "
-      },
-      {
-        "lineNumber": 520,
-        "line": "     * The texture will automatically update its contents before each render when the camera matrix is dirty,"
-      },
-      {
-        "lineNumber": 521,
-        "line": "     * and to do so will use the following events:"
-      },
-      {
-        "lineNumber": 522,
-        "line": "     * "
-      },
-      {
-        "lineNumber": 523,
-        "line": "     * - `scene.rendering` event will be used to know that the camera texture should be updated"
-      },
-      {
-        "lineNumber": 524,
-        "line": "     * - `camera.matrix` event will be used to know that the camera matices changed"
-      },
-      {
-        "lineNumber": 525,
-        "line": "     * "
-      },
-      {
-        "lineNumber": 526,
-        "line": "     * @param {WebGL2RenderingContext} gl "
-      },
-      {
-        "lineNumber": 527,
-        "line": "     * @param {Camera} camera "
-      },
-      {
-        "lineNumber": 528,
-        "line": "     * @param {Scene} scene "
-      },
-      {
-        "lineNumber": 529,
-        "line": "     * @param {null|number[3]} origin "
-      },
-      {
-        "lineNumber": 530,
-        "line": "     * "
-      },
-      {
-        "lineNumber": 531,
-        "line": "     * @returns {BindableDataTexture}"
-      },
-      {
-        "lineNumber": 532,
-        "line": "     */"
-      },
-      {
-        "lineNumber": 533,
-        "line": "    generateCameraDataTexture (gl, camera, scene, origin, followCameraUpdate = true)"
-      }
-    ],
-    "codeParams": [
-      "gl",
-      "camera",
-      "scene",
-      "origin",
-      "followCameraUpdate"
-    ],
-    "docParams": [
-      "gl",
-      "camera",
-      "scene",
-      "origin"
+      "metaModelData"
     ]
   },
   {
     "name": "DataTextureGenerator#generateTextureForObjectOffsets",
-    "filePath": "src/viewer/scene/models/DataTextureSceneModel/lib/layers/DataTextureState.js",
+    "filePath": "src/viewer/scene/model/dtx/triangles/DataTextureGenerator.js",
     "lines": [
       {
-        "lineNumber": 841,
+        "lineNumber": 311,
         "line": "    /**"
       },
       {
-        "lineNumber": 842,
+        "lineNumber": 312,
         "line": "     * This will generate a texture for all object offsets."
       },
       {
-        "lineNumber": 843,
-        "line": "     * "
+        "lineNumber": 313,
+        "line": "     *"
       },
       {
-        "lineNumber": 844,
+        "lineNumber": 314,
         "line": "     * @param {WebGL2RenderingContext} gl"
       },
       {
-        "lineNumber": 845,
+        "lineNumber": 315,
         "line": "     * @param {int[]} offsets Array of int[3], one XYZ offset array for each object"
       },
       {
-        "lineNumber": 846,
-        "line": "     * "
+        "lineNumber": 316,
+        "line": "     *"
       },
       {
-        "lineNumber": 847,
+        "lineNumber": 317,
         "line": "     * @returns {BindableDataTexture}"
       },
       {
-        "lineNumber": 848,
+        "lineNumber": 318,
         "line": "     */"
       },
       {
-        "lineNumber": 849,
-        "line": "    generateTextureForObjectOffsets (gl, numOffsets) {"
+        "lineNumber": 319,
+        "line": "    generateTextureForObjectOffsets(gl, numOffsets) {"
       }
     ],
     "codeParams": [
@@ -201,7 +84,7 @@
   },
   {
     "name": "LinesBatchingLayer#createPortion",
-    "filePath": "src/viewer/scene/models/VBOSceneModel/lib/layers/linesBatching/LinesBatchingLayer.js",
+    "filePath": "src/viewer/scene/model/vbo/linesBatching/LinesBatchingLayer.js",
     "lines": [
       {
         "lineNumber": 104,
@@ -279,7 +162,7 @@
   },
   {
     "name": "PointsBatchingLayer#createPortion",
-    "filePath": "src/viewer/scene/models/VBOSceneModel/lib/layers/pointsBatching/PointsBatchingLayer.js",
+    "filePath": "src/viewer/scene/model/vbo/pointsBatching/PointsBatchingLayer.js",
     "lines": [
       {
         "lineNumber": 113,
@@ -357,7 +240,7 @@
   },
   {
     "name": "TrianglesBatchingLayer#createPortion",
-    "filePath": "src/viewer/scene/models/VBOSceneModel/lib/layers/trianglesBatching/TrianglesBatchingLayer.js",
+    "filePath": "src/viewer/scene/model/vbo/trianglesBatching/TrianglesBatchingLayer.js",
     "lines": [
       {
         "lineNumber": 157,
@@ -437,7 +320,7 @@
       },
       {
         "lineNumber": 176,
-        "line": "     * @param [cfg.worldMatrix] Flat float 4x4 matrix"
+        "line": "     * @param [cfg.sceneModelMatrix] Flat float 4x4 matrix"
       },
       {
         "lineNumber": 177,
