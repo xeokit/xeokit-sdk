@@ -6,6 +6,13 @@ import { MetaObject } from "./MetaObject";
  * Metadata corresponding to an {@link Entity} that represents a model.
  */
 export declare class MetaModel {
+
+  /**
+   * Creates a new MetaModel.
+   * @param param
+   */
+  constructor(param: { metaScene: MetaScene; id: any | String | Number | string | number });
+
   /**
    * Globally-unique ID.
    *
@@ -62,4 +69,16 @@ export declare class MetaModel {
    * The root {@link MetaObject} in this MetaModel's composition structure hierarchy.
    */
   rootMetaObject: MetaObject;
+
+  /**
+   * Finalizes this MetaModel.
+   */
+  finalize(): void;
+
+  /**
+   * Loads data into this MetaModel.
+   * @param metaModelData
+   * @param options
+   */
+  loadData(metaModelData: any, options: { includeTypes: String[]; excludeTypes: String[]; globalizeObjectIds: any }): void;
 }
