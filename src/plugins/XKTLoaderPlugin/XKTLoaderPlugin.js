@@ -431,38 +431,36 @@ parsers[ParserV10.version] = ParserV10;
  * myViewer.scene.setObjectVisibilities("myModel1#0BTBFw6f90Nfh9rP1dlXrb", true);
  *````
  *
- * # Loading a model from a set of XKT files
+ * # Loading a model from a manifest of XKT files
  *
  * The `ifc2gltf` tool from Creoox, which converts IFC files into glTF geometry and JSON metadata files, has the option to
- * split its output into multiple pairs of glTF and JSON files.
+ * split its output into multiple pairs of glTF and JSON files, accompanied by a JSON manifest that lists the files.
  *
  * To integrate with that option, the `convert2xkt` tool, which converts glTF geometry and JSON metadata files into XKT files,
- * has the option to batch-convert a set of multiple glTF+JSON files into a set of XKT files, in one invocation.
+ * also has the option to batch-convert the glTF+JSON files in the manifest, in one invocation.
  *
- * When use this option, then convert2xkt will output a bunch of glTF and JSON files, along with a JSON manifest file that lists them.
+ * When we use this option, convert2xkt will output a bunch of XKT files, along with a JSON manifest file that lists those XKT files.
  *
- * The XKTLoaderPlugin has the option batch-load all XKT files listed in that manifest into a xeokit Viewer in one shot,
- * combining them into a single SceneModel and MetaDataModel.
+ * Working down the pipeline, the XKTLoaderPlugin has the option batch-load all XKT files listed in that manifest
+ * into a xeokit Viewer in one load operation, combining the XKT files into a single SceneModel and MetaModel.
  *
- * You can learn about this conversion and loading process, with splitting, batch converting and batch loading,
+ * You can learn more about this conversion and loading process, with splitting, batch converting and batch loading,
  * in [this tutorial](https://www.notion.so/xeokit/Importing-Huge-IFC-Models-as-Multiple-XKT-Files-165fc022e94742cf966ee50003572259).
  *
- * Let's imagine that we have a set of such XKT files. As described in the tutorial, they were converted by `ifc2gltf` from an
- * IFC file into a set of glTF+JSON files, that were then converted by convert2xkt.
- *
- * The `convert2xkt` tool has also output a JSON manifest that lists the XKT files it created. The XKT files and their
- * manifest are listed below:
+ * To show how to use XKTLoaderPlugin to load a manifest of XKT files, let's imagine that we have a set of such XKT files. As
+ * described in the tutorial, they were converted by `ifc2gltf` from an IFC file into a set of glTF+JSON files, that were
+ * then converted by convert2xkt into this set of XKT files and a manifest, as shown below.
  *
  * ````bash
  * ./
- * ├── model_1.glb.xkt
- * ├── model_2.glb.xkt
- * ├── model_3.glb.xkt
- * ├── model.glb.xkt
+ * ├── model_1.xkt
+ * ├── model_2.xkt
+ * ├── model_3.xkt
+ * ├── model_4..xkt
  * └── model.xkt.manifest.json
  * ````
  *
- * The `model.xkt.manifest.json` XKT manifest looks something like this:
+ * The `model.xkt.manifest.json` XKT manifest would look something like this:
  *
  * ````json
  * {
@@ -472,10 +470,10 @@ parsers[ParserV10.version] = ParserV10;
  *   "conversionDate": "10-08-2023- 02-05-01",
  *   "outputDir": null,
  *   "xktFiles": [
- *     "model.glb.xkt",
- *     "model_1.glb.xkt",
- *     "model_2.glb.xkt",
- *     "model_3.glb.xkt"
+ *     "model_1.xkt",
+ *     "model_2.xkt",
+ *     "model_3.xkt",
+ *     "model_4.xkt"
  *   ]
  * }
  * ````
