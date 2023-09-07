@@ -930,7 +930,7 @@ class XKTLoaderPlugin extends Plugin {
                 });
 
             } else if (params.metaModelData) {
-                metaModel.loadData(metaModelData, {
+                metaModel.loadData(params.metaModelData, {
                     includeTypes: includeTypes,
                     excludeTypes: excludeTypes,
                     globalizeObjectIds: options.globalizeObjectIds
