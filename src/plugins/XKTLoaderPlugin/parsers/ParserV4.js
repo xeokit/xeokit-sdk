@@ -67,6 +67,8 @@ const decompressColor = (function () {
 
 function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx) {
 
+    const modelPartId = manifestCtx.getNextId();
+
     sceneModel.positionsCompression = "precompressed";
     sceneModel.normalsCompression = "precompressed";
 
@@ -174,7 +176,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
 
             // Primitive instanced by more than one entity, and has positions in Model-space
 
-            var geometryId = "geometry" + orderedPrimitiveIndex; // These IDs are local to the SceneModel
+           const geometryId = `${modelPartId}-geometry.${orderedPrimitiveIndex}`; // These IDs are local to the SceneModel
 
             sceneModel.createGeometry({
                 id: geometryId,
@@ -192,7 +194,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
 
             // Primitive is used only by one entity, and has positions pre-transformed into World-space
 
-            const meshId = orderedPrimitiveIndex; // These IDs are local to the SceneModel
+            const meshId = `${modelPartId}-${orderedPrimitiveIndex}`;
 
             const entityIndex = batchedPrimitiveEntityIndexes[orderedPrimitiveIndex];
             const entityId = eachEntityId[entityIndex];
@@ -235,8 +237,9 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
 
                 const meshDefaults = {}; // TODO: get from lookup from entity IDs
 
-                const meshId = "instance." + countInstances++;
-                const geometryId = "geometry" + primitiveIndex;
+                const meshId = `${modelPartId}-instance.${countInstances++}`;
+                const geometryId = `${modelPartId}-geometry.${primitiveIndex}`; // These IDs are local to the SceneModel
+
                 const matricesIndex = (eachEntityMatricesPortion [entityIndex]) * 16;
                 const matrix = matrices.subarray(matricesIndex, matricesIndex + 16);
 
@@ -249,6 +252,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
                 meshIds.push(meshId);
 
             } else {
+                const meshId = `${modelPartId}-${primitiveIndex}`;
                 meshIds.push(primitiveIndex);
             }
         }

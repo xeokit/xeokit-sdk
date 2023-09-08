@@ -69,6 +69,8 @@ const decompressColor = (function () {
 
 function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx) {
 
+    const modelPartId = manifestCtx.getNextId();
+
     sceneModel.positionsCompression = "precompressed";
     sceneModel.normalsCompression = "precompressed";
 
@@ -141,7 +143,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
             var jj = entityMeshIds [j];
 
             const lastMesh = (jj === (numMeshes - 1));
-            const meshId = entityId + ".mesh." + jj;
+            const meshId = `${modelPartId}.${entityId}.mesh.${jj}`;
 
             const color = decompressColor(meshColors.subarray((jj * 4), (jj * 4) + 3));
             const opacity = meshColors[(jj * 4) + 3] / 255.0;
@@ -152,7 +154,8 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
             var tmpEdgeIndices = edgeIndices.subarray(meshEdgesIndices [jj], lastMesh ? edgeIndices.length : meshEdgesIndices [jj + 1]);
 
             if (entityUsesInstancing [i] === 1) {
-                var geometryId = "geometry." + jj;
+
+                const geometryId = `${modelPartId}.geometry.${meshId}.${jj}`;
 
                 if (!(geometryId in _alreadyCreatedGeometries)) {
 
@@ -174,7 +177,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
                     color: color,
                     opacity: opacity,
                     matrix: entityMatrix,
-                    geometryId: geometryId,
+                    geometryId,
                 }));
 
                 meshIds.push(meshId);

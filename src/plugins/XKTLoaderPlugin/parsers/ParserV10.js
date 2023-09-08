@@ -115,6 +115,8 @@ const imagDataToImage = (function () {
 
 function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx) {
 
+    const modelPartId = manifestCtx.getNextId();
+
     const metadata = inflatedData.metadata;
     const textureData = inflatedData.textureData;
     const eachTextureDataPortion = inflatedData.eachTextureDataPortion;
@@ -181,7 +183,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
 
             const imageDataSubarray = new Uint8Array(textureData.subarray(textureDataPortionStart, textureDataPortionEnd));
             const arrayBuffer = imageDataSubarray.buffer;
-            const textureId = `texture-${textureIndex}`;
+            const textureId = `${modelPartId}-texture-${textureIndex}`;
 
             if (compressed) {
 
@@ -222,7 +224,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
 
     for (let textureSetIndex = 0; textureSetIndex < numTextureSets; textureSetIndex++) {
         const eachTextureSetTexturesIndex = textureSetIndex * 5;
-        const textureSetId = `textureSet-${textureSetIndex}`;
+        const textureSetId = `${modelPartId}-textureSet-${textureSetIndex}`;
         const colorTextureIndex = eachTextureSetTextures[eachTextureSetTexturesIndex + 0];
         const metallicRoughnessTextureIndex = eachTextureSetTextures[eachTextureSetTexturesIndex + 1];
         const normalsTextureIndex = eachTextureSetTextures[eachTextureSetTexturesIndex + 2];
@@ -230,11 +232,11 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
         const occlusionTextureIndex = eachTextureSetTextures[eachTextureSetTexturesIndex + 4];
         sceneModel.createTextureSet({
             id: textureSetId,
-            colorTextureId: colorTextureIndex >= 0 ? `texture-${colorTextureIndex}` : null,
-            normalsTextureId: normalsTextureIndex >= 0 ? `texture-${normalsTextureIndex}` : null,
-            metallicRoughnessTextureId: metallicRoughnessTextureIndex >= 0 ? `texture-${metallicRoughnessTextureIndex}` : null,
-            emissiveTextureId: emissiveTextureIndex >= 0 ? `texture-${emissiveTextureIndex}` : null,
-            occlusionTextureId: occlusionTextureIndex >= 0 ? `texture-${occlusionTextureIndex}` : null
+            colorTextureId: colorTextureIndex >= 0 ? `${modelPartId}-texture-${colorTextureIndex}` : null,
+            normalsTextureId: normalsTextureIndex >= 0 ? `${modelPartId}-texture-${normalsTextureIndex}` : null,
+            metallicRoughnessTextureId: metallicRoughnessTextureIndex >= 0 ? `${modelPartId}-texture-${metallicRoughnessTextureIndex}` : null,
+            emissiveTextureId: emissiveTextureIndex >= 0 ? `${modelPartId}-texture-${emissiveTextureIndex}` : null,
+            occlusionTextureId: occlusionTextureIndex >= 0 ? `${modelPartId}-texture-${occlusionTextureIndex}` : null
         });
     }
 
@@ -357,14 +359,14 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
 
                 const textureSetIndex = eachMeshTextureSet[meshIndex];
 
-                const textureSetId = (textureSetIndex >= 0) ? `textureSet-${textureSetIndex}` : null;
+                const textureSetId = (textureSetIndex >= 0) ? `${modelPartId}-textureSet-${textureSetIndex}` : null;
 
                 const meshColor = decompressColor(eachMeshMaterialAttributes.subarray((meshIndex * 6), (meshIndex * 6) + 3));
                 const meshOpacity = eachMeshMaterialAttributes[(meshIndex * 6) + 3] / 255.0;
                 const meshMetallic = eachMeshMaterialAttributes[(meshIndex * 6) + 4] / 255.0;
                 const meshRoughness = eachMeshMaterialAttributes[(meshIndex * 6) + 5] / 255.0;
 
-                const meshId = manifestCtx.nextMeshId++;
+                const meshId = manifestCtx.getNextId();
 
                 if (isReusedGeometry) {
 
@@ -373,7 +375,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
                     const meshMatrixIndex = eachMeshMatricesPortion[meshIndex];
                     const meshMatrix = matrices.slice(meshMatrixIndex, meshMatrixIndex + 16);
 
-                    const geometryId = "geometry." + tileIndex + "." + geometryIndex; // These IDs are local to the SceneModel
+                    const geometryId = `${modelPartId}-geometry.${tileIndex}.${geometryIndex}`; // These IDs are local to the SceneModel
 
                     let geometryArrays = geometryArraysCache[geometryId];
 
@@ -477,7 +479,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
 
                             sceneModel.createMesh(utils.apply(meshDefaults, {
                                 id: meshId,
-                                textureSetId: textureSetId,
+                                textureSetId,
                                 origin: tileCenter,
                                 primitive: geometryArrays.primitiveName,
                                 positionsCompressed: transformedAndRecompressedPositions,
@@ -516,8 +518,8 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
 
                             sceneModel.createMesh(utils.apply(meshDefaults, {
                                 id: meshId,
-                                geometryId: geometryId,
-                                textureSetId: textureSetId,
+                                geometryId,
+                                textureSetId,
                                 matrix: meshMatrix,
                                 color: meshColor,
                                 metallic: meshMetallic,
@@ -592,7 +594,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
 
                         sceneModel.createMesh(utils.apply(meshDefaults, {
                             id: meshId,
-                            textureSetId: textureSetId,
+                            textureSetId,
                             origin: tileCenter,
                             primitive: primitiveName,
                             positionsCompressed: geometryPositions,

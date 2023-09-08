@@ -111,6 +111,8 @@ const decompressColor = (function () {
 
 function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx) {
 
+    const modelPartId = manifestCtx.getNextId();
+
     const metadata = inflatedData.metadata;
 
     const positions = inflatedData.positions;
@@ -270,7 +272,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
                 const meshMetallic = eachMeshMaterial[(meshIndex * 6) + 4] / 255.0;
                 const meshRoughness = eachMeshMaterial[(meshIndex * 6) + 5] / 255.0;
 
-                const meshId = manifestCtx.nextMeshId++;
+                const meshId = manifestCtx.getNextId();
 
                 if (isReusedGeometry) {
 
@@ -279,7 +281,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
                     const meshMatrixIndex = eachMeshMatricesPortion[meshIndex];
                     const meshMatrix = matrices.slice(meshMatrixIndex, meshMatrixIndex + 16);
 
-                    const geometryId = "geometry." + tileIndex + "." + geometryIndex; // These IDs are local to the SceneModel
+                    const geometryId = `${modelPartId}-geometry.${tileIndex}.${geometryIndex}`; // These IDs are local to the SceneModel
 
                     let geometryArrays = geometryArraysCache[geometryId];
 

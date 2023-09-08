@@ -63,6 +63,8 @@ function inflate(deflatedData) {
 
 function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx) {
 
+    const modelPartId = manifestCtx.getNextId();
+
     sceneModel.positionsCompression = "precompressed";
     sceneModel.normalsCompression = "precompressed";
 

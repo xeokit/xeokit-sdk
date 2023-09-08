@@ -900,8 +900,11 @@ class XKTLoaderPlugin extends Plugin {
             sceneModel.fire("error", errMsg);
         }
 
+        let nextId = 0;
         const manifestCtx = {
-            nextMeshId: 0
+            getNextId: () => {
+                return `${modelId}.${nextId++}`;
+            }
         };
 
         if (params.metaModelSrc || params.metaModelData) {
@@ -942,7 +945,6 @@ class XKTLoaderPlugin extends Plugin {
                     finish();
                 }
             }
-
 
 
         } else {
@@ -1016,9 +1018,9 @@ class XKTLoaderPlugin extends Plugin {
 
     _loadModel(src, params, options, sceneModel, metaModel, manifestCtx, done, error) {
         this._dataSource.getXKT(params.src, (arrayBuffer) => {
-                this._parseModel(arrayBuffer, params, options, sceneModel, metaModel, manifestCtx);
-                done();
-            }, error);
+            this._parseModel(arrayBuffer, params, options, sceneModel, metaModel, manifestCtx);
+            done();
+        }, error);
     }
 
     _parseModel(arrayBuffer, params, options, sceneModel, metaModel, manifestCtx) {

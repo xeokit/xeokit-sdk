@@ -74,6 +74,8 @@ const decompressColor = (function () {
 
 function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx) {
 
+    const modelPartId = manifestCtx.getNextId();
+
     const positions = inflatedData.positions;
     const normals = inflatedData.normals;
     const indices = inflatedData.indices;
@@ -221,13 +223,13 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
                 const color = decompressColor(eachPrimitiveColorAndOpacity.subarray((primitiveIndex * 4), (primitiveIndex * 4) + 3));
                 const opacity = eachPrimitiveColorAndOpacity[(primitiveIndex * 4) + 3] / 255.0;
 
-                const meshId = manifestCtx.nextMeshId++;
+                const meshId = manifestCtx.getNextId();
 
                 if (isReusedPrimitive) {
 
                     // Create mesh for multi-use primitive - create (or reuse) geometry, create mesh using that geometry
 
-                    const geometryId = "geometry." + tileIndex + "." + primitiveIndex; // These IDs are local to the SceneModel
+                    const geometryId = `${modelPartId}-geometry.${tileIndex}.${primitiveIndex}`; // These IDs are local to the SceneModel
 
                     if (!geometryCreated[geometryId]) {
 

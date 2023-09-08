@@ -130,6 +130,8 @@ function convertColorsRGBToRGBA(colorsRGB) {
 
 function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx) {
 
+    const modelPartId = manifestCtx.getNextId();
+
     const types = JSON.parse(inflatedData.types);
     const eachMetaObjectId = JSON.parse(inflatedData.eachMetaObjectId);
     const eachMetaObjectType = inflatedData.eachMetaObjectType;
@@ -317,7 +319,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
                 const meshMetallic = eachMeshMaterial[(meshIndex * 6) + 4] / 255.0;
                 const meshRoughness = eachMeshMaterial[(meshIndex * 6) + 5] / 255.0;
 
-                const meshId = manifestCtx.nextMeshId++;
+                const meshId = manifestCtx.getNextId();
 
                 if (isReusedGeometry) {
 
@@ -326,7 +328,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
                     const meshMatrixIndex = eachMeshMatricesPortion[meshIndex];
                     const meshMatrix = matrices.slice(meshMatrixIndex, meshMatrixIndex + 16);
 
-                    const geometryId = "geometry." + tileIndex + "." + geometryIndex; // These IDs are local to the SceneModel
+                     const geometryId = `${modelPartId}-geometry.${tileIndex}.${geometryIndex}`; // These IDs are local to the SceneModel
 
                     let geometryArrays = geometryArraysCache[geometryId];
 

@@ -62,6 +62,8 @@ const decompressColor = (function () {
 
 function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx) {
 
+    const modelPartId = manifestCtx.getNextId();
+
     sceneModel.positionsCompression = "disabled"; // Positions in XKT V4 are floats, which we never quantize, for precision with big models
     sceneModel.normalsCompression = "precompressed"; // Normals are oct-encoded though
 
@@ -141,7 +143,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
 
             // Primitive instanced by more than one entity, and has positions in Model-space
 
-            var geometryId = "geometry" + primitiveIndex; // These IDs are local to the SceneModel
+            const geometryId = `${modelPartId}-geometry.${primitiveIndex}`; // These IDs are local to the SceneModel
 
             sceneModel.createGeometry({
                 id: geometryId,
