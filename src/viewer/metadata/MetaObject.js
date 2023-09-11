@@ -96,6 +96,12 @@ class MetaObject {
          */
         this.propertySets = [];
 
+        /**
+         * The attributes of this MetaObject.
+         * @type {{}}
+         */
+        this.attributes = params.attributes || {};
+
         // if (external !== undefined && external !== null) {
         //
         //     /**

@@ -70,7 +70,7 @@
         PhongMaterial,
         XKTLoaderPlugin,
         Skybox
-    } from "../../dist/xeokit-sdk.min.es.js";
+    } from "../../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange camera
@@ -87,12 +87,6 @@
     viewer.camera.up = [0.05999999865889549, 0.9599999785423279, 0.1599999964237213];
 
     viewer.cameraControl.navMode = "firstPerson";
-
-    //------------------------------------------------------------------------------
-    // Configure view frustum culling
-    //------------------------------------------------------------------------------
-
-    viewer.scene.vfc.enabled = true;
 
     //----------------------------------------------------------------------------------------------------------------------
     // Load model and fit it to view
