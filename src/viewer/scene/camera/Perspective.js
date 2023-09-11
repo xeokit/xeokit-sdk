@@ -61,7 +61,7 @@ class Perspective extends Component {
 
         const WIDTH_INDEX = 2;
         const HEIGHT_INDEX = 3;
-        const boundary = this.scene.viewport.boundary;
+        const boundary = this.scene.canvas.boundary;
         const aspect = boundary[WIDTH_INDEX] / boundary[HEIGHT_INDEX];
         const fovAxis = this._fovAxis;
 
