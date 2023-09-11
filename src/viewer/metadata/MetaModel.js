@@ -192,10 +192,10 @@ class MetaModel {
         if (metaModelData.metaObjects) {
             for (let i = 0, len = metaModelData.metaObjects.length; i < len; i++) {
                 const metaObjectData = metaModelData.metaObjects[i];
+                const id = metaObjectData.id;
                 let metaObject = metaScene.metaObjects[id];
                 if (!metaObject) {
                     const type = metaObjectData.type;
-                    const id = metaObjectData.id;
                     const originalSystemId = metaObjectData.originalSystemId;
                     const propertySetIds = metaObjectData.propertySets || metaObjectData.propertySetIds;
                     metaObject = new MetaObject({
@@ -212,7 +212,7 @@ class MetaModel {
                 metaObject.metaModels.push(this);
                 if (!metaObjectData.parent) {
                     this.rootMetaObjects.push(metaObject);
-                    metaScene.rootMetaObjects[metaObject.id] = metaObject;
+                    metaScene.rootMetaObjects[id] = metaObject;
                 }
                 this.metaObjects.push(metaObject);
             }
