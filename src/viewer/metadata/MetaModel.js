@@ -212,7 +212,7 @@ class MetaModel {
                 metaObject.metaModels.push(this);
                 if (!metaObjectData.parent) {
                     this.rootMetaObjects.push(metaObject);
-                    metaScene.rootMetaObjects[id] = metaObject;
+                    metaScene.rootMetaObjects[metaObject.id] = metaObject;
                 }
                 this.metaObjects.push(metaObject);
             }
