@@ -9,7 +9,7 @@ export class SceneModelMesh {
         this.object = null;
         this.parent = null;
         this.id = id;
-        this.aabb = null;
+        this._aabb = null;
         this.layer = layer;
         this.portionId = portionId;
         this._color = [color[0], color[1], color[2], opacity]; // [0..255]
@@ -144,6 +144,14 @@ export class SceneModelMesh {
 
     getEachVertex(callback) {
         this.layer.getEachVertex(this.portionId, callback);
+    }
+
+    set aabb(aabb) {
+        this._aabb = aabb;
+    }
+
+    get aabb() {
+        return this._aabb;
     }
 
     _destroy() {
