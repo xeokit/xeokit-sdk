@@ -176,8 +176,8 @@ class MetaScene {
                 } else {
                     const newMetaModels = [];
                     for (let j = 0, lenj = propertySet.metaModels.length; j < lenj; j++) {
-                        if (propertySet.metaModels[i].id !== id) {
-                            newMetaModels.push(propertySet.metaModels[i]);
+                        if (propertySet.metaModels[j].id !== id) {
+                            newMetaModels.push(propertySet.metaModels[j]);
                         }
                     }
                     propertySet.metaModels = newMetaModels;
@@ -200,9 +200,9 @@ class MetaScene {
                 } else {
                     const newMetaModels = [];
                     const metaModelId = metaModel.id;
-                    for (let i = 0, len = metaObject.metaModels.length; i < len; i++) {
-                        if (metaObject.metaModels[i].id !== metaModelId) {
-                            newMetaModels.push(metaObject.metaModels[i]);
+                    for (let j = 0, lenj = metaObject.metaModels.length; j < lenj; j++) {
+                        if (metaObject.metaModels[j].id !== metaModelId) {
+                            newMetaModels.push(metaObject.metaModels[j]);
                         }
                     }
                     metaObject.metaModels = newMetaModels;
