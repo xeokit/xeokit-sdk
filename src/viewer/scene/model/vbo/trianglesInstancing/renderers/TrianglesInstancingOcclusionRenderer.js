@@ -32,7 +32,7 @@ class TrianglesInstancingOcclusionRenderer extends VBOSceneModelTriangleInstanci
             src.push("bool isPerspectiveMatrix(mat4 m) {");
             src.push("    return (m[2][3] == - 1.0);");
             src.push("}");
-            src.push("in float isPerspective;");
+            src.push("out float isPerspective;");
         }
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
