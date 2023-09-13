@@ -210,7 +210,12 @@
         src: "../../assets/models/xkt/v8/ifc/OTCConferenceCenter.ifc.xkt",
         saoEnabled: true,
         edges: false,
-        dtxEnabled: true
+        dtxEnabled: true,
+        objectDefaults: {
+            "IfcPlate": {
+                opacity: 0.3 // These are used as windows in this model - make transparent
+            }
+        }
     });
 
     sceneModel.on("loaded", ()=>{
