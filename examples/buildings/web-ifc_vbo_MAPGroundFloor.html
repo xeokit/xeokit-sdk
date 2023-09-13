@@ -114,7 +114,18 @@
         id: "myModel",
         src: "../../assets/models/ifc/19_rue_Marc_Antoine_Petit_Ground_floor.ifc",
         loadMetadata: false,
-        edges: true
+        edges: true,
+        objectDefaults: {
+            "IfcPlate": {
+                opacity: 0.3
+            },
+            "IfcWindow": {
+                opacity: 0.4
+            },
+            "IfcSpace": {
+                opacity: 0.4
+            }
+        }
     });
 
     sceneModel.on("loaded", ()=>{

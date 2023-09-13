@@ -209,7 +209,18 @@
         src: "../../assets/models/xkt/v8/ifc/HolterTower.ifc.xkt",
         saoEnabled: true,
         edges: true,
-        dtxEnabled: false
+        dtxEnabled: false,
+        objectDefaults: {
+            "IfcPlate": {
+                opacity: 0.3 // These are used as windows in this model - make transparent
+            },
+            "IfcWindow": {
+                opacity: 0.4
+            },
+            "IfcSpace": {
+                opacity: 0.4
+            }
+        }
     });
 
     sceneModel.on("loaded", ()=>{
