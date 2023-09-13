@@ -47,9 +47,9 @@ class Viewer {
      * @param {Boolean} [cfg.alphaDepthMask=true] Whether writing into the depth buffer is enabled or disabled when rendering transparent objects.
      * @param {Boolean} [cfg.entityOffsetsEnabled=false] Whether to enable {@link Entity#offset}. For best performance, only set this ````true```` when you need to use {@link Entity#offset}.
      * @param {Boolean} [cfg.pickSurfacePrecisionEnabled=false] Whether to enable full-precision accuracy when surface picking with {@link Scene#pick}. Note that when ````true````, this configuration will increase the amount of browser memory used by the Viewer. The ````pickSurfacePrecision```` option for ````Scene#pick```` only works if this is set ````true````.
-     * @param {Boolean} [cfg.logarithmicDepthBufferEnabled=false] Whether to enable logarithmic depth buffer. When this is true,
+     * @param {Boolean} [cfg.logarithmicDepthBufferEnabled=true] Whether to enable logarithmic depth buffer. When this is true,
      * you can set huge values for {@link Perspective#far} and {@link Ortho#far}, to push the far clipping plane back so
-     * that it does not clip huge models.
+     * that it does not clip huge models. Enabling this also allows snap-picking to work more accurately when the model is far from the viewpoint.
      * @param {Boolean} [cfg.colorTextureEnabled=true] Whether to enable base color texture rendering.
      * @param {Boolean} [cfg.pbrEnabled=false] Whether to enable physically-based rendering.
      * @param {LocaleService} [cfg.localeService=null] Optional locale-based translation service.
@@ -111,7 +111,7 @@ class Viewer {
             alphaDepthMask: (cfg.alphaDepthMask !== false),
             entityOffsetsEnabled: (!!cfg.entityOffsetsEnabled),
             pickSurfacePrecisionEnabled: (!!cfg.pickSurfacePrecisionEnabled),
-            logarithmicDepthBufferEnabled: (!!cfg.logarithmicDepthBufferEnabled),
+            logarithmicDepthBufferEnabled: (cfg.logarithmicDepthBufferEnabled !== false),
             pbrEnabled: (!!cfg.pbrEnabled),
             lodEnabled: (!!cfg.lodEnabled),
             vfcCulling: (!!cfg.vfcEnabled),
