@@ -42,7 +42,8 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
-        transparent: true
+        transparent: true,
+        logarithmicDepthBufferEnabled: true // Better precision for snapping
     });
 
     viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
