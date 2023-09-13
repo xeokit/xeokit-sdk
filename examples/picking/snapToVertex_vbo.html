@@ -34,6 +34,7 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
+        logarithmicDepthBufferEnabled: true,
         dtxEnabled: false // Disable data texture model representation
     });
 
@@ -67,14 +68,14 @@
     markerDiv.style.position = "absolute";
     markerDiv.style.pointerEvents = "none";
 
-    viewer.scene.input.on("mousemove", function (canvasPos) {
+    // Mouse and touch input
 
+    function updateCursorPosition(canvasPos) {
         const snapPickResult = viewer.scene.snapPick({
-            canvasPos: canvasPos,
+            canvasPos,
             snapRadius: 30,
             snapMode: "vertex",
         });
-
         if (snapPickResult && snapPickResult.snappedCanvasPos) {
             markerDiv.style.marginLeft = `${snapPickResult.snappedCanvasPos[0] - 10}px`;
             markerDiv.style.marginTop = `${snapPickResult.snappedCanvasPos[1] - 10}px`;
@@ -86,8 +87,22 @@
             markerDiv.style.background = "white";
             markerDiv.style.border = "1px solid black";
         }
-    });
+    }
 
+    function mouseUpdateCursorPosition(event) {
+        event.preventDefault();
+        updateCursorPosition([event.clientX, event.clientY]);
+    }
+
+    function touchUpdateCursorPosition(event) {
+        event.preventDefault();
+        const touch = event.touches[0];
+        updateCursorPosition([touch.clientX, touch.clientY]);
+    }
+
+    document.addEventListener("mousemove", mouseUpdateCursorPosition);
+    document.addEventListener("touchstart", touchUpdateCursorPosition);
+    document.addEventListener("touchmove", touchUpdateCursorPosition);
 
 </script>
 </html>
