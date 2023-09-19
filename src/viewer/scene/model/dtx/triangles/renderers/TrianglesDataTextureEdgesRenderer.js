@@ -64,11 +64,12 @@ export class TrianglesDataTextureEdgesRenderer {
         );
 
         let rtcViewMatrix;
-        let rtcCameraEye;
 
-        if (origin || position[0] !== 0 || position[1] !== 0 || position[2] !== 0) {
+        const gotOrigin = (origin[0] !== 0 || origin[1] !== 0 || origin[2] !== 0);
+        const gotPosition = (position[0] !== 0 || position[1] !== 0 || position[2] !== 0);
+        if (gotOrigin || gotPosition) {
             const rtcOrigin = tempVec3a;
-            if (origin) {
+            if (gotOrigin) {
                 const rotatedOrigin = tempVec3b;
                 math.transformPoint3(rotationMatrix, origin, rotatedOrigin);
                 rtcOrigin[0] = rotatedOrigin[0];
@@ -83,17 +84,12 @@ export class TrianglesDataTextureEdgesRenderer {
             rtcOrigin[1] += position[1];
             rtcOrigin[2] += position[2];
             rtcViewMatrix = createRTCViewMat(viewMatrix, rtcOrigin, tempMat4a);
-            rtcCameraEye = tempVec3c;
-            rtcCameraEye[0] = camera.eye[0] - rtcOrigin[0];
-            rtcCameraEye[1] = camera.eye[1] - rtcOrigin[1];
-            rtcCameraEye[2] = camera.eye[2] - rtcOrigin[2];
         } else {
             rtcViewMatrix = viewMatrix;
-            rtcCameraEye = camera.eye;
         }
 
         gl.uniform1i(this._uRenderPass, renderPass);
-        gl.uniformMatrix4fv(this._uWorldMatrix, false, rotationMatrixConjugate);
+        gl.uniformMatrix4fv(this._uSceneModelWorldMatrix, false, rotationMatrixConjugate);
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
         gl.uniformMatrix4fv(this._uProjMatrix, false, camera.projMatrix);
 
@@ -118,9 +114,6 @@ export class TrianglesDataTextureEdgesRenderer {
         } else {
             gl.uniform4fv(this._uColor, defaultColor);
         }
-
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
-        gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
@@ -193,6 +186,7 @@ export class TrianglesDataTextureEdgesRenderer {
         const program = this._program;
         this._uRenderPass = program.getLocation("renderPass");
         this._uColor = program.getLocation("color");
+        this._uSceneModelWorldMatrix = program.getLocation("sceneModelWorldMatrix");
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
@@ -263,7 +257,7 @@ export class TrianglesDataTextureEdgesRenderer {
             src.push("in vec3 offset;");
         }
 
-        src.push("uniform mat4 worldMatrix;");
+        src.push("uniform mat4 sceneModelWorldMatrix;");
         src.push("uniform mat4 viewMatrix;");
         src.push("uniform mat4 projMatrix;");
 
@@ -315,6 +309,8 @@ export class TrianglesDataTextureEdgesRenderer {
         src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
         src.push("   return;"); // Cull vertex
         src.push("} else {");
+
+        src.push("mat4 worldMatrix = sceneModelWorldMatrix * mat4 (texelFetch (uTextureModelMatrices, ivec2(0, 0), 0), texelFetch (uTextureModelMatrices, ivec2(1, 0), 0), texelFetch (uTextureModelMatrices, ivec2(2, 0), 0), texelFetch (uTextureModelMatrices, ivec2(3, 0), 0));");
 
         // get vertex base
         src.push("ivec4 packedVertexBase = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+4, objectIndexCoords.y), 0));");

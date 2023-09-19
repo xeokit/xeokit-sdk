@@ -420,7 +420,7 @@ export class TrianglesDataTextureSilhouetteRenderer {
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("in float isPerspective;");
             src.push("uniform float logDepthBufFC;");
-            src.push("varying float vFragDepth;");
+            src.push("in float vFragDepth;");
         }
         if (clipping) {
             src.push("in vec4 vWorldPosition;");

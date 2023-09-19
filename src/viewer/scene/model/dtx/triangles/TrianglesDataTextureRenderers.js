@@ -10,7 +10,6 @@ import {TrianglesDataTexturePickNormalsRenderer} from "./renderers/TrianglesData
 import {TrianglesDataTextureOcclusionRenderer} from "./renderers/TrianglesDataTextureOcclusionRenderer.js";
 import {TrianglesDataTextureDepthRenderer} from "./renderers/TrianglesDataTextureDepthRenderer.js";
 import {TrianglesDataTextureNormalsRenderer} from "./renderers/TrianglesDataTextureNormalsRenderer.js";
-import {TrianglesDataTextureColorQualityRenderer} from "./renderers/TrianglesDataTextureColorQualityRenderer.js";
 import {TrianglesDataTexturePickNormalsFlatRenderer} from "./renderers/TrianglesDataTexturePickNormalsFlatRenderer.js";
 
 /**
@@ -38,10 +37,6 @@ class TrianglesDataTextureRenderers {
         if (this._flatColorRendererWithSAO && (!this._flatColorRendererWithSAO.getValid())) {
             this._flatColorRendererWithSAO.destroy();
             this._flatColorRendererWithSAO = null;
-        }
-        if (this._colorQualityRenderer && (!this._colorQualityRenderer.getValid())) {
-            this._colorQualityRenderer.destroy();
-            this._colorQualityRenderer = null;
         }
         if (this._colorQualityRendererWithSAO && (!this._colorQualityRendererWithSAO.getValid())) {
             this._colorQualityRendererWithSAO.destroy();
@@ -109,13 +104,6 @@ class TrianglesDataTextureRenderers {
             this._colorRendererWithSAO = new TrianglesDataTextureColorRenderer(this._scene, true);
         }
         return this._colorRendererWithSAO;
-    }
-
-    get colorQualityRenderer() {
-        if (!this._colorQualityRenderer) {
-            this._colorQualityRenderer = new TrianglesDataTextureColorQualityRenderer(this._scene, false);
-        }
-        return this._colorQualityRenderer;
     }
 
     get colorQualityRendererWithSAO() {
@@ -221,9 +209,6 @@ class TrianglesDataTextureRenderers {
         }
         if (this._flatColorRendererWithSAO) {
             this._flatColorRendererWithSAO.destroy();
-        }
-        if (this._colorQualityRenderer) {
-            this._colorQualityRenderer.destroy();
         }
         if (this._colorQualityRendererWithSAO) {
             this._colorQualityRendererWithSAO.destroy();

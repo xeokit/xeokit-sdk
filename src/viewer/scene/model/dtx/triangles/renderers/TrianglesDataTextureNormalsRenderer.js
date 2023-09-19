@@ -54,9 +54,11 @@ export class TrianglesDataTextureNormalsRenderer {
         let rtcViewMatrix;
         let rtcCameraEye;
 
-        if (origin || position[0] !== 0 || position[1] !== 0 || position[2] !== 0) {
+        const gotOrigin = (origin[0] !== 0 || origin[1] !== 0 || origin[2] !== 0);
+        const gotPosition = (position[0] !== 0 || position[1] !== 0 || position[2] !== 0);
+        if (gotOrigin || gotPosition) {
             const rtcOrigin = tempVec3a;
-            if (origin) {
+            if (gotOrigin) {
                 const rotatedOrigin = tempVec3b;
                 math.transformPoint3(rotationMatrix, origin, rotatedOrigin);
                 rtcOrigin[0] = rotatedOrigin[0];
@@ -210,7 +212,7 @@ export class TrianglesDataTextureNormalsRenderer {
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-                src.push("varying float vFragDepth;");
+                src.push("out float vFragDepth;");
             }
             src.push("bool isPerspectiveMatrix(mat4 m) {");
             src.push("    return (m[2][3] == - 1.0);");
@@ -225,10 +227,10 @@ export class TrianglesDataTextureNormalsRenderer {
         src.push("    return normalize(v);");
         src.push("}");
         if (clipping) {
-            src.push("varying vec4 vWorldPosition;");
-            src.push("varying vec4 vFlags2;");
+            src.push("out vec4 vWorldPosition;");
+            src.push("out vec4 vFlags2;");
         }
-        src.push("varying vec3 vViewNormal;");
+        src.push("out vec3 vViewNormal;");
         src.push("void main(void) {");
 
         // flags.x = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
@@ -286,21 +288,21 @@ export class TrianglesDataTextureNormalsRenderer {
         src.push("#endif");
 
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-            src.push("varying float isPerspective;");
+            src.push("in float isPerspective;");
             src.push("uniform float logDepthBufFC;");
-            src.push("varying float vFragDepth;");
+            src.push("in float vFragDepth;");
         }
 
         if (clipping) {
-            src.push("varying vec4 vWorldPosition;");
-            src.push("varying vec4 vFlags2;");
+            src.push("in vec4 vWorldPosition;");
+            src.push("in vec4 vFlags2;");
             for (let i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
-        src.push("varying vec3 vViewNormal;");
+        src.push("in vec3 vViewNormal;");
         src.push("vec3 packNormalToRGB( const in vec3 normal ) {");
         src.push("    return normalize( normal ) * 0.5 + 0.5;");
         src.push("}");

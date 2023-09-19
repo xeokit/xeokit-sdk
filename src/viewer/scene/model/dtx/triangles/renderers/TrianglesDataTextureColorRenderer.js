@@ -6,6 +6,9 @@ const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
 const tempVec3c = math.vec3();
 const tempVec3d = math.vec3();
+
+const tempVec4a = math.vec4();
+
 const tempMat4a = math.mat4();
 
 /**
@@ -279,11 +282,11 @@ export class TrianglesDataTextureColorRenderer {
             if (saoEnabled) {
                 const viewportWidth = gl.drawingBufferWidth;
                 const viewportHeight = gl.drawingBufferHeight;
-                tempVec4[0] = viewportWidth;
-                tempVec4[1] = viewportHeight;
-                tempVec4[2] = sao.blendCutoff;
-                tempVec4[3] = sao.blendFactor;
-                gl.uniform4fv(this._uSAOParams, tempVec4);
+                tempVec4a[0] = viewportWidth;
+                tempVec4a[1] = viewportHeight;
+                tempVec4a[2] = sao.blendCutoff;
+                tempVec4a[3] = sao.blendFactor;
+                gl.uniform4fv(this._uSAOParams, tempVec4a);
                 this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 10);
             }
         }
