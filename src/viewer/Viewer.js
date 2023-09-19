@@ -111,7 +111,7 @@ class Viewer {
             alphaDepthMask: (cfg.alphaDepthMask !== false),
             entityOffsetsEnabled: (!!cfg.entityOffsetsEnabled),
             pickSurfacePrecisionEnabled: (!!cfg.pickSurfacePrecisionEnabled),
-            logarithmicDepthBufferEnabled: (!!cfg.logarithmicDepthBufferEnabled),
+            logarithmicDepthBufferEnabled: (cfg.logarithmicDepthBufferEnabled !== false),
             pbrEnabled: (!!cfg.pbrEnabled),
             lodEnabled: (!!cfg.lodEnabled),
             vfcCulling: (!!cfg.vfcEnabled),

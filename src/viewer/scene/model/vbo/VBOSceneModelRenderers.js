@@ -10,6 +10,9 @@ const edgesDefaultColor = new Float32Array([0, 0, 0, 1]);
 
 const tempVec4 = math.vec4();
 const tempVec3a = math.vec3();
+const tempVec3b = math.vec3();
+const tempVec3c = math.vec3();
+const tempMat4a = math.mat4();
 
 class VBOSceneModelRenderer {
     constructor(scene, withSAO = false, {instancing = false, edges = false} = {}) {
@@ -426,7 +429,7 @@ class VBOSceneModelRenderer {
         const {camera} = model.scene;
         const {viewNormalMatrix, project} = camera;
         const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix
-        const {worldMatrix, worldNormalMatrix} = model;
+        const {position, rotationMatrix, rotationMatrixConjugate, worldNormalMatrix} = model;
 
         if (!this._program) {
             this._allocate();
@@ -449,11 +452,28 @@ class VBOSceneModelRenderer {
         let offset = 0;
         const mat4Size = 4 * 4;
 
-        this._matricesUniformBlockBufferData.set(worldMatrix, 0);
-        this._matricesUniformBlockBufferData.set(
-            (origin) ? createRTCViewMat(viewMatrix, origin) : viewMatrix,
-            offset += mat4Size,
-        );
+        this._matricesUniformBlockBufferData.set(rotationMatrixConjugate, 0);
+
+        if (origin || position[0] !== 0 || position[1] !== 0 || position[2] !== 0) {
+            const layerOrigin = tempVec3b;
+            if (origin) {
+                const rotatedOrigin = math.transformPoint3(rotationMatrix, origin, tempVec3c);
+                layerOrigin[0] = rotatedOrigin[0];
+                layerOrigin[1] = rotatedOrigin[1];
+                layerOrigin[2] = rotatedOrigin[2];
+            } else {
+                layerOrigin[0] = 0;
+                layerOrigin[1] = 0;
+                layerOrigin[2] = 0;
+            }
+            layerOrigin[0] += position[0];
+            layerOrigin[1] += position[1];
+            layerOrigin[2] += position[2];
+            this._matricesUniformBlockBufferData.set(createRTCViewMat(viewMatrix, layerOrigin, tempMat4a), offset += mat4Size);
+        } else {
+            this._matricesUniformBlockBufferData.set(viewMatrix, offset += mat4Size);
+        }
+
         this._matricesUniformBlockBufferData.set(frameCtx.pickProjMatrix || project.matrix, offset += mat4Size);
         this._matricesUniformBlockBufferData.set(positionsDecodeMatrix, offset += mat4Size);
         this._matricesUniformBlockBufferData.set(worldNormalMatrix, offset += mat4Size);
@@ -511,7 +531,9 @@ class VBOSceneModelRenderer {
         }
 
         if (this._uNearPlaneHeight) {
-            const nearPlaneHeight = (scene.camera.projection === "ortho") ? 1.0 : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0)));
+            const nearPlaneHeight = (scene.camera.projection === "ortho") ?
+                1.0
+                : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0)));
             gl.uniform1f(this._uNearPlaneHeight, nearPlaneHeight);
         }
 
@@ -603,7 +625,7 @@ class VBOSceneModelRenderer {
             }
         }
 
-        this._draw({ state, frameCtx, incrementDrawState});
+        this._draw({state, frameCtx, incrementDrawState});
 
         gl.bindVertexArray(null);
     }

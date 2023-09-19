@@ -103,7 +103,7 @@ class TrianglesInstancingColorRenderer extends VBOSceneModelTriangleInstancingRe
         src.push("vec4 worldPosition =  positionsDecodeMatrix * vec4(position, 1.0); ");
         src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
         if (scene.entityOffsetsEnabled) {
-            src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
+            src.push("worldPosition.xyz = worldPosition.xyz + offset;");
         }
 
         src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");

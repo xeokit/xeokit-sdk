@@ -2,8 +2,11 @@ import {Program} from "../../../../webgl/Program.js";
 import {math} from "../../../../math/math.js";
 import {createRTCViewMat, getPlaneRTCPos} from "../../../../math/rtcCoords.js";
 
-const tempVec4 = math.vec4();
 const tempVec3a = math.vec3();
+const tempVec3b = math.vec3();
+const tempVec3c = math.vec3();
+const tempVec3d = math.vec3();
+const tempMat4a = math.mat4();
 
 /**
  * @private
@@ -25,6 +28,7 @@ export class TrianglesDataTextureDepthRenderer {
     }
 
     drawLayer(frameCtx, dataTextureLayer, renderPass) {
+
         const scene = this._scene;
         const camera = scene.camera;
         const model = dataTextureLayer.model;
@@ -32,6 +36,7 @@ export class TrianglesDataTextureDepthRenderer {
         const state = dataTextureLayer._state;
         const textureState = state.textureState;
         const origin = dataTextureLayer._state.origin;
+        const {position, rotationMatrix, rotationMatrixConjugate} = model;
 
         if (!this._program) {
             this._allocate();

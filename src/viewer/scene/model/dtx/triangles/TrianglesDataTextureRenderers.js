@@ -10,7 +10,6 @@ import {TrianglesDataTexturePickNormalsRenderer} from "./renderers/TrianglesData
 import {TrianglesDataTextureOcclusionRenderer} from "./renderers/TrianglesDataTextureOcclusionRenderer.js";
 import {TrianglesDataTextureDepthRenderer} from "./renderers/TrianglesDataTextureDepthRenderer.js";
 import {TrianglesDataTextureNormalsRenderer} from "./renderers/TrianglesDataTextureNormalsRenderer.js";
-import {TrianglesDataTextureShadowRenderer} from "./renderers/TrianglesDataTextureShadowRenderer.js";
 import {TrianglesDataTextureColorQualityRenderer} from "./renderers/TrianglesDataTextureColorQualityRenderer.js";
 import {TrianglesDataTexturePickNormalsFlatRenderer} from "./renderers/TrianglesDataTexturePickNormalsFlatRenderer.js";
 
@@ -95,10 +94,6 @@ class TrianglesDataTextureRenderers {
         if (this._occlusionRenderer && this._occlusionRenderer.getValid() === false) {
             this._occlusionRenderer.destroy();
             this._occlusionRenderer = null;
-        }
-        if (this._shadowRenderer && (!this._shadowRenderer.getValid())) {
-            this._shadowRenderer.destroy();
-            this._shadowRenderer = null;
         }
     }
 
@@ -214,13 +209,6 @@ class TrianglesDataTextureRenderers {
         return this._occlusionRenderer;
     }
 
-    get shadowRenderer() {
-        if (!this._shadowRenderer) {
-            this._shadowRenderer = new TrianglesDataTextureShadowRenderer(this._scene);
-        }
-        return this._shadowRenderer;
-    }
-
     _destroy() {
         if (this._colorRenderer) {
             this._colorRenderer.destroy();
@@ -275,9 +263,6 @@ class TrianglesDataTextureRenderers {
         }
         if (this._occlusionRenderer) {
             this._occlusionRenderer.destroy();
-        }
-        if (this._shadowRenderer) {
-            this._shadowRenderer.destroy();
         }
     }
 }

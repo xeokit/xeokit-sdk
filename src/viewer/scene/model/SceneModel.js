@@ -1134,7 +1134,7 @@ export class SceneModel extends Component {
         this._maxGeometryBatchSize = cfg.maxGeometryBatchSize;
 
         this._aabb = math.collapseAABB3();
-        this._aabbDirty = false;
+        this._aabbDirty = true;
 
         this._quantizationRanges = {};
 
@@ -1230,12 +1230,20 @@ export class SceneModel extends Component {
         this._position = math.vec3(cfg.position || [0, 0, 0]);
         this._rotation = math.vec3(cfg.rotation || [0, 0, 0]);
         this._quaternion = math.vec4(cfg.quaternion || [0, 0, 0, 1]);
+        this._conjugateQuaternion = math.vec4(cfg.quaternion || [0, 0, 0, 1]);
+
         if (cfg.rotation) {
             math.eulerToQuaternion(this._rotation, "XYZ", this._quaternion);
         }
         this._scale = math.vec3(cfg.scale || [1, 1, 1]);
+
+        this._worldRotationMatrix = math.mat4();
+        this._worldRotationMatrixConjugate = math.mat4();
         this._matrix = math.mat4();
-        math.composeMat4(this._position, this._quaternion, this._scale, this._matrix);
+        this._matrixDirty = true;
+
+        this._rebuildMatrices();
+
         this._worldNormalMatrix = math.mat4();
         math.inverseMat4(this._matrix, this._worldNormalMatrix);
         math.transposeMat4(this._worldNormalMatrix);
@@ -1381,8 +1389,8 @@ export class SceneModel extends Component {
      */
     set position(value) {
         this._position.set(value || [0, 0, 0]);
-        this._setMatrixDirty();
-        this._setAABBDirty();
+        this._setWorldMatrixDirty();
+        this._setWorldAABBDirty();
         this.glRedraw();
     }
 
@@ -1407,8 +1415,8 @@ export class SceneModel extends Component {
     set rotation(value) {
         this._rotation.set(value || [0, 0, 0]);
         math.eulerToQuaternion(this._rotation, "XYZ", this._quaternion);
-        this._setMatrixDirty();
-        this._setAABBDirty();
+        this._setWorldMatrixDirty();
+        this._setWorldAABBDirty();
         this.glRedraw();
     }
 
@@ -1433,8 +1441,8 @@ export class SceneModel extends Component {
     set quaternion(value) {
         this._quaternion.set(value || [0, 0, 0, 1]);
         math.quaternionToEuler(this._quaternion, "XYZ", this._rotation);
-        this._setMatrixDirty();
-        this._setAABBDirty();
+        this._setWorldMatrixDirty();
+        this._setWorldAABBDirty();
         this.glRedraw();
     }
 
@@ -1455,12 +1463,10 @@ export class SceneModel extends Component {
      * Default value is ````[1,1,1]````.
      *
      * @type {Number[]}
+     * @deprecated
      */
     set scale(value) {
-        this._scale.set(value || [1, 1, 1]);
-        this._setMatrixDirty();
-        this._setAABBDirty();
-        this.glRedraw();
+        // NOP - deprecated
     }
 
     /**
@@ -1469,6 +1475,7 @@ export class SceneModel extends Component {
      * Default value is ````[1,1,1]````.
      *
      * @type {Number[]}
+     * @deprecated
      */
     get scale() {
         return this._scale;
@@ -1483,10 +1490,16 @@ export class SceneModel extends Component {
      */
     set matrix(value) {
         this._matrix.set(value || DEFAULT_MATRIX);
-        math.decomposeMat4(this._matrix, this._position, this._quaternion, this._scale);
+
+        math.quaternionToRotationMat4(this._quaternion, this._worldRotationMatrix);
+        math.conjugateQuaternion(this._quaternion, this._conjugateQuaternion);
+        math.quaternionToRotationMat4(this._quaternion, this._worldRotationMatrixConjugate);
+        this._matrix.set(this._worldRotationMatrix);
+        math.translateMat4v(this._position, this._matrix);
+
         this._matrixDirty = false;
         this._setWorldMatrixDirty();
-        this._setAABBDirty();
+        this._setWorldAABBDirty();
         this.glRedraw();
     }
 
@@ -1499,27 +1512,64 @@ export class SceneModel extends Component {
      */
     get matrix() {
         if (this._matrixDirty) {
-            math.composeMat4(this._position, this._quaternion, this._scale, this._matrix);
-            this._matrixDirty = false;
+            this._rebuildMatrices();
         }
         return this._matrix;
     }
 
-    _setMatrixDirty() {
+    /**
+     * Gets the SceneModel's local modeling rotation transform matrix.
+     *
+     * @type {Number[]}
+     */
+    get rotationMatrix() {
+        if (this._matrixDirty) {
+            this._rebuildMatrices();
+        }
+        return this._worldRotationMatrix;
+    }
+
+    _rebuildMatrices() {
+        if (this._matrixDirty) {
+            math.quaternionToRotationMat4(this._quaternion, this._worldRotationMatrix);
+            math.conjugateQuaternion(this._quaternion, this._conjugateQuaternion);
+            math.quaternionToRotationMat4(this._quaternion, this._worldRotationMatrixConjugate);
+            this._matrix.set(this._worldRotationMatrix);
+            math.translateMat4v(this._position, this._matrix);
+            this._matrixDirty = false;
+        }
+    }
+
+    /**
+     * Gets the conjugate of the SceneModel's local modeling rotation transform matrix.
+     *
+     * @type {Number[]}
+     */
+    get rotationMatrixConjugate() {
+        if (this._matrixDirty) {
+            this._rebuildMatrices();
+        }
+        return this._worldRotationMatrixConjugate;
+    }
+
+    _setWorldMatrixDirty() {
         this._matrixDirty = true;
-        // for (let i = 0, len = this._meshes.length; i < len; i++) {
-        //     //this._meshes[i]._setMatrixDirty();
-        // }
+    }
+    _setLocalAABBDirty() {
+        for (let i = 0, len = this._entityList.length; i < len; i++) {
+            this._entityList[i]._setLocalAABBDirty(); // Entities need to rebuild their Local AABBs from their Mesh's local AABBs
+        }
     }
 
-
-    _setAABBDirty() {
-        this._setSubtreeAABBsDirty(this);
-        // for (let i = 0, len = this._meshes.length; i < len; i++) {
-        //     //this._meshes[i]._setMatrixDirty();
-        // }
+    _setWorldAABBDirty() {
+        this._aabbDirty = true;
+        this.scene._aabbDirty = true;
+        this._matrixDirty = true;
+        for (let i = 0, len = this._entityList.length; i < len; i++) {
+            this._entityList[i]._setWorldAABBDirty(); // Entities need to retransform their World AABBs by SceneModel's worldMatrix
+        }
     }
-
+    
     /**
      * Gets the SceneModel's World matrix.
      *
@@ -1550,12 +1600,15 @@ export class SceneModel extends Component {
         if (!this._viewMatrix) {
             return this.scene.camera.viewMatrix;
         }
-        if (this._viewMatrixDirty || this._matrixDirty) {
+        if (this._matrixDirty) {
+            this._rebuildMatrices();
+            this._viewMatrixDirty = true;
+        }
+        if (this._viewMatrixDirty) {
             math.mulMat4(this.scene.camera.viewMatrix, this._matrix, this._viewMatrix);
             math.inverseMat4(this._viewMatrix, this._viewNormalMatrix);
             math.transposeMat4(this._viewNormalMatrix);
             this._viewMatrixDirty = false;
-            this._matrixDirty = false;
         }
         return this._viewMatrix;
     }
@@ -1569,12 +1622,18 @@ export class SceneModel extends Component {
         if (!this._viewNormalMatrix) {
             return this.scene.camera.viewNormalMatrix;
         }
+        if (this._matrixDirty) {
+            this._rebuildMatrices();
+            this._viewMatrixDirty = true;
+        }
         if (this._viewMatrixDirty) {
             math.mulMat4(this.scene.camera.viewMatrix, this._matrix, this._viewMatrix);
             math.inverseMat4(this._viewMatrix, this._viewNormalMatrix);
             math.transposeMat4(this._viewNormalMatrix);
             this._viewMatrixDirty = false;
         }
+        math.inverseMat4(this._viewMatrix, this._viewNormalMatrix);
+        math.transposeMat4(this._viewNormalMatrix);
         return this._viewNormalMatrix;
     }
 
@@ -1663,7 +1722,11 @@ export class SceneModel extends Component {
      */
     get aabb() {
         if (this._aabbDirty) {
-            this._rebuildAABB();
+            math.collapseAABB3(this._aabb);
+            for (let i = 0, len = this._entityList.length; i < len; i++) {
+                math.expandAABB3(this._aabb, this._entityList[i].aabb);
+            }
+            this._aabbDirty = false;
         }
         return this._aabb;
     }
@@ -3252,15 +3315,6 @@ export class SceneModel extends Component {
         if (this.scene.lod.enabled) {
             this._lodManager = this.scene.lod.getLODManager(this);
         }
-    }
-
-    _rebuildAABB() {
-        math.collapseAABB3(this._aabb);
-        for (let i = 0, len = this._entityList.length; i < len; i++) {
-            const entity = this._entityList[i];
-            math.expandAABB3(this._aabb, entity.aabb);
-        }
-        this._aabbDirty = false;
     }
 
     /** @private */

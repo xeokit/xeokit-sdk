@@ -11,7 +11,7 @@ class TrianglesInstancingOcclusionRenderer extends VBOSceneModelTriangleInstanci
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
         src.push("#version 300 es");
-        src.push("// Instancing occlusion vertex shader");
+        src.push("// TrianglesInstancingOcclusionRenderer vertex shader");
 
         src.push("uniform int renderPass;");
         src.push("in vec3 position;");
@@ -32,7 +32,7 @@ class TrianglesInstancingOcclusionRenderer extends VBOSceneModelTriangleInstanci
             src.push("bool isPerspectiveMatrix(mat4 m) {");
             src.push("    return (m[2][3] == - 1.0);");
             src.push("}");
-            src.push("in float isPerspective;");
+            src.push("out float isPerspective;");
         }
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
@@ -75,7 +75,7 @@ class TrianglesInstancingOcclusionRenderer extends VBOSceneModelTriangleInstanci
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
         src.push("#version 300 es");
-        src.push("// Instancing occlusion fragment shader");
+        src.push("// TrianglesInstancingOcclusionRenderer fragment shader");
 
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");

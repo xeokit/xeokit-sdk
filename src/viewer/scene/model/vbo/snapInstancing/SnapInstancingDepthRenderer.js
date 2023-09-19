@@ -3,6 +3,11 @@ import {createRTCViewMat, getPlaneRTCPos} from "../../../math/rtcCoords.js";
 import {math} from "../../../math/math.js";
 
 const tempVec3a = math.vec3();
+const tempVec3b = math.vec3();
+const tempVec3c = math.vec3();
+const tempVec3d = math.vec3();
+const tempVec3e = math.vec3();
+const tempMat4a = math.mat4();
 
 /**
  * @private
@@ -25,27 +30,6 @@ class SnapInstancingDepthRenderer {
 
     drawLayer(frameCtx, instancingLayer, renderPass) {
 
-        const model = instancingLayer.model;
-        const scene = model.scene;
-        const gl = scene.canvas.gl;
-        const state = instancingLayer._state;
-        const origin = instancingLayer._state.origin;
-
-        frameCtx.snapPickOrigin[0] = origin[0];
-        frameCtx.snapPickOrigin[1] = origin[1];
-        frameCtx.snapPickOrigin[2] = origin[2];
-
-        const aabb = instancingLayer.aabb;
-        const coordinateDivider = [
-            math.safeInv(aabb[3] - aabb[0]) * math.MAX_INT,
-            math.safeInv(aabb[4] - aabb[1]) * math.MAX_INT,
-            math.safeInv(aabb[5] - aabb[2]) * math.MAX_INT,
-        ];
-
-        frameCtx.snapPickCoordinateScale[0] = math.safeInv(coordinateDivider[0]);
-        frameCtx.snapPickCoordinateScale[1] = math.safeInv(coordinateDivider[1]);
-        frameCtx.snapPickCoordinateScale[2] = math.safeInv(coordinateDivider[2]);
-
         if (!this._program) {
             this._allocate(instancingLayer);
             if (this.errors) {
@@ -58,43 +42,73 @@ class SnapInstancingDepthRenderer {
             this._bindProgram();
         }
 
+        const model = instancingLayer.model;
+        const scene = model.scene;
         const camera = scene.camera;
-        let cameraEye = camera.eye;
+        const gl = scene.canvas.gl;
+        const state = instancingLayer._state;
+        const origin = instancingLayer._state.origin;
+        const {position, rotationMatrix, rotationMatrixConjugate} = model;
+        const aabb = instancingLayer.aabb;
+        const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
 
-        if (frameCtx.pickViewMatrix) {
-            cameraEye = frameCtx.pickOrigin || cameraEye;
+        const coordinateScaler = tempVec3a;
+        coordinateScaler[0] = math.safeInv(aabb[3] - aabb[0]) * math.MAX_INT;
+        coordinateScaler[1] = math.safeInv(aabb[4] - aabb[1]) * math.MAX_INT;
+        coordinateScaler[2] = math.safeInv(aabb[5] - aabb[2]) * math.MAX_INT;
+
+        frameCtx.snapPickCoordinateScale[0] = math.safeInv(coordinateScaler[0]);
+        frameCtx.snapPickCoordinateScale[1] = math.safeInv(coordinateScaler[1]);
+        frameCtx.snapPickCoordinateScale[2] = math.safeInv(coordinateScaler[2]);
+
+        let rtcViewMatrix;
+        let rtcCameraEye;
+
+        if (origin || position[0] !== 0 || position[1] !== 0 || position[2] !== 0) {
+            const rtcOrigin = tempVec3b;
+            if (origin) {
+                const rotatedOrigin = math.transformPoint3(rotationMatrix, origin, tempVec3c);
+                rtcOrigin[0] = rotatedOrigin[0];
+                rtcOrigin[1] = rotatedOrigin[1];
+                rtcOrigin[2] = rotatedOrigin[2];
+            } else {
+                rtcOrigin[0] = 0;
+                rtcOrigin[1] = 0;
+                rtcOrigin[2] = 0;
+            }
+            rtcOrigin[0] += position[0];
+            rtcOrigin[1] += position[1];
+            rtcOrigin[2] += position[2];
+            rtcViewMatrix = createRTCViewMat(viewMatrix, rtcOrigin, tempMat4a);
+            rtcCameraEye = tempVec3d;
+            rtcCameraEye[0] = camera.eye[0] - rtcOrigin[0];
+            rtcCameraEye[1] = camera.eye[1] - rtcOrigin[1];
+            rtcCameraEye[2] = camera.eye[2] - rtcOrigin[2];
+            frameCtx.snapPickOrigin[0] = rtcOrigin[0];
+            frameCtx.snapPickOrigin[1] = rtcOrigin[1];
+            frameCtx.snapPickOrigin[2] = rtcOrigin[2];
+        } else {
+            rtcViewMatrix = viewMatrix;
+            rtcCameraEye = camera.eye;
+            frameCtx.snapPickOrigin[0] = 0;
+            frameCtx.snapPickOrigin[1] = 0;
+            frameCtx.snapPickOrigin[2] = 0;
         }
 
-        const originCameraEye = [
-            cameraEye[0] - origin[0],
-            cameraEye[1] - origin[1],
-            cameraEye[2] - origin[2],
-        ];
-
-        gl.uniform3fv(this._uCameraEyeRtc, originCameraEye);
-
+        gl.uniform3fv(this._uCameraEyeRtc, rtcCameraEye);
         gl.uniform2fv(this.uVectorA, frameCtx.snapVectorA);
         gl.uniform2fv(this.uInverseVectorAB, frameCtx.snapInvVectorAB);
         gl.uniform1i(this._uLayerNumber, frameCtx.snapPickLayerNumber);
-        gl.uniform3fv(this._uCoordinateScaler, coordinateDivider);
-
+        gl.uniform3fv(this._uCoordinateScaler, coordinateScaler);
         gl.uniform1i(this._uRenderPass, renderPass);
-
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
-
-        const pickViewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
-        const rtcPickViewMatrix = (origin) ? createRTCViewMat(pickViewMatrix, origin) : pickViewMatrix;
-
-        gl.uniformMatrix4fv(this._uViewMatrix, false, rtcPickViewMatrix);
-        gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
-
+        gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
+        gl.uniformMatrix4fv(this._uWorldMatrix, false, rotationMatrixConjugate);
         gl.uniformMatrix4fv(this._uProjMatrix, false, camera.projMatrix);
-
         if (scene.logarithmicDepthBufferEnabled) {
             const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2); // TODO: Far from pick project matrix
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
-
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
@@ -108,7 +122,7 @@ class SnapInstancingDepthRenderer {
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
                         if (origin) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3e);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -120,25 +134,19 @@ class SnapInstancingDepthRenderer {
         }
 
         gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, state.positionsDecodeMatrix);
-
         this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
         this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
         this._aModelMatrixCol2.bindArrayBuffer(state.modelMatrixCol2Buf);
-
         gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 1);
         gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 1);
         gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 1);
-
         this._aPosition.bindArrayBuffer(state.positionsBuf);
-
         this._aFlags.bindArrayBuffer(state.flagsBuf);
         gl.vertexAttribDivisor(this._aFlags.location, 1);
-
         if (this._aOffset) {
             this._aOffset.bindArrayBuffer(state.offsetsBuf);
             gl.vertexAttribDivisor(this._aOffset.location, 1);
         }
-
         if (frameCtx.snapMode === "edge") {
             state.edgeIndicesBuf.bind();
             gl.drawElementsInstanced(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0, state.numInstances);
@@ -146,8 +154,6 @@ class SnapInstancingDepthRenderer {
         } else {
             gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
         }
-
-
         // Cleanup
         gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 0);
         gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 0);
@@ -159,19 +165,14 @@ class SnapInstancingDepthRenderer {
     }
 
     _allocate() {
-
         const scene = this._scene;
         const gl = scene.canvas.gl;
-
         this._program = new Program(gl, this._buildShader());
-
         if (this._program.errors) {
             this.errors = this._program.errors;
             return;
         }
-
         const program = this._program;
-
         this._uRenderPass = program.getLocation("renderPass");
         this._uPickInvisible = program.getLocation("pickInvisible");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
@@ -179,7 +180,6 @@ class SnapInstancingDepthRenderer {
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
         this._uSectionPlanes = [];
-
         for (let i = 0, len = scene._sectionPlanesState.sectionPlanes.length; i < len; i++) {
             this._uSectionPlanes.push({
                 active: program.getLocation("sectionPlaneActive" + i),
@@ -187,18 +187,15 @@ class SnapInstancingDepthRenderer {
                 dir: program.getLocation("sectionPlaneDir" + i)
             });
         }
-
         this._aPosition = program.getAttribute("position");
         this._aOffset = program.getAttribute("offset");
         this._aFlags = program.getAttribute("flags");
         this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
         this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");
         this._aModelMatrixCol2 = program.getAttribute("modelMatrixCol2");
-
         if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
-
         this._uCameraEyeRtc = program.getLocation("uCameraEyeRtc"); 
         this.uVectorA = program.getLocation("snapVectorA"); 
         this.uInverseVectorAB = program.getLocation("snapInvVectorAB"); 

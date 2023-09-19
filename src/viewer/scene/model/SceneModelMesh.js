@@ -146,11 +146,11 @@ export class SceneModelMesh {
         this.layer.getEachVertex(this.portionId, callback);
     }
 
-    set aabb(aabb) {
+    set aabb(aabb) { // Called by SceneModel
         this._aabb = aabb;
     }
 
-    get aabb() {
+    get aabb() { // called by SceneModelEntity
         return this._aabb;
     }
 

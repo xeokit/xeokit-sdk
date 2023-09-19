@@ -4,6 +4,10 @@ import {math} from "../../../../math/math.js";
 import {WEBGL_INFO} from "../../../../webglInfo.js";
 
 const tempVec3a = math.vec3();
+const tempVec3b = math.vec3();
+const tempVec3c = math.vec3();
+const tempVec3d = math.vec3();
+const tempMat4a = math.mat4();
 
 /**
  * @private
@@ -32,6 +36,8 @@ export class TrianglesDataTextureNormalsRenderer {
         const gl = scene.canvas.gl;
         const state = dataTextureLayer._state;
         const origin = dataTextureLayer._state.origin;
+        const {position, rotationMatrix, rotationMatrixConjugate} = model;
+        const viewMatrix = camera.viewMatrix;
 
         if (!this._program) {
             this._allocate(dataTextureLayer);
@@ -45,12 +51,42 @@ export class TrianglesDataTextureNormalsRenderer {
             this._bindProgram(dataTextureLayer);
         }
 
+        let rtcViewMatrix;
+        let rtcCameraEye;
+
+        if (origin || position[0] !== 0 || position[1] !== 0 || position[2] !== 0) {
+            const rtcOrigin = tempVec3a;
+            if (origin) {
+                const rotatedOrigin = tempVec3b;
+                math.transformPoint3(rotationMatrix, origin, rotatedOrigin);
+                rtcOrigin[0] = rotatedOrigin[0];
+                rtcOrigin[1] = rotatedOrigin[1];
+                rtcOrigin[2] = rotatedOrigin[2];
+            } else {
+                rtcOrigin[0] = 0;
+                rtcOrigin[1] = 0;
+                rtcOrigin[2] = 0;
+            }
+            rtcOrigin[0] += position[0];
+            rtcOrigin[1] += position[1];
+            rtcOrigin[2] += position[2];
+            rtcViewMatrix = createRTCViewMat(viewMatrix, rtcOrigin, tempMat4a);
+            rtcCameraEye = tempVec3c;
+            rtcCameraEye[0] = camera.eye[0] - rtcOrigin[0];
+            rtcCameraEye[1] = camera.eye[1] - rtcOrigin[1];
+            rtcCameraEye[2] = camera.eye[2] - rtcOrigin[2];
+        } else {
+            rtcViewMatrix = viewMatrix;
+            rtcCameraEye = camera.eye;
+        }
+
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uViewMatrix, false, (origin) ? createRTCViewMat(camera.viewMatrix, origin) : camera.viewMatrix);
-        gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
+        gl.uniformMatrix4fv(this._uWorldMatrix, false, rotationMatrixConjugate);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
+        gl.uniformMatrix4fv(this._uProjMatrix, false, camera.projMatrix);
 
-        gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
+        gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
         gl.uniformMatrix4fv(this._uWorldNormalMatrix, false, model.worldNormalMatrix);
 
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
@@ -66,7 +102,7 @@ export class TrianglesDataTextureNormalsRenderer {
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
                         if (origin) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3d);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -93,19 +129,14 @@ export class TrianglesDataTextureNormalsRenderer {
     }
 
     _allocate() {
-
         const scene = this._scene;
         const gl = scene.canvas.gl;
-
         this._program = new Program(gl, this._buildShader());
-
         if (this._program.errors) {
             this.errors = this._program.errors;
             return;
         }
-
         const program = this._program;
-
         this._uRenderPass = program.getLocation("renderPass");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uWorldMatrix = program.getLocation("worldMatrix");
@@ -114,7 +145,6 @@ export class TrianglesDataTextureNormalsRenderer {
         this._uViewNormalMatrix = program.getLocation("viewNormalMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
         this._uSectionPlanes = [];
-
         for (let i = 0, len = scene._sectionPlanesState.sectionPlanes.length; i < len; i++) {
             this._uSectionPlanes.push({
                 active: program.getLocation("sectionPlaneActive" + i),
@@ -122,32 +152,25 @@ export class TrianglesDataTextureNormalsRenderer {
                 dir: program.getLocation("sectionPlaneDir" + i)
             });
         }
-
         this._aPosition = program.getAttribute("position");
         this._aOffset = program.getAttribute("offset");
         this._aNormal = program.getAttribute("normal");
         this._aColor = program.getAttribute("color");
         this._aFlags = program.getAttribute("flags");
-
         if (this._aFlags2) { // Won't be in shader when not clipping
             this._aFlags2 = program.getAttribute("flags2");
         }
-
         if ( scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
     }
 
     _bindProgram() {
-
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const project = scene.camera.project;
-
         this._program.bind();
-
         gl.uniformMatrix4fv(this._uProjMatrix, false, project.matrix);
-
         if ( scene.logarithmicDepthBufferEnabled) {
             const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
