@@ -1,5 +1,11 @@
 import {VBOSceneModelTriangleBatchingRenderer} from "../../VBOSceneModelRenderers.js";
 
+// Logarithmic depth buffer involves an accuracy tradeoff, sacrificing
+// accuracy at close range to improve accuracy at long range. This can
+// mess up accuracy for occlusion tests, so we'll disable for now.
+
+const ENABLE_LOG_DEPTH_BUF = false;
+
 /**
  * @private
  */
@@ -22,7 +28,7 @@ class TrianglesBatchingOcclusionRenderer extends VBOSceneModelTriangleBatchingRe
 
         this._addMatricesUniformBlockLines(src);
 
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (ENABLE_LOG_DEPTH_BUF && scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
             src.push("out float vFragDepth;");
             src.push("bool isPerspectiveMatrix(mat4 m) {");
@@ -56,7 +62,7 @@ class TrianglesBatchingOcclusionRenderer extends VBOSceneModelTriangleBatchingRe
             src.push("      vFlags = flags;");
         }
         src.push("vec4 clipPos = projMatrix * viewPosition;");
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (ENABLE_LOG_DEPTH_BUF && scene.logarithmicDepthBufferEnabled) {
            src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
@@ -81,7 +87,7 @@ class TrianglesBatchingOcclusionRenderer extends VBOSceneModelTriangleBatchingRe
         src.push("precision mediump float;");
         src.push("precision mediump int;");
         src.push("#endif");
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (ENABLE_LOG_DEPTH_BUF && scene.logarithmicDepthBufferEnabled) {
             src.push("in float isPerspective;");
             src.push("uniform float logDepthBufFC;");
             src.push("in float vFragDepth;");
@@ -109,7 +115,7 @@ class TrianglesBatchingOcclusionRenderer extends VBOSceneModelTriangleBatchingRe
             src.push("      if (dist > 0.0) { discard; }");
             src.push("  }");
         }
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (ENABLE_LOG_DEPTH_BUF && scene.logarithmicDepthBufferEnabled) {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
         src.push("   outColor = vec4(0.0, 0.0, 1.0, 1.0); "); // Occluders are blue
