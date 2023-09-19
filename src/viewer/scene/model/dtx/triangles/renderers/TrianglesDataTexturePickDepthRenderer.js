@@ -1,8 +1,12 @@
 import {Program} from "../../../../webgl/Program.js";
-import {getPlaneRTCPos} from "../../../../math/rtcCoords.js";
+import {createRTCViewMat, getPlaneRTCPos} from "../../../../math/rtcCoords.js";
 import {math} from "../../../../math/math.js";
 
 const tempVec3a = math.vec3();
+const tempVec3b = math.vec3();
+const tempVec3c = math.vec3();
+const tempVec3d = math.vec3();
+const tempMat4a = math.mat4();
 
 /**
  * @private
@@ -24,6 +28,7 @@ export class TrianglesDataTexturePickDepthRenderer {
     }
 
     drawLayer(frameCtx, dataTextureLayer, renderPass) {
+
         const model = dataTextureLayer.model;
         const scene = model.scene;
         const camera = scene.camera;
@@ -31,6 +36,8 @@ export class TrianglesDataTexturePickDepthRenderer {
         const state = dataTextureLayer._state;
         const textureState = state.textureState;
         const origin = dataTextureLayer._state.origin;
+        const {position, rotationMatrix, rotationMatrixConjugate} = model;
+        const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
 
         if (!this._program) {
             this._allocate();
@@ -46,36 +53,56 @@ export class TrianglesDataTexturePickDepthRenderer {
             this._uTexturePerObjectIdPositionsDecodeMatrix,
             this._uTexturePerVertexIdCoordinates,
             this._uTexturePerObjectIdColorsAndFlags,
-            this._uTextureCameraMatrices,
             this._uTextureModelMatrices,
             this._uTexturePerObjectIdOffsets
         );
 
         let cameraEye = camera.eye;
 
-        if (frameCtx.pickViewMatrix) {
-            textureState.bindPickCameraTexture(
-                this._program,
-                this._uTextureCameraMatrices
-            );
-            cameraEye = frameCtx.pickOrigin || cameraEye;
+
+        let rtcViewMatrix;
+        let rtcCameraEye;
+
+        if (origin || position[0] !== 0 || position[1] !== 0 || position[2] !== 0) {
+            const rtcOrigin = tempVec3a;
+            if (origin) {
+                const rotatedOrigin = tempVec3b;
+                math.transformPoint3(rotationMatrix, origin, rotatedOrigin);
+                rtcOrigin[0] = rotatedOrigin[0];
+                rtcOrigin[1] = rotatedOrigin[1];
+                rtcOrigin[2] = rotatedOrigin[2];
+            } else {
+                rtcOrigin[0] = 0;
+                rtcOrigin[1] = 0;
+                rtcOrigin[2] = 0;
+            }
+            rtcOrigin[0] += position[0];
+            rtcOrigin[1] += position[1];
+            rtcOrigin[2] += position[2];
+            rtcViewMatrix = createRTCViewMat(viewMatrix, rtcOrigin, tempMat4a);
+            rtcCameraEye = tempVec3c;
+            rtcCameraEye[0] = camera.eye[0] - rtcOrigin[0];
+            rtcCameraEye[1] = camera.eye[1] - rtcOrigin[1];
+            rtcCameraEye[2] = camera.eye[2] - rtcOrigin[2];
+            frameCtx.snapPickOrigin[0] = rtcOrigin[0];
+            frameCtx.snapPickOrigin[1] = rtcOrigin[1];
+            frameCtx.snapPickOrigin[2] = rtcOrigin[2];
+        } else {
+            rtcViewMatrix = viewMatrix;
+            rtcCameraEye = camera.eye;
+            frameCtx.snapPickOrigin[0] = 0;
+            frameCtx.snapPickOrigin[1] = 0;
+            frameCtx.snapPickOrigin[2] = 0;
         }
 
-        const originCameraEye = [
-            cameraEye[0] - origin[0],
-            cameraEye[1] - origin[1],
-            cameraEye[2] - origin[2],
-        ];
-
-        gl.uniform3fv(this._uCameraEyeRtc, originCameraEye);
-
+        gl.uniform3fv(this._uCameraEyeRtc, rtcCameraEye);
         gl.uniform1i(this._uRenderPass, renderPass);
-
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
-
         gl.uniform1f(this._uPickZNear, frameCtx.pickZNear);
         gl.uniform1f(this._uPickZFar, frameCtx.pickZFar);
-
+        gl.uniformMatrix4fv(this._uWorldMatrix, false, rotationMatrixConjugate);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
+        gl.uniformMatrix4fv(this._uProjMatrix, false, camera.projMatrix);
         if (scene.logarithmicDepthBufferEnabled) {
             const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2); // TODO: Far from pick project matrix?
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
@@ -94,7 +121,7 @@ export class TrianglesDataTexturePickDepthRenderer {
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
                         if (origin) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3d);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -104,7 +131,6 @@ export class TrianglesDataTexturePickDepthRenderer {
                 }
             }
         }
-
         if (state.numIndices8Bits > 0) {
             textureState.bindTriangleIndicesTextures(
                 this._program,
@@ -112,10 +138,8 @@ export class TrianglesDataTexturePickDepthRenderer {
                 this._uTexturePerPolygonIdIndices,
                 8 // 8 bits indices
             );
-
             gl.drawArrays(gl.TRIANGLES, 0, state.numIndices8Bits);
         }
-
         if (state.numIndices16Bits > 0) {
             textureState.bindTriangleIndicesTextures(
                 this._program,
@@ -123,10 +147,8 @@ export class TrianglesDataTexturePickDepthRenderer {
                 this._uTexturePerPolygonIdIndices,
                 16 // 16 bits indices
             );
-
             gl.drawArrays(gl.TRIANGLES, 0, state.numIndices16Bits);
         }
-
         if (state.numIndices32Bits > 0) {
             textureState.bindTriangleIndicesTextures(
                 this._program,
@@ -134,32 +156,26 @@ export class TrianglesDataTexturePickDepthRenderer {
                 this._uTexturePerPolygonIdIndices,
                 32 // 32 bits indices
             );
-
             gl.drawArrays(gl.TRIANGLES, 0, state.numIndices32Bits);
         }
-
         frameCtx.drawElements++;
     }
 
     _allocate() {
-
         const scene = this._scene;
         const gl = scene.canvas.gl;
-
         this._program = new Program(gl, this._buildShader());
-
         if (this._program.errors) {
             this.errors = this._program.errors;
             return;
         }
-
         const program = this._program;
-
         this._uRenderPass = program.getLocation("renderPass");
         this._uPickInvisible = program.getLocation("pickInvisible");
-
+        this._uWorldMatrix = program.getLocation("worldMatrix");
+        this._uViewMatrix = program.getLocation("viewMatrix");
+        this._uProjMatrix = program.getLocation("projMatrix");
         this._uSectionPlanes = [];
-
         for (let i = 0, len = scene._sectionPlanesState.sectionPlanes.length; i < len; i++) {
             this._uSectionPlanes.push({
                 active: program.getLocation("sectionPlaneActive" + i),
@@ -167,15 +183,11 @@ export class TrianglesDataTexturePickDepthRenderer {
                 dir: program.getLocation("sectionPlaneDir" + i)
             });
         }
-
-        this._aPackedVertexId = program.getAttribute("packedVertexId");
         this._uPickZNear = program.getLocation("pickZNear");
         this._uPickZFar = program.getLocation("pickZFar");
-
         if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
-
         this._uTexturePerObjectIdPositionsDecodeMatrix = "uTexturePerObjectIdPositionsDecodeMatrix";
         this._uTexturePerObjectIdColorsAndFlags = "uTexturePerObjectIdColorsAndFlags";
         this._uTexturePerVertexIdCoordinates = "uTexturePerVertexIdCoordinates";
@@ -227,6 +239,9 @@ export class TrianglesDataTexturePickDepthRenderer {
             src.push("in vec3 offset;");
         }
 
+        src.push("uniform mat4 worldMatrix;");
+        src.push("uniform mat4 viewMatrix;");
+        src.push("uniform mat4 projMatrix;");
         src.push("uniform bool pickInvisible;");
 
         src.push("uniform highp sampler2D uTexturePerObjectIdPositionsDecodeMatrix;");
@@ -235,7 +250,6 @@ export class TrianglesDataTexturePickDepthRenderer {
         src.push("uniform mediump usampler2D uTexturePerVertexIdCoordinates;");
         src.push("uniform highp usampler2D uTexturePerPolygonIdIndices;");
         src.push("uniform mediump usampler2D uTexturePerPolygonIdPortionIds;");
-        src.push("uniform highp sampler2D uTextureCameraMatrices;");
         src.push("uniform highp sampler2D uTextureModelMatrices;");
         src.push("uniform vec3 uCameraEyeRtc;");
 
@@ -257,15 +271,6 @@ export class TrianglesDataTexturePickDepthRenderer {
         }
         src.push("out vec4 vViewPosition;");
         src.push("void main(void) {");
-
-        // camera matrices
-        src.push("mat4 viewMatrix = mat4 (texelFetch (uTextureCameraMatrices, ivec2(0, 0), 0), texelFetch (uTextureCameraMatrices, ivec2(1, 0), 0), texelFetch (uTextureCameraMatrices, ivec2(2, 0), 0), texelFetch (uTextureCameraMatrices, ivec2(3, 0), 0));");
-        src.push("mat4 viewNormalMatrix = mat4 (texelFetch (uTextureCameraMatrices, ivec2(0, 1), 0), texelFetch (uTextureCameraMatrices, ivec2(1, 1), 0), texelFetch (uTextureCameraMatrices, ivec2(2, 1), 0), texelFetch (uTextureCameraMatrices, ivec2(3, 1), 0));");
-        src.push("mat4 projMatrix = mat4 (texelFetch (uTextureCameraMatrices, ivec2(0, 2), 0), texelFetch (uTextureCameraMatrices, ivec2(1, 2), 0), texelFetch (uTextureCameraMatrices, ivec2(2, 2), 0), texelFetch (uTextureCameraMatrices, ivec2(3, 2), 0));");
-
-        // model matrices
-        src.push("mat4 worldMatrix = mat4 (texelFetch (uTextureModelMatrices, ivec2(0, 0), 0), texelFetch (uTextureModelMatrices, ivec2(1, 0), 0), texelFetch (uTextureModelMatrices, ivec2(2, 0), 0), texelFetch (uTextureModelMatrices, ivec2(3, 0), 0));");
-        src.push("mat4 worldNormalMatrix = mat4 (texelFetch (uTextureModelMatrices, ivec2(0, 1), 0), texelFetch (uTextureModelMatrices, ivec2(1, 1), 0), texelFetch (uTextureModelMatrices, ivec2(2, 1), 0), texelFetch (uTextureModelMatrices, ivec2(3, 1), 0));");
 
         // constants
         src.push("int polygonIndex = gl_VertexID / 3;")

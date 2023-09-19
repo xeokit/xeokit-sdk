@@ -42,9 +42,7 @@ const tempVec4c = math.vec4([0, 0, 0, 1]);
 const tempUint8Array4 = new Uint8Array(4);
 const tempFloat32Array3 = new Float32Array(3);
 
-const tempAABB3 = math.AABB3();
 const tempAABB3b = math.AABB3();
-const tempOBB3 = math.OBB3();
 
 let numLayers = 0;
 
@@ -1101,24 +1099,12 @@ export class TrianglesDataTextureLayer {
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
         if (frameCtx.withSAO && this.model.saoEnabled) {
-            if (frameCtx.pbrEnabled && this.model.pbrEnabled) {
-                if (this._dataTextureRenderers.colorQualityRendererWithSAO) {
-                    this._dataTextureRenderers.colorQualityRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-                }
-            } else {
-                if (this._dataTextureRenderers.colorRendererWithSAO) {
-                    this._dataTextureRenderers.colorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-                }
+            if (this._dataTextureRenderers.colorRendererWithSAO) {
+                this._dataTextureRenderers.colorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
             }
         } else {
-            if (frameCtx.pbrEnabled && this.model.pbrEnabled) {
-                if (this._dataTextureRenderers.colorQualityRenderer) {
-                    this._dataTextureRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-                }
-            } else {
-                if (this._dataTextureRenderers.colorRenderer) {
-                    this._dataTextureRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-                }
+            if (this._dataTextureRenderers.colorRenderer) {
+                this._dataTextureRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
             }
         }
     }
@@ -1141,14 +1127,8 @@ export class TrianglesDataTextureLayer {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
-        if (frameCtx.pbrEnabled && this.model.pbrEnabled) {
-            if (this._dataTextureRenderers.colorQualityRenderer) {
-                this._dataTextureRenderers.colorQualityRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
-            }
-        } else {
-            if (this._dataTextureRenderers.colorRenderer) {
-                this._dataTextureRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
-            }
+        if (this._dataTextureRenderers.colorRenderer) {
+            this._dataTextureRenderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
         }
     }
 

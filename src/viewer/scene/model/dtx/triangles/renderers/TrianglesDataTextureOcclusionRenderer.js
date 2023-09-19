@@ -4,6 +4,10 @@ import {math} from "../../../../math/math.js";
 import {WEBGL_INFO} from "../../../../webglInfo.js";
 
 const tempVec3a = math.vec3();
+const tempVec3b = math.vec3();
+const tempVec3c = math.vec3();
+const tempVec3d = math.vec3();
+const tempMat4a = math.mat4();
 
 /**
  * @private
@@ -171,7 +175,7 @@ export class TrianglesDataTextureOcclusionRenderer {
         const scene = this._scene;
         const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
-        src.push("// Triangles dataTexture occlusion vertex shader");
+        src.push("// TrianglesDataTextureColorRenderer vertex shader");
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
         }
@@ -191,16 +195,16 @@ export class TrianglesDataTextureOcclusionRenderer {
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-                src.push("varying float vFragDepth;");
+                src.push("out float vFragDepth;");
             }
             src.push("bool isPerspectiveMatrix(mat4 m) {");
             src.push("    return (m[2][3] == - 1.0);");
             src.push("}");
-            src.push("varying float isPerspective;");
+            src.push("out float isPerspective;");
         }
         if (clipping) {
-            src.push("varying vec4 vWorldPosition;");
-            src.push("varying vec4 vFlags2;");
+            src.push("out vec4 vWorldPosition;");
+            src.push("out vec4 vFlags2;");
         }
         src.push("void main(void) {");
 
@@ -243,7 +247,7 @@ export class TrianglesDataTextureOcclusionRenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
-        src.push("// Triangles dataTexture occlusion fragment shader");
+        src.push("// TrianglesDataTextureColorRenderer fragment shader");
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
             src.push("#extension GL_EXT_frag_depth : enable");
         }
@@ -255,13 +259,13 @@ export class TrianglesDataTextureOcclusionRenderer {
         src.push("precision mediump int;");
         src.push("#endif");
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-            src.push("varying float isPerspective;");
+            src.push("in float isPerspective;");
             src.push("uniform float logDepthBufFC;");
-            src.push("varying float vFragDepth;");
+            src.push("in float vFragDepth;");
         }
         if (clipping) {
-            src.push("varying vec4 vWorldPosition;");
-            src.push("varying vec4 vFlags2;");
+            src.push("in vec4 vWorldPosition;");
+            src.push("in vec4 vFlags2;");
             for (let i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");

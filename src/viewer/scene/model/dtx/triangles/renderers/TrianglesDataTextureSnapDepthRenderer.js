@@ -3,6 +3,11 @@ import {createRTCViewMat, getPlaneRTCPos} from "../../../../math/rtcCoords.js";
 import {math} from "../../../../math/math.js";
 
 const tempVec3a = math.vec3();
+const tempVec3b = math.vec3();
+const tempVec3c = math.vec3();
+const tempVec3d = math.vec3();
+const tempVec3e = math.vec3();
+const tempMat4a = math.mat4();
 
 /**
  * @private
@@ -24,30 +29,12 @@ export class TrianglesDataTextureSnapDepthRenderer {
     }
 
     drawLayer(frameCtx, dataTextureLayer, renderPass) {
-        const model = dataTextureLayer.model;
-        const scene = model.scene;
-        const camera = scene.camera;
-        const gl = scene.canvas.gl;
-        const state = dataTextureLayer._state;
-        const textureState = state.textureState;
-        const origin = dataTextureLayer._state.origin;
-
-        frameCtx.snapPickOrigin[0] = origin[0];
-        frameCtx.snapPickOrigin[1] = origin[1];
-        frameCtx.snapPickOrigin[2] = origin[2];
-
-        const aabb = dataTextureLayer.aabb;
-        const coordinateDivider = [
-            math.safeInv(aabb[3] - aabb[0]) * math.MAX_INT,
-            math.safeInv(aabb[4] - aabb[1]) * math.MAX_INT,
-            math.safeInv(aabb[5] - aabb[2]) * math.MAX_INT,
-        ];
-        frameCtx.snapPickCoordinateScale[0] = math.safeInv(coordinateDivider[0]);
-        frameCtx.snapPickCoordinateScale[1] = math.safeInv(coordinateDivider[1]);
-        frameCtx.snapPickCoordinateScale[2] = math.safeInv(coordinateDivider[2]);
 
         if (!this._program) {
             this._allocate();
+            if (this.errors) {
+                return;
+            }
         }
 
         if (frameCtx.lastProgramId !== this._program.id) {
@@ -55,46 +42,85 @@ export class TrianglesDataTextureSnapDepthRenderer {
             this._bindProgram();
         }
 
+        const model = dataTextureLayer.model;
+        const scene = model.scene;
+        const camera = scene.camera;
+        const gl = scene.canvas.gl;
+        const state = dataTextureLayer._state;
+        const textureState = state.textureState;
+        const origin = dataTextureLayer._state.origin;
+        const {position, rotationMatrix, rotationMatrixConjugate} = model;
+        const aabb = dataTextureLayer.aabb;
+        const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
+
+        const coordinateScaler = tempVec3a;
+        coordinateScaler[0] = math.safeInv(aabb[3] - aabb[0]) * math.MAX_INT;
+        coordinateScaler[1] = math.safeInv(aabb[4] - aabb[1]) * math.MAX_INT;
+        coordinateScaler[2] = math.safeInv(aabb[5] - aabb[2]) * math.MAX_INT;
+        
+        frameCtx.snapPickCoordinateScale[0] = math.safeInv(coordinateScaler[0]);
+        frameCtx.snapPickCoordinateScale[1] = math.safeInv(coordinateScaler[1]);
+        frameCtx.snapPickCoordinateScale[2] = math.safeInv(coordinateScaler[2]);
+
         textureState.bindCommonTextures(
             this._program,
             this._uTexturePerObjectIdPositionsDecodeMatrix,
             this._uTexturePerVertexIdCoordinates,
             this._uTexturePerObjectIdColorsAndFlags,
-            this._uTextureCameraMatrices,
             this._uTextureModelMatrices,
             this._uTexturePerObjectIdOffsets
         );
 
-        let cameraEye = camera.eye;
+        let rtcViewMatrix;
+        let rtcCameraEye;
 
-        if (frameCtx.pickViewMatrix) {
-            textureState.bindPickCameraTexture(
-                this._program,
-                this._uTextureCameraMatrices
-            );
-            cameraEye = frameCtx.pickOrigin || cameraEye;
+        const gotOrigin = (origin[0] !== 0 || origin[1] !== 0 || origin[2] !== 0);
+        const gotPosition = (position[0] !== 0 || position[1] !== 0 || position[2] !== 0);
+        if (gotOrigin || gotPosition) {
+            const rtcOrigin = tempVec3b;
+            if (gotOrigin) {
+                const rotatedOrigin = math.transformPoint3(rotationMatrix, origin, tempVec3c);
+                rtcOrigin[0] = rotatedOrigin[0];
+                rtcOrigin[1] = rotatedOrigin[1];
+                rtcOrigin[2] = rotatedOrigin[2];
+            } else {
+                rtcOrigin[0] = 0;
+                rtcOrigin[1] = 0;
+                rtcOrigin[2] = 0;
+            }
+            rtcOrigin[0] += position[0];
+            rtcOrigin[1] += position[1];
+            rtcOrigin[2] += position[2];
+            rtcViewMatrix = createRTCViewMat(viewMatrix, rtcOrigin, tempMat4a);
+            rtcCameraEye = tempVec3d;
+            rtcCameraEye[0] = camera.eye[0] - rtcOrigin[0];
+            rtcCameraEye[1] = camera.eye[1] - rtcOrigin[1];
+            rtcCameraEye[2] = camera.eye[2] - rtcOrigin[2];
+            frameCtx.snapPickOrigin[0] = rtcOrigin[0];
+            frameCtx.snapPickOrigin[1] = rtcOrigin[1];
+            frameCtx.snapPickOrigin[2] = rtcOrigin[2];
+        } else {
+            rtcViewMatrix = viewMatrix;
+            rtcCameraEye = camera.eye;
+            frameCtx.snapPickOrigin[0] = 0;
+            frameCtx.snapPickOrigin[1] = 0;
+            frameCtx.snapPickOrigin[2] = 0;
         }
 
-        const originCameraEye = [
-            cameraEye[0] - origin[0],
-            cameraEye[1] - origin[1],
-            cameraEye[2] - origin[2],
-        ];
-
-        gl.uniform3fv(this._uCameraEyeRtc, originCameraEye);
-
+        gl.uniform3fv(this._uCameraEyeRtc, rtcCameraEye);
         gl.uniform2fv(this.uVectorA, frameCtx.snapVectorA);
         gl.uniform2fv(this.uInverseVectorAB, frameCtx.snapInvVectorAB);
         gl.uniform1i(this._uLayerNumber, frameCtx.snapPickLayerNumber);
-        gl.uniform3fv(this._uCoordinateScaler, coordinateDivider);
+        gl.uniform3fv(this._uCoordinateScaler, coordinateScaler);
         gl.uniform1i(this._uRenderPass, renderPass);
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
-
+        gl.uniformMatrix4fv(this._uSceneModelWorldMatrix, false, rotationMatrixConjugate);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
+        gl.uniformMatrix4fv(this._uProjMatrix, false, camera.projMatrix);
         if (scene.logarithmicDepthBufferEnabled) {
-            const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2); // TODO: Far from pick project matrix?
+            const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
-
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
@@ -108,7 +134,7 @@ export class TrianglesDataTextureSnapDepthRenderer {
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
                         if (origin) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3e);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -118,9 +144,7 @@ export class TrianglesDataTextureSnapDepthRenderer {
                 }
             }
         }
-
         const glMode = (frameCtx.snapMode === "edge") ? gl.LINES : gl.POINTS;
-
         if (state.numEdgeIndices8Bits > 0) {
             textureState.bindEdgeIndicesTextures(
                 this._program,
@@ -130,7 +154,6 @@ export class TrianglesDataTextureSnapDepthRenderer {
             );
             gl.drawArrays(glMode, 0, state.numEdgeIndices8Bits);
         }
-
         if (state.numEdgeIndices16Bits > 0) {
             textureState.bindEdgeIndicesTextures(
                 this._program,
@@ -140,7 +163,6 @@ export class TrianglesDataTextureSnapDepthRenderer {
             );
             gl.drawArrays(glMode, 0, state.numEdgeIndices16Bits);
         }
-
         if (state.numEdgeIndices32Bits > 0) {
             textureState.bindEdgeIndicesTextures(
                 this._program,
@@ -150,7 +172,6 @@ export class TrianglesDataTextureSnapDepthRenderer {
             );
             gl.drawArrays(glMode, 0, state.numEdgeIndices32Bits);
         }
-
         frameCtx.drawElements++;
     }
 
@@ -165,6 +186,9 @@ export class TrianglesDataTextureSnapDepthRenderer {
         const program = this._program;
         this._uRenderPass = program.getLocation("renderPass");
         this._uPickInvisible = program.getLocation("pickInvisible");
+        this._uSceneModelWorldMatrix = program.getLocation("sceneModelWorldMatrix");
+        this._uViewMatrix = program.getLocation("viewMatrix");
+        this._uProjMatrix = program.getLocation("projMatrix");
         this._uSectionPlanes = [];
         for (let i = 0, len = scene._sectionPlanesState.sectionPlanes.length; i < len; i++) {
             this._uSectionPlanes.push({
@@ -181,14 +205,13 @@ export class TrianglesDataTextureSnapDepthRenderer {
         this._uTexturePerVertexIdCoordinates = "uTexturePerVertexIdCoordinates";
         this._uTexturePerPolygonIdEdgeIndices = "uTexturePerPolygonIdEdgeIndices";
         this._uTexturePerEdgeIdPortionIds = "uTexturePerEdgeIdPortionIds";
-        this._uTextureCameraMatrices = "uTextureCameraMatrices";
         this._uTextureModelMatrices = "uTextureModelMatrices";
         this._uTexturePerObjectIdOffsets = "uTexturePerObjectIdOffsets";
         this._uCameraEyeRtc = program.getLocation("uCameraEyeRtc");
         this.uVectorA = program.getLocation("uSnapVectorA");
         this.uInverseVectorAB = program.getLocation("uSnapInvVectorAB");
         this._uLayerNumber = program.getLocation("uLayerNumber");
-        this._uCoordinateScaler = program.getLocation("uCoordinateLayer");
+        this._uCoordinateScaler = program.getLocation("uCoordinateScaler");
     }
 
     _bindProgram() {
@@ -230,13 +253,16 @@ export class TrianglesDataTextureSnapDepthRenderer {
             src.push("in vec3 offset;");
         }
 
+        src.push("uniform mat4 sceneModelWorldMatrix;");
+        src.push("uniform mat4 viewMatrix;");
+        src.push("uniform mat4 projMatrix;");
+
         src.push("uniform highp sampler2D uTexturePerObjectIdPositionsDecodeMatrix;");
         src.push("uniform lowp usampler2D uTexturePerObjectIdColorsAndFlags;");
         src.push("uniform highp sampler2D uTexturePerObjectIdOffsets;");
         src.push("uniform mediump usampler2D uTexturePerVertexIdCoordinates;");
         src.push("uniform highp usampler2D uTexturePerPolygonIdEdgeIndices;");
         src.push("uniform mediump usampler2D uTexturePerEdgeIdPortionIds;");
-        src.push("uniform highp sampler2D uTextureCameraMatrices;");
         src.push("uniform highp sampler2D uTextureModelMatrices;");
         src.push("uniform vec3 uCameraEyeRtc;");
         src.push("uniform vec2 uSnapVectorA;");
@@ -253,7 +279,6 @@ export class TrianglesDataTextureSnapDepthRenderer {
             src.push("out float isPerspective;");
         }
 
-
         src.push("vec2 remapClipPos(vec2 clipPos) {");
         src.push("    float x = (clipPos.x - uSnapVectorA.x) * uSnapInvVectorAB.x;");
         src.push("    float y = (clipPos.y - uSnapVectorA.y) * uSnapInvVectorAB.y;");
@@ -267,15 +292,6 @@ export class TrianglesDataTextureSnapDepthRenderer {
         src.push("out vec4 vViewPosition;");
         src.push("out highp vec3 relativeToOriginPosition;");
         src.push("void main(void) {");
-
-        // camera matrices
-        src.push("mat4 viewMatrix = mat4 (texelFetch (uTextureCameraMatrices, ivec2(0, 0), 0), texelFetch (uTextureCameraMatrices, ivec2(1, 0), 0), texelFetch (uTextureCameraMatrices, ivec2(2, 0), 0), texelFetch (uTextureCameraMatrices, ivec2(3, 0), 0));");
-        src.push("mat4 viewNormalMatrix = mat4 (texelFetch (uTextureCameraMatrices, ivec2(0, 1), 0), texelFetch (uTextureCameraMatrices, ivec2(1, 1), 0), texelFetch (uTextureCameraMatrices, ivec2(2, 1), 0), texelFetch (uTextureCameraMatrices, ivec2(3, 1), 0));");
-        src.push("mat4 projMatrix = mat4 (texelFetch (uTextureCameraMatrices, ivec2(0, 2), 0), texelFetch (uTextureCameraMatrices, ivec2(1, 2), 0), texelFetch (uTextureCameraMatrices, ivec2(2, 2), 0), texelFetch (uTextureCameraMatrices, ivec2(3, 2), 0));");
-
-        // model matrices
-        src.push("mat4 worldMatrix = mat4 (texelFetch (uTextureModelMatrices, ivec2(0, 0), 0), texelFetch (uTextureModelMatrices, ivec2(1, 0), 0), texelFetch (uTextureModelMatrices, ivec2(2, 0), 0), texelFetch (uTextureModelMatrices, ivec2(3, 0), 0));");
-        src.push("mat4 worldNormalMatrix = mat4 (texelFetch (uTextureModelMatrices, ivec2(0, 1), 0), texelFetch (uTextureModelMatrices, ivec2(1, 1), 0), texelFetch (uTextureModelMatrices, ivec2(2, 1), 0), texelFetch (uTextureModelMatrices, ivec2(3, 1), 0));");
 
         // constants
         src.push("int edgeIndex = gl_VertexID / 2;")
@@ -292,6 +308,8 @@ export class TrianglesDataTextureSnapDepthRenderer {
         src.push("uvec4 flags2 = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);");
 
         src.push("{");
+
+        src.push ("mat4 worldMatrix = sceneModelWorldMatrix * mat4 (texelFetch (uTextureModelMatrices, ivec2(0, 0), 0), texelFetch (uTextureModelMatrices, ivec2(1, 0), 0), texelFetch (uTextureModelMatrices, ivec2(2, 0), 0), texelFetch (uTextureModelMatrices, ivec2(3, 0), 0));");
 
         // get vertex base
         src.push("ivec4 packedVertexBase = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+4, objectIndexCoords.y), 0));");
@@ -358,7 +376,7 @@ export class TrianglesDataTextureSnapDepthRenderer {
             src.push("in float vFragDepth;");
         }
         src.push("uniform int uLayerNumber;");
-        src.push("uniform vec3 uCoordinateLayer;");
+        src.push("uniform vec3 uCoordinateScaler;");
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
             src.push("flat in uint vFlags2;");
@@ -386,7 +404,7 @@ export class TrianglesDataTextureSnapDepthRenderer {
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
-        src.push("outCoords = ivec4(relativeToOriginPosition.xyz*uCoordinateLayer.xyz, uLayerNumber);")
+        src.push("outCoords = ivec4(relativeToOriginPosition.xyz * uCoordinateScaler.xyz, uLayerNumber);")
         src.push("}");
         return src;
     }

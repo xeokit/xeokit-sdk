@@ -1,7 +1,13 @@
 import {Program} from "../../../../webgl/Program.js";
 import {math} from "../../../../math/math.js";
+import {createRTCViewMat, getPlaneRTCPos} from "../../../../math";
 
 const tempVec3a = math.vec3();
+const tempVec3b = math.vec3();
+const tempVec3c = math.vec3();
+const tempVec3d = math.vec3();
+const tempVec3e = math.vec3();
+const tempMat4a = math.mat4();
 
 /**
  * @private
@@ -23,32 +29,6 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
     }
 
     drawLayer(frameCtx, dataTextureLayer, renderPass) {
-        const model = dataTextureLayer.model;
-        const scene = model.scene;
-        const camera = scene.camera;
-        /**
-         * @type {WebGL2RenderingContext}
-         */
-        const gl = scene.canvas.gl;
-        const state = dataTextureLayer._state;
-        const textureState = state.textureState;
-        const origin = dataTextureLayer._state.origin;
-
-        frameCtx.snapPickOrigin[0] = origin[0];
-        frameCtx.snapPickOrigin[1] = origin[1];
-        frameCtx.snapPickOrigin[2] = origin[2];
-
-        const aabb = dataTextureLayer.aabb;
-
-        const coordinateDivider = [
-            math.safeInv(aabb[3] - aabb[0]) * math.MAX_INT,
-            math.safeInv(aabb[4] - aabb[1]) * math.MAX_INT,
-            math.safeInv(aabb[5] - aabb[2]) * math.MAX_INT,
-        ];
-
-        frameCtx.snapPickCoordinateScale[0] = math.safeInv(coordinateDivider[0]);
-        frameCtx.snapPickCoordinateScale[1] = math.safeInv(coordinateDivider[1]);
-        frameCtx.snapPickCoordinateScale[2] = math.safeInv(coordinateDivider[2]);
 
         if (!this._program) {
             this._allocate();
@@ -59,45 +39,83 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
             this._bindProgram();
         }
 
+        const model = dataTextureLayer.model;
+        const scene = model.scene;
+        const camera = scene.camera;
+        const gl = scene.canvas.gl;
+        const state = dataTextureLayer._state;
+        const textureState = state.textureState;
+        const origin = dataTextureLayer._state.origin;
+        const {position, rotationMatrix, rotationMatrixConjugate} = model;
+        const aabb = dataTextureLayer.aabb;
+        const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
+
+        const coordinateScaler = tempVec3a;
+        coordinateScaler[0] = math.safeInv(aabb[3] - aabb[0]) * math.MAX_INT;
+        coordinateScaler[1] = math.safeInv(aabb[4] - aabb[1]) * math.MAX_INT;
+        coordinateScaler[2] = math.safeInv(aabb[5] - aabb[2]) * math.MAX_INT;
+
+        frameCtx.snapPickCoordinateScale[0] = math.safeInv(coordinateScaler[0]);
+        frameCtx.snapPickCoordinateScale[1] = math.safeInv(coordinateScaler[1]);
+        frameCtx.snapPickCoordinateScale[2] = math.safeInv(coordinateScaler[2]);
+
         textureState.bindCommonTextures(
             this._program,
             this._uTexturePerObjectIdPositionsDecodeMatrix,
             this._uTexturePerVertexIdCoordinates,
             this._uTexturePerObjectIdColorsAndFlags,
-            this._uTextureCameraMatrices,
             this._uTextureModelMatrices,
-            this._uTexturePerObjectIdOffsets
-        );
-
-        let cameraEye = camera.eye;
-
-        if (frameCtx.pickViewMatrix) {
-            textureState.bindPickCameraTexture(
-                this._program,
-                this._uTextureCameraMatrices
-            );
-            cameraEye = frameCtx.pickOrigin || cameraEye;
+            this._uTexturePerObjectIdOffsets);
+        let rtcViewMatrix;
+        let rtcCameraEye;
+        const gotOrigin = (origin[0] !== 0 || origin[1] !== 0 || origin[2] !== 0);
+        const gotPosition = (position[0] !== 0 || position[1] !== 0 || position[2] !== 0);
+        if (gotOrigin || gotPosition) {
+            const rtcOrigin = tempVec3b;
+            if (gotOrigin) {
+                const rotatedOrigin = tempVec3c;
+                math.transformPoint3(rotationMatrix, origin, rotatedOrigin);
+                rtcOrigin[0] = rotatedOrigin[0];
+                rtcOrigin[1] = rotatedOrigin[1];
+                rtcOrigin[2] = rotatedOrigin[2];
+            } else {
+                rtcOrigin[0] = 0;
+                rtcOrigin[1] = 0;
+                rtcOrigin[2] = 0;
+            }
+            rtcOrigin[0] += position[0];
+            rtcOrigin[1] += position[1];
+            rtcOrigin[2] += position[2];
+            rtcViewMatrix = createRTCViewMat(viewMatrix, rtcOrigin, tempMat4a);
+            rtcCameraEye = tempVec3d;
+            rtcCameraEye[0] = camera.eye[0] - rtcOrigin[0];
+            rtcCameraEye[1] = camera.eye[1] - rtcOrigin[1];
+            rtcCameraEye[2] = camera.eye[2] - rtcOrigin[2];
+            frameCtx.snapPickOrigin[0] = rtcOrigin[0];
+            frameCtx.snapPickOrigin[1] = rtcOrigin[1];
+            frameCtx.snapPickOrigin[2] = rtcOrigin[2];
+        } else {
+            rtcViewMatrix = viewMatrix;
+            rtcCameraEye = camera.eye;
+            frameCtx.snapPickOrigin[0] = 0;
+            frameCtx.snapPickOrigin[1] = 0;
+            frameCtx.snapPickOrigin[2] = 0;
         }
 
-        const originCameraEye = [
-            cameraEye[0] - origin[0],
-            cameraEye[1] - origin[1],
-            cameraEye[2] - origin[2],
-        ];
-
-        gl.uniform3fv(this._uCameraEyeRtc, originCameraEye);
+        gl.uniform3fv(this._uCameraEyeRtc, rtcCameraEye);
         gl.uniform2fv(this._uVectorA, frameCtx.snapVectorA);
         gl.uniform2fv(this._uInverseVectorAB, frameCtx.snapInvVectorAB);
         gl.uniform1i(this._uLayerNumber, frameCtx.snapPickLayerNumber);
-        gl.uniform3fv(this._uCoordinateScaler, coordinateDivider);
+        gl.uniform3fv(this._uCoordinateScaler, coordinateScaler);
         gl.uniform1i(this._uRenderPass, renderPass);
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
-
+        gl.uniformMatrix4fv(this._uSceneWorldModelMatrix, false, rotationMatrixConjugate);
+        gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
+        gl.uniformMatrix4fv(this._uProjMatrix, false, camera.projMatrix);
         if (scene.logarithmicDepthBufferEnabled) {
-            const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2); // TODO: Far from pick project matrix?
+            const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
-
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
         if (numSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
@@ -111,7 +129,7 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
                     if (active) {
                         const sectionPlane = sectionPlanes[sectionPlaneIndex];
                         if (origin) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
+                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3e);
                             gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                         } else {
                             gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -121,7 +139,6 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
                 }
             }
         }
-
         if (state.numIndices8Bits > 0) {
             textureState.bindTriangleIndicesTextures(
                 this._program,
@@ -131,7 +148,6 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
             );
             gl.drawArrays(gl.TRIANGLES, 0, state.numIndices8Bits);
         }
-
         if (state.numIndices16Bits > 0) {
             textureState.bindTriangleIndicesTextures(
                 this._program,
@@ -141,7 +157,6 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
             );
             gl.drawArrays(gl.TRIANGLES, 0, state.numIndices16Bits);
         }
-
         if (state.numIndices32Bits > 0) {
             textureState.bindTriangleIndicesTextures(
                 this._program,
@@ -151,29 +166,24 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
             );
             gl.drawArrays(gl.TRIANGLES, 0, state.numIndices32Bits);
         }
-
         frameCtx.drawElements++;
     }
 
     _allocate() {
-
         const scene = this._scene;
         const gl = scene.canvas.gl;
-
         this._program = new Program(gl, this._buildShader());
-
         if (this._program.errors) {
             this.errors = this._program.errors;
             return;
         }
-
         const program = this._program;
-
         this._uRenderPass = program.getLocation("renderPass");
         this._uPickInvisible = program.getLocation("pickInvisible");
-
+        this._uSceneWorldModelMatrix = program.getLocation("sceneModelWorldMatrix");
+        this._uViewMatrix = program.getLocation("viewMatrix");
+        this._uProjMatrix = program.getLocation("projMatrix");
         this._uSectionPlanes = [];
-
         for (let i = 0, len = scene._sectionPlanesState.sectionPlanes.length; i < len; i++) {
             this._uSectionPlanes.push({
                 active: program.getLocation("sectionPlaneActive" + i),
@@ -181,17 +191,14 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
                 dir: program.getLocation("sectionPlaneDir" + i)
             });
         }
-
         if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
-
         this._uTexturePerObjectIdPositionsDecodeMatrix = "uTexturePerObjectIdPositionsDecodeMatrix";
         this._uTexturePerObjectIdColorsAndFlags = "uTexturePerObjectIdColorsAndFlags";
         this._uTexturePerVertexIdCoordinates = "uTexturePerVertexIdCoordinates";
         this._uTexturePerPolygonIdIndices = "uTexturePerPolygonIdIndices";
         this._uTexturePerPolygonIdPortionIds = "uTexturePerPolygonIdPortionIds";
-        this._uTextureCameraMatrices = "uTextureCameraMatrices";
         this._uTextureModelMatrices = "uTextureModelMatrices";
         this._uTexturePerObjectIdOffsets = "uTexturePerObjectIdOffsets";
         this._uCameraEyeRtc = program.getLocation("uCameraEyeRtc");
@@ -239,13 +246,16 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
             src.push("in vec3 offset;");
         }
 
+        src.push("uniform mat4 sceneModelWorldMatrix;");
+        src.push("uniform mat4 viewMatrix;");
+        src.push("uniform mat4 projMatrix;");
+
         src.push("uniform highp sampler2D uTexturePerObjectIdPositionsDecodeMatrix;");
         src.push("uniform lowp usampler2D uTexturePerObjectIdColorsAndFlags;");
         src.push("uniform highp sampler2D uTexturePerObjectIdOffsets;");
         src.push("uniform mediump usampler2D uTexturePerVertexIdCoordinates;");
         src.push("uniform highp usampler2D uTexturePerPolygonIdIndices;");
         src.push("uniform mediump usampler2D uTexturePerPolygonIdPortionIds;");
-        src.push("uniform highp sampler2D uTextureCameraMatrices;");
         src.push("uniform highp sampler2D uTextureModelMatrices;");
         src.push("uniform vec3 uCameraEyeRtc;");
         src.push("uniform vec2 uVectorAB;");
@@ -292,6 +302,8 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
 
         src.push("{");
 
+        src.push("mat4 worldMatrix = sceneModelWorldMatrix * mat4 (texelFetch (uTextureModelMatrices, ivec2(0, 0), 0), texelFetch (uTextureModelMatrices, ivec2(1, 0), 0), texelFetch (uTextureModelMatrices, ivec2(2, 0), 0), texelFetch (uTextureModelMatrices, ivec2(3, 0), 0));");
+
         // get color
         src.push("uvec4 color = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);");
 
@@ -299,15 +311,6 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
         src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
         src.push("   return;");
         src.push("};");
-
-        // camera matrices
-        src.push("mat4 viewMatrix = mat4 (texelFetch (uTextureCameraMatrices, ivec2(0, 0), 0), texelFetch (uTextureCameraMatrices, ivec2(1, 0), 0), texelFetch (uTextureCameraMatrices, ivec2(2, 0), 0), texelFetch (uTextureCameraMatrices, ivec2(3, 0), 0));");
-        src.push("mat4 viewNormalMatrix = mat4 (texelFetch (uTextureCameraMatrices, ivec2(0, 1), 0), texelFetch (uTextureCameraMatrices, ivec2(1, 1), 0), texelFetch (uTextureCameraMatrices, ivec2(2, 1), 0), texelFetch (uTextureCameraMatrices, ivec2(3, 1), 0));");
-        src.push("mat4 projMatrix = mat4 (texelFetch (uTextureCameraMatrices, ivec2(0, 2), 0), texelFetch (uTextureCameraMatrices, ivec2(1, 2), 0), texelFetch (uTextureCameraMatrices, ivec2(2, 2), 0), texelFetch (uTextureCameraMatrices, ivec2(3, 2), 0));");
-
-        // model matrices
-        src.push("mat4 worldMatrix = mat4 (texelFetch (uTextureModelMatrices, ivec2(0, 0), 0), texelFetch (uTextureModelMatrices, ivec2(1, 0), 0), texelFetch (uTextureModelMatrices, ivec2(2, 0), 0), texelFetch (uTextureModelMatrices, ivec2(3, 0), 0));");
-        src.push("mat4 worldNormalMatrix = mat4 (texelFetch (uTextureModelMatrices, ivec2(0, 1), 0), texelFetch (uTextureModelMatrices, ivec2(1, 1), 0), texelFetch (uTextureModelMatrices, ivec2(2, 1), 0), texelFetch (uTextureModelMatrices, ivec2(3, 1), 0));");
 
         // get vertex base
         src.push("ivec4 packedVertexBase = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+4, objectIndexCoords.y), 0));");

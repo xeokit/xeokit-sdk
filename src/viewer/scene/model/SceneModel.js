@@ -1134,13 +1134,15 @@ export class SceneModel extends Component {
         this._maxGeometryBatchSize = cfg.maxGeometryBatchSize;
 
         this._aabb = math.collapseAABB3();
-        this._aabbDirty = false;
+        this._aabbDirty = true;
 
         this._quantizationRanges = {};
 
         this._vboInstancingLayers = {};
         this._vboBatchingLayers = {};
         this._dtxLayers = {};
+
+        this._meshList = [];
 
         this.layerList = []; // For GL state efficiency when drawing, InstancingLayers are in first part, BatchingLayers are in second
         this._entityList = [];
@@ -1228,21 +1230,29 @@ export class SceneModel extends Component {
         this._position = math.vec3(cfg.position || [0, 0, 0]);
         this._rotation = math.vec3(cfg.rotation || [0, 0, 0]);
         this._quaternion = math.vec4(cfg.quaternion || [0, 0, 0, 1]);
+        this._conjugateQuaternion = math.vec4(cfg.quaternion || [0, 0, 0, 1]);
+
         if (cfg.rotation) {
             math.eulerToQuaternion(this._rotation, "XYZ", this._quaternion);
         }
         this._scale = math.vec3(cfg.scale || [1, 1, 1]);
-        this._sceneModelMatrix = math.mat4();
-        math.composeMat4(this._position, this._quaternion, this._scale, this._sceneModelMatrix);
+
+        this._worldRotationMatrix = math.mat4();
+        this._worldRotationMatrixConjugate = math.mat4();
+        this._matrix = math.mat4();
+        this._matrixDirty = true;
+
+        this._rebuildMatrices();
+
         this._worldNormalMatrix = math.mat4();
-        math.inverseMat4(this._sceneModelMatrix, this._worldNormalMatrix);
+        math.inverseMat4(this._matrix, this._worldNormalMatrix);
         math.transposeMat4(this._worldNormalMatrix);
 
         if (cfg.matrix || cfg.position || cfg.rotation || cfg.scale || cfg.quaternion) {
             this._viewMatrix = math.mat4();
             this._viewNormalMatrix = math.mat4();
             this._viewMatrixDirty = true;
-            this._sceneModelMatrixNonIdentity = true;
+            this._matrixNonIdentity = true;
         }
 
         this._opacity = 1.0;
@@ -1371,6 +1381,20 @@ export class SceneModel extends Component {
     }
 
     /**
+     * Sets the SceneModel's local translation.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @type {Number[]}
+     */
+    set position(value) {
+        this._position.set(value || [0, 0, 0]);
+        this._setWorldMatrixDirty();
+        this._setWorldAABBDirty();
+        this.glRedraw();
+    }
+
+    /**
      * Gets the SceneModel's local translation.
      *
      * Default value is ````[0,0,0]````.
@@ -1379,6 +1403,21 @@ export class SceneModel extends Component {
      */
     get position() {
         return this._position;
+    }
+
+    /**
+     * Sets the SceneModel's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @type {Number[]}
+     */
+    set rotation(value) {
+        this._rotation.set(value || [0, 0, 0]);
+        math.eulerToQuaternion(this._rotation, "XYZ", this._quaternion);
+        this._setWorldMatrixDirty();
+        this._setWorldAABBDirty();
+        this.glRedraw();
     }
 
     /**
@@ -1393,7 +1432,22 @@ export class SceneModel extends Component {
     }
 
     /**
-     * Gets the PerformanceModels's local rotation quaternion.
+     * Sets the SceneModel's local rotation quaternion.
+     *
+     * Default value is ````[0,0,0,1]````.
+     *
+     * @type {Number[]}
+     */
+    set quaternion(value) {
+        this._quaternion.set(value || [0, 0, 0, 1]);
+        math.quaternionToEuler(this._quaternion, "XYZ", this._rotation);
+        this._setWorldMatrixDirty();
+        this._setWorldAABBDirty();
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the SceneModel's local rotation quaternion.
      *
      * Default value is ````[0,0,0,1]````.
      *
@@ -1404,14 +1458,49 @@ export class SceneModel extends Component {
     }
 
     /**
+     * Sets the SceneModel's local scale.
+     *
+     * Default value is ````[1,1,1]````.
+     *
+     * @type {Number[]}
+     * @deprecated
+     */
+    set scale(value) {
+        // NOP - deprecated
+    }
+
+    /**
      * Gets the SceneModel's local scale.
      *
      * Default value is ````[1,1,1]````.
      *
      * @type {Number[]}
+     * @deprecated
      */
     get scale() {
         return this._scale;
+    }
+
+    /**
+     * Sets the SceneModel's local modeling transform matrix.
+     *
+     * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
+     *
+     * @type {Number[]}
+     */
+    set matrix(value) {
+        this._matrix.set(value || DEFAULT_MATRIX);
+
+        math.quaternionToRotationMat4(this._quaternion, this._worldRotationMatrix);
+        math.conjugateQuaternion(this._quaternion, this._conjugateQuaternion);
+        math.quaternionToRotationMat4(this._quaternion, this._worldRotationMatrixConjugate);
+        this._matrix.set(this._worldRotationMatrix);
+        math.translateMat4v(this._position, this._matrix);
+
+        this._matrixDirty = false;
+        this._setWorldMatrixDirty();
+        this._setWorldAABBDirty();
+        this.glRedraw();
     }
 
     /**
@@ -1422,9 +1511,65 @@ export class SceneModel extends Component {
      * @type {Number[]}
      */
     get matrix() {
-        return this._sceneModelMatrix;
+        if (this._matrixDirty) {
+            this._rebuildMatrices();
+        }
+        return this._matrix;
     }
 
+    /**
+     * Gets the SceneModel's local modeling rotation transform matrix.
+     *
+     * @type {Number[]}
+     */
+    get rotationMatrix() {
+        if (this._matrixDirty) {
+            this._rebuildMatrices();
+        }
+        return this._worldRotationMatrix;
+    }
+
+    _rebuildMatrices() {
+        if (this._matrixDirty) {
+            math.quaternionToRotationMat4(this._quaternion, this._worldRotationMatrix);
+            math.conjugateQuaternion(this._quaternion, this._conjugateQuaternion);
+            math.quaternionToRotationMat4(this._quaternion, this._worldRotationMatrixConjugate);
+            this._matrix.set(this._worldRotationMatrix);
+            math.translateMat4v(this._position, this._matrix);
+            this._matrixDirty = false;
+        }
+    }
+
+    /**
+     * Gets the conjugate of the SceneModel's local modeling rotation transform matrix.
+     *
+     * @type {Number[]}
+     */
+    get rotationMatrixConjugate() {
+        if (this._matrixDirty) {
+            this._rebuildMatrices();
+        }
+        return this._worldRotationMatrixConjugate;
+    }
+
+    _setWorldMatrixDirty() {
+        this._matrixDirty = true;
+    }
+    _setLocalAABBDirty() {
+        for (let i = 0, len = this._entityList.length; i < len; i++) {
+            this._entityList[i]._setLocalAABBDirty(); // Entities need to rebuild their Local AABBs from their Mesh's local AABBs
+        }
+    }
+
+    _setWorldAABBDirty() {
+        this._aabbDirty = true;
+        this.scene._aabbDirty = true;
+        this._matrixDirty = true;
+        for (let i = 0, len = this._entityList.length; i < len; i++) {
+            this._entityList[i]._setWorldAABBDirty(); // Entities need to retransform their World AABBs by SceneModel's worldMatrix
+        }
+    }
+    
     /**
      * Gets the SceneModel's World matrix.
      *
@@ -1432,7 +1577,7 @@ export class SceneModel extends Component {
      * @type {Number[]}
      */
     get worldMatrix() {
-        return this._sceneModelMatrix;
+        return this.matrix;
     }
 
     /**
@@ -1455,8 +1600,12 @@ export class SceneModel extends Component {
         if (!this._viewMatrix) {
             return this.scene.camera.viewMatrix;
         }
+        if (this._matrixDirty) {
+            this._rebuildMatrices();
+            this._viewMatrixDirty = true;
+        }
         if (this._viewMatrixDirty) {
-            math.mulMat4(this.scene.camera.viewMatrix, this._sceneModelMatrix, this._viewMatrix);
+            math.mulMat4(this.scene.camera.viewMatrix, this._matrix, this._viewMatrix);
             math.inverseMat4(this._viewMatrix, this._viewNormalMatrix);
             math.transposeMat4(this._viewNormalMatrix);
             this._viewMatrixDirty = false;
@@ -1473,12 +1622,18 @@ export class SceneModel extends Component {
         if (!this._viewNormalMatrix) {
             return this.scene.camera.viewNormalMatrix;
         }
+        if (this._matrixDirty) {
+            this._rebuildMatrices();
+            this._viewMatrixDirty = true;
+        }
         if (this._viewMatrixDirty) {
-            math.mulMat4(this.scene.camera.viewMatrix, this._sceneModelMatrix, this._viewMatrix);
+            math.mulMat4(this.scene.camera.viewMatrix, this._matrix, this._viewMatrix);
             math.inverseMat4(this._viewMatrix, this._viewNormalMatrix);
             math.transposeMat4(this._viewNormalMatrix);
             this._viewMatrixDirty = false;
         }
+        math.inverseMat4(this._viewMatrix, this._viewNormalMatrix);
+        math.transposeMat4(this._viewNormalMatrix);
         return this._viewNormalMatrix;
     }
 
@@ -1567,7 +1722,11 @@ export class SceneModel extends Component {
      */
     get aabb() {
         if (this._aabbDirty) {
-            this._rebuildAABB();
+            math.collapseAABB3(this._aabb);
+            for (let i = 0, len = this._entityList.length; i < len; i++) {
+                math.expandAABB3(this._aabb, this._entityList[i].aabb);
+            }
+            this._aabbDirty = false;
         }
         return this._aabb;
     }
@@ -2448,7 +2607,7 @@ export class SceneModel extends Component {
         const instancing = (cfg.geometryId !== undefined);
         const batching = !instancing;
 
-        cfg.sceneModelMatrix = this._sceneModelMatrixNonIdentity ? this._sceneModelMatrix : null;
+        cfg.sceneModelMatrix = this._matrixNonIdentity ? this._matrix : null;
 
         if (batching) {
 
@@ -2723,6 +2882,7 @@ export class SceneModel extends Component {
         mesh.numPrimitives = cfg.numPrimitives;
         math.expandAABB3(this._aabb, mesh.aabb);
         this._meshes[cfg.id] = mesh;
+        this._meshList.push(mesh);
     }
 
     _getNumPrimitives(cfg) {
@@ -3155,15 +3315,6 @@ export class SceneModel extends Component {
         if (this.scene.lod.enabled) {
             this._lodManager = this.scene.lod.getLODManager(this);
         }
-    }
-
-    _rebuildAABB() {
-        math.collapseAABB3(this._aabb);
-        for (let i = 0, len = this._entityList.length; i < len; i++) {
-            const entity = this._entityList[i];
-            math.expandAABB3(this._aabb, entity.aabb);
-        }
-        this._aabbDirty = false;
     }
 
     /** @private */
