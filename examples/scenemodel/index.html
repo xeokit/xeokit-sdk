@@ -336,7 +336,17 @@
 
         "repositioning": [
 
-            ["repositioning_vbo_instancing", "SceneModel test: repositioning SceneModel with VBOs and geometry reuse"]
+            ["repositioning_vbo_instancing", "SceneModel test: repositioning SceneModel with VBOs and geometry reuse"],
+            ["repositioning_vbo_instancing_rtc", "SceneModel test: repositioning SceneModel with VBOs and geometry reuse, RTC coordinates"],
+
+            ["repositioning_vbo_batching", "SceneModel test: repositioning SceneModel with VBOs and no geometry reuse"],
+            ["repositioning_vbo_batching_rtc", "SceneModel test: repositioning SceneModel with VBOs and no geometry reuse, RTC coordinates"],
+
+            ["repositioning_dtx_batching", "SceneModel test: repositioning SceneModel with DTX and no geometry reuse"],
+            ["repositioning_dtx_batching_rtc", "SceneModel test: repositioning SceneModel with DTX and no geometry reuse, RTC coordinates"],
+
+            ["repositioning_dtx_instancing", "SceneModel test: repositioning SceneModel with DTX and geometry reuse"],
+            ["repositioning_dtx_instancing_rtc", "SceneModel test: repositioning SceneModel with DTX and geometry reuse, RTC coordinates"],
         ],
 
         "Effects": [
@@ -406,12 +416,23 @@
             ["snapToVertex_dtx_batching_triangles", "SceneModel test: DTXs, no geometry reuse, snap-to-vertex"],
             ["snapToVertex_vbo_instancingAndBatching_triangles", "SceneModel test: VBOs, instancing and batching, snap-to-vertex"],
 
+            ["snapToVertex_vbo_instancing_autocompressed_triangles_rtc", "SceneModel test: VBOs, instancing, snap-to-vertex, RTC coordinates"],
+            ["snapToVertex_vbo_batching_autocompressed_triangles_rtc", "SceneModel test: VBOs, batching, snap-to-vertex, RTC coordinates"],
+            ["snapToVertex_dtx_instancing_autocompressed_triangles_rtc", "SceneModel test: DTX, instancing, snap-to-vertex, RTC coordinates"],
+            ["snapToVertex_dtx_batching_autocompressed_triangles_rtc", "SceneModel test: DTX, batching, snap-to-vertex, RTC coordinates"],
+
             "#Snap-to-edge",
 
             ["snapToEdge_vbo_instancing_triangles", "SceneModel test: VBOs, geometry reuse, snap-to-edges"],
             ["snapToEdge_dtx_instancing_triangles", "SceneModel test: DTXs, geometry reuse, snap-to-edges"],
             ["snapToEdge_vbo_batching_triangles", "SceneModel test: VBOs, no geometry reuse, snap-to-edges"],
-            ["snapToEdge_dtx_batching_triangles", "SceneModel test: DTXs, no geometry reuse, snap-to-edges"]
+            ["snapToEdge_dtx_batching_triangles", "SceneModel test: DTXs, no geometry reuse, snap-to-edges"],
+
+            ["snapToEdge_vbo_instancing_autocompressed_triangles_rtc", "SceneModel test: VBOs, instancing, snap-to-edges, RTC coordinates"],
+            ["snapToEdge_vbo_batching_autocompressed_triangles_rtc", "SceneModel test: VBOs, batching, snap-to-edges, RTC coordinates"],
+            ["snapToEdge_dtx_instancing_autocompressed_triangles_rtc", "SceneModel test: DTX, instancing, snap-to-edges, RTC coordinates"],
+            ["snapToEdge_dtx_batching_autocompressed_triangles_rtc", "SceneModel test: DTX, batching, snap-to-edges, RTC coordinates"],
+
         ],
 
         "Benchmarks": [

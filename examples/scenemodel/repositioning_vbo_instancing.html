@@ -147,8 +147,8 @@
 
     sceneModel.finalize();
 
-  const  position = [0, 0, 0];
-const rotation = [0,0,0];
+    const position = [0, 0, 0];
+    const rotation = [0, 0, 0];
 
     const next = () => {
         requestAnimationFrame(() => {
@@ -156,10 +156,12 @@ const rotation = [0,0,0];
             sceneModel.position = position;
             sceneModel.rotation = rotation;
 
-            position[0] += .1;
-rotation[1] += 0.5;
+            position[0] += 1;
+            rotation[1] += 0.5;
 
-            next();
+            if (position[0] < 100) {
+                next();
+            }
         });
     }
 
