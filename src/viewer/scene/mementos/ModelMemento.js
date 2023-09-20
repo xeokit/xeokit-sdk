@@ -136,18 +136,10 @@ class ModelMemento {
      */
     saveObjects(scene, metaModel, mask) {
 
-        const rootMetaObject = metaModel.rootMetaObject;
-        if (!rootMetaObject) {
-            return;
-        }
-
-        const objectIds = rootMetaObject.getObjectIDsInSubtree();
-
         this.numObjects = 0;
 
         this._mask = mask ? utils.apply(mask, {}) : null;
 
-        const objects = scene.objects;
         const visible = (!mask || mask.visible);
         const edges = (!mask || mask.edges);
         const xrayed = (!mask || mask.xrayed);
@@ -158,8 +150,12 @@ class ModelMemento {
         const colorize = (!mask || mask.colorize);
         const opacity = (!mask || mask.opacity);
 
-        for (var i = 0, len = objectIds.length; i < len; i++) {
-            const objectId = objectIds[i];
+        const metaObjects = metaModel.metaObjects;
+        const objects = scene.objects;
+
+        for (let i = 0, len = metaObjects.length; i < len; i++) {
+            const metaObject = metaObjects[i];
+            const objectId = metaObject.id;
             const object = objects[objectId];
             if (!object) {
                 continue;
@@ -208,13 +204,6 @@ class ModelMemento {
      */
     restoreObjects(scene, metaModel) {
 
-        const rootMetaObject = metaModel.rootMetaObject;
-        if (!rootMetaObject) {
-            return;
-        }
-
-        const objectIds = rootMetaObject.getObjectIDsInSubtree();
-
         const mask = this._mask;
 
         const visible = (!mask || mask.visible);
@@ -227,10 +216,12 @@ class ModelMemento {
         const colorize = (!mask || mask.colorize);
         const opacity = (!mask || mask.opacity);
 
+        const metaObjects = metaModel.metaObjects;
         const objects = scene.objects;
 
-        for (var i = 0, len = objectIds.length; i < len; i++) {
-            const objectId = objectIds[i];
+        for (let i = 0, len = metaObjects.length; i < len; i++) {
+            const metaObject = metaObjects[i];
+            const objectId = metaObject.id;
             const object = objects[objectId];
             if (!object) {
                 continue;
