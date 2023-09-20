@@ -8,6 +8,7 @@ export * from "./GLTFLoaderPlugin/index.js";
 export * from "./NavCubePlugin/index.js";
 export * from "./OBJLoaderPlugin/index.js";
 export * from "./SectionPlanesPlugin/index.js";
+export * from "./StoreyViewsPlugin/index.js";
 export * from "./FaceAlignedSectionPlanesPlugin/index.js";
 export * from "./SkyboxesPlugin/index.js";
 export * from "./STLLoaderPlugin/index.js";
