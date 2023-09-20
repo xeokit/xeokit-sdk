@@ -175,10 +175,8 @@ export class TrianglesDataTextureOcclusionRenderer {
         const scene = this._scene;
         const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
+        src.push("#version 300 es");
         src.push("// TrianglesDataTextureColorRenderer vertex shader");
-        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-            src.push("#extension GL_EXT_frag_depth : enable");
-        }
         src.push("uniform int renderPass;");
         src.push("attribute vec3 position;");
         if (scene.entityOffsetsEnabled) {
@@ -228,12 +226,7 @@ export class TrianglesDataTextureOcclusionRenderer {
         }
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
-            if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-                src.push("vFragDepth = 1.0 + clipPos.w;");
-            } else {
-                src.push("clipPos.z = log2( max( 1e-6, clipPos.w + 1.0 ) ) * logDepthBufFC - 1.0;");
-                src.push("clipPos.z *= clipPos.w;");
-            }
+            src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
         src.push("gl_Position = clipPos;");
@@ -247,10 +240,8 @@ export class TrianglesDataTextureOcclusionRenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
+        src.push('#version 300 es');
         src.push("// TrianglesDataTextureColorRenderer fragment shader");
-        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-            src.push("#extension GL_EXT_frag_depth : enable");
-        }
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -258,7 +249,7 @@ export class TrianglesDataTextureOcclusionRenderer {
         src.push("precision mediump float;");
         src.push("precision mediump int;");
         src.push("#endif");
-        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+        if (scene.logarithmicDepthBufferEnabled) {
             src.push("in float isPerspective;");
             src.push("uniform float logDepthBufFC;");
             src.push("in float vFragDepth;");
@@ -285,7 +276,7 @@ export class TrianglesDataTextureOcclusionRenderer {
             src.push("      if (dist > 0.0) { discard; }");
             src.push("  }");
         }
-        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+        if (scene.logarithmicDepthBufferEnabled) {
             src.push("    gl_FragDepthEXT = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
         src.push("   gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0); "); // Occluders are blue

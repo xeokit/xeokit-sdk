@@ -273,6 +273,7 @@ export class TrianglesDataTextureNormalsRenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = (sectionPlanesState.sectionPlanes.length > 0);
         const src = [];
+        src.push("#version 300 es");
         src.push("// Batched geometry normals fragment shader");
 
         if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
