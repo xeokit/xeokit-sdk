@@ -31,9 +31,9 @@ const tempQuat = math.vec4([0, 0, 0, 1]);
  *
  * <img src="http://xeokit.io/img/docs/ImagePlane/schependomlaanGoogleSatMapMed.png">
  *
- * [<img src="http://xeokit.io/img/docs/ImagePlane/ImagePlane.png">](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_groundPlane)
+ * [<img src="http://xeokit.io/img/docs/ImagePlane/ImagePlane.png">](/examples/#ImagePlane_groundPlane)
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_groundPlane)]
+ * [[Run this example](/examples/#ImagePlane_groundPlane)]
  *
  * ````javascript
  * import {Viewer, ImagePlane, XKTLoaderPlugin} from "xeokit-sdk.es.js";
@@ -81,9 +81,9 @@ const tempQuat = math.vec4([0, 0, 0, 1]);
  *
  * <img src="http://xeokit.io/img/docs/ImagePlane/schependomlaanPlanViewMed.png">
  *
- * [<img src="http://xeokit.io/img/docs/ImagePlane/ImagePlane_planView.png">](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_imageInSectionPlane)
+ * [<img src="http://xeokit.io/img/docs/ImagePlane/ImagePlane_planView.png">](/examples/#ImagePlane_imageInSectionPlane)
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#ImagePlane_imageInSectionPlane)]
+ * [[Run this example](/examples/#ImagePlane_imageInSectionPlane)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, ImagePlane} from "xeokit-sdk.es.js";
@@ -159,7 +159,7 @@ class ImagePlane extends Component {
         this._src = null;
         this._image = null;
         this._pos = math.vec3();
-        this._rtcCenter = math.vec3();
+        this._origin = math.vec3();
         this._rtcPos = math.vec3();
         this._dir = math.vec3();
         this._size = 1.0;
@@ -355,8 +355,8 @@ class ImagePlane extends Component {
      */
     set position(value) {
         this._pos.set(value || [0, 0, 0]);
-        worldToRTCPos(this._pos, this._rtcCenter, this._rtcPos);
-        this._node.rtcCenter = this._rtcCenter;
+        worldToRTCPos(this._pos, this._origin, this._rtcPos);
+        this._node.origin = this._origin;
         this._node.position = this._rtcPos;
     }
 
@@ -550,7 +550,6 @@ class ImagePlane extends Component {
      * @destroy
      */
     destroy() {
-        this._state.destroy();
         super.destroy();
     }
 
@@ -558,10 +557,11 @@ class ImagePlane extends Component {
         const size = this._size;
         const width = this._imageSize[0];
         const height = this._imageSize[1];
-        const aspect = height / width;
         if (width > height) {
+            const aspect = height / width;
             this._node.scale = [size, 1.0, size * aspect];
         } else {
+            const aspect = width / height;
             this._node.scale = [size * aspect, 1.0, size];
         }
     }

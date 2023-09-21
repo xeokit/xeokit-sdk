@@ -1,0 +1,218 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <style>
+        #downloadLink {
+            position: absolute;
+            font-size: 18px;
+            left: 75px;
+            top: 80px;
+            pointer-events: all;
+        }
+    </style>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div id="downloadLink"></div>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/bcf_logo.png"/>
+    <h1>BCFViewpointsPlugin</h1>
+    <h2>Saving a BCF Viewpoint</h2>
+    <p>The BIM Collaboration Format (BCF) is a structured file format used for issue tracking with a building
+        information model. BCF defines views of a building model and associated information on collisions
+        and errors connected with specific objects in the view. </p>
+    <p>In this example, to simulate logging a model issue via BCF, we're loading a BIM model from the file system,
+        slicing it with a section plane, creating a grid groundplane and a bitmap plan view, selecting some objects, then saving the viewer state as a JSON-encoded BCF
+        viewpoint.</p>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html"
+               target="_other">SectionPlanesPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html"
+               target="_other">Bitmap</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/LineSet/LineSet.js~LineSet.html"
+               target="_other">LineSet</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html"
+               target="_other">BCFViewpointsPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="https://www.notion.so/xeokit/Saving-and-Loading-BCF-Viewpoints-800a5479dc8346848165c88b9ec84fcf"
+               target="_other">Tutorial</a>
+        </li>
+        <li>
+            <a href="https://github.com/openBIMstandards/DataSetSchependomlaan"
+               target="_other">Model source</a>
+        </li>
+    </ul>
+</div>
+
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, Bitmap, LineSet, buildGridGeometry, BCFViewpointsPlugin} from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const camera = viewer.camera;
+
+    camera.eye = [-48.93, 50.41, -54.54];
+    camera.look = [0, 1.49, 0];
+    camera.up = [0.37, 0.83, 0.41];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Add a XKTModelsPlugin - we'll use this to load the model geometry and IFC metadata
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Add a SectionPlanesPlugin - we'll use this to create cross-section planes
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sectionPlanes = new SectionPlanesPlugin(viewer);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Add a BCFViewpointsPlugin - we'll use this to save the BCF viewpoint
+    //------------------------------------------------------------------------------------------------------------------
+
+    const bcfViewpoints = new BCFViewpointsPlugin(viewer);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load the .xkt model and IFC metadata
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sceneModel = xktLoader.load({
+        id: "myModel",
+        src: "../../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
+        edges: true // Emphasise edges
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a cross-section plane
+    //------------------------------------------------------------------------------------------------------------------
+
+    sectionPlanes.createSectionPlane({
+        id: "myClip",
+        pos: [0, 0, 0],
+        dir: [0.5, 0.0, 0.5]
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a bitmap
+    //------------------------------------------------------------------------------------------------------------------
+
+    const bitmap = new Bitmap(viewer.scene, {
+        src: "../../assets/images/schependomlaanPlanView.png",
+        visible: true,
+        height: 24.0,
+        pos: [-15, 0, -10],
+        normal: [0, -1, 0],
+        up: [0, 0, 1],
+        collidable: false,
+        opacity: 1.0,
+        clippable: false,
+        pickable: true
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a grid ground plane
+    //------------------------------------------------------------------------------------------------------------------
+
+    const geometryArrays = buildGridGeometry({
+        size: 60,
+        divisions: 10
+    });
+
+    new LineSet(viewer.scene, {
+        positions: geometryArrays.positions,
+        indices: geometryArrays.indices,
+        position: [10,0,10],
+        clippable: false
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // When the model has loaded,select some objects and save a BCF viewpoint
+    //
+    // The BCF viewpoint JSON is written to the JavaScript developer console
+    //------------------------------------------------------------------------------------------------------------------
+
+    sceneModel.on("loaded", () => {
+
+        viewer.scene.setObjectsSelected([
+            "3b2U496P5Ebhz5FROhTwFH",
+            "2MGtJUm9nD$Re1_MDIv0g2",
+            "3IbuwYOm5EV9Q6cXmwVWqd",
+            "3lhisrBxL8xgLCRdxNG$2v",
+            "1uDn0xT8LBkP15zQc9MVDW"
+        ], true);
+
+        // Create download link
+        // https://stackoverflow.com/questions/2897619/using-html5-javascript-to-generate-and-save-a-file
+
+        const pom = document.createElement('a');
+
+        pom.onclick = function () {
+
+            const viewpoint = bcfViewpoints.getViewpoint({ // Options
+                spacesVisible: false, // Don't force IfcSpace types visible in viewpoint (default)
+                spaceBoundariesVisible: false, // Don't show IfcSpace boundaries in viewpoint (default)
+                openingsVisible: false // Don't force IfcOpening types visible in viewpoint (default)
+            });
+
+            const viewpointStr = JSON.stringify(viewpoint, null, 4);
+            pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(viewpointStr));
+        }
+
+        pom.setAttribute('download', "bcfViewpoint.json");
+        pom.innerText = "Download BCF Viewpoint JSON";
+        document.getElementById("downloadLink").appendChild(pom);
+    });
+
+    window.viewer = viewer;
+
+</script>
+
+</html>

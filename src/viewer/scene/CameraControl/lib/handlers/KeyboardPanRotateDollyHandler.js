@@ -14,18 +14,17 @@ class KeyboardPanRotateDollyHandler {
 
         let mouseMovedSinceLastKeyboardDolly = true;
 
-        document.addEventListener("mousemove", this._documentMouseMoveHandler = () => {
+        this._onSceneMouseMove = input.on("mousemove", () => {
             mouseMovedSinceLastKeyboardDolly = true;
         });
 
-        document.addEventListener("keydown", this._documentKeyDownHandler = (e) => {
+        this._onSceneKeyDown = input.on("keydown", (keyCode) => {
             if (!(configs.active && configs.pointerEnabled) || (!scene.input.keyboardEnabled)) {
                 return;
             }
             if (!states.mouseover) {
                 return;
             }
-            const keyCode = e.keyCode;
             keyDownMap[keyCode] = true;
 
             if (keyCode === input.KEY_SHIFT) {
@@ -33,14 +32,10 @@ class KeyboardPanRotateDollyHandler {
             }
         });
 
-        document.addEventListener("keyup", this._documentKeyUpHandler = (e) => {
+        this._onSceneKeyUp = input.on("keyup", (keyCode) => {
             if (!(configs.active && configs.pointerEnabled) || (!scene.input.keyboardEnabled)) {
                 return;
             }
-            if (!states.mouseover) {
-                return;
-            }
-            const keyCode = e.keyCode;
             keyDownMap[keyCode] = false;
 
             if (keyCode === input.KEY_SHIFT) {
@@ -179,9 +174,9 @@ class KeyboardPanRotateDollyHandler {
 
         this._scene.off(this._onTick);
 
-        document.removeEventListener("mousemove", this._documentMouseMoveHandler);
-        document.removeEventListener("keydown", this._documentKeyDownHandler);
-        document.removeEventListener("keyup", this._documentKeyUpHandler);
+        this._scene.input.off(this._onSceneMouseMove);
+        this._scene.input.off(this._onSceneKeyDown);
+        this._scene.input.off(this._onSceneKeyUp);
     }
 }
 

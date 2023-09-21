@@ -166,7 +166,7 @@ li > code {
   top: 0;
   left: 0;
   box-sizing: border-box;
-  width: 250px;
+  width: 300px;
   height: 100%;
   padding-top: 40px;
   padding-left: 15px;
@@ -257,7 +257,7 @@ h1 .url a {
 
 .content {
   margin-top: 40px;
-  margin-left: 250px;
+  margin-left: 300px;
   padding: 10px 50px 10px 20px;
 }
 

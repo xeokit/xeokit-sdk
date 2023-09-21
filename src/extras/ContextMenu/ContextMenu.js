@@ -32,11 +32,12 @@ class Group {
  * @private
  */
 class Item {
-    constructor(id, getTitle, doAction, getEnabled) {
+    constructor(id, getTitle, doAction, getEnabled, getShown) {
         this.id = id;
         this.getTitle = getTitle;
         this.doAction = doAction;
         this.getEnabled = getEnabled;
+        this.getShown = getShown;
         this.itemElement = null;
         this.subMenu = null;
         this.enabled = true;
@@ -55,8 +56,9 @@ class Item {
  * * A pure JavaScript, lightweight context menu
  * * Dynamically configure menu items
  * * Dynamically enable or disable items
+ * * Dynamically show or hide items
  * * Supports cascading sub-menus
- * * Configure custom style with custom CSS (see examples above)
+ * * Configure custom style with CSS (see examples above)
  *
  * ## Usage
  *
@@ -68,16 +70,23 @@ class Item {
  * Each item has:
  *
  * * a ````title```` for the item,
- * * a ````doAction()```` callback to fire when the item's title is clicked, and
- * * an optional ````getEnabled()```` callback that indicates if the item should enabled in the menu or not.
+ * * a ````doAction()```` callback to fire when the item's title is clicked,
+ * * an optional ````getShown()```` callback that indicates if the item should shown in the menu or not, and
+ * * an optional ````getEnabled()```` callback that indicates if the item should be shown enabled in the menu or not.
  *
  * <br>
  *
- * The ````getEnabled()```` callbacks are invoked whenever the menu is shown. When an item's ````getEnabled()```` callback
- * returns ````true````, then the item is enabled and clickable. When it returns ````false````, then the item is disabled
- * and cannot be clicked. An item without a ````getEnabled()```` callback is always enabled and clickable.
+ * The ````getShown()```` and ````getEnabled()```` callbacks are invoked whenever the menu is shown.
  *
- * Note how the ````doAction()```` and ````getEnabled()```` callbacks accept a ````context````
+ * When an item's ````getShown()```` callback
+ * returns ````true````, then the item is shown. When it returns ````false````, then the item is hidden. An item without
+ * a ````getShown()```` callback is always shown.
+ *
+ * When an item's ````getEnabled()```` callback returns ````true````, then the item is enabled and clickable (as long as it's also shown). When it
+ * returns ````false````, then the item is disabled and cannot be clicked. An item without a ````getEnabled()````
+ * callback is always enabled and clickable.
+ *
+ * Note how the ````doAction()````,  ````getShown()```` and ````getEnabled()```` callbacks accept a ````context````
  * object. That must be set on the ````ContextMenu```` before we're able to we show it. The context object can be anything. In this example,
  * we'll use the context object to provide the callbacks with the Entity that we right-clicked.
  *
@@ -272,6 +281,7 @@ class ContextMenu {
      * @param {Object} [cfg.context] The context, which is passed into the item callbacks. This can also be dynamically set on {@link ContextMenu#context}. This must be set before calling {@link ContextMenu#show}.
      * @param {Boolean} [cfg.enabled=true] Whether this ````ContextMenu```` is initially enabled. {@link ContextMenu#show} does nothing while this is ````false````.
      * @param {Boolean} [cfg.hideOnMouseDown=true] Whether this ````ContextMenu```` automatically hides whenever we mouse-down or tap anywhere in the page.
+     * @param {Boolean} [cfg.hideOnAction=true] Whether this ````ContextMenu```` automatically hides after we select a menu item. Se false if we want the menu to remain shown and show any updates to its item titles, after we've selected an item.
      */
     constructor(cfg = {}) {
 
@@ -299,11 +309,18 @@ class ContextMenu {
                     this.hide();
                 }
             });
+            document.addEventListener("touchstart", this._canvasTouchStartHandler = (event) => {
+                if (!event.target.classList.contains("xeokit-context-menu-item")) {
+                    this.hide();
+                }
+            });
         }
 
         if (cfg.items) {
             this.items = cfg.items;
         }
+
+        this._hideOnAction = (cfg.hideOnAction !== false);
 
         this.context = cfg.context;
         this.enabled = cfg.enabled !== false;
@@ -533,7 +550,11 @@ class ContextMenu {
                         return true;
                     });
 
-                    const item = new Item(itemId, getTitle, doAction, getEnabled);
+                    const getShown = itemCfg.getShown || (() => {
+                        return true;
+                    });
+
+                    const item = new Item(itemId, getTitle, doAction, getEnabled, getShown);
 
                     item.parentMenu = menu;
 
@@ -560,7 +581,7 @@ class ContextMenu {
     }
 
     _getNextId() { // Returns a unique ID
-        return "ContextMenu_" + this._id + "" + this._nextId++; // Start ID with alpha chars to make a valid DOM element selector
+        return "ContextMenu_" + this._id + "_" + this._nextId++; // Start ID with alpha chars to make a valid DOM element selector
     }
 
     _createUI() { // Builds DOM elements for the entire menu tree
@@ -686,9 +707,7 @@ class ContextMenu {
 
                         item.itemElement.addEventListener("mouseenter", (event) => {
                             event.preventDefault();
-                            if (item.enabled === false) {
-                                return;
-                            }
+
                             const subMenu = item.subMenu;
                             if (!subMenu) {
                                 if (lastSubMenu) {
@@ -700,6 +719,10 @@ class ContextMenu {
                             if (lastSubMenu && (lastSubMenu.id !== subMenu.id)) {
                                 self._hideMenu(lastSubMenu.id);
                                 lastSubMenu = null;
+                            }
+
+                            if (item.enabled === false) {
+                                return;
                             }
 
                             const itemElement = item.itemElement;
@@ -727,7 +750,6 @@ class ContextMenu {
 
                             item.itemElement.addEventListener("click", (event) => {
                                 event.preventDefault();
-                                self.hide();
                                 if (!self._context) {
                                     return;
                                 }
@@ -737,9 +759,13 @@ class ContextMenu {
                                 if (item.doAction) {
                                     item.doAction(self._context);
                                 }
+                                if (this._hideOnAction) {
+                                    self.hide();
+                                } else {
+                                    self._updateItemsTitles();
+                                    self._updateItemsEnabledStatus();
+                                }
                             });
-
-
                             item.itemElement.addEventListener("mouseenter", (event) => {
                                 event.preventDefault();
                                 if (item.enabled === false) {
@@ -767,6 +793,10 @@ class ContextMenu {
             if (!itemElement) {
                 continue;
             }
+            const getShown = item.getShown;
+            if (!getShown || !getShown(this._context)) {
+                continue;
+            }
             const title = item.getTitle(this._context);
             if (item.subMenu) {
                 itemElement.innerText = title;
@@ -789,6 +819,22 @@ class ContextMenu {
             const getEnabled = item.getEnabled;
             if (!getEnabled) {
                 continue;
+            }
+            const getShown = item.getShown;
+            if (!getShown) {
+                continue;
+            }
+            const shown = getShown(this._context);
+            item.shown = shown;
+            if (!shown) {
+                itemElement.style.visibility = "hidden";
+                itemElement.style.height = "0";
+                itemElement.style.padding = "0";
+                continue;
+            } else {
+                itemElement.style.visibility = "visible";
+                itemElement.style.height = "auto";
+                itemElement.style.padding = null;
             }
             const enabled = getEnabled(this._context);
             item.enabled = enabled;

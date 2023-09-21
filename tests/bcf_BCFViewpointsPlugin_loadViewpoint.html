@@ -10,7 +10,7 @@
 </body>
 <script type="module">
 
-    import {Viewer, XKTLoaderPlugin, BCFViewpointsPlugin} from "../dist/xeokit-sdk.es.js";
+    import {Viewer, XKTLoaderPlugin, BCFViewpointsPlugin} from "./https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
     import {signalTestComplete} from "./lib/utils.js";
 
     const viewer = new Viewer({
@@ -30,7 +30,7 @@
 
     const model = xktLoader.load({
         id: "myModel",
-        src: "../assets/models/xkt/v8/Schependomlaan.xkt",
+        src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
         edges: true
     });
 

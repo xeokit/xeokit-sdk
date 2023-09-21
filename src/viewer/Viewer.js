@@ -2,14 +2,15 @@ import {Scene} from "./scene/scene/Scene.js";
 import {CameraFlightAnimation} from "./scene/camera/CameraFlightAnimation.js";
 import {CameraControl} from "./scene/CameraControl/CameraControl.js";
 import {MetaScene} from "./metadata/MetaScene.js";
-import {WEBGL_INFO} from "./scene/webglInfo.js";
+import {LocaleService} from "./localization/LocaleService.js";
+import html2canvas from 'html2canvas/dist/html2canvas.esm.js';
 
 /**
  * The 3D Viewer at the heart of the xeokit SDK.
  *
  * * A Viewer wraps a single {@link Scene}
  * * Add {@link Plugin}s to a Viewer to extend its functionality.
- * * {@link Viewer#metaScene} holds metadata about {@link Model}s in the
+ * * {@link Viewer#metaScene} holds metadata about models in the
  * Viewer's {@link MetaScene}.
  * * Use {@link Viewer#cameraFlight} to fly or jump the {@link Scene}'s
  * {@link Camera} to target positions, boundaries or {@link Entity}s.
@@ -24,6 +25,7 @@ class Viewer {
      * @param {String} [cfg.id] Optional ID for this Viewer, defaults to the ID of {@link Viewer#scene}, which xeokit automatically generates.
      * @param {String} [cfg.canvasId]  ID of an existing HTML canvas for the {@link Viewer#scene} - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas for the {@link Viewer#scene} - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
+     * @param {HTMLElement} [cfg.keyboardEventsElement] Optional reference to HTML element on which key events should be handled. Defaults to the HTML Document.
      * @param {String} [cfg.spinnerElementId]  ID of existing HTML element to show the {@link Spinner} - internally creates a default element automatically if this is omitted.
      * @param {Number} [cfg.passes=1] The number of times the {@link Viewer#scene} renders per frame.
      * @param {Boolean} [cfg.clearEachPass=false] When doing multiple passes per frame, specifies if to clear the canvas before each pass (true) or just before the first pass (false).
@@ -44,19 +46,41 @@ class Viewer {
      * @throws {String} Throws an exception when both canvasId or canvasElement are missing or they aren't pointing to a valid HTMLCanvasElement.
      * @param {Boolean} [cfg.alphaDepthMask=true] Whether writing into the depth buffer is enabled or disabled when rendering transparent objects.
      * @param {Boolean} [cfg.entityOffsetsEnabled=false] Whether to enable {@link Entity#offset}. For best performance, only set this ````true```` when you need to use {@link Entity#offset}.
-     * @param {Boolean} [cfg.logarithmicDepthBufferEnabled=false] Whether to enable logarithmic depth buffer. When this is true,
+     * @param {Boolean} [cfg.pickSurfacePrecisionEnabled=false] Whether to enable full-precision accuracy when surface picking with {@link Scene#pick}. Note that when ````true````, this configuration will increase the amount of browser memory used by the Viewer. The ````pickSurfacePrecision```` option for ````Scene#pick```` only works if this is set ````true````.
+     * @param {Boolean} [cfg.logarithmicDepthBufferEnabled=true] Whether to enable logarithmic depth buffer. When this is true,
      * you can set huge values for {@link Perspective#far} and {@link Ortho#far}, to push the far clipping plane back so
-     * that it does not clip huge models.
+     * that it does not clip huge models. Enabling this also allows snap-picking to work more accurately when the model is far from the viewpoint.
+     * @param {Boolean} [cfg.colorTextureEnabled=true] Whether to enable base color texture rendering.
      * @param {Boolean} [cfg.pbrEnabled=false] Whether to enable physically-based rendering.
+     * @param {LocaleService} [cfg.localeService=null] Optional locale-based translation service.
+     * @param {Boolean} [cfg.dtxEnabled=false] Whether to enable data texture-based (DTX) scene representation within the Viewer. When this is true, the Viewer will use data textures to
+     * store geometry on the GPU for triangle meshes that don't have textures. This gives a much lower memory footprint for these types of model element. This mode may not perform well on low-end GPUs that are optimized
+     * to use textures to hold geometry data. Works great on most medium/high-end GPUs found in desktop computers, including the nVIDIA and Intel HD chipsets. Set this false to use the default vertex buffer object (VBO)
+     * mode for storing geometry, which is the standard technique used in most graphics engines, and will work adequately on most low-end GPUs.
      */
     constructor(cfg) {
 
         /**
          * The Viewer's current language setting.
          * @property language
+         * @deprecated
          * @type {String}
          */
         this.language = "en";
+
+        /**
+         * The viewer's locale service.
+         *
+         * This is configured via the Viewer's constructor.
+         *
+         * By default, this service will be an instance of {@link LocaleService}, which will just return
+         * null translations for all given strings and phrases.
+         *
+         * @property localeService
+         * @type {LocaleService}
+         * @since 2.0
+         */
+        this.localeService = cfg.localeService || new LocaleService();
 
         /**
          * The Viewer's {@link Scene}.
@@ -66,7 +90,7 @@ class Viewer {
         this.scene = new Scene(this, {
             canvasId: cfg.canvasId,
             canvasElement: cfg.canvasElement,
-            webgl2: false,
+            keyboardEventsElement: cfg.keyboardEventsElement,
             contextAttr: {
                 preserveDrawingBuffer: cfg.preserveDrawingBuffer !== false,
                 premultipliedAlpha: (!!cfg.premultipliedAlpha),
@@ -86,8 +110,13 @@ class Viewer {
             saoEnabled: cfg.saoEnabled,
             alphaDepthMask: (cfg.alphaDepthMask !== false),
             entityOffsetsEnabled: (!!cfg.entityOffsetsEnabled),
-            logarithmicDepthBufferEnabled: (!!cfg.logarithmicDepthBufferEnabled),
-            pbrEnabled: (!!cfg.pbrEnabled)
+            pickSurfacePrecisionEnabled: (!!cfg.pickSurfacePrecisionEnabled),
+            logarithmicDepthBufferEnabled: (cfg.logarithmicDepthBufferEnabled !== false),
+            pbrEnabled: (!!cfg.pbrEnabled),
+            lodEnabled: (!!cfg.lodEnabled),
+            vfcCulling: (!!cfg.vfcEnabled),
+            colorTextureEnabled: (cfg.colorTextureEnabled !== false),
+            dtxEnabled: (!!cfg.dtxEnabled)
         });
 
         /**
@@ -141,6 +170,15 @@ class Viewer {
          * @private
          */
         this._eventSubs = {};
+    }
+
+    /**
+     * Returns the capabilities of this Viewer.
+     *
+     * @returns {{astcSupported: boolean, etc1Supported: boolean, pvrtcSupported: boolean, etc2Supported: boolean, dxtSupported: boolean, bptcSupported: boolean}}
+     */
+    get capabilities() {
+        return this.scene.capabilities;
     }
 
     /**
@@ -294,6 +332,17 @@ class Viewer {
     getSnapshot(params = {}) {
 
         const needFinishSnapshot = (!this._snapshotBegun);
+        const resize = (params.width !== undefined && params.height !== undefined);
+        const canvas = this.scene.canvas.canvas;
+        const saveWidth = canvas.clientWidth;
+        const saveHeight = canvas.clientHeight;
+        const width = params.width ? Math.floor(params.width) : canvas.width;
+        const height = params.height ? Math.floor(params.height) : canvas.height;
+
+        if (resize) {
+            canvas.width = width;
+            canvas.height = height;
+        }
 
         if (!this._snapshotBegun) {
             this.beginSnapshot();
@@ -303,19 +352,20 @@ class Viewer {
             this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
         }
 
-        const resize = (params.width !== undefined && params.height !== undefined);
-        const canvas = this.scene.canvas.canvas;
-        const saveWidth = canvas.clientWidth;
-        const saveHeight = canvas.clientHeight;
-        const saveCssWidth = canvas.style.width;
-        const saveCssHeight = canvas.style.height;
-
-        const width = params.width ? Math.floor(params.width) : canvas.width;
-        const height = params.height ? Math.floor(params.height) : canvas.height;
-
-        if (resize) {
-            canvas.style.width = width + "px";
-            canvas.style.height = height + "px";
+        const captured = {};
+        for (let i = 0, len = this._plugins.length; i < len; i++) {
+            const plugin = this._plugins[i];
+            if (plugin.getContainerElement) {
+                const container = plugin.getContainerElement();
+                if (container !== document.body) {
+                    if (!captured[container.id]) {
+                        captured[container.id] = true;
+                        html2canvas(container).then(function (canvas) {
+                            document.body.appendChild(canvas);
+                        });
+                    }
+                }
+            }
         }
 
         this.scene._renderer.renderSnapshot();
@@ -323,8 +373,6 @@ class Viewer {
         const imageDataURI = this.scene._renderer.readSnapshot(params);
 
         if (resize) {
-            canvas.style.width = saveCssWidth;
-            canvas.style.height = saveCssHeight;
             canvas.width = saveWidth;
             canvas.height = saveHeight;
 
@@ -340,6 +388,121 @@ class Viewer {
         }
 
         return imageDataURI;
+    }
+
+    /**
+     * Gets a snapshot of this Viewer's {@link Scene} as a Base64-encoded image which includes
+     * the HTML elements created by various plugins.
+     *
+     * The snapshot image is composed of an image of the viewer canvas, overlaid with an image
+     * of the HTML container element belonging to each installed Viewer plugin. Each container
+     * element is only rendered once, so it's OK for plugins to share the same container.
+     *
+     * #### Usage:
+     *
+     * ````javascript
+     * viewer.getSnapshotWithPlugins({
+     *    width: 500,
+     *    height: 500,
+     *    format: "png"
+     * }).then((imageData)=>{
+     *
+     * });
+     * ````
+     * @param {*} [params] Capture options.
+     * @param {Number} [params.width] Desired width of result in pixels - defaults to width of canvas.
+     * @param {Number} [params.height] Desired height of result in pixels - defaults to height of canvas.
+     * @param {String} [params.format="jpeg"] Desired format; "jpeg", "png" or "bmp".
+     * @param {Boolean} [params.includeGizmos=false] When true, will include gizmos like {@link SectionPlane} in the snapshot.
+     * @returns {Promise} Promise which returns a string-encoded image data URI.
+     */
+    async getSnapshotWithPlugins(params = {}) {
+
+        // We use gl.readPixels to get the WebGL canvas snapshot in a new
+        // HTMLCanvas element, scaled to the target snapshot size, then
+        // use html2canvas to render each plugin's container element into
+        // that HTMLCanvas. Finally, we save the HTMLCanvas to a bitmap.
+
+        // We don't rely on html2canvas to up-scale our WebGL canvas
+        // when we want a higher-resolution snapshot, which would cause
+        // blurring. Instead, we manage the scale and redraw of the WebGL
+        // canvas ourselves, in order to allow the Viewer to render the
+        // right amount of pixels, for a sharper image.
+
+
+        const needFinishSnapshot = (!this._snapshotBegun);
+        const resize = (params.width !== undefined && params.height !== undefined);
+        const canvas = this.scene.canvas.canvas;
+        const saveWidth = canvas.clientWidth;
+        const saveHeight = canvas.clientHeight;
+        const snapshotWidth = params.width ? Math.floor(params.width) : canvas.width;
+        const snapshotHeight = params.height ? Math.floor(params.height) : canvas.height;
+
+        if (resize) {
+            canvas.width = snapshotWidth;
+            canvas.height = snapshotHeight;
+        }
+
+        if (!this._snapshotBegun) {
+            this.beginSnapshot();
+        }
+
+        if (!params.includeGizmos) {
+            this.sendToPlugins("snapshotStarting"); // Tells plugins to hide things that shouldn't be in snapshot
+        }
+
+        this.scene._renderer.renderSnapshot();
+
+        const snapshotCanvas = this.scene._renderer.readSnapshotAsCanvas();
+
+        if (resize) {
+            canvas.width = saveWidth;
+            canvas.height = saveHeight;
+            this.scene.glRedraw();
+        }
+
+        const pluginToCapture = {};
+        const pluginContainerElements = [];
+
+        for (let i = 0, len = this._plugins.length; i < len; i++) { // Find plugin container elements
+            const plugin = this._plugins[i];
+            if (plugin.getContainerElement) {
+                const containerElement = plugin.getContainerElement();
+                if (containerElement !== document.body) {
+                    if (!pluginToCapture[containerElement.id]) {
+                        pluginToCapture[containerElement.id] = true;
+                        pluginContainerElements.push(containerElement);
+                    }
+                }
+            }
+        }
+
+        for (let i = 0, len = pluginContainerElements.length; i < len; i++) {
+            const containerElement = pluginContainerElements[i];
+            await html2canvas(containerElement, {
+                canvas: snapshotCanvas,
+                backgroundColor: null,
+                scale: snapshotCanvas.width / containerElement.clientWidth
+            });
+        }
+        if (!params.includeGizmos) {
+            this.sendToPlugins("snapshotFinished");
+        }
+        if (needFinishSnapshot) {
+            this.endSnapshot();
+        }
+        let format = params.format || "png";
+        if (format !== "jpeg" && format !== "png" && format !== "bmp") {
+            console.error("Unsupported image format: '" + format + "' - supported types are 'jpeg', 'bmp' and 'png' - defaulting to 'png'");
+            format = "png";
+        }
+        if (!params.includeGizmos) {
+            this.sendToPlugins("snapshotFinished");
+        }
+        if (needFinishSnapshot) {
+            this.endSnapshot();
+        }
+        return snapshotCanvas.toDataURL(`image/${format}`);
     }
 
     /**

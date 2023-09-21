@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+
+    <style>
+
+        #myNavCubeCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 50px;
+            right: 10px;
+            z-index: 200000;
+        }
+
+        .xeokit-camera-pivot-marker {
+            color: #ffffff;
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border-radius: 15px;
+            border: 2px solid #ebebeb;
+            background: black;
+            visibility: hidden;
+            box-shadow: 5px 5px 15px 1px #000000;
+            z-index: 10000;
+            pointer-events: none;
+        }
+
+    </style>
+
+</head>
+
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<canvas id="myNavCubeCanvas"></canvas>
+<div class="slideout-sidebar">
+    <h1>Logarithmic depth buffer enabled</h1>
+    <p>XKT model with double-precision geometry, rendered <b>with</b> logarithmic buffer enabled</p><br>
+    <h3>Stats</h3>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+    </ul>
+    <h3>Components used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>Model provided by <a href="https://bimdata.io" target="_other">BIMData.io</a></li>
+    </ul>
+
+</div>
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {
+        Viewer,
+        XKTLoaderPlugin,
+        NavCubePlugin,
+        FastNavPlugin
+    } from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer with a logarithmic depth buffer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true,
+        logarithmicDepthBufferEnabled: true // <<--- Enable logarithmic depth buffer
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Higher-quality SAO configuration
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.sao.bias = -.3;
+    viewer.scene.sao.numSamples = 50;
+    viewer.scene.sao.kernelRadius = 200;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Higher-quality rendering when camera still, lower-quality when moving
+    //------------------------------------------------------------------------------------------------------------------
+
+    new FastNavPlugin(viewer);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Configure Camera
+    //
+    // Since our viewer has a logarithmic depth buffer,
+    // we can set a huge distance for the Camera's far clipping plane
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.camera.eye = [1841982.5187600704, 19.207790938410042, -5173303.042326414];
+    viewer.scene.camera.look = [1842011.793756829, 9.913817421536704, -5173299.841616623];
+    viewer.scene.camera.up = [0.2991762376746394, 0.9536370664170352, 0.0327096983532173];
+
+    viewer.camera.perspective.near = 1.0;
+    viewer.camera.perspective.far = 10000000; // 10000km
+
+    viewer.camera.ortho.near = 1.0;
+    viewer.camera.ortho.far = 10000000; // 10000km
+
+    viewer.camera.projection = "ortho";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Configure CameraControl
+    //
+    // Show a dot about the pivot point, whenever we orbit the Camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const pivotElement = document.createRange().createContextualFragment("<div class='xeokit-camera-pivot-marker'></div>").firstChild;
+    document.body.appendChild(pivotElement);
+    viewer.cameraControl.pivotElement = pivotElement;
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Add a NavCube
+    //----------------------------------------------------------------------------------------------------------------------
+
+    new NavCubePlugin(viewer, {
+        canvasId: "myNavCubeCanvas",
+        visible: true,           // Initially visible (default)
+        size: 250,               // NavCube size in pixels (default is 200)
+        alignment: "topRight",   // Align NavCube to top-left of Viewer canvas
+        topMargin: 170,          // 170 pixels margin from top of Viewer canvas
+        cameraFly: true,       // Fly camera to each selected axis/diagonal
+        cameraFitFOV: 45,        // How much field-of-view the scene takes once camera has fitted it to view
+        cameraFlyDuration: 0.5 // How long (in seconds) camera takes to fly to each new axis/diagonal
+    });
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const t0 = performance.now();
+
+    document.getElementById("time").innerHTML = "Loading model 1 of 9";
+
+    const sceneModel = xktLoader.load({
+        id: "myModel",
+        src: "../../../assets/models/xkt/v7/MAP/MAP.xkt",
+        edges: true
+    });
+
+</script>
+</html>

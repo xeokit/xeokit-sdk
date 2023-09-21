@@ -3,13 +3,10 @@ import {RenderState} from '../webgl/RenderState.js';
 import {ArrayBuf} from '../webgl/ArrayBuf.js';
 import {math} from '../math/math.js';
 import {stats} from '../stats.js';
-import {WEBGL_INFO} from '../webglInfo.js';
 import {buildEdgeIndices} from '../math/buildEdgeIndices.js';
 import {geometryCompressionUtils} from '../math/geometryCompressionUtils.js';
 
 const memoryStats = stats.memory;
-const bigIndicesSupported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"];
-const IndexArrayType = bigIndicesSupported ? Uint32Array : Uint16Array;
 const tempAABB = math.AABB3();
 
 /**
@@ -21,7 +18,7 @@ const tempAABB = math.AABB3();
  *
  * Creating a {@link Mesh} with a ReadableGeometry that defines a single triangle, plus a {@link PhongMaterial} with diffuse {@link Texture}:
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#geometry_ReadableGeometry)]
+ * [[Run this example](/examples/#geometry_ReadableGeometry)]
  *
  * ````javascript
  * import {Viewer, Mesh, ReadableGeometry, PhongMaterial, Texture} from "xeokit-sdk.es.js";
@@ -66,7 +63,7 @@ class ReadableGeometry extends Geometry {
 
     /**
      * @private
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     get isReadableGeometry() {
         return true;
@@ -217,11 +214,7 @@ class ReadableGeometry extends Geometry {
             }
         }
         if (cfg.indices) {
-            if (!bigIndicesSupported && cfg.indices.constructor === Uint32Array) {
-                this.error("This WebGL implementation does not support Uint32Array");
-                return;
-            }
-            state.indices = (cfg.indices.constructor === Uint32Array || cfg.indices.constructor === Uint16Array) ? cfg.indices : new IndexArrayType(cfg.indices);
+            state.indices = (cfg.indices.constructor === Uint32Array || cfg.indices.constructor === Uint16Array) ? cfg.indices : new Uint32Array(cfg.indices);
             if (this._state.primitiveName === "triangles") {
                 this._numTriangles = (cfg.indices.length / 3);
             }

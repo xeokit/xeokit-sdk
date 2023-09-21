@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <style>
+        #mySectionPlanesOverviewCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 70px;
+            right: 10px;
+            z-index: 200000;
+        }
+
+        #mySectionPlaneControlDiv {
+            padding: 10px;
+            font-size: 20px;
+            color: rgba(0,0,0,1);
+            background-color: #ffffff;
+            border: 1px solid black;
+            opacity: 0.8;
+            position: absolute;
+            width: 200px;
+            height: calc(100vh - 300px);
+            top: 150px;
+            left: 50px;
+            z-index: 200000;
+            border-radius: 10px;
+            box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<canvas id="mySectionPlanesOverviewCanvas"></canvas>
+<div id="mySectionPlaneControlDiv">Click and vertically drag the mouse here to move the SectionPlane</div>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/section_plane_icon.png"/>
+    <h1>FaceAlignedSectionPlanesPlugin</h1>
+    <h2>Slices models open to reveal internal structures</h2>
+    <p>This example loads an IFC2x3 BIM model, then with programmatically creates face-aligned section planes
+        to slice it.</p>
+    <p>To edit the SectionPlane's position, ensure that you select it by clicking it in the
+        overview canvas, then drag vertically with mouse or touch input in the control area.</p>
+    <h3>Components used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html"
+               target="_other">FaceAlignedSectionPlanesPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="https://github.com/openBIMstandards/DataSetSchependomlaan"
+               target="_other">Model source</a>
+        </li>
+    </ul>
+</div>
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer, XKTLoaderPlugin, FaceAlignedSectionPlanesPlugin} from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-3.933, 2.855, 27.018];
+    viewer.camera.look = [4.400, 3.724, 8.899];
+    viewer.camera.up = [-0.018, 0.999, 0.039];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Add a XKTModelsPlugin - we'll use this to load the model geometry
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Add a FaceAlignedSectionPlanesPlugin - we'll use this to create cross-section planes
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sectionPlanes = new FaceAlignedSectionPlanesPlugin(viewer, {
+        overviewCanvasId: "mySectionPlanesOverviewCanvas",
+        controlElementId: "mySectionPlaneControlDiv",
+        overviewVisible: true,
+        dragSensitivity: 1
+    });
+
+    sectionPlanes.setDragSensitivity(1); // Set sensitivity of drag and touch input
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load the .xkt model
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sceneModel = xktLoader.load({
+        id: "myModel",
+        src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt",
+        edges: true,
+        backfaces: true // Sometimes it's best to show backfaces, so that sliced objects look less odd
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a SectionPlane
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sectionPlane = sectionPlanes.createSectionPlane({
+        id: "mySectionPlane",
+        pos: [1.8933897259414376, 3.8494953147158935, 16.297288643481703],
+        dir: [0.007873527603475804, 0.007873527603475804, -0.9999380056414271]
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Activate the drag control element for the SectionPlane
+    //------------------------------------------------------------------------------------------------------------------
+
+
+    sectionPlanes.showControl(sectionPlane.id);
+
+</script>
+
+</html>

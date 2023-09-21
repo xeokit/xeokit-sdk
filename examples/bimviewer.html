@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xeokit BIMViewer Selected Examples</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .card {
+            transition: transform 0.2s; /* Add smooth transition effect */
+        }
+
+        .card:hover {
+            transform: scale(1.05); /* Slightly enlarge the card on hover */
+        }
+
+        .card {
+            display: block;
+            width: 100%;
+            height: 100%;
+            min-height: 400px;
+            text-decoration: none;
+        }
+
+        .card h4.card-title {
+            color: inherit;
+        }
+
+        .card p.card-text {
+            color: inherit;
+        }
+
+        .thumbnail {
+
+            max-width: 100%;
+            min-height: 200px;
+            max-height: 200px; /* Adjust this value for the desired height */
+            object-fit: cover; /* Maintain aspect ratio and cover thumbnail area */
+        }
+
+        a.card-link {
+            font-size: 18px;
+            color: inherit;
+            text-decoration: none;
+            display: block;
+        }
+
+
+        .card-title {
+            color: black;
+        }
+
+        .card:hover .card-title {
+            color: blue;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2 class="mb-3"><a href="https://xeokit.io">xeokit</a> / <a href="https://github.com/xeokit/xeokit-bim-viewer">BIMViewer</a>
+        Examples</h2>
+    <a href="https://badge.fury.io/js/@xeokit%2Fxeokit-bim-viewer"><img
+            src="https://badge.fury.io/js/@xeokit%2Fxeokit-bim-viewer.svg" alt="npm version" height="18"></a>
+    <br><br>
+    <p><a href="https://github.com/xeokit/xeokit-bim-viewer">BIMViewer</a> is an open source 2D/3D BIM viewer
+        that
+        runs in the browser and loads models from your file
+        system. The viewer is built on xeokit, and is bundled as an example application within the xeokit SDK. Click on
+        one of the links below
+        to
+        try it out, or try some of our <a href="./index.html">SDK programming examples</a> to
+        learn about how you
+        can build your own custom applications.</p>
+    <br><br>
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <a href="https://xeokit.io/demo.html?projectId=MAP" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail"
+                         src="../assets/images/BIMViewer_MAP.png"
+                         alt="Thumbnail 2">
+                    <div class="card-body">
+                        <h4 class="card-title">MAP Appartment</h4>
+                        <p class="card-text">BIM model placed at coordinates <code>[1842022, 10, -5173301]</code>, demonstrating
+                            xeokit's support for double-precision geometry coordinates.
+                        </p>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <a href="https://xeokit.io/demo.html?projectId=Karhumaki&tab=storeys" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail" src="../assets/images/BIMViewer_Karhumaki.png"
+                         alt="Thumbnail 3">
+                    <div class="card-body">
+                        <h4 class="card-title">Karhumaki Bridge</h4>
+                        <p class="card-text">BIM model, loaded in one shot from multiple files created
+                            using our import pipeline's automatic model splitting feature,
+                            which allows us to load bigger models into the Browser.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <a href="https://xeokit.io/demo.html?projectId=RevitSamples" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail"
+                         src="../assets/images/BIMViewer_RAC.png" alt="Thumbnail 2">
+                    <div class="card-body">
+                        <h4 class="card-title">Revit IFC Models</h4>
+                        <p class="card-text">The RAC and RME example models, exported from Revit. Demonstrates property sets, which
+                            may be inspected in the viewer.</p>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <a href="https://xeokit.io/demo.html?projectId=WestRiversideHospital&tab=storeys" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail" src="../assets/images/BIMViewer_WestRiversideHospital.png"
+                         alt="Thumbnail 2">
+                    <div class="card-body">
+                        <h4 class="card-title">West Riverside Hospital</h4>
+                        <p class="card-text">West River Side Hospital federated BIM model - seven models: air
+                            conditioning,
+                            plumbing, electrical, alarms, sprinklers, structure and architecture.</p>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <a href="https://xeokit.io/demo.html?projectId=OTCConferenceCenter&tab=storeys" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail" src="../assets/images/BIMViewer_OTCConferenceCenter.png"
+                         alt="Thumbnail 1">
+                    <div class="card-body">
+                        <h4 class="card-title">OTC Conference Center</h4>
+                        <p class="card-text">IFC 2x3 OTC Conference Center model.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <a href="https://xeokit.io/demo.html?projectId=HolterTower&tab=storeys" class="card-link">
+                <div class="card">
+                    <img class="card-img-top thumbnail" src="../assets/images/BIMViewer_HolterTower.png"
+                         alt="Thumbnail 3">
+                    <div class="card-body">
+                        <h4 class="card-title">Holter Tower</h4>
+                        <p class="card-text">IFC 4 Holter Tower BIM model.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+
+    </div>
+</div>
+
+<!-- Include Bootstrap JS and jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -25,14 +25,14 @@ const PRESETS = {
  * * Located at {@link Scene#pointsMaterial}.
  * * Supports round and square points.
  * * Optional perspective point scaling.
- * * Globally configures "points" primitives for all {@link PerformanceModel}s.
+ * * Globally configures "points" primitives for all {@link VBOSceneModel}s.
  *
  * ## Usage
  *
  * In the example below, we'll customize the {@link Scene}'s global ````PointsMaterial````, then use
  * an {@link XKTLoaderPlugin} to load a model containing a point cloud.
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#materials_PointsMaterial)]
+ * [[Run this example](/examples/#materials_PointsMaterial)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin} from "xeokit-sdk.es.js";
@@ -51,6 +51,9 @@ const PRESETS = {
  * viewer.scene.pointsMaterial.perspectivePoints = true;
  * viewer.scene.pointsMaterial.minPerspectivePointSize = 1;
  * viewer.scene.pointsMaterial.maxPerspectivePointSize = 6;
+ * viewer.scene.pointsMaterial.filterIntensity = true;
+ * viewer.scene.pointsMaterial.minIntensity = 0.0;
+ * viewer.scene.pointsMaterial.maxIntensity = 1.0;
  *
  * const xktLoader = new XKTLoaderPlugin(viewer);
  *
@@ -88,6 +91,9 @@ class PointsMaterial extends Material {
      * @param {Boolean} [cfg.perspectivePoints=true] Whether apparent point size reduces with distance when {@link Camera#projection} is set to "perspective".
      * @param {Number} [cfg.minPerspectivePointSize=1] When ````perspectivePoints```` is ````true````, this is the minimum rendered size of each point in pixels.
      * @param {Number} [cfg.maxPerspectivePointSize=6] When ````perspectivePoints```` is ````true````, this is the maximum rendered size of each point in pixels.
+     * @param {Boolean} [cfg.filterIntensity=false] When this is true, points are only rendered when their intensity value falls within the range given in {@link }
+     * @param {Number} [cfg.minIntensity=0] When ````filterIntensity```` is ````true````, points with intensity below this value will not be rendered.
+     * @param {Number} [cfg.maxIntensity=1] When ````filterIntensity```` is ````true````, points with intensity above this value will not be rendered.
      * @param {String} [cfg.preset] Selects a preset PointsMaterial configuration - see {@link PointsMaterial#presets}.
      */
     constructor(owner, cfg = {}) {
@@ -100,7 +106,10 @@ class PointsMaterial extends Material {
             roundPoints: null,
             perspectivePoints: null,
             minPerspectivePointSize: null,
-            maxPerspectivePointSize: null
+            maxPerspectivePointSize: null,
+            filterIntensity: null,
+            minIntensity: null,
+            maxIntensity: null
         });
 
         if (cfg.preset) { // Apply preset then override with configs where provided
@@ -124,10 +133,15 @@ class PointsMaterial extends Material {
             this._preset = "default";
             this.pointSize = cfg.pointSize;
             this.roundPoints = cfg.roundPoints;
+
             this.perspectivePoints = cfg.perspectivePoints;
             this.minPerspectivePointSize = cfg.minPerspectivePointSize;
             this.maxPerspectivePointSize = cfg.maxPerspectivePointSize;
         }
+
+        this.filterIntensity = cfg.filterIntensity;
+        this.minIntensity = cfg.minIntensity;
+        this.maxIntensity = cfg.maxIntensity;
     }
 
     /**
@@ -259,6 +273,80 @@ class PointsMaterial extends Material {
     }
 
     /**
+     * Sets if rendered point size reduces with distance when {@link Camera#projection} is set to ````"perspective"````.
+     *
+     * Default is ````false````.
+     *
+     * @type {Boolean}
+     */
+    set filterIntensity(value) {
+        value = (value !== false);
+        if (this._state.filterIntensity === value) {
+            return;
+        }
+        this._state.filterIntensity = value;
+        this.scene._needRecompile = true;
+        this.glRedraw();
+    }
+
+    /**
+     * Gets if rendered point size reduces with distance when {@link Camera#projection} is set to "perspective".
+     *
+     * Default is ````false````.
+     *
+     * @type {Boolean}
+     */
+    get filterIntensity() {
+        return this._state.filterIntensity;
+    }
+
+    /**
+     * Sets the minimum rendered size of points when {@link PointsMaterial#perspectivePoints} is ````true````.
+     *
+     * Default value is ````0````.
+     *
+     * @type {Number}
+     */
+    set minIntensity(value) {
+        this._state.minIntensity = (value !== undefined && value !== null) ? value: 0.0;
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the minimum rendered size of points when {@link PointsMaterial#filterIntensity} is ````true````.
+     *
+     * Default value is ````0````.
+     *
+     * @type {Number}
+     */
+    get minIntensity() {
+        return this._state.minIntensity;
+    }
+
+    /**
+     * Sets the maximum rendered size of points when {@link PointsMaterial#filterIntensity} is ````true````.
+     *
+     * Default value is ````1````.
+     *
+     * @type {Number}
+     */
+    set maxIntensity(value) {
+        this._state.maxIntensity = (value !== undefined && value !== null) ? value: 1.0;
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the maximum rendered size of points when {@link PointsMaterial#filterIntensity} is ````true````.
+     *
+     * Default value is ````1````.
+     *
+     * @type {Number}
+     */
+    get maxIntensity() {
+        return this._state.maxIntensity;
+    }
+
+    /**
      * Selects a preset ````PointsMaterial```` configuration.
      *
      * Default value is ````"default"````.
@@ -304,7 +392,8 @@ class PointsMaterial extends Material {
             this.roundPoints,
             this.perspectivePoints,
             this.minPerspectivePointSize,
-            this.maxPerspectivePointSize
+            this.maxPerspectivePointSize,
+            this.filterIntensity
         ].join((";"));
     }
 

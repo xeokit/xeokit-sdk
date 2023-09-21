@@ -7,7 +7,7 @@ import {utils} from '../../utils.js';
  *
  * Creating a {@link Mesh} with a cylinder-shaped {@link ReadableGeometry} :
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#geometry_builders_buildCylinderGeometry)]
+ * [[Run this example](/examples/#geometry_builders_buildCylinderGeometry)]
  *
  * ````javascript
  *

@@ -7,7 +7,7 @@ import {math} from '../../math/math.js';
  * ## Usage
  * Creating a {@link Mesh} with a torus-shaped {@link ReadableGeometry} :
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#geometry_builders_buildTorusGeometry)]
+ * [[Run this example](/examples/#geometry_builders_buildTorusGeometry)]
  * 
  * ````javascript
  * import {Viewer, Mesh, buildTorusGeometry, ReadableGeometry, PhongMaterial, Texture} from "xeokit-sdk.es.js";

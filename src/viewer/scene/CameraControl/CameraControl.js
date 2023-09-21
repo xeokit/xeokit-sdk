@@ -15,6 +15,8 @@ import {utils} from "../utils.js";
 import {math} from "../math/math.js";
 import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
 
+const DEFAULT_SNAP_PICK_RADIUS = 30;
+
 /**
  * @desc Controls the {@link Camera} with user input, and fires events when the user interacts with pickable {@link Entity}s.
  *
@@ -622,9 +624,8 @@ class CameraControl extends Component {
 
             // Private
 
-            tapInterval: 150, // Millisecs
-            doubleTapInterval: 325, // Millisecs
-            tapDistanceThreshold: 4, // Pixels
+            longTapTimeout: 600, // Millisecs
+            longTapRadius: 5, // Pixels
 
             // General
 
@@ -640,6 +641,10 @@ class CameraControl extends Component {
             pointerEnabled: true,
             constrainVertical: false,
             smartPivot: false,
+            doubleClickTimeFrame: 250,
+            
+            snapMode: "vertex",
+            snapRadius: DEFAULT_SNAP_PICK_RADIUS,
 
             // Rotation
 
@@ -677,7 +682,8 @@ class CameraControl extends Component {
             activeTouches: [],
             tapStartPos: math.vec2(),
             tapStartTime: -1,
-            lastTapTime: -1
+            lastTapTime: -1,
+            longTouchTimeout: null
         };
 
         // Updates for CameraUpdater to process on next Scene "tick" event
@@ -890,6 +896,57 @@ class CameraControl extends Component {
         return this._configs.active;
     }
 
+    /**
+     * Sets the current snap mode for "hoverSnapOrSurface" events, to specify whether the pointer
+     * snaps to the nearest vertex or the nearest edge.
+     *
+     * Accepted values are:
+     *
+     * * "vertex" - (default) snap to the nearest vertex, or
+     * * "edge" - snap to the nearest edge.
+     *
+     * @param {String} snapMode The snap mode: "vertex" or "edge".
+     */
+    set snapMode(snapMode) {
+        snapMode = snapMode || "vertex";
+        if (snapMode !== "vertex" && snapMode !== "edge") {
+            this.error("Unsupported value for snapMode: " + snapMode + " - supported values are 'vertex' and 'edge' - defaulting to 'vertex'");
+            snapMode = "vertex";
+        }
+        this._configs.snapMode = snapMode;
+    }
+
+    /**
+     * Gets the current snap mode.
+     *
+     * @returns {String} The snap mode: "vertex" or "edge".
+     */
+    get snapMode() {
+        return this._configs.snapMode;
+    }
+
+    /**
+     * Sets the current snap radius for "hoverSnapOrSurface" events, to specify whether the radius
+     * within which the pointer snaps to the nearest vertex or the nearest edge.
+     *
+     * Default value is 30 pixels.
+     *
+     * @param {Number} snapRadius The snap radius.
+     */
+    set snapRadius(snapRadius) {
+        snapRadius = snapRadius || DEFAULT_SNAP_PICK_RADIUS;
+        this._configs.snapRadius = snapRadius;
+    }
+
+    /**
+     * Gets the current snap radius.
+     *
+     * @returns {Number} The snap radius.
+     */
+    get snapRadius() {
+        return this._configs.snapRadius;
+    }
+    
     /**
      * Sets the current navigation mode.
      *
@@ -1619,6 +1676,30 @@ class CameraControl extends Component {
      */
     get smartPivot() {
         return this._configs.smartPivot;
+    }
+
+    /**
+     * Sets the double click time frame length in milliseconds.
+     * 
+     * If two mouse click events occur within this time frame, it is considered a double click. 
+     * 
+     * Default is ````250````
+     * 
+     * @param {Number} value New double click time frame.
+     */
+    set doubleClickTimeFrame(value) {
+        this._configs.doubleClickTimeFrame = (value !== undefined && value !== null) ? value : 250;
+    }
+
+    /**
+     * Gets the double click time frame length in milliseconds.
+     *  
+     * Default is ````250````
+     * 
+     * @param {Number} value Current double click time frame.
+     */
+    get doubleClickTimeFrame() {
+        return this._configs.doubleClickTimeFrame;
     }
 
     /**

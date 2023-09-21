@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <style>
+        #controls {
+            font-size: 16px;
+            position: absolute;
+            left: 10px;
+            top: 60px;
+            margin-top: 20px;
+            height: auto;
+            width: auto;
+            pointer-events: all;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<ul id="controls">
+    <li>
+        <a href="javascript:viewer.cameraFlight.flyTo({ projection: 'ortho', duration: 1.0  })">viewer.cameraFlight.flyTo({
+            projection: 'ortho' })</a>
+    </li>
+    <li>
+        <a href="javascript:viewer.cameraFlight.flyTo({ projection: 'perspective', duration: 1.0  })">viewer.cameraFlight.flyTo({
+            projection: 'perspective' })</a>
+    </li>
+</ul>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/camera_icon.png"/>
+    <h1>CameraFlightAnimation</h1>
+    <h2>Smooth transition between projections</h2>
+    <p>In this example, we load a BIM model from the file system, then demonstrate how to transition smoothly between
+        orthographic and perspective projections.
+
+    <h3>Components used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html"
+               target="_other">CameraFlightAnimation</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/301"
+               target="_other">Model source</a>
+        </li>
+    </ul>
+</div>
+</body>
+
+<script type="module">
+
+    import {Viewer, XKTLoaderPlugin} from "../../dist/xeokit-sdk.min.es.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas"
+    });
+
+    viewer.camera.eye = [-3.933, 2.855, 27.018];
+    viewer.camera.look = [4.400, 3.724, 8.899];
+    viewer.camera.up = [-0.018, 0.999, 0.039];
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const sceneModel = xktLoader.load({
+        id: "myModel",
+        src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt",
+        edges: true
+    });
+
+    sceneModel.on("loaded", function () {
+        viewer.cameraFlight.flyTo(sceneModel);
+    });
+
+    window.viewer = viewer;
+
+</script>
+</html>

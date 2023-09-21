@@ -17,14 +17,14 @@ const PRESETS = {
  * @desc Configures the shape of "lines" geometry primitives.
  *
  * * Located at {@link Scene#linesMaterial}.
- * * Globally configures "lines" primitives for all {@link PerformanceModel}s.
+ * * Globally configures "lines" primitives for all {@link VBOSceneModel}s.
  *
  * ## Usage
  *
  * In the example below, we'll customize the {@link Scene}'s global ````LinesMaterial````, then use
  * an {@link XKTLoaderPlugin} to load a model containing line segments.
  *
- * [[Run this example](http://xeokit.github.io/xeokit-sdk/examples/#materials_LinesMaterial)]
+ * [[Run this example](/examples/#materials_LinesMaterial)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin} from "xeokit-sdk.es.js";
@@ -44,7 +44,7 @@ const PRESETS = {
  *
  * const model = xktLoader.load({
  *      id: "myModel",
- *      src: "./models/xkt/Duplex.xkt"
+ *      src: "./models/xkt/Duplex.ifc.xkt"
  * });
  * ````
  */

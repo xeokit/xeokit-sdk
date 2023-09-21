@@ -18,6 +18,8 @@ import {Metrics} from "../metriqs/Metriqs.js";
 import {SAO} from "../postfx/SAO.js";
 import {PointsMaterial} from "../materials/PointsMaterial.js";
 import {LinesMaterial} from "../materials/LinesMaterial.js";
+import {LOD} from "../lod/LOD.js";
+import {VFC} from "../vfc/VFC";
 
 // Enables runtime check for redundant calls to object state update methods, eg. Scene#_objectVisibilityUpdated
 const ASSERT_OBJECT_STATE_UPDATE = false;
@@ -338,7 +340,9 @@ class Scene extends Component {
      * @param {Viewer} viewer The Viewer this Scene belongs to.
      * @param {Object} cfg Scene configuration.
      * @param {String} [cfg.canvasId]  ID of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
+     * @param {String} [cfg.lodEnabled]  ID of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
+     * @param {HTMLElement} [cfg.keyboardEventsElement] Optional reference to HTML element on which key events should be handled. Defaults to the HTML Document.
      * @throws {String} Throws an exception when both canvasId or canvasElement are missing or they aren't pointing to a valid HTMLCanvasElement.
      */
     constructor(viewer, cfg = {}) {
@@ -568,6 +572,20 @@ class Scene extends Component {
         this.reflectionMaps = {};
 
         /**
+         * The {@link Bitmap}s in this Scene, each mapped to its {@link Bitmap#id}.
+         *
+         * @type {{String:Bitmap}}
+         */
+        this.bitmaps = {};
+
+        /**
+         * The {@link LineSet}s in this Scene, each mapped to its {@link LineSet#id}.
+         *
+         * @type {{String:LineSet}}
+         */
+        this.lineSets = {};
+
+        /**
          * The real world offset for this Scene
          *
          * @type {Number[]}
@@ -771,7 +789,8 @@ class Scene extends Component {
          */
         this.input = new Input(this, {
             dontClear: true, // Never destroy this component with Scene#clear();
-            element: this.canvas.canvas
+            element: this.canvas.canvas,
+            keyboardEventsElement: cfg.keyboardEventsElement
         });
 
         /**
@@ -806,7 +825,10 @@ class Scene extends Component {
         this._entityOffsetsEnabled = !!cfg.entityOffsetsEnabled;
         this._logarithmicDepthBufferEnabled = !!cfg.logarithmicDepthBufferEnabled;
 
+        this._dtxEnabled = (cfg.dtxEnabled !== false);
         this._pbrEnabled = !!cfg.pbrEnabled;
+        this._colorTextureEnabled = (cfg.colorTextureEnabled !== false);
+        this._dtxEnabled = !!cfg.dtxEnabled;
 
         // Register Scene on xeokit
         // Do this BEFORE we add components below
@@ -850,6 +872,22 @@ class Scene extends Component {
 
         this._camera.on("dirty", () => {
             this._renderer.imageDirty();
+        });
+
+        /** Configures Level-of-Detail (LOD) culling for {@link SceneModel}s belonging to this Scene.
+         * @type {LOD}
+         * @final
+         */
+        this.lod = new LOD(this, {
+            enabled: cfg.lodEnabled
+        });
+
+        /** Configures View Frustum Culling (VFC) for {@link SceneModel}s belonging to this Scene.
+         * @type {VFC}
+         * @final
+         */
+        this.vfc = new VFC(this, {
+            enabled: cfg.vfcEnabled
         });
     }
 
@@ -935,6 +973,16 @@ class Scene extends Component {
         this._needRecompile = true;
     }
 
+    _bitmapCreated(bitmap) {
+        this.bitmaps[bitmap.id] = bitmap;
+        this.scene.fire("bitmapCreated", bitmap, true /* Don't retain event */);
+    }
+
+    _lineSetCreated(lineSet) {
+        this.lineSets[lineSet.id] = lineSet;
+        this.scene.fire("lineSetCreated", lineSet, true /* Don't retain event */);
+    }
+
     _lightCreated(light) {
         this.lights[light.id] = light;
         this.scene._lightsState.addLight(light._state);
@@ -958,6 +1006,16 @@ class Scene extends Component {
         this.scene._sectionPlanesState.removeSectionPlane(sectionPlane._state);
         this.scene.fire("sectionPlaneDestroyed", sectionPlane, true /* Don't retain event */);
         this._needRecompile = true;
+    }
+
+    _bitmapDestroyed(bitmap) {
+        delete this.bitmaps[bitmap.id];
+        this.scene.fire("bitmapDestroyed", bitmap, true /* Don't retain event */);
+    }
+
+    _lineSetDestroyed(lineSet) {
+        delete this.lineSets[lineSet.id];
+        this.scene.fire("lineSetDestroyed", lineSet, true /* Don't retain event */);
     }
 
     _lightDestroyed(light) {
@@ -984,8 +1042,10 @@ class Scene extends Component {
     }
 
     _deregisterModel(entity) {
-        delete this.models[entity.id];
+        const modelId = entity.id;
+        delete this.models[modelId];
         this._modelIds = null; // Lazy regenerate
+        this.fire("modelUnloaded", modelId);
     }
 
     _registerObject(entity) {
@@ -1022,7 +1082,7 @@ class Scene extends Component {
         }
     }
 
-    _objectXRayedUpdated(entity) {
+    _objectXRayedUpdated(entity, notify = true) {
         if (entity.xrayed) {
             if (ASSERT_OBJECT_STATE_UPDATE && this.xrayedObjects[entity.id]) {
                 console.error("Redundant object xray update (xrayed=true)");
@@ -1039,9 +1099,12 @@ class Scene extends Component {
             this._numXRayedObjects--;
         }
         this._xrayedObjectIds = null; // Lazy regenerate
+        if (notify) {
+            this.fire("objectXRayed", entity, true);
+        }
     }
 
-    _objectHighlightedUpdated(entity) {
+    _objectHighlightedUpdated(entity, notify = true) {
         if (entity.highlighted) {
             if (ASSERT_OBJECT_STATE_UPDATE && this.highlightedObjects[entity.id]) {
                 console.error("Redundant object highlight update (highlighted=true)");
@@ -1058,9 +1121,12 @@ class Scene extends Component {
             this._numHighlightedObjects--;
         }
         this._highlightedObjectIds = null; // Lazy regenerate
+        if (notify) {
+            this.fire("objectHighlighted", entity, true);
+        }
     }
 
-    _objectSelectedUpdated(entity) {
+    _objectSelectedUpdated(entity, notify = true) {
         if (entity.selected) {
             if (ASSERT_OBJECT_STATE_UPDATE && this.selectedObjects[entity.id]) {
                 console.error("Redundant object select update (selected=true)");
@@ -1077,6 +1143,9 @@ class Scene extends Component {
             this._numSelectedObjects--;
         }
         this._selectedObjectIds = null; // Lazy regenerate
+        if (notify) {
+            this.fire("objectSelected", entity, true);
+        }
     }
 
     _objectColorizeUpdated(entity, colorized) {
@@ -1142,6 +1211,16 @@ class Scene extends Component {
     }
 
     /**
+     * Returns the capabilities of this Scene.
+     *
+     * @private
+     * @returns {{astcSupported: boolean, etc1Supported: boolean, pvrtcSupported: boolean, etc2Supported: boolean, dxtSupported: boolean, bptcSupported: boolean}}
+     */
+    get capabilities() {
+        return this._renderer.capabilities;
+    }
+
+    /**
      * Whether {@link Entity#offset} is enabled.
      *
      * This is set via the {@link Viewer} constructor and is ````false```` by default.
@@ -1150,6 +1229,21 @@ class Scene extends Component {
      */
     get entityOffsetsEnabled() {
         return this._entityOffsetsEnabled;
+    }
+
+    /**
+     * Whether precision surface picking is enabled.
+     *
+     * This is set via the {@link Viewer} constructor and is ````false```` by default.
+     *
+     * The ````pickSurfacePrecision```` option for ````Scene#pick```` only works if this is set ````true````.
+     *
+     * Note that when ````true````, this configuration will increase the amount of browser memory used by the Viewer.
+     *
+     * @returns {Boolean} True if precision picking is enabled.
+     */
+    get pickSurfacePrecisionEnabled() {
+        return false; // Removed
     }
 
     /**
@@ -1176,7 +1270,7 @@ class Scene extends Component {
     }
 
     /**
-     * Sets whether quality rendering is enabled.
+     * Gets whether physically-based rendering is enabled.
      *
      * Default is ````false````.
      *
@@ -1184,6 +1278,59 @@ class Scene extends Component {
      */
     get pbrEnabled() {
         return this._pbrEnabled;
+    }
+
+    /**
+     * Sets whether data texture scene representation (DTX) is enabled for the {@link Scene}.
+     *
+     * Even when enabled, DTX will only work if supported.
+     *
+     * Default value is ````false````.
+     *
+     * @type {Boolean}
+     */
+    set dtxEnabled(value) {
+        value = !!value;
+        if (this._dtxEnabled === value) {
+            return;
+        }
+        this._dtxEnabled = value;
+    }
+
+    /**
+     * Gets whether data texture-based scene representation (DTX) is enabled for the {@link Scene}.
+     *
+     * Even when enabled, DTX will only apply if supported.
+     *
+     * Default value is ````false````.
+     *
+     * @type {Boolean}
+     */
+    get dtxEnabled() {
+        return this._dtxEnabled;
+    }
+
+    /**
+     * Sets whether basic color texture rendering is enabled.
+     *
+     * Default is ````true````.
+     *
+     * @returns {Boolean} True if basic color texture rendering is enabled.
+     */
+    set colorTextureEnabled(colorTextureEnabled) {
+        this._colorTextureEnabled = !!colorTextureEnabled;
+        this.glRedraw();
+    }
+
+    /**
+     * Gets whether basic color texture rendering is enabled.
+     *
+     * Default is ````true````.
+     *
+     * @returns {Boolean} True if basic color texture rendering is enabled.
+     */
+    get colorTextureEnabled() {
+        return this._colorTextureEnabled;
     }
 
     /**
@@ -1224,6 +1371,10 @@ class Scene extends Component {
             this._recompile();
             this._renderer.imageDirty();
             this._needRecompile = false;
+        }
+
+        if (!forceRender && !this._renderer.needsRender()) {
+            return;
         }
 
         renderEvent.sceneId = this.id;
@@ -2009,6 +2160,7 @@ class Scene extends Component {
      *
      * @param {*} params Picking parameters.
      * @param {Boolean} [params.pickSurface=false] Whether to find the picked position on the surface of the Entity.
+     * @param {Boolean} [params.pickSurfacePrecision=false] When picking an Entity surface position, indicates whether or not we want full-precision {@link PickResult#worldPos}. Only works when {@link Scene#pickSurfacePrecisionEnabled} is ````true````. If pick succeeds, the returned {@link PickResult} will have {@link PickResult#precision} set ````true````, to indicate that it contains full-precision surface pick results.
      * @param {Boolean} [params.pickSurfaceNormal=false] Whether to find the picked normal on the surface of the Entity. Only works if ````pickSurface```` is given.
      * @param {Number[]} [params.canvasPos] Canvas-space coordinates. When ray-picking, this will override the **origin** and ** direction** parameters and will cause the ray to be fired through the canvas at this position, directly along the negative View-space Z-axis.
      * @param {Number[]} [params.origin] World-space ray origin when ray-picking. Ignored when canvasPos given.
@@ -2061,6 +2213,20 @@ class Scene extends Component {
     }
 
     /**
+     * @param {Object} params Picking parameters.
+     * @param {Number[]} [params.canvasPos] Canvas-space coordinates. When ray-picking, this will override the **origin** and ** direction** parameters and will cause the ray to be fired through the canvas at this position, directly along the negative View-space Z-axis.
+     * @param {Number} [params.snapRadius=30] The snap radius, in canvas pixels
+     * @param {"vertex"|"edge"} [params.snapMode="vertex"] Whether to snap to vertex or edge.
+     */
+    snapPick(params) {
+        return this._renderer.snapPick(
+            params.canvasPos,
+            params.snapRadius || 30,
+            params.snapMode || "vertex"
+        );
+    }
+
+    /**
      * Destroys all non-default {@link Component}s in this Scene.
      */
     clear() {
@@ -2092,6 +2258,27 @@ class Scene extends Component {
         const ids = Object.keys(this.sectionPlanes);
         for (let i = 0, len = ids.length; i < len; i++) {
             this.sectionPlanes[ids[i]].destroy();
+        }
+    }
+
+    /**
+     * Destroys all {@link Line}s in this Scene.
+     */
+    clearBitmaps() {
+        const ids = Object.keys(this.bitmaps);
+        for (let i = 0, len = ids.length; i < len; i++) {
+            this.bitmaps[ids[i]].destroy();
+        }
+    }
+
+
+    /**
+     * Destroys all {@link Line}s in this Scene.
+     */
+    clearLines() {
+        const ids = Object.keys(this.lineSets);
+        for (let i = 0, len = ids.length; i < len; i++) {
+            this.lineSets[ids[i]].destroy();
         }
     }
 
@@ -2176,7 +2363,7 @@ class Scene extends Component {
      * registered by {@link Entity#id} in {@link Scene#visibleObjects}.
      *
      * @param {String[]} ids Array of {@link Entity#id} values.
-     * @param {Boolean} visible Whether or not to cull.
+     * @param {Boolean} visible Whether or not to set visible.
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsVisible(ids, visible) {
@@ -2193,7 +2380,7 @@ class Scene extends Component {
      * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
      *
      * @param {String[]} ids Array of {@link Entity#id} values.
-     * @param {Boolean} collidable Whether or not to cull.
+     * @param {Boolean} collidable Whether or not to set collidable.
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsCollidable(ids, collidable) {
@@ -2214,7 +2401,7 @@ class Scene extends Component {
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsCulled(ids, culled) {
-        return this.withObjects(ids, this.objects, entity => {
+        return this.withObjects(ids, entity => {
             const changed = (entity.culled !== culled);
             entity.culled = culled;
             return changed;
@@ -2230,7 +2417,7 @@ class Scene extends Component {
      * registered by {@link Entity#id} in {@link Scene#selectedObjects}.
      *
      * @param {String[]} ids Array of {@link Entity#id} values.
-     * @param {Boolean} selected Whether or not to highlight.
+     * @param {Boolean} selected Whether or not to select.
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsSelected(ids, selected) {
@@ -2265,9 +2452,6 @@ class Scene extends Component {
      * Batch-updates {@link Entity#xrayed} on {@link Entity}s that represent objects.
      *
      * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
-     *
-     * Each {@link Entity} on which both {@link Entity#isObject} and {@link Entity#xrayed} are ````true```` is
-     * registered by {@link Entity#id} in {@link Scene#xrayedObjects}.
      *
      * @param {String[]} ids Array of {@link Entity#id} values.
      * @param {Boolean} xrayed Whether or not to xray.
@@ -2336,7 +2520,7 @@ class Scene extends Component {
      * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
      *
      * @param {String[]} ids Array of {@link Entity#id} values.
-     * @param {Boolean} pickable Whether or not to enable picking.
+     * @param {Boolean} pickable Whether or not to set pickable.
      * @returns {Boolean} True if any {@link Entity}s were updated, else false if all updates were redundant and not applied.
      */
     setObjectsPickable(ids, pickable) {
@@ -2362,12 +2546,9 @@ class Scene extends Component {
     }
 
     /**
-     * Iterates with a callback over {@link Entity#visible} on {@link Entity}s that represent objects.
+     * Iterates with a callback over {@link Entity}s that represent objects.
      *
      * An {@link Entity} represents an object when {@link Entity#isObject} is ````true````.
-     *
-     * Each {@link Entity} on which both {@link Entity#isObject} and {@link Entity#visible} are ````true```` is
-     * registered by {@link Entity#id} in {@link Scene#visibleObjects}.
      *
      * @param {String[]} ids Array of {@link Entity#id} values.
      * @param {Function} callback Callback to execute on eacn {@link Entity}.

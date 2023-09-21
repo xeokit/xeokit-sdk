@@ -58,16 +58,16 @@ var compressPositions = (function () { // http://cg.postech.ac.kr/research/mesh_
     const scale = math.mat4();
     return function (array, min, max) {
         const quantized = new Uint16Array(array.length);
-        var multiplier = new Float32Array([
+        const multiplier = new Float32Array([
             max[0] !== min[0] ? 65535 / (max[0] - min[0]) : 0,
             max[1] !== min[1] ? 65535 / (max[1] - min[1]) : 0,
             max[2] !== min[2] ? 65535 / (max[2] - min[2]) : 0
         ]);
         let i;
         for (i = 0; i < array.length; i += 3) {
-            quantized[i + 0] = Math.floor((array[i + 0] - min[0]) * multiplier[0]);
-            quantized[i + 1] = Math.floor((array[i + 1] - min[1]) * multiplier[1]);
-            quantized[i + 2] = Math.floor((array[i + 2] - min[2]) * multiplier[2]);
+            quantized[i + 0] = Math.max(0, Math.min(65535, Math.floor((array[i + 0] - min[0]) * multiplier[0])));
+            quantized[i + 1] = Math.max(0, Math.min(65535, Math.floor((array[i + 1] - min[1]) * multiplier[1])));
+            quantized[i + 2] = Math.max(0, Math.min(65535, Math.floor((array[i + 2] - min[2]) * multiplier[2])));
         }
         math.identityMat4(translate);
         math.translationMat4v(min, translate);
@@ -85,6 +85,17 @@ var compressPositions = (function () { // http://cg.postech.ac.kr/research/mesh_
     };
 })();
 
+function compressPosition(p, aabb, q) {
+    const multiplier = new Float32Array([
+        aabb[3] !== aabb[0] ? 65535 / (aabb[3] - aabb[0]) : 0,
+        aabb[4] !== aabb[1] ? 65535 / (aabb[4] - aabb[1]) : 0,
+        aabb[5] !== aabb[2] ? 65535 / (aabb[5] - aabb[2]) : 0
+    ]);
+    q[0] = Math.max(0, Math.min(65535, Math.floor((p[0] - aabb[0]) * multiplier[0])));
+    q[1] = Math.max(0, Math.min(65535, Math.floor((p[1] - aabb[1]) * multiplier[1])));
+    q[2] = Math.max(0, Math.min(65535, Math.floor((p[2] - aabb[2]) * multiplier[2])));
+}
+
 function decompressPosition(position, decodeMatrix, dest) {
     dest[0] = position[0] * decodeMatrix[0] + decodeMatrix[12];
     dest[1] = position[1] * decodeMatrix[5] + decodeMatrix[13];
@@ -92,7 +103,7 @@ function decompressPosition(position, decodeMatrix, dest) {
     return dest;
 }
 
-function decompressAABB(aabb, decodeMatrix, dest=aabb) {
+function decompressAABB(aabb, decodeMatrix, dest = aabb) {
     dest[0] = aabb[0] * decodeMatrix[0] + decodeMatrix[12];
     dest[1] = aabb[1] * decodeMatrix[5] + decodeMatrix[13];
     dest[2] = aabb[2] * decodeMatrix[10] + decodeMatrix[14];
@@ -155,8 +166,8 @@ var compressUVs = (function () {
         ]);
         let i;
         for (i = 0; i < array.length; i += 2) {
-            quantized[i + 0] = Math.floor((array[i + 0] - min[0]) * multiplier[0]);
-            quantized[i + 1] = Math.floor((array[i + 1] - min[1]) * multiplier[1]);
+            quantized[i + 0] = Math.max(0, Math.min(65535, Math.floor((array[i + 0] - min[0]) * multiplier[0])));
+            quantized[i + 1] = Math.max(0, Math.min(65535, Math.floor((array[i + 1] - min[1]) * multiplier[1])));
         }
         math.identityMat3(translate);
         math.translationMat3v(min, translate);
@@ -336,6 +347,7 @@ const geometryCompressionUtils = {
     getPositionsBounds: getPositionsBounds,
     createPositionsDecodeMatrix: createPositionsDecodeMatrix,
     compressPositions: compressPositions,
+    compressPosition:compressPosition,
     decompressPositions: decompressPositions,
     decompressPosition: decompressPosition,
     decompressAABB: decompressAABB,

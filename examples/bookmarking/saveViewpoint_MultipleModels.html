@@ -1,0 +1,166 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <style>
+        #downloadLink {
+            position: absolute;
+            font-size: 18px;
+            left: 75px;
+            top: 80px;
+            pointer-events: all;
+        }
+    </style>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div id="downloadLink"></div>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/bcf_logo.png"/>
+    <h1>BCFViewpointsPlugin</h1>
+    <h2>Saving a BCF viewpoint for multiple copies of a model</h2>
+    <p>The BIM Collaboration Format (BCF) is a structured file format used for issue tracking with a building
+        information model. BCF defines views of a building model and associated information on collisions
+        and errors connected with specific objects in the view. </p>
+    <p>In this example, we're simulating an unusual use case: loading two copies of the same BIM model from the file
+        system, slicing them with a
+        section plane, selecting some objects, then saving
+        the viewer state as a JSON-encoded BCF viewpoint.</p>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html"
+               target="_other">SectionPlanesPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html"
+               target="_other">BCFViewpointsPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="https://www.notion.so/xeokit/Saving-and-Loading-BCF-Viewpoints-800a5479dc8346848165c88b9ec84fcf"
+               target="_other">Tutorial</a>
+        </li>
+        <li>
+            <a href="https://github.com/openBIMstandards/DataSetSchependomlaan"
+               target="_other">Model source</a>
+        </li>
+    </ul>
+</div>
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, BCFViewpointsPlugin} from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const camera = viewer.camera;
+
+    viewer.camera.eye = [-1.73, 34.52, -48.39];
+    viewer.camera.look = [30.17, -6.41, 0.32];
+    viewer.camera.up = [0.31, 0.81, 0.48];
+
+    viewer.cameraControl.followPointer = true;
+
+    const sectionPlanes = new SectionPlanesPlugin(viewer);
+
+    sectionPlanes.createSectionPlane({
+        id: "myClip",
+        pos: [0, 0, 0],
+        dir: [0.5, 0.0, 0.5]
+    });
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    xktLoader.globalizeObjectIds = true;
+
+    const sceneModel = xktLoader.load({
+        id: "model1",
+        src: "../../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
+        edges: true,
+        excludeUnclassifiedObjects: false
+    });
+
+    sceneModel.on("loaded", function () {
+
+        const model2 = xktLoader.load({
+            id: "model2",
+            src: "../../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
+            edges: true,
+            excludeUnclassifiedObjects: false,
+            position: [30, 0, 0]
+        });
+
+        model2.on("loaded", () => {
+
+            viewer.scene.setObjectsSelected([
+                "model1#3b2U496P5Ebhz5FROhTwFH"
+            ], true);
+
+            viewer.scene.setObjectsSelected([
+                "model2#2MGtJUm9nD$Re1_MDIv0g2"
+            ], true);
+
+            const bcfViewpoints = new BCFViewpointsPlugin(viewer);
+
+            // Create download link
+            // https://stackoverflow.com/questions/2897619/using-html5-javascript-to-generate-and-save-a-file
+
+            const pom = document.createElement('a');
+
+            pom.onclick = function() {
+
+                const viewpoint = bcfViewpoints.getViewpoint({ // Options
+                    spacesVisible: false, // Don't force IfcSpace types visible in viewpoint (default)
+                    spaceBoundariesVisible: false, // Don't show IfcSpace boundaries in viewpoint (default)
+                    openingsVisible: false // Don't force IfcOpening types visible in viewpoint (default)
+                });
+
+                const viewpointStr = JSON.stringify(viewpoint, null, 4);
+                pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(viewpointStr));
+            }
+
+            pom.setAttribute('download', "bcfViewpoint.json");
+            pom.innerText = "Download BCF Viewpoint JSON";
+            document.getElementById("downloadLink").appendChild(pom);
+        });
+    });
+
+
+</script>
+
+</html>

@@ -11,7 +11,7 @@
 
 <script type="module">
 
-    import {Viewer,XKTLoaderPlugin,SectionPlanesPlugin,BCFViewpointsPlugin} from "../dist/xeokit-sdk.es.js";
+    import {Viewer,XKTLoaderPlugin,SectionPlanesPlugin,BCFViewpointsPlugin} from "./https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
     import {signalTestComplete} from "./lib/utils.js";
 
     const viewer = new Viewer({
@@ -33,7 +33,7 @@
 
     const model1 = xktLoader.load({
         id: "model1",
-        src: "../assets/models/xkt/v8/Schependomlaan.xkt",
+        src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
         edges: true
     });
 
@@ -41,7 +41,7 @@
 
         const model2 = xktLoader.load({
             id: "model2",
-            src: "../assets/models/xkt/v8/Schependomlaan.xkt",
+            src: "../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
             edges: true,
             position: [30, 0, 0]
         });

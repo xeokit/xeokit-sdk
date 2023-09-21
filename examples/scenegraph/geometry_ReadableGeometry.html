@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <h1>ReadableGeometry</h1>
+    <h2>JavaScript-resident geometry</h2>
+    <p>In this example, we're creating a simple 3D scene that contains geometry that is stored both on the GPU and in
+        browser
+        memory.</p>
+    <p>Storing the geometry data in browser memory increases the memory footprint, but allows us to access
+        it with JavaScript.</p>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html"
+               target="_other">Mesh</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html"
+               target="_other">ReadableGeometry</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html"
+               target="_other">PhongMaterial</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/materials/Texture.js~Texture.html"
+               target="_other">Texture</a>
+        </li>
+    </ul>
+</div>
+</body>
+
+<script id="source" type="module">
+
+    import {Viewer, Mesh, ReadableGeometry, PhongMaterial, Texture} from "../../dist/xeokit-sdk.min.es.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas"
+    });
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, {
+            primitive: "triangles",
+            positions: [0.0, 3, 0.0, -3, -3, 0.0, 3, -3, 0.0],
+            normals: [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0],
+            uv: [0.0, 0.0, 0.5, 1.0, 1.0, 0.0],
+            indices: [0, 1, 2]
+        }),
+        material: new PhongMaterial(viewer.scene, {
+            diffuseMap: new Texture(viewer.scene, {
+                src: "../../assets/textures/diffuse/uvGrid2.jpg"
+            }),
+            backfaces: true
+        })
+    });
+
+    viewer.scene.on("tick", function () {
+        viewer.scene.camera.orbitYaw(0.2);
+        viewer.scene.camera.orbitPitch(0.1);
+    });
+
+</script>
+</html>

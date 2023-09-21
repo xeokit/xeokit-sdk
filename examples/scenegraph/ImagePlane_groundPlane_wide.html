@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <h1>ImagePlane - Ground Plane using a Google Maps Satellite Image - Wide Version</h1>
+    <p>Using a wide image to demonstrate the ImagePlane's automatic sizing for image aspect when the height of the image
+        is greater than the width.</p>
+    <h3>Components used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html"
+               target="_other">ImagePlane</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="../../assets/images/schependomlaanSatMap.png">Satellite image</a> from Google Maps
+        </li>
+        <li>
+            <a href="https://github.com/buildingSMART/Sample-Test-Files/tree/master/IFC%202x3/Schependomlaan"
+               target="_other">Model
+                source</a>
+        </li>
+    </ul>
+</div>
+</body>
+
+<script id="source" type="module">
+
+    import {Viewer, ImagePlane, XKTLoaderPlugin, DirLight, AmbientLight} from "../../dist/xeokit-sdk.min.es.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-93.90, 90.78, 136.73];
+    viewer.camera.look = [1.89, -19.18, -17.71];
+    viewer.camera.up = [0.27, 0.85, -0.43];
+
+    viewer.cameraControl.followPointer = true;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Replace the Scene's default lights with three custom world-space DirLights
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.clearLights();
+
+    new DirLight(viewer.scene, {
+        dir: [-0.8, -0.6, -0.8],
+        color: [1.0, 1.0, 0.9],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new AmbientLight(viewer.scene, {
+        color: [0.9, 0.9, 1.0],
+        intensity: 0.8
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load Schependomlaan model
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer, {
+        objectDefaults: { // <<----- Only override color of IfcSpace elements, keep other original IFC colors
+            IfcSpace: {
+                visible: false,
+                pickable: false,
+                opacity: 0.2
+            },
+            IfcWindow: {
+                pickable: false,
+                opacity: 0.5
+            }
+        }
+    });
+
+    const sceneModel = xktLoader.load({
+        id: "myModel",
+        src: "../../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
+        edges: true,
+        rotation: [0, 22, 0],
+        position: [-8, 0, 15],
+        scale: [1.1, 1.1, 1.1]
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create an ImagePlane to represent the ground plane
+    //------------------------------------------------------------------------------------------------------------------
+
+    new ImagePlane(viewer.scene, {
+        src: "../../assets/images/schependomlaanSatMap_wide.png",
+        size: 190,
+        position: [0, -1, 0],
+        rotation: [0, 0, 0], // X, Y and Z
+        opacity: 1.0,
+        collidable: false,
+        gridVisible: true,
+        pickable: true
+    });
+
+</script>
+</html>

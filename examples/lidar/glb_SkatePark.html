@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/gltf_logo.png"/>
+    <h1>GLTFLoaderPlugin</h1>
+    <h2>Viewing a binary glTF photogrammetry test model</h2>
+    <p>In this example, we're using a <a
+            href="../../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
+            target="_other">GLTFLoaderPlugin</a> to load a photogrammetric scan from
+       a binary glTF (.glb) file.</p>
+    <p>
+    <h3>Components used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
+               target="_other">GLTFLoaderPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="https://sketchfab.com/matousekfoto"
+               target="_other">Model source</a>
+        </li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    import {Viewer, LightMap, GLTFLoaderPlugin} from "../../dist/xeokit-sdk.min.es.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true,
+        colorTextureEnabled: true,
+        pbrEnabled:false
+    });
+
+    viewer.scene.gammaInput = true;
+    viewer.scene.gammaOutput = true;
+    viewer.scene.gammaFactor = 4.4;
+
+    viewer.camera.eye = [-3.351107502463288, 3.9321259279903114, 4.030067755126885];
+    viewer.camera.look = [-0.687950493700225, 0.9435747389607769, 0.21646512460703526];
+    viewer.camera.up = [0.309485261773766, 0.8413154758004762, -0.4431784549404927];
+
+    const gltfLoader = new GLTFLoaderPlugin(viewer);
+
+    const sceneModel = gltfLoader.load({
+        id: "myModel",
+        src: "../../assets/models/gltf/SkatePark/glTF-Binary/SkatePark.glb"
+    });
+
+    sceneModel.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(sceneModel);
+    });
+
+    window.viewer = viewer;
+
+</script>
+</html>

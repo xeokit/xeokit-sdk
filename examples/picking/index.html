@@ -1,0 +1,479 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Examples</title>
+    <link href='https://fonts.googleapis.com/css?family=Exo+2:400,800,900,700,600,500|Roboto:100,300,400,500,700,900'
+          rel='stylesheet' type='text/css'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
+
+    <style>
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-size: 1rem;
+            line-height: 1.50;
+            color: #212529;
+            background-color: #000000;
+            text-decoration: none;
+            word-spacing: normal;
+            text-align: left;
+            letter-spacing: 0;
+            -webkit-font-smoothing: antialiased;
+            overflow-y: hidden;
+            overflow-x: hidden;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #index {
+            position: absolute;
+            height: 100%;
+            background: #fdfdfd;
+            overflow: auto;
+            border-right: 2px solid #212529;
+            padding: 20px;
+            padding-bottom: 100px;
+            user-select: none;
+        }
+
+        #index a {
+            /*text-decoration: none;*/
+        }
+
+        #index h1 {
+            margin-top: 0;
+            margin-bottom: 0;
+            font-size: 1.8rem;
+            font-weight: normal;
+            text-decoration: none !important;
+        }
+
+        #index h1 a {
+            color: #212529;
+        }
+
+        #index h2 {
+            font-size: 1.4rem;
+            font-weight: normal;
+            padding-top: 20px;
+            padding-bottom: 10px;
+            text-decoration: none;
+        }
+
+        #index .link {
+            margin-left: 0 !important;
+            padding-left: 0 !important;
+            padding-top: 1px;
+            text-decoration: none;
+            font-weight: normal;
+            background: #fdfdfd;
+            cursor: pointer;
+            line-height: 1.5em;
+        }
+
+        #index .selected {
+            margin-left: -5px !important;
+            padding-left: 5px !important;
+            padding-top: 0;
+            padding-bottom: 0;
+            border: 1px solid #676767;
+            background: #FFFF44;
+        }
+
+
+        #index .commentFirst {
+            margin-left: 0 !important;
+            padding-left: 0 !important;
+            padding-top: 1px;
+            text-decoration: none;
+            font-weight: normal;
+            font-style: italic;
+            color: #8b8b8b;
+            cursor: pointer;
+            line-height: 1.5em;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        #index .comment {
+            color: #8b8b8b;
+            margin-left: 0 !important;
+            padding-left: 0 !important;
+            padding-top: 1px;
+            text-decoration: none;
+            font-weight: normal;
+            font-style: italic;
+            cursor: pointer;
+            line-height: 1.5em;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        #index .link:hover {
+            text-decoration: underline;
+        }
+
+        .content-container {
+            position: absolute;
+            z-index: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0 auto;
+            overflow: hidden;
+            opacity: 1.0;
+            pointer-events: all;
+            transition: all 300ms ease-in-out;
+            background: lightblue;
+        }
+
+        .content-overlay {
+            position: absolute;
+            z-index: 7;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0 auto;
+            overflow: hidden;
+            opacity: 1.0;
+            pointer-events: none;
+            transition: all 300ms ease-in-out;
+        }
+
+        .slideout-sidebar {
+            position: fixed;
+            top: 0;
+            left: -600px;
+            z-index: 10;
+            width: 560px;
+            height: 100%;
+            padding: 0;
+            transition: all 300ms ease-in-out;
+        }
+
+        #index_toggle {
+            display: none;
+        }
+
+        #index_toggle:hover {
+            cursor: pointer;
+        }
+
+        .index-button {
+            position: absolute;
+            font-size: 18px;
+            top: 15px;
+            left: 20px;
+            text-align: center;
+            vertical-align: middle;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            z-index: 5;
+            transition: all 300ms ease-in-out;
+        }
+
+        .index-button:hover {
+            cursor: pointer;
+            color: black;
+        }
+
+        .page-title {
+            position: absolute;
+            font-size: 1.6rem;
+            top: 17px;
+            left: 75px;
+            text-align: left;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            z-index: 5;
+            transition: all 300ms ease-in-out;
+            max-width: calc(100% - 550px);
+            pointer-events: none;
+        }
+
+        .viewSourceButton {
+            position: absolute;
+            left: 20px;
+            bottom: 15px;
+            z-index: 200;
+            transition: all 300ms ease-in-out;
+        }
+
+        .viewSourceButton:hover {
+            cursor: pointer;
+            opacity: 1;
+            color: black;
+        }
+
+        #index_toggle:checked ~ .slideout-sidebar {
+            left: 0;
+        }
+
+        #index_toggle:checked + .index-button {
+            left: 585px;
+            color: white;
+        }
+
+        #index_toggle:checked ~ .page-title {
+            left: 530px;
+            color: white;
+        }
+
+        #index_toggle:checked ~ .viewSourceButton {
+            left: 570px;
+        }
+
+        #index_toggle:checked ~ .content-container {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        #index_toggle:checked ~ .content-overlay {
+            pointer-events: all;
+        }
+
+    </style>
+</head>
+<body>
+<input type="checkbox" id="index_toggle"/>
+<label for="index_toggle" class="index-button"><i class="fas fa-2x fa-bars"></i></label>
+<div class="page-title" id="page-title"></div>
+<div class="viewSourceButton" id="viewSourceButton"><i class="fas fa-2x fa-code"></i></div>
+<div class="content-overlay" id="viewer-overlay"></div>
+<iframe class="content-container" id="viewer" src="../default.html"></iframe>
+<div class="slideout-sidebar">
+    <div id="index"><h1><a href="http://xeokit.io">xeokit</a> / <a href="../">Examples</a> / Picking</h1></div>
+</div>
+</body>
+<script>
+
+    const files = {
+
+        "Interactive Picking": [
+
+            ["hover_entity", "Selecting entities by hovering over them with mouse"],
+            ["doubleClick_entity", "Selecting entities by double-clicking/tapping them"],
+        ],
+
+        "Pointer Snapping": [
+
+            ["snapToVertex", "snapToVertex"],
+            ["snapToEdge", "snapToEdge"]
+        ],
+
+        "Programmatic Picking": [
+
+            "#Canvas coordinates",
+
+            ["pick_canvas_entity", "Using Scene.pick to pick an entity at canvas coordinates"],
+            ["pick_canvas_surface", "Using Scene.pick to pick surface position on an entity at canvas coordinates"],
+
+            "#Ray intersection",
+
+            ["pick_ray_entity", "Using Scene.pick to pick an entity with a ray"],
+            ["pick_ray_surface", "Using Scene.pick to pick surface position on an entity with a ray"]
+        ],
+
+        "Picking Options": [
+
+            ["pick_setObjectsPickable", "Controlling which objects are pickable"]
+        ]
+    };
+
+    const list = document.getElementById('index');
+    const viewer = document.getElementById('viewer');
+    const viewerOverlay = document.getElementById('viewer-overlay');
+
+    const container = document.createElement('div');
+    list.appendChild(container);
+
+    const viewSourceButton = document.getElementById('viewSourceButton');
+    viewSourceButton.addEventListener('click', function (event) {
+        window.open('https://github.com/xeokit/xeokit-sdk/blob/master/examples/picking/' + selected + '.html');
+    }, false);
+
+    const indexToggle = document.getElementById("index_toggle");
+    const pageTitle = document.getElementById('page-title');
+
+    viewerOverlay.addEventListener('click', function (event) {
+        indexToggle.checked = false;
+    }, false);
+
+    // indexToggle.addEventListener('click', function (event) {
+    //     viewer.src="default.html";
+    // }, false);
+
+    const sectionDivs = {};
+    const divs = {};
+    const fileDescriptions = {};
+    let selected = null;
+    let index = 1;
+    var indexStr;
+
+    // Index
+
+    let div = document.createElement('h2');
+    div.textContent = "Index";
+
+    container.appendChild(div);
+    container.appendChild(document.createElement('hr'));
+
+    const sectionNames = Object.keys(files);
+    // sectionNames.sort((a, b) => {
+    //     if (a < b) {
+    //         return -1;
+    //     }
+    //     if (a > b) {
+    //         return 1;
+    //     }
+    //     return 0;
+    // });
+
+    for (let i = 0, len = sectionNames.length; i < len; i++) {
+        const sectionName = sectionNames[i];
+        const sectionFiles = files[sectionName];
+        var sectionDiv = document.createElement('div');
+        sectionDiv.className = 'link';
+        indexStr = "" + index++ + ".";
+        for (let i = indexStr.length, len = 5; i < len; i++) {
+            indexStr += ".";
+        }
+        sectionDiv.textContent = indexStr + sectionName;
+        sectionDiv.addEventListener('click', (function () {
+            const _sectionName = sectionName;
+            return function () {
+                sectionDivs[_sectionName].scrollIntoView();
+            }
+        })());
+        container.appendChild(sectionDiv);
+    }
+
+    container.appendChild(document.createElement('hr'));
+
+    _index = 1;
+
+    let clickedFile = null;
+
+    for (let i = 0, len = sectionNames.length; i < len; i++) {
+        const sectionName = sectionNames[i];
+        const sectionFiles = files[sectionName];
+        const sectionDiv = document.createElement('h2');
+        sectionDiv.textContent = _index++ + ". " + sectionName;
+        container.appendChild(sectionDiv);
+        sectionDivs[sectionName] = sectionDiv;
+        container.appendChild(document.createElement('hr'));
+
+        for (let i = 0; i < sectionFiles.length; i++) {
+
+            let sectionFile = sectionFiles[i];
+            let fileName;
+            let fileDesc;
+
+            if (!isString(sectionFile)) {
+                fileName = sectionFile[0];
+                fileDesc = sectionFile[1];
+            } else {
+                fileName = sectionFile;
+                fileDesc = sectionFile;
+            }
+
+            if (fileDesc.charAt(0) === "#") {
+                const commentDiv = document.createElement('div');
+                commentDiv.textContent = "// " + fileDesc.substring(1);
+                commentDiv.className = (i === 0 ? 'commentFirst' : 'comment');
+                container.appendChild(commentDiv);
+                continue;
+            }
+
+            const fileNameComponents = fileName.split('_');
+            //    fileNameComponents.shift();
+            const fileNamePath = fileNameComponents.join(' / ');
+            const fileNameDiv = document.createElement('div');
+            fileNameDiv.className = 'link';
+            fileNameDiv.textContent = fileNamePath; // expandCamel(name);
+            fileNameDiv.addEventListener('click', (function () {
+                const _file = fileName;
+                return function () {
+                    clickedFile = _file;
+                    window.location.hash = "#" + _file;
+                    viewer.src = "";
+                }
+            })());
+            container.appendChild(fileNameDiv);
+            divs[fileName] = fileNameDiv;
+            fileDescriptions[fileName] = fileDesc;
+        }
+    }
+
+    const paddingDiv = document.createElement('div');
+    paddingDiv.style["height"] = "50px";
+    container.appendChild(paddingDiv);
+
+    function expandCamel(str) {
+        return str.replace(/([A-Z])/g, function ($1) {
+            return " " + $1.toLowerCase();
+        });
+    }
+
+    if (window.location.hash !== '') {
+        load(window.location.hash.substring(1));
+    } else {
+        indexToggle.checked = true;
+    }
+
+    var hash = window.location.hash;
+
+    window.setInterval(function () {
+        if (window.location.hash !== hash || viewer.src === "") {
+            setTimeout(() => {
+                load(window.location.hash.substring(1));
+                hash = window.location.hash;
+            }, 300)
+
+            indexToggle.checked = false;
+        }
+    }, 70);
+
+    function scrollIntoView(div) {
+        document.getElementById("index").scrollTop = documentOffsetTop(div) - (window.innerHeight / 6);
+    }
+
+    function documentOffsetTop(div) {
+        return div.offsetTop + (div.offsetParent ? documentOffsetTop(div.offsetParent) : 0);
+    }
+
+    function load(file) {
+
+        pageTitle.innerText = fileDescriptions[file] || "Example not found - perhaps renamed?";
+
+        if (file.indexOf(".html", file.length - 5) !== -1) {
+            window.location = "./" + file + ".html";
+            return;
+        }
+
+        if (selected !== null) divs[selected].className = 'link';
+        divs[file].className = 'link selected';
+        window.location.hash = file;
+        viewer.src = file + '.html';
+        viewer.focus();
+        viewSourceButton.style.display = '';
+        selected = file;
+        if (clickedFile !== file) {
+            scrollIntoView(divs[file]);
+        }
+        clickedFile = null;
+    }
+
+    function isString(value) {
+        return (typeof value === 'string' || value instanceof String);
+    }
+
+</script>
+</html>

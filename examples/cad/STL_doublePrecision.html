@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/stl_logo.png"/>
+    <h1>STLLoaderPlugin</h1>
+    <h2>Loading an STL model with double-precision geometry</h2>
+    <h3>Components used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html"
+               target="_other">STLLoaderPlugin</a>
+        </li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer,STLLoaderPlugin,DirLight}  from "../../dist/xeokit-sdk.min.es.js";
+    import {generateTestSTL} from "../../assets/js/generateTestSTL.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas"
+    });
+
+    viewer.camera.eye = [0, 0, -100];
+    viewer.camera.look = [0, 0, 0];
+    viewer.camera.up = [0, 1, 0];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Replace the Scene's default lights with three custom world-space DirLights
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.clearLights();
+
+    new DirLight(viewer.scene, {
+        id: "keyLight",
+        dir: [0.8, -0.6, -0.8],
+        color: [1.0, 0.3, 0.3],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new DirLight(viewer.scene, {
+        id: "fillLight",
+        dir: [-0.8, -0.4, -0.4],
+        color: [0.3, 1.0, 0.3],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new DirLight(viewer.scene, {
+        id: "rimLight",
+        dir: [0.2, -0.8, 0.8],
+        color: [0.6, 0.6, 0.6],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load three double-precision STL models
+    //
+    // For this demo, we're dynamically generating our STL models, so that we can ensure
+    // that they have huge double-precision values for their vertex positions.
+    //------------------------------------------------------------------------------------------------------------------
+
+    const stlLoader = new STLLoaderPlugin(viewer);
+
+    stlLoader.load({
+        stl: generateTestSTL({
+            pos: [1000000000, 0, 1000000000]
+        })
+    });
+
+    stlLoader.load({
+        stl: generateTestSTL({
+            pos: [1000000000, 0, 1000000070]
+        })
+    });
+
+    stlLoader.load({
+        stl: generateTestSTL({
+            pos: [1000000000, 0, 1000000140]
+        })
+    });
+
+    viewer.cameraFlight.jumpTo(viewer.scene);
+
+    viewer.scene.on("tick", () => {
+        viewer.camera.orbitYaw(0.4);
+    })
+
+</script>
+</html>

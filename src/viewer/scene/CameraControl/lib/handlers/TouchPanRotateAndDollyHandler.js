@@ -54,7 +54,6 @@ class TouchPanRotateAndDollyHandler {
                 return;
             }
 
-            event.stopPropagation();
             event.preventDefault();
 
             const touches = event.touches;
@@ -139,8 +138,8 @@ class TouchPanRotateAndDollyHandler {
             // Scaling drag-rotate to canvas boundary
 
             const canvasBoundary = scene.canvas.boundary;
-            const canvasWidth = canvasBoundary[2] - canvasBoundary[0];
-            const canvasHeight = canvasBoundary[3] - canvasBoundary[1];
+            const canvasWidth = canvasBoundary[2];
+            const canvasHeight = canvasBoundary[3];
 
             const touches = event.touches;
 
@@ -162,7 +161,12 @@ class TouchPanRotateAndDollyHandler {
 
                 const xPanDelta = touch0Vec[0];
                 const yPanDelta = touch0Vec[1];
-                
+
+                if (states.longTouchTimeout !== null && (Math.abs(xPanDelta) > configs.longTapRadius || Math.abs(yPanDelta) > configs.longTapRadius)) {
+                    clearTimeout(states.longTouchTimeout);
+                    states.longTouchTimeout = null;
+                }
+
                 if (configs.planView) { // No rotating in plan-view mode
 
                     const camera = scene.camera;

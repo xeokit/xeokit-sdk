@@ -1,0 +1,233 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <script src="../libs/dat.gui.min.js" type="text/javascript"></script>
+    <link href="../css/dat-gui-light-style.css" rel="stylesheet"/>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/performance_icon.png"/>
+    <h1>Find Complex Entities</h1>
+    <h2>An experimental function to find entities that could be hidden while </h2>
+    <p>Entities are red when they are above a certain complexity and/or below a certain size.</p><br>
+    <h3>Stats</h3>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+    </ul>
+    <h3>Customize</h3>
+    <div id="myDatGuiContainer"></div>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="https://github.com/openBIMstandards/DataSetSchependomlaan"
+               target="_other">Model source</a>
+        </li>
+    </ul>
+</div>
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer, XKTLoaderPlugin, math} from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera, tweak highlight color to red, enable SAO
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true,
+        dtxEnabled: true
+    });
+
+    viewer.camera.eye = [-2.56, 8.38, 8.27];
+    viewer.camera.look = [13.44, 3.31, -14.83];
+    viewer.camera.up = [0.10, 0.98, -0.14];
+
+    viewer.scene.highlightMaterial.fillAlpha = 0.5;
+    viewer.scene.highlightMaterial.fillColor = [1, 0, 0];
+    viewer.scene.highlightMaterial.edgeColor = [1, 0.5, 0.5];
+
+    const sao = viewer.scene.sao;
+    sao.enabled = true;
+    sao.intensity = 0.5;
+    sao.bias = 0.5;
+    sao.scale = 1500.0;
+    sao.minResolution = 0.0;
+    sao.kernelRadius = 100;
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Create an XKT loader plugin and load a model
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    var t0 = performance.now();
+
+    document.getElementById("time").innerHTML = "Loading model...";
+
+    const sceneModel = xktLoader.load({
+        id: "myModel",
+        src: "../../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
+        edges: true
+    });
+
+    sceneModel.on("loaded", () => {
+        var t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
+    });
+
+    //-----------------------------------------------------------------------------------------------------------------
+    // Function that finds complex entities, with a callback to highlight those entities
+    //-----------------------------------------------------------------------------------------------------------------
+
+    function visitEntity(entity, isComplex) {
+        if (isComplex) {
+            entity.highlighted = true;
+        } else {
+            entity.highlighted = false;
+        }
+    }
+
+    function getMaxSize(viewer) {
+        const scene = viewer.scene;
+        const objectIds = scene.objectIds;
+        const entities = scene.objects;
+        const numEntities = objectIds.length;
+        let maxSize = 0;
+        for (let i = 0; i < numEntities; i++) {
+            const objectId = objectIds[i];
+            const entity = entities[objectId];
+            if (entity) {
+                const entityDiagSize = math.getAABB3Diag(entity.aabb);
+                if (entityDiagSize > maxSize) {
+                    maxSize = entityDiagSize;
+                }
+            }
+        }
+        return maxSize;
+    }
+
+    function getMinComplexity(viewer) {
+        const scene = viewer.scene;
+        const objectIds = scene.objectIds;
+        const entities = scene.objects;
+        const numEntities = objectIds.length;
+        let minComplexity = 0;
+        for (let i = 0; i < numEntities; i++) {
+            const objectId = objectIds[i];
+            const entity = entities[objectId];
+            if (entity) {
+                const entityTriangles = (entity.numTriangles || 0);
+                if (entityTriangles > minComplexity) {
+                    minComplexity = entityTriangles;
+                }
+            }
+        }
+        return minComplexity;
+    }
+
+    /**
+     *
+     * @param viewer
+     * @param params
+     * @param visitEntity
+     */
+    function findComplexEntities(viewer, params, visitEntity) {
+
+        const scene = viewer.scene;
+        const objectIds = scene.objectIds;
+        const entities = scene.objects;
+        const enableComplexityTest = (params.enableComplexityTest !== false);
+        const enableSizeTest = (params.enableSizeTest !== false);
+
+        const minComplexity = params.minComplexity;
+        const maxSize = params.maxSize;
+
+        for (var i = 0, len = objectIds.length; i < len; i++) {
+            const objectId = objectIds[i];
+            const entity = entities[objectId];
+            if (entity) {
+                const entityComplexity = entity.numTriangles;
+                const entitySize = math.getAABB3Diag(entity.aabb);
+                const isComplex = (((!enableComplexityTest) || (minComplexity <= entityComplexity)) && ((!enableSizeTest) || (entitySize <= maxSize)));
+                visitEntity(entity, isComplex);
+            }
+        }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    // When the model has loaded, create a GUI to interactively control our complex-entity-finding function
+    //------------------------------------------------------------------------------------------------------------------
+
+    sceneModel.on("loaded", () => {
+
+        const params = new function () {
+            this.enableComplexityTest = true;
+            this.minComplexity = 409;
+            this.enableSizeTest = true;
+            this.maxSize = 14;
+        }();
+
+        const prevParams = {};
+
+        function update() {
+            if ((prevParams.enableComplexityTest !== params.enableComplexityTest) ||
+                (prevParams.minComplexity !== params.minComplexity) ||
+                (prevParams.enableSizeTest !== params.enableSizeTest) ||
+                (prevParams.maxSize !== params.maxSize)) {
+
+                findComplexEntities(viewer, params, visitEntity);
+
+                Object.assign(prevParams, params);
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        update();
+
+        const minComplexity = getMinComplexity(viewer);
+        const maxSize = getMaxSize(viewer);
+
+        const gui = new dat.GUI({autoPlace: false, width: "100%"});
+        const complexityFolder = gui.addFolder('Complexity Filter');
+        complexityFolder.add(params, 'enableComplexityTest', true);
+        complexityFolder.add(params, 'minComplexity', 0, minComplexity);
+        complexityFolder.open();
+        const sizeFolder = gui.addFolder('Size Filter');
+        sizeFolder.add(params, 'enableSizeTest', true);
+        sizeFolder.add(params, 'maxSize', 0, maxSize);
+        sizeFolder.open();
+        var customContainer = document.getElementById('myDatGuiContainer');
+        customContainer.appendChild(gui.domElement);
+    });
+</script>
+</html>
+

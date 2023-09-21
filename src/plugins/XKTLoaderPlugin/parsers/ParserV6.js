@@ -72,7 +72,9 @@ const decompressColor = (function () {
     };
 })();
 
-function load(viewer, options, inflatedData, performanceModel) {
+function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx) {
+
+    const modelPartId = manifestCtx.getNextId();
 
     const positions = inflatedData.positions;
     const normals = inflatedData.normals;
@@ -101,8 +103,6 @@ function load(viewer, options, inflatedData, performanceModel) {
     const numPrimitiveInstances = primitiveInstances.length;
     const numEntities = eachEntityId.length;
     const numTiles = eachTileEntitiesPortion.length;
-
-    let nextMeshId = 0;
 
     // Count instances of each primitive
 
@@ -152,7 +152,7 @@ function load(viewer, options, inflatedData, performanceModel) {
         for (let tileEntityIndex = firstTileEntityIndex; tileEntityIndex < lastTileEntityIndex; tileEntityIndex++) {
 
             const xktEntityId = eachEntityId[tileEntityIndex];
-            const entityId = options.globalizeObjectIds ? math.globalizeObjectId(performanceModel.id, xktEntityId) : xktEntityId;
+            const entityId = options.globalizeObjectIds ? math.globalizeObjectId(sceneModel.id, xktEntityId) : xktEntityId;
 
             const entityMatrixIndex = eachEntityMatricesPortion[tileEntityIndex];
             const entityMatrix = matrices.slice(entityMatrixIndex, entityMatrixIndex + 16);
@@ -223,22 +223,21 @@ function load(viewer, options, inflatedData, performanceModel) {
                 const color = decompressColor(eachPrimitiveColorAndOpacity.subarray((primitiveIndex * 4), (primitiveIndex * 4) + 3));
                 const opacity = eachPrimitiveColorAndOpacity[(primitiveIndex * 4) + 3] / 255.0;
 
-                const meshId = nextMeshId++;
+                const meshId = manifestCtx.getNextId();
 
                 if (isReusedPrimitive) {
 
                     // Create mesh for multi-use primitive - create (or reuse) geometry, create mesh using that geometry
 
-                    const geometryId = "geometry." + tileIndex + "." + primitiveIndex; // These IDs are local to the PerformanceModel
+                    const geometryId = `${modelPartId}-geometry.${tileIndex}.${primitiveIndex}`; // These IDs are local to the SceneModel
 
                     if (!geometryCreated[geometryId]) {
 
-                        performanceModel.createGeometry({
+                        sceneModel.createGeometry({
                             id: geometryId,
-                            rtcCenter: tileCenter,
                             primitive: "triangles",
-                            positions: primitivePositions,
-                            normals: primitiveNormals,
+                            positionsCompressed: primitivePositions,
+                         //   normalsCompressed: primitiveNormals,
                             indices: primitiveIndices,
                             edgeIndices: primitiveEdgeIndices,
                             positionsDecodeMatrix: reusedPrimitivesDecodeMatrix
@@ -247,9 +246,10 @@ function load(viewer, options, inflatedData, performanceModel) {
                         geometryCreated[geometryId] = true;
                     }
 
-                    performanceModel.createMesh(utils.apply(meshDefaults, {
+                    sceneModel.createMesh(utils.apply(meshDefaults, {
                         id: meshId,
                         geometryId: geometryId,
+                        origin: tileCenter,
                         matrix: entityMatrix,
                         color: color,
                         opacity: opacity
@@ -259,12 +259,12 @@ function load(viewer, options, inflatedData, performanceModel) {
 
                 } else {
 
-                    performanceModel.createMesh(utils.apply(meshDefaults, {
+                    sceneModel.createMesh(utils.apply(meshDefaults, {
                         id: meshId,
-                        rtcCenter: tileCenter,
+                        origin: tileCenter,
                         primitive: "triangles",
-                        positions: primitivePositions,
-                        normals: primitiveNormals,
+                        positionsCompressed: primitivePositions,
+                        normalsCompressed: primitiveNormals,
                         indices: primitiveIndices,
                         edgeIndices: primitiveEdgeIndices,
                         positionsDecodeMatrix: tileDecodeMatrix,
@@ -278,7 +278,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
             if (meshIds.length > 0) {
 
-                performanceModel.createEntity(utils.apply(entityDefaults, {
+                sceneModel.createEntity(utils.apply(entityDefaults, {
                     id: entityId,
                     isObject: true,
                     meshIds: meshIds
@@ -291,10 +291,10 @@ function load(viewer, options, inflatedData, performanceModel) {
 /** @private */
 const ParserV6 = {
     version: 6,
-    parse: function (viewer, options, elements, performanceModel) {
+    parse: function (viewer, options, elements, sceneModel, metaModel, manifestCtx) {
         const deflatedData = extract(elements);
         const inflatedData = inflate(deflatedData);
-        load(viewer, options, inflatedData, performanceModel);
+        load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx);
     }
 };
 

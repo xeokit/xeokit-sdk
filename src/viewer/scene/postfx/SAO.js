@@ -176,12 +176,7 @@ class SAO extends Component {
 
         super(owner, cfg);
 
-        const ua = navigator.userAgent.match(/(opera|chrome|safari|firefox|msie)\/?\s*(\.?\d+(\.\d+)*)/i);
-        const browser = (navigator.userAgent.match(/Edge/i) || navigator.userAgent.match(/Trident.*rv[ :]*11\./i)) ? "msie" : ua[1].toLowerCase();
-        const isSafari = (browser === "safari");
-
-        this._supported = (!isSafari) &&
-            WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_standard_derivatives"]; // For computing normals in SAO fragment shader
+        this._supported = WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_standard_derivatives"]; // For computing normals in SAO fragment shader
 
         this.enabled = cfg.enabled;
         this.kernelRadius = cfg.kernelRadius;
@@ -241,7 +236,7 @@ class SAO extends Component {
      * Returns true if SAO is currently possible, where it is supported, enabled, and the current scene state is compatible.
      * Called internally by renderer logic.
      * @private
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     get possible() {
         if (!this._supported) {

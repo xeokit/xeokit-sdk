@@ -3,10 +3,13 @@ class Label {
 
     constructor(parentElement, cfg = {}) {
 
+        this._highlightClass = "viewer-ruler-label-highlighted";
+
         this._prefix = cfg.prefix || "";
         this._x = 0;
         this._y = 0;
         this._visible = true;
+        this._culled = false;
 
         this._label = document.createElement('div');
         this._label.className += this._label.className ? ' viewer-ruler-label' : 'viewer-ruler-label';
@@ -17,25 +20,55 @@ class Label {
         style["border-radius"] = 5 + "px";
         style.color = "white";
         style.padding = "4px";
-        style.border = "solid 0px white";
+        style.border = "solid 1px";
         style.background = "lightgreen";
         style.position = "absolute";
-        style["z-index"] = "5000005";
+        style["z-index"] = cfg.zIndex === undefined ? "5000005" : cfg.zIndex;
         style.width = "auto";
         style.height = "auto";
         style.visibility = "visible";
         style.top = 0 + "px";
         style.left = 0 + "px";
-        style["pointer-events"] = "none";
+        style["pointer-events"] = "all";
         style["opacity"] = 1.0;
+        if (cfg.onContextMenu) {
+            //  style["cursor"] = "context-menu";
+        }
         label.innerText = "";
 
         parentElement.appendChild(label);
 
         this.setPos(cfg.x || 0, cfg.y || 0);
         this.setFillColor(cfg.fillColor);
-        this.setBorderColor(cfg.borderColor);
+        this.setBorderColor(cfg.fillColor);
         this.setText(cfg.text);
+
+        if (cfg.onMouseOver) {
+            label.addEventListener('mouseover', (event) => {
+                cfg.onMouseOver(event, this);
+                event.preventDefault();
+            });
+        }
+
+        if (cfg.onMouseLeave) {
+            label.addEventListener('mouseleave', (event) => {
+                cfg.onMouseLeave(event, this);
+                event.preventDefault();
+            });
+        }
+
+        if (cfg.onMouseWheel) {
+            label.addEventListener('wheel', (event) => {
+                cfg.onMouseWheel(event, this);
+            });
+        }
+
+        if (cfg.onContextMenu) {
+            label.addEventListener('contextmenu', (event) => {
+                cfg.onContextMenu(event, this);
+                event.preventDefault();
+            });
+        }
     }
 
     setPos(x, y) {
@@ -63,15 +96,17 @@ class Label {
     }
 
     setText(text) {
-        this._label.innerText = this._prefix + "~" + (text || "");
+        this._label.innerHTML = this._prefix + (text || "");
     }
 
     setFillColor(color) {
-        this._label.style.background = color || "lightgreen";
+        this._fillColor = color || "lightgreen";
+        this._label.style.background =this._fillColor;
     }
 
     setBorderColor(color) {
-        this._label.style.border = "solid 2px" + (color || "black");
+        this._borderColor = color || "black";
+        this._label.style.border = "solid 1px " + this._borderColor;
     }
 
     setOpacity(opacity) {
@@ -83,11 +118,37 @@ class Label {
             return;
         }
         this._visible = !!visible;
-        this._label.style.visibility = this._visible ? "visible" : "hidden";
+        this._label.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
+    }
+
+    setCulled(culled) {
+        if (this._culled === culled) {
+            return;
+        }
+        this._culled = !!culled;
+        this._label.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
+    }
+
+    setHighlighted(highlighted) {
+        if (this._highlighted === highlighted) {
+            return;
+        }
+        this._highlighted = !!highlighted;
+        if (this._highlighted) {
+            this._label.classList.add(this._highlightClass);
+        } else {
+            this._label.classList.remove(this._highlightClass);
+        }
+    }
+
+    setClickable(clickable) {
+        this._label.style["pointer-events"] = (!!clickable) ? "all" : "none";
     }
 
     destroy() {
-        this._label.parentElement.removeChild(this._label);
+        if (this._label.parentElement) {
+            this._label.parentElement.removeChild(this._label);
+        }
     }
 }
 

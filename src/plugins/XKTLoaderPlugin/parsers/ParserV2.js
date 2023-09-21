@@ -76,10 +76,12 @@ const decompressColor = (function () {
     };
 })();
 
-function load(viewer, options, inflatedData, performanceModel) {
+function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx) {
 
-    performanceModel.positionsCompression = "precompressed";
-    performanceModel.normalsCompression = "precompressed";
+    const modelPartId = manifestCtx.getNextId();
+
+    sceneModel.positionsCompression = "precompressed";
+    sceneModel.normalsCompression = "precompressed";
 
     const positions = inflatedData.positions;
     const normals = inflatedData.normals;
@@ -104,7 +106,7 @@ function load(viewer, options, inflatedData, performanceModel) {
     for (let i = 0; i < numEntities; i++) {
 
         const xktEntityId = entityIDs [i];
-        const entityId = options.globalizeObjectIds ? math.globalizeObjectId(performanceModel.id, xktEntityId) : xktEntityId;
+        const entityId = options.globalizeObjectIds ? math.globalizeObjectId(sceneModel.id, xktEntityId) : xktEntityId;
         const metaObject = viewer.metaScene.metaObjects[entityId];
         const entityDefaults = {};
         const meshDefaults = {};
@@ -147,7 +149,7 @@ function load(viewer, options, inflatedData, performanceModel) {
             const jj = entityMeshIds [j];
 
             const lastMesh = (jj === (numMeshes - 1));
-            const meshId = entityId + ".mesh." + jj;
+            const meshId = manifestCtx.getNextId();
 
             const color = decompressColor(meshColors.subarray((jj * 4), (jj * 4) + 3));
             const opacity = meshColors[(jj * 4) + 3] / 255.0;
@@ -159,14 +161,14 @@ function load(viewer, options, inflatedData, performanceModel) {
 
             if (entityUsesInstancing [i] === 1) {
 
-                const geometryId = "geometry." + jj;
+                const geometryId = `${modelPartId}.geometry.${meshId}.${jj}`;
 
                 if (!(geometryId in alreadyCreatedGeometries)) {
 
-                    performanceModel.createGeometry({
+                    sceneModel.createGeometry({
                         id: geometryId,
-                        positions: tmpPositions,
-                        normals: tmpNormals,
+                        positionsCompressed: tmpPositions,
+                        normalsCompressed: tmpNormals,
                         indices: tmpIndices,
                         edgeIndices: tmpEdgeIndices,
                         primitive: "triangles",
@@ -176,23 +178,23 @@ function load(viewer, options, inflatedData, performanceModel) {
                     alreadyCreatedGeometries [geometryId] = true;
                 }
 
-                performanceModel.createMesh(utils.apply(meshDefaults, {
+                sceneModel.createMesh(utils.apply(meshDefaults, {
                     id: meshId,
                     color: color,
                     opacity: opacity,
                     matrix: entityMatrix,
-                    geometryId: geometryId,
+                    geometryId,
                 }));
 
                 meshIds.push(meshId);
 
             } else {
 
-                performanceModel.createMesh(utils.apply(meshDefaults, {
+                sceneModel.createMesh(utils.apply(meshDefaults, {
                     id: meshId,
                     primitive: "triangles",
-                    positions: tmpPositions,
-                    normals: tmpNormals,
+                    positionsCompressed: tmpPositions,
+                    normalsCompressed: tmpNormals,
                     indices: tmpIndices,
                     edgeIndices: tmpEdgeIndices,
                     positionsDecodeMatrix: inflatedData.positionsDecodeMatrix,
@@ -206,7 +208,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
         if (meshIds.length) {
 
-            performanceModel.createEntity(utils.apply(entityDefaults, {
+            sceneModel.createEntity(utils.apply(entityDefaults, {
                 id: entityId,
                 isObject: (entityIsObjects [i] === 1),
                 meshIds: meshIds
@@ -218,10 +220,10 @@ function load(viewer, options, inflatedData, performanceModel) {
 /** @private */
 const ParserV2 = {
     version: 2,
-    parse: function (viewer, options, elements, performanceModel) {
+    parse: function (viewer, options, elements, sceneModel, metaModel, manifestCtx) {
         const deflatedData = extract(elements);
         const inflatedData = inflate(deflatedData);
-        load(viewer, options, inflatedData, performanceModel);
+        load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx);
     }
 };
 

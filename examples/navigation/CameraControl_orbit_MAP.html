@@ -1,0 +1,286 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <script src="libs/dat.gui.min.js" type="text/javascript"></script>
+    <link href="../css/dat-gui-light-style.css" rel="stylesheet"/>
+    <style>
+
+        .xeokit-camera-pivot-marker {
+            color: #ffffff;
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border-radius: 15px;
+            border: 2px solid #ebebeb;
+            background: black;
+            visibility: hidden;
+            box-shadow: 5px 5px 15px 1px #000000;
+            z-index: 10000;
+            pointer-events: none;
+        }
+
+        #myNavCubeCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 50px;
+            right: 10px;
+            z-index: 200000;
+        }
+    </style>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<canvas id="myNavCubeCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/camera_icon.png"/>
+    <h1>CameraControl</h1>
+    <h2>Orbit mode</h2>
+    <p>In this example, we're loading a double-precision BIM model from the file system, then navigating using an
+        orbiting
+        camera.</p>
+    <p>This model's center is [1842022, 10, -5173301].</p>
+    <h3>Stats</h3>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+    </ul>
+    <h3>Customize</h3>
+    <div id="myDatGuiContainer"></div>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html"
+               target="_other">CameraControl</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html"
+               target="_other">NavCubePlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>Model provided by <a href="https://bimdata.io" target="_other">BIMData.io</a></li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {
+        Viewer,
+        XKTLoaderPlugin,
+        Mesh,
+        VBOGeometry,
+        buildGridGeometry,
+        PhongMaterial,
+        NavCubePlugin
+    } from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    const scene = viewer.scene;
+    const cameraFlight = viewer.cameraFlight;
+    const camera = scene.camera;
+
+    viewer.camera.eye = [-3.933, 2.855, 27.018];
+    viewer.camera.look = [4.400, 3.724, 8.899];
+    viewer.camera.up = [-0.018, 0.999, 0.039];
+
+    viewer.camera.orbitPitch(20);
+    viewer.camera.orbitYaw(100);
+
+    viewer.cameraControl.followPointer = true;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Customize CameraControl
+    //------------------------------------------------------------------------------------------------------------------
+
+    const cameraControl = viewer.cameraControl;
+
+    cameraControl.navMode = "orbit";
+    cameraControl.followPointer = true;
+
+    const pivotElement = document.createRange().createContextualFragment("<div class='xeokit-camera-pivot-marker'></div>").firstChild;
+    document.body.appendChild(pivotElement);
+    cameraControl.pivotElement = pivotElement;
+
+    cameraControl.on("picked", (e) => {
+        console.log("picked");
+    });
+
+    cameraControl.on("doublePicked", (e) => {
+        console.log("doublePicked");
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load a model and fit it to view
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const sceneModel = xktLoader.load({
+        id: "myModel",
+        src: "../../assets/models/xkt/v7/MAP/MAP.xkt",
+        metaModelSrc: "../../assets/models/xkt/v7/MAP/MAP.json",
+        edges: true
+    });
+
+    sceneModel.on("loaded", () => { // This synchronizes camera.ortho.scale to the model boundary
+        cameraFlight.flyTo(sceneModel);
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a mesh with grid
+    //------------------------------------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new VBOGeometry(viewer.scene, buildGridGeometry({
+            size: 300,
+            divisions: 60
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            color: [0.0, 0.0, 0.0],
+            emissive: [0.4, 0.4, 0.4]
+        }),
+        position: [0, -1.6, 0],
+        collidable: false
+    });
+
+    const t0 = performance.now();
+    document.getElementById("time").innerHTML = "Loading model...";
+    sceneModel.on("loaded", function () {
+        const t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds";
+    });
+
+    new NavCubePlugin(viewer, {
+        canvasId: "myNavCubeCanvas",
+        visible: true,           // Initially visible (default)
+        size: 250,               // NavCube size in pixels (default is 200)
+        alignment: "topRight",   // Align NavCube to top-left of Viewer canvas
+        topMargin: 170,          // 170 pixels margin from top of Viewer canvas
+        cameraFly: true,       // Fly camera to each selected axis/diagonal
+        cameraFitFOV: 45,        // How much field-of-view the scene takes once camera has fitted it to view
+        cameraFlyDuration: 0.5 // How long (in seconds) camera takes to fly to each new axis/diagonal
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // GUI to play with Camera configs
+    //------------------------------------------------------------------------------------------------------------------
+
+    const cameraControlParams = new function () {
+
+        this.active = cameraControl.active;
+        this.keyboardLayout = cameraControl.keyboardLayout;
+        this.ortho = camera.projection === "ortho";
+        this.followPointer = cameraControl.followPointer;
+        this.doublePickFlyTo = cameraControl.doublePickFlyTo;
+        this.panRightClick = cameraControl.panRightClick;
+        this.smartPivot = cameraControl.smartPivot;
+
+        this.dragRotationRate = cameraControl.dragRotationRate;
+        this.keyboardRotationRate = cameraControl.keyboardRotationRate;
+        this.rotationInertia = cameraControl.rotationInertia;
+
+        this.keyboardPanRate = cameraControl.keyboardPanRate;
+        this.panInertia = cameraControl.panInertia;
+
+        this.keyboardDollyRate = cameraControl.keyboardDollyRate;
+        this.mouseWheelDollyRate = cameraControl.mouseWheelDollyRate;
+        this.dollyInertia = cameraControl.dollyInertia;
+        this.dollyProximityThreshold = cameraControl.dollyProximityThreshold;
+        this.dollyMinSpeed = cameraControl.dollyMinSpeed;
+    }();
+
+    const update = () => {
+
+        cameraControl.active = cameraControlParams.active;
+        cameraControl.keyboardLayout = cameraControlParams.keyboardLayout;
+        camera.projection = cameraControlParams.ortho ? "ortho" : "perspective";
+        cameraControl.followPointer = cameraControlParams.followPointer;
+        cameraControl.doublePickFlyTo = cameraControlParams.doublePickFlyTo;
+        cameraControl.panRightClick = cameraControlParams.panRightClick;
+        cameraControl.smartPivot = cameraControlParams.smartPivot;
+
+        cameraControl.dragRotationRate = cameraControlParams.dragRotationRate;
+        cameraControl.keyboardRotationRate = cameraControlParams.keyboardRotationRate;
+        cameraControl.rotationInertia = cameraControlParams.rotationInertia;
+
+        cameraControl.keyboardPanRate = cameraControlParams.keyboardPanRate;
+        cameraControl.panInertia = cameraControlParams.panInertia;
+
+        cameraControl.keyboardDollyRate = cameraControlParams.keyboardDollyRate;
+        cameraControl.mouseWheelDollyRate = cameraControlParams.mouseWheelDollyRate;
+        cameraControl.dollyInertia = cameraControlParams.dollyInertia;
+        cameraControl.dollyProximityThreshold = cameraControlParams.dollyProximityThreshold;
+        cameraControl.dollyMinSpeed = cameraControlParams.dollyMinSpeed;
+
+        requestAnimationFrame(update);
+    };
+
+    update();
+
+    const gui = new dat.GUI({autoPlace: false, width: "100%"});
+
+    const cameraControlFolder = gui.addFolder('cameraControl');
+    cameraControlFolder.add(cameraControlParams, 'active');
+    cameraControlFolder.add(cameraControlParams, 'keyboardLayout', ["qwerty", "azerty"]);
+    cameraControlFolder.add(cameraControlParams, 'ortho');
+    cameraControlFolder.add(cameraControlParams, 'followPointer');
+    cameraControlFolder.add(cameraControlParams, 'doublePickFlyTo');
+    cameraControlFolder.add(cameraControlParams, 'panRightClick');
+    cameraControlFolder.add(cameraControlParams, 'smartPivot');
+    cameraControlFolder.open();
+
+    const rotationFolder = gui.addFolder('Rotation');
+    rotationFolder.add(cameraControlParams, 'dragRotationRate', 0, 720);
+    rotationFolder.add(cameraControlParams, 'keyboardRotationRate', 0, 360);
+    rotationFolder.add(cameraControlParams, 'rotationInertia', 0, 1);
+    rotationFolder.open();
+
+    const panningFolder = gui.addFolder('Panning');
+    panningFolder.add(cameraControlParams, 'keyboardPanRate', 0, 50);
+    panningFolder.add(cameraControlParams, 'panInertia', 0, 1);
+    panningFolder.open();
+
+    const dollyFolder = gui.addFolder('Dolly');
+    dollyFolder.add(cameraControlParams, 'keyboardDollyRate', 0, 30);
+    dollyFolder.add(cameraControlParams, 'mouseWheelDollyRate', 0, 100);
+    dollyFolder.add(cameraControlParams, 'dollyInertia', 0, 1);
+    dollyFolder.add(cameraControlParams, 'dollyProximityThreshold', 0, 150);
+    dollyFolder.add(cameraControlParams, 'dollyMinSpeed', 0.01, 1.0);
+    dollyFolder.open();
+
+    const customContainer = document.getElementById('myDatGuiContainer');
+    customContainer.appendChild(gui.domElement);
+
+</script>
+</html>

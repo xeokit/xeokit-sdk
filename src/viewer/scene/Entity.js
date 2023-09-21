@@ -97,6 +97,25 @@ class Entity {
     }
 
     /**
+     * Sets the 3D World-space origin for this Entity.
+     *
+     * @type {Float64Array}
+     * @abstract
+     */
+    set origin(origin) {
+
+    }
+
+    /**
+     * Gets the 3D World-space origin for this Entity.
+     *
+     * @type {Float64Array}
+     * @abstract
+     */
+    get origin() {
+    }
+
+    /**
      * World-space 3D axis-aligned bounding box (AABB) of this Entity.
      *
      * Represented by a six-element Float64Array containing the min/max extents of the
@@ -462,6 +481,14 @@ class Entity {
      * @type {Number[]}
      */
     get offset() {
+    }
+
+    /**
+     * Gets the World, View and Canvas-space positions of each vertex in a callback.
+     *
+     * @param callback
+     */
+    getEachVertex(callback) {
     }
 
     /**

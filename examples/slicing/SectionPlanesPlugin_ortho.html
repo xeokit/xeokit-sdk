@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <style>
+
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+            background: lightBlue;
+        }
+
+        #mySectionPlanesOverviewCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 70px;
+            right: 10px;
+            z-index: 200000;
+            /*border: 1px solid blue;*/
+        }
+
+    </style>
+
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<canvas id="mySectionPlanesOverviewCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../../assets/images/section_plane_icon.png"/>
+    <h1>SectionPlanesPlugin</h1>
+    <h2>Section planes overview canvas</h2>
+    <p>This example contains an IFC apartment model with two section planes. At bottom right is an overview of the
+        section planes. Click the planes in
+        the overview to activate an editing gizmo with which you can reposition them.</p>
+    <h3>Stats</h3>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+    </ul>
+    <h3>Components used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html"
+               target="_other">SectionPlanesPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
+               target="_other">Model source</a>
+        </li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin} from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-5.02, 2.22, 15.09];
+    viewer.camera.look = [4.97, 2.79, 9.89];
+    viewer.camera.up = [-0.05, 0.99, 0.02];
+    viewer.camera.project.fov = 45;
+
+    viewer.camera.projection = "ortho";
+
+    viewer.cameraControl.followPointer = true;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Add a XKTModelsPlugin - we'll use this to load the model geometry
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Add a SectionPlanesPlugin - we'll use this to create cross-section planes
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sectionPlanes = new SectionPlanesPlugin(viewer, {
+        overviewCanvasId: "mySectionPlanesOverviewCanvas",
+        overviewVisible: true
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load the .xkt model and IFC metadata
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sceneModel = xktLoader.load({
+        id: "myModel",
+        src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        edges: true,
+        backfaces: true // Sometimes it's best to show backfaces, so that sliced objects look less odd
+    });
+
+    sceneModel.on("loaded", () => {
+        viewer.cameraFlight.flyTo(sceneModel);
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a couple of cross-section planes
+    //------------------------------------------------------------------------------------------------------------------
+
+    sectionPlanes.createSectionPlane({
+        id: "mySectionPlane",
+        pos: [1.04, 1.95, 9.74],
+        dir: [1.0, 0.0, 0.0]
+    });
+
+    sectionPlanes.createSectionPlane({
+        id: "mySectionPlane2",
+        pos: [2.30, 4.46, 14.93],
+        dir: [0.0, -0.09, -0.79]
+    });
+
+</script>
+
+</html>

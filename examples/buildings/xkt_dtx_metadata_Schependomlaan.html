@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <h1>XKTLoaderPlugin</h1>
+    <img class="info-icon" src="../../assets/images/bim_icon.png"/>
+    <h2>Using model metadata to X-ray some objects.</h2>
+    <p>Loads an .xkt IFC model from the file system, then uses the metadata to xray the whole
+        third storey and fit it to view.</p>
+    <h3>Stats</h3>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+    </ul>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/metadata/MetaScene.js~MetaScene.html"
+               target="_other">MetaScene</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="https://github.com/openBIMstandards/DataSetSchependomlaan"
+               target="_other">Model source</a>
+        </li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer, XKTLoaderPlugin} from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // 1. Create a Viewer,
+    // 2. Arrange the camera,
+    // 3. Tweak the xray material
+    //------------------------------------------------------------------------------------------------------------------
+
+    // 1
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    // 2
+    viewer.camera.eye = [-2.56, 8.38, 8.27];
+    viewer.camera.look = [13.44, 3.31, -14.83];
+    viewer.camera.up = [0.10, 0.98, -0.14];
+
+    // 3
+    viewer.scene.xrayMaterial.fillColor = [0.0, 0.0, 1.0];
+    viewer.scene.xrayMaterial.edgeColor = [0.0, 0.0, 0.0];
+    viewer.scene.xrayMaterial.fillAlpha = 0.1;
+    viewer.scene.xrayMaterial.edgeAlpha = 0.4;
+
+
+    //------------------------------------------------------------------------------------------------------------------
+    // 1. Create an XKT loader plugin,
+    // 2. Load a XKT model
+    //------------------------------------------------------------------------------------------------------------------
+
+    // 1
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    // 2
+    const sceneModel = xktLoader.load({                                     // Creates a Node representing the model
+        id: "myModel",
+        src: "../../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
+        edges: true
+    });
+
+    const t0 = performance.now();
+
+    document.getElementById("time").innerHTML = "Loading model...";
+
+    sceneModel.on("loaded", function () {
+
+        const t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
+
+
+        //--------------------------------------------------------------------------------------------------------------
+        // 1. Find metadata on the third storey
+        // 2. Xray all the objects in the third storey
+        //--------------------------------------------------------------------------------------------------------------
+
+        // 1
+        const metaModel = viewer.metaScene.metaModels["myModel"];       // MetaModel with ID "myModel"
+        const metaObject
+            = viewer.metaScene.metaObjects["0u4wgLe6n0ABVaiXyikbkA"];   // MetaObject with ID "0u4wgLe6n0ABVaiXyikbkA"
+
+        const name = metaObject.name;                                   // "01 eerste verdieping"
+        const type = metaObject.type;                                   // "IfcBuildingStorey"
+        const parent = metaObject.parent;                               // MetaObject with type "IfcBuilding"
+        const children = metaObject.children;                           // Array of child MetaObjects
+        const objectId = metaObject.id;                                 // "0u4wgLe6n0ABVaiXyikbkA"
+        const objectIds = viewer.metaScene.getObjectIDsInSubtree(objectId);   // IDs of leaf sub-objects
+        const aabb = viewer.scene.getAABB(objectIds);                   // Axis-aligned boundary of the leaf sub-objects
+
+        // 2
+        viewer.scene.setObjectsXRayed(objectIds, true);
+        viewer.scene.setObjectsPickable(objectIds, false);
+    });
+
+    viewer.cameraControl.on("doublePicked", function (e) {
+        console.log("Picked: " + e);
+    });
+
+</script>
+</html>

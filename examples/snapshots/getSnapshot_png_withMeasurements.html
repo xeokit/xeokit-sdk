@@ -1,0 +1,183 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <style>
+
+        #snapshot {
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            height: 40%;
+            width: 40%;
+            left: 10px;
+            top: 100px;
+            background: lightblue;
+            z-index: 200000;
+            border: 2px black solid;
+        }
+
+        #measurementsContainer {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            margin: 0;
+            pointer-events: none;
+            z-index: 100000
+        }
+    </style>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<img id="snapshot" src=""></img>
+<div class="slideout-sidebar">
+    <h1>Capturing PNG Screenshots with Measurements Included</h1>
+    <p>Using viewer.getSnapshotWithPlugins()</p>
+    <h3>Components used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html"
+               target="_other">DistanceMeasurementsPlugin</a>
+
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="https://github.com/openBIMstandards/DataSetSchependomlaan"
+               target="_other">Model source</a>
+        </li>
+    </ul>
+</div>
+<div id="measurementsContainer"></div>
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {
+        Viewer,
+        XKTLoaderPlugin,
+        DistanceMeasurementsPlugin
+    } from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer, arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true, // Default
+        preserveDrawingBuffer: true // Default - needed true for canvas screenshots
+    });
+
+    viewer.camera.eye = [-3.933, 2.855, 27.018];
+    viewer.camera.look = [4.400, 3.724, 8.899];
+    viewer.camera.up = [-0.018, 0.999, 0.039];
+
+    //----------------------------------------------------------------------------------------------------------------------
+    // Load a model and fit it to view
+    //----------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const sceneModel = xktLoader.load({
+        id: "myModel",
+        src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt",
+        edges: true
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create two DistanceMeasurements
+    //------------------------------------------------------------------------------------------------------------------
+
+    const distanceMeasurements = new DistanceMeasurementsPlugin(viewer, {
+        container: document.getElementById("measurementsContainer"),
+        zIndex: 100000 // If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
+    });
+
+    const myMeasurement1 = distanceMeasurements.createMeasurement({
+        id: "distanceMeasurement1",
+        origin: {
+            entity: viewer.scene.objects["0jf0rYHfX3RAB3bSIRjmoa"],
+            worldPos: [0.04815268516540527, 6.0054426193237305, 17.76587677001953]
+        },
+        target: {
+            entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FLOH"],
+            worldPos: [4.70150089263916, 3.09493088722229, 17.766956329345703]
+        },
+        visible: true,
+        wireVisible: true
+    });
+
+    const myMeasurement2 = distanceMeasurements.createMeasurement({
+        id: "distanceMeasurement2",
+        origin: {
+            entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FNr2"],
+            worldPos: [0.44101902244149116, 2.513236278487104, 17.79690253112633]
+        },
+        target: {
+            entity: viewer.scene.objects["1CZILmCaHETO8tf3SgGEXu"],
+            worldPos: [5.2587011937829935, 0.07359975878555769, 17.844586643910404]
+        },
+        visible: true,
+        wireVisible: true
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // When model loaded, start capturing PNG screenshots while orbiting the model
+    //------------------------------------------------------------------------------------------------------------------
+
+    const img = document.getElementById("snapshot");
+
+    sceneModel.on("loaded", () => {
+
+        const nextFrame = () => {
+
+            // This method will get a snapshot image, composed of
+            // an image of the viewer canvas, overlaid with an image
+            // of the HTML container element belonging to each installed
+            // Viewer plugin.
+
+            viewer.getSnapshotWithPlugins({
+                format: "png",
+                width: img.width * 2, // Upscale snapshot resolution 2x
+                height: img.height * 2
+
+            }).then((imageData) => {
+
+                img.src = imageData;
+
+                viewer.camera.orbitYaw(5);
+
+                setTimeout(nextFrame, 200);
+            });
+        };
+
+        nextFrame();
+    });
+
+</script>
+</html>

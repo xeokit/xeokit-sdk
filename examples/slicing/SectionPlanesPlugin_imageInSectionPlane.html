@@ -1,0 +1,180 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <script src="../libs/dat.gui.min.js" type="text/javascript"></script>
+    <link href="../css/dat-gui-light-style.css" rel="stylesheet"/>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/section_plane_icon.png"/>
+    <h1>SectionPlanesPlugin and ImagePlane</h1>
+    <h2>Embedding a 2D plan view in a section plane</h2>
+    <p>In this example, we're loading a BIM model and slicing it with a section plane, while embedding a 2D plan view
+        within the section plane.</p>
+
+    <h3>Customize</h3>
+    <div id="myDatGuiContainer"></div>
+
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html"
+               target="_other">SectionPlanesPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html"
+               target="_other">ImagePlane</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a
+                    href="../../assets/images/schependomlaanPlanView.png">Plan view image</a>
+        </li>
+        <li>
+            <a href="https://github.com/buildingSMART/Sample-Test-Files/tree/master/IFC%202x3/Schependomlaan"
+               target="_other">Model
+                source</a>
+        </li>
+    </ul>
+</div>
+</body>
+
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, ImagePlane} from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-9.11, 20.01, 5.13];
+    viewer.camera.look = [9.07, 0.77, -9.78];
+    viewer.camera.up = [0.47, 0.76, -0.38];
+    viewer.camera.perspective.near = 0.1;
+    viewer.camera.perspective.far = 5000.0;
+
+    viewer.cameraControl.followPointer = true;
+
+    const sao = viewer.scene.sao;
+    sao.enabled = true;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Add a XKTModelsPlugin - we'll use this to load the model geometry
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Add a SectionPlanesPlugin - we'll use this to create cross-section planes
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sectionPlanes = new SectionPlanesPlugin(viewer, {
+        overviewVisible: false
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load the .xkt model and IFC metadata
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sceneModel = xktLoader.load({
+        id: "myModel",
+        src: "../../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
+        edges: true,
+        saoEnabled: true
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a cross-section plane
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sectionPlane = sectionPlanes.createSectionPlane({
+        id: "mySectionPlane",
+        pos: [10.95, 1.95, -10.35],
+        dir: [0.0, -1.0, 0.0]
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create an ImagePlane to represent the SectionPlane
+    //------------------------------------------------------------------------------------------------------------------
+
+    const imagePlane = new ImagePlane(viewer.scene, {
+        src: "../../assets/images/schependomlaanPlanView.png",
+        visible: true,
+        gridVisible: true,
+        size: 23.95,
+        position: sectionPlane.pos,
+        dir: sectionPlane.dir,
+        collidable: false,
+        opacity: 0.75,
+        clippable: false,
+        pickable: false
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // GUI to play with imagePlane parameters
+    //------------------------------------------------------------------------------------------------------------------
+
+    const imagePlaneParams = new function () {
+        this.visible = imagePlane.visible;
+        this.gridVisible = imagePlane.gridVisible;
+        this.opacity = imagePlane.opacity;
+    }();
+
+    const update = function () {
+        if (imagePlane.visible !== imagePlaneParams.visible) {
+            imagePlane.visible = imagePlaneParams.visible;
+        }
+        if (imagePlane.gridVisible !== imagePlaneParams.gridVisible) {
+            imagePlane.gridVisible = imagePlaneParams.gridVisible;
+        }
+        if (imagePlane.opacity !== imagePlaneParams.opacity) {
+            imagePlane.opacity = imagePlaneParams.opacity;
+        }
+        requestAnimationFrame(update);
+    };
+
+    update();
+
+    const gui = new dat.GUI({autoPlace: false, width: "100%"});
+
+    const imagePlaneFolder = gui.addFolder('imagePlane');
+
+    imagePlaneFolder.add(imagePlaneParams, 'visible');
+    imagePlaneFolder.add(imagePlaneParams, 'opacity', 0.0, 0.95);
+    imagePlaneFolder.add(imagePlaneParams, 'gridVisible');
+    imagePlaneFolder.open();
+
+    const customContainer = document.getElementById('myDatGuiContainer');
+    customContainer.appendChild(gui.domElement);
+
+</script>
+
+</html>

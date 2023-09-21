@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+        <img class="info-icon" src="../../assets/images/geometry_icon.png"/>
+    <h1>buildPlaneGeometry()</h1>
+    <h2>Builds plane-shaped triangle meshes</h2>
+    <p>In this example, we're creating a simple 3D scene that contains a plane-shaped geometry, generated using the
+        buildPlaneGeometry helper function.</p>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html"
+               target="_other">Mesh</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html"
+               target="_other">ReadableGeometry</a>
+        </li>
+        <li>
+            <a href="../../docs/function/index.html#static-function-buildPlaneGeometry"
+               target="_other">buildPlaneGeometry</a>
+        </li>
+
+        <li>
+            <a href="../../docs/class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html"
+               target="_other">PhongMaterial</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/materials/Texture.js~Texture.html"
+               target="_other">Texture</a>
+        </li>
+    </ul>
+</div>
+</body>
+<script id="source" type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer, Mesh, buildPlaneGeometry, ReadableGeometry, PhongMaterial, Texture} from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas"
+    });
+
+    viewer.camera.eye = [0, 1, 5];
+    viewer.camera.look = [0, 0, 0];
+    viewer.camera.up = [0, 1, 0];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a mesh with torus shape
+    //------------------------------------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildPlaneGeometry({
+            xSize: 1,
+            ySize: 1,
+            zSize: 1
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            ambient: [0.9, 0.3, 0.9],
+            shininess: 30,
+            diffuseMap: new Texture(viewer.scene, {
+                src: "../../assets/textures/diffuse/uvGrid2.jpg"
+            })
+        })
+    });
+
+</script>
+</html>

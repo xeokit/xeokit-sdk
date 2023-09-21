@@ -221,8 +221,8 @@ class AxisGizmoPlugin extends Plugin {
                 pickable: false,
                 collidable: false,
                 visible: cfg.visible !== false,
-                position: [-5, 0, 0],
-                rotation: [0, 0, 90]
+                position: [5, 0, 0],
+                rotation: [0, 0, -90]
             }),
 
             new Mesh(axisGizmoScene, {  // Shaft
@@ -231,7 +231,7 @@ class AxisGizmoPlugin extends Plugin {
                 pickable: false,
                 collidable: false,
                 visible: cfg.visible !== false,
-                position: [-2, 0, 0],
+                position: [2, 0, 0],
                 rotation: [0, 0, 90]
             }),
 
@@ -241,7 +241,7 @@ class AxisGizmoPlugin extends Plugin {
                 pickable: false,
                 collidable: false,
                 visible: cfg.visible !== false,
-                position: [-7, 0, 0],
+                position: [7, 0, 0],
                 billboard: "spherical"
             }),
 
@@ -324,8 +324,8 @@ class AxisGizmoPlugin extends Plugin {
      */
     destroy() {
         this._axisGizmoCanvas = null;
-        this._navCubeScene.destroy();
-        this._navCubeScene = null;
+        this._axisGizmoScene.destroy();
+        this._axisGizmoScene = null;
         super.destroy();
     }
 }

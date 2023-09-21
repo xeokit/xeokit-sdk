@@ -1,5 +1,9 @@
 import {math} from "../../../math/math.js";
+import {Scene} from "../../../scene/Scene.js";
 import {PickResult} from "../../../webgl/PickResult.js";
+
+const DEFAULT_SNAP_PICK_RADIUS = 45;
+const DEFAULT_SNAP_MODE = "vertex";
 
 /**
  *
@@ -8,7 +12,9 @@ import {PickResult} from "../../../webgl/PickResult.js";
 class PickController {
 
     constructor(cameraControl, configs) {
-
+        /**
+         * @type {Scene}
+         */
         this._scene = cameraControl.scene;
 
         this._cameraControl = cameraControl;
@@ -30,6 +36,12 @@ class PickController {
          * @type {boolean}
          */
         this.schedulePickSurface = false;
+
+        /**
+         * Set true to schedule snap-picking with surface picking as a fallback - used for measurement.
+         * @type {boolean}
+         */
+        this.scheduleSnapOrPick = false;
 
         /**
          * The canvas position at which to do the next scheduled pick.
@@ -75,9 +87,28 @@ class PickController {
 
         this.picked = false;
         this.pickedSurface = false;
+        this.snappedOrPicked = false;
+        this.hoveredSnappedOrSurfaceOff = false;
+
         this._needFireEvents = false;
 
         const hasHoverSurfaceSubs = this._cameraControl.hasSubs("hoverSurface");
+
+        if (this.scheduleSnapOrPick) {
+            const snapPickResult = this._scene.snapPick({
+                canvasPos: this.pickCursorPos,
+                snapRadius: this._configs.snapRadius,
+                snapMode: this._configs.snapMode,
+            });
+            if (snapPickResult && snapPickResult.snappedWorldPos) {
+                this.snapPickResult = snapPickResult;
+                this.snappedOrPicked = true;
+                this._needFireEvents = true;
+            }else {
+                this.schedulePickSurface = true; // Fallback
+                this.snapPickResult = null;
+            }
+        }
 
         if (this.schedulePickSurface) {
             if (this.pickResult && this.pickResult.worldPos) {
@@ -88,14 +119,20 @@ class PickController {
                     this._needFireEvents = hasHoverSurfaceSubs;
                     this.schedulePickEntity = false;
                     this.schedulePickSurface = false;
+                    if (this.scheduleSnapOrPick) {
+                        this.snappedOrPicked = true;
+                    } else {
+                        this.hoveredSnappedOrSurfaceOff = true;
+                    }
+                    this.scheduleSnapOrPick = false;
                     return;
                 }
             }
         }
 
         if (this.schedulePickEntity) {
-            if (this.pickResult) {
-                const pickResultCanvasPos = this.pickResult.canvasPos;
+            if (this.pickResult && (this.pickResult.canvasPos || this.pickResult.snappedCanvasPos)) {
+                const pickResultCanvasPos = this.pickResult.canvasPos || this.pickResult.snappedCanvasPos;
                 if (pickResultCanvasPos[0] === this.pickCursorPos[0] && pickResultCanvasPos[1] === this.pickCursorPos[1]) {
                     this.picked = true;
                     this.pickedSurface = false;
@@ -107,17 +144,22 @@ class PickController {
             }
         }
 
-        if (this.schedulePickSurface) {
-
+        if (this.schedulePickSurface || (this.scheduleSnapOrPick && !this.snapPickResult)) {
             this.pickResult = this._scene.pick({
                 pickSurface: true,
                 pickSurfaceNormal: false,
                 canvasPos: this.pickCursorPos
             });
-
             if (this.pickResult) {
                 this.picked = true;
-                this.pickedSurface = true;
+                if (this.scheduleSnapOrPick) {
+                    this.snappedOrPicked = true;
+                } else {
+                    this.pickedSurface = true;
+                }
+                this._needFireEvents = true;
+            }else   if (this.scheduleSnapOrPick) {
+                this.hoveredSnappedOrSurfaceOff = true;
                 this._needFireEvents = true;
             }
 
@@ -134,6 +176,7 @@ class PickController {
             }
         }
 
+        this.scheduleSnapOrPick = false;
         this.schedulePickEntity = false;
         this.schedulePickSurface = false;
     }
@@ -144,20 +187,43 @@ class PickController {
             return;
         }
 
-        if (this.picked && this.pickResult && this.pickResult.entity) {
+        if (this.hoveredSnappedOrSurfaceOff) {
+            this._cameraControl.fire("hoverSnapOrSurfaceOff", {
+                canvasPos: this.pickCursorPos
+            }, true);
+        }
 
-            const pickedEntityId = this.pickResult.entity.id;
+        if (this.snappedOrPicked) {
+            if (this.snapPickResult) {
+                const pickResult = new PickResult();
+                pickResult.worldPos = this.snapPickResult.snappedWorldPos;
+                pickResult.canvasPos = this.snapPickResult.snappedCanvasPos;
+                this._cameraControl.fire("hoverSnapOrSurface", pickResult, true);
+                this.snapPickResult = null;
+            } else {
+                this._cameraControl.fire("hoverSnapOrSurface", this.pickResult, true);
+            }
+        } else {
 
-            if (this._lastPickedEntityId !== pickedEntityId) {
+        }
 
-                if (this._lastPickedEntityId !== undefined) {
-                    this._cameraControl.fire("hoverOut", {
-                        entity: this._scene.objects[this._lastPickedEntityId]
-                    }, true);
+        if (this.picked && this.pickResult && (this.pickResult.entity || this.pickResult.worldPos)) {
+
+            if (this.pickResult.entity) {
+
+                const pickedEntityId = this.pickResult.entity.id;
+
+                if (this._lastPickedEntityId !== pickedEntityId) {
+
+                    if (this._lastPickedEntityId !== undefined) {
+                        this._cameraControl.fire("hoverOut", {
+                            entity: this._scene.objects[this._lastPickedEntityId]
+                        }, true);
+                    }
+
+                    this._cameraControl.fire("hoverEnter", this.pickResult, true);
+                    this._lastPickedEntityId = pickedEntityId;
                 }
-
-                this._cameraControl.fire("hoverEnter", this.pickResult, true);
-                this._lastPickedEntityId = pickedEntityId;
             }
 
             this._cameraControl.fire("hover", this.pickResult, true);

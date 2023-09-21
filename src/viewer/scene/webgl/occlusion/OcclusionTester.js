@@ -1,13 +1,13 @@
 import {math} from '../../math/math.js';
 import {Program} from "./../Program.js";
-import {RenderBuffer} from "./../RenderBuffer.js";
 import {OcclusionLayer} from "./OcclusionLayer.js";
-import {createRTCViewMat, getPlaneRTCPos, worldToRTCPos} from "../../math/rtcCoords.js";
+import {createRTCViewMat, getPlaneRTCPos} from "../../math/rtcCoords.js";
 import {WEBGL_INFO} from "../../webglInfo.js";
 
 const TEST_MODE = false;
 const MARKER_COLOR = math.vec3([1.0, 0.0, 0.0]);
 const POINT_SIZE = 20;
+const MARKER_SPRITE_CLIPZ_OFFSET = -0.001; // Amount that we offset sprite clip Z coords to raise them from surfaces
 
 const tempVec3a = math.vec3();
 
@@ -16,9 +16,11 @@ const tempVec3a = math.vec3();
  */
 class OcclusionTester {
 
-    constructor(scene) {
+    constructor(scene, renderBufferManager) {
 
         this._scene = scene;
+
+        this._renderBufferManager = renderBufferManager;
 
         this._occlusionLayers = {};
         this._occlusionLayersList = [];
@@ -52,11 +54,11 @@ class OcclusionTester {
      * @param marker
      */
     addMarker(marker) {
-        const rtcCenterHash = marker.rtcCenter.join();
-        let occlusionLayer = this._occlusionLayers[rtcCenterHash];
+        const originHash = marker.origin.join();
+        let occlusionLayer = this._occlusionLayers[originHash];
         if (!occlusionLayer) {
-            occlusionLayer = new OcclusionLayer(this._scene, marker.rtcCenter);
-            this._occlusionLayers[occlusionLayer.rtcCenterHash] = occlusionLayer;
+            occlusionLayer = new OcclusionLayer(this._scene, marker.origin);
+            this._occlusionLayers[occlusionLayer.originHash] = occlusionLayer;
             this._occlusionLayersListDirty = true;
         }
         occlusionLayer.addMarker(marker);
@@ -74,19 +76,19 @@ class OcclusionTester {
             marker.error("Marker has not been added to OcclusionTester");
             return;
         }
-        const rtcCenterHash = marker.rtcCenter.join();
-        if (rtcCenterHash !== occlusionLayer.rtcCenterHash) {
+        const originHash = marker.origin.join();
+        if (originHash !== occlusionLayer.originHash) {
             if (occlusionLayer.numMarkers === 1) {
                 occlusionLayer.destroy();
-                delete this._occlusionLayers[occlusionLayer.rtcCenterHash];
+                delete this._occlusionLayers[occlusionLayer.originHash];
                 this._occlusionLayersListDirty = true;
             } else {
                 occlusionLayer.removeMarker(marker);
             }
-            let newOcclusionLayer = this._occlusionLayers[rtcCenterHash];
+            let newOcclusionLayer = this._occlusionLayers[originHash];
             if (!newOcclusionLayer) {
-                newOcclusionLayer = new OcclusionLayer(this._scene, marker.rtcCenter);
-                this._occlusionLayers[rtcCenterHash] = occlusionLayer;
+                newOcclusionLayer = new OcclusionLayer(this._scene, marker.origin);
+                this._occlusionLayers[originHash] = occlusionLayer;
                 this._occlusionLayersListDirty = true;
             }
             newOcclusionLayer.addMarker(marker);
@@ -101,14 +103,14 @@ class OcclusionTester {
      * @param marker
      */
     removeMarker(marker) {
-        const rtcCenterHash = marker.rtcCenter.join();
-        let occlusionLayer = this._occlusionLayers[rtcCenterHash];
+        const originHash = marker.origin.join();
+        let occlusionLayer = this._occlusionLayers[originHash];
         if (!occlusionLayer) {
             return;
         }
         if (occlusionLayer.numMarkers === 1) {
             occlusionLayer.destroy();
-            delete this._occlusionLayers[occlusionLayer.rtcCenterHash];
+            delete this._occlusionLayers[occlusionLayer.originHash];
             this._occlusionLayersListDirty = true;
         } else {
             occlusionLayer.removeMarker(marker);
@@ -119,7 +121,7 @@ class OcclusionTester {
     /**
      * Returns true if an occlusion test is needed.
      *
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     get needOcclusionTest() {
         return this._occlusionTestListDirty;
@@ -164,7 +166,7 @@ class OcclusionTester {
         }
 
         if (!TEST_MODE) {
-            this._readPixelBuf = this._readPixelBuf || (this._readPixelBuf = new RenderBuffer(this._scene.canvas.canvas, this._scene.canvas.gl));
+            this._readPixelBuf = this._renderBufferManager.getRenderBuffer("occlusionReadPix");
             this._readPixelBuf.bind();
             this._readPixelBuf.clear();
         }
@@ -172,9 +174,9 @@ class OcclusionTester {
 
     _buildOcclusionLayersList() {
         let numOcclusionLayers = 0;
-        for (let rtcCenterHash in this._occlusionLayers) {
-            if (this._occlusionLayers.hasOwnProperty(rtcCenterHash)) {
-                this._occlusionLayersList[numOcclusionLayers++] = this._occlusionLayers[rtcCenterHash];
+        for (let originHash in this._occlusionLayers) {
+            if (this._occlusionLayers.hasOwnProperty(originHash)) {
+                this._occlusionLayersList[numOcclusionLayers++] = this._occlusionLayers[originHash];
             }
         }
         this._occlusionLayersList.length = numOcclusionLayers;
@@ -191,22 +193,19 @@ class OcclusionTester {
         const scene = this._scene;
         const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
+        src.push("#version 300 es");
         src.push("// OcclusionTester vertex shader");
-        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-            src.push("#extension GL_EXT_frag_depth : enable");
-        }
-        src.push("attribute vec3 position;");
+        
+        src.push("in vec3 position;");
         src.push("uniform mat4 modelMatrix;");
         src.push("uniform mat4 viewMatrix;");
         src.push("uniform mat4 projMatrix;");
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
-            if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-                src.push("varying float vFragDepth;");
-            }
+            src.push("out float vFragDepth;");
         }
         if (clipping) {
-            src.push("varying vec4 vWorldPosition;");
+            src.push("out vec4 vWorldPosition;");
         }
         src.push("void main(void) {");
         src.push("vec4 worldPosition = vec4(position, 1.0); ");
@@ -215,16 +214,13 @@ class OcclusionTester {
             src.push("   vWorldPosition = worldPosition;");
         }
         src.push("   vec4 clipPos = projMatrix * viewPosition;");
-        src.push("   gl_Position = clipPos;");
         src.push("   gl_PointSize = " + POINT_SIZE + ".0;");
         if (scene.logarithmicDepthBufferEnabled) {
-            if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-                src.push("vFragDepth = 1.0 + clipPos.w;");
-            } else {
-                src.push("clipPos.z = log2( max( 1e-6, clipPos.w + 1.0 ) ) * logDepthBufFC - 1.0;");
-                src.push("clipPos.z *= clipPos.w;");
-            }
+           src.push("vFragDepth = 1.0 + clipPos.w;");
+        } else {
+            src.push("clipPos.z += " + MARKER_SPRITE_CLIPZ_OFFSET + ";");
         }
+        src.push("   gl_Position = clipPos;");
         src.push("}");
         return src;
     }
@@ -234,10 +230,9 @@ class OcclusionTester {
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
+        src.push("#version 300 es");
         src.push("// OcclusionTester fragment shader");
-        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-            src.push("#extension GL_EXT_frag_depth : enable");
-        }
+        
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -245,18 +240,19 @@ class OcclusionTester {
         src.push("precision mediump float;");
         src.push("precision mediump int;");
         src.push("#endif");
-        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
+        if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
-            src.push("varying float vFragDepth;");
+            src.push("in float vFragDepth;");
         }
         if (clipping) {
-            src.push("varying vec4 vWorldPosition;");
+            src.push("in vec4 vWorldPosition;");
             for (let i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
+        src.push("out vec4 outColor;");
         src.push("void main(void) {");
         if (clipping) {
             src.push("  float dist = 0.0;");
@@ -267,10 +263,10 @@ class OcclusionTester {
             }
             src.push("  if (dist > 0.0) { discard; }");
         }
-        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-            src.push("gl_FragDepthEXT = log2( vFragDepth ) * logDepthBufFC * 0.5;");
+        if (scene.logarithmicDepthBufferEnabled) {
+            src.push("gl_FragDepth = log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
-        src.push("   gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); ");
+        src.push("   outColor = vec4(1.0, 0.0, 0.0, 1.0); ");
         src.push("}");
         return src;
     }
@@ -317,10 +313,6 @@ class OcclusionTester {
         const camera = scene.camera;
         const project = scene.camera.project;
 
-        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"] && scene.logarithmicDepthBufferEnabled) {
-            gl.getExtension('EXT_frag_depth');
-        }
-
         program.bind();
 
         gl.uniformMatrix4fv(this._uProjMatrix, false, camera._project._state.matrix);
@@ -340,21 +332,23 @@ class OcclusionTester {
                 continue;
             }
 
-            const rtcCenter = occlusionLayer.rtcCenter;
+            const origin = occlusionLayer.origin;
 
-            gl.uniformMatrix4fv(this._uViewMatrix, false, createRTCViewMat(camera.viewMatrix, rtcCenter));
+            gl.uniformMatrix4fv(this._uViewMatrix, false, createRTCViewMat(camera.viewMatrix, origin));
 
             const numSectionPlanes = sectionPlanesState.sectionPlanes.length;
             if (numSectionPlanes > 0) {
                 const sectionPlanes = sectionPlanesState.sectionPlanes;
                 for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
                     const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
-                    const active = occlusionLayer.sectionPlanesActive[sectionPlaneIndex];
-                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                    if (active) {
-                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        gl.uniform3fv(sectionPlaneUniforms.pos, getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, rtcCenter, tempVec3a));
-                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+                    if (sectionPlaneUniforms) {
+                        const active = occlusionLayer.sectionPlanesActive[sectionPlaneIndex];
+                        gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                        if (active) {
+                            const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                            gl.uniform3fv(sectionPlaneUniforms.pos, getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a));
+                            gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+                        }
                     }
                 }
             }
@@ -374,6 +368,8 @@ class OcclusionTester {
 
         if (!TEST_MODE) {
 
+            const resolutionScale = this._scene.canvas.resolutionScale;
+
             const markerR = MARKER_COLOR[0] * 255;
             const markerG = MARKER_COLOR[1] * 255;
             const markerB = MARKER_COLOR[2] * 255;
@@ -386,7 +382,7 @@ class OcclusionTester {
 
                     const marker = occlusionLayer.occlusionTestList[i];
                     const j = i * 2;
-                    const color = this._readPixelBuf.read(occlusionLayer.pixels[j], occlusionLayer.pixels[j + 1]);
+                    const color = this._readPixelBuf.read(Math.round(occlusionLayer.pixels[j] * resolutionScale), Math.round(occlusionLayer.pixels[j + 1] * resolutionScale));
                     const visible = (color[0] === markerR) && (color[1] === markerG) && (color[2] === markerB);
 
                     marker._setVisible(visible);

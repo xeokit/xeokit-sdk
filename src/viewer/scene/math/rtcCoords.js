@@ -1,7 +1,6 @@
 import {math} from './math.js';
 
 const tempVec3a = math.vec3();
-const tempAABB3 = math.AABB3();
 
 /**
  * Given a view matrix and a relative-to-center (RTC) coordinate origin, returns a view matrix
@@ -13,18 +12,19 @@ const tempAABB3 = math.AABB3();
  */
 const createRTCViewMat = (function () {
 
-    const tempMat = new Float32Array(16);
+    const tempMat = new Float64Array(16);
     const rtcCenterWorld = new Float64Array(4);
     const rtcCenterView = new Float64Array(4);
 
-    return function (viewMat, rtcCenter, rtcViewMat = tempMat) {
+    return function (viewMat, rtcCenter, rtcViewMat) {
+        rtcViewMat = rtcViewMat || tempMat;
         rtcCenterWorld[0] = rtcCenter[0];
         rtcCenterWorld[1] = rtcCenter[1];
         rtcCenterWorld[2] = rtcCenter[2];
         rtcCenterWorld[3] = 1;
         math.transformVec4(viewMat, rtcCenterWorld, rtcCenterView);
         math.setMat4Translation(viewMat, rtcCenterView, rtcViewMat);
-        return rtcViewMat;
+        return rtcViewMat.slice ();
     }
 }());
 
@@ -33,7 +33,7 @@ const createRTCViewMat = (function () {
  *
  * Given a double-precision World-space position, returns a double-precision relative-to-center (RTC) center pos
  * and a single-precision offset fom that center.
- *
+ * @private
  * @param {Float64Array} worldPos The World-space position.
  * @param {Float64Array} rtcCenter Double-precision relative-to-center (RTC) center pos.
  * @param {Float32Array} rtcPos Single-precision offset fom that center.
@@ -60,13 +60,16 @@ function worldToRTCPos(worldPos, rtcCenter, rtcPos) {
 
 
 /**
- * Converts a flat array of double-precision positions to RTC positions.
+ * Converts a flat array of double-precision positions to RTC positions, if necessary.
  *
- * Returns the RTC positions, along with a computed RTC center for those positions.
+ * Conversion is necessary if the coordinates have values larger than can be expressed at single-precision. When
+ * that's the case, then this function will compute the RTC coordinates and RTC center and return true. Otherwise
+ * this function does nothing and returns false.
  *
  * When computing the RTC position, this function uses a modulus operation to ensure that, whenever possible,
- * identical RTC positions are reused for different positions arrays.
+ * identical RTC centers are reused for different positions arrays.
  *
+ * @private
  * @param {Float64Array} worldPositions Flat array of World-space 3D positions.
  * @param {Float64Array} rtcPositions Outputs the computed flat array of 3D RTC positions.
  * @param {Float64Array} rtcCenter Outputs the computed double-precision relative-to-center (RTC) center pos.
@@ -75,7 +78,7 @@ function worldToRTCPos(worldPos, rtcCenter, rtcPos) {
  * ````false````, we can safely ignore the data returned in ````rtcPositions```` and ````rtcCenter````,
  * since ````rtcCenter```` will equal ````[0,0,0]````, and ````rtcPositions```` will contain identical values to ````positions````.
  */
-function worldToRTCPositions(worldPositions, rtcPositions, rtcCenter, cellSize = 10000000) {
+function worldToRTCPositions(worldPositions, rtcPositions, rtcCenter, cellSize = 1000) {
 
     const center = math.getPositionsCenter(worldPositions, tempVec3a);
 
@@ -83,17 +86,19 @@ function worldToRTCPositions(worldPositions, rtcPositions, rtcCenter, cellSize =
     const rtcCenterY = Math.round(center[1] / cellSize) * cellSize;
     const rtcCenterZ = Math.round(center[2] / cellSize) * cellSize;
 
-    for (let i = 0, len = worldPositions.length; i < len; i += 3) {
-        rtcPositions[i + 0] = worldPositions[i + 0] - rtcCenterX;
-        rtcPositions[i + 1] = worldPositions[i + 1] - rtcCenterY;
-        rtcPositions[i + 2] = worldPositions[i + 2] - rtcCenterZ;
-    }
-
     rtcCenter[0] = rtcCenterX;
     rtcCenter[1] = rtcCenterY;
     rtcCenter[2] = rtcCenterZ;
 
     const rtcNeeded = (rtcCenter[0] !== 0 || rtcCenter[1] !== 0 || rtcCenter[2] !== 0);
+
+    if (rtcNeeded) {
+        for (let i = 0, len = worldPositions.length; i < len; i += 3) {
+            rtcPositions[i + 0] = worldPositions[i + 0] - rtcCenterX;
+            rtcPositions[i + 1] = worldPositions[i + 1] - rtcCenterY;
+            rtcPositions[i + 2] = worldPositions[i + 2] - rtcCenterZ;
+        }
+    }
 
     return rtcNeeded;
 }
@@ -101,6 +106,7 @@ function worldToRTCPositions(worldPositions, rtcPositions, rtcCenter, cellSize =
 /**
  * Converts an RTC 3D position to World-space.
  *
+ * @private
  * @param {Float64Array} rtcCenter Double-precision relative-to-center (RTC) center pos.
  * @param {Float32Array} rtcPos Single-precision offset fom that center.
  * @param {Float64Array} worldPos The World-space position.
@@ -116,6 +122,7 @@ function rtcToWorldPos(rtcCenter, rtcPos, worldPos) {
  * Given a 3D plane defined by distance from origin and direction, and an RTC center position,
  * return a plane position that is relative to the RTC center.
  *
+ * @private
  * @param dist
  * @param dir
  * @param rtcCenter

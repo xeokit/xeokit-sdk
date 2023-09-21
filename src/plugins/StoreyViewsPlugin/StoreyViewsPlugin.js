@@ -318,26 +318,29 @@ class StoreyViewsPlugin extends Plugin {
         const metaScene = viewer.metaScene;
         const metaModel = metaScene.metaModels[modelId];
         const model = scene.models[modelId];
-        if (!metaModel || !metaModel.rootMetaObject) {
+        if (!metaModel || !metaModel.rootMetaObjects) {
             return;
         }
-        const storeyIds = metaModel.rootMetaObject.getObjectIDsInSubtreeByType(["IfcBuildingStorey"]);
-        for (let i = 0, len = storeyIds.length; i < len; i++) {
-            const storeyId = storeyIds[i];
-            const metaObject = metaScene.metaObjects[storeyId];
-            const childObjectIds = metaObject.getObjectIDsInSubtree();
-            const aabb = scene.getAABB(childObjectIds);
-            const numObjects = (Math.random() > 0.5) ? childObjectIds.length : 0;
-            const storey = new Storey(this, aabb, modelId, storeyId, numObjects);
-            storey._onModelDestroyed = model.once("destroyed", () => {
-                this._deregisterModelStoreys(modelId);
-                this.fire("storeys", this.storeys);
-            });
-            this.storeys[storeyId] = storey;
-            if (!this.modelStoreys[modelId]) {
-                this.modelStoreys[modelId] = {};
+        const rootMetaObjects = metaModel.rootMetaObjects;
+        for (let j = 0, lenj = rootMetaObjects.length; j < lenj; j++) {
+            const storeyIds = rootMetaObjects[j].getObjectIDsInSubtreeByType(["IfcBuildingStorey"]);
+            for (let i = 0, len = storeyIds.length; i < len; i++) {
+                const storeyId = storeyIds[i];
+                const metaObject = metaScene.metaObjects[storeyId];
+                const childObjectIds = metaObject.getObjectIDsInSubtree();
+                const aabb = scene.getAABB(childObjectIds);
+                const numObjects = (Math.random() > 0.5) ? childObjectIds.length : 0;
+                const storey = new Storey(this, aabb, modelId, storeyId, numObjects);
+                storey._onModelDestroyed = model.once("destroyed", () => {
+                    this._deregisterModelStoreys(modelId);
+                    this.fire("storeys", this.storeys);
+                });
+                this.storeys[storeyId] = storey;
+                if (!this.modelStoreys[modelId]) {
+                    this.modelStoreys[modelId] = {};
+                }
+                this.modelStoreys[modelId][storeyId] = storey;
             }
-            this.modelStoreys[modelId][storeyId] = storey;
         }
     }
 
@@ -582,7 +585,7 @@ class StoreyViewsPlugin extends Plugin {
         const scene = viewer.scene;
         const format = options.format || "png";
         const aabb = storey.aabb;
-        const aspect = (aabb[5] - aabb[2]) / (aabb[3] - aabb[0]);
+        const aspect = Math.abs((aabb[5] - aabb[2]) / (aabb[3] - aabb[0]));
         const padding = options.padding || 0;
 
         let width;
@@ -594,15 +597,15 @@ class StoreyViewsPlugin extends Plugin {
 
         } else if (options.height) {
             height = options.height;
-            width = height / aspect;
+            width = Math.round(height / aspect);
 
         } else if (options.width) {
             width = options.width;
-            height = width * aspect;
+            height = Math.round(width * aspect);
 
         } else {
             width = 300;
-            height = width * aspect;
+            height = Math.round(width * aspect);
         }
 
         this._objectsMemento.saveObjects(scene);

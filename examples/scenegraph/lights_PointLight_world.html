@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/lighting_icon.png"/>
+    <h1>PointLight</h1>
+    <h2>Three point light sources in World-space</h2>
+    <h3>Components used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html"
+               target="_other">Mesh</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html"
+               target="_other">ReadableGeometry</a>
+        </li>
+        <li>
+            <a href="../../docs/function/index.html#static-function-buildTorusGeometry"
+               target="_other">buildTorusGeometry()</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html"
+               target="_other">PhongMaterial</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/materials/Texture.js~Texture.html"
+               target="_other">Texture</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/lights/PointLight.js~PointLight.html"
+               target="_other">PointLight</a>
+        </li>
+    </ul>
+</div>
+</body>
+
+<script id="source" type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {
+        Viewer,
+        Mesh,
+        buildSphereGeometry,
+        buildPlaneGeometry,
+        ReadableGeometry,
+        PhongMaterial,
+        Texture,
+        PointLight
+    } from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas"
+    });
+
+    viewer.scene.camera.eye = [0, 0, 5];
+    viewer.scene.camera.look = [0, 0, 0];
+    viewer.scene.camera.up = [0, 1, 0];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Replace the Scene's default lights with three custom world-space PointLights
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.clearLights();
+
+    new PointLight(viewer.scene, {
+        id: "keyLight",
+        pos: [-80, 60, 80],
+        color: [1.0, 0.8, 0.8],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new PointLight(viewer.scene, {
+        id: "fillLight",
+        pos: [80, 40, 40],
+        color: [0.8, 1.0, 0.8],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    new PointLight(viewer.scene, {
+        id: "rimLight",
+        pos: [-20, 80, -80],
+        color: [0.8, 0.8, 0.8],
+        intensity: 1.0,
+        space: "world"
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a sphere and ground plane
+    //------------------------------------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildSphereGeometry({
+            radius: 1.3
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            diffuse: [1.0, 1.0, 1.0],
+            specular: [1.0, 1.0, 1.0],
+            emissive: [0, 0, 0],
+            alpha: 1.0,
+            ambient: [1, 1, 1],
+            shininess:70,
+            diffuseMap: new Texture(viewer.scene, {
+                src: "../../assets/textures/diffuse/uvGrid2.jpg"
+            })
+        })
+    });
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildPlaneGeometry({
+            xSize: 30,
+            zSize: 30
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            diffuse: [1.0, 1.0, 1.0],
+            diffuseMap: new Texture(viewer.scene, {
+                src: "../../assets/textures/diffuse/uvGrid2.jpg"
+            }),
+            ambient: [1, 1, 1],
+            shininess:70,
+            backfaces: true
+        }),
+        position: [0, -2.1, 0]
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Orbit camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.on("tick", function () {
+        viewer.scene.camera.orbitYaw(0.3);
+    });
+
+</script>
+</html>

@@ -47,7 +47,7 @@ class FrameContext {
         this.lastProgramId = null;
 
         /**
-         * Whether to render a quality representation for triangle surfaces.
+         * Whether to render a physically-based representation for triangle surfaces.
          *
          * When ````false````, we'll render them with a fast vertex-shaded Gouraud-shaded representation, which
          * is great for zillions of objects.
@@ -60,6 +60,15 @@ class FrameContext {
          * @type {Boolean}
          */
         this.pbrEnabled = false;
+
+        /**
+         * Whether to render color textures for triangle surfaces.
+         *
+         * @property quality
+         * @default false
+         * @type {Boolean}
+         */
+        this.colorTextureEnabled = false;
 
         /**
          * Whether SAO is currently enabled during the current frame.
@@ -210,23 +219,68 @@ class FrameContext {
          */
         this.pickInvisible = false;
 
+        /**
+         * Used to draw only requested elements / indices.
+         *
+         * @property pickElementsCount
+         * @type {Number}
+         */
+        this.pickElementsCount = null;
+
+        /**
+         * Used to draw only requested elements / indices.
+         *
+         * @property pickElementsOffset
+         * @type {Number}
+         */
+        this.pickElementsOffset = null;
+
         /** The current line width.
          *
          * @property lineWidth
          * @type Number
          */
         this.lineWidth = 1;
+
+        /**
+         * Collects info from SceneModel.drawSnapInitDepthBuf and SceneModel.drawSnapDepths,
+         * which is then used in Renderer to determine snap-picking results.
+         *
+         * @type {{}}
+         */
+        this.snapPickLayerParams = {};
+
+        /**
+         * Collects info from SceneModel.drawSnapInitDepthBuf and SceneModel.drawSnapDepths,
+         * which is then used in Renderer to determine snap-picking results.
+         * @type {number}
+         */
+        this.snapPickLayerNumber = 0;
+
+        /**
+         * Collects info from SceneModel.drawSnapInitDepthBuf and SceneModel.drawSnapDepths,
+         * which is then used in Renderer to determine snap-picking results.
+         * @type {Number[]}
+         */
+        this.snapPickCoordinateScale = math.vec3();
+
+        /**
+         * Collects info from SceneModel.drawSnapInitDepthBuf and SceneModel.drawSnapDepths,
+         * which is then used in Renderer to determine snap-picking results.
+         * @type {Number[]}
+         */
+        this.snapPickOrigin = math.vec3();
     }
 
     /**
      * Get View matrix for the given RTC center.
      */
-    getRTCViewMatrix(rtcCenterHash, rtcCenter) {
-        let rtcViewMat = this._rtcViewMats[rtcCenterHash];
+    getRTCViewMatrix(originHash, origin) {
+        let rtcViewMat = this._rtcViewMats[originHash];
         if (!rtcViewMat) {
             rtcViewMat = this._getNewMat();
-            createRTCViewMat(this._scene.camera.viewMatrix, rtcCenter, rtcViewMat);
-            this._rtcViewMats[rtcCenterHash] = rtcViewMat;
+            createRTCViewMat(this._scene.camera.viewMatrix, origin, rtcViewMat);
+            this._rtcViewMats[originHash] = rtcViewMat;
         }
         return rtcViewMat;
     }
@@ -234,13 +288,13 @@ class FrameContext {
     /**
      * Get picking View RTC matrix for the given RTC center.
      */
-    getRTCPickViewMatrix(rtcCenterHash, rtcCenter) {
-        let rtcPickViewMat = this._rtcPickViewMats[rtcCenterHash];
+    getRTCPickViewMatrix(originHash, origin) {
+        let rtcPickViewMat = this._rtcPickViewMats[originHash];
         if (!rtcPickViewMat) {
             rtcPickViewMat = this._getNewMat();
             const pickViewMat = this.pickViewMatrix || this._scene.camera.viewMatrix;
-            createRTCViewMat(pickViewMat, rtcCenter, rtcPickViewMat);
-            this._rtcPickViewMats[rtcCenterHash] = rtcPickViewMat;
+            createRTCViewMat(pickViewMat, origin, rtcPickViewMat);
+            this._rtcPickViewMats[originHash] = rtcPickViewMat;
         }
         return rtcPickViewMat;
     }

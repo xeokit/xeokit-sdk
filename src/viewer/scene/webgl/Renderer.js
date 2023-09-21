@@ -1,5 +1,4 @@
 import {FrameContext} from './FrameContext.js';
-import {RenderBuffer} from './RenderBuffer.js';
 import {math} from '../math/math.js';
 import {stats} from '../stats.js';
 import {WEBGL_INFO} from '../webglInfo.js';
@@ -9,6 +8,8 @@ import {OcclusionTester} from "./occlusion/OcclusionTester.js";
 import {SAOOcclusionRenderer} from "./sao/SAOOcclusionRenderer.js";
 import {createRTCViewMat} from "../math/rtcCoords.js";
 import {SAODepthLimitedBlurRenderer} from "./sao/SAODepthLimitedBlurRenderer.js";
+import {RenderBufferManager} from "./RenderBufferManager.js";
+import {getExtension} from "./getExtension.js";
 
 /**
  * @private
@@ -19,11 +20,12 @@ const Renderer = function (scene, options) {
 
     const frameCtx = new FrameContext(scene);
     const canvas = scene.canvas.canvas;
+    /**
+     * @type {WebGL2RenderingContext}
+     */
     const gl = scene.canvas.gl;
     const canvasTransparent = (!!options.transparent);
     const alphaDepthMask = options.alphaDepthMask;
-
-    const extensionHandles = {};
 
     const pickIDs = new Map({});
 
@@ -35,14 +37,13 @@ const Renderer = function (scene, options) {
     let imageDirty = true;
     let shadowsDirty = true;
 
-    const saoDepthRenderBuffer = new RenderBuffer(canvas, gl, {
-        depthTexture: WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"]
-    });
-    const occlusionRenderBuffer1 = new RenderBuffer(canvas, gl);
-    const occlusionRenderBuffer2 = new RenderBuffer(canvas, gl);
+    let transparentEnabled = true;
+    let edgesEnabled = true;
+    let saoEnabled = true;
+    let pbrEnabled = true;
+    let colorTextureEnabled = true;
 
-    const pickBuffer = new RenderBuffer(canvas, gl);
-    const snapshotBuffer = new RenderBuffer(canvas, gl);
+    const renderBufferManager = new RenderBufferManager(scene);
 
     let snapshotBound = false;
 
@@ -52,7 +53,43 @@ const Renderer = function (scene, options) {
     const saoOcclusionRenderer = new SAOOcclusionRenderer(scene);
     const saoDepthLimitedBlurRenderer = new SAODepthLimitedBlurRenderer(scene);
 
+    this.scene = scene;
+
     this._occlusionTester = null; // Lazy-created in #addMarker()
+
+    this.capabilities = {
+        astcSupported: !!getExtension(gl, 'WEBGL_compressed_texture_astc'),
+        etc1Supported: true, // WebGL2
+        etc2Supported: !!getExtension(gl, 'WEBGL_compressed_texture_etc'),
+        dxtSupported: !!getExtension(gl, 'WEBGL_compressed_texture_s3tc'),
+        bptcSupported: !!getExtension(gl, 'EXT_texture_compression_bptc'),
+        pvrtcSupported: !!(getExtension(gl, 'WEBGL_compressed_texture_pvrtc') || getExtension(gl, 'WEBKIT_WEBGL_compressed_texture_pvrtc'))
+    };
+
+    this.setTransparentEnabled = function (enabled) {
+        transparentEnabled = enabled;
+        imageDirty = true;
+    };
+
+    this.setEdgesEnabled = function (enabled) {
+        edgesEnabled = enabled;
+        imageDirty = true;
+    };
+
+    this.setSAOEnabled = function (enabled) {
+        saoEnabled = enabled;
+        imageDirty = true;
+    };
+
+    this.setPBREnabled = function (enabled) {
+        pbrEnabled = enabled;
+        imageDirty = true;
+    };
+
+    this.setColorTextureEnabled = function (enabled) {
+        colorTextureEnabled = enabled;
+        imageDirty = true;
+    };
 
     this.needStateSort = function () {
         stateSortDirty = true;
@@ -71,11 +108,7 @@ const Renderer = function (scene, options) {
 
     this.webglContextRestored = function (gl) {
 
-        pickBuffer.webglContextRestored(gl);
-        snapshotBuffer.webglContextRestored(gl);
-        saoDepthRenderBuffer.webglContextRestored(gl);
-        occlusionRenderBuffer1.webglContextRestored(gl);
-        occlusionRenderBuffer2.webglContextRestored(gl);
+        // renderBufferManager.webglContextRestored(gl);
 
         saoOcclusionRenderer.init();
         saoDepthLimitedBlurRenderer.init();
@@ -172,6 +205,15 @@ const Renderer = function (scene, options) {
     };
 
     /**
+     * Returns true if the next call to render() will draw something
+     * @returns {Boolean}
+     */
+    this.needsRender = function () {
+        const needsRender = (imageDirty || drawableListDirty || stateSortDirty);
+        return needsRender;
+    }
+
+    /**
      * Renders inserted drawables.
      *  @private
      */
@@ -253,21 +295,9 @@ const Renderer = function (scene, options) {
 
     function draw(params) {
 
-        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"]) { // In case context lost/recovered
-            extensionHandles.OES_element_index_uint = gl.getExtension("OES_element_index_uint");
-        }
-
-        if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-            extensionHandles.EXT_frag_depth = gl.getExtension('EXT_frag_depth');
-        }
-
-        if (WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"]) {
-            extensionHandles.WEBGL_depth_texture = gl.getExtension('WEBGL_depth_texture');
-        }
-
         const sao = scene.sao;
 
-        if (sao.possible) {
+        if (saoEnabled && sao.possible) {
             drawSAOBuffers(params);
         }
 
@@ -282,12 +312,18 @@ const Renderer = function (scene, options) {
 
         // Render depth buffer
 
+        const saoDepthRenderBuffer = renderBufferManager.getRenderBuffer("saoDepth", {
+            depthTexture: true
+        });
+
         saoDepthRenderBuffer.bind();
         saoDepthRenderBuffer.clear();
         drawDepth(params);
         saoDepthRenderBuffer.unbind();
 
         // Render occlusion buffer
+
+        const occlusionRenderBuffer1 = renderBufferManager.getRenderBuffer("saoOcclusion");
 
         occlusionRenderBuffer1.bind();
         occlusionRenderBuffer1.clear();
@@ -297,6 +333,8 @@ const Renderer = function (scene, options) {
         if (sao.blur) {
 
             // Horizontally blur occlusion buffer 1 into occlusion buffer 2
+
+            const occlusionRenderBuffer2 = renderBufferManager.getRenderBuffer("saoOcclusion2");
 
             occlusionRenderBuffer2.bind();
             occlusionRenderBuffer2.clear();
@@ -339,7 +377,7 @@ const Renderer = function (scene, options) {
 
                     const drawable = drawableList[i];
 
-                    if (drawable.culled === true || drawable.visible === false || !drawable.drawDepth) {
+                    if (drawable.culled === true || drawable.visible === false || !drawable.drawDepth || !drawable.saoEnabled) {
                         continue;
                     }
 
@@ -433,7 +471,7 @@ const Renderer = function (scene, options) {
         shadowRenderBuf.unbind();
     }
 
-    const drawColor = (function () { // Draws the drawables in drawableListSorted
+    function drawColor(params) {
 
         const normalDrawSAOBin = [];
         const normalEdgesOpaqueBin = [];
@@ -455,125 +493,135 @@ const Renderer = function (scene, options) {
         const selectedFillTransparentBin = [];
         const selectedEdgesTransparentBin = [];
 
-        return function (params) {
 
-            const ambientColorAndIntensity = scene._lightsState.getAmbientColorAndIntensity();
+        const ambientColorAndIntensity = scene._lightsState.getAmbientColorAndIntensity();
 
-            frameCtx.reset();
-            frameCtx.pass = params.pass;
-            frameCtx.withSAO = false;
-            frameCtx.pbrEnabled = !!scene.pbrEnabled;
+        frameCtx.reset();
+        frameCtx.pass = params.pass;
+        frameCtx.withSAO = false;
+        frameCtx.pbrEnabled = pbrEnabled && !!scene.pbrEnabled;
+        frameCtx.colorTextureEnabled = colorTextureEnabled && !!scene.colorTextureEnabled;
 
-            gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
-            if (canvasTransparent) {
-                gl.clearColor(0, 0, 0, 0);
-            } else {
-                const backgroundColor = scene.canvas.backgroundColorFromAmbientLight ? ambientColorAndIntensity : scene.canvas.backgroundColor;
-                gl.clearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], 1.0);
-            }
+        if (canvasTransparent) {
+            gl.clearColor(0, 0, 0, 0);
+        } else {
+            const backgroundColor = scene.canvas.backgroundColorFromAmbientLight ? ambientColorAndIntensity : scene.canvas.backgroundColor;
+            gl.clearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], 1.0);
+        }
 
-            gl.enable(gl.DEPTH_TEST);
-            gl.frontFace(gl.CCW);
-            gl.enable(gl.CULL_FACE);
-            gl.depthMask(true);
-            gl.lineWidth(1);
+        gl.enable(gl.DEPTH_TEST);
+        gl.frontFace(gl.CCW);
+        gl.enable(gl.CULL_FACE);
+        gl.depthMask(true);
+        gl.lineWidth(1);
 
-            frameCtx.lineWidth = 1;
+        frameCtx.lineWidth = 1;
 
-            const saoPossible = scene.sao.possible;
-            frameCtx.occlusionTexture = saoPossible ? occlusionRenderBuffer1.getTexture() : null;
+        const saoPossible = scene.sao.possible;
 
-            let i;
-            let len;
-            let drawable;
+        if (saoEnabled && saoPossible) {
+            const occlusionRenderBuffer1 = renderBufferManager.getRenderBuffer("saoOcclusion");
+            frameCtx.occlusionTexture = occlusionRenderBuffer1 ? occlusionRenderBuffer1.getTexture() : null;
+        } else {
+            frameCtx.occlusionTexture = null;
 
-            const startTime = Date.now();
+        }
 
-            if (bindOutputFrameBuffer) {
-                bindOutputFrameBuffer(params.pass);
-            }
+        let i;
+        let len;
+        let drawable;
 
-            if (params.clear !== false) {
-                gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-            }
+        const startTime = Date.now();
 
-            let normalDrawSAOBinLen = 0;
-            let normalEdgesOpaqueBinLen = 0;
-            let normalFillTransparentBinLen = 0;
-            let normalEdgesTransparentBinLen = 0;
+        if (bindOutputFrameBuffer) {
+            bindOutputFrameBuffer(params.pass);
+        }
 
-            let xrayedFillOpaqueBinLen = 0;
-            let xrayEdgesOpaqueBinLen = 0;
-            let xrayedFillTransparentBinLen = 0;
-            let xrayEdgesTransparentBinLen = 0;
+        if (params.clear !== false) {
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        }
 
-            let highlightedFillOpaqueBinLen = 0;
-            let highlightedEdgesOpaqueBinLen = 0;
-            let highlightedFillTransparentBinLen = 0;
-            let highlightedEdgesTransparentBinLen = 0;
+        let normalDrawSAOBinLen = 0;
+        let normalEdgesOpaqueBinLen = 0;
+        let normalFillTransparentBinLen = 0;
+        let normalEdgesTransparentBinLen = 0;
 
-            let selectedFillOpaqueBinLen = 0;
-            let selectedEdgesOpaqueBinLen = 0;
-            let selectedFillTransparentBinLen = 0;
-            let selectedEdgesTransparentBinLen = 0;
+        let xrayedFillOpaqueBinLen = 0;
+        let xrayEdgesOpaqueBinLen = 0;
+        let xrayedFillTransparentBinLen = 0;
+        let xrayEdgesTransparentBinLen = 0;
 
-            //------------------------------------------------------------------------------------------------------
-            // Render normal opaque solids, defer others to bins to render after
-            //------------------------------------------------------------------------------------------------------
+        let highlightedFillOpaqueBinLen = 0;
+        let highlightedEdgesOpaqueBinLen = 0;
+        let highlightedFillTransparentBinLen = 0;
+        let highlightedEdgesTransparentBinLen = 0;
 
-            for (let type in drawableTypeInfo) {
-                if (drawableTypeInfo.hasOwnProperty(type)) {
+        let selectedFillOpaqueBinLen = 0;
+        let selectedEdgesOpaqueBinLen = 0;
+        let selectedFillTransparentBinLen = 0;
+        let selectedEdgesTransparentBinLen = 0;
 
-                    const drawableInfo = drawableTypeInfo[type];
-                    const drawableList = drawableInfo.drawableList;
+        //------------------------------------------------------------------------------------------------------
+        // Render normal opaque solids, defer others to bins to render after
+        //------------------------------------------------------------------------------------------------------
 
-                    for (i = 0, len = drawableList.length; i < len; i++) {
+        for (let type in drawableTypeInfo) {
+            if (drawableTypeInfo.hasOwnProperty(type)) {
 
-                        drawable = drawableList[i];
+                const drawableInfo = drawableTypeInfo[type];
+                const drawableList = drawableInfo.drawableList;
 
-                        if (drawable.culled === true || drawable.visible === false) {
-                            continue;
+                for (i = 0, len = drawableList.length; i < len; i++) {
+
+                    drawable = drawableList[i];
+
+                    if (drawable.culled === true || drawable.visible === false) {
+                        continue;
+                    }
+
+                    const renderFlags = drawable.renderFlags;
+
+                    if (renderFlags.colorOpaque) {
+                        if (saoEnabled && saoPossible && drawable.saoEnabled) {
+                            normalDrawSAOBin[normalDrawSAOBinLen++] = drawable;
+                        } else {
+                            drawable.drawColorOpaque(frameCtx);
                         }
+                    }
 
-                        const renderFlags = drawable.renderFlags;
-
-                        if (renderFlags.colorOpaque) {
-                            if (saoPossible && drawable.saoEnabled) {
-                                normalDrawSAOBin[normalDrawSAOBinLen++] = drawable;
-                            } else {
-                                drawable.drawColorOpaque(frameCtx);
-                            }
-                        }
-
+                    if (transparentEnabled) {
                         if (renderFlags.colorTransparent) {
                             normalFillTransparentBin[normalFillTransparentBinLen++] = drawable;
                         }
+                    }
 
-                        if (renderFlags.xrayedSilhouetteTransparent) {
-                            xrayedFillTransparentBin[xrayedFillTransparentBinLen++] = drawable;
-                        }
+                    if (renderFlags.xrayedSilhouetteTransparent) {
+                        xrayedFillTransparentBin[xrayedFillTransparentBinLen++] = drawable;
+                    }
 
-                        if (renderFlags.xrayedSilhouetteOpaque) {
-                            xrayedFillOpaqueBin[xrayedFillOpaqueBinLen++] = drawable;
-                        }
+                    if (renderFlags.xrayedSilhouetteOpaque) {
+                        xrayedFillOpaqueBin[xrayedFillOpaqueBinLen++] = drawable;
+                    }
 
-                        if (renderFlags.highlightedSilhouetteTransparent) {
-                            highlightedFillTransparentBin[highlightedFillTransparentBinLen++] = drawable;
-                        }
+                    if (renderFlags.highlightedSilhouetteTransparent) {
+                        highlightedFillTransparentBin[highlightedFillTransparentBinLen++] = drawable;
+                    }
 
-                        if (renderFlags.highlightedSilhouetteOpaque) {
-                            highlightedFillOpaqueBin[highlightedFillOpaqueBinLen++] = drawable;
-                        }
+                    if (renderFlags.highlightedSilhouetteOpaque) {
+                        highlightedFillOpaqueBin[highlightedFillOpaqueBinLen++] = drawable;
+                    }
 
-                        if (renderFlags.selectedSilhouetteTransparent) {
-                            selectedFillTransparentBin[selectedFillTransparentBinLen++] = drawable;
-                        }
+                    if (renderFlags.selectedSilhouetteTransparent) {
+                        selectedFillTransparentBin[selectedFillTransparentBinLen++] = drawable;
+                    }
 
-                        if (renderFlags.selectedSilhouetteOpaque) {
-                            selectedFillOpaqueBin[selectedFillOpaqueBinLen++] = drawable;
-                        }
+                    if (renderFlags.selectedSilhouetteOpaque) {
+                        selectedFillOpaqueBin[selectedFillOpaqueBinLen++] = drawable;
+                    }
 
+                    if (edgesEnabled) {
                         if (renderFlags.edgesOpaque) {
                             normalEdgesOpaqueBin[normalEdgesOpaqueBinLen++] = drawable;
                         }
@@ -581,218 +629,275 @@ const Renderer = function (scene, options) {
                         if (renderFlags.edgesTransparent) {
                             normalEdgesTransparentBin[normalEdgesTransparentBinLen++] = drawable;
                         }
+                    }
+                    if (renderFlags.selectedEdgesTransparent) {
+                        selectedEdgesTransparentBin[selectedEdgesTransparentBinLen++] = drawable;
+                    }
 
-                        if (renderFlags.selectedEdgesTransparent) {
-                            selectedEdgesTransparentBin[selectedEdgesTransparentBinLen++] = drawable;
-                        }
+                    if (renderFlags.selectedEdgesOpaque) {
+                        selectedEdgesOpaqueBin[selectedEdgesOpaqueBinLen++] = drawable;
+                    }
 
-                        if (renderFlags.selectedEdgesOpaque) {
-                            selectedEdgesOpaqueBin[selectedEdgesOpaqueBinLen++] = drawable;
-                        }
+                    if (renderFlags.xrayedEdgesTransparent) {
+                        xrayEdgesTransparentBin[xrayEdgesTransparentBinLen++] = drawable;
+                    }
 
-                        if (renderFlags.xrayedEdgesTransparent) {
-                            xrayEdgesTransparentBin[xrayEdgesTransparentBinLen++] = drawable;
-                        }
+                    if (renderFlags.xrayedEdgesOpaque) {
+                        xrayEdgesOpaqueBin[xrayEdgesOpaqueBinLen++] = drawable;
+                    }
 
-                        if (renderFlags.xrayedEdgesOpaque) {
-                            xrayEdgesOpaqueBin[xrayEdgesOpaqueBinLen++] = drawable;
-                        }
+                    if (renderFlags.highlightedEdgesTransparent) {
+                        highlightedEdgesTransparentBin[highlightedEdgesTransparentBinLen++] = drawable;
+                    }
 
-                        if (renderFlags.highlightedEdgesTransparent) {
-                            highlightedEdgesTransparentBin[highlightedEdgesTransparentBinLen++] = drawable;
-                        }
-
-                        if (renderFlags.highlightedEdgesOpaque) {
-                            highlightedEdgesOpaqueBin[highlightedEdgesOpaqueBinLen++] = drawable;
-                        }
+                    if (renderFlags.highlightedEdgesOpaque) {
+                        highlightedEdgesOpaqueBin[highlightedEdgesOpaqueBinLen++] = drawable;
                     }
                 }
             }
+        }
 
-            //------------------------------------------------------------------------------------------------------
-            // Render deferred bins
-            //------------------------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------------------
+        // Render deferred bins
+        //------------------------------------------------------------------------------------------------------
 
-            if (normalDrawSAOBinLen > 0) {
-                frameCtx.withSAO = true;
-                for (i = 0; i < normalDrawSAOBinLen; i++) {
-                    normalDrawSAOBin[i].drawColorOpaque(frameCtx);
+        // Opaque color with SAO
+
+        if (normalDrawSAOBinLen > 0) {
+            frameCtx.withSAO = true;
+            for (i = 0; i < normalDrawSAOBinLen; i++) {
+                normalDrawSAOBin[i].drawColorOpaque(frameCtx);
+            }
+        }
+
+        // Opaque edges
+
+        if (normalEdgesOpaqueBinLen > 0) {
+            for (i = 0; i < normalEdgesOpaqueBinLen; i++) {
+                normalEdgesOpaqueBin[i].drawEdgesColorOpaque(frameCtx);
+            }
+        }
+
+        // Opaque X-ray fill
+
+        if (xrayedFillOpaqueBinLen > 0) {
+            for (i = 0; i < xrayedFillOpaqueBinLen; i++) {
+                xrayedFillOpaqueBin[i].drawSilhouetteXRayed(frameCtx);
+            }
+        }
+
+        // Opaque X-ray edges
+
+        if (xrayEdgesOpaqueBinLen > 0) {
+            for (i = 0; i < xrayEdgesOpaqueBinLen; i++) {
+                xrayEdgesOpaqueBin[i].drawEdgesXRayed(frameCtx);
+            }
+        }
+
+        // Transparent
+
+        if (xrayedFillTransparentBinLen > 0 || xrayEdgesTransparentBinLen > 0 || normalFillTransparentBinLen > 0 || normalEdgesTransparentBinLen > 0) {
+            gl.enable(gl.CULL_FACE);
+            gl.enable(gl.BLEND);
+            if (canvasTransparent) {
+                gl.blendEquation(gl.FUNC_ADD);
+                gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+            } else {
+                gl.blendEquation(gl.FUNC_ADD);
+                gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+            }
+            frameCtx.backfaces = false;
+            if (!alphaDepthMask) {
+                gl.depthMask(false);
+            }
+
+            // Transparent color edges
+
+            if (normalFillTransparentBinLen > 0 || normalEdgesTransparentBinLen > 0) {
+                gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+            }
+            if (normalEdgesTransparentBinLen > 0) {
+                for (i = 0; i < normalEdgesTransparentBinLen; i++) {
+                    drawable = normalEdgesTransparentBin[i];
+                    drawable.drawEdgesColorTransparent(frameCtx);
                 }
             }
 
-            if (normalEdgesOpaqueBinLen > 0) {
-                for (i = 0; i < normalEdgesOpaqueBinLen; i++) {
-                    normalEdgesOpaqueBin[i].drawEdgesColorOpaque(frameCtx);
+            // Transparent color fill
+
+            if (normalFillTransparentBinLen > 0) {
+                for (i = 0; i < normalFillTransparentBinLen; i++) {
+                    drawable = normalFillTransparentBin[i];
+                    drawable.drawColorTransparent(frameCtx);
                 }
             }
 
-            if (xrayedFillOpaqueBinLen > 0) {
-                for (i = 0; i < xrayedFillOpaqueBinLen; i++) {
-                    xrayedFillOpaqueBin[i].drawSilhouetteXRayed(frameCtx);
+            // Transparent X-ray edges
+
+            if (xrayEdgesTransparentBinLen > 0) {
+                for (i = 0; i < xrayEdgesTransparentBinLen; i++) {
+                    xrayEdgesTransparentBin[i].drawEdgesXRayed(frameCtx);
                 }
             }
 
-            if (xrayEdgesOpaqueBinLen > 0) {
-                for (i = 0; i < xrayEdgesOpaqueBinLen; i++) {
-                    xrayEdgesOpaqueBin[i].drawEdgesXRayed(frameCtx);
+            // Transparent X-ray fill
+
+            if (xrayedFillTransparentBinLen > 0) {
+                for (i = 0; i < xrayedFillTransparentBinLen; i++) {
+                    xrayedFillTransparentBin[i].drawSilhouetteXRayed(frameCtx);
                 }
             }
 
-            if (xrayedFillTransparentBinLen > 0 || xrayEdgesTransparentBinLen > 0 || normalFillTransparentBinLen > 0 || normalEdgesTransparentBinLen > 0) {
-                gl.enable(gl.CULL_FACE);
-                gl.enable(gl.BLEND);
-
-                if (canvasTransparent) {
-                    gl.blendEquation(gl.FUNC_ADD);
-                    gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-                } else {
-                    gl.blendEquation(gl.FUNC_ADD);
-                    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-                }
-
-                frameCtx.backfaces = false;
-                if (!alphaDepthMask) {
-                    gl.depthMask(false);
-                }
-                if (xrayEdgesTransparentBinLen > 0) {
-                    for (i = 0; i < xrayEdgesTransparentBinLen; i++) {
-                        xrayEdgesTransparentBin[i].drawEdgesXRayed(frameCtx);
-                    }
-                }
-                if (xrayedFillTransparentBinLen > 0) {
-                    for (i = 0; i < xrayedFillTransparentBinLen; i++) {
-                        xrayedFillTransparentBin[i].drawSilhouetteXRayed(frameCtx);
-                    }
-                }
-                if (normalFillTransparentBinLen > 0 || normalEdgesTransparentBinLen > 0) {
-                    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-                }
-                if (normalEdgesTransparentBinLen > 0) {
-                    for (i = 0; i < normalEdgesTransparentBinLen; i++) {
-                        drawable = normalEdgesTransparentBin[i];
-                        drawable.drawEdgesColorTransparent(frameCtx);
-                    }
-                }
-                if (normalFillTransparentBinLen > 0) {
-                    for (i = 0; i < normalFillTransparentBinLen; i++) {
-                        drawable = normalFillTransparentBin[i];
-                        drawable.drawColorTransparent(frameCtx);
-                    }
-                }
-                gl.disable(gl.BLEND);
-                if (!alphaDepthMask) {
-                    gl.depthMask(true);
-                }
+            gl.disable(gl.BLEND);
+            if (!alphaDepthMask) {
+                gl.depthMask(true);
             }
+        }
 
-            if (highlightedFillOpaqueBinLen > 0 || highlightedEdgesOpaqueBinLen > 0) {
-                frameCtx.lastProgramId = null;
+        // Opaque highlight
+
+        if (highlightedFillOpaqueBinLen > 0 || highlightedEdgesOpaqueBinLen > 0) {
+            frameCtx.lastProgramId = null;
+            if (scene.highlightMaterial.glowThrough) {
                 gl.clear(gl.DEPTH_BUFFER_BIT);
-                if (highlightedEdgesOpaqueBinLen > 0) {
-                    for (i = 0; i < highlightedEdgesOpaqueBinLen; i++) {
-                        highlightedEdgesOpaqueBin[i].drawEdgesHighlighted(frameCtx);
-                    }
-                }
-                if (highlightedFillOpaqueBinLen > 0) {
-                    for (i = 0; i < highlightedFillOpaqueBinLen; i++) {
-                        highlightedFillOpaqueBin[i].drawSilhouetteHighlighted(frameCtx);
-                    }
+            }
+
+            // Opaque highlighted edges
+
+            if (highlightedEdgesOpaqueBinLen > 0) {
+                for (i = 0; i < highlightedEdgesOpaqueBinLen; i++) {
+                    highlightedEdgesOpaqueBin[i].drawEdgesHighlighted(frameCtx);
                 }
             }
 
-            if (highlightedFillTransparentBinLen > 0 || highlightedEdgesTransparentBinLen > 0 || highlightedFillOpaqueBinLen > 0) {
-                frameCtx.lastProgramId = null;
+            // Opaque highlighted fill
+
+            if (highlightedFillOpaqueBinLen > 0) {
+                for (i = 0; i < highlightedFillOpaqueBinLen; i++) {
+                    highlightedFillOpaqueBin[i].drawSilhouetteHighlighted(frameCtx);
+                }
+            }
+        }
+
+        // Highlighted transparent
+
+        if (highlightedFillTransparentBinLen > 0 || highlightedEdgesTransparentBinLen > 0 || highlightedFillOpaqueBinLen > 0) {
+            frameCtx.lastProgramId = null;
+            if (scene.selectedMaterial.glowThrough) {
                 gl.clear(gl.DEPTH_BUFFER_BIT);
-                gl.enable(gl.CULL_FACE);
-                gl.enable(gl.BLEND);
+            }
+            gl.enable(gl.BLEND);
+            if (canvasTransparent) {
+                gl.blendEquation(gl.FUNC_ADD);
+                gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+            } else {
+                gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+            }
+            gl.enable(gl.CULL_FACE);
 
-                if (canvasTransparent) {
-                    gl.blendEquation(gl.FUNC_ADD);
-                    gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-                } else {
-                    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-                }
+            // Highlighted transparent edges
 
-                if (highlightedEdgesTransparentBinLen > 0) {
-                    for (i = 0; i < highlightedEdgesTransparentBinLen; i++) {
-                        highlightedEdgesTransparentBin[i].drawEdgesHighlighted(frameCtx);
-                    }
+            if (highlightedEdgesTransparentBinLen > 0) {
+                for (i = 0; i < highlightedEdgesTransparentBinLen; i++) {
+                    highlightedEdgesTransparentBin[i].drawEdgesHighlighted(frameCtx);
                 }
-                if (highlightedFillTransparentBinLen > 0) {
-                    for (i = 0; i < highlightedFillTransparentBinLen; i++) {
-                        highlightedFillTransparentBin[i].drawSilhouetteHighlighted(frameCtx);
-                    }
-                }
-                gl.disable(gl.BLEND);
             }
 
-            if (selectedFillOpaqueBinLen > 0 || selectedEdgesOpaqueBinLen > 0) {
-                frameCtx.lastProgramId = null;
+            // Highlighted transparent fill
+
+            if (highlightedFillTransparentBinLen > 0) {
+                for (i = 0; i < highlightedFillTransparentBinLen; i++) {
+                    highlightedFillTransparentBin[i].drawSilhouetteHighlighted(frameCtx);
+                }
+            }
+            gl.disable(gl.BLEND);
+        }
+
+        // Selected opaque
+
+        if (selectedFillOpaqueBinLen > 0 || selectedEdgesOpaqueBinLen > 0) {
+            frameCtx.lastProgramId = null;
+            if (scene.selectedMaterial.glowThrough) {
                 gl.clear(gl.DEPTH_BUFFER_BIT);
-                if (selectedEdgesOpaqueBinLen > 0) {
-                    for (i = 0; i < selectedEdgesOpaqueBinLen; i++) {
-                        selectedEdgesOpaqueBin[i].drawEdgesSelected(frameCtx);
-                    }
-                }
-                if (selectedFillOpaqueBinLen > 0) {
-                    for (i = 0; i < selectedFillOpaqueBinLen; i++) {
-                        selectedFillOpaqueBin[i].drawSilhouetteSelected(frameCtx);
-                    }
+            }
+
+            // Selected opaque fill
+
+            if (selectedEdgesOpaqueBinLen > 0) {
+                for (i = 0; i < selectedEdgesOpaqueBinLen; i++) {
+                    selectedEdgesOpaqueBin[i].drawEdgesSelected(frameCtx);
                 }
             }
 
-            if (selectedFillTransparentBinLen > 0 || selectedEdgesTransparentBinLen > 0) {
-                frameCtx.lastProgramId = null;
+            // Selected opaque edges
+
+            if (selectedFillOpaqueBinLen > 0) {
+                for (i = 0; i < selectedFillOpaqueBinLen; i++) {
+                    selectedFillOpaqueBin[i].drawSilhouetteSelected(frameCtx);
+                }
+            }
+        }
+
+        // Selected transparent
+
+        if (selectedFillTransparentBinLen > 0 || selectedEdgesTransparentBinLen > 0) {
+            frameCtx.lastProgramId = null;
+            if (scene.selectedMaterial.glowThrough) {
                 gl.clear(gl.DEPTH_BUFFER_BIT);
-                gl.enable(gl.CULL_FACE);
-                gl.enable(gl.BLEND);
+            }
+            gl.enable(gl.CULL_FACE);
+            gl.enable(gl.BLEND);
+            if (canvasTransparent) {
+                gl.blendEquation(gl.FUNC_ADD);
+                gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+            } else {
+                gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+            }
 
-                if (canvasTransparent) {
-                    gl.blendEquation(gl.FUNC_ADD);
-                    gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-                } else {
-                    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+            // Selected transparent edges
+
+            if (selectedEdgesTransparentBinLen > 0) {
+                for (i = 0; i < selectedEdgesTransparentBinLen; i++) {
+                    selectedEdgesTransparentBin[i].drawEdgesSelected(frameCtx);
                 }
+            }
 
-                if (selectedEdgesTransparentBinLen > 0) {
-                    for (i = 0; i < selectedEdgesTransparentBinLen; i++) {
-                        selectedEdgesTransparentBin[i].drawEdgesSelected(frameCtx);
-                    }
+            // Selected transparent fill
+
+            if (selectedFillTransparentBinLen > 0) {
+                for (i = 0; i < selectedFillTransparentBinLen; i++) {
+                    selectedFillTransparentBin[i].drawSilhouetteSelected(frameCtx);
                 }
-                if (selectedFillTransparentBinLen > 0) {
-                    for (i = 0; i < selectedFillTransparentBinLen; i++) {
-                        selectedFillTransparentBin[i].drawSilhouetteSelected(frameCtx);
-                    }
-                }
-                gl.disable(gl.BLEND);
             }
+            gl.disable(gl.BLEND);
+        }
 
-            const endTime = Date.now();
-            const frameStats = stats.frame;
+        const endTime = Date.now();
+        const frameStats = stats.frame;
 
-            frameStats.renderTime = (endTime - startTime) / 1000.0;
-            frameStats.drawElements = frameCtx.drawElements;
-            frameStats.useProgram = frameCtx.useProgram;
-            frameStats.bindTexture = frameCtx.bindTexture;
-            frameStats.bindArray = frameCtx.bindArray;
+        frameStats.renderTime = (endTime - startTime) / 1000.0;
+        frameStats.drawElements = frameCtx.drawElements;
+        frameStats.drawArrays = frameCtx.drawArrays;
+        frameStats.useProgram = frameCtx.useProgram;
+        frameStats.bindTexture = frameCtx.bindTexture;
+        frameStats.bindArray = frameCtx.bindArray;
 
-            const numTextureUnits = WEBGL_INFO.MAX_TEXTURE_UNITS;
-            for (let ii = 0; ii < numTextureUnits; ii++) {
-                gl.activeTexture(gl.TEXTURE0 + ii);
-            }
-            gl.bindTexture(gl.TEXTURE_CUBE_MAP, null);
-            gl.bindTexture(gl.TEXTURE_2D, null);
+        const numTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
+        for (let ii = 0; ii < numTextureUnits; ii++) {
+            gl.activeTexture(gl.TEXTURE0 + ii);
+        }
+        gl.bindTexture(gl.TEXTURE_CUBE_MAP, null);
+        gl.bindTexture(gl.TEXTURE_2D, null);
 
-            const numVertexAttribs = WEBGL_INFO.MAX_VERTEX_ATTRIBS; // Fixes https://github.com/xeokit/xeokit-sdk/issues/174
-            for (let ii = 0; ii < numVertexAttribs; ii++) {
-                gl.disableVertexAttribArray(ii);
-            }
+        const numVertexAttribs = WEBGL_INFO.MAX_VERTEX_ATTRIBS; // Fixes https://github.com/xeokit/xeokit-sdk/issues/174
+        for (let ii = 0; ii < numVertexAttribs; ii++) {
+            gl.disableVertexAttribArray(ii);
+        }
 
-            if (unbindOutputFrameBuffer) {
-                unbindOutputFrameBuffer(params.pass);
-            }
-        };
-    })();
+        if (unbindOutputFrameBuffer) {
+            unbindOutputFrameBuffer(params.pass);
+        }
+    }
 
     /**
      * Picks an Entity.
@@ -804,10 +909,18 @@ const Renderer = function (scene, options) {
         const tempMat4a = math.mat4();
         const tempMat4b = math.mat4();
 
+        const randomVec3 = math.vec3();
         const up = math.vec3([0, 1, 0]);
         const _pickResult = new PickResult();
 
         const nearAndFar = math.vec2();
+
+        const canvasPos = math.vec3();
+
+        const worldRayOrigin = math.vec3();
+        const worldRayDir = math.vec3();
+        const worldSurfacePos = math.vec3();
+        const worldSurfaceNormal = math.vec3();
 
         return function (params, pickResult = _pickResult) {
 
@@ -815,22 +928,6 @@ const Renderer = function (scene, options) {
 
             updateDrawlist();
 
-            if (WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_element_index_uint"]) { // In case context lost/recovered
-                extensionHandles.OES_element_index_uint = gl.getExtension("OES_element_index_uint");
-            }
-
-            if (scene.logarithmicDepthBufferEnabled && WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-                extensionHandles.EXT_frag_depth = gl.getExtension('EXT_frag_depth');
-            }
-
-            if (WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"]) {
-                extensionHandles.WEBGL_depth_texture = gl.getExtension('WEBGL_depth_texture');
-            }
-
-            let canvasX;
-            let canvasY;
-            let origin;
-            let direction;
             let look;
             let pickViewMatrix = null;
             let pickProjMatrix = null;
@@ -839,8 +936,8 @@ const Renderer = function (scene, options) {
 
             if (params.canvasPos) {
 
-                canvasX = params.canvasPos[0];
-                canvasY = params.canvasPos[1];
+                canvasPos[0] = params.canvasPos[0];
+                canvasPos[1] = params.canvasPos[1];
 
                 pickViewMatrix = scene.camera.viewMatrix;
                 pickProjMatrix = scene.camera.projMatrix;
@@ -852,7 +949,7 @@ const Renderer = function (scene, options) {
                 // Picking with arbitrary World-space ray
                 // Align camera along ray and fire ray through center of canvas
 
-                const pickFrustumMatrix = math.frustumMat4(-1, 1, -1, 1, scene.camera.project.near, scene.camera.project.far, tempMat4a);
+                const pickFrustumMatrix = math.frustumMat4(-1, 1, -1, 1, 0.01, scene.camera.project.far, tempMat4a);
 
                 if (params.matrix) {
 
@@ -861,24 +958,46 @@ const Renderer = function (scene, options) {
 
                 } else {
 
-                    origin = params.origin || math.vec3([0, 0, 0]);
-                    direction = params.direction || math.vec3([0, 0, 1]);
-                    look = math.addVec3(origin, direction, tempVec3a);
+                    worldRayOrigin.set(params.origin || [0, 0, 0]);
+                    worldRayDir.set(params.direction || [0, 0, 1]);
 
-                    pickViewMatrix = math.lookAtMat4v(origin, look, up, tempMat4b);
+                    look = math.addVec3(worldRayOrigin, worldRayDir, tempVec3a);
+
+                    randomVec3[0] = Math.random();
+                    randomVec3[1] = Math.random();
+                    randomVec3[2] = Math.random();
+
+                    math.normalizeVec3(randomVec3);
+                    math.cross3Vec3(worldRayDir, randomVec3, up);
+
+                    pickViewMatrix = math.lookAtMat4v(worldRayOrigin, look, up, tempMat4b);
                     pickProjMatrix = pickFrustumMatrix;
 
-                    pickResult.origin = origin;
-                    pickResult.direction = direction;
+                    pickResult.origin = worldRayOrigin;
+                    pickResult.direction = worldRayDir;
                 }
 
-                canvasX = canvas.clientWidth * 0.5;
-                canvasY = canvas.clientHeight * 0.5;
+                canvasPos[0] = canvas.clientWidth * 0.5;
+                canvasPos[1] = canvas.clientHeight * 0.5;
             }
+
+            for (let type in drawableTypeInfo) {
+                if (drawableTypeInfo.hasOwnProperty(type)) {
+                    const drawableList = drawableTypeInfo[type].drawableList;
+                    for (let i = 0, len = drawableList.length; i < len; i++) {
+                        const drawable = drawableList[i];
+                        if (drawable.setPickMatrices) { // Eg. SceneModel, which needs pre-loading into texture
+                            drawable.setPickMatrices(pickViewMatrix, pickProjMatrix);
+                        }
+                    }
+                }
+            }
+
+            const pickBuffer = renderBufferManager.getRenderBuffer("pick");
 
             pickBuffer.bind();
 
-            const pickable = pickPickable(canvasX, canvasY, pickViewMatrix, pickProjMatrix, params);
+            const pickable = gpuPickPickable(pickBuffer, canvasPos, pickViewMatrix, pickProjMatrix, params, pickResult);
 
             if (!pickable) {
                 pickBuffer.unbind();
@@ -888,14 +1007,21 @@ const Renderer = function (scene, options) {
             const pickedEntity = (pickable.delegatePickedEntity) ? pickable.delegatePickedEntity() : pickable;
 
             if (!pickedEntity) {
+                pickBuffer.unbind();
                 return null;
             }
 
             if (params.pickSurface) {
 
+                // GPU-based ray-picking
+
                 if (pickable.canPickTriangle && pickable.canPickTriangle()) {
-                    pickTriangle(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult);
+
+                    gpuPickTriangle(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult);
+
                     pickable.pickTriangleSurface(pickViewMatrix, pickProjMatrix, pickResult);
+
+                    pickResult.pickSurfacePrecision = false;
 
                 } else {
 
@@ -904,27 +1030,28 @@ const Renderer = function (scene, options) {
                         nearAndFar[0] = scene.camera.project.near;
                         nearAndFar[1] = scene.camera.project.far;
 
-                        pickWorldPos(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult);
+                        gpuPickWorldPos(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult);
+
                         if (params.pickSurfaceNormal !== false) {
-                            pickWorldNormal(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult);
+                            gpuPickWorldNormal(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult);
                         }
+
+                        pickResult.pickSurfacePrecision = false;
                     }
                 }
             }
-
             pickBuffer.unbind();
-
             pickResult.entity = pickedEntity;
-
             return pickResult;
         };
     })();
 
-    function pickPickable(canvasX, canvasY, pickViewMatrix, pickProjMatrix, params) {
+    function gpuPickPickable(pickBuffer, canvasPos, pickViewMatrix, pickProjMatrix, params, pickResult) {
 
         frameCtx.reset();
         frameCtx.backfaces = true;
         frameCtx.frontface = true; // "ccw"
+        frameCtx.pickOrigin = pickResult.origin;
         frameCtx.pickViewMatrix = pickViewMatrix;
         frameCtx.pickProjMatrix = pickProjMatrix;
         frameCtx.pickInvisible = !!params.pickInvisible;
@@ -937,8 +1064,6 @@ const Renderer = function (scene, options) {
         gl.disable(gl.BLEND);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        let i;
-        let len;
         const includeEntityIds = params.includeEntityIds;
         const excludeEntityIds = params.excludeEntityIds;
 
@@ -948,11 +1073,11 @@ const Renderer = function (scene, options) {
                 const drawableInfo = drawableTypeInfo[type];
                 const drawableList = drawableInfo.drawableList;
 
-                for (i = 0, len = drawableList.length; i < len; i++) {
+                for (let i = 0, len = drawableList.length; i < len; i++) {
 
                     const drawable = drawableList[i];
 
-                    if (!drawable.drawPickMesh || drawable.culled === true || (params.pickInvisible !== true && drawable.visible === false) || drawable.pickable === false) {
+                    if (!drawable.drawPickMesh || (params.pickInvisible !== true && drawable.visible === false) || drawable.pickable === false) {
                         continue;
                     }
                     if (includeEntityIds && !includeEntityIds[drawable.id]) { // TODO: push this logic into drawable
@@ -966,8 +1091,8 @@ const Renderer = function (scene, options) {
                 }
             }
         }
-
-        const pix = pickBuffer.read(Math.round(canvasX), Math.round(canvasY));
+        const resolutionScale = scene.canvas.resolutionScale;
+        const pix = pickBuffer.read(Math.round(canvasPos[0] * resolutionScale), Math.round(canvasPos[1] * resolutionScale));
         let pickID = pix[0] + (pix[1] * 256) + (pix[2] * 256 * 256) + (pix[3] * 256 * 256 * 256);
 
         if (pickID < 0) {
@@ -979,7 +1104,7 @@ const Renderer = function (scene, options) {
         return pickable;
     }
 
-    function pickTriangle(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, pickResult) {
+    function gpuPickTriangle(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult) {
 
         if (!pickable.drawPickTriangles) {
             return;
@@ -988,6 +1113,7 @@ const Renderer = function (scene, options) {
         frameCtx.reset();
         frameCtx.backfaces = true;
         frameCtx.frontface = true; // "ccw"
+        frameCtx.pickOrigin = pickResult.origin;
         frameCtx.pickViewMatrix = pickViewMatrix; // Can be null
         frameCtx.pickProjMatrix = pickProjMatrix; // Can be null
         // frameCtx.pickInvisible = !!params.pickInvisible;
@@ -1002,7 +1128,8 @@ const Renderer = function (scene, options) {
 
         pickable.drawPickTriangles(frameCtx);
 
-        const pix = pickBuffer.read(canvasX, canvasY);
+        const resolutionScale = scene.canvas.resolutionScale;
+        const pix = pickBuffer.read(Math.round(canvasPos[0] * resolutionScale), Math.round(canvasPos[1] * resolutionScale));
 
         let primIndex = pix[0] + (pix[1] * 256) + (pix[2] * 256 * 256) + (pix[3] * 256 * 256 * 256);
 
@@ -1011,7 +1138,7 @@ const Renderer = function (scene, options) {
         pickResult.primIndex = primIndex;
     }
 
-    const pickWorldPos = (function () {
+    const gpuPickWorldPos = (function () {
 
         const tempVec4a = math.vec4();
         const tempVec4b = math.vec4();
@@ -1022,15 +1149,18 @@ const Renderer = function (scene, options) {
         const tempMat4b = math.mat4();
         const tempMat4c = math.mat4();
 
-        return function (pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult) {
+        return function (pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult) {
 
             frameCtx.reset();
             frameCtx.backfaces = true;
             frameCtx.frontface = true; // "ccw"
+            frameCtx.pickOrigin = pickResult.origin;
             frameCtx.pickViewMatrix = pickViewMatrix;
             frameCtx.pickProjMatrix = pickProjMatrix;
             frameCtx.pickZNear = nearAndFar[0];
             frameCtx.pickZFar = nearAndFar[1];
+            frameCtx.pickElementsCount = pickable.pickElementsCount;
+            frameCtx.pickElementsOffset = pickable.pickElementsOffset;
 
             gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
@@ -1042,19 +1172,20 @@ const Renderer = function (scene, options) {
 
             pickable.drawPickDepths(frameCtx); // Draw color-encoded fragment screen-space depths
 
-            const pix = pickBuffer.read(Math.round(canvasX), Math.round(canvasY));
+            const resolutionScale = scene.canvas.resolutionScale;
+            const pix = pickBuffer.read(Math.round(canvasPos[0] * resolutionScale), Math.round(canvasPos[1] * resolutionScale));
 
             const screenZ = unpackDepth(pix); // Get screen-space Z at the given canvas coords
 
             // Calculate clip space coordinates, which will be in range of x=[-1..1] and y=[-1..1], with y=(+1) at top
-            const x = (canvasX - canvas.width / 2) / (canvas.width / 2);
-            const y = -(canvasY - canvas.height / 2) / (canvas.height / 2);
+            const x = (canvasPos[0] - canvas.clientWidth / 2) / (canvas.clientWidth / 2);
+            const y = -(canvasPos[1] - canvas.clientHeight / 2) / (canvas.clientHeight / 2);
 
-            const rtcCenter = pickable.rtcCenter;
+            const origin = pickable.origin;
             let pvMat;
 
-            if (rtcCenter) {
-                const rtcPickViewMat = createRTCViewMat(pickViewMatrix, rtcCenter, tempMat4a);
+            if (origin) {
+                const rtcPickViewMat = createRTCViewMat(pickViewMatrix, origin, tempMat4a);
                 pvMat = math.mulMat4(pickProjMatrix, rtcPickViewMat, tempMat4b);
 
             } else {
@@ -1082,13 +1213,220 @@ const Renderer = function (scene, options) {
             const dir = math.subVec3(world2, world1, tempVec4c);
             const worldPos = math.addVec3(world1, math.mulVec4Scalar(dir, screenZ, tempVec4d), tempVec4e);
 
-            if (rtcCenter) {
-                math.addVec3(worldPos, rtcCenter);
+            if (origin) {
+                math.addVec3(worldPos, origin);
             }
 
             pickResult.worldPos = worldPos;
         }
     })();
+
+    function snapInitDepthBuf(frameCtx) {
+        frameCtx.snapPickLayerParams = {};
+        frameCtx.snapPickLayerNumber = 0;
+        for (let type in drawableTypeInfo) {
+            const drawableInfo = drawableTypeInfo[type];
+            const drawableList = drawableInfo.drawableList;
+            for (let i = 0, len = drawableList.length; i < len; i++) {
+                const drawable = drawableList[i];
+                if (drawable.drawSnapInitDepthBuf) {
+                    if (!drawable.culled && drawable.visible && drawable.pickable) {
+                        drawable.drawSnapInitDepthBuf(frameCtx);
+                    }
+                }
+            }
+        }
+        return frameCtx.snapPickLayerParams;
+    }
+
+    function snapPickDrawSnapDepths(frameCtx) {
+        frameCtx.snapPickLayerParams = {};
+        frameCtx.snapPickLayerNumber = 0;
+        for (let type in drawableTypeInfo) {
+            const drawableInfo = drawableTypeInfo[type];
+            const drawableList = drawableInfo.drawableList;
+            for (let i = 0, len = drawableList.length; i < len; i++) {
+                const drawable = drawableList[i];
+                if (drawable.drawSnapDepths) {
+                    if (!drawable.culled && drawable.visible && drawable.pickable) {
+                        drawable.drawSnapDepths(frameCtx);
+                    }
+                }
+            }
+        }
+        return frameCtx.snapPickLayerParams;
+    }
+
+    function getClipPosX(pos, size) {
+        return 2 * (pos / size) - 1;
+    }
+
+    function getClipPosY(pos, size) {
+        return 1 - 2 * (pos / size);
+    }
+
+    /**
+     * @param {[number, number]} canvasPos
+     * @param {number} snapRadiusInPixels
+     * @param {"vertex"|"edge"} snapMode
+     *
+     * @returns {{worldPos:number[],snappedWorldPos:null|number[],snappedCanvasPos:null|number[]}}
+     */
+    this.snapPick = function (canvasPos, snapRadiusInPixels = 50, snapMode = "vertex") {
+
+        frameCtx.reset();
+        frameCtx.backfaces = true;
+        frameCtx.frontface = true; // "ccw"
+        frameCtx.pickZNear = scene.camera.project.near;
+        frameCtx.pickZFar = scene.camera.project.far;
+
+        let vertexPickBuffer = renderBufferManager.getRenderBuffer("uniquePickColors-aabs", {
+            depthTexture: true,
+            size: [
+                2 * snapRadiusInPixels + 1,
+                2 * snapRadiusInPixels + 1,
+            ]
+        });
+
+        frameCtx.snapVectorA = [
+            getClipPosX(canvasPos[0], gl.drawingBufferWidth),
+            getClipPosY(canvasPos[1], gl.drawingBufferHeight),
+        ];
+
+        frameCtx.snapInvVectorAB = [
+            gl.drawingBufferWidth / (2 * snapRadiusInPixels),
+            gl.drawingBufferHeight / (2 * snapRadiusInPixels),
+        ];
+
+        frameCtx.snapMode = snapMode;
+
+        // Bind and clear the snap render target
+
+        vertexPickBuffer.bind(gl.RGBA32I);
+        gl.viewport(0, 0, vertexPickBuffer.size[0], vertexPickBuffer.size[1]);
+        gl.enable(gl.DEPTH_TEST);
+        gl.frontFace(gl.CCW);
+        gl.disable(gl.CULL_FACE);
+        gl.depthMask(true);
+        gl.disable(gl.BLEND);
+        gl.depthFunc(gl.LESS);
+        gl.clear(gl.DEPTH_BUFFER_BIT);
+        gl.clearBufferiv(gl.COLOR, 0, new Int32Array([0, 0, 0, 0]));
+
+        //////////////////////////////////
+        // Set view and proj mats for VBO renderers
+        ///////////////////////////////////////
+
+        const pickViewMatrix = scene.camera.viewMatrix;
+        const pickProjMatrix = scene.camera.projMatrix;
+
+        for (let type in drawableTypeInfo) {
+            if (drawableTypeInfo.hasOwnProperty(type)) {
+                const drawableList = drawableTypeInfo[type].drawableList;
+                for (let i = 0, len = drawableList.length; i < len; i++) {
+                    const drawable = drawableList[i];
+                    if (drawable.setPickMatrices) { // Eg. SceneModel, which needs pre-loading into texture
+                        drawable.setPickMatrices(pickViewMatrix, pickProjMatrix);
+                    }
+                }
+            }
+        }
+
+        // a) init z-buffer
+        const layerParamsSurface = snapInitDepthBuf(frameCtx);
+
+        // b) snap-pick
+        const layerParamsSnap = snapPickDrawSnapDepths(frameCtx);
+
+        // Read and decode the snapped coordinates
+
+        const snapPickResultArray = vertexPickBuffer.readArray(gl.RGBA_INTEGER, gl.INT, Int32Array, 4);
+
+        vertexPickBuffer.unbind();
+
+        // result 1) regular hi-precision world position
+
+        let worldPos = null;
+
+        const middleX = snapRadiusInPixels;
+        const middleY = snapRadiusInPixels;
+        const middleIndex = (middleX * 4) + (middleY * vertexPickBuffer.size[0] * 4);
+        const pickResultMiddleXY = snapPickResultArray.slice(middleIndex, middleIndex + 4);
+
+        if (pickResultMiddleXY[3] !== 0) {
+            const pickedLayerParmasSurface = layerParamsSurface[Math.abs(pickResultMiddleXY[3])];
+            const origin = pickedLayerParmasSurface.origin;
+            const scale = pickedLayerParmasSurface.coordinateScale;
+            worldPos = [
+                pickResultMiddleXY[0] * scale[0] + origin[0],
+                pickResultMiddleXY[1] * scale[1] + origin[1],
+                pickResultMiddleXY[2] * scale[2] + origin[2],
+            ];
+        }
+
+        // result 2) hi-precision snapped (to vertex/edge) world position
+
+        let snapPickResult = [];
+
+        for (let i = 0; i < snapPickResultArray.length; i += 4) {
+            if (snapPickResultArray[i + 3] > 0) {
+                const pixelNumber = Math.floor(i / 4);
+                const w = vertexPickBuffer.size[0];
+                const h = vertexPickBuffer.size[1];
+                const x = pixelNumber % w - Math.floor(w / 2);
+                const y = Math.floor(pixelNumber / w) - Math.floor(w / 2);
+                const dist = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+                snapPickResult.push({
+                    x,
+                    y,
+                    dist,
+                    result: [
+                        snapPickResultArray[i + 0],
+                        snapPickResultArray[i + 1],
+                        snapPickResultArray[i + 2],
+                        snapPickResultArray[i + 3],
+                    ]
+                });
+            }
+        }
+
+        let snappedWorldPos = null;
+
+        if (snapPickResult.length > 0) {
+            snapPickResult.sort((a, b) => {
+                return a.dist - b.dist
+            });
+
+            snapPickResult = snapPickResult[0].result;
+
+            const pickedLayerParmas = layerParamsSnap[snapPickResult[3]];
+
+            const origin = pickedLayerParmas.origin;
+            const scale = pickedLayerParmas.coordinateScale;
+
+            snappedWorldPos = [
+                snapPickResult[0] * scale[0] + origin[0],
+                snapPickResult[1] * scale[1] + origin[1],
+                snapPickResult[2] * scale[2] + origin[2],
+            ];
+        }
+
+        if (null === worldPos && null == snappedWorldPos) {   // If neither regular pick or snap pick, return null
+            return null;
+        }
+
+        let snappedCanvasPos = null;
+
+        if (null !== snappedWorldPos) {
+            snappedCanvasPos = scene.camera.projectWorldPos(snappedWorldPos);
+        }
+
+        return {
+            worldPos,
+            snappedWorldPos,
+            snappedCanvasPos
+        };
+    };
 
     function unpackDepth(depthZ) {
         const vec = [depthZ[0] / 256.0, depthZ[1] / 256.0, depthZ[2] / 256.0, depthZ[3] / 256.0];
@@ -1096,15 +1434,14 @@ const Renderer = function (scene, options) {
         return math.dotVec4(vec, bitShift);
     }
 
-    function pickWorldNormal(pickable, canvasX, canvasY, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult) {
+    function gpuPickWorldNormal(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult) {
 
         frameCtx.reset();
         frameCtx.backfaces = true;
         frameCtx.frontface = true; // "ccw"
+        frameCtx.pickOrigin = pickResult.origin;
         frameCtx.pickViewMatrix = pickViewMatrix;
         frameCtx.pickProjMatrix = pickProjMatrix;
-        frameCtx.pickZNear = nearAndFar[0];
-        frameCtx.pickZFar = nearAndFar[1];
 
         gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
@@ -1116,7 +1453,8 @@ const Renderer = function (scene, options) {
 
         pickable.drawPickNormals(frameCtx); // Draw color-encoded fragment World-space normals
 
-        const pix = pickBuffer.read(Math.round(canvasX), Math.round(canvasY));
+        const resolutionScale = scene.canvas.resolutionScale;
+        const pix = pickBuffer.read(Math.round(canvasPos[0] * resolutionScale), Math.round(canvasPos[1] * resolutionScale));
 
         const worldNormal = [(pix[0] / 256.0) - 0.5, (pix[1] / 256.0) - 0.5, (pix[2] / 256.0) - 0.5];
 
@@ -1130,7 +1468,7 @@ const Renderer = function (scene, options) {
      * @param marker
      */
     this.addMarker = function (marker) {
-        this._occlusionTester = this._occlusionTester || new OcclusionTester(scene);
+        this._occlusionTester = this._occlusionTester || new OcclusionTester(scene, renderBufferManager);
         this._occlusionTester.addMarker(marker);
         scene.occlusionTestCountdown = 0;
     };
@@ -1204,6 +1542,7 @@ const Renderer = function (scene, options) {
      * @private
      */
     this.readPixels = function (pixels, colors, len, opaqueOnly) {
+        const snapshotBuffer = renderBufferManager.getRenderBuffer("snapshot");
         snapshotBuffer.bind();
         snapshotBuffer.clear();
         this.render({force: true, opaqueOnly: opaqueOnly});
@@ -1231,7 +1570,11 @@ const Renderer = function (scene, options) {
      *
      * Exit snapshot mode using endSnapshot().
      */
-    this.beginSnapshot = function () {
+    this.beginSnapshot = function (params = {}) {
+        const snapshotBuffer = renderBufferManager.getRenderBuffer("snapshot");
+        if (params.width && params.height) {
+            snapshotBuffer.setSize([params.width, params.height]);
+        }
         snapshotBuffer.bind();
         snapshotBuffer.clear();
         snapshotBound = true;
@@ -1244,6 +1587,7 @@ const Renderer = function (scene, options) {
         if (!snapshotBound) {
             return;
         }
+        const snapshotBuffer = renderBufferManager.getRenderBuffer("snapshot");
         snapshotBuffer.clear();
         this.render({force: true, opaqueOnly: false});
         imageDirty = true;
@@ -1256,8 +1600,21 @@ const Renderer = function (scene, options) {
      * @returns {String} The image data URI.
      */
     this.readSnapshot = function (params) {
-        const imageDataURI = snapshotBuffer.readImage(params);
-        return imageDataURI;
+        const snapshotBuffer = renderBufferManager.getRenderBuffer("snapshot");
+        return snapshotBuffer.readImage(params);
+    };
+
+    /**
+     * Returns an HTMLCanvas containing an image of the snapshot canvas.
+     *
+     * - The HTMLCanvas has a CanvasRenderingContext2D.
+     * - Expects the caller to draw more things on the HTMLCanvas (annotations etc).
+     *
+     * @returns {HTMLCanvasElement}
+     */
+    this.readSnapshotAsCanvas = function () {
+        const snapshotBuffer = renderBufferManager.getRenderBuffer("snapshot");
+        return snapshotBuffer.readImageAsCanvas();
     };
 
     /**
@@ -1269,6 +1626,7 @@ const Renderer = function (scene, options) {
         if (!snapshotBound) {
             return;
         }
+        const snapshotBuffer = renderBufferManager.getRenderBuffer("snapshot");
         snapshotBuffer.unbind();
         snapshotBound = false;
     };
@@ -1282,11 +1640,7 @@ const Renderer = function (scene, options) {
         drawableTypeInfo = {};
         drawables = {};
 
-        pickBuffer.destroy();
-        snapshotBuffer.destroy();
-        saoDepthRenderBuffer.destroy();
-        occlusionRenderBuffer1.destroy();
-        occlusionRenderBuffer2.destroy();
+        renderBufferManager.destroy();
 
         saoOcclusionRenderer.destroy();
         saoDepthLimitedBlurRenderer.destroy();

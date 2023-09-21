@@ -60,10 +60,12 @@ const decompressColor = (function () {
     };
 })();
 
-function load(viewer, options, inflatedData, performanceModel) {
+function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx) {
 
-    performanceModel.positionsCompression = "disabled"; // Positions in XKT V4 are floats, which we never quantize, for precision with big models
-    performanceModel.normalsCompression = "precompressed"; // Normals are oct-encoded though
+    const modelPartId = manifestCtx.getNextId();
+
+    sceneModel.positionsCompression = "disabled"; // Positions in XKT V4 are floats, which we never quantize, for precision with big models
+    sceneModel.normalsCompression = "precompressed"; // Normals are oct-encoded though
 
     const positions = inflatedData.positions;
     const normals = inflatedData.normals;
@@ -141,13 +143,13 @@ function load(viewer, options, inflatedData, performanceModel) {
 
             // Primitive instanced by more than one entity, and has positions in Model-space
 
-            var geometryId = "geometry" + primitiveIndex; // These IDs are local to the PerformanceModel
+            const geometryId = `${modelPartId}-geometry.${primitiveIndex}`; // These IDs are local to the SceneModel
 
-            performanceModel.createGeometry({
+            sceneModel.createGeometry({
                 id: geometryId,
                 primitive: "triangles",
-                positions: primitivePositions,
-                normals: primitiveNormals,
+                positionsCompressed: primitivePositions,
+                normalsCompressed: primitiveNormals,
                 indices: primitiveIndices,
                 edgeIndices: primitiveEdgeIndices
             });
@@ -158,18 +160,18 @@ function load(viewer, options, inflatedData, performanceModel) {
 
             // Primitive is used only by one entity, and has positions pre-transformed into World-space
 
-            const meshId = primitiveIndex; // These IDs are local to the PerformanceModel
+            const meshId = primitiveIndex; // These IDs are local to the SceneModel
 
             const entityIndex = batchedPrimitiveEntityIndexes[primitiveIndex];
             const entityId = eachEntityId[entityIndex];
 
             const meshDefaults = {}; // TODO: get from lookup from entity IDs
 
-            performanceModel.createMesh(utils.apply(meshDefaults, {
+            sceneModel.createMesh(utils.apply(meshDefaults, {
                 id: meshId,
                 primitive: "triangles",
-                positions: primitivePositions,
-                normals: primitiveNormals,
+                positionsCompressed: primitivePositions,
+                normalsCompressed: primitiveNormals,
                 indices: primitiveIndices,
                 edgeIndices: primitiveEdgeIndices,
                 color: color,
@@ -205,7 +207,7 @@ function load(viewer, options, inflatedData, performanceModel) {
                 const matricesIndex = (eachEntityMatricesPortion [entityIndex]) * 16;
                 const matrix = matrices.subarray(matricesIndex, matricesIndex + 16);
 
-                performanceModel.createMesh(utils.apply(meshDefaults, {
+                sceneModel.createMesh(utils.apply(meshDefaults, {
                     id: meshId,
                     geometryId: geometryId,
                     matrix: matrix
@@ -222,7 +224,7 @@ function load(viewer, options, inflatedData, performanceModel) {
 
             const entityDefaults = {}; // TODO: get from lookup from entity IDs
 
-            performanceModel.createEntity(utils.apply(entityDefaults, {
+            sceneModel.createEntity(utils.apply(entityDefaults, {
                 id: entityId,
                 isObject: true, ///////////////// TODO: If metaobject exists
                 meshIds: meshIds
@@ -234,10 +236,10 @@ function load(viewer, options, inflatedData, performanceModel) {
 /** @private */
 const ParserV5 = {
     version: 5,
-    parse: function (viewer, options, elements, performanceModel) {
+    parse: function (viewer, options, elements, sceneModel, metaModel, manifestCtx) {
         const deflatedData = extract(elements);
         const inflatedData = inflate(deflatedData);
-        load(viewer, options, inflatedData, performanceModel);
+        load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx);
     }
 };
 

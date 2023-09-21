@@ -1,0 +1,285 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/scene_graph_icon.png"/>
+    <h1>Scene Graph</h1>
+    <h2>Scene graph with browser-resident geometry</h2>
+    <p>In this example, we're programmatically building a simple model from xeokit's scene graph components, with
+        geometry stored in both browser memory and GPU.</p>
+    <p>We have the option to not retain geometry in browser memory, in case we need a lower footprint.</p>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/nodes/Node.js~Node.html"
+               target="_other">Node</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html"
+               target="_other">Mesh</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html"
+               target="_other">PhongMaterial</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html"
+               target="_other">ReadableGeometry</a>
+        </li>
+        <li>
+            <a href="../../docs/function/index.html#static-function-buildBoxGeometry"
+               target="_other">buildBoxGeometry</a>
+        </li>
+    </ul>
+</div>
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {
+        Viewer,
+        Mesh,
+        Node,
+        PhongMaterial,
+        buildBoxGeometry,
+        VBOGeometry,
+        ReadableGeometry,
+        buildSphereGeometry,
+        math
+    } from "../../dist/xeokit-sdk.min.es.js";
+
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
+    viewer.scene.camera.look = [0, -5.75, 0];
+    viewer.scene.camera.up = [0.37, 0.91, -0.11];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Build a simple scene graph representing a table with four legs
+    //------------------------------------------------------------------------------------------------------------------
+
+    const boxGeometry = new ReadableGeometry(viewer.scene, buildBoxGeometry({
+        xSize: 1,
+        ySize: 1,
+        zSize: 1
+    }));
+
+    new Node(viewer.scene, {
+        id: "table",
+        isModel: true, // <--------------------- Node represents a model
+        rotation: [0, 50, 0],
+        position: [0, 0, 0],
+        scale: [1, 1, 1],
+
+        children: [
+
+            new Mesh(viewer.scene, { // Red table leg
+                id: "redLeg",
+                isObject: true, // <---------- Node represents an object
+                position: [-4, -6, -4],
+                scale: [1, 3, 1],
+                rotation: [0, 0, 0],
+                geometry: boxGeometry,
+                material: new PhongMaterial(viewer.scene, {
+                    diffuse: [1, 0.3, 0.3]
+                })
+            }),
+
+            new Mesh(viewer.scene, { // Green table leg
+                id: "greenLeg",
+                isObject: true, // <---------- Node represents an object
+                position: [4, -6, -4],
+                scale: [1, 3, 1],
+                rotation: [0, 0, 0],
+                geometry: boxGeometry,
+                material: new PhongMaterial(viewer.scene, {
+                    diffuse: [0.3, 1.0, 0.3]
+                })
+            }),
+
+            new Mesh(viewer.scene, {// Blue table leg
+                id: "blueLeg",
+                isObject: true, // <---------- Node represents an object
+                position: [4, -6, 4],
+                scale: [1, 3, 1],
+                rotation: [0, 0, 0],
+                geometry: boxGeometry,
+                material: new PhongMaterial(viewer.scene, {
+                    diffuse: [0.3, 0.3, 1.0]
+                })
+            }),
+
+            new Mesh(viewer.scene, {  // Yellow table leg
+                id: "yellowLeg",
+                isObject: true, // <---------- Node represents an object
+                position: [-4, -6, 4],
+                scale: [1, 3, 1],
+                rotation: [0, 0, 0],
+                geometry: boxGeometry,
+                material: new PhongMaterial(viewer.scene, {
+                    diffuse: [1.0, 1.0, 0.0]
+                })
+            }),
+
+            new Mesh(viewer.scene, { // Purple table top
+                id: "tableTop",
+                isObject: true, // <---------- Node represents an object
+                position: [0, -3, 0],
+                scale: [6, 0.5, 6],
+                rotation: [0, 0, 0],
+                geometry: boxGeometry,
+                material: new PhongMaterial(viewer.scene, {
+                    diffuse: [1.0, 0.3, 1.0]
+                })
+            })
+        ]
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Find scene graph nodes by their model and object IDs
+    //------------------------------------------------------------------------------------------------------------------
+
+    // Get the whole table model
+    var table = viewer.scene.models["table"];
+
+    table.edges = true;
+
+    // Get some leg objects
+    var redLeg = viewer.scene.objects["redLeg"];
+    var greenLeg = viewer.scene.objects["greenLeg"];
+    var blueLeg = viewer.scene.objects["blueLeg"];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Periodically update transforms on our scene nodes
+    //------------------------------------------------------------------------------------------------------------------
+
+    // viewer.scene.on("tick", function () {
+    //
+    //     // Rotate legs
+    //     redLeg.rotateY(0.5);
+    //     greenLeg.rotateY(0.5);
+    //     blueLeg.rotateY(0.5);
+    //
+    //     // Rotate table
+    //     table.rotateY(0.5);
+    //     table.rotateX(0.3);
+    // });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Display an indicator wherever the pointer picks a surface
+    //------------------------------------------------------------------------------------------------------------------
+
+    var hitHelper = new (function () {
+
+        const zeroVec = new Float32Array([0, 0, -1]);
+        const quat = new Float32Array(4);
+
+        var node = new Node(viewer.scene, {
+            pickable: false,
+            visible: true,
+            position: [0, 0, 0],
+
+            children: [
+                new Mesh(viewer.scene, {
+                    geometry: new VBOGeometry(viewer.scene, buildSphereGeometry({radius: .4})),
+                    material: new PhongMaterial(viewer.scene, {emissive: [1, 0, 0], diffuse: [0, 0, 0]}),
+                    pickable: false
+                }),
+                new Mesh(viewer.scene, {
+                    geometry: new VBOGeometry(viewer.scene, {
+                        primitive: "lines",
+                        positions: [
+                            0.0, 0.0, 0.0, 0.0, 0.0, -2.0
+                        ],
+                        indices: [0, 1]
+                    }),
+                    material: new PhongMaterial(viewer.scene, {emissive: [1, 1, 0], diffuse: [0, 0, 0], lineWidth: 4}),
+                    pickable: false
+                })
+            ]
+        });
+
+        this.show = function (hit) {
+            node.position = hit.worldPos;
+            node.visible = true;
+
+            (this._dir = this._dir || math.vec3()).set(hit.worldNormal || [0, 0, 1]);
+            math.vec3PairToQuaternion(zeroVec, this._dir, quat);
+            node.quaternion = quat;
+        };
+
+        this.hide = function () {
+            node.visible = false;
+        };
+    })();
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Dynamically pick surfaces of model with the pointer, show pick intersection with red sphere
+    //------------------------------------------------------------------------------------------------------------------
+
+    var lastEntity = null;
+    var lastColorize = null;
+
+    viewer.scene.input.on("mousemove", function (coords) {
+
+        var hit = viewer.scene.pick({
+            canvasPos: coords,
+            pickSurface: true  // <<------ This causes picking to find the intersection point on the entity
+        });
+
+        if (hit) {
+
+            if (!lastEntity || hit.entity.id !== lastEntity.id) {
+
+                if (lastEntity) {
+                    lastEntity.colorize = lastColorize;
+                }
+
+                lastEntity = hit.entity;
+                lastColorize = hit.entity.colorize.slice();
+
+                hit.entity.colorize = [0.0, 1.0, 0.0, 1.0];
+            }
+
+            hitHelper.show(hit);
+
+        } else {
+
+            if (lastEntity) {
+                lastEntity.colorize = lastColorize;
+                lastEntity = null;
+
+                hitHelper.hide();
+            }
+        }
+    });
+
+</script>
+</html>

@@ -1,0 +1,760 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+
+    <style>
+
+        .viewer-ruler-wire-highlighted {
+            border: 2px solid white !important;
+        }
+
+        .viewer-ruler-label-highlighted {
+            border: 2px solid white !important;
+        }
+
+        .viewer-ruler-dot-highlighted {
+            border: 2px solid white !important;
+        }
+
+        .xeokit-context-menu {
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            display: none;
+            z-index: 300000;
+            background: rgba(255, 255, 255, 0.46);
+            border: 1px solid black;
+            border-radius: 6px;
+            padding: 0;
+            width: 200px;
+        }
+
+        .xeokit-context-menu ul {
+            list-style: none;
+            margin-left: 0;
+            padding: 0;
+        }
+
+        .xeokit-context-menu ul li {
+            list-style-type: none;
+            padding-left: 10px;
+            padding-right: 20px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+            color: black;
+            border-bottom: 1px solid gray;
+            background: rgba(255, 255, 255, 0.46);
+            cursor: pointer;
+            width: calc(100% - 30px);
+        }
+
+        .xeokit-context-menu ul li:hover {
+            background: black;
+            color: white;
+            font-weight: normal;
+        }
+
+        .xeokit-context-menu ul li span {
+            display: inline-block;
+        }
+
+        .xeokit-context-menu .disabled {
+            display: inline-block;
+            color: gray;
+            cursor: default;
+            font-weight: normal;
+        }
+
+        .xeokit-context-menu .disabled:hover {
+            color: gray;
+            cursor: default;
+            background: #eeeeee;
+            font-weight: normal;
+        }
+
+    </style>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/measure_angle_icon.png"/>
+    <h1>AngleMeasurementsPlugin</h1>
+    <h2>Creating angle measurements programmatically</h2>
+    <p>In this example, we're loading a BIM model from the file system, then programmatically creating a couple of
+        angle measurements on the model's surface.</p>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html"
+               target="_other">AngleMeasurementsPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
+               target="_other">Model source</a>
+        </li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer, XKTLoaderPlugin, ContextMenu, AngleMeasurementsPlugin} from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas"
+    });
+
+    viewer.camera.eye = [-3.93, 2.85, 27.01];
+    viewer.camera.look = [4.40, 3.72, 8.89];
+    viewer.camera.up = [-0.01, 0.99, 0.039];
+
+    viewer.cameraControl.followPointer = true;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load a model
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const sceneModel = xktLoader.load({
+        id: "myModel",
+        src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        edges: true
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a context menu to delete and configure measurements
+    //------------------------------------------------------------------------------------------------------------------
+
+    const angleMeasurementsContextMenu = new ContextMenu({
+        items: [
+
+            [
+                {
+                    getTitle: (context) => {
+                        return context.measurement.labelsVisible ? "Hide Labels" : "Show Labels";
+                    },
+                    doAction: function (context) {
+                        context.measurement.labelsVisible = !context.measurement.labelsVisible;
+                    }
+                }
+            ], [
+                {
+                    title: "Delete Measurement",
+                    doAction: function (context) {
+                        context.measurement.destroy();
+                    }
+                }
+            ]
+
+        ]
+    });
+
+    angleMeasurementsContextMenu.on("hidden", () => {
+        if (angleMeasurementsContextMenu.context.measurement) {
+            angleMeasurementsContextMenu.context.measurement.setHighlighted(false);
+        }
+    });
+    
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a AngleMeasurementsPlugin, with which we'll create AngleMeasurements
+    //------------------------------------------------------------------------------------------------------------------
+
+    const angleMeasurementsPlugin = new AngleMeasurementsPlugin(viewer, {
+        zIndex: 100000 // If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
+    });
+
+    angleMeasurementsPlugin.on("mouseOver", (e) => {
+        e.measurement.setHighlighted(true);
+    });
+
+    angleMeasurementsPlugin.on("mouseLeave", (e) => {
+        if (angleMeasurementsContextMenu.shown && angleMeasurementsContextMenu.context.measurement.id === e.measurement.id) {
+            return;
+        }
+        e.measurement.setHighlighted(false);
+    });
+
+    angleMeasurementsPlugin.on("contextMenu", (e) => {
+        angleMeasurementsContextMenu.context = { // Must set context before showing menu
+            viewer: viewer,
+            angleMeasurementsPlugin: angleMeasurementsPlugin,
+            measurement: e.measurement
+        };
+        angleMeasurementsContextMenu.show(e.event.clientX, e.event.clientY);
+        e.event.preventDefault();
+    });
+    
+    sceneModel.on("loaded", () => {
+
+        //------------------------------------------------------------------------------------------------------------------
+        // Create some AngleMeasurements
+        //------------------------------------------------------------------------------------------------------------------
+
+        angleMeasurementsPlugin.createMeasurement({
+            id: "angleMeasurement1",
+            origin: {
+                entity: viewer.scene.objects["1CZILmCaHETO8tf3SgGEXu"],
+                worldPos: [0.4158603637281142, 2.5193106917110457, 17.79972838299403]
+            },
+            corner: {
+                entity: viewer.scene.objects["1CZILmCaHETO8tf3SgGEXu"],
+                worldPos: [0.41857741956197625,0.0987169929481646,17.799763071093395]
+            },
+            target: {
+                entity: viewer.scene.objects["1CZILmCaHETO8tf3SgGEXu"],
+                worldPos: [5.235526066859247, 0.11580773869801986, 17.824891550941565]
+            },
+            visible: true
+        });
+
+        angleMeasurementsPlugin.createMeasurement({
+            id: "angleMeasurement2",
+            origin: {
+                entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FNr2"],
+                worldPos: [-0.00003814187850181838, 5.9996748076205115,17.79996871551525]
+            },
+            corner: {
+                entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FNqI"],
+                worldPos: [-0.0005214119318139865, 3.1010044228517595, 17.787656604483363]
+
+            },
+            target: {
+                entity: viewer.scene.objects["1s1jVhK8z0pgKYcr9jt7AB"],
+                worldPos: [ 8.380657312957396, 3.1055697628459553, 17.799220108187185]
+            },
+            visible: true
+        });
+    });
+
+    const objectContextMenu = new ContextMenu({
+        items: [
+            [
+                {
+                    getTitle: function (context) {
+                        return (!context.entity.xrayed) ? "X-Ray" : "Undo X-Ray";
+                    },
+                    doAction: function (context) {
+                        context.entity.xrayed = !context.entity.xrayed;
+                    }
+                },
+                {
+                    title: "X-Ray Others",
+                    doAction: function (context) {
+                        const viewer = context.viewer;
+                        const scene = viewer.scene;
+                        const entity = context.entity;
+                        const metaObject = viewer.metaScene.metaObjects[entity.id];
+                        if (!metaObject) {
+                            return;
+                        }
+                        scene.setObjectsVisible(scene.objectIds, true);
+                        scene.setObjectsXRayed(scene.objectIds, true);
+                        scene.setObjectsSelected(scene.selectedObjectIds, false);
+                        scene.setObjectsHighlighted(scene.highlightedObjectIds, false);
+                        metaObject.withMetaObjectsInSubtree((metaObject) => {
+                            const entity = scene.objects[metaObject.id];
+                            if (entity) {
+                                entity.xrayed = false;
+                            }
+                        });
+                    }
+                },
+                {
+                    title: "X-Ray All",
+                    getEnabled: function (context) {
+                        const scene = context.viewer.scene;
+                        return (scene.numXRayedObjects < scene.numObjects);
+                    },
+                    doAction: function (context) {
+                        const scene = context.viewer.scene;
+                        scene.setObjectsXRayed(scene.objectIds, true);
+                    }
+                },
+                {
+                    title: "X-Ray None",
+                    getEnabled: function (context) {
+                        return (context.viewer.scene.numXRayedObjects > 0);
+                    },
+                    doAction: function (context) {
+                        context.viewer.scene.setObjectsXRayed(context.viewer.scene.xrayedObjectIds, false);
+                    }
+                }
+            ],
+            [
+                {
+                    title: "Hide",
+                    getEnabled: function (context) {
+                        return context.entity.visible;
+                    },
+                    doAction: function (context) {
+                        context.entity.visible = false;
+                    }
+                },
+                {
+                    title: "Hide Others",
+                    doAction: function (context) {
+                        const viewer = context.viewer;
+                        const scene = viewer.scene;
+                        const entity = context.entity;
+                        const metaObject = viewer.metaScene.metaObjects[entity.id];
+                        if (!metaObject) {
+                            return;
+                        }
+                        scene.setObjectsVisible(scene.visibleObjectIds, false);
+                        scene.setObjectsXRayed(scene.xrayedObjectIds, false);
+                        scene.setObjectsSelected(scene.selectedObjectIds, false);
+                        scene.setObjectsHighlighted(scene.highlightedObjectIds, false);
+                        metaObject.withMetaObjectsInSubtree((metaObject) => {
+                            const entity = scene.objects[metaObject.id];
+                            if (entity) {
+                                entity.visible = true;
+                            }
+                        });
+                    }
+                },
+                {
+                    title: "Hide All",
+                    getEnabled: function (context) {
+                        return (context.viewer.scene.numVisibleObjects > 0);
+                    },
+                    doAction: function (context) {
+                        context.viewer.scene.setObjectsVisible(context.viewer.scene.visibleObjectIds, false);
+                    }
+                },
+                {
+                    title: "Show All",
+                    getEnabled: function (context) {
+                        const scene = context.viewer.scene;
+                        return (scene.numVisibleObjects < scene.numObjects);
+                    },
+                    doAction: function (context) {
+                        const scene = context.viewer.scene;
+                        scene.setObjectsVisible(scene.objectIds, true);
+                    }
+                }
+            ],
+            [
+                {
+                    getTitle: function (context) {
+                        return (!context.entity.selected) ? "Select" : "Undo Select";
+                    },
+                    doAction: function (context) {
+                        context.entity.selected = !context.entity.selected;
+                    }
+                },
+                {
+                    title: "Select All",
+                    getEnabled: function (context) {
+                        const scene = context.viewer.scene;
+                        return (scene.numSelectedObjects < scene.numObjects);
+                    },
+                    doAction: function (context) {
+                        const scene = context.viewer.scene;
+                        scene.setObjectsSelected(scene.objectIds, true);
+                    }
+                },
+                {
+                    title: "Select None",
+                    getEnabled: function (context) {
+                        return (context.viewer.scene.numSelectedObjects > 0);
+                    },
+                    doAction: function (context) {
+                        context.viewer.scene.setObjectsSelected(context.viewer.scene.selectedObjectIds, false);
+                    }
+                }
+            ],
+
+            [
+                {
+                    title: "Camera..",
+                    items: [
+                        [
+                            {
+                                title: "View Fit",
+                                doAction: function (context) {
+                                    const viewer = context.viewer;
+                                    const scene = viewer.scene;
+                                    const entity = context.entity;
+                                    viewer.cameraFlight.flyTo({
+                                        aabb: entity.aabb,
+                                        duration: 0.5
+                                    }, () => {
+                                        setTimeout(function () {
+                                            scene.setObjectsHighlighted(scene.highlightedObjectIds, false);
+                                        }, 500);
+                                    });
+                                }
+                            },
+                            {
+                                title: "View Fit All",
+                                doAction: function (context) {
+                                    const scene = context.viewer.scene;
+                                    context.viewer.cameraFlight.flyTo({
+                                        projection: "perspective",
+                                        aabb: scene.getAABB(),
+                                        duration: 0.5
+                                    });
+                                }
+                            }
+                        ],
+                        [
+                            {
+                                title: "Perspective",
+                                getEnabled: function (context) {
+                                    const scene = context.viewer.scene;
+                                    return (scene.camera.projection !== "perspective");
+                                },
+                                doAction: function (context) {
+                                    context.viewer.cameraFlight.flyTo({
+                                        projection: "perspective"
+                                    });
+                                }
+                            },
+                            {
+                                title: "Orthographic",
+                                getEnabled: function (context) {
+                                    const scene = context.viewer.scene;
+                                    return (scene.camera.projection !== "ortho");
+                                },
+                                doAction: function (context) {
+                                    context.viewer.cameraFlight.flyTo({
+                                        projection: "ortho"
+                                    });
+                                }
+                            }
+                        ]
+                    ]
+                }
+            ],
+
+            [
+                {
+                    title: "Effects..",
+                    items: [
+                        [
+                            {
+                                getTitle: (context) => {
+                                    return context.viewer.scene.edgeMaterial.edges ? "Disable Edges" : "Enable Edges";
+                                },
+                                doAction: function (context) {
+                                    context.viewer.scene.edgeMaterial.edges = !context.viewer.scene.edgeMaterial.edges;
+                                }
+                            },
+                            {
+                                getTitle: (context) => {
+                                    return context.viewer.scene.sao.enabled ? "Disable SAO" : "Enable SAO";
+                                },
+                                doAction: function (context) {
+                                    context.viewer.scene.sao.enabled = !context.viewer.scene.sao.enabled;
+                                }
+                            },
+                            {
+                                getTitle: (context) => {
+                                    return context.viewer.scene.pbrEnabled ? "Disable PBR" : "Enable PBR";
+                                },
+                                doAction: function (context) {
+                                    context.viewer.scene.pbrEnabled = !context.viewer.scene.pbrEnabled;
+                                }
+                            }
+                        ]
+                    ]
+                }
+            ],
+
+            [
+                {
+                    title: "Measurements..",
+                    getEnabled: function (context) {
+                        return (Object.keys(angleMeasurementsPlugin.measurements).length > 0);
+                    },
+                    items: [
+                        [
+                            {
+                                getTitle: function (context) {
+                                    return (Object.keys(angleMeasurementsPlugin.measurements).length > 0) ? "Show All Labels" : "Hide All Labels";
+                                },
+                                getEnabled: function (context) {
+                                    return (Object.keys(angleMeasurementsPlugin.measurements).length > 0);
+                                },
+                                doAction: function (context) {
+                                    //angleMeasurementsPlugin.clear();
+                                }
+                            },
+                            {
+                                getTitle: function (context) {
+                                    return (Object.keys(angleMeasurementsPlugin.measurements).length > 0) ? "Show All Axis" : "Hide All Axis";
+                                },
+                                getEnabled: function (context) {
+                                    return (Object.keys(angleMeasurementsPlugin.measurements).length > 0);
+                                },
+                                doAction: function (context) {
+                                    //angleMeasurementsPlugin.clear();
+                                }
+                            },
+                            {
+                                title: "Delete All",
+                                getEnabled: function (context) {
+                                    return (Object.keys(angleMeasurementsPlugin.measurements).length > 0);
+                                },
+                                doAction: function (context) {
+                                    angleMeasurementsPlugin.clear();
+                                }
+                            }
+                        ]
+                    ]
+                }
+            ]
+        ],
+        enabled: true
+    });
+
+    const canvasContextMenu = new ContextMenu({
+        enabled: true,
+        context: {
+            viewer: viewer
+        },
+        items: [
+            [
+                {
+                    title: "Objects..",
+                    items: [
+                        [
+                            {
+                                title: "X-Ray All",
+                                getEnabled: function (context) {
+                                    const scene = context.viewer.scene;
+                                    return (scene.numXRayedObjects < scene.numObjects);
+                                },
+                                doAction: function (context) {
+                                    const scene = context.viewer.scene;
+                                    scene.setObjectsXRayed(scene.objectIds, true);
+                                }
+                            },
+                            {
+                                title: "X-Ray None",
+                                getEnabled: function (context) {
+                                    return (context.viewer.scene.numXRayedObjects > 0);
+                                },
+                                doAction: function (context) {
+                                    context.viewer.scene.setObjectsXRayed(context.viewer.scene.xrayedObjectIds, false);
+                                }
+                            }
+                        ],
+                        [
+                            {
+                                title: "Hide All",
+                                getEnabled: function (context) {
+                                    return (context.viewer.scene.numVisibleObjects > 0);
+                                },
+                                doAction: function (context) {
+                                    context.viewer.scene.setObjectsVisible(context.viewer.scene.visibleObjectIds, false);
+                                }
+                            },
+                            {
+                                title: "Show All",
+                                getEnabled: function (context) {
+                                    const scene = context.viewer.scene;
+                                    return (scene.numVisibleObjects < scene.numObjects);
+                                },
+                                doAction: function (context) {
+                                    const scene = context.viewer.scene;
+                                    scene.setObjectsVisible(scene.objectIds, true);
+                                    scene.setObjectsXRayed(scene.xrayedObjectIds, false);
+                                    scene.setObjectsSelected(scene.selectedObjectIds, false);
+                                }
+                            }
+                        ],
+
+                        [
+                            {
+                                title: "Select All",
+                                getEnabled: function (context) {
+                                    const scene = context.viewer.scene;
+                                    return (scene.numSelectedObjects < scene.numObjects);
+                                },
+                                doAction: function (context) {
+                                    const scene = context.viewer.scene;
+                                    scene.setObjectsSelected(scene.objectIds, true);
+                                }
+                            },
+                            {
+                                title: "Select None",
+                                getEnabled: function (context) {
+                                    return (context.viewer.scene.numSelectedObjects > 0);
+                                },
+                                doAction: function (context) {
+                                    context.viewer.scene.setObjectsSelected(context.viewer.scene.selectedObjectIds, false);
+                                }
+                            }
+                        ]
+                    ]
+                }
+            ],
+            [
+                {
+                    title: "Camera..",
+                    items: [
+                        [
+                            {
+                                title: "View Fit All",
+                                doAction: function (context) {
+                                    context.viewer.cameraFlight.flyTo({
+                                        aabb: context.viewer.scene.getAABB()
+                                    });
+                                }
+                            }
+                        ],
+                        [
+                            {
+                                title: "Perspective",
+                                getEnabled: function (context) {
+                                    const scene = context.viewer.scene;
+                                    return (scene.camera.projection !== "perspective");
+                                },
+                                doAction: function (context) {
+                                    context.viewer.cameraFlight.flyTo({
+                                        projection: "perspective"
+                                    });
+                                }
+                            },
+                            {
+                                title: "Orthographic",
+                                getEnabled: function (context) {
+                                    const scene = context.viewer.scene;
+                                    return (scene.camera.projection !== "ortho");
+                                },
+                                doAction: function (context) {
+                                    context.viewer.cameraFlight.flyTo({
+                                        projection: "ortho"
+                                    });
+                                }
+                            }
+                        ]
+                    ]
+                }
+            ],
+
+            [
+                {
+                    title: "Effects..",
+                    items: [
+                        [
+                            {
+                                getTitle: (context) => {
+                                    return context.viewer.scene.edgeMaterial.edges ? "Disable Edges" : "Enable Edges";
+                                },
+                                doAction: function (context) {
+                                    context.viewer.scene.edgeMaterial.edges = !context.viewer.scene.edgeMaterial.edges;
+                                }
+                            },
+                            {
+                                getTitle: (context) => {
+                                    return context.viewer.scene.sao.enabled ? "Disable SAO" : "Enable SAO";
+                                },
+                                doAction: function (context) {
+                                    context.viewer.scene.sao.enabled = !context.viewer.scene.sao.enabled;
+                                }
+                            },
+                            {
+                                getTitle: (context) => {
+                                    return context.viewer.scene.pbrEnabled ? "Disable PBR" : "Enable PBR";
+                                },
+                                doAction: function (context) {
+                                    context.viewer.scene.pbrEnabled = !context.viewer.scene.pbrEnabled;
+                                }
+                            }
+                        ]
+                    ]
+                }
+            ],
+            [
+                {
+                    title: "Measurements..",
+                    getEnabled: function (context) {
+                        return (Object.keys(angleMeasurementsPlugin.measurements).length > 0);
+                    },
+                    items: [
+                        [
+                            {
+                                getTitle: function (context) {
+                                    return (Object.keys(angleMeasurementsPlugin.measurements).length > 0) ? "Show All Labels" : "Hide All Labels";
+                                },
+                                getEnabled: function (context) {
+                                    return (Object.keys(angleMeasurementsPlugin.measurements).length > 0);
+                                },
+                                doAction: function (context) {
+                                    //angleMeasurementsPlugin.clear();
+                                }
+                            },
+                            {
+                                title: "Delete All",
+                                getEnabled: function (context) {
+                                    return (Object.keys(angleMeasurementsPlugin.measurements).length > 0);
+                                },
+                                doAction: function (context) {
+                                    angleMeasurementsPlugin.clear();
+                                }
+                            }
+                        ]
+                    ]
+                }
+            ]
+        ]
+    });
+
+    viewer.cameraControl.on("rightClick", (e) => {
+
+        const hit = viewer.scene.pick({
+            canvasPos: e.canvasPos
+        });
+
+        if (hit && hit.entity.isObject) {
+
+            objectContextMenu.context = { // Must set context before showing menu
+                viewer: viewer,
+                entity: hit.entity
+            };
+
+            objectContextMenu.show(e.pagePos[0], e.pagePos[1]);
+        } else {
+
+            canvasContextMenu.context = { // Must set context before showing menu
+                viewer: viewer
+            };
+
+            canvasContextMenu.show(e.pagePos[0], e.pagePos[1]);
+        }
+
+        e.event.preventDefault();
+    });
+
+    window.viewer = viewer;
+
+</script>
+</html>

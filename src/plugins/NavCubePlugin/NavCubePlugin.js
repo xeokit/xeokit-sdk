@@ -8,6 +8,11 @@ import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
 import {Texture} from "../../viewer/scene/materials/Texture.js";
 import {buildCylinderGeometry} from "../../viewer/scene/geometry/builders/buildCylinderGeometry.js";
 import {CubeTextureCanvas} from "./CubeTextureCanvas.js";
+import {ClampToEdgeWrapping} from "../../viewer/scene/constants/constants.js";
+
+const tempVec3a = math.vec3();
+const tempVec3b = math.vec3();
+const tempMat4a = math.mat4();
 
 /**
  * {@link Viewer} plugin that lets us look at the entire {@link Scene} from along a chosen axis or diagonal.
@@ -64,7 +69,7 @@ import {CubeTextureCanvas} from "./CubeTextureCanvas.js";
  *
  * const model = xktLoader.load({
  *     id: "myModel",
- *     src: "./models/xkt/Duplex.xkt",
+ *     src: "./models/xkt/Duplex.ifc.xkt",
  *     edges: true
  * });
  * ````
@@ -79,6 +84,7 @@ class NavCubePlugin extends Plugin {
      * @param {String} [cfg.canvasId] ID of an existing HTML canvas to display the NavCube - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas to display the NavCube - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @param {Boolean} [cfg.visible=true] Initial visibility.
+     * @param {Boolean} [cfg.shadowVisible=true] Whether the shadow of the cube is visible.
      * @param {String} [cfg.cameraFly=true] Whether the {@link Camera} flies or jumps to each selected axis or diagonal.
      * @param {String} [cfg.cameraFitFOV=45] How much of the field-of-view, in degrees, that the 3D scene should fill the {@link Canvas} when the {@link Camera} moves to an axis or diagonal.
      * @param {String} [cfg.cameraFlyDuration=0.5] When flying the {@link Camera} to each new axis or diagonal, how long, in seconds, that the Camera takes to get there.
@@ -93,6 +99,8 @@ class NavCubePlugin extends Plugin {
      * @param {Boolean} [cfg.fitVisible=false] Sets whether the axis, corner and edge-aligned views will fit the
      * view to the entire {@link Scene} or just to visible object-{@link Entity}s. Entitys are visible objects when {@link Entity#isObject} and {@link Entity#visible} are both ````true````.
      * @param {Boolean} [cfg.synchProjection=false] Sets whether the NavCube switches between perspective and orthographic projections in synchrony with the {@link Camera}. When ````false````, the NavCube will always be rendered with perspective projection.
+     * @param {Boolean} [cfg.isProjectNorth] sets whether the NavCube switches between true north and project north - using the project north offset angle.
+     * @param {number} [cfg.projectNorthOffsetAngle] sets the NavCube project north offset angle - when the {@link isProjectNorth} is true.
      */
     constructor(viewer, cfg = {}) {
 
@@ -131,9 +139,24 @@ class NavCubePlugin extends Plugin {
         this._navCubeCamera.ortho.near = 0.1;
         this._navCubeCamera.ortho.far = 2000;
 
+        navCubeScene.edgeMaterial.edgeColor = [0.2, 0.2, 0.2];
+        navCubeScene.edgeMaterial.edgeAlpha = 0.6;
+
         this._zUp = Boolean(viewer.camera.zUp);
 
         var self = this;
+
+        this.setIsProjectNorth(cfg.isProjectNorth);
+        this.setProjectNorthOffsetAngle(cfg.projectNorthOffsetAngle);
+
+        const rotateTrueNorth = (function () {
+            const trueNorthMatrix = math.mat4();
+            return function (dir, vec, dest) {
+                math.identityMat4(trueNorthMatrix);
+                math.rotationMat4v(dir * self._projectNorthOffsetAngle * math.DEGTORAD, [0, 1, 0], trueNorthMatrix);
+                return math.transformVec3(trueNorthMatrix, vec, dest)
+            }
+        }())
 
         this._synchCamera = (function () {
             var matrix = math.rotationMat4c(-90 * math.DEGTORAD, 1, 0, 0);
@@ -145,6 +168,12 @@ class NavCubePlugin extends Plugin {
                 var look = viewer.camera.look;
                 var up = viewer.camera.up;
                 eyeLookVec = math.mulVec3Scalar(math.normalizeVec3(math.subVec3(eye, look, eyeLookVec)), 5);
+
+                if (self._isProjectNorth && self._projectNorthOffsetAngle) {
+                    eyeLookVec = rotateTrueNorth(-1, eyeLookVec, tempVec3a);
+                    up = rotateTrueNorth(-1, up, tempVec3b);
+                }
+
                 if (self._zUp) { // +Z up
                     math.transformVec3(matrix, eyeLookVec, eyeLookVecCube);
                     math.transformVec3(matrix, up, upCube);
@@ -159,13 +188,13 @@ class NavCubePlugin extends Plugin {
             };
         }());
 
-        this._cubeTextureCanvas = new CubeTextureCanvas(viewer, cfg);
+        this._cubeTextureCanvas = new CubeTextureCanvas(viewer, navCubeScene, cfg);
 
         this._cubeSampler = new Texture(navCubeScene, {
             image: this._cubeTextureCanvas.getImage(),
             flipY: true,
-            wrapS: "clampToEdge",
-            wrapT: "clampToEdge"
+            wrapS: ClampToEdgeWrapping,
+            wrapT: ClampToEdgeWrapping
         });
 
         this._cubeMesh = new Mesh(navCubeScene, {
@@ -202,7 +231,7 @@ class NavCubePlugin extends Plugin {
             edges: true
         });
 
-        this._shadow = new Mesh(navCubeScene, {
+        this._shadow = cfg.shadowVisible === false ? null : new Mesh(navCubeScene, {
             geometry: new ReadableGeometry(navCubeScene, buildCylinderGeometry({
                 center: [0, 0, 0],
                 radiusTop: 0.001,
@@ -242,7 +271,7 @@ class NavCubePlugin extends Plugin {
         });
         this._onCameraProjection = viewer.camera.on("projection", (projection) => {
             if (this._synchProjection) {
-                this._navCubeCamera.projection = projection;
+                this._navCubeCamera.projection = (projection === "ortho" || projection === "perspective") ? projection : "perspective";
             }
         });
 
@@ -300,7 +329,7 @@ class NavCubePlugin extends Plugin {
 
             var lastX;
             var lastY;
-            var dragging = false;
+
 
             self._navCubeCanvas.addEventListener("mouseenter", self._onMouseEnter = function (e) {
                 over = true;
@@ -364,33 +393,26 @@ class NavCubePlugin extends Plugin {
                                 var dir = self._cubeTextureCanvas.getAreaDir(areaId);
                                 if (dir) {
                                     var up = self._cubeTextureCanvas.getAreaUp(areaId);
+                                    if (self._isProjectNorth && self._projectNorthOffsetAngle) {
+                                        dir = rotateTrueNorth(+1, dir, tempVec3a);
+                                        up = rotateTrueNorth(+1, up, tempVec3b);
+                                    }
                                     flyTo(dir, up, function () {
                                         if (lastAreaId >= 0) {
                                             self._cubeTextureCanvas.setAreaHighlighted(lastAreaId, false);
                                             self._repaint();
                                             lastAreaId = -1;
                                         }
-                                        var hit = navCubeScene.pick({
-                                            canvasPos: canvasPos,
-                                            pickSurface: true
-                                        });
-                                        if (hit) {
-                                            if (hit.uv) {
-                                                var areaId = self._cubeTextureCanvas.getArea(hit.uv);
-                                                if (areaId !== undefined) {
-                                                    document.body.style.cursor = "pointer";
-                                                    if (lastAreaId >= 0) {
-                                                        self._cubeTextureCanvas.setAreaHighlighted(lastAreaId, false);
-                                                        self._repaint();
-                                                        lastAreaId = -1;
-                                                    }
-                                                    if (areaId >= 0) {
-                                                        self._cubeTextureCanvas.setAreaHighlighted(areaId, true);
-                                                        lastAreaId = areaId;
-                                                        self._repaint();
-                                                    }
-                                                }
-                                            }
+                                        document.body.style.cursor = "pointer";
+                                        if (lastAreaId >= 0) {
+                                            self._cubeTextureCanvas.setAreaHighlighted(lastAreaId, false);
+                                            self._repaint();
+                                            lastAreaId = -1;
+                                        }
+                                        if (areaId >= 0) {
+                                            self._cubeTextureCanvas.setAreaHighlighted(areaId, false);
+                                            lastAreaId = -1;
+                                            self._repaint();
                                         }
                                     });
                                 }
@@ -456,14 +478,14 @@ class NavCubePlugin extends Plugin {
                     var aabb = self._fitVisible ? viewer.scene.getAABB(viewer.scene.visibleObjectIds) : viewer.scene.aabb;
                     var diag = math.getAABB3Diag(aabb);
                     math.getAABB3Center(aabb, center);
-                    var dist = Math.abs(diag / Math.tan(55.0 / 2));
+                    var dist = Math.abs(diag / Math.tan(self._cameraFitFOV * math.DEGTORAD));
                     viewer.cameraControl.pivotPos = center;
                     if (self._cameraFly) {
                         viewer.cameraFlight.flyTo({
                             look: center,
                             eye: [center[0] - (dist * dir[0]), center[1] - (dist * dir[1]), center[2] - (dist * dir[2])],
                             up: up || [0, 1, 0],
-                            orthoScale: diag * 1.3,
+                            orthoScale: diag * 1.1,
                             fitFOV: self._cameraFitFOV,
                             duration: self._cameraFlyDuration
                         }, ok);
@@ -472,13 +494,18 @@ class NavCubePlugin extends Plugin {
                             look: center,
                             eye: [center[0] - (dist * dir[0]), center[1] - (dist * dir[1]), center[2] - (dist * dir[2])],
                             up: up || [0, 1, 0],
-                            orthoScale: diag * 1.3,
+                            orthoScale: diag * 1.1,
                             fitFOV: self._cameraFitFOV
                         }, ok);
                     }
                 };
             })();
         }
+
+        this._onUpdated = viewer.localeService.on("updated", () => {
+            this._cubeTextureCanvas.clear();
+            this._repaint();
+        });
 
         this.setVisible(cfg.visible);
         this.setCameraFitFOV(cfg.cameraFitFOV);
@@ -513,7 +540,9 @@ class NavCubePlugin extends Plugin {
             return;
         }
         this._cubeMesh.visible = visible;
-        this._shadow.visible = visible;
+        if (this._shadow) {
+            this._shadow.visible = visible;
+        }
         this._navCubeCanvas.style.visibility = visible ? "visible" : "hidden";
     }
 
@@ -643,6 +672,42 @@ class NavCubePlugin extends Plugin {
     }
 
     /**
+     * Sets whether the NavCube switches between project north and true north
+     *
+     * @param {Boolean} isProjectNorth Set ````true```` to use project north offset
+     */
+    setIsProjectNorth(isProjectNorth = false) {
+        this._isProjectNorth = isProjectNorth;
+    }
+
+    /**
+     * Gets whether the NavCube switches between project north and true north
+     *
+     * @return {Boolean} isProjectNorth when ````true```` - use project north offset
+     */
+    getIsProjectNorth() {
+        return this._isProjectNorth;
+    }
+
+    /**
+     * Sets the NavCube project north offset angle (used when {@link isProjectNorth} is ````true````
+     *
+     * @param {number} projectNorthOffsetAngle Set the vector offset for project north
+     */
+    setProjectNorthOffsetAngle(projectNorthOffsetAngle) {
+        this._projectNorthOffsetAngle = projectNorthOffsetAngle;
+    }
+
+    /**
+     * Gets the offset angle between project north and true north
+     *
+     * @return {number} projectNorthOffsetAngle
+     */
+    getProjectNorthOffsetAngle() {
+        return this._projectNorthOffsetAngle;
+    }
+
+    /**
      * Destroys this NavCubePlugin.
      *
      * Does not destroy the canvas the NavCubePlugin was configured with.
@@ -651,6 +716,7 @@ class NavCubePlugin extends Plugin {
 
         if (this._navCubeCanvas) {
 
+            this.viewer.localeService.off(this._onUpdated);
             this.viewer.camera.off(this._onCameraMatrix);
             this.viewer.camera.off(this._onCameraWorldAxis);
             this.viewer.camera.perspective.off(this._onCameraFOV);
@@ -684,4 +750,3 @@ class NavCubePlugin extends Plugin {
 }
 
 export {NavCubePlugin};
-

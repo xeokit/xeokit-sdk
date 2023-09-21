@@ -6,7 +6,7 @@ import {Spinner} from './Spinner.js';
 import {WEBGL_INFO} from '../webglInfo.js';
 
 const WEBGL_CONTEXT_NAMES = [
-    "webgl",
+    "webgl2",
     "experimental-webgl",
     "webkit-3d",
     "moz-webgl",
@@ -20,13 +20,6 @@ const WEBGL_CONTEXT_NAMES = [
  * * Has a {@link Spinner}, provided at {@link Canvas#spinner}, which manages the loading progress indicator.
  */
 class Canvas extends Component {
-
-    /**
-     @private
-     */
-    get type() {
-        return "Canvas";
-    }
 
     /**
      * @constructor
@@ -95,8 +88,10 @@ class Canvas extends Component {
         // If the canvas uses css styles to specify the sizes make sure the basic
         // width and height attributes match or the WebGL context will use 300 x 150
 
-        this.canvas.width = this.canvas.clientWidth;
-        this.canvas.height = this.canvas.clientHeight;
+        this.resolutionScale = cfg.resolutionScale;
+
+        this.canvas.width = Math.round(this.canvas.clientWidth * this._resolutionScale);
+        this.canvas.height = Math.round(this.canvas.clientHeight * this._resolutionScale);
 
         /**
          * Boundary of the Canvas in absolute browser window coordinates.
@@ -113,7 +108,7 @@ class Canvas extends Component {
          * ````
          *
          * @property boundary
-         * @type {{Number[]}}
+         * @type {Number[]}
          * @final
          */
         this.boundary = [
@@ -157,92 +152,161 @@ class Canvas extends Component {
             },
             false);
 
-        // Publish canvas size and position changes on each scene tick
+        // Attach to resize events on the canvas
+        let dirtyBoundary = true; // make sure we publish the 1st boundary event
 
-        let lastWindowWidth = null;
-        let lastWindowHeight = null;
-
-        let lastCanvasWidth = null;
-        let lastCanvasHeight = null;
-
-        let lastCanvasOffsetLeft = null;
-        let lastCanvasOffsetTop = null;
-
-        let lastParent = null;
-
-        this._tick = this.scene.on("tick", function () {
-
-            const canvas = self.canvas;
-
-            const newWindowSize = (window.innerWidth !== lastWindowWidth || window.innerHeight !== lastWindowHeight);
-            const newCanvasSize = (canvas.clientWidth !== lastCanvasWidth || canvas.clientHeight !== lastCanvasHeight);
-            const newCanvasPos = (canvas.offsetLeft !== lastCanvasOffsetLeft || canvas.offsetTop !== lastCanvasOffsetTop);
-
-            const parent = canvas.parentElement;
-            const newParent = (parent !== lastParent);
-
-            if (newWindowSize || newCanvasSize || newCanvasPos || newParent) {
-
-                self._spinner._adjustPosition();
-
-                if (newCanvasSize || newCanvasPos) {
-
-                    const newWidth = canvas.clientWidth;
-                    const newHeight = canvas.clientHeight;
-
-                    // TODO: Wasteful to re-count pixel size of each canvas on each canvas' resize
-                    if (newCanvasSize) {
-                        let countPixels = 0;
-                        let scene;
-                        for (const sceneId in core.scenes) {
-                            if (core.scenes.hasOwnProperty(sceneId)) {
-                                scene = core.scenes[sceneId];
-                                countPixels += scene.canvas.canvas.clientWidth * scene.canvas.canvas.clientHeight;
-                            }
-                        }
-                        stats.memory.pixels = countPixels;
-
-                        canvas.width = canvas.clientWidth;
-                        canvas.height = canvas.clientHeight;
-                    }
-
-                    const boundary = self.boundary;
-
-                    boundary[0] = canvas.offsetLeft;
-                    boundary[1] = canvas.offsetTop;
-                    boundary[2] = newWidth;
-                    boundary[3] = newHeight;
-
-                    /**
-                     * Fired whenever this Canvas's {@link Canvas/boundary} property changes.
-                     *
-                     * @event boundary
-                     * @param value The property's new value
-                     */
-                    self.fire("boundary", boundary);
-
-                    lastCanvasWidth = newWidth;
-                    lastCanvasHeight = newHeight;
+        const resizeObserver = new ResizeObserver((entries) => {
+            for (const entry of entries) {
+                if (entry.contentBoxSize) {
+                    dirtyBoundary = true;
                 }
-
-                if (newWindowSize) {
-                    lastWindowWidth = window.innerWidth;
-                    lastWindowHeight = window.innerHeight;
-                }
-
-                if (newCanvasPos) {
-                    lastCanvasOffsetLeft = canvas.offsetLeft;
-                    lastCanvasOffsetTop = canvas.offsetTop;
-                }
-
-                lastParent = parent;
             }
+        });
+
+        resizeObserver.observe(this.canvas);
+
+        // Publish canvas size and position changes on each scene tick
+        this._tick = this.scene.on("tick", () => {
+            // Only publish if the canvas bounds changed
+            if (!dirtyBoundary) {
+                return;
+            }
+
+            dirtyBoundary = false;
+
+            // Set the real size of the canvas (the drawable w*h)
+            self.canvas.width = Math.round(self.canvas.clientWidth * self._resolutionScale);
+            self.canvas.height = Math.round(self.canvas.clientHeight * self._resolutionScale);
+
+            // Publish the boundary change
+            self.boundary[0] = self.canvas.offsetLeft;
+            self.boundary[1] = self.canvas.offsetTop;
+            self.boundary[2] = self.canvas.clientWidth;
+            self.boundary[3] = self.canvas.clientHeight;
+
+            self.fire("boundary", self.boundary);
         });
 
         this._spinner = new Spinner(this.scene, {
             canvas: this.canvas,
             elementId: cfg.spinnerElementId
         });
+    }
+
+    /**
+     @private
+     */
+    get type() {
+        return "Canvas";
+    }
+
+    /**
+     * Gets whether the canvas clear color will be derived from {@link AmbientLight} or {@link Canvas#backgroundColor}
+     * when {@link Canvas#transparent} is ```true```.
+     *
+     * When {@link Canvas#transparent} is ```true``` and this is ````true````, then the canvas clear color will
+     * be taken from the {@link Scene}'s ambient light color.
+     *
+     * When {@link Canvas#transparent} is ```true``` and this is ````false````, then the canvas clear color will
+     * be taken from {@link Canvas#backgroundColor}.
+     *
+     * Default value is ````true````.
+     *
+     * @type {Boolean}
+     */
+    get backgroundColorFromAmbientLight() {
+        return this._backgroundColorFromAmbientLight;
+    }
+
+    /**
+     * Sets if the canvas background color is derived from an {@link AmbientLight}.
+     *
+     * This only has effect when the canvas is not transparent. When not enabled, the background color
+     * will be the canvas element's HTML/CSS background color.
+     *
+     * Default value is ````true````.
+     *
+     * @type {Boolean}
+     */
+    set backgroundColorFromAmbientLight(backgroundColorFromAmbientLight) {
+        this._backgroundColorFromAmbientLight = (backgroundColorFromAmbientLight !== false);
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the canvas clear color.
+     *
+     * Default value is ````[1, 1, 1]````.
+     *
+     * @type {Number[]}
+     */
+    get backgroundColor() {
+        return this._backgroundColor;
+    }
+
+    /**
+     * Sets the canvas clear color.
+     *
+     * Default value is ````[1, 1, 1]````.
+     *
+     * @type {Number[]}
+     */
+    set backgroundColor(value) {
+        if (value) {
+            this._backgroundColor[0] = value[0];
+            this._backgroundColor[1] = value[1];
+            this._backgroundColor[2] = value[2];
+        } else {
+            this._backgroundColor[0] = 1.0;
+            this._backgroundColor[1] = 1.0;
+            this._backgroundColor[2] = 1.0;
+        }
+        this.glRedraw();
+    }
+
+    /**
+     * Gets the scale of the canvas back buffer relative to the CSS-defined size of the canvas.
+     *
+     * This is a common way to trade off rendering quality for speed. If the canvas size is defined in CSS, then
+     * setting this to a value between ````[0..1]```` (eg ````0.5````) will render into a smaller back buffer, giving
+     * a performance boost.
+     *
+     * @returns {*|number} The resolution scale.
+     */
+    get resolutionScale() {
+        return this._resolutionScale;
+    }
+
+    /**
+     * Sets the scale of the canvas back buffer relative to the CSS-defined size of the canvas.
+     *
+     * This is a common way to trade off rendering quality for speed. If the canvas size is defined in CSS, then
+     * setting this to a value between ````[0..1]```` (eg ````0.5````) will render into a smaller back buffer, giving
+     * a performance boost.
+     *
+     * @param {*|number} resolutionScale The resolution scale.
+     */
+    set resolutionScale(resolutionScale) {
+        resolutionScale = resolutionScale || 1.0;
+        if (resolutionScale === this._resolutionScale) {
+            return;
+        }
+        this._resolutionScale = resolutionScale;
+        const canvas = this.canvas;
+        canvas.width = Math.round(canvas.clientWidth * this._resolutionScale);
+        canvas.height = Math.round(canvas.clientHeight * this._resolutionScale);
+        this.glRedraw();
+    }
+
+    /**
+     * The busy {@link Spinner} for this Canvas.
+     *
+     * @property spinner
+     * @type Spinner
+     * @final
+     */
+    get spinner() {
+        return this._spinner;
     }
 
     /**
@@ -314,86 +378,61 @@ class Canvas extends Component {
             this.fire("webglContextFailed", true, true);
         }
 
+        // data-textures: avoid to re-bind same texture
+        {
+            const gl = this.gl;
+
+            let lastTextureUnit = "__";
+
+            let originalActiveTexture = gl.activeTexture;
+
+            gl.activeTexture = function (arg1) {
+                if (lastTextureUnit === arg1) {
+                    return;
+                }
+
+                lastTextureUnit = arg1;
+
+                originalActiveTexture.call (this, arg1);
+            };
+
+            let lastBindTexture = {};
+
+            let originalBindTexture = gl.bindTexture;
+
+            let avoidedRebinds = 0;
+
+            gl.bindTexture = function (arg1, arg2) {
+                if (lastBindTexture[lastTextureUnit] === arg2)
+                {
+                    avoidedRebinds++;
+                    return;
+                }
+
+                lastBindTexture[lastTextureUnit] = arg2;
+
+                originalBindTexture.call (this, arg1, arg2);
+            }
+
+            // setInterval (
+            //     () => {
+            //         console.log (`${avoidedRebinds} avoided texture binds/sec`);
+            //         avoidedRebinds = 0;
+            //     },
+            //     1000
+            // );
+        }
+
         if (this.gl) {
             // Setup extension (if necessary) and hints for fragment shader derivative functions
             if (this.webgl2) {
                 this.gl.hint(this.gl.FRAGMENT_SHADER_DERIVATIVE_HINT, this.gl.FASTEST);
-            } else {
-                if (WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_standard_derivatives"]) {
-                    const ext = this.gl.getExtension("OES_standard_derivatives");
-                    this.gl.hint(ext.FRAGMENT_SHADER_DERIVATIVE_HINT_OES, this.gl.FASTEST);
-                }
-                if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
-                    this.gl.getExtension('EXT_frag_depth');
-                }
-                if (WEBGL_INFO.SUPPORTED_EXTENSIONS["WEBGL_depth_texture"]) {
-                    this.gl.getExtension('WEBGL_depth_texture');
+
+                // data-textures: not using standard-derivatives
+                if (!(this.gl instanceof WebGL2RenderingContext)) {
                 }
             }
         }
-    }
-
-    /**
-     * Sets if the canvas background color is derived from an {@link AmbientLight}.
-     *
-     * This only has effect when the canvas is not transparent. When not enabled, the background color
-     * will be the canvas element's HTML/CSS background color.
-     *
-     * Default value is ````true````.
-     *
-     * @type {Boolean}
-     */
-    set backgroundColorFromAmbientLight(backgroundColorFromAmbientLight) {
-        this._backgroundColorFromAmbientLight = (backgroundColorFromAmbientLight !== false);
-    }
-
-    /**
-     * Gets whether the canvas clear color will be derived from {@link AmbientLight} or {@link Canvas#backgroundColor}
-     * when {@link Canvas#transparent} is ```true```.
-     *
-     * When {@link Canvas#transparent} is ```true``` and this is ````true````, then the canvas clear color will
-     * be taken from the {@link Scene}'s ambient light color.
-     *
-     * When {@link Canvas#transparent} is ```true``` and this is ````false````, then the canvas clear color will
-     * be taken from {@link Canvas#backgroundColor}.
-     *
-     * Default value is ````true````.
-     *
-     * @type {Boolean}
-     */
-    get backgroundColorFromAmbientLight() {
-        return this._backgroundColorFromAmbientLight;
-    }
-
-    /**
-     * Sets the canvas clear color.
-     *
-     * Default value is ````[1, 1, 1]````.
-     *
-     * @type {Number[]}
-     */
-    set backgroundColor(value) {
-        if (value) {
-            this._backgroundColor[0] = value[0];
-            this._backgroundColor[1] = value[1];
-            this._backgroundColor[2] = value[2];
-        } else {
-            this._backgroundColor[0] = 1.0;
-            this._backgroundColor[1] = 1.0;
-            this._backgroundColor[2] = 1.0;
-        }
-        this.glRedraw();
-    }
-
-    /**
-     * Gets the canvas clear color.
-     *
-     * Default value is ````[1, 1, 1]````.
-     *
-     * @type {Number[]}
-     */
-    get backgroundColor() {
-        return this._backgroundColor;
     }
 
     /**
@@ -437,17 +476,6 @@ class Canvas extends Component {
         if (this.canvas.loseContext) {
             this.canvas.loseContext();
         }
-    }
-
-    /**
-     * The busy {@link Spinner} for this Canvas.
-     *
-     * @property spinner
-     * @type Spinner
-     * @final
-     */
-    get spinner() {
-        return this._spinner;
     }
 
     destroy() {

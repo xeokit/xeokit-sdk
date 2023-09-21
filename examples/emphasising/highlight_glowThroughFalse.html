@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <h1>Picking Objects</h1>
+    <h2>Hover over objects to highlight them</h2>
+    <p>In this example, we've set glowThrough:false on the Scene's HighlightMaterial. This disables the usual "glow-through" behaviour for highlighted objects.</p>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer, XKTLoaderPlugin} from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-3.93, 2.85, 27.01];
+    viewer.camera.look = [4.40, 3.72, 8.89];
+    viewer.camera.up = [-0.01, 0.99, 0.039];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Disable glow-through effect on the highlight material.
+    // It also seems best to make objects opaque when highlighted.
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.highlightMaterial.glowThrough = false;
+    viewer.scene.highlightMaterial.fillAlpha = 1.0;
+    viewer.scene.highlightMaterial.edgeAlpha = 1.0;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load a model
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const sceneModel = xktLoader.load({
+        id: "myModel",
+        src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt",
+        edges: true
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Click Entities to highlight them
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.input.on("mousedown", function (coords) {
+
+        const pickResult = viewer.scene.pick({
+            canvasPos: coords
+        });
+
+        if (pickResult) {
+            console.log(pickResult.entity.id);
+            pickResult.entity.highlighted = true;
+        }
+    });
+
+</script>
+</html>

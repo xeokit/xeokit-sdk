@@ -1,0 +1,693 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <style>
+
+        .annotation-marker {
+            color: #ffffff;
+            line-height: 1.8;
+            text-align: center;
+            font-family: "monospace";
+            font-weight: bold;
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border-radius: 15px;
+            border: 2px solid #ffffff;
+            background: black;
+            visibility: hidden;
+            box-shadow: 5px 5px 15px 1px #000000;
+            z-index: 0;
+        }
+
+        .annotation-label {
+            pointer-events: none;
+            position: absolute;
+            max-width: 200px;
+            min-height: 20px;
+            padding: 8px;
+            padding-left: 12px;
+            padding-right: 12px;
+            background: #ffffff;
+            color: #000000;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 8px;
+            border: #ffffff solid 2px;
+            box-shadow: 5px 5px 15px 1px #000000;
+            z-index: 90000;
+        }
+
+        .annotation-label:after {
+            content: '';
+            position: absolute;
+            border-style: solid;
+            border-width: 8px 12px 8px 0;
+            border-color: transparent white;
+            display: block;
+            width: 0;
+            z-index: 1;
+            margin-top: -11px;
+            left: -12px;
+            top: 20px;
+        }
+
+        .annotation-label:before {
+            content: '';
+            position: absolute;
+            border-style: solid;
+            border-width: 9px 13px 9px 0;
+            border-color: transparent #ffffff;
+            display: block;
+            width: 0;
+            z-index: 0;
+            margin-top: -12px;
+            left: -15px;
+            top: 20px;
+        }
+
+        .annotation-title {
+            font: normal 14px arial, serif;
+        }
+
+    </style>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/lighting_icon.png"/>
+    <h1>PointLight</h1>
+    <h2>Positional View-space lighting test for various scene representations</h2>
+    <p>In this example, we're programmatically building a scene, using both the scene graph and SceneModel scene
+        representations, which we illuminate with positional View-space light sources.</p>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/model/SceneModel.js~SceneModel.html"
+               target="_other">SceneModel</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/lights/PointLight.js~PointLight.html"
+               target="_other">PointLight</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html"
+               target="_other">Mesh</a>
+        </li>
+        <li>
+            <a href="../../docs/function/index.html#static-function-buildBoxGeometry"
+               target="_other">buildBoxGeometry</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html"
+               target="_other">PhongMaterial</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html"
+               target="_other">LambertMaterial</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html"
+               target="_other">ReadableGeometry</a>
+        </li>
+    </ul>
+</div>
+</body>
+
+<script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {
+        Viewer,
+        Mesh,
+        Node,
+        PhongMaterial,
+        buildBoxGeometry,
+        ReadableGeometry,
+        LambertMaterial,
+        SceneModel,
+        PointLight,
+        AnnotationsPlugin
+    } from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-30.23, 12.26, 22.10];
+    viewer.camera.look = [10, -5.75, 10];
+    viewer.camera.up = [0.37, 0.91, -0.11];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Replace default lights with two positional View-space lights
+    //------------------------------------------------------------------------------------------------------------------
+
+    viewer.scene.clearLights();
+
+    new PointLight(viewer.scene, {
+        id: "light1",
+        pos: [-800, -800, 800],
+        color: [1.0, 1.0, 1.0],
+        intensity: 1.0,
+        space: "view"
+    });
+
+    // new PointLight(viewer.scene,{
+    //     id: "fillLight",
+    //     pos: [800, 400, 400],
+    //     color: [0.3, 1.0, 0.3],
+    //     intensity: 1.0,
+    //     space: "view"
+    // });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Scene graph with Phong materials
+    //------------------------------------------------------------------------------------------------------------------
+
+    const boxGeometry = new ReadableGeometry(viewer.scene, buildBoxGeometry({
+        xSize: 1,
+        ySize: 1,
+        zSize: 1
+    }));
+
+    new Node(viewer.scene, {
+        id: "tablePhong",
+        isModel: true, // <--------------------- Node represents a model
+        rotation: [0, 0, 0],
+        position: [0, 0, 0],
+        scale: [1, 1, 1],
+        edges: true,
+
+        children: [
+
+            new Mesh(viewer.scene, { // Red table leg
+                id: "redLegPhong",
+                isObject: true, // <---------- Node represents an object
+                position: [-4, -6, -4],
+                scale: [1, 3, 1],
+                rotation: [0, 0, 0],
+                geometry: boxGeometry,
+                material: new PhongMaterial(viewer.scene, {
+                    diffuse: [1, 0.3, 0.3]
+                })
+            }),
+
+            new Mesh(viewer.scene, { // Green table leg
+                id: "greenLegPhong",
+                isObject: true, // <---------- Node represents an object
+                position: [4, -6, -4],
+                scale: [1, 3, 1],
+                rotation: [0, 0, 0],
+                geometry: boxGeometry,
+                material: new PhongMaterial(viewer.scene, {
+                    diffuse: [0.3, 1.0, 0.3]
+                })
+            }),
+
+            new Mesh(viewer.scene, {// Blue table leg
+                id: "blueLegPhong",
+                isObject: true, // <---------- Node represents an object
+                position: [4, -6, 4],
+                scale: [1, 3, 1],
+                rotation: [0, 0, 0],
+                geometry: boxGeometry,
+                material: new PhongMaterial(viewer.scene, {
+                    diffuse: [0.3, 0.3, 1.0]
+                })
+            }),
+
+            new Mesh(viewer.scene, {  // Yellow table leg
+                id: "yellowLegPhong",
+                isObject: true, // <---------- Node represents an object
+                position: [-4, -6, 4],
+                scale: [1, 3, 1],
+                rotation: [0, 0, 0],
+                geometry: boxGeometry,
+                material: new PhongMaterial(viewer.scene, {
+                    diffuse: [1.0, 1.0, 0.0]
+                })
+            }),
+
+            new Mesh(viewer.scene, { // Purple table top
+                id: "tableTopPhong",
+                isObject: true, // <---------- Node represents an object
+                position: [0, -3, 0],
+                scale: [6, 0.5, 6],
+                rotation: [0, 0, 0],
+                geometry: boxGeometry,
+                material: new PhongMaterial(viewer.scene, {
+                    diffuse: [1.0, 0.3, 1.0]
+                })
+            })
+        ]
+    });
+
+    // //------------------------------------------------------------------------------------------------------------------
+    // // Scene graph with LambertMaterials
+    // //------------------------------------------------------------------------------------------------------------------
+
+    new Node(viewer.scene, {
+        id: "tableLambert",
+        isModel: true, // <--------------------- Node represents a model
+        rotation: [0, 0, 0],
+        position: [0, 0, 20],
+        scale: [1, 1, 1],
+
+        children: [
+
+            new Mesh(viewer.scene, { // Red table leg
+                id: "redLegLambert",
+                isObject: true, // <---------- Node represents an object
+                position: [-4, -6, -4],
+                scale: [1, 3, 1],
+                rotation: [0, 0, 0],
+                geometry: boxGeometry,
+                material: new LambertMaterial(viewer.scene, {
+                    color: [1, 0.3, 0.3]
+                })
+            }),
+
+            new Mesh(viewer.scene, { // Green table leg
+                id: "greenLegLambert",
+                isObject: true, // <---------- Node represents an object
+                position: [4, -6, -4],
+                scale: [1, 3, 1],
+                rotation: [0, 0, 0],
+                geometry: boxGeometry,
+                material: new LambertMaterial(viewer.scene, {
+                    color: [0.3, 1.0, 0.3]
+                })
+            }),
+
+            new Mesh(viewer.scene, {// Blue table leg
+                id: "blueLegLambert",
+                isObject: true, // <---------- Node represents an object
+                position: [4, -6, 4],
+                scale: [1, 3, 1],
+                rotation: [0, 0, 0],
+                geometry: boxGeometry,
+                material: new LambertMaterial(viewer.scene, {
+                    color: [0.3, 0.3, 1.0]
+                })
+            }),
+
+            new Mesh(viewer.scene, {  // Yellow table leg
+                id: "yellowLegLambert",
+                isObject: true, // <---------- Node represents an object
+                position: [-4, -6, 4],
+                scale: [1, 3, 1],
+                rotation: [0, 0, 0],
+                geometry: boxGeometry,
+                material: new LambertMaterial(viewer.scene, {
+                    color: [1.0, 1.0, 0.0]
+                })
+            }),
+
+            new Mesh(viewer.scene, { // Purple table top
+                id: "tableTopLambert",
+                isObject: true, // <---------- Node represents an object
+                position: [0, -3, 0],
+                scale: [6, 0.5, 6],
+                rotation: [0, 0, 0],
+                geometry: boxGeometry,
+                material: new LambertMaterial(viewer.scene, {
+                    color: [1.0, 0.3, 1.0]
+                })
+            })
+        ]
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // SceneModel with batched geometries
+    //------------------------------------------------------------------------------------------------------------------
+
+    const performanceModelBatched = new SceneModel(viewer.scene, {
+        id: "tableBatched",
+        isModel: true, // <--------------------- Represents a model, registers SceneModel by ID on viewer.scene.models
+        position: [20, 0, 0],
+        scale: [1, 1, 1],
+        rotation: [0, 0, 0],
+        edges: true
+    });
+
+    performanceModelBatched.createMesh({
+        id: "redLegMeshBatched",
+        primitive: "triangles",
+        positions: [
+            1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, // v0-v1-v2-v3 front
+            1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, // v0-v3-v4-v1 right
+            1, 1, 1, 1, 1, -1, -1, 1, -1, -1, 1, 1, // v0-v1-v6-v1 top
+            -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, // v1-v6-v7-v2 left
+            -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1,// v7-v4-v3-v2 bottom
+            1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1 // v4-v7-v6-v1 back
+        ],
+        normals: [
+            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1,// v0-v1-v2-v3 front
+            1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,// v0-v3-v4-v5 right
+            0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,// v0-v5-v6-v1 top
+            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0,// v1-v6-v7-v2 left
+            0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,// v7-v4-v3-v2 bottom
+            0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1// v4-v7-v6-v5 back
+        ],
+        indices: [
+            0, 1, 2, 0, 2, 3,            // front
+            4, 5, 6, 4, 6, 7,            // right
+            8, 9, 10, 8, 10, 11,         // top
+            12, 13, 14, 12, 14, 15,      // left
+            16, 17, 18, 16, 18, 19,      // bottom
+            20, 21, 22, 20, 22, 23
+        ],
+        position: [-4, -6, -4],
+        scale: [1, 3, 1],
+        rotation: [0, 0, 0],
+        color: [1, 0.3, 0.3]
+    });
+
+    performanceModelBatched.createEntity({
+        id: "redLegBatched",
+        meshIds: ["redLegMeshBatched"],
+        isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
+    });
+
+    performanceModelBatched.createMesh({
+        id: "greenLegMeshBatched",
+        primitive: "triangles",
+        positions: [
+            1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1,
+            1, 1, 1, 1, 1, -1, -1, 1, -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1,
+            -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1
+        ],
+        normals: [
+            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1
+        ],
+        indices: [
+            0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15,
+            16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23
+        ],
+        position: [4, -6, -4],
+        scale: [1, 3, 1],
+        rotation: [0, 0, 0],
+        color: [0.3, 1.0, 0.3]
+    });
+
+    performanceModelBatched.createEntity({
+        id: "greenLegBatched",
+        meshIds: ["greenLegMeshBatched"],
+        isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
+    });
+
+    performanceModelBatched.createMesh({
+        id: "blueLegMeshBatched",
+        positions: [
+            1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
+            -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1,
+            -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1
+        ],
+        normals: [
+            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0,
+            -1, 0, 0, -1
+        ],
+        indices: [
+            0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19,
+            20, 21, 22, 20, 22, 23
+        ],
+        position: [4, -6, 4],
+        scale: [1, 3, 1],
+        rotation: [0, 0, 0],
+        color: [0.3, 0.3, 1.0]
+    });
+
+    performanceModelBatched.createEntity({
+        id: "blueLegBatched",
+        meshIds: ["blueLegMeshBatched"],
+        isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
+    });
+
+    performanceModelBatched.createMesh({
+        id: "yellowLegMeshBatched",
+        positions: [
+            1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
+            -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1,
+            -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1
+        ],
+        normals: [
+            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1
+        ],
+        indices: [
+            0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19,
+            20, 21, 22, 20, 22, 23
+        ],
+        position: [-4, -6, 4],
+        scale: [1, 3, 1],
+        rotation: [0, 0, 0],
+        color: [1.0, 1.0, 0.0]
+    });
+
+    performanceModelBatched.createEntity({
+        id: "yellowLegBatched",
+        meshIds: ["yellowLegMeshBatched"],
+        isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
+    });
+
+    performanceModelBatched.createMesh({
+        id: "purpleTableTopMeshBatched",
+        positions: [
+            1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
+            -1, -1, 1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, 1,
+            -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1
+        ],
+        normals: [
+            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1
+        ],
+        indices: [
+            0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19,
+            20, 21, 22, 20, 22, 23
+        ],
+        position: [0, -3, 0],
+        scale: [6, 0.5, 6],
+        rotation: [0, 0, 0],
+        color: [1.0, 0.3, 1.0]
+    });
+
+    performanceModelBatched.createEntity({
+        id: "purpleTableTopBatched",
+        meshIds: ["purpleTableTopMeshBatched"],
+        isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
+    });
+
+    performanceModelBatched.finalize();
+
+    //------------------------------------------------------------------------------------------------------------------
+    // SceneModel with instanced geometries
+    //------------------------------------------------------------------------------------------------------------------
+
+    const performanceModelInstanced = new SceneModel(viewer.scene, {
+        id: "tableInstanced",
+        isModel: true, // <--------------------- Represents a model, registers SceneModel by ID on viewer.scene.models
+        position: [20, 0, 20],
+        scale: [1, 1, 1],
+        rotation: [0, 0, 0],
+        edges: true
+    });
+
+    performanceModelInstanced.createGeometry({
+        id: "myBoxGeometryInstanced",
+        primitive: "triangles",
+        positions: [
+            1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, // v0-v1-v2-v3 front
+            1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, // v0-v3-v4-v1 right
+            1, 1, 1, 1, 1, -1, -1, 1, -1, -1, 1, 1, // v0-v1-v6-v1 top
+            -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, // v1-v6-v7-v2 left
+            -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1,// v7-v4-v3-v2 bottom
+            1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1 // v4-v7-v6-v1 back
+        ],
+        normals: [
+            0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1,// v0-v1-v2-v3 front
+            1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,// v0-v3-v4-v5 right
+            0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,// v0-v5-v6-v1 top
+            -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0,// v1-v6-v7-v2 left
+            0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,// v7-v4-v3-v2 bottom
+            0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1// v4-v7-v6-v5 back
+        ],
+        indices: [
+            0, 1, 2, 0, 2, 3,            // front
+            4, 5, 6, 4, 6, 7,            // right
+            8, 9, 10, 8, 10, 11,         // top
+            12, 13, 14, 12, 14, 15,      // left
+            16, 17, 18, 16, 18, 19,      // bottom
+            20, 21, 22, 20, 22, 23
+        ]
+    });
+
+    performanceModelInstanced.createMesh({
+        id: "redLegMeshInstanced",
+        geometryId: "myBoxGeometryInstanced",
+        position: [-4, -6, -4],
+        scale: [1, 3, 1],
+        rotation: [0, 0, 0],
+        color: [1, 0.3, 0.3]
+    });
+
+    performanceModelInstanced.createEntity({
+        id: "redLegInstanced",
+        meshIds: ["redLegMeshInstanced"],
+        isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
+    });
+
+    performanceModelInstanced.createMesh({
+        id: "greenLegMeshInstanced",
+        geometryId: "myBoxGeometryInstanced",
+        position: [4, -6, -4],
+        scale: [1, 3, 1],
+        rotation: [0, 0, 0],
+        color: [0.3, 1.0, 0.3]
+    });
+
+    performanceModelInstanced.createEntity({
+        id: "greenLegInstanced",
+        meshIds: ["greenLegMeshInstanced"],
+        isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
+    });
+
+    performanceModelInstanced.createMesh({
+        id: "blueLegMeshInstanced",
+        geometryId: "myBoxGeometryInstanced",
+        position: [4, -6, 4],
+        scale: [1, 3, 1],
+        rotation: [0, 0, 0],
+        color: [0.3, 0.3, 1.0]
+    });
+
+    performanceModelInstanced.createEntity({
+        id: "blueLegInstanced",
+        meshIds: ["blueLegMeshInstanced"],
+        isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
+    });
+
+    performanceModelInstanced.createMesh({
+        id: "yellowLegMeshInstanced",
+        geometryId: "myBoxGeometryInstanced",
+        position: [-4, -6, 4],
+        scale: [1, 3, 1],
+        rotation: [0, 0, 0],
+        color: [1.0, 1.0, 0.0]
+    });
+
+    performanceModelInstanced.createEntity({
+        id: "yellowLegInstanced",
+        meshIds: ["yellowLegMeshInstanced"],
+        isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
+    });
+
+    performanceModelInstanced.createMesh({
+        id: "purpleTableTopMeshInstanced",
+        geometryId: "myBoxGeometryInstanced",
+        position: [0, -3, 0],
+        scale: [6, 0.5, 6],
+        rotation: [0, 0, 0],
+        color: [1.0, 0.3, 1.0]
+    });
+
+    performanceModelInstanced.createEntity({
+        id: "purpleTableTopInstanced",
+        meshIds: ["purpleTableTopMeshInstanced"],
+        isObject: true // <----------------- Represents an object, registers Entity by ID on viewer.scene.objects
+    });
+
+    performanceModelInstanced.finalize();
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create an AnnotationsPlugin, with which we'll create annotations
+    //------------------------------------------------------------------------------------------------------------------
+
+    const annotations = new AnnotationsPlugin(viewer, {
+        markerHTML: "<div class='annotation-marker' style='background-color: {{markerBGColor}};'>{{glyph}}</div>",
+        labelHTML: "<div class='annotation-label' style='background-color: {{labelBGColor}};'><div class='annotation-title'>{{title}}</div></div>",
+        values: {
+            markerBGColor: "red",
+            glyph: "X",
+            title: "Untitled"
+        },
+        surfaceOffset: 0.8
+    });
+
+    annotations.createAnnotation({
+        id: "myAnnotation1",
+        worldPos: [-0.011305934161100595, -2.5, 0.7264036027276575],
+        occludable: false,
+        markerShown: true,
+        labelShown: true,
+        values: {
+            glyph: "A",
+            title: "Scene graph with Phong materials",
+            markerBGColor: "lightgreen"
+        },
+    });
+
+    annotations.createAnnotation({
+        id: "myAnnotation2",
+        worldPos: [-0.6044467477183844, -2.5, 20.895877757216102],
+        occludable: false,
+        markerShown: true,
+        labelShown: true,
+        values: {
+            glyph: "B",
+            title: "Scene graph with Lambertian materials",
+            markerBGColor: "lightgreen"
+        },
+    });
+
+    annotations.createAnnotation({
+        id: "myAnnotation4",
+        worldPos: [21.686618836579424, -2.5491287813590056, -1.500981976742164],
+        occludable: false,
+        markerShown: true,
+        labelShown: true,
+        values: {
+            glyph: "D",
+            title: "SceneModel with batched geometries",
+            markerBGColor: "lightgreen"
+        },
+    });
+
+    annotations.createAnnotation({
+        id: "myAnnotation3",
+        worldPos: [20.746045919568733, -2.5348495898763215, 20.851344987075752],
+        occludable: false,
+        markerShown: true,
+        labelShown: true,
+        values: {
+            glyph: "C",
+            title: "SceneModel with instanced geometries",
+            markerBGColor: "lightgreen"
+        },
+    });
+
+
+    window.viewer = viewer;
+</script>
+</html>

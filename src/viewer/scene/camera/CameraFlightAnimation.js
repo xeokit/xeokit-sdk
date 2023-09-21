@@ -72,7 +72,7 @@ const newLookEyeVec = math.vec3();
  *
  * Let's transition the Camera to orthographic projection:
  *
- * [[Run example](http://xeokit.github.io/xeokit-sdk/examples/#camera_CameraFlightAnimation_projection)]
+ * [[Run example](/examples/#camera_CameraFlightAnimation_projection)]
  *
  * ````Javascript
  * viewer.cameraFlight.flyTo({ projection: "ortho", () => {
@@ -313,7 +313,6 @@ class CameraFlightAnimation extends Component {
             if (params.projection === "ortho" && camera.projection !== "ortho") {
                 this._projection2 = "ortho";
                 this._projMatrix1 = camera.projMatrix.slice();
-                camera.ortho.scale = this._orthoScale2;
                 this._projMatrix2 = camera.ortho.matrix.slice();
                 camera.projection = "customProjection";
             }
@@ -495,6 +494,7 @@ class CameraFlightAnimation extends Component {
         }
 
         if (stopping) {
+            camera.ortho.scale = this._orthoScale2;
             this.stop();
             return;
         }

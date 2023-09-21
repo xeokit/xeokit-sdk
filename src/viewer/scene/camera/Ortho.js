@@ -64,7 +64,7 @@ class Ortho extends Component {
         const scale = this._scale;
         const halfSize = 0.5 * scale;
 
-        const boundary = scene.viewport.boundary;
+        const boundary = scene.canvas.boundary;
         const boundaryWidth = boundary[WIDTH_INDEX];
         const boundaryHeight = boundary[HEIGHT_INDEX];
         const aspect = boundaryWidth / boundaryHeight;

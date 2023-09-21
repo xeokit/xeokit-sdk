@@ -1,3 +1,5 @@
+import {Map} from "./scene/utils/Map.js";
+
 /**
  @desc Base class for {@link Viewer} plugin classes.
  */
@@ -26,43 +28,153 @@ class Plugin {
          */
         this.viewer = viewer;
 
-        /**
-         * Subscriptions to events fired at this Plugin.
-         * @private
-         */
-        this._eventSubs = {};
+        this._subIdMap = null; // Subscription subId pool
+        this._subIdEvents = null; // Subscription subIds mapped to event names
+        this._eventSubs = null; // Event names mapped to subscribers
+        this._eventSubsNum = null;
+        this._events = null; // Maps names to events
+        this._eventCallDepth = 0; // Helps us catch stack overflows from recursive events
 
         viewer.addPlugin(this);
     }
 
     /**
-     Subscribes to an event fired at this Plugin.
-
-     @param {String} event The event
-     @param {Function} callback Callback fired on the event
+     * Fires an event on this Plugin.
+     *
+     * Notifies existing subscribers to the event, optionally retains the event to give to
+     * any subsequent notifications on the event as they are made.
+     *
+     * @param {String} event The event type name
+     * @param {Object} value The event parameters
+     * @param {Boolean} [forget=false] When true, does not retain for subsequent subscribers
      */
-    on(event, callback) {
-        let subs = this._eventSubs[event];
-        if (!subs) {
-            subs = [];
-            this._eventSubs[event] = subs;
+    fire(event, value, forget) {
+        if (!this._events) {
+            this._events = {};
         }
-        subs.push(callback);
+        if (!this._eventSubs) {
+            this._eventSubs = {};
+            this._eventSubsNum = {};
+        }
+        if (forget !== true) {
+            this._events[event] = value || true; // Save notification
+        }
+        const subs = this._eventSubs[event];
+        let sub;
+        if (subs) { // Notify subscriptions
+            for (const subId in subs) {
+                if (subs.hasOwnProperty(subId)) {
+                    sub = subs[subId];
+                    this._eventCallDepth++;
+                    if (this._eventCallDepth < 300) {
+                        sub.callback.call(sub.scope, value);
+                    } else {
+                        this.error("fire: potential stack overflow from recursive event '" + event + "' - dropping this event");
+                    }
+                    this._eventCallDepth--;
+                }
+            }
+        }
     }
 
     /**
-     Fires an event at this Plugin.
-
-     @param {String} event The event type name
-     @param {Object} value The event parameters
+     * Subscribes to an event on this Plugin.
+     *
+     * The callback is be called with this Plugin as scope.
+     *
+     * @param {String} event The event
+     * @param {Function} callback Called fired on the event
+     * @param {Object} [scope=this] Scope for the callback
+     * @return {String} Handle to the subscription, which may be used to unsubscribe with {@link #off}.
      */
-    fire(event, value) {
-        const subs = this._eventSubs[event];
-        if (subs) {
-            for (let i = 0, len = subs.length; i < len; i++) {
-                subs[i](value);
-            }
+    on(event, callback, scope) {
+        if (!this._events) {
+            this._events = {};
         }
+        if (!this._subIdMap) {
+            this._subIdMap = new Map(); // Subscription subId pool
+        }
+        if (!this._subIdEvents) {
+            this._subIdEvents = {};
+        }
+        if (!this._eventSubs) {
+            this._eventSubs = {};
+        }
+        if (!this._eventSubsNum) {
+            this._eventSubsNum = {};
+        }
+        let subs = this._eventSubs[event];
+        if (!subs) {
+            subs = {};
+            this._eventSubs[event] = subs;
+            this._eventSubsNum[event] = 1;
+        } else {
+            this._eventSubsNum[event]++;
+        }
+        const subId = this._subIdMap.addItem(); // Create unique subId
+        subs[subId] = {
+            callback: callback,
+            scope: scope || this
+        };
+        this._subIdEvents[subId] = event;
+        const value = this._events[event];
+        if (value !== undefined) { // A publication exists, notify callback immediately
+            callback.call(scope || this, value);
+        }
+        return subId;
+    }
+
+    /**
+     * Cancels an event subscription that was previously made with {@link Plugin#on} or {@link Plugin#once}.
+     *
+     * @param {String} subId Subscription ID
+     */
+    off(subId) {
+        if (subId === undefined || subId === null) {
+            return;
+        }
+        if (!this._subIdEvents) {
+            return;
+        }
+        const event = this._subIdEvents[subId];
+        if (event) {
+            delete this._subIdEvents[subId];
+            const subs = this._eventSubs[event];
+            if (subs) {
+                delete subs[subId];
+                this._eventSubsNum[event]--;
+            }
+            this._subIdMap.removeItem(subId); // Release subId
+        }
+    }
+
+    /**
+     * Subscribes to the next occurrence of the given event, then un-subscribes as soon as the event is subIdd.
+     *
+     * This is equivalent to calling {@link Plugin#on}, and then calling {@link Plugin#off} inside the callback function.
+     *
+     * @param {String} event Data event to listen to
+     * @param {Function} callback Called when fresh data is available at the event
+     * @param {Object} [scope=this] Scope for the callback
+     */
+    once(event, callback, scope) {
+        const self = this;
+        const subId = this.on(event,
+            function (value) {
+                self.off(subId);
+                callback.call(scope || this, value);
+            },
+            scope);
+    }
+
+    /**
+     * Returns true if there are any subscribers to the given event on this Plugin.
+     *
+     * @param {String} event The event
+     * @return {Boolean} True if there are any subscribers to the given event on this Plugin.
+     */
+    hasSubs(event) {
+        return (this._eventSubsNum && (this._eventSubsNum[event] > 0));
     }
 
     /**
