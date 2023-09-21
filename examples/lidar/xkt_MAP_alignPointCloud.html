@@ -48,14 +48,14 @@
 <div class="slideout-sidebar">
     <img class="info-icon" src="../../assets/images/bim_icon.png"/>
     <h1>XKTLoaderPlugin</h1>
-    <h2>Loading a point cloud with 2.6M points</h2>
+    <h2>Loading a BIM model and point cloud with 2.6M points</h2>
     <h3>Stats</h3>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
         </li>
     </ul>
-    <h3>Customize points</h3>
+    <h3>Align and customize point cloud</h3>
     <div id="myDatGuiContainer"></div>
     <h3>Components used</h3>
     <ul>
@@ -137,12 +137,37 @@
 
     document.getElementById("time").innerHTML = "Loading model...";
 
-    const sceneModel = xktLoader.load({
+    const bimSceneModel = xktLoader.load({
         id: "myModel",
-        src: "../../assets/models/xkt/v7/MAP-PointCloud/MAP-PointCloud.xkt",
-        edges: true
+        src: "../../assets/models/xkt/v8/gltf/MAP.gltf.xkt",
+        saoEnabled: true,
+        edges: true,
+        objectDefaults: {
+            "IfcPlate": {
+                opacity: 0.3 // These are used as windows in this model - make transparent
+            },
+            "IfcWindow": {
+                opacity: 0.4
+            },
+            "IfcSpace": {
+                opacity: 0.4
+            }
+        }
     });
 
+    const lasSceneModel = xktLoader.load({
+        id: "myModel2",
+        src: "../../assets/models/xkt/v7/MAP-PointCloud/MAP-PointCloud.xkt",
+        edges: true
+
+    });
+
+    bimSceneModel.on("loaded", () => {
+
+       bimSceneModel.position =  [-1842009.4968455553, -9.685518291306686, 5173295.851503017]
+        var t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + bimSceneModel.numEntities;
+    });
 
     //------------------------------------------------------------------------------------------------------------------
     // GUI to play with points material properties
@@ -152,6 +177,12 @@
     const camera = viewer.camera;
 
     var guiParams = new function () {
+        this.positionX = -9.5;
+        this.positionY = -9;
+        this.positionZ = 1;
+        this.rotateX = 0;
+        this.rotateY = -3.8;
+        this.rotateZ = 0;
         this.roundPoints = pointsMaterial.roundPoints;
         this.perspectivePoints = pointsMaterial.perspectivePoints;
         this.pointSize = pointsMaterial.pointSize;
@@ -161,6 +192,16 @@
     }();
 
     var update = function () {
+        lasSceneModel.position = [
+            guiParams.positionX,
+             guiParams.positionY,
+             guiParams.positionZ
+        ];
+        lasSceneModel.rotation = [
+            guiParams.rotateX,
+            guiParams.rotateY,
+            guiParams.rotateZ
+        ];
         pointsMaterial.roundPoints = guiParams.roundPoints;
         pointsMaterial.perspectivePoints = guiParams.perspectivePoints;
         pointsMaterial.pointSize = guiParams.pointSize;
@@ -173,6 +214,18 @@
     update();
 
     const gui = new dat.GUI({autoPlace: false, width: "100%"});
+
+    const lasPositionFolder = gui.addFolder('LAS Position');
+    gui.add(guiParams, 'positionX', -50, 50).onChange(update);
+    gui.add(guiParams, 'positionY', -50, 50).onChange(update);
+    gui.add(guiParams, 'positionZ', -50, 50).onChange(update);
+    lasPositionFolder.open();
+
+    const lasRotationFolder = gui.addFolder('LAS Orientation');
+    gui.add(guiParams, 'rotateX', -90, 90).onChange(update);
+    gui.add(guiParams, 'rotateY', -90, 90).onChange(update);
+    gui.add(guiParams, 'rotateZ', -90, 90).onChange(update);
+    lasRotationFolder.open();
 
     const pointsMaterialFolder = gui.addFolder('PointsMaterial');
     pointsMaterialFolder.add(guiParams, 'roundPoints');
