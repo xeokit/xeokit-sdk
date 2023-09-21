@@ -454,22 +454,24 @@ class VBOSceneModelRenderer {
 
         this._matricesUniformBlockBufferData.set(rotationMatrixConjugate, 0);
 
-        if (origin || position[0] !== 0 || position[1] !== 0 || position[2] !== 0) {
-            const layerOrigin = tempVec3b;
-            if (origin) {
+        const gotOrigin = (origin[0] !== 0 || origin[1] !== 0 || origin[2] !== 0);
+        const gotPosition = (position[0] !== 0 || position[1] !== 0 || position[2] !== 0);
+        if (gotOrigin || gotPosition) {
+            const rtcOrigin = tempVec3a;
+            if (gotOrigin) {
                 const rotatedOrigin = math.transformPoint3(rotationMatrix, origin, tempVec3c);
-                layerOrigin[0] = rotatedOrigin[0];
-                layerOrigin[1] = rotatedOrigin[1];
-                layerOrigin[2] = rotatedOrigin[2];
+                rtcOrigin[0] = rotatedOrigin[0];
+                rtcOrigin[1] = rotatedOrigin[1];
+                rtcOrigin[2] = rotatedOrigin[2];
             } else {
-                layerOrigin[0] = 0;
-                layerOrigin[1] = 0;
-                layerOrigin[2] = 0;
+                rtcOrigin[0] = 0;
+                rtcOrigin[1] = 0;
+                rtcOrigin[2] = 0;
             }
-            layerOrigin[0] += position[0];
-            layerOrigin[1] += position[1];
-            layerOrigin[2] += position[2];
-            this._matricesUniformBlockBufferData.set(createRTCViewMat(viewMatrix, layerOrigin, tempMat4a), offset += mat4Size);
+            rtcOrigin[0] += position[0];
+            rtcOrigin[1] += position[1];
+            rtcOrigin[2] += position[2];
+            this._matricesUniformBlockBufferData.set(createRTCViewMat(viewMatrix, rtcOrigin, tempMat4a), offset += mat4Size);
         } else {
             this._matricesUniformBlockBufferData.set(viewMatrix, offset += mat4Size);
         }

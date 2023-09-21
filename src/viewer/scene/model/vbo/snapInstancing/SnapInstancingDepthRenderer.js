@@ -9,6 +9,8 @@ const tempVec3d = math.vec3();
 const tempVec3e = math.vec3();
 const tempMat4a = math.mat4();
 
+const SNAPPING_LOG_DEPTH_BUF_ENABLED = true; // Improves occlusion accuracy at distance
+
 /**
  * @private
  */
@@ -105,7 +107,7 @@ class SnapInstancingDepthRenderer {
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, rotationMatrixConjugate);
         gl.uniformMatrix4fv(this._uProjMatrix, false, camera.projMatrix);
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2); // TODO: Far from pick project matrix
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
@@ -193,7 +195,7 @@ class SnapInstancingDepthRenderer {
         this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
         this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");
         this._aModelMatrixCol2 = program.getAttribute("modelMatrixCol2");
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
         this._uCameraEyeRtc = program.getLocation("uCameraEyeRtc"); 
@@ -252,7 +254,7 @@ class SnapInstancingDepthRenderer {
         src.push("uniform vec3 uCameraEyeRtc;"); 
         src.push("uniform vec2 snapVectorA;"); 
         src.push("uniform vec2 snapInvVectorAB;"); 
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             src.push("uniform float logDepthBufFC;");
             src.push("out float vFragDepth;");
             src.push("bool isPerspectiveMatrix(mat4 m) {");
@@ -293,7 +295,7 @@ class SnapInstancingDepthRenderer {
         src.push("clipPos.xyzw /= tmp;")
         src.push("clipPos.xy = remapClipPos(clipPos.xy);");
         src.push("clipPos.xyzw *= tmp;")
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
@@ -318,7 +320,7 @@ class SnapInstancingDepthRenderer {
         src.push("precision mediump float;");
         src.push("precision mediump int;");
         src.push("#endif");
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             src.push("in float isPerspective;");
             src.push("uniform float logDepthBufFC;");
             src.push("in float vFragDepth;");
@@ -349,7 +351,7 @@ class SnapInstancingDepthRenderer {
             src.push("if (dist > 0.0) { discard; }");
             src.push("}");
         }
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
         src.push("outCoords = ivec4(relativeToOriginPosition.xyz*coordinateScaler.xyz, layerNumber);")

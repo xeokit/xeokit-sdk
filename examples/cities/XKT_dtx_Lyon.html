@@ -87,7 +87,7 @@
         ReadableGeometry,
         buildPlaneGeometry,
         FastNavPlugin
-    } from "../../dist/xeokit-sdk.min.es.js";
+    } from "../../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer with a logarithmic depth buffer
@@ -95,8 +95,7 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
-        transparent: true,
-        logarithmicDepthBufferEnabled: true // <<--- Enable logarithmic depth buffer
+        transparent: true
     });
 
     // Enable data texture model representation for
@@ -116,7 +115,7 @@
     // Higher-quality rendering when camera still, lower-quality when moving
     //------------------------------------------------------------------------------------------------------------------
 
-    new FastNavPlugin(viewer);
+    //new FastNavPlugin(viewer);
 
     //------------------------------------------------------------------------------------------------------------------
     // Configure Camera
@@ -210,19 +209,19 @@
     // Create a ground plane
     //------------------------------------------------------------------------------------------------------------------
 
-    new Mesh(viewer.scene, {
-        geometry: new ReadableGeometry(viewer.scene, buildPlaneGeometry({
-            xSize: 15000,
-            zSize: 15000
-        })),
-        material: new PhongMaterial(viewer.scene, {
-            diffuse: [0.3, 0.5, 0.1],
-            // alpha: 0.0,
-            alphaMode: "opaque"
-        }),
-        position: [1842761.9375, -5.53293939639616, -5174733.5],
-        collidable: false
-    });
+    // new Mesh(viewer.scene, {
+    //     geometry: new ReadableGeometry(viewer.scene, buildPlaneGeometry({
+    //         xSize: 15000,
+    //         zSize: 15000
+    //     })),
+    //     material: new PhongMaterial(viewer.scene, {
+    //         diffuse: [0.3, 0.5, 0.1],
+    //         // alpha: 0.0,
+    //         alphaMode: "opaque"
+    //     }),
+    //     position: [1842761.9375, -5.53293939639616, -5174733.5],
+    //     collidable: false
+    // });
 
     //----------------------------------------------------------------------------------------------------------------------
     // Load nine CityGML models

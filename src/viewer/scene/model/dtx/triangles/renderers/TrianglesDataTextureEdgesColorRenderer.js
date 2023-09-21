@@ -38,7 +38,7 @@ export class TrianglesDataTextureEdgesColorRenderer {
         const viewMatrix = camera.viewMatrix;
         
         if (!this._program) {
-            this._allocate(dataTextureLayer);
+            this._allocate();
             if (this.errors) {
                 return;
             }
@@ -167,7 +167,6 @@ export class TrianglesDataTextureEdgesColorRenderer {
 
         this._uRenderPass = program.getLocation("renderPass");
         this._uSceneModelWorldMatrix = program.getLocation("sceneModelWorldMatrix");
-        this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
         this._uSectionPlanes = [];
@@ -186,13 +185,13 @@ export class TrianglesDataTextureEdgesColorRenderer {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
 
-        this._uTexturePerObjectIdPositionsDecodeMatrix = "uTexturePerObjectIdPositionsDecodeMatrix"; 
-        this._uTexturePerObjectIdColorsAndFlags = "uTexturePerObjectIdColorsAndFlags"; 
-        this._uTexturePerVertexIdCoordinates = "uTexturePerVertexIdCoordinates"; 
-        this._uTexturePerPolygonIdEdgeIndices = "uTexturePerPolygonIdEdgeIndices"; 
+        this._uTexturePerObjectIdPositionsDecodeMatrix = "uTexturePerObjectIdPositionsDecodeMatrix";
+        this._uTexturePerObjectIdColorsAndFlags = "uTexturePerObjectIdColorsAndFlags";
+        this._uTexturePerVertexIdCoordinates = "uTexturePerVertexIdCoordinates";
+        this._uTexturePerPolygonIdEdgeIndices = "uTexturePerPolygonIdEdgeIndices";
         this._uTexturePerEdgeIdPortionIds = "uTexturePerEdgeIdPortionIds";
-        this._uTextureModelMatrices = "uTextureModelMatrices"; 
-        this._uTexturePerObjectIdOffsets = "uTexturePerObjectIdOffsets"; 
+        this._uTextureModelMatrices = "uTextureModelMatrices";
+        this._uTexturePerObjectIdOffsets = "uTexturePerObjectIdOffsets";
     }
 
     _bindProgram() {
@@ -223,7 +222,7 @@ export class TrianglesDataTextureEdgesColorRenderer {
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
         src.push("#version 300 es");
-        src.push("// Batched geometry edges drawing vertex shader");
+        src.push("// TrianglesDataTextureEdgesColorRenderer");
 
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
@@ -242,19 +241,19 @@ export class TrianglesDataTextureEdgesColorRenderer {
         src.push("uniform int renderPass;");
 
         if (scene.entityOffsetsEnabled) {
-            src.push("in vec3 offset;");
+        //    src.push("in vec3 offset;");
         }
 
         src.push("uniform mat4 sceneModelWorldMatrix;");
         src.push("uniform mat4 viewMatrix;");
         src.push("uniform mat4 projMatrix;");
 
-        src.push("uniform highp sampler2D uTexturePerObjectIdPositionsDecodeMatrix;"); 
-        src.push("uniform lowp usampler2D uTexturePerObjectIdColorsAndFlags;"); 
-        src.push("uniform highp sampler2D uTexturePerObjectIdOffsets;"); 
-        src.push("uniform mediump usampler2D uTexturePerVertexIdCoordinates;"); 
-        src.push("uniform highp usampler2D uTexturePerPolygonIdEdgeIndices;"); 
-        src.push("uniform mediump usampler2D uTexturePerEdgeIdPortionIds;"); 
+        src.push("uniform highp sampler2D uTexturePerObjectIdPositionsDecodeMatrix;");
+        src.push("uniform lowp usampler2D uTexturePerObjectIdColorsAndFlags;");
+        src.push("uniform highp sampler2D uTexturePerObjectIdOffsets;");
+        src.push("uniform mediump usampler2D uTexturePerVertexIdCoordinates;");
+        src.push("uniform highp usampler2D uTexturePerPolygonIdEdgeIndices;");
+        src.push("uniform mediump usampler2D uTexturePerEdgeIdPortionIds;");
         src.push("uniform highp sampler2D uTextureModelMatrices;");
 
       //  src.push("uniform vec4 color;");
@@ -290,19 +289,19 @@ export class TrianglesDataTextureEdgesColorRenderer {
         src.push("ivec2 objectIndexCoords = ivec2(objectIndex % 512, objectIndex / 512);");
 
         // get flags & flags2
-        src.push("uvec4 flags = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);"); 
-        src.push("uvec4 flags2 = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);"); 
-        
+        src.push("uvec4 flags = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);");
+        src.push("uvec4 flags2 = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);");
+
         // flags.z = NOT_RENDERED | EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
         // renderPass = EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT
-        
+
         src.push(`if (int(flags.z) != renderPass) {`);
         src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
         src.push("   return;"); // Cull vertex
         src.push("} else {");
 
         // get vertex base
-        src.push("ivec4 packedVertexBase = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+4, objectIndexCoords.y), 0));"); 
+        src.push("ivec4 packedVertexBase = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+4, objectIndexCoords.y), 0));");
 
         src.push("ivec4 packedEdgeIndexBaseOffset = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+6, objectIndexCoords.y), 0));");
 
@@ -313,21 +312,21 @@ export class TrianglesDataTextureEdgesColorRenderer {
 
         src.push("ivec3 vertexIndices = ivec3(texelFetch(uTexturePerPolygonIdEdgeIndices, ivec2(h_index, v_index), 0));");
         src.push("ivec3 uniqueVertexIndexes = vertexIndices + (packedVertexBase.r << 24) + (packedVertexBase.g << 16) + (packedVertexBase.b << 8) + packedVertexBase.a;")
-        
+
         src.push("int indexPositionH = uniqueVertexIndexes[gl_VertexID % 2] & 4095;")
         src.push("int indexPositionV = uniqueVertexIndexes[gl_VertexID % 2] >> 12;")
 
         src.push("mat4 positionsDecodeMatrix = mat4 (texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));")
 
         // get flags & flags2
-        src.push("uvec4 flags = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);"); 
-        src.push("uvec4 flags2 = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);"); 
-        
+        src.push("uvec4 flags = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);");
+        src.push("uvec4 flags2 = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);");
+
         // get position
         src.push("vec3 position = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH, indexPositionV), 0));")
 
         // get color
-        src.push("uvec4 color = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);"); 
+        src.push("uvec4 color = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);");
 
         src.push(`if (color.a == 0u) {`);
         src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
@@ -339,7 +338,7 @@ export class TrianglesDataTextureEdgesColorRenderer {
         // get XYZ offset
         src.push("vec4 offset = vec4(texelFetch (uTexturePerObjectIdOffsets, objectIndexCoords, 0).rgb, 0.0);");
 
-        src.push("worldPosition.xyz = worldPosition.xyz + offset.xyz;");
+      //  src.push("worldPosition.xyz = worldPosition.xyz + offset.xyz;");
 
         src.push("      vec4 viewPosition  = viewMatrix * worldPosition; ");
 
@@ -368,10 +367,7 @@ export class TrianglesDataTextureEdgesColorRenderer {
         const clipping = sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
         src.push ('#version 300 es');
-        src.push("// Batched geometry edges drawing fragment shader");
-        if (scene.logarithmicDepthBufferEnabled) {
-            src.push("#extension GL_EXT_frag_depth : enable");
-        }
+        src.push("// TrianglesDataTextureEdgesColorRenderer");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -409,6 +405,7 @@ export class TrianglesDataTextureEdgesColorRenderer {
             src.push("}");
         }
         if (scene.logarithmicDepthBufferEnabled) {
+         //   src.push("gl_FragDepth = log2( vFragDepth ) * logDepthBufFC * 0.5;");
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
         src.push("   outColor            = vColor;");

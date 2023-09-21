@@ -9,6 +9,8 @@ const tempVec3d = math.vec3();
 const tempVec3e = math.vec3();
 const tempMat4a = math.mat4();
 
+const SNAPPING_LOG_DEPTH_BUF_ENABLED = true; // Improves occlusion accuracy at distance
+
 /**
  * @private
  */
@@ -117,7 +119,7 @@ export class TrianglesDataTextureSnapDepthRenderer {
         gl.uniformMatrix4fv(this._uSceneModelWorldMatrix, false, rotationMatrixConjugate);
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
         gl.uniformMatrix4fv(this._uProjMatrix, false, camera.projMatrix);
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
@@ -197,7 +199,7 @@ export class TrianglesDataTextureSnapDepthRenderer {
                 dir: program.getLocation("sectionPlaneDir" + i)
             });
         }
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
         this._uTexturePerObjectIdPositionsDecodeMatrix = "uTexturePerObjectIdPositionsDecodeMatrix";
@@ -270,7 +272,7 @@ export class TrianglesDataTextureSnapDepthRenderer {
 
         src.push("vec3 positions[3];")
 
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             src.push("uniform float logDepthBufFC;");
             src.push("out float vFragDepth;");
             src.push("bool isPerspectiveMatrix(mat4 m) {");
@@ -344,7 +346,7 @@ export class TrianglesDataTextureSnapDepthRenderer {
         src.push("clipPos.xy = remapClipPos(clipPos.xy);");
         src.push("clipPos.xyzw *= tmp;")
         src.push("vViewPosition = clipPos;");
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
@@ -370,7 +372,7 @@ export class TrianglesDataTextureSnapDepthRenderer {
         src.push("precision mediump float;");
         src.push("precision mediump int;");
         src.push("#endif");
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             src.push("in float isPerspective;");
             src.push("uniform float logDepthBufFC;");
             src.push("in float vFragDepth;");
@@ -401,7 +403,7 @@ export class TrianglesDataTextureSnapDepthRenderer {
             src.push("      if (dist > 0.0) { discard; }");
             src.push("  }");
         }
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
         src.push("outCoords = ivec4(relativeToOriginPosition.xyz * uCoordinateScaler.xyz, uLayerNumber);")
