@@ -78,8 +78,7 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
-        transparent: true,
-        dtxEnabled: true
+        transparent: true
     });
 
     viewer.camera.eye = [10.449999809265137, 17.3799991607666, -98.30999755859375];
@@ -114,7 +113,18 @@
     const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../../assets/models/xkt/v8/ifc/OTCConferenceCenter.ifc.xkt",
-        edges: false
+        edges: false,
+        objectDefaults: {
+            "IfcPlate": {
+                opacity: 0.3 // These are used as windows in this model - make transparent
+            },
+            "IfcWindow": {
+                opacity: 0.4
+            },
+            "IfcSpace": {
+                opacity: 0.4
+            }
+        }
     });
 
     // new Skybox(viewer.scene, {

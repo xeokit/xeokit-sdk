@@ -78,7 +78,8 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
-        transparent: true
+        transparent: true,
+        dtsEnabled: true
     });
 
     viewer.scene.sao.enabled = true; // Higher-quality SAO settings
@@ -119,11 +120,16 @@
         src: "../../assets/models/xkt/v8/ifc/OTCConferenceCenter.ifc.xkt",
         edges: true,
         enableSAO: true,
-        useDataTextures: {
-            enableViewFrustumCulling: true,
-            targetLodFps: 50,
-            disableVertexWelding: true,
-            disableIndexRebucketing: true
+        objectDefaults: {
+            "IfcPlate": {
+                opacity: 0.3 // These are used as windows in this model - make transparent
+            },
+            "IfcWindow": {
+                opacity: 0.4
+            },
+            "IfcSpace": {
+                opacity: 0.4
+            }
         }
     });
 

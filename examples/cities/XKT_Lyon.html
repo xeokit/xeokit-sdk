@@ -91,8 +91,7 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
-        transparent: true,
-        logarithmicDepthBufferEnabled: false // <<--- Enable logarithmic depth buffer
+        transparent: true
     });
 
     //------------------------------------------------------------------------------------------------------------------
@@ -131,9 +130,6 @@
     //
     // Show a dot about the pivot point, whenever we orbit the Camera
     //------------------------------------------------------------------------------------------------------------------
-
-    viewer.cameraControl.followPointer = true;
-    viewer.cameraControl.smartPivot = true;
 
     const pivotElement = document.createRange().createContextualFragment("<div class='xeokit-camera-pivot-marker'></div>").firstChild;
     document.body.appendChild(pivotElement);

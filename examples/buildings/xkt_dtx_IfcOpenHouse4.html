@@ -178,6 +178,10 @@
     viewer.scene.camera.look = [6.599999999999998, 8.34099990051474, -4.159999575600315];
     viewer.scene.camera.up = [-0.2820584034861215, 0.9025563895259413, -0.3253229483893775];
 
+    viewer.cameraControl.enablePivotSphere({
+        size: 1
+    });
+
     new NavCubePlugin(viewer, {
         canvasId: "myNavCubeCanvas",
         visible: true,

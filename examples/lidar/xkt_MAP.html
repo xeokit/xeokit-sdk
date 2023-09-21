@@ -96,6 +96,10 @@
         transparent: true
     });
 
+    viewer.cameraControl.enablePivotSphere({
+        size: 1
+    });
+
     new NavCubePlugin(viewer, {
         canvasId: "myNavCubeCanvas",
         visible: true,
