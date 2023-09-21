@@ -1628,6 +1628,25 @@ class CameraControl extends Component {
     }
 
     /**
+     * Sets a sphere as the representation of the pivot position.
+     *
+     * @param {Object} [cfg] Sphere configuration.
+     * @param {String} [cfg.size=1] Optional size factor of the sphere. Defaults to 1.
+     * @param {String} [cfg.material=PhongMaterial] Optional size factor of the sphere. Defaults to a red opaque material.
+     */
+    enablePivotSphere(cfg = {}) {
+        this._controllers.pivotController.enablePivotSphere(cfg);
+    }
+
+    /**
+     * Remove the sphere as the representation of the pivot position.
+     *
+     */
+    disablePivotSphere() {
+        this._controllers.pivotController.disablePivotSphere();
+    }
+    
+    /**
      * Sets whether smart default pivoting is enabled.
      *
      * When ````true````, we'll pivot by default about the 3D position of the mouse/touch pointer on an

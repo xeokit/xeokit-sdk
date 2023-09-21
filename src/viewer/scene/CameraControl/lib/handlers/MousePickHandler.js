@@ -174,6 +174,10 @@ class MousePickHandler {
             if (e.which === 3) {
                 rightDown = false;
             }
+
+            if (pivotController.getPivoting()) {
+                pivotController.endPivot();
+            }
         });
 
         canvas.addEventListener('mouseup', this._canvasMouseUpHandler = (e) => {
