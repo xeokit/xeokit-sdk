@@ -176,8 +176,7 @@ export class TrianglesDataTextureLayer {
      * @param portionCfg.metallic Metalness factor [0..255]
      * @param portionCfg.roughness Roughness factor [0..255]
      * @param portionCfg.opacity Opacity [0..255]
-     * @param [portionCfg.meshMatrix] Flat float 4x4 matrix
-     * @param [portionCfg.sceneModelMatrix] Flat float 4x4 matrix
+     * @param [portionCfg.meshMatrix] Flat float 4x4 matrix - transforms the portion within the coordinate system that's local to the SceneModel
      * @param portionCfg.worldAABB Flat float AABB World-space AABB
      * @param portionCfg.pickColor Quantized pick color
      * @returns {number} Portion ID
@@ -329,7 +328,6 @@ export class TrianglesDataTextureLayer {
         const colors = portionCfg.colors;
         const opacity = portionCfg.opacity;
         const meshMatrix = portionCfg.meshMatrix;
-        const sceneModelMatrix = portionCfg.sceneModelMatrix;
         const pickColor = portionCfg.pickColor;
         const buffer = this._buffer;
         const state = this._state;
@@ -337,7 +335,8 @@ export class TrianglesDataTextureLayer {
         buffer.perObjectPositionsDecodeMatrices.push(portionCfg.positionsDecodeMatrix);
         buffer.perObjectInstancePositioningMatrices.push(meshMatrix || DEFAULT_MATRIX);
 
-        if (meshMatrix || sceneModelMatrix) { // TODO: optimize for identity scene model matrix
+        if (meshMatrix) { // NB: SceneModel world matrix is used in shaders and SceneModelMesh.aabb
+
             if (!bucketGeometry.obb) {
                 bucketGeometry.obb = math.AABB3ToOBB3(bucketGeometry.aabb);
             }
@@ -350,12 +349,7 @@ export class TrianglesDataTextureLayer {
                 if (meshMatrix) {
                     math.transformPoint4(meshMatrix, tempVec4a, tempVec4b);
                 }
-                if (sceneModelMatrix) {
-                    math.transformPoint4(sceneModelMatrix, tempVec4b, tempVec4c);
-                    math.expandAABB3Point3(subPortionAABB, tempVec4c);
-                } else {
-                    math.expandAABB3Point3(subPortionAABB, tempVec4b);
-                }
+                math.expandAABB3Point3(subPortionAABB, tempVec4b);
             }
         } else {
             math.expandAABB3(subPortionAABB, bucketGeometry.aabb);
@@ -454,10 +448,6 @@ export class TrianglesDataTextureLayer {
 
         return subPortionId;
     }
-
-    // updatePickCameratexture(pickViewMatrix, pickCameraMatrix) {
-    //     this._dataTextureState.texturePickCameraMatrices.updateViewMatrix(pickViewMatrix, pickCameraMatrix);
-    // }
 
     /**
      * Builds data textures from the appended geometries and loads them into the GPU.
@@ -1189,6 +1179,13 @@ export class TrianglesDataTextureLayer {
     // ---------------------- EDGES RENDERING -----------------------------------
 
     drawEdgesColorOpaque(renderFlags, frameCtx) {
+        if (this.model.scene.logarithmicDepthBufferEnabled) {
+            if (!this.model.scene._loggedWarning) {
+                console.log("Edge enhancement for SceneModel data texture layers currently disabled with logarithmic depth buffer");
+                this.model.scene._loggedWarning = true;
+            }
+            return;
+        }
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
             return;
         }

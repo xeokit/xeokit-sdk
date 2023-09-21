@@ -154,7 +154,6 @@ class TrianglesInstancingLayer {
      * @param cfg.roughness Roughness factor [0..255]
      * @param cfg.opacity Opacity [0..255].
      * @param cfg.meshMatrix Flat float 4x4 matrix.
-     * @param [cfg.sceneModelMatrix] Flat float 4x4 matrix.
      * @param [cfg.worldMatrix] Flat float 4x4 matrix.
      * @param cfg.worldAABB Flat float AABB.
      * @param cfg.pickColor Quantized pick color
@@ -167,7 +166,6 @@ class TrianglesInstancingLayer {
         const roughness = cfg.roughness;
         const opacity = cfg.opacity !== null && cfg.opacity !== undefined ? cfg.opacity : 255;
         const meshMatrix = cfg.meshMatrix;
-        const sceneModelMatrix = cfg.sceneModelMatrix;
         const worldAABB = cfg.aabb;
         const pickColor = cfg.pickColor;
 
@@ -251,12 +249,7 @@ class TrianglesInstancingLayer {
             tempVec4a[2] = positions[i + 2];
             math.transformPoint4(positionsDecodeMatrix, tempVec4a, tempVec4b);
             math.transformPoint4(meshMatrix, tempVec4b, tempVec4a);
-            if (sceneModelMatrix) {
-                math.transformPoint4(sceneModelMatrix, tempVec4a, tempVec4c);
-                math.expandAABB3Point3(worldAABB, tempVec4c);
-            } else {
                 math.expandAABB3Point3(worldAABB, tempVec4a);
-            }
         }
 
         if (this._state.origin) {

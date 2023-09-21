@@ -1555,6 +1555,7 @@ export class SceneModel extends Component {
     _setWorldMatrixDirty() {
         this._matrixDirty = true;
     }
+
     _setLocalAABBDirty() {
         for (let i = 0, len = this._entityList.length; i < len; i++) {
             this._entityList[i]._setLocalAABBDirty(); // Entities need to rebuild their Local AABBs from their Mesh's local AABBs
@@ -1569,7 +1570,7 @@ export class SceneModel extends Component {
             this._entityList[i]._setWorldAABBDirty(); // Entities need to retransform their World AABBs by SceneModel's worldMatrix
         }
     }
-    
+
     /**
      * Gets the SceneModel's World matrix.
      *
@@ -2607,13 +2608,9 @@ export class SceneModel extends Component {
         const instancing = (cfg.geometryId !== undefined);
         const batching = !instancing;
 
-        cfg.sceneModelMatrix = this._matrixNonIdentity ? this._matrix : null;
-
         if (batching) {
 
             // Batched geometry
-
-            const useDTX = !!this._dtxEnabled;
 
             if (cfg.primitive === undefined || cfg.primitive === null) {
                 cfg.primitive = "triangles";
@@ -2646,6 +2643,8 @@ export class SceneModel extends Component {
                 this.error("Unexpected params: 'matrix', 'rotation', 'scale', 'position' not allowed with 'positionsCompressed'");
                 return null;
             }
+
+            const useDTX = (!!this._dtxEnabled && (cfg.primitive === "triangles" || cfg.primitive === "solid" || cfg.primitive === "surface"));
 
             cfg.origin = cfg.origin ? math.addVec3(this._origin, cfg.origin, math.vec3()) : this._origin;
 
@@ -2789,7 +2788,7 @@ export class SceneModel extends Component {
                 cfg.meshMatrix = math.composeMat4(position, DEFAULT_QUATERNION, scale, math.mat4());
             }
 
-            const useDTX = !!this._dtxEnabled; // Data textures - disabled by default for now
+            const useDTX = (!!this._dtxEnabled && (cfg.geometry.primitive === "triangles" || cfg.geometry.primitive === "solid" || cfg.geometry.primitive === "surface"));
 
             if (useDTX) {
 
@@ -3315,6 +3314,15 @@ export class SceneModel extends Component {
         if (this.scene.lod.enabled) {
             this._lodManager = this.scene.lod.getLODManager(this);
         }
+
+        this._viewMatrixDirty = true;
+        this._matrixDirty = true;
+        this._aabbDirty = true;
+
+        this._setWorldMatrixDirty();
+        this._setWorldAABBDirty();
+        
+        this.position = this._position;
     }
 
     /** @private */

@@ -121,7 +121,6 @@ class PointsInstancingLayer {
     createPortion(cfg) {
 
         const meshMatrix = cfg.meshMatrix;
-        const worldMatrix = cfg.worldMatrix;
         const worldAABB = cfg.aabb;
         const pickColor = cfg.pickColor;
 
@@ -167,12 +166,7 @@ class PointsInstancingLayer {
             tempVec4a[1] = obb[i + 1];
             tempVec4a[2] = obb[i + 2];
             math.transformPoint4(meshMatrix, tempVec4a, tempVec4b);
-            if (worldMatrix) {
-                math.transformPoint4(worldMatrix, tempVec4b, tempVec4c);
-                math.expandAABB3Point3(worldAABB, tempVec4c);
-            } else {
-                math.expandAABB3Point3(worldAABB, tempVec4b);
-            }
+            math.expandAABB3Point3(worldAABB, tempVec4b);
         }
 
         if (this._state.origin) {

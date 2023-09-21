@@ -88,7 +88,7 @@ class TrianglesBatchingLayer {
             flagsBuf: null,
             indicesBuf: null,
             edgeIndicesBuf: null,
-            positionsDecodeMatrix:null,
+            positionsDecodeMatrix: null,
             uvDecodeMatrix: null,
             textureSet: cfg.textureSet,
             pbrSupported: false // Set in #finalize if we have enough to support quality rendering
@@ -174,7 +174,6 @@ class TrianglesBatchingLayer {
      * @param cfg.roughness Roughness factor [0..255]
      * @param cfg.opacity Opacity [0..255]
      * @param [cfg.meshMatrix] Flat float 4x4 matrix
-     * @param [cfg.sceneModelMatrix] Flat float 4x4 matrix
      * @param cfg.worldAABB Flat float AABB World-space AABB
      * @param cfg.pickColor Quantized pick color
      * @returns {number} Portion ID
@@ -200,7 +199,6 @@ class TrianglesBatchingLayer {
         const roughness = cfg.roughness;
         const opacity = cfg.opacity;
         const meshMatrix = cfg.meshMatrix;
-        const sceneModelMatrix = cfg.sceneModelMatrix;
         const worldAABB = cfg.worldAABB;
         const pickColor = cfg.pickColor;
 
@@ -235,12 +233,6 @@ class TrianglesBatchingLayer {
             worldAABB[4] = max[1];
             worldAABB[5] = max[2];
 
-            if (sceneModelMatrix) {
-                math.AABB3ToOBB3(worldAABB, tempOBB3);
-                math.transformOBB3(sceneModelMatrix, tempOBB3);
-                math.OBB3ToAABB3(tempOBB3, worldAABB);
-            }
-
         } else {
 
             if (!positions) {
@@ -272,13 +264,7 @@ class TrianglesBatchingLayer {
                     buffer.positions[i + 2] = tempVec4b[2];
 
                     math.expandAABB3Point3(this._modelAABB, tempVec4b);
-
-                    if (sceneModelMatrix) {
-                        math.transformPoint4(sceneModelMatrix, tempVec4b, tempVec4c);
-                        math.expandAABB3Point3(worldAABB, tempVec4c);
-                    } else {
-                        math.expandAABB3Point3(worldAABB, tempVec4b);
-                    }
+                    math.expandAABB3Point3(worldAABB, tempVec4b);
                 }
 
             } else {
@@ -290,13 +276,7 @@ class TrianglesBatchingLayer {
                     tempVec4a[2] = buffer.positions[i + 2];
 
                     math.expandAABB3Point3(this._modelAABB, tempVec4a);
-
-                    if (sceneModelMatrix) {
-                        math.transformPoint4(sceneModelMatrix, tempVec4a, tempVec4b);
-                        math.expandAABB3Point3(worldAABB, tempVec4b);
-                    } else {
-                        math.expandAABB3Point3(worldAABB, tempVec4a);
-                    }
+                    math.expandAABB3Point3(worldAABB, tempVec4a);
                 }
             }
         }
@@ -926,7 +906,7 @@ class TrianglesBatchingLayer {
             offset = portion.indicesBaseIndex;
         }
 
-        return { count, offset }
+        return {count, offset}
     }
 
     // ---------------------- COLOR RENDERING -----------------------------------

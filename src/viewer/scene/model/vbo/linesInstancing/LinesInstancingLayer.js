@@ -123,7 +123,6 @@ class LinesInstancingLayer {
      * @param cfg.color Color [0..255,0..255,0..255]
      * @param cfg.opacity Opacity [0..255].
      * @param cfg.meshMatrix Flat float 4x4 matrix.
-     * @param [cfg.worldMatrix] Flat float 4x4 matrix.
      * @param cfg.aabb Flat float AABB.
      * @returns {number} Portion ID.
      */
@@ -132,7 +131,6 @@ class LinesInstancingLayer {
         const color = cfg.color;
         const opacity = cfg.opacity;
         const meshMatrix = cfg.meshMatrix;
-        const worldMatrix = cfg.worldMatrix;
         const worldAABB = cfg.aabb;
 
         if (this._finalized) {
@@ -182,12 +180,7 @@ class LinesInstancingLayer {
             tempVec4a[1] = obb[i + 1];
             tempVec4a[2] = obb[i + 2];
             math.transformPoint4(meshMatrix, tempVec4a, tempVec4b);
-            if (worldMatrix) {
-                math.transformPoint4(worldMatrix, tempVec4b, tempVec4c);
-                math.expandAABB3Point3(worldAABB, tempVec4c);
-            } else {
-                math.expandAABB3Point3(worldAABB, tempVec4b);
-            }
+            math.expandAABB3Point3(worldAABB, tempVec4b);
         }
 
         if (this._state.origin) {

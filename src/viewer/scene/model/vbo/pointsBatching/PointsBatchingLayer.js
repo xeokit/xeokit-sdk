@@ -122,7 +122,6 @@ class PointsBatchingLayer {
      * @param [cfg.colors] Flat float colors array.
      * @param cfg.color Float RGB color [0..1,0..1,0..1]
      * @param [cfg.meshMatrix] Flat float 4x4 matrix
-     * @param [cfg.worldMatrix] Flat float 4x4 matrix
      * @param cfg.worldAABB Flat float AABB World-space AABB
      * @param cfg.pickColor Quantized pick color
      * @returns {number} Portion ID
@@ -139,7 +138,6 @@ class PointsBatchingLayer {
         const colorsCompressed = cfg.colorsCompressed;
         const colors = cfg.colors;
         const meshMatrix = cfg.meshMatrix;
-        const worldMatrix = cfg.worldMatrix;
         const worldAABB = cfg.worldAABB;
         const pickColor = cfg.pickColor;
 
@@ -170,12 +168,6 @@ class PointsBatchingLayer {
             worldAABB[3] = max[0];
             worldAABB[4] = max[1];
             worldAABB[5] = max[2];
-
-            if (worldMatrix) {
-                math.AABB3ToOBB3(worldAABB, tempOBB3);
-                math.transformOBB3(worldMatrix, tempOBB3);
-                math.OBB3ToAABB3(tempOBB3, worldAABB);
-            }
 
             numVerts = positionsCompressed.length / 3;
 
@@ -209,13 +201,7 @@ class PointsBatchingLayer {
                     buffer.positions[i + 2] = tempVec4b[2];
 
                     math.expandAABB3Point3(this._modelAABB, tempVec4b);
-
-                    if (worldMatrix) {
-                        math.transformPoint4(worldMatrix, tempVec4b, tempVec4c);
-                        math.expandAABB3Point3(worldAABB, tempVec4c);
-                    } else {
                         math.expandAABB3Point3(worldAABB, tempVec4b);
-                    }
                 }
 
             } else {
@@ -227,17 +213,9 @@ class PointsBatchingLayer {
                     tempVec4a[2] = buffer.positions[i + 2];
 
                     math.expandAABB3Point3(this._modelAABB, tempVec4a);
-
-                    if (worldMatrix) {
-                        math.transformPoint4(worldMatrix, tempVec4a, tempVec4b);
-                        math.expandAABB3Point3(worldAABB, tempVec4b);
-                    } else {
                         math.expandAABB3Point3(worldAABB, tempVec4a);
-                    }
                 }
             }
-
-
         }
 
         if (this._state.origin) {
