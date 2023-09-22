@@ -18,7 +18,7 @@
             background: darkblue;
             overflow: hidden;
             pointer-events: none;
-            margin-top: 65px;
+            margin-top: 75px;
             margin-left: 25px;
             /*display: none;*/
         }
@@ -73,7 +73,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin} from "../../dist/xeokit-sdk.es.js";
+    import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin} from "../../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera
@@ -88,6 +88,14 @@
     viewer.camera.eye = [-3.933, 2.855, 27.018];
     viewer.camera.look = [4.400, 3.724, 8.899];
     viewer.camera.up = [-0.018, 0.999, 0.039];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a DistanceMeasurementsPlugin
+    //------------------------------------------------------------------------------------------------------------------
+
+    const distanceMeasurements = new DistanceMeasurementsPlugin(viewer, {});
+
+    distanceMeasurements.control.activate();
 
     //----------------------------------------------------------------------------------------------------------------------
     // Load a model and fit it to view
@@ -146,9 +154,9 @@
         lensContainer.style.marginLeft = `25px`;
         if (pointerOnLens) {
             if (lensPosToggle) {
-                lensContainer.style.marginTop = `${canvasRect.bottom - canvasRect.top - lensCanvas.height - 65}px`;
+                lensContainer.style.marginTop = `${canvasRect.bottom - canvasRect.top - lensCanvas.height - 75}px`;
             } else {
-                lensContainer.style.marginTop = `65px`;
+                lensContainer.style.marginTop = `75px`;
             }
             lensPosToggle = !lensPosToggle;
         }
