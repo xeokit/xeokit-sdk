@@ -104,7 +104,7 @@ class PickController {
                 this.snapPickResult = snapPickResult;
                 this.snappedOrPicked = true;
                 this._needFireEvents = true;
-            }else {
+            } else {
                 this.schedulePickSurface = true; // Fallback
                 this.snapPickResult = null;
             }
@@ -158,7 +158,7 @@ class PickController {
                     this.pickedSurface = true;
                 }
                 this._needFireEvents = true;
-            }else   if (this.scheduleSnapOrPick) {
+            } else if (this.scheduleSnapOrPick) {
                 this.hoveredSnappedOrSurfaceOff = true;
                 this._needFireEvents = true;
             }
@@ -198,6 +198,11 @@ class PickController {
                 const pickResult = new PickResult();
                 pickResult.worldPos = this.snapPickResult.snappedWorldPos;
                 pickResult.canvasPos = this.snapPickResult.snappedCanvasPos;
+                if (this._configs.snapMode === "vertex") {
+                    pickResult.snappedToVertex = true;
+                } else {
+                    pickResult.snappedToEdge = true;
+                }
                 this._cameraControl.fire("hoverSnapOrSurface", pickResult, true);
                 this.snapPickResult = null;
             } else {

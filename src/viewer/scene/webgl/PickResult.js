@@ -48,6 +48,18 @@ class PickResult {
          */
         this.touchInput = false;
 
+        /**
+         * True when snapped to the nearest vertex position.
+         * @type {boolean}
+         */
+        this.snappedToVertex = false;
+
+        /**
+         * True when snapped to the nearest edge.
+         * @type {boolean}
+         */
+        this.snappedToEdge = false;
+
         this._canvasPos = new Int16Array([0, 0]);
         this._origin = new Float64Array([0, 0, 0]);
         this._direction = new Float64Array([0, 0, 0]);
@@ -319,6 +331,8 @@ class PickResult {
         this._gotWorldNormal = false;
         this._gotUV = false;
         this.touchInput = false;
+        this.snappedToVertex = false;
+        this.snappedToEdge = false;
     }
 }
 
