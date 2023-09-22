@@ -18,7 +18,7 @@
             background: darkblue;
             overflow: hidden;
             pointer-events: none;
-            margin-top: 75px;
+            margin-top: 85px;
             margin-left: 25px;
             /*display: none;*/
         }
@@ -154,9 +154,9 @@
         lensContainer.style.marginLeft = `25px`;
         if (pointerOnLens) {
             if (lensPosToggle) {
-                lensContainer.style.marginTop = `${canvasRect.bottom - canvasRect.top - lensCanvas.height - 75}px`;
+                lensContainer.style.marginTop = `${canvasRect.bottom - canvasRect.top - lensCanvas.height - 85}px`;
             } else {
-                lensContainer.style.marginTop = `75px`;
+                lensContainer.style.marginTop = `85px`;
             }
             lensPosToggle = !lensPosToggle;
         }
@@ -207,17 +207,17 @@
     // Mouse hover to snap to vertices
     //------------------------------------------------------------------------------------------------------------------
 
-    const canvasCursorDiv = document.createElement('div');
-    viewer.scene.canvas.canvas.parentNode.insertBefore(canvasCursorDiv, viewer.scene.canvas.canvas);
-    canvasCursorDiv.style.background = "black";
-    canvasCursorDiv.style.border = "2px solid blue";
-    canvasCursorDiv.style.borderRadius = "20px";
-    canvasCursorDiv.style.width = "10px";
-    canvasCursorDiv.style.height = "10px";
-    canvasCursorDiv.style.margin = "-200px -200px";
-    canvasCursorDiv.style.zIndex = "100000";
-    canvasCursorDiv.style.position = "absolute";
-    canvasCursorDiv.style.pointerEvents = "none";
+    // const canvasCursorDiv = document.createElement('div');
+    // viewer.scene.canvas.canvas.parentNode.insertBefore(canvasCursorDiv, viewer.scene.canvas.canvas);
+    // canvasCursorDiv.style.background = "black";
+    // canvasCursorDiv.style.border = "2px solid blue";
+    // canvasCursorDiv.style.borderRadius = "20px";
+    // canvasCursorDiv.style.width = "10px";
+    // canvasCursorDiv.style.height = "10px";
+    // canvasCursorDiv.style.margin = "-200px -200px";
+    // canvasCursorDiv.style.zIndex = "100000";
+    // canvasCursorDiv.style.position = "absolute";
+    // canvasCursorDiv.style.pointerEvents = "none";
 
     function pointerMoved(canvasPos) {
         const snapPickResult = viewer.scene.snapPick({
@@ -226,17 +226,17 @@
             snapMode: "vertex",
         });
         if (snapPickResult && snapPickResult.snappedCanvasPos) {
-            canvasCursorDiv.style.marginLeft = `${snapPickResult.snappedCanvasPos[0] - 10}px`;
-            canvasCursorDiv.style.marginTop = `${snapPickResult.snappedCanvasPos[1] - 10}px`;
-            canvasCursorDiv.style.background = "greenyellow";
-            canvasCursorDiv.style.border = "2px solid green";
+            // canvasCursorDiv.style.marginLeft = `${snapPickResult.snappedCanvasPos[0] - 10}px`;
+            // canvasCursorDiv.style.marginTop = `${snapPickResult.snappedCanvasPos[1] - 10}px`;
+            // canvasCursorDiv.style.background = "greenyellow";
+            // canvasCursorDiv.style.border = "2px solid green";
             setLensCenterAt(snapPickResult.snappedCanvasPos);
             setLensSnapCursorAt(snapPickResult.snappedCanvasPos);
         } else {
-            canvasCursorDiv.style.marginLeft = `${canvasPos[0] - 10}px`;
-            canvasCursorDiv.style.marginTop = `${canvasPos[1] - 10}px`;
-            canvasCursorDiv.style.background = "pink";
-            canvasCursorDiv.style.border = "2px solid red";
+            // canvasCursorDiv.style.marginLeft = `${canvasPos[0] - 10}px`;
+            // canvasCursorDiv.style.marginTop = `${canvasPos[1] - 10}px`;
+            // canvasCursorDiv.style.background = "pink";
+            // canvasCursorDiv.style.border = "2px solid red";
             setLensCenterAt(canvasPos);
             setLensSnapCursorAt(null);
         }
