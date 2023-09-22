@@ -144,8 +144,15 @@ class DistanceMeasurementsControl extends Component {
                 this.markerDiv.style.marginLeft = `${event.canvasPos[0] - 5}px`;
                 this.markerDiv.style.marginTop = `${event.canvasPos[1] - 5}px`;
                 this.markerDiv.style.background = "pink";
-                this.markerDiv.style.border = "2px solid red";
-            } else if (!this.active) {
+                if (event.snappedToVertex || event.snappedToEdge) {
+                    this.markerDiv.style.background = "greenyellow";
+                    this.markerDiv.style.border ="2px solid green";
+                } else {
+                    this.markerDiv.style.background = "pink";
+                    this.markerDiv.style.border = "2px solid red";
+                }
+
+            } else  {
                 this.markerDiv.style.marginLeft = `-10000px`;
                 this.markerDiv.style.marginTop = `-10000px`;
             }
@@ -158,6 +165,8 @@ class DistanceMeasurementsControl extends Component {
                 this._currentDistanceMeasurementByMouse.zAxisVisible = this._currentDistanceMeasurementByMouseInittouchState.zAxisVisible && this.plugin.defaultZAxisVisible;
                 this._currentDistanceMeasurementByMouse.targetVisible = this._currentDistanceMeasurementByMouseInittouchState.targetVisible;
                 this._currentDistanceMeasurementByMouse.target.worldPos = mouseWorldPos;
+                this.markerDiv.style.marginLeft = `-10000px`;
+                this.markerDiv.style.marginTop = `-10000px`;
             }
         });
 
