@@ -100,4 +100,16 @@ export declare class PickResult {
    * @type {Number[]}
    */
   get uv(): number[];
+
+  /**
+   * True when snapped to the nearest vertex position.
+   * @type {boolean}
+   */
+  snappedToVertex : false;
+
+  /**
+   * True when snapped to the nearest edge.
+   * @type {boolean}
+   */
+  snappedToEdge: boolean;
 }
