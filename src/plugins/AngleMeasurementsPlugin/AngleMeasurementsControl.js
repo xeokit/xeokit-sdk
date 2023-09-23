@@ -297,15 +297,18 @@ class AngleMeasurementsControl extends Component {
                             break;
                         case FINDING_CORNER:
                             this._currentAngleMeasurement.corner.worldPos = pickResult.worldPos;
+                            this._currentAngleMeasurement.originWireVisible = true;
                             this._currentAngleMeasurement.targetWireVisible = false;
                             this._currentAngleMeasurement.targetVisible = true;
                             this._currentAngleMeasurement.angleVisible = true;
+                            this._currentAngleMeasurement.cornerVisible = true;
                             this._state = FINDING_TARGET;
                             break;
                         case FINDING_TARGET:
                             this._currentAngleMeasurement.target.worldPos = pickResult.worldPos;
                             //  this._currentAngleMeasurement.approximate = false;
                             this._currentAngleMeasurement.targetVisible = true;
+                            this._currentAngleMeasurement.targetWireVisible = true;
                             this._currentAngleMeasurement.angleVisible = true;
                             this._currentAngleMeasurement.clickable = true;
                             this.fire("measurementEnd", this._currentAngleMeasurement);
