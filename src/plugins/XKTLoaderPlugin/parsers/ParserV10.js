@@ -154,7 +154,11 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
     const numTiles = eachTileEntitiesPortion.length;
 
     if (metaModel) {
-        metaModel.loadData(metadata); // Can be empty
+        metaModel.loadData(metadata, {
+            includeTypes: options.includeTypes,
+            excludeTypes: options.excludeTypes,
+            globalizeObjectIds: options.globalizeObjectIds
+        }); // Can be empty
     }
 
     // Create textures
@@ -425,7 +429,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
                                         atLastGeometry
                                             ? indices.length
                                             : eachGeometryIndicesPortion [geometryIndex + 1]));
-                                 geometryValid = (geometryArrays.geometryPositions.length > 0 && geometryArrays.geometryIndices.length > 0);
+                                geometryValid = (geometryArrays.geometryPositions.length > 0 && geometryArrays.geometryIndices.length > 0);
                                 break;
                             default:
                                 continue;
