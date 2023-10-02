@@ -45,7 +45,7 @@ class TrianglesBatchingLayer {
      */
     constructor(cfg) {
 
-        console.log("Creating TrianglesBatchingLayer");
+        console.info("Creating TrianglesBatchingLayer");
 
         /**
          * Owner model
