@@ -57,9 +57,6 @@ export class TrianglesDataTexturePickDepthRenderer {
             this._uTexturePerObjectIdOffsets
         );
 
-        let cameraEye = camera.eye;
-
-
         let rtcViewMatrix;
         let rtcCameraEye;
 
