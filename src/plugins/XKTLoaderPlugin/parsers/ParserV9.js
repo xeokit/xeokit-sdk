@@ -147,7 +147,11 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
     const numTiles = eachTileEntitiesPortion.length;
 
     if (metaModel) {
-        metaModel.loadData(metadata); // Can be empty
+        metaModel.loadData(metadata, {
+            includeTypes: options.includeTypes,
+            excludeTypes: options.excludeTypes,
+            globalizeObjectIds: options.globalizeObjectIds
+        }); // Can be empty
     }
 
     // Count instances of each geometry
