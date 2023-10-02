@@ -5,6 +5,7 @@ import {LASDefaultDataSource} from "./LASDefaultDataSource.js";
 import {math} from "../../viewer/index.js";
 import {parse} from '@loaders.gl/core';
 import {LASLoader} from '@loaders.gl/las/dist/esm/las-loader.js';
+import {loadLASHeader} from "./loadLASHeader";
 
 /**
  * {@link Viewer} plugin that loads lidar point cloud geometry from LAS files.
@@ -399,6 +400,9 @@ class LASLoaderPlugin extends Plugin {
             stats.numVertices = 0;
 
             try {
+
+                const lasHeader = loadLASHeader(arrayBuffer);
+
                 parse(arrayBuffer, LASLoader, options).then((parsedData) => {
 
                     const attributes = parsedData.attributes;
@@ -473,16 +477,20 @@ class LASLoaderPlugin extends Plugin {
                             createdAt: "",
                             schema: "",
                             creatingApplication: "",
-                            metaObjects: [{
-                                id: rootMetaObjectId,
-                                name: "Model",
-                                type: "Model"
-                            }, {
-                                id: pointsObjectId,
-                                name: "PointCloud (LAS)",
-                                type: "PointCloud",
-                                parent: rootMetaObjectId
-                            }],
+                            metaObjects: [
+                                {
+                                    id: rootMetaObjectId,
+                                    name: "Model",
+                                    type: "Model"
+                                },
+                                {
+                                    id: pointsObjectId,
+                                    name: "PointCloud (LAS)",
+                                    type: "PointCloud",
+                                    parent: rootMetaObjectId,
+                                    attributes: lasHeader || {}
+                                }
+                            ],
                             propertySets: []
                         };
                         const metaModelId = sceneModel.id;

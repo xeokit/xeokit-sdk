@@ -137,7 +137,7 @@ class MetaModel {
          * @property metaObjects
          * @type  {MetaObject[]}
          */
-        this.metaObjects=[];
+        this.metaObjects = [];
 
         /**
          * Connectivity graph.
@@ -158,7 +158,7 @@ class MetaModel {
      * Load metamodel data into this MetaModel.
      * @param metaModelData
      */
-    loadData(metaModelData, options={}) {
+    loadData(metaModelData, options = {}) {
 
         if (this.finalized) {
             throw "MetaScene already finalized - can't add more data";
@@ -274,13 +274,26 @@ class MetaModel {
         this.metaScene.fire("metaModelCreated", this.id);
     }
 
+    /**
+     * Gets this MetaModel as JSON.
+     * @returns {{schema: (String|string|*), createdAt: (String|string|*), metaObjects: *[], author: (String|string|*), id: (String|Number|string|number|*), creatingApplication: (String|string|*), projectId: (String|Number|string|number|*), propertySets: *[]}}
+     */
     getJSON() {
-
-        const metaObjects = [];
-
-        function visit(metaObject) {
+        const json = {
+            id: this.id,
+            projectId: this.projectId,
+            author: this.author,
+            createdAt: this.createdAt,
+            schema: this.schema,
+            creatingApplication: this.creatingApplication,
+            metaObjects: [],
+            propertySets: []
+        };
+        for (let i = 0, len = this.metaObjects.length; i < len; i++) {
+            const metaObject = this.metaObjects[i];
             const metaObjectCfg = {
                 id: metaObject.id,
+                originalSystemId: metaObject.originalSystemId,
                 extId: metaObject.extId,
                 type: metaObject.type,
                 name: metaObject.name
@@ -288,23 +301,38 @@ class MetaModel {
             if (metaObject.parent) {
                 metaObjectCfg.parent = metaObject.parent.id;
             }
-            metaObjects.push(metaObjectCfg);
-            const children = metaObject.children;
-            if (children) {
-                for (let i = 0, len = children.length; i < len; i++) {
-                    visit(children[i]);
-                }
+            if (metaObject.attributes) {
+                metaObjectCfg.attributes = metaObject.attributes;
             }
+            if (metaObject.propertySetIds) {
+                metaObjectCfg.propertySetIds = metaObject.propertySetIds;
+            }
+            json.metaObjects.push(metaObjectCfg);
         }
-
-        visit(this.rootMetaObject);
-
-        const json = {
-            id: this.id,
-            projectId: this.projectId,
-            revisionId: this.revisionId,
-            metaObjects: metaObjects
-        };
+        for (let i = 0, len = this.propertySets.length; i < len; i++) {
+            const propertySet = this.propertySets[i];
+            const propertySetCfg = {
+                id: propertySet.id,
+                originalSystemId: propertySet.originalSystemId,
+                extId: propertySet.extId,
+                type: propertySet.type,
+                name: propertySet.name,
+                propertyies: []
+            };
+            for (let j = 0, lenj = propertySet.properties.length; j < lenj; j++) {
+                const property = propertySet.properties[j];
+                const propertyCfg = {
+                    id: property.id,
+                    description: property.description,
+                    type: property.type,
+                    name: property.name,
+                    value: property.value,
+                    valueType: property.valueType
+                };
+                propertySetCfg.properties.push(propertyCfg);
+            }
+            json.propertySets.push(propertySetCfg);
+        }
         return json;
     }
 
