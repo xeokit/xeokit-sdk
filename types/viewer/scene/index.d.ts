@@ -1,6 +1,7 @@
 export * from "./Component";
 export * from "./Entity";
-
+export * from "./LineSet";
+export * from "./Bitmap";
 export * from "./camera";
 export * from "./CameraControl/CameraControl";
 export * from "./geometry";
