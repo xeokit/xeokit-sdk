@@ -115,7 +115,6 @@
     //----------------------------------------------------------------------------------------------------------------------
 
     const lasLoader = new LASLoaderPlugin(viewer, {
-        skip: 10, // Load every 10th point
         fp64: false, // Positions expected in 32-bit floats instead of 64-bit
         colorDepth: "auto" // Whether colors encoded using 8 or 16 bits - accepted values are "auto", 8 and 16
     });
