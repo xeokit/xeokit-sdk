@@ -71,6 +71,7 @@
     "typedoc": "^0.22.15"
   },
   "files": [
+    "/src",
     "/dist",
     "/types"
   ]
