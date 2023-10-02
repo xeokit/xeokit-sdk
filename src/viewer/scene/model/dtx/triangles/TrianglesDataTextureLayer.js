@@ -760,7 +760,7 @@ export class TrianglesDataTextureLayer {
      * flags/flags2 set since the previous invocation of `_beginDeferredFlags`.
      */
     _uploadDeferredFlags() {
-        //  console.log("_uploadDeferredFlags")
+        console.info("_uploadDeferredFlags")
         this._deferredSetFlagsActive = false;
         if (!this._deferredSetFlagsDirty) {
             return;
@@ -849,14 +849,14 @@ export class TrianglesDataTextureLayer {
         // object colors
         textureState.texturePerObjectIdColorsAndFlags._textureData.set(tempUint8Array4, subPortionId * 32);
         if (this._deferredSetFlagsActive) {
-            // console.log("_subPortionSetColor defer");
+            console.info("_subPortionSetColor defer");
             this._deferredSetFlagsDirty = true;
             return;
         }
         if (++this._numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
             this._beginDeferredFlags(); // Subsequent flags updates now deferred
         }
-        // console.log("_subPortionSetColor write through");
+        console.info("_subPortionSetColor write through");
         gl.bindTexture(gl.TEXTURE_2D, textureState.texturePerObjectIdColorsAndFlags._texture);
         gl.texSubImage2D(
             gl.TEXTURE_2D,
@@ -964,14 +964,14 @@ export class TrianglesDataTextureLayer {
         // object flags
         textureState.texturePerObjectIdColorsAndFlags._textureData.set(tempUint8Array4, subPortionId * 32 + 8);
         if (this._deferredSetFlagsActive || deferred) {
-            // console.log("_subPortionSetFlags set flags defer");
+            console.info("_subPortionSetFlags set flags defer");
             this._deferredSetFlagsDirty = true;
             return;
         }
         if (++this._numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
             this._beginDeferredFlags(); // Subsequent flags updates now deferred
         }
-        // console.log("_subPortionSetFlags set flags write through");
+        console.info("_subPortionSetFlags set flags write through");
         gl.bindTexture(gl.TEXTURE_2D, textureState.texturePerObjectIdColorsAndFlags._texture);
         gl.texSubImage2D(
             gl.TEXTURE_2D,
@@ -1018,7 +1018,7 @@ export class TrianglesDataTextureLayer {
         if (++this._numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
             this._beginDeferredFlags(); // Subsequent flags updates now deferred
         }
-        // console.log("_subPortionSetFlags2 set flags write through");
+        console.info("_subPortionSetFlags2 set flags write through");
         gl.bindTexture(gl.TEXTURE_2D, textureState.texturePerObjectIdColorsAndFlags._texture);
         gl.texSubImage2D(
             gl.TEXTURE_2D,
