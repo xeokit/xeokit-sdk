@@ -378,7 +378,7 @@ class MetaModel {
                 const propertySet = metaModelData.propertySets[i];
                 propertySet.originalSystemId = propertySet.id;
                 if (globalize) {
-                    propertySet.id = math.globalizeObjectId(mothis.id, propertySet.id);
+                    propertySet.id = math.globalizeObjectId(this.id, propertySet.id);
                 }
             }
         }
