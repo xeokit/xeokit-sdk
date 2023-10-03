@@ -29,7 +29,7 @@ export class PointerLens {
         this._lensContainer = document.createElement('div');
         this._lensContainer.style.border = "1px solid black";
         this._lensContainer.style.background = "white";
-        this._lensContainer.style.opacity = "0";
+    //    this._lensContainer.style.opacity = "0";
         this._lensContainer.style.borderRadius = "50%";
         this._lensContainer.style.width = "300px";
         this._lensContainer.style.height = "300px";
@@ -93,7 +93,7 @@ export class PointerLens {
             this._lensPosToggle = !this._lensPosToggle;
         }
         this._lensCanvasContext.clearRect(0, 0, this._lensCanvas.width, this._lensCanvas.height);
-        const size = Math.max(this._lensCanvas.width, this._lensCanvas.height) / zoomLevel;
+        const size = Math.max(this._lensCanvas.width, this._lensCanvas.height) / this._zoomLevel;
         this._lensCanvasContext.drawImage(
             this._canvasElement, // source canvas
             this._centerPos[0] - size / 2, // source x (zoom center)
@@ -152,6 +152,23 @@ export class PointerLens {
     }
 
     /**
+     * Sets the canvas central position of the lens.
+     * @param centerPos
+     */
+    set centerPos(centerPos) {
+        this._centerPos = centerPos;
+        this.update();
+    }
+
+    /**
+     * Gets the canvas central position of the lens.
+     * @returns {Number[]}
+     */
+    get centerPos() {
+        return this._centerPos;
+    }
+
+    /**
      * Sets the canvas coordinates of the pointer.
      * @param cursorPos
      */
@@ -175,6 +192,10 @@ export class PointerLens {
     set active(active) {
         this._active = active;
         this._lensContainer.style.visibility = active ? "visible" : "hidden";
+        if (!active) {
+            this._lensCursorDiv.style.marginLeft = `-100px`;
+            this._lensCursorDiv.style.marginTop = `-100px`;
+        }
         this.update();
     }
 
