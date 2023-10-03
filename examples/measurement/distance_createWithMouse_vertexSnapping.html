@@ -119,7 +119,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, ContextMenu, DistanceMeasurementsPlugin} from "../../dist/xeokit-sdk.es.js";
+    import {Viewer, XKTLoaderPlugin, ContextMenu, DistanceMeasurementsPlugin, PointerLens} from "../../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -162,7 +162,11 @@
     // DistanceMeasurementsPlugin
     //------------------------------------------------------------------------------------------------------------------
 
-    const distanceMeasurements = new DistanceMeasurementsPlugin(viewer, {});
+    const pointerLens = new PointerLens(viewer);
+
+    const distanceMeasurements = new DistanceMeasurementsPlugin(viewer, {
+        pointerLens
+    });
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a context menu to delete and configure measurements
@@ -238,10 +242,10 @@
         ]
     });
 
-    viewer.cameraControl.on("rightClick", function (e) {
-        canvasContextMenu.show(e.pagePos[0], e.pagePos[1]);
-        e.event.preventDefault();
-    });
+    // viewer.cameraControl.on("rightClick", function (e) {
+    //     canvasContextMenu.show(e.pagePos[0], e.pagePos[1]);
+    //     e.event.preventDefault();
+    // });
 
     //------------------------------------------------------------------------------------------------------------------
     // Create an DistanceMeasurementsPlugin, activate its DistanceMeasuremntsControl
