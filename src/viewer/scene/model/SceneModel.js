@@ -31,11 +31,11 @@ import {
     sRGBEncoding
 } from "../constants/constants.js";
 import {createPositionsDecodeMatrix, quantizePositions} from "./compression.js";
-import {uniquifyPositions} from "./dtx/triangles/calculateUniquePositions";
-import {rebucketPositions} from "./dtx/triangles/rebucketPositions";
-import {TrianglesDataTextureLayer} from "./dtx/triangles/TrianglesDataTextureLayer";
-import {SceneModelEntity} from "./SceneModelEntity";
-import {geometryCompressionUtils} from "../math/geometryCompressionUtils";
+import {uniquifyPositions} from "./dtx/triangles/calculateUniquePositions.js";
+import {rebucketPositions} from "./dtx/triangles/rebucketPositions.js";
+import {TrianglesDataTextureLayer} from "./dtx/triangles/TrianglesDataTextureLayer.js";
+import {SceneModelEntity} from "./SceneModelEntity.js";
+import {geometryCompressionUtils} from "../math/geometryCompressionUtils.js";
 
 const tempVec3a = math.vec3();
 const tempMat4 = math.mat4();

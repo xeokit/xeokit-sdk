@@ -1,5 +1,5 @@
-import {clusterizeV2} from "./cluster-helper";
-import {math} from "../math";
+import {clusterizeV2} from "./cluster-helper.js";
+import {math} from "../math/math.js";
 
 const tempVec3 = math.vec3();
 

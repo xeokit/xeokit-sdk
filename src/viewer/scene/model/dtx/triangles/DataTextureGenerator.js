@@ -1,6 +1,6 @@
-import {createRTCViewMat, math} from "../../../math";
-import {BindableDataTexture} from "./BindableDataTexture";
-import {dataTextureRamStats} from "./dataTextureRamStats";
+import {createRTCViewMat, math} from "../../../math/index.js";
+import {BindableDataTexture} from "./BindableDataTexture.js";
+import {dataTextureRamStats} from "./dataTextureRamStats.js";
 
 /**
  * @private

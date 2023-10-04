@@ -1,5 +1,5 @@
-import {Component} from "../Component";
-import {LODCullingManager} from "./LODCullingManager";
+import {Component} from "../Component.js";
+import {LODCullingManager} from "./LODCullingManager.js";
 
 /**
  * Manages LOD culling for {@link SceneModel} implementations.

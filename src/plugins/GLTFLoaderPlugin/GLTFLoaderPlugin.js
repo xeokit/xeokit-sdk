@@ -2,7 +2,7 @@ import {Plugin, SceneModel, utils} from "../../viewer/index.js"
 import {GLTFSceneModelLoader} from "./GLTFSceneModelLoader.js";
 
 import {GLTFDefaultDataSource} from "./GLTFDefaultDataSource.js";
-import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults";
+import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
 
 /**
  * {@link Viewer} plugin that loads models from [glTF](https://www.khronos.org/gltf/).

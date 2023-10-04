@@ -5,7 +5,7 @@
  *
  * @private
  */
-import {math} from "../math";
+import {math} from "../math/math.js";
 
 export class LODState {
 

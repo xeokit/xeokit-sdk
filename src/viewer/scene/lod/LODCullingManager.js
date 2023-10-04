@@ -1,4 +1,4 @@
-import {LODState} from "./LODState";
+import {LODState} from "./LODState.js";
 
 /**
  * @private
