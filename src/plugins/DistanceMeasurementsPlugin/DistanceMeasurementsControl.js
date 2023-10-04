@@ -134,7 +134,6 @@ class DistanceMeasurementsControl extends Component {
 
         const pointerLens = plugin.pointerLens;
 
-        const pickSurfacePrecisionEnabled = scene.pickSurfacePrecisionEnabled;
 
         let mouseHovering = false;
         const pointerWorldPos = math.vec3();
@@ -678,6 +677,7 @@ class DistanceMeasurementsControl extends Component {
 
                 enableCameraMouseControl();
                 clearTimeout(longTouchTimeout);
+                longTouchTimeout = null;
 
                 const touchX = event.changedTouches[0].clientX;
                 const touchY = event.changedTouches[0].clientY;
