@@ -212,12 +212,16 @@ class AngleMeasurementsPlugin extends Plugin {
      * @param {String} [cfg.id="AngleMeasurements"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {HTMLElement} [cfg.container] Container DOM element for markers and labels. Defaults to ````document.body````.
      * @param {string} [cfg.defaultColor=null] The default color of the dots, wire and label.
-    * @param {boolean} [cfg.defaultLabelsVisible=true] The default value of {@link AngleMeasurement.labelsVisible}.
+     * @param {boolean} [cfg.defaultLabelsVisible=true] The default value of {@link AngleMeasurement.labelsVisible}.
      * @param {number} [cfg.zIndex] If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
-    */
+     * @param {PointerLens} [cfg.pointerLens] A PointerLens to help the user position the pointer. This can be shared with other plugins.
+     */
     constructor(viewer, cfg = {}) {
 
         super("AngleMeasurements", viewer);
+
+        this._pointerLens = cfg.pointerLens;
+        this._pointerLens.active = false;
 
         this._container = cfg.container || document.body;
 
@@ -271,6 +275,14 @@ class AngleMeasurementsPlugin extends Plugin {
      */
     send(name, value) {
 
+    }
+
+    /**
+     * Gets the PointerLens attached to this AngleMeasurementsPlugin.
+     * @returns {PointerLens}
+     */
+    get pointerLens() {
+        return this._pointerLens;
     }
 
     /**
