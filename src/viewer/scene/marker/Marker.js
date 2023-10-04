@@ -1,7 +1,7 @@
 import {math} from '../math/math.js';
 import {Component} from '../Component.js';
 import {worldToRTCPos} from "../math/rtcCoords.js";
-import {SceneModelEntity} from "../model/SceneModelEntity";
+import {SceneModelEntity} from "../model/SceneModelEntity.js";
 
 const tempVec4a = math.vec4();
 const tempVec4b = math.vec4();

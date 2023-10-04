@@ -8,7 +8,7 @@ import {geometryCompressionUtils} from "../../../math/geometryCompressionUtils.j
 import {getBatchingRenderers} from "./TrianglesBatchingRenderers.js";
 import {TrianglesBatchingBuffer} from "./TrianglesBatchingBuffer.js";
 import {quantizePositions, transformAndOctEncodeNormals} from "../../compression.js";
-import {getSnapBatchingRenderers} from "../snapBatching/SnapBatchingRenderers";
+import {getSnapBatchingRenderers} from "../snapBatching/SnapBatchingRenderers.js";
 
 const tempMat4 = math.mat4();
 const tempMat4b = math.mat4();

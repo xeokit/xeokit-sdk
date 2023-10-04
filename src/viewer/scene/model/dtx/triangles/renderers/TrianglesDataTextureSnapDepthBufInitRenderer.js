@@ -1,6 +1,6 @@
 import {Program} from "../../../../webgl/Program.js";
 import {math} from "../../../../math/math.js";
-import {createRTCViewMat, getPlaneRTCPos} from "../../../../math";
+import {createRTCViewMat, getPlaneRTCPos} from "../../../../math/index.js";
 
 const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
