@@ -59,7 +59,7 @@ export class PointerLens {
         this._cursorPos = null;
         this._lensPosToggle = true;
 
-        this._zoomLevel = 2;
+        this._zoomLevel = cfg.zoomLevel || 2;
 
         this._onViewerRendering = this.viewer.scene.on("rendering", () => {
             if (this._active) {
