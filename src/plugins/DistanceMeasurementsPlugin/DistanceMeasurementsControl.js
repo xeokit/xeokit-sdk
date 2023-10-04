@@ -144,8 +144,11 @@ class DistanceMeasurementsControl extends Component {
                 this.markerDiv.style.marginLeft = `${event.canvasPos[0] - 5}px`;
                 this.markerDiv.style.marginTop = `${event.canvasPos[1] - 5}px`;
                 this.markerDiv.style.background = "pink";
-                if (event.snappedToVertex || event.snappedToEdge) {
+                if (event.snapType === "vertex") {
                     this.markerDiv.style.background = "greenyellow";
+                    this.markerDiv.style.border ="2px solid green";
+                } else if (event.snapType === "edge") {
+                    this.markerDiv.style.background = "lightblue";
                     this.markerDiv.style.border ="2px solid green";
                 } else {
                     this.markerDiv.style.background = "pink";
