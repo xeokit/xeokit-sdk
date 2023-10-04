@@ -16,6 +16,8 @@ import {math} from "../math/math.js";
 import {TouchPickHandler} from "./lib/handlers/TouchPickHandler.js";
 
 const DEFAULT_SNAP_PICK_RADIUS = 30;
+const DEFAULT_SNAP_VERTEX = true;
+const DEFAULT_SNAP_EDGE = true;
 
 /**
  * @desc Controls the {@link Camera} with user input, and fires events when the user interacts with pickable {@link Entity}s.
@@ -643,7 +645,8 @@ class CameraControl extends Component {
             smartPivot: false,
             doubleClickTimeFrame: 250,
             
-            snapMode: "vertex",
+            snapVertex: DEFAULT_SNAP_VERTEX,
+            snapEdge: DEFAULT_SNAP_EDGE,
             snapRadius: DEFAULT_SNAP_PICK_RADIUS,
 
             // Rotation
@@ -897,32 +900,39 @@ class CameraControl extends Component {
     }
 
     /**
-     * Sets the current snap mode for "hoverSnapOrSurface" events, to specify whether the pointer
-     * snaps to the nearest vertex or the nearest edge.
+     * Sets whether the pointer snap to vertex.
      *
-     * Accepted values are:
-     *
-     * * "vertex" - (default) snap to the nearest vertex, or
-     * * "edge" - snap to the nearest edge.
-     *
-     * @param {String} snapMode The snap mode: "vertex" or "edge".
+     * @param {boolean} snapVertex
      */
-    set snapMode(snapMode) {
-        snapMode = snapMode || "vertex";
-        if (snapMode !== "vertex" && snapMode !== "edge") {
-            this.error("Unsupported value for snapMode: " + snapMode + " - supported values are 'vertex' and 'edge' - defaulting to 'vertex'");
-            snapMode = "vertex";
-        }
-        this._configs.snapMode = snapMode;
+    set snapVertex(snapVertex) {
+        this._configs.snapVertex = !!snapVertex;
     }
 
     /**
-     * Gets the current snap mode.
+     * Gets whether the pointer snap to vertex.
      *
-     * @returns {String} The snap mode: "vertex" or "edge".
+     * @returns {boolean}
      */
-    get snapMode() {
-        return this._configs.snapMode;
+    get snapVertex() {
+        return this._configs.snapVertex;
+    }
+
+    /**
+     * Sets whether the pointer snap to edge.
+     *
+     * @param {boolean} snapEdge
+     */
+    set snapEdge(snapEdge) {
+        this._configs.snapEdge = !!snapEdge;
+    }
+
+    /**
+     * Gets whether the pointer snap to edge.
+     *
+     * @returns {boolean}
+     */
+    get snapEdge() {
+        return this._configs.snapEdge;
     }
 
     /**

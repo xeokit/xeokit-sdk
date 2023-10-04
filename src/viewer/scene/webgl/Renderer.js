@@ -1222,7 +1222,7 @@ const Renderer = function (scene, options) {
     })();
 
     function snapInitDepthBuf(frameCtx) {
-        frameCtx.snapPickLayerParams = {};
+        frameCtx.snapPickLayerParams = [];
         frameCtx.snapPickLayerNumber = 0;
         for (let type in drawableTypeInfo) {
             const drawableInfo = drawableTypeInfo[type];
@@ -1240,8 +1240,8 @@ const Renderer = function (scene, options) {
     }
 
     function snapPickDrawSnapDepths(frameCtx) {
-        frameCtx.snapPickLayerParams = {};
-        frameCtx.snapPickLayerNumber = 0;
+        frameCtx.snapPickLayerParams = frameCtx.snapPickLayerParams || [];
+        frameCtx.snapPickLayerNumber = frameCtx.snapPickLayerParams.length;
         for (let type in drawableTypeInfo) {
             const drawableInfo = drawableTypeInfo[type];
             const drawableList = drawableInfo.drawableList;
@@ -1267,12 +1267,17 @@ const Renderer = function (scene, options) {
 
     /**
      * @param {[number, number]} canvasPos
-     * @param {number} snapRadiusInPixels
-     * @param {"vertex"|"edge"} snapMode
+     * @param {number} [snapRadiusInPixels=30]
+     * @param {boolean} [snapVertex=true]
+     * @param {boolean} [snapEdge=true]
      *
-     * @returns {{worldPos:number[],snappedWorldPos:null|number[],snappedCanvasPos:null|number[]}}
+     * @returns {{worldPos:number[],snappedWorldPos:null|number[],snappedCanvasPos:null|number[], snapType:null|"vertex"|"edge"}}
      */
-    this.snapPick = function (canvasPos, snapRadiusInPixels = 50, snapMode = "vertex") {
+    this.snapPick = function (canvasPos, snapRadiusInPixels = 30, snapVertex = true, snapEdge = true) {
+
+        if (!snapVertex && !snapEdge) {
+            return this.pick({ canvasPos, pickSurface: true });
+        }
 
         frameCtx.reset();
         frameCtx.backfaces = true;
@@ -1297,8 +1302,6 @@ const Renderer = function (scene, options) {
             gl.drawingBufferWidth / (2 * snapRadiusInPixels),
             gl.drawingBufferHeight / (2 * snapRadiusInPixels),
         ];
-
-        frameCtx.snapMode = snapMode;
 
         // Bind and clear the snap render target
 
@@ -1334,9 +1337,26 @@ const Renderer = function (scene, options) {
 
         // a) init z-buffer
         const layerParamsSurface = snapInitDepthBuf(frameCtx);
-
+        
         // b) snap-pick
-        const layerParamsSnap = snapPickDrawSnapDepths(frameCtx);
+        const layerParamsSnap = []
+        frameCtx.snapPickLayerParams = layerParamsSnap;
+
+        gl.depthMask(false);
+
+        if (snapVertex && snapEdge) {
+            frameCtx.snapMode = "edge";
+            snapPickDrawSnapDepths(frameCtx);
+            
+            frameCtx.snapMode = "vertex";
+            frameCtx.snapPickLayerNumber++;
+    
+            snapPickDrawSnapDepths(frameCtx);
+        } else {
+            frameCtx.snapMode = snapVertex ? "vertex" : "edge";
+
+            snapPickDrawSnapDepths(frameCtx);
+        }
 
         // Read and decode the snapped coordinates
 
@@ -1354,7 +1374,7 @@ const Renderer = function (scene, options) {
         const pickResultMiddleXY = snapPickResultArray.slice(middleIndex, middleIndex + 4);
 
         if (pickResultMiddleXY[3] !== 0) {
-            const pickedLayerParmasSurface = layerParamsSurface[Math.abs(pickResultMiddleXY[3])];
+            const pickedLayerParmasSurface = layerParamsSurface[Math.abs(pickResultMiddleXY[3]) % layerParamsSurface.length];
             const origin = pickedLayerParmasSurface.origin;
             const scale = pickedLayerParmasSurface.coordinateScale;
             worldPos = [
@@ -1372,7 +1392,6 @@ const Renderer = function (scene, options) {
             if (snapPickResultArray[i + 3] > 0) {
                 const pixelNumber = Math.floor(i / 4);
                 const w = vertexPickBuffer.size[0];
-                const h = vertexPickBuffer.size[1];
                 const x = pixelNumber % w - Math.floor(w / 2);
                 const y = Math.floor(pixelNumber / w) - Math.floor(w / 2);
                 const dist = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
@@ -1380,6 +1399,7 @@ const Renderer = function (scene, options) {
                     x,
                     y,
                     dist,
+                    isVertex: snapVertex && snapEdge ? snapPickResultArray[i + 3] > layerParamsSnap.length / 2 : snapVertex,
                     result: [
                         snapPickResultArray[i + 0],
                         snapPickResultArray[i + 1],
@@ -1391,12 +1411,19 @@ const Renderer = function (scene, options) {
         }
 
         let snappedWorldPos = null;
+        let snapType = null;
 
         if (snapPickResult.length > 0) {
+            // vertex snap first, then edge snap
             snapPickResult.sort((a, b) => {
-                return a.dist - b.dist
+                if (a.isVertex !== b.isVertex) {
+                    return a.isVertex ? -1 : 1;
+                } else {
+                    return a.dist - b.dist;
+                }
             });
 
+            snapType = snapPickResult[0].isVertex ? "vertex" : "edge";
             snapPickResult = snapPickResult[0].result;
 
             const pickedLayerParmas = layerParamsSnap[snapPickResult[3]];
@@ -1422,6 +1449,7 @@ const Renderer = function (scene, options) {
         }
 
         return {
+            snapType,
             worldPos,
             snappedWorldPos,
             snappedCanvasPos
