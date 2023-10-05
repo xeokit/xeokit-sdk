@@ -351,14 +351,14 @@ class VBOSceneModelRenderer {
 
         }
 
-        this._aPosition.bindArrayBuffer(this._instancing ? state.positionsBuf : state.positionsBuf);
+        this._aPosition.bindArrayBuffer(state.positionsBuf);
 
         if (this._aUV) {
-            this._aUV.bindArrayBuffer(this._instancing ? state.uvBuf : state.uvBuf);
+            this._aUV.bindArrayBuffer(state.uvBuf);
         }
 
         if (this._aNormal) {
-            this._aNormal.bindArrayBuffer(this._instancing ? state.normalsBuf : state.normalsBuf);
+            this._aNormal.bindArrayBuffer(state.normalsBuf);
         }
 
         if (this._aMetallicRoughness) {
@@ -369,7 +369,7 @@ class VBOSceneModelRenderer {
         }
 
         if (this._aColor) {
-            this._aColor.bindArrayBuffer(state.colorsBuf ? state.colorsBuf : state.colorsBuf);
+            this._aColor.bindArrayBuffer(state.colorsBuf);
             if (this._instancing && state.colorsBuf) {
                 gl.vertexAttribDivisor(this._aColor.location, 1);
             }
@@ -521,7 +521,7 @@ class VBOSceneModelRenderer {
         }
 
         if (this._uUVDecodeMatrix) {
-            gl.uniformMatrix3fv(this._uUVDecodeMatrix, false, this._instancing ? state.uvDecodeMatrix : state.uvDecodeMatrix);
+            gl.uniformMatrix3fv(this._uUVDecodeMatrix, false, state.uvDecodeMatrix);
         }
 
         if (this._uIntensityRange && pointsMaterial.filterIntensity) {
@@ -793,6 +793,7 @@ class VBOSceneModelLineInstancingRenderer extends VBOSceneModelRenderer {
 }
 
 export {
+    VBOSceneModelRenderer,
     VBOSceneModelTriangleBatchingRenderer,
     VBOSceneModelTriangleBatchingEdgesRenderer,
     VBOSceneModelTriangleInstancingRenderer,
