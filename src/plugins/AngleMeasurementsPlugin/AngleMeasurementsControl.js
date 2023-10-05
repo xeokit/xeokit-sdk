@@ -249,6 +249,7 @@ class AngleMeasurementsControl extends Component {
                                 },
                                 approximate: true
                             });
+                            this._currentAngleMeasurement.clickable = false;
                             this._currentAngleMeasurement.originVisible = true;
                             this._currentAngleMeasurement.originWireVisible = true;
                             this._currentAngleMeasurement.cornerVisible = false;
@@ -424,6 +425,7 @@ class AngleMeasurementsControl extends Component {
                                                 worldPos: snapPickResult.snappedWorldPos
                                             }
                                         });
+                                        this._currentAngleMeasurement.clickable = false;
                                         this._currentAngleMeasurement.originVisible = true;
                                         this._currentAngleMeasurement.originWireVisible = false;
                                         this._currentAngleMeasurement.cornerVisible = false;
@@ -459,6 +461,7 @@ class AngleMeasurementsControl extends Component {
                                                     worldPos: pickResult.worldPos
                                                 }
                                             });
+                                            this._currentAngleMeasurement.clickable = false;
                                             this._currentAngleMeasurement.originVisible = true;
                                             this._currentAngleMeasurement.originWireVisible = false;
                                             this._currentAngleMeasurement.cornerVisible = false;
@@ -712,6 +715,7 @@ class AngleMeasurementsControl extends Component {
                                         worldPos: snapPickResult.snappedWorldPos
                                     }
                                 });
+                                this._currentAngleMeasurement.clickable = false;
                                 this._currentAngleMeasurement.originVisible = true;
                                 this._currentAngleMeasurement.originWireVisible = false;
                                 this._currentAngleMeasurement.cornerVisible = false;
@@ -747,6 +751,7 @@ class AngleMeasurementsControl extends Component {
                                             worldPos: pickResult.worldPos
                                         }
                                     });
+                                    this._currentAngleMeasurement.clickable = false;
                                     this._currentAngleMeasurement.originVisible = true;
                                     this._currentAngleMeasurement.originWireVisible = false;
                                     this._currentAngleMeasurement.cornerVisible = false;
@@ -980,6 +985,7 @@ class AngleMeasurementsControl extends Component {
                                         worldPos: pickResult.worldPos
                                     }
                                 });
+                                this._currentAngleMeasurement.clickable = false;
                                 this._currentAngleMeasurement.originVisible = true;
                                 this._currentAngleMeasurement.originWireVisible = false;
                                 this._currentAngleMeasurement.cornerVisible = false;
@@ -1020,6 +1026,7 @@ class AngleMeasurementsControl extends Component {
                                     worldPos: touchEndCanvasPos
                                 }
                             });
+                            this._currentAngleMeasurement.clickable = false;
                             this._currentAngleMeasurement.originVisible = true;
                             this._currentAngleMeasurement.originWireVisible = false;
                             this._currentAngleMeasurement.cornerVisible = false;
