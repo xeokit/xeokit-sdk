@@ -3,6 +3,15 @@ import {Component} from "../../viewer/scene/Component.js";
 import {math} from "../../viewer/scene/math/math.js";
 import {Marker} from "../../viewer/index.js";
 
+
+const TOUCH_FINDING_ORIGIN = 0;
+const QUICK_TOUCH_FINDING_START = 1;
+const LONG_TOUCH_FINDING_START = 2;
+const TOUCH_FINDING_TARGET = 3;
+const QUICK_TOUCH_FINDING_END = 4;
+const LONG_TOUCH_FINDING_END = 5;
+const TOUCH_CANCELING = 6;
+
 /**
  * Creates {@link DistanceMeasurement}s from mouse and touch input.
  *
@@ -29,7 +38,6 @@ class DistanceMeasurementsControl extends Component {
 
         this._active = false;
 
-        // Add a marker to the canvas
         const markerDiv = document.createElement('div');
         const canvas = this.scene.canvas.canvas;
         canvas.parentNode.insertBefore(markerDiv, canvas);
@@ -46,12 +54,9 @@ class DistanceMeasurementsControl extends Component {
 
         this.markerDiv = markerDiv;
 
-        // Mouse input uses a combo of events that requires us to track
-        // the current DistanceMeasurement under construction. This is not used for touch input, which
-        // just uses touch-move-release to make a measurement.
         this._currentDistanceMeasurement = null;
 
-        this._currentDistanceMeasurementDefaults = {
+        this._currentDistanceMeasurementInitState = {
             wireVisible: null,
             axisVisible: null,
             xAxisVisible: null,
@@ -60,29 +65,8 @@ class DistanceMeasurementsControl extends Component {
             targetVisible: null,
         }
 
-        // Shows 2D canvas pos of touch INIT
-        this._touchStartDot = new Dot(plugin._container, {
-            fillColor: plugin.defaultColor,
-            zIndex: plugin.zIndex + 1,
-            visible: false
-        });
-
-        // Tracks 3D world pos of touch INIT, dynamically calculates 2D canvas pos
-        this._touchStartMarker = new Marker(this, {
-            id: "distanceMeasurementMarker"
-        });
-
-        // Routes 2D canvas pos from Marker to Dot
-        this._touchStartMarker.on("canvasPos", (canvasPos) => {
-            this._touchStartDot.setPos(canvasPos[0], canvasPos[1]);
-        });
-
-        // Event handles from CameraControl
-        this._onMouseHoverSurface = null;
-        this._onMouseHoverOff = null;
-        this._onPickedNothing = null;
-
-        // Event handles from Scene.input
+        this._onCameraControlHoverSnapOrSurface = null;
+        this._onCameraControlHoverSnapOrSurfaceOff = null;
         this._onInputMouseDown = null;
         this._onInputMouseUp = null;
 
@@ -130,10 +114,8 @@ class DistanceMeasurementsControl extends Component {
         const cameraControl = plugin.viewer.cameraControl;
         const canvas = scene.canvas.canvas;
         const input = scene.input;
-        const startDot = this._touchStartDot;
 
         const pointerLens = plugin.pointerLens;
-
 
         let mouseHovering = false;
         const pointerWorldPos = math.vec3();
@@ -142,128 +124,139 @@ class DistanceMeasurementsControl extends Component {
         let pointerDownCanvasX;
         let pointerDownCanvasY;
 
-        const mouseCanvasClickTolerance = 20;
+        const clickTolerance = 20;
 
-        const FIRST_TOUCH_EXPECTED = 0;
-        const SECOND_TOUCH_EXPECTED = 1;
-        let touchState = FIRST_TOUCH_EXPECTED;
-        const touchCanvasClickTolerance = 5;
+        const MOUSE_FIRST_CLICK_EXPECTED = 0;
+        const MOUSE_SECOND_CLICK_EXPECTED = 1;
 
-        const touchStartCanvasPos = math.vec2();
-        const touchEndCanvasPos = math.vec2();
-        const touchStartWorldPos = math.vec3();
-
-        // this._onMouseHoverSurface = cameraControl.on("hoverSnapOrSurface", event => {
-        //     mouseHovering = true;
-        //     pointerWorldPos.set(event.worldPos);
-        //     pointerCanvasPos.set(event.canvasPos);
-        //     if (touchState === FIRST_TOUCH_EXPECTED) {
-        //         this.markerDiv.style.marginLeft = `${event.canvasPos[0] - 5}px`;
-        //         this.markerDiv.style.marginTop = `${event.canvasPos[1] - 5}px`;
-        //         this.markerDiv.style.background = "pink";
-        //         if (event.snappedToVertex || event.snappedToEdge) {
-        //             this.markerDiv.style.background = "greenyellow";
-        //             this.markerDiv.style.border = "2px solid green";
-        //         } else {
-        //             this.markerDiv.style.background = "pink";
-        //             this.markerDiv.style.border = "2px solid red";
-        //         }
-        //     } else {
-        //         this.markerDiv.style.marginLeft = `-10000px`;
-        //         this.markerDiv.style.marginTop = `-10000px`;
-        //     }
-        //     canvas.style.cursor = "pointer";
-        //     if (this._currentDistanceMeasurement) {
-        //         this._currentDistanceMeasurement.wireVisible = this._currentDistanceMeasurement.wireVisible;
-        //         this._currentDistanceMeasurement.axisVisible = this._currentDistanceMeasurement.axisVisible && this.plugin.defaultAxisVisible;
-        //         this._currentDistanceMeasurement.xAxisVisible = this._currentDistanceMeasurement.xAxisVisible && this.plugin.defaultXAxisVisible;
-        //         this._currentDistanceMeasurement.yAxisVisible = this._currentDistanceMeasurement.yAxisVisible && this.plugin.defaultYAxisVisible;
-        //         this._currentDistanceMeasurement.zAxisVisible = this._currentDistanceMeasurement.zAxisVisible && this.plugin.defaultZAxisVisible;
-        //         this._currentDistanceMeasurement.targetVisible = this._currentDistanceMeasurement.targetVisible;
-        //         this._currentDistanceMeasurement.target.worldPos = pointerWorldPos;
-        //         this.markerDiv.style.marginLeft = `-10000px`;
-        //         this.markerDiv.style.marginTop = `-10000px`;
-        //     }
-        // });
-        //
-        // this._onInputMouseDown = input.on("mousedown", (coords) => {
-        //     pointerDownCanvasX = coords[0];
-        //     pointerDownCanvasY = coords[1];
-        // });
-        //
-        // this._onInputMouseUp = input.on("mouseup", (coords) => {
-        //     if (coords[0] > pointerDownCanvasX + mouseCanvasClickTolerance ||
-        //         coords[0] < pointerDownCanvasX - mouseCanvasClickTolerance ||
-        //         coords[1] > pointerDownCanvasY + mouseCanvasClickTolerance ||
-        //         coords[1] < pointerDownCanvasY - mouseCanvasClickTolerance) {
-        //         return;
-        //     }
-        //     if (this._currentDistanceMeasurement) {
-        //         if (mouseHovering) {
-        //             this._currentDistanceMeasurement.clickable = true;
-        //             this.fire("measurementEnd", this._currentDistanceMeasurement);
-        //             this._currentDistanceMeasurement = null;
-        //         } else {
-        //             this._currentDistanceMeasurement.destroy();
-        //             this.fire("measurementCancel", this._currentDistanceMeasurement);
-        //             this._currentDistanceMeasurement = null;
-        //         }
-        //     } else {
-        //         if (mouseHovering) {
-        //             this._currentDistanceMeasurement = plugin.createMeasurement({
-        //                 id: math.createUUID(),
-        //                 origin: {
-        //                     worldPos: pointerWorldPos.slice()
-        //                 },
-        //                 target: {
-        //                     worldPos: pointerWorldPos.slice()
-        //                 },
-        //                 approximate: true
-        //             });
-        //             this._currentDistanceMeasurement.axisVisible = this._currentDistanceMeasurement.axisVisible && this.plugin.defaultAxisVisible;
-        //             this._currentDistanceMeasurement.xAxisVisible = this._currentDistanceMeasurement.xAxisVisible && this.plugin.defaultXAxisVisible;
-        //             this._currentDistanceMeasurement.yAxisVisible = this._currentDistanceMeasurement.yAxisVisible && this.plugin.defaultYAxisVisible;
-        //             this._currentDistanceMeasurement.zAxisVisible = this._currentDistanceMeasurement.zAxisVisible && this.plugin.defaultZAxisVisible;
-        //             this._currentDistanceMeasurement.wireVisible = this._currentDistanceMeasurement.wireVisible;
-        //             this._currentDistanceMeasurement.targetVisible = this._currentDistanceMeasurement.targetVisible;
-        //             this._currentDistanceMeasurement.clickable = false;
-        //             this.fire("measurementStart", this._currentDistanceMeasurement);
-        //         }
-        //     }
-        // });
-        //
-        // this._onMouseHoverOff = cameraControl.on("hoverSnapOrSurfaceOff", event => {
-        //     mouseHovering = false;
-        //     this.markerDiv.style.marginLeft = `-100px`;
-        //     this.markerDiv.style.marginTop = `-100px`;
-        //     if (this._currentDistanceMeasurement) {
-        //         this._currentDistanceMeasurement.wireVisible = false;
-        //         this._currentDistanceMeasurement.targetVisible = false;
-        //         this._currentDistanceMeasurement.axisVisible = false;
-        //     }
-        //     canvas.style.cursor = "default";
-        // });
+        this._mouseState = MOUSE_FIRST_CLICK_EXPECTED;
 
         //----------------------------------------------------------------------------------------------------
-        // Touch input always assumes mobile devices
-        //
+        // Mouse input 
         //----------------------------------------------------------------------------------------------------
 
         {
+            
+            this._onCameraControlHoverSnapOrSurface = cameraControl.on("hoverSnapOrSurface", event => {
+                mouseHovering = true;
+                pointerWorldPos.set(event.worldPos);
+                pointerCanvasPos.set(event.canvasPos);
+                if (this._mouseState === MOUSE_FIRST_CLICK_EXPECTED) {
+                    this.markerDiv.style.marginLeft = `${event.canvasPos[0] - 5}px`;
+                    this.markerDiv.style.marginTop = `${event.canvasPos[1] - 5}px`;
+                    this.markerDiv.style.background = "pink";
+                    if (event.snappedToVertex || event.snappedToEdge) {
+                        if (pointerLens) {
+                            pointerLens.visible = true;
+                            pointerLens.centerPos = event.cursorPos || event.canvasPos;
+                            pointerLens.cursorPos = event.canvasPos;
+                        }
+                        this.markerDiv.style.background = "greenyellow";
+                        this.markerDiv.style.border = "2px solid green";
+                    } else {
+                        if (pointerLens) {
+                            pointerLens.visible = true;
+                            pointerLens.centerPos = event.cursorPos || event.canvasPos;
+                            pointerLens.cursorPos = event.canvasPos;
+                        }
+                        this.markerDiv.style.background = "pink";
+                        this.markerDiv.style.border = "2px solid red";
+                    }
+                } else {
+                    this.markerDiv.style.marginLeft = `-10000px`;
+                    this.markerDiv.style.marginTop = `-10000px`;
+                }
+                canvas.style.cursor = "pointer";
+                if (this._currentDistanceMeasurement) {
+                    this._currentDistanceMeasurement.wireVisible = this._currentDistanceMeasurementInitState.wireVisible;
+                    this._currentDistanceMeasurement.axisVisible = this._currentDistanceMeasurementInitState.axisVisible && this.plugin.defaultAxisVisible;
+                    this._currentDistanceMeasurement.xAxisVisible = this._currentDistanceMeasurementInitState.xAxisVisible && this.plugin.defaultXAxisVisible;
+                    this._currentDistanceMeasurement.yAxisVisible = this._currentDistanceMeasurementInitState.yAxisVisible && this.plugin.defaultYAxisVisible;
+                    this._currentDistanceMeasurement.zAxisVisible = this._currentDistanceMeasurementInitState.zAxisVisible && this.plugin.defaultZAxisVisible;
+                    this._currentDistanceMeasurement.targetVisible = this._currentDistanceMeasurementInitState.targetVisible;
+                    this._currentDistanceMeasurement.target.worldPos = pointerWorldPos;
+                    this.markerDiv.style.marginLeft = `-10000px`;
+                    this.markerDiv.style.marginTop = `-10000px`;
+                }
+            });
 
+            this._onInputMouseDown = input.on("mousedown", (coords) => {
+                pointerDownCanvasX = coords[0];
+                pointerDownCanvasY = coords[1];
+            });
 
+            this._onInputMouseUp = input.on("mouseup", (coords) => {
+                if (coords[0] > pointerDownCanvasX + clickTolerance ||
+                    coords[0] < pointerDownCanvasX - clickTolerance ||
+                    coords[1] > pointerDownCanvasY + clickTolerance ||
+                    coords[1] < pointerDownCanvasY - clickTolerance) {
+                    return;
+                }
+                if (this._currentDistanceMeasurement) {
+                    if (mouseHovering) {
+                        this._currentDistanceMeasurement.clickable = true;
+                        this.fire("measurementEnd", this._currentDistanceMeasurement);
+                        this._currentDistanceMeasurement = null;
+                    } else {
+                        this._currentDistanceMeasurement.destroy();
+                        this.fire("measurementCancel", this._currentDistanceMeasurement);
+                        this._currentDistanceMeasurement = null;
+                    }
+                } else {
+                    if (mouseHovering) {
+                        this._currentDistanceMeasurement = plugin.createMeasurement({
+                            id: math.createUUID(),
+                            origin: {
+                                worldPos: pointerWorldPos.slice()
+                            },
+                            target: {
+                                worldPos: pointerWorldPos.slice()
+                            },
+                            approximate: true
+                        });
+                        this._currentDistanceMeasurementInitState.axisVisible = this._currentDistanceMeasurement.axisVisible && this.plugin.defaultAxisVisible;
+                        this._currentDistanceMeasurementInitState.xAxisVisible = this._currentDistanceMeasurement.xAxisVisible && this.plugin.defaultXAxisVisible;
+                        this._currentDistanceMeasurementInitState.yAxisVisible = this._currentDistanceMeasurement.yAxisVisible && this.plugin.defaultYAxisVisible;
+                        this._currentDistanceMeasurementInitState.zAxisVisible = this._currentDistanceMeasurement.zAxisVisible && this.plugin.defaultZAxisVisible;
+                        this._currentDistanceMeasurementInitState.wireVisible = this._currentDistanceMeasurement.wireVisible;
+                        this._currentDistanceMeasurementInitState.targetVisible = this._currentDistanceMeasurement.targetVisible;
+                        this._currentDistanceMeasurement.clickable = false;
+                        this.fire("measurementStart", this._currentDistanceMeasurement);
+                    }
+                }
+            });
+
+            this._onCameraControlHoverSnapOrSurfaceOff = cameraControl.on("hoverSnapOrSurfaceOff", event => {
+                if (pointerLens) {
+                    pointerLens.visible = true;
+                    pointerLens.centerPos = event.cursorPos || event.canvasPos;
+                    pointerLens.cursorPos = event.canvasPos;
+                }
+                mouseHovering = false;
+                this.markerDiv.style.marginLeft = `-100px`;
+                this.markerDiv.style.marginTop = `-100px`;
+                if (this._currentDistanceMeasurement) {
+                    this._currentDistanceMeasurement.wireVisible = false;
+                    this._currentDistanceMeasurement.targetVisible = false;
+                    this._currentDistanceMeasurement.axisVisible = false;
+                }
+                canvas.style.cursor = "default";
+            });
+        }
+
+        //----------------------------------------------------------------------------------------------------
+        // Touch input always assumes mobile devices
+        //----------------------------------------------------------------------------------------------------
+
+        {
             let longTouchTimeout = null;
 
             const disableCameraMouseControl = () => {
                 this.plugin.viewer.cameraControl.active = false;
-                this.plugin.viewer.cameraControl._handlers[1]._active = false;
-                this.plugin.viewer.cameraControl._handlers[5]._active = false;
             }
 
             const enableCameraMouseControl = () => {
                 this.plugin.viewer.cameraControl.active = true;
-                this.plugin.viewer.cameraControl._handlers[1]._active = true;
-                this.plugin.viewer.cameraControl._handlers[5]._active = true;
             }
 
             const scheduleSurfacePickIfNeeded = () => {
@@ -273,16 +266,7 @@ class DistanceMeasurementsControl extends Component {
                 }
             }
 
-
-            const FINDING_START = 0;
-            const QUICK_TOUCH_FINDING_START = 1;
-            const LONG_TOUCH_FINDING_START = 2;
-            const FINDING_END = 3;
-            const QUICK_TOUCH_FINDING_END = 4;
-            const LONG_TOUCH_FINDING_END = 5;
-            const CANCELING = 6;
-
-            let state = FINDING_START;
+            this._mouseState = TOUCH_FINDING_ORIGIN;
 
             const touchStartCanvasPos = math.vec2();
             const touchMoveCanvasPos = math.vec2();
@@ -302,44 +286,43 @@ class DistanceMeasurementsControl extends Component {
                 touchStartCanvasPos.set([touchX, touchY]);
                 touchMoveCanvasPos.set([touchX, touchY]);
 
-                switch (state) {
+                switch (this._mouseState) {
 
-                    case FINDING_START:
+                    case TOUCH_FINDING_ORIGIN:
                         if (currentNumTouches !== 1 && longTouchTimeout !== null) { // Two or more fingers down
                             clearTimeout(longTouchTimeout);
                             longTouchTimeout = null;
-                            state = CANCELING;
-                            // console.log("touchstart: state= FINDING_START -> CANCELING")
+                            this._mouseState = TOUCH_CANCELING;
+                            // console.log("touchstart: this._mouseState= TOUCH_FINDING_ORIGIN -> TOUCH_CANCELING")
                             return;
                         }
                         if (currentNumTouches === 1) { // One finger down
                             longTouchTimeout = setTimeout(() => {
                                 longTouchTimeout = null;
                                 if (currentNumTouches !== 1 ||
-                                    touchMoveCanvasPos[0] > touchStartCanvasPos[0] + mouseCanvasClickTolerance ||
-                                    touchMoveCanvasPos[0] < touchStartCanvasPos[0] - mouseCanvasClickTolerance ||
-                                    touchMoveCanvasPos[1] > touchStartCanvasPos[1] + mouseCanvasClickTolerance ||
-                                    touchMoveCanvasPos[1] < touchStartCanvasPos[1] - mouseCanvasClickTolerance) {
+                                    touchMoveCanvasPos[0] > touchStartCanvasPos[0] + clickTolerance ||
+                                    touchMoveCanvasPos[0] < touchStartCanvasPos[0] - clickTolerance ||
+                                    touchMoveCanvasPos[1] > touchStartCanvasPos[1] + clickTolerance ||
+                                    touchMoveCanvasPos[1] < touchStartCanvasPos[1] - clickTolerance) {
                                     return;   // Has moved
                                 }
                                 // Long touch
                                 disableCameraMouseControl();
-                                if (this.plugin.pointerLens) {
-                                    this.plugin.pointerLens.active = true;
-                                    this.plugin.pointerLens.centerPos = touchStartCanvasPos;
-                                    this.plugin.pointerLens.cursorPos = touchStartCanvasPos;
+                                if (pointerLens) {
+                                    pointerLens.visible = true;
+                                    pointerLens.centerPos = touchStartCanvasPos;
+                                    pointerLens.cursorPos = touchStartCanvasPos;
                                 }
-
-                                if (this.plugin.pointerLens) {
-                                    this.plugin.pointerLens.centerPos = touchMoveCanvasPos;
+                                if (pointerLens) {
+                                    pointerLens.centerPos = touchMoveCanvasPos;
                                 }
                                 const snapPickResult = scene.snapPick({
                                     canvasPos: touchMoveCanvasPos,
                                     snapMode: this._snapMode
                                 });
                                 if (snapPickResult && snapPickResult.snappedWorldPos) {
-                                    if (this.plugin.pointerLens) {
-                                        this.plugin.pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
+                                    if (pointerLens) {
+                                        pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
                                     }
                                     pointerWorldPos.set(snapPickResult.snappedWorldPos);
                                     if (!this._currentDistanceMeasurement) {
@@ -370,8 +353,8 @@ class DistanceMeasurementsControl extends Component {
                                         pickSurface: true
                                     })
                                     if (pickResult && pickResult.worldPos) {
-                                        if (this.plugin.pointerLens) {
-                                            this.plugin.pointerLens.cursorPos = pickResult.canvasPos;
+                                        if (pointerLens) {
+                                            pointerLens.cursorPos = pickResult.canvasPos;
                                         }
                                         pointerWorldPos.set(pickResult.worldPos);
                                         if (!this._currentDistanceMeasurement) {
@@ -398,20 +381,20 @@ class DistanceMeasurementsControl extends Component {
 
                                         this.fire("measurementStart", this._currentDistanceMeasurement);
                                     } else {
-                                        if (this.plugin.pointerLens) {
-                                            this.plugin.pointerLens.cursorPos = null;
+                                        if (pointerLens) {
+                                            pointerLens.cursorPos = null;
                                         }
                                     }
                                 }
-                                state = LONG_TOUCH_FINDING_START;
-                                // console.log("touchstart: state= FINDING_START -> LONG_TOUCH_FINDING_START")
+                                this._mouseState = LONG_TOUCH_FINDING_START;
+                                // console.log("touchstart: this._mouseState= TOUCH_FINDING_ORIGIN -> LONG_TOUCH_FINDING_START")
                             }, this._mobileModeLongPressTimeMs);
-                            state = QUICK_TOUCH_FINDING_START;
-                            // console.log("touchstart: state= FINDING_START -> QUICK_TOUCH_FINDING_START")
+                            this._mouseState = QUICK_TOUCH_FINDING_START;
+                            // console.log("touchstart: this._mouseState= TOUCH_FINDING_ORIGIN -> QUICK_TOUCH_FINDING_START")
                         }
                         break;
 
-                    case FINDING_END:
+                    case TOUCH_FINDING_TARGET:
                         if (currentNumTouches !== 1 && longTouchTimeout !== null) { // Two or more fingers down
                             clearTimeout(longTouchTimeout);
                             longTouchTimeout = null;
@@ -421,18 +404,18 @@ class DistanceMeasurementsControl extends Component {
                             longTouchTimeout = setTimeout(() => {
                                 longTouchTimeout = null;
                                 if (currentNumTouches !== 1 ||
-                                    touchMoveCanvasPos[0] > touchStartCanvasPos[0] + mouseCanvasClickTolerance ||
-                                    touchMoveCanvasPos[0] < touchStartCanvasPos[0] - mouseCanvasClickTolerance ||
-                                    touchMoveCanvasPos[1] > touchStartCanvasPos[1] + mouseCanvasClickTolerance ||
-                                    touchMoveCanvasPos[1] < touchStartCanvasPos[1] - mouseCanvasClickTolerance) {
+                                    touchMoveCanvasPos[0] > touchStartCanvasPos[0] + clickTolerance ||
+                                    touchMoveCanvasPos[0] < touchStartCanvasPos[0] - clickTolerance ||
+                                    touchMoveCanvasPos[1] > touchStartCanvasPos[1] + clickTolerance ||
+                                    touchMoveCanvasPos[1] < touchStartCanvasPos[1] - clickTolerance) {
                                     // Has moved
                                     return;
                                 }
                                 // Long touch
                                 disableCameraMouseControl();
-                                if (this.plugin.pointerLens) {
-                                    this.plugin.pointerLens.active = true;
-                                    this.plugin.pointerLens.centerPos = touchStartCanvasPos;
+                                if (pointerLens) {
+                                    pointerLens.visible = true;
+                                    pointerLens.centerPos = touchStartCanvasPos;
                                 }
 
                                 const snapPickResult = scene.snapPick({
@@ -440,8 +423,8 @@ class DistanceMeasurementsControl extends Component {
                                     snapMode: this._snapMode
                                 });
                                 if (snapPickResult && snapPickResult.snappedWorldPos) {
-                                    if (this.plugin.pointerLens) {
-                                        this.plugin.pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
+                                    if (pointerLens) {
+                                        pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
                                     }
                                     pointerWorldPos.set(snapPickResult.snappedWorldPos);
                                     this._currentDistanceMeasurement.target.worldPos = snapPickResult.snappedWorldPos;
@@ -455,8 +438,8 @@ class DistanceMeasurementsControl extends Component {
                                         pickSurface: true
                                     })
                                     if (pickResult && pickResult.worldPos) {
-                                        if (this.plugin.pointerLens) {
-                                            this.plugin.pointerLens.cursorPos = pickResult.canvasPos;
+                                        if (pointerLens) {
+                                            pointerLens.cursorPos = pickResult.canvasPos;
                                         }
                                         pointerWorldPos.set(pickResult.worldPos);
                                         this._currentDistanceMeasurement.target.worldPos = pickResult.worldPos;
@@ -465,16 +448,16 @@ class DistanceMeasurementsControl extends Component {
                                         this._currentDistanceMeasurement.labelsVisible = true;
                                         this.fire("measurementStart", this._currentDistanceMeasurement);
                                     } else {
-                                        if (this.plugin.pointerLens) {
-                                            this.plugin.pointerLens.cursorPos = null;
+                                        if (pointerLens) {
+                                            pointerLens.cursorPos = null;
                                         }
                                     }
                                 }
-                                state = LONG_TOUCH_FINDING_END;
-                                // console.log("touchstart: state= FINDING_END -> LONG_TOUCH_FINDING_END")
+                                this._mouseState = LONG_TOUCH_FINDING_END;
+                                // console.log("touchstart: this._mouseState= TOUCH_FINDING_TARGET -> LONG_TOUCH_FINDING_END")
                             }, this._mobileModeLongPressTimeMs);
-                            state = QUICK_TOUCH_FINDING_END;
-                            // console.log("touchstart: state= FINDING_END -> QUICK_TOUCH_FINDING_END")
+                            this._mouseState = QUICK_TOUCH_FINDING_END;
+                            // console.log("touchstart: this._mouseState= TOUCH_FINDING_TARGET -> QUICK_TOUCH_FINDING_END")
                         }
                         break;
 
@@ -484,8 +467,8 @@ class DistanceMeasurementsControl extends Component {
                             longTouchTimeout = null;
                         }
                         enableCameraMouseControl();
-                        state = CANCELING;
-                        // console.log("touchstart: state= default -> CANCELING")
+                        this._mouseState = TOUCH_CANCELING;
+                        // console.log("touchstart: this._mouseState= default -> TOUCH_CANCELING")
 
                         return;
                 }
@@ -509,32 +492,32 @@ class DistanceMeasurementsControl extends Component {
                 let snapPickResult;
                 let pickResult;
 
-                switch (state) {
+                switch (this._mouseState) {
 
-                    case CANCELING:
+                    case TOUCH_CANCELING:
                         break;
 
-                    case FINDING_START:
-                        state = FINDING_START;
-                        // console.log("touchmove: state= FINDING_START -> FINDING_START")
+                    case TOUCH_FINDING_ORIGIN:
+                        this._mouseState = TOUCH_FINDING_ORIGIN;
+                        // console.log("touchmove: this._mouseState= TOUCH_FINDING_ORIGIN -> TOUCH_FINDING_ORIGIN")
                         break;
 
                     case QUICK_TOUCH_FINDING_START:
-                        state = QUICK_TOUCH_FINDING_START;
-                        // console.log("touchmove: state= QUICK_TOUCH_FINDING_START -> QUICK_TOUCH_FINDING_START")
+                        this._mouseState = QUICK_TOUCH_FINDING_START;
+                        // console.log("touchmove: this._mouseState= QUICK_TOUCH_FINDING_START -> QUICK_TOUCH_FINDING_START")
                         break;
 
                     case LONG_TOUCH_FINDING_START:
-                        if (this.plugin.pointerLens) {
-                            this.plugin.pointerLens.centerPos = touchMoveCanvasPos;
+                        if (pointerLens) {
+                            pointerLens.centerPos = touchMoveCanvasPos;
                         }
                         snapPickResult = scene.snapPick({
                             canvasPos: touchMoveCanvasPos,
                             snapMode: this._snapMode
                         });
                         if (snapPickResult && snapPickResult.snappedWorldPos) {
-                            if (this.plugin.pointerLens) {
-                                this.plugin.pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
+                            if (pointerLens) {
+                                pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
                             }
                             pointerWorldPos.set(snapPickResult.snappedWorldPos);
                             if (!this._currentDistanceMeasurement) {
@@ -566,8 +549,8 @@ class DistanceMeasurementsControl extends Component {
                                 pickSurface: true
                             })
                             if (pickResult && pickResult.worldPos) {
-                                if (this.plugin.pointerLens) {
-                                    this.plugin.pointerLens.cursorPos = pickResult.canvasPos;
+                                if (pointerLens) {
+                                    pointerLens.cursorPos = pickResult.canvasPos;
                                 }
                                 pointerWorldPos.set(pickResult.worldPos);
                                 if (!this._currentDistanceMeasurement) {
@@ -594,47 +577,47 @@ class DistanceMeasurementsControl extends Component {
 
                                 this.fire("measurementStart", this._currentDistanceMeasurement);
                             } else {
-                                if (this.plugin.pointerLens) {
-                                    this.plugin.pointerLens.cursorPos = null;
+                                if (pointerLens) {
+                                    pointerLens.cursorPos = null;
                                 }
                             }
                         }
-                        state = LONG_TOUCH_FINDING_START;
-                        // console.log("touchmove: state= LONG_TOUCH_FINDING_START -> LONG_TOUCH_FINDING_START")
+                        this._mouseState = LONG_TOUCH_FINDING_START;
+                        // console.log("touchmove: this._mouseState= LONG_TOUCH_FINDING_START -> LONG_TOUCH_FINDING_START")
                         break;
 
-                    case FINDING_END:
-                        state = FINDING_END;
-                        // console.log("touchmove: state= FINDING_END -> FINDING_END")
+                    case TOUCH_FINDING_TARGET:
+                        this._mouseState = TOUCH_FINDING_TARGET;
+                        // console.log("touchmove: this._mouseState= TOUCH_FINDING_TARGET -> TOUCH_FINDING_TARGET")
                         break;
 
                     case QUICK_TOUCH_FINDING_END:
-                        state = FINDING_END;
-                        // console.log("touchmove: state= QUICK_TOUCH_FINDING_END -> QUICK_TOUCH_FINDING_END")
+                        this._mouseState = TOUCH_FINDING_TARGET;
+                        // console.log("touchmove: this._mouseState= QUICK_TOUCH_FINDING_END -> QUICK_TOUCH_FINDING_END")
                         break;
 
                     case LONG_TOUCH_FINDING_END:
                         if (currentNumTouches !== 1 && longTouchTimeout !== null) { // Two or more fingers down
                             clearTimeout(longTouchTimeout);
                             longTouchTimeout = null;
-                            if (this.plugin.pointerLens) {
-                                this.plugin.pointerLens.active = false;
+                            if (pointerLens) {
+                                pointerLens.visible = false;
                             }
                             enableCameraMouseControl();
-                            state = CANCELING;
-                            // console.log("touchmove: state= QUICK_TOUCH_FINDING_END -> CANCELING")
+                            this._mouseState = TOUCH_CANCELING;
+                            // console.log("touchmove: this._mouseState= QUICK_TOUCH_FINDING_END -> TOUCH_CANCELING")
                             return;
                         }
-                        if (this.plugin.pointerLens) {
-                            this.plugin.pointerLens.centerPos = touchMoveCanvasPos;
+                        if (pointerLens) {
+                            pointerLens.centerPos = touchMoveCanvasPos;
                         }
                         snapPickResult = scene.snapPick({
                             canvasPos: touchMoveCanvasPos,
                             snapMode: this._snapMode
                         });
                         if (snapPickResult && snapPickResult.snappedWorldPos) {
-                            if (this.plugin.pointerLens) {
-                                this.plugin.pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
+                            if (pointerLens) {
+                                pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
                             }
                             this._currentDistanceMeasurement.target.worldPos = snapPickResult.snappedWorldPos;
                             this._currentDistanceMeasurement.targetVisible = true;
@@ -646,8 +629,8 @@ class DistanceMeasurementsControl extends Component {
                                 pickSurface: true
                             })
                             if (pickResult && pickResult.worldPos) {
-                                if (this.plugin.pointerLens) {
-                                    this.plugin.pointerLens.cursorPos = pickResult.canvasPos;
+                                if (pointerLens) {
+                                    pointerLens.cursorPos = pickResult.canvasPos;
                                 }
                                 this._currentDistanceMeasurement.target.worldPos = pickResult.worldPos;
                                 this._currentDistanceMeasurement.targetVisible = true;
@@ -656,12 +639,12 @@ class DistanceMeasurementsControl extends Component {
 
                             }
                         }
-                        state = LONG_TOUCH_FINDING_END;
+                        this._mouseState = LONG_TOUCH_FINDING_END;
                         break;
 
                     default:
-                        state = FINDING_START;
-                        // console.log("touchmove: state= default -> FINDING_START")
+                        this._mouseState = TOUCH_FINDING_ORIGIN;
+                        // console.log("touchmove: this._mouseState= default -> TOUCH_FINDING_ORIGIN")
                         break;
                 }
 
@@ -684,35 +667,35 @@ class DistanceMeasurementsControl extends Component {
 
                 touchEndCanvasPos.set([touchX, touchY]);
 
-                switch (state) {
+                switch (this._mouseState) {
 
-                    case CANCELING:
-                        state = FINDING_START;
-                        // console.log("touchend: state= CANCELING -> FINDING_START")
+                    case TOUCH_CANCELING:
+                        this._mouseState = TOUCH_FINDING_ORIGIN;
+                        // console.log("touchend: this._mouseState= TOUCH_CANCELING -> TOUCH_FINDING_ORIGIN")
                         break;
 
-                    case FINDING_START:
-                        state = FINDING_START;
-                        // console.log("touchend: state= FINDING_START -> FINDING_START")
+                    case TOUCH_FINDING_ORIGIN:
+                        this._mouseState = TOUCH_FINDING_ORIGIN;
+                        // console.log("touchend: this._mouseState= TOUCH_FINDING_ORIGIN -> TOUCH_FINDING_ORIGIN")
                         break;
 
-                    case FINDING_END:
-                        state = FINDING_END;
-                        // console.log("touchend: state= FINDING_END -> FINDING_END")
+                    case TOUCH_FINDING_TARGET:
+                        this._mouseState = TOUCH_FINDING_TARGET;
+                        // console.log("touchend: this._mouseState= TOUCH_FINDING_TARGET -> TOUCH_FINDING_TARGET")
                         break;
 
                     case QUICK_TOUCH_FINDING_START:
                         if (currentNumTouches !== 1 ||
-                            touchEndCanvasPos[0] > touchStartCanvasPos[0] + mouseCanvasClickTolerance ||
-                            touchEndCanvasPos[0] < touchStartCanvasPos[0] - mouseCanvasClickTolerance ||
-                            touchEndCanvasPos[1] > touchStartCanvasPos[1] + mouseCanvasClickTolerance ||
-                            touchEndCanvasPos[1] < touchStartCanvasPos[1] - mouseCanvasClickTolerance) {
+                            touchEndCanvasPos[0] > touchStartCanvasPos[0] + clickTolerance ||
+                            touchEndCanvasPos[0] < touchStartCanvasPos[0] - clickTolerance ||
+                            touchEndCanvasPos[1] > touchStartCanvasPos[1] + clickTolerance ||
+                            touchEndCanvasPos[1] < touchStartCanvasPos[1] - clickTolerance) {
                             if (this._currentDistanceMeasurement) {
                                 this._currentDistanceMeasurement.destroy();
                                 this._currentDistanceMeasurement = null;
                             }
-                            state = FINDING_START;
-                            // console.log("touchend: state= QUICK_TOUCH_FINDING_START (pointer moved, destroy measurement) -> FINDING_START")
+                            this._mouseState = TOUCH_FINDING_ORIGIN;
+                            // console.log("touchend: this._mouseState= QUICK_TOUCH_FINDING_START (pointer moved, destroy measurement) -> TOUCH_FINDING_ORIGIN")
                             break;
                         } else {
                             const pickResult = scene.pick({
@@ -720,8 +703,8 @@ class DistanceMeasurementsControl extends Component {
                                 pickSurface: true
                             })
                             if (pickResult && pickResult.worldPos) {
-                                if (this.plugin.pointerLens) {
-                                    this.plugin.pointerLens.cursorPos = pickResult.canvasPos;
+                                if (pointerLens) {
+                                    pointerLens.cursorPos = pickResult.canvasPos;
                                 }
                                 this._currentDistanceMeasurement = plugin.createMeasurement({
                                     id: math.createUUID(),
@@ -741,24 +724,24 @@ class DistanceMeasurementsControl extends Component {
                                 this._currentDistanceMeasurement.clickable = false;
                                 this._currentDistanceMeasurement.wireVisible = false;
                                 this.fire("measurementStart", this._currentDistanceMeasurement);
-                          //      enableCameraMouseControl();
-                                state = FINDING_END;
-                                // console.log("touchend: state= QUICK_TOUCH_FINDING_START (picked, begin measurement) -> FINDING_END")
+                                //      enableCameraMouseControl();
+                                this._mouseState = TOUCH_FINDING_TARGET;
+                                // console.log("touchend: this._mouseState= QUICK_TOUCH_FINDING_START (picked, begin measurement) -> TOUCH_FINDING_TARGET")
                                 break;
                             } else {
                                 if (this._currentDistanceMeasurement) { // Not likely needed, but safe
                                     this._currentDistanceMeasurement.destroy();
                                     this._currentDistanceMeasurement = null;
                                 }
-                                state = FINDING_START;
-                                // console.log("touchend: state= QUICK_TOUCH_FINDING_START (nothing picked)  -> FINDING_START")
+                                this._mouseState = TOUCH_FINDING_ORIGIN;
+                                // console.log("touchend: this._mouseState= QUICK_TOUCH_FINDING_START (nothing picked)  -> TOUCH_FINDING_ORIGIN")
                                 break;
                             }
                         }
 
                     case LONG_TOUCH_FINDING_START:
-                        if (this.plugin.pointerLens) {
-                            this.plugin.pointerLens.active = false;
+                        if (pointerLens) {
+                            pointerLens.visible = false;
                         }
                         if (!this._currentDistanceMeasurement) {
                             this._currentDistanceMeasurement = plugin.createMeasurement({
@@ -780,23 +763,23 @@ class DistanceMeasurementsControl extends Component {
                             this._currentDistanceMeasurement.clickable = false;
                         }
                         this.fire("measurementStart", this._currentDistanceMeasurement);
-                      //  enableCameraMouseControl();
-                        state = FINDING_END;
-                        // console.log("touchend: state= LONG_TOUCH_FINDING_START (picked, begin measurement) -> FINDING_END")
+                        //  enableCameraMouseControl();
+                        this._mouseState = TOUCH_FINDING_TARGET;
+                        // console.log("touchend: this._mouseState= LONG_TOUCH_FINDING_START (picked, begin measurement) -> TOUCH_FINDING_TARGET")
                         break;
 
                     case QUICK_TOUCH_FINDING_END:
                         if (currentNumTouches !== 1 ||
-                            touchEndCanvasPos[0] > touchStartCanvasPos[0] + mouseCanvasClickTolerance ||
-                            touchEndCanvasPos[0] < touchStartCanvasPos[0] - mouseCanvasClickTolerance ||
-                            touchEndCanvasPos[1] > touchStartCanvasPos[1] + mouseCanvasClickTolerance ||
-                            touchEndCanvasPos[1] < touchStartCanvasPos[1] - mouseCanvasClickTolerance) {
+                            touchEndCanvasPos[0] > touchStartCanvasPos[0] + clickTolerance ||
+                            touchEndCanvasPos[0] < touchStartCanvasPos[0] - clickTolerance ||
+                            touchEndCanvasPos[1] > touchStartCanvasPos[1] + clickTolerance ||
+                            touchEndCanvasPos[1] < touchStartCanvasPos[1] - clickTolerance) {
                             if (this._currentDistanceMeasurement) {
                                 this._currentDistanceMeasurement.destroy();
                                 this._currentDistanceMeasurement = null;
                             }
-                            state = FINDING_END;
-                            // console.log("touchend: (moved) state= QUICK_TOUCH_FINDING_END -> FINDING_END")
+                            this._mouseState = TOUCH_FINDING_TARGET;
+                            // console.log("touchend: (moved) this._mouseState= QUICK_TOUCH_FINDING_END -> TOUCH_FINDING_TARGET")
                             break;
                         } else {
                             const pickResult = scene.pick({
@@ -804,8 +787,8 @@ class DistanceMeasurementsControl extends Component {
                                 pickSurface: true
                             })
                             if (pickResult && pickResult.worldPos) {
-                                if (this.plugin.pointerLens) {
-                                    this.plugin.pointerLens.cursorPos = pickResult.canvasPos;
+                                if (pointerLens) {
+                                    pointerLens.cursorPos = pickResult.canvasPos;
                                 }
                                 this._currentDistanceMeasurement.xAxisVisible = false;
                                 this._currentDistanceMeasurement.yAxisVisible = false;
@@ -818,31 +801,30 @@ class DistanceMeasurementsControl extends Component {
                                 this._currentDistanceMeasurement.clickable = false;
                                 this.fire("measurementEnd", this._currentDistanceMeasurement);
                                 this._currentDistanceMeasurement = null;
-                                state = FINDING_START;
-                                // console.log("touchend: state= QUICK_TOUCH_FINDING_END (picked, begin measurement) -> FINDING_START")
+                                this._mouseState = TOUCH_FINDING_ORIGIN;
+                                // console.log("touchend: this._mouseState= QUICK_TOUCH_FINDING_END (picked, begin measurement) -> TOUCH_FINDING_ORIGIN")
                                 break;
                             } else {
                                 if (this._currentDistanceMeasurement) {
                                     this._currentDistanceMeasurement.destroy();
                                     this._currentDistanceMeasurement = null;
                                 }
-                                state = FINDING_START;
-                                // console.log("touchend: state= QUICK_TOUCH_FINDING_START (nothing picked, destroy measurement) -> FINDING_START")
+                                this._mouseState = TOUCH_FINDING_ORIGIN;
+                                // console.log("touchend: this._mouseState= QUICK_TOUCH_FINDING_START (nothing picked, destroy measurement) -> TOUCH_FINDING_ORIGIN")
                                 break;
                             }
                         }
 
                     case LONG_TOUCH_FINDING_END:
-                        if (this.plugin.pointerLens) {
-                            this.plugin.pointerLens.active = false;
+                        if (pointerLens) {
+                            pointerLens.visible = false;
                         }
                         const snapPickResult = scene.snapPick({
-                            canvasPos: touchEndCanvasPos,
-                            snapMode: this._snapMode
+                            canvasPos: touchEndCanvasPos
                         });
                         if (snapPickResult && snapPickResult.snappedWorldPos) {
-                            if (this.plugin.pointerLens) {
-                                this.plugin.pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
+                            if (pointerLens) {
+                                pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
                             }
                             this._currentDistanceMeasurement.xAxisVisible = false;
                             this._currentDistanceMeasurement.yAxisVisible = false;
@@ -858,8 +840,8 @@ class DistanceMeasurementsControl extends Component {
                                 pickSurface: true
                             })
                             if (pickResult && pickResult.worldPos) {
-                                if (this.plugin.pointerLens) {
-                                    this.plugin.pointerLens.cursorPos = pickResult.canvasPos;
+                                if (pointerLens) {
+                                    pointerLens.cursorPos = pickResult.canvasPos;
                                 }
                                 this._currentDistanceMeasurement.xAxisVisible = false;
                                 this._currentDistanceMeasurement.yAxisVisible = false;
@@ -874,8 +856,8 @@ class DistanceMeasurementsControl extends Component {
                                     this._currentDistanceMeasurement.destroy();
                                     this._currentDistanceMeasurement = null;
                                 }
-                                state = FINDING_START;
-                                // console.log("touchend: state= QUICK_TOUCH_FINDING_END (nothing picked, destroy measurement) -> FINDING_START")
+                                this._mouseState = TOUCH_FINDING_ORIGIN;
+                                // console.log("touchend: this._mouseState= QUICK_TOUCH_FINDING_END (nothing picked, destroy measurement) -> TOUCH_FINDING_ORIGIN")
                                 break;
                             }
                         }
@@ -883,17 +865,17 @@ class DistanceMeasurementsControl extends Component {
                         this._currentDistanceMeasurement.clickable = true;
                         this.fire("measurementEnd", this._currentDistanceMeasurement);
                         this._currentDistanceMeasurement = null;
-                        state = FINDING_START;
-                        // console.log("touchend: state= LONG_TOUCH_FINDING_END -> FINDING_START")
+                        this._mouseState = TOUCH_FINDING_ORIGIN;
+                        // console.log("touchend: this._mouseState= LONG_TOUCH_FINDING_END -> TOUCH_FINDING_ORIGIN")
                         break;
 
                     default:
-                        if (this.plugin.pointerLens) {
-                            this.plugin.pointerLens.active = false;
+                        if (pointerLens) {
+                            pointerLens.visible = false;
                         }
                         this._currentDistanceMeasurement = null;
-                        state = FINDING_START;
-                        // console.log("touchend: state= default -> FINDING_START")
+                        this._mouseState = TOUCH_FINDING_ORIGIN;
+                        // console.log("touchend: this._mouseState= default -> TOUCH_FINDING_ORIGIN")
                         break;
                 }
 
@@ -914,7 +896,9 @@ class DistanceMeasurementsControl extends Component {
             return;
         }
 
-        this._touchStartDot.setVisible(false);
+        if (this.plugin.pointerLens) {
+            this.plugin.pointerLens.visible = false;
+        }
 
         this.reset();
 
@@ -923,9 +907,8 @@ class DistanceMeasurementsControl extends Component {
         input.off(this._onInputMouseUp);
 
         const cameraControl = this.plugin.viewer.cameraControl;
-        cameraControl.off(this._onMouseHoverSurface);
-        cameraControl.off(this._onMouseHoverOff);
-        cameraControl.off(this._onPickedNothing);
+        cameraControl.off(this._onCameraControlHoverSnapOrSurface);
+        cameraControl.off(this._onCameraControlHoverSnapOrSurfaceOff);
 
         const canvas = this.plugin.viewer.scene.canvas.canvas;
         canvas.removeEventListener("touchstart", this._onCanvasTouchStart);
@@ -962,7 +945,6 @@ class DistanceMeasurementsControl extends Component {
      * @private
      */
     destroy() {
-        this._touchStartDot.destroy();
         this.deactivate();
         super.destroy();
     }

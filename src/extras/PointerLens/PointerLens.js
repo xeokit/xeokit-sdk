@@ -7,7 +7,8 @@ export class PointerLens {
     /**
      * Constructs a new PointerLens.
      * @param viewer The Viewer
-     * @param [cfg]
+     * @param [cfg] PointerLens configuration.
+     * @param [cfg.active=true] Whether PointerLens is active. The PointerLens can only be shown when this is `true` (default).
      */
     constructor(viewer, cfg={}) {
 
@@ -61,8 +62,11 @@ export class PointerLens {
 
         this._zoomLevel = cfg.zoomLevel || 2;
 
+        this._active = (cfg.active !== false);
+        this._visible = false;
+
         this._onViewerRendering = this.viewer.scene.on("rendering", () => {
-            if (this._active) {
+            if (this._active && this._visible) {
                 this.update();
             }
         });
@@ -72,7 +76,7 @@ export class PointerLens {
      * Updates this PointerLens.
      */
     update() {
-        if (!this._active) {
+        if (!this._active || !this._visible) {
             return;
         }
         if (!this._centerPos) {
@@ -191,8 +195,8 @@ export class PointerLens {
      */
     set active(active) {
         this._active = active;
-        this._lensContainer.style.visibility = active ? "visible" : "hidden";
-        if (!active) {
+        this._lensContainer.style.visibility = (active && this._visible) ? "visible" : "hidden";
+        if (!active || !this._visible ) {
             this._lensCursorDiv.style.marginLeft = `-100px`;
             this._lensCursorDiv.style.marginTop = `-100px`;
         }
@@ -205,6 +209,32 @@ export class PointerLens {
      */
     get active() {
         return this._active;
+    }
+
+    /**
+     * Sets if this PointerLens is visible.
+     * This is set by plugins.
+     * @param visible
+     * @private
+     */
+    set visible(visible) {
+        this._visible = visible;
+        this._lensContainer.style.visibility = (visible && this._active) ? "visible" : "hidden";
+        if (!visible || !this._active) {
+            this._lensCursorDiv.style.marginLeft = `-100px`;
+            this._lensCursorDiv.style.marginTop = `-100px`;
+        }
+        this.update();
+    }
+
+    /**
+     * Gets if this PointerLens is visible.
+     * This is called by plugins.
+     * @returns {Boolean}
+     * @private
+     */
+    get visible() {
+        return this._visible;
     }
 
     /**

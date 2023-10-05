@@ -232,7 +232,6 @@ class DistanceMeasurementsPlugin extends Plugin {
         super("DistanceMeasurements", viewer);
 
         this._pointerLens = cfg.pointerLens;
-        this._pointerLens.active = false;
 
         this._container = cfg.container || document.body;
 
