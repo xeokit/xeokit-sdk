@@ -6,8 +6,8 @@ import {geometryCompressionUtils} from "../../../math/geometryCompressionUtils.j
 import {getDataTextureRenderers} from "./TrianglesDataTextureRenderers.js";
 import {TrianglesDataTextureBuffer} from "./TrianglesDataTextureBuffer.js";
 import {DataTextureState} from "./DataTextureState.js"
-import {DataTextureGenerator} from "./DataTextureGenerator";
-import {dataTextureRamStats} from "./dataTextureRamStats";
+import {DataTextureGenerator} from "./DataTextureGenerator.js";
+import {dataTextureRamStats} from "./dataTextureRamStats.js";
 
 /**
  * 12-bits allowed for object ids.

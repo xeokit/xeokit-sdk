@@ -1,6 +1,6 @@
-import {PropertySet} from "./PropertySet";
-import {MetaObject} from "./MetaObject";
-import {math} from "../scene";
+import {PropertySet} from "./PropertySet.js";
+import {MetaObject} from "./MetaObject.js";
+import {math} from "../scene/math/math.js";
 
 /**
  * @desc Metadata corresponding to an {@link Entity} that represents a model.

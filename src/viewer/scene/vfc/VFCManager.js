@@ -1,4 +1,4 @@
-import {VFCState} from "./VFCState";
+import {VFCState} from "./VFCState.js";
 
 /**
  * @private

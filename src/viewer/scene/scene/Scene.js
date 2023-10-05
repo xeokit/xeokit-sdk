@@ -19,7 +19,7 @@ import {SAO} from "../postfx/SAO.js";
 import {PointsMaterial} from "../materials/PointsMaterial.js";
 import {LinesMaterial} from "../materials/LinesMaterial.js";
 import {LOD} from "../lod/LOD.js";
-import {VFC} from "../vfc/VFC";
+import {VFC} from "../vfc/VFC.js";
 
 // Enables runtime check for redundant calls to object state update methods, eg. Scene#_objectVisibilityUpdated
 const ASSERT_OBJECT_STATE_UPDATE = false;
@@ -2216,13 +2216,15 @@ class Scene extends Component {
      * @param {Object} params Picking parameters.
      * @param {Number[]} [params.canvasPos] Canvas-space coordinates. When ray-picking, this will override the **origin** and ** direction** parameters and will cause the ray to be fired through the canvas at this position, directly along the negative View-space Z-axis.
      * @param {Number} [params.snapRadius=30] The snap radius, in canvas pixels
-     * @param {"vertex"|"edge"} [params.snapMode="vertex"] Whether to snap to vertex or edge.
+     * @param {boolean} [params.snapVertex=true] Whether to snap to vertex.
+     * @param {boolean} [params.snapEdge=true] Whether to snap to edge.
      */
     snapPick(params) {
         return this._renderer.snapPick(
             params.canvasPos,
             params.snapRadius || 30,
-            params.snapMode || "vertex"
+            params.snapVertex,
+            params.snapEdge,
         );
     }
 

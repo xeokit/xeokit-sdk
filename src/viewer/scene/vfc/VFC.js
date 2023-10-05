@@ -1,5 +1,5 @@
-import {Component} from "../Component";
-import {VFCManager} from "./VFCManager";
+import {Component} from "../Component.js";
+import {VFCManager} from "./VFCManager.js";
 
 /**
  * Manages view frustum culling (VFC) for {@link SceneModel} implementations.
