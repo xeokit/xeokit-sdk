@@ -1,379 +1,464 @@
-import {Dot} from "../lib/html/Dot.js";
-import {Component} from "../../viewer/scene/Component.js";
-import {math} from "../../viewer/scene/math/math.js";
-import {Marker} from "../../viewer/index.js";
+import {Plugin} from "../../viewer/Plugin.js";
+import {DistanceMeasurement} from "./DistanceMeasurement.js";
+import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
 
 /**
- * Creates {@link DistanceMeasurement}s from mouse and touch input.
+ * {@link Viewer} plugin for measuring point-to-point distances.
  *
- * Belongs to a {@link DistanceMeasurementsPlugin}. Located at {@link DistanceMeasurementsPlugin#control}.
+ * [<img src="https://user-images.githubusercontent.com/83100/63047331-867a0a80-bed4-11e9-892f-398740013c5f.gif">](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_createWithMouse)
  *
- * Once the DistanceMeasurementControl is activated, the first click on any {@link Entity} begins constructing a {@link DistanceMeasurement}, fixing its origin to that Entity. The next click on any Entity will complete the DistanceMeasurement, fixing its target to that second Entity. The DistanceMeasurementControl will then wait for the next click on any Entity, to begin constructing another DistanceMeasurement, and so on, until deactivated.
+ * * [[Example 1: Model with distance measurements](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_modelWithMeasurements)]
+ * * [[Example 2: Create distance measurements with mouse](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_createWithMouse)]
+ * * [[Example 3: Configuring units and scale](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_unitsAndScale)
  *
- * See {@link DistanceMeasurementsPlugin} for more info.
+ * ## Overview
+ *
+ * * A {@link DistanceMeasurement} represents a point-to-point measurement between two 3D points on one or two {@link Entity}s.
+ * * As shown on the screen capture above, a DistanceMeasurement has one wire (light blue) that shows the direct point-to-point measurement,
+ * and three more wires (red, green and blue) that show the distance on each of the World-space X, Y and Z axis.
+ * * Create DistanceMeasurements programmatically with {@link DistanceMeasurementsPlugin#createMeasurement}.
+ * * Create DistanceMeasurements interactively using the {@link DistanceMeasurementsControl}, located at {@link DistanceMeasurementsPlugin#control}.
+ * * Existing DistanceMeasurements are registered by ID in {@link DistanceMeasurementsPlugin#measurements}.
+ * * Destroy DistanceMeasurements using {@link DistanceMeasurementsPlugin#destroyMeasurement}.
+ * * Configure global measurement units and scale via {@link Metrics}, located at {@link Scene#metrics}.
+ *
+ * ## Example 1: Creating DistanceMeasurements Programmatically
+ *
+ * In our first example, we'll use an {@link XKTLoaderPlugin} to load a model, and then use a DistanceMeasurementsPlugin to programmatically create two {@link DistanceMeasurement}s.
+ *
+ * Note how each DistanceMeasurement has ````origin```` and ````target```` endpoints, which each indicate a 3D World-space
+ * position on the surface of an {@link Entity}. The endpoints can be attached to the same Entity, or to different Entitys.
+ *
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_modelWithMeasurements)]
+ *
+ * ````JavaScript
+ * import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin} from "xeokit-sdk.es.js";
+ *
+ * const viewer = new Viewer({
+ *     canvasId: "myCanvas",
+ *     transparent: true
+ * });
+ *
+ * viewer.scene.camera.eye = [-2.37, 18.97, -26.12];
+ * viewer.scene.camera.look = [10.97, 5.82, -11.22];
+ * viewer.scene.camera.up = [0.36, 0.83, 0.40];
+ *
+ * const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ * const distanceMeasurements = new DistanceMeasurementsPlugin(viewer);
+ *
+ * const model = xktLoader.load({
+ *      src: "./models/xkt/duplex/duplex.xkt"
+ * });
+ *
+ * model.on("loaded", () => {
+ *
+ *      const myMeasurement1 = distanceMeasurements.createMeasurement({
+ *          id: "distanceMeasurement1",
+ *          origin: {
+ *              entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FLOH"],
+ *              worldPos: [0.044, 5.998, 17.767]
+ *          },
+ *          target: {
+ *              entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FLOH"],
+ *              worldPos: [4.738, 3.172, 17.768]
+ *          },
+ *          visible: true,
+ *          wireVisible: true
+ *      });
+ *
+ *      const myMeasurement2 = distanceMeasurements.createMeasurement({
+ *          id: "distanceMeasurement2",
+ *          origin: {
+ *              entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FNr2"],
+ *              worldPos: [0.457, 2.532, 17.766]
+ *          },
+ *          target: {
+ *              entity: viewer.scene.objects["1CZILmCaHETO8tf3SgGEXu"],
+ *              worldPos: [0.436, 0.001, 22.135]
+ *          },
+ *          visible: true,
+ *          wireVisible: true
+ *      });
+ * });
+ * ````
+ *
+ * ## Example 2: Creating DistanceMeasurements Interactively
+ *
+ * In our second example, we'll use an {@link XKTLoaderPlugin} to load a model, then we'll use the DistanceMeasurementPlugin's {@link DistanceMeasurementsControl} to interactively create {@link DistanceMeasurement}s with mouse or touch input.
+ *
+ * After we've activated the DistanceMeasurementsControl, the first click on any {@link Entity} begins constructing a DistanceMeasurement, fixing its
+ * origin to that Entity. The next click on any Entity will complete the DistanceMeasurement, fixing its target to that second Entity.
+ *
+ * The DistanceMeasurementControl will then wait for the next click on any Entity, to begin constructing
+ * another DistanceMeasurement, and so on, until deactivated again.
+ *
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_createWithMouse)]
+ *
+ * ````JavaScript
+ * import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin} from "xeokit-sdk.es.js";
+ *
+ * const viewer = new Viewer({
+ *     canvasId: "myCanvas",
+ *     transparent: true
+ * });
+ *
+ * viewer.scene.camera.eye = [-2.37, 18.97, -26.12];
+ * viewer.scene.camera.look = [10.97, 5.82, -11.22];
+ * viewer.scene.camera.up = [0.36, 0.83, 0.40];
+ *
+ * const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ * const distanceMeasurements = new DistanceMeasurementsPlugin(viewer);
+ *
+ * const model = xktLoader.load({
+ *     src: "./models/xkt/duplex/duplex.xkt"
+ * });
+ *
+ * distanceMeasurements.control.activate();  // <------------ Activate the DistanceMeasurementsControl
+ * ````
+ *
+ * ## Example 3: Configuring Measurement Units and Scale
+ *
+ * In our third example, we'll use the  {@link Scene}'s {@link Metrics} to set the global unit of measurement to ````"meters"````. We'll also specify that a unit within the World-space coordinate system represents ten meters.
+ *
+ * The wires belonging to our DistanceMeasurements show their lengths in Real-space coordinates, in the current unit of measurement. They will dynamically update as we set these configurations.
+ *
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_unitsAndScale)]
+ *
+ * ````JavaScript
+ * const metrics = viewer.scene.metrics;
+
+ * metrics.units = "meters";
+ * metrics.scale = 10.0;
+ * ````
+ *
+ * ## Example 4: Attaching Mouse Handlers
+ *
+ * In our fourth example, we'll attach even handlers to our plugin, to catch when the user
+ * hovers or right-clicks over our measurements.
+ *
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_modelWithMeasurements)]
+ *
+ * ````javascript
+ * import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin} from "xeokit-sdk.es.js";
+ *
+ * const viewer = new Viewer({
+ *     canvasId: "myCanvas",
+ *     transparent: true
+ * });
+ *
+ * viewer.scene.camera.eye = [-2.37, 18.97, -26.12];
+ * viewer.scene.camera.look = [10.97, 5.82, -11.22];
+ * viewer.scene.camera.up = [0.36, 0.83, 0.40];
+ *
+ * const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ * const distanceMeasurements = new DistanceMeasurementsPlugin(viewer);
+ *
+ * distanceMeasurements.on("mouseOver", (e) => {
+ *     e.measurement.setHighlighted(true);
+ * });
+ *
+ * distanceMeasurements.on("mouseLeave", (e) => {
+ *     e.measurement.setHighlighted(false);
+ * });
+ *
+ * distanceMeasurements.on("contextMenu", (e) => {
+ *     // Show context menu
+ *     e.event.preventDefault();
+ * });
+ *
+ * const model = xktLoader.load({
+ *      src: "./models/xkt/duplex/duplex.xkt"
+ * });
+ *
+ * model.on("loaded", () => {
+ *
+ *      const myMeasurement1 = distanceMeasurements.createMeasurement({
+ *          id: "distanceMeasurement1",
+ *          origin: {
+ *              entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FLOH"],
+ *              worldPos: [0.044, 5.998, 17.767]
+ *          },
+ *          target: {
+ *              entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FLOH"],
+ *              worldPos: [4.738, 3.172, 17.768]
+ *          },
+ *          visible: true,
+ *          wireVisible: true
+ *      });
+ *
+ *      const myMeasurement2 = distanceMeasurements.createMeasurement({
+ *          id: "distanceMeasurement2",
+ *          origin: {
+ *              entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FNr2"],
+ *              worldPos: [0.457, 2.532, 17.766]
+ *          },
+ *          target: {
+ *              entity: viewer.scene.objects["1CZILmCaHETO8tf3SgGEXu"],
+ *              worldPos: [0.436, 0.001, 22.135]
+ *          },
+ *          visible: true,
+ *          wireVisible: true
+ *      });
+ * });
+ * ````
  */
-class DistanceMeasurementsControl extends Component {
+class DistanceMeasurementsPlugin extends Plugin {
 
     /**
-     * @private
+     * @constructor
+     * @param {Viewer} viewer The Viewer.
+     * @param {Object} [cfg]  Plugin configuration.
+     * @param {String} [cfg.id="DistanceMeasurements"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {Number} [cfg.labelMinAxisLength=25] The minimum length, in pixels, of an axis wire beyond which its label is shown.
+     * @param {HTMLElement} [cfg.container] Container DOM element for markers and labels. Defaults to ````document.body````.
+     * @param {boolean} [cfg.defaultVisible=true] The default value of the DistanceMeasurements `visible` property.
+     * @param {boolean} [cfg.defaultOriginVisible=true] The default value of the DistanceMeasurements `originVisible` property.
+     * @param {boolean} [cfg.defaultTargetVisible=true] The default value of the DistanceMeasurements `targetVisible` property.
+     * @param {boolean} [cfg.defaultWireVisible=true] The default value of the DistanceMeasurements `wireVisible` property.
+     * @param {boolean} [cfg.defaultLabelsVisible=true] The default value of the DistanceMeasurements `labelsVisible` property.
+     * @param {boolean} [cfg.defaultAxisVisible=true] The default value of the DistanceMeasurements `axisVisible` property.
+     * @param {boolean} [cfg.defaultXAxisVisible=true] The default value of the DistanceMeasurements `xAxisVisible` property.
+     * @param {boolean} [cfg.defaultYAxisVisible=true] The default value of the DistanceMeasurements `yAxisVisible` property.
+     * @param {boolean} [cfg.defaultZAxisVisible=true] The default value of the DistanceMeasurements `zAxisVisible` property.
+     * @param {string} [cfg.defaultColor=#00BBFF] The default color of the length dots, wire and label.
+     * @param {number} [cfg.zIndex] If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
+     * @param {PointerLens} [cfg.pointerLens] A PointerLens to help the user position the pointer. This can be shared with other plugins.
      */
-    constructor(plugin, cfg = {}) {
+    constructor(viewer, cfg = {}) {
 
-        super(plugin.viewer.scene);
+        super("DistanceMeasurements", viewer);
 
-        /**
-         * The {@link DistanceMeasurementsPlugin} that owns this DistanceMeasurementsControl.
-         * @type {DistanceMeasurementsPlugin}
-         */
-        this.plugin = plugin;
+        this._pointerLens = cfg.pointerLens;
 
-        this._active = false;
+        this._container = cfg.container || document.body;
 
-        // Add a marker to the canvas
-        const markerDiv = document.createElement('div');
-        const canvas = this.scene.canvas.canvas;
-        canvas.parentNode.insertBefore(markerDiv, canvas);
+        this._control = new DistanceMeasurementsControl(this, {});
 
-        markerDiv.style.background = "black";
-        markerDiv.style.border = "2px solid blue";
-        markerDiv.style.borderRadius = "10px";
-        markerDiv.style.width = "5px";
-        markerDiv.style.height = "5px";
-        markerDiv.style.margin = "-200px -200px";
-        markerDiv.style.zIndex = "100";
-        markerDiv.style.position = "absolute";
-        markerDiv.style.pointerEvents = "none";
+        this._measurements = {};
 
-        this.markerDiv = markerDiv;
+        this.labelMinAxisLength = cfg.labelMinAxisLength;
 
-        // Mouse input uses a combo of events that requires us to track
-        // the current DistanceMeasurement under construction. This is not used for touch input, which
-        // just uses touch-move-release to make a measurement.
-        this._currentDistanceMeasurementByMouse = null;
+        this.defaultVisible = cfg.defaultVisible !== false;
+        this.defaultOriginVisible = cfg.defaultOriginVisible !== false;
+        this.defaultTargetVisible = cfg.defaultTargetVisible !== false;
+        this.defaultWireVisible = cfg.defaultWireVisible !== false;
+        this.defaultLabelsVisible = cfg.defaultLabelsVisible !== false;
+        this.defaultAxisVisible = cfg.defaultAxisVisible !== false;
+        this.defaultXAxisVisible = cfg.defaultXAxisVisible !== false;
+        this.defaultYAxisVisible = cfg.defaultYAxisVisible !== false;
+        this.defaultZAxisVisible = cfg.defaultZAxisVisible !== false;
+        this.defaultColor = cfg.defaultColor !== undefined ? cfg.defaultColor : "#00BBFF";
+        this.zIndex = cfg.zIndex || 10000;
 
-        this._currentDistanceMeasurementByMouseInittouchState = {
-            wireVisible: null,
-            axisVisible: null,
-            xAxisVisible: null,
-            yaxisVisible: null,
-            zAxisVisible: null,
-            targetVisible: null,
+        this._onMouseOver = (event, measurement) => {
+            this.fire("mouseOver", {
+                plugin: this,
+                distanceMeasurement: measurement,
+                measurement,
+                event
+            });
         }
 
-        // Shows 2D canvas pos of touch start
-        this._touchStartDot = new Dot(plugin._container, {
-            fillColor: plugin.defaultColor,
-            zIndex: plugin.zIndex + 1,
-            visible: false
-        });
+        this._onMouseLeave = (event, measurement) => {
+            this.fire("mouseLeave", {
+                plugin: this,
+                distanceMeasurement: measurement,
+                measurement,
+                event
+            });
+        };
 
-        // Tracks 3D world pos of touch start, dynamically calculates 2D canvas pos
-        this._touchStartMarker = new Marker(this, {
-            id: "distanceMeasurementMarker"
-        });
-
-        // Routes 2D canvas pos from Marker to Dot
-        this._touchStartMarker.on("canvasPos", (canvasPos) => {
-            this._touchStartDot.setPos(canvasPos[0], canvasPos[1]);
-        });
-
-        // Event handles from CameraControl
-        this._onMouseHoverSurface = null;
-        this._onMouseHoverOff = null;
-        this._onPickedNothing = null;
-
-        // Event handles from Scene.input
-        this._onInputMouseDown = null;
-        this._onInputMouseUp = null;
-
-        // Event handles from Canvas element
-        this._onCanvasTouchStart = null;
-        this._onCanvasTouchEnd = null;
-    }
-
-    /** Gets if this DistanceMeasurementsControl is currently active, where it is responding to input.
-     *
-     * @returns {Boolean}
-     */
-    get active() {
-        return this._active;
+        this._onContextMenu = (event, measurement) => {
+            this.fire("contextMenu", {
+                plugin: this,
+                distanceMeasurement: measurement,
+                measurement,
+                event
+            });
+        };
     }
 
     /**
-     * Activates this DistanceMeasurementsControl, ready to respond to input.
-     *
+     * Gets the plugin's HTML container element, if any.
+     * @returns {*|HTMLElement|HTMLElement}
      */
-    activate() {
-
-        if (this._active) {
-            return;
-        }
-
-        const plugin = this.plugin;
-        const scene = this.scene;
-        const cameraControl = plugin.viewer.cameraControl;
-        const canvas = scene.canvas.canvas;
-        const input = scene.input;
-        const startDot = this._touchStartDot;
-
-        const pickSurfacePrecisionEnabled = scene.pickSurfacePrecisionEnabled;
-
-        let mouseHovering = false;
-        const mouseWorldPos = math.vec3();
-        const mouseCanvasPos = math.vec2();
-
-        let mouseDownCanvasX;
-        let mouseDownCanvasY;
-
-        const mouseCanvasClickTolerance = 5;
-
-        const FIRST_TOUCH_EXPECTED = 0;
-        const SECOND_TOUCH_EXPECTED = 1;
-        let touchState = FIRST_TOUCH_EXPECTED;
-        const touchCanvasClickTolerance = 5;
-
-        const touchStartCanvasPos = math.vec2();
-        const touchEndCanvasPos = math.vec2();
-        const touchStartWorldPos = math.vec3();
-
-        this._onMouseHoverSurface = cameraControl.on("hoverSnapOrSurface", event => { // This gets fired for both mouse and touch input, but we don't care when handling touch
-            mouseHovering = true;
-            mouseWorldPos.set(event.worldPos);
-            mouseCanvasPos.set(event.canvasPos);
-            if (touchState === FIRST_TOUCH_EXPECTED) {
-                this.markerDiv.style.marginLeft = `${event.canvasPos[0] - 5}px`;
-                this.markerDiv.style.marginTop = `${event.canvasPos[1] - 5}px`;
-                this.markerDiv.style.background = "pink";
-                if (event.snapType === "vertex") {
-                    this.markerDiv.style.background = "greenyellow";
-                    this.markerDiv.style.border ="2px solid green";
-                } else if (event.snapType === "edge") {
-                    this.markerDiv.style.background = "lightblue";
-                    this.markerDiv.style.border ="2px solid green";
-                } else {
-                    this.markerDiv.style.background = "pink";
-                    this.markerDiv.style.border = "2px solid red";
-                }
-
-            } else  {
-                this.markerDiv.style.marginLeft = `-10000px`;
-                this.markerDiv.style.marginTop = `-10000px`;
-            }
-            canvas.style.cursor = "pointer";
-            if (this._currentDistanceMeasurementByMouse) {
-                this._currentDistanceMeasurementByMouse.wireVisible = this._currentDistanceMeasurementByMouseInittouchState.wireVisible;
-                this._currentDistanceMeasurementByMouse.axisVisible = this._currentDistanceMeasurementByMouseInittouchState.axisVisible && this.plugin.defaultAxisVisible;
-                this._currentDistanceMeasurementByMouse.xAxisVisible = this._currentDistanceMeasurementByMouseInittouchState.xAxisVisible && this.plugin.defaultXAxisVisible;
-                this._currentDistanceMeasurementByMouse.yAxisVisible = this._currentDistanceMeasurementByMouseInittouchState.yAxisVisible && this.plugin.defaultYAxisVisible;
-                this._currentDistanceMeasurementByMouse.zAxisVisible = this._currentDistanceMeasurementByMouseInittouchState.zAxisVisible && this.plugin.defaultZAxisVisible;
-                this._currentDistanceMeasurementByMouse.targetVisible = this._currentDistanceMeasurementByMouseInittouchState.targetVisible;
-                this._currentDistanceMeasurementByMouse.target.worldPos = mouseWorldPos;
-                this.markerDiv.style.marginLeft = `-10000px`;
-                this.markerDiv.style.marginTop = `-10000px`;
-            }
-        });
-
-        this._onInputMouseDown = input.on("mousedown", (coords) => {
-            mouseDownCanvasX = coords[0];
-            mouseDownCanvasY = coords[1];
-        });
-
-        this._onInputMouseUp = input.on("mouseup", (coords) => {
-            if (coords[0] > mouseDownCanvasX + mouseCanvasClickTolerance ||
-                coords[0] < mouseDownCanvasX - mouseCanvasClickTolerance ||
-                coords[1] > mouseDownCanvasY + mouseCanvasClickTolerance ||
-                coords[1] < mouseDownCanvasY - mouseCanvasClickTolerance) {
-                return;
-            }
-            if (this._currentDistanceMeasurementByMouse) {
-                if (mouseHovering) {
-                    this._currentDistanceMeasurementByMouse.clickable = true;
-                    this.fire("measurementEnd", this._currentDistanceMeasurementByMouse);
-                    this._currentDistanceMeasurementByMouse = null;
-                } else {
-                    this._currentDistanceMeasurementByMouse.destroy();
-                    this.fire("measurementCancel", this._currentDistanceMeasurementByMouse);
-                    this._currentDistanceMeasurementByMouse = null;
-                }
-            } else {
-                if (mouseHovering) {
-                    this._currentDistanceMeasurementByMouse = plugin.createMeasurement({
-                        id: math.createUUID(),
-                        origin: {
-                            worldPos: mouseWorldPos.slice()
-                        },
-                        target: {
-                            worldPos: mouseWorldPos.slice()
-                        },
-                        approximate: true
-                    });
-                    this._currentDistanceMeasurementByMouseInittouchState.axisVisible = this._currentDistanceMeasurementByMouse.axisVisible && this.plugin.defaultAxisVisible;
-                    this._currentDistanceMeasurementByMouseInittouchState.xAxisVisible = this._currentDistanceMeasurementByMouse.xAxisVisible && this.plugin.defaultXAxisVisible;
-                    this._currentDistanceMeasurementByMouseInittouchState.yAxisVisible = this._currentDistanceMeasurementByMouse.yAxisVisible && this.plugin.defaultYAxisVisible;
-                    this._currentDistanceMeasurementByMouseInittouchState.zAxisVisible = this._currentDistanceMeasurementByMouse.zAxisVisible && this.plugin.defaultZAxisVisible;
-                    this._currentDistanceMeasurementByMouseInittouchState.wireVisible = this._currentDistanceMeasurementByMouse.wireVisible;
-                    this._currentDistanceMeasurementByMouseInittouchState.targetVisible = this._currentDistanceMeasurementByMouse.targetVisible;
-                    this._currentDistanceMeasurementByMouse.clickable = false;
-                    this.fire("measurementStart", this._currentDistanceMeasurementByMouse);
-                }
-            }
-        });
-
-        this._onMouseHoverOff = cameraControl.on("hoverSnapOrSurfaceOff", event => {
-            mouseHovering = false;
-            this.markerDiv.style.marginLeft = `-100px`;
-            this.markerDiv.style.marginTop = `-100px`;
-            if (this._currentDistanceMeasurementByMouse) {
-                this._currentDistanceMeasurementByMouse.wireVisible = false;
-                this._currentDistanceMeasurementByMouse.targetVisible = false;
-                this._currentDistanceMeasurementByMouse.axisVisible = false;
-            }
-            canvas.style.cursor = "default";
-        });
-
-        canvas.addEventListener("touchstart", this._onCanvasTouchStart = (event) => {
-            const touches = event.touches;
-            const changedTouches = event.changedTouches;
-            if (touches.length === 1 && changedTouches.length === 1) {
-                getCanvasPosFromEvent(touches[0], touchStartCanvasPos);
-            }
-        }, {passive: true});
-
-        canvas.addEventListener("touchend", this._onCanvasTouchEnd = (event) => {
-            const touches = event.touches;
-            const changedTouches = event.changedTouches;
-            if (touches.length === 0 && changedTouches.length === 1) {
-                getCanvasPosFromEvent(changedTouches[0], touchEndCanvasPos);
-                if (touchEndCanvasPos[0] > touchStartCanvasPos[0] + touchCanvasClickTolerance ||
-                    touchEndCanvasPos[0] < touchStartCanvasPos[0] - touchCanvasClickTolerance ||
-                    touchEndCanvasPos[1] > touchStartCanvasPos[1] + touchCanvasClickTolerance ||
-                    touchEndCanvasPos[1] < touchStartCanvasPos[1] - touchCanvasClickTolerance) {
-                    return; // User is repositioning the camera or model
-                }
-                const pickResult = scene.pick({
-                    canvasPos: touchEndCanvasPos,
-                    pickSurface: true
-                });
-                if (pickResult && pickResult.worldPos) {
-                    switch (touchState) {
-                        case FIRST_TOUCH_EXPECTED:
-                            startDot.setVisible(true);
-                            this._touchStartMarker.worldPos = pickResult.worldPos;
-                            touchStartWorldPos.set(pickResult.worldPos);
-                            touchState = SECOND_TOUCH_EXPECTED;
-                            break;
-                        case SECOND_TOUCH_EXPECTED:
-                            startDot.setVisible(false);
-                            this._touchStartMarker.worldPos = pickResult.worldPos;
-                            const measurement = plugin.createMeasurement({
-                                id: math.createUUID(),
-                                origin: {
-                                    worldPos: touchStartWorldPos
-                                },
-                                target: {
-                                    worldPos: pickResult.worldPos
-                                },
-                                approximate: (!pickSurfacePrecisionEnabled)
-                            });
-                            measurement.clickable = true;
-                            touchState = FIRST_TOUCH_EXPECTED;
-                            this.fire("measurementEnd", measurement);
-                            break;
-                    }
-                } else {
-                    startDot.setVisible(false);
-                    touchState = FIRST_TOUCH_EXPECTED;
-                }
-            }
-            //  event.stopPropagation();
-        }, {passive: true});
-
-        this._active = true;
-    }
-
-    /**
-     * Deactivates this DistanceMeasurementsControl, making it unresponsive to input.
-     *
-     * Destroys any {@link DistanceMeasurement} under construction.
-     */
-    deactivate() {
-
-        if (!this._active) {
-            return;
-        }
-
-        this._touchStartDot.setVisible(false);
-
-        this.reset();
-
-        const input = this.plugin.viewer.scene.input;
-        input.off(this._onInputMouseDown);
-        input.off(this._onInputMouseUp);
-
-        const cameraControl = this.plugin.viewer.cameraControl;
-        cameraControl.off(this._onMouseHoverSurface);
-        cameraControl.off(this._onMouseHoverOff);
-        cameraControl.off(this._onPickedNothing);
-
-        const canvas = this.plugin.viewer.scene.canvas.canvas;
-        canvas.removeEventListener("touchstart", this._onCanvasTouchStart);
-        canvas.removeEventListener("touchend", this._onCanvasTouchEnd);
-
-        if (this._currentDistanceMeasurementByMouse) {
-            this.fire("measurementCancel", this._currentDistanceMeasurementByMouse);
-            this._currentDistanceMeasurementByMouse.destroy();
-            this._currentDistanceMeasurementByMouse = null;
-        }
-
-        this._active = false;
-    }
-
-    /**
-     * Resets this DistanceMeasurementsControl.
-     *
-     * Destroys any {@link DistanceMeasurement} under construction.
-     *
-     * Does nothing if the DistanceMeasurementsControl is not active.
-     */
-    reset() {
-        if (!this._active) {
-            return;
-        }
-        if (this._currentDistanceMeasurementByMouse) {
-            this.fire("measurementCancel", this._currentDistanceMeasurementByMouse);
-            this._currentDistanceMeasurementByMouse.destroy();
-            this._currentDistanceMeasurementByMouse = null;
-        }
+    getContainerElement() {
+        return this._container;
     }
 
     /**
      * @private
+     */
+    send(name, value) {
+
+    }
+
+    /**
+     * Gets the PointerLens attached to this DistanceMeasurementsPlugin.
+     * @returns {PointerLens}
+     */
+    get pointerLens() {
+        return this._pointerLens;
+    }
+
+    /**
+     * Gets the {@link DistanceMeasurementsControl}, which creates {@link DistanceMeasurement}s from user input.
+     *
+     * @type {DistanceMeasurementsControl}
+     */
+    get control() {
+        return this._control;
+    }
+
+    /**
+     * Gets the existing {@link DistanceMeasurement}s, each mapped to its {@link DistanceMeasurement#id}.
+     *
+     * @type {{String:DistanceMeasurement}}
+     */
+    get measurements() {
+        return this._measurements;
+    }
+
+    /**
+     * Sets the minimum length, in pixels, of an axis wire beyond which its label is shown.
+     *
+     * The axis wire's label is not shown when its length is less than this value.
+     *
+     * This is ````25```` pixels by default.
+     *
+     * Must not be less than ````1````.
+     *
+     * @type {number}
+     */
+    set labelMinAxisLength(labelMinAxisLength) {
+        if (labelMinAxisLength < 1) {
+            this.error("labelMinAxisLength must be >= 1; defaulting to 25");
+            labelMinAxisLength = 25;
+        }
+        this._labelMinAxisLength = labelMinAxisLength || 25;
+    }
+
+    /**
+     * Gets the minimum length, in pixels, of an axis wire beyond which its label is shown.
+     * @returns {number}
+     */
+    get labelMinAxisLength() {
+        return this._labelMinAxisLength;
+    }
+
+    /**
+     * Creates a {@link DistanceMeasurement}.
+     *
+     * The DistanceMeasurement is then registered by {@link DistanceMeasurement#id} in {@link DistanceMeasurementsPlugin#measurements}.
+     *
+     * @param {Object} params {@link DistanceMeasurement} configuration.
+     * @param {String} params.id Unique ID to assign to {@link DistanceMeasurement#id}. The DistanceMeasurement will be registered by this in {@link DistanceMeasurementsPlugin#measurements} and {@link Scene.components}. Must be unique among all components in the {@link Viewer}.
+     * @param {Number[]} params.origin.worldPos Origin World-space 3D position.
+     * @param {Entity} params.origin.entity Origin Entity.
+     * @param {Number[]} params.target.worldPos Target World-space 3D position.
+     * @param {Entity} params.target.entity Target Entity.
+     * @param {Boolean} [params.visible=true] Whether to initially show the {@link DistanceMeasurement}.
+     * @param {Boolean} [params.originVisible=true] Whether to initially show the {@link DistanceMeasurement} origin.
+     * @param {Boolean} [params.targetVisible=true] Whether to initially show the {@link DistanceMeasurement} target.
+     * @param {Boolean} [params.wireVisible=true] Whether to initially show the direct point-to-point wire between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
+     * @param {Boolean} [params.axisVisible=true] Whether to initially show the axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
+     * @param {Boolean} [params.xAxisVisible=true] Whether to initially show the X-axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
+     * @param {Boolean} [params.yAxisVisible=true] Whether to initially show the Y-axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
+     * @param {Boolean} [params.zAxisVisible=true] Whether to initially show the Z-axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
+     * @param {Boolean} [params.labelsVisible=true] Whether to initially show the labels.
+     * @param {string} [params.color] The color of the length dot, wire and label.
+     * @returns {DistanceMeasurement} The new {@link DistanceMeasurement}.
+     */
+    createMeasurement(params = {}) {
+        if (this.viewer.scene.components[params.id]) {
+            this.error("Viewer scene component with this ID already exists: " + params.id);
+            delete params.id;
+        }
+        const origin = params.origin;
+        const target = params.target;
+        const measurement = new DistanceMeasurement(this, {
+            id: params.id,
+            plugin: this,
+            container: this._container,
+            origin: {
+                entity: origin.entity,
+                worldPos: origin.worldPos
+            },
+            target: {
+                entity: target.entity,
+                worldPos: target.worldPos
+            },
+            visible: params.visible,
+            wireVisible: params.wireVisible,
+            axisVisible: params.axisVisible !== false && this.defaultAxisVisible !== false,
+            xAxisVisible: params.xAxisVisible !== false && this.defaultXAxisVisible !== false,
+            yAxisVisible: params.yAxisVisible !== false && this.defaultYAxisVisible !== false,
+            zAxisVisible: params.zAxisVisible !== false && this.defaultZAxisVisible !== false,
+            labelsVisible: params.labelsVisible !== false && this.defaultLabelsVisible !== false,
+            originVisible: params.originVisible,
+            targetVisible: params.targetVisible,
+            color: params.color,
+            onMouseOver: this._onMouseOver,
+            onMouseLeave: this._onMouseLeave,
+            onContextMenu: this._onContextMenu
+        });
+        this._measurements[measurement.id] = measurement;
+        measurement.on("destroyed", () => {
+            delete this._measurements[measurement.id];
+        });
+        this.fire("measurementCreated", measurement);
+        return measurement;
+    }
+
+    /**
+     * Destroys a {@link DistanceMeasurement}.
+     *
+     * @param {String} id ID of DistanceMeasurement to destroy.
+     */
+    destroyMeasurement(id) {
+        const measurement = this._measurements[id];
+        if (!measurement) {
+            this.log("DistanceMeasurement not found: " + id);
+            return;
+        }
+        measurement.destroy();
+        this.fire("measurementDestroyed", measurement);
+    }
+
+    /**
+     * Shows all or hides the angle label of each {@link DistanceMeasurement}.
+     *
+     * @param {Boolean} labelsShown Whether or not to show the labels.
+     */
+    setLabelsShown(labelsShown) {
+        for (const [key, measurement] of Object.entries(this.measurements)) {
+            measurement.labelShown = labelsShown;
+        }
+    }
+
+
+    /**
+     * Destroys all {@link DistanceMeasurement}s.
+     */
+    clear() {
+        const ids = Object.keys(this._measurements);
+        for (var i = 0, len = ids.length; i < len; i++) {
+            this.destroyMeasurement(ids[i]);
+        }
+    }
+
+    /**
+     * Destroys this DistanceMeasurementsPlugin.
+     *
+     * Destroys all {@link DistanceMeasurement}s first.
      */
     destroy() {
-        this._touchStartDot.destroy();
-        this.deactivate();
+        this.clear();
         super.destroy();
     }
 }
 
-const getCanvasPosFromEvent = function (event, canvasPos) {
-    if (!event) {
-        event = window.event;
-        canvasPos[0] = event.x;
-        canvasPos[1] = event.y;
-    } else {
-        let element = event.target;
-        let totalOffsetLeft = 0;
-        let totalOffsetTop = 0;
-        while (element.offsetParent) {
-            totalOffsetLeft += element.offsetLeft;
-            totalOffsetTop += element.offsetTop;
-            element = element.offsetParent;
-        }
-        canvasPos[0] = event.pageX - totalOffsetLeft;
-        canvasPos[1] = event.pageY - totalOffsetTop;
-    }
-    return canvasPos;
-};
-
-export {DistanceMeasurementsControl};
+export {DistanceMeasurementsPlugin}

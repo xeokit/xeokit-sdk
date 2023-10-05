@@ -85,7 +85,7 @@
 <canvas id="myCanvas"></canvas>
 <div class="slideout-sidebar">
     <img class="info-icon" src="../../assets/images/measure_distance_icon.png"/>
-    <h1>DistanceMeasurementPlugin with edge snapping</h1>
+    <h1>DistanceMeasurementPlugin with vertex-snapping</h1>
     <h2>Click on the model to create distance measurements</h2>
     <p>In this example, we're loading a BIM model from the file system, then creating distance measurements wherever the
         user clicks on the model.</p>
@@ -119,7 +119,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, ContextMenu, DistanceMeasurementsPlugin} from "../../dist/xeokit-sdk.min.es.js";
+    import {Viewer, XKTLoaderPlugin, ContextMenu, DistanceMeasurementsPlugin, PointerLens} from "../../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -136,11 +136,11 @@
 
 
     //------------------------------------------------------------------------------------------------------------------
-    // Edge-snapping mode
+    // Vertex-snapping mode
     //------------------------------------------------------------------------------------------------------------------
 
-    viewer.cameraControl.snapMode = "edge"; // Snap to nearest edge
-    viewer.cameraControl.snapRadius = 30; // 30 pixel snapping radius
+    viewer.cameraControl.snapMode = "vertex"; // Snap to nearest vertex
+    viewer.cameraControl.snapRadius = 30; // 30 pixels snapping radius
 
     //------------------------------------------------------------------------------------------------------------------
     // Load a model
@@ -154,11 +154,19 @@
         edges: true
     });
 
+    sceneModel.on("loaded", ()=>{
+        viewer.cameraFlight.jumpTo(sceneModel);
+    });
+
     //------------------------------------------------------------------------------------------------------------------
     // DistanceMeasurementsPlugin
     //------------------------------------------------------------------------------------------------------------------
 
-    const distanceMeasurements = new DistanceMeasurementsPlugin(viewer, {});
+    const pointerLens = new PointerLens(viewer);
+
+    const distanceMeasurements = new DistanceMeasurementsPlugin(viewer, {
+        pointerLens
+    });
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a context menu to delete and configure measurements
@@ -234,10 +242,10 @@
         ]
     });
 
-    viewer.cameraControl.on("rightClick", function (e) {
-        canvasContextMenu.show(e.pagePos[0], e.pagePos[1]);
-        e.event.preventDefault();
-    });
+    // viewer.cameraControl.on("rightClick", function (e) {
+    //     canvasContextMenu.show(e.pagePos[0], e.pagePos[1]);
+    //     e.event.preventDefault();
+    // });
 
     //------------------------------------------------------------------------------------------------------------------
     // Create an DistanceMeasurementsPlugin, activate its DistanceMeasuremntsControl
@@ -265,6 +273,7 @@
     });
 
     distanceMeasurements.control.activate();
+    distanceMeasurements.control.snapMode = "vertex";
 
     window.viewer = viewer;
 

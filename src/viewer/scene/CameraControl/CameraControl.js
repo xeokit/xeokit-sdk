@@ -883,7 +883,10 @@ class CameraControl extends Component {
      * @param {Boolean} value Set ````true```` to activate this ````CameraControl````.
      */
     set active(value) {
-        this._configs.active = value !== false;
+        value = value !== false;
+        this._configs.active = value;
+        this._handlers[1]._active = value;
+        this._handlers[5]._active = value;
     }
 
     /**

@@ -225,15 +225,17 @@ class DistanceMeasurementsPlugin extends Plugin {
      * @param {boolean} [cfg.defaultZAxisVisible=true] The default value of the DistanceMeasurements `zAxisVisible` property.
      * @param {string} [cfg.defaultColor=#00BBFF] The default color of the length dots, wire and label.
      * @param {number} [cfg.zIndex] If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
+     * @param {PointerLens} [cfg.pointerLens] A PointerLens to help the user position the pointer. This can be shared with other plugins.
      */
     constructor(viewer, cfg = {}) {
 
         super("DistanceMeasurements", viewer);
 
+        this._pointerLens = cfg.pointerLens;
+
         this._container = cfg.container || document.body;
 
-        this._control = new DistanceMeasurementsControl(this, {
-        });
+        this._control = new DistanceMeasurementsControl(this, {});
 
         this._measurements = {};
 
@@ -292,6 +294,14 @@ class DistanceMeasurementsPlugin extends Plugin {
      */
     send(name, value) {
 
+    }
+
+    /**
+     * Gets the PointerLens attached to this DistanceMeasurementsPlugin.
+     * @returns {PointerLens}
+     */
+    get pointerLens() {
+        return this._pointerLens;
     }
 
     /**

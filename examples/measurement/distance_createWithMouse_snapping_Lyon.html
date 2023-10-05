@@ -87,8 +87,9 @@
         ReadableGeometry,
         buildPlaneGeometry,
         FastNavPlugin,
-        DistanceMeasurementsPlugin
-    } from "../../dist/xeokit-sdk.min.es.js";
+        DistanceMeasurementsPlugin,
+        PointerLens
+    } from "../../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer with a logarithmic depth buffer
@@ -96,8 +97,7 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
-        transparent: true,
-        logarithmicDepthBufferEnabled: true // <<--- Enable logarithmic depth buffer
+        transparent: true
     });
 
     // Enable data texture model representation for
@@ -229,8 +229,13 @@
     // Create distance measurements plugin
     //----------------------------------------------------------------------------------------------------------------------
 
+    const pointerLens = new PointerLens(viewer, {
+        zoomLevel: 2
+    });
+
     const distanceMeasurements = new DistanceMeasurementsPlugin(viewer, {
-        defaultAxisVisible: false // <<------------ Hide axis wires
+        defaultAxisVisible: false, // <<------------ Hide axis wires
+        pointerLens
     });
 
     //----------------------------------------------------------------------------------------------------------------------
