@@ -1059,6 +1059,7 @@ const Renderer = function (scene, options) {
         gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
         gl.clearColor(0, 0, 0, 0);
+        gl.depthMask(true);
         gl.enable(gl.DEPTH_TEST);
         gl.disable(gl.CULL_FACE);
         gl.disable(gl.BLEND);
@@ -1165,6 +1166,7 @@ const Renderer = function (scene, options) {
             gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
             gl.clearColor(0, 0, 0, 0);
+            gl.depthMask(true);
             gl.enable(gl.DEPTH_TEST);
             gl.disable(gl.CULL_FACE);
             gl.disable(gl.BLEND);
@@ -1357,6 +1359,8 @@ const Renderer = function (scene, options) {
 
             snapPickDrawSnapDepths(frameCtx);
         }
+
+        gl.depthMask(true);
 
         // Read and decode the snapped coordinates
 
