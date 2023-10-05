@@ -30,7 +30,7 @@ class AngleMeasurementsControl extends Component {
     /**
      * @private
      */
-    constructor(plugin) {
+    constructor(plugin, cfg={}) {
 
         super(plugin.viewer.scene);
 
@@ -80,6 +80,8 @@ class AngleMeasurementsControl extends Component {
 
         this._mobileModeLongPressTimeMs = 500;
 
+        this._snapEdge = cfg.snapEdge !== false;
+        this._snapVertex = cfg.snapVertex !== false;
     }
 
     /** Gets if this AngleMeasurementsControl is currently active, where it is responding to input.
@@ -88,6 +90,42 @@ class AngleMeasurementsControl extends Component {
      */
     get active() {
         return this._active;
+    }
+
+    /**
+     * Sets whether snap-to-vertex is enabled for this AngleMeasurementsControl.
+     * This is `true` by default.
+     * @param snapVertex
+     */
+    set snapVertex(snapVertex) {
+        this._snapVertex = snapVertex;
+    }
+
+    /**
+     * Gets whether snap-to-vertex is enabled for this AngleMeasurementsControl.
+     * This is `true` by default.
+     * @returns {*}
+     */
+    get snapVertex() {
+        return this._snapVertex;
+    }
+
+    /**
+     * Sets whether snap-to-edge is enabled for this AngleMeasurementsControl.
+     * This is `true` by default.
+     * @param snapEdge
+     */
+    set snapEdge(snapEdge) {
+        this._snapEdge = snapEdge;
+    }
+
+    /**
+     * Gets whether snap-to-edge is enabled for this AngleMeasurementsControl.
+     * This is `true` by default.
+     * @returns {*}
+     */
+    get snapEdge() {
+        return this._snapEdge;
     }
 
     /**

@@ -1,7 +1,5 @@
-import {Dot} from "../lib/html/Dot.js";
 import {Component} from "../../viewer/scene/Component.js";
 import {math} from "../../viewer/scene/math/math.js";
-import {Marker} from "../../viewer/index.js";
 
 
 const TOUCH_FINDING_ORIGIN = 0;
@@ -76,7 +74,8 @@ class DistanceMeasurementsControl extends Component {
 
         this._mobileModeLongPressTimeMs = 500;
 
-        this._snapMode = "vertex;"
+        this._snapEdge = cfg.snapEdge !== false;
+        this._snapVertex = cfg.snapVertex !== false;
     }
 
     /** Gets if this DistanceMeasurementsControl is currently active, where it is responding to input.
@@ -87,21 +86,44 @@ class DistanceMeasurementsControl extends Component {
         return this._active;
     }
 
-    set snapMode(snapMode) {
-        if (snapMode !== "vertex" && snapMode !== "edge") {
-            this.plugin.error(`Unsupported snapMode: "${snapMode} - defaulting to "vertex"`);
-            snapMode = "vertex";
-        }
-        this._snapMode = snapMode;
+    /**
+     * Sets whether snap-to-vertex is enabled for this DistanceMeasurementsControl.
+     * This is `true` by default.
+     * @param snapVertex
+     */
+    set snapVertex(snapVertex) {
+        this._snapVertex = snapVertex;
     }
 
-    get snapMode() {
-        return this._snapMode;
+    /**
+     * Gets whether snap-to-vertex is enabled for this DistanceMeasurementsControl.
+     * This is `true` by default.
+     * @returns {*}
+     */
+    get snapVertex() {
+        return this._snapVertex;
+    }
+
+    /**
+     * Sets whether snap-to-edge is enabled for this DistanceMeasurementsControl.
+     * This is `true` by default.
+     * @param snapEdge
+     */
+    set snapEdge(snapEdge) {
+        this._snapEdge = snapEdge;
+    }
+
+    /**
+     * Gets whether snap-to-edge is enabled for this DistanceMeasurementsControl.
+     * This is `true` by default.
+     * @returns {*}
+     */
+    get snapEdge() {
+        return this._snapEdge;
     }
 
     /**
      * Activates this DistanceMeasurementsControl, ready to respond to input.
-     *
      */
     activate() {
 
@@ -136,7 +158,7 @@ class DistanceMeasurementsControl extends Component {
         //----------------------------------------------------------------------------------------------------
 
         {
-            
+
             this._onCameraControlHoverSnapOrSurface = cameraControl.on("hoverSnapOrSurface", event => {
                 mouseHovering = true;
                 pointerWorldPos.set(event.worldPos);
@@ -318,7 +340,8 @@ class DistanceMeasurementsControl extends Component {
                                 }
                                 const snapPickResult = scene.snapPick({
                                     canvasPos: touchMoveCanvasPos,
-                                    snapMode: this._snapMode
+                                    snapVertex: this._snapVertex,
+                                    snapEdge: this._snapEdge,
                                 });
                                 if (snapPickResult && snapPickResult.snappedWorldPos) {
                                     if (pointerLens) {
@@ -420,7 +443,8 @@ class DistanceMeasurementsControl extends Component {
 
                                 const snapPickResult = scene.snapPick({
                                     canvasPos: touchMoveCanvasPos,
-                                    snapMode: this._snapMode
+                                    snapVertex: this._snapVertex,
+                                    snapEdge: this._snapEdge,
                                 });
                                 if (snapPickResult && snapPickResult.snappedWorldPos) {
                                     if (pointerLens) {
@@ -513,7 +537,8 @@ class DistanceMeasurementsControl extends Component {
                         }
                         snapPickResult = scene.snapPick({
                             canvasPos: touchMoveCanvasPos,
-                            snapMode: this._snapMode
+                            snapVertex: this._snapVertex,
+                            snapEdge: this._snapEdge,
                         });
                         if (snapPickResult && snapPickResult.snappedWorldPos) {
                             if (pointerLens) {
@@ -613,7 +638,8 @@ class DistanceMeasurementsControl extends Component {
                         }
                         snapPickResult = scene.snapPick({
                             canvasPos: touchMoveCanvasPos,
-                            snapMode: this._snapMode
+                            snapVertex: this._snapVertex,
+                            snapEdge: this._snapEdge,
                         });
                         if (snapPickResult && snapPickResult.snappedWorldPos) {
                             if (pointerLens) {
@@ -820,7 +846,9 @@ class DistanceMeasurementsControl extends Component {
                             pointerLens.visible = false;
                         }
                         const snapPickResult = scene.snapPick({
-                            canvasPos: touchEndCanvasPos
+                            canvasPos: touchEndCanvasPos,
+                            snapVertex: this._snapVertex,
+                            snapEdge: this._snapEdge,
                         });
                         if (snapPickResult && snapPickResult.snappedWorldPos) {
                             if (pointerLens) {
