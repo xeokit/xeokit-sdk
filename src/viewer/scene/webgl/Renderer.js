@@ -1276,7 +1276,7 @@ const Renderer = function (scene, options) {
     this.snapPick = function (canvasPos, snapRadiusInPixels = 30, snapVertex = true, snapEdge = true) {
 
         if (!snapVertex && !snapEdge) {
-            return this.pick({ canvasPos, pickSurface: true });
+            return this.pick({canvasPos, pickSurface: true});
         }
 
         frameCtx.reset();
@@ -1337,7 +1337,7 @@ const Renderer = function (scene, options) {
 
         // a) init z-buffer
         const layerParamsSurface = snapInitDepthBuf(frameCtx);
-        
+
         // b) snap-pick
         const layerParamsSnap = []
         frameCtx.snapPickLayerParams = layerParamsSnap;
@@ -1347,10 +1347,10 @@ const Renderer = function (scene, options) {
         if (snapVertex && snapEdge) {
             frameCtx.snapMode = "edge";
             snapPickDrawSnapDepths(frameCtx);
-            
+
             frameCtx.snapMode = "vertex";
             frameCtx.snapPickLayerNumber++;
-    
+
             snapPickDrawSnapDepths(frameCtx);
         } else {
             frameCtx.snapMode = snapVertex ? "vertex" : "edge";
@@ -1450,6 +1450,8 @@ const Renderer = function (scene, options) {
 
         return {
             snapType,
+            snappedToVertex: snapType === "vertex",
+            snappedToEdge: snapType === "edge",
             worldPos,
             snappedWorldPos,
             snappedCanvasPos

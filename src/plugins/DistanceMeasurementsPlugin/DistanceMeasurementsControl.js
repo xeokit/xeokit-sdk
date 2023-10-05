@@ -196,7 +196,7 @@ class DistanceMeasurementsControl extends Component {
                     this._currentDistanceMeasurement.yAxisVisible = this._currentDistanceMeasurementInitState.yAxisVisible && this.plugin.defaultYAxisVisible;
                     this._currentDistanceMeasurement.zAxisVisible = this._currentDistanceMeasurementInitState.zAxisVisible && this.plugin.defaultZAxisVisible;
                     this._currentDistanceMeasurement.targetVisible = this._currentDistanceMeasurementInitState.targetVisible;
-                    this._currentDistanceMeasurement.target.worldPos = pointerWorldPos;
+                    this._currentDistanceMeasurement.target.worldPos = pointerWorldPos.slice();
                     this.markerDiv.style.marginLeft = `-10000px`;
                     this.markerDiv.style.marginTop = `-10000px`;
                 }

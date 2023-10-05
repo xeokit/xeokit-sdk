@@ -198,10 +198,11 @@ class PickController {
         if (this.snappedOrPicked) {
             if (this.snapPickResult) {
                 const pickResult = new PickResult();
+                pickResult.snappedToVertex = this.snapPickResult.snappedToVertex;
+                pickResult.snappedToEdge = this.snapPickResult.snappedToEdge;
                 pickResult.worldPos = this.snapPickResult.snappedWorldPos;
                 pickResult.cursorPos = this.pickCursorPos;
                 pickResult.canvasPos = this.snapPickResult.snappedCanvasPos;
-                pickResult.snapType = this.snapPickResult.snapType;
                 this._cameraControl.fire("hoverSnapOrSurface", pickResult, true);
                 this.snapPickResult = null;
             } else {
