@@ -1,12 +1,11 @@
-import {Program} from "../../../webgl/Program.js";
-import {createRTCViewMat, getPlaneRTCPos} from "../../../math/rtcCoords.js";
+import {VBOSceneModelRenderer} from "../VBOSceneModelRenderers.js";
+import {createRTCViewMat} from "../../../math/rtcCoords.js";
 import {math} from "../../../math/math.js";
 
 const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
 const tempVec3c = math.vec3();
 const tempVec3d = math.vec3();
-const tempVec3e = math.vec3();
 const tempMat4a = math.mat4();
 
 const SNAPPING_LOG_DEPTH_BUF_ENABLED = true; // Improves occlusion accuracy at distance
@@ -14,18 +13,7 @@ const SNAPPING_LOG_DEPTH_BUF_ENABLED = true; // Improves occlusion accuracy at d
 /**
  * @private
  */
-export class SnapBatchingDepthRenderer {
-
-    constructor(scene) {
-        this._scene = scene;
-        this._hash = this._getHash();
-        this._allocate();
-    }
-
-    getValid() {
-        return this._hash === this._getHash();
-    };
-
+export class SnapBatchingDepthRenderer extends VBOSceneModelRenderer{
     _getHash() {
         return this._scene._sectionPlanesState.getHash() + (this._scene.pointsMaterial.hash);
     }
@@ -53,6 +41,12 @@ export class SnapBatchingDepthRenderer {
         const {position, rotationMatrix, rotationMatrixConjugate} = model;
         const aabb = batchingLayer.aabb;
         const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
+
+        if (this._vaoCache.has(batchingLayer)) {
+            gl.bindVertexArray(this._vaoCache.get(batchingLayer));
+        } else {
+            this._vaoCache.set(batchingLayer, this._makeVAO(state))
+        }
 
         const coordinateScaler = tempVec3a;
         coordinateScaler[0] = math.safeInv(aabb[3] - aabb[0]) * math.MAX_INT;
@@ -105,47 +99,34 @@ export class SnapBatchingDepthRenderer {
         gl.uniform3fv(this._uCoordinateScaler, coordinateScaler);
         gl.uniform1i(this._uRenderPass, renderPass);
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
-        gl.uniformMatrix4fv(this._uWorldMatrix, false, rotationMatrixConjugate);
-        gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
-        gl.uniformMatrix4fv(this._uProjMatrix, false, camera.projMatrix);
+
+        let offset = 0;
+        const mat4Size = 4 * 4;
+
+        this._matricesUniformBlockBufferData.set(rotationMatrixConjugate, 0);
+        this._matricesUniformBlockBufferData.set(rtcViewMatrix, offset += mat4Size);
+        this._matricesUniformBlockBufferData.set(camera.projMatrix, offset += mat4Size);
+        this._matricesUniformBlockBufferData.set(state.positionsDecodeMatrix, offset += mat4Size);
+
+        gl.bindBuffer(gl.UNIFORM_BUFFER, this._matricesUniformBlockBuffer);
+        gl.bufferData(gl.UNIFORM_BUFFER, this._matricesUniformBlockBufferData, gl.DYNAMIC_DRAW);
+
+        gl.bindBufferBase(
+            gl.UNIFORM_BUFFER,
+            this._matricesUniformBlockBufferBindingPoint,
+            this._matricesUniformBlockBuffer);
+
         if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2); // TODO: Far from pick project matrix?
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
-        const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
-        if (numSectionPlanes > 0) {
-            const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
-            const baseIndex = batchingLayer.layerIndex * numSectionPlanes;
-            const renderFlags = model.renderFlags;
-            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
-                const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
-                if (sectionPlaneUniforms) {
-                    const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                    if (active) {
-                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (origin) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3e);
-                            gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
-                        } else {
-                            gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-                        }
-                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
-                    }
-                }
-            }
-        }
+
+        this.setSectionPlanesStateUniforms(batchingLayer);
+
         //=============================================================
         // TODO: Use drawElements count and offset to draw only one entity
         //=============================================================
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, batchingLayer._state.positionsDecodeMatrix);
-        this._aPosition.bindArrayBuffer(state.positionsBuf);
-        if (this._aOffset) {
-            this._aOffset.bindArrayBuffer(state.offsetsBuf);
-        }
-        if (this._aFlags) {
-            this._aFlags.bindArrayBuffer(state.flagsBuf);
-        }
+
         if (frameCtx.snapMode === "edge") {
             state.edgeIndicesBuf.bind();
             gl.drawElements(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0);
@@ -156,38 +137,9 @@ export class SnapBatchingDepthRenderer {
     }
 
     _allocate() {
-
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-
-        this._program = new Program(gl, this._buildShader());
-
-        if (this._program.errors) {
-            this.errors = this._program.errors;
-            return;
-        }
+        super._allocate();
 
         const program = this._program;
-
-        this._uRenderPass = program.getLocation("renderPass");
-        this._uPickInvisible = program.getLocation("pickInvisible");
-        this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
-        this._uWorldMatrix = program.getLocation("worldMatrix");
-        this._uViewMatrix = program.getLocation("viewMatrix");
-        this._uProjMatrix = program.getLocation("projMatrix");
-        this._uSectionPlanes = [];
-
-        for (let i = 0, len = scene._sectionPlanesState.sectionPlanes.length; i < len; i++) {
-            this._uSectionPlanes.push({
-                active: program.getLocation("sectionPlaneActive" + i),
-                pos: program.getLocation("sectionPlanePos" + i),
-                dir: program.getLocation("sectionPlaneDir" + i)
-            });
-        }
-
-        this._aPosition = program.getAttribute("position");
-        this._aOffset = program.getAttribute("offset");
-        this._aFlags = program.getAttribute("flags");
 
         if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
@@ -202,13 +154,6 @@ export class SnapBatchingDepthRenderer {
 
     _bindProgram() {
         this._program.bind();
-    }
-
-    _buildShader() {
-        return {
-            vertex: this._buildVertexShader(),
-            fragment: this._buildFragmentShader()
-        };
     }
 
     _buildVertexShader() {
@@ -238,10 +183,9 @@ export class SnapBatchingDepthRenderer {
         }
         src.push("in float flags;");
         src.push("uniform bool pickInvisible;");
-        src.push("uniform mat4 worldMatrix;");
-        src.push("uniform mat4 viewMatrix;");
-        src.push("uniform mat4 projMatrix;");
-        src.push("uniform mat4 positionsDecodeMatrix;");
+
+        this._addMatricesUniformBlockLines(src);
+
         src.push("uniform vec3 uCameraEyeRtc;"); 
         src.push("uniform vec2 snapVectorA;"); 
         src.push("uniform vec2 snapInvVectorAB;"); 
@@ -362,4 +306,3 @@ export class SnapBatchingDepthRenderer {
         this._program = null;
     }
 }
-
