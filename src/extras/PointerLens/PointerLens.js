@@ -17,8 +17,8 @@ export class PointerLens {
 
         this._lensCursorDiv = document.createElement('div');
         this.viewer.scene.canvas.canvas.parentNode.insertBefore(this._lensCursorDiv, this.viewer.scene.canvas.canvas);
-        this._lensCursorDiv.style.background = "greenyellow";
-        this._lensCursorDiv.style.border = "2px solid green";
+        this._lensCursorDiv.style.background = "pink";
+        this._lensCursorDiv.style.border = "2px solid red";
         this._lensCursorDiv.style.borderRadius = "20px";
         this._lensCursorDiv.style.width = "10px";
         this._lensCursorDiv.style.height = "10px";
@@ -64,6 +64,7 @@ export class PointerLens {
 
         this._active = (cfg.active !== false);
         this._visible = false;
+        this._snapped = false;
 
         this._onViewerRendering = this.viewer.scene.on("rendering", () => {
             if (this._active && this._visible) {
@@ -121,13 +122,9 @@ export class PointerLens {
 
             this._lensCursorDiv.style.marginLeft = `${centerLensCanvas[0] + deltaX * this._zoomLevel - 10}px`;
             this._lensCursorDiv.style.marginTop = `${centerLensCanvas[1] + deltaY * this._zoomLevel - 10}px`;
-            this._lensCursorDiv.style.background = "greenyellow";
-            this._lensCursorDiv.style.border = "2px solid green";
         } else {
             this._lensCursorDiv.style.marginLeft = `${centerLensCanvas[0] - 10}px`;
             this._lensCursorDiv.style.marginTop = `${centerLensCanvas[1] - 10}px`;
-            this._lensCursorDiv.style.background = "pink";
-            this._lensCursorDiv.style.border = "2px solid red";
         }
     }
 
@@ -189,6 +186,33 @@ export class PointerLens {
         return this._cursorPos;
     }
 
+    /**
+     * Sets if the cursor has snapped to anything.
+     * This is set by plugins.
+     * @param snapped
+     * @private
+     */
+    set snapped(snapped) {
+     this._snapped = snapped;
+        if (snapped) {
+            this._lensCursorDiv.style.background = "greenyellow";
+            this._lensCursorDiv.style.border = "2px solid green";
+        } else {
+            this._lensCursorDiv.style.background = "pink";
+            this._lensCursorDiv.style.border = "2px solid red";
+        }
+    }
+
+    /**
+     * Gets  if the cursor has snapped to anything.
+     * This is called by plugins.
+     * @returns {Boolean}
+     * @private
+     */
+    get snapped() {
+        return this._snapped;
+    }
+    
     /**
      * Sets if this PointerLens is active.
      * @param active

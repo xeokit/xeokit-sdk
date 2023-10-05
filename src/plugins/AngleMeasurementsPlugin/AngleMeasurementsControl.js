@@ -30,7 +30,7 @@ class AngleMeasurementsControl extends Component {
     /**
      * @private
      */
-    constructor(plugin, cfg={}) {
+    constructor(plugin, cfg = {}) {
 
         super(plugin.viewer.scene);
 
@@ -164,10 +164,24 @@ class AngleMeasurementsControl extends Component {
             this._currentAngleMeasurement = null;
 
             this._onMouseHoverSurface = cameraControl.on("hoverSnapOrSurface", event => {
-                if (pointerLens) {
-                    pointerLens.visible = true;
-                    pointerLens.centerPos = event.cursorPos || event.canvasPos;
-                    pointerLens.cursorPos = event.canvasPos;
+                if (event.snappedToVertex || event.snappedToEdge) {
+                    if (pointerLens) {
+                        pointerLens.visible = true;
+                        pointerLens.centerPos = event.cursorPos || event.canvasPos;
+                        pointerLens.cursorPos = event.canvasPos;
+                        pointerLens.snapped = true;
+                    }
+                    this.markerDiv.style.background = "greenyellow";
+                    this.markerDiv.style.border = "2px solid green";
+                } else {
+                    if (pointerLens) {
+                        pointerLens.visible = true;
+                        pointerLens.centerPos = event.cursorPos || event.canvasPos;
+                        pointerLens.cursorPos = event.canvasPos;
+                        pointerLens.snapped = false;
+                    }
+                    this.markerDiv.style.background = "pink";
+                    this.markerDiv.style.border = "2px solid red";
                 }
                 mouseHovering = true;
                 mouseHoverEntity = event.entity;
@@ -177,8 +191,6 @@ class AngleMeasurementsControl extends Component {
                     case MOUSE_FINDING_ORIGIN:
                         this.markerDiv.style.marginLeft = `${event.canvasPos[0] - 5}px`;
                         this.markerDiv.style.marginTop = `${event.canvasPos[1] - 5}px`;
-                        this.markerDiv.style.background = "pink";
-                        this.markerDiv.style.border = "2px solid red";
                         break;
                     case MOUSE_FINDING_CORNER:
                         if (this._currentAngleMeasurement) {
@@ -287,6 +299,7 @@ class AngleMeasurementsControl extends Component {
                     pointerLens.visible = true;
                     pointerLens.centerPos = event.cursorPos;
                     pointerLens.cursorPos = event.cursorPos;
+                    pointerLens.snapped = false;
                 }
                 this.markerDiv.style.marginLeft = `-100px`;
                 this.markerDiv.style.marginTop = `-100px`;
@@ -389,11 +402,13 @@ class AngleMeasurementsControl extends Component {
                                 }
                                 const snapPickResult = scene.snapPick({
                                     canvasPos: touchMoveCanvasPos,
-                                    snapMode: this._snapMode
+                                    snapVertex: this._snapVertex,
+                                    snapEdge: this._snapEdge
                                 });
                                 if (snapPickResult && snapPickResult.snappedWorldPos) {
                                     if (pointerLens) {
                                         pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
+                                        pointerLens.snapped = true;
                                     }
                                     pointerWorldPos.set(snapPickResult.snappedWorldPos);
                                     if (!this._currentAngleMeasurement) {
@@ -428,6 +443,7 @@ class AngleMeasurementsControl extends Component {
                                     if (pickResult && pickResult.worldPos) {
                                         if (pointerLens) {
                                             pointerLens.cursorPos = pickResult.canvasPos;
+                                            pointerLens.snapped = false;
                                         }
                                         pointerWorldPos.set(pickResult.worldPos);
                                         if (!this._currentAngleMeasurement) {
@@ -457,6 +473,7 @@ class AngleMeasurementsControl extends Component {
                                     } else {
                                         if (pointerLens) {
                                             pointerLens.cursorPos = null;
+                                            pointerLens.snapped = false;
                                         }
                                     }
                                 }
@@ -499,11 +516,13 @@ class AngleMeasurementsControl extends Component {
                                 }
                                 const snapPickResult = scene.snapPick({
                                     canvasPos: touchMoveCanvasPos,
-                                    snapMode: this._snapMode
+                                    snapVertex: this._snapVertex,
+                                    snapEdge: this._snapEdge
                                 });
                                 if (snapPickResult && snapPickResult.snappedWorldPos) {
                                     if (pointerLens) {
                                         pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
+                                        pointerLens.snapped = true;
                                     }
                                     pointerWorldPos.set(snapPickResult.snappedWorldPos);
                                     this._currentAngleMeasurement.corner.worldPos = snapPickResult.snappedWorldPos;
@@ -522,6 +541,7 @@ class AngleMeasurementsControl extends Component {
                                     if (pickResult && pickResult.worldPos) {
                                         if (pointerLens) {
                                             pointerLens.cursorPos = pickResult.canvasPos;
+                                            pointerLens.snapped = false;
                                         }
                                         pointerWorldPos.set(pickResult.worldPos);
                                         this._currentAngleMeasurement.corner.worldPos = pickResult.worldPos;
@@ -535,6 +555,7 @@ class AngleMeasurementsControl extends Component {
                                     } else {
                                         if (pointerLens) {
                                             pointerLens.cursorPos = null;
+                                            pointerLens.snapped = false;
                                         }
                                     }
                                 }
@@ -572,11 +593,13 @@ class AngleMeasurementsControl extends Component {
 
                                 const snapPickResult = scene.snapPick({
                                     canvasPos: touchMoveCanvasPos,
-                                    snapMode: this._snapMode
+                                    snapVertex: this._snapVertex,
+                                    snapEdge: this._snapEdge
                                 });
                                 if (snapPickResult && snapPickResult.snappedWorldPos) {
                                     if (pointerLens) {
                                         pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
+                                        pointerLens.snapped = true;
                                     }
                                     pointerWorldPos.set(snapPickResult.snappedWorldPos);
                                     this._currentAngleMeasurement.target.worldPos = snapPickResult.snappedWorldPos;
@@ -595,6 +618,7 @@ class AngleMeasurementsControl extends Component {
                                     if (pickResult && pickResult.worldPos) {
                                         if (pointerLens) {
                                             pointerLens.cursorPos = pickResult.canvasPos;
+                                            pointerLens.snapped = false;
                                         }
                                         pointerWorldPos.set(pickResult.worldPos);
                                         this._currentAngleMeasurement.target.worldPos = pickResult.worldPos;
@@ -608,6 +632,7 @@ class AngleMeasurementsControl extends Component {
                                     } else {
                                         if (pointerLens) {
                                             pointerLens.cursorPos = null;
+                                            pointerLens.snapped = false;
                                         }
                                     }
                                 }
@@ -665,11 +690,13 @@ class AngleMeasurementsControl extends Component {
                         }
                         snapPickResult = scene.snapPick({
                             canvasPos: touchMoveCanvasPos,
-                            snapMode: this._snapMode
+                            snapVertex: this._snapVertex,
+                            snapEdge: this._snapEdge
                         });
                         if (snapPickResult && snapPickResult.snappedWorldPos) {
                             if (pointerLens) {
                                 pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
+                                pointerLens.snapped = true;
                             }
                             pointerWorldPos.set(snapPickResult.snappedWorldPos);
                             if (!this._currentAngleMeasurement) {
@@ -704,6 +731,7 @@ class AngleMeasurementsControl extends Component {
                             if (pickResult && pickResult.worldPos) {
                                 if (pointerLens) {
                                     pointerLens.cursorPos = pickResult.canvasPos;
+                                    pointerLens.snapped = false;
                                 }
                                 pointerWorldPos.set(pickResult.worldPos);
                                 if (!this._currentAngleMeasurement) {
@@ -733,6 +761,7 @@ class AngleMeasurementsControl extends Component {
                             } else {
                                 if (pointerLens) {
                                     pointerLens.cursorPos = null;
+                                    pointerLens.snapped = false;
                                 }
                             }
                         }
@@ -756,11 +785,13 @@ class AngleMeasurementsControl extends Component {
                         }
                         snapPickResult = scene.snapPick({
                             canvasPos: touchMoveCanvasPos,
-                            snapMode: this._snapMode
+                            snapVertex: this._snapVertex,
+                            snapEdge: this._snapEdge
                         });
                         if (snapPickResult && snapPickResult.snappedWorldPos) {
                             if (pointerLens) {
                                 pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
+                                pointerLens.snapped = true;
                             }
                             pointerWorldPos.set(snapPickResult.snappedWorldPos);
                             this._currentAngleMeasurement.corner.worldPos = snapPickResult.snappedWorldPos;
@@ -779,6 +810,7 @@ class AngleMeasurementsControl extends Component {
                             if (pickResult && pickResult.worldPos) {
                                 if (pointerLens) {
                                     pointerLens.cursorPos = pickResult.canvasPos;
+                                    pointerLens.snapped = false;
                                 }
                                 pointerWorldPos.set(pickResult.worldPos);
                                 this._currentAngleMeasurement.corner.worldPos = pickResult.worldPos;
@@ -792,6 +824,7 @@ class AngleMeasurementsControl extends Component {
                             } else {
                                 if (pointerLens) {
                                     pointerLens.cursorPos = null;
+                                    pointerLens.snapped = false;
                                 }
                             }
                         }
@@ -826,11 +859,13 @@ class AngleMeasurementsControl extends Component {
                         }
                         snapPickResult = scene.snapPick({
                             canvasPos: touchMoveCanvasPos,
-                            snapMode: this._snapMode
+                            snapVertex: this._snapVertex,
+                            snapEdge: this._snapEdge
                         });
                         if (snapPickResult && snapPickResult.snappedWorldPos) {
                             if (pointerLens) {
                                 pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
+                                pointerLens.snapped = true;
                             }
                             this._currentAngleMeasurement.target.worldPos = snapPickResult.snappedWorldPos;
                             this._currentAngleMeasurement.originVisible = true;
@@ -848,6 +883,7 @@ class AngleMeasurementsControl extends Component {
                             if (pickResult && pickResult.worldPos) {
                                 if (pointerLens) {
                                     pointerLens.cursorPos = pickResult.canvasPos;
+                                    pointerLens.snapped = false;
                                 }
                                 this._currentAngleMeasurement.target.worldPos = pickResult.worldPos;
                                 this._currentAngleMeasurement.originVisible = true;
@@ -930,6 +966,7 @@ class AngleMeasurementsControl extends Component {
                             if (pickResult && pickResult.worldPos) {
                                 if (pointerLens) {
                                     pointerLens.cursorPos = pickResult.canvasPos;
+                                    pointerLens.snapped = false;
                                 }
                                 this._currentAngleMeasurement = plugin.createMeasurement({
                                     id: math.createUUID(),
@@ -1018,6 +1055,7 @@ class AngleMeasurementsControl extends Component {
                             if (pickResult && pickResult.worldPos) {
                                 if (pointerLens) {
                                     pointerLens.cursorPos = pickResult.canvasPos;
+                                    pointerLens.snapped = false;
                                 }
                                 this._currentAngleMeasurement.corner.worldPos = pickResult.worldPos;
                                 this._currentAngleMeasurement.originVisible = true;
@@ -1047,11 +1085,13 @@ class AngleMeasurementsControl extends Component {
                         }
                         const snapPickResult = scene.snapPick({
                             canvasPos: touchEndCanvasPos,
-                            snapMode: this._snapMode
+                            snapVertex: this._snapVertex,
+                            snapEdge: this._snapEdge
                         });
                         if (snapPickResult && snapPickResult.snappedWorldPos) {
                             if (pointerLens) {
                                 pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
+                                pointerLens.snapped = true;
                             }
                             this._currentAngleMeasurement.corner.worldPos = snapPickResult.snappedWorldPos;
                             this._currentAngleMeasurement.originVisible = true;
@@ -1069,6 +1109,7 @@ class AngleMeasurementsControl extends Component {
                             if (pickResult && pickResult.worldPos) {
                                 if (pointerLens) {
                                     pointerLens.cursorPos = pickResult.canvasPos;
+                                    pointerLens.snapped = false;
                                 }
                                 this._currentAngleMeasurement.corner.worldPos = pickResult.worldPos;
                                 this._currentAngleMeasurement.originVisible = true;
@@ -1114,6 +1155,7 @@ class AngleMeasurementsControl extends Component {
                             if (pickResult && pickResult.worldPos) {
                                 if (pointerLens) {
                                     pointerLens.cursorPos = pickResult.canvasPos;
+                                    pointerLens.snapped = false;
                                 }
                                 this._currentAngleMeasurement.target.worldPos = pickResult.worldPos;
                                 this._currentAngleMeasurement.originVisible = true;
@@ -1145,11 +1187,13 @@ class AngleMeasurementsControl extends Component {
                         }
                         const snapPickResult = scene.snapPick({
                             canvasPos: touchEndCanvasPos,
-                            snapMode: this._snapMode
+                            snapVertex: this._snapVertex,
+                            snapEdge: this._snapEdge
                         });
                         if (snapPickResult && snapPickResult.snappedWorldPos) {
                             if (pointerLens) {
                                 pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
+                                pointerLens.snapped = true;
                             }
                             this._currentAngleMeasurement.target.worldPos = snapPickResult.snappedWorldPos;
                             this._currentAngleMeasurement.originVisible = true;
@@ -1167,6 +1211,7 @@ class AngleMeasurementsControl extends Component {
                             if (pickResult && pickResult.worldPos) {
                                 if (pointerLens) {
                                     pointerLens.cursorPos = pickResult.canvasPos;
+                                    pointerLens.snapped = true;
                                 }
                                 this._currentAngleMeasurement.target.worldPos = pickResult.worldPos;
                                 this._currentAngleMeasurement.originVisible = true;
@@ -1196,6 +1241,7 @@ class AngleMeasurementsControl extends Component {
                     default:
                         if (pointerLens) {
                             pointerLens.visible = false;
+                            pointerLens.snapped = false;
                         }
                         this._currentAngleMeasurement = null;
                         this._touchState = TOUCH_FINDING_ORIGIN;

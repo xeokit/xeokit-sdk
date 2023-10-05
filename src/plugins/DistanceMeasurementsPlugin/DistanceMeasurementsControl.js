@@ -172,6 +172,7 @@ class DistanceMeasurementsControl extends Component {
                             pointerLens.visible = true;
                             pointerLens.centerPos = event.cursorPos || event.canvasPos;
                             pointerLens.cursorPos = event.canvasPos;
+                            pointerLens.snapped = true;
                         }
                         this.markerDiv.style.background = "greenyellow";
                         this.markerDiv.style.border = "2px solid green";
@@ -180,6 +181,7 @@ class DistanceMeasurementsControl extends Component {
                             pointerLens.visible = true;
                             pointerLens.centerPos = event.cursorPos || event.canvasPos;
                             pointerLens.cursorPos = event.canvasPos;
+                            pointerLens.snapped = false;
                         }
                         this.markerDiv.style.background = "pink";
                         this.markerDiv.style.border = "2px solid red";
@@ -337,15 +339,17 @@ class DistanceMeasurementsControl extends Component {
                                 }
                                 if (pointerLens) {
                                     pointerLens.centerPos = touchMoveCanvasPos;
+                                    pointerLens.snapped = false;
                                 }
                                 const snapPickResult = scene.snapPick({
                                     canvasPos: touchMoveCanvasPos,
                                     snapVertex: this._snapVertex,
-                                    snapEdge: this._snapEdge,
+                                    snapEdge: this._snapEdge
                                 });
                                 if (snapPickResult && snapPickResult.snappedWorldPos) {
                                     if (pointerLens) {
                                         pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
+                                        pointerLens.snapped = true;
                                     }
                                     pointerWorldPos.set(snapPickResult.snappedWorldPos);
                                     if (!this._currentDistanceMeasurement) {
@@ -378,6 +382,7 @@ class DistanceMeasurementsControl extends Component {
                                     if (pickResult && pickResult.worldPos) {
                                         if (pointerLens) {
                                             pointerLens.cursorPos = pickResult.canvasPos;
+                                            pointerLens.snapped = false;
                                         }
                                         pointerWorldPos.set(pickResult.worldPos);
                                         if (!this._currentDistanceMeasurement) {
@@ -406,6 +411,7 @@ class DistanceMeasurementsControl extends Component {
                                     } else {
                                         if (pointerLens) {
                                             pointerLens.cursorPos = null;
+                                            pointerLens.snapped = false;
                                         }
                                     }
                                 }
@@ -439,16 +445,18 @@ class DistanceMeasurementsControl extends Component {
                                 if (pointerLens) {
                                     pointerLens.visible = true;
                                     pointerLens.centerPos = touchStartCanvasPos;
+                                    pointerLens.snapped = false;
                                 }
 
                                 const snapPickResult = scene.snapPick({
                                     canvasPos: touchMoveCanvasPos,
                                     snapVertex: this._snapVertex,
-                                    snapEdge: this._snapEdge,
+                                    snapEdge: this._snapEdge
                                 });
                                 if (snapPickResult && snapPickResult.snappedWorldPos) {
                                     if (pointerLens) {
                                         pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
+                                        pointerLens.snapped = true;
                                     }
                                     pointerWorldPos.set(snapPickResult.snappedWorldPos);
                                     this._currentDistanceMeasurement.target.worldPos = snapPickResult.snappedWorldPos;
@@ -464,6 +472,7 @@ class DistanceMeasurementsControl extends Component {
                                     if (pickResult && pickResult.worldPos) {
                                         if (pointerLens) {
                                             pointerLens.cursorPos = pickResult.canvasPos;
+                                            pointerLens.snapped = false;
                                         }
                                         pointerWorldPos.set(pickResult.worldPos);
                                         this._currentDistanceMeasurement.target.worldPos = pickResult.worldPos;
@@ -474,6 +483,7 @@ class DistanceMeasurementsControl extends Component {
                                     } else {
                                         if (pointerLens) {
                                             pointerLens.cursorPos = null;
+                                            pointerLens.snapped = false;
                                         }
                                     }
                                 }
@@ -538,11 +548,12 @@ class DistanceMeasurementsControl extends Component {
                         snapPickResult = scene.snapPick({
                             canvasPos: touchMoveCanvasPos,
                             snapVertex: this._snapVertex,
-                            snapEdge: this._snapEdge,
+                            snapEdge: this._snapEdge
                         });
                         if (snapPickResult && snapPickResult.snappedWorldPos) {
                             if (pointerLens) {
                                 pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
+                                pointerLens.snapped = true;
                             }
                             pointerWorldPos.set(snapPickResult.snappedWorldPos);
                             if (!this._currentDistanceMeasurement) {
@@ -576,6 +587,7 @@ class DistanceMeasurementsControl extends Component {
                             if (pickResult && pickResult.worldPos) {
                                 if (pointerLens) {
                                     pointerLens.cursorPos = pickResult.canvasPos;
+                                    pointerLens.snapped = false;
                                 }
                                 pointerWorldPos.set(pickResult.worldPos);
                                 if (!this._currentDistanceMeasurement) {
@@ -604,6 +616,7 @@ class DistanceMeasurementsControl extends Component {
                             } else {
                                 if (pointerLens) {
                                     pointerLens.cursorPos = null;
+                                    pointerLens.snapped = false;
                                 }
                             }
                         }
@@ -639,11 +652,12 @@ class DistanceMeasurementsControl extends Component {
                         snapPickResult = scene.snapPick({
                             canvasPos: touchMoveCanvasPos,
                             snapVertex: this._snapVertex,
-                            snapEdge: this._snapEdge,
+                            snapEdge: this._snapEdge
                         });
                         if (snapPickResult && snapPickResult.snappedWorldPos) {
                             if (pointerLens) {
                                 pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
+                                pointerLens.snapped = true;
                             }
                             this._currentDistanceMeasurement.target.worldPos = snapPickResult.snappedWorldPos;
                             this._currentDistanceMeasurement.targetVisible = true;
@@ -657,6 +671,7 @@ class DistanceMeasurementsControl extends Component {
                             if (pickResult && pickResult.worldPos) {
                                 if (pointerLens) {
                                     pointerLens.cursorPos = pickResult.canvasPos;
+                                    pointerLens.snapped = false;
                                 }
                                 this._currentDistanceMeasurement.target.worldPos = pickResult.worldPos;
                                 this._currentDistanceMeasurement.targetVisible = true;
@@ -731,6 +746,7 @@ class DistanceMeasurementsControl extends Component {
                             if (pickResult && pickResult.worldPos) {
                                 if (pointerLens) {
                                     pointerLens.cursorPos = pickResult.canvasPos;
+                                    pointerLens.snapped = false;
                                 }
                                 this._currentDistanceMeasurement = plugin.createMeasurement({
                                     id: math.createUUID(),
@@ -815,6 +831,7 @@ class DistanceMeasurementsControl extends Component {
                             if (pickResult && pickResult.worldPos) {
                                 if (pointerLens) {
                                     pointerLens.cursorPos = pickResult.canvasPos;
+                                    pointerLens.snapped = false;
                                 }
                                 this._currentDistanceMeasurement.xAxisVisible = false;
                                 this._currentDistanceMeasurement.yAxisVisible = false;
@@ -848,11 +865,12 @@ class DistanceMeasurementsControl extends Component {
                         const snapPickResult = scene.snapPick({
                             canvasPos: touchEndCanvasPos,
                             snapVertex: this._snapVertex,
-                            snapEdge: this._snapEdge,
+                            snapEdge: this._snapEdge
                         });
                         if (snapPickResult && snapPickResult.snappedWorldPos) {
                             if (pointerLens) {
                                 pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
+                                pointerLens.snapped = true;
                             }
                             this._currentDistanceMeasurement.xAxisVisible = false;
                             this._currentDistanceMeasurement.yAxisVisible = false;
@@ -870,6 +888,7 @@ class DistanceMeasurementsControl extends Component {
                             if (pickResult && pickResult.worldPos) {
                                 if (pointerLens) {
                                     pointerLens.cursorPos = pickResult.canvasPos;
+                                    pointerLens.snapped = false;
                                 }
                                 this._currentDistanceMeasurement.xAxisVisible = false;
                                 this._currentDistanceMeasurement.yAxisVisible = false;
