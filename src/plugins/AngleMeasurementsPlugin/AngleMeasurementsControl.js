@@ -845,7 +845,7 @@ class AngleMeasurementsControl extends Component {
                         break;
 
                     case QUICK_TOUCH_FINDING_TARGET:
-                        this._touchState = TOUCH_FINDING_TARGET;
+                        this._touchState = QUICK_TOUCH_FINDING_TARGET;
                         // console.log("touchmove: this._touchState= QUICK_TOUCH_FINDING_TARGET -> QUICK_TOUCH_FINDING_TARGET")
                         break;
 

@@ -323,7 +323,7 @@ class DistanceMeasurementsControl extends Component {
                             clearTimeout(longTouchTimeout);
                             longTouchTimeout = null;
                             this._touchState = TOUCH_CANCELING;
-                            //console.log("touchstart: this._touchState= TOUCH_FINDING_ORIGIN -> TOUCH_CANCELING")
+                           // console.log("touchstart: this._touchState= TOUCH_FINDING_ORIGIN -> TOUCH_CANCELING")
                             return;
                         }
                         longTouchTimeout = setTimeout(() => {
@@ -421,10 +421,10 @@ class DistanceMeasurementsControl extends Component {
                                 }
                             }
                             this._touchState = LONG_TOUCH_FINDING_ORIGIN;
-                            //console.log("touchstart: this._touchState= TOUCH_FINDING_ORIGIN -> LONG_TOUCH_FINDING_ORIGIN")
+                           // console.log("touchstart: this._touchState= TOUCH_FINDING_ORIGIN -> LONG_TOUCH_FINDING_ORIGIN")
                         }, this._mobileModeLongPressTimeMs);
                         this._touchState = QUICK_TOUCH_FINDING_ORIGIN;
-                        //console.log("touchstart: this._touchState= TOUCH_FINDING_ORIGIN -> QUICK_TOUCH_FINDING_ORIGIN")
+                       // console.log("touchstart: this._touchState= TOUCH_FINDING_ORIGIN -> QUICK_TOUCH_FINDING_ORIGIN")
                         break;
 
                     case TOUCH_FINDING_TARGET:
@@ -492,10 +492,10 @@ class DistanceMeasurementsControl extends Component {
                                     }
                                 }
                                 this._touchState = LONG_TOUCH_FINDING_TARGET;
-                                //console.log("touchstart: this._touchState= TOUCH_FINDING_TARGET -> LONG_TOUCH_FINDING_TARGET")
+                               // console.log("touchstart: this._touchState= TOUCH_FINDING_TARGET -> LONG_TOUCH_FINDING_TARGET")
                             }, this._mobileModeLongPressTimeMs);
                             this._touchState = QUICK_TOUCH_FINDING_TARGET;
-                            //console.log("touchstart: this._touchState= TOUCH_FINDING_TARGET -> QUICK_TOUCH_FINDING_TARGET")
+                           // console.log("touchstart: this._touchState= TOUCH_FINDING_TARGET -> QUICK_TOUCH_FINDING_TARGET")
                         }
                         break;
 
@@ -506,7 +506,7 @@ class DistanceMeasurementsControl extends Component {
                         }
                         enableCameraMouseControl();
                         this._touchState = TOUCH_CANCELING;
-                        //console.log("touchstart: this._touchState= default -> TOUCH_CANCELING")
+                       // console.log("touchstart: this._touchState= default -> TOUCH_CANCELING")
                         return;
                 }
 
@@ -549,12 +549,12 @@ class DistanceMeasurementsControl extends Component {
 
                     case TOUCH_FINDING_ORIGIN:
                         this._touchState = TOUCH_FINDING_ORIGIN;
-                        //console.log("touchmove: this._touchState= TOUCH_FINDING_ORIGIN -> TOUCH_FINDING_ORIGIN")
+                       // console.log("touchmove: this._touchState= TOUCH_FINDING_ORIGIN -> TOUCH_FINDING_ORIGIN")
                         break;
 
                     case QUICK_TOUCH_FINDING_ORIGIN:
                         this._touchState = QUICK_TOUCH_FINDING_ORIGIN;
-                        //console.log("touchmove: this._touchState= QUICK_TOUCH_FINDING_ORIGIN -> QUICK_TOUCH_FINDING_ORIGIN")
+                       // console.log("touchmove: this._touchState= QUICK_TOUCH_FINDING_ORIGIN -> QUICK_TOUCH_FINDING_ORIGIN")
                         break;
 
                     case LONG_TOUCH_FINDING_ORIGIN:
@@ -637,17 +637,17 @@ class DistanceMeasurementsControl extends Component {
                             }
                         }
                         this._touchState = LONG_TOUCH_FINDING_ORIGIN;
-                        //console.log("touchmove: this._touchState= LONG_TOUCH_FINDING_ORIGIN -> LONG_TOUCH_FINDING_ORIGIN")
+                       // console.log("touchmove: this._touchState= LONG_TOUCH_FINDING_ORIGIN -> LONG_TOUCH_FINDING_ORIGIN")
                         break;
 
                     case TOUCH_FINDING_TARGET:
                         this._touchState = TOUCH_FINDING_TARGET;
-                        //console.log("touchmove: this._touchState= TOUCH_FINDING_TARGET -> TOUCH_FINDING_TARGET")
+                       // console.log("touchmove: this._touchState= TOUCH_FINDING_TARGET -> TOUCH_FINDING_TARGET")
                         break;
 
                     case QUICK_TOUCH_FINDING_TARGET:
-                        this._touchState = TOUCH_FINDING_TARGET;
-                        //console.log("touchmove: this._touchState= QUICK_TOUCH_FINDING_TARGET -> TOUCH_FINDING_TARGET")
+                        this._touchState = QUICK_TOUCH_FINDING_TARGET;
+                       // console.log("touchmove: this._touchState= QUICK_TOUCH_FINDING_TARGET -> QUICK_TOUCH_FINDING_TARGET")
                         break;
 
                     case LONG_TOUCH_FINDING_TARGET:
@@ -659,7 +659,7 @@ class DistanceMeasurementsControl extends Component {
                             }
                             enableCameraMouseControl();
                             this._touchState = TOUCH_CANCELING;
-                            //console.log("touchmove: this._touchState= QUICK_TOUCH_FINDING_TARGET -> TOUCH_CANCELING")
+                           // console.log("touchmove: this._touchState= QUICK_TOUCH_FINDING_TARGET -> TOUCH_CANCELING")
                             return;
                         }
                         if (pointerLens) {
@@ -701,7 +701,7 @@ class DistanceMeasurementsControl extends Component {
 
                     default:
                         this._touchState = TOUCH_FINDING_ORIGIN;
-                        //console.log("touchmove: this._touchState= default -> TOUCH_FINDING_ORIGIN")
+                       // console.log("touchmove: this._touchState= default -> TOUCH_FINDING_ORIGIN")
                         break;
                 }
             }, {passive: true});
@@ -738,17 +738,17 @@ class DistanceMeasurementsControl extends Component {
                             this._currentDistanceMeasurement = null;
                         }
                         this._touchState = TOUCH_FINDING_ORIGIN;
-                        //console.log("touchend: this._touchState= TOUCH_CANCELING -> TOUCH_FINDING_ORIGIN")
+                       // console.log("touchend: this._touchState= TOUCH_CANCELING -> TOUCH_FINDING_ORIGIN")
                         break;
 
                     case TOUCH_FINDING_ORIGIN:
                         this._touchState = TOUCH_FINDING_ORIGIN;
-                        //console.log("touchend: this._touchState= TOUCH_FINDING_ORIGIN -> TOUCH_FINDING_ORIGIN")
+                       // console.log("touchend: this._touchState= TOUCH_FINDING_ORIGIN -> TOUCH_FINDING_ORIGIN")
                         break;
 
                     case TOUCH_FINDING_TARGET:
                         this._touchState = TOUCH_FINDING_TARGET;
-                        //console.log("touchend: this._touchState= TOUCH_FINDING_TARGET -> TOUCH_FINDING_TARGET")
+                       // console.log("touchend: this._touchState= TOUCH_FINDING_TARGET -> TOUCH_FINDING_TARGET")
                         break;
 
                     case QUICK_TOUCH_FINDING_ORIGIN:
@@ -762,7 +762,7 @@ class DistanceMeasurementsControl extends Component {
                                 this._currentDistanceMeasurement = null;
                             }
                             this._touchState = TOUCH_FINDING_ORIGIN;
-                            //console.log("touchend: this._touchState= QUICK_TOUCH_FINDING_ORIGIN (pointer moved, destroy measurement) -> TOUCH_FINDING_ORIGIN")
+                           // console.log("touchend: this._touchState= QUICK_TOUCH_FINDING_ORIGIN (pointer moved, destroy measurement) -> TOUCH_FINDING_ORIGIN")
                             break;
                         } else {
                             const pickResult = scene.pick({
@@ -794,7 +794,7 @@ class DistanceMeasurementsControl extends Component {
                                 this.fire("measurementStart", this._currentDistanceMeasurement);
                                 //      enableCameraMouseControl();
                                 this._touchState = TOUCH_FINDING_TARGET;
-                                //console.log("touchend: this._touchState= QUICK_TOUCH_FINDING_ORIGIN (picked, begin measurement) -> TOUCH_FINDING_TARGET")
+                               // console.log("touchend: this._touchState= QUICK_TOUCH_FINDING_ORIGIN (picked, begin measurement) -> TOUCH_FINDING_TARGET")
                                 break;
                             } else {
                                 if (this._currentDistanceMeasurement) { // Not likely needed, but safe
@@ -802,7 +802,7 @@ class DistanceMeasurementsControl extends Component {
                                     this._currentDistanceMeasurement = null;
                                 }
                                 this._touchState = TOUCH_FINDING_ORIGIN;
-                                //console.log("touchend: this._touchState= QUICK_TOUCH_FINDING_ORIGIN (nothing picked)  -> TOUCH_FINDING_ORIGIN")
+                               // console.log("touchend: this._touchState= QUICK_TOUCH_FINDING_ORIGIN (nothing picked)  -> TOUCH_FINDING_ORIGIN")
                                 break;
                             }
                         }
@@ -817,10 +817,10 @@ class DistanceMeasurementsControl extends Component {
                                 pointerLens.visible = false;
                             }
                             this._touchState = TOUCH_FINDING_ORIGIN;
-                            //console.log("touchend: this._touchState= LONG_TOUCH_FINDING_ORIGIN (no measurement) -> TOUCH_FINDING_ORIGIN")
+                           // console.log("touchend: this._touchState= LONG_TOUCH_FINDING_ORIGIN (no measurement) -> TOUCH_FINDING_ORIGIN")
                         } else {
                             this._touchState = TOUCH_FINDING_TARGET;
-                            //console.log("touchend: this._touchState= LONG_TOUCH_FINDING_ORIGIN (picked, begin measurement) -> TOUCH_FINDING_TARGET")
+                           // console.log("touchend: this._touchState= LONG_TOUCH_FINDING_ORIGIN (picked, begin measurement) -> TOUCH_FINDING_TARGET")
                         }
                         break;
 
@@ -835,7 +835,7 @@ class DistanceMeasurementsControl extends Component {
                                 this._currentDistanceMeasurement = null;
                             }
                             this._touchState = TOUCH_FINDING_TARGET;
-                            //console.log("touchend: (moved) this._touchState= QUICK_TOUCH_FINDING_TARGET -> TOUCH_FINDING_TARGET")
+                           // console.log("touchend: (moved) this._touchState= QUICK_TOUCH_FINDING_TARGET -> TOUCH_FINDING_TARGET")
                         } else {
                             const pickResult = scene.pick({
                                 canvasPos: touchEndCanvasPos,
@@ -858,14 +858,14 @@ class DistanceMeasurementsControl extends Component {
                                 this.fire("measurementEnd", this._currentDistanceMeasurement);
                                 this._currentDistanceMeasurement = null;
                                 this._touchState = TOUCH_FINDING_ORIGIN;
-                                //console.log("touchend: this._touchState= QUICK_TOUCH_FINDING_TARGET (picked, begin measurement) -> TOUCH_FINDING_ORIGIN")
+                               // console.log("touchend: this._touchState= QUICK_TOUCH_FINDING_TARGET (picked, begin measurement) -> TOUCH_FINDING_ORIGIN")
                             } else {
                                 if (this._currentDistanceMeasurement) {
                                     this._currentDistanceMeasurement.destroy();
                                     this._currentDistanceMeasurement = null;
                                 }
                                 this._touchState = TOUCH_FINDING_ORIGIN;
-                                //console.log("touchend: this._touchState= QUICK_TOUCH_FINDING_ORIGIN (nothing picked, destroy measurement) -> TOUCH_FINDING_ORIGIN")
+                               // console.log("touchend: this._touchState= QUICK_TOUCH_FINDING_ORIGIN (nothing picked, destroy measurement) -> TOUCH_FINDING_ORIGIN")
 
                             }
                         }
@@ -881,13 +881,13 @@ class DistanceMeasurementsControl extends Component {
                                 this._currentDistanceMeasurement = null;
                             }
                             this._touchState = TOUCH_FINDING_ORIGIN;
-                            //console.log("touchend: this._touchState= LONG_TOUCH_FINDING_TARGET (no target found) -> TOUCH_FINDING_ORIGIN")
+                           // console.log("touchend: this._touchState= LONG_TOUCH_FINDING_TARGET (no target found) -> TOUCH_FINDING_ORIGIN")
                         } else {
                             this._currentDistanceMeasurement.clickable = true;
                             this.fire("measurementEnd", this._currentDistanceMeasurement);
                             this._currentDistanceMeasurement = null;
                             this._touchState = TOUCH_FINDING_ORIGIN;
-                            //console.log("touchend: this._touchState= LONG_TOUCH_FINDING_TARGET  -> TOUCH_FINDING_ORIGIN")
+                           // console.log("touchend: this._touchState= LONG_TOUCH_FINDING_TARGET  -> TOUCH_FINDING_ORIGIN")
                         }
                         break;
 
@@ -897,7 +897,7 @@ class DistanceMeasurementsControl extends Component {
                     //      }
                     //      this._currentDistanceMeasurement = null;
                     //      this._touchState = TOUCH_FINDING_ORIGIN;
-                    //      //console.log("touchend: this._touchState= default -> TOUCH_FINDING_ORIGIN")
+                    //     // console.log("touchend: this._touchState= default -> TOUCH_FINDING_ORIGIN")
                     //      break;
                 }
 
