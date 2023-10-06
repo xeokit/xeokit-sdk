@@ -12,8 +12,8 @@ const TOUCH_FINDING_CORNER = 3;
 const QUICK_TOUCH_MOUSE_FINDING_CORNER = 4;
 const LONG_TOUCH_MOUSE_FINDING_CORNER = 5;
 const TOUCH_FINDING_TARGET = 6;
-const QUICK_TOUCH_FINDING_END = 7;
-const LONG_TOUCH_FINDING_END = 8;
+const QUICK_TOUCH_FINDING_TARGET = 7;
+const LONG_TOUCH_FINDING_TARGET = 8;
 const TOUCH_CANCELING = 9;
 
 /**
@@ -437,6 +437,8 @@ class AngleMeasurementsControl extends Component {
                                         this._currentAngleMeasurement.origin.worldPos = snapPickResult.snappedWorldPos;
                                     }
                                     this.fire("measurementStart", this._currentAngleMeasurement);
+                                    this._touchState = LONG_TOUCH_FINDING_ORIGIN;
+                                    // console.log("touchstart: this._touchState= TOUCH_FINDING_ORIGIN -> LONG_TOUCH_FINDING_ORIGIN")
                                 } else {
                                     const pickResult = scene.pick({
                                         canvasPos: touchMoveCanvasPos,
@@ -639,11 +641,11 @@ class AngleMeasurementsControl extends Component {
                                         }
                                     }
                                 }
-                                this._touchState = LONG_TOUCH_FINDING_END;
-                                // console.log("touchstart: this._touchState= TOUCH_FINDING_TARGET -> LONG_TOUCH_FINDING_END")
+                                this._touchState = LONG_TOUCH_FINDING_TARGET;
+                                // console.log("touchstart: this._touchState= TOUCH_FINDING_TARGET -> LONG_TOUCH_FINDING_TARGET")
                             }, this._mobileModeLongPressTimeMs);
-                            this._touchState = QUICK_TOUCH_FINDING_END;
-                            // console.log("touchstart: this._touchState= TOUCH_FINDING_TARGET -> QUICK_TOUCH_FINDING_END")
+                            this._touchState = QUICK_TOUCH_FINDING_TARGET;
+                            // console.log("touchstart: this._touchState= TOUCH_FINDING_TARGET -> QUICK_TOUCH_FINDING_TARGET")
                         }
                         break;
 
@@ -842,12 +844,12 @@ class AngleMeasurementsControl extends Component {
                         // console.log("touchmove: this._touchState= TOUCH_FINDING_TARGET -> TOUCH_FINDING_TARGET")
                         break;
 
-                    case QUICK_TOUCH_FINDING_END:
+                    case QUICK_TOUCH_FINDING_TARGET:
                         this._touchState = TOUCH_FINDING_TARGET;
-                        // console.log("touchmove: this._touchState= QUICK_TOUCH_FINDING_END -> QUICK_TOUCH_FINDING_END")
+                        // console.log("touchmove: this._touchState= QUICK_TOUCH_FINDING_TARGET -> QUICK_TOUCH_FINDING_TARGET")
                         break;
 
-                    case LONG_TOUCH_FINDING_END:
+                    case LONG_TOUCH_FINDING_TARGET:
                         if (currentNumTouches !== 1 && longTouchTimeout !== null) { // Two or more fingers down
                             clearTimeout(longTouchTimeout);
                             longTouchTimeout = null;
@@ -856,7 +858,7 @@ class AngleMeasurementsControl extends Component {
                             }
                             enableCameraMouseControl();
                             this._touchState = TOUCH_CANCELING;
-                            // console.log("touchmove: this._touchState= QUICK_TOUCH_FINDING_END -> TOUCH_CANCELING")
+                            // console.log("touchmove: this._touchState= QUICK_TOUCH_FINDING_TARGET -> TOUCH_CANCELING")
                             return;
                         }
                         if (pointerLens) {
@@ -900,7 +902,7 @@ class AngleMeasurementsControl extends Component {
                                 this._currentAngleMeasurement.angleVisible = true;
                             }
                         }
-                        this._touchState = LONG_TOUCH_FINDING_END;
+                        this._touchState = LONG_TOUCH_FINDING_TARGET;
                         break;
 
                     default:
@@ -994,7 +996,6 @@ class AngleMeasurementsControl extends Component {
                                 this._currentAngleMeasurement.targetWireVisible = false;
                                 this._currentAngleMeasurement.angleVisible = false
                                 this.fire("measurementStart", this._currentAngleMeasurement);
-                                //      enableCameraMouseControl();
                                 this._touchState = TOUCH_FINDING_CORNER;
                                 // console.log("touchend: this._touchState= QUICK_TOUCH_FINDING_ORIGIN (picked, begin measurement) -> TOUCH_FINDING_CORNER")
                                 break;
@@ -1014,32 +1015,20 @@ class AngleMeasurementsControl extends Component {
                             pointerLens.visible = false;
                         }
                         if (!this._currentAngleMeasurement) {
-                            this._currentAngleMeasurement = plugin.createMeasurement({
-                                id: math.createUUID(),
-                                origin: {
-                                    worldPos: touchEndCanvasPos
-                                },
-                                corner: {
-                                    worldPos: touchEndCanvasPos
-                                },
-                                target: {
-                                    worldPos: touchEndCanvasPos
-                                }
-                            });
-                            this._currentAngleMeasurement.clickable = false;
-                            this._currentAngleMeasurement.originVisible = true;
-                            this._currentAngleMeasurement.originWireVisible = false;
-                            this._currentAngleMeasurement.cornerVisible = false;
-                            this._currentAngleMeasurement.cornerWireVisible = false;
-                            this._currentAngleMeasurement.targetVisible = false;
-                            this._currentAngleMeasurement.targetWireVisible = false;
-                            this._currentAngleMeasurement.angleVisible = false
+                            if (pointerLens) {
+                                pointerLens.snapped = false;
+                                pointerLens.visible = false;
+                            }
+                            this._touchState = TOUCH_FINDING_ORIGIN;
+                            // console.log("touchend: this._touchState= LONG_TOUCH_FINDING_ORIGIN (no measurement) -> TOUCH_FINDING_ORIGIN")
+                            break;
+                        } else {
+                            //    this.fire("measurementStart", this._currentAngleMeasurement);
+                            //  enableCameraMouseControl();
+                            this._touchState = TOUCH_FINDING_CORNER;
+                            // console.log("touchend: this._touchState= LONG_TOUCH_FINDING_ORIGIN (picked, begin measurement) -> TOUCH_FINDING_CORNER")
+                            break;
                         }
-                        this.fire("measurementStart", this._currentAngleMeasurement);
-                        //  enableCameraMouseControl();
-                        this._touchState = TOUCH_FINDING_CORNER;
-                        // console.log("touchend: this._touchState= LONG_TOUCH_FINDING_ORIGIN (picked, begin measurement) -> TOUCH_FINDING_CORNER")
-                        break;
 
                     case QUICK_TOUCH_MOUSE_FINDING_CORNER:
                         if (currentNumTouches !== 1 ||
@@ -1090,58 +1079,21 @@ class AngleMeasurementsControl extends Component {
                         if (pointerLens) {
                             pointerLens.visible = false;
                         }
-                        const snapPickResult = scene.snapPick({
-                            canvasPos: touchEndCanvasPos,
-                            snapVertex: this._snapVertex,
-                            snapEdge: this._snapEdge
-                        });
-                        if (snapPickResult && snapPickResult.snappedWorldPos) {
-                            if (pointerLens) {
-                                pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
-                                pointerLens.snapped = true;
+                        if (!this._currentAngleMeasurement || !this._currentAngleMeasurement.cornerVisible) {
+                            if (this._currentAngleMeasurement) {
+                                this._currentAngleMeasurement.destroy();
+                                this._currentAngleMeasurement = null;
                             }
-                            this._currentAngleMeasurement.corner.worldPos = snapPickResult.snappedWorldPos;
-                            this._currentAngleMeasurement.originVisible = true;
-                            this._currentAngleMeasurement.originWireVisible = true;
-                            this._currentAngleMeasurement.cornerVisible = true;
-                            this._currentAngleMeasurement.cornerWireVisible = false;
-                            this._currentAngleMeasurement.targetVisible = false;
-                            this._currentAngleMeasurement.targetWireVisible = false;
-                            this._currentAngleMeasurement.angleVisible = false;
+                            this._touchState = TOUCH_FINDING_ORIGIN;
+                            // console.log("touchend: this._touchState= LONG_TOUCH_FINDING_ORIGIN (no measurement) -> TOUCH_FINDING_ORIGIN")
                         } else {
-                            const pickResult = scene.pick({
-                                canvasPos: touchEndCanvasPos,
-                                pickSurface: true
-                            })
-                            if (pickResult && pickResult.worldPos) {
-                                if (pointerLens) {
-                                    pointerLens.cursorPos = pickResult.canvasPos;
-                                    pointerLens.snapped = false;
-                                }
-                                this._currentAngleMeasurement.corner.worldPos = pickResult.worldPos;
-                                this._currentAngleMeasurement.originVisible = true;
-                                this._currentAngleMeasurement.originWireVisible = true;
-                                this._currentAngleMeasurement.cornerVisible = true;
-                                this._currentAngleMeasurement.cornerWireVisible = false;
-                                this._currentAngleMeasurement.targetVisible = false;
-                                this._currentAngleMeasurement.targetWireVisible = false;
-                                this._currentAngleMeasurement.angleVisible = false;
-                            } else {
-                                if (this._currentAngleMeasurement) {
-                                    this._currentAngleMeasurement.destroy();
-                                    this._currentAngleMeasurement = null;
-                                }
-                                this._touchState = TOUCH_FINDING_ORIGIN;
-                                // console.log("touchend: this._touchState= QUICK_TOUCH_MOUSE_FINDING_CORNER (nothing picked, destroy measurement) -> TOUCH_FINDING_ORIGIN")
-                                break;
-                            }
+                            this._touchState = TOUCH_FINDING_TARGET;
+                            // console.log("touchend: this._touchState= LONG_TOUCH_MOUSE_FINDING_CORNER  -> TOUCH_FINDING_ORIGIN")
                         }
-                        this._touchState = TOUCH_FINDING_TARGET;
-                        // console.log("touchend: this._touchState= LONG_TOUCH_MOUSE_FINDING_CORNER -> TOUCH_FINDING_TARGET")
                         break;
                     }
 
-                    case QUICK_TOUCH_FINDING_END:
+                    case QUICK_TOUCH_FINDING_TARGET:
                         if (currentNumTouches !== 1 ||
                             touchEndCanvasPos[0] > touchStartCanvasPos[0] + clickTolerance ||
                             touchEndCanvasPos[0] < touchStartCanvasPos[0] - clickTolerance ||
@@ -1152,7 +1104,7 @@ class AngleMeasurementsControl extends Component {
                             //     this._currentAngleMeasurement = null;
                             // }
                             this._touchState = TOUCH_FINDING_TARGET;
-                            // console.log("touchend: (moved) this._touchState= QUICK_TOUCH_FINDING_END -> TOUCH_FINDING_TARGET")
+                            // console.log("touchend: (moved) this._touchState= QUICK_TOUCH_FINDING_TARGET -> TOUCH_FINDING_TARGET")
                             break;
                         } else {
                             const pickResult = scene.pick({
@@ -1175,7 +1127,7 @@ class AngleMeasurementsControl extends Component {
                                 this.fire("measurementEnd", this._currentAngleMeasurement);
                                 this._currentAngleMeasurement = null;
                                 this._touchState = TOUCH_FINDING_ORIGIN;
-                                // console.log("touchend: this._touchState= QUICK_TOUCH_FINDING_END (picked, begin measurement) -> TOUCH_FINDING_ORIGIN")
+                                // console.log("touchend: this._touchState= QUICK_TOUCH_FINDING_TARGET (picked, begin measurement) -> TOUCH_FINDING_ORIGIN")
                                 break;
                             } else {
                                 if (this._currentAngleMeasurement) {
@@ -1188,61 +1140,25 @@ class AngleMeasurementsControl extends Component {
                             }
                         }
 
-                    case LONG_TOUCH_FINDING_END:
+                    case LONG_TOUCH_FINDING_TARGET:
                         if (pointerLens) {
                             pointerLens.visible = false;
                         }
-                        const snapPickResult = scene.snapPick({
-                            canvasPos: touchEndCanvasPos,
-                            snapVertex: this._snapVertex,
-                            snapEdge: this._snapEdge
-                        });
-                        if (snapPickResult && snapPickResult.snappedWorldPos) {
-                            if (pointerLens) {
-                                pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
-                                pointerLens.snapped = true;
+                        if (!this._currentAngleMeasurement || !this._currentAngleMeasurement.targetVisible) {
+                            if (this._currentAngleMeasurement) {
+                                this._currentAngleMeasurement.destroy();
+                                this._currentAngleMeasurement = null;
                             }
-                            this._currentAngleMeasurement.target.worldPos = snapPickResult.snappedWorldPos;
-                            this._currentAngleMeasurement.originVisible = true;
-                            this._currentAngleMeasurement.originWireVisible = true;
-                            this._currentAngleMeasurement.cornerVisible = true;
-                            this._currentAngleMeasurement.cornerWireVisible = true;
-                            this._currentAngleMeasurement.targetVisible = true;
-                            this._currentAngleMeasurement.targetWireVisible = true;
-                            this._currentAngleMeasurement.angleVisible = true;
+                            this._currentAngleMeasurement = null;
+                            this._touchState = TOUCH_FINDING_ORIGIN;
+                            // console.log("touchend: this._touchState= LONG_TOUCH_FINDING_TARGET (no target found) -> TOUCH_FINDING_ORIGIN")
                         } else {
-                            const pickResult = scene.pick({
-                                canvasPos: touchEndCanvasPos,
-                                pickSurface: true
-                            })
-                            if (pickResult && pickResult.worldPos) {
-                                if (pointerLens) {
-                                    pointerLens.cursorPos = pickResult.canvasPos;
-                                    pointerLens.snapped = true;
-                                }
-                                this._currentAngleMeasurement.target.worldPos = pickResult.worldPos;
-                                this._currentAngleMeasurement.originVisible = true;
-                                this._currentAngleMeasurement.originWireVisible = true;
-                                this._currentAngleMeasurement.cornerVisible = true;
-                                this._currentAngleMeasurement.cornerWireVisible = true;
-                                this._currentAngleMeasurement.targetVisible = true;
-                                this._currentAngleMeasurement.targetWireVisible = true;
-                                this._currentAngleMeasurement.angleVisible = true;
-                            } else {
-                                if (this._currentAngleMeasurement) {
-                                    this._currentAngleMeasurement.destroy();
-                                    this._currentAngleMeasurement = null;
-                                }
-                                this._touchState = TOUCH_FINDING_ORIGIN;
-                                // console.log("touchend: this._touchState= QUICK_TOUCH_FINDING_END (nothing picked, destroy measurement) -> TOUCH_FINDING_ORIGIN")
-                                break;
-                            }
+                            this._currentAngleMeasurement.clickable = true;
+                            this.fire("measurementEnd", this._currentAngleMeasurement);
+                            this._currentAngleMeasurement = null;
+                            this._touchState = TOUCH_FINDING_ORIGIN;
+                            // console.log("touchend: this._touchState= LONG_TOUCH_FINDING_TARGET  -> TOUCH_FINDING_ORIGIN")
                         }
-                        this._currentAngleMeasurement.clickable = true;
-                        this.fire("measurementEnd", this._currentAngleMeasurement);
-                        this._currentAngleMeasurement = null;
-                        this._touchState = TOUCH_FINDING_ORIGIN;
-                        // console.log("touchend: this._touchState= LONG_TOUCH_FINDING_END -> TOUCH_FINDING_ORIGIN")
                         break;
 
                     default:
