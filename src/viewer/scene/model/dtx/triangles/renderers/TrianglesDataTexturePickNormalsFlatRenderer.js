@@ -17,7 +17,7 @@ export class TrianglesDataTexturePickNormalsFlatRenderer {
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         return this._scene._sectionPlanesState.getHash();
@@ -90,6 +90,7 @@ export class TrianglesDataTexturePickNormalsFlatRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
+        gl.uniform2fv(this._uPickClipPos, frameCtx.pickClipPos);
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
@@ -258,6 +259,7 @@ export class TrianglesDataTexturePickNormalsFlatRenderer {
 
         this._uRenderPass = program.getLocation("renderPass");
         this._uPickInvisible = program.getLocation("pickInvisible");
+        this._uPickClipPos = program.getLocation("pickClipPos");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
@@ -347,6 +349,16 @@ export class TrianglesDataTexturePickNormalsFlatRenderer {
             src.push("}");
             src.push("out float isPerspective;");
         }
+
+        src.push("uniform vec2 pickClipPos;");
+
+        src.push("vec4 remapClipPos(vec4 clipPos) {");
+        src.push("    clipPos.xy /= clipPos.w;")
+        src.push("    clipPos.xy -= pickClipPos;");
+        src.push("    clipPos.xy *= clipPos.w;")
+        src.push("    return clipPos;")
+        src.push("}");
+
         src.push("out vec4 vWorldPosition;");
         if (clipping) {
             src.push("out int vFlags2;");
@@ -425,7 +437,7 @@ export class TrianglesDataTexturePickNormalsFlatRenderer {
             src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
-        src.push("gl_Position = clipPos;");
+        src.push("gl_Position = remapClipPos(clipPos);");
         src.push("  }");
         src.push("}");
         return src;

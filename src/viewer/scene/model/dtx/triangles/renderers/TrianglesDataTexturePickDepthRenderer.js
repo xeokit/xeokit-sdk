@@ -21,7 +21,7 @@ export class TrianglesDataTexturePickDepthRenderer {
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         return this._scene._sectionPlanesState.getHash();
@@ -95,6 +95,7 @@ export class TrianglesDataTexturePickDepthRenderer {
         gl.uniform3fv(this._uCameraEyeRtc, rtcCameraEye);
         gl.uniform1i(this._uRenderPass, renderPass);
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
+        gl.uniform2fv(this._uPickClipPos, frameCtx.pickClipPos);
         gl.uniform1f(this._uPickZNear, frameCtx.pickZNear);
         gl.uniform1f(this._uPickZFar, frameCtx.pickZFar);
         gl.uniformMatrix4fv(this._uWorldMatrix, false, rotationMatrixConjugate);
@@ -169,6 +170,7 @@ export class TrianglesDataTexturePickDepthRenderer {
         const program = this._program;
         this._uRenderPass = program.getLocation("renderPass");
         this._uPickInvisible = program.getLocation("pickInvisible");
+        this._uPickClipPos = program.getLocation("pickClipPos");
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
@@ -257,6 +259,15 @@ export class TrianglesDataTexturePickDepthRenderer {
             src.push("out float vFragDepth;");
             src.push("out float isPerspective;");
         }
+
+        src.push("uniform vec2 pickClipPos;");
+
+        src.push("vec4 remapClipPos(vec4 clipPos) {");
+        src.push("    clipPos.xy /= clipPos.w;")
+        src.push("    clipPos.xy -= pickClipPos;");
+        src.push("    clipPos.xy *= clipPos.w;")
+        src.push("    return clipPos;")
+        src.push("}");
 
         src.push("bool isPerspectiveMatrix(mat4 m) {");
         src.push("    return (m[2][3] == - 1.0);");
@@ -364,7 +375,7 @@ export class TrianglesDataTexturePickDepthRenderer {
             src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
-        src.push("gl_Position = clipPos;");
+        src.push("gl_Position = remapClipPos(clipPos);");
         src.push("  }");
         src.push("}");
         return src;

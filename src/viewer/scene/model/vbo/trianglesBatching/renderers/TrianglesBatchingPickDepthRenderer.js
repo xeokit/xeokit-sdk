@@ -40,6 +40,9 @@ class TrianglesBatchingPickDepthRenderer extends VBOSceneModelTriangleBatchingRe
             src.push("out vec4 vWorldPosition;");
             src.push("out float vFlags;");
         }
+
+        this._addRemapClipPosLines(src);
+
         src.push("out vec4 vViewPosition;");
         src.push("void main(void) {");
 
@@ -65,7 +68,7 @@ class TrianglesBatchingPickDepthRenderer extends VBOSceneModelTriangleBatchingRe
            src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
-        src.push("gl_Position = clipPos;");
+        src.push("gl_Position = remapClipPos(clipPos);");
         src.push("  }");
         src.push("}");
         return src;

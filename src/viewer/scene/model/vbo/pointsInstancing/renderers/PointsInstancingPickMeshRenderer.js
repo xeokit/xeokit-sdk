@@ -32,6 +32,8 @@ class PointsInstancingPickMeshRenderer extends VBOSceneModelPointInstancingRende
 
         this._addMatricesUniformBlockLines(src);
 
+        this._addRemapClipPosLines(src);
+
         src.push("uniform float pointSize;");
         if (pointsMaterial.perspectivePoints) {
             src.push("uniform float nearPlaneHeight;");
@@ -73,6 +75,7 @@ class PointsInstancingPickMeshRenderer extends VBOSceneModelPointInstancingRende
             src.push("  vFlags = flags;");
         }
         src.push("vec4 clipPos = projMatrix * viewPosition;");
+        src.push("gl_Position = remapClipPos(clipPos);");
         if (scene.logarithmicDepthBufferEnabled) {
            src.push("vFragDepth = 1.0 + clipPos.w;");
         }

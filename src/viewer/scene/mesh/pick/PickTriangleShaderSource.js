@@ -1,7 +1,6 @@
 /**
  * @private
  */
-import {WEBGL_INFO} from "../../webglInfo.js";
 
 class PickTriangleShaderSource {
     constructor(mesh) {
@@ -14,8 +13,6 @@ function buildVertex(mesh) {
     const scene = mesh.scene;
     const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
     const quantizedGeometry = !!mesh._geometry._state.compressGeometry;
-    const billboard = mesh._state.billboard;
-    const stationary = mesh._state.stationary;
     const src = [];
     src.push('#version 300 es');
     src.push("// Surface picking vertex shader");
@@ -37,6 +34,16 @@ function buildVertex(mesh) {
         src.push("}");
         src.push("out float isPerspective;");
     }
+
+    src.push("uniform vec2 pickClipPos;");
+
+    src.push("vec4 remapClipPos(vec4 clipPos) {");
+    src.push("    clipPos.xy /= clipPos.w;")
+    src.push("    clipPos.xy -= pickClipPos;");
+    src.push("    clipPos.xy *= clipPos.w;")
+    src.push("    return clipPos;")
+    src.push("}");
+
     src.push("out vec4 vColor;");
     if (quantizedGeometry) {
         src.push("uniform mat4 positionsDecodeMatrix;");
@@ -58,7 +65,7 @@ function buildVertex(mesh) {
         src.push("vFragDepth = 1.0 + clipPos.w;");
         src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
     }
-    src.push("gl_Position = clipPos;");
+    src.push("gl_Position = remapClipPos(clipPos);");
     src.push("}");
     return src;
 }

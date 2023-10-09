@@ -1,5 +1,5 @@
 import {Program} from "../../../../webgl/Program.js";
-import {createRTCViewMat, getPlaneRTCPos} from "../../../../math/rtcCoords.js";
+import {getPlaneRTCPos} from "../../../../math/rtcCoords.js";
 import {math} from "../../../../math/math.js";
 
 const tempVec3a = math.vec3();
@@ -17,7 +17,7 @@ export class TrianglesDataTexturePickNormalsRenderer {
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         return this._scene._sectionPlanesState.getHash();
@@ -75,6 +75,7 @@ export class TrianglesDataTexturePickNormalsRenderer {
         gl.uniform3fv(this._uCameraEyeRtc, originCameraEye);
 
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
+        gl.uniform2fv(this._uPickClipPos, frameCtx.pickClipPos);
 
         if (scene.logarithmicDepthBufferEnabled) {
             const logDepthBufFC = 2.0 / (Math.log(camera.project.far + 1.0) / Math.LN2);  // TODO: Far should be from projection matrix?
@@ -157,6 +158,7 @@ export class TrianglesDataTexturePickNormalsRenderer {
 
         this._uRenderPass = program.getLocation("renderPass");
         this._uPickInvisible = program.getLocation("pickInvisible");
+        this._uPickClipPos = program.getLocation("pickClipPos");
 
         this._uSectionPlanes = [];
 
@@ -240,6 +242,15 @@ export class TrianglesDataTexturePickNormalsRenderer {
             src.push("out float vFragDepth;");
             src.push("out float isPerspective;");
         }
+
+        src.push("uniform vec2 pickClipPos;");
+
+        src.push("vec4 remapClipPos(vec4 clipPos) {");
+        src.push("    clipPos.xy /= clipPos.w;")
+        src.push("    clipPos.xy -= pickClipPos;");
+        src.push("    clipPos.xy *= clipPos.w;")
+        src.push("    return clipPos;")
+        src.push("}");
 
         src.push("bool isPerspectiveMatrix(mat4 m) {");
         src.push("    return (m[2][3] == - 1.0);");
@@ -355,7 +366,7 @@ export class TrianglesDataTexturePickNormalsRenderer {
             src.push("      vWorldPosition = worldPosition;");
             src.push("      vFlags2 = flags2.w;");
         }
-        src.push("gl_Position = clipPos;");
+        src.push("gl_Position = remapClipPos(clipPos);");
         src.push("}");
 
         src.push("}");

@@ -152,6 +152,8 @@ PickMeshRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     const r = pickID & 0xFF;
     gl.uniform4f(this._uPickColor, r / 255, g / 255, b / 255, a / 255);
 
+    gl.uniform2fv(this._uPickClipPos, frameCtx.pickClipPos);
+
     if (geometryState.indicesBuf) {
         gl.drawElements(geometryState.primitive, geometryState.indicesBuf.numItems, geometryState.indicesBuf.itemType, 0);
         frameCtx.drawElements++;
@@ -185,6 +187,7 @@ PickMeshRenderer.prototype._allocate = function (mesh) {
     this._aPosition = program.getAttribute("position");
     this._uClippable = program.getLocation("clippable");
     this._uPickColor = program.getLocation("pickColor");
+    this._uPickClipPos = program.getLocation("pickClipPos");
     this._uOffset = program.getLocation("offset");
     if (scene.logarithmicDepthBufferEnabled ) {
         this._uLogDepthBufFC = program.getLocation("logDepthBufFC");

@@ -993,7 +993,7 @@ const Renderer = function (scene, options) {
                 }
             }
 
-            const pickBuffer = renderBufferManager.getRenderBuffer("pick");
+            const pickBuffer = renderBufferManager.getRenderBuffer("pick", { size: [1, 1] });
 
             pickBuffer.bind();
 
@@ -1055,10 +1055,12 @@ const Renderer = function (scene, options) {
         frameCtx.pickViewMatrix = pickViewMatrix;
         frameCtx.pickProjMatrix = pickProjMatrix;
         frameCtx.pickInvisible = !!params.pickInvisible;
+        frameCtx.pickClipPos = [
+            getClipPosX(canvasPos[0], gl.drawingBufferWidth),
+            getClipPosY(canvasPos[1], gl.drawingBufferHeight),
+        ];
 
-        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-
-        gl.clearColor(0, 0, 0, 0);
+        gl.viewport(0, 0, 1, 1);
         gl.depthMask(true);
         gl.enable(gl.DEPTH_TEST);
         gl.disable(gl.CULL_FACE);
@@ -1092,8 +1094,7 @@ const Renderer = function (scene, options) {
                 }
             }
         }
-        const resolutionScale = scene.canvas.resolutionScale;
-        const pix = pickBuffer.read(Math.round(canvasPos[0] * resolutionScale), Math.round(canvasPos[1] * resolutionScale));
+        const pix = pickBuffer.read(0, 0);
         let pickID = pix[0] + (pix[1] * 256) + (pix[2] * 256 * 256) + (pix[3] * 256 * 256 * 256);
 
         if (pickID < 0) {
@@ -1118,8 +1119,12 @@ const Renderer = function (scene, options) {
         frameCtx.pickViewMatrix = pickViewMatrix; // Can be null
         frameCtx.pickProjMatrix = pickProjMatrix; // Can be null
         // frameCtx.pickInvisible = !!params.pickInvisible;
+        frameCtx.pickClipPos = [
+            getClipPosX(canvasPos[0], gl.drawingBufferWidth),
+            getClipPosY(canvasPos[1], gl.drawingBufferHeight),
+        ];
 
-        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+        gl.viewport(0, 0, 1, 1);
 
         gl.clearColor(0, 0, 0, 0);
         gl.enable(gl.DEPTH_TEST);
@@ -1129,8 +1134,7 @@ const Renderer = function (scene, options) {
 
         pickable.drawPickTriangles(frameCtx);
 
-        const resolutionScale = scene.canvas.resolutionScale;
-        const pix = pickBuffer.read(Math.round(canvasPos[0] * resolutionScale), Math.round(canvasPos[1] * resolutionScale));
+        const pix = pickBuffer.read(0, 0);
 
         let primIndex = pix[0] + (pix[1] * 256) + (pix[2] * 256 * 256) + (pix[3] * 256 * 256 * 256);
 
@@ -1162,8 +1166,12 @@ const Renderer = function (scene, options) {
             frameCtx.pickZFar = nearAndFar[1];
             frameCtx.pickElementsCount = pickable.pickElementsCount;
             frameCtx.pickElementsOffset = pickable.pickElementsOffset;
-
-            gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+            frameCtx.pickClipPos = [
+                getClipPosX(canvasPos[0], gl.drawingBufferWidth),
+                getClipPosY(canvasPos[1], gl.drawingBufferHeight),
+            ];
+    
+            gl.viewport(0, 0, 1, 1);
 
             gl.clearColor(0, 0, 0, 0);
             gl.depthMask(true);
@@ -1174,8 +1182,7 @@ const Renderer = function (scene, options) {
 
             pickable.drawPickDepths(frameCtx); // Draw color-encoded fragment screen-space depths
 
-            const resolutionScale = scene.canvas.resolutionScale;
-            const pix = pickBuffer.read(Math.round(canvasPos[0] * resolutionScale), Math.round(canvasPos[1] * resolutionScale));
+            const pix = pickBuffer.read(0, 0);
 
             const screenZ = unpackDepth(pix); // Get screen-space Z at the given canvas coords
 
@@ -1476,8 +1483,12 @@ const Renderer = function (scene, options) {
         frameCtx.pickOrigin = pickResult.origin;
         frameCtx.pickViewMatrix = pickViewMatrix;
         frameCtx.pickProjMatrix = pickProjMatrix;
+        frameCtx.pickClipPos = [
+            getClipPosX(canvasPos[0], gl.drawingBufferWidth),
+            getClipPosY(canvasPos[1], gl.drawingBufferHeight),
+        ];
 
-        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+        gl.viewport(0, 0, 1, 1);
 
         gl.clearColor(0, 0, 0, 0);
         gl.enable(gl.DEPTH_TEST);
@@ -1487,8 +1498,7 @@ const Renderer = function (scene, options) {
 
         pickable.drawPickNormals(frameCtx); // Draw color-encoded fragment World-space normals
 
-        const resolutionScale = scene.canvas.resolutionScale;
-        const pix = pickBuffer.read(Math.round(canvasPos[0] * resolutionScale), Math.round(canvasPos[1] * resolutionScale));
+        const pix = pickBuffer.read(0, 0);
 
         const worldNormal = [(pix[0] / 256.0) - 0.5, (pix[1] / 256.0) - 0.5, (pix[2] / 256.0) - 0.5];
 
@@ -1685,4 +1695,4 @@ const Renderer = function (scene, options) {
     };
 };
 
-export {Renderer};
+export { Renderer };

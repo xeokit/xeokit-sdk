@@ -2,8 +2,6 @@
  * @author xeolabs / https://github.com/xeolabs
  */
 
-import {WEBGL_INFO} from "../../webglInfo.js";
-
 /**
  * @private
  */
@@ -58,6 +56,16 @@ function buildVertex(mesh) {
         src.push("   mat[2][2] =1.0;");
         src.push("}");
     }
+
+    src.push("uniform vec2 pickClipPos;");
+
+    src.push("vec4 remapClipPos(vec4 clipPos) {");
+    src.push("    clipPos.xy /= clipPos.w;")
+    src.push("    clipPos.xy -= pickClipPos;");
+    src.push("    clipPos.xy *= clipPos.w;")
+    src.push("    return clipPos;")
+    src.push("}");
+
     src.push("void main(void) {");
     src.push("vec4 localPosition = vec4(position, 1.0); ");
     if (quantizedGeometry) {
@@ -84,7 +92,7 @@ function buildVertex(mesh) {
         src.push("vFragDepth = 1.0 + clipPos.w;");
         src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
     }
-    src.push("gl_Position = clipPos;");
+    src.push("gl_Position = remapClipPos(clipPos);");
     src.push("}");
     return src;
 }
