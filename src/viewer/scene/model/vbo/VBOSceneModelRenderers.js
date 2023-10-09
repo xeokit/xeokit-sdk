@@ -10,7 +10,6 @@ const edgesDefaultColor = new Float32Array([0, 0, 0, 1]);
 
 const tempVec4 = math.vec4();
 const tempVec3a = math.vec3();
-const tempVec3b = math.vec3();
 const tempVec3c = math.vec3();
 const tempMat4a = math.mat4();
 
@@ -256,7 +255,6 @@ class VBOSceneModelRenderer {
         const program = this._program;
         const lightsState = scene._lightsState;
         const lights = lightsState.lights;
-        const project = scene.camera.project;
 
         program.bind();
 
@@ -282,43 +280,6 @@ class VBOSceneModelRenderer {
             if (this._uLightDir[i]) {
                 gl.uniform3fv(this._uLightDir[i], light.dir);
             }
-        }
-
-        if (this._withSAO) {
-            const sao = scene.sao;
-            const saoEnabled = sao.possible;
-            if (saoEnabled) {
-                const viewportWidth = gl.drawingBufferWidth;
-                const viewportHeight = gl.drawingBufferHeight;
-                tempVec4[0] = viewportWidth;
-                tempVec4[1] = viewportHeight;
-                tempVec4[2] = sao.blendCutoff;
-                tempVec4[3] = sao.blendFactor;
-                gl.uniform4fv(this._uSAOParams, tempVec4);
-                this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 0);
-            }
-        }
-
-        if (scene.logarithmicDepthBufferEnabled) {
-            const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
-            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
-        }
-
-        if (this._uGammaFactor) {
-            gl.uniform1f(this._uGammaFactor, scene.gammaFactor);
-        }
-
-        if (this._uPickInvisible) {
-            gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
-        }
-
-
-        if (this._uShadowViewMatrix) {
-            gl.uniformMatrix4fv(this._uShadowViewMatrix, false, frameCtx.shadowViewMatrix);
-        }
-
-        if (this._uShadowProjMatrix) {
-            gl.uniformMatrix4fv(this._uShadowProjMatrix, false, frameCtx.shadowProjMatrix);
         }
     }
 
