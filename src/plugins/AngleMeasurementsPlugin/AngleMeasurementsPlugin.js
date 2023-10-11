@@ -1,6 +1,6 @@
 import {Plugin} from "../../viewer/Plugin.js";
 import {AngleMeasurement} from "./AngleMeasurement.js";
-import {AngleMeasurementsControl} from "./AngleMeasurementsControl.js";
+import {AngleMeasurementsMouseControl} from "./AngleMeasurementsMouseControl";
 
 /**
  * {@link Viewer} plugin for measuring angles.
@@ -16,7 +16,7 @@ import {AngleMeasurementsControl} from "./AngleMeasurementsControl.js";
  * as three positions on the surface(s) of one or more {@link Entity}s.
  * * As shown on the screen capture above, a AngleMeasurement has two wires that show the line segments, with a label that shows the angle between them.
  * * Create AngleMeasurements programmatically with {@link AngleMeasurementsPlugin#createMeasurement}.
- * * Create AngleMeasurements interactively using the {@link AngleMeasurementsControl}, located at {@link AngleMeasurementsPlugin#control}.
+ * * Create AngleMeasurements interactively using a {@link AngleMeasurementsControl}.
  * * Existing AngleMeasurements are registered by ID in {@link AngleMeasurementsPlugin#measurements}.
  * * Destroy AngleMeasurements using {@link AngleMeasurementsPlugin#destroyMeasurement}.
  * * Configure global measurement units and scale via {@link Metrics}, located at {@link Scene#metrics}
@@ -88,9 +88,9 @@ import {AngleMeasurementsControl} from "./AngleMeasurementsControl.js";
  * });
  * ````
  *
- * ## Example 2: Creating AngleMeasurements Interactively
+ * ## Example 2: Creating AngleMeasurements with Mouse Input
  *
- * In our second example, we'll use an {@link XKTLoaderPlugin} to load a model, then we'll use the AngleMeasurementsPlugin's {@link AngleMeasurementsControl} to interactively create {@link AngleMeasurement}s with mouse or touch input.
+ * In our second example, we'll use an {@link XKTLoaderPlugin} to load a model, then we'll use the AngleMeasurementsPlugin's {@link AngleMeasurementsTouchControl} to interactively create {@link AngleMeasurement}s with mouse or touch input.
  *
  * After we've activated the AngleMeasurementsControl, the first click on any {@link Entity} begins constructing a AngleMeasurement, fixing its
  * origin to that Entity. The next click on any Entity will fix the AngleMeasurement's corner, and the next click after
@@ -102,7 +102,7 @@ import {AngleMeasurementsControl} from "./AngleMeasurementsControl.js";
  * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_createWithMouse)]
  *
  * ````JavaScript
- * import {Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin} from "xeokit-sdk.es.js";
+ * import {Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin, AngleMeasurementsMouseControl, PointerLens} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas",
@@ -115,13 +115,14 @@ import {AngleMeasurementsControl} from "./AngleMeasurementsControl.js";
  *
  * const xktLoader = new XKTLoaderPlugin(viewer);
  *
- * const angleMeasurements = new AngleMeasurementsPlugin(viewer);
+ * cconst angleMeasurementsMouseControl  = new AngleMeasurementsMouseControl(angleMeasurements, {
+ *     pointerLens : new PointerLens(viewer)
+ * })
  *
- * const model = xktLoader.load({
- *     src: "./models/xkt/duplex/duplex.xkt"
- * });
+ * angleMeasurementsMouseControl.snapToVertex = true;
+ * angleMeasurementsMouseControl.snapToEdge = true;
  *
- * angleMeasurements.control.activate();  // <------------ Activate the AngleMeasurementsControl
+ * angleMeasurementsMouseControl.activate();
  * ````
  *
  * ## Example 4: Attaching Mouse Handlers
@@ -129,7 +130,7 @@ import {AngleMeasurementsControl} from "./AngleMeasurementsControl.js";
  * In our fourth example, we'll attach even handlers to our plugin, to catch when the user
  * hovers or right-clicks over our measurements.
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_modelWithMeasurements)]
+ * [[Run example](/examples/measurement/#angle_modelWithMeasurements)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin} from "xeokit-sdk.es.js";
@@ -203,7 +204,7 @@ import {AngleMeasurementsControl} from "./AngleMeasurementsControl.js";
  * });
  * ````
  */
-class AngleMeasurementsPlugin extends Plugin {
+export class AngleMeasurementsPlugin extends Plugin {
 
     /**
      * @constructor
@@ -214,17 +215,15 @@ class AngleMeasurementsPlugin extends Plugin {
      * @param {string} [cfg.defaultColor=null] The default color of the dots, wire and label.
      * @param {boolean} [cfg.defaultLabelsVisible=true] The default value of {@link AngleMeasurement.labelsVisible}.
      * @param {number} [cfg.zIndex] If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
-     * @param {PointerLens} [cfg.pointerLens] A PointerLens to help the user position the pointer. This can be shared with other plugins.
+     * @param {PointerCircle} [cfg.pointerLens] A PointerLens to help the user position the pointer. This can be shared with other plugins.
      */
     constructor(viewer, cfg = {}) {
 
         super("AngleMeasurements", viewer);
 
-        this._pointerLens = cfg.pointerLens;
-
         this._container = cfg.container || document.body;
 
-        this._control = new AngleMeasurementsControl(this);
+        this._defaultControl = null;
 
         this._measurements = {};
 
@@ -277,20 +276,16 @@ class AngleMeasurementsPlugin extends Plugin {
     }
 
     /**
-     * Gets the PointerLens attached to this AngleMeasurementsPlugin.
-     * @returns {PointerLens}
-     */
-    get pointerLens() {
-        return this._pointerLens;
-    }
-
-    /**
-     * Gets the {@link AngleMeasurementsControl}, which creates {@link AngleMeasurement}s from user input.
+     * Gets the default {@link AngleMeasurementsMouseControl}.
      *
-     * @type {AngleMeasurementsControl}
+     * @type {AngleMeasurementsMouseControl}
+     * @deprecated
      */
     get control() {
-        return this._control;
+        if (!this._defaultControl) {
+            this._defaultControl = new AngleMeasurementsMouseControl(this, {});
+        }
+        return this._defaultControl;
     }
 
     /**
@@ -408,4 +403,3 @@ class AngleMeasurementsPlugin extends Plugin {
     }
 }
 
-export {AngleMeasurementsPlugin}

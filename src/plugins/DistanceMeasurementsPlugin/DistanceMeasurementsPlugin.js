@@ -1,6 +1,6 @@
 import {Plugin} from "../../viewer/Plugin.js";
 import {DistanceMeasurement} from "./DistanceMeasurement.js";
-import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
+import {DistanceMeasurementsMouseControl} from "./DistanceMeasurementsMouseControl";
 
 /**
  * {@link Viewer} plugin for measuring point-to-point distances.
@@ -17,7 +17,7 @@ import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
  * * As shown on the screen capture above, a DistanceMeasurement has one wire (light blue) that shows the direct point-to-point measurement,
  * and three more wires (red, green and blue) that show the distance on each of the World-space X, Y and Z axis.
  * * Create DistanceMeasurements programmatically with {@link DistanceMeasurementsPlugin#createMeasurement}.
- * * Create DistanceMeasurements interactively using the {@link DistanceMeasurementsControl}, located at {@link DistanceMeasurementsPlugin#control}.
+ * * Create DistanceMeasurements interactively using a {@link DistanceMeasurementsControl}.
  * * Existing DistanceMeasurements are registered by ID in {@link DistanceMeasurementsPlugin#measurements}.
  * * Destroy DistanceMeasurements using {@link DistanceMeasurementsPlugin#destroyMeasurement}.
  * * Configure global measurement units and scale via {@link Metrics}, located at {@link Scene#metrics}.
@@ -29,7 +29,7 @@ import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
  * Note how each DistanceMeasurement has ````origin```` and ````target```` endpoints, which each indicate a 3D World-space
  * position on the surface of an {@link Entity}. The endpoints can be attached to the same Entity, or to different Entitys.
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_modelWithMeasurements)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/measurements/#distance_modelWithMeasurements)]
  *
  * ````JavaScript
  * import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin} from "xeokit-sdk.es.js";
@@ -83,20 +83,21 @@ import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
  * });
  * ````
  *
- * ## Example 2: Creating DistanceMeasurements Interactively
+ * ## Example 2: Creating DistanceMeasurements with Mouse Input
  *
- * In our second example, we'll use an {@link XKTLoaderPlugin} to load a model, then we'll use the DistanceMeasurementPlugin's {@link DistanceMeasurementsControl} to interactively create {@link DistanceMeasurement}s with mouse or touch input.
+ * In our second example, we'll use an {@link XKTLoaderPlugin} to load a model, then we'll use a
+ * {@link DistanceMeasurementsMouseControl} to interactively create {@link DistanceMeasurement}s with mouse input.
  *
- * After we've activated the DistanceMeasurementsControl, the first click on any {@link Entity} begins constructing a DistanceMeasurement, fixing its
+ * After we've activated the DistanceMeasurementsMouseControl, the first click on any {@link Entity} begins constructing a DistanceMeasurement, fixing its
  * origin to that Entity. The next click on any Entity will complete the DistanceMeasurement, fixing its target to that second Entity.
  *
- * The DistanceMeasurementControl will then wait for the next click on any Entity, to begin constructing
+ * The DistanceMeasurementsMouseControl will then wait for the next click on any Entity, to begin constructing
  * another DistanceMeasurement, and so on, until deactivated again.
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_createWithMouse)]
+ * [[Run example](/examples/measurement/#distance_createWithMouse)]
  *
  * ````JavaScript
- * import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin} from "xeokit-sdk.es.js";
+ * import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin, DistanceMeasurementsMouseControl, PointerLens} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas",
@@ -111,11 +112,18 @@ import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
  *
  * const distanceMeasurements = new DistanceMeasurementsPlugin(viewer);
  *
+ * const distanceMeasurementsControl  = new DistanceMeasurementsMouseControl(distanceMeasurements, {
+ *     pointerLens : new PointerLens(viewer)
+ * })
+ *
+ * distanceMeasurementsControl.snapToVertex = true;
+ * distanceMeasurementsControl.snapToEdge = true;
+ *
+ * distanceMeasurementsControl.activate();
+ *
  * const model = xktLoader.load({
  *     src: "./models/xkt/duplex/duplex.xkt"
  * });
- *
- * distanceMeasurements.control.activate();  // <------------ Activate the DistanceMeasurementsControl
  * ````
  *
  * ## Example 3: Configuring Measurement Units and Scale
@@ -135,13 +143,13 @@ import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
  *
  * ## Example 4: Attaching Mouse Handlers
  *
- * In our fourth example, we'll attach even handlers to our plugin, to catch when the user
+ * In our fourth example, we'll attach event handlers to our plugin, to catch when the user
  * hovers or right-clicks over our measurements.
  *
  * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_modelWithMeasurements)]
  *
  * ````javascript
- * import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin} from "xeokit-sdk.es.js";
+ * import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin, DistanceMeasurementsMouseControl, PointerLens} from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas",
@@ -155,6 +163,15 @@ import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
  * const xktLoader = new XKTLoaderPlugin(viewer);
  *
  * const distanceMeasurements = new DistanceMeasurementsPlugin(viewer);
+ *
+ * const distanceMeasurementsControl  = new DistanceMeasurementsMouseControl(distanceMeasurements, {
+ *     pointerLens : new PointerLens(viewer)
+ * })
+ *
+ * distanceMeasurementsControl.snapToVertex = true;
+ * distanceMeasurementsControl.snapToEdge = true;
+ *
+ * distanceMeasurementsControl.activate();
  *
  * distanceMeasurements.on("mouseOver", (e) => {
  *     e.measurement.setHighlighted(true);
@@ -170,7 +187,7 @@ import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
  * });
  *
  * const model = xktLoader.load({
- *      src: "./models/xkt/duplex/duplex.xkt"
+ *      src: "Duplex.xkt"
  * });
  *
  * model.on("loaded", () => {
@@ -225,7 +242,7 @@ class DistanceMeasurementsPlugin extends Plugin {
      * @param {boolean} [cfg.defaultZAxisVisible=true] The default value of the DistanceMeasurements `zAxisVisible` property.
      * @param {string} [cfg.defaultColor=#00BBFF] The default color of the length dots, wire and label.
      * @param {number} [cfg.zIndex] If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
-     * @param {PointerLens} [cfg.pointerLens] A PointerLens to help the user position the pointer. This can be shared with other plugins.
+     * @param {PointerCircle} [cfg.pointerLens] A PointerLens to help the user position the pointer. This can be shared with other plugins.
      */
     constructor(viewer, cfg = {}) {
 
@@ -235,7 +252,7 @@ class DistanceMeasurementsPlugin extends Plugin {
 
         this._container = cfg.container || document.body;
 
-        this._control = new DistanceMeasurementsControl(this, {});
+        this._defaultControl = null;
 
         this._measurements = {};
 
@@ -298,19 +315,23 @@ class DistanceMeasurementsPlugin extends Plugin {
 
     /**
      * Gets the PointerLens attached to this DistanceMeasurementsPlugin.
-     * @returns {PointerLens}
+     * @returns {PointerCircle}
      */
     get pointerLens() {
         return this._pointerLens;
     }
 
     /**
-     * Gets the {@link DistanceMeasurementsControl}, which creates {@link DistanceMeasurement}s from user input.
+     * Gets the default {@link DistanceMeasurementsControl}.
      *
      * @type {DistanceMeasurementsControl}
+     * @deprecated
      */
     get control() {
-        return this._control;
+        if (!this._defaultControl) {
+            this._defaultControl = new DistanceMeasurementsMouseControl(this, {});
+        }
+        return this._defaultControl;
     }
 
     /**

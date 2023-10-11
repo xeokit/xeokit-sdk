@@ -1270,14 +1270,14 @@ const Renderer = function (scene, options) {
     /**
      * @param {[number, number]} canvasPos
      * @param {number} [snapRadiusInPixels=30]
-     * @param {boolean} [snapVertex=true]
-     * @param {boolean} [snapEdge=true]
+     * @param {boolean} [snapToVertex=true]
+     * @param {boolean} [snapToEdge=true]
      *
      * @returns {{worldPos:number[],snappedWorldPos:null|number[],snappedCanvasPos:null|number[], snapType:null|"vertex"|"edge"}}
      */
-    this.snapPick = function (canvasPos, snapRadiusInPixels = 30, snapVertex = true, snapEdge = true) {
+    this.snapPick = function (canvasPos, snapRadiusInPixels = 30, snapToVertex = true, snapToEdge = true) {
 
-        if (!snapVertex && !snapEdge) {
+        if (!snapToVertex && !snapToEdge) {
             return this.pick({canvasPos, pickSurface: true});
         }
 
@@ -1346,7 +1346,7 @@ const Renderer = function (scene, options) {
 
         gl.depthMask(false);
 
-        if (snapVertex && snapEdge) {
+        if (snapToVertex && snapToEdge) {
             frameCtx.snapMode = "edge";
             snapPickDrawSnapDepths(frameCtx);
 
@@ -1355,7 +1355,7 @@ const Renderer = function (scene, options) {
 
             snapPickDrawSnapDepths(frameCtx);
         } else {
-            frameCtx.snapMode = snapVertex ? "vertex" : "edge";
+            frameCtx.snapMode = snapToVertex ? "vertex" : "edge";
 
             snapPickDrawSnapDepths(frameCtx);
         }
@@ -1403,7 +1403,7 @@ const Renderer = function (scene, options) {
                     x,
                     y,
                     dist,
-                    isVertex: snapVertex && snapEdge ? snapPickResultArray[i + 3] > layerParamsSnap.length / 2 : snapVertex,
+                    isVertex: snapToVertex && snapToEdge ? snapPickResultArray[i + 3] > layerParamsSnap.length / 2 : snapToVertex,
                     result: [
                         snapPickResultArray[i + 0],
                         snapPickResultArray[i + 1],

@@ -48,13 +48,7 @@
 </body>
 <script type="module">
 
-    import {
-        Viewer,
-        XKTLoaderPlugin,
-        AngleMeasurementsPlugin,
-        AngleMeasurementsMouseControl,
-        PointerLens
-    } from "../../dist/xeokit-sdk.es.js";
+    import {Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin, AngleMeasurementsMouseControl, PointerLens} from "../../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -75,11 +69,11 @@
 
     const angleMeasurements = new AngleMeasurementsPlugin(viewer);
 
-    const angleMeasurementsMouseControl = new AngleMeasurementsMouseControl(angleMeasurements, {
-        pointerLens: new PointerLens(viewer)
-    });
+    const angleMeasurementsMouseControl  = new AngleMeasurementsMouseControl(angleMeasurements, {
+        pointerLens : new PointerLens(viewer)
+    })
 
-    angleMeasurementsMouseControl.snapping = true;
+    angleMeasurementsMouseControl.snapping = false;
 
     angleMeasurementsMouseControl.activate();
 

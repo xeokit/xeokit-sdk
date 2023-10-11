@@ -645,8 +645,8 @@ class CameraControl extends Component {
             smartPivot: false,
             doubleClickTimeFrame: 250,
             
-            snapVertex: DEFAULT_SNAP_VERTEX,
-            snapEdge: DEFAULT_SNAP_EDGE,
+            snapToVertex: DEFAULT_SNAP_VERTEX,
+            snapToEdge: DEFAULT_SNAP_EDGE,
             snapRadius: DEFAULT_SNAP_PICK_RADIUS,
 
             // Rotation
@@ -905,10 +905,10 @@ class CameraControl extends Component {
     /**
      * Sets whether the pointer snap to vertex.
      *
-     * @param {boolean} snapVertex
+     * @param {boolean} snapToVertex
      */
-    set snapVertex(snapVertex) {
-        this._configs.snapVertex = !!snapVertex;
+    set snapToVertex(snapToVertex) {
+        this._configs.snapToVertex = !!snapToVertex;
     }
 
     /**
@@ -916,17 +916,17 @@ class CameraControl extends Component {
      *
      * @returns {boolean}
      */
-    get snapVertex() {
-        return this._configs.snapVertex;
+    get snapToVertex() {
+        return this._configs.snapToVertex;
     }
 
     /**
      * Sets whether the pointer snap to edge.
      *
-     * @param {boolean} snapEdge
+     * @param {boolean} snapToEdge
      */
-    set snapEdge(snapEdge) {
-        this._configs.snapEdge = !!snapEdge;
+    set snapToEdge(snapToEdge) {
+        this._configs.snapToEdge = !!snapToEdge;
     }
 
     /**
@@ -934,8 +934,8 @@ class CameraControl extends Component {
      *
      * @returns {boolean}
      */
-    get snapEdge() {
-        return this._configs.snapEdge;
+    get snapToEdge() {
+        return this._configs.snapToEdge;
     }
 
     /**
