@@ -21,7 +21,7 @@
       },
       {
         "lineNumber": 160,
-        "line": "    loadData(metaModelData, options={}) {"
+        "line": "    loadData(metaModelData, options = {}) {"
       }
     ],
     "codeParams": [
@@ -132,26 +132,22 @@
       },
       {
         "lineNumber": 115,
-        "line": "     * @param [cfg.worldMatrix] Flat float 4x4 matrix"
-      },
-      {
-        "lineNumber": 116,
         "line": "     * @param cfg.worldAABB Flat float AABB World-space AABB"
       },
       {
-        "lineNumber": 117,
+        "lineNumber": 116,
         "line": "     * @param cfg.pickColor Quantized pick color"
       },
       {
-        "lineNumber": 118,
+        "lineNumber": 117,
         "line": "     * @returns {number} Portion ID"
       },
       {
-        "lineNumber": 119,
+        "lineNumber": 118,
         "line": "     */"
       },
       {
-        "lineNumber": 120,
+        "lineNumber": 119,
         "line": "    createPortion(cfg) {"
       }
     ],
@@ -210,26 +206,22 @@
       },
       {
         "lineNumber": 124,
-        "line": "     * @param [cfg.worldMatrix] Flat float 4x4 matrix"
-      },
-      {
-        "lineNumber": 125,
         "line": "     * @param cfg.worldAABB Flat float AABB World-space AABB"
       },
       {
-        "lineNumber": 126,
+        "lineNumber": 125,
         "line": "     * @param cfg.pickColor Quantized pick color"
       },
       {
-        "lineNumber": 127,
+        "lineNumber": 126,
         "line": "     * @returns {number} Portion ID"
       },
       {
-        "lineNumber": 128,
+        "lineNumber": 127,
         "line": "     */"
       },
       {
-        "lineNumber": 129,
+        "lineNumber": 128,
         "line": "    createPortion(cfg) {"
       }
     ],
@@ -320,26 +312,22 @@
       },
       {
         "lineNumber": 176,
-        "line": "     * @param [cfg.sceneModelMatrix] Flat float 4x4 matrix"
-      },
-      {
-        "lineNumber": 177,
         "line": "     * @param cfg.worldAABB Flat float AABB World-space AABB"
       },
       {
-        "lineNumber": 178,
+        "lineNumber": 177,
         "line": "     * @param cfg.pickColor Quantized pick color"
       },
       {
-        "lineNumber": 179,
+        "lineNumber": 178,
         "line": "     * @returns {number} Portion ID"
       },
       {
-        "lineNumber": 180,
+        "lineNumber": 179,
         "line": "     */"
       },
       {
-        "lineNumber": 181,
+        "lineNumber": 180,
         "line": "    createPortion(cfg) {"
       }
     ],
