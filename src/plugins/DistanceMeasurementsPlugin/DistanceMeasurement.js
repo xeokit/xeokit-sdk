@@ -6,7 +6,7 @@ import {math} from "../../viewer/scene/math/math.js";
 import {Component} from "../../viewer/scene/Component.js";
 
 
-var distVec3 = math.vec3();
+const distVec3 = math.vec3();
 
 const lengthWire = (x1, y1, x2, y2) => {
     var a = x1 - x2;

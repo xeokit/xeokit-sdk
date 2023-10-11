@@ -1,6 +1,43 @@
 /**
- * A PointerLens shows a magnified view of a {@link Viewer's | Viewer} canvas, centered at the position of the
+ * A PointerLens shows a magnified view of a {@link Viewer}'s canvas, centered at the position of the
  * mouse or touch pointer.
+ *
+ * This component is used by {@link DistanceMeasurementsControl} and {@link AngleMeasurementsControl}
+ * to help position the pointer when snap-to-vertex or snap-toedge is enabled.
+ *
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/measurements/#distance_modelWithMeasurements)]
+ *
+ * ````JavaScript
+ *
+ *  import {Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin, AngleMeasurementsMouseControl, PointerLens} from "../../dist/xeokit-sdk.es.js";
+ *
+ *  const viewer = new Viewer({
+ *      canvasId: "myCanvas",
+ *      dtxEnabled: true
+ *  });
+ *
+ *  viewer.camera.eye = [-3.93, 2.85, 27.01];
+ *  viewer.camera.look = [4.40, 3.72, 8.89];
+ *  viewer.camera.up = [-0.01, 0.99, 0.039];
+ *
+ *  const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ *  const sceneModel = xktLoader.load({
+ *      id: "myModel",
+ *      src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt",
+ *      edges: true
+ *  });
+ *
+ *  const angleMeasurements = new AngleMeasurementsPlugin(viewer);
+ *
+ *  const angleMeasurementsMouseControl  = new AngleMeasurementsMouseControl(angleMeasurements, {
+ *      pointerLens : new PointerLens(viewer, {
+ *          zoomFactor: 2
+ *      })
+ *  })
+ *
+ *  angleMeasurementsMouseControl.activate();
+ * ````
  */
 export class PointerLens {
 
