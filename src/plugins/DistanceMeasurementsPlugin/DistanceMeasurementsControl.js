@@ -18,47 +18,28 @@ export class DistanceMeasurementsControl extends Component {
     }
 
     /**
-     * Gets whether snap-to-vertex is enabled for this DistanceMeasurementsControl.
+     * Sets whether snap-to-vertex and snap-to-edge are enabled for this DistanceMeasurementsControl.
      *
      * This is `true` by default.
      *
-     * @returns {boolean}  Whether snap-to-vertex is enabled for this DistanceMeasurementsControl.
-     * @abstract
+     * Internally, this deactivates then activates the DistanceMeasurementsControl when changed, which means that
+     * it will destroy any DistanceMeasurements currently under construction, and incurs some overhead, since it unbinds
+     * and rebinds various input handlers.
+     *
+     * @param {boolean} snapping Whether to enable snap-to-vertex and snap-edge for this DistanceMeasurementsControl.
      */
-    get snapToVertex() {
+    set snapping(snapping) {
     }
 
     /**
-     * Sets whether snap-to-vertex is enabled for this DistanceMeasurementsControl.
+     * Gets whether snap-to-vertex and snap-to-edge are enabled for this DistanceMeasurementsControl.
      *
      * This is `true` by default.
      *
-     * @param {boolean} snapToVertex Whether to enable snap-to-vertex for this DistanceMeasurementsControl.
-     * @abstract
+     * @returns {boolean} Whether snap-to-vertex and snap-to-edge are enabled for this DistanceMeasurementsControl.
      */
-    set snapToVertex(snapToVertex) {
-    }
-
-    /**
-     * Gets whether snap-to-edge is enabled for this DistanceMeasurementsControl.
-     *
-     * This is `true` by default.
-     *
-     * @returns {boolean} Whether snap-to-edge is enabled for this DistanceMeasurementsControl.
-     * @abstract
-     */
-    get snapToEdge() {
-    }
-
-    /**
-     * Sets whether snap-to-edge is enabled for this DistanceMeasurementsControl.
-     *
-     * This is `true` by default.
-     *
-     * @param snapToEdge {boolean} snapToEdge Whether to enable snap-to-edge for this DistanceMeasurementsControl.
-     * @abstract
-     */
-    set snapToEdge(snapToEdge) {
+    get snapping() {
+        return true;
     }
 
     /**

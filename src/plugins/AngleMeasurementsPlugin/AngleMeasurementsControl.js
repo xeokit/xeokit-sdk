@@ -18,47 +18,28 @@ export class AngleMeasurementsControl extends Component {
     }
 
     /**
-     * Gets whether snap-to-vertex is enabled for this AngleMeasurementsControl.
+     * Sets whether snap-to-vertex and snap-to-edge are enabled for this AngleMeasurementsControl.
      *
      * This is `true` by default.
      *
-     * @returns {boolean}
-     * @abstract
+     * Internally, this deactivates then activates the AngleMeasurementsControl when changed, which means that
+     * it will destroy any AngleMeasurements currently under construction, and incurs some overhead, since it unbinds
+     * and rebinds various input handlers.
+     *
+     * @param {boolean} snapping Whether to enable snap-to-vertex and snap-edge for this AngleMeasurementsControl.
      */
-    get snapToVertex() {
+    set snapping(snapping) {
     }
 
     /**
-     * Sets whether snap-to-vertex is enabled for this AngleMeasurementsControl.
+     * Gets whether snap-to-vertex and snap-to-edge are enabled for this AngleMeasurementsControl.
      *
      * This is `true` by default.
      *
-     * @param {boolean} snapToVertex Whether to enable snap-to-vertex for this AngleMeasurementsControl.
-     * @abstract
+     * @returns {boolean} Whether snap-to-vertex and snap-to-edge are enabled for this AngleMeasurementsControl.
      */
-    set snapToVertex(snapToVertex) {
-    }
-
-    /**
-     * Gets whether snap-to-edge is enabled for this AngleMeasurementsControl.
-     *
-     * This is `true` by default.
-     *
-     * @returns {boolean}
-     * @abstract
-     */
-    get snapToEdge() {
-    }
-
-    /**
-     * Sets whether snap-to-edge is enabled for this AngleMeasurementsControl.
-     *
-     * This is `true` by default.
-     *
-     * @param snapToEdge {boolean} snapToEdge Whether to enable snap-to-edge for this AngleMeasurementsControl.
-     * @abstract
-     */
-    set snapToEdge(snapToEdge) {
+    get snapping() {
+        return true;
     }
 
     /**

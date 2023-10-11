@@ -1,4 +1,3 @@
-import {Component} from "../../viewer/scene/Component.js";
 import {math} from "../../viewer/scene/math/math.js";
 import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
 
@@ -36,16 +35,20 @@ const MOUSE_SECOND_CLICK_EXPECTED = 1;
  *     pointerLens: new PointerLens(viewer)
  * })
  *
- * distanceMeasurementsControl.snapToVertex = true;
- * distanceMeasurementsControl.snapToEdge = true;
+ * distanceMeasurementsControl.snapping = true;
  *
  * distanceMeasurementsControl.activate();
  * ````
  */
-export class DistanceMeasurementsMouseControl  extends DistanceMeasurementsControl {
+export class DistanceMeasurementsMouseControl extends DistanceMeasurementsControl {
 
     /**
      * Creates a DistanceMeasurementsMouseControl bound to the given DistanceMeasurementsPlugin.
+     *
+     * @param {DistanceMeasurementsPlugin} distanceMeasurementsPlugin The AngleMeasurementsPlugin to control.
+     * @param [cfg] Configuration
+     * @param {PointerLens} [cfg.pointerLens] A PointerLens to use to provide a magnified view of the cursor when snapping is enabled.
+     * @param {boolean} [cfg.snapping=true] Whether to initially enable snap-to-vertex and snap-to-edge for this DistanceMeasurementsMouseControl.
      */
     constructor(distanceMeasurementsPlugin, cfg = {}) {
 
@@ -87,8 +90,7 @@ export class DistanceMeasurementsMouseControl  extends DistanceMeasurementsContr
         this._onInputMouseUp = null;
         this._onCanvasTouchStart = null;
         this._onCanvasTouchEnd = null;
-        this._snapToEdge = cfg.snapToEdge !== false;
-        this._snapToVertex = cfg.snapToVertex !== false;
+        this._snapping = cfg.snapping !== false;
         this._mouseState = MOUSE_FIRST_CLICK_EXPECTED;
 
         this._attachPlugin(distanceMeasurementsPlugin, cfg);
@@ -119,47 +121,35 @@ export class DistanceMeasurementsMouseControl  extends DistanceMeasurementsContr
     }
 
     /**
-     * Sets whether snap-to-vertex is enabled for this DistanceMeasurementsMouseControl.
+     * Sets whether snap-to-vertex and snap-to-edge are enabled for this DistanceMeasurementsMouseControl.
      *
      * This is `true` by default.
      *
-     * @param {boolean} snapToVertex Whether to enable snap-to-vertex for this DistanceMeasurementsMouseControl.
+     * Internally, this deactivates then activates the DistanceMeasurementsMouseControl when changed, which means that
+     * it will destroy any DistanceMeasurements currently under construction, and incurs some overhead, since it unbinds
+     * and rebinds various input handlers.
+     *
+     * @param {boolean} snapping Whether to enable snap-to-vertex and snap-edge for this DistanceMeasurementsMouseControl.
      */
-    set snapToVertex(snapToVertex) {
-        this._snapToVertex = snapToVertex;
+    set snapping(snapping) {
+        if (snapping !== this._snapping) {
+            this._snapping = snapping;
+            this.deactivate();
+            this.activate();
+        } else {
+            this._snapping = snapping;
+        }
     }
 
     /**
-     * Gets whether snap-to-vertex is enabled for this DistanceMeasurementsMouseControl.
+     * Gets whether snap-to-vertex and snap-to-edge are enabled for this DistanceMeasurementsMouseControl.
      *
      * This is `true` by default.
      *
-     * @returns {boolean} Whether snap-to-vertex is enabled for this DistanceMeasurementsMouseControl.
+     * @returns {boolean} Whether snap-to-vertex and snap-to-edge are enabled for this DistanceMeasurementsMouseControl.
      */
-    get snapToVertex() {
-        return this._snapToVertex;
-    }
-
-    /**
-     * Sets whether snap-to-edge is enabled for this DistanceMeasurementsMouseControl.
-     *
-     * This is `true` by default.
-     *
-     * @param snapToEdge {boolean} snapToEdge Whether to enable snap-to-edge for this DistanceMeasurementsMouseControl.
-     */
-    set snapToEdge(snapToEdge) {
-        this._snapToEdge = snapToEdge;
-    }
-
-    /**
-     * Gets whether snap-to-edge is enabled for this DistanceMeasurementsMouseControl.
-     *
-     * This is `true` by default.
-     *
-     * @returns {boolean} Whether snap-to-edge is enabled for this DistanceMeasurementsControl.
-     */
-    get snapToEdge() {
-        return this._snapToEdge;
+    get snapping() {
+        return this._snapping;
     }
 
     /**
@@ -185,51 +175,53 @@ export class DistanceMeasurementsMouseControl  extends DistanceMeasurementsContr
 
         this._mouseState = MOUSE_FIRST_CLICK_EXPECTED;
 
-        this._onCameraControlHoverSnapOrSurface = cameraControl.on("hoverSnapOrSurface", event => {
-            mouseHovering = true;
-            pointerWorldPos.set(event.worldPos);
-            pointerCanvasPos.set(event.canvasPos);
-            if (this._mouseState === MOUSE_FIRST_CLICK_EXPECTED) {
-                this._markerDiv.style.marginLeft = `${event.canvasPos[0] - 5}px`;
-                this._markerDiv.style.marginTop = `${event.canvasPos[1] - 5}px`;
-                this._markerDiv.style.background = "pink";
-                if (event.snappedToVertex || event.snappedToEdge) {
-                    if (this.pointerLens) {
-                        this.pointerLens.visible = true;
-                        this.pointerLens.centerPos = event.cursorPos || event.canvasPos;
-                        this.pointerLens.cursorPos = event.canvasPos;
-                        this.pointerLens.snapped = true;
-                    }
-                    this._markerDiv.style.background = "greenyellow";
-                    this._markerDiv.style.border = "2px solid green";
-                } else {
-                    if (this.pointerLens) {
-                        this.pointerLens.visible = true;
-                        this.pointerLens.centerPos = event.cursorPos || event.canvasPos;
-                        this.pointerLens.cursorPos = event.canvasPos;
-                        this.pointerLens.snapped = false;
-                    }
+        this._onCameraControlHoverSnapOrSurface = cameraControl.on(
+            this._snapping
+                ? "hoverSnapOrSurface"
+                : "hoverSurface", event => {
+                mouseHovering = true;
+                pointerWorldPos.set(event.worldPos);
+                pointerCanvasPos.set(event.canvasPos);
+                if (this._mouseState === MOUSE_FIRST_CLICK_EXPECTED) {
+                    this._markerDiv.style.marginLeft = `${event.canvasPos[0] - 5}px`;
+                    this._markerDiv.style.marginTop = `${event.canvasPos[1] - 5}px`;
                     this._markerDiv.style.background = "pink";
-                    this._markerDiv.style.border = "2px solid red";
+                    if (event.snappedToVertex || event.snappedToEdge) {
+                        if (this.pointerLens) {
+                            this.pointerLens.visible = true;
+                            this.pointerLens.centerPos = event.cursorPos || event.canvasPos;
+                            this.pointerLens.cursorPos = event.canvasPos;
+                            this.pointerLens.snapped = true;
+                        }
+                        this._markerDiv.style.background = "greenyellow";
+                        this._markerDiv.style.border = "2px solid green";
+                    } else {
+                        if (this.pointerLens) {
+                            this.pointerLens.visible = true;
+                            this.pointerLens.centerPos = event.cursorPos || event.canvasPos;
+                            this.pointerLens.cursorPos = event.canvasPos;
+                            this.pointerLens.snapped = false;
+                        }
+                        this._markerDiv.style.background = "pink";
+                        this._markerDiv.style.border = "2px solid red";
+                    }
+                } else {
+                    this._markerDiv.style.marginLeft = `-10000px`;
+                    this._markerDiv.style.marginTop = `-10000px`;
                 }
-            } else {
-                this._markerDiv.style.marginLeft = `-10000px`;
-                this._markerDiv.style.marginTop = `-10000px`;
-            }
-            canvas.style.cursor = "pointer";
-            if (this._currentDistanceMeasurement) {
-                this._currentDistanceMeasurement.wireVisible = this._currentDistanceMeasurementInitState.wireVisible;
-                this._currentDistanceMeasurement.axisVisible = this._currentDistanceMeasurementInitState.axisVisible && this.distanceMeasurementsPlugin.defaultAxisVisible;
-                this._currentDistanceMeasurement.xAxisVisible = this._currentDistanceMeasurementInitState.xAxisVisible && this.distanceMeasurementsPlugin.defaultXAxisVisible;
-                this._currentDistanceMeasurement.yAxisVisible = this._currentDistanceMeasurementInitState.yAxisVisible && this.distanceMeasurementsPlugin.defaultYAxisVisible;
-                this._currentDistanceMeasurement.zAxisVisible = this._currentDistanceMeasurementInitState.zAxisVisible && this.distanceMeasurementsPlugin.defaultZAxisVisible;
-                this._currentDistanceMeasurement.targetVisible = this._currentDistanceMeasurementInitState.targetVisible;
-                this._currentDistanceMeasurement.target.worldPos = pointerWorldPos.slice();
-                this._markerDiv.style.marginLeft = `-10000px`;
-                this._markerDiv.style.marginTop = `-10000px`;
-            }
-        });
-
+                canvas.style.cursor = "pointer";
+                if (this._currentDistanceMeasurement) {
+                    this._currentDistanceMeasurement.wireVisible = this._currentDistanceMeasurementInitState.wireVisible;
+                    this._currentDistanceMeasurement.axisVisible = this._currentDistanceMeasurementInitState.axisVisible && this.distanceMeasurementsPlugin.defaultAxisVisible;
+                    this._currentDistanceMeasurement.xAxisVisible = this._currentDistanceMeasurementInitState.xAxisVisible && this.distanceMeasurementsPlugin.defaultXAxisVisible;
+                    this._currentDistanceMeasurement.yAxisVisible = this._currentDistanceMeasurementInitState.yAxisVisible && this.distanceMeasurementsPlugin.defaultYAxisVisible;
+                    this._currentDistanceMeasurement.zAxisVisible = this._currentDistanceMeasurementInitState.zAxisVisible && this.distanceMeasurementsPlugin.defaultZAxisVisible;
+                    this._currentDistanceMeasurement.targetVisible = this._currentDistanceMeasurementInitState.targetVisible;
+                    this._currentDistanceMeasurement.target.worldPos = pointerWorldPos.slice();
+                    this._markerDiv.style.marginLeft = `-10000px`;
+                    this._markerDiv.style.marginTop = `-10000px`;
+                }
+            });
 
         this._onInputMouseDown = input.on("mousedown", (coords) => {
             pointerDownCanvasX = coords[0];
@@ -277,7 +269,10 @@ export class DistanceMeasurementsMouseControl  extends DistanceMeasurementsContr
             }
         });
 
-        this._onCameraControlHoverSnapOrSurfaceOff = cameraControl.on("hoverSnapOrSurfaceOff", event => {
+        this._onCameraControlHoverSnapOrSurfaceOff = cameraControl.on(
+            this._snapping
+                ? "hoverSnapOrSurfaceOff"
+                : "hoverOff", event => {
             if (this.pointerLens) {
                 this.pointerLens.visible = true;
                 this.pointerLens.centerPos = event.cursorPos || event.canvasPos;
