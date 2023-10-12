@@ -54,13 +54,13 @@ export class TrianglesDataTexturePickNormalsRenderer {
 
         let cameraEye = camera.eye;
 
-        if (frameCtx.pickViewMatrix) {
-            textureState.bindPickCameraTexture(
-                this._program,
-                this._uTextureCameraMatrices
-            );
-            cameraEye = frameCtx.pickOrigin || cameraEye;
-        }
+        // if (frameCtx.pickViewMatrix) {
+        //     textureState.bindPickCameraTexture(
+        //         this._program,
+        //         this._uTextureCameraMatrices
+        //     );
+        //     cameraEye = frameCtx.pickOrigin || cameraEye;
+        // }
 
         const originCameraEye = [
             cameraEye[0] - origin[0],

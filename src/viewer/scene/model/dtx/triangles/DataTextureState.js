@@ -207,30 +207,11 @@ export class DataTextureState {
             3 // webgl texture unit
         );
 
-        this.textureModelMatrices.bindTexture(
-            glProgram,
-            modelMatricesShaderName,
-            4 // webgl texture unit
-        );
-
         this.texturePerObjectIdOffsets.bindTexture(
             glProgram,
             objectOffsetsShaderName,
-            5 // webgl texture unit
+            4 // webgl texture unit
         );
-    }
-
-    /**
-     *
-     * @param {Program} glProgram
-     * @param {string} cameraMatricesShaderName
-     */
-    bindPickCameraTexture(glProgram, cameraMatricesShaderName) {
-        // this.texturePickCameraMatrices.bindTexture(
-        //     glProgram,
-        //     cameraMatricesShaderName,
-        //     4 // webgl texture unit
-        // );
     }
 
     /**
@@ -249,13 +230,13 @@ export class DataTextureState {
         this.indicesPortionIdsPerBitnessTextures[textureBitness].bindTexture(
             glProgram,
             portionIdsShaderName,
-            6 // webgl texture unit
+            5 // webgl texture unit
         );
 
         this.indicesPerBitnessTextures[textureBitness].bindTexture(
             glProgram,
             polygonIndicesShaderName,
-            7 // webgl texture unit
+            6 // webgl texture unit
         );
     }
 
@@ -275,13 +256,13 @@ export class DataTextureState {
         this.edgeIndicesPortionIdsPerBitnessTextures[textureBitness].bindTexture(
             glProgram,
             edgePortionIdsShaderName,
-            6 // webgl texture unit
+            5 // webgl texture unit
         );
 
         this.edgeIndicesPerBitnessTextures[textureBitness].bindTexture(
             glProgram,
             edgeIndicesShaderName,
-            7 // webgl texture unit
+            6 // webgl texture unit
         );
     }
 }

@@ -555,34 +555,6 @@ export class TrianglesDataTextureLayer {
                 buffer.edgeIndices32Bits);
         }
 
-        // if (buffer.metallicRoughness.length > 0) {
-        //     const metallicRoughness = new Uint8Array(buffer.metallicRoughness);
-        //     let normalized = false;
-        //     state.metallicRoughnessBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, metallicRoughness, buffer.metallicRoughness.length, 2, gl.STATIC_DRAW, normalized);
-        // }
-
-        // Model matrices texture
-        if (!this.model._modelMatricesTexture) {
-            this.model._modelMatricesTexture = this._dataTextureGenerator.generateModelTexture(gl, this.model);
-        }
-
-        textureState.textureModelMatrices = this.model._modelMatricesTexture;
-
-        // Camera textures
-
-        textureState.cameraTexture = this._dataTextureGenerator.generateCameraDataTexture(
-            this.model.scene.canvas.gl,
-            this.model.scene.camera,
-            this.model.scene,
-            this._state.origin.slice());
-
-        textureState.textureCameraMatrices = textureState.cameraTexture;
-
-        textureState.texturePickCameraMatrices = this._dataTextureGenerator.generatePickCameraDataTexture(
-            this.model.scene.canvas.gl,
-            this.model.scene.camera,
-            this._state.origin.slice());
-
         textureState.finalize();
 
         // Free up memory
@@ -1254,10 +1226,10 @@ export class TrianglesDataTextureLayer {
     //---- PICKING ----------------------------------------------------------------------------------------------------
 
     setPickMatrices(pickViewMatrix, pickProjMatrix) {
-        if (this._numVisibleLayerPortions === 0) {
-            return;
-        }
-        this._dataTextureState.texturePickCameraMatrices.updateViewMatrix(pickViewMatrix, pickProjMatrix);
+        // if (this._numVisibleLayerPortions === 0) {
+        //     return;
+        // }
+        // this._dataTextureState.texturePickCameraMatrices.updateViewMatrix(pickViewMatrix, pickProjMatrix);
     }
 
     drawPickMesh(renderFlags, frameCtx) {
