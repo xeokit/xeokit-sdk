@@ -7,7 +7,7 @@ import {parse} from '@loaders.gl/core';
 import {LASLoader} from '@loaders.gl/las/dist/esm/las-loader.js';
 import {loadLASHeader} from "./loadLASHeader";
 
-const MAX_VERTICES = 5000000; // TODO: Magic value shared with PointsBatchingLayer - centralize somewhere
+const MAX_VERTICES = 500000; // TODO: Rough estimate
 
 /**
  * {@link Viewer} plugin that loads lidar point cloud geometry from LAS files.
