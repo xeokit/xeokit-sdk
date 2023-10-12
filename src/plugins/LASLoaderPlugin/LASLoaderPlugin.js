@@ -7,6 +7,8 @@ import {parse} from '@loaders.gl/core';
 import {LASLoader} from '@loaders.gl/las/dist/esm/las-loader.js';
 import {loadLASHeader} from "./loadLASHeader";
 
+const MAX_VERTICES = 5000000; // TODO: Magic value shared with PointsBatchingLayer - centralize somewhere
+
 /**
  * {@link Viewer} plugin that loads lidar point cloud geometry from LAS files.
  *
@@ -452,18 +454,50 @@ class LASLoaderPlugin extends Plugin {
                             break;
                     }
 
-                    sceneModel.createMesh({
-                        id: "pointsMesh",
-                        primitive: "points",
-                        positions: positionsValue,
-                        colorsCompressed: colorsCompressed
-                    });
+                    const pointsChunks = chunkArray(positionsValue, MAX_VERTICES * 3);
+                    const colorsChunks = chunkArray(colorsCompressed, MAX_VERTICES * 4);
+                    const meshIds = [];
+
+                    for (let i = 0, len = pointsChunks.length; i < len; i++) {
+                        const meshId = `pointsMesh${i}`;
+                        meshIds.push(meshId);
+                        sceneModel.createMesh({
+                            id: meshId,
+                            primitive: "points",
+                            positions: pointsChunks[i],
+                            colorsCompressed: (i < colorsChunks.length) ? colorsChunks[i] : null
+                        });
+                    }
+                    /*
+                                const pointsChunks = chunkArray(positionsValue, MAX_VERTICES * 3);
+                    const colorsChunks = chunkArray(colorsCompressed, MAX_VERTICES * 4);
+                    const meshIds = [];
+
+                    for (let i = 0, len = pointsChunks.length; i < len; i++) {
+
+                        const geometryId = `geometryMesh${i}`;
+                        const meshId = `pointsMesh${i}`;
+                        meshIds.push(meshId);
+
+                        sceneModel.createGeometry({
+                            id: geometryId,
+                            primitive: "points",
+                            positions: pointsChunks[i],
+                            colorsCompressed: (i < colorsChunks.length) ? colorsChunks[i] : null
+                        });
+
+                        sceneModel.createMesh({
+                            id: meshId,
+                            geometryId
+                        });
+                    }
+                     */
 
                     const pointsObjectId = math.createUUID();
 
                     sceneModel.createEntity({
                         id: pointsObjectId,
-                        meshIds: ["pointsMesh"],
+                        meshIds,
                         isObject: true
                     });
 
@@ -513,6 +547,17 @@ class LASLoaderPlugin extends Plugin {
             }
         });
     }
+}
+
+function chunkArray(array, chunkSize) {
+    if (chunkSize >= array.length) {
+        return array;
+    }
+    let result = [];
+    for (let i = 0; i < array.length; i += chunkSize) {
+        result.push(array.slice(i, i + chunkSize));
+    }
+    return result;
 }
 
 export {LASLoaderPlugin};
