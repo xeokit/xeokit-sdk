@@ -30,6 +30,8 @@ class TrianglesInstancingPickDepthRenderer extends VBOSceneModelTriangleInstanci
 
         this._addMatricesUniformBlockLines(src);
 
+        this._addRemapClipPosLines(src);
+
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
             src.push("out float vFragDepth;");
@@ -72,7 +74,7 @@ class TrianglesInstancingPickDepthRenderer extends VBOSceneModelTriangleInstanci
             src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
-        src.push("gl_Position = clipPos;");
+        src.push("gl_Position = remapClipPos(clipPos);");
         src.push("}");
         src.push("}");
         return src;

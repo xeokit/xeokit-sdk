@@ -30,6 +30,8 @@ class PointsBatchingPickMeshRenderer extends VBOSceneModelPointBatchingRenderer 
 
         this._addMatricesUniformBlockLines(src);
 
+        this._addRemapClipPosLines(src);
+
         src.push("uniform float pointSize;");
         if (pointsMaterial.perspectivePoints) {
             src.push("uniform float nearPlaneHeight;");
@@ -71,7 +73,7 @@ class PointsBatchingPickMeshRenderer extends VBOSceneModelPointBatchingRenderer 
         if (scene.logarithmicDepthBufferEnabled) {
            src.push("vFragDepth = 1.0 + clipPos.w;");
         }
-        src.push("gl_Position = clipPos;");
+        src.push("gl_Position = remapClipPos(clipPos);");
         if (pointsMaterial.perspectivePoints) {
             src.push("gl_PointSize = (nearPlaneHeight * pointSize) / clipPos.w;");
             src.push("gl_PointSize = max(gl_PointSize, " + Math.floor(pointsMaterial.minPerspectivePointSize) + ".0);");

@@ -41,6 +41,8 @@ class TrianglesBatchingPickMeshRenderer extends VBOSceneModelTriangleBatchingRen
             src.push("out float vFlags;");
         }
 
+        this._addRemapClipPosLines(src);
+
         src.push("out vec4 vPickColor;");
 
         src.push("void main(void) {");
@@ -68,7 +70,7 @@ class TrianglesBatchingPickMeshRenderer extends VBOSceneModelTriangleBatchingRen
            src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
-        src.push("gl_Position = clipPos;");
+        src.push("gl_Position = remapClipPos(clipPos);");
         src.push("  }");
         src.push("}");
         return src;

@@ -35,6 +35,8 @@ class PointsInstancingPickDepthRenderer extends VBOSceneModelPointInstancingRend
 
         this._addMatricesUniformBlockLines(src);
 
+        this._addRemapClipPosLines(src);
+
         src.push("uniform float pointSize;");
         if (pointsMaterial.perspectivePoints) {
             src.push("uniform float nearPlaneHeight;");
@@ -74,10 +76,11 @@ class PointsInstancingPickDepthRenderer extends VBOSceneModelPointInstancingRend
         }
         src.push("  vViewPosition = viewPosition;");
         src.push("vec4 clipPos = projMatrix * viewPosition;");
+        src.push("gl_Position = remapClipPos(clipPos);");
         if (scene.logarithmicDepthBufferEnabled) {
            src.push("vFragDepth = 1.0 + clipPos.w;");
         }
-        src.push("gl_Position = clipPos;");
+        src.push("gl_Position = remapClipPos(clipPos);");
         if (pointsMaterial.perspectivePoints) {
             src.push("gl_PointSize = (nearPlaneHeight * pointSize) / clipPos.w;");
             src.push("gl_PointSize = max(gl_PointSize, " + Math.floor(pointsMaterial.minPerspectivePointSize) + ".0);");

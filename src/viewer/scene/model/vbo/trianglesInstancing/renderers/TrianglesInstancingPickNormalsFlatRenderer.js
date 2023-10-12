@@ -27,6 +27,8 @@ class TrianglesInstancingPickNormalsFlatRenderer extends VBOSceneModelTriangleIn
 
         this._addMatricesUniformBlockLines(src);
 
+        this._addRemapClipPosLines(src);
+
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
             src.push("out float vFragDepth;");
@@ -65,7 +67,7 @@ class TrianglesInstancingPickNormalsFlatRenderer extends VBOSceneModelTriangleIn
             src.push("vFlags = flags;");
         }
 
-        src.push("gl_Position = clipPos;");
+        src.push("gl_Position = remapClipPos(clipPos);");
         src.push("}");
         src.push("}");
         return src;

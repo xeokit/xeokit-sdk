@@ -167,7 +167,7 @@ class RenderBuffer {
 
     read(pickX, pickY, glFormat = null, glType = null, arrayType = Uint8Array, arrayMultiplier = 4) {
         const x = pickX;
-        const y = (this.buffer.height || this.gl.drawingBufferHeight) - pickY;
+        const y = this.buffer.height ? (this.buffer.height - pickY - 1) : (this.gl.drawingBufferHeight - pickY);
         const pix = new arrayType(arrayMultiplier);
         const gl = this.gl;
         gl.readPixels(x, y, 1, 1, glFormat || gl.RGBA, glType || gl.UNSIGNED_BYTE, pix, 0);

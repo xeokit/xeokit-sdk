@@ -142,6 +142,9 @@ PickTriangleRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     } else {
         this._aPosition.bindArrayBuffer(positionsBuf);
     }
+
+    gl.uniform2fv(this._uPickClipPos, frameCtx.pickClipPos);
+
     pickColorsBuf.bind();
     gl.enableVertexAttribArray(this._aColor.location);
     gl.vertexAttribPointer(this._aColor.location, pickColorsBuf.itemSize, pickColorsBuf.itemType, true, 0, 0); // Normalize
@@ -173,6 +176,7 @@ PickTriangleRenderer.prototype._allocate = function (mesh) {
     }
     this._aPosition = program.getAttribute("position");
     this._aColor = program.getAttribute("color");
+    this._uPickClipPos = program.getLocation("pickClipPos");
     this._uClippable = program.getLocation("clippable");
     this._uOffset = program.getLocation("offset");
     if (scene.logarithmicDepthBufferEnabled ) {

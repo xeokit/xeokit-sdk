@@ -903,7 +903,7 @@ const Renderer = function (scene, options) {
      * Picks an Entity.
      * @private
      */
-    this.pick = (function () {
+     this.pick = (function () {
 
         const tempVec3a = math.vec3();
         const tempMat4a = math.mat4();
@@ -948,13 +948,11 @@ const Renderer = function (scene, options) {
 
                 // Picking with arbitrary World-space ray
                 // Align camera along ray and fire ray through center of canvas
-
-                const pickFrustumMatrix = math.frustumMat4(-1, 1, -1, 1, 0.01, scene.camera.project.far, tempMat4a);
-
+                
                 if (params.matrix) {
 
                     pickViewMatrix = params.matrix;
-                    pickProjMatrix = pickFrustumMatrix;
+                    pickProjMatrix = scene.camera.projMatrix;
 
                 } else {
 
@@ -971,7 +969,7 @@ const Renderer = function (scene, options) {
                     math.cross3Vec3(worldRayDir, randomVec3, up);
 
                     pickViewMatrix = math.lookAtMat4v(worldRayOrigin, look, up, tempMat4b);
-                    pickProjMatrix = pickFrustumMatrix;
+                    pickProjMatrix = scene.camera.projMatrix;
 
                     pickResult.origin = worldRayOrigin;
                     pickResult.direction = worldRayDir;
@@ -993,7 +991,7 @@ const Renderer = function (scene, options) {
                 }
             }
 
-            const pickBuffer = renderBufferManager.getRenderBuffer("pick");
+            const pickBuffer = renderBufferManager.getRenderBuffer("pick", { size: [1, 1] });
 
             pickBuffer.bind();
 
@@ -1055,10 +1053,12 @@ const Renderer = function (scene, options) {
         frameCtx.pickViewMatrix = pickViewMatrix;
         frameCtx.pickProjMatrix = pickProjMatrix;
         frameCtx.pickInvisible = !!params.pickInvisible;
+        frameCtx.pickClipPos = [
+            getClipPosX(canvasPos[0], gl.drawingBufferWidth),
+            getClipPosY(canvasPos[1], gl.drawingBufferHeight),
+        ];
 
-        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-
-        gl.clearColor(0, 0, 0, 0);
+        gl.viewport(0, 0, 1, 1);
         gl.depthMask(true);
         gl.enable(gl.DEPTH_TEST);
         gl.disable(gl.CULL_FACE);
@@ -1092,8 +1092,7 @@ const Renderer = function (scene, options) {
                 }
             }
         }
-        const resolutionScale = scene.canvas.resolutionScale;
-        const pix = pickBuffer.read(Math.round(canvasPos[0] * resolutionScale), Math.round(canvasPos[1] * resolutionScale));
+        const pix = pickBuffer.read(0, 0);
         let pickID = pix[0] + (pix[1] * 256) + (pix[2] * 256 * 256) + (pix[3] * 256 * 256 * 256);
 
         if (pickID < 0) {
@@ -1118,8 +1117,12 @@ const Renderer = function (scene, options) {
         frameCtx.pickViewMatrix = pickViewMatrix; // Can be null
         frameCtx.pickProjMatrix = pickProjMatrix; // Can be null
         // frameCtx.pickInvisible = !!params.pickInvisible;
+        frameCtx.pickClipPos = [
+            getClipPosX(canvasPos[0], gl.drawingBufferWidth),
+            getClipPosY(canvasPos[1], gl.drawingBufferHeight),
+        ];
 
-        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+        gl.viewport(0, 0, 1, 1);
 
         gl.clearColor(0, 0, 0, 0);
         gl.enable(gl.DEPTH_TEST);
@@ -1129,8 +1132,7 @@ const Renderer = function (scene, options) {
 
         pickable.drawPickTriangles(frameCtx);
 
-        const resolutionScale = scene.canvas.resolutionScale;
-        const pix = pickBuffer.read(Math.round(canvasPos[0] * resolutionScale), Math.round(canvasPos[1] * resolutionScale));
+        const pix = pickBuffer.read(0, 0);
 
         let primIndex = pix[0] + (pix[1] * 256) + (pix[2] * 256 * 256) + (pix[3] * 256 * 256 * 256);
 
@@ -1162,8 +1164,12 @@ const Renderer = function (scene, options) {
             frameCtx.pickZFar = nearAndFar[1];
             frameCtx.pickElementsCount = pickable.pickElementsCount;
             frameCtx.pickElementsOffset = pickable.pickElementsOffset;
-
-            gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+            frameCtx.pickClipPos = [
+                getClipPosX(canvasPos[0], gl.drawingBufferWidth),
+                getClipPosY(canvasPos[1], gl.drawingBufferHeight),
+            ];
+    
+            gl.viewport(0, 0, 1, 1);
 
             gl.clearColor(0, 0, 0, 0);
             gl.depthMask(true);
@@ -1174,8 +1180,7 @@ const Renderer = function (scene, options) {
 
             pickable.drawPickDepths(frameCtx); // Draw color-encoded fragment screen-space depths
 
-            const resolutionScale = scene.canvas.resolutionScale;
-            const pix = pickBuffer.read(Math.round(canvasPos[0] * resolutionScale), Math.round(canvasPos[1] * resolutionScale));
+            const pix = pickBuffer.read(0, 0);
 
             const screenZ = unpackDepth(pix); // Get screen-space Z at the given canvas coords
 
@@ -1476,12 +1481,12 @@ const Renderer = function (scene, options) {
         frameCtx.pickOrigin = pickResult.origin;
         frameCtx.pickViewMatrix = pickViewMatrix;
         frameCtx.pickProjMatrix = pickProjMatrix;
+        frameCtx.pickClipPos = [
+            getClipPosX(canvasPos[0], gl.drawingBufferWidth),
+            getClipPosY(canvasPos[1], gl.drawingBufferHeight),
+        ];
 
-        const pickNormalBuffer = renderBufferManager.getRenderBuffer("pick-normal");
-
-        pickNormalBuffer.bind(gl.RGBA32I);
-
-        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+        gl.viewport(0, 0, 1, 1);
 
         gl.enable(gl.DEPTH_TEST);
         gl.disable(gl.CULL_FACE);
@@ -1491,10 +1496,7 @@ const Renderer = function (scene, options) {
 
         pickable.drawPickNormals(frameCtx); // Draw color-encoded fragment World-space normals
 
-        const resolutionScale = scene.canvas.resolutionScale;
-        const pix = pickNormalBuffer.read(Math.round(canvasPos[0] * resolutionScale), Math.round(canvasPos[1] * resolutionScale), gl.RGBA_INTEGER, gl.INT, Int32Array, 4);
-
-        pickNormalBuffer.unbind();
+        const pix = pickBuffer.read(0, 0);
 
         const worldNormal = [
             pix[0] / math.MAX_INT,
@@ -1695,4 +1697,4 @@ const Renderer = function (scene, options) {
     };
 };
 
-export {Renderer};
+export { Renderer };
