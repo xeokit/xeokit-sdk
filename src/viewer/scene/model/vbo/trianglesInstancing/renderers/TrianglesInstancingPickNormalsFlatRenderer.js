@@ -101,7 +101,6 @@ class TrianglesInstancingPickNormalsFlatRenderer extends VBOSceneModelTriangleIn
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
-        src.push("in vec3 vWorldNormal;");
         src.push("out highp ivec4 outNormal;");
         src.push("void main(void) {");
         if (clipping) {
