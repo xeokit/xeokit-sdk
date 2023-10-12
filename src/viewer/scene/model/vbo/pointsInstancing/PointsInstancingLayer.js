@@ -60,6 +60,7 @@ class PointsInstancingLayer {
             numInstances: 0,
             origin: cfg.origin ? math.vec3(cfg.origin) : null,
             geometry: cfg.geometry,
+            positionsDecodeMatrix: cfg.geometry.positionsDecodeMatrix, // So we can null the geometry for GC
             colorsBuf: null,
             flagsBuf: null,
             offsetsBuf: null,
@@ -198,34 +199,46 @@ class PointsInstancingLayer {
         }
         const gl = this.model.scene.canvas.gl;
         const flagsLength = this._pickColors.length / 4;
+        const state = this._state;
+        const geometry = state.geometry;
         if (flagsLength > 0) {
             // Because we only build flags arrays here, 
             // get their length from the colors array
             let notNormalized = false;
-            this._state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(flagsLength), flagsLength, 1, gl.DYNAMIC_DRAW, notNormalized);
+            state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(flagsLength), flagsLength, 1, gl.DYNAMIC_DRAW, notNormalized);
         }
         if (this.model.scene.entityOffsetsEnabled) {
             if (this._offsets.length > 0) {
                 const notNormalized = false;
-                this._state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._offsets), this._offsets.length, 3, gl.DYNAMIC_DRAW, notNormalized);
+                state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._offsets), this._offsets.length, 3, gl.DYNAMIC_DRAW, notNormalized);
                 this._offsets = []; // Release memory
             }
         }
+        if (geometry.positionsCompressed && geometry.positionsCompressed.length > 0) {
+            const normalized = false;
+            state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, geometry.positionsCompressed, geometry.positionsCompressed.length, 3, gl.STATIC_DRAW, normalized);
+            state.positionsDecodeMatrix = math.mat4(geometry.positionsDecodeMatrix);
+        }
+        if (geometry.colorsCompressed && geometry.colorsCompressed.length > 0) {
+            const colorsCompressed = new Uint8Array(geometry.colorsCompressed);
+            const notNormalized = false;
+            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colorsCompressed, colorsCompressed.length, 4, gl.STATIC_DRAW, notNormalized);
+        }
         if (this._modelMatrixCol0.length > 0) {
             const normalized = false;
-            this._state.modelMatrixCol0Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelMatrixCol0), this._modelMatrixCol0.length, 4, gl.STATIC_DRAW, normalized);
-            this._state.modelMatrixCol1Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelMatrixCol1), this._modelMatrixCol1.length, 4, gl.STATIC_DRAW, normalized);
-            this._state.modelMatrixCol2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelMatrixCol2), this._modelMatrixCol2.length, 4, gl.STATIC_DRAW, normalized);
+            state.modelMatrixCol0Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelMatrixCol0), this._modelMatrixCol0.length, 4, gl.STATIC_DRAW, normalized);
+            state.modelMatrixCol1Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelMatrixCol1), this._modelMatrixCol1.length, 4, gl.STATIC_DRAW, normalized);
+            state.modelMatrixCol2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelMatrixCol2), this._modelMatrixCol2.length, 4, gl.STATIC_DRAW, normalized);
             this._modelMatrixCol0 = [];
             this._modelMatrixCol1 = [];
             this._modelMatrixCol2 = [];
         }
         if (this._pickColors.length > 0) {
             const normalized = false;
-            this._state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._pickColors), this._pickColors.length, 4, gl.STATIC_DRAW, normalized);
+            state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._pickColors), this._pickColors.length, 4, gl.STATIC_DRAW, normalized);
             this._pickColors = []; // Release memory
         }
-        this._state.geometry = null;
+        state.geometry = null;
         this._finalized = true;
     }
 
