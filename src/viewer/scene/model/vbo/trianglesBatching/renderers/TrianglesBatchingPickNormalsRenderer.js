@@ -1,3 +1,4 @@
+import { math } from "../../../../math/math.js";
 import {VBOSceneModelTriangleBatchingRenderer} from "../../VBOSceneModelRenderers.js";
 
 /**
@@ -105,7 +106,7 @@ class TrianglesBatchingPickNormalsRenderer extends VBOSceneModelTriangleBatching
             }
         }
         src.push("in vec3 vWorldNormal;");
-        src.push("out vec4 outColor;");
+        src.push("out highp ivec4 outNormal;");
         src.push("void main(void) {");
         if (clipping) {
             src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
@@ -122,7 +123,7 @@ class TrianglesBatchingPickNormalsRenderer extends VBOSceneModelTriangleBatching
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
-        src.push("    outColor = vec4((vWorldNormal * 0.5) + 0.5, 1.0);");
+        src.push(`    outNormal = ivec4(vWorldNormal * float(${math.MAX_INT}), 1.0);`);
         src.push("}");
         return src;
     }

@@ -48,6 +48,10 @@ class TouchPanRotateAndDollyHandler {
             waitForTick = false;
         });
 
+        let firstDragDeltaX = 0;
+        let firstDragDeltaY = 1;
+        let absorbTinyFirstDrag = false;
+
         canvas.addEventListener("touchstart", this._canvasTouchStartHandler = (event) => {
 
             if (!(configs.active && configs.pointerEnabled)) {
@@ -117,6 +121,9 @@ class TouchPanRotateAndDollyHandler {
             if (pivotController.getPivoting()) {
                 pivotController.endPivot()
             }
+            firstDragDeltaX = 0;
+            firstDragDeltaY = 0;
+            absorbTinyFirstDrag = true;
         })
 
         canvas.addEventListener("touchmove", this._canvasTouchMoveHandler = (event) => {
@@ -191,8 +198,20 @@ class TouchPanRotateAndDollyHandler {
                     }
 
                 } else {
-                    updates.rotateDeltaY -= (xPanDelta / canvasWidth) * (configs.dragRotationRate * 1.0); // Full horizontal rotation
-                    updates.rotateDeltaX += (yPanDelta / canvasHeight) * (configs.dragRotationRate * 1.5); // Half vertical rotation
+                  //  if (!absorbTinyFirstDrag) {
+                        updates.rotateDeltaY -= (xPanDelta / canvasWidth) * (configs.dragRotationRate * 1.0); // Full horizontal rotation
+                        updates.rotateDeltaX += (yPanDelta / canvasHeight) * (configs.dragRotationRate * 1.5); // Half vertical rotation
+                    // } else {
+                    //     firstDragDeltaY -= (xPanDelta / canvasWidth) * (configs.dragRotationRate * 1.0); // Full horizontal rotation
+                    //     firstDragDeltaX += (yPanDelta / canvasHeight) * (configs.dragRotationRate * 1.5); // Half vertical rotation
+                    //     if (Math.abs(firstDragDeltaX) > 5 || Math.abs(firstDragDeltaY) > 5) {
+                    //         updates.rotateDeltaX += firstDragDeltaX;
+                    //         updates.rotateDeltaY += firstDragDeltaY;
+                    //         firstDragDeltaX = 0;
+                    //         firstDragDeltaY = 0;
+                    //         absorbTinyFirstDrag = false;
+                    //     }
+                    // }
                 }
 
             } else if (numTouches === 2) {

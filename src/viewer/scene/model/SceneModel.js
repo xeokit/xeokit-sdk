@@ -2916,7 +2916,8 @@ export class SceneModel extends Component {
                         countIndices += cfg.positions ? cfg.positions.length : cfg.positionsCompressed.length;
                         break;
                     case VBO_INSTANCED:
-                        countIndices += cfg.positions ? cfg.positions.length : cfg.positionsCompressed.length;
+                        const geometry = cfg.geometry;
+                        countIndices += geometry.positions ? geometry.positions.length : geometry.positionsCompressed.length;
                         break;
                 }
                 return Math.round(countIndices);

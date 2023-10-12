@@ -1,6 +1,43 @@
 /**
- * A PointerLens shows a magnified view of a {@link Viewer's | Viewer} canvas, centered at the position of the
+ * A PointerLens shows a magnified view of a {@link Viewer}'s canvas, centered at the position of the
  * mouse or touch pointer.
+ *
+ * This component is used by {@link DistanceMeasurementsControl} and {@link AngleMeasurementsControl}
+ * to help position the pointer when snap-to-vertex or snap-toedge is enabled.
+ *
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/measurements/#distance_modelWithMeasurements)]
+ *
+ * ````JavaScript
+ *
+ *  import {Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin, AngleMeasurementsMouseControl, PointerLens} from "../../dist/xeokit-sdk.es.js";
+ *
+ *  const viewer = new Viewer({
+ *      canvasId: "myCanvas",
+ *      dtxEnabled: true
+ *  });
+ *
+ *  viewer.camera.eye = [-3.93, 2.85, 27.01];
+ *  viewer.camera.look = [4.40, 3.72, 8.89];
+ *  viewer.camera.up = [-0.01, 0.99, 0.039];
+ *
+ *  const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ *  const sceneModel = xktLoader.load({
+ *      id: "myModel",
+ *      src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt",
+ *      edges: true
+ *  });
+ *
+ *  const angleMeasurements = new AngleMeasurementsPlugin(viewer);
+ *
+ *  const angleMeasurementsMouseControl  = new AngleMeasurementsMouseControl(angleMeasurements, {
+ *      pointerLens : new PointerLens(viewer, {
+ *          zoomFactor: 2
+ *      })
+ *  })
+ *
+ *  angleMeasurementsMouseControl.activate();
+ * ````
  */
 export class PointerLens {
 
@@ -17,8 +54,8 @@ export class PointerLens {
 
         this._lensCursorDiv = document.createElement('div');
         this.viewer.scene.canvas.canvas.parentNode.insertBefore(this._lensCursorDiv, this.viewer.scene.canvas.canvas);
-        this._lensCursorDiv.style.background = "greenyellow";
-        this._lensCursorDiv.style.border = "2px solid green";
+        this._lensCursorDiv.style.background = "pink";
+        this._lensCursorDiv.style.border = "2px solid red";
         this._lensCursorDiv.style.borderRadius = "20px";
         this._lensCursorDiv.style.width = "10px";
         this._lensCursorDiv.style.height = "10px";
@@ -64,6 +101,7 @@ export class PointerLens {
 
         this._active = (cfg.active !== false);
         this._visible = false;
+        this._snapped = false;
 
         this._onViewerRendering = this.viewer.scene.on("rendering", () => {
             if (this._active && this._visible) {
@@ -121,13 +159,9 @@ export class PointerLens {
 
             this._lensCursorDiv.style.marginLeft = `${centerLensCanvas[0] + deltaX * this._zoomLevel - 10}px`;
             this._lensCursorDiv.style.marginTop = `${centerLensCanvas[1] + deltaY * this._zoomLevel - 10}px`;
-            this._lensCursorDiv.style.background = "greenyellow";
-            this._lensCursorDiv.style.border = "2px solid green";
         } else {
             this._lensCursorDiv.style.marginLeft = `${centerLensCanvas[0] - 10}px`;
             this._lensCursorDiv.style.marginTop = `${centerLensCanvas[1] - 10}px`;
-            this._lensCursorDiv.style.background = "pink";
-            this._lensCursorDiv.style.border = "2px solid red";
         }
     }
 
@@ -189,6 +223,33 @@ export class PointerLens {
         return this._cursorPos;
     }
 
+    /**
+     * Sets if the cursor has snapped to anything.
+     * This is set by plugins.
+     * @param snapped
+     * @private
+     */
+    set snapped(snapped) {
+     this._snapped = snapped;
+        if (snapped) {
+            this._lensCursorDiv.style.background = "greenyellow";
+            this._lensCursorDiv.style.border = "2px solid green";
+        } else {
+            this._lensCursorDiv.style.background = "pink";
+            this._lensCursorDiv.style.border = "2px solid red";
+        }
+    }
+
+    /**
+     * Gets  if the cursor has snapped to anything.
+     * This is called by plugins.
+     * @returns {Boolean}
+     * @private
+     */
+    get snapped() {
+        return this._snapped;
+    }
+    
     /**
      * Sets if this PointerLens is active.
      * @param active

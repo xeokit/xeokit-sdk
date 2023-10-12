@@ -24,6 +24,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/plugins/anglemeasurementsplugin/anglemeasurementsmousecontrol.js~anglemeasurementsmousecontrol",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl.html",
+    "<span>AngleMeasurementsMouseControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/plugins/anglemeasurementsplugin/anglemeasurementsplugin.js~anglemeasurementsplugin",
     "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html",
     "<span>AngleMeasurementsPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js</span>",
@@ -213,6 +219,12 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/plugins/distancemeasurementsplugin/distancemeasurementscontrol.js~distancemeasurementscontrol",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html",
     "<span>DistanceMeasurementsControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/distancemeasurementsplugin/distancemeasurementsmousecontrol.js~distancemeasurementsmousecontrol",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl.html",
+    "<span>DistanceMeasurementsMouseControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js</span>",
     "class"
   ],
   [
@@ -669,6 +681,12 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/lights/pointlight.js~pointlight",
     "class/src/viewer/scene/lights/PointLight.js~PointLight.html",
     "<span>PointLight</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/lights/PointLight.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/extras/pointerlens/pointerlens.js~pointerlens",
+    "class/src/extras/PointerLens/PointerLens.js~PointerLens.html",
+    "<span>PointerLens</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/extras/PointerLens/PointerLens.js</span>",
     "class"
   ],
   [
@@ -1680,6 +1698,96 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/extras/pointerlens/pointerlens.js",
+    "file/src/extras/PointerLens/PointerLens.js.html",
+    "src/extras/PointerLens/PointerLens.js",
+    "file"
+  ],
+  [
+    "src/extras/pointerlens/pointerlens.js~pointerlens#active",
+    "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-set-active",
+    "src/extras/PointerLens/PointerLens.js~PointerLens#active",
+    "member"
+  ],
+  [
+    "src/extras/pointerlens/pointerlens.js~pointerlens#active",
+    "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-get-active",
+    "src/extras/PointerLens/PointerLens.js~PointerLens#active",
+    "member"
+  ],
+  [
+    "src/extras/pointerlens/pointerlens.js~pointerlens#centerpos",
+    "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-set-centerPos",
+    "src/extras/PointerLens/PointerLens.js~PointerLens#centerPos",
+    "member"
+  ],
+  [
+    "src/extras/pointerlens/pointerlens.js~pointerlens#centerpos",
+    "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-get-centerPos",
+    "src/extras/PointerLens/PointerLens.js~PointerLens#centerPos",
+    "member"
+  ],
+  [
+    "src/extras/pointerlens/pointerlens.js~pointerlens#constructor",
+    "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-constructor-constructor",
+    "src/extras/PointerLens/PointerLens.js~PointerLens#constructor",
+    "method"
+  ],
+  [
+    "src/extras/pointerlens/pointerlens.js~pointerlens#cursorpos",
+    "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-set-cursorPos",
+    "src/extras/PointerLens/PointerLens.js~PointerLens#cursorPos",
+    "member"
+  ],
+  [
+    "src/extras/pointerlens/pointerlens.js~pointerlens#cursorpos",
+    "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-get-cursorPos",
+    "src/extras/PointerLens/PointerLens.js~PointerLens#cursorPos",
+    "member"
+  ],
+  [
+    "src/extras/pointerlens/pointerlens.js~pointerlens#destroy",
+    "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-method-destroy",
+    "src/extras/PointerLens/PointerLens.js~PointerLens#destroy",
+    "method"
+  ],
+  [
+    "src/extras/pointerlens/pointerlens.js~pointerlens#scene",
+    "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-member-scene",
+    "src/extras/PointerLens/PointerLens.js~PointerLens#scene",
+    "member"
+  ],
+  [
+    "src/extras/pointerlens/pointerlens.js~pointerlens#update",
+    "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-method-update",
+    "src/extras/PointerLens/PointerLens.js~PointerLens#update",
+    "method"
+  ],
+  [
+    "src/extras/pointerlens/pointerlens.js~pointerlens#viewer",
+    "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-member-viewer",
+    "src/extras/PointerLens/PointerLens.js~PointerLens#viewer",
+    "member"
+  ],
+  [
+    "src/extras/pointerlens/pointerlens.js~pointerlens#zoomfactor",
+    "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-set-zoomFactor",
+    "src/extras/PointerLens/PointerLens.js~PointerLens#zoomFactor",
+    "member"
+  ],
+  [
+    "src/extras/pointerlens/pointerlens.js~pointerlens#zoomfactor",
+    "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-get-zoomFactor",
+    "src/extras/PointerLens/PointerLens.js~PointerLens#zoomFactor",
+    "member"
+  ],
+  [
+    "src/extras/pointerlens/index.js",
+    "file/src/extras/PointerLens/index.js.html",
+    "src/extras/PointerLens/index.js",
+    "file"
+  ],
+  [
     "src/extras/index.js",
     "file/src/extras/index.js.html",
     "src/extras/index.js",
@@ -1890,22 +1998,106 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/plugins/anglemeasurementsplugin/anglemeasurementscontrol.js~anglemeasurementscontrol#markerdiv",
-    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html#instance-member-markerDiv",
-    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl#markerDiv",
-    "member"
-  ],
-  [
-    "src/plugins/anglemeasurementsplugin/anglemeasurementscontrol.js~anglemeasurementscontrol#plugin",
-    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html#instance-member-plugin",
-    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl#plugin",
-    "member"
+    "src/plugins/anglemeasurementsplugin/anglemeasurementscontrol.js~anglemeasurementscontrol#destroy",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html#instance-method-destroy",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl#destroy",
+    "method"
   ],
   [
     "src/plugins/anglemeasurementsplugin/anglemeasurementscontrol.js~anglemeasurementscontrol#reset",
     "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html#instance-method-reset",
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl#reset",
     "method"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementscontrol.js~anglemeasurementscontrol#snapping",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html#instance-set-snapping",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl#snapping",
+    "member"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementscontrol.js~anglemeasurementscontrol#snapping",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html#instance-get-snapping",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl#snapping",
+    "member"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementsmousecontrol.js",
+    "file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js.html",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js",
+    "file"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementsmousecontrol.js~anglemeasurementsmousecontrol#activate",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl.html#instance-method-activate",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl#activate",
+    "method"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementsmousecontrol.js~anglemeasurementsmousecontrol#active",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl.html#instance-get-active",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl#active",
+    "member"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementsmousecontrol.js~anglemeasurementsmousecontrol#anglemeasurementsplugin",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl.html#instance-member-angleMeasurementsPlugin",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl#angleMeasurementsPlugin",
+    "member"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementsmousecontrol.js~anglemeasurementsmousecontrol#constructor",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl.html#instance-constructor-constructor",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementsmousecontrol.js~anglemeasurementsmousecontrol#deactivate",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl.html#instance-method-deactivate",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl#deactivate",
+    "method"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementsmousecontrol.js~anglemeasurementsmousecontrol#destroy",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl.html#instance-method-destroy",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl#destroy",
+    "method"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementsmousecontrol.js~anglemeasurementsmousecontrol#markerdiv",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl.html#instance-member-markerDiv",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl#markerDiv",
+    "member"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementsmousecontrol.js~anglemeasurementsmousecontrol#plugin",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl.html#instance-member-plugin",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl#plugin",
+    "member"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementsmousecontrol.js~anglemeasurementsmousecontrol#pointerlens",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl.html#instance-member-pointerLens",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl#pointerLens",
+    "member"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementsmousecontrol.js~anglemeasurementsmousecontrol#reset",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl.html#instance-method-reset",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl#reset",
+    "method"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementsmousecontrol.js~anglemeasurementsmousecontrol#snapping",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl.html#instance-set-snapping",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl#snapping",
+    "member"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementsmousecontrol.js~anglemeasurementsmousecontrol#snapping",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl.html#instance-get-snapping",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl#snapping",
+    "member"
   ],
   [
     "src/plugins/anglemeasurementsplugin/anglemeasurementsplugin.js",
@@ -2496,22 +2688,100 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrol.js~distancemeasurementscontrol#markerdiv",
-    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html#instance-member-markerDiv",
-    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl#markerDiv",
-    "member"
-  ],
-  [
-    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrol.js~distancemeasurementscontrol#plugin",
-    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html#instance-member-plugin",
-    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl#plugin",
-    "member"
+    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrol.js~distancemeasurementscontrol#destroy",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html#instance-method-destroy",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl#destroy",
+    "method"
   ],
   [
     "src/plugins/distancemeasurementsplugin/distancemeasurementscontrol.js~distancemeasurementscontrol#reset",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html#instance-method-reset",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl#reset",
     "method"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrol.js~distancemeasurementscontrol#snapping",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html#instance-set-snapping",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl#snapping",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrol.js~distancemeasurementscontrol#snapping",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html#instance-get-snapping",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl#snapping",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsmousecontrol.js",
+    "file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js.html",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js",
+    "file"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsmousecontrol.js~distancemeasurementsmousecontrol#activate",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl.html#instance-method-activate",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl#activate",
+    "method"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsmousecontrol.js~distancemeasurementsmousecontrol#active",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl.html#instance-get-active",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl#active",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsmousecontrol.js~distancemeasurementsmousecontrol#constructor",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl.html#instance-constructor-constructor",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsmousecontrol.js~distancemeasurementsmousecontrol#deactivate",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl.html#instance-method-deactivate",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl#deactivate",
+    "method"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsmousecontrol.js~distancemeasurementsmousecontrol#destroy",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl.html#instance-method-destroy",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl#destroy",
+    "method"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsmousecontrol.js~distancemeasurementsmousecontrol#distancemeasurementsplugin",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl.html#instance-member-distanceMeasurementsPlugin",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl#distanceMeasurementsPlugin",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsmousecontrol.js~distancemeasurementsmousecontrol#plugin",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl.html#instance-member-plugin",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl#plugin",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsmousecontrol.js~distancemeasurementsmousecontrol#pointerlens",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl.html#instance-member-pointerLens",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl#pointerLens",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsmousecontrol.js~distancemeasurementsmousecontrol#reset",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl.html#instance-method-reset",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl#reset",
+    "method"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsmousecontrol.js~distancemeasurementsmousecontrol#snapping",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl.html#instance-set-snapping",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl#snapping",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsmousecontrol.js~distancemeasurementsmousecontrol#snapping",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl.html#instance-get-snapping",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl#snapping",
+    "member"
   ],
   [
     "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js",
@@ -2637,6 +2907,12 @@ window.esdocSearchIndex = [
     "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#measurements",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-get-measurements",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#measurements",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#pointerlens",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-get-pointerLens",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#pointerLens",
     "member"
   ],
   [
@@ -4710,6 +4986,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/viewer/metadata/metaobject.js~metaobject#attributes",
+    "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-member-attributes",
+    "src/viewer/metadata/MetaObject.js~MetaObject#attributes",
+    "member"
+  ],
+  [
     "src/viewer/metadata/metaobject.js~metaobject#getjson",
     "class/src/viewer/metadata/MetaObject.js~MetaObject.html#instance-method-getJSON",
     "src/viewer/metadata/MetaObject.js~MetaObject#getJSON",
@@ -5268,6 +5550,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#disablepivotsphere",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-method-disablePivotSphere",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#disablePivotSphere",
+    "method"
+  ],
+  [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#dollyinertia",
     "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-dollyInertia",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#dollyInertia",
@@ -5350,6 +5638,12 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-dragRotationRate",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#dragRotationRate",
     "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#enablepivotsphere",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-method-enablePivotSphere",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#enablePivotSphere",
+    "method"
   ],
   [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#firstperson",
@@ -5562,18 +5856,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#snapmode",
-    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-snapMode",
-    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#snapMode",
-    "member"
-  ],
-  [
-    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#snapmode",
-    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-snapMode",
-    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#snapMode",
-    "member"
-  ],
-  [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#snapradius",
     "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-snapRadius",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#snapRadius",
@@ -5583,6 +5865,30 @@ window.esdocSearchIndex = [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#snapradius",
     "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-snapRadius",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#snapRadius",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#snaptoedge",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-snapToEdge",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#snapToEdge",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#snaptoedge",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-snapToEdge",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#snapToEdge",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#snaptovertex",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-snapToVertex",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#snapToVertex",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#snaptovertex",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-snapToVertex",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#snapToVertex",
     "member"
   ],
   [
@@ -11197,6 +11503,12 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/model/scenemodel.js~scenemodel#matrix",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-set-matrix",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#matrix",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#matrix",
     "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-matrix",
     "src/viewer/scene/model/SceneModel.js~SceneModel#matrix",
     "member"
@@ -11269,8 +11581,20 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/model/scenemodel.js~scenemodel#position",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-set-position",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#position",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#position",
     "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-position",
     "src/viewer/scene/model/SceneModel.js~SceneModel#position",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#quaternion",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-set-quaternion",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#quaternion",
     "member"
   ],
   [
@@ -11293,14 +11617,38 @@ window.esdocSearchIndex = [
   ],
   [
     "src/viewer/scene/model/scenemodel.js~scenemodel#rotation",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-set-rotation",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#rotation",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#rotation",
     "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-rotation",
     "src/viewer/scene/model/SceneModel.js~SceneModel#rotation",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#rotationmatrix",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-rotationMatrix",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#rotationMatrix",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#rotationmatrixconjugate",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-rotationMatrixConjugate",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#rotationMatrixConjugate",
     "member"
   ],
   [
     "src/viewer/scene/model/scenemodel.js~scenemodel#saoenabled",
     "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-get-saoEnabled",
     "src/viewer/scene/model/SceneModel.js~SceneModel#saoEnabled",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#scale",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-set-scale",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#scale",
     "member"
   ],
   [
@@ -11460,12 +11808,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturecolorqualityrenderer.js",
-    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureColorQualityRenderer.js.html",
-    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureColorQualityRenderer.js",
-    "file"
-  ],
-  [
     "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturecolorrenderer.js",
     "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureColorRenderer.js.html",
     "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureColorRenderer.js",
@@ -11523,12 +11865,6 @@ window.esdocSearchIndex = [
     "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturepicknormalsrenderer.js",
     "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickNormalsRenderer.js.html",
     "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickNormalsRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatextureshadowrenderer.js",
-    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureShadowRenderer.js.html",
-    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureShadowRenderer.js",
     "file"
   ],
   [
@@ -14301,6 +14637,18 @@ window.esdocSearchIndex = [
     "src/viewer/scene/webgl/pickresult.js~pickresult#primitive",
     "class/src/viewer/scene/webgl/PickResult.js~PickResult.html#instance-member-primitive",
     "src/viewer/scene/webgl/PickResult.js~PickResult#primitive",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/pickresult.js~pickresult#snappedtoedge",
+    "class/src/viewer/scene/webgl/PickResult.js~PickResult.html#instance-member-snappedToEdge",
+    "src/viewer/scene/webgl/PickResult.js~PickResult#snappedToEdge",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/pickresult.js~pickresult#snappedtovertex",
+    "class/src/viewer/scene/webgl/PickResult.js~PickResult.html#instance-member-snappedToVertex",
+    "src/viewer/scene/webgl/PickResult.js~PickResult#snappedToVertex",
     "member"
   ],
   [

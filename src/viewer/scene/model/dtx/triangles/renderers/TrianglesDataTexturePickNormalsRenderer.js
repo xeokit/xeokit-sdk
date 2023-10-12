@@ -54,13 +54,13 @@ export class TrianglesDataTexturePickNormalsRenderer {
 
         let cameraEye = camera.eye;
 
-        if (frameCtx.pickViewMatrix) {
-            textureState.bindPickCameraTexture(
-                this._program,
-                this._uTextureCameraMatrices
-            );
-            cameraEye = frameCtx.pickOrigin || cameraEye;
-        }
+        // if (frameCtx.pickViewMatrix) {
+        //     textureState.bindPickCameraTexture(
+        //         this._program,
+        //         this._uTextureCameraMatrices
+        //     );
+        //     cameraEye = frameCtx.pickOrigin || cameraEye;
+        // }
 
         const originCameraEye = [
             cameraEye[0] - origin[0],
@@ -404,7 +404,7 @@ export class TrianglesDataTexturePickNormalsRenderer {
             }
         }
         src.push("in vec3 vWorldNormal;");
-        src.push("out vec4 outNormal;");
+        src.push("out highp ivec4 outNormal;");
         src.push("void main(void) {");
         if (clipping) {
             src.push("  bool clippable = vFlags2 > 0u;");
@@ -423,7 +423,7 @@ export class TrianglesDataTexturePickNormalsRenderer {
             // src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
             src.push("    gl_FragDepth = log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
-        src.push("    outNormal = vec4((vWorldNormal * 0.5) + 0.5, 1.0);");
+        src.push(`    outNormal = ivec4(vWorldNormal * float(${math.MAX_INT}), 1.0);`);
         src.push("}");
         return src;
     }

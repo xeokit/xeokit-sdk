@@ -14,10 +14,10 @@
 <canvas id="myCanvas"></canvas>
 <div class="slideout-sidebar">
     <img class="info-icon" src="../../assets/images/measure_angle_icon.png"/>
-    <h1>AngleMeasurementsPlugin</h1>
-    <h2>Click on the model to create angle measurements, with snap-to-vertex</h2>
+    <h1>AngleMeasurementPlugin with AngleMeasurementsMouseControl and PointerLens</h1>
+    <h2>Click on the model to create angle measurements, with vertex and edge snapping</h2>
     <p>In this example, we're loading a BIM model from the file system, then creating angle measurements wherever the
-        user clicks on the model.</p>
+        user clicks on the model with the mouse.</p>
     <h3>Components Used</h3>
     <ul>
         <li>
@@ -29,8 +29,12 @@
                target="_other">AngleMeasurementsPlugin</a>
         </li>
         <li>
-            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
-               target="_other">XKTLoaderPlugin</a>
+            <a href="../../docs/class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl.html"
+               target="_other">AngleMeasurementsMouseControl</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/extras/PointerLens/PointerLens.js~PointerLens.html"
+               target="_other">PointerLens</a>
         </li>
     </ul>
     <h3>Resources</h3>
@@ -44,15 +48,13 @@
 </body>
 <script type="module">
 
-    //------------------------------------------------------------------------------------------------------------------
-    // Import the modules we need for this example
-    //------------------------------------------------------------------------------------------------------------------
-
-    import {Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin, PointerLens} from "../../dist/xeokit-sdk.es.js";
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Create a Viewer and arrange the camera
-    //------------------------------------------------------------------------------------------------------------------
+    import {
+        Viewer,
+        XKTLoaderPlugin,
+        AngleMeasurementsPlugin,
+        AngleMeasurementsMouseControl,
+        PointerLens
+    } from "../../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -63,17 +65,6 @@
     viewer.camera.look = [4.40, 3.72, 8.89];
     viewer.camera.up = [-0.01, 0.99, 0.039];
 
-    //------------------------------------------------------------------------------------------------------------------
-    // Vertex-snapping mode
-    //------------------------------------------------------------------------------------------------------------------
-
-    viewer.cameraControl.snapMode = "vertex"; // Snap to nearest vertex
-    viewer.cameraControl.snapRadius = 30; // 30 pixels snapping radius
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Load a model
-    //------------------------------------------------------------------------------------------------------------------
-
     const xktLoader = new XKTLoaderPlugin(viewer);
 
     const sceneModel = xktLoader.load({
@@ -82,17 +73,15 @@
         edges: true
     });
 
-    //------------------------------------------------------------------------------------------------------------------
-    // Create an AngleMeasurementsPlugin, activate its AngleMeasuremntsControl
-    //------------------------------------------------------------------------------------------------------------------
+    const angleMeasurements = new AngleMeasurementsPlugin(viewer);
 
-    const pointerLens = new PointerLens(viewer);
-
-    const angleMeasurements = new AngleMeasurementsPlugin(viewer, {
-        pointerLens
+    const angleMeasurementsMouseControl = new AngleMeasurementsMouseControl(angleMeasurements, {
+        pointerLens: new PointerLens(viewer)
     });
 
-    angleMeasurements.control.activate();
+    angleMeasurementsMouseControl.snapping = true;
+
+    angleMeasurementsMouseControl.activate();
 
 </script>
 </html>

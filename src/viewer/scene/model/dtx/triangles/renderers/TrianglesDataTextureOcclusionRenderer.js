@@ -299,8 +299,6 @@ export class TrianglesDataTextureOcclusionRenderer {
         src.push("      gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
 
         src.push("  } else {");
-        // model matrices
-        src.push ("mat4 worldMatrix = sceneModelWorldMatrix * mat4 (texelFetch (uTextureModelMatrices, ivec2(0, 0), 0), texelFetch (uTextureModelMatrices, ivec2(1, 0), 0), texelFetch (uTextureModelMatrices, ivec2(2, 0), 0), texelFetch (uTextureModelMatrices, ivec2(3, 0), 0));");
 
         // get vertex base
         src.push("ivec4 packedVertexBase = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+4, objectIndexCoords.y), 0));");
@@ -342,7 +340,7 @@ export class TrianglesDataTextureOcclusionRenderer {
         // when the geometry is not solid, if needed, flip the triangle winding
         src.push("if (solid != 1u) {");
         src.push("  if (isPerspectiveMatrix(projMatrix)) {");
-        src.push("      vec3 uCameraEyeRtcInQuantizedSpace = (inverse(worldMatrix * positionsDecodeMatrix) * vec4(uCameraEyeRtc, 1)).xyz;")
+        src.push("      vec3 uCameraEyeRtcInQuantizedSpace = (inverse(sceneModelWorldMatrix; * positionsDecodeMatrix) * vec4(uCameraEyeRtc, 1)).xyz;")
         src.push("      if (dot(position.xyz - uCameraEyeRtcInQuantizedSpace, normal) < 0.0) {");
         src.push("          position = positions[2 - (gl_VertexID % 3)];");
         src.push("      }");
@@ -354,7 +352,7 @@ export class TrianglesDataTextureOcclusionRenderer {
         src.push("  }");
         src.push("}");
 
-        src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
+        src.push("vec4 worldPosition = sceneModelWorldMatrix; * (positionsDecodeMatrix * vec4(position, 1.0)); ");
 
         // get XYZ offset
         src.push("vec4 offset = vec4(texelFetch (uTexturePerObjectIdOffsets, objectIndexCoords, 0).rgb, 0.0);");

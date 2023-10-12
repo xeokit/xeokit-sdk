@@ -475,7 +475,7 @@ export class TrianglesDataTexturePickNormalsFlatRenderer {
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
-        src.push("out vec4 outNormal;");
+        src.push("out highp ivec4 outNormal;");
         src.push("void main(void) {");
         if (clipping) {
             src.push("  bool clippable = vFlags2 > 0;");
@@ -495,7 +495,7 @@ export class TrianglesDataTexturePickNormalsFlatRenderer {
         src.push("  vec3 xTangent = dFdx( vWorldPosition.xyz );");
         src.push("  vec3 yTangent = dFdy( vWorldPosition.xyz );");
         src.push("  vec3 worldNormal = normalize( cross( xTangent, yTangent ) );");
-        src.push("  outNormal = vec4((worldNormal * 0.5) + 0.5, 1.0);");
+        src.push(`  outNormal = ivec4(worldNormal * float(${math.MAX_INT}), 1.0);`);
         src.push("}");
         return src;
     }

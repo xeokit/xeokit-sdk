@@ -98,8 +98,8 @@ class PickController {
             const snapPickResult = this._scene.snapPick({
                 canvasPos: this.pickCursorPos,
                 snapRadius: this._configs.snapRadius,
-                snapVertex: this._configs.snapVertex,
-                snapEdge: this._configs.snapEdge,
+                snapToVertex: this._configs.snapToVertex,
+                snapToEdge: this._configs.snapToEdge,
             });
             if (snapPickResult && snapPickResult.snappedWorldPos) {
                 this.snapPickResult = snapPickResult;

@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 780,
+  "end": 798,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 23,
-      "column": 22
+      "column": 31
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 780,
+    "end": 798,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 23,
-        "column": 22
+        "column": 31
       }
     },
     "sourceType": "module",
@@ -766,7 +766,7 @@
       {
         "type": "ExportAllDeclaration",
         "start": 735,
-        "end": 757,
+        "end": 766,
         "loc": {
           "start": {
             "line": 22,
@@ -774,13 +774,13 @@
           },
           "end": {
             "line": 22,
-            "column": 22
+            "column": 31
           }
         },
         "source": {
           "type": "StringLiteral",
           "start": 749,
-          "end": 756,
+          "end": 765,
           "loc": {
             "start": {
               "line": 22,
@@ -788,20 +788,20 @@
             },
             "end": {
               "line": 22,
-              "column": 21
+              "column": 30
             }
           },
           "extra": {
-            "rawValue": "./lod",
-            "raw": "\"./lod\""
+            "rawValue": "./lod/index.js",
+            "raw": "\"./lod/index.js\""
           },
-          "value": "./lod"
+          "value": "./lod/index.js"
         }
       },
       {
         "type": "ExportAllDeclaration",
-        "start": 758,
-        "end": 780,
+        "start": 767,
+        "end": 798,
         "loc": {
           "start": {
             "line": 23,
@@ -809,13 +809,13 @@
           },
           "end": {
             "line": 23,
-            "column": 22
+            "column": 31
           }
         },
         "source": {
           "type": "StringLiteral",
-          "start": 772,
-          "end": 779,
+          "start": 781,
+          "end": 797,
           "loc": {
             "start": {
               "line": 23,
@@ -823,14 +823,14 @@
             },
             "end": {
               "line": 23,
-              "column": 21
+              "column": 30
             }
           },
           "extra": {
-            "rawValue": "./vfc",
-            "raw": "\"./vfc\""
+            "rawValue": "./vfc/index.js",
+            "raw": "\"./vfc/index.js\""
           },
-          "value": "./vfc"
+          "value": "./vfc/index.js"
         }
       }
     ],
@@ -3746,9 +3746,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "./lod",
+      "value": "./lod/index.js",
       "start": 749,
-      "end": 756,
+      "end": 765,
       "loc": {
         "start": {
           "line": 22,
@@ -3756,7 +3756,7 @@
         },
         "end": {
           "line": 22,
-          "column": 21
+          "column": 30
         }
       }
     },
@@ -3773,16 +3773,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 756,
-      "end": 757,
+      "start": 765,
+      "end": 766,
       "loc": {
         "start": {
           "line": 22,
-          "column": 21
+          "column": 30
         },
         "end": {
           "line": 22,
-          "column": 22
+          "column": 31
         }
       }
     },
@@ -3801,8 +3801,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 758,
-      "end": 764,
+      "start": 767,
+      "end": 773,
       "loc": {
         "start": {
           "line": 23,
@@ -3828,8 +3828,8 @@
         "updateContext": null
       },
       "value": "*",
-      "start": 765,
-      "end": 766,
+      "start": 774,
+      "end": 775,
       "loc": {
         "start": {
           "line": 23,
@@ -3854,8 +3854,8 @@
         "binop": null
       },
       "value": "from",
-      "start": 767,
-      "end": 771,
+      "start": 776,
+      "end": 780,
       "loc": {
         "start": {
           "line": 23,
@@ -3880,9 +3880,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "./vfc",
-      "start": 772,
-      "end": 779,
+      "value": "./vfc/index.js",
+      "start": 781,
+      "end": 797,
       "loc": {
         "start": {
           "line": 23,
@@ -3890,7 +3890,7 @@
         },
         "end": {
           "line": 23,
-          "column": 21
+          "column": 30
         }
       }
     },
@@ -3907,16 +3907,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 779,
-      "end": 780,
+      "start": 797,
+      "end": 798,
       "loc": {
         "start": {
           "line": 23,
-          "column": 21
+          "column": 30
         },
         "end": {
           "line": 23,
-          "column": 22
+          "column": 31
         }
       }
     },
@@ -3933,16 +3933,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 780,
-      "end": 780,
+      "start": 798,
+      "end": 798,
       "loc": {
         "start": {
           "line": 23,
-          "column": 22
+          "column": 31
         },
         "end": {
           "line": 23,
-          "column": 22
+          "column": 31
         }
       }
     }

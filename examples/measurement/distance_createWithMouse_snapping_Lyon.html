@@ -43,19 +43,29 @@
 <canvas id="myCanvas"></canvas>
 <canvas id="myNavCubeCanvas"></canvas>
 <div class="slideout-sidebar">
-    <h1>Logarithmic depth buffer enabled</h1>
-    <p>XKT model with double-precision geometry, rendered <b>with</b> logarithmic buffer enabled</p><br>
+    <h1>DistanceMeasurementPlugin with DistanceMeasurementsMouseControl and Pointerlens</h1>
+    <h2>Click on the model to create distance measurements, with vertex and edge snapping</h2>
+    <p>In this example, we're loading a model of the City of Lyon from the file system, then creating distance measurements wherever the
+        user clicks on the model with the mouse.</p>
     <h3>Stats</h3>
-    <ul>
-        <li>
-            <div id="time">Loading JavaScript modules...</div>
-        </li>
-    </ul>
-    <h3>Components used</h3>
+    <div id="time">Loading JavaScript modules...</div>
+    <h3>Components Used</h3>
     <ul>
         <li>
             <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
                target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html"
+               target="_other">DistanceMeasurementsPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl.html"
+               target="_other">DistanceMeasurementsMouseControl</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/extras/PointerLens/PointerLens.js~PointerLens.html"
+               target="_other">PointerLens</a>
         </li>
         <li>
             <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
@@ -66,7 +76,6 @@
     <ul>
         <li>Model provided by <a href="https://bimdata.io" target="_other">BIMData.io</a></li>
     </ul>
-
 </div>
 </body>
 
@@ -88,6 +97,7 @@
         buildPlaneGeometry,
         FastNavPlugin,
         DistanceMeasurementsPlugin,
+        DistanceMeasurementsMouseControl,
         PointerLens
     } from "../../dist/xeokit-sdk.es.js";
 
@@ -225,18 +235,21 @@
         collidable: false
     });
 
-    //----------------------------------------------------------------------------------------------------------------------
-    // Create distance measurements plugin
-    //----------------------------------------------------------------------------------------------------------------------
-
-    const pointerLens = new PointerLens(viewer, {
-        zoomLevel: 2
-    });
+    //------------------------------------------------------------------------------------------------------------------
+    // DistanceMeasurementsPlugin, DistanceMeasurementsMouseControl and PointerLens
+    //------------------------------------------------------------------------------------------------------------------
 
     const distanceMeasurements = new DistanceMeasurementsPlugin(viewer, {
         defaultAxisVisible: false, // <<------------ Hide axis wires
-        pointerLens
     });
+
+    const distanceMeasurementsMouseControl  = new DistanceMeasurementsMouseControl(distanceMeasurements, {
+        pointerLens : new PointerLens(viewer)
+    })
+
+    distanceMeasurementsMouseControl.snapping = true;
+
+    distanceMeasurementsMouseControl.activate();
 
     //----------------------------------------------------------------------------------------------------------------------
     // Load nine CityGML models

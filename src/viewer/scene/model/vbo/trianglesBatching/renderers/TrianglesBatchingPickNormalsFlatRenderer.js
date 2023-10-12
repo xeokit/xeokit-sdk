@@ -1,3 +1,4 @@
+import { math } from "../../../../math/math.js";
 import {VBOSceneModelTriangleBatchingRenderer} from "../../VBOSceneModelRenderers.js";
 
 /**
@@ -92,7 +93,7 @@ class TrianglesBatchingPickNormalsFlatRenderer extends VBOSceneModelTriangleBatc
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
-        src.push("out vec4 outColor;");
+        src.push("out highp ivec4 outNormal;");
         src.push("void main(void) {");
         if (clipping) {
             src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
@@ -112,7 +113,7 @@ class TrianglesBatchingPickNormalsFlatRenderer extends VBOSceneModelTriangleBatc
         src.push("  vec3 xTangent = dFdx( vWorldPosition.xyz );");
         src.push("  vec3 yTangent = dFdy( vWorldPosition.xyz );");
         src.push("  vec3 worldNormal = normalize( cross( xTangent, yTangent ) );");
-        src.push("  outColor = vec4((worldNormal * 0.5) + 0.5, 1.0);");
+        src.push(`  outNormal = ivec4(worldNormal * float(${math.MAX_INT}), 1.0);`);
         src.push("}");
         return src;
     }

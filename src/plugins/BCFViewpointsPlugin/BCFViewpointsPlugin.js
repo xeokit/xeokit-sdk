@@ -633,7 +633,7 @@ class BCFViewpointsPlugin extends Plugin {
 
         scene.clearSectionPlanes();
 
-        if (bcfViewpoint.clipping_planes) {
+        if (bcfViewpoint.clipping_planes && bcfViewpoint.clipping_planes.length > 0) {
             bcfViewpoint.clipping_planes.forEach(function (e) {
                 let pos = xyzObjectToArray(e.location, tempVec3);
                 let dir = xyzObjectToArray(e.direction, tempVec3);
@@ -653,7 +653,7 @@ class BCFViewpointsPlugin extends Plugin {
 
         scene.clearLines();
 
-        if (bcfViewpoint.lines) {
+        if (bcfViewpoint.lines && bcfViewpoint.lines.length > 0) {
             const positions = [];
             const indices = [];
             let i = 0;
@@ -683,7 +683,7 @@ class BCFViewpointsPlugin extends Plugin {
 
         scene.clearBitmaps();
 
-        if (bcfViewpoint.bitmaps) {
+        if (bcfViewpoint.bitmaps && bcfViewpoint.bitmaps.length > 0) {
             bcfViewpoint.bitmaps.forEach(function (e) {
                 const bitmap_type = e.bitmap_type || "jpg"; // "jpg" | "png"
                 const bitmap_data = e.bitmap_data; // base64

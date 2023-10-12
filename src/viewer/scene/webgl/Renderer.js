@@ -903,7 +903,7 @@ const Renderer = function (scene, options) {
      * Picks an Entity.
      * @private
      */
-    this.pick = (function () {
+     this.pick = (function () {
 
         const tempVec3a = math.vec3();
         const tempMat4a = math.mat4();
@@ -948,13 +948,11 @@ const Renderer = function (scene, options) {
 
                 // Picking with arbitrary World-space ray
                 // Align camera along ray and fire ray through center of canvas
-
-                const pickFrustumMatrix = math.frustumMat4(-1, 1, -1, 1, 0.01, scene.camera.project.far, tempMat4a);
-
+                
                 if (params.matrix) {
 
                     pickViewMatrix = params.matrix;
-                    pickProjMatrix = pickFrustumMatrix;
+                    pickProjMatrix = scene.camera.projMatrix;
 
                 } else {
 
@@ -971,7 +969,7 @@ const Renderer = function (scene, options) {
                     math.cross3Vec3(worldRayDir, randomVec3, up);
 
                     pickViewMatrix = math.lookAtMat4v(worldRayOrigin, look, up, tempMat4b);
-                    pickProjMatrix = pickFrustumMatrix;
+                    pickProjMatrix = scene.camera.projMatrix;
 
                     pickResult.origin = worldRayOrigin;
                     pickResult.direction = worldRayDir;
@@ -1277,14 +1275,14 @@ const Renderer = function (scene, options) {
     /**
      * @param {[number, number]} canvasPos
      * @param {number} [snapRadiusInPixels=30]
-     * @param {boolean} [snapVertex=true]
-     * @param {boolean} [snapEdge=true]
+     * @param {boolean} [snapToVertex=true]
+     * @param {boolean} [snapToEdge=true]
      *
      * @returns {{worldPos:number[],snappedWorldPos:null|number[],snappedCanvasPos:null|number[], snapType:null|"vertex"|"edge"}}
      */
-    this.snapPick = function (canvasPos, snapRadiusInPixels = 30, snapVertex = true, snapEdge = true) {
+    this.snapPick = function (canvasPos, snapRadiusInPixels = 30, snapToVertex = true, snapToEdge = true) {
 
-        if (!snapVertex && !snapEdge) {
+        if (!snapToVertex && !snapToEdge) {
             return this.pick({canvasPos, pickSurface: true});
         }
 
@@ -1353,7 +1351,7 @@ const Renderer = function (scene, options) {
 
         gl.depthMask(false);
 
-        if (snapVertex && snapEdge) {
+        if (snapToVertex && snapToEdge) {
             frameCtx.snapMode = "edge";
             snapPickDrawSnapDepths(frameCtx);
 
@@ -1362,7 +1360,7 @@ const Renderer = function (scene, options) {
 
             snapPickDrawSnapDepths(frameCtx);
         } else {
-            frameCtx.snapMode = snapVertex ? "vertex" : "edge";
+            frameCtx.snapMode = snapToVertex ? "vertex" : "edge";
 
             snapPickDrawSnapDepths(frameCtx);
         }
@@ -1410,7 +1408,7 @@ const Renderer = function (scene, options) {
                     x,
                     y,
                     dist,
-                    isVertex: snapVertex && snapEdge ? snapPickResultArray[i + 3] > layerParamsSnap.length / 2 : snapVertex,
+                    isVertex: snapToVertex && snapToEdge ? snapPickResultArray[i + 3] > layerParamsSnap.length / 2 : snapToVertex,
                     result: [
                         snapPickResultArray[i + 0],
                         snapPickResultArray[i + 1],
@@ -1490,17 +1488,21 @@ const Renderer = function (scene, options) {
 
         gl.viewport(0, 0, 1, 1);
 
-        gl.clearColor(0, 0, 0, 0);
         gl.enable(gl.DEPTH_TEST);
         gl.disable(gl.CULL_FACE);
         gl.disable(gl.BLEND);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        gl.clear(gl.DEPTH_BUFFER_BIT);
+        gl.clearBufferiv(gl.COLOR, 0, new Int32Array([0, 0, 0, 0]));
 
         pickable.drawPickNormals(frameCtx); // Draw color-encoded fragment World-space normals
 
         const pix = pickBuffer.read(0, 0);
 
-        const worldNormal = [(pix[0] / 256.0) - 0.5, (pix[1] / 256.0) - 0.5, (pix[2] / 256.0) - 0.5];
+        const worldNormal = [
+            pix[0] / math.MAX_INT,
+            pix[1] / math.MAX_INT,
+            pix[2] / math.MAX_INT,
+        ];
 
         math.normalizeVec3(worldNormal);
 
