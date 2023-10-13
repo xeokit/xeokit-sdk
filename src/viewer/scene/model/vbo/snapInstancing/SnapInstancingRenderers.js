@@ -21,6 +21,20 @@ class SnapInstancingRenderers {
         }
     }
 
+    eagerCreateRenders() {
+
+        // Pre-initialize renderers that would otherwise be lazy-initialised
+        // on user interaction, such as picking or emphasis, so that there is no delay
+        // when user first begins interacting with the viewer.
+
+        if (!this._snapDepthBufInitRenderer) {
+            this._snapDepthBufInitRenderer = new SnapInstancingDepthBufInitRenderer(this._scene, false);
+        }
+        if (!this._snapDepthRenderer) {
+            this._snapDepthRenderer = new SnapInstancingDepthRenderer(this._scene);
+        }
+    }
+
     get snapDepthBufInitRenderer() {
         if (!this._snapDepthBufInitRenderer) {
             this._snapDepthBufInitRenderer = new SnapInstancingDepthBufInitRenderer(this._scene, false);
@@ -57,8 +71,10 @@ function getSnapInstancingRenderers(scene) {
         instancingRenderers = new SnapInstancingRenderers(scene);
         cachedRenderers[sceneId] = instancingRenderers;
         instancingRenderers._compile();
+        instancingRenderers.eagerCreateRenders();
         scene.on("compile", () => {
             instancingRenderers._compile();
+            instancingRenderers.eagerCreateRenders();
         });
         scene.on("destroyed", () => {
             delete cachedRenderers[sceneId];

@@ -102,6 +102,23 @@ class TrianglesBatchingRenderers {
         }
     }
 
+    eagerCreateRenders() {
+
+        // Pre-initialize certain renderers that would otherwise be lazy-initialised
+        // on user interaction, such as picking or emphasis, so that there is no delay
+        // when user first begins interacting with the viewer.
+
+        if (!this._silhouetteRenderer) { // Used for highlighting and selection
+            this._silhouetteRenderer = new TrianglesBatchingSilhouetteRenderer(this._scene);
+        }
+        if (!this._pickMeshRenderer) {
+            this._pickMeshRenderer = new TrianglesBatchingPickMeshRenderer(this._scene);
+        }
+        if (!this._pickDepthRenderer) {
+            this._pickDepthRenderer = new TrianglesBatchingPickDepthRenderer(this._scene);
+        }
+    }
+
     get colorRenderer() {
         if (!this._colorRenderer) {
             this._colorRenderer = new TrianglesBatchingColorRenderer(this._scene, false);
@@ -308,8 +325,10 @@ function getBatchingRenderers(scene) {
         batchingRenderers = new TrianglesBatchingRenderers(scene);
         cachdRenderers[sceneId] = batchingRenderers;
         batchingRenderers._compile();
+        batchingRenderers.eagerCreateRenders();
         scene.on("compile", () => {
             batchingRenderers._compile();
+            batchingRenderers.eagerCreateRenders();
         });
         scene.on("destroyed", () => {
             delete cachdRenderers[sceneId];

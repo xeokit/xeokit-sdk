@@ -102,6 +102,23 @@ class TrianglesInstancingRenderers {
         }
     }
 
+    eagerCreateRenders() {
+
+        // Pre-initialize certain renderers that would otherwise be lazy-initialised
+        // on user interaction, such as picking or emphasis, so that there is no delay
+        // when user first begins interacting with the viewer.
+
+        if (!this._silhouetteRenderer) { // Used for highlighting and selection
+            this._silhouetteRenderer = new TrianglesInstancingSilhouetteRenderer(this._scene);
+        }
+        if (!this._pickMeshRenderer) {
+            this._pickMeshRenderer = new TrianglesInstancingPickMeshRenderer(this._scene);
+        }
+        if (!this._pickDepthRenderer) {
+            this._pickDepthRenderer = new TrianglesInstancingPickDepthRenderer(this._scene);
+        }
+    }
+
     get colorRenderer() {
         if (!this._colorRenderer) {
             this._colorRenderer = new TrianglesInstancingColorRenderer(this._scene, false);
@@ -308,8 +325,10 @@ function getInstancingRenderers(scene) {
         instancingRenderers = new TrianglesInstancingRenderers(scene);
         cachedRenderers[sceneId] = instancingRenderers;
         instancingRenderers._compile();
+        instancingRenderers.eagerCreateRenders();
         scene.on("compile", () => {
             instancingRenderers._compile();
+            instancingRenderers.eagerCreateRenders();
         });
         scene.on("destroyed", () => {
             delete cachedRenderers[sceneId];

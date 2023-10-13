@@ -660,7 +660,7 @@ class VBOSceneModelTriangleBatchingEdgesRenderer extends VBOSceneModelTriangleBa
 
 
 class VBOSceneModelTriangleInstancingRenderer extends VBOSceneModelRenderer {
-    constructor(scene, withSAO, {edges = false} = {}) {
+    constructor(scene, withSAO, { edges = false} = {}) {
         super(scene, withSAO, {instancing: true, edges});
     }
 

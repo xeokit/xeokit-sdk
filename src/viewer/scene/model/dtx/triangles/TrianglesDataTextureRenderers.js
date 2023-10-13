@@ -92,6 +92,30 @@ class TrianglesDataTextureRenderers {
         }
     }
 
+    eagerCreateRenders() {
+
+        // Pre-initialize certain renderers that would otherwise be lazy-initialised
+        // on user interaction, such as picking or emphasis, so that there is no delay
+        // when user first begins interacting with the viewer.
+
+        if (!this._silhouetteRenderer) { // Used for highlighting and selection
+            this._silhouetteRenderer = new TrianglesDataTextureSilhouetteRenderer(this._scene);
+        }
+        if (!this._pickMeshRenderer) {
+            this._pickMeshRenderer = new TrianglesDataTexturePickMeshRenderer(this._scene);
+        }
+        if (!this._pickDepthRenderer) {
+            this._pickDepthRenderer = new TrianglesDataTexturePickDepthRenderer(this._scene);
+        }
+        if (!this._vertexDepthRenderer) {
+            this._vertexDepthRenderer = new TrianglesDataTextureSnapDepthRenderer(this._scene);
+        }
+        if (!this._snapDepthBufInitRenderer) {
+            this._snapDepthBufInitRenderer = new TrianglesDataTextureSnapDepthBufInitRenderer(this._scene);
+        }
+    }
+
+
     get colorRenderer() {
         if (!this._colorRenderer) {
             this._colorRenderer = new TrianglesDataTextureColorRenderer(this._scene, false);
@@ -264,8 +288,10 @@ function getDataTextureRenderers(scene) {
         dataTextureRenderers = new TrianglesDataTextureRenderers(scene);
         cachdRenderers[sceneId] = dataTextureRenderers;
         dataTextureRenderers._compile();
+        dataTextureRenderers.eagerCreateRenders();
         scene.on("compile", () => {
             dataTextureRenderers._compile();
+            dataTextureRenderers.eagerCreateRenders();
         });
         scene.on("destroyed", () => {
             delete cachdRenderers[sceneId];
