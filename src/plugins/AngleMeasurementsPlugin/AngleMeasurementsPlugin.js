@@ -1,6 +1,6 @@
 import {Plugin} from "../../viewer/Plugin.js";
 import {AngleMeasurement} from "./AngleMeasurement.js";
-import {AngleMeasurementsMouseControl} from "./AngleMeasurementsMouseControl";
+import {AngleMeasurementsMouseControl} from "./AngleMeasurementsMouseControl.js";
 
 /**
  * {@link Viewer} plugin for measuring angles.

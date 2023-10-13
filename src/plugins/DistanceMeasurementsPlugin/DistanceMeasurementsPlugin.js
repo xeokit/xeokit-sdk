@@ -1,6 +1,6 @@
 import {Plugin} from "../../viewer/Plugin.js";
 import {DistanceMeasurement} from "./DistanceMeasurement.js";
-import {DistanceMeasurementsMouseControl} from "./DistanceMeasurementsMouseControl";
+import {DistanceMeasurementsMouseControl} from "./DistanceMeasurementsMouseControl.js";
 
 /**
  * {@link Viewer} plugin for measuring point-to-point distances.

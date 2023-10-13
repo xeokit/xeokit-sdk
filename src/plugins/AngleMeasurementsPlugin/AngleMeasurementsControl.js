@@ -1,4 +1,4 @@
-import {Component} from "../../viewer";
+import {Component} from "../../viewer/scene/Component.js";
 
 /**
  * Creates {@link AngleMeasurement}s in an {@link AngleMeasurementsPlugin} from user input.

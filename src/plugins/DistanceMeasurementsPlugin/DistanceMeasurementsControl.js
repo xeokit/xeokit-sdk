@@ -1,4 +1,4 @@
-import {Component} from "../../viewer";
+import {Component} from "../../viewer/scene/Component.js";
 
 /**
  * Creates {@link DistanceMeasurement}s in a {@link DistanceMeasurementsPlugin} from user input.

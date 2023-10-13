@@ -1,9 +1,7 @@
-import {core} from "../core.js";
+
 import {math} from '../math/math.js';
-import {stats} from '../stats.js';
 import {Component} from '../Component.js';
 import {Spinner} from './Spinner.js';
-import {WEBGL_INFO} from '../webglInfo.js';
 
 const WEBGL_CONTEXT_NAMES = [
     "webgl2",
