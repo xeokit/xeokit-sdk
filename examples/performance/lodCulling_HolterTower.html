@@ -66,13 +66,13 @@
 
 <script type="module">
 
-    import {Viewer, XKTLoaderPlugin, NavCubePlugin} from "../../dist/xeokit-sdk.min.es.js";
+    import {Viewer, XKTLoaderPlugin, NavCubePlugin} from "../../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true,
-        saoEnabled: true,
-        edges: true
+        saoEnabled: false,
+        edges: false
     });
 
     viewer.scene.camera.eye = [14.915582703146043, 14.396781491179095, 5.431098754133695];
@@ -84,7 +84,7 @@
     //------------------------------------------------------------------------------
 
     viewer.scene.lod.enabled = true;
-    viewer.scene.lod.targetFPS = 70; // Set an excessive FPS target to force LoD
+    viewer.scene.lod.targetFPS = 50; // Set an excessive FPS target to force LoD
 
     new NavCubePlugin(viewer, {
         canvasId: "myNavCubeCanvas",
@@ -101,7 +101,18 @@
         id: "myModel",
         src: "../../assets/models/xkt/v8/ifc/HolterTower.ifc.xkt",
         saoEnabled: true,
-        edges: true
+        edges: true,
+        objectDefaults: {
+            "IfcPlate": {
+                opacity: 0.3 // These are used as windows in this model - make transparent
+            },
+            "IfcWindow": {
+                opacity: 0.4
+            },
+            "IfcSpace": {
+                opacity: 0.4
+            }
+        }
     });
 
     sceneModel.on("loaded", ()=>{

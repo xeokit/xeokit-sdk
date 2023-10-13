@@ -282,7 +282,8 @@
         const snapPickResult = viewer.scene.snapPick({
             canvasPos: canvasPos,
             snapRadius: 50,
-            snapMode: "edge",
+            snapToEdge: true, // Default is true
+            snapToVertex: false // Default is true
         });
 
         if (snapPickResult && snapPickResult.snappedCanvasPos) {

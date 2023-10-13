@@ -74,7 +74,8 @@
         const snapPickResult = viewer.scene.snapPick({
             canvasPos,
             snapRadius: 30,
-            snapMode: "vertex",
+            snapToEdge: false, // Default is true
+            snapToVertex: true // Default is true
         });
         if (snapPickResult && snapPickResult.snappedCanvasPos) {
             markerDiv.style.marginLeft = `${snapPickResult.snappedCanvasPos[0] - 10}px`;

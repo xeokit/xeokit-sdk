@@ -136,6 +136,7 @@
     });
 
     sceneModel.createMesh({
+    sceneModel.createMesh({snap
         id: "yellowLegMesh",
         positions: [
             1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1, 1, -1, -1, 1,
@@ -204,7 +205,8 @@
         const snapPickResult = viewer.scene.snapPick({
             canvasPos: canvasPos,
             snapRadius: 30,
-            snapMode: "edge",
+            snapToEdge: true, // Default is true
+            snapToVertex: false // Default is true
         });
 
         if (snapPickResult && snapPickResult.snappedCanvasPos) {
