@@ -23,7 +23,6 @@ export class LODCullingManager {
         }
         const entitiesInLOD = lodState.entitiesInLOD [lodState.primLODLevels[lodState.lodLevelIndex]] || [];
         for (let i = 0, len = entitiesInLOD.length; i < len; i++) {
-
             entitiesInLOD[i].culledLOD = true;
         }
         lodState.lodLevelIndex++;
@@ -59,12 +58,12 @@ export class LODCullingManager {
         let lodState = this.lodState;
         let retVal = false;
         if (currentFPS < lodState.targetFps) {
-            if (++lodState.consecutiveFramesWithoutTargetFps > 0) {
+            if (++lodState.consecutiveFramesWithoutTargetFps > 5) {
                 lodState.consecutiveFramesWithoutTargetFps = 0;
                 retVal = this._increaseLODLevelIndex();
             }
         } else if (currentFPS > (lodState.targetFps + 4)) {
-            if (++lodState.consecutiveFramesWithTargetFps > 1) {
+            if (++lodState.consecutiveFramesWithTargetFps > 5) {
                 lodState.consecutiveFramesWithTargetFps = 0;
                 retVal = this._decreaseLODLevelIndex();
             }

@@ -132,6 +132,32 @@ export class LOD extends Component {
     }
 
     /**
+     * Sets the {@link MetaObject} types that are never culled.
+     *
+     * Default value is ````[]````.
+     *
+     * @type {string[]}
+     */
+    set neverCullTypes(value) {
+        if (value === undefined || value === null) {
+            value = [];
+        }
+        this._neverCullTypes = value;
+      //  this.glRedraw();
+    }
+
+    /**
+     * Gets the {@link MetaObject} types that are never culled.
+     *
+     * Default value is ````[]````.
+     *
+     * @type {string[]}
+     */
+    get neverCullTypes() {
+        return this._neverCullTypes;
+    }
+    
+    /**
      * Called within SceneModel constructors
      * @private
      */
