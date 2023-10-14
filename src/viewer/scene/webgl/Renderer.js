@@ -1486,6 +1486,10 @@ const Renderer = function (scene, options) {
             getClipPosY(canvasPos[1], gl.drawingBufferHeight),
         ];
 
+        const pickNormalBuffer = renderBufferManager.getRenderBuffer("pick-normal", { size: [1, 1] });
+
+        pickNormalBuffer.bind(gl.RGBA32I);
+
         gl.viewport(0, 0, 1, 1);
 
         gl.enable(gl.DEPTH_TEST);
@@ -1496,7 +1500,9 @@ const Renderer = function (scene, options) {
 
         pickable.drawPickNormals(frameCtx); // Draw color-encoded fragment World-space normals
 
-        const pix = pickBuffer.read(0, 0);
+        const pix = pickNormalBuffer.read(0, 0, gl.RGBA_INTEGER, gl.INT, Int32Array, 4);
+
+        pickNormalBuffer.unbind();
 
         const worldNormal = [
             pix[0] / math.MAX_INT,
