@@ -283,6 +283,10 @@ class VBOSceneModelRenderer {
             gl.uniform4fv(this._uLightAmbient, lightsState.getAmbientColorAndIntensity());
         }
 
+        if (this._uGammaFactor) {
+            gl.uniform1f(this._uGammaFactor, scene.gammaFactor);
+        }
+
         for (let i = 0, len = lights.length; i < len; i++) {
 
             const light = lights[i];
@@ -502,10 +506,6 @@ class VBOSceneModelRenderer {
 
         if (this._uDrawingBufferSize) {
             gl.uniform2f(this._uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
-        }
-
-        if (this._uPositionsDecodeMatrix) {
-            gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, state.positionsDecodeMatrix);
         }
 
         if (this._uUVDecodeMatrix) {
