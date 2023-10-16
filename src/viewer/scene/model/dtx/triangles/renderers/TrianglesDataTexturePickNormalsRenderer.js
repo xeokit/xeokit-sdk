@@ -76,6 +76,7 @@ export class TrianglesDataTexturePickNormalsRenderer {
 
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
         gl.uniform2fv(this._uPickClipPos, frameCtx.pickClipPos);
+        gl.uniform2f(this._uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
         if (scene.logarithmicDepthBufferEnabled) {
             const logDepthBufFC = 2.0 / (Math.log(camera.project.far + 1.0) / Math.LN2);  // TODO: Far should be from projection matrix?
@@ -159,6 +160,7 @@ export class TrianglesDataTexturePickNormalsRenderer {
         this._uRenderPass = program.getLocation("renderPass");
         this._uPickInvisible = program.getLocation("pickInvisible");
         this._uPickClipPos = program.getLocation("pickClipPos");
+        this._uDrawingBufferSize = program.getLocation("drawingBufferSize");
 
         this._uSectionPlanes = [];
 
@@ -243,11 +245,12 @@ export class TrianglesDataTexturePickNormalsRenderer {
             src.push("out float isPerspective;");
         }
 
+        src.push("uniform vec2 drawingBufferSize;");
         src.push("uniform vec2 pickClipPos;");
 
         src.push("vec4 remapClipPos(vec4 clipPos) {");
-        src.push("    clipPos.xy /= clipPos.w;")
-        src.push("    clipPos.xy -= pickClipPos;");
+        src.push("    clipPos.xy /= clipPos.w;");
+        src.push(`    clipPos.xy = (clipPos.xy - pickClipPos) * (drawingBufferSize / 3.0);`);
         src.push("    clipPos.xy *= clipPos.w;")
         src.push("    return clipPos;")
         src.push("}");

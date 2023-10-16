@@ -27,7 +27,7 @@ class TrianglesInstancingPickNormalsFlatRenderer extends VBOSceneModelTriangleIn
 
         this._addMatricesUniformBlockLines(src);
 
-        this._addRemapClipPosLines(src);
+        this._addRemapClipPosLines(src, 3);
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");

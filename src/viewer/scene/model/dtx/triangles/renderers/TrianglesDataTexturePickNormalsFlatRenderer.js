@@ -91,6 +91,7 @@ export class TrianglesDataTexturePickNormalsFlatRenderer {
         gl.uniform1i(this._uRenderPass, renderPass);
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
         gl.uniform2fv(this._uPickClipPos, frameCtx.pickClipPos);
+        gl.uniform2f(this._uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
         gl.uniformMatrix4fv(this._uWorldMatrix, false, model.worldMatrix);
 
@@ -260,6 +261,7 @@ export class TrianglesDataTexturePickNormalsFlatRenderer {
         this._uRenderPass = program.getLocation("renderPass");
         this._uPickInvisible = program.getLocation("pickInvisible");
         this._uPickClipPos = program.getLocation("pickClipPos");
+        this._uDrawingBufferSize = program.getLocation("drawingBufferSize");
         this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
@@ -350,11 +352,12 @@ export class TrianglesDataTexturePickNormalsFlatRenderer {
             src.push("out float isPerspective;");
         }
 
+        src.push("uniform vec2 drawingBufferSize;");
         src.push("uniform vec2 pickClipPos;");
 
         src.push("vec4 remapClipPos(vec4 clipPos) {");
-        src.push("    clipPos.xy /= clipPos.w;")
-        src.push("    clipPos.xy -= pickClipPos;");
+        src.push("    clipPos.xy /= clipPos.w;");
+        src.push(`    clipPos.xy = (clipPos.xy - pickClipPos) * (drawingBufferSize / 3.0);`);
         src.push("    clipPos.xy *= clipPos.w;")
         src.push("    return clipPos;")
         src.push("}");

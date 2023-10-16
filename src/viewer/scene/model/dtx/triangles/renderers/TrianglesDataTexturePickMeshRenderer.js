@@ -82,6 +82,7 @@ export class TrianglesDataTexturePickMeshRenderer {
             rtcCameraEye = camera.eye;
         }
         gl.uniform2fv(this._uPickClipPos, frameCtx.pickClipPos);
+        gl.uniform2f(this._uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
         gl.uniformMatrix4fv(this._uSceneModelWorldMatrix, false, rotationMatrixConjugate);
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
         gl.uniformMatrix4fv(this._uProjMatrix, false, camera.projMatrix);
@@ -156,6 +157,7 @@ export class TrianglesDataTexturePickMeshRenderer {
         this._uRenderPass = program.getLocation("renderPass");
         this._uPickInvisible = program.getLocation("pickInvisible");
         this._uPickClipPos = program.getLocation("pickClipPos");
+        this._uDrawingBufferSize = program.getLocation("drawingBufferSize");
         this._uSceneModelWorldMatrix = program.getLocation("sceneModelWorldMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
@@ -254,10 +256,11 @@ export class TrianglesDataTexturePickMeshRenderer {
         }
 
         src.push("uniform vec2 pickClipPos;");
+        src.push("uniform vec2 drawingBufferSize;");
 
         src.push("vec4 remapClipPos(vec4 clipPos) {");
         src.push("    clipPos.xy /= clipPos.w;")
-        src.push("    clipPos.xy -= pickClipPos;");
+        src.push(`    clipPos.xy = (clipPos.xy - pickClipPos) * drawingBufferSize;`);
         src.push("    clipPos.xy *= clipPos.w;")
         src.push("    return clipPos;")
         src.push("}");
