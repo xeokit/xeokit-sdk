@@ -169,10 +169,6 @@ export class TrianglesDataTexturePickMeshRenderer {
                 dir: program.getLocation("sectionPlaneDir" + i)
             });
         }
-        if (this._withSAO) {
-            this._uOcclusionTexture = "uOcclusionTexture";
-            this._uSAOParams = program.getLocation("uSAOParams");
-        }
         if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
@@ -188,12 +184,9 @@ export class TrianglesDataTexturePickMeshRenderer {
     }
 
     _bindProgram(frameCtx) {
-
         const scene = this._scene;
         const gl = scene.canvas.gl;
-
         this._program.bind();
-
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
     }
 
