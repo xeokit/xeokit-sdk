@@ -15,12 +15,13 @@
 <div class="slideout-sidebar">
     <img class="info-icon" src="../../assets/images/gltf_logo.png"/>
     <h1>GLTFLoaderPlugin</h1>
-    <h2>Viewing a binary glTF photogrammetry test model</h2>
+    <h2>Physically-based rendering of a binary glTF test model</h2>
     <p>In this example, we're using a <a
             href="../../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
-            target="_other">GLTFLoaderPlugin</a> to load a photogrammetric scan from
-       a binary glTF (.glb) file.</p>
-    <p>
+            target="_other">GLTFLoaderPlugin</a> to load the <a
+            href="https://sketchfab.com/bimcc"
+            target="_other">House Plan</a> demo model from
+        binary glTF (.glb).</p>
     <h3>Components used</h3>
     <ul>
         <li>
@@ -31,11 +32,15 @@
             <a href="../../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
                target="_other">GLTFLoaderPlugin</a>
         </li>
+        <li>
+            <a href="../../docs/class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html"
+               target="_other">FastNavPlugin</a>
+        </li>
     </ul>
     <h3>Resources</h3>
     <ul>
         <li>
-            <a href="https://sketchfab.com/matousekfoto"
+            <a href="https://sketchfab.com/bimcc"
                target="_other">Model source</a>
         </li>
     </ul>
@@ -43,35 +48,31 @@
 </body>
 <script type="module">
 
-    import {Viewer, LightMap, GLTFLoaderPlugin} from "../../dist/xeokit-sdk.es.js";
+    import {Viewer, GLTFLoaderPlugin, ReflectionMap, FastNavPlugin, sRGBEncoding} from "../../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true,
-        colorTextureEnabled: true,
-        pbrEnabled:false
+       // pbrEnabled: true,
+
+        colorTextureSupported: true,
     });
 
-    viewer.scene.gammaInput = true;
-    viewer.scene.gammaOutput = true;
-    viewer.scene.gammaFactor = 4.4;
-
-    viewer.camera.eye = [-3.351107502463288, 3.9321259279903114, 4.030067755126885];
-    viewer.camera.look = [-0.687950493700225, 0.9435747389607769, 0.21646512460703526];
-    viewer.camera.up = [0.309485261773766, 0.8413154758004762, -0.4431784549404927];
+    viewer.camera.eye = [1394.38, 3.78, -247.05];
+    viewer.camera.look = [1391.46, 0.89, -244.24];
+    viewer.camera.up = [-0.41, 0.81, 0.40];
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
 
     const sceneModel = gltfLoader.load({
-        id: "myModel",
-        src: "../../assets/models/gltf/SkatePark/glTF-Binary/SkatePark.glb"
+        id: "boxTextured",
+        src: "../../assets/models/gltf/BoxTextured/glTF-Binary/BoxTextured.glb",
+        edges: true
     });
 
     sceneModel.on("loaded", () => {
         viewer.cameraFlight.jumpTo(sceneModel);
     });
-
-    window.viewer = viewer;
 
 </script>
 </html>
