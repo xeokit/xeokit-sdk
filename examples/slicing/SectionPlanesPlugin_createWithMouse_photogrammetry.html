@@ -71,6 +71,10 @@
         colorTextureEnabled: true
     });
 
+    viewer.scene.gammaInput = true;
+    viewer.scene.gammaOutput = true;
+    viewer.scene.gammaFactor = 4.4;
+
     viewer.camera.eye = [-3.351107502463288, 3.9321259279903114, 4.030067755126885];
     viewer.camera.look = [-0.687950493700225, 0.9435747389607769, 0.21646512460703526];
     viewer.camera.up = [0.309485261773766, 0.8413154758004762, -0.4431784549404927];
@@ -96,17 +100,13 @@
 
     const sceneModel = gltfLoader.load({
         id: "myModel",
-        src: "../../assets/models/gltf/skatepark/scene.gltf",
+        src: "../../assets/models/gltf/SkatePark/glTF-Binary/SkatePark.glb",
         colorTextureEnabled: true
     });
 
     sceneModel.on("loaded", () => {
         viewer.cameraFlight.jumpTo(sceneModel);
     });
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Use the AnnotationsPlugin to create an annotation wherever we click on an object
-    //------------------------------------------------------------------------------------------------------------------
 
     var i = 1;
 
