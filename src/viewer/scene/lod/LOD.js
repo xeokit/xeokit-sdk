@@ -13,6 +13,8 @@ export class LOD extends Component {
 
         this._scene = scene;
         this._lodLevels = [2000, 600, 150, 80, 20];
+        this._neverCullTypes = [];
+        this._neverCullTypesMap = {};
         this._lodManagers = {};
         this._lodManagerList = [];
 
@@ -143,6 +145,10 @@ export class LOD extends Component {
             value = [];
         }
         this._neverCullTypes = value;
+        this._neverCullTypesMap = {};
+        for (let i = 0, len = this._neverCullTypes.length; i < len; i++) {
+            this._neverCullTypesMap[this._neverCullTypes[i]] = true;
+        }
       //  this.glRedraw();
     }
 
@@ -155,6 +161,14 @@ export class LOD extends Component {
      */
     get neverCullTypes() {
         return this._neverCullTypes;
+    }
+
+    /**
+     * @private
+     * @returns {*|{}}
+     */
+    get neverCullTypesMap() {
+        return this._neverCullTypesMap;
     }
     
     /**

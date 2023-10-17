@@ -8,18 +8,6 @@ import {math} from "../math/math.js";
  * @private
  */
 
-
-const neverCullTypes = {
-    "IfcWall": true,
-    "IfcSlab": true,
-    "IfcFloor": true,
-    "IfcRoof": true,
-    "IfcSpace": true,
-    "IfcBeam": true,
-    "IfcStair": true,
-    "IfcPlate":true
-}
-
 export class LODState {
 
     /**
@@ -101,6 +89,7 @@ export class LODState {
         if (entityList.length === 0) {
             return;
         }
+        const neverCullTypesMap = sceneModel.scene.lod.neverCullTypesMap;
         const metaScene = sceneModel.scene.viewer.metaScene;
         const entitiesInLOD = {};
         const primCountInLOD = {};
@@ -110,15 +99,15 @@ export class LODState {
         for (let i = 0, len = entityList.length; i < len; i++) {
             const entity = entityList[i];
             const metaObject = metaScene.metaObjects[entity.id];
-            if (metaObject && neverCullTypes[metaObject.type]) {
+            if (metaObject && neverCullTypesMap[metaObject.type]) {
                 continue;
             }
             const entityComplexity = entity.numPrimitives;
             const entitySize = math.getAABB3Diag(entity.aabb);
-            const isCullable = ((minComplexity <= entityComplexity) && (entitySize <= maxSize));
-            if (!isCullable) {
-                continue;
-            }
+            // const isCullable = ((minComplexity <= entityComplexity) && (entitySize <= maxSize));
+            // if (!isCullable) {
+            //     continue;
+            // }
             let lodLevel = 0, len;
             for (lodLevel = 0, len = this.primLODLevels.length; lodLevel < len; lodLevel++) {
                 if (entity.numPrimitives >= this.primLODLevels [lodLevel]) {

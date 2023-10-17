@@ -82,9 +82,20 @@
     //------------------------------------------------------------------------------
     // Configure level-of-detail culling
     //------------------------------------------------------------------------------
-
+    
     viewer.scene.lod.enabled = true;
     viewer.scene.lod.targetFPS = 50; // Set an excessive FPS target to force LoD
+    viewer.scene.lod.neverCullTypes = [
+        "IfcWall",
+        "IfcSlab",
+        "IfcFloor",
+        "IfcRoof",
+        "IfcSpace",
+        "IfcBeam",
+        "IfcStair",
+        "IfcPlate",
+        "IfcSite"
+    ];
 
     new NavCubePlugin(viewer, {
         canvasId: "myNavCubeCanvas",
@@ -115,7 +126,7 @@
         }
     });
 
-    sceneModel.on("loaded", ()=>{
+    sceneModel.on("loaded", () => {
         viewer.cameraFlight.jumpTo(sceneModel);
     });
 

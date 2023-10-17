@@ -58,12 +58,12 @@ export class LODCullingManager {
         let lodState = this.lodState;
         let retVal = false;
         if (currentFPS < lodState.targetFps) {
-            if (++lodState.consecutiveFramesWithoutTargetFps > 5) {
+            if (++lodState.consecutiveFramesWithoutTargetFps > 2) {
                 lodState.consecutiveFramesWithoutTargetFps = 0;
                 retVal = this._increaseLODLevelIndex();
             }
         } else if (currentFPS > (lodState.targetFps + 4)) {
-            if (++lodState.consecutiveFramesWithTargetFps > 5) {
+            if (++lodState.consecutiveFramesWithTargetFps > 2) {
                 lodState.consecutiveFramesWithTargetFps = 0;
                 retVal = this._decreaseLODLevelIndex();
             }
