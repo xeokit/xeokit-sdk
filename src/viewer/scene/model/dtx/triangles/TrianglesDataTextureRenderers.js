@@ -6,7 +6,6 @@ import {TrianglesDataTexturePickMeshRenderer} from "./renderers/TrianglesDataTex
 import {TrianglesDataTexturePickDepthRenderer} from "./renderers/TrianglesDataTexturePickDepthRenderer.js";
 import {TrianglesDataTextureSnapDepthRenderer} from "./renderers/TrianglesDataTextureSnapDepthRenderer.js";
 import {TrianglesDataTextureSnapDepthBufInitRenderer} from "./renderers/TrianglesDataTextureSnapDepthBufInitRenderer.js";
-import {TrianglesDataTexturePickNormalsRenderer} from "./renderers/TrianglesDataTexturePickNormalsRenderer.js";
 import {TrianglesDataTextureOcclusionRenderer} from "./renderers/TrianglesDataTextureOcclusionRenderer.js";
 import {TrianglesDataTextureDepthRenderer} from "./renderers/TrianglesDataTextureDepthRenderer.js";
 import {TrianglesDataTextureNormalsRenderer} from "./renderers/TrianglesDataTextureNormalsRenderer.js";
@@ -107,6 +106,9 @@ class TrianglesDataTextureRenderers {
         if (!this._pickDepthRenderer) {
             this._pickDepthRenderer = new TrianglesDataTexturePickDepthRenderer(this._scene);
         }
+        if (!this._pickNormalsRenderer) {
+            this._pickNormalsRenderer = new TrianglesDataTexturePickNormalsFlatRenderer(this._scene);
+        }
         if (!this._vertexDepthRenderer) {
             this._vertexDepthRenderer = new TrianglesDataTextureSnapDepthRenderer(this._scene);
         }
@@ -131,9 +133,9 @@ class TrianglesDataTextureRenderers {
     }
 
     get colorQualityRendererWithSAO() {
-        if (!this._colorQualityRendererWithSAO) {
-            this._colorQualityRendererWithSAO = new TrianglesDataTextureColorQualityRenderer(this._scene, true);
-        }
+        // if (!this._colorQualityRendererWithSAO) {
+        //     this._colorQualityRendererWithSAO = new TrianglesDataTextureColorQualityRenderer(this._scene, true);
+        // }
         return this._colorQualityRendererWithSAO;
     }
 
@@ -181,7 +183,7 @@ class TrianglesDataTextureRenderers {
 
     get pickNormalsRenderer() {
         if (!this._pickNormalsRenderer) {
-            this._pickNormalsRenderer = new TrianglesDataTexturePickNormalsRenderer(this._scene);
+            this._pickNormalsRenderer = new TrianglesDataTexturePickNormalsFlatRenderer(this._scene);
         }
         return this._pickNormalsRenderer;
     }
