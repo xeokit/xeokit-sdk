@@ -460,6 +460,16 @@ class DistanceMeasurementsPlugin extends Plugin {
         }
     }
 
+    /**
+     * Shows all or hides the axis wires of each {@link DistanceMeasurement}.
+     *
+     * @param {Boolean} labelsShown Whether or not to show the axis wires.
+     */
+    setAxisVisible(axisVisible) {
+        for (const [key, measurement] of Object.entries(this.measurements)) {
+            measurement.axisVisible = axisVisible;
+        }
+    }
 
     /**
      * Destroys all {@link DistanceMeasurement}s.
