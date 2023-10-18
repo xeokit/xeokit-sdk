@@ -469,6 +469,16 @@ class DistanceMeasurementsPlugin extends Plugin {
         for (const [key, measurement] of Object.entries(this.measurements)) {
             measurement.axisVisible = axisVisible;
         }
+        this.defaultAxisVisible = axisVisible;
+    }
+
+    /**
+     * Gets if the axis wires of each {@link DistanceMeasurement} are visible.
+     *
+     * @returns {Boolean} Whether or not the axis wires are visible.
+     */
+    getAxisVisible() {
+        return this.defaultAxisVisible;
     }
 
     /**
