@@ -119,7 +119,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, ContextMenu, DistanceMeasurementsPlugin} from "../../dist/xeokit-sdk.min.es.js";
+    import {Viewer, XKTLoaderPlugin, ContextMenu, DistanceMeasurementsPlugin} from "../../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -572,13 +572,13 @@
                             {
                                 title: "Show all Axis",
                                 doAction: function (context) {
-                                //    distanceMeasurements.setWiresShown(true);
+                                    distanceMeasurements.setAxisVisible(true);
                                 }
                             },
                             {
                                 title: "Hide all Axis",
                                 doAction: function (context) {
-                                  //  distanceMeasurements.setLabelsShown(false);
+                                    distanceMeasurements.setAxisVisible(false);
                                 }
                             },
                             {
@@ -784,7 +784,18 @@
                                     return (Object.keys(distanceMeasurements.measurements).length > 0);
                                 },
                                 doAction: function (context) {
-                                    //distanceMeasurements.clear();
+                                    distanceMeasurements.setAxisVisible(true);
+                                }
+                            },
+                            {
+                                getTitle: function (context) {
+                                    return (Object.keys(distanceMeasurements.measurements).length > 0) ? "Hide All Axis" : "Hide All Axis";
+                                },
+                                getEnabled: function (context) {
+                                    return (Object.keys(distanceMeasurements.measurements).length > 0);
+                                },
+                                doAction: function (context) {
+                                    distanceMeasurements.setAxisVisible(false);
                                 }
                             },
                             {
