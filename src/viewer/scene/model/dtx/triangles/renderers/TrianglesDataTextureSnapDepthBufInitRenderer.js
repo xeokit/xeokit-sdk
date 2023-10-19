@@ -371,7 +371,7 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
         src.push("float tmp = clipPos.w;")
         src.push("clipPos.xyzw /= tmp;")
         src.push("clipPos.xy = remapClipPos(clipPos.xy);");
-        src.push("clipPos.z += 0.0001;"); // small Z offset
+        //     src.push("clipPos.z += 0.0001;"); // small Z offset
         src.push("clipPos.xyzw *= tmp;")
         if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
@@ -413,6 +413,14 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
+
+        src.push("float calculateDepthOffset(vec3 clipPos) {");
+        src.push("    const float epsilon = 0.0001;"); // Small constant to avoid Z-fighting
+        src.push("    vec3 depthSlope = dFdx(clipPos);"); // Calculate depth slope using finite difference
+        src.push("    float offset = epsilon * dot(depthSlope, depthSlope);");
+        src.push("    return offset;");
+        src.push(" }");
+
         src.push("in highp vec3 relativeToOriginPosition;");
         src.push("out highp ivec4 outCoords;");
         src.push("void main(void) {");
@@ -429,7 +437,8 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
             src.push("  }");
         }
         if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
-            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
+            src.push("float fragDepth = vFragDepth + calculateDepthOffset(vec3(gl_FragCoord.xyz));");
+            src.push("gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( fragDepth ) * logDepthBufFC * 0.5;");
         }
         src.push("outCoords = ivec4(relativeToOriginPosition.xyz * uCoordinateScaler.xyz, - uLayerNumber);")
         src.push("}");
