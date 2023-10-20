@@ -68,7 +68,7 @@
         PhongMaterial,
         XKTLoaderPlugin,
         ViewCullPlugin
-    } from "../../dist/xeokit-sdk.min.es.js";
+    } from "../../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange camera
@@ -76,7 +76,8 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
-        transparent: true
+        transparent: true,
+        dtxEnabled: true
     });
 
     viewer.camera.eye = [10.449999809265137, 17.3799991607666, -98.30999755859375];
@@ -129,7 +130,19 @@
     const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../../assets/models/xkt/v8/ifc/OTCConferenceCenter.ifc.xkt",
-        edges: false
+        edges: false,
+        dtxEnabled: true,
+        objectDefaults: { // This model has opaque windows / spaces; make them transparent
+            "IfcPlate": {
+                opacity: 0.3 // These are used as windows in this model - make transparent
+            },
+            "IfcWindow": {
+                opacity: 0.4
+            },
+            "IfcSpace": {
+                opacity: 0.4
+            }
+        }
     });
 
     //----------------------------------------------------------------------------------------------------------------------

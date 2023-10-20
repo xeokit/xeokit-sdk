@@ -97,7 +97,7 @@
         scaleCanvasResolution: true,
         scaleCanvasResolutionFactor: 0.5,
         delayBeforeRestore: true,
-        delayBeforeRestoreSeconds: 0.4
+        delayBeforeRestoreSeconds: 1.0
     });
 
     // Ground plane
@@ -131,7 +131,18 @@
     const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../../assets/models/xkt/v8/ifc/HolterTower.ifc.xkt",
-        edges: true
+        edges: true,
+        objectDefaults: { // This model has opaque windows / spaces; make them transparent
+            "IfcPlate": {
+                opacity: 0.3 // These are used as windows in this model - make transparent
+            },
+            "IfcWindow": {
+                opacity: 0.4
+            },
+            "IfcSpace": {
+                opacity: 0.4
+            }
+        }
     });
 
     sceneModel.on("loaded", () => {
