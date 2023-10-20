@@ -18,8 +18,6 @@ import {Metrics} from "../metriqs/Metriqs.js";
 import {SAO} from "../postfx/SAO.js";
 import {PointsMaterial} from "../materials/PointsMaterial.js";
 import {LinesMaterial} from "../materials/LinesMaterial.js";
-import {LOD} from "../lod/LOD.js";
-import {VFC} from "../vfc/VFC.js";
 
 // Enables runtime check for redundant calls to object state update methods, eg. Scene#_objectVisibilityUpdated
 const ASSERT_OBJECT_STATE_UPDATE = false;
@@ -340,8 +338,7 @@ class Scene extends Component {
      * @param {Viewer} viewer The Viewer this Scene belongs to.
      * @param {Object} cfg Scene configuration.
      * @param {String} [cfg.canvasId]  ID of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
-     * @param {String} [cfg.lodEnabled]  ID of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
-     * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
+      * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @param {HTMLElement} [cfg.keyboardEventsElement] Optional reference to HTML element on which key events should be handled. Defaults to the HTML Document.
      * @throws {String} Throws an exception when both canvasId or canvasElement are missing or they aren't pointing to a valid HTMLCanvasElement.
      */
@@ -872,22 +869,6 @@ class Scene extends Component {
 
         this._camera.on("dirty", () => {
             this._renderer.imageDirty();
-        });
-
-        /** Configures Level-of-Detail (LOD) culling for {@link SceneModel}s belonging to this Scene.
-         * @type {LOD}
-         * @final
-         */
-        this.lod = new LOD(this, {
-            enabled: cfg.lodEnabled
-        });
-
-        /** Configures View Frustum Culling (VFC) for {@link SceneModel}s belonging to this Scene.
-         * @type {VFC}
-         * @final
-         */
-        this.vfc = new VFC(this, {
-            enabled: cfg.vfcEnabled
         });
     }
 

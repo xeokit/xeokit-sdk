@@ -19,5 +19,3 @@ export * from "./Component.js";
 export * from "./utils.js";
 export * from "./stats.js";
 export * from "./constants/constants.js";
-export * from "./lod/index.js";
-export * from "./vfc/index.js";

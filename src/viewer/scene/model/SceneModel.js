@@ -1271,10 +1271,6 @@ export class SceneModel extends Component {
             this._viewMatrixDirty = true;
         });
 
-        if (this.scene.vfc.enabled) {
-            this._vfcManager = this.scene.vfc.getVFCManager(this);
-        }
-
         this._createDefaultTextureSet();
 
         this.visible = cfg.visible;
@@ -2841,11 +2837,7 @@ export class SceneModel extends Component {
 
         cfg.numPrimitives = this._getNumPrimitives(cfg);
 
-        if (this._vfcManager && !this._vfcManager.finalized) {
-            this._vfcManager.addMesh(cfg); // Deferred so VFC manager can cluster meshes for GPU cache locality
-        } else {
-            this._createMesh(cfg);
-        }
+        this._createMesh(cfg);
     }
 
     _createMesh(cfg) {
@@ -3174,7 +3166,6 @@ export class SceneModel extends Component {
      * @param {Boolean} [cfg.highlighted=false] Indicates if the Entity is initially highlighted. Highlighted appearance is configured by {@link SceneModel#highlightMaterial}.
      * @param {Boolean} [cfg.selected=false] Indicates if the Entity is initially selected. Selected appearance is configured by {@link SceneModel#selectedMaterial}.
      * @param {Boolean} [cfg.edges=false] Indicates if the Entity's edges are initially emphasized. Edges appearance is configured by {@link SceneModel#edgeMaterial}.
-     * @param {Boolean} [cfg.lodCullable=true] Indicates if the Entity can be LoD culled. LoD culling isconfigured by {@link LOD}.
      * @returns {Entity}
      */
     createEntity(cfg) {
@@ -3217,18 +3208,7 @@ export class SceneModel extends Component {
             flags = flags | ENTITY_FLAGS.SELECTED;
         }
         cfg.flags = flags;
-        if (this._vfcManager && !this._vfcManager.finalized) {
-            for (let i = 0, len = cfg.meshIds.length; i < len; i++) {
-                const meshId = cfg.meshIds[i];
-                if (this._scheduledMeshes[meshId]) {
-                    this.error(`[createEntity] Mesh not found: ${meshId}`);
-                    return;
-                }
-            }
-            this._vfcManager.addEntity(cfg);
-        } else {
-            this._createEntity(cfg);
-        }
+        this._createEntity(cfg);
     }
 
     _createEntity(cfg) {
@@ -3273,10 +3253,6 @@ export class SceneModel extends Component {
         if (this.destroyed) {
             return;
         }
-        if (this._vfcManager) {
-            this._vfcManager.finalize(() => {// Makes deferred calls to #_createEntity() and #_createMesh()
-            });
-        }
         for (let i = 0, len = this.layerList.length; i < len; i++) {
             const layer = this.layerList[i];
             layer.finalize();
@@ -3312,17 +3288,13 @@ export class SceneModel extends Component {
         }
         this.glRedraw();
         this.scene._aabbDirty = true;
-        if (this.scene.lod.enabled) {
-            this._lodManager = this.scene.lod.getLODManager(this);
-        }
-
         this._viewMatrixDirty = true;
         this._matrixDirty = true;
         this._aabbDirty = true;
 
         this._setWorldMatrixDirty();
         this._setWorldAABBDirty();
-        
+
         this.position = this._position;
     }
 
@@ -3731,12 +3703,6 @@ export class SceneModel extends Component {
             this.scene._deregisterModel(this);
         }
         putScratchMemory();
-        if (this._vfcManager) {
-            this.scene.vfc.putVFCManager(this._vfcManager);
-        }
-        if (this._lodManager) {
-            this.scene.lod.putLODManager(this._lodManager);
-        }
         super.destroy();
     }
 }

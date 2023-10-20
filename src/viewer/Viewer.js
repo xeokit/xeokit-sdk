@@ -113,8 +113,6 @@ class Viewer {
             pickSurfacePrecisionEnabled: (!!cfg.pickSurfacePrecisionEnabled),
             logarithmicDepthBufferEnabled: (!!cfg.logarithmicDepthBufferEnabled),
             pbrEnabled: (!!cfg.pbrEnabled),
-            lodEnabled: (!!cfg.lodEnabled),
-            vfcCulling: (!!cfg.vfcEnabled),
             colorTextureEnabled: (cfg.colorTextureEnabled !== false),
             dtxEnabled: (!!cfg.dtxEnabled)
         });
