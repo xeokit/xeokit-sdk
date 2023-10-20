@@ -903,7 +903,7 @@ const Renderer = function (scene, options) {
      * Picks an Entity.
      * @private
      */
-     this.pick = (function () {
+    this.pick = (function () {
 
         const tempVec3a = math.vec3();
         const tempMat4a = math.mat4();
@@ -948,7 +948,7 @@ const Renderer = function (scene, options) {
 
                 // Picking with arbitrary World-space ray
                 // Align camera along ray and fire ray through center of canvas
-                
+
                 if (params.matrix) {
 
                     pickViewMatrix = params.matrix;
@@ -991,7 +991,7 @@ const Renderer = function (scene, options) {
                 }
             }
 
-            const pickBuffer = renderBufferManager.getRenderBuffer("pick", { size: [1, 1] });
+            const pickBuffer = renderBufferManager.getRenderBuffer("pick", {size: [1, 1]});
 
             pickBuffer.bind();
 
@@ -1046,6 +1046,8 @@ const Renderer = function (scene, options) {
 
     function gpuPickPickable(pickBuffer, canvasPos, pickViewMatrix, pickProjMatrix, params, pickResult) {
 
+        const resolutionScale = viewer.scene.canvas.resolutionScale;
+
         frameCtx.reset();
         frameCtx.backfaces = true;
         frameCtx.frontface = true; // "ccw"
@@ -1054,8 +1056,8 @@ const Renderer = function (scene, options) {
         frameCtx.pickProjMatrix = pickProjMatrix;
         frameCtx.pickInvisible = !!params.pickInvisible;
         frameCtx.pickClipPos = [
-            getClipPosX(canvasPos[0], gl.drawingBufferWidth),
-            getClipPosY(canvasPos[1], gl.drawingBufferHeight),
+            getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
+            getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight),
         ];
 
         gl.viewport(0, 0, 1, 1);
@@ -1110,6 +1112,8 @@ const Renderer = function (scene, options) {
             return;
         }
 
+        const resolutionScale = viewer.scene.canvas.resolutionScale;
+
         frameCtx.reset();
         frameCtx.backfaces = true;
         frameCtx.frontface = true; // "ccw"
@@ -1118,8 +1122,8 @@ const Renderer = function (scene, options) {
         frameCtx.pickProjMatrix = pickProjMatrix; // Can be null
         // frameCtx.pickInvisible = !!params.pickInvisible;
         frameCtx.pickClipPos = [
-            getClipPosX(canvasPos[0], gl.drawingBufferWidth),
-            getClipPosY(canvasPos[1], gl.drawingBufferHeight),
+            getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
+            getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight),
         ];
 
         gl.viewport(0, 0, 1, 1);
@@ -1154,6 +1158,8 @@ const Renderer = function (scene, options) {
 
         return function (pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult) {
 
+            const resolutionScale = viewer.scene.canvas.resolutionScale;
+
             frameCtx.reset();
             frameCtx.backfaces = true;
             frameCtx.frontface = true; // "ccw"
@@ -1165,10 +1171,10 @@ const Renderer = function (scene, options) {
             frameCtx.pickElementsCount = pickable.pickElementsCount;
             frameCtx.pickElementsOffset = pickable.pickElementsOffset;
             frameCtx.pickClipPos = [
-                getClipPosX(canvasPos[0], gl.drawingBufferWidth),
-                getClipPosY(canvasPos[1], gl.drawingBufferHeight),
+                getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
+                getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight),
             ];
-    
+
             gl.viewport(0, 0, 1, 1);
 
             gl.clearColor(0, 0, 0, 0);
@@ -1286,6 +1292,8 @@ const Renderer = function (scene, options) {
             return this.pick({canvasPos, pickSurface: true});
         }
 
+        const resolutionScale = viewer.scene.canvas.resolutionScale;
+
         frameCtx.reset();
         frameCtx.backfaces = true;
         frameCtx.frontface = true; // "ccw"
@@ -1301,8 +1309,8 @@ const Renderer = function (scene, options) {
         });
 
         frameCtx.snapVectorA = [
-            getClipPosX(canvasPos[0], gl.drawingBufferWidth),
-            getClipPosY(canvasPos[1], gl.drawingBufferHeight),
+            getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
+            getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight),
         ];
 
         frameCtx.snapInvVectorAB = [
@@ -1475,6 +1483,8 @@ const Renderer = function (scene, options) {
 
     function gpuPickWorldNormal(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult) {
 
+        const resolutionScale = viewer.scene.canvas.resolutionScale;
+
         frameCtx.reset();
         frameCtx.backfaces = true;
         frameCtx.frontface = true; // "ccw"
@@ -1482,11 +1492,11 @@ const Renderer = function (scene, options) {
         frameCtx.pickViewMatrix = pickViewMatrix;
         frameCtx.pickProjMatrix = pickProjMatrix;
         frameCtx.pickClipPos = [
-            getClipPosX(canvasPos[0], gl.drawingBufferWidth),
-            getClipPosY(canvasPos[1], gl.drawingBufferHeight),
+            getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
+            getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight),
         ];
 
-        const pickNormalBuffer = renderBufferManager.getRenderBuffer("pick-normal", { size: [3, 3] });
+        const pickNormalBuffer = renderBufferManager.getRenderBuffer("pick-normal", {size: [3, 3]});
 
         pickNormalBuffer.bind(gl.RGBA32I);
 
@@ -1703,4 +1713,4 @@ const Renderer = function (scene, options) {
     };
 };
 
-export { Renderer };
+export {Renderer};
