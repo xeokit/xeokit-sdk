@@ -1292,7 +1292,7 @@ const Renderer = function (scene, options) {
             return this.pick({canvasPos, pickSurface: true});
         }
 
-        const resolutionScale = viewer.scene.canvas.resolutionScale;
+        const resolutionScale = scene.canvas.resolutionScale;
 
         frameCtx.reset();
         frameCtx.backfaces = true;
