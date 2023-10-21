@@ -227,15 +227,21 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                         break;
                 }
             });
-        this._onInputMouseDown = input.on("mousedown", (coords) => {
-            lastMouseCanvasX = coords[0];
-            lastMouseCanvasY = coords[1];
+        canvas.addEventListener('mousedown', this._onMouseDown = (e) => {
+            if (e.which !== 1) {
+                return;
+            }
+            lastMouseCanvasX = e.clientX;
+            lastMouseCanvasY = e.clientY;
         });
-        this._onInputMouseUp = input.on("mouseup", (coords) => {
-            if (coords[0] > lastMouseCanvasX + clickTolerance ||
-                coords[0] < lastMouseCanvasX - clickTolerance ||
-                coords[1] > lastMouseCanvasY + clickTolerance ||
-                coords[1] < lastMouseCanvasY - clickTolerance) {
+        canvas.addEventListener("mouseup", this._onMouseUp =(e) => {
+            if (e.which !== 1) {
+                return;
+            }
+            if (e.clientX > lastMouseCanvasX + clickTolerance ||
+                e.clientX < lastMouseCanvasX - clickTolerance ||
+                e.clientY > lastMouseCanvasY + clickTolerance ||
+                e.clientY < lastMouseCanvasY - clickTolerance) {
                 return;
             }
             switch (this._mouseState) {
@@ -352,10 +358,10 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
             this.pointerLens.visible = false;
         }
         this.reset();
-        const input = this.angleMeasurementsPlugin.viewer.scene.input;
+        const canvas = this.scene.canvas.canvas;
+        canvas.removeEventListener("mousedown", this._onMouseDown);
+        canvas.removeEventListener("mouseup", this._onMouseUp);
         const cameraControl = this.angleMeasurementsPlugin.viewer.cameraControl;
-        input.off(this._onInputMouseDown);
-        input.off(this._onInputMouseUp);
         cameraControl.off(this._onMouseHoverSurface);
         cameraControl.off(this._onPickedSurface);
         cameraControl.off(this._onHoverNothing);

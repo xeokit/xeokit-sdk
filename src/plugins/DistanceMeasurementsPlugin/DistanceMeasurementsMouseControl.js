@@ -86,8 +86,8 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
 
         this._onCameraControlHoverSnapOrSurface = null;
         this._onCameraControlHoverSnapOrSurfaceOff = null;
-        this._onInputMouseDown = null;
-        this._onInputMouseUp = null;
+        this._onMouseDown = null;
+        this._onMouseUp = null;
         this._onCanvasTouchStart = null;
         this._onCanvasTouchEnd = null;
         this._snapping = cfg.snapping !== false;
@@ -223,16 +223,22 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
                 }
             });
 
-        this._onInputMouseDown = input.on("mousedown", (coords) => {
-            pointerDownCanvasX = coords[0];
-            pointerDownCanvasY = coords[1];
+        canvas.addEventListener('mousedown', this._onMouseDown = (e) => {
+            if (e.which !== 1) {
+                return;
+            }
+            pointerDownCanvasX = e.clientX;
+            pointerDownCanvasY = e.clientY;
         });
 
-        this._onInputMouseUp = input.on("mouseup", (coords) => {
-            if (coords[0] > pointerDownCanvasX + clickTolerance ||
-                coords[0] < pointerDownCanvasX - clickTolerance ||
-                coords[1] > pointerDownCanvasY + clickTolerance ||
-                coords[1] < pointerDownCanvasY - clickTolerance) {
+        canvas.addEventListener("mouseup", this._onMouseUp =(e) => {
+            if (e.which !== 1) {
+                return;
+            }
+            if (e.clientX > pointerDownCanvasX + clickTolerance ||
+                e.clientX < pointerDownCanvasX - clickTolerance ||
+                e.clientY > pointerDownCanvasY + clickTolerance ||
+                e.clientY < pointerDownCanvasY - clickTolerance) {
                 return;
             }
             if (this._currentDistanceMeasurement) {
@@ -305,9 +311,10 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
             this.pointerLens.visible = false;
         }
         this.reset();
-        const input = this.distanceMeasurementsPlugin.viewer.scene.input;
-        input.off(this._onInputMouseDown);
-        input.off(this._onInputMouseUp);
+        this.viewer
+        const canvas = this.scene.canvas.canvas;
+        canvas.removeEventListener("mousedown", this._onMouseDown);
+        canvas.removeEventListener("mouseup", this._onMouseUp);
         const cameraControl = this.distanceMeasurementsPlugin.viewer.cameraControl;
         cameraControl.off(this._onCameraControlHoverSnapOrSurface);
         cameraControl.off(this._onCameraControlHoverSnapOrSurfaceOff);
