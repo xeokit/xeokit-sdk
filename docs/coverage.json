@@ -1,7 +1,7 @@
 {
-  "coverage": "40.62%",
-  "expectCount": 6548,
-  "actualCount": 2660,
+  "coverage": "40.63%",
+  "expectCount": 6494,
+  "actualCount": 2639,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 61,
@@ -144,7 +144,7 @@
         86,
         88,
         93,
-        304
+        310
       ]
     },
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js": {
@@ -337,8 +337,8 @@
       ]
     },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js": {
-      "expectCount": 33,
-      "actualCount": 14,
+      "expectCount": 35,
+      "actualCount": 16,
       "undocumentLines": [
         251,
         253,
@@ -513,16 +513,52 @@
       ]
     },
     "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js": {
-      "expectCount": 17,
+      "expectCount": 19,
       "actualCount": 11,
       "undocumentLines": [
-        189,
-        211,
-        233,
-        259,
-        319,
-        338
+        10,
+        552,
+        191,
+        213,
+        235,
+        261,
+        321,
+        340
       ]
+    },
+    "src/plugins/LODCullingPlugin/LODCullingPlugin.js": {
+      "expectCount": 22,
+      "actualCount": 11,
+      "undocumentLines": [
+        10,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        27,
+        79,
+        99,
+        128
+      ]
+    },
+    "src/plugins/LODCullingPlugin/LODManager.js": {
+      "expectCount": 10,
+      "actualCount": 4,
+      "undocumentLines": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        74
+      ]
+    },
+    "src/plugins/LODCullingPlugin/LODState.js": {
+      "expectCount": 10,
+      "actualCount": 10,
+      "undocumentLines": []
     },
     "src/plugins/NavCubePlugin/CubeTextureCanvas.js": {
       "expectCount": 1,
@@ -1195,8 +1231,8 @@
       "expectCount": 29,
       "actualCount": 27,
       "undocumentLines": [
-        166,
-        310
+        164,
+        308
       ]
     },
     "src/viewer/localization/LocaleService.js": {
@@ -1701,14 +1737,14 @@
       "expectCount": 29,
       "actualCount": 21,
       "undocumentLines": [
-        8,
-        32,
-        36,
-        169,
-        190,
-        294,
-        342,
-        481
+        6,
+        30,
+        34,
+        167,
+        188,
+        292,
+        340,
+        479
       ]
     },
     "src/viewer/scene/canvas/Spinner.js": {
@@ -2016,38 +2052,6 @@
         106,
         128,
         132
-      ]
-    },
-    "src/viewer/scene/lod/LOD.js": {
-      "expectCount": 16,
-      "actualCount": 9,
-      "undocumentLines": [
-        14,
-        15,
-        16,
-        17,
-        25,
-        90,
-        119
-      ]
-    },
-    "src/viewer/scene/lod/LODCullingManager.js": {
-      "expectCount": 10,
-      "actualCount": 4,
-      "undocumentLines": [
-        8,
-        9,
-        10,
-        11,
-        12,
-        75
-      ]
-    },
-    "src/viewer/scene/lod/LODState.js": {
-      "expectCount": 10,
-      "actualCount": 9,
-      "undocumentLines": [
-        10
       ]
     },
     "src/viewer/scene/marker/Marker.js": {
@@ -2490,19 +2494,19 @@
         49,
         59,
         63,
-        163,
-        196
+        165,
+        199
       ]
     },
     "src/viewer/scene/mesh/pick/PickMeshShaderSource.js": {
       "expectCount": 6,
       "actualCount": 1,
       "undocumentLines": [
-        17,
-        92,
-        11,
-        12,
-        13
+        15,
+        100,
+        9,
+        10,
+        11
       ]
     },
     "src/viewer/scene/mesh/pick/PickTriangleRenderer.js": {
@@ -2515,19 +2519,18 @@
         47,
         57,
         61,
-        151
+        154
       ]
     },
     "src/viewer/scene/mesh/pick/PickTriangleShaderSource.js": {
       "expectCount": 6,
-      "actualCount": 0,
+      "actualCount": 1,
       "undocumentLines": [
-        13,
-        66,
+        12,
+        73,
         6,
         7,
-        8,
-        9
+        8
       ]
     },
     "src/viewer/scene/mesh/shadow/ShadowRenderer.js": {
@@ -2580,7 +2583,7 @@
       "undocumentLines": []
     },
     "src/viewer/scene/model/SceneModel.js": {
-      "expectCount": 206,
+      "expectCount": 204,
       "actualCount": 111,
       "undocumentLines": [
         40,
@@ -2649,35 +2652,33 @@
         1263,
         1265,
         1270,
-        1275,
-        1296,
-        1532,
+        1292,
+        1528,
+        1551,
         1555,
-        1559,
-        1565,
-        1670,
-        1786,
-        1809,
-        1832,
-        1855,
-        1878,
-        1905,
-        1932,
-        1955,
-        1981,
-        2056,
-        2078,
-        2851,
-        2887,
-        2943,
-        2963,
-        3063,
-        3075,
-        3233,
-        3315,
-        3359,
-        3378,
-        3805
+        1561,
+        1666,
+        1782,
+        1805,
+        1828,
+        1851,
+        1874,
+        1901,
+        1928,
+        1951,
+        1977,
+        2052,
+        2074,
+        2843,
+        2879,
+        2936,
+        2956,
+        3056,
+        3068,
+        3214,
+        3332,
+        3351,
+        3772
       ]
     },
     "src/viewer/scene/model/SceneModelEntity.js": {
@@ -2853,15 +2854,15 @@
       ]
     },
     "src/viewer/scene/model/dtx/triangles/DataTextureGenerator.js": {
-      "expectCount": 17,
-      "actualCount": 16,
+      "expectCount": 14,
+      "actualCount": 13,
       "undocumentLines": [
-        234
+        52
       ]
     },
     "src/viewer/scene/model/dtx/triangles/DataTextureState.js": {
-      "expectCount": 28,
-      "actualCount": 22,
+      "expectCount": 27,
+      "actualCount": 21,
       "undocumentLines": [
         8,
         149,
@@ -2902,46 +2903,47 @@
       ]
     },
     "src/viewer/scene/model/dtx/triangles/TrianglesDataTextureRenderers.js": {
-      "expectCount": 39,
+      "expectCount": 40,
       "actualCount": 2,
       "undocumentLines": [
+        19,
         20,
-        21,
-        24,
-        27,
-        31,
-        35,
-        39,
-        43,
-        47,
-        51,
-        55,
-        59,
-        63,
-        67,
-        71,
-        75,
-        79,
-        83,
-        87,
-        91,
-        95,
-        102,
-        109,
-        116,
-        123,
-        130,
-        137,
-        144,
-        151,
-        158,
-        165,
-        172,
-        179,
-        186,
-        193,
-        200,
-        255
+        23,
+        26,
+        30,
+        34,
+        38,
+        42,
+        46,
+        50,
+        54,
+        58,
+        62,
+        66,
+        70,
+        74,
+        78,
+        82,
+        86,
+        90,
+        94,
+        121,
+        128,
+        135,
+        142,
+        149,
+        156,
+        163,
+        170,
+        177,
+        184,
+        191,
+        198,
+        205,
+        212,
+        219,
+        226,
+        281
       ]
     },
     "src/viewer/scene/model/dtx/triangles/calculateUniquePositions.js": {
@@ -3021,13 +3023,13 @@
         248,
         300,
         307,
-        538,
-        623,
-        627
+        535,
+        620,
+        624
       ]
     },
     "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureDepthRenderer.js": {
-      "expectCount": 38,
+      "expectCount": 37,
       "actualCount": 1,
       "undocumentLines": [
         5,
@@ -3050,8 +3052,8 @@
         180,
         181,
         182,
-        183,
-        194,
+        193,
+        196,
         197,
         198,
         199,
@@ -3060,13 +3062,12 @@
         202,
         203,
         204,
-        205,
-        208,
-        225,
-        232,
-        405,
-        464,
-        468
+        207,
+        224,
+        231,
+        401,
+        460,
+        464
       ]
     },
     "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureEdgesColorRenderer.js": {
@@ -3102,9 +3103,9 @@
         197,
         212,
         219,
-        364,
-        416,
-        420
+        361,
+        413,
+        417
       ]
     },
     "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureEdgesRenderer.js": {
@@ -3144,9 +3145,9 @@
         213,
         225,
         232,
-        366,
-        420,
-        424
+        364,
+        418,
+        422
       ]
     },
     "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureNormalsRenderer.js": {
@@ -3231,13 +3232,13 @@
         203,
         217,
         224,
-        382,
-        432,
-        436
+        380,
+        430,
+        434
       ]
     },
     "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickDepthRenderer.js": {
-      "expectCount": 40,
+      "expectCount": 42,
       "actualCount": 1,
       "undocumentLines": [
         5,
@@ -3251,34 +3252,36 @@
         22,
         26,
         30,
-        161,
-        164,
+        163,
         166,
-        170,
-        171,
+        168,
         172,
         173,
         174,
         175,
-        183,
-        184,
-        186,
+        176,
+        177,
+        178,
+        179,
+        187,
         188,
-        189,
         190,
-        191,
         192,
         193,
         194,
         195,
         196,
         197,
+        198,
+        199,
         200,
+        201,
         204,
-        211,
-        373,
-        440,
-        444
+        208,
+        215,
+        387,
+        454,
+        458
       ]
     },
     "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickMeshRenderer.js": {
@@ -3295,17 +3298,17 @@
         21,
         25,
         29,
-        146,
-        149,
+        148,
         151,
-        155,
-        156,
+        153,
         157,
         158,
         159,
         160,
-        169,
-        170,
+        161,
+        162,
+        163,
+        164,
         173,
         175,
         176,
@@ -3317,84 +3320,95 @@
         182,
         183,
         186,
-        196,
-        203,
-        374,
-        426,
-        430
+        193,
+        200,
+        377,
+        429,
+        433
       ]
     },
     "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickNormalsFlatRenderer.js": {
-      "expectCount": 32,
+      "expectCount": 41,
       "actualCount": 1,
       "undocumentLines": [
         5,
+        6,
+        7,
+        8,
+        10,
         12,
-        13,
-        14,
-        18,
+        19,
+        20,
+        21,
         22,
         26,
-        245,
-        250,
-        253,
-        259,
-        260,
-        261,
-        262,
-        263,
-        264,
-        265,
-        275,
-        279,
-        282,
-        283,
-        284,
-        285,
-        286,
-        287,
-        290,
-        294,
-        301,
-        434,
-        491,
-        495
-      ]
-    },
-    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickNormalsRenderer.js": {
-      "expectCount": 31,
-      "actualCount": 1,
-      "undocumentLines": [
-        5,
-        12,
-        13,
-        14,
-        18,
-        22,
-        26,
-        144,
-        149,
-        152,
-        158,
-        159,
-        161,
-        172,
+        30,
+        35,
+        164,
+        167,
+        169,
+        173,
+        174,
         175,
         176,
         177,
         178,
         179,
         180,
+        189,
+        191,
+        192,
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199,
+        202,
+        214,
+        221,
+        392,
+        447,
+        451
+      ]
+    },
+    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickNormalsRenderer.js": {
+      "expectCount": 33,
+      "actualCount": 1,
+      "undocumentLines": [
+        5,
+        12,
+        13,
+        14,
+        18,
+        22,
+        26,
+        146,
+        151,
+        154,
+        160,
+        161,
+        162,
+        163,
+        165,
+        176,
+        179,
+        180,
         181,
         182,
         183,
         184,
+        185,
+        186,
         187,
+        188,
         191,
-        198,
-        366,
-        420,
-        424
+        195,
+        202,
+        380,
+        434,
+        438
       ]
     },
     "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureSilhouetteRenderer.js": {
@@ -3482,9 +3496,9 @@
         212,
         216,
         223,
-        388,
-        441,
-        445
+        386,
+        439,
+        443
       ]
     },
     "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureSnapDepthRenderer.js": {
@@ -3529,9 +3543,9 @@
         219,
         223,
         230,
-        360,
-        414,
-        418
+        358,
+        412,
+        416
       ]
     },
     "src/viewer/scene/model/vbo/ScratchMemory.js": {
@@ -3549,7 +3563,7 @@
       ]
     },
     "src/viewer/scene/model/vbo/VBOSceneModelRenderers.js": {
-      "expectCount": 96,
+      "expectCount": 98,
       "actualCount": 3,
       "undocumentLines": [
         8,
@@ -3558,93 +3572,95 @@
         12,
         13,
         14,
-        15,
+        16,
         17,
         18,
         19,
         20,
         21,
         22,
-        23,
+        37,
         38,
-        39,
-        57,
-        64,
-        68,
-        72,
-        86,
-        90,
-        121,
-        126,
-        129,
-        135,
+        56,
+        63,
+        67,
+        71,
+        85,
+        102,
+        106,
         137,
         142,
-        143,
-        144,
-        152,
+        145,
+        151,
         153,
-        155,
         158,
         159,
         160,
-        161,
-        162,
-        192,
-        196,
-        199,
-        209,
-        210,
-        211,
+        168,
+        169,
+        171,
+        174,
+        175,
+        176,
+        177,
+        178,
+        208,
         212,
-        213,
-        214,
         215,
-        216,
-        217,
-        218,
-        220,
-        221,
-        222,
-        223,
-        224,
+        225,
+        226,
         227,
         228,
         229,
+        230,
         231,
         232,
         233,
-        237,
+        234,
+        235,
+        236,
         238,
+        239,
+        240,
+        241,
         242,
+        245,
         246,
+        247,
         249,
         250,
-        253,
-        325,
-        420,
-        635,
-        639,
-        648,
-        649,
-        653,
+        251,
+        255,
+        256,
+        260,
+        264,
+        267,
+        268,
+        271,
+        309,
+        404,
+        623,
+        627,
+        636,
+        637,
+        641,
+        665,
+        666,
+        672,
+        673,
         677,
-        678,
-        684,
-        685,
-        689,
-        709,
-        710,
-        715,
-        716,
-        733,
-        734,
-        738,
-        755,
-        756,
-        773,
-        774,
-        778
+        697,
+        698,
+        703,
+        704,
+        721,
+        722,
+        726,
+        743,
+        744,
+        761,
+        762,
+        766
       ]
     },
     "src/viewer/scene/model/vbo/float16.js": {
@@ -4045,7 +4061,7 @@
       "undocumentLines": [
         7,
         11,
-        82
+        84
       ]
     },
     "src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingPickMeshRenderer.js": {
@@ -4054,7 +4070,7 @@
       "undocumentLines": [
         7,
         11,
-        88
+        90
       ]
     },
     "src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingShadowRenderer.js": {
@@ -4088,7 +4104,6 @@
         55,
         56,
         58,
-        73,
         74,
         75,
         76,
@@ -4098,45 +4113,46 @@
         80,
         81,
         82,
-        88,
+        83,
         89,
-        92,
+        90,
         93,
         94,
-        96,
-        98,
-        195,
-        235,
-        275,
-        289,
-        303,
-        317,
-        331,
-        345,
-        359,
-        365,
-        379,
-        393,
-        403,
-        522,
-        538,
-        547,
-        558,
-        561,
-        566,
-        575,
-        584,
-        595,
-        598,
-        601,
-        604,
-        607,
-        612,
-        624,
-        629,
-        638,
-        647,
-        650
+        95,
+        97,
+        99,
+        196,
+        248,
+        288,
+        302,
+        316,
+        330,
+        344,
+        358,
+        372,
+        378,
+        392,
+        406,
+        416,
+        535,
+        551,
+        560,
+        571,
+        574,
+        579,
+        588,
+        597,
+        608,
+        611,
+        614,
+        617,
+        620,
+        625,
+        637,
+        642,
+        651,
+        660,
+        663
       ]
     },
     "src/viewer/scene/model/vbo/pointsInstancing/PointsInstancingRenderers.js": {
@@ -4198,7 +4214,7 @@
       "undocumentLines": [
         7,
         11,
-        93
+        96
       ]
     },
     "src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingPickMeshRenderer.js": {
@@ -4207,7 +4223,7 @@
       "undocumentLines": [
         7,
         11,
-        91
+        94
       ]
     },
     "src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingShadowRenderer.js": {
@@ -4282,7 +4298,7 @@
       ]
     },
     "src/viewer/scene/model/vbo/snapBatching/SnapBatchingRenderers.js": {
-      "expectCount": 11,
+      "expectCount": 12,
       "actualCount": 2,
       "undocumentLines": [
         9,
@@ -4291,9 +4307,10 @@
         16,
         20,
         24,
-        31,
         38,
-        48
+        45,
+        52,
+        62
       ]
     },
     "src/viewer/scene/model/vbo/snapInstancing/SnapInstancingDepthBufInitRenderer.js": {
@@ -4351,7 +4368,7 @@
       ]
     },
     "src/viewer/scene/model/vbo/snapInstancing/SnapInstancingRenderers.js": {
-      "expectCount": 11,
+      "expectCount": 12,
       "actualCount": 2,
       "undocumentLines": [
         9,
@@ -4360,9 +4377,10 @@
         16,
         20,
         24,
-        31,
         38,
-        48
+        45,
+        52,
+        62
       ]
     },
     "src/viewer/scene/model/vbo/trianglesBatching/TrianglesBatchingBuffer.js": {
@@ -4464,7 +4482,7 @@
       ]
     },
     "src/viewer/scene/model/vbo/trianglesBatching/TrianglesBatchingRenderers.js": {
-      "expectCount": 45,
+      "expectCount": 46,
       "actualCount": 2,
       "undocumentLines": [
         22,
@@ -4490,26 +4508,27 @@
         97,
         101,
         105,
-        112,
-        119,
-        126,
-        133,
-        140,
-        147,
-        154,
-        161,
-        168,
-        175,
-        182,
-        189,
-        196,
-        203,
-        210,
-        217,
-        224,
-        231,
-        238,
-        299
+        122,
+        129,
+        136,
+        143,
+        150,
+        157,
+        164,
+        171,
+        178,
+        185,
+        192,
+        199,
+        206,
+        213,
+        220,
+        227,
+        234,
+        241,
+        248,
+        255,
+        316
       ]
     },
     "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingColorRenderer.js": {
@@ -4598,7 +4617,7 @@
       "actualCount": 1,
       "undocumentLines": [
         8,
-        74
+        77
       ]
     },
     "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPickMeshRenderer.js": {
@@ -4606,23 +4625,23 @@
       "actualCount": 1,
       "undocumentLines": [
         8,
-        77
+        79
       ]
     },
     "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPickNormalsFlatRenderer.js": {
       "expectCount": 3,
       "actualCount": 1,
       "undocumentLines": [
-        8,
-        64
+        9,
+        67
       ]
     },
     "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPickNormalsRenderer.js": {
       "expectCount": 3,
       "actualCount": 1,
       "undocumentLines": [
-        8,
-        76
+        9,
+        79
       ]
     },
     "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingShadowRenderer.js": {
@@ -4725,7 +4744,7 @@
       ]
     },
     "src/viewer/scene/model/vbo/trianglesInstancing/TrianglesInstancingRenderers.js": {
-      "expectCount": 45,
+      "expectCount": 46,
       "actualCount": 2,
       "undocumentLines": [
         22,
@@ -4751,26 +4770,27 @@
         97,
         101,
         105,
-        112,
-        119,
-        126,
-        133,
-        140,
-        147,
-        154,
-        161,
-        168,
-        175,
-        182,
-        189,
-        196,
-        203,
-        210,
-        217,
-        224,
-        231,
-        238,
-        299
+        122,
+        129,
+        136,
+        143,
+        150,
+        157,
+        164,
+        171,
+        178,
+        185,
+        192,
+        199,
+        206,
+        213,
+        220,
+        227,
+        234,
+        241,
+        248,
+        255,
+        316
       ]
     },
     "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingColorRenderer.js": {
@@ -4868,7 +4888,7 @@
       "actualCount": 1,
       "undocumentLines": [
         7,
-        81
+        83
       ]
     },
     "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPickMeshRenderer.js": {
@@ -4876,23 +4896,23 @@
       "actualCount": 1,
       "undocumentLines": [
         8,
-        82
+        84
       ]
     },
     "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPickNormalsFlatRenderer.js": {
       "expectCount": 3,
       "actualCount": 1,
       "undocumentLines": [
-        8,
-        73
+        9,
+        76
       ]
     },
     "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPickNormalsRenderer.js": {
       "expectCount": 3,
       "actualCount": 1,
       "undocumentLines": [
-        8,
-        87
+        9,
+        90
       ]
     },
     "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingShadowRenderer.js": {
@@ -5037,80 +5057,80 @@
       ]
     },
     "src/viewer/scene/scene/Scene.js": {
-      "expectCount": 177,
-      "actualCount": 106,
+      "expectCount": 175,
+      "actualCount": 104,
       "undocumentLines": [
-        25,
-        29,
-        361,
-        414,
-        426,
-        440,
-        454,
-        468,
-        482,
-        496,
-        510,
+        23,
+        27,
+        358,
+        411,
+        423,
+        437,
+        451,
+        465,
+        479,
+        493,
+        507,
+        515,
+        516,
+        517,
         518,
         519,
         520,
         521,
         522,
-        523,
         524,
         525,
         527,
-        528,
-        530,
-        620,
-        625,
-        629,
-        669,
+        617,
+        622,
+        626,
+        666,
+        822,
+        823,
         825,
         826,
-        828,
-        829,
-        830,
-        841,
-        847,
-        894,
-        908,
-        944,
-        969,
-        976,
-        981,
-        986,
+        827,
+        838,
+        844,
+        875,
+        889,
+        925,
+        950,
+        957,
+        962,
+        967,
+        973,
+        979,
+        985,
         992,
-        998,
-        1004,
-        1011,
-        1016,
-        1021,
-        1027,
-        1033,
-        1039,
+        997,
+        1002,
+        1008,
+        1014,
+        1020,
+        1025,
+        1032,
+        1038,
         1044,
-        1051,
-        1057,
-        1063,
-        1085,
-        1107,
-        1129,
-        1151,
-        1162,
-        1173,
-        1184,
-        1198,
-        1417,
-        1427,
-        1438,
-        1627,
-        1659,
-        1691,
-        1718,
-        1980,
-        2002,
-        2061
+        1066,
+        1088,
+        1110,
+        1132,
+        1143,
+        1154,
+        1165,
+        1179,
+        1398,
+        1408,
+        1419,
+        1608,
+        1640,
+        1672,
+        1699,
+        1961,
+        1983,
+        2042
       ]
     },
     "src/viewer/scene/sectionPlane/SectionPlane.js": {
@@ -5277,95 +5297,6 @@
       "undocumentLines": [
         398
       ]
-    },
-    "src/viewer/scene/vfc/VFC.js": {
-      "expectCount": 12,
-      "actualCount": 7,
-      "undocumentLines": [
-        12,
-        13,
-        14,
-        19,
-        39
-      ]
-    },
-    "src/viewer/scene/vfc/VFCManager.js": {
-      "expectCount": 13,
-      "actualCount": 1,
-      "undocumentLines": [
-        8,
-        9,
-        10,
-        11,
-        12,
-        15,
-        22,
-        29,
-        34,
-        37,
-        40,
-        47
-      ]
-    },
-    "src/viewer/scene/vfc/VFCState.js": {
-      "expectCount": 45,
-      "actualCount": 13,
-      "undocumentLines": [
-        4,
-        10,
-        16,
-        42,
-        43,
-        44,
-        45,
-        47,
-        48,
-        49,
-        50,
-        52,
-        53,
-        54,
-        55,
-        57,
-        58,
-        59,
-        70,
-        72,
-        73,
-        74,
-        75,
-        80,
-        170,
-        173,
-        183,
-        199,
-        200,
-        204,
-        208,
-        215
-      ]
-    },
-    "src/viewer/scene/vfc/cluster-helper.js": {
-      "expectCount": 2,
-      "actualCount": 0,
-      "undocumentLines": [
-        12,
-        105
-      ]
-    },
-    "src/viewer/scene/vfc/rbush3d.js": {
-      "expectCount": 3,
-      "actualCount": 0,
-      "undocumentLines": [
-        1,
-        2,
-        846
-      ]
-    },
-    "src/viewer/scene/vfc/xeokit-cluster.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
     },
     "src/viewer/scene/viewport/Viewport.js": {
       "expectCount": 12,
@@ -5550,6 +5481,11 @@
       ]
     },
     "src/viewer/scene/webgl/Renderer.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/viewer/scene/webgl/Renderer2.js": {
       "expectCount": 1,
       "actualCount": 1,
       "undocumentLines": []

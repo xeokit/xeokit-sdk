@@ -390,15 +390,9 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/lod/lod.js~lod",
-    "class/src/viewer/scene/lod/LOD.js~LOD.html",
-    "<span>LOD</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/lod/LOD.js</span>",
-    "class"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/lod/lodstate.js~lodstate",
-    "class/src/viewer/scene/lod/LODState.js~LODState.html",
-    "<span>LODState</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/lod/LODState.js</span>",
+    "@xeokit/xeokit-sdk/src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin",
+    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html",
+    "<span>LODCullingPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/LODCullingPlugin/LODCullingPlugin.js</span>",
     "class"
   ],
   [
@@ -663,12 +657,6 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/webgl/pickresult.js~pickresult",
     "class/src/viewer/scene/webgl/PickResult.js~PickResult.html",
     "<span>PickResult</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/webgl/PickResult.js</span>",
-    "class"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/mesh/pick/picktriangleshadersource.js~picktriangleshadersource",
-    "class/src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource.html",
-    "<span>PickTriangleShaderSource</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/mesh/pick/PickTriangleShaderSource.js</span>",
     "class"
   ],
   [
@@ -1164,12 +1152,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/vfc/vfc.js~vfc",
-    "class/src/viewer/scene/vfc/VFC.js~VFC.html",
-    "<span>VFC</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/vfc/VFC.js</span>",
-    "class"
-  ],
-  [
     "@xeokit/xeokit-sdk/src/plugins/viewcullplugin/viewcullplugin.js~viewcullplugin",
     "class/src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin.html",
     "<span>ViewCullPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ViewCullPlugin/ViewCullPlugin.js</span>",
@@ -1272,12 +1254,6 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/vfc/cluster-helper.js~clusterizev2",
-    "function/index.html#static-function-clusterizeV2",
-    "<span>clusterizeV2</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/vfc/cluster-helper.js</span>",
-    "function"
-  ],
-  [
     "@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/triangles/datatextureramstats.js~datatextureramstats",
     "variable/index.html#static-variable-dataTextureRamStats",
     "<span>dataTextureRamStats</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/triangles/dataTextureRamStats.js</span>",
@@ -1293,12 +1269,6 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/loadobjgeometry.js~loadobjgeometry",
     "function/index.html#static-function-loadOBJGeometry",
     "<span>loadOBJGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/loaders/loadOBJGeometry.js</span>",
-    "function"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/vfc/xeokit-cluster.js~makeclusters",
-    "function/index.html#static-function-makeClusters",
-    "<span>makeClusters</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/vfc/xeokit-cluster.js</span>",
     "function"
   ],
   [
@@ -2886,6 +2856,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#getaxisvisible",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-method-getAxisVisible",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#getAxisVisible",
+    "method"
+  ],
+  [
     "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#getcontainerelement",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-method-getContainerElement",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#getContainerElement",
@@ -2914,6 +2890,12 @@ window.esdocSearchIndex = [
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-get-pointerLens",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#pointerLens",
     "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#setaxisvisible",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-method-setAxisVisible",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#setAxisVisible",
+    "method"
   ],
   [
     "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#setlabelsshown",
@@ -3393,6 +3375,72 @@ window.esdocSearchIndex = [
     "src/plugins/lasloaderplugin/index.js",
     "file/src/plugins/LASLoaderPlugin/index.js.html",
     "src/plugins/LASLoaderPlugin/index.js",
+    "file"
+  ],
+  [
+    "src/plugins/lodcullingplugin/lodcullingplugin.js",
+    "file/src/plugins/LODCullingPlugin/LODCullingPlugin.js.html",
+    "src/plugins/LODCullingPlugin/LODCullingPlugin.js",
+    "file"
+  ],
+  [
+    "src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin#constructor",
+    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html#instance-constructor-constructor",
+    "src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin#enabled",
+    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html#instance-set-enabled",
+    "src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin#enabled",
+    "member"
+  ],
+  [
+    "src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin#enabled",
+    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html#instance-get-enabled",
+    "src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin#enabled",
+    "member"
+  ],
+  [
+    "src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin#neverculltypes",
+    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html#instance-set-neverCullTypes",
+    "src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin#neverCullTypes",
+    "member"
+  ],
+  [
+    "src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin#neverculltypes",
+    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html#instance-get-neverCullTypes",
+    "src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin#neverCullTypes",
+    "member"
+  ],
+  [
+    "src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin#targetfps",
+    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html#instance-set-targetFPS",
+    "src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin#targetFPS",
+    "member"
+  ],
+  [
+    "src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin#targetfps",
+    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html#instance-get-targetFPS",
+    "src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin#targetFPS",
+    "member"
+  ],
+  [
+    "src/plugins/lodcullingplugin/lodmanager.js",
+    "file/src/plugins/LODCullingPlugin/LODManager.js.html",
+    "src/plugins/LODCullingPlugin/LODManager.js",
+    "file"
+  ],
+  [
+    "src/plugins/lodcullingplugin/lodstate.js",
+    "file/src/plugins/LODCullingPlugin/LODState.js.html",
+    "src/plugins/LODCullingPlugin/LODState.js",
+    "file"
+  ],
+  [
+    "src/plugins/lodcullingplugin/index.js",
+    "file/src/plugins/LODCullingPlugin/index.js.html",
+    "src/plugins/LODCullingPlugin/index.js",
     "file"
   ],
   [
@@ -8784,108 +8832,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/viewer/scene/lod/lod.js",
-    "file/src/viewer/scene/lod/LOD.js.html",
-    "src/viewer/scene/lod/LOD.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/lod/lod.js~lod#enabled",
-    "class/src/viewer/scene/lod/LOD.js~LOD.html#instance-set-enabled",
-    "src/viewer/scene/lod/LOD.js~LOD#enabled",
-    "member"
-  ],
-  [
-    "src/viewer/scene/lod/lod.js~lod#enabled",
-    "class/src/viewer/scene/lod/LOD.js~LOD.html#instance-get-enabled",
-    "src/viewer/scene/lod/LOD.js~LOD#enabled",
-    "member"
-  ],
-  [
-    "src/viewer/scene/lod/lod.js~lod#targetfps",
-    "class/src/viewer/scene/lod/LOD.js~LOD.html#instance-set-targetFPS",
-    "src/viewer/scene/lod/LOD.js~LOD#targetFPS",
-    "member"
-  ],
-  [
-    "src/viewer/scene/lod/lod.js~lod#targetfps",
-    "class/src/viewer/scene/lod/LOD.js~LOD.html#instance-get-targetFPS",
-    "src/viewer/scene/lod/LOD.js~LOD#targetFPS",
-    "member"
-  ],
-  [
-    "src/viewer/scene/lod/lodcullingmanager.js",
-    "file/src/viewer/scene/lod/LODCullingManager.js.html",
-    "src/viewer/scene/lod/LODCullingManager.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/lod/lodstate.js",
-    "file/src/viewer/scene/lod/LODState.js.html",
-    "src/viewer/scene/lod/LODState.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/lod/lodstate.js~lodstate#consecutiveframeswithtargetfps",
-    "class/src/viewer/scene/lod/LODState.js~LODState.html#instance-member-consecutiveFramesWithTargetFps",
-    "src/viewer/scene/lod/LODState.js~LODState#consecutiveFramesWithTargetFps",
-    "member"
-  ],
-  [
-    "src/viewer/scene/lod/lodstate.js~lodstate#consecutiveframeswithouttargetfps",
-    "class/src/viewer/scene/lod/LODState.js~LODState.html#instance-member-consecutiveFramesWithoutTargetFps",
-    "src/viewer/scene/lod/LODState.js~LODState#consecutiveFramesWithoutTargetFps",
-    "member"
-  ],
-  [
-    "src/viewer/scene/lod/lodstate.js~lodstate#constructor",
-    "class/src/viewer/scene/lod/LODState.js~LODState.html#instance-constructor-constructor",
-    "src/viewer/scene/lod/LODState.js~LODState#constructor",
-    "method"
-  ],
-  [
-    "src/viewer/scene/lod/lodstate.js~lodstate#entitiesinlod",
-    "class/src/viewer/scene/lod/LODState.js~LODState.html#instance-member-entitiesInLOD",
-    "src/viewer/scene/lod/LODState.js~LODState#entitiesInLOD",
-    "member"
-  ],
-  [
-    "src/viewer/scene/lod/lodstate.js~lodstate#initializelodstate",
-    "class/src/viewer/scene/lod/LODState.js~LODState.html#instance-method-initializeLodState",
-    "src/viewer/scene/lod/LODState.js~LODState#initializeLodState",
-    "method"
-  ],
-  [
-    "src/viewer/scene/lod/lodstate.js~lodstate#lodlevelindex",
-    "class/src/viewer/scene/lod/LODState.js~LODState.html#instance-member-lodLevelIndex",
-    "src/viewer/scene/lod/LODState.js~LODState#lodLevelIndex",
-    "member"
-  ],
-  [
-    "src/viewer/scene/lod/lodstate.js~lodstate#primcountinlod",
-    "class/src/viewer/scene/lod/LODState.js~LODState.html#instance-member-primCountInLOD",
-    "src/viewer/scene/lod/LODState.js~LODState#primCountInLOD",
-    "member"
-  ],
-  [
-    "src/viewer/scene/lod/lodstate.js~lodstate#primlodlevels",
-    "class/src/viewer/scene/lod/LODState.js~LODState.html#instance-member-primLODLevels",
-    "src/viewer/scene/lod/LODState.js~LODState#primLODLevels",
-    "member"
-  ],
-  [
-    "src/viewer/scene/lod/lodstate.js~lodstate#targetfps",
-    "class/src/viewer/scene/lod/LODState.js~LODState.html#instance-member-targetFps",
-    "src/viewer/scene/lod/LODState.js~LODState#targetFps",
-    "member"
-  ],
-  [
-    "src/viewer/scene/lod/index.js",
-    "file/src/viewer/scene/lod/index.js.html",
-    "src/viewer/scene/lod/index.js",
-    "file"
-  ],
-  [
     "src/viewer/scene/marker/marker.js",
     "file/src/viewer/scene/marker/Marker.js.html",
     "src/viewer/scene/marker/Marker.js",
@@ -11164,24 +11110,6 @@ window.esdocSearchIndex = [
     "file/src/viewer/scene/mesh/pick/PickTriangleShaderSource.js.html",
     "src/viewer/scene/mesh/pick/PickTriangleShaderSource.js",
     "file"
-  ],
-  [
-    "src/viewer/scene/mesh/pick/picktriangleshadersource.js~picktriangleshadersource#constructor",
-    "class/src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource.html#instance-constructor-constructor",
-    "src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource#constructor",
-    "method"
-  ],
-  [
-    "src/viewer/scene/mesh/pick/picktriangleshadersource.js~picktriangleshadersource#fragment",
-    "class/src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource.html#instance-member-fragment",
-    "src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource#fragment",
-    "member"
-  ],
-  [
-    "src/viewer/scene/mesh/pick/picktriangleshadersource.js~picktriangleshadersource#vertex",
-    "class/src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource.html#instance-member-vertex",
-    "src/viewer/scene/mesh/pick/PickTriangleShaderSource.js~PickTriangleShaderSource#vertex",
-    "member"
   ],
   [
     "src/viewer/scene/mesh/shadow/shadowrenderer.js",
@@ -13578,12 +13506,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/viewer/scene/scene/scene.js~scene#lod",
-    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-lod",
-    "src/viewer/scene/scene/Scene.js~Scene#lod",
-    "member"
-  ],
-  [
     "src/viewer/scene/scene/scene.js~scene#logarithmicdepthbufferenabled",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-logarithmicDepthBufferEnabled",
     "src/viewer/scene/scene/Scene.js~Scene#logarithmicDepthBufferEnabled",
@@ -13881,12 +13803,6 @@ window.esdocSearchIndex = [
     "src/viewer/scene/scene/scene.js~scene#types",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-types",
     "src/viewer/scene/scene/Scene.js~Scene#types",
-    "member"
-  ],
-  [
-    "src/viewer/scene/scene/scene.js~scene#vfc",
-    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-vfc",
-    "src/viewer/scene/scene/Scene.js~Scene#vfc",
     "member"
   ],
   [
@@ -14466,60 +14382,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/viewer/scene/vfc/vfc.js",
-    "file/src/viewer/scene/vfc/VFC.js.html",
-    "src/viewer/scene/vfc/VFC.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/vfc/vfc.js~vfc#enabled",
-    "class/src/viewer/scene/vfc/VFC.js~VFC.html#instance-set-enabled",
-    "src/viewer/scene/vfc/VFC.js~VFC#enabled",
-    "member"
-  ],
-  [
-    "src/viewer/scene/vfc/vfc.js~vfc#enabled",
-    "class/src/viewer/scene/vfc/VFC.js~VFC.html#instance-get-enabled",
-    "src/viewer/scene/vfc/VFC.js~VFC#enabled",
-    "member"
-  ],
-  [
-    "src/viewer/scene/vfc/vfcmanager.js",
-    "file/src/viewer/scene/vfc/VFCManager.js.html",
-    "src/viewer/scene/vfc/VFCManager.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/vfc/vfcstate.js",
-    "file/src/viewer/scene/vfc/VFCState.js.html",
-    "src/viewer/scene/vfc/VFCState.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/vfc/cluster-helper.js",
-    "file/src/viewer/scene/vfc/cluster-helper.js.html",
-    "src/viewer/scene/vfc/cluster-helper.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/vfc/index.js",
-    "file/src/viewer/scene/vfc/index.js.html",
-    "src/viewer/scene/vfc/index.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/vfc/rbush3d.js",
-    "file/src/viewer/scene/vfc/rbush3d.js.html",
-    "src/viewer/scene/vfc/rbush3d.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/vfc/xeokit-cluster.js",
-    "file/src/viewer/scene/vfc/xeokit-cluster.js.html",
-    "src/viewer/scene/vfc/xeokit-cluster.js",
-    "file"
-  ],
-  [
     "src/viewer/scene/viewport/viewport.js",
     "file/src/viewer/scene/viewport/Viewport.js.html",
     "src/viewer/scene/viewport/Viewport.js",
@@ -14721,6 +14583,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/webgl/renderer.js",
     "file/src/viewer/scene/webgl/Renderer.js.html",
     "src/viewer/scene/webgl/Renderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/webgl/renderer2.js",
+    "file/src/viewer/scene/webgl/Renderer2.js.html",
+    "src/viewer/scene/webgl/Renderer2.js",
     "file"
   ],
   [

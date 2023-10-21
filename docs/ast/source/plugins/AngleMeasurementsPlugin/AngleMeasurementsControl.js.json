@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 2292,
+  "end": 2311,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 2292,
+    "end": 2311,
     "loc": {
       "start": {
         "line": 1,
@@ -31,7 +31,7 @@
       {
         "type": "ImportDeclaration",
         "start": 0,
-        "end": 39,
+        "end": 58,
         "loc": {
           "start": {
             "line": 1,
@@ -39,7 +39,7 @@
           },
           "end": {
             "line": 1,
-            "column": 39
+            "column": 58
           }
         },
         "specifiers": [
@@ -96,7 +96,7 @@
         "source": {
           "type": "StringLiteral",
           "start": 24,
-          "end": 38,
+          "end": 57,
           "loc": {
             "start": {
               "line": 1,
@@ -104,21 +104,21 @@
             },
             "end": {
               "line": 1,
-              "column": 38
+              "column": 57
             }
           },
           "extra": {
-            "rawValue": "../../viewer",
-            "raw": "\"../../viewer\""
+            "rawValue": "../../viewer/scene/Component.js",
+            "raw": "\"../../viewer/scene/Component.js\""
           },
-          "value": "../../viewer"
+          "value": "../../viewer/scene/Component.js"
         },
         "trailingComments": [
           {
             "type": "CommentBlock",
             "value": "*\n * Creates {@link AngleMeasurement}s in an {@link AngleMeasurementsPlugin} from user input.\n *\n * @interface\n * @abstract\n ",
-            "start": 41,
-            "end": 170,
+            "start": 60,
+            "end": 189,
             "loc": {
               "start": {
                 "line": 3,
@@ -134,8 +134,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 171,
-        "end": 2292,
+        "start": 190,
+        "end": 2311,
         "loc": {
           "start": {
             "line": 9,
@@ -150,8 +150,8 @@
         "source": null,
         "declaration": {
           "type": "ClassDeclaration",
-          "start": 178,
-          "end": 2292,
+          "start": 197,
+          "end": 2311,
           "loc": {
             "start": {
               "line": 9,
@@ -164,8 +164,8 @@
           },
           "id": {
             "type": "Identifier",
-            "start": 184,
-            "end": 208,
+            "start": 203,
+            "end": 227,
             "loc": {
               "start": {
                 "line": 9,
@@ -182,8 +182,8 @@
           },
           "superClass": {
             "type": "Identifier",
-            "start": 217,
-            "end": 226,
+            "start": 236,
+            "end": 245,
             "loc": {
               "start": {
                 "line": 9,
@@ -199,8 +199,8 @@
           },
           "body": {
             "type": "ClassBody",
-            "start": 227,
-            "end": 2292,
+            "start": 246,
+            "end": 2311,
             "loc": {
               "start": {
                 "line": 9,
@@ -214,8 +214,8 @@
             "body": [
               {
                 "type": "ClassMethod",
-                "start": 449,
-                "end": 469,
+                "start": 468,
+                "end": 488,
                 "loc": {
                   "start": {
                     "line": 17,
@@ -230,8 +230,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 453,
-                  "end": 459,
+                  "start": 472,
+                  "end": 478,
                   "loc": {
                     "start": {
                       "line": 17,
@@ -253,8 +253,8 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 462,
-                  "end": 469,
+                  "start": 481,
+                  "end": 488,
                   "loc": {
                     "start": {
                       "line": 17,
@@ -274,8 +274,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Gets if this AngleMeasurementsControl is currently active, where it is responding to input.\n     *\n     * @returns {boolean} True if this AngleMeassurementsControl is active.\n     * @abstract\n     ",
-                    "start": 234,
-                    "end": 444,
+                    "start": 253,
+                    "end": 463,
                     "loc": {
                       "start": {
                         "line": 11,
@@ -292,8 +292,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Sets whether snap-to-vertex and snap-to-edge are enabled for this AngleMeasurementsControl.\n     *\n     * This is `true` by default.\n     *\n     * Internally, this deactivates then activates the AngleMeasurementsControl when changed, which means that\n     * it will destroy any AngleMeasurements currently under construction, and incurs some overhead, since it unbinds\n     * and rebinds various input handlers.\n     *\n     * @param {boolean} snapping Whether to enable snap-to-vertex and snap-edge for this AngleMeasurementsControl.\n     ",
-                    "start": 475,
-                    "end": 1027,
+                    "start": 494,
+                    "end": 1046,
                     "loc": {
                       "start": {
                         "line": 20,
@@ -309,8 +309,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 1032,
-                "end": 1062,
+                "start": 1051,
+                "end": 1081,
                 "loc": {
                   "start": {
                     "line": 31,
@@ -325,8 +325,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1036,
-                  "end": 1044,
+                  "start": 1055,
+                  "end": 1063,
                   "loc": {
                     "start": {
                       "line": 31,
@@ -348,8 +348,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 1045,
-                    "end": 1053,
+                    "start": 1064,
+                    "end": 1072,
                     "loc": {
                       "start": {
                         "line": 31,
@@ -366,8 +366,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1055,
-                  "end": 1062,
+                  "start": 1074,
+                  "end": 1081,
                   "loc": {
                     "start": {
                       "line": 31,
@@ -387,8 +387,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Sets whether snap-to-vertex and snap-to-edge are enabled for this AngleMeasurementsControl.\n     *\n     * This is `true` by default.\n     *\n     * Internally, this deactivates then activates the AngleMeasurementsControl when changed, which means that\n     * it will destroy any AngleMeasurements currently under construction, and incurs some overhead, since it unbinds\n     * and rebinds various input handlers.\n     *\n     * @param {boolean} snapping Whether to enable snap-to-vertex and snap-edge for this AngleMeasurementsControl.\n     ",
-                    "start": 475,
-                    "end": 1027,
+                    "start": 494,
+                    "end": 1046,
                     "loc": {
                       "start": {
                         "line": 20,
@@ -405,8 +405,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Gets whether snap-to-vertex and snap-to-edge are enabled for this AngleMeasurementsControl.\n     *\n     * This is `true` by default.\n     *\n     * @returns {boolean} Whether snap-to-vertex and snap-to-edge are enabled for this AngleMeasurementsControl.\n     ",
-                    "start": 1068,
-                    "end": 1339,
+                    "start": 1087,
+                    "end": 1358,
                     "loc": {
                       "start": {
                         "line": 34,
@@ -422,8 +422,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 1344,
-                "end": 1387,
+                "start": 1363,
+                "end": 1406,
                 "loc": {
                   "start": {
                     "line": 41,
@@ -438,8 +438,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1348,
-                  "end": 1356,
+                  "start": 1367,
+                  "end": 1375,
                   "loc": {
                     "start": {
                       "line": 41,
@@ -461,8 +461,8 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1359,
-                  "end": 1387,
+                  "start": 1378,
+                  "end": 1406,
                   "loc": {
                     "start": {
                       "line": 41,
@@ -476,8 +476,8 @@
                   "body": [
                     {
                       "type": "ReturnStatement",
-                      "start": 1369,
-                      "end": 1381,
+                      "start": 1388,
+                      "end": 1400,
                       "loc": {
                         "start": {
                           "line": 42,
@@ -490,8 +490,8 @@
                       },
                       "argument": {
                         "type": "BooleanLiteral",
-                        "start": 1376,
-                        "end": 1380,
+                        "start": 1395,
+                        "end": 1399,
                         "loc": {
                           "start": {
                             "line": 42,
@@ -513,8 +513,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Gets whether snap-to-vertex and snap-to-edge are enabled for this AngleMeasurementsControl.\n     *\n     * This is `true` by default.\n     *\n     * @returns {boolean} Whether snap-to-vertex and snap-to-edge are enabled for this AngleMeasurementsControl.\n     ",
-                    "start": 1068,
-                    "end": 1339,
+                    "start": 1087,
+                    "end": 1358,
                     "loc": {
                       "start": {
                         "line": 34,
@@ -531,8 +531,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Activates this AngleMeasurementsMouseControl, ready to respond to input.\n     *\n     * @abstract\n     ",
-                    "start": 1393,
-                    "end": 1508,
+                    "start": 1412,
+                    "end": 1527,
                     "loc": {
                       "start": {
                         "line": 45,
@@ -548,8 +548,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 1513,
-                "end": 1531,
+                "start": 1532,
+                "end": 1550,
                 "loc": {
                   "start": {
                     "line": 50,
@@ -564,8 +564,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1513,
-                  "end": 1521,
+                  "start": 1532,
+                  "end": 1540,
                   "loc": {
                     "start": {
                       "line": 50,
@@ -588,8 +588,8 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1524,
-                  "end": 1531,
+                  "start": 1543,
+                  "end": 1550,
                   "loc": {
                     "start": {
                       "line": 50,
@@ -609,8 +609,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Activates this AngleMeasurementsMouseControl, ready to respond to input.\n     *\n     * @abstract\n     ",
-                    "start": 1393,
-                    "end": 1508,
+                    "start": 1412,
+                    "end": 1527,
                     "loc": {
                       "start": {
                         "line": 45,
@@ -627,8 +627,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Deactivates this AngleMeasurementsControl, making it unresponsive to input.\n     *\n     * Destroys any {@link AngleMeasurement} under construction by this AngleMeasurementsControl.\n     *\n     * @abstract\n     ",
-                    "start": 1537,
-                    "end": 1760,
+                    "start": 1556,
+                    "end": 1779,
                     "loc": {
                       "start": {
                         "line": 53,
@@ -644,8 +644,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 1765,
-                "end": 1785,
+                "start": 1784,
+                "end": 1804,
                 "loc": {
                   "start": {
                     "line": 60,
@@ -660,8 +660,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1765,
-                  "end": 1775,
+                  "start": 1784,
+                  "end": 1794,
                   "loc": {
                     "start": {
                       "line": 60,
@@ -684,8 +684,8 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1778,
-                  "end": 1785,
+                  "start": 1797,
+                  "end": 1804,
                   "loc": {
                     "start": {
                       "line": 60,
@@ -705,8 +705,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Deactivates this AngleMeasurementsControl, making it unresponsive to input.\n     *\n     * Destroys any {@link AngleMeasurement} under construction by this AngleMeasurementsControl.\n     *\n     * @abstract\n     ",
-                    "start": 1537,
-                    "end": 1760,
+                    "start": 1556,
+                    "end": 1779,
                     "loc": {
                       "start": {
                         "line": 53,
@@ -723,8 +723,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Resets this AngleMeasurementsControl.\n     *\n     * Destroys any {@link AngleMeasurement} under construction by this AngleMeasurementsControl.\n     *\n     * Does nothing if the AngleMeasurementsControl is not active.\n     *\n     * @abstract\n     ",
-                    "start": 1791,
-                    "end": 2050,
+                    "start": 1810,
+                    "end": 2069,
                     "loc": {
                       "start": {
                         "line": 63,
@@ -740,8 +740,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 2055,
-                "end": 2070,
+                "start": 2074,
+                "end": 2089,
                 "loc": {
                   "start": {
                     "line": 72,
@@ -756,8 +756,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 2055,
-                  "end": 2060,
+                  "start": 2074,
+                  "end": 2079,
                   "loc": {
                     "start": {
                       "line": 72,
@@ -780,8 +780,8 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 2063,
-                  "end": 2070,
+                  "start": 2082,
+                  "end": 2089,
                   "loc": {
                     "start": {
                       "line": 72,
@@ -801,8 +801,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Resets this AngleMeasurementsControl.\n     *\n     * Destroys any {@link AngleMeasurement} under construction by this AngleMeasurementsControl.\n     *\n     * Does nothing if the AngleMeasurementsControl is not active.\n     *\n     * @abstract\n     ",
-                    "start": 1791,
-                    "end": 2050,
+                    "start": 1810,
+                    "end": 2069,
                     "loc": {
                       "start": {
                         "line": 63,
@@ -819,8 +819,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Destroys this AngleMeasurementsMouseControl.\n     *\n     * Destroys any {@link AngleMeasurement} under construction by this AngleMeasurementsControl.\n     *\n     * @abstract\n     ",
-                    "start": 2076,
-                    "end": 2268,
+                    "start": 2095,
+                    "end": 2287,
                     "loc": {
                       "start": {
                         "line": 75,
@@ -836,8 +836,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 2273,
-                "end": 2290,
+                "start": 2292,
+                "end": 2309,
                 "loc": {
                   "start": {
                     "line": 82,
@@ -852,8 +852,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 2273,
-                  "end": 2280,
+                  "start": 2292,
+                  "end": 2299,
                   "loc": {
                     "start": {
                       "line": 82,
@@ -876,8 +876,8 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 2283,
-                  "end": 2290,
+                  "start": 2302,
+                  "end": 2309,
                   "loc": {
                     "start": {
                       "line": 82,
@@ -895,8 +895,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Destroys this AngleMeasurementsMouseControl.\n     *\n     * Destroys any {@link AngleMeasurement} under construction by this AngleMeasurementsControl.\n     *\n     * @abstract\n     ",
-                    "start": 2076,
-                    "end": 2268,
+                    "start": 2095,
+                    "end": 2287,
                     "loc": {
                       "start": {
                         "line": 75,
@@ -916,8 +916,8 @@
             {
               "type": "CommentBlock",
               "value": "*\n * Creates {@link AngleMeasurement}s in an {@link AngleMeasurementsPlugin} from user input.\n *\n * @interface\n * @abstract\n ",
-              "start": 41,
-              "end": 170,
+              "start": 60,
+              "end": 189,
               "loc": {
                 "start": {
                   "line": 3,
@@ -936,8 +936,8 @@
           {
             "type": "CommentBlock",
             "value": "*\n * Creates {@link AngleMeasurement}s in an {@link AngleMeasurementsPlugin} from user input.\n *\n * @interface\n * @abstract\n ",
-            "start": 41,
-            "end": 170,
+            "start": 60,
+            "end": 189,
             "loc": {
               "start": {
                 "line": 3,
@@ -958,8 +958,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n * Creates {@link AngleMeasurement}s in an {@link AngleMeasurementsPlugin} from user input.\n *\n * @interface\n * @abstract\n ",
-      "start": 41,
-      "end": 170,
+      "start": 60,
+      "end": 189,
       "loc": {
         "start": {
           "line": 3,
@@ -974,8 +974,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Gets if this AngleMeasurementsControl is currently active, where it is responding to input.\n     *\n     * @returns {boolean} True if this AngleMeassurementsControl is active.\n     * @abstract\n     ",
-      "start": 234,
-      "end": 444,
+      "start": 253,
+      "end": 463,
       "loc": {
         "start": {
           "line": 11,
@@ -990,8 +990,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Sets whether snap-to-vertex and snap-to-edge are enabled for this AngleMeasurementsControl.\n     *\n     * This is `true` by default.\n     *\n     * Internally, this deactivates then activates the AngleMeasurementsControl when changed, which means that\n     * it will destroy any AngleMeasurements currently under construction, and incurs some overhead, since it unbinds\n     * and rebinds various input handlers.\n     *\n     * @param {boolean} snapping Whether to enable snap-to-vertex and snap-edge for this AngleMeasurementsControl.\n     ",
-      "start": 475,
-      "end": 1027,
+      "start": 494,
+      "end": 1046,
       "loc": {
         "start": {
           "line": 20,
@@ -1006,8 +1006,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Gets whether snap-to-vertex and snap-to-edge are enabled for this AngleMeasurementsControl.\n     *\n     * This is `true` by default.\n     *\n     * @returns {boolean} Whether snap-to-vertex and snap-to-edge are enabled for this AngleMeasurementsControl.\n     ",
-      "start": 1068,
-      "end": 1339,
+      "start": 1087,
+      "end": 1358,
       "loc": {
         "start": {
           "line": 34,
@@ -1022,8 +1022,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Activates this AngleMeasurementsMouseControl, ready to respond to input.\n     *\n     * @abstract\n     ",
-      "start": 1393,
-      "end": 1508,
+      "start": 1412,
+      "end": 1527,
       "loc": {
         "start": {
           "line": 45,
@@ -1038,8 +1038,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Deactivates this AngleMeasurementsControl, making it unresponsive to input.\n     *\n     * Destroys any {@link AngleMeasurement} under construction by this AngleMeasurementsControl.\n     *\n     * @abstract\n     ",
-      "start": 1537,
-      "end": 1760,
+      "start": 1556,
+      "end": 1779,
       "loc": {
         "start": {
           "line": 53,
@@ -1054,8 +1054,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Resets this AngleMeasurementsControl.\n     *\n     * Destroys any {@link AngleMeasurement} under construction by this AngleMeasurementsControl.\n     *\n     * Does nothing if the AngleMeasurementsControl is not active.\n     *\n     * @abstract\n     ",
-      "start": 1791,
-      "end": 2050,
+      "start": 1810,
+      "end": 2069,
       "loc": {
         "start": {
           "line": 63,
@@ -1070,8 +1070,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Destroys this AngleMeasurementsMouseControl.\n     *\n     * Destroys any {@link AngleMeasurement} under construction by this AngleMeasurementsControl.\n     *\n     * @abstract\n     ",
-      "start": 2076,
-      "end": 2268,
+      "start": 2095,
+      "end": 2287,
       "loc": {
         "start": {
           "line": 75,
@@ -1228,9 +1228,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "../../viewer",
+      "value": "../../viewer/scene/Component.js",
       "start": 24,
-      "end": 38,
+      "end": 57,
       "loc": {
         "start": {
           "line": 1,
@@ -1238,7 +1238,7 @@
         },
         "end": {
           "line": 1,
-          "column": 38
+          "column": 57
         }
       }
     },
@@ -1255,24 +1255,24 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 38,
-      "end": 39,
+      "start": 57,
+      "end": 58,
       "loc": {
         "start": {
           "line": 1,
-          "column": 38
+          "column": 57
         },
         "end": {
           "line": 1,
-          "column": 39
+          "column": 58
         }
       }
     },
     {
       "type": "CommentBlock",
       "value": "*\n * Creates {@link AngleMeasurement}s in an {@link AngleMeasurementsPlugin} from user input.\n *\n * @interface\n * @abstract\n ",
-      "start": 41,
-      "end": 170,
+      "start": 60,
+      "end": 189,
       "loc": {
         "start": {
           "line": 3,
@@ -1299,8 +1299,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 171,
-      "end": 177,
+      "start": 190,
+      "end": 196,
       "loc": {
         "start": {
           "line": 9,
@@ -1327,8 +1327,8 @@
         "updateContext": null
       },
       "value": "class",
-      "start": 178,
-      "end": 183,
+      "start": 197,
+      "end": 202,
       "loc": {
         "start": {
           "line": 9,
@@ -1353,8 +1353,8 @@
         "binop": null
       },
       "value": "AngleMeasurementsControl",
-      "start": 184,
-      "end": 208,
+      "start": 203,
+      "end": 227,
       "loc": {
         "start": {
           "line": 9,
@@ -1381,8 +1381,8 @@
         "updateContext": null
       },
       "value": "extends",
-      "start": 209,
-      "end": 216,
+      "start": 228,
+      "end": 235,
       "loc": {
         "start": {
           "line": 9,
@@ -1407,8 +1407,8 @@
         "binop": null
       },
       "value": "Component",
-      "start": 217,
-      "end": 226,
+      "start": 236,
+      "end": 245,
       "loc": {
         "start": {
           "line": 9,
@@ -1432,8 +1432,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 227,
-      "end": 228,
+      "start": 246,
+      "end": 247,
       "loc": {
         "start": {
           "line": 9,
@@ -1448,8 +1448,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Gets if this AngleMeasurementsControl is currently active, where it is responding to input.\n     *\n     * @returns {boolean} True if this AngleMeassurementsControl is active.\n     * @abstract\n     ",
-      "start": 234,
-      "end": 444,
+      "start": 253,
+      "end": 463,
       "loc": {
         "start": {
           "line": 11,
@@ -1474,8 +1474,8 @@
         "binop": null
       },
       "value": "get",
-      "start": 449,
-      "end": 452,
+      "start": 468,
+      "end": 471,
       "loc": {
         "start": {
           "line": 17,
@@ -1500,8 +1500,8 @@
         "binop": null
       },
       "value": "active",
-      "start": 453,
-      "end": 459,
+      "start": 472,
+      "end": 478,
       "loc": {
         "start": {
           "line": 17,
@@ -1525,8 +1525,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 459,
-      "end": 460,
+      "start": 478,
+      "end": 479,
       "loc": {
         "start": {
           "line": 17,
@@ -1550,8 +1550,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 460,
-      "end": 461,
+      "start": 479,
+      "end": 480,
       "loc": {
         "start": {
           "line": 17,
@@ -1575,8 +1575,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 462,
-      "end": 463,
+      "start": 481,
+      "end": 482,
       "loc": {
         "start": {
           "line": 17,
@@ -1600,8 +1600,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 468,
-      "end": 469,
+      "start": 487,
+      "end": 488,
       "loc": {
         "start": {
           "line": 18,
@@ -1616,8 +1616,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Sets whether snap-to-vertex and snap-to-edge are enabled for this AngleMeasurementsControl.\n     *\n     * This is `true` by default.\n     *\n     * Internally, this deactivates then activates the AngleMeasurementsControl when changed, which means that\n     * it will destroy any AngleMeasurements currently under construction, and incurs some overhead, since it unbinds\n     * and rebinds various input handlers.\n     *\n     * @param {boolean} snapping Whether to enable snap-to-vertex and snap-edge for this AngleMeasurementsControl.\n     ",
-      "start": 475,
-      "end": 1027,
+      "start": 494,
+      "end": 1046,
       "loc": {
         "start": {
           "line": 20,
@@ -1642,8 +1642,8 @@
         "binop": null
       },
       "value": "set",
-      "start": 1032,
-      "end": 1035,
+      "start": 1051,
+      "end": 1054,
       "loc": {
         "start": {
           "line": 31,
@@ -1668,8 +1668,8 @@
         "binop": null
       },
       "value": "snapping",
-      "start": 1036,
-      "end": 1044,
+      "start": 1055,
+      "end": 1063,
       "loc": {
         "start": {
           "line": 31,
@@ -1693,8 +1693,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1044,
-      "end": 1045,
+      "start": 1063,
+      "end": 1064,
       "loc": {
         "start": {
           "line": 31,
@@ -1719,8 +1719,8 @@
         "binop": null
       },
       "value": "snapping",
-      "start": 1045,
-      "end": 1053,
+      "start": 1064,
+      "end": 1072,
       "loc": {
         "start": {
           "line": 31,
@@ -1744,8 +1744,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1053,
-      "end": 1054,
+      "start": 1072,
+      "end": 1073,
       "loc": {
         "start": {
           "line": 31,
@@ -1769,8 +1769,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1055,
-      "end": 1056,
+      "start": 1074,
+      "end": 1075,
       "loc": {
         "start": {
           "line": 31,
@@ -1794,8 +1794,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1061,
-      "end": 1062,
+      "start": 1080,
+      "end": 1081,
       "loc": {
         "start": {
           "line": 32,
@@ -1810,8 +1810,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Gets whether snap-to-vertex and snap-to-edge are enabled for this AngleMeasurementsControl.\n     *\n     * This is `true` by default.\n     *\n     * @returns {boolean} Whether snap-to-vertex and snap-to-edge are enabled for this AngleMeasurementsControl.\n     ",
-      "start": 1068,
-      "end": 1339,
+      "start": 1087,
+      "end": 1358,
       "loc": {
         "start": {
           "line": 34,
@@ -1836,8 +1836,8 @@
         "binop": null
       },
       "value": "get",
-      "start": 1344,
-      "end": 1347,
+      "start": 1363,
+      "end": 1366,
       "loc": {
         "start": {
           "line": 41,
@@ -1862,8 +1862,8 @@
         "binop": null
       },
       "value": "snapping",
-      "start": 1348,
-      "end": 1356,
+      "start": 1367,
+      "end": 1375,
       "loc": {
         "start": {
           "line": 41,
@@ -1887,8 +1887,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1356,
-      "end": 1357,
+      "start": 1375,
+      "end": 1376,
       "loc": {
         "start": {
           "line": 41,
@@ -1912,8 +1912,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1357,
-      "end": 1358,
+      "start": 1376,
+      "end": 1377,
       "loc": {
         "start": {
           "line": 41,
@@ -1937,8 +1937,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1359,
-      "end": 1360,
+      "start": 1378,
+      "end": 1379,
       "loc": {
         "start": {
           "line": 41,
@@ -1965,8 +1965,8 @@
         "updateContext": null
       },
       "value": "return",
-      "start": 1369,
-      "end": 1375,
+      "start": 1388,
+      "end": 1394,
       "loc": {
         "start": {
           "line": 42,
@@ -1993,8 +1993,8 @@
         "updateContext": null
       },
       "value": "true",
-      "start": 1376,
-      "end": 1380,
+      "start": 1395,
+      "end": 1399,
       "loc": {
         "start": {
           "line": 42,
@@ -2019,8 +2019,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1380,
-      "end": 1381,
+      "start": 1399,
+      "end": 1400,
       "loc": {
         "start": {
           "line": 42,
@@ -2044,8 +2044,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1386,
-      "end": 1387,
+      "start": 1405,
+      "end": 1406,
       "loc": {
         "start": {
           "line": 43,
@@ -2060,8 +2060,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Activates this AngleMeasurementsMouseControl, ready to respond to input.\n     *\n     * @abstract\n     ",
-      "start": 1393,
-      "end": 1508,
+      "start": 1412,
+      "end": 1527,
       "loc": {
         "start": {
           "line": 45,
@@ -2086,8 +2086,8 @@
         "binop": null
       },
       "value": "activate",
-      "start": 1513,
-      "end": 1521,
+      "start": 1532,
+      "end": 1540,
       "loc": {
         "start": {
           "line": 50,
@@ -2111,8 +2111,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1521,
-      "end": 1522,
+      "start": 1540,
+      "end": 1541,
       "loc": {
         "start": {
           "line": 50,
@@ -2136,8 +2136,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1522,
-      "end": 1523,
+      "start": 1541,
+      "end": 1542,
       "loc": {
         "start": {
           "line": 50,
@@ -2161,8 +2161,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1524,
-      "end": 1525,
+      "start": 1543,
+      "end": 1544,
       "loc": {
         "start": {
           "line": 50,
@@ -2186,8 +2186,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1530,
-      "end": 1531,
+      "start": 1549,
+      "end": 1550,
       "loc": {
         "start": {
           "line": 51,
@@ -2202,8 +2202,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Deactivates this AngleMeasurementsControl, making it unresponsive to input.\n     *\n     * Destroys any {@link AngleMeasurement} under construction by this AngleMeasurementsControl.\n     *\n     * @abstract\n     ",
-      "start": 1537,
-      "end": 1760,
+      "start": 1556,
+      "end": 1779,
       "loc": {
         "start": {
           "line": 53,
@@ -2228,8 +2228,8 @@
         "binop": null
       },
       "value": "deactivate",
-      "start": 1765,
-      "end": 1775,
+      "start": 1784,
+      "end": 1794,
       "loc": {
         "start": {
           "line": 60,
@@ -2253,8 +2253,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1775,
-      "end": 1776,
+      "start": 1794,
+      "end": 1795,
       "loc": {
         "start": {
           "line": 60,
@@ -2278,8 +2278,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1776,
-      "end": 1777,
+      "start": 1795,
+      "end": 1796,
       "loc": {
         "start": {
           "line": 60,
@@ -2303,8 +2303,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1778,
-      "end": 1779,
+      "start": 1797,
+      "end": 1798,
       "loc": {
         "start": {
           "line": 60,
@@ -2328,8 +2328,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1784,
-      "end": 1785,
+      "start": 1803,
+      "end": 1804,
       "loc": {
         "start": {
           "line": 61,
@@ -2344,8 +2344,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Resets this AngleMeasurementsControl.\n     *\n     * Destroys any {@link AngleMeasurement} under construction by this AngleMeasurementsControl.\n     *\n     * Does nothing if the AngleMeasurementsControl is not active.\n     *\n     * @abstract\n     ",
-      "start": 1791,
-      "end": 2050,
+      "start": 1810,
+      "end": 2069,
       "loc": {
         "start": {
           "line": 63,
@@ -2370,8 +2370,8 @@
         "binop": null
       },
       "value": "reset",
-      "start": 2055,
-      "end": 2060,
+      "start": 2074,
+      "end": 2079,
       "loc": {
         "start": {
           "line": 72,
@@ -2395,8 +2395,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2060,
-      "end": 2061,
+      "start": 2079,
+      "end": 2080,
       "loc": {
         "start": {
           "line": 72,
@@ -2420,8 +2420,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2061,
-      "end": 2062,
+      "start": 2080,
+      "end": 2081,
       "loc": {
         "start": {
           "line": 72,
@@ -2445,8 +2445,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2063,
-      "end": 2064,
+      "start": 2082,
+      "end": 2083,
       "loc": {
         "start": {
           "line": 72,
@@ -2470,8 +2470,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2069,
-      "end": 2070,
+      "start": 2088,
+      "end": 2089,
       "loc": {
         "start": {
           "line": 73,
@@ -2486,8 +2486,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Destroys this AngleMeasurementsMouseControl.\n     *\n     * Destroys any {@link AngleMeasurement} under construction by this AngleMeasurementsControl.\n     *\n     * @abstract\n     ",
-      "start": 2076,
-      "end": 2268,
+      "start": 2095,
+      "end": 2287,
       "loc": {
         "start": {
           "line": 75,
@@ -2512,8 +2512,8 @@
         "binop": null
       },
       "value": "destroy",
-      "start": 2273,
-      "end": 2280,
+      "start": 2292,
+      "end": 2299,
       "loc": {
         "start": {
           "line": 82,
@@ -2537,8 +2537,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2280,
-      "end": 2281,
+      "start": 2299,
+      "end": 2300,
       "loc": {
         "start": {
           "line": 82,
@@ -2562,8 +2562,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2281,
-      "end": 2282,
+      "start": 2300,
+      "end": 2301,
       "loc": {
         "start": {
           "line": 82,
@@ -2587,8 +2587,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2283,
-      "end": 2284,
+      "start": 2302,
+      "end": 2303,
       "loc": {
         "start": {
           "line": 82,
@@ -2612,8 +2612,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2289,
-      "end": 2290,
+      "start": 2308,
+      "end": 2309,
       "loc": {
         "start": {
           "line": 83,
@@ -2637,8 +2637,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2291,
-      "end": 2292,
+      "start": 2310,
+      "end": 2311,
       "loc": {
         "start": {
           "line": 84,
@@ -2663,8 +2663,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2292,
-      "end": 2292,
+      "start": 2311,
+      "end": 2311,
       "loc": {
         "start": {
           "line": 84,

@@ -1,29 +1,29 @@
 {
   "type": "File",
   "start": 0,
-  "end": 798,
+  "end": 734,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 23,
-      "column": 31
+      "line": 21,
+      "column": 41
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 798,
+    "end": 734,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 23,
-        "column": 31
+        "line": 21,
+        "column": 41
       }
     },
     "sourceType": "module",
@@ -761,76 +761,6 @@
             "raw": "\"./constants/constants.js\""
           },
           "value": "./constants/constants.js"
-        }
-      },
-      {
-        "type": "ExportAllDeclaration",
-        "start": 735,
-        "end": 766,
-        "loc": {
-          "start": {
-            "line": 22,
-            "column": 0
-          },
-          "end": {
-            "line": 22,
-            "column": 31
-          }
-        },
-        "source": {
-          "type": "StringLiteral",
-          "start": 749,
-          "end": 765,
-          "loc": {
-            "start": {
-              "line": 22,
-              "column": 14
-            },
-            "end": {
-              "line": 22,
-              "column": 30
-            }
-          },
-          "extra": {
-            "rawValue": "./lod/index.js",
-            "raw": "\"./lod/index.js\""
-          },
-          "value": "./lod/index.js"
-        }
-      },
-      {
-        "type": "ExportAllDeclaration",
-        "start": 767,
-        "end": 798,
-        "loc": {
-          "start": {
-            "line": 23,
-            "column": 0
-          },
-          "end": {
-            "line": 23,
-            "column": 31
-          }
-        },
-        "source": {
-          "type": "StringLiteral",
-          "start": 781,
-          "end": 797,
-          "loc": {
-            "start": {
-              "line": 23,
-              "column": 14
-            },
-            "end": {
-              "line": 23,
-              "column": 30
-            }
-          },
-          "extra": {
-            "rawValue": "./vfc/index.js",
-            "raw": "\"./vfc/index.js\""
-          },
-          "value": "./vfc/index.js"
         }
       }
     ],
@@ -3654,274 +3584,6 @@
     },
     {
       "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 735,
-      "end": 741,
-      "loc": {
-        "start": {
-          "line": 22,
-          "column": 0
-        },
-        "end": {
-          "line": 22,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "*",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": 10,
-        "updateContext": null
-      },
-      "value": "*",
-      "start": 742,
-      "end": 743,
-      "loc": {
-        "start": {
-          "line": 22,
-          "column": 7
-        },
-        "end": {
-          "line": 22,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 744,
-      "end": 748,
-      "loc": {
-        "start": {
-          "line": 22,
-          "column": 9
-        },
-        "end": {
-          "line": 22,
-          "column": 13
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./lod/index.js",
-      "start": 749,
-      "end": 765,
-      "loc": {
-        "start": {
-          "line": 22,
-          "column": 14
-        },
-        "end": {
-          "line": 22,
-          "column": 30
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 765,
-      "end": 766,
-      "loc": {
-        "start": {
-          "line": 22,
-          "column": 30
-        },
-        "end": {
-          "line": 22,
-          "column": 31
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 767,
-      "end": 773,
-      "loc": {
-        "start": {
-          "line": 23,
-          "column": 0
-        },
-        "end": {
-          "line": 23,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "*",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": 10,
-        "updateContext": null
-      },
-      "value": "*",
-      "start": 774,
-      "end": 775,
-      "loc": {
-        "start": {
-          "line": 23,
-          "column": 7
-        },
-        "end": {
-          "line": 23,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 776,
-      "end": 780,
-      "loc": {
-        "start": {
-          "line": 23,
-          "column": 9
-        },
-        "end": {
-          "line": 23,
-          "column": 13
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./vfc/index.js",
-      "start": 781,
-      "end": 797,
-      "loc": {
-        "start": {
-          "line": 23,
-          "column": 14
-        },
-        "end": {
-          "line": 23,
-          "column": 30
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 797,
-      "end": 798,
-      "loc": {
-        "start": {
-          "line": 23,
-          "column": 30
-        },
-        "end": {
-          "line": 23,
-          "column": 31
-        }
-      }
-    },
-    {
-      "type": {
         "label": "eof",
         "beforeExpr": false,
         "startsExpr": false,
@@ -3933,16 +3595,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 798,
-      "end": 798,
+      "start": 734,
+      "end": 734,
       "loc": {
         "start": {
-          "line": 23,
-          "column": 31
+          "line": 21,
+          "column": 41
         },
         "end": {
-          "line": 23,
-          "column": 31
+          "line": 21,
+          "column": 41
         }
       }
     }

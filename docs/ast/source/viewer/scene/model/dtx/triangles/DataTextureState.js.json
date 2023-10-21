@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 8629,
+  "end": 8122,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 289,
+      "line": 270,
       "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 8629,
+    "end": 8122,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 289,
+        "line": 270,
         "column": 0
       }
     },
@@ -157,14 +157,14 @@
       {
         "type": "ExportNamedDeclaration",
         "start": 131,
-        "end": 8627,
+        "end": 8120,
         "loc": {
           "start": {
             "line": 7,
             "column": 0
           },
           "end": {
-            "line": 287,
+            "line": 268,
             "column": 1
           }
         },
@@ -173,14 +173,14 @@
         "declaration": {
           "type": "ClassDeclaration",
           "start": 138,
-          "end": 8627,
+          "end": 8120,
           "loc": {
             "start": {
               "line": 7,
               "column": 7
             },
             "end": {
-              "line": 287,
+              "line": 268,
               "column": 1
             }
           },
@@ -206,14 +206,14 @@
           "body": {
             "type": "ClassBody",
             "start": 161,
-            "end": 8627,
+            "end": 8120,
             "loc": {
               "start": {
                 "line": 7,
                 "column": 30
               },
               "end": {
-                "line": 287,
+                "line": 268,
                 "column": 1
               }
             },
@@ -4015,14 +4015,14 @@
               {
                 "type": "ClassMethod",
                 "start": 5791,
-                "end": 6862,
+                "end": 6707,
                 "loc": {
                   "start": {
                     "line": 184,
                     "column": 4
                   },
                   "end": {
-                    "line": 221,
+                    "line": 215,
                     "column": 5
                   }
                 },
@@ -4158,14 +4158,14 @@
                 "body": {
                   "type": "BlockStatement",
                   "start": 6018,
-                  "end": 6862,
+                  "end": 6707,
                   "loc": {
                     "start": {
                       "line": 191,
                       "column": 6
                     },
                     "end": {
-                      "line": 221,
+                      "line": 215,
                       "column": 5
                     }
                   },
@@ -4731,7 +4731,7 @@
                     {
                       "type": "ExpressionStatement",
                       "start": 6551,
-                      "end": 6696,
+                      "end": 6701,
                       "loc": {
                         "start": {
                           "line": 210,
@@ -4745,7 +4745,7 @@
                       "expression": {
                         "type": "CallExpression",
                         "start": 6551,
-                        "end": 6695,
+                        "end": 6700,
                         "loc": {
                           "start": {
                             "line": 210,
@@ -4759,7 +4759,7 @@
                         "callee": {
                           "type": "MemberExpression",
                           "start": 6551,
-                          "end": 6588,
+                          "end": 6593,
                           "loc": {
                             "start": {
                               "line": 210,
@@ -4767,13 +4767,13 @@
                             },
                             "end": {
                               "line": 210,
-                              "column": 45
+                              "column": 50
                             }
                           },
                           "object": {
                             "type": "MemberExpression",
                             "start": 6551,
-                            "end": 6576,
+                            "end": 6581,
                             "loc": {
                               "start": {
                                 "line": 210,
@@ -4781,7 +4781,7 @@
                               },
                               "end": {
                                 "line": 210,
-                                "column": 33
+                                "column": 38
                               }
                             },
                             "object": {
@@ -4802,7 +4802,7 @@
                             "property": {
                               "type": "Identifier",
                               "start": 6556,
-                              "end": 6576,
+                              "end": 6581,
                               "loc": {
                                 "start": {
                                   "line": 210,
@@ -4810,26 +4810,26 @@
                                 },
                                 "end": {
                                   "line": 210,
-                                  "column": 33
+                                  "column": 38
                                 },
-                                "identifierName": "textureModelMatrices"
+                                "identifierName": "texturePerObjectIdOffsets"
                               },
-                              "name": "textureModelMatrices"
+                              "name": "texturePerObjectIdOffsets"
                             },
                             "computed": false
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 6577,
-                            "end": 6588,
+                            "start": 6582,
+                            "end": 6593,
                             "loc": {
                               "start": {
                                 "line": 210,
-                                "column": 34
+                                "column": 39
                               },
                               "end": {
                                 "line": 210,
-                                "column": 45
+                                "column": 50
                               },
                               "identifierName": "bindTexture"
                             },
@@ -4840,8 +4840,8 @@
                         "arguments": [
                           {
                             "type": "Identifier",
-                            "start": 6602,
-                            "end": 6611,
+                            "start": 6607,
+                            "end": 6616,
                             "loc": {
                               "start": {
                                 "line": 211,
@@ -4857,8 +4857,8 @@
                           },
                           {
                             "type": "Identifier",
-                            "start": 6625,
-                            "end": 6648,
+                            "start": 6630,
+                            "end": 6653,
                             "loc": {
                               "start": {
                                 "line": 212,
@@ -4868,14 +4868,14 @@
                                 "line": 212,
                                 "column": 35
                               },
-                              "identifierName": "modelMatricesShaderName"
+                              "identifierName": "objectOffsetsShaderName"
                             },
-                            "name": "modelMatricesShaderName"
+                            "name": "objectOffsetsShaderName"
                           },
                           {
                             "type": "NumericLiteral",
-                            "start": 6662,
-                            "end": 6663,
+                            "start": 6667,
+                            "end": 6668,
                             "loc": {
                               "start": {
                                 "line": 213,
@@ -4896,8 +4896,8 @@
                               {
                                 "type": "CommentLine",
                                 "value": " webgl texture unit",
-                                "start": 6664,
-                                "end": 6685,
+                                "start": 6669,
+                                "end": 6690,
                                 "loc": {
                                   "start": {
                                     "line": 213,
@@ -4905,192 +4905,6 @@
                                   },
                                   "end": {
                                     "line": 213,
-                                    "column": 35
-                                  }
-                                }
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "type": "ExpressionStatement",
-                      "start": 6706,
-                      "end": 6856,
-                      "loc": {
-                        "start": {
-                          "line": 216,
-                          "column": 8
-                        },
-                        "end": {
-                          "line": 220,
-                          "column": 10
-                        }
-                      },
-                      "expression": {
-                        "type": "CallExpression",
-                        "start": 6706,
-                        "end": 6855,
-                        "loc": {
-                          "start": {
-                            "line": 216,
-                            "column": 8
-                          },
-                          "end": {
-                            "line": 220,
-                            "column": 9
-                          }
-                        },
-                        "callee": {
-                          "type": "MemberExpression",
-                          "start": 6706,
-                          "end": 6748,
-                          "loc": {
-                            "start": {
-                              "line": 216,
-                              "column": 8
-                            },
-                            "end": {
-                              "line": 216,
-                              "column": 50
-                            }
-                          },
-                          "object": {
-                            "type": "MemberExpression",
-                            "start": 6706,
-                            "end": 6736,
-                            "loc": {
-                              "start": {
-                                "line": 216,
-                                "column": 8
-                              },
-                              "end": {
-                                "line": 216,
-                                "column": 38
-                              }
-                            },
-                            "object": {
-                              "type": "ThisExpression",
-                              "start": 6706,
-                              "end": 6710,
-                              "loc": {
-                                "start": {
-                                  "line": 216,
-                                  "column": 8
-                                },
-                                "end": {
-                                  "line": 216,
-                                  "column": 12
-                                }
-                              }
-                            },
-                            "property": {
-                              "type": "Identifier",
-                              "start": 6711,
-                              "end": 6736,
-                              "loc": {
-                                "start": {
-                                  "line": 216,
-                                  "column": 13
-                                },
-                                "end": {
-                                  "line": 216,
-                                  "column": 38
-                                },
-                                "identifierName": "texturePerObjectIdOffsets"
-                              },
-                              "name": "texturePerObjectIdOffsets"
-                            },
-                            "computed": false
-                          },
-                          "property": {
-                            "type": "Identifier",
-                            "start": 6737,
-                            "end": 6748,
-                            "loc": {
-                              "start": {
-                                "line": 216,
-                                "column": 39
-                              },
-                              "end": {
-                                "line": 216,
-                                "column": 50
-                              },
-                              "identifierName": "bindTexture"
-                            },
-                            "name": "bindTexture"
-                          },
-                          "computed": false
-                        },
-                        "arguments": [
-                          {
-                            "type": "Identifier",
-                            "start": 6762,
-                            "end": 6771,
-                            "loc": {
-                              "start": {
-                                "line": 217,
-                                "column": 12
-                              },
-                              "end": {
-                                "line": 217,
-                                "column": 21
-                              },
-                              "identifierName": "glProgram"
-                            },
-                            "name": "glProgram"
-                          },
-                          {
-                            "type": "Identifier",
-                            "start": 6785,
-                            "end": 6808,
-                            "loc": {
-                              "start": {
-                                "line": 218,
-                                "column": 12
-                              },
-                              "end": {
-                                "line": 218,
-                                "column": 35
-                              },
-                              "identifierName": "objectOffsetsShaderName"
-                            },
-                            "name": "objectOffsetsShaderName"
-                          },
-                          {
-                            "type": "NumericLiteral",
-                            "start": 6822,
-                            "end": 6823,
-                            "loc": {
-                              "start": {
-                                "line": 219,
-                                "column": 12
-                              },
-                              "end": {
-                                "line": 219,
-                                "column": 13
-                              }
-                            },
-                            "extra": {
-                              "rawValue": 5,
-                              "raw": "5"
-                            },
-                            "value": 5,
-                            "leadingComments": null,
-                            "trailingComments": [
-                              {
-                                "type": "CommentLine",
-                                "value": " webgl texture unit",
-                                "start": 6824,
-                                "end": 6845,
-                                "loc": {
-                                  "start": {
-                                    "line": 219,
-                                    "column": 14
-                                  },
-                                  "end": {
-                                    "line": 219,
                                     "column": 35
                                   }
                                 }
@@ -5125,16 +4939,16 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     *\n     * @param {Program} glProgram\n     * @param {string} cameraMatricesShaderName\n     ",
-                    "start": 6868,
-                    "end": 6968,
+                    "value": "*\n     *\n     * @param {Program} glProgram\n     * @param {string} portionIdsShaderName\n     * @param {string} polygonIndicesShaderName\n     * @param {8|16|32} textureBitness\n     ",
+                    "start": 6713,
+                    "end": 6896,
                     "loc": {
                       "start": {
-                        "line": 223,
+                        "line": 217,
                         "column": 4
                       },
                       "end": {
-                        "line": 227,
+                        "line": 223,
                         "column": 7
                       }
                     }
@@ -5143,15 +4957,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 6973,
-                "end": 7214,
+                "start": 6901,
+                "end": 7409,
                 "loc": {
                   "start": {
-                    "line": 228,
+                    "line": 224,
                     "column": 4
                   },
                   "end": {
-                    "line": 234,
+                    "line": 241,
                     "column": 5
                   }
                 },
@@ -5159,225 +4973,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 6973,
-                  "end": 6994,
+                  "start": 6901,
+                  "end": 6928,
                   "loc": {
                     "start": {
-                      "line": 228,
+                      "line": 224,
                       "column": 4
                     },
                     "end": {
-                      "line": 228,
-                      "column": 25
-                    },
-                    "identifierName": "bindPickCameraTexture"
-                  },
-                  "name": "bindPickCameraTexture",
-                  "leadingComments": null
-                },
-                "kind": "method",
-                "id": null,
-                "generator": false,
-                "expression": false,
-                "async": false,
-                "params": [
-                  {
-                    "type": "Identifier",
-                    "start": 6995,
-                    "end": 7004,
-                    "loc": {
-                      "start": {
-                        "line": 228,
-                        "column": 26
-                      },
-                      "end": {
-                        "line": 228,
-                        "column": 35
-                      },
-                      "identifierName": "glProgram"
-                    },
-                    "name": "glProgram"
-                  },
-                  {
-                    "type": "Identifier",
-                    "start": 7006,
-                    "end": 7030,
-                    "loc": {
-                      "start": {
-                        "line": 228,
-                        "column": 37
-                      },
-                      "end": {
-                        "line": 228,
-                        "column": 61
-                      },
-                      "identifierName": "cameraMatricesShaderName"
-                    },
-                    "name": "cameraMatricesShaderName"
-                  }
-                ],
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 7032,
-                  "end": 7214,
-                  "loc": {
-                    "start": {
-                      "line": 228,
-                      "column": 63
-                    },
-                    "end": {
-                      "line": 234,
-                      "column": 5
-                    }
-                  },
-                  "body": [],
-                  "directives": [],
-                  "leadingComments": null,
-                  "trailingComments": [
-                    {
-                      "type": "CommentLine",
-                      "value": " this.texturePickCameraMatrices.bindTexture(",
-                      "start": 7042,
-                      "end": 7088,
-                      "loc": {
-                        "start": {
-                          "line": 229,
-                          "column": 8
-                        },
-                        "end": {
-                          "line": 229,
-                          "column": 54
-                        }
-                      }
-                    },
-                    {
-                      "type": "CommentLine",
-                      "value": "     glProgram,",
-                      "start": 7097,
-                      "end": 7114,
-                      "loc": {
-                        "start": {
-                          "line": 230,
-                          "column": 8
-                        },
-                        "end": {
-                          "line": 230,
-                          "column": 25
-                        }
-                      }
-                    },
-                    {
-                      "type": "CommentLine",
-                      "value": "     cameraMatricesShaderName,",
-                      "start": 7123,
-                      "end": 7155,
-                      "loc": {
-                        "start": {
-                          "line": 231,
-                          "column": 8
-                        },
-                        "end": {
-                          "line": 231,
-                          "column": 40
-                        }
-                      }
-                    },
-                    {
-                      "type": "CommentLine",
-                      "value": "     4 // webgl texture unit",
-                      "start": 7164,
-                      "end": 7194,
-                      "loc": {
-                        "start": {
-                          "line": 232,
-                          "column": 8
-                        },
-                        "end": {
-                          "line": 232,
-                          "column": 38
-                        }
-                      }
-                    },
-                    {
-                      "type": "CommentLine",
-                      "value": " );",
-                      "start": 7203,
-                      "end": 7208,
-                      "loc": {
-                        "start": {
-                          "line": 233,
-                          "column": 8
-                        },
-                        "end": {
-                          "line": 233,
-                          "column": 13
-                        }
-                      }
-                    },
-                    {
-                      "type": "CommentBlock",
-                      "value": "*\n     *\n     * @param {Program} glProgram\n     * @param {string} portionIdsShaderName\n     * @param {string} polygonIndicesShaderName\n     * @param {8|16|32} textureBitness\n     ",
-                      "start": 7220,
-                      "end": 7403,
-                      "loc": {
-                        "start": {
-                          "line": 236,
-                          "column": 4
-                        },
-                        "end": {
-                          "line": 242,
-                          "column": 7
-                        }
-                      }
-                    }
-                  ]
-                },
-                "leadingComments": [
-                  {
-                    "type": "CommentBlock",
-                    "value": "*\n     *\n     * @param {Program} glProgram\n     * @param {string} cameraMatricesShaderName\n     ",
-                    "start": 6868,
-                    "end": 6968,
-                    "loc": {
-                      "start": {
-                        "line": 223,
-                        "column": 4
-                      },
-                      "end": {
-                        "line": 227,
-                        "column": 7
-                      }
-                    }
-                  }
-                ]
-              },
-              {
-                "type": "ClassMethod",
-                "start": 7408,
-                "end": 7916,
-                "loc": {
-                  "start": {
-                    "line": 243,
-                    "column": 4
-                  },
-                  "end": {
-                    "line": 260,
-                    "column": 5
-                  }
-                },
-                "static": false,
-                "computed": false,
-                "key": {
-                  "type": "Identifier",
-                  "start": 7408,
-                  "end": 7435,
-                  "loc": {
-                    "start": {
-                      "line": 243,
-                      "column": 4
-                    },
-                    "end": {
-                      "line": 243,
+                      "line": 224,
                       "column": 31
                     },
                     "identifierName": "bindTriangleIndicesTextures"
@@ -5393,15 +4997,15 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 7445,
-                    "end": 7454,
+                    "start": 6938,
+                    "end": 6947,
                     "loc": {
                       "start": {
-                        "line": 244,
+                        "line": 225,
                         "column": 8
                       },
                       "end": {
-                        "line": 244,
+                        "line": 225,
                         "column": 17
                       },
                       "identifierName": "glProgram"
@@ -5410,15 +5014,15 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 7464,
-                    "end": 7484,
+                    "start": 6957,
+                    "end": 6977,
                     "loc": {
                       "start": {
-                        "line": 245,
+                        "line": 226,
                         "column": 8
                       },
                       "end": {
-                        "line": 245,
+                        "line": 226,
                         "column": 28
                       },
                       "identifierName": "portionIdsShaderName"
@@ -5427,15 +5031,15 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 7494,
-                    "end": 7518,
+                    "start": 6987,
+                    "end": 7011,
                     "loc": {
                       "start": {
-                        "line": 246,
+                        "line": 227,
                         "column": 8
                       },
                       "end": {
-                        "line": 246,
+                        "line": 227,
                         "column": 32
                       },
                       "identifierName": "polygonIndicesShaderName"
@@ -5444,15 +5048,15 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 7528,
-                    "end": 7542,
+                    "start": 7021,
+                    "end": 7035,
                     "loc": {
                       "start": {
-                        "line": 247,
+                        "line": 228,
                         "column": 8
                       },
                       "end": {
-                        "line": 247,
+                        "line": 228,
                         "column": 22
                       },
                       "identifierName": "textureBitness"
@@ -5462,115 +5066,115 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 7550,
-                  "end": 7916,
+                  "start": 7043,
+                  "end": 7409,
                   "loc": {
                     "start": {
-                      "line": 248,
+                      "line": 229,
                       "column": 6
                     },
                     "end": {
-                      "line": 260,
+                      "line": 241,
                       "column": 5
                     }
                   },
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 7560,
-                      "end": 7733,
+                      "start": 7053,
+                      "end": 7226,
                       "loc": {
                         "start": {
-                          "line": 249,
+                          "line": 230,
                           "column": 8
                         },
                         "end": {
-                          "line": 253,
+                          "line": 234,
                           "column": 10
                         }
                       },
                       "expression": {
                         "type": "CallExpression",
-                        "start": 7560,
-                        "end": 7732,
+                        "start": 7053,
+                        "end": 7225,
                         "loc": {
                           "start": {
-                            "line": 249,
+                            "line": 230,
                             "column": 8
                           },
                           "end": {
-                            "line": 253,
+                            "line": 234,
                             "column": 9
                           }
                         },
                         "callee": {
                           "type": "MemberExpression",
-                          "start": 7560,
-                          "end": 7628,
+                          "start": 7053,
+                          "end": 7121,
                           "loc": {
                             "start": {
-                              "line": 249,
+                              "line": 230,
                               "column": 8
                             },
                             "end": {
-                              "line": 249,
+                              "line": 230,
                               "column": 76
                             }
                           },
                           "object": {
                             "type": "MemberExpression",
-                            "start": 7560,
-                            "end": 7616,
+                            "start": 7053,
+                            "end": 7109,
                             "loc": {
                               "start": {
-                                "line": 249,
+                                "line": 230,
                                 "column": 8
                               },
                               "end": {
-                                "line": 249,
+                                "line": 230,
                                 "column": 64
                               }
                             },
                             "object": {
                               "type": "MemberExpression",
-                              "start": 7560,
-                              "end": 7600,
+                              "start": 7053,
+                              "end": 7093,
                               "loc": {
                                 "start": {
-                                  "line": 249,
+                                  "line": 230,
                                   "column": 8
                                 },
                                 "end": {
-                                  "line": 249,
+                                  "line": 230,
                                   "column": 48
                                 }
                               },
                               "object": {
                                 "type": "ThisExpression",
-                                "start": 7560,
-                                "end": 7564,
+                                "start": 7053,
+                                "end": 7057,
                                 "loc": {
                                   "start": {
-                                    "line": 249,
+                                    "line": 230,
                                     "column": 8
                                   },
                                   "end": {
-                                    "line": 249,
+                                    "line": 230,
                                     "column": 12
                                   }
                                 }
                               },
                               "property": {
                                 "type": "Identifier",
-                                "start": 7565,
-                                "end": 7600,
+                                "start": 7058,
+                                "end": 7093,
                                 "loc": {
                                   "start": {
-                                    "line": 249,
+                                    "line": 230,
                                     "column": 13
                                   },
                                   "end": {
-                                    "line": 249,
+                                    "line": 230,
                                     "column": 48
                                   },
                                   "identifierName": "indicesPortionIdsPerBitnessTextures"
@@ -5581,15 +5185,15 @@
                             },
                             "property": {
                               "type": "Identifier",
-                              "start": 7601,
-                              "end": 7615,
+                              "start": 7094,
+                              "end": 7108,
                               "loc": {
                                 "start": {
-                                  "line": 249,
+                                  "line": 230,
                                   "column": 49
                                 },
                                 "end": {
-                                  "line": 249,
+                                  "line": 230,
                                   "column": 63
                                 },
                                 "identifierName": "textureBitness"
@@ -5600,15 +5204,15 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 7617,
-                            "end": 7628,
+                            "start": 7110,
+                            "end": 7121,
                             "loc": {
                               "start": {
-                                "line": 249,
+                                "line": 230,
                                 "column": 65
                               },
                               "end": {
-                                "line": 249,
+                                "line": 230,
                                 "column": 76
                               },
                               "identifierName": "bindTexture"
@@ -5620,15 +5224,15 @@
                         "arguments": [
                           {
                             "type": "Identifier",
-                            "start": 7642,
-                            "end": 7651,
+                            "start": 7135,
+                            "end": 7144,
                             "loc": {
                               "start": {
-                                "line": 250,
+                                "line": 231,
                                 "column": 12
                               },
                               "end": {
-                                "line": 250,
+                                "line": 231,
                                 "column": 21
                               },
                               "identifierName": "glProgram"
@@ -5637,15 +5241,15 @@
                           },
                           {
                             "type": "Identifier",
-                            "start": 7665,
-                            "end": 7685,
+                            "start": 7158,
+                            "end": 7178,
                             "loc": {
                               "start": {
-                                "line": 251,
+                                "line": 232,
                                 "column": 12
                               },
                               "end": {
-                                "line": 251,
+                                "line": 232,
                                 "column": 32
                               },
                               "identifierName": "portionIdsShaderName"
@@ -5654,15 +5258,234 @@
                           },
                           {
                             "type": "NumericLiteral",
-                            "start": 7699,
-                            "end": 7700,
+                            "start": 7192,
+                            "end": 7193,
                             "loc": {
                               "start": {
-                                "line": 252,
+                                "line": 233,
                                 "column": 12
                               },
                               "end": {
-                                "line": 252,
+                                "line": 233,
+                                "column": 13
+                              }
+                            },
+                            "extra": {
+                              "rawValue": 5,
+                              "raw": "5"
+                            },
+                            "value": 5,
+                            "leadingComments": null,
+                            "trailingComments": [
+                              {
+                                "type": "CommentLine",
+                                "value": " webgl texture unit",
+                                "start": 7194,
+                                "end": 7215,
+                                "loc": {
+                                  "start": {
+                                    "line": 233,
+                                    "column": 14
+                                  },
+                                  "end": {
+                                    "line": 233,
+                                    "column": 35
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 7236,
+                      "end": 7403,
+                      "loc": {
+                        "start": {
+                          "line": 236,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 240,
+                          "column": 10
+                        }
+                      },
+                      "expression": {
+                        "type": "CallExpression",
+                        "start": 7236,
+                        "end": 7402,
+                        "loc": {
+                          "start": {
+                            "line": 236,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 240,
+                            "column": 9
+                          }
+                        },
+                        "callee": {
+                          "type": "MemberExpression",
+                          "start": 7236,
+                          "end": 7294,
+                          "loc": {
+                            "start": {
+                              "line": 236,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 236,
+                              "column": 66
+                            }
+                          },
+                          "object": {
+                            "type": "MemberExpression",
+                            "start": 7236,
+                            "end": 7282,
+                            "loc": {
+                              "start": {
+                                "line": 236,
+                                "column": 8
+                              },
+                              "end": {
+                                "line": 236,
+                                "column": 54
+                              }
+                            },
+                            "object": {
+                              "type": "MemberExpression",
+                              "start": 7236,
+                              "end": 7266,
+                              "loc": {
+                                "start": {
+                                  "line": 236,
+                                  "column": 8
+                                },
+                                "end": {
+                                  "line": 236,
+                                  "column": 38
+                                }
+                              },
+                              "object": {
+                                "type": "ThisExpression",
+                                "start": 7236,
+                                "end": 7240,
+                                "loc": {
+                                  "start": {
+                                    "line": 236,
+                                    "column": 8
+                                  },
+                                  "end": {
+                                    "line": 236,
+                                    "column": 12
+                                  }
+                                }
+                              },
+                              "property": {
+                                "type": "Identifier",
+                                "start": 7241,
+                                "end": 7266,
+                                "loc": {
+                                  "start": {
+                                    "line": 236,
+                                    "column": 13
+                                  },
+                                  "end": {
+                                    "line": 236,
+                                    "column": 38
+                                  },
+                                  "identifierName": "indicesPerBitnessTextures"
+                                },
+                                "name": "indicesPerBitnessTextures"
+                              },
+                              "computed": false
+                            },
+                            "property": {
+                              "type": "Identifier",
+                              "start": 7267,
+                              "end": 7281,
+                              "loc": {
+                                "start": {
+                                  "line": 236,
+                                  "column": 39
+                                },
+                                "end": {
+                                  "line": 236,
+                                  "column": 53
+                                },
+                                "identifierName": "textureBitness"
+                              },
+                              "name": "textureBitness"
+                            },
+                            "computed": true
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 7283,
+                            "end": 7294,
+                            "loc": {
+                              "start": {
+                                "line": 236,
+                                "column": 55
+                              },
+                              "end": {
+                                "line": 236,
+                                "column": 66
+                              },
+                              "identifierName": "bindTexture"
+                            },
+                            "name": "bindTexture"
+                          },
+                          "computed": false
+                        },
+                        "arguments": [
+                          {
+                            "type": "Identifier",
+                            "start": 7308,
+                            "end": 7317,
+                            "loc": {
+                              "start": {
+                                "line": 237,
+                                "column": 12
+                              },
+                              "end": {
+                                "line": 237,
+                                "column": 21
+                              },
+                              "identifierName": "glProgram"
+                            },
+                            "name": "glProgram"
+                          },
+                          {
+                            "type": "Identifier",
+                            "start": 7331,
+                            "end": 7355,
+                            "loc": {
+                              "start": {
+                                "line": 238,
+                                "column": 12
+                              },
+                              "end": {
+                                "line": 238,
+                                "column": 36
+                              },
+                              "identifierName": "polygonIndicesShaderName"
+                            },
+                            "name": "polygonIndicesShaderName"
+                          },
+                          {
+                            "type": "NumericLiteral",
+                            "start": 7369,
+                            "end": 7370,
+                            "loc": {
+                              "start": {
+                                "line": 239,
+                                "column": 12
+                              },
+                              "end": {
+                                "line": 239,
                                 "column": 13
                               }
                             },
@@ -5676,234 +5499,15 @@
                               {
                                 "type": "CommentLine",
                                 "value": " webgl texture unit",
-                                "start": 7701,
-                                "end": 7722,
+                                "start": 7371,
+                                "end": 7392,
                                 "loc": {
                                   "start": {
-                                    "line": 252,
+                                    "line": 239,
                                     "column": 14
                                   },
                                   "end": {
-                                    "line": 252,
-                                    "column": 35
-                                  }
-                                }
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "type": "ExpressionStatement",
-                      "start": 7743,
-                      "end": 7910,
-                      "loc": {
-                        "start": {
-                          "line": 255,
-                          "column": 8
-                        },
-                        "end": {
-                          "line": 259,
-                          "column": 10
-                        }
-                      },
-                      "expression": {
-                        "type": "CallExpression",
-                        "start": 7743,
-                        "end": 7909,
-                        "loc": {
-                          "start": {
-                            "line": 255,
-                            "column": 8
-                          },
-                          "end": {
-                            "line": 259,
-                            "column": 9
-                          }
-                        },
-                        "callee": {
-                          "type": "MemberExpression",
-                          "start": 7743,
-                          "end": 7801,
-                          "loc": {
-                            "start": {
-                              "line": 255,
-                              "column": 8
-                            },
-                            "end": {
-                              "line": 255,
-                              "column": 66
-                            }
-                          },
-                          "object": {
-                            "type": "MemberExpression",
-                            "start": 7743,
-                            "end": 7789,
-                            "loc": {
-                              "start": {
-                                "line": 255,
-                                "column": 8
-                              },
-                              "end": {
-                                "line": 255,
-                                "column": 54
-                              }
-                            },
-                            "object": {
-                              "type": "MemberExpression",
-                              "start": 7743,
-                              "end": 7773,
-                              "loc": {
-                                "start": {
-                                  "line": 255,
-                                  "column": 8
-                                },
-                                "end": {
-                                  "line": 255,
-                                  "column": 38
-                                }
-                              },
-                              "object": {
-                                "type": "ThisExpression",
-                                "start": 7743,
-                                "end": 7747,
-                                "loc": {
-                                  "start": {
-                                    "line": 255,
-                                    "column": 8
-                                  },
-                                  "end": {
-                                    "line": 255,
-                                    "column": 12
-                                  }
-                                }
-                              },
-                              "property": {
-                                "type": "Identifier",
-                                "start": 7748,
-                                "end": 7773,
-                                "loc": {
-                                  "start": {
-                                    "line": 255,
-                                    "column": 13
-                                  },
-                                  "end": {
-                                    "line": 255,
-                                    "column": 38
-                                  },
-                                  "identifierName": "indicesPerBitnessTextures"
-                                },
-                                "name": "indicesPerBitnessTextures"
-                              },
-                              "computed": false
-                            },
-                            "property": {
-                              "type": "Identifier",
-                              "start": 7774,
-                              "end": 7788,
-                              "loc": {
-                                "start": {
-                                  "line": 255,
-                                  "column": 39
-                                },
-                                "end": {
-                                  "line": 255,
-                                  "column": 53
-                                },
-                                "identifierName": "textureBitness"
-                              },
-                              "name": "textureBitness"
-                            },
-                            "computed": true
-                          },
-                          "property": {
-                            "type": "Identifier",
-                            "start": 7790,
-                            "end": 7801,
-                            "loc": {
-                              "start": {
-                                "line": 255,
-                                "column": 55
-                              },
-                              "end": {
-                                "line": 255,
-                                "column": 66
-                              },
-                              "identifierName": "bindTexture"
-                            },
-                            "name": "bindTexture"
-                          },
-                          "computed": false
-                        },
-                        "arguments": [
-                          {
-                            "type": "Identifier",
-                            "start": 7815,
-                            "end": 7824,
-                            "loc": {
-                              "start": {
-                                "line": 256,
-                                "column": 12
-                              },
-                              "end": {
-                                "line": 256,
-                                "column": 21
-                              },
-                              "identifierName": "glProgram"
-                            },
-                            "name": "glProgram"
-                          },
-                          {
-                            "type": "Identifier",
-                            "start": 7838,
-                            "end": 7862,
-                            "loc": {
-                              "start": {
-                                "line": 257,
-                                "column": 12
-                              },
-                              "end": {
-                                "line": 257,
-                                "column": 36
-                              },
-                              "identifierName": "polygonIndicesShaderName"
-                            },
-                            "name": "polygonIndicesShaderName"
-                          },
-                          {
-                            "type": "NumericLiteral",
-                            "start": 7876,
-                            "end": 7877,
-                            "loc": {
-                              "start": {
-                                "line": 258,
-                                "column": 12
-                              },
-                              "end": {
-                                "line": 258,
-                                "column": 13
-                              }
-                            },
-                            "extra": {
-                              "rawValue": 7,
-                              "raw": "7"
-                            },
-                            "value": 7,
-                            "leadingComments": null,
-                            "trailingComments": [
-                              {
-                                "type": "CommentLine",
-                                "value": " webgl texture unit",
-                                "start": 7878,
-                                "end": 7899,
-                                "loc": {
-                                  "start": {
-                                    "line": 258,
-                                    "column": 14
-                                  },
-                                  "end": {
-                                    "line": 258,
+                                    "line": 239,
                                     "column": 35
                                   }
                                 }
@@ -5921,15 +5525,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     *\n     * @param {Program} glProgram\n     * @param {string} portionIdsShaderName\n     * @param {string} polygonIndicesShaderName\n     * @param {8|16|32} textureBitness\n     ",
-                    "start": 7220,
-                    "end": 7403,
+                    "start": 6713,
+                    "end": 6896,
                     "loc": {
                       "start": {
-                        "line": 236,
+                        "line": 217,
                         "column": 4
                       },
                       "end": {
-                        "line": 242,
+                        "line": 223,
                         "column": 7
                       }
                     }
@@ -5939,15 +5543,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     *\n     * @param {Program} glProgram\n     * @param {string} edgePortionIdsShaderName\n     * @param {string} edgeIndicesShaderName\n     * @param {8|16|32} textureBitness\n     ",
-                    "start": 7922,
-                    "end": 8106,
+                    "start": 7415,
+                    "end": 7599,
                     "loc": {
                       "start": {
-                        "line": 262,
+                        "line": 243,
                         "column": 4
                       },
                       "end": {
-                        "line": 268,
+                        "line": 249,
                         "column": 7
                       }
                     }
@@ -5956,15 +5560,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 8111,
-                "end": 8625,
+                "start": 7604,
+                "end": 8118,
                 "loc": {
                   "start": {
-                    "line": 269,
+                    "line": 250,
                     "column": 4
                   },
                   "end": {
-                    "line": 286,
+                    "line": 267,
                     "column": 5
                   }
                 },
@@ -5972,15 +5576,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 8111,
-                  "end": 8134,
+                  "start": 7604,
+                  "end": 7627,
                   "loc": {
                     "start": {
-                      "line": 269,
+                      "line": 250,
                       "column": 4
                     },
                     "end": {
-                      "line": 269,
+                      "line": 250,
                       "column": 27
                     },
                     "identifierName": "bindEdgeIndicesTextures"
@@ -5996,15 +5600,15 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 8144,
-                    "end": 8153,
+                    "start": 7637,
+                    "end": 7646,
                     "loc": {
                       "start": {
-                        "line": 270,
+                        "line": 251,
                         "column": 8
                       },
                       "end": {
-                        "line": 270,
+                        "line": 251,
                         "column": 17
                       },
                       "identifierName": "glProgram"
@@ -6013,15 +5617,15 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 8163,
-                    "end": 8187,
+                    "start": 7656,
+                    "end": 7680,
                     "loc": {
                       "start": {
-                        "line": 271,
+                        "line": 252,
                         "column": 8
                       },
                       "end": {
-                        "line": 271,
+                        "line": 252,
                         "column": 32
                       },
                       "identifierName": "edgePortionIdsShaderName"
@@ -6030,15 +5634,15 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 8197,
-                    "end": 8218,
+                    "start": 7690,
+                    "end": 7711,
                     "loc": {
                       "start": {
-                        "line": 272,
+                        "line": 253,
                         "column": 8
                       },
                       "end": {
-                        "line": 272,
+                        "line": 253,
                         "column": 29
                       },
                       "identifierName": "edgeIndicesShaderName"
@@ -6047,15 +5651,15 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 8228,
-                    "end": 8242,
+                    "start": 7721,
+                    "end": 7735,
                     "loc": {
                       "start": {
-                        "line": 273,
+                        "line": 254,
                         "column": 8
                       },
                       "end": {
-                        "line": 273,
+                        "line": 254,
                         "column": 22
                       },
                       "identifierName": "textureBitness"
@@ -6065,115 +5669,115 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 8250,
-                  "end": 8625,
+                  "start": 7743,
+                  "end": 8118,
                   "loc": {
                     "start": {
-                      "line": 274,
+                      "line": 255,
                       "column": 6
                     },
                     "end": {
-                      "line": 286,
+                      "line": 267,
                       "column": 5
                     }
                   },
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 8260,
-                      "end": 8441,
+                      "start": 7753,
+                      "end": 7934,
                       "loc": {
                         "start": {
-                          "line": 275,
+                          "line": 256,
                           "column": 8
                         },
                         "end": {
-                          "line": 279,
+                          "line": 260,
                           "column": 10
                         }
                       },
                       "expression": {
                         "type": "CallExpression",
-                        "start": 8260,
-                        "end": 8440,
+                        "start": 7753,
+                        "end": 7933,
                         "loc": {
                           "start": {
-                            "line": 275,
+                            "line": 256,
                             "column": 8
                           },
                           "end": {
-                            "line": 279,
+                            "line": 260,
                             "column": 9
                           }
                         },
                         "callee": {
                           "type": "MemberExpression",
-                          "start": 8260,
-                          "end": 8332,
+                          "start": 7753,
+                          "end": 7825,
                           "loc": {
                             "start": {
-                              "line": 275,
+                              "line": 256,
                               "column": 8
                             },
                             "end": {
-                              "line": 275,
+                              "line": 256,
                               "column": 80
                             }
                           },
                           "object": {
                             "type": "MemberExpression",
-                            "start": 8260,
-                            "end": 8320,
+                            "start": 7753,
+                            "end": 7813,
                             "loc": {
                               "start": {
-                                "line": 275,
+                                "line": 256,
                                 "column": 8
                               },
                               "end": {
-                                "line": 275,
+                                "line": 256,
                                 "column": 68
                               }
                             },
                             "object": {
                               "type": "MemberExpression",
-                              "start": 8260,
-                              "end": 8304,
+                              "start": 7753,
+                              "end": 7797,
                               "loc": {
                                 "start": {
-                                  "line": 275,
+                                  "line": 256,
                                   "column": 8
                                 },
                                 "end": {
-                                  "line": 275,
+                                  "line": 256,
                                   "column": 52
                                 }
                               },
                               "object": {
                                 "type": "ThisExpression",
-                                "start": 8260,
-                                "end": 8264,
+                                "start": 7753,
+                                "end": 7757,
                                 "loc": {
                                   "start": {
-                                    "line": 275,
+                                    "line": 256,
                                     "column": 8
                                   },
                                   "end": {
-                                    "line": 275,
+                                    "line": 256,
                                     "column": 12
                                   }
                                 }
                               },
                               "property": {
                                 "type": "Identifier",
-                                "start": 8265,
-                                "end": 8304,
+                                "start": 7758,
+                                "end": 7797,
                                 "loc": {
                                   "start": {
-                                    "line": 275,
+                                    "line": 256,
                                     "column": 13
                                   },
                                   "end": {
-                                    "line": 275,
+                                    "line": 256,
                                     "column": 52
                                   },
                                   "identifierName": "edgeIndicesPortionIdsPerBitnessTextures"
@@ -6184,15 +5788,15 @@
                             },
                             "property": {
                               "type": "Identifier",
-                              "start": 8305,
-                              "end": 8319,
+                              "start": 7798,
+                              "end": 7812,
                               "loc": {
                                 "start": {
-                                  "line": 275,
+                                  "line": 256,
                                   "column": 53
                                 },
                                 "end": {
-                                  "line": 275,
+                                  "line": 256,
                                   "column": 67
                                 },
                                 "identifierName": "textureBitness"
@@ -6203,15 +5807,15 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 8321,
-                            "end": 8332,
+                            "start": 7814,
+                            "end": 7825,
                             "loc": {
                               "start": {
-                                "line": 275,
+                                "line": 256,
                                 "column": 69
                               },
                               "end": {
-                                "line": 275,
+                                "line": 256,
                                 "column": 80
                               },
                               "identifierName": "bindTexture"
@@ -6223,15 +5827,15 @@
                         "arguments": [
                           {
                             "type": "Identifier",
-                            "start": 8346,
-                            "end": 8355,
+                            "start": 7839,
+                            "end": 7848,
                             "loc": {
                               "start": {
-                                "line": 276,
+                                "line": 257,
                                 "column": 12
                               },
                               "end": {
-                                "line": 276,
+                                "line": 257,
                                 "column": 21
                               },
                               "identifierName": "glProgram"
@@ -6240,15 +5844,15 @@
                           },
                           {
                             "type": "Identifier",
-                            "start": 8369,
-                            "end": 8393,
+                            "start": 7862,
+                            "end": 7886,
                             "loc": {
                               "start": {
-                                "line": 277,
+                                "line": 258,
                                 "column": 12
                               },
                               "end": {
-                                "line": 277,
+                                "line": 258,
                                 "column": 36
                               },
                               "identifierName": "edgePortionIdsShaderName"
@@ -6257,15 +5861,234 @@
                           },
                           {
                             "type": "NumericLiteral",
-                            "start": 8407,
-                            "end": 8408,
+                            "start": 7900,
+                            "end": 7901,
                             "loc": {
                               "start": {
-                                "line": 278,
+                                "line": 259,
                                 "column": 12
                               },
                               "end": {
-                                "line": 278,
+                                "line": 259,
+                                "column": 13
+                              }
+                            },
+                            "extra": {
+                              "rawValue": 5,
+                              "raw": "5"
+                            },
+                            "value": 5,
+                            "leadingComments": null,
+                            "trailingComments": [
+                              {
+                                "type": "CommentLine",
+                                "value": " webgl texture unit",
+                                "start": 7902,
+                                "end": 7923,
+                                "loc": {
+                                  "start": {
+                                    "line": 259,
+                                    "column": 14
+                                  },
+                                  "end": {
+                                    "line": 259,
+                                    "column": 35
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 7944,
+                      "end": 8112,
+                      "loc": {
+                        "start": {
+                          "line": 262,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 266,
+                          "column": 10
+                        }
+                      },
+                      "expression": {
+                        "type": "CallExpression",
+                        "start": 7944,
+                        "end": 8111,
+                        "loc": {
+                          "start": {
+                            "line": 262,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 266,
+                            "column": 9
+                          }
+                        },
+                        "callee": {
+                          "type": "MemberExpression",
+                          "start": 7944,
+                          "end": 8006,
+                          "loc": {
+                            "start": {
+                              "line": 262,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 262,
+                              "column": 70
+                            }
+                          },
+                          "object": {
+                            "type": "MemberExpression",
+                            "start": 7944,
+                            "end": 7994,
+                            "loc": {
+                              "start": {
+                                "line": 262,
+                                "column": 8
+                              },
+                              "end": {
+                                "line": 262,
+                                "column": 58
+                              }
+                            },
+                            "object": {
+                              "type": "MemberExpression",
+                              "start": 7944,
+                              "end": 7978,
+                              "loc": {
+                                "start": {
+                                  "line": 262,
+                                  "column": 8
+                                },
+                                "end": {
+                                  "line": 262,
+                                  "column": 42
+                                }
+                              },
+                              "object": {
+                                "type": "ThisExpression",
+                                "start": 7944,
+                                "end": 7948,
+                                "loc": {
+                                  "start": {
+                                    "line": 262,
+                                    "column": 8
+                                  },
+                                  "end": {
+                                    "line": 262,
+                                    "column": 12
+                                  }
+                                }
+                              },
+                              "property": {
+                                "type": "Identifier",
+                                "start": 7949,
+                                "end": 7978,
+                                "loc": {
+                                  "start": {
+                                    "line": 262,
+                                    "column": 13
+                                  },
+                                  "end": {
+                                    "line": 262,
+                                    "column": 42
+                                  },
+                                  "identifierName": "edgeIndicesPerBitnessTextures"
+                                },
+                                "name": "edgeIndicesPerBitnessTextures"
+                              },
+                              "computed": false
+                            },
+                            "property": {
+                              "type": "Identifier",
+                              "start": 7979,
+                              "end": 7993,
+                              "loc": {
+                                "start": {
+                                  "line": 262,
+                                  "column": 43
+                                },
+                                "end": {
+                                  "line": 262,
+                                  "column": 57
+                                },
+                                "identifierName": "textureBitness"
+                              },
+                              "name": "textureBitness"
+                            },
+                            "computed": true
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 7995,
+                            "end": 8006,
+                            "loc": {
+                              "start": {
+                                "line": 262,
+                                "column": 59
+                              },
+                              "end": {
+                                "line": 262,
+                                "column": 70
+                              },
+                              "identifierName": "bindTexture"
+                            },
+                            "name": "bindTexture"
+                          },
+                          "computed": false
+                        },
+                        "arguments": [
+                          {
+                            "type": "Identifier",
+                            "start": 8020,
+                            "end": 8029,
+                            "loc": {
+                              "start": {
+                                "line": 263,
+                                "column": 12
+                              },
+                              "end": {
+                                "line": 263,
+                                "column": 21
+                              },
+                              "identifierName": "glProgram"
+                            },
+                            "name": "glProgram"
+                          },
+                          {
+                            "type": "Identifier",
+                            "start": 8043,
+                            "end": 8064,
+                            "loc": {
+                              "start": {
+                                "line": 264,
+                                "column": 12
+                              },
+                              "end": {
+                                "line": 264,
+                                "column": 33
+                              },
+                              "identifierName": "edgeIndicesShaderName"
+                            },
+                            "name": "edgeIndicesShaderName"
+                          },
+                          {
+                            "type": "NumericLiteral",
+                            "start": 8078,
+                            "end": 8079,
+                            "loc": {
+                              "start": {
+                                "line": 265,
+                                "column": 12
+                              },
+                              "end": {
+                                "line": 265,
                                 "column": 13
                               }
                             },
@@ -6279,234 +6102,15 @@
                               {
                                 "type": "CommentLine",
                                 "value": " webgl texture unit",
-                                "start": 8409,
-                                "end": 8430,
+                                "start": 8080,
+                                "end": 8101,
                                 "loc": {
                                   "start": {
-                                    "line": 278,
+                                    "line": 265,
                                     "column": 14
                                   },
                                   "end": {
-                                    "line": 278,
-                                    "column": 35
-                                  }
-                                }
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "type": "ExpressionStatement",
-                      "start": 8451,
-                      "end": 8619,
-                      "loc": {
-                        "start": {
-                          "line": 281,
-                          "column": 8
-                        },
-                        "end": {
-                          "line": 285,
-                          "column": 10
-                        }
-                      },
-                      "expression": {
-                        "type": "CallExpression",
-                        "start": 8451,
-                        "end": 8618,
-                        "loc": {
-                          "start": {
-                            "line": 281,
-                            "column": 8
-                          },
-                          "end": {
-                            "line": 285,
-                            "column": 9
-                          }
-                        },
-                        "callee": {
-                          "type": "MemberExpression",
-                          "start": 8451,
-                          "end": 8513,
-                          "loc": {
-                            "start": {
-                              "line": 281,
-                              "column": 8
-                            },
-                            "end": {
-                              "line": 281,
-                              "column": 70
-                            }
-                          },
-                          "object": {
-                            "type": "MemberExpression",
-                            "start": 8451,
-                            "end": 8501,
-                            "loc": {
-                              "start": {
-                                "line": 281,
-                                "column": 8
-                              },
-                              "end": {
-                                "line": 281,
-                                "column": 58
-                              }
-                            },
-                            "object": {
-                              "type": "MemberExpression",
-                              "start": 8451,
-                              "end": 8485,
-                              "loc": {
-                                "start": {
-                                  "line": 281,
-                                  "column": 8
-                                },
-                                "end": {
-                                  "line": 281,
-                                  "column": 42
-                                }
-                              },
-                              "object": {
-                                "type": "ThisExpression",
-                                "start": 8451,
-                                "end": 8455,
-                                "loc": {
-                                  "start": {
-                                    "line": 281,
-                                    "column": 8
-                                  },
-                                  "end": {
-                                    "line": 281,
-                                    "column": 12
-                                  }
-                                }
-                              },
-                              "property": {
-                                "type": "Identifier",
-                                "start": 8456,
-                                "end": 8485,
-                                "loc": {
-                                  "start": {
-                                    "line": 281,
-                                    "column": 13
-                                  },
-                                  "end": {
-                                    "line": 281,
-                                    "column": 42
-                                  },
-                                  "identifierName": "edgeIndicesPerBitnessTextures"
-                                },
-                                "name": "edgeIndicesPerBitnessTextures"
-                              },
-                              "computed": false
-                            },
-                            "property": {
-                              "type": "Identifier",
-                              "start": 8486,
-                              "end": 8500,
-                              "loc": {
-                                "start": {
-                                  "line": 281,
-                                  "column": 43
-                                },
-                                "end": {
-                                  "line": 281,
-                                  "column": 57
-                                },
-                                "identifierName": "textureBitness"
-                              },
-                              "name": "textureBitness"
-                            },
-                            "computed": true
-                          },
-                          "property": {
-                            "type": "Identifier",
-                            "start": 8502,
-                            "end": 8513,
-                            "loc": {
-                              "start": {
-                                "line": 281,
-                                "column": 59
-                              },
-                              "end": {
-                                "line": 281,
-                                "column": 70
-                              },
-                              "identifierName": "bindTexture"
-                            },
-                            "name": "bindTexture"
-                          },
-                          "computed": false
-                        },
-                        "arguments": [
-                          {
-                            "type": "Identifier",
-                            "start": 8527,
-                            "end": 8536,
-                            "loc": {
-                              "start": {
-                                "line": 282,
-                                "column": 12
-                              },
-                              "end": {
-                                "line": 282,
-                                "column": 21
-                              },
-                              "identifierName": "glProgram"
-                            },
-                            "name": "glProgram"
-                          },
-                          {
-                            "type": "Identifier",
-                            "start": 8550,
-                            "end": 8571,
-                            "loc": {
-                              "start": {
-                                "line": 283,
-                                "column": 12
-                              },
-                              "end": {
-                                "line": 283,
-                                "column": 33
-                              },
-                              "identifierName": "edgeIndicesShaderName"
-                            },
-                            "name": "edgeIndicesShaderName"
-                          },
-                          {
-                            "type": "NumericLiteral",
-                            "start": 8585,
-                            "end": 8586,
-                            "loc": {
-                              "start": {
-                                "line": 284,
-                                "column": 12
-                              },
-                              "end": {
-                                "line": 284,
-                                "column": 13
-                              }
-                            },
-                            "extra": {
-                              "rawValue": 7,
-                              "raw": "7"
-                            },
-                            "value": 7,
-                            "leadingComments": null,
-                            "trailingComments": [
-                              {
-                                "type": "CommentLine",
-                                "value": " webgl texture unit",
-                                "start": 8587,
-                                "end": 8608,
-                                "loc": {
-                                  "start": {
-                                    "line": 284,
-                                    "column": 14
-                                  },
-                                  "end": {
-                                    "line": 284,
+                                    "line": 265,
                                     "column": 35
                                   }
                                 }
@@ -6523,15 +6127,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     *\n     * @param {Program} glProgram\n     * @param {string} edgePortionIdsShaderName\n     * @param {string} edgeIndicesShaderName\n     * @param {8|16|32} textureBitness\n     ",
-                    "start": 7922,
-                    "end": 8106,
+                    "start": 7415,
+                    "end": 7599,
                     "loc": {
                       "start": {
-                        "line": 262,
+                        "line": 243,
                         "column": 4
                       },
                       "end": {
-                        "line": 268,
+                        "line": 249,
                         "column": 7
                       }
                     }
@@ -6954,8 +6558,8 @@
     {
       "type": "CommentLine",
       "value": " webgl texture unit",
-      "start": 6664,
-      "end": 6685,
+      "start": 6669,
+      "end": 6690,
       "loc": {
         "start": {
           "line": 213,
@@ -6964,133 +6568,21 @@
         "end": {
           "line": 213,
           "column": 35
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": " webgl texture unit",
-      "start": 6824,
-      "end": 6845,
-      "loc": {
-        "start": {
-          "line": 219,
-          "column": 14
-        },
-        "end": {
-          "line": 219,
-          "column": 35
-        }
-      }
-    },
-    {
-      "type": "CommentBlock",
-      "value": "*\n     *\n     * @param {Program} glProgram\n     * @param {string} cameraMatricesShaderName\n     ",
-      "start": 6868,
-      "end": 6968,
-      "loc": {
-        "start": {
-          "line": 223,
-          "column": 4
-        },
-        "end": {
-          "line": 227,
-          "column": 7
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": " this.texturePickCameraMatrices.bindTexture(",
-      "start": 7042,
-      "end": 7088,
-      "loc": {
-        "start": {
-          "line": 229,
-          "column": 8
-        },
-        "end": {
-          "line": 229,
-          "column": 54
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": "     glProgram,",
-      "start": 7097,
-      "end": 7114,
-      "loc": {
-        "start": {
-          "line": 230,
-          "column": 8
-        },
-        "end": {
-          "line": 230,
-          "column": 25
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": "     cameraMatricesShaderName,",
-      "start": 7123,
-      "end": 7155,
-      "loc": {
-        "start": {
-          "line": 231,
-          "column": 8
-        },
-        "end": {
-          "line": 231,
-          "column": 40
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": "     4 // webgl texture unit",
-      "start": 7164,
-      "end": 7194,
-      "loc": {
-        "start": {
-          "line": 232,
-          "column": 8
-        },
-        "end": {
-          "line": 232,
-          "column": 38
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": " );",
-      "start": 7203,
-      "end": 7208,
-      "loc": {
-        "start": {
-          "line": 233,
-          "column": 8
-        },
-        "end": {
-          "line": 233,
-          "column": 13
         }
       }
     },
     {
       "type": "CommentBlock",
       "value": "*\n     *\n     * @param {Program} glProgram\n     * @param {string} portionIdsShaderName\n     * @param {string} polygonIndicesShaderName\n     * @param {8|16|32} textureBitness\n     ",
-      "start": 7220,
-      "end": 7403,
+      "start": 6713,
+      "end": 6896,
       "loc": {
         "start": {
-          "line": 236,
+          "line": 217,
           "column": 4
         },
         "end": {
-          "line": 242,
+          "line": 223,
           "column": 7
         }
       }
@@ -7098,15 +6590,15 @@
     {
       "type": "CommentLine",
       "value": " webgl texture unit",
-      "start": 7701,
-      "end": 7722,
+      "start": 7194,
+      "end": 7215,
       "loc": {
         "start": {
-          "line": 252,
+          "line": 233,
           "column": 14
         },
         "end": {
-          "line": 252,
+          "line": 233,
           "column": 35
         }
       }
@@ -7114,15 +6606,15 @@
     {
       "type": "CommentLine",
       "value": " webgl texture unit",
-      "start": 7878,
-      "end": 7899,
+      "start": 7371,
+      "end": 7392,
       "loc": {
         "start": {
-          "line": 258,
+          "line": 239,
           "column": 14
         },
         "end": {
-          "line": 258,
+          "line": 239,
           "column": 35
         }
       }
@@ -7130,15 +6622,15 @@
     {
       "type": "CommentBlock",
       "value": "*\n     *\n     * @param {Program} glProgram\n     * @param {string} edgePortionIdsShaderName\n     * @param {string} edgeIndicesShaderName\n     * @param {8|16|32} textureBitness\n     ",
-      "start": 7922,
-      "end": 8106,
+      "start": 7415,
+      "end": 7599,
       "loc": {
         "start": {
-          "line": 262,
+          "line": 243,
           "column": 4
         },
         "end": {
-          "line": 268,
+          "line": 249,
           "column": 7
         }
       }
@@ -7146,15 +6638,15 @@
     {
       "type": "CommentLine",
       "value": " webgl texture unit",
-      "start": 8409,
-      "end": 8430,
+      "start": 7902,
+      "end": 7923,
       "loc": {
         "start": {
-          "line": 278,
+          "line": 259,
           "column": 14
         },
         "end": {
-          "line": 278,
+          "line": 259,
           "column": 35
         }
       }
@@ -7162,15 +6654,15 @@
     {
       "type": "CommentLine",
       "value": " webgl texture unit",
-      "start": 8587,
-      "end": 8608,
+      "start": 8080,
+      "end": 8101,
       "loc": {
         "start": {
-          "line": 284,
+          "line": 265,
           "column": 14
         },
         "end": {
-          "line": 284,
+          "line": 265,
           "column": 35
         }
       }
@@ -14908,9 +14400,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "textureModelMatrices",
+      "value": "texturePerObjectIdOffsets",
       "start": 6556,
-      "end": 6576,
+      "end": 6581,
       "loc": {
         "start": {
           "line": 210,
@@ -14918,7 +14410,7 @@
         },
         "end": {
           "line": 210,
-          "column": 33
+          "column": 38
         }
       }
     },
@@ -14935,16 +14427,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 6576,
-      "end": 6577,
+      "start": 6581,
+      "end": 6582,
       "loc": {
         "start": {
           "line": 210,
-          "column": 33
+          "column": 38
         },
         "end": {
           "line": 210,
-          "column": 34
+          "column": 39
         }
       }
     },
@@ -14961,16 +14453,16 @@
         "binop": null
       },
       "value": "bindTexture",
-      "start": 6577,
-      "end": 6588,
+      "start": 6582,
+      "end": 6593,
       "loc": {
         "start": {
           "line": 210,
-          "column": 34
+          "column": 39
         },
         "end": {
           "line": 210,
-          "column": 45
+          "column": 50
         }
       }
     },
@@ -14986,16 +14478,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6588,
-      "end": 6589,
+      "start": 6593,
+      "end": 6594,
       "loc": {
         "start": {
           "line": 210,
-          "column": 45
+          "column": 50
         },
         "end": {
           "line": 210,
-          "column": 46
+          "column": 51
         }
       }
     },
@@ -15012,8 +14504,8 @@
         "binop": null
       },
       "value": "glProgram",
-      "start": 6602,
-      "end": 6611,
+      "start": 6607,
+      "end": 6616,
       "loc": {
         "start": {
           "line": 211,
@@ -15038,8 +14530,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 6611,
-      "end": 6612,
+      "start": 6616,
+      "end": 6617,
       "loc": {
         "start": {
           "line": 211,
@@ -15063,9 +14555,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "modelMatricesShaderName",
-      "start": 6625,
-      "end": 6648,
+      "value": "objectOffsetsShaderName",
+      "start": 6630,
+      "end": 6653,
       "loc": {
         "start": {
           "line": 212,
@@ -15090,8 +14582,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 6648,
-      "end": 6649,
+      "start": 6653,
+      "end": 6654,
       "loc": {
         "start": {
           "line": 212,
@@ -15117,8 +14609,8 @@
         "updateContext": null
       },
       "value": 4,
-      "start": 6662,
-      "end": 6663,
+      "start": 6667,
+      "end": 6668,
       "loc": {
         "start": {
           "line": 213,
@@ -15133,8 +14625,8 @@
     {
       "type": "CommentLine",
       "value": " webgl texture unit",
-      "start": 6664,
-      "end": 6685,
+      "start": 6669,
+      "end": 6690,
       "loc": {
         "start": {
           "line": 213,
@@ -15158,8 +14650,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 6694,
-      "end": 6695,
+      "start": 6699,
+      "end": 6700,
       "loc": {
         "start": {
           "line": 214,
@@ -15184,8 +14676,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 6695,
-      "end": 6696,
+      "start": 6700,
+      "end": 6701,
       "loc": {
         "start": {
           "line": 214,
@@ -15199,680 +14691,25 @@
     },
     {
       "type": {
-        "label": "this",
-        "keyword": "this",
+        "label": "}",
         "beforeExpr": false,
-        "startsExpr": true,
+        "startsExpr": false,
         "rightAssociative": false,
         "isLoop": false,
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "this",
       "start": 6706,
-      "end": 6710,
+      "end": 6707,
       "loc": {
         "start": {
-          "line": 216,
-          "column": 8
-        },
-        "end": {
-          "line": 216,
-          "column": 12
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ".",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 6710,
-      "end": 6711,
-      "loc": {
-        "start": {
-          "line": 216,
-          "column": 12
-        },
-        "end": {
-          "line": 216,
-          "column": 13
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "texturePerObjectIdOffsets",
-      "start": 6711,
-      "end": 6736,
-      "loc": {
-        "start": {
-          "line": 216,
-          "column": 13
-        },
-        "end": {
-          "line": 216,
-          "column": 38
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ".",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 6736,
-      "end": 6737,
-      "loc": {
-        "start": {
-          "line": 216,
-          "column": 38
-        },
-        "end": {
-          "line": 216,
-          "column": 39
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "bindTexture",
-      "start": 6737,
-      "end": 6748,
-      "loc": {
-        "start": {
-          "line": 216,
-          "column": 39
-        },
-        "end": {
-          "line": 216,
-          "column": 50
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "(",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 6748,
-      "end": 6749,
-      "loc": {
-        "start": {
-          "line": 216,
-          "column": 50
-        },
-        "end": {
-          "line": 216,
-          "column": 51
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "glProgram",
-      "start": 6762,
-      "end": 6771,
-      "loc": {
-        "start": {
-          "line": 217,
-          "column": 12
-        },
-        "end": {
-          "line": 217,
-          "column": 21
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ",",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 6771,
-      "end": 6772,
-      "loc": {
-        "start": {
-          "line": 217,
-          "column": 21
-        },
-        "end": {
-          "line": 217,
-          "column": 22
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "objectOffsetsShaderName",
-      "start": 6785,
-      "end": 6808,
-      "loc": {
-        "start": {
-          "line": 218,
-          "column": 12
-        },
-        "end": {
-          "line": 218,
-          "column": 35
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ",",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 6808,
-      "end": 6809,
-      "loc": {
-        "start": {
-          "line": 218,
-          "column": 35
-        },
-        "end": {
-          "line": 218,
-          "column": 36
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "num",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": 5,
-      "start": 6822,
-      "end": 6823,
-      "loc": {
-        "start": {
-          "line": 219,
-          "column": 12
-        },
-        "end": {
-          "line": 219,
-          "column": 13
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": " webgl texture unit",
-      "start": 6824,
-      "end": 6845,
-      "loc": {
-        "start": {
-          "line": 219,
-          "column": 14
-        },
-        "end": {
-          "line": 219,
-          "column": 35
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ")",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 6854,
-      "end": 6855,
-      "loc": {
-        "start": {
-          "line": 220,
-          "column": 8
-        },
-        "end": {
-          "line": 220,
-          "column": 9
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 6855,
-      "end": 6856,
-      "loc": {
-        "start": {
-          "line": 220,
-          "column": 9
-        },
-        "end": {
-          "line": 220,
-          "column": 10
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 6861,
-      "end": 6862,
-      "loc": {
-        "start": {
-          "line": 221,
+          "line": 215,
           "column": 4
         },
         "end": {
-          "line": 221,
-          "column": 5
-        }
-      }
-    },
-    {
-      "type": "CommentBlock",
-      "value": "*\n     *\n     * @param {Program} glProgram\n     * @param {string} cameraMatricesShaderName\n     ",
-      "start": 6868,
-      "end": 6968,
-      "loc": {
-        "start": {
-          "line": 223,
-          "column": 4
-        },
-        "end": {
-          "line": 227,
-          "column": 7
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "bindPickCameraTexture",
-      "start": 6973,
-      "end": 6994,
-      "loc": {
-        "start": {
-          "line": 228,
-          "column": 4
-        },
-        "end": {
-          "line": 228,
-          "column": 25
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "(",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 6994,
-      "end": 6995,
-      "loc": {
-        "start": {
-          "line": 228,
-          "column": 25
-        },
-        "end": {
-          "line": 228,
-          "column": 26
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "glProgram",
-      "start": 6995,
-      "end": 7004,
-      "loc": {
-        "start": {
-          "line": 228,
-          "column": 26
-        },
-        "end": {
-          "line": 228,
-          "column": 35
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ",",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 7004,
-      "end": 7005,
-      "loc": {
-        "start": {
-          "line": 228,
-          "column": 35
-        },
-        "end": {
-          "line": 228,
-          "column": 36
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "cameraMatricesShaderName",
-      "start": 7006,
-      "end": 7030,
-      "loc": {
-        "start": {
-          "line": 228,
-          "column": 37
-        },
-        "end": {
-          "line": 228,
-          "column": 61
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ")",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 7030,
-      "end": 7031,
-      "loc": {
-        "start": {
-          "line": 228,
-          "column": 61
-        },
-        "end": {
-          "line": 228,
-          "column": 62
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 7032,
-      "end": 7033,
-      "loc": {
-        "start": {
-          "line": 228,
-          "column": 63
-        },
-        "end": {
-          "line": 228,
-          "column": 64
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": " this.texturePickCameraMatrices.bindTexture(",
-      "start": 7042,
-      "end": 7088,
-      "loc": {
-        "start": {
-          "line": 229,
-          "column": 8
-        },
-        "end": {
-          "line": 229,
-          "column": 54
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": "     glProgram,",
-      "start": 7097,
-      "end": 7114,
-      "loc": {
-        "start": {
-          "line": 230,
-          "column": 8
-        },
-        "end": {
-          "line": 230,
-          "column": 25
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": "     cameraMatricesShaderName,",
-      "start": 7123,
-      "end": 7155,
-      "loc": {
-        "start": {
-          "line": 231,
-          "column": 8
-        },
-        "end": {
-          "line": 231,
-          "column": 40
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": "     4 // webgl texture unit",
-      "start": 7164,
-      "end": 7194,
-      "loc": {
-        "start": {
-          "line": 232,
-          "column": 8
-        },
-        "end": {
-          "line": 232,
-          "column": 38
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": " );",
-      "start": 7203,
-      "end": 7208,
-      "loc": {
-        "start": {
-          "line": 233,
-          "column": 8
-        },
-        "end": {
-          "line": 233,
-          "column": 13
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 7213,
-      "end": 7214,
-      "loc": {
-        "start": {
-          "line": 234,
-          "column": 4
-        },
-        "end": {
-          "line": 234,
+          "line": 215,
           "column": 5
         }
       }
@@ -15880,15 +14717,15 @@
     {
       "type": "CommentBlock",
       "value": "*\n     *\n     * @param {Program} glProgram\n     * @param {string} portionIdsShaderName\n     * @param {string} polygonIndicesShaderName\n     * @param {8|16|32} textureBitness\n     ",
-      "start": 7220,
-      "end": 7403,
+      "start": 6713,
+      "end": 6896,
       "loc": {
         "start": {
-          "line": 236,
+          "line": 217,
           "column": 4
         },
         "end": {
-          "line": 242,
+          "line": 223,
           "column": 7
         }
       }
@@ -15906,15 +14743,15 @@
         "binop": null
       },
       "value": "bindTriangleIndicesTextures",
-      "start": 7408,
-      "end": 7435,
+      "start": 6901,
+      "end": 6928,
       "loc": {
         "start": {
-          "line": 243,
+          "line": 224,
           "column": 4
         },
         "end": {
-          "line": 243,
+          "line": 224,
           "column": 31
         }
       }
@@ -15931,15 +14768,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7435,
-      "end": 7436,
+      "start": 6928,
+      "end": 6929,
       "loc": {
         "start": {
-          "line": 243,
+          "line": 224,
           "column": 31
         },
         "end": {
-          "line": 243,
+          "line": 224,
           "column": 32
         }
       }
@@ -15957,15 +14794,15 @@
         "binop": null
       },
       "value": "glProgram",
-      "start": 7445,
-      "end": 7454,
+      "start": 6938,
+      "end": 6947,
       "loc": {
         "start": {
-          "line": 244,
+          "line": 225,
           "column": 8
         },
         "end": {
-          "line": 244,
+          "line": 225,
           "column": 17
         }
       }
@@ -15983,15 +14820,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7454,
-      "end": 7455,
+      "start": 6947,
+      "end": 6948,
       "loc": {
         "start": {
-          "line": 244,
+          "line": 225,
           "column": 17
         },
         "end": {
-          "line": 244,
+          "line": 225,
           "column": 18
         }
       }
@@ -16009,15 +14846,15 @@
         "binop": null
       },
       "value": "portionIdsShaderName",
-      "start": 7464,
-      "end": 7484,
+      "start": 6957,
+      "end": 6977,
       "loc": {
         "start": {
-          "line": 245,
+          "line": 226,
           "column": 8
         },
         "end": {
-          "line": 245,
+          "line": 226,
           "column": 28
         }
       }
@@ -16035,15 +14872,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7484,
-      "end": 7485,
+      "start": 6977,
+      "end": 6978,
       "loc": {
         "start": {
-          "line": 245,
+          "line": 226,
           "column": 28
         },
         "end": {
-          "line": 245,
+          "line": 226,
           "column": 29
         }
       }
@@ -16061,15 +14898,15 @@
         "binop": null
       },
       "value": "polygonIndicesShaderName",
-      "start": 7494,
-      "end": 7518,
+      "start": 6987,
+      "end": 7011,
       "loc": {
         "start": {
-          "line": 246,
+          "line": 227,
           "column": 8
         },
         "end": {
-          "line": 246,
+          "line": 227,
           "column": 32
         }
       }
@@ -16087,15 +14924,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7518,
-      "end": 7519,
+      "start": 7011,
+      "end": 7012,
       "loc": {
         "start": {
-          "line": 246,
+          "line": 227,
           "column": 32
         },
         "end": {
-          "line": 246,
+          "line": 227,
           "column": 33
         }
       }
@@ -16113,15 +14950,15 @@
         "binop": null
       },
       "value": "textureBitness",
-      "start": 7528,
-      "end": 7542,
+      "start": 7021,
+      "end": 7035,
       "loc": {
         "start": {
-          "line": 247,
+          "line": 228,
           "column": 8
         },
         "end": {
-          "line": 247,
+          "line": 228,
           "column": 22
         }
       }
@@ -16139,15 +14976,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7542,
-      "end": 7543,
+      "start": 7035,
+      "end": 7036,
       "loc": {
         "start": {
-          "line": 247,
+          "line": 228,
           "column": 22
         },
         "end": {
-          "line": 247,
+          "line": 228,
           "column": 23
         }
       }
@@ -16164,15 +15001,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7548,
-      "end": 7549,
+      "start": 7041,
+      "end": 7042,
       "loc": {
         "start": {
-          "line": 248,
+          "line": 229,
           "column": 4
         },
         "end": {
-          "line": 248,
+          "line": 229,
           "column": 5
         }
       }
@@ -16189,15 +15026,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7550,
-      "end": 7551,
+      "start": 7043,
+      "end": 7044,
       "loc": {
         "start": {
-          "line": 248,
+          "line": 229,
           "column": 6
         },
         "end": {
-          "line": 248,
+          "line": 229,
           "column": 7
         }
       }
@@ -16217,15 +15054,15 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 7560,
-      "end": 7564,
+      "start": 7053,
+      "end": 7057,
       "loc": {
         "start": {
-          "line": 249,
+          "line": 230,
           "column": 8
         },
         "end": {
-          "line": 249,
+          "line": 230,
           "column": 12
         }
       }
@@ -16243,15 +15080,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7564,
-      "end": 7565,
+      "start": 7057,
+      "end": 7058,
       "loc": {
         "start": {
-          "line": 249,
+          "line": 230,
           "column": 12
         },
         "end": {
-          "line": 249,
+          "line": 230,
           "column": 13
         }
       }
@@ -16269,15 +15106,15 @@
         "binop": null
       },
       "value": "indicesPortionIdsPerBitnessTextures",
-      "start": 7565,
-      "end": 7600,
+      "start": 7058,
+      "end": 7093,
       "loc": {
         "start": {
-          "line": 249,
+          "line": 230,
           "column": 13
         },
         "end": {
-          "line": 249,
+          "line": 230,
           "column": 48
         }
       }
@@ -16295,15 +15132,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7600,
-      "end": 7601,
+      "start": 7093,
+      "end": 7094,
       "loc": {
         "start": {
-          "line": 249,
+          "line": 230,
           "column": 48
         },
         "end": {
-          "line": 249,
+          "line": 230,
           "column": 49
         }
       }
@@ -16321,15 +15158,15 @@
         "binop": null
       },
       "value": "textureBitness",
-      "start": 7601,
-      "end": 7615,
+      "start": 7094,
+      "end": 7108,
       "loc": {
         "start": {
-          "line": 249,
+          "line": 230,
           "column": 49
         },
         "end": {
-          "line": 249,
+          "line": 230,
           "column": 63
         }
       }
@@ -16347,15 +15184,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7615,
-      "end": 7616,
+      "start": 7108,
+      "end": 7109,
       "loc": {
         "start": {
-          "line": 249,
+          "line": 230,
           "column": 63
         },
         "end": {
-          "line": 249,
+          "line": 230,
           "column": 64
         }
       }
@@ -16373,15 +15210,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7616,
-      "end": 7617,
+      "start": 7109,
+      "end": 7110,
       "loc": {
         "start": {
-          "line": 249,
+          "line": 230,
           "column": 64
         },
         "end": {
-          "line": 249,
+          "line": 230,
           "column": 65
         }
       }
@@ -16399,15 +15236,15 @@
         "binop": null
       },
       "value": "bindTexture",
-      "start": 7617,
-      "end": 7628,
+      "start": 7110,
+      "end": 7121,
       "loc": {
         "start": {
-          "line": 249,
+          "line": 230,
           "column": 65
         },
         "end": {
-          "line": 249,
+          "line": 230,
           "column": 76
         }
       }
@@ -16424,15 +15261,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7628,
-      "end": 7629,
+      "start": 7121,
+      "end": 7122,
       "loc": {
         "start": {
-          "line": 249,
+          "line": 230,
           "column": 76
         },
         "end": {
-          "line": 249,
+          "line": 230,
           "column": 77
         }
       }
@@ -16450,15 +15287,15 @@
         "binop": null
       },
       "value": "glProgram",
-      "start": 7642,
-      "end": 7651,
+      "start": 7135,
+      "end": 7144,
       "loc": {
         "start": {
-          "line": 250,
+          "line": 231,
           "column": 12
         },
         "end": {
-          "line": 250,
+          "line": 231,
           "column": 21
         }
       }
@@ -16476,15 +15313,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7651,
-      "end": 7652,
+      "start": 7144,
+      "end": 7145,
       "loc": {
         "start": {
-          "line": 250,
+          "line": 231,
           "column": 21
         },
         "end": {
-          "line": 250,
+          "line": 231,
           "column": 22
         }
       }
@@ -16502,15 +15339,15 @@
         "binop": null
       },
       "value": "portionIdsShaderName",
-      "start": 7665,
-      "end": 7685,
+      "start": 7158,
+      "end": 7178,
       "loc": {
         "start": {
-          "line": 251,
+          "line": 232,
           "column": 12
         },
         "end": {
-          "line": 251,
+          "line": 232,
           "column": 32
         }
       }
@@ -16528,15 +15365,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7685,
-      "end": 7686,
+      "start": 7178,
+      "end": 7179,
       "loc": {
         "start": {
-          "line": 251,
+          "line": 232,
           "column": 32
         },
         "end": {
-          "line": 251,
+          "line": 232,
           "column": 33
         }
       }
@@ -16554,16 +15391,16 @@
         "binop": null,
         "updateContext": null
       },
-      "value": 6,
-      "start": 7699,
-      "end": 7700,
+      "value": 5,
+      "start": 7192,
+      "end": 7193,
       "loc": {
         "start": {
-          "line": 252,
+          "line": 233,
           "column": 12
         },
         "end": {
-          "line": 252,
+          "line": 233,
           "column": 13
         }
       }
@@ -16571,15 +15408,15 @@
     {
       "type": "CommentLine",
       "value": " webgl texture unit",
-      "start": 7701,
-      "end": 7722,
+      "start": 7194,
+      "end": 7215,
       "loc": {
         "start": {
-          "line": 252,
+          "line": 233,
           "column": 14
         },
         "end": {
-          "line": 252,
+          "line": 233,
           "column": 35
         }
       }
@@ -16596,15 +15433,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7731,
-      "end": 7732,
+      "start": 7224,
+      "end": 7225,
       "loc": {
         "start": {
-          "line": 253,
+          "line": 234,
           "column": 8
         },
         "end": {
-          "line": 253,
+          "line": 234,
           "column": 9
         }
       }
@@ -16622,15 +15459,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7732,
-      "end": 7733,
+      "start": 7225,
+      "end": 7226,
       "loc": {
         "start": {
-          "line": 253,
+          "line": 234,
           "column": 9
         },
         "end": {
-          "line": 253,
+          "line": 234,
           "column": 10
         }
       }
@@ -16650,15 +15487,15 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 7743,
-      "end": 7747,
+      "start": 7236,
+      "end": 7240,
       "loc": {
         "start": {
-          "line": 255,
+          "line": 236,
           "column": 8
         },
         "end": {
-          "line": 255,
+          "line": 236,
           "column": 12
         }
       }
@@ -16676,15 +15513,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7747,
-      "end": 7748,
+      "start": 7240,
+      "end": 7241,
       "loc": {
         "start": {
-          "line": 255,
+          "line": 236,
           "column": 12
         },
         "end": {
-          "line": 255,
+          "line": 236,
           "column": 13
         }
       }
@@ -16702,15 +15539,15 @@
         "binop": null
       },
       "value": "indicesPerBitnessTextures",
-      "start": 7748,
-      "end": 7773,
+      "start": 7241,
+      "end": 7266,
       "loc": {
         "start": {
-          "line": 255,
+          "line": 236,
           "column": 13
         },
         "end": {
-          "line": 255,
+          "line": 236,
           "column": 38
         }
       }
@@ -16728,15 +15565,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7773,
-      "end": 7774,
+      "start": 7266,
+      "end": 7267,
       "loc": {
         "start": {
-          "line": 255,
+          "line": 236,
           "column": 38
         },
         "end": {
-          "line": 255,
+          "line": 236,
           "column": 39
         }
       }
@@ -16754,15 +15591,15 @@
         "binop": null
       },
       "value": "textureBitness",
-      "start": 7774,
-      "end": 7788,
+      "start": 7267,
+      "end": 7281,
       "loc": {
         "start": {
-          "line": 255,
+          "line": 236,
           "column": 39
         },
         "end": {
-          "line": 255,
+          "line": 236,
           "column": 53
         }
       }
@@ -16780,15 +15617,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7788,
-      "end": 7789,
+      "start": 7281,
+      "end": 7282,
       "loc": {
         "start": {
-          "line": 255,
+          "line": 236,
           "column": 53
         },
         "end": {
-          "line": 255,
+          "line": 236,
           "column": 54
         }
       }
@@ -16806,15 +15643,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7789,
-      "end": 7790,
+      "start": 7282,
+      "end": 7283,
       "loc": {
         "start": {
-          "line": 255,
+          "line": 236,
           "column": 54
         },
         "end": {
-          "line": 255,
+          "line": 236,
           "column": 55
         }
       }
@@ -16832,15 +15669,15 @@
         "binop": null
       },
       "value": "bindTexture",
-      "start": 7790,
-      "end": 7801,
+      "start": 7283,
+      "end": 7294,
       "loc": {
         "start": {
-          "line": 255,
+          "line": 236,
           "column": 55
         },
         "end": {
-          "line": 255,
+          "line": 236,
           "column": 66
         }
       }
@@ -16857,15 +15694,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 7801,
-      "end": 7802,
+      "start": 7294,
+      "end": 7295,
       "loc": {
         "start": {
-          "line": 255,
+          "line": 236,
           "column": 66
         },
         "end": {
-          "line": 255,
+          "line": 236,
           "column": 67
         }
       }
@@ -16883,15 +15720,15 @@
         "binop": null
       },
       "value": "glProgram",
-      "start": 7815,
-      "end": 7824,
+      "start": 7308,
+      "end": 7317,
       "loc": {
         "start": {
-          "line": 256,
+          "line": 237,
           "column": 12
         },
         "end": {
-          "line": 256,
+          "line": 237,
           "column": 21
         }
       }
@@ -16909,15 +15746,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7824,
-      "end": 7825,
+      "start": 7317,
+      "end": 7318,
       "loc": {
         "start": {
-          "line": 256,
+          "line": 237,
           "column": 21
         },
         "end": {
-          "line": 256,
+          "line": 237,
           "column": 22
         }
       }
@@ -16935,15 +15772,15 @@
         "binop": null
       },
       "value": "polygonIndicesShaderName",
-      "start": 7838,
-      "end": 7862,
+      "start": 7331,
+      "end": 7355,
       "loc": {
         "start": {
-          "line": 257,
+          "line": 238,
           "column": 12
         },
         "end": {
-          "line": 257,
+          "line": 238,
           "column": 36
         }
       }
@@ -16961,798 +15798,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 7862,
-      "end": 7863,
+      "start": 7355,
+      "end": 7356,
       "loc": {
         "start": {
-          "line": 257,
+          "line": 238,
           "column": 36
         },
         "end": {
-          "line": 257,
-          "column": 37
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "num",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": 7,
-      "start": 7876,
-      "end": 7877,
-      "loc": {
-        "start": {
-          "line": 258,
-          "column": 12
-        },
-        "end": {
-          "line": 258,
-          "column": 13
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": " webgl texture unit",
-      "start": 7878,
-      "end": 7899,
-      "loc": {
-        "start": {
-          "line": 258,
-          "column": 14
-        },
-        "end": {
-          "line": 258,
-          "column": 35
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ")",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 7908,
-      "end": 7909,
-      "loc": {
-        "start": {
-          "line": 259,
-          "column": 8
-        },
-        "end": {
-          "line": 259,
-          "column": 9
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 7909,
-      "end": 7910,
-      "loc": {
-        "start": {
-          "line": 259,
-          "column": 9
-        },
-        "end": {
-          "line": 259,
-          "column": 10
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 7915,
-      "end": 7916,
-      "loc": {
-        "start": {
-          "line": 260,
-          "column": 4
-        },
-        "end": {
-          "line": 260,
-          "column": 5
-        }
-      }
-    },
-    {
-      "type": "CommentBlock",
-      "value": "*\n     *\n     * @param {Program} glProgram\n     * @param {string} edgePortionIdsShaderName\n     * @param {string} edgeIndicesShaderName\n     * @param {8|16|32} textureBitness\n     ",
-      "start": 7922,
-      "end": 8106,
-      "loc": {
-        "start": {
-          "line": 262,
-          "column": 4
-        },
-        "end": {
-          "line": 268,
-          "column": 7
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "bindEdgeIndicesTextures",
-      "start": 8111,
-      "end": 8134,
-      "loc": {
-        "start": {
-          "line": 269,
-          "column": 4
-        },
-        "end": {
-          "line": 269,
-          "column": 27
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "(",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 8134,
-      "end": 8135,
-      "loc": {
-        "start": {
-          "line": 269,
-          "column": 27
-        },
-        "end": {
-          "line": 269,
-          "column": 28
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "glProgram",
-      "start": 8144,
-      "end": 8153,
-      "loc": {
-        "start": {
-          "line": 270,
-          "column": 8
-        },
-        "end": {
-          "line": 270,
-          "column": 17
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ",",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 8153,
-      "end": 8154,
-      "loc": {
-        "start": {
-          "line": 270,
-          "column": 17
-        },
-        "end": {
-          "line": 270,
-          "column": 18
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "edgePortionIdsShaderName",
-      "start": 8163,
-      "end": 8187,
-      "loc": {
-        "start": {
-          "line": 271,
-          "column": 8
-        },
-        "end": {
-          "line": 271,
-          "column": 32
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ",",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 8187,
-      "end": 8188,
-      "loc": {
-        "start": {
-          "line": 271,
-          "column": 32
-        },
-        "end": {
-          "line": 271,
-          "column": 33
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "edgeIndicesShaderName",
-      "start": 8197,
-      "end": 8218,
-      "loc": {
-        "start": {
-          "line": 272,
-          "column": 8
-        },
-        "end": {
-          "line": 272,
-          "column": 29
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ",",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 8218,
-      "end": 8219,
-      "loc": {
-        "start": {
-          "line": 272,
-          "column": 29
-        },
-        "end": {
-          "line": 272,
-          "column": 30
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "textureBitness",
-      "start": 8228,
-      "end": 8242,
-      "loc": {
-        "start": {
-          "line": 273,
-          "column": 8
-        },
-        "end": {
-          "line": 273,
-          "column": 22
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ",",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 8242,
-      "end": 8243,
-      "loc": {
-        "start": {
-          "line": 273,
-          "column": 22
-        },
-        "end": {
-          "line": 273,
-          "column": 23
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ")",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 8248,
-      "end": 8249,
-      "loc": {
-        "start": {
-          "line": 274,
-          "column": 4
-        },
-        "end": {
-          "line": 274,
-          "column": 5
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 8250,
-      "end": 8251,
-      "loc": {
-        "start": {
-          "line": 274,
-          "column": 6
-        },
-        "end": {
-          "line": 274,
-          "column": 7
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "this",
-        "keyword": "this",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "this",
-      "start": 8260,
-      "end": 8264,
-      "loc": {
-        "start": {
-          "line": 275,
-          "column": 8
-        },
-        "end": {
-          "line": 275,
-          "column": 12
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ".",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 8264,
-      "end": 8265,
-      "loc": {
-        "start": {
-          "line": 275,
-          "column": 12
-        },
-        "end": {
-          "line": 275,
-          "column": 13
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "edgeIndicesPortionIdsPerBitnessTextures",
-      "start": 8265,
-      "end": 8304,
-      "loc": {
-        "start": {
-          "line": 275,
-          "column": 13
-        },
-        "end": {
-          "line": 275,
-          "column": 52
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "[",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 8304,
-      "end": 8305,
-      "loc": {
-        "start": {
-          "line": 275,
-          "column": 52
-        },
-        "end": {
-          "line": 275,
-          "column": 53
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "textureBitness",
-      "start": 8305,
-      "end": 8319,
-      "loc": {
-        "start": {
-          "line": 275,
-          "column": 53
-        },
-        "end": {
-          "line": 275,
-          "column": 67
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "]",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 8319,
-      "end": 8320,
-      "loc": {
-        "start": {
-          "line": 275,
-          "column": 67
-        },
-        "end": {
-          "line": 275,
-          "column": 68
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ".",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 8320,
-      "end": 8321,
-      "loc": {
-        "start": {
-          "line": 275,
-          "column": 68
-        },
-        "end": {
-          "line": 275,
-          "column": 69
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "bindTexture",
-      "start": 8321,
-      "end": 8332,
-      "loc": {
-        "start": {
-          "line": 275,
-          "column": 69
-        },
-        "end": {
-          "line": 275,
-          "column": 80
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "(",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 8332,
-      "end": 8333,
-      "loc": {
-        "start": {
-          "line": 275,
-          "column": 80
-        },
-        "end": {
-          "line": 275,
-          "column": 81
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "glProgram",
-      "start": 8346,
-      "end": 8355,
-      "loc": {
-        "start": {
-          "line": 276,
-          "column": 12
-        },
-        "end": {
-          "line": 276,
-          "column": 21
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ",",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 8355,
-      "end": 8356,
-      "loc": {
-        "start": {
-          "line": 276,
-          "column": 21
-        },
-        "end": {
-          "line": 276,
-          "column": 22
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "edgePortionIdsShaderName",
-      "start": 8369,
-      "end": 8393,
-      "loc": {
-        "start": {
-          "line": 277,
-          "column": 12
-        },
-        "end": {
-          "line": 277,
-          "column": 36
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ",",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 8393,
-      "end": 8394,
-      "loc": {
-        "start": {
-          "line": 277,
-          "column": 36
-        },
-        "end": {
-          "line": 277,
+          "line": 238,
           "column": 37
         }
       }
@@ -17771,15 +15825,15 @@
         "updateContext": null
       },
       "value": 6,
-      "start": 8407,
-      "end": 8408,
+      "start": 7369,
+      "end": 7370,
       "loc": {
         "start": {
-          "line": 278,
+          "line": 239,
           "column": 12
         },
         "end": {
-          "line": 278,
+          "line": 239,
           "column": 13
         }
       }
@@ -17787,15 +15841,15 @@
     {
       "type": "CommentLine",
       "value": " webgl texture unit",
-      "start": 8409,
-      "end": 8430,
+      "start": 7371,
+      "end": 7392,
       "loc": {
         "start": {
-          "line": 278,
+          "line": 239,
           "column": 14
         },
         "end": {
-          "line": 278,
+          "line": 239,
           "column": 35
         }
       }
@@ -17812,15 +15866,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8439,
-      "end": 8440,
+      "start": 7401,
+      "end": 7402,
       "loc": {
         "start": {
-          "line": 279,
+          "line": 240,
           "column": 8
         },
         "end": {
-          "line": 279,
+          "line": 240,
           "column": 9
         }
       }
@@ -17838,15 +15892,798 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 8440,
-      "end": 8441,
+      "start": 7402,
+      "end": 7403,
       "loc": {
         "start": {
-          "line": 279,
+          "line": 240,
           "column": 9
         },
         "end": {
-          "line": 279,
+          "line": 240,
+          "column": 10
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7408,
+      "end": 7409,
+      "loc": {
+        "start": {
+          "line": 241,
+          "column": 4
+        },
+        "end": {
+          "line": 241,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     *\n     * @param {Program} glProgram\n     * @param {string} edgePortionIdsShaderName\n     * @param {string} edgeIndicesShaderName\n     * @param {8|16|32} textureBitness\n     ",
+      "start": 7415,
+      "end": 7599,
+      "loc": {
+        "start": {
+          "line": 243,
+          "column": 4
+        },
+        "end": {
+          "line": 249,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "bindEdgeIndicesTextures",
+      "start": 7604,
+      "end": 7627,
+      "loc": {
+        "start": {
+          "line": 250,
+          "column": 4
+        },
+        "end": {
+          "line": 250,
+          "column": 27
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7627,
+      "end": 7628,
+      "loc": {
+        "start": {
+          "line": 250,
+          "column": 27
+        },
+        "end": {
+          "line": 250,
+          "column": 28
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "glProgram",
+      "start": 7637,
+      "end": 7646,
+      "loc": {
+        "start": {
+          "line": 251,
+          "column": 8
+        },
+        "end": {
+          "line": 251,
+          "column": 17
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7646,
+      "end": 7647,
+      "loc": {
+        "start": {
+          "line": 251,
+          "column": 17
+        },
+        "end": {
+          "line": 251,
+          "column": 18
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "edgePortionIdsShaderName",
+      "start": 7656,
+      "end": 7680,
+      "loc": {
+        "start": {
+          "line": 252,
+          "column": 8
+        },
+        "end": {
+          "line": 252,
+          "column": 32
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7680,
+      "end": 7681,
+      "loc": {
+        "start": {
+          "line": 252,
+          "column": 32
+        },
+        "end": {
+          "line": 252,
+          "column": 33
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "edgeIndicesShaderName",
+      "start": 7690,
+      "end": 7711,
+      "loc": {
+        "start": {
+          "line": 253,
+          "column": 8
+        },
+        "end": {
+          "line": 253,
+          "column": 29
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7711,
+      "end": 7712,
+      "loc": {
+        "start": {
+          "line": 253,
+          "column": 29
+        },
+        "end": {
+          "line": 253,
+          "column": 30
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "textureBitness",
+      "start": 7721,
+      "end": 7735,
+      "loc": {
+        "start": {
+          "line": 254,
+          "column": 8
+        },
+        "end": {
+          "line": 254,
+          "column": 22
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7735,
+      "end": 7736,
+      "loc": {
+        "start": {
+          "line": 254,
+          "column": 22
+        },
+        "end": {
+          "line": 254,
+          "column": 23
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7741,
+      "end": 7742,
+      "loc": {
+        "start": {
+          "line": 255,
+          "column": 4
+        },
+        "end": {
+          "line": 255,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7743,
+      "end": 7744,
+      "loc": {
+        "start": {
+          "line": 255,
+          "column": 6
+        },
+        "end": {
+          "line": 255,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "this",
+        "keyword": "this",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "this",
+      "start": 7753,
+      "end": 7757,
+      "loc": {
+        "start": {
+          "line": 256,
+          "column": 8
+        },
+        "end": {
+          "line": 256,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7757,
+      "end": 7758,
+      "loc": {
+        "start": {
+          "line": 256,
+          "column": 12
+        },
+        "end": {
+          "line": 256,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "edgeIndicesPortionIdsPerBitnessTextures",
+      "start": 7758,
+      "end": 7797,
+      "loc": {
+        "start": {
+          "line": 256,
+          "column": 13
+        },
+        "end": {
+          "line": 256,
+          "column": 52
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "[",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7797,
+      "end": 7798,
+      "loc": {
+        "start": {
+          "line": 256,
+          "column": 52
+        },
+        "end": {
+          "line": 256,
+          "column": 53
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "textureBitness",
+      "start": 7798,
+      "end": 7812,
+      "loc": {
+        "start": {
+          "line": 256,
+          "column": 53
+        },
+        "end": {
+          "line": 256,
+          "column": 67
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "]",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7812,
+      "end": 7813,
+      "loc": {
+        "start": {
+          "line": 256,
+          "column": 67
+        },
+        "end": {
+          "line": 256,
+          "column": 68
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7813,
+      "end": 7814,
+      "loc": {
+        "start": {
+          "line": 256,
+          "column": 68
+        },
+        "end": {
+          "line": 256,
+          "column": 69
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "bindTexture",
+      "start": 7814,
+      "end": 7825,
+      "loc": {
+        "start": {
+          "line": 256,
+          "column": 69
+        },
+        "end": {
+          "line": 256,
+          "column": 80
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7825,
+      "end": 7826,
+      "loc": {
+        "start": {
+          "line": 256,
+          "column": 80
+        },
+        "end": {
+          "line": 256,
+          "column": 81
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "glProgram",
+      "start": 7839,
+      "end": 7848,
+      "loc": {
+        "start": {
+          "line": 257,
+          "column": 12
+        },
+        "end": {
+          "line": 257,
+          "column": 21
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7848,
+      "end": 7849,
+      "loc": {
+        "start": {
+          "line": 257,
+          "column": 21
+        },
+        "end": {
+          "line": 257,
+          "column": 22
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "edgePortionIdsShaderName",
+      "start": 7862,
+      "end": 7886,
+      "loc": {
+        "start": {
+          "line": 258,
+          "column": 12
+        },
+        "end": {
+          "line": 258,
+          "column": 36
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7886,
+      "end": 7887,
+      "loc": {
+        "start": {
+          "line": 258,
+          "column": 36
+        },
+        "end": {
+          "line": 258,
+          "column": 37
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "num",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": 5,
+      "start": 7900,
+      "end": 7901,
+      "loc": {
+        "start": {
+          "line": 259,
+          "column": 12
+        },
+        "end": {
+          "line": 259,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " webgl texture unit",
+      "start": 7902,
+      "end": 7923,
+      "loc": {
+        "start": {
+          "line": 259,
+          "column": 14
+        },
+        "end": {
+          "line": 259,
+          "column": 35
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7932,
+      "end": 7933,
+      "loc": {
+        "start": {
+          "line": 260,
+          "column": 8
+        },
+        "end": {
+          "line": 260,
+          "column": 9
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7933,
+      "end": 7934,
+      "loc": {
+        "start": {
+          "line": 260,
+          "column": 9
+        },
+        "end": {
+          "line": 260,
           "column": 10
         }
       }
@@ -17866,15 +16703,15 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 8451,
-      "end": 8455,
+      "start": 7944,
+      "end": 7948,
       "loc": {
         "start": {
-          "line": 281,
+          "line": 262,
           "column": 8
         },
         "end": {
-          "line": 281,
+          "line": 262,
           "column": 12
         }
       }
@@ -17892,15 +16729,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 8455,
-      "end": 8456,
+      "start": 7948,
+      "end": 7949,
       "loc": {
         "start": {
-          "line": 281,
+          "line": 262,
           "column": 12
         },
         "end": {
-          "line": 281,
+          "line": 262,
           "column": 13
         }
       }
@@ -17918,15 +16755,15 @@
         "binop": null
       },
       "value": "edgeIndicesPerBitnessTextures",
-      "start": 8456,
-      "end": 8485,
+      "start": 7949,
+      "end": 7978,
       "loc": {
         "start": {
-          "line": 281,
+          "line": 262,
           "column": 13
         },
         "end": {
-          "line": 281,
+          "line": 262,
           "column": 42
         }
       }
@@ -17944,15 +16781,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 8485,
-      "end": 8486,
+      "start": 7978,
+      "end": 7979,
       "loc": {
         "start": {
-          "line": 281,
+          "line": 262,
           "column": 42
         },
         "end": {
-          "line": 281,
+          "line": 262,
           "column": 43
         }
       }
@@ -17970,15 +16807,15 @@
         "binop": null
       },
       "value": "textureBitness",
-      "start": 8486,
-      "end": 8500,
+      "start": 7979,
+      "end": 7993,
       "loc": {
         "start": {
-          "line": 281,
+          "line": 262,
           "column": 43
         },
         "end": {
-          "line": 281,
+          "line": 262,
           "column": 57
         }
       }
@@ -17996,15 +16833,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 8500,
-      "end": 8501,
+      "start": 7993,
+      "end": 7994,
       "loc": {
         "start": {
-          "line": 281,
+          "line": 262,
           "column": 57
         },
         "end": {
-          "line": 281,
+          "line": 262,
           "column": 58
         }
       }
@@ -18022,15 +16859,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 8501,
-      "end": 8502,
+      "start": 7994,
+      "end": 7995,
       "loc": {
         "start": {
-          "line": 281,
+          "line": 262,
           "column": 58
         },
         "end": {
-          "line": 281,
+          "line": 262,
           "column": 59
         }
       }
@@ -18048,15 +16885,15 @@
         "binop": null
       },
       "value": "bindTexture",
-      "start": 8502,
-      "end": 8513,
+      "start": 7995,
+      "end": 8006,
       "loc": {
         "start": {
-          "line": 281,
+          "line": 262,
           "column": 59
         },
         "end": {
-          "line": 281,
+          "line": 262,
           "column": 70
         }
       }
@@ -18073,15 +16910,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8513,
-      "end": 8514,
+      "start": 8006,
+      "end": 8007,
       "loc": {
         "start": {
-          "line": 281,
+          "line": 262,
           "column": 70
         },
         "end": {
-          "line": 281,
+          "line": 262,
           "column": 71
         }
       }
@@ -18099,15 +16936,15 @@
         "binop": null
       },
       "value": "glProgram",
-      "start": 8527,
-      "end": 8536,
+      "start": 8020,
+      "end": 8029,
       "loc": {
         "start": {
-          "line": 282,
+          "line": 263,
           "column": 12
         },
         "end": {
-          "line": 282,
+          "line": 263,
           "column": 21
         }
       }
@@ -18125,15 +16962,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 8536,
-      "end": 8537,
+      "start": 8029,
+      "end": 8030,
       "loc": {
         "start": {
-          "line": 282,
+          "line": 263,
           "column": 21
         },
         "end": {
-          "line": 282,
+          "line": 263,
           "column": 22
         }
       }
@@ -18151,15 +16988,15 @@
         "binop": null
       },
       "value": "edgeIndicesShaderName",
-      "start": 8550,
-      "end": 8571,
+      "start": 8043,
+      "end": 8064,
       "loc": {
         "start": {
-          "line": 283,
+          "line": 264,
           "column": 12
         },
         "end": {
-          "line": 283,
+          "line": 264,
           "column": 33
         }
       }
@@ -18177,15 +17014,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 8571,
-      "end": 8572,
+      "start": 8064,
+      "end": 8065,
       "loc": {
         "start": {
-          "line": 283,
+          "line": 264,
           "column": 33
         },
         "end": {
-          "line": 283,
+          "line": 264,
           "column": 34
         }
       }
@@ -18203,16 +17040,16 @@
         "binop": null,
         "updateContext": null
       },
-      "value": 7,
-      "start": 8585,
-      "end": 8586,
+      "value": 6,
+      "start": 8078,
+      "end": 8079,
       "loc": {
         "start": {
-          "line": 284,
+          "line": 265,
           "column": 12
         },
         "end": {
-          "line": 284,
+          "line": 265,
           "column": 13
         }
       }
@@ -18220,15 +17057,15 @@
     {
       "type": "CommentLine",
       "value": " webgl texture unit",
-      "start": 8587,
-      "end": 8608,
+      "start": 8080,
+      "end": 8101,
       "loc": {
         "start": {
-          "line": 284,
+          "line": 265,
           "column": 14
         },
         "end": {
-          "line": 284,
+          "line": 265,
           "column": 35
         }
       }
@@ -18245,15 +17082,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8617,
-      "end": 8618,
+      "start": 8110,
+      "end": 8111,
       "loc": {
         "start": {
-          "line": 285,
+          "line": 266,
           "column": 8
         },
         "end": {
-          "line": 285,
+          "line": 266,
           "column": 9
         }
       }
@@ -18271,15 +17108,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 8618,
-      "end": 8619,
+      "start": 8111,
+      "end": 8112,
       "loc": {
         "start": {
-          "line": 285,
+          "line": 266,
           "column": 9
         },
         "end": {
-          "line": 285,
+          "line": 266,
           "column": 10
         }
       }
@@ -18296,15 +17133,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8624,
-      "end": 8625,
+      "start": 8117,
+      "end": 8118,
       "loc": {
         "start": {
-          "line": 286,
+          "line": 267,
           "column": 4
         },
         "end": {
-          "line": 286,
+          "line": 267,
           "column": 5
         }
       }
@@ -18321,15 +17158,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 8626,
-      "end": 8627,
+      "start": 8119,
+      "end": 8120,
       "loc": {
         "start": {
-          "line": 287,
+          "line": 268,
           "column": 0
         },
         "end": {
-          "line": 287,
+          "line": 268,
           "column": 1
         }
       }
@@ -18347,15 +17184,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 8629,
-      "end": 8629,
+      "start": 8122,
+      "end": 8122,
       "loc": {
         "start": {
-          "line": 289,
+          "line": 270,
           "column": 0
         },
         "end": {
-          "line": 289,
+          "line": 270,
           "column": 0
         }
       }
