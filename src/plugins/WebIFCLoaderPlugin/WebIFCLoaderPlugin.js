@@ -769,8 +769,8 @@ class WebIFCLoaderPlugin extends Plugin {
         const metaObjectName = (ifcElement.Name && ifcElement.Name.value !== "") ? ifcElement.Name.value : metaObjectType;
         const metaObject = {
             id: id,
-            name: metaObjectType,
-            type: metaObjectName,
+            name: metaObjectName,
+            type: metaObjectType,
             parent: parentMetaObjectId
         };
         ctx.metadata.metaObjects.push(metaObject);
