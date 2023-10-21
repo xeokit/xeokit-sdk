@@ -1046,7 +1046,7 @@ const Renderer = function (scene, options) {
 
     function gpuPickPickable(pickBuffer, canvasPos, pickViewMatrix, pickProjMatrix, params, pickResult) {
 
-        const resolutionScale = viewer.scene.canvas.resolutionScale;
+        const resolutionScale = scene.canvas.resolutionScale;
 
         frameCtx.reset();
         frameCtx.backfaces = true;
@@ -1112,7 +1112,7 @@ const Renderer = function (scene, options) {
             return;
         }
 
-        const resolutionScale = viewer.scene.canvas.resolutionScale;
+        const resolutionScale = scene.canvas.resolutionScale;
 
         frameCtx.reset();
         frameCtx.backfaces = true;
@@ -1158,7 +1158,7 @@ const Renderer = function (scene, options) {
 
         return function (pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, nearAndFar, pickResult) {
 
-            const resolutionScale = viewer.scene.canvas.resolutionScale;
+            const resolutionScale = scene.canvas.resolutionScale;
 
             frameCtx.reset();
             frameCtx.backfaces = true;
@@ -1483,7 +1483,7 @@ const Renderer = function (scene, options) {
 
     function gpuPickWorldNormal(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult) {
 
-        const resolutionScale = viewer.scene.canvas.resolutionScale;
+        const resolutionScale = scene.canvas.resolutionScale;
 
         frameCtx.reset();
         frameCtx.backfaces = true;
