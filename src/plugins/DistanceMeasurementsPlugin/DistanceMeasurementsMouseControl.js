@@ -311,7 +311,6 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
             this.pointerLens.visible = false;
         }
         this.reset();
-        this.viewer
         const canvas = this.scene.canvas.canvas;
         canvas.removeEventListener("mousedown", this._onMouseDown);
         canvas.removeEventListener("mouseup", this._onMouseUp);
