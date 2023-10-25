@@ -15,8 +15,8 @@ function CubeTextureCanvas(viewer, navCubeScene, cfg = {}) {
     const facesZUp = [
         {boundary: [6, 6, 6, 6], color: cfg.frontColor || cfg.color || "#55FF55"},
         {boundary: [18, 6, 6, 6], color: cfg.backColor || cfg.color || "#55FF55"},
-        {boundary: [12, 6, 6, 6], color: cfg.leftColor || cfg.color || "#FF5555"},
-        {boundary: [0, 6, 6, 6], color: cfg.rightColor || cfg.color || "#FF5555"},
+        {boundary: [12, 6, 6, 6], color: cfg.rightColor || cfg.color || "#FF5555"},
+        {boundary: [0, 6, 6, 6], color: cfg.leftColor || cfg.color || "#FF5555"},
         {boundary: [6, 0, 6, 6], color: cfg.topColor || cfg.color || "#7777FF"},
         {boundary: [6, 12, 6, 6], color: cfg.bottomColor || cfg.color || "#7777FF"}
     ];
@@ -53,8 +53,8 @@ function CubeTextureCanvas(viewer, navCubeScene, cfg = {}) {
     const facesYUp = [
         {boundary: [6, 6, 6, 6], color: cfg.frontColor || cfg.color || "#55FF55"},
         {boundary: [18, 6, 6, 6], color: cfg.backColor || cfg.color || "#55FF55"},
-        {boundary: [12, 6, 6, 6], color: cfg.leftColor || cfg.color || "#FF5555"},
-        {boundary: [0, 6, 6, 6], color: cfg.rightColor || cfg.color || "#FF5555"},
+        {boundary: [12, 6, 6, 6], color: cfg.rightColor || cfg.color || "#FF5555"},
+        {boundary: [0, 6, 6, 6], color: cfg.leftColor || cfg.color || "#FF5555"},
         {boundary: [6, 0, 6, 6], color: cfg.topColor || cfg.color || "#7777FF"},
         {boundary: [6, 12, 6, 6], color: cfg.bottomColor || cfg.color || "#7777FF"}
     ];
