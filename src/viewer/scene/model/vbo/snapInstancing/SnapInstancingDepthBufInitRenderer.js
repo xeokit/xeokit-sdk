@@ -249,7 +249,6 @@ class SnapInstancingDepthBufInitRenderer extends VBOSceneModelRenderer {
         src.push("float tmp = clipPos.w;")
         src.push("clipPos.xyzw /= tmp;")
         src.push("clipPos.xy = remapClipPos(clipPos.xy);");
-        src.push("clipPos.z += 0.0001;"); // small Z offset
         src.push("clipPos.xyzw *= tmp;")
         if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
@@ -307,7 +306,10 @@ class SnapInstancingDepthBufInitRenderer extends VBOSceneModelRenderer {
             src.push("}");
         }
         if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
-            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
+            src.push("    float dx = dFdx(vFragDepth);")
+            src.push("    float dy = dFdy(vFragDepth);")
+            src.push("    float diff = sqrt(dx*dx+dy*dy);");
+            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth + diff ) * logDepthBufFC * 0.5;");
         }
         src.push("outCoords = ivec4(relativeToOriginPosition.xyz*coordinateScaler.xyz, -layerNumber);")
         src.push("}");
