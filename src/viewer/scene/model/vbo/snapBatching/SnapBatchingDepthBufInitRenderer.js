@@ -217,7 +217,6 @@ export class SnapBatchingDepthBufInitRenderer extends VBOSceneModelRenderer {
         src.push("float tmp = clipPos.w;")
         src.push("clipPos.xyzw /= tmp;")
         src.push("clipPos.xy = remapClipPos(clipPos.xy);");
-        // src.push("clipPos.z += 0.0001;"); // small Z offset
         src.push("clipPos.xyzw *= tmp;")
         if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
