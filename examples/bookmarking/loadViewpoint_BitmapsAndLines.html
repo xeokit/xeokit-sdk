@@ -84,6 +84,12 @@
     camera.look = [0, 1.49, 0];
     camera.up = [0.37, 0.83, 0.41];
 
+    camera.worldAxis = [
+        1, 0, 0, // Right
+        0, 0, 1, // Up
+        0,-1, 0  // Forward
+    ];
+
     new NavCubePlugin(viewer, {
         canvasId: "myNavCubeCanvas",
         color: "lightblue",
@@ -113,6 +119,7 @@
 
     const sceneModel = xktLoader.load({
         id: "myModel",
+        rotation: [90,0,0],
         src: "../../../assets/models/bcfTestModels/bitmapAndLines/model.xkt",
         edges: true // Emphasise edges
     });
