@@ -65,8 +65,7 @@ export class TrianglesDataTextureEdgesColorRenderer {
         if (gotOrigin || gotPosition) {
             const rtcOrigin = tempVec3a;
             if (gotOrigin) {
-                const rotatedOrigin = tempVec3b;
-                math.transformPoint3(rotationMatrix, origin, rotatedOrigin);
+                const rotatedOrigin = math.transformPoint3(rotationMatrix, origin, tempVec3b);
                 rtcOrigin[0] = rotatedOrigin[0];
                 rtcOrigin[1] = rotatedOrigin[1];
                 rtcOrigin[2] = rotatedOrigin[2];
@@ -335,7 +334,7 @@ export class TrianglesDataTextureEdgesColorRenderer {
         // get XYZ offset
         src.push("vec4 offset = vec4(texelFetch (uTexturePerObjectIdOffsets, objectIndexCoords, 0).rgb, 0.0);");
 
-      //  src.push("worldPosition.xyz = worldPosition.xyz + offset.xyz;");
+        src.push("worldPosition.xyz = worldPosition.xyz + offset.xyz;");
 
         src.push("      vec4 viewPosition  = viewMatrix * worldPosition; ");
 
