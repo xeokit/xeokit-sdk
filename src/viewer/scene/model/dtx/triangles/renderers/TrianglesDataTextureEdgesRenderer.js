@@ -7,7 +7,6 @@ const defaultColor = new Float32Array([0, 0, 0, 1]);
 
 const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
-const tempVec3c = math.vec3();
 const tempVec3d = math.vec3();
 const tempMat4a = math.mat4();
 
@@ -70,8 +69,7 @@ export class TrianglesDataTextureEdgesRenderer {
         if (gotOrigin || gotPosition) {
             const rtcOrigin = tempVec3a;
             if (gotOrigin) {
-                const rotatedOrigin = tempVec3b;
-                math.transformPoint3(rotationMatrix, origin, rotatedOrigin);
+                const rotatedOrigin = math.transformPoint3(rotationMatrix, origin, tempVec3b);
                 rtcOrigin[0] = rotatedOrigin[0];
                 rtcOrigin[1] = rotatedOrigin[1];
                 rtcOrigin[2] = rotatedOrigin[2];
@@ -253,9 +251,9 @@ export class TrianglesDataTextureEdgesRenderer {
 
         src.push("uniform int renderPass;");
 
-        if (scene.entityOffsetsEnabled) {
-            src.push("in vec3 offset;");
-        }
+        // if (scene.entityOffsetsEnabled) {
+        //     src.push("in vec3 offset;");
+        // }
 
         src.push("uniform mat4 sceneModelWorldMatrix;");
         src.push("uniform mat4 viewMatrix;");
@@ -340,7 +338,7 @@ export class TrianglesDataTextureEdgesRenderer {
         // get XYZ offset
         src.push("vec4 offset = vec4(texelFetch (uTexturePerObjectIdOffsets, objectIndexCoords, 0).rgb, 0.0);");
 
-        src.push("worldPosition.xyz = worldPosition.xyz + offset.xyz;");
+        src.push("worldPosition.xyz = worldPosition.xyz + offset.xyz + vec3(110.0,50.0, 10.0);");
 
         src.push("      vec4 viewPosition  = viewMatrix * worldPosition; ");
 
