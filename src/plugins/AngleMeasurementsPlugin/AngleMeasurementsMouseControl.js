@@ -293,6 +293,7 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                     if (mouseHovering) {
                         this._currentAngleMeasurement.targetVisible = true;
                         this._currentAngleMeasurement.angleVisible = true;
+                        this._currentAngleMeasurement.clickable = true;
                         this.angleMeasurementsPlugin.fire("measurementEnd", this._currentAngleMeasurement);
                         this._currentAngleMeasurement = null;
                         this._mouseState = MOUSE_FINDING_ORIGIN;
