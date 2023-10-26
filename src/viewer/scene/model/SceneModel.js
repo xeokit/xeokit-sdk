@@ -2245,7 +2245,7 @@ export class SceneModel extends Component {
             cfg.primitive = "triangles";
         }
         if (cfg.primitive !== "points" && cfg.primitive !== "lines" && cfg.primitive !== "triangles" && cfg.primitive !== "solid" && cfg.primitive !== "surface") {
-            this.error(`[createGeometry] Unsupported value for 'primitive': '${primitive}' - supported values are 'points', 'lines', 'triangles', 'solid' and 'surface'. Defaulting to 'triangles'.`);
+            this.error(`[createGeometry] Unsupported value for 'primitive': '${cfg.primitive}' - supported values are 'points', 'lines', 'triangles', 'solid' and 'surface'. Defaulting to 'triangles'.`);
             return;
         }
         if (!cfg.positions && !cfg.positionsCompressed && !cfg.buckets) {
