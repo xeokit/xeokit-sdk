@@ -73,9 +73,20 @@
         edges: true
     });
 
-    const angleMeasurements = new AngleMeasurementsPlugin(viewer);
+    const angleMeasurementsPlugin = new AngleMeasurementsPlugin(viewer);
 
-    const angleMeasurementsMouseControl = new AngleMeasurementsMouseControl(angleMeasurements, {
+    angleMeasurementsPlugin.on("mouseOver", (e) => {
+        e.measurement.setHighlighted(true);
+    });
+
+    angleMeasurementsPlugin.on("mouseLeave", (e) => {
+        if (angleMeasurementsContextMenu.shown && angleMeasurementsContextMenu.context.measurement.id === e.measurement.id) {
+            return;
+        }
+        e.measurement.setHighlighted(false);
+    });
+
+    const angleMeasurementsMouseControl = new AngleMeasurementsMouseControl(angleMeasurementsPlugin, {
         pointerLens: new PointerLens(viewer)
     });
 
