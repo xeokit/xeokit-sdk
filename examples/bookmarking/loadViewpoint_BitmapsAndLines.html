@@ -84,6 +84,9 @@
     camera.look = [0, 1.49, 0];
     camera.up = [0.37, 0.83, 0.41];
 
+    // Since our model and BCF comes from Solibri,
+    // we'll configure the World coordinate system axis accordingly
+
     camera.worldAxis = [
         1, 0, 0, // Right
         0, 0, 1, // Up
@@ -115,6 +118,8 @@
 
     //------------------------------------------------------------------------------------------------------------------
     // Load the XKT model and IFC metadata
+    // Since our model and BCF comes from Solibri,
+    // we'll rotate our model, because it's created for +Y being the "up" axis
     //------------------------------------------------------------------------------------------------------------------
 
     const sceneModel = xktLoader.load({
