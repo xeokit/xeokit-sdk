@@ -56,12 +56,13 @@ class MousePickHandler {
             }
 
             const hoverSubs = cameraControl.hasSubs("hover");
+            const hoverEnterSubs = cameraControl.hasSubs("hoverEnter");
             const hoverOutSubs = cameraControl.hasSubs("hoverOut");
             const hoverOffSubs = cameraControl.hasSubs("hoverOff");
             const hoverSurfaceSubs = cameraControl.hasSubs("hoverSurface");
             const hoverSnapOrSurfaceSubs = cameraControl.hasSubs("hoverSnapOrSurface");
 
-            if (hoverSubs || hoverOutSubs || hoverOffSubs || hoverSurfaceSubs || hoverSnapOrSurfaceSubs) {
+            if (hoverSubs || hoverEnterSubs || hoverOutSubs || hoverOffSubs || hoverSurfaceSubs || hoverSnapOrSurfaceSubs) {
 
                 pickController.pickCursorPos = states.pointerCanvasPos;
                 pickController.schedulePickEntity = true;
