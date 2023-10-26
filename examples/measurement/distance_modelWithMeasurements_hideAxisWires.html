@@ -80,17 +80,25 @@
     // Create a DistanceMeasurementsPlugin, with which we'll create DistanceMeasurements
     //------------------------------------------------------------------------------------------------------------------
 
-    const distanceMeasurements = new DistanceMeasurementsPlugin(viewer, {
+    const distanceMeasurementsPlugin = new DistanceMeasurementsPlugin(viewer, {
         defaultAxisVisible: false // <<------------ Hide axis wires
     });
 
+    distanceMeasurementsPlugin.on("mouseOver", (e) => {
+        e.measurement.setHighlighted(true);
+    });
+
+    distanceMeasurementsPlugin.on("mouseLeave", (e) => {
+        e.measurement.setHighlighted(false);
+    });
+    
     sceneModel.on("loaded", () => {
 
         //------------------------------------------------------------------------------------------------------------------
         // Create some DistanceMeasurements
         //------------------------------------------------------------------------------------------------------------------
 
-        const myMeasurement1 = distanceMeasurements.createMeasurement({
+        const myMeasurement1 = distanceMeasurementsPlugin.createMeasurement({
             id: "distanceMeasurement1",
             origin: {
                 entity: viewer.scene.objects["0jf0rYHfX3RAB3bSIRjmoa"],
@@ -104,7 +112,7 @@
             wireVisible: true
         });
 
-        const myMeasurement2 = distanceMeasurements.createMeasurement({
+        const myMeasurement2 = distanceMeasurementsPlugin.createMeasurement({
             id: "distanceMeasurement2",
             origin: {
                 entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FNr2"],

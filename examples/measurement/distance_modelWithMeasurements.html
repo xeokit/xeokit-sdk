@@ -217,25 +217,25 @@
     // Create a DistanceMeasurementsPlugin, with which we'll create DistanceMeasurements
     //------------------------------------------------------------------------------------------------------------------
 
-    const distanceMeasurements = new DistanceMeasurementsPlugin(viewer, {
+    const distanceMeasurementsPlugin = new DistanceMeasurementsPlugin(viewer, {
         zIndex: 100000 // If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
     });
 
-    distanceMeasurements.on("mouseOver", (e) => {
+    distanceMeasurementsPlugin.on("mouseOver", (e) => {
         e.measurement.setHighlighted(true);
     });
 
-    distanceMeasurements.on("mouseLeave", (e) => {
+    distanceMeasurementsPlugin.on("mouseLeave", (e) => {
         if (distanceMeasurementsContextMenu.shown && distanceMeasurementsContextMenu.context.measurement.id === e.measurement.id) {
             return;
         }
         e.measurement.setHighlighted(false);
     });
 
-    distanceMeasurements.on("contextMenu", (e) => {
+    distanceMeasurementsPlugin.on("contextMenu", (e) => {
         distanceMeasurementsContextMenu.context = { // Must set context before showing menu
             viewer: viewer,
-            distanceMeasurementsPlugin: distanceMeasurements,
+            distanceMeasurementsPlugin: distanceMeasurementsPlugin,
             measurement: e.measurement
         };
         distanceMeasurementsContextMenu.show(e.event.clientX, e.event.clientY);
@@ -250,7 +250,7 @@
         // Create some DistanceMeasurements
         //------------------------------------------------------------------------------------------------------------------
 
-        const myMeasurement1 = distanceMeasurements.createMeasurement({
+        const myMeasurement1 = distanceMeasurementsPlugin.createMeasurement({
             id: "distanceMeasurement1",
             origin: {
                 entity: viewer.scene.objects["0jf0rYHfX3RAB3bSIRjmoa"],
@@ -264,7 +264,7 @@
             wireVisible: true
         });
 
-        const myMeasurement2 = distanceMeasurements.createMeasurement({
+        const myMeasurement2 = distanceMeasurementsPlugin.createMeasurement({
             id: "distanceMeasurement2",
             origin: {
                 entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FNr2"],
@@ -553,41 +553,41 @@
                 {
                     title: "Measurements..",
                     getEnabled: function (context) {
-                        return (Object.keys(distanceMeasurements.measurements).length > 0);
+                        return (Object.keys(distanceMeasurementsPlugin.measurements).length > 0);
                     },
                     items: [
                         [
                             {
                                 title: "Show all Labels",
                                 doAction: function (context) {
-                                    distanceMeasurements.setLabelsShown(true);
+                                    distanceMeasurementsPlugin.setLabelsShown(true);
                                 }
                             },
                             {
                                 title: "Hide all Labels",
                                 doAction: function (context) {
-                                    distanceMeasurements.setLabelsShown(false);
+                                    distanceMeasurementsPlugin.setLabelsShown(false);
                                 }
                             },
                             {
                                 title: "Show all Axis",
                                 doAction: function (context) {
-                                    distanceMeasurements.setAxisVisible(true);
+                                    distanceMeasurementsPlugin.setAxisVisible(true);
                                 }
                             },
                             {
                                 title: "Hide all Axis",
                                 doAction: function (context) {
-                                    distanceMeasurements.setAxisVisible(false);
+                                    distanceMeasurementsPlugin.setAxisVisible(false);
                                 }
                             },
                             {
                                 title: "Delete All",
                                 getEnabled: function (context) {
-                                    return (Object.keys(distanceMeasurements.measurements).length > 0);
+                                    return (Object.keys(distanceMeasurementsPlugin.measurements).length > 0);
                                 },
                                 doAction: function (context) {
-                                    distanceMeasurements.clear();
+                                    distanceMeasurementsPlugin.clear();
                                 }
                             }
                         ]
@@ -761,50 +761,50 @@
                 {
                     title: "Measurements..",
                     getEnabled: function (context) {
-                        return (Object.keys(distanceMeasurements.measurements).length > 0);
+                        return (Object.keys(distanceMeasurementsPlugin.measurements).length > 0);
                     },
                     items: [
                         [
                             {
                                 getTitle: function (context) {
-                                    return (Object.keys(distanceMeasurements.measurements).length > 0) ? "Show All Labels" : "Hide All Labels";
+                                    return (Object.keys(distanceMeasurementsPlugin.measurements).length > 0) ? "Show All Labels" : "Hide All Labels";
                                 },
                                 getEnabled: function (context) {
-                                    return (Object.keys(distanceMeasurements.measurements).length > 0);
+                                    return (Object.keys(distanceMeasurementsPlugin.measurements).length > 0);
                                 },
                                 doAction: function (context) {
-                                    //distanceMeasurements.clear();
+                                    //distanceMeasurementsPlugin.clear();
                                 }
                             },
                             {
                                 getTitle: function (context) {
-                                    return (Object.keys(distanceMeasurements.measurements).length > 0) ? "Show All Axis" : "Hide All Axis";
+                                    return (Object.keys(distanceMeasurementsPlugin.measurements).length > 0) ? "Show All Axis" : "Hide All Axis";
                                 },
                                 getEnabled: function (context) {
-                                    return (Object.keys(distanceMeasurements.measurements).length > 0);
+                                    return (Object.keys(distanceMeasurementsPlugin.measurements).length > 0);
                                 },
                                 doAction: function (context) {
-                                    distanceMeasurements.setAxisVisible(true);
+                                    distanceMeasurementsPlugin.setAxisVisible(true);
                                 }
                             },
                             {
                                 getTitle: function (context) {
-                                    return (Object.keys(distanceMeasurements.measurements).length > 0) ? "Hide All Axis" : "Hide All Axis";
+                                    return (Object.keys(distanceMeasurementsPlugin.measurements).length > 0) ? "Hide All Axis" : "Hide All Axis";
                                 },
                                 getEnabled: function (context) {
-                                    return (Object.keys(distanceMeasurements.measurements).length > 0);
+                                    return (Object.keys(distanceMeasurementsPlugin.measurements).length > 0);
                                 },
                                 doAction: function (context) {
-                                    distanceMeasurements.setAxisVisible(false);
+                                    distanceMeasurementsPlugin.setAxisVisible(false);
                                 }
                             },
                             {
                                 title: "Delete All",
                                 getEnabled: function (context) {
-                                    return (Object.keys(distanceMeasurements.measurements).length > 0);
+                                    return (Object.keys(distanceMeasurementsPlugin.measurements).length > 0);
                                 },
                                 doAction: function (context) {
-                                    distanceMeasurements.clear();
+                                    distanceMeasurementsPlugin.clear();
                                 }
                             }
                         ]

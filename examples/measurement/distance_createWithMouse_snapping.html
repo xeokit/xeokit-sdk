@@ -164,9 +164,20 @@
     // DistanceMeasurementsPlugin, DistanceMeasurementsMouseControl and PointerLens
     //------------------------------------------------------------------------------------------------------------------
 
-    const distanceMeasurements = new DistanceMeasurementsPlugin(viewer);
+    const distanceMeasurementsPlugin = new DistanceMeasurementsPlugin(viewer);
 
-    const distanceMeasurementsMouseControl  = new DistanceMeasurementsMouseControl(distanceMeasurements, {
+    distanceMeasurementsPlugin.on("mouseOver", (e) => {
+        e.measurement.setHighlighted(true);
+    });
+
+    distanceMeasurementsPlugin.on("mouseLeave", (e) => {
+        if (distanceMeasurementsContextMenu.shown && distanceMeasurementsContextMenu.context.measurement.id === e.measurement.id) {
+            return;
+        }
+        e.measurement.setHighlighted(false);
+    });
+    
+    const distanceMeasurementsMouseControl  = new DistanceMeasurementsMouseControl(distanceMeasurementsPlugin, {
         pointerLens : new PointerLens(viewer)
     })
 
@@ -236,12 +247,12 @@
             [
                 {
                     getTitle: (context) => {
-                        return distanceMeasurements.control.active ? "Deactivate Control" : "Activate Control";
+                        return distanceMeasurementsPlugin.control.active ? "Deactivate Control" : "Activate Control";
                     },
                     doAction: function (context) {
-                        distanceMeasurements.control.active
-                            ? distanceMeasurements.control.deactivate()
-                            : distanceMeasurements.control.activate();
+                        distanceMeasurementsPlugin.control.active
+                            ? distanceMeasurementsPlugin.control.deactivate()
+                            : distanceMeasurementsPlugin.control.activate();
                     }
                 }
             ]
@@ -257,21 +268,21 @@
     // Create an DistanceMeasurementsPlugin, activate its DistanceMeasuremntsControl
     //------------------------------------------------------------------------------------------------------------------
 
-    distanceMeasurements.on("mouseOver", (e) => {
+    distanceMeasurementsPlugin.on("mouseOver", (e) => {
         e.distanceMeasurement.setHighlighted(true);
     });
 
-    distanceMeasurements.on("mouseLeave", (e) => {
+    distanceMeasurementsPlugin.on("mouseLeave", (e) => {
         if (distanceMeasurementsContextMenu.shown && distanceMeasurementsContextMenu.context.distanceMeasurement.id === e.distanceMeasurement.id) {
             return;
         }
         e.distanceMeasurement.setHighlighted(false);
     });
 
-    distanceMeasurements.on("contextMenu", (e) => {
+    distanceMeasurementsPlugin.on("contextMenu", (e) => {
         distanceMeasurementsContextMenu.context = { // Must set context before showing menu
             viewer: viewer,
-            distanceMeasurementsPlugin: distanceMeasurements,
+            distanceMeasurementsPlugin: distanceMeasurementsPlugin,
             distanceMeasurement: e.distanceMeasurement
         };
         distanceMeasurementsContextMenu.show(e.event.clientX, e.event.clientY);
