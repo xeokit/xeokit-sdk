@@ -94,7 +94,10 @@ class Bitmap extends Component {
         this._rtcPos = math.vec3();
         this._imageSize = math.vec2();
 
-        this._texture = new Texture(this);
+        this._texture = new Texture(this, {
+            flipY: true
+        });
+
         this._image = new Image();
 
         if (this._type !== "jpg" && this._type !== "png") {

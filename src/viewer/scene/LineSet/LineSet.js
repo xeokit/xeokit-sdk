@@ -3,6 +3,7 @@ import {Mesh} from "../mesh/Mesh.js";
 import {PhongMaterial} from "../materials/PhongMaterial.js";
 import {math} from "../math/math.js";
 import {VBOGeometry} from "../geometry/VBOGeometry.js";
+import {worldToRTCPositions} from "../math";
 
 /**
  * A set of 3D line segments.
@@ -78,8 +79,10 @@ class LineSet extends Component {
         super(owner, cfg);
 
         this._positions = cfg.positions || [];
-
-        this._origin = math.vec3(cfg.origin || [0, 0, 0]);
+        const rtcPositions = new Float32Array(this._positions.length);
+        const rtcCenter = math.vec3();
+        const cellSize = 100;
+        const rtcNeeded = worldToRTCPositions(this._positions, new Float32Array(this._positions.length), rtcCenter, cellSize);
 
         if (cfg.indices) {
             this._indices = cfg.indices;
@@ -97,9 +100,9 @@ class LineSet extends Component {
             collidable: cfg.collidable,
             geometry: new VBOGeometry(this, {
                 primitive: "lines",
-                positions: this._positions,
+                positions: rtcNeeded ? rtcPositions : this._positions,
                 indices: this._indices,
-                origin: cfg.origin
+                origin: rtcNeeded ? rtcCenter : null
             }),
             material: new PhongMaterial(this, {
                 diffuse: cfg.color || [0, 0, 0],
