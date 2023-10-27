@@ -158,8 +158,18 @@
     const lasSceneModel = xktLoader.load({
         id: "myModel2",
         src: "../../assets/models/xkt/v7/MAP-PointCloud/MAP-PointCloud.xkt",
-        edges: true
-
+        edges: true,
+        objectDefaults: { // This model has opaque windows / spaces; make them transparent
+            "IfcPlate": {
+                opacity: 0.3 // These are used as windows in this model - make transparent
+            },
+            "IfcWindow": {
+                opacity: 0.4
+            },
+            "IfcSpace": {
+                opacity: 0.4
+            }
+        }
     });
 
     bimSceneModel.on("loaded", () => {
