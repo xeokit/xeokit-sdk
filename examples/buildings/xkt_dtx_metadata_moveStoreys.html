@@ -13,9 +13,10 @@
 <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
 <div class="slideout-sidebar">
-    <h1>XKTLoaderPlugin</h1>
-    <img class="info-icon" src="../../assets/images/bim_icon.png"/>
-    <h2>Using IFC metadata to separate building storeys.</h2>
+    <img class="info-icon" style="width:280px; padding-bottom:10px;" src="../../assets/images/bim_icon.png"/>
+    <h1>XKTLoaderPlugin, Data Textures & Metadata</h1>
+    <h2>Loading a BIM model from an XKT file into a data texture model representation</h2>
+    <h3>Using IFC metadata to separate building storeys.</h3>
     <p>Loads an .xkt IFC model from the file system, then uses the model's metadata to reveal each
         building storey.</p>
     <p>Note that translation of objects requires the Viewer to be configured with <code>entityOffsetsEnabled</code> set
@@ -42,7 +43,14 @@
                target="_other">MetaScene</a>
         </li>
     </ul>
-    <h3>Resources</h3>
+    <h3>Tutorials</h3>
+    <ul>
+        <li>
+            <a href="https://www.notion.so/xeokit/Compact-Model-Representation-using-Data-Textures-e8093ae372fa47bf9995c26dc24ccd53?pvs=4"
+               target="_other">Compact Model Representation using Data Textures</a>
+        </li>
+    </ul>
+    <h3>Assets</h3>
     <ul>
         <li>
             <a href="https://github.com/openBIMstandards/DataSetSchependomlaan"
@@ -117,7 +125,18 @@
         id: "myModel",
         src: "../../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
         saoEnabled: true,
-        edges: true
+        edges: true,
+        objectDefaults: { // This model has opaque windows / spaces; make them transparent
+            "IfcPlate": {
+                opacity: 0.3 // These are used as windows in this model - make transparent
+            },
+            "IfcWindow": {
+                opacity: 0.4
+            },
+            "IfcSpace": {
+                opacity: 0.4
+            }
+        }
     });
 
     const t0 = performance.now();

@@ -223,7 +223,7 @@
 <div class="slideout-sidebar">
     <img class="info-icon" src="../../assets/images/bim_icon.png"/>
     <h1>XKTLoaderPlugin</h1>
-    <h2>Loading a federated IFC4 model from the file system, split into multiple XKT files and a manifest</h2>
+    <h2>Loading a federated BIM model from split multiple XKT files into a data texture model representation</h2>
 
     <h3>Stats</h3>
     <ul>
@@ -247,12 +247,19 @@
         </li>
 
     </ul>
-    <h3>Resources</h3>
+    <h3>Tutorials</h3>
     <ul>
         <li>
             <a href="https://www.notion.so/xeokit/Splitting-Big-IFC-Models-During-Conversion-for-Improved-Performance-165fc022e94742cf966ee50003572259"
                target="_other">Splitting Big IFC Models During Conversion for Improved Performance</a>
         </li>
+        <li>
+            <a href="https://www.notion.so/xeokit/Compact-Model-Representation-using-Data-Textures-e8093ae372fa47bf9995c26dc24ccd53?pvs=4"
+               target="_other">Compact Model Representation using Data Textures</a>
+        </li>
+    </ul>
+    <h3>Assets</h3>
+    <ul>
         <li>
             <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/274"
                target="_other">Model source</a>
@@ -285,7 +292,18 @@
 
     const sceneModel = xktLoader.load({
         manifestSrc: "../../assets/models/xkt/v2/WestRiverSideHospital/model.xkt.manifest.json",
-        id: "myModel"
+        id: "myModel",
+        objectDefaults: { // This model has opaque windows / spaces; make them transparent
+            "IfcPlate": {
+                opacity: 0.3 // These are used as windows in this model - make transparent
+            },
+            "IfcWindow": {
+                opacity: 0.4
+            },
+            "IfcSpace": {
+                opacity: 0.4
+            }
+        }
     });
 
     const t0 = performance.now();

@@ -210,8 +210,9 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const treeView = new TreeViewPlugin(viewer, {
+        hierarchy: "types",
         containerElement: document.getElementById("treeViewContainer"),
-        autoExpandDepth: 3 // Initially expand the root tree node
+        autoExpandDepth: 1 // Initially expand the root tree node
     });
 
     //------------------------------------------------------------------------------------------------------------------

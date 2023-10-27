@@ -21,6 +21,12 @@
             target="_other">GLTFLoaderPlugin</a> to load a photogrammetric scan from
        a binary glTF (.glb) file.</p>
     <p>
+    <h3>Stats</h3>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+    </ul>
     <h3>Components used</h3>
     <ul>
         <li>
@@ -65,6 +71,13 @@
     const sceneModel = gltfLoader.load({
         id: "myModel",
         src: "../../assets/models/gltf/SkatePark/glTF-Binary/SkatePark.glb"
+    });
+
+    const t0 = performance.now();
+    document.getElementById("time").innerHTML = "Loading model...";
+    sceneModel.on("loaded", function () {
+        const t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
     });
 
     sceneModel.on("loaded", () => {

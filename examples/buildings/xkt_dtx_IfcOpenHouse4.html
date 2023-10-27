@@ -128,8 +128,8 @@
 <div id="treeViewContainer"></div>
 <div class="slideout-sidebar">
     <img class="info-icon" style="width:280px; padding-bottom:10px;" src="../../assets/images/bim_icon.png"/>
-    <h1>XKTLoaderPlugin</h1>
-    <h2>Loading an XKT model</h2>
+    <h1>XKTLoaderPlugin and Data Textures</h1>
+    <h2>Loading a BIM model from an XKT file into a data texture model representation</h2>
 
     <h3>Stats</h3>
     <ul>
@@ -156,7 +156,14 @@
                target="_other">NavCubePlugin</a>
         </li>
     </ul>
-    <h3>Resources</h3>
+    <h3>Tutorials</h3>
+    <ul>
+        <li>
+            <a href="https://www.notion.so/xeokit/Compact-Model-Representation-using-Data-Textures-e8093ae372fa47bf9995c26dc24ccd53?pvs=4"
+               target="_other">Compact Model Representation using Data Textures</a>
+        </li>
+    </ul>
+    <h3>Assets</h3>
     <ul>
         <li><a href="https://www.cityjson.org/" target="_other">Model source</a></li>
     </ul>
@@ -204,10 +211,21 @@
         src: "../../assets/models/xkt/v8/ifc/IfcOpenHouse4.ifc.xkt",
         saoEnabled: true,
         edges: true,
-        dtxEnabled: true // Default
+        dtxEnabled: true, // Default
+        objectDefaults: { // This model has opaque windows / spaces; make them transparent
+            "IfcPlate": {
+                opacity: 0.3 // These are used as windows in this model - make transparent
+            },
+            "IfcWindow": {
+                opacity: 0.4
+            },
+            "IfcSpace": {
+                opacity: 0.4
+            }
+        }
     });
 
-    sceneModel.on("loaded", ()=>{
+    sceneModel.on("loaded", () => {
         viewer.cameraFlight.jumpTo(sceneModel);
     });
 

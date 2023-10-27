@@ -222,8 +222,8 @@
 <div id="treeViewContainer"></div>
 <div class="slideout-sidebar">
     <img class="info-icon" src="../../assets/images/bim_icon.png"/>
-    <h1>XKTLoaderPlugin</h1>
-    <h2>Loading a federated IFC4 model from the file system, split into multiple XKT files and a manifest</h2>
+    <h1>XKTLoaderPlugin, Split Model and Data Textures</h1>
+    <h2>Loading a federated BIM model from split multiple XKT files into a data texture model representation</h2>
 
     <h3>Stats</h3>
     <ul>
@@ -247,12 +247,19 @@
         </li>
 
     </ul>
-    <h3>Resources</h3>
+    <h3>Tutorials</h3>
     <ul>
         <li>
             <a href="https://www.notion.so/xeokit/Splitting-Big-IFC-Models-During-Conversion-for-Improved-Performance-165fc022e94742cf966ee50003572259"
-               target="_other">Splitting Big IFC Models During Conversion for Improved Performance</a>
+               target="_other">Automatically Splitting Large Models for Better Performance</a>
         </li>
+        <li>
+            <a href="https://www.notion.so/xeokit/Compact-Model-Representation-using-Data-Textures-e8093ae372fa47bf9995c26dc24ccd53?pvs=4"
+               target="_other">Compact Model Representation using Data Textures</a>
+        </li>
+    </ul>
+    <h3>Assets</h3>
+    <ul>
         <li>
             <a href="http://drumbeat.cs.hut.fi/ifc/"
                target="_other">Model source</a>
@@ -283,12 +290,17 @@
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
-    xktLoader.load({
+   const sceneModel =  xktLoader.load({
         manifestSrc: "../../assets/models/xkt/v10/split/Karhumaki-Bridge/manifest.json",
         id: "myModel"
     });
 
-    var t0 = performance.now();
+    const t0 = performance.now();
+    document.getElementById("time").innerHTML = "Loading model...";
+    sceneModel.on("loaded", function () {
+        const t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
+    });
 
     //----------------------------------------------------------------------------------------------------------------------
     // Create a tree view

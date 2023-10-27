@@ -13,9 +13,10 @@
 <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
 <div class="slideout-sidebar">
-    <h1>XKTLoaderPlugin</h1>
-    <img class="info-icon" src="../../assets/images/bim_icon.png"/>
-    <h2>Using model metadata to X-ray some objects.</h2>
+    <img class="info-icon" style="width:280px; padding-bottom:10px;" src="../../assets/images/bim_icon.png"/>
+    <h1>XKTLoaderPlugin and Data Textures</h1>
+    <h2>Loading a BIM model from an XKT file into a data texture model representation</h2>
+    <h2>Using model metadata to X-ray some objects</h2>
     <p>Loads an .xkt IFC model from the file system, then uses the metadata to xray the whole
         third storey and fit it to view.</p>
     <h3>Stats</h3>
@@ -39,7 +40,14 @@
                target="_other">MetaScene</a>
         </li>
     </ul>
-    <h3>Resources</h3>
+    <h3>Tutorials</h3>
+    <ul>
+        <li>
+            <a href="https://www.notion.so/xeokit/Compact-Model-Representation-using-Data-Textures-e8093ae372fa47bf9995c26dc24ccd53?pvs=4"
+               target="_other">Compact Model Representation using Data Textures</a>
+        </li>
+    </ul>
+    <h3>Assets</h3>
     <ul>
         <li>
             <a href="https://github.com/openBIMstandards/DataSetSchependomlaan"
@@ -92,7 +100,18 @@
     const sceneModel = xktLoader.load({                                     // Creates a Node representing the model
         id: "myModel",
         src: "../../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
-        edges: true
+        edges: true,
+        objectDefaults: { // This model has opaque windows / spaces; make them transparent
+            "IfcPlate": {
+                opacity: 0.3 // These are used as windows in this model - make transparent
+            },
+            "IfcWindow": {
+                opacity: 0.4
+            },
+            "IfcSpace": {
+                opacity: 0.4
+            }
+        }
     });
 
     const t0 = performance.now();
