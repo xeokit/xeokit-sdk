@@ -338,7 +338,7 @@ export class TrianglesDataTextureEdgesRenderer {
         // get XYZ offset
         src.push("vec4 offset = vec4(texelFetch (uTexturePerObjectIdOffsets, objectIndexCoords, 0).rgb, 0.0);");
 
-        src.push("worldPosition.xyz = worldPosition.xyz + offset.xyz + vec3(110.0,50.0, 10.0);");
+        src.push("worldPosition.xyz = worldPosition.xyz + offset.xyz;");
 
         src.push("      vec4 viewPosition  = viewMatrix * worldPosition; ");
 
