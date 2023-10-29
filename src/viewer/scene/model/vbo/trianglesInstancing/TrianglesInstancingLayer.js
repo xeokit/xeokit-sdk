@@ -37,7 +37,7 @@ class TrianglesInstancingLayer {
      */
     constructor(cfg) {
 
-        console.info("Creating TrianglesInstancingLayer");
+       // console.info("Creating TrianglesInstancingLayer");
 
         /**
          * Owner model
