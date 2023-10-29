@@ -1126,7 +1126,7 @@ export class SceneModel extends Component {
         this._dtxEnabled = this.scene.dtxEnabled && (cfg.dtxEnabled !== false);
 
         this._enableVertexWelding = false; // Not needed for most objects, and very expensive, so disabled
-        this._enableIndexBucketing = true;
+        this._enableIndexBucketing = false; // Until fixed: https://github.com/xeokit/xeokit-sdk/issues/1204
 
         this._vboBatchingLayerScratchMemory = getScratchMemory();
         this._textureTranscoder = cfg.textureTranscoder || getKTX2TextureTranscoder(this.scene.viewer);
