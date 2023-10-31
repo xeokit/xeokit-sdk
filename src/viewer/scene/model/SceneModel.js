@@ -3733,7 +3733,7 @@ export class SceneModel extends Component {
  */
 function createDTXBuckets(geometry, enableVertexWelding, enableIndexBucketing) {
     let uniquePositionsCompressed, uniqueIndices, uniqueEdgeIndices;
-    if (enableVertexWelding) { // Expensive - careful!
+    if (enableVertexWelding || enableIndexBucketing) { // Expensive - careful!
         [
             uniquePositionsCompressed,
             uniqueIndices,
