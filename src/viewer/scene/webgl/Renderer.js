@@ -1300,7 +1300,7 @@ const Renderer = function (scene, options) {
         frameCtx.pickZNear = scene.camera.project.near;
         frameCtx.pickZFar = scene.camera.project.far;
 
-        let vertexPickBuffer = renderBufferManager.getRenderBuffer("uniquePickColors-aabs", {
+        const vertexPickBuffer = renderBufferManager.getRenderBuffer("uniquePickColors-aabs", {
             depthTexture: true,
             size: [
                 2 * snapRadiusInPixels + 1,
@@ -1320,16 +1320,17 @@ const Renderer = function (scene, options) {
 
         // Bind and clear the snap render target
 
-        vertexPickBuffer.bind(gl.RGBA32I);
+        vertexPickBuffer.bind(gl.RGBA32I, gl.RGBA32I);
         gl.viewport(0, 0, vertexPickBuffer.size[0], vertexPickBuffer.size[1]);
         gl.enable(gl.DEPTH_TEST);
         gl.frontFace(gl.CCW);
         gl.disable(gl.CULL_FACE);
         gl.depthMask(true);
         gl.disable(gl.BLEND);
-        gl.depthFunc(gl.LESS);
+        gl.depthFunc(gl.LEQUAL);
         gl.clear(gl.DEPTH_BUFFER_BIT);
         gl.clearBufferiv(gl.COLOR, 0, new Int32Array([0, 0, 0, 0]));
+        gl.clearBufferiv(gl.COLOR, 1, new Int32Array([0, 0, 0, 0]));
 
         //////////////////////////////////
         // Set view and proj mats for VBO renderers
@@ -1351,6 +1352,7 @@ const Renderer = function (scene, options) {
         }
 
         // a) init z-buffer
+        gl.drawBuffers([gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1]);
         const layerParamsSurface = snapInitDepthBuf(frameCtx);
 
         // b) snap-pick
@@ -1358,6 +1360,7 @@ const Renderer = function (scene, options) {
         frameCtx.snapPickLayerParams = layerParamsSnap;
 
         gl.depthMask(false);
+        gl.drawBuffers([gl.COLOR_ATTACHMENT0]);
 
         if (snapToVertex && snapToEdge) {
             frameCtx.snapMode = "edge";
@@ -1378,17 +1381,20 @@ const Renderer = function (scene, options) {
         // Read and decode the snapped coordinates
 
         const snapPickResultArray = vertexPickBuffer.readArray(gl.RGBA_INTEGER, gl.INT, Int32Array, 4);
+        const snapPickNormalResultArray = vertexPickBuffer.readArray(gl.RGBA_INTEGER, gl.INT, Int32Array, 4, 1);
 
         vertexPickBuffer.unbind();
 
         // result 1) regular hi-precision world position
 
         let worldPos = null;
+        let worldNormal = null;
 
         const middleX = snapRadiusInPixels;
         const middleY = snapRadiusInPixels;
         const middleIndex = (middleX * 4) + (middleY * vertexPickBuffer.size[0] * 4);
         const pickResultMiddleXY = snapPickResultArray.slice(middleIndex, middleIndex + 4);
+        const pickNormalResultMiddleXY = snapPickNormalResultArray.slice(middleIndex, middleIndex + 4);
 
         if (pickResultMiddleXY[3] !== 0) {
             const pickedLayerParmasSurface = layerParamsSurface[Math.abs(pickResultMiddleXY[3]) % layerParamsSurface.length];
@@ -1399,6 +1405,11 @@ const Renderer = function (scene, options) {
                 pickResultMiddleXY[1] * scale[1] + origin[1],
                 pickResultMiddleXY[2] * scale[2] + origin[2],
             ];
+            worldNormal = math.normalizeVec3([
+                pickNormalResultMiddleXY[0] / math.MAX_INT,
+                pickNormalResultMiddleXY[1] / math.MAX_INT,
+                pickNormalResultMiddleXY[2] / math.MAX_INT,
+            ]);
         }
 
         // result 2) hi-precision snapped (to vertex/edge) world position
@@ -1422,12 +1433,19 @@ const Renderer = function (scene, options) {
                         snapPickResultArray[i + 1],
                         snapPickResultArray[i + 2],
                         snapPickResultArray[i + 3],
+                    ],
+                    normal: [
+                        snapPickNormalResultArray[i + 0],
+                        snapPickNormalResultArray[i + 1],
+                        snapPickNormalResultArray[i + 2],
+                        snapPickNormalResultArray[i + 3],
                     ]
                 });
             }
         }
 
         let snappedWorldPos = null;
+        let snappedWorldNormal = null;
         let snapType = null;
 
         if (snapPickResult.length > 0) {
@@ -1441,17 +1459,24 @@ const Renderer = function (scene, options) {
             });
 
             snapType = snapPickResult[0].isVertex ? "vertex" : "edge";
-            snapPickResult = snapPickResult[0].result;
+            const snapPick = snapPickResult[0].result;
+            const snapPickNormal = snapPickResult[0].normal;
 
-            const pickedLayerParmas = layerParamsSnap[snapPickResult[3]];
+            const pickedLayerParmas = layerParamsSnap[snapPick[3]];
 
             const origin = pickedLayerParmas.origin;
             const scale = pickedLayerParmas.coordinateScale;
 
+            snappedWorldNormal = math.normalizeVec3([
+                snapPickNormal[0] / math.MAX_INT,
+                snapPickNormal[1] / math.MAX_INT,
+                snapPickNormal[2] / math.MAX_INT,
+            ]);
+
             snappedWorldPos = [
-                snapPickResult[0] * scale[0] + origin[0],
-                snapPickResult[1] * scale[1] + origin[1],
-                snapPickResult[2] * scale[2] + origin[2],
+                snapPick[0] * scale[0] + origin[0],
+                snapPick[1] * scale[1] + origin[1],
+                snapPick[2] * scale[2] + origin[2],
             ];
         }
 
@@ -1470,7 +1495,9 @@ const Renderer = function (scene, options) {
             snappedToVertex: snapType === "vertex",
             snappedToEdge: snapType === "edge",
             worldPos,
+            worldNormal,
             snappedWorldPos,
+            snappedWorldNormal,
             snappedCanvasPos
         };
     };

@@ -280,8 +280,8 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
         src.push("    return vec2(x, y);")
         src.push("}");
 
+        src.push("out vec4 vWorldPosition;");
         if (clipping) {
-            src.push("out vec4 vWorldPosition;");
             src.push("flat out uint vFlags2;");
         }
         src.push("out highp vec3 relativeToOriginPosition;");
@@ -363,8 +363,8 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
         src.push("relativeToOriginPosition = worldPosition.xyz;")
         src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
 
+        src.push("vWorldPosition = worldPosition;");
         if (clipping) {
-            src.push("vWorldPosition = worldPosition;");
             src.push("vFlags2 = flags2.r;");
         }
         src.push("vec4 clipPos = projMatrix * viewPosition;");
@@ -403,8 +403,8 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
         }
         src.push("uniform int uLayerNumber;");
         src.push("uniform vec3 uCoordinateScaler;");
+        src.push("in vec4 vWorldPosition;");
         if (clipping) {
-            src.push("in vec4 vWorldPosition;");
             src.push("flat in uint vFlags2;");
             for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
@@ -413,7 +413,8 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
             }
         }
         src.push("in highp vec3 relativeToOriginPosition;");
-        src.push("out highp ivec4 outCoords;");
+        src.push("layout(location = 0) out highp ivec4 outCoords;");
+        src.push("layout(location = 1) out highp ivec4 outNormal;");
         src.push("void main(void) {");
         if (clipping) {
             src.push("  bool clippable = vFlags2 > 0u;");
@@ -434,6 +435,11 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth + diff ) * logDepthBufFC * 0.5;");
         }
         src.push("outCoords = ivec4(relativeToOriginPosition.xyz * uCoordinateScaler.xyz, - uLayerNumber);")
+
+        src.push("vec3 xTangent = dFdx( vWorldPosition.xyz );");
+        src.push("vec3 yTangent = dFdy( vWorldPosition.xyz );");
+        src.push("vec3 worldNormal = normalize( cross( xTangent, yTangent ) );");
+        src.push(`outNormal = ivec4(worldNormal * float(${math.MAX_INT}), 1.0);`);
         src.push("}");
         return src;
     }

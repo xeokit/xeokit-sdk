@@ -6,6 +6,7 @@ class RenderBuffer {
 
     constructor(canvas, gl, options) {
         options = options || {};
+        /** @type {WebGL2RenderingContext} */
         this.gl = gl;
         this.allocated = false;
         this.canvas = canvas;
@@ -26,8 +27,8 @@ class RenderBuffer {
         this.bound = false;
     }
 
-    bind(internalformat = null) {
-        this._touch(internalformat);
+    bind(...internalformats) {
+        this._touch(...internalformats);
         if (this.bound) {
             return;
         }
@@ -37,17 +38,42 @@ class RenderBuffer {
     }
 
     /**
+     * Create and specify a WebGL texture image.
      *
-     * @param {number} internalformat
+     * @param { number } width 
+     * @param { number } height 
+     * @param { GLenum } [internalformat=null] 
+     *
+     * @returns { WebGLTexture }
+     */
+    createTexture(width, height, internalformat = null) {
+        const gl = this.gl;
+
+        const colorTexture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, colorTexture);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        if (internalformat) {
+            gl.texStorage2D(gl.TEXTURE_2D, 1, internalformat, width, height);
+        } else {
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+        }
+
+        return colorTexture;
+    }
+
+    /**
+     *
+     * @param {number[]} [internalformats=[]]
      * @returns
      */
-    _touch(internalformat = null) {
+    _touch(...internalformats) {
 
         let width;
         let height;
-        /**
-         * @type {WebGL2RenderingContext}
-         */
         const gl = this.gl;
 
         if (this.size) {
@@ -65,23 +91,17 @@ class RenderBuffer {
                 return;
 
             } else {
-                gl.deleteTexture(this.buffer.texture);
+                this.buffer.textures.forEach(texture => gl.deleteTexture(texture));
                 gl.deleteFramebuffer(this.buffer.framebuf);
                 gl.deleteRenderbuffer(this.buffer.renderbuf);
             }
         }
 
-        const colorTexture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, colorTexture);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
-        if (!internalformat) {
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+        const colorTextures = [];
+        if (internalformats.length > 0) {
+            colorTextures.push(...internalformats.map(internalformat => this.createTexture(width, height, internalformat)));
         } else {
-            gl.texStorage2D(gl.TEXTURE_2D, 1, internalformat, width, height);
+            colorTextures.push(this.createTexture(width, height));
         }
 
         let depthTexture;
@@ -102,7 +122,12 @@ class RenderBuffer {
 
         const framebuf = gl.createFramebuffer();
         gl.bindFramebuffer(gl.FRAMEBUFFER, framebuf);
-        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, colorTexture, 0);
+        for (let i = 0; i < colorTextures.length; i++) {
+            gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0 + i, gl.TEXTURE_2D, colorTextures[i], 0);
+        }
+        if (internalformats.length > 0) {
+            gl.drawBuffers(colorTextures.map((_, i) => gl.COLOR_ATTACHMENT0 + i));
+        }
 
         if (this._hasDepthTexture) {
             gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, depthTexture, 0);
@@ -148,7 +173,8 @@ class RenderBuffer {
         this.buffer = {
             framebuf: framebuf,
             renderbuf: renderbuf,
-            texture: colorTexture,
+            texture: colorTextures[0],
+            textures: colorTextures,
             depthTexture: depthTexture,
             width: width,
             height: height
@@ -165,18 +191,20 @@ class RenderBuffer {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     }
 
-    read(pickX, pickY, glFormat = null, glType = null, arrayType = Uint8Array, arrayMultiplier = 4) {
+    read(pickX, pickY, glFormat = null, glType = null, arrayType = Uint8Array, arrayMultiplier = 4, colorBufferIndex = 0) {
         const x = pickX;
         const y = this.buffer.height ? (this.buffer.height - pickY - 1) : (this.gl.drawingBufferHeight - pickY);
         const pix = new arrayType(arrayMultiplier);
         const gl = this.gl;
+        gl.readBuffer(gl.COLOR_ATTACHMENT0 + colorBufferIndex);
         gl.readPixels(x, y, 1, 1, glFormat || gl.RGBA, glType || gl.UNSIGNED_BYTE, pix, 0);
         return pix;
     }
 
-    readArray(glFormat = null, glType = null, arrayType = Uint8Array, arrayMultiplier = 4) {
+    readArray(glFormat = null, glType = null, arrayType = Uint8Array, arrayMultiplier = 4, colorBufferIndex = 0) {
         const pix = new arrayType(this.buffer.width*this.buffer.height * arrayMultiplier);
         const gl = this.gl;
+        gl.readBuffer(gl.COLOR_ATTACHMENT0 + colorBufferIndex);
         gl.readPixels(0, 0, this.buffer.width, this.buffer.height, glFormat || gl.RGBA, glType || gl.UNSIGNED_BYTE, pix, 0);
         return pix;
     }
@@ -281,20 +309,20 @@ class RenderBuffer {
         this.bound = false;
     }
 
-    getTexture() {
+    getTexture(index = 0) {
         const self = this;
         return this._texture || (this._texture = {
             renderBuffer: this,
             bind: function (unit) {
-                if (self.buffer && self.buffer.texture) {
+                if (self.buffer && self.buffer.textures[index]) {
                     self.gl.activeTexture(self.gl["TEXTURE" + unit]);
-                    self.gl.bindTexture(self.gl.TEXTURE_2D, self.buffer.texture);
+                    self.gl.bindTexture(self.gl.TEXTURE_2D, self.buffer.textures[index]);
                     return true;
                 }
                 return false;
             },
             unbind: function (unit) {
-                if (self.buffer && self.buffer.texture) {
+                if (self.buffer && self.buffer.textures[index]) {
                     self.gl.activeTexture(self.gl["TEXTURE" + unit]);
                     self.gl.bindTexture(self.gl.TEXTURE_2D, null);
                 }
@@ -333,7 +361,7 @@ class RenderBuffer {
     destroy() {
         if (this.allocated) {
             const gl = this.gl;
-            gl.deleteTexture(this.buffer.texture);
+            this.buffer.textures.forEach(texture => gl.deleteTexture(texture));
             gl.deleteTexture(this.buffer.depthTexture);
             gl.deleteFramebuffer(this.buffer.framebuf);
             gl.deleteRenderbuffer(this.buffer.renderbuf);
