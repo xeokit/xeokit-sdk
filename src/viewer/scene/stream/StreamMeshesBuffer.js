@@ -1,19 +1,22 @@
 import {StreamFixedItemBuffer} from "./StreamFixedItemBuffer";
-import {BindableDataTexture} from "./BindableDataTexture";
+import {StreamDataTexture} from "./StreamDataTexture";
 
-const NUM_PORTIONS = 100000;
+const MAX_OBJECTS = 100000;
 
 /**
+ * Stream buffer containing per-object elements.
+ *
  * @private
  */
-export class ColorsAndFlagsStreamBuffer extends StreamFixedItemBuffer {
+export class StreamMeshesBuffer extends StreamFixedItemBuffer {
 
     constructor(gl) {
-        super(NUM_PORTIONS); // Never repack
+        super(MAX_OBJECTS); // Never repack
         this.gl = gl;
-        const numPortions = NUM_PORTIONS;
+        this.numObjects = 0;
+        const maxObjects = MAX_OBJECTS;
         const textureWidth = 512 * 8;
-        const textureHeight = Math.ceil(numPortions / (textureWidth / 8));
+        const textureHeight = Math.ceil(maxObjects / (textureWidth / 8));
         if (textureHeight === 0) {
             throw "texture height===0";
         }
@@ -37,14 +40,33 @@ export class ColorsAndFlagsStreamBuffer extends StreamFixedItemBuffer {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
         gl.bindTexture(gl.TEXTURE_2D, null);
-        this.texture = new BindableDataTexture(gl, texture, textureWidth, textureHeight, texArray);
+        this.texture = new StreamDataTexture(gl, texture, textureWidth, textureHeight, texArray);
     }
 
     canCreateBlock() {
-        // TODO
+        this.numObjects < MAX_OBJECTS;
     }
 
+    /**
+     * Creates a block in this stream buffer.
+     *
+     * For positions, indices and edge indices, we pass in blocks to their respective stream blocks. Whenever those
+     * streams are repacked, this stream buffer will catch an event off those and adjust this block accordingly.
+     *
+     * @param color RGBA color as 8-bit ints
+     * @param pickColor RGBA pick color as 8-bit ints
+     * @param flags
+     * @param flags2
+     * @param positionsBlock Handle to block in StreamPositionsBuffer
+     * @param indicesBlock Handle to block in StreamIndices32Buffer
+     * @param edgeIndicesBlock Handle to block in Edges32StreamBuffer
+     * @param solid Indicates if object is a closed mesh
+     * @returns {StreamBlock} Handle to the new block.
+     */
     createBlock(color, pickColor, flags, flags2, positionsBlock, indicesBlock, edgeIndicesBlock, solid) {
+       if (!this.canCreateBlock) {
+           throw "Out of space for new object block";
+       }
         const block = this._createBlock();
         if (!block) {
             throw "No room left for blocks";

@@ -1,12 +1,12 @@
 import {StreamVariableItemBuffer} from "./StreamVariableItemBuffer";
-import {BindableDataTexture} from "./BindableDataTexture";
+import {StreamDataTexture} from "./StreamDataTexture";
 
 const LEN_INDICES = 100000;
 
 /**
  * @private
  */
-export class Indices32StreamBuffer extends StreamVariableItemBuffer {
+export class Indices16StreamBuffer extends StreamVariableItemBuffer {
 
     constructor(gl) {
         super(LEN_INDICES);
@@ -17,18 +17,18 @@ export class Indices32StreamBuffer extends StreamVariableItemBuffer {
             throw "texture height===0";
         }
         const texArraySize = textureWidth * textureHeight;
-        this.texArray = new Uint32Array(texArraySize);
+        this.texArray = new Uint16Array(texArraySize);
         const texArray = this.texArray;
         const texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGB32UI, textureWidth, textureHeight);
+        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGB16UI, textureWidth, textureHeight);
         gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, gl.RGB_INTEGER, gl.UNSIGNED_BYTE, texArray, 0);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
         gl.bindTexture(gl.TEXTURE_2D, null);
-        this.texture = new BindableDataTexture(gl, texture, textureWidth, textureHeight, texArray);
+        this.texture = new StreamDataTexture(gl, texture, textureWidth, textureHeight, texArray);
     }
 
     canCreateBlock() {

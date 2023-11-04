@@ -1,7 +1,7 @@
 /**
  * @private
  */
-export class BindableDataTexture {
+export class StreamDataTexture {
 
     constructor(gl, texture, textureWidth, textureHeight, textureData = null) {
         this._gl = gl;

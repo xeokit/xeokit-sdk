@@ -1,49 +1,57 @@
-import {StreamVariableItemBuffer} from "./StreamVariableItemBuffer";
-import {BindableDataTexture} from "./BindableDataTexture";
+import {StreamFixedItemBuffer} from "./StreamFixedItemBuffer";
+import {StreamDataTexture} from "./StreamDataTexture";
 
-const LEN_POSITIONS = 100000;
+const NUM_PORTIONS = 100000;
 
 /**
  * @private
  */
-export class PositionsStreamBuffer extends StreamVariableItemBuffer {
+export class StreamOffsetsBuffer extends StreamFixedItemBuffer {
 
     constructor(gl) {
-        super(LEN_POSITIONS);
+        super(NUM_PORTIONS);
         this.gl = gl;
         const textureWidth = 4096;
-        const textureHeight = Math.ceil(LEN_POSITIONS / textureWidth);
+        const textureHeight = Math.ceil(NUM_PORTIONS / textureWidth);
         if (textureHeight === 0) {
             throw "texture height===0";
         }
         const texArraySize = textureWidth * textureHeight * 3;
-        this.texArray = new Uint16Array(texArraySize);
+        this.texArray = new Float32Array(texArraySize);
         const texArray = this.texArray;
         const texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGB16UI, textureWidth, textureHeight);
-        gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, gl.RGB_INTEGER, gl.UNSIGNED_SHORT, texArray, 0);
+        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGB32F, textureWidth, textureHeight);
+        gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, gl.RGB, gl.FLOAT, texArray, 0);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
         gl.bindTexture(gl.TEXTURE_2D, null);
-        this.texture = new BindableDataTexture(gl, texture, textureWidth, textureHeight, texArray);
+        this.texture = new StreamDataTexture(gl, texture, textureWidth, textureHeight, texArray);
     }
 
     canCreateBlock() {
         // TODO
     }
 
-    createBlock(positions) {
-        const block = this._createBlock(positions.size);
+    createBlock(offset) {
+        const block = this._createBlock();
         if (!block) {
             throw "No room left for blocks";
         }
         const base = block.base;
         const texArray = this.texArray;
-        texArray.set(positions, base);
+        texArray.set(offset, base);
         return block;
+    }
+
+    setOffset(blockId, offset) {
+        const block = this.blocks[blockId];
+        if (!block) {
+            throw "Block not found";
+        }
+        this.texArray.set(offset, block.base);
     }
 
     deleteBlock(blockId) {
