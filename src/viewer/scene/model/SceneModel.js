@@ -1141,6 +1141,7 @@ export class SceneModel extends Component {
         this._vboInstancingLayers = {};
         this._vboBatchingLayers = {};
         this._dtxLayers = {};
+        this._dtxPrebuiltLayers = {}; // Created with #createdtxLayer
 
         this._meshList = [];
 
@@ -2211,6 +2212,41 @@ export class SceneModel extends Component {
     }
 
     /**
+     * Creates a data layer within this SceneModel.
+     *
+     * @param {Object} cfg Data layer configuration.
+     * @param {String} cfg.id
+     * @param {String} cfg.primitive
+     * @param {Uint16Array} cfg.positionsCompressed
+     * @param cfg.metallicRoughness: Uint8Array;
+     * @param cfg.indices8Bits: Uint8Array;
+     * @param cfg.indices16Bits: Uint16Array;
+     * @param cfg.indices32Bits: Uint32Array;
+     * @param cfg.edgeIndices8Bits: Uint8Array;
+     * @param cfg.edgeIndices16Bits: Uint16Array;
+     * @param cfg.edgeIndices32Bits: Uint32Array;
+     * @param cfg.perObjectColors: Uint8Array;
+     * @param cfg.perObjectPickColors: Uint8Array;
+     * @param cfg.perObjectSolid: Uint8Array;
+     * @param cfg.perObjectOffsets: Uint32Array;
+     * @param cfg.perObjectPositionsDecodeMatrices: Uint32Array;
+     * @param cfg.perObjectInstancePositioningMatrices: Uint32Array;
+     * @param cfg.perObjectVertexBases: Uint32Array;
+     * @param cfg.perObjectIndexBaseOffsets: Uint32Array;
+     * @param cfg.perObjectEdgeIndexBaseOffsets: Uint32Array;
+     * @param cfg.perTriangleNumberPortionId8Bits: Uint32Array;
+     * @param {Uint32Array} cfg.perTriangleNumberPortionId16Bits
+     * @param {Uint32Array} cfg.perTriangleNumberPortionId32Bits
+     * @param {Uint8Array} cfg.perEdgeNumberPortionId8Bits
+     * @param {Uint16Array} cfg.perEdgeNumberPortionId16Bits
+     * @param {Uint32Array} cfg.perEdgeNumberPortionId32Bits
+     */
+    createDTXLayer(cfg) {
+
+        // this._dtxPrebuiltLayers[cfg.id] = new TrianglesDataTextureLayer(...);
+    }
+
+    /**
      * Creates a reusable geometry within this SceneModel.
      *
      * We can then supply the geometry ID to {@link SceneModel#createMesh} when we want to create meshes that
@@ -2564,9 +2600,11 @@ export class SceneModel extends Component {
      *
      * @param {object} cfg Object properties.
      * @param {String} cfg.id Mandatory ID for the new mesh. Must not clash with any existing components within the {@link Scene}.
+     * @param {String} [cfg.dtxLayerId] Optional ID of a data later previously created with {@link SceneModel#createDTXLayer"}. The data layer will override all other geometry and material parameters given to this method.
+     * @param {Number} [cfg.dtxLayerPortionId] Index of a portion within the data layer if given. Mandatory with `dtxLayerId`.
      * @param {String|Number} [cfg.textureSetId] ID of a texture set previously created with {@link SceneModel#createTextureSet"}.
      * @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link SceneModel#createGeometry"}. Overrides all other geometry parameters given to this method.
-     * @param {String} cfg.primitive The primitive type. Accepted values are 'points', 'lines', 'triangles', 'solid' and 'surface'.
+     * @param {String} [cfg.primitive] The primitive type. Accepted values are 'points', 'lines', 'triangles', 'solid' and 'surface'.
      * @param {Number[]} [cfg.positions] Flat array of uncompressed 3D vertex positions positions. Required for all primitive types. Overridden by ````positionsCompressed````.
      * @param {Number[]} [cfg.positionsCompressed] Flat array of quantized 3D vertex positions. Overrides ````positions````, and must be accompanied by ````positionsDecodeMatrix````.
      * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positionsCompressed````. Must be accompanied by ````positionsCompressed````.
@@ -2601,10 +2639,26 @@ export class SceneModel extends Component {
             return;
         }
 
+        const dtxLayer = (cfg.dtxLayerId !== undefined);
         const instancing = (cfg.geometryId !== undefined);
         const batching = !instancing;
 
-        if (batching) {
+        if (dtxLayer) {
+            
+            // Data layer
+
+            if (cfg.dtxLayerPortionId === null || cfg.dtxLayerPortionId === undefined) {
+                this.error(`Param expected: 'dtxLayerPortionId' (required with 'dtxLayerId')`);
+                return null;
+            }
+            
+            cfg.dtxLayer = this._dtxPrebuiltLayers[cfg.dtxLayerId];
+            if (!cfg.dtxLayer) {
+                this.error(`Data layer not found: '${cfg.dtxLayerId}')`);
+                return null;
+            }
+            
+        } else  if (batching) {
 
             // Batched geometry
 
@@ -2856,22 +2910,29 @@ export class SceneModel extends Component {
         cfg.worldAABB = math.collapseAABB3();
         cfg.aabb = cfg.worldAABB; /// Hack for VBOInstancing layer
         cfg.solid = (cfg.primitive === "solid");
-        mesh.origin = math.vec3(cfg.origin);
-        switch (cfg.type) {
-            case DTX:
-                mesh.layer = this._getDTXLayer(cfg);
-                break;
-            case VBO_BATCHED:
-                mesh.layer = this._getVBOBatchingLayer(cfg);
-                break;
-            case VBO_INSTANCED:
-                mesh.layer = this._getVBOInstancingLayer(cfg);
-                break;
+        
+        if (cfg.dtxLayer) {
+            mesh.layer = cfg.dtxLayer;
+            mesh.portionId = cfg.dtxLayerPortionId;
+            
+        } else {
+            mesh.origin = math.vec3(cfg.origin);
+            switch (cfg.type) {
+                case DTX:
+                    mesh.layer = this._getDTXLayer(cfg);
+                    break;
+                case VBO_BATCHED:
+                    mesh.layer = this._getVBOBatchingLayer(cfg);
+                    break;
+                case VBO_INSTANCED:
+                    mesh.layer = this._getVBOInstancingLayer(cfg);
+                    break;
+            }
+            mesh.portionId = mesh.layer.createPortion(cfg);
+            mesh.aabb = cfg.worldAABB;
+            mesh.numPrimitives = cfg.numPrimitives;
+            math.expandAABB3(this._aabb, mesh.aabb);
         }
-        mesh.portionId = mesh.layer.createPortion(cfg);
-        mesh.aabb = cfg.worldAABB;
-        mesh.numPrimitives = cfg.numPrimitives;
-        math.expandAABB3(this._aabb, mesh.aabb);
         this._meshes[cfg.id] = mesh;
         this._meshList.push(mesh);
     }
