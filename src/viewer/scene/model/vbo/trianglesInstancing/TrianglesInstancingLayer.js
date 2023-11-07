@@ -976,9 +976,19 @@ class TrianglesInstancingLayer {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
-        if (this._instancingRenderers.pickNormalsRenderer) {
-            this._instancingRenderers.pickNormalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
-        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // TODO
+        // if (this._state.normalsBuf) {
+        //     if (this._instancingRenderers.pickNormalsRenderer) {
+        //         this._instancingRenderers.pickNormalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        //     }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // } else {
+            if (this._instancingRenderers.pickNormalsFlatRenderer) {
+                this._instancingRenderers.pickNormalsFlatRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+            }
+        // }
     }
 
     drawSnapInitDepthBuf(renderFlags, frameCtx) {
