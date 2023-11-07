@@ -2225,15 +2225,15 @@ export class SceneModel extends Component {
      * @param cfg.edgeIndices8Bits: Uint8Array;
      * @param cfg.edgeIndices16Bits: Uint16Array;
      * @param cfg.edgeIndices32Bits: Uint32Array;
-     * @param cfg.perObjectColors: Uint8Array;
-     * @param cfg.perObjectPickColors: Uint8Array;
-     * @param cfg.perObjectSolid: Uint8Array;
-     * @param cfg.perObjectOffsets: Uint32Array;
-     * @param cfg.perObjectPositionsDecodeMatrices: Uint32Array;
-     * @param cfg.perObjectInstancePositioningMatrices: Uint32Array;
-     * @param cfg.perObjectVertexBases: Uint32Array;
-     * @param cfg.perObjectIndexBaseOffsets: Uint32Array;
-     * @param cfg.perObjectEdgeIndexBaseOffsets: Uint32Array;
+     * @param cfg.perEntityColors: Uint8Array;
+     * @param cfg.perEntityPickColors: Uint8Array;
+     * @param cfg.perEntitySolid: Uint8Array;
+     * @param cfg.perEntityOffsets: Uint32Array;
+     * @param cfg.perEntityPositionsDecodeMatrices: Uint32Array;
+     * @param cfg.perEntityInstancePositioningMatrices: Uint32Array;
+     * @param cfg.perEntityVertexBases: Uint32Array;
+     * @param cfg.perEntityIndexBaseOffsets: Uint32Array;
+     * @param cfg.perEntityEdgeIndexBaseOffsets: Uint32Array;
      * @param cfg.perTriangleNumberPortionId8Bits: Uint32Array;
      * @param {Uint32Array} cfg.perTriangleNumberPortionId16Bits
      * @param {Uint32Array} cfg.perTriangleNumberPortionId32Bits
