@@ -2217,24 +2217,24 @@ export class SceneModel extends Component {
      * @param {Object} cfg Data layer configuration.
      * @param {String} cfg.id
      * @param {String} cfg.primitive
+     * @param {Number[]} cfg.origin
      * @param {Uint16Array} cfg.positionsCompressed
-     * @param cfg.metallicRoughness: Uint8Array;
-     * @param cfg.indices8Bits: Uint8Array;
-     * @param cfg.indices16Bits: Uint16Array;
-     * @param cfg.indices32Bits: Uint32Array;
-     * @param cfg.edgeIndices8Bits: Uint8Array;
-     * @param cfg.edgeIndices16Bits: Uint16Array;
-     * @param cfg.edgeIndices32Bits: Uint32Array;
-     * @param cfg.perEntityColors: Uint8Array;
-     * @param cfg.perEntityPickColors: Uint8Array;
-     * @param cfg.perEntitySolid: Uint8Array;
-     * @param cfg.perEntityOffsets: Uint32Array;
-     * @param cfg.perEntityPositionsDecodeMatrices: Uint32Array;
-     * @param cfg.perEntityInstancePositioningMatrices: Uint32Array;
-     * @param cfg.perEntityVertexBases: Uint32Array;
-     * @param cfg.perEntityIndexBaseOffsets: Uint32Array;
-     * @param cfg.perEntityEdgeIndexBaseOffsets: Uint32Array;
-     * @param cfg.perTriangleNumberPortionId8Bits: Uint32Array;
+     * @param {Uint8Array} cfg.metallicRoughness
+     * @param {Uint8Array} cfg.indices8Bits
+     * @param {Uint16Array} cfg.indices16Bits
+     * @param {Uint32Array} cfg.indices32Bits
+     * @param {Uint8Array} cfg.edgeIndices8Bits
+     * @param {Uint16Array} cfg.edgeIndices16Bits
+     * @param {Uint32Array} cfg.edgeIndices32Bits
+     * @param {Uint8Array} cfg.perMeshColors
+     * @param {Uint8Array} cfg.perMeshSolid
+     * @param {Uint32Array} cfg.perMeshOffsets
+     * @param {Uint32Array} cfg.perMeshPositionsDecodeMatrices
+     * @param {Uint32Array} cfg.perMeshInstancePositioningMatrices
+     * @param {Uint32Array} cfg.perMeshVertexBases
+     * @param {Uint32Array} cfg.perMeshIndexBaseOffsets
+     * @param {Uint32Array} cfg.perMeshEdgeIndexBaseOffsets
+     * @param {Uint32Array} cfg.perTriangleNumberPortionId8Bits
      * @param {Uint32Array} cfg.perTriangleNumberPortionId16Bits
      * @param {Uint32Array} cfg.perTriangleNumberPortionId32Bits
      * @param {Uint8Array} cfg.perEdgeNumberPortionId8Bits
