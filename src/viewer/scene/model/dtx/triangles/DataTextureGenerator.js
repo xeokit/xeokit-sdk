@@ -216,7 +216,6 @@ export class DataTextureGenerator {
         const texArray = new Uint8Array(texArraySize);
         dataTextureRamStats.sizeDataTextureIndices += texArray.byteLength;
         dataTextureRamStats.numberOfTextures++;
-        texArray.fill(0);
         texArray.set(indices, 0)
         const texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -246,7 +245,6 @@ export class DataTextureGenerator {
         const texArray = new Uint16Array(texArraySize);
         dataTextureRamStats.sizeDataTextureIndices += texArray.byteLength;
         dataTextureRamStats.numberOfTextures++;
-        texArray.fill(0);
         texArray.set(indices, 0)
         const texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -276,7 +274,6 @@ export class DataTextureGenerator {
         const texArray = new Uint32Array(texArraySize);
         dataTextureRamStats.sizeDataTextureIndices += texArray.byteLength;
         dataTextureRamStats.numberOfTextures++;
-        texArray.fill(0);
         texArray.set(indices, 0)
         const texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -306,7 +303,6 @@ export class DataTextureGenerator {
         const texArray = new Uint8Array(texArraySize);
         dataTextureRamStats.sizeDataTextureEdgeIndices += texArray.byteLength;
         dataTextureRamStats.numberOfTextures++;
-        texArray.fill(0);
         texArray.set(edgeIndices, 0)
         const texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -336,7 +332,6 @@ export class DataTextureGenerator {
         const texArray = new Uint16Array(texArraySize);
         dataTextureRamStats.sizeDataTextureEdgeIndices += texArray.byteLength;
         dataTextureRamStats.numberOfTextures++;
-        texArray.fill(0);
         texArray.set(edgeIndices, 0)
         const texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -366,7 +361,6 @@ export class DataTextureGenerator {
         const texArray = new Uint32Array(texArraySize);
         dataTextureRamStats.sizeDataTextureEdgeIndices += texArray.byteLength;
         dataTextureRamStats.numberOfTextures++;
-        texArray.fill(0);
         texArray.set(edgeIndices, 0)
         const texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -400,7 +394,6 @@ export class DataTextureGenerator {
         const texArray = new Uint16Array(texArraySize);
         dataTextureRamStats.sizeDataTexturePositions += texArray.byteLength;
         dataTextureRamStats.numberOfTextures++;
-        texArray.fill(0);
         texArray.set(positions, 0);
         const texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, texture);
