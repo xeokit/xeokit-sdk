@@ -68,7 +68,7 @@ class AngleMeasurement extends Component {
 
         this._originDot = new Dot(this._container, {
             fillColor: this._color,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined,
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2 : undefined,
             onMouseOver,
             onMouseLeave,
             onMouseWheel,
@@ -76,7 +76,7 @@ class AngleMeasurement extends Component {
         });
         this._cornerDot = new Dot(this._container, {
             fillColor: this._color,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined,
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2 : undefined,
             onMouseOver,
             onMouseLeave,
             onMouseWheel,
@@ -84,7 +84,7 @@ class AngleMeasurement extends Component {
         });
         this._targetDot = new Dot(this._container, {
             fillColor: this._color,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2: undefined,
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2 : undefined,
             onMouseOver,
             onMouseLeave,
             onMouseWheel,
@@ -103,7 +103,7 @@ class AngleMeasurement extends Component {
         this._targetWire = new Wire(this._container, {
             color: this._color || "red",
             thickness: 1,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1: undefined,
+            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1 : undefined,
             onMouseOver,
             onMouseLeave,
             onMouseWheel,
@@ -170,7 +170,7 @@ class AngleMeasurement extends Component {
             this._needUpdate(0); // No lag
         });
 
-        this._onSectionPlaneUpdated = scene.on("sectionPlaneUpdated", () =>{
+        this._onSectionPlaneUpdated = scene.on("sectionPlaneUpdated", () => {
             this._sectionPlanesDirty = true;
             this._needUpdate();
         });
@@ -341,7 +341,8 @@ class AngleMeasurement extends Component {
     _isSliced(positions) {
         const sectionPlanes = this.scene._sectionPlanesState.sectionPlanes;
         for (let i = 0, len = sectionPlanes.length; i < len; i++) {
-            if (sectionPlanes[i].clipsPositions3(positions, 4)) {
+            const sectionPlane = sectionPlanes[i];
+            if (math.planeClipsPositions3(sectionPlane.pos, sectionPlane.dir, positions, 4)) {
                 return true
             }
         }

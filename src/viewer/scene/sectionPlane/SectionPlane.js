@@ -186,27 +186,6 @@ class SectionPlane extends Component {
     }
 
     /**
-     * Returns `true` if this Section plane clips the given 3D positions.
-     * @param {number} positions Flat array of 3D positions.
-     * @param {number} numElementsPerPosition Number of elements perposition - usually either 3 or 4.
-     * @returns {boolean}
-     */
-    clipsPositions3(positions, numElementsPerPosition=3) {
-        const pos = this._state.pos;
-        const dir = this._state.dir;
-        for (let i = 0, len = positions.length; i < len; i += numElementsPerPosition) {
-            tempVec3a[0] = positions[i + 0] - pos[0];
-            tempVec3a[1] = positions[i + 1] - pos[1];
-            tempVec3a[2] = positions[i + 2] - pos[2];
-            let dotProduct = tempVec3a[0] * dir[0] + tempVec3a[1] * dir[1] + tempVec3a[2] * dir[2];
-            if (dotProduct < 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * @destroy
      */
     destroy() {

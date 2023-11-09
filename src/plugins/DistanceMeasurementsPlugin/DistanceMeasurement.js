@@ -470,7 +470,8 @@ class DistanceMeasurement extends Component {
     _isSliced(positions) {
        const sectionPlanes = this.scene._sectionPlanesState.sectionPlanes;
         for (let i = 0, len = sectionPlanes.length; i < len; i++) {
-            if (sectionPlanes[i].clipsPositions3(positions, 4)) {
+            const sectionPlane = sectionPlanes[i];
+            if (math.planeClipsPositions3(sectionPlane.pos, sectionPlane.dir, positions, 4)) {
                 return true
             }
         }

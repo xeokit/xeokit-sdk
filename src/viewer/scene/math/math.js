@@ -3,6 +3,8 @@
 let doublePrecision = true;
 let FloatArrayType = doublePrecision ? Float64Array : Float32Array;
 
+const tempVec3a = new FloatArrayType(3);
+
 const tempMat1 = new FloatArrayType(16);
 const tempMat2 = new FloatArrayType(16);
 const tempVec4 = new FloatArrayType(4);
@@ -5359,5 +5361,26 @@ math.buildEdgeIndices = (function () {
     };
 })();
 
+
+/**
+ * Returns `true` if a plane clips the given 3D positions.
+ * @param {Number[]} pos Position in plane
+ * @param {Number[]} dir Direction of plane
+ * @param {number} positions Flat array of 3D positions.
+ * @param {number} numElementsPerPosition Number of elements perposition - usually either 3 or 4.
+ * @returns {boolean}
+ */
+math.planeClipsPositions3 = function(pos, dir, positions, numElementsPerPosition=3) {
+    for (let i = 0, len = positions.length; i < len; i += numElementsPerPosition) {
+        tempVec3a[0] = positions[i + 0] - pos[0];
+        tempVec3a[1] = positions[i + 1] - pos[1];
+        tempVec3a[2] = positions[i + 2] - pos[2];
+        let dotProduct = tempVec3a[0] * dir[0] + tempVec3a[1] * dir[1] + tempVec3a[2] * dir[2];
+        if (dotProduct < 0) {
+            return true;
+        }
+    }
+    return false;
+}
 
 export {math};
