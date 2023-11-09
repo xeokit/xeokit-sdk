@@ -199,16 +199,17 @@ export class DataTextureGenerator {
 
     /**
      * @param {WebGL2RenderingContext} gl
-     * @param {ArrayLike<int>} indices
+     * @param indicesArrays
+     * @param lenIndices
      *
      * @returns {BindableDataTexture}
      */
-    generateTextureFor8BitIndices(gl, indices) {
-        if (indices.length === 0) {
+    generateTextureFor8BitIndices(gl, indicesArrays, lenIndices) {
+        if (lenIndices === 0) {
             return {texture: null, textureHeight: 0,};
         }
         const textureWidth = 4096;
-        const textureHeight = Math.ceil(indices.length / 3 / textureWidth);
+        const textureHeight = Math.ceil(lenIndices / 3 / textureWidth);
         if (textureHeight === 0) {
             throw "texture height===0";
         }
@@ -216,7 +217,11 @@ export class DataTextureGenerator {
         const texArray = new Uint8Array(texArraySize);
         dataTextureRamStats.sizeDataTextureIndices += texArray.byteLength;
         dataTextureRamStats.numberOfTextures++;
-        texArray.set(indices, 0)
+        for (let i = 0, j = 0, len = indicesArrays.length; i < len; i++) {
+            const pc = indicesArrays[i];
+            texArray.set(pc, j);
+            j += pc.length;
+        }
         const texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGB8UI, textureWidth, textureHeight);
@@ -228,16 +233,17 @@ export class DataTextureGenerator {
 
     /**
      * @param {WebGL2RenderingContext} gl
-     * @param {ArrayLike<int>} indices
+     * @param indicesArrays
+     * @param lenIndices
      *
      * @returns {BindableDataTexture}
      */
-    generateTextureFor16BitIndices(gl, indices) {
-        if (indices.length === 0) {
+    generateTextureFor16BitIndices(gl, indicesArrays, lenIndices) {
+        if (lenIndices === 0) {
             return {texture: null, textureHeight: 0,};
         }
         const textureWidth = 4096;
-        const textureHeight = Math.ceil(indices.length / 3 / textureWidth);
+        const textureHeight = Math.ceil(lenIndices / 3 / textureWidth);
         if (textureHeight === 0) {
             throw "texture height===0";
         }
@@ -245,7 +251,11 @@ export class DataTextureGenerator {
         const texArray = new Uint16Array(texArraySize);
         dataTextureRamStats.sizeDataTextureIndices += texArray.byteLength;
         dataTextureRamStats.numberOfTextures++;
-        texArray.set(indices, 0)
+        for (let i = 0, j = 0, len = indicesArrays.length; i < len; i++) {
+            const pc = indicesArrays[i];
+            texArray.set(pc, j);
+            j += pc.length;
+        }
         const texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGB16UI, textureWidth, textureHeight);
@@ -257,16 +267,17 @@ export class DataTextureGenerator {
 
     /**
      * @param {WebGL2RenderingContext} gl
-     * @param {ArrayLike<int>} indices
+     * @param indicesArrays
+     * @param lenIndices
      *
      * @returns {BindableDataTexture}
      */
-    generateTextureFor32BitIndices(gl, indices) {
-        if (indices.length === 0) {
-            return {texture: null, textureHeight: 0};
+    generateTextureFor32BitIndices(gl, indicesArrays, lenIndices) {
+        if (lenIndices === 0) {
+            return {texture: null, textureHeight: 0,};
         }
         const textureWidth = 4096;
-        const textureHeight = Math.ceil(indices.length / 3 / textureWidth);
+        const textureHeight = Math.ceil(lenIndices / 3 / textureWidth);
         if (textureHeight === 0) {
             throw "texture height===0";
         }
@@ -274,7 +285,11 @@ export class DataTextureGenerator {
         const texArray = new Uint32Array(texArraySize);
         dataTextureRamStats.sizeDataTextureIndices += texArray.byteLength;
         dataTextureRamStats.numberOfTextures++;
-        texArray.set(indices, 0)
+        for (let i = 0, j = 0, len = indicesArrays.length; i < len; i++) {
+            const pc = indicesArrays[i];
+            texArray.set(pc, j);
+            j += pc.length;
+        }
         const texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGB32UI, textureWidth, textureHeight);
@@ -286,16 +301,17 @@ export class DataTextureGenerator {
 
     /**
      * @param {WebGL2RenderingContext} gl
-     * @param {ArrayLike<int>} edgeIndices
+     * @param indicesArrays
+     * @param lenIndices
      *
      * @returns {BindableDataTexture}
      */
-    generateTextureFor8BitsEdgeIndices(gl, edgeIndices) {
-        if (edgeIndices.length === 0) {
-            return {texture: null, textureHeight: 0};
+    generateTextureFor8BitsEdgeIndices(gl, indicesArrays, lenIndices) {
+        if (lenIndices === 0) {
+            return {texture: null, textureHeight: 0,};
         }
         const textureWidth = 4096;
-        const textureHeight = Math.ceil(edgeIndices.length / 2 / textureWidth);
+        const textureHeight = Math.ceil(lenIndices / 2 / textureWidth);
         if (textureHeight === 0) {
             throw "texture height===0";
         }
@@ -303,7 +319,11 @@ export class DataTextureGenerator {
         const texArray = new Uint8Array(texArraySize);
         dataTextureRamStats.sizeDataTextureEdgeIndices += texArray.byteLength;
         dataTextureRamStats.numberOfTextures++;
-        texArray.set(edgeIndices, 0)
+        for (let i = 0, j = 0, len = indicesArrays.length; i < len; i++) {
+            const pc = indicesArrays[i];
+            texArray.set(pc, j);
+            j += pc.length;
+        }
         const texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RG8UI, textureWidth, textureHeight);
@@ -315,16 +335,17 @@ export class DataTextureGenerator {
 
     /**
      * @param {WebGL2RenderingContext} gl
-     * @param {ArrayLike<int>} edgeIndices
+     * @param indicesArrays
+     * @param lenIndices
      *
      * @returns {BindableDataTexture}
      */
-    generateTextureFor16BitsEdgeIndices(gl, edgeIndices) {
-        if (edgeIndices.length === 0) {
-            return {texture: null, textureHeight: 0};
+    generateTextureFor16BitsEdgeIndices(gl, indicesArrays, lenIndices) {
+        if (lenIndices === 0) {
+            return {texture: null, textureHeight: 0,};
         }
         const textureWidth = 4096;
-        const textureHeight = Math.ceil(edgeIndices.length / 2 / textureWidth);
+        const textureHeight = Math.ceil(lenIndices / 2 / textureWidth);
         if (textureHeight === 0) {
             throw "texture height===0";
         }
@@ -332,7 +353,11 @@ export class DataTextureGenerator {
         const texArray = new Uint16Array(texArraySize);
         dataTextureRamStats.sizeDataTextureEdgeIndices += texArray.byteLength;
         dataTextureRamStats.numberOfTextures++;
-        texArray.set(edgeIndices, 0)
+        for (let i = 0, j = 0, len = indicesArrays.length; i < len; i++) {
+            const pc = indicesArrays[i];
+            texArray.set(pc, j);
+            j += pc.length;
+        }
         const texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RG16UI, textureWidth, textureHeight);
@@ -344,16 +369,17 @@ export class DataTextureGenerator {
 
     /**
      * @param {WebGL2RenderingContext} gl
-     * @param {ArrayLike<int>} edgeIndices
+     * @param indicesArrays
+     * @param lenIndices
      *
      * @returns {BindableDataTexture}
      */
-    generateTextureFor32BitsEdgeIndices(gl, edgeIndices) {
-        if (edgeIndices.length === 0) {
+    generateTextureFor32BitsEdgeIndices(gl, indicesArrays, lenIndices) {
+        if (lenIndices === 0) {
             return {texture: null, textureHeight: 0,};
         }
         const textureWidth = 4096;
-        const textureHeight = Math.ceil(edgeIndices.length / 2 / textureWidth);
+        const textureHeight = Math.ceil(lenIndices / 2 / textureWidth);
         if (textureHeight === 0) {
             throw "texture height===0";
         }
@@ -361,7 +387,11 @@ export class DataTextureGenerator {
         const texArray = new Uint32Array(texArraySize);
         dataTextureRamStats.sizeDataTextureEdgeIndices += texArray.byteLength;
         dataTextureRamStats.numberOfTextures++;
-        texArray.set(edgeIndices, 0)
+        for (let i = 0, j = 0, len = indicesArrays.length; i < len; i++) {
+            const pc = indicesArrays[i];
+            texArray.set(pc, j);
+            j += pc.length;
+        }
         const texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RG32UI, textureWidth, textureHeight);
@@ -373,7 +403,8 @@ export class DataTextureGenerator {
 
     /**
      * @param {WebGL2RenderingContext} gl
-     * @param {ArrayLike<int>} positions Array of (uniquified) quantized positions in the layer
+     * @param {ArrayLike<int>} positionsArrays Arrays of  quantized positions in the layer
+     * @param lenPositions
      *
      * This will generate a texture for positions in the layer.
      *
@@ -383,8 +414,8 @@ export class DataTextureGenerator {
      *
      * @returns {BindableDataTexture}
      */
-    generateTextureForPositions(gl, positions) {
-        const numVertices = positions.length / 3;
+    generateTextureForPositions(gl, positionsArrays, lenPositions) {
+        const numVertices = lenPositions / 3;
         const textureWidth = 4096;
         const textureHeight = Math.ceil(numVertices / textureWidth);
         if (textureHeight === 0) {
@@ -394,7 +425,11 @@ export class DataTextureGenerator {
         const texArray = new Uint16Array(texArraySize);
         dataTextureRamStats.sizeDataTexturePositions += texArray.byteLength;
         dataTextureRamStats.numberOfTextures++;
-        texArray.set(positions, 0);
+        for (let i = 0, j = 0, len = positionsArrays.length; i < len; i++) {
+            const pc = positionsArrays[i];
+            texArray.set(pc, j);
+            j += pc.length;
+        }
         const texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGB16UI, textureWidth, textureHeight);

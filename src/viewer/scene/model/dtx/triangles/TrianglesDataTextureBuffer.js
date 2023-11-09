@@ -5,13 +5,28 @@ export class TrianglesDataTextureBuffer {
 
     constructor() {
         this.positionsCompressed = [];
+        this.lenPositionsCompressed = 0;
+
         this.metallicRoughness = [];
+
         this.indices8Bits = [];
+        this.lenIndices8Bits = 0;
+
         this.indices16Bits = [];
+        this.lenIndices16Bits = 0;
+
         this.indices32Bits = [];
+        this.lenIndices32Bits = 0;
+
         this.edgeIndices8Bits = [];
+        this.lenEdgeIndices8Bits = 0;
+
         this.edgeIndices16Bits = [];
+        this.lenEdgeIndices16Bits = 0;
+
         this.edgeIndices32Bits = [];
+        this.lenEdgeIndices32Bits = 0;
+
         this.perObjectColors = [];
         this.perObjectPickColors = [];
         this.perObjectSolid = [];

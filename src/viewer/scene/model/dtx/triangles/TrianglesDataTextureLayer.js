@@ -70,7 +70,6 @@ export class TrianglesDataTextureLayer {
         this._state = new RenderState({
             origin: math.vec3(cfg.origin),
             metallicRoughnessBuf: null,
-            positionsDecodeMatrix: math.mat4(),
             textureState: this._dataTextureState,
             numIndices8Bits: 0,
             numIndices16Bits: 0,
@@ -255,12 +254,11 @@ export class TrianglesDataTextureLayer {
         const indices = bucket.indices;
         const edgeIndices = bucket.edgeIndices;
         const buffer = this._buffer;
-        const vertexBase = buffer.positionsCompressed.length / 3;
-        const numVertices = positionsCompressed.length / 3;
 
-        for (let i = 0, len = positionsCompressed.length; i < len; i++) {
-            buffer.positionsCompressed.push(positionsCompressed[i]);
-        }
+        buffer.positionsCompressed.push(positionsCompressed)
+        const vertexBase = buffer.lenPositionsCompressed / 3;
+        const numVertices = positionsCompressed.length / 3;
+        buffer.lenPositionsCompressed += positionsCompressed.length;
 
         let indicesBase;
         let numTriangles = 0;
@@ -269,15 +267,18 @@ export class TrianglesDataTextureLayer {
             let indicesBuffer;
             if (numVertices <= (1 << 8)) {
                 indicesBuffer = buffer.indices8Bits;
+                indicesBase = buffer.lenIndices8Bits / 3;
+                buffer.lenIndices8Bits += indices.length;
             } else if (numVertices <= (1 << 16)) {
                 indicesBuffer = buffer.indices16Bits;
+                indicesBase = buffer.lenIndices16Bits / 3;
+                buffer.lenIndices16Bits += indices.length;
             } else {
                 indicesBuffer = buffer.indices32Bits;
+                indicesBase = buffer.lenIndices32Bits / 3;
+                buffer.lenIndices32Bits += indices.length;
             }
-            indicesBase = indicesBuffer.length / 3;
-            for (let i = 0, len = indices.length; i < len; i++) {
-                indicesBuffer.push(indices[i]);
-            }
+            indicesBuffer.push(indices);
         }
 
         let edgeIndicesBase;
@@ -287,15 +288,18 @@ export class TrianglesDataTextureLayer {
             let edgeIndicesBuffer;
             if (numVertices <= (1 << 8)) {
                 edgeIndicesBuffer = buffer.edgeIndices8Bits;
+                edgeIndicesBase = buffer.lenEdgeIndices8Bits / 2;
+                buffer.lenEdgeIndices8Bits += edgeIndices.length;
             } else if (numVertices <= (1 << 16)) {
                 edgeIndicesBuffer = buffer.edgeIndices16Bits;
+                edgeIndicesBase = buffer.lenEdgeIndices16Bits / 2;
+                buffer.lenEdgeIndices16Bits += edgeIndices.length;
             } else {
                 edgeIndicesBuffer = buffer.edgeIndices32Bits;
+                edgeIndicesBase = buffer.lenEdgeIndices32Bits / 2;
+                buffer.lenEdgeIndices32Bits += edgeIndices.length;
             }
-            edgeIndicesBase = edgeIndicesBuffer.length / 2;
-            for (let i = 0, len = edgeIndices.length; i < len; i++) {
-                edgeIndicesBuffer.push(edgeIndices[i]);
-            }
+            edgeIndicesBuffer.push(edgeIndices);
         }
 
         this._state.numVertices += numVertices;
@@ -466,7 +470,7 @@ export class TrianglesDataTextureLayer {
         const buffer = this._buffer;
 
         state.gl = gl;
-
+        const start = performance.now();
         textureState.texturePerObjectIdColorsAndFlags = this._dataTextureGenerator.generateTextureForColorsAndFlags(
             gl,
             buffer.perObjectColors,
@@ -484,9 +488,17 @@ export class TrianglesDataTextureLayer {
             buffer.perObjectPositionsDecodeMatrices,
             buffer.perObjectInstancePositioningMatrices);
 
+        // const positionsCompressed = new Uint16Array(buffer.lenPositionsCompressed);
+        // for (let i = 0, j = 0, len = buffer.positionsCompressed.length; i < len; i++) {
+        //     const pc = buffer.positionsCompressed[i];
+        //     positionsCompressed.set(pc, j);
+        //     j += pc.length;
+        // }
+
         textureState.texturePerVertexIdCoordinates = this._dataTextureGenerator.generateTextureForPositions(
             gl,
-            buffer.positionsCompressed);
+            buffer.positionsCompressed,
+            buffer.lenPositionsCompressed );
 
         textureState.texturePerPolygonIdPortionIds8Bits = this._dataTextureGenerator.generateTextureForPackedPortionIds(
             gl,
@@ -512,48 +524,50 @@ export class TrianglesDataTextureLayer {
                 buffer.perEdgeNumberPortionId16Bits);
         }
 
-
         if (buffer.perEdgeNumberPortionId32Bits.length > 0) {
             textureState.texturePerEdgeIdPortionIds32Bits = this._dataTextureGenerator.generateTextureForPackedPortionIds(
                 gl,
                 buffer.perEdgeNumberPortionId32Bits);
         }
 
-        if (buffer.indices8Bits.length > 0) {
+        if (buffer.lenIndices8Bits > 0) {
             textureState.texturePerPolygonIdIndices8Bits = this._dataTextureGenerator.generateTextureFor8BitIndices(
                 gl,
-                buffer.indices8Bits);
+                buffer.indices8Bits, buffer.lenIndices8Bits);
         }
 
-        if (buffer.indices16Bits.length > 0) {
+        if (buffer.lenIndices16Bits > 0) {
             textureState.texturePerPolygonIdIndices16Bits = this._dataTextureGenerator.generateTextureFor16BitIndices(
                 gl,
-                buffer.indices16Bits);
+                buffer.indices16Bits, buffer.lenIndices16Bits);
         }
 
-        if (buffer.indices32Bits.length > 0) {
+        if (buffer.lenIndices32Bits > 0) {
             textureState.texturePerPolygonIdIndices32Bits = this._dataTextureGenerator.generateTextureFor32BitIndices(
                 gl,
-                buffer.indices32Bits);
+                buffer.indices32Bits, buffer.lenIndices32Bits);
         }
 
-        if (buffer.edgeIndices8Bits.length > 0) {
+        if (buffer.lenEdgeIndices8Bits > 0) {
             textureState.texturePerPolygonIdEdgeIndices8Bits = this._dataTextureGenerator.generateTextureFor8BitsEdgeIndices(
                 gl,
-                buffer.edgeIndices8Bits);
+                buffer.edgeIndices8Bits, buffer.lenEdgeIndices8Bits);
         }
 
-        if (buffer.edgeIndices16Bits.length > 0) {
+        if (buffer.lenEdgeIndices16Bits > 0) {
             textureState.texturePerPolygonIdEdgeIndices16Bits = this._dataTextureGenerator.generateTextureFor16BitsEdgeIndices(
                 gl,
-                buffer.edgeIndices16Bits);
+                buffer.edgeIndices16Bits, buffer.lenEdgeIndices16Bits);
         }
 
-        if (buffer.edgeIndices32Bits.length > 0) {
+        if (buffer.lenEdgeIndices32Bits > 0) {
             textureState.texturePerPolygonIdEdgeIndices32Bits = this._dataTextureGenerator.generateTextureFor32BitsEdgeIndices(
                 gl,
-                buffer.edgeIndices32Bits);
+                buffer.edgeIndices32Bits, buffer.lenEdgeIndices32Bits);
         }
+
+        const end = performance.now();
+        console.log(`Time taken: ${end - start} milliseconds`);
 
         textureState.finalize();
 
