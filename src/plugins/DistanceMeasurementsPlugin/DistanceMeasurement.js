@@ -185,6 +185,7 @@ class DistanceMeasurement extends Component {
         this._wpDirty = false;
         this._vpDirty = false;
         this._cpDirty = false;
+        this._sectionPlanesDirty = true;
 
         this._visible = false;
         this._originVisible = false;
@@ -237,6 +238,11 @@ class DistanceMeasurement extends Component {
 
         this._onMetricsOrigin = scene.metrics.on("origin", () => {
             this._cpDirty = true;
+            this._needUpdate();
+        });
+
+        this._onSectionPlaneUpdated = scene.on("sectionPlaneUpdated", () =>{
+            this._sectionPlanesDirty = true;
             this._needUpdate();
         });
 
@@ -297,6 +303,36 @@ class DistanceMeasurement extends Component {
 
             this._vpDirty = false;
             this._cpDirty = true;
+        }
+
+        if (this._sectionPlanesDirty) {
+
+            if (this._isSliced(this._wp)) {
+                this._xAxisLabel.setCulled(true);
+                this._yAxisLabel.setCulled(true);
+                this._zAxisLabel.setCulled(true);
+                this._lengthLabel.setCulled(true);
+                this._xAxisWire.setCulled(true);
+                this._yAxisWire.setCulled(true);
+                this._zAxisWire.setCulled(true);
+                this._lengthWire.setCulled(true);
+                this._originDot.setCulled(true);
+                this._targetDot.setCulled(true);
+                return;
+            } else {
+                this._xAxisLabel.setCulled(false);
+                this._yAxisLabel.setCulled(false);
+                this._zAxisLabel.setCulled(false);
+                this._lengthLabel.setCulled(false);
+                this._xAxisWire.setCulled(false);
+                this._yAxisWire.setCulled(false);
+                this._zAxisWire.setCulled(false);
+                this._lengthWire.setCulled(false);
+                this._originDot.setCulled(false);
+                this._targetDot.setCulled(false);
+            }
+
+            this._sectionPlanesDirty = true;
         }
 
         const near = -0.3;
@@ -429,6 +465,16 @@ class DistanceMeasurement extends Component {
 
             this._cpDirty = false;
         }
+    }
+
+    _isSliced(positions) {
+       const sectionPlanes = this.scene._sectionPlanesState.sectionPlanes;
+        for (let i = 0, len = sectionPlanes.length; i < len; i++) {
+            if (sectionPlanes[i].clipsPositions3(positions, 4)) {
+                return true
+            }
+        }
+        return false;
     }
 
     /**
@@ -841,7 +887,6 @@ class DistanceMeasurement extends Component {
         if (this._onCanvasBoundary) {
             scene.canvas.off(this._onCanvasBoundary);
         }
-
         if (this._onMetricsUnits) {
             metrics.off(this._onMetricsUnits);
         }
@@ -850,6 +895,9 @@ class DistanceMeasurement extends Component {
         }
         if (this._onMetricsOrigin) {
             metrics.off(this._onMetricsOrigin);
+        }
+        if (this._onSectionPlaneUpdated) {
+            scene.off(this._onSectionPlaneUpdated);
         }
 
         this._originDot.destroy();

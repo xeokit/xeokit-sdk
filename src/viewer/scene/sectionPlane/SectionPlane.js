@@ -2,6 +2,8 @@ import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {math} from "../math/math.js";
 
+const tempVec3a = math.vec3();
+
 /**
  *  @desc An arbitrarily-aligned World-space clipping plane.
  *
@@ -118,6 +120,7 @@ class SectionPlane extends Component {
         this._state.pos.set(value || [0, 0, 0]);
         this._state.dist = (-math.dotVec3(this._state.pos, this._state.dir));
         this.fire("pos", this._state.pos);
+        this.scene.fire("sectionPlaneUpdated", this);
     }
 
     /**
@@ -143,6 +146,7 @@ class SectionPlane extends Component {
         this._state.dist = (-math.dotVec3(this._state.pos, this._state.dir));
         this.glRedraw();
         this.fire("dir", this._state.dir);
+        this.scene.fire("sectionPlaneUpdated", this);
     }
 
     /**
@@ -179,6 +183,27 @@ class SectionPlane extends Component {
         this._state.dist = (-math.dotVec3(this._state.pos, this._state.dir));
         this.fire("dir", this._state.dir);
         this.glRedraw();
+    }
+
+    /**
+     * Returns `true` if this Section plane clips the given 3D positions.
+     * @param {number} positions Flat array of 3D positions.
+     * @param {number} numElementsPerPosition Number of elements perposition - usually either 3 or 4.
+     * @returns {boolean}
+     */
+    clipsPositions3(positions, numElementsPerPosition=3) {
+        const pos = this._state.pos;
+        const dir = this._state.dir;
+        for (let i = 0, len = positions.length; i < len; i += numElementsPerPosition) {
+            tempVec3a[0] = positions[i + 0] - pos[0];
+            tempVec3a[1] = positions[i + 1] - pos[1];
+            tempVec3a[2] = positions[i + 2] - pos[2];
+            let dotProduct = tempVec3a[0] * dir[0] + tempVec3a[1] * dir[1] + tempVec3a[2] * dir[2];
+            if (dotProduct < 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

@@ -15,6 +15,9 @@ class Wire {
         this._thickness = cfg.thickness || 1.0;
         this._thicknessClickable = cfg.thicknessClickable || 6.0;
 
+        this._visible = true;
+        this._culled = false;
+
         var wire = this._wire;
         var wireStyle = wire.style;
 
@@ -107,7 +110,7 @@ class Wire {
         this._update();
     }
 
-    get _visible() {
+    get visible() {
         return this._wire.style.visibility === "visible";
     }
 
@@ -155,11 +158,19 @@ class Wire {
     }
 
     setVisible(visible) {
-        visible = !!visible;
         if (this._visible === visible) {
             return;
         }
-        this._wire.style.visibility = visible ? "visible" : "hidden";
+        this._visible = !!visible;
+        this._wire.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
+    }
+
+    setCulled(culled) {
+        if (this._culled === culled) {
+            return;
+        }
+        this._culled = !!culled;
+        this._wire.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
     }
 
     setClickable(clickable) {

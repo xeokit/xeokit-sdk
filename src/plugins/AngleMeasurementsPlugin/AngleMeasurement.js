@@ -170,6 +170,11 @@ class AngleMeasurement extends Component {
             this._needUpdate(0); // No lag
         });
 
+        this._onSectionPlaneUpdated = scene.on("sectionPlaneUpdated", () =>{
+            this._sectionPlanesDirty = true;
+            this._needUpdate();
+        });
+
         this.approximate = cfg.approximate;
         this.visible = cfg.visible;
 
@@ -223,6 +228,28 @@ class AngleMeasurement extends Component {
 
             this._vpDirty = false;
             this._cpDirty = true;
+        }
+
+        if (this._sectionPlanesDirty) {
+
+            if (this._isSliced(this._wp)) {
+                this._angleLabel.setCulled(true);
+                this._originWire.setCulled(true);
+                this._targetWire.setCulled(true);
+                this._originDot.setCulled(true);
+                this._cornerDot.setCulled(true);
+                this._targetDot.setCulled(true);
+                return;
+            } else {
+                this._angleLabel.setCulled(false);
+                this._originWire.setCulled(false);
+                this._targetWire.setCulled(false);
+                this._originDot.setCulled(false);
+                this._cornerDot.setCulled(false);
+                this._targetDot.setCulled(false);
+            }
+
+            this._sectionPlanesDirty = true;
         }
 
         if (this._cpDirty) {
@@ -309,6 +336,16 @@ class AngleMeasurement extends Component {
 
             this._cpDirty = false;
         }
+    }
+
+    _isSliced(positions) {
+        const sectionPlanes = this.scene._sectionPlanesState.sectionPlanes;
+        for (let i = 0, len = sectionPlanes.length; i < len; i++) {
+            if (sectionPlanes[i].clipsPositions3(positions, 4)) {
+                return true
+            }
+        }
+        return false;
     }
 
     /**
@@ -640,6 +677,9 @@ class AngleMeasurement extends Component {
         }
         if (this._onCanvasBoundary) {
             scene.canvas.off(this._onCanvasBoundary);
+        }
+        if (this._onSectionPlaneUpdated) {
+            scene.off(this._onSectionPlaneUpdated);
         }
 
         this._originDot.destroy();

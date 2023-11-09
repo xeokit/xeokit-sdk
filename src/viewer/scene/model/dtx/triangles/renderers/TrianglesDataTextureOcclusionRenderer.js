@@ -226,7 +226,7 @@ export class TrianglesDataTextureOcclusionRenderer {
         const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
         const src = [];
         src.push("#version 300 es");
-        src.push("// TrianglesDataTextureColorRenderer vertex shader");
+        src.push("// TrianglesDataTextureOcclusionRenderer vertex shader");
 
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
@@ -273,7 +273,7 @@ export class TrianglesDataTextureOcclusionRenderer {
         src.push("}");
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
-            src.push("out vec4 vFlags2;");
+            src.push("flat out uint vFlags2;");
         }
         src.push("void main(void) {");
 
@@ -358,10 +358,6 @@ export class TrianglesDataTextureOcclusionRenderer {
         src.push("vec4 offset = vec4(texelFetch (uTexturePerObjectIdOffsets, objectIndexCoords, 0).rgb, 0.0);");
         src.push("worldPosition.xyz = worldPosition.xyz + offset.xyz;");
         src.push("vec4 viewPosition = viewMatrix * worldPosition; ");
-        if (clipping) {
-            src.push("      vWorldPosition = worldPosition;");
-            src.push("      vFlags2 = flags2;");
-        }
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (ENABLE_LOG_DEPTH_BUF && scene.logarithmicDepthBufferEnabled) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
@@ -398,7 +394,7 @@ export class TrianglesDataTextureOcclusionRenderer {
         }
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
-            src.push("in vec4 vFlags2;");
+            src.push("flat in uint vFlags2;");
             for (let i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
@@ -408,7 +404,7 @@ export class TrianglesDataTextureOcclusionRenderer {
         src.push("out vec4 outColor;");
         src.push("void main(void) {");
         if (clipping) {
-            src.push("  bool clippable = (float(vFlags2.x) > 0.0);");
+            src.push("  bool clippable = (float(vFlags2) > 0.0);");
             src.push("  if (clippable) {");
             src.push("      float dist = 0.0;");
             for (let i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
