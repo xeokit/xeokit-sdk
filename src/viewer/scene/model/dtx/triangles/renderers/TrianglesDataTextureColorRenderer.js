@@ -172,6 +172,7 @@ export class TrianglesDataTextureColorRenderer {
 
         if (this._program.errors) {
             this.errors = this._program.errors;
+            console.error(this.errors);
             return;
         }
 

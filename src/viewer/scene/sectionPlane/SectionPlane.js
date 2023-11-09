@@ -2,6 +2,8 @@ import {Component} from '../Component.js';
 import {RenderState} from '../webgl/RenderState.js';
 import {math} from "../math/math.js";
 
+const tempVec3a = math.vec3();
+
 /**
  *  @desc An arbitrarily-aligned World-space clipping plane.
  *
@@ -118,6 +120,7 @@ class SectionPlane extends Component {
         this._state.pos.set(value || [0, 0, 0]);
         this._state.dist = (-math.dotVec3(this._state.pos, this._state.dir));
         this.fire("pos", this._state.pos);
+        this.scene.fire("sectionPlaneUpdated", this);
     }
 
     /**
@@ -143,6 +146,7 @@ class SectionPlane extends Component {
         this._state.dist = (-math.dotVec3(this._state.pos, this._state.dir));
         this.glRedraw();
         this.fire("dir", this._state.dir);
+        this.scene.fire("sectionPlaneUpdated", this);
     }
 
     /**

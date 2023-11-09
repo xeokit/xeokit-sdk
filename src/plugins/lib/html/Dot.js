@@ -15,6 +15,9 @@ class Dot {
         this._dotClickable = document.createElement('div');
         this._dotClickable.className += this._dotClickable.className ? ' viewer-ruler-dot-clickable' : 'viewer-ruler-dot-clickable';
 
+        this._visible = true;
+        this._culled = false;
+
         var dot = this._dot;
         var dotStyle = dot.style;
         dotStyle["border-radius"] = 25 + "px";
@@ -112,7 +115,15 @@ class Dot {
             return;
         }
         this._visible = !!visible;
-        this._dot.style.visibility = this._visible ? "visible" : "hidden";
+        this._dot.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
+    }
+
+    setCulled(culled) {
+        if (this._culled === culled) {
+            return;
+        }
+        this._culled = !!culled;
+        this._dot.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
     }
 
     setClickable(clickable) {
