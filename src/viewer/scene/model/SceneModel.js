@@ -2798,7 +2798,6 @@ export class SceneModel extends Component {
 
                 // TEXTURE
 
-                // cfg.textureSetId = cfg.textureSetId || DEFAULT_TEXTURE_SET_ID;
                 if (cfg.textureSetId) {
                     cfg.textureSet = this._textureSets[cfg.textureSetId];
                     if (!cfg.textureSet) {
