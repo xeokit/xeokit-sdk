@@ -470,7 +470,6 @@ export class TrianglesDataTextureLayer {
         const buffer = this._buffer;
 
         state.gl = gl;
-        const start = performance.now();
         textureState.texturePerObjectIdColorsAndFlags = this._dataTextureGenerator.generateTextureForColorsAndFlags(
             gl,
             buffer.perObjectColors,
@@ -565,9 +564,6 @@ export class TrianglesDataTextureLayer {
                 gl,
                 buffer.edgeIndices32Bits, buffer.lenEdgeIndices32Bits);
         }
-
-        const end = performance.now();
-        console.log(`Time taken: ${end - start} milliseconds`);
 
         textureState.finalize();
 
