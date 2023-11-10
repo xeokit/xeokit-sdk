@@ -347,10 +347,14 @@ class MetaModel {
                 // Globalize MetaObject IDs and parent IDs
 
                 metaObjectData.originalSystemId = metaObjectData.id;
-                metaObjectData.originalParentSystemId = metaObjectData.parent;
+                if (metaObjectData.parent) {
+                    metaObjectData.originalParentSystemId = metaObjectData.parent;
+                }
                 if (globalize) {
                     metaObjectData.id = math.globalizeObjectId(this.id, metaObjectData.id);
-                    metaObjectData.parent = math.globalizeObjectId(this.id, metaObjectData.parent);
+                    if (metaObjectData.parent) {
+                        metaObjectData.parent = math.globalizeObjectId(this.id, metaObjectData.parent);
+                    }
                 }
 
                 // Globalize MetaObject property set IDs
