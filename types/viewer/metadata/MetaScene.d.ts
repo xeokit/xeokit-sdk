@@ -48,7 +48,7 @@ export declare class MetaScene {
      *
      * @type {{String:MetaObject}}
      */
-  metaObjectsByType: {[key: string]: MetaObject};
+  metaObjectsByType: {[key: string]: {[key: string]: MetaObject} };
 
   /**
      * Subscribes to an event fired at this Viewer.
