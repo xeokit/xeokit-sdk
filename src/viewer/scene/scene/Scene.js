@@ -1367,6 +1367,10 @@ class Scene extends Component {
 
         for (pass = 0; pass < passes; pass++) {
 
+            if (this.viewer.scene.canvas.spinner.processes>0) {
+             //   return;
+            }
+
             renderEvent.pass = pass;
 
             /**

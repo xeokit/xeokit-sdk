@@ -97,7 +97,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
     for (let i = 0; i < numEntities; i++) {
 
         const xktEntityId = entityIDs [i];
-        const entityId = options.globalizeObjectIds ? math.globalizeObjectId(sceneModel.id, xktEntityId) : xktEntityId;
+        const entityId = viewer.createFastId(options.globalizeObjectIds ? math.globalizeObjectId(sceneModel.id, xktEntityId) : xktEntityId);
         const metaObject = viewer.metaScene.metaObjects[entityId];
         const entityDefaults = {};
         const meshDefaults = {};

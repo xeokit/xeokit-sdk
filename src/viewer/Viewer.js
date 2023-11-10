@@ -4,6 +4,7 @@ import {CameraControl} from "./scene/CameraControl/CameraControl.js";
 import {MetaScene} from "./metadata/MetaScene.js";
 import {LocaleService} from "./localization/LocaleService.js";
 import html2canvas from 'html2canvas/dist/html2canvas.esm.js';
+import {FastMap} from "./scene/utils/Map.js";
 
 /**
  * The 3D Viewer at the heart of the xeokit SDK.
@@ -57,8 +58,15 @@ class Viewer {
      * store geometry on the GPU for triangle meshes that don't have textures. This gives a much lower memory footprint for these types of model element. This mode may not perform well on low-end GPUs that are optimized
      * to use textures to hold geometry data. Works great on most medium/high-end GPUs found in desktop computers, including the nVIDIA and Intel HD chipsets. Set this false to use the default vertex buffer object (VBO)
      * mode for storing geometry, which is the standard technique used in most graphics engines, and will work adequately on most low-end GPUs.
+     * @param {Boolean} [cfg.fastIdsEnabled=false] Whether to automatically compress IDs of {@link Entity}s loaded in models.
      */
     constructor(cfg) {
+
+        //this._fastIdsEnabled = !!cfg.fastIdsEnabled;
+        this._fastIdsEnabled = false;
+        this.ids = new FastMap();
+        this.keys = {};
+        this._fastIdUseCounts = [];
 
         /**
          * The Viewer's current language setting.
@@ -168,6 +176,64 @@ class Viewer {
          * @private
          */
         this._eventSubs = {};
+    }
+
+    /**
+     * Get a fast integer version of a string ID.
+     *
+     * The integer ID will be unique within this Viewer.
+     *
+     * This is used when we wish to avoid the overhead of using large numbers of long string IDs for things like objects,
+     * where the string IDs could be long UUIDs that would cause many expensive string comparisons. Integers are faster.
+     *
+     * @param {string} slowId Long and slow string ID.
+     * @returns {number|string} Faster integer ID.
+     */
+    createFastId(slowId) {
+        if (!this._fastIdsEnabled) {
+            return slowId;
+        }
+        let fastId = this.keys[slowId];
+        if (fastId !== null && fastId !== undefined) {
+            this._fastIdUseCounts[fastId]++;
+            return fastId;
+        }
+        fastId = this.ids.addItem(slowId);
+        this.keys[slowId] = fastId;
+        this._fastIdUseCounts[fastId] = 1;
+        return fastId;
+    }
+
+    /**
+     * Get the full, uncompressed version of an ID, if available.
+     *
+     * Returns the given ID if no uncompressed version available.
+     *
+     * @param {string|number} fastId
+     * @returns {*}
+     */
+    getSlowId(fastId) {
+        if (!this._fastIdsEnabled) {
+            return fastId;
+        }
+        return this.ids.items[fastId] || fastId;
+    }
+
+    /**
+     *
+     * @param fastId
+     */
+    putFastId(fastId) {
+        if (!this._fastIdsEnabled) {
+            return;
+        }
+        const slowId = this.ids.items[fastId];
+        if (slowId) {
+            if (this._fastIdUseCounts[fastId]-- === 0) {
+                this.ids.removeItem(fastId);
+                delete this.keys[slowId];
+            }
+        }
     }
 
     /**

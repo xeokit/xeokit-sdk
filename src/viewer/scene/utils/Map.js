@@ -3,6 +3,7 @@ class Map {
 
     constructor(items, baseId) {
         this.items = items || [];
+
         this._lastUniqueId = (baseId || 0) + 1;
     }
 
@@ -42,4 +43,11 @@ class Map {
     }
 }
 
-export {Map};
+/**
+ * FastMao
+ */
+class FastMap extends Map {
+
+}
+
+export {Map, FastMap};

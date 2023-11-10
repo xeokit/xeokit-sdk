@@ -164,6 +164,8 @@ class MetaModel {
             throw "MetaScene already finalized - can't add more data";
         }
 
+        const viewer = this.metaScene.viewer;
+
         this._globalizeIDs(metaModelData, options)
 
         const metaScene = this.metaScene;
@@ -176,8 +178,8 @@ class MetaModel {
                 let propertySet = metaScene.propertySets[propertySetData.id];
                 if (!propertySet) {
                     propertySet = new PropertySet({
-                        id: propertySetData.id,
-                        originalSystemId: propertySetData.originalSystemId || propertySetData.id,
+                        id: viewer.createFastId(propertySetData.id),
+                        originalSystemId: viewer.createFastId(propertySetData.originalSystemId || propertySetData.id),
                         type: propertySetData.type,
                         name: propertySetData.name,
                         properties: propertySetData.properties
@@ -192,7 +194,7 @@ class MetaModel {
         if (metaModelData.metaObjects) {
             for (let i = 0, len = metaModelData.metaObjects.length; i < len; i++) {
                 const metaObjectData = metaModelData.metaObjects[i];
-                const id = metaObjectData.id;
+                const id = viewer.createFastId(metaObjectData.id);
                 let metaObject = metaScene.metaObjects[id];
                 if (!metaObject) {
                     const type = metaObjectData.type;
@@ -201,7 +203,7 @@ class MetaModel {
                     metaObject = new MetaObject({
                         id,
                         originalSystemId,
-                        parentId: metaObjectData.parent,
+                        parentId: viewer.createFastId(metaObjectData.parent),
                         type,
                         name: metaObjectData.name,
                         attributes: metaObjectData.attributes,

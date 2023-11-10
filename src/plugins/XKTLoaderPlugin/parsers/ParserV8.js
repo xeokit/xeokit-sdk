@@ -248,7 +248,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
             const xktMetaObjectId = eachMetaObjectId[xktMetaObjectIndex];
             const xktEntityId = xktMetaObjectId;
 
-            const entityId = options.globalizeObjectIds ? math.globalizeObjectId(sceneModel.id, xktEntityId) : xktEntityId;
+            const entityId = viewer.createFastId(options.globalizeObjectIds ? math.globalizeObjectId(sceneModel.id, xktEntityId) : xktEntityId);
 
             const lastTileEntityIndex = (numEntities - 1);
             const atLastTileEntity = (tileEntityIndex === lastTileEntityIndex);

@@ -162,9 +162,6 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
 
             const meshId = primitiveIndex; // These IDs are local to the SceneModel
 
-            const entityIndex = batchedPrimitiveEntityIndexes[primitiveIndex];
-            const entityId = eachEntityId[entityIndex];
-
             const meshDefaults = {}; // TODO: get from lookup from entity IDs
 
             sceneModel.createMesh(utils.apply(meshDefaults, {
@@ -186,7 +183,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
 
         const lastEntityIndex = (numEntities - 1);
         const atLastEntity = (entityIndex === lastEntityIndex);
-        const entityId = eachEntityId[entityIndex];
+        const entityId = viewer.createFastId(eachEntityId[entityIndex]);
         const firstEntityPrimitiveInstanceIndex = eachEntityPrimitiveInstancesPortion [entityIndex];
         const lastEntityPrimitiveInstanceIndex = atLastEntity ? eachEntityPrimitiveInstancesPortion[lastEntityIndex] : eachEntityPrimitiveInstancesPortion[entityIndex + 1];
 

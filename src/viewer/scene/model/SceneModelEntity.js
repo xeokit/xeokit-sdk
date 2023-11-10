@@ -26,7 +26,7 @@ export class SceneModelEntity {
         }
 
         this.id = id;
-        this.originalSystemId = math.unglobalizeObjectId(model.id, id);
+      //  this.originalSystemId = math.unglobalizeObjectId(model.id, id);
 
         this._flags = flags;
         this._aabb = aabb;
@@ -470,6 +470,7 @@ export class SceneModelEntity {
             }
             this.scene._objectOffsetUpdated(this, false);
         }
+        scene.viewer.putFastId(this.id);
         for (let i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._destroy();
         }

@@ -152,7 +152,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
         for (let tileEntityIndex = firstTileEntityIndex; tileEntityIndex < lastTileEntityIndex; tileEntityIndex++) {
 
             const xktEntityId = eachEntityId[tileEntityIndex];
-            const entityId = options.globalizeObjectIds ? math.globalizeObjectId(sceneModel.id, xktEntityId) : xktEntityId;
+            const entityId = viewer.createFastId(options.globalizeObjectIds ? math.globalizeObjectId(sceneModel.id, xktEntityId) : xktEntityId);
 
             const entityMatrixIndex = eachEntityMatricesPortion[tileEntityIndex];
             const entityMatrix = matrices.slice(entityMatrixIndex, entityMatrixIndex + 16);

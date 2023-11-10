@@ -196,6 +196,7 @@ class MetaScene {
                     delete this.metaObjects[id];
                     if (!metaObject.parent) {
                         delete this.rootMetaObjects[id];
+                        viewer.putFastId(id);
                     }
                 } else {
                     const newMetaModels = [];
