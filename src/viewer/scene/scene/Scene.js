@@ -30,7 +30,7 @@ function getEntityIDMap(scene, entityIds) {
     let entity;
     for (let i = 0, len = entityIds.length; i < len; i++) {
         entityId = entityIds[i];
-        entity = scene.component[entityId];
+        entity = scene.components[entityId];
         if (!entity) {
             scene.warn("pick(): Component not found: " + entityId);
             continue;
