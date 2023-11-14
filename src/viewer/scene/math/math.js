@@ -5370,7 +5370,7 @@ math.buildEdgeIndices = (function () {
  * @param {number} numElementsPerPosition Number of elements perposition - usually either 3 or 4.
  * @returns {boolean}
  */
-math.planeClipsPositions3 = function(pos, dir, positions, numElementsPerPosition=3) {
+math.planeClipsPositions3 = function (pos, dir, positions, numElementsPerPosition = 3) {
     for (let i = 0, len = positions.length; i < len; i += numElementsPerPosition) {
         tempVec3a[0] = positions[i + 0] - pos[0];
         tempVec3a[1] = positions[i + 1] - pos[1];
