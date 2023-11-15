@@ -22,15 +22,6 @@ class MetaObject {
     constructor(params) {
 
         /**
-         * Model metadata.
-         *
-         * @property metaModel
-         * @type {MetaModel}
-         * @deprecated
-         */
-        this.metaModel = null;
-
-        /**
          * The MetaModels that share this MetaObject.
          * @type {MetaModel[]}
          */
@@ -114,6 +105,20 @@ class MetaObject {
         //      */
         //     this.external = external;
         // }
+    }
+
+    /**
+     * Backwards compatibility with the object belonging to a single MetaModel.
+     * 
+     * @property metaModel
+     * @type {MetaModel|null}
+     **/
+    get metaModel() {
+        if (this.metaModels.length == 1) {
+            return this.metaModels[0];
+        }
+
+        return null;
     }
 
     /**
