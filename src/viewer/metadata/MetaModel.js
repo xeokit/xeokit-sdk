@@ -115,15 +115,6 @@ class MetaModel {
         this.propertySets = [];
 
         /**
-         * The root {@link MetaObject} in this MetaModel's composition structure hierarchy.
-         *
-         * @property rootMetaObject
-         * @type {MetaObject}
-         * @deprecated
-         */
-        this.rootMetaObject = null;
-
-        /**
          * The root {@link MetaObject}s in this MetaModel's composition structure hierarchy.
          *
          * @property rootMetaObject
@@ -152,6 +143,20 @@ class MetaModel {
          * @type {boolean}
          */
         this.finalized = false;
+    }
+
+    /**
+     * Backwards compatibility with the model having a single root MetaObject.
+     *
+     * @property rootMetaObject
+     * @type {MetaObject|null}
+     */
+    get rootMetaObject()
+    {
+        if (this.rootMetaObjects.length == 1) {
+            return this.rootMetaObjects[0];
+        }
+        return null;
     }
 
     /**
