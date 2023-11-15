@@ -205,7 +205,8 @@ class MetaModel {
                         type,
                         name: metaObjectData.name,
                         attributes: metaObjectData.attributes,
-                        propertySetIds
+                        propertySetIds,
+                        external: metaObjectData.external,
                     });
                     this.metaScene.metaObjects[id] = metaObject;
                 }

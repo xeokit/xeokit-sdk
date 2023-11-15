@@ -102,18 +102,18 @@ class MetaObject {
          */
         this.attributes = params.attributes || {};
 
-        // if (external !== undefined && external !== null) {
-        //
-        //     /**
-        //      * External application-specific metadata
-        //      *
-        //      * Undefined when there are is no external application-specific metadata.
-        //      *
-        //      * @property external
-        //      * @type {*}
-        //      */
-        //     this.external = external;
-        // }
+        if (params.external !== undefined && params.external !== null) {
+        
+            /**
+             * External application-specific metadata
+             *
+             * Undefined when there are is no external application-specific metadata.
+             *
+             * @property external
+             * @type {*}
+             */
+            this.external = params.external;
+        }
     }
 
     /**
