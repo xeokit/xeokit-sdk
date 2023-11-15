@@ -1382,6 +1382,17 @@ export class SceneModel extends Component {
     }
 
     /**
+     * The {@link SceneModelTexture}s in this SceneModel.
+     *
+     * Each {@link SceneModelTexture} is stored here against its {@link SceneModelTexture.id}.
+     *
+     * @returns {*|{}}
+     */
+    get textures() {
+        return this._textures;
+    }
+
+    /**
      * The {@link SceneModelTextureSet}s in this SceneModel.
      *
      * Each {@link SceneModelTextureSet} is stored here against its {@link SceneModelTextureSet.id}.

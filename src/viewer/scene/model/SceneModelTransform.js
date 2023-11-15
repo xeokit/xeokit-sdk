@@ -109,7 +109,7 @@ export class SceneModelTransform {
     }
 
     /**
-     * Gets the SceneModelTransform's local translation.
+     * Gets the SceneModelTransform's translation.
      *
      * Default value is ````[0,0,0]````.
      *
@@ -120,7 +120,7 @@ export class SceneModelTransform {
     }
 
     /**
-     * Sets the SceneModelTransform's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     * Sets the SceneModelTransform's rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      *
      * Default value is ````[0,0,0]````.
      *
@@ -134,7 +134,7 @@ export class SceneModelTransform {
     }
 
     /**
-     * Gets the SceneModelTransform's local rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
+     * Gets the SceneModelTransform's rotation, as Euler angles given in degrees, for each of the X, Y and Z axis.
      *
      * Default value is ````[0,0,0]````.
      *
@@ -145,7 +145,7 @@ export class SceneModelTransform {
     }
 
     /**
-     * Sets the SceneModelTransform's local rotation quaternion.
+     * Sets the SceneModelTransform's rotation quaternion.
      *
      * Default value is ````[0,0,0,1]````.
      *
@@ -159,7 +159,7 @@ export class SceneModelTransform {
     }
 
     /**
-     * Gets the SceneModelTransform's local rotation quaternion.
+     * Gets the SceneModelTransform's rotation quaternion.
      *
      * Default value is ````[0,0,0,1]````.
      *
@@ -170,7 +170,7 @@ export class SceneModelTransform {
     }
 
     /**
-     * Sets the SceneModelTransform's local scale.
+     * Sets the SceneModelTransform's scale.
      *
      * Default value is ````[1,1,1]````.
      *
@@ -183,7 +183,7 @@ export class SceneModelTransform {
     }
 
     /**
-     * Gets the SceneModelTransform's local scale.
+     * Gets the SceneModelTransform's scale.
      *
      * Default value is ````[1,1,1]````.
      *
@@ -194,7 +194,7 @@ export class SceneModelTransform {
     }
 
     /**
-     * Sets the SceneModelTransform's local modeling transform matrix.
+     * Sets the SceneModelTransform's transform matrix.
      *
      * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
      *
@@ -212,7 +212,7 @@ export class SceneModelTransform {
     }
 
     /**
-     * Gets the SceneModelTransform's local modeling transform matrix.
+     * Gets the SceneModelTransform's transform matrix.
      *
      * Default value is ````[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]````.
      *
@@ -243,7 +243,7 @@ export class SceneModelTransform {
     }
 
     /**
-     * Rotates the SceneModelTransform about the given local axis by the given increment.
+     * Rotates the SceneModelTransform about the given axis by the given increment.
      *
      * @param {Number[]} axis Local axis about which to rotate.
      * @param {Number} angle Angle increment in degrees.
@@ -306,7 +306,7 @@ export class SceneModelTransform {
     }
 
     /**
-     * Translates the SceneModelTransform along local space vector by the given increment.
+     * Translates the SceneModelTransform along the local axis by the given increment.
      *
      * @param {Number[]} axis Normalized local space 3D vector along which to translate.
      * @param {Number} distance Distance to translate along  the vector.

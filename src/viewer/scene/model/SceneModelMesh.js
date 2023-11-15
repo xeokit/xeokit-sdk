@@ -5,7 +5,7 @@
  * * Belongs to exactly one {@link SceneModelEntity}
  * * Stored by ID in {@link SceneModel#meshes}
  * * Referenced by {@link SceneModelEntity#meshes}
- * * Can have a {@link SceneModelTransform} to dyncmically scale, rotate and translate it.
+ * * Can have a {@link SceneModelTransform} to dynamically scale, rotate and translate it.
  */
 export class SceneModelMesh {
 
@@ -23,6 +23,9 @@ export class SceneModelMesh {
          */
         this.object = null;
 
+        /**
+         * @private
+         */
         this.parent = null;
 
         /**
@@ -59,14 +62,30 @@ export class SceneModelMesh {
         this.id = id;
 
         this._aabb = null;
+
+        /**
+         * @private
+         */
         this.layer = layer;
+
+        /**
+         * @private
+         */
         this.portionId = portionId;
+
         this._color = new Uint8Array([color[0], color[1], color[2], opacity]); // [0..255]
         this._colorize = new Uint8Array([color[0], color[1], color[2], opacity]); // [0..255]
         this._colorizing = false;
         this._transparent = (opacity < 255);
+
+
+        /**
+         * @private
+         */
         this.numTriangles = 0;
+
         this.origin = null;
+
         if (transform) {
             transform._addMesh(this);
         }
