@@ -36,6 +36,7 @@ const IFCObjectDefaultColors = {
 
     // Priority 2
 
+
     IfcStair: {
         colorize: [0.637255, 0.603922, 0.670588]
     },
