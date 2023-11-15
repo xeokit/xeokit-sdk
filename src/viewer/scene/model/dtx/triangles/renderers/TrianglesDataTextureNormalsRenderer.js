@@ -115,7 +115,7 @@ export class TrianglesDataTextureNormalsRenderer {
             }
         }
 
-        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, dataTextureLayer._state.positionsDecodeMatrix);
+        gl.uniformMatrix4fv(this._uPositionsDecodeMatrix, false, dataTextureLayer._state.objectDecodeAndInstanceMatrix);
 
         this._aPosition.bindArrayBuffer(state.positionsBuf);
         this._aOffset.bindArrayBuffer(state.offsetsBuf);
@@ -140,7 +140,7 @@ export class TrianglesDataTextureNormalsRenderer {
         }
         const program = this._program;
         this._uRenderPass = program.getLocation("renderPass");
-        this._uPositionsDecodeMatrix = program.getLocation("positionsDecodeMatrix");
+        this._uPositionsDecodeMatrix = program.getLocation("objectDecodeAndInstanceMatrix");
         this._uWorldMatrix = program.getLocation("worldMatrix");
         this._uWorldNormalMatrix = program.getLocation("worldNormalMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
@@ -208,7 +208,7 @@ export class TrianglesDataTextureNormalsRenderer {
         src.push("uniform mat4 viewMatrix;");
         src.push("uniform mat4 projMatrix;");
         src.push("uniform mat4 viewNormalMatrix;");
-        src.push("uniform mat4 positionsDecodeMatrix;");
+        src.push("uniform mat4 objectDecodeAndInstanceMatrix;");
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
             if (WEBGL_INFO.SUPPORTED_EXTENSIONS["EXT_frag_depth"]) {
@@ -240,7 +240,7 @@ export class TrianglesDataTextureNormalsRenderer {
         src.push("      gl_Position = vec4(0.0, 0.0, 0.0, 0.0);");
 
         src.push("  } else {");
-        src.push("      vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
+        src.push("      vec4 worldPosition = worldMatrix * (objectDecodeAndInstanceMatrix * vec4(position, 1.0)); ");
         if (scene.entityOffsetsEnabled) {
             src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
         }

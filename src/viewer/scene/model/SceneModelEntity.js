@@ -7,16 +7,35 @@ const tempIntRGB = new Uint16Array([0, 0, 0]);
 const tempOBB3a = math.OBB3();
 
 /**
- * @private
+ * An entity within a {@link SceneModel}
+ *
+ * * Created with {@link SceneModel#createEntity}
+ * * Stored by ID in {@link SceneModel#entities}
+ * * Has one or more {@link SceneModelMesh}es
+ *
+ * @implements {Entity}
  */
 export class SceneModelEntity {
 
+    /**
+     * @private
+     */
     constructor(model, isObject, id, meshes, flags, aabb, lodCullable) {
 
         this._isObject = isObject;
         this.scene = model.scene;
         this.model = model;
+
+        /**
+         * The {@link SceneModelMesh}es belonging to this SceneModelEntity.
+         *
+         * * These are created with {@link SceneModel#createMesh}
+         * * Each of these is also registered in {@ilnk SceneModel#meshes}.
+         *
+         * @returns {*|{}}
+         */
         this.meshes = meshes;
+
         this._numPrimitives = 0;
 
         for (let i = 0, len = this.meshes.length; i < len; i++) {  // TODO: tidier way? Refactor?
@@ -92,7 +111,6 @@ export class SceneModelEntity {
     get isObject() {
         return this._isObject;
     }
-
 
     get numPrimitives() {
         return this._numPrimitives;

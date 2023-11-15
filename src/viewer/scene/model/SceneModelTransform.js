@@ -16,25 +16,35 @@ const identityMat = math.identityMat4();
  * A dynically-updatable transform within a {@link SceneModel}.
  *
  * * Can be composed into hierarchies
- * * Created with {@link SceneModel#createTransform | SceneModel#createTransform}
- * * Stored by ID in {@link SceneModel#transforms | SceneModel#transforms}
- * * Referenced by {@link SceneModelMesh#transform | SceneModelMesh#transform}
+ * * Shared by multiple {@link SceneModelMesh}es
+ * * Created with {@link SceneModel#createTransform}
+ * * Stored by ID in {@link SceneModel#transforms}
+ * * Referenced by {@link SceneModelMesh#transform}
  */
 export class SceneModelTransform {
 
+    /**
+     * @private
+     */
     constructor(cfg) {
         this._model = cfg.model;
+
+        /**
+         * Unique ID of this SceneModelTransform.
+         *
+         * The SceneModelTransform is registered against this ID in {@link SceneModel#transforms}.
+         */
         this.id = cfg.id;
-        this.portionId = cfg.portionId;
+
         this._parentTransform = cfg.parent;
         this._childTransforms = [];
         this._meshes = [];
-        this._scale = math.vec3([1,1,1]);
-        this._quaternion = math.identityQuaternion();
-        this._rotation = math.vec3();
-        this._position = math.vec3();
-        this._localMatrix = math.identityMat4();
-        this._worldMatrix = math.identityMat4();
+        this._scale = new Float32Array([1,1,1]);
+        this._quaternion = math.identityQuaternion(new Float32Array(4));
+        this._rotation = new Float32Array(3);
+        this._position = new Float32Array(3);
+        this._localMatrix = math.identityMat4(new Float32Array(16));
+        this._worldMatrix = math.identityMat4(new Float32Array(16));
         this._localMatrixDirty = true;
         this._worldMatrixDirty = true;
 
@@ -68,7 +78,7 @@ export class SceneModelTransform {
     }
 
     /**
-     * The parent SceneModelTransform.
+     * The optional parent SceneModelTransform.
      *
      * @type {SceneModelTransform}
      */
@@ -77,7 +87,8 @@ export class SceneModelTransform {
     }
 
     /**
-     * The {@link SceneModelMesh}es transformed by this SceneModelTransform
+     * The {@link SceneModelMesh}es transformed by this SceneModelTransform.
+     *
      * @returns {[]}
      */
     get meshes() {
@@ -94,7 +105,6 @@ export class SceneModelTransform {
     set position(value) {
         this._position.set(value || [0, 0, 0]);
         this._setLocalMatrixDirty();
-        this._setAABBDirty();
         this._model.glRedraw();
     }
 
@@ -120,7 +130,6 @@ export class SceneModelTransform {
         this._rotation.set(value || [0, 0, 0]);
         math.eulerToQuaternion(this._rotation, "XYZ", this._quaternion);
         this._setLocalMatrixDirty();
-        this._setAABBDirty();
         this._model.glRedraw();
     }
 
@@ -146,7 +155,6 @@ export class SceneModelTransform {
         this._quaternion.set(value || [0, 0, 0, 1]);
         math.quaternionToEuler(this._quaternion, "XYZ", this._rotation);
         this._setLocalMatrixDirty();
-        this._setAABBDirty();
         this._model.glRedraw();
     }
 
@@ -171,7 +179,6 @@ export class SceneModelTransform {
     set scale(value) {
         this._scale.set(value || [1, 1, 1]);
         this._setLocalMatrixDirty();
-        this._setAABBDirty();
         this._model.glRedraw();
     }
 
@@ -201,7 +208,6 @@ export class SceneModelTransform {
         math.decomposeMat4(this._localMatrix, this._position, this._quaternion, this._scale);
         this._localMatrixDirty = false;
         this._setWorldMatrixDirty();
-        this._setAABBDirty();
         this._model.glRedraw();
     }
 
@@ -251,7 +257,6 @@ export class SceneModelTransform {
         math.mulQuaternions(this.quaternion, q1, q2);
         this.quaternion = q2;
         this._setLocalMatrixDirty();
-        this._setAABBDirty();
         this._model.glRedraw();
         return this;
     }

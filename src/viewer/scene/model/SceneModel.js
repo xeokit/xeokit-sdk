@@ -36,6 +36,7 @@ import {rebucketPositions} from "./dtx/triangles/rebucketPositions.js";
 import {TrianglesDataTextureLayer} from "./dtx/triangles/TrianglesDataTextureLayer.js";
 import {SceneModelEntity} from "./SceneModelEntity.js";
 import {geometryCompressionUtils} from "../math/geometryCompressionUtils.js";
+import {SceneModelTransform} from "./SceneModelTransform";
 
 const tempVec3a = math.vec3();
 const tempMat4 = math.mat4();
@@ -1114,7 +1115,7 @@ export class SceneModel extends Component {
      * to convert transcoded texture data. Only required when we'll be providing transcoded data
      * to {@link SceneModel#createTexture}. We assume that all transcoded texture data added to a  ````SceneModel````
      * will then in a format supported by this transcoder.
-     * @param {Boolean} [params.dtxEnabled=true] When ````true```` (default) use data textures (DTX), where appropriate, to
+     * @param {Boolean} [cfg.dtxEnabled=true] When ````true```` (default) use data textures (DTX), where appropriate, to
      * represent the returned model. Set false to always use vertex buffer objects (VBOs). Note that DTX is only applicable
      * to non-textured triangle meshes, and that VBOs are always used for meshes that have textures, line segments, or point
      * primitives. Only works while {@link DTX#enabled} is also ````true````.
@@ -1151,6 +1152,7 @@ export class SceneModel extends Component {
         this._dtxBuckets = {}; // Geometries with optimizations used for data texture representation
         this._textures = {};
         this._textureSets = {};
+        this._transforms = {};
         this._meshes = {};
         this._entities = {};
 
@@ -1271,6 +1273,15 @@ export class SceneModel extends Component {
             this._viewMatrixDirty = true;
         });
 
+        this._meshesWithDirtyMatrices = [];
+        this._numMeshesWithDirtyMatrices = 0;
+
+        this._onTick = this.scene.on("tick", () => {
+            while (this._numMeshesWithDirtyMatrices > 0) {
+                this._meshesWithDirtyMatrices[--this._numMeshesWithDirtyMatrices]._updateMatrix();
+            }
+        });
+
         this._createDefaultTextureSet();
 
         this.visible = cfg.visible;
@@ -1287,6 +1298,10 @@ export class SceneModel extends Component {
         this.colorize = cfg.colorize;
         this.opacity = cfg.opacity;
         this.backfaces = cfg.backfaces;
+    }
+
+    _meshMatrixDirty(mesh) {
+        this._meshesWithDirtyMatrices[this._numMeshesWithDirtyMatrices++] = mesh;
     }
 
     _createDefaultTextureSet() {
@@ -1356,7 +1371,44 @@ export class SceneModel extends Component {
     }
 
     /**
-     * Returns the {@link Entity}s in this SceneModel.
+     * The {@link SceneModelTransform}s in this SceneModel.
+     *
+     * Each {#link SceneModelTransform} is stored here against its {@link SceneModelTransform.id}.
+     *
+     * @returns {*|{}}
+     */
+    get transforms() {
+        return this._transforms;
+    }
+
+    /**
+     * The {@link SceneModelTextureSet}s in this SceneModel.
+     *
+     * Each {@link SceneModelTextureSet} is stored here against its {@link SceneModelTextureSet.id}.
+     *
+     * @returns {*|{}}
+     */
+    get textureSets() {
+        return this._textureSets;
+    }
+
+    /**
+     * The {@link SceneModelMesh}es in this SceneModel.
+     *
+     * Each {@SceneModelMesh} is stored here against its {@link SceneModelMesh.id}.
+     *
+     * @returns {*|{}}
+     */
+    get meshes() {
+        return this._meshes;
+    }
+
+    /**
+     * The {@link SceneModelEntity}s in this SceneModel.
+     *
+     * Each {#link SceneModelEntity} in this SceneModel that represents an object is
+     * stored here against its {@link SceneModelTransform.id}.
+     *
      * @returns {*|{}}
      */
     get objects() {
@@ -1366,7 +1418,7 @@ export class SceneModel extends Component {
     /**
      * Gets the 3D World-space origin for this SceneModel.
      *
-     * Each mesh origin, if supplied, is relative to this origin.
+     * Each {@link SceneModelMesh.origin}, if supplied, is relative to this origin.
      *
      * Default value is ````[0,0,0]````.
      *
@@ -1539,6 +1591,8 @@ export class SceneModel extends Component {
     /**
      * Gets the conjugate of the SceneModel's local modeling rotation transform matrix.
      *
+     * This is used for RTC view matrix management in renderers.
+     *
      * @type {Number[]}
      */
     get rotationMatrixConjugate() {
@@ -1668,9 +1722,9 @@ export class SceneModel extends Component {
     }
 
     /**
-     * Gets the list of {@link Entity}s within this SceneModel.
+     * Gets the list of {@link SceneModelEntity}s within this SceneModel.
      *
-     * @returns {Entity[]}
+     * @returns {SceneModelEntity[]}
      */
     get entityList() {
         return this._entityList;
@@ -1760,7 +1814,7 @@ export class SceneModel extends Component {
     }
 
     /**
-     * Gets if any {@link Entity}s in this SceneModel are visible.
+     * Gets if any {@link SceneModelEntity}s in this SceneModel are visible.
      *
      * The SceneModel is only rendered when {@link SceneModel#visible} is ````true```` and {@link SceneModel#culled} is ````false````.
      *
@@ -1787,7 +1841,7 @@ export class SceneModel extends Component {
     }
 
     /**
-     * Gets if any {@link Entity}s in this SceneModel are xrayed.
+     * Gets if any {@link SceneModelEntity}s in this SceneModel are xrayed.
      *
      * @type {Boolean}
      */
@@ -1796,7 +1850,7 @@ export class SceneModel extends Component {
     }
 
     /**
-     * Sets if all {@link Entity}s in this SceneModel are xrayed.
+     * Sets if all {@link SceneModelEntity}s in this SceneModel are xrayed.
      *
      * @type {Boolean}
      */
@@ -1810,7 +1864,7 @@ export class SceneModel extends Component {
     }
 
     /**
-     * Gets if any {@link Entity}s in this SceneModel are highlighted.
+     * Gets if any {@link SceneModelEntity}s in this SceneModel are highlighted.
      *
      * @type {Boolean}
      */
@@ -1819,7 +1873,7 @@ export class SceneModel extends Component {
     }
 
     /**
-     * Sets if all {@link Entity}s in this SceneModel are highlighted.
+     * Sets if all {@link SceneModelEntity}s in this SceneModel are highlighted.
      *
      * @type {Boolean}
      */
@@ -1833,7 +1887,7 @@ export class SceneModel extends Component {
     }
 
     /**
-     * Gets if any {@link Entity}s in this SceneModel are selected.
+     * Gets if any {@link SceneModelEntity}s in this SceneModel are selected.
      *
      * @type {Boolean}
      */
@@ -1842,7 +1896,7 @@ export class SceneModel extends Component {
     }
 
     /**
-     * Sets if all {@link Entity}s in this SceneModel are selected.
+     * Sets if all {@link SceneModelEntity}s in this SceneModel are selected.
      *
      * @type {Boolean}
      */
@@ -1856,7 +1910,7 @@ export class SceneModel extends Component {
     }
 
     /**
-     * Gets if any {@link Entity}s in this SceneModel have edges emphasised.
+     * Gets if any {@link SceneModelEntity}s in this SceneModel have edges emphasised.
      *
      * @type {Boolean}
      */
@@ -1865,7 +1919,7 @@ export class SceneModel extends Component {
     }
 
     /**
-     * Sets if all {@link Entity}s in this SceneModel have edges emphasised.
+     * Sets if all {@link SceneModelEntity}s in this SceneModel have edges emphasised.
      *
      * @type {Boolean}
      */
@@ -1906,7 +1960,7 @@ export class SceneModel extends Component {
     }
 
     /**
-     * Gets if {@link Entity}s in this SceneModel are clippable.
+     * Gets if {@link SceneModelEntity}s in this SceneModel are clippable.
      *
      * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
      *
@@ -1917,7 +1971,7 @@ export class SceneModel extends Component {
     }
 
     /**
-     * Sets if {@link Entity}s in this SceneModel are clippable.
+     * Sets if {@link SceneModelEntity}s in this SceneModel are clippable.
      *
      * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
      *
@@ -1942,7 +1996,7 @@ export class SceneModel extends Component {
     }
 
     /**
-     * Sets if {@link Entity}s in this SceneModel are collidable.
+     * Sets if {@link SceneModelEntity}s in this SceneModel are collidable.
      *
      * @type {Boolean}
      */
@@ -1966,7 +2020,7 @@ export class SceneModel extends Component {
     }
 
     /**
-     * Sets if {@link Entity}s in this SceneModel are pickable.
+     * Sets if {@link SceneModelEntity}s in this SceneModel are pickable.
      *
      * Picking is done via calls to {@link Scene#pick}.
      *
@@ -2126,7 +2180,7 @@ export class SceneModel extends Component {
     }
 
     /**
-     * Configures the appearance of xrayed {@link Entity}s within this SceneModel.
+     * Configures the appearance of xrayed {@link SceneModelEntity}s within this SceneModel.
      *
      * This is the {@link Scene#xrayMaterial}.
      *
@@ -2137,7 +2191,7 @@ export class SceneModel extends Component {
     }
 
     /**
-     * Configures the appearance of highlighted {@link Entity}s within this SceneModel.
+     * Configures the appearance of highlighted {@link SceneModelEntity}s within this SceneModel.
      *
      * This is the {@link Scene#highlightMaterial}.
      *
@@ -2148,7 +2202,7 @@ export class SceneModel extends Component {
     }
 
     /**
-     * Configures the appearance of selected {@link Entity}s within this SceneModel.
+     * Configures the appearance of selected {@link SceneModelEntity}s within this SceneModel.
      *
      * This is the {@link Scene#selectedMaterial}.
      *
@@ -2159,7 +2213,7 @@ export class SceneModel extends Component {
     }
 
     /**
-     * Configures the appearance of edges of {@link Entity}s within this SceneModel.
+     * Configures the appearance of edges of {@link SceneModelEntity}s within this SceneModel.
      *
      * This is the {@link Scene#edgeMaterial}.
      *
@@ -2461,6 +2515,8 @@ export class SceneModel extends Component {
     /**
      * Creates a texture set within this SceneModel.
      *
+     * * Stores the new {@link SceneModelTextureSet} in {@link SceneModel#textureSets}.
+     *
      * A texture set is a collection of textures that can be shared among meshes. We can then supply the texture set
      * ID to {@link SceneModel#createMesh} when we want to create meshes that use the texture set.
      *
@@ -2475,6 +2531,7 @@ export class SceneModel extends Component {
      * @param {*} [cfg.normalsTextureId] ID of *RGBA* normal map texture, with normal map vectors in *RGB*.
      * @param {*} [cfg.emissiveTextureId] ID of *RGBA* emissive map texture, with emissive color in *RGB*.
      * @param {*} [cfg.occlusionTextureId] ID of *RGBA* occlusion map texture, with occlusion factor in *R*.
+     * @returns {SceneModelTransform} The new texture set.
      */
     createTextureSet(cfg) {
         const textureSetId = cfg.id;
@@ -2546,26 +2603,79 @@ export class SceneModel extends Component {
             occlusionTexture
         });
         this._textureSets[textureSetId] = textureSet;
+
+        return textureSet;
     }
 
     /**
-     * Creates a mesh within this SceneModel.
+     * Creates a new {@link SceneModelTransform} within this SceneModel.
      *
-     * A mesh can either define its own geometry or share it with other meshes. To define own geometry, provide the
+     * * Stores the new {@link SceneModelTransform} in {@link SceneModel#transforms}.
+     * * Can be connected into hierarchies
+     * * Each {@link SceneModelTransform} can be used by unlimited {@link SceneModelMesh}es
+     *
+     * @param {*} cfg Transform creation parameters.
+     * @param {String} cfg.id Mandatory ID for the new transform. Must not clash with any existing components within the {@link Scene}.
+     * @param {String} [cfg.parentTransformId] ID of a parent transform, previously created with {@link SceneModel#createTextureSet}.
+     * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position of the mesh. Overridden by ````transformId````.
+     * @param {Number[]} [cfg.scale=[1,1,1]] Scale of the transform.
+     * @param {Number[]} [cfg.rotation=[0,0,0]] Rotation of the transform as Euler angles given in degrees, for each of the X, Y and Z axis.
+     * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Modelling transform matrix. Overrides the ````position````, ````scale```` and ````rotation```` parameters.
+     * @returns {SceneModelTransform} The new transform.
+     */
+    createTransform(cfg) {
+
+        if (cfg.id === undefined || cfg.id === null) {
+            this.error("[createTransform] SceneModel.createTransform() config missing: id");
+            return;
+        }
+
+        if (this._transforms[cfg.id]) {
+            this.error(`[createTransform] SceneModel already has a transform with this ID: ${cfg.id}`);
+            return;
+        }
+
+        let parentTransform;
+        if (this.parentTransformId) {
+            parentTransform = this._transforms[cfg.parentTransformId];
+            if (!parentTransform) {
+                this.error("[createTransform] SceneModel.createTransform() config missing: id");
+                return;
+            }
+        }
+
+        const transform = new SceneModelTransform({
+            id: cfg.id,
+            model: this,
+            parentTransform,
+            matrix: cfg.matrix,
+            position: cfg.position,
+            scale: cfg.scale,
+            rotation: cfg.rotation,
+            quaternion: cfg.quaternion
+        });
+
+        this._transforms[transform.id] = transform;
+
+        return transform;
+    }
+
+    /**
+     * Creates a new {@link SceneModelMesh} within this SceneModel.
+     *
+     * * Stores the new SceneModelMesh in {@link SceneModel#meshes}.
+     * * The SceneModelMesh can either define its own geometry or share it with other SceneModelMeshes. To define own geometry, provide the
      * various geometry arrays to this method. To share a geometry, provide the ID of a geometry created earlier
      * with {@link SceneModel#createGeometry}.
-     *
-     * Internally, SceneModel will batch all unique mesh geometries into the same arrays, which improves
-     * rendering performance.
-     *
-     * If you accompany the arrays with an  ````origin````, then ````createMesh()```` will assume
-     * that the ````positions```` are in relative-to-center (RTC) coordinates, with ````origin```` being the origin of their
-     * RTC coordinate system.
+     * * If you accompany the arrays with an  ````origin````, then ````createMesh()```` will assume
+     * that the geometry ````positions```` are in relative-to-center (RTC) coordinates, with ````origin```` being the
+     * origin of their RTC coordinate system.
      *
      * @param {object} cfg Object properties.
      * @param {String} cfg.id Mandatory ID for the new mesh. Must not clash with any existing components within the {@link Scene}.
-     * @param {String|Number} [cfg.textureSetId] ID of a texture set previously created with {@link SceneModel#createTextureSet"}.
-     * @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link SceneModel#createGeometry"}. Overrides all other geometry parameters given to this method.
+     * @param {String|Number} [cfg.textureSetId] ID of a {@link SceneModelTextureSet} previously created with {@link SceneModel#createTextureSet}.
+     * @param {String|Number} [cfg.transformId] ID of a {@link SceneModelTransform} to instance, previously created with {@link SceneModel#createTransform}. Overrides all other transform parameters given to this method.
+     * @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link SceneModel#createGeometry}. Overrides all other geometry parameters given to this method.
      * @param {String} cfg.primitive The primitive type. Accepted values are 'points', 'lines', 'triangles', 'solid' and 'surface'.
      * @param {Number[]} [cfg.positions] Flat array of uncompressed 3D vertex positions positions. Required for all primitive types. Overridden by ````positionsCompressed````.
      * @param {Number[]} [cfg.positionsCompressed] Flat array of quantized 3D vertex positions. Overrides ````positions````, and must be accompanied by ````positionsDecodeMatrix````.
@@ -2580,14 +2690,15 @@ export class SceneModel extends Component {
      * @param {Number[]} [cfg.indices] Array of primitive connectivity indices. Not required for `points` primitives.
      * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Used only with 'triangles', 'solid' and 'surface' primitives. Automatically generated internally if not supplied, using the optional ````edgeThreshold```` given to the ````SceneModel```` constructor.
      * @param {Number[]} [cfg.origin] Optional geometry origin, relative to {@link SceneModel#origin}. When this is given, then ````positions```` are assumed to be relative to this.
-     * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position of the mesh.
-     * @param {Number[]} [cfg.scale=[1,1,1]] Scale of the mesh.
-     * @param {Number[]} [cfg.rotation=[0,0,0]] Rotation of the mesh as Euler angles given in degrees, for each of the X, Y and Z axis.
-     * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Mesh modelling transform matrix. Overrides the ````position````, ````scale```` and ````rotation```` parameters.
+     * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position of the mesh. Overridden by ````transformId````.
+     * @param {Number[]} [cfg.scale=[1,1,1]] Scale of the mesh.  Overridden by ````transformId````.
+     * @param {Number[]} [cfg.rotation=[0,0,0]] Rotation of the mesh as Euler angles given in degrees, for each of the X, Y and Z axis.  Overridden by ````transformId````.
+     * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Mesh modelling transform matrix. Overrides the ````position````, ````scale```` and ````rotation```` parameters. Also  overridden by ````transformId````.
      * @param {Number[]} [cfg.color=[1,1,1]] RGB color in range ````[0..1, 0..1, 0..1]````. Overridden by texture set ````colorTexture````. Overrides ````colors```` and ````colorsCompressed````.
      * @param {Number} [cfg.opacity=1] Opacity in range ````[0..1]````. Overridden by texture set ````colorTexture````.
      * @param {Number} [cfg.metallic=0] Metallic factor in range ````[0..1]````. Overridden by texture set ````metallicRoughnessTexture````.
      * @param {Number} [cfg.roughness=1] Roughness factor in range ````[0..1]````. Overridden by texture set ````metallicRoughnessTexture````.
+     * @returns {@link SceneModelMesh} The new mesh.
      */
     createMesh(cfg) {
 
@@ -2772,16 +2883,28 @@ export class SceneModel extends Component {
             cfg.origin = cfg.origin ? math.addVec3(this._origin, cfg.origin, math.vec3()) : this._origin;
             cfg.positionsDecodeMatrix = cfg.geometry.positionsDecodeMatrix;
 
-            // MATRIX - always have a matrix for instancing
+            if (cfg.transformId) {
 
-            if (cfg.matrix) {
-                cfg.meshMatrix = cfg.matrix.slice();
+                cfg.transform = this._transforms[cfg.transformId];
+
+                if (!cfg.transform) {
+                    this.error(`[createMesh] Transform not found: ${cfg.transformId} - ensure that you create it first with createTransform()`);
+                    return;
+                }
+
             } else {
-                const scale = cfg.scale || DEFAULT_SCALE;
-                const position = cfg.position || DEFAULT_POSITION;
-                const rotation = cfg.rotation || DEFAULT_ROTATION;
-                math.eulerToQuaternion(rotation, "XYZ", DEFAULT_QUATERNION);
-                cfg.meshMatrix = math.composeMat4(position, DEFAULT_QUATERNION, scale, math.mat4());
+
+                // MATRIX - always have a matrix for instancing
+
+                if (cfg.matrix) {
+                    cfg.meshMatrix = cfg.matrix.slice();
+                } else {
+                    const scale = cfg.scale || DEFAULT_SCALE;
+                    const position = cfg.position || DEFAULT_POSITION;
+                    const rotation = cfg.rotation || DEFAULT_ROTATION;
+                    math.eulerToQuaternion(rotation, "XYZ", DEFAULT_QUATERNION);
+                    cfg.meshMatrix = math.composeMat4(position, DEFAULT_QUATERNION, scale, math.mat4());
+                }
             }
 
             const useDTX = (!!this._dtxEnabled && (cfg.geometry.primitive === "triangles" || cfg.geometry.primitive === "solid" || cfg.geometry.primitive === "surface"));
@@ -2837,12 +2960,12 @@ export class SceneModel extends Component {
 
         cfg.numPrimitives = this._getNumPrimitives(cfg);
 
-        this._createMesh(cfg);
+        return this._createMesh(cfg);
     }
 
     _createMesh(cfg) {
 
-        const mesh = new SceneModelMesh(this, cfg.id, cfg.color, cfg.opacity);
+        const mesh = new SceneModelMesh(this, cfg.id, cfg.color, cfg.opacity, cfg.transform, cfg.textureSet);
 
         mesh.pickId = this.scene._renderer.getPickID(mesh);
 
@@ -2868,12 +2991,16 @@ export class SceneModel extends Component {
                 mesh.layer = this._getVBOInstancingLayer(cfg);
                 break;
         }
+        if (cfg.transform) {
+            cfg.meshMatrix = cfg.transform.worldMatrix;
+        }
         mesh.portionId = mesh.layer.createPortion(cfg);
         mesh.aabb = cfg.worldAABB;
         mesh.numPrimitives = cfg.numPrimitives;
         math.expandAABB3(this._aabb, mesh.aabb);
         this._meshes[cfg.id] = mesh;
         this._meshList.push(mesh);
+        return mesh;
     }
 
     _getNumPrimitives(cfg) {
@@ -3146,27 +3273,32 @@ export class SceneModel extends Component {
     }
 
     /**
-     * Creates an {@link Entity} within this SceneModel, giving it one or more meshes previously created with {@link SceneModel#createMesh}.
+     * Creates a {@link SceneModelEntity} within this SceneModel.
      *
-     * A mesh can only belong to one {@link Entity}, so you'll get an error if you try to reuse a mesh among multiple {@link Entity}s.
+     * * Gives the SceneModelEntity one or more {@link SceneModelMesh}es previously created with
+     * {@link SceneModel#createMesh}. A SceneModelMesh can only belong to one SceneModelEntity, so you'll get an
+     * error if you try to reuse a mesh among multiple SceneModelEntitys.
+     * * The SceneModelEntity can have a {@link SceneModelTextureSet}, previously created with
+     * {@link SceneModel#createTextureSet}. A SceneModelTextureSet can belong to multiple SceneModelEntitys.
+     * * The SceneModelEntity can have a geometry, previously created with
+     * {@link SceneModel#createTextureSet}. A geometry is a "virtual component" and can belong to multiple SceneModelEntitys.
      *
-     * @param {Object} cfg Entity configuration.
-     * @param {String} cfg.id Optional ID for the new Entity. Must not clash with any existing components within the {@link Scene}.
+     * @param {Object} cfg SceneModelEntity configuration.
+     * @param {String} cfg.id Optional ID for the new SceneModelEntity. Must not clash with any existing components within the {@link Scene}.
      * @param {String[]} cfg.meshIds IDs of one or more meshes created previously with {@link SceneModel@createMesh}.
-
-     * @param {Boolean} [cfg.isObject] Set ````true```` if the {@link Entity} represents an object, in which case it will be registered by {@link Entity#id} in {@link Scene#objects} and can also have a corresponding {@link MetaObject} with matching {@link MetaObject#id}, registered by that ID in {@link MetaScene#metaObjects}.
-     * @param {Boolean} [cfg.visible=true] Indicates if the Entity is initially visible.
-     * @param {Boolean} [cfg.culled=false] Indicates if the Entity is initially culled from view.
-     * @param {Boolean} [cfg.pickable=true] Indicates if the Entity is initially pickable.
-     * @param {Boolean} [cfg.clippable=true] Indicates if the Entity is initially clippable.
-     * @param {Boolean} [cfg.collidable=true] Indicates if the Entity is initially included in boundary calculations.
-     * @param {Boolean} [cfg.castsShadow=true] Indicates if the Entity initially casts shadows.
-     * @param {Boolean} [cfg.receivesShadow=true]  Indicates if the Entity initially receives shadows.
-     * @param {Boolean} [cfg.xrayed=false] Indicates if the Entity is initially xrayed. XRayed appearance is configured by {@link SceneModel#xrayMaterial}.
-     * @param {Boolean} [cfg.highlighted=false] Indicates if the Entity is initially highlighted. Highlighted appearance is configured by {@link SceneModel#highlightMaterial}.
-     * @param {Boolean} [cfg.selected=false] Indicates if the Entity is initially selected. Selected appearance is configured by {@link SceneModel#selectedMaterial}.
-     * @param {Boolean} [cfg.edges=false] Indicates if the Entity's edges are initially emphasized. Edges appearance is configured by {@link SceneModel#edgeMaterial}.
-     * @returns {Entity}
+     * @param {Boolean} [cfg.isObject] Set ````true```` if the {@link SceneModelEntity} represents an object, in which case it will be registered by {@link SceneModelEntity#id} in {@link Scene#objects} and can also have a corresponding {@link MetaObject} with matching {@link MetaObject#id}, registered by that ID in {@link MetaScene#metaObjects}.
+     * @param {Boolean} [cfg.visible=true] Indicates if the SceneModelEntity is initially visible.
+     * @param {Boolean} [cfg.culled=false] Indicates if the SceneModelEntity is initially culled from view.
+     * @param {Boolean} [cfg.pickable=true] Indicates if the SceneModelEntity is initially pickable.
+     * @param {Boolean} [cfg.clippable=true] Indicates if the SceneModelEntity is initially clippable.
+     * @param {Boolean} [cfg.collidable=true] Indicates if the SceneModelEntity is initially included in boundary calculations.
+     * @param {Boolean} [cfg.castsShadow=true] Indicates if the SceneModelEntity initially casts shadows.
+     * @param {Boolean} [cfg.receivesShadow=true]  Indicates if the SceneModelEntity initially receives shadows.
+     * @param {Boolean} [cfg.xrayed=false] Indicates if the SceneModelEntity is initially xrayed. XRayed appearance is configured by {@link SceneModel#xrayMaterial}.
+     * @param {Boolean} [cfg.highlighted=false] Indicates if the SceneModelEntity is initially highlighted. Highlighted appearance is configured by {@link SceneModel#highlightMaterial}.
+     * @param {Boolean} [cfg.selected=false] Indicates if the SceneModelEntity is initially selected. Selected appearance is configured by {@link SceneModel#selectedMaterial}.
+     * @param {Boolean} [cfg.edges=false] Indicates if the SceneModelEntity's edges are initially emphasized. Edges appearance is configured by {@link SceneModel#edgeMaterial}.
+     * @returns {SceneModelEntity} The new SceneModelEntity.
      */
     createEntity(cfg) {
         if (cfg.id === undefined) {
@@ -3244,8 +3376,6 @@ export class SceneModel extends Component {
 
     /**
      * Finalizes this SceneModel.
-     *
-     * Immediately creates the SceneModel's {@link Entity}s within the {@link Scene}.
      *
      * Once finalized, you can't add anything more to this SceneModel.
      */
@@ -3682,6 +3812,7 @@ export class SceneModel extends Component {
         }
         this._vboInstancingLayers = {};
         this.scene.camera.off(this._onCameraViewMatrix);
+        this.scene.off(this._onTick);
         for (let i = 0, len = this.layerList.length; i < len; i++) {
             this.layerList[i].destroy();
         }
@@ -3731,7 +3862,9 @@ export class SceneModel extends Component {
  * @param enableIndexBucketing
  * @returns {object} The mesh information enrichened with `.buckets` key.
  */
-function createDTXBuckets(geometry, enableVertexWelding, enableIndexBucketing) {
+function
+
+createDTXBuckets(geometry, enableVertexWelding, enableIndexBucketing) {
     let uniquePositionsCompressed, uniqueIndices, uniqueEdgeIndices;
     if (enableVertexWelding || enableIndexBucketing) { // Expensive - careful!
         [
@@ -3769,7 +3902,9 @@ function createDTXBuckets(geometry, enableVertexWelding, enableIndexBucketing) {
     return buckets;
 }
 
-function createGeometryOBB(geometry) {
+function
+
+createGeometryOBB(geometry) {
     geometry.obb = math.OBB3();
     if (geometry.positionsCompressed && geometry.positionsCompressed.length > 0) {
         const localAABB = math.collapseAABB3();

@@ -66,11 +66,10 @@ export class TrianglesDataTextureSnapDepthRenderer {
 
         textureState.bindCommonTextures(
             this._program,
-            this._uTexturePerObjectIdPositionsDecodeMatrix,
+            this.uTexturePerObjectPositionsDecodeMatrix,
             this._uTexturePerVertexIdCoordinates,
-            this._uTexturePerObjectIdColorsAndFlags,
-            this._uTextureModelMatrices,
-            this._uTexturePerObjectIdOffsets
+            this.uTexturePerObjectColorsAndFlags,
+            this._uTexturePerObjectMatrix
         );
 
         let rtcViewMatrix;
@@ -116,7 +115,7 @@ export class TrianglesDataTextureSnapDepthRenderer {
         gl.uniform3fv(this._uCoordinateScaler, coordinateScaler);
         gl.uniform1i(this._uRenderPass, renderPass);
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
-        gl.uniformMatrix4fv(this._uSceneModelWorldMatrix, false, rotationMatrixConjugate);
+        gl.uniformMatrix4fv(this._uSceneModelMatrix, false, rotationMatrixConjugate);
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
         gl.uniformMatrix4fv(this._uProjMatrix, false, camera.projMatrix);
         if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
@@ -188,7 +187,7 @@ export class TrianglesDataTextureSnapDepthRenderer {
         const program = this._program;
         this._uRenderPass = program.getLocation("renderPass");
         this._uPickInvisible = program.getLocation("pickInvisible");
-        this._uSceneModelWorldMatrix = program.getLocation("sceneModelWorldMatrix");
+        this._uSceneModelMatrix = program.getLocation("sceneModelMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
         this._uSectionPlanes = [];
@@ -202,13 +201,13 @@ export class TrianglesDataTextureSnapDepthRenderer {
         if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
-        this._uTexturePerObjectIdPositionsDecodeMatrix = "uTexturePerObjectIdPositionsDecodeMatrix";
-        this._uTexturePerObjectIdColorsAndFlags = "uTexturePerObjectIdColorsAndFlags";
+        this.uTexturePerObjectPositionsDecodeMatrix = "uObjectPerObjectPositionsDecodeMatrix";
+        this.uTexturePerObjectColorsAndFlags = "uObjectPerObjectColorsAndFlags";
         this._uTexturePerVertexIdCoordinates = "uTexturePerVertexIdCoordinates";
         this._uTexturePerPolygonIdEdgeIndices = "uTexturePerPolygonIdEdgeIndices";
         this._uTexturePerEdgeIdPortionIds = "uTexturePerEdgeIdPortionIds";
         this._uTextureModelMatrices = "uTextureModelMatrices";
-        this._uTexturePerObjectIdOffsets = "uTexturePerObjectIdOffsets";
+        this._uTexturePerObjectMatrix= "uTexturePerObjectMatrix";
         this._uCameraEyeRtc = program.getLocation("uCameraEyeRtc");
         this.uVectorA = program.getLocation("uSnapVectorA");
         this.uInverseVectorAB = program.getLocation("uSnapInvVectorAB");
@@ -255,17 +254,16 @@ export class TrianglesDataTextureSnapDepthRenderer {
             src.push("in vec3 offset;");
         }
 
-        src.push("uniform mat4 sceneModelWorldMatrix;");
+        src.push("uniform mat4 sceneModelMatrix;");
         src.push("uniform mat4 viewMatrix;");
         src.push("uniform mat4 projMatrix;");
 
-        src.push("uniform highp sampler2D uTexturePerObjectIdPositionsDecodeMatrix;");
-        src.push("uniform lowp usampler2D uTexturePerObjectIdColorsAndFlags;");
-        src.push("uniform highp sampler2D uTexturePerObjectIdOffsets;");
+        src.push("uniform highp sampler2D uObjectPerObjectPositionsDecodeMatrix;");
+        src.push("uniform lowp usampler2D uObjectPerObjectColorsAndFlags;");
+        src.push("uniform highp sampler2D uTexturePerObjectMatrix;");
         src.push("uniform mediump usampler2D uTexturePerVertexIdCoordinates;");
         src.push("uniform highp usampler2D uTexturePerPolygonIdEdgeIndices;");
         src.push("uniform mediump usampler2D uTexturePerEdgeIdPortionIds;");
-        src.push("uniform highp sampler2D uTextureModelMatrices;");
         src.push("uniform vec3 uCameraEyeRtc;");
         src.push("uniform vec2 uSnapVectorA;");
         src.push("uniform vec2 uSnapInvVectorAB;");
@@ -306,31 +304,35 @@ export class TrianglesDataTextureSnapDepthRenderer {
         src.push("ivec2 objectIndexCoords = ivec2(objectIndex % 512, objectIndex / 512);");
 
         // get flags & flags2
-        src.push("uvec4 flags = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);");
-        src.push("uvec4 flags2 = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);");
+        src.push("uvec4 flags = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);");
+        src.push("uvec4 flags2 = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);");
 
         src.push("{");
 
         // get vertex base
-        src.push("ivec4 packedVertexBase = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+4, objectIndexCoords.y), 0));");
-        src.push("ivec4 packedEdgeIndexBaseOffset = ivec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+6, objectIndexCoords.y), 0));");
+        src.push("ivec4 packedVertexBase = ivec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+4, objectIndexCoords.y), 0));");
+        src.push("ivec4 packedEdgeIndexBaseOffset = ivec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+6, objectIndexCoords.y), 0));");
         src.push("int edgeIndexBaseOffset = (packedEdgeIndexBaseOffset.r << 24) + (packedEdgeIndexBaseOffset.g << 16) + (packedEdgeIndexBaseOffset.b << 8) + packedEdgeIndexBaseOffset.a;");
+   
         src.push("int h_index = (edgeIndex - edgeIndexBaseOffset) & 4095;")
         src.push("int v_index = (edgeIndex - edgeIndexBaseOffset) >> 12;")
+   
         src.push("ivec3 vertexIndices = ivec3(texelFetch(uTexturePerPolygonIdEdgeIndices, ivec2(h_index, v_index), 0));");
+   
         src.push("ivec3 uniqueVertexIndexes = vertexIndices + (packedVertexBase.r << 24) + (packedVertexBase.g << 16) + (packedVertexBase.b << 8) + packedVertexBase.a;")
+   
         src.push("int indexPositionH = uniqueVertexIndexes[gl_VertexID % 2] & 4095;")
         src.push("int indexPositionV = uniqueVertexIndexes[gl_VertexID % 2] >> 12;")
-        src.push("mat4 positionsDecodeMatrix = mat4 (texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectIdPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));")
-        // get flags & flags2
-        src.push("uvec4 flags = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);");
-        src.push("uvec4 flags2 = texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);");
-        // get position
+
+        src.push("mat4 objectInstanceMatrix = mat4 (texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));")
+        src.push("mat4 objectDecodeAndInstanceMatrix = objectInstanceMatrix * mat4 (texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));")
+   
+        src.push("uvec4 flags = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);");
+        src.push("uvec4 flags2 = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);");
+   
         src.push("vec3 position = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH, indexPositionV), 0));")
-        src.push("vec4 worldPosition = sceneModelWorldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
-        // get XYZ offset
-        src.push("vec4 offset = vec4(texelFetch (uTexturePerObjectIdOffsets, objectIndexCoords, 0).rgb, 0.0);");
-        src.push("worldPosition.xyz = worldPosition.xyz + offset.xyz;");
+   
+        src.push("vec4 worldPosition = sceneModelMatrix * (objectDecodeAndInstanceMatrix * vec4(position, 1.0)); ");
         src.push("relativeToOriginPosition = worldPosition.xyz;")
         src.push("      vec4 viewPosition  = viewMatrix * worldPosition; ");
         if (clipping) {
