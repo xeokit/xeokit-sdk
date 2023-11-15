@@ -88,6 +88,7 @@ class PointsBatchingColorRenderer extends VBOSceneModelPointBatchingRenderer {
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
         }
+
         src.push("gl_Position = clipPos;");
         if (pointsMaterial.perspectivePoints) {
             src.push("gl_PointSize = (nearPlaneHeight * pointSize) / clipPos.w;");
