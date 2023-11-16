@@ -60,9 +60,9 @@ function setMaxNumberOfPositions(maxPositions) {
  * in order to calculate the mapping between original indices and unique
  * indices.
  *
- * @param {*} mesh The input mesh to process, with `positionsCompressed`, `indices` and `edgeIndices` keys.
+ * @param {{positionsCompressed: number[],indices: number[], edgeIndices: number[]}} mesh The input mesh to process, with `positionsCompressed`, `indices` and `edgeIndices` keys.
  *
- * @returns An array with 3 elements: 0 => the uniquified positionsCompressed; 1 and 2 => the remapped edges and edgeIndices arrays
+ * @returns {[Uint16Array, UInt32Array, UInt32Array]} An array with 3 elements: 0 => the uniquified positionsCompressed; 1 and 2 => the remapped edges and edgeIndices arrays
  */
 export function uniquifyPositions(mesh) {
     const _positions = mesh.positionsCompressed;
