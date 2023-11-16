@@ -1092,9 +1092,9 @@ export class TrianglesDataTextureLayer {
             gl.TEXTURE_2D,
             0, // level
             (subPortionId % 512) * 4, // xoffset
-            //Math.floor(subPortionId / 512), // yoffset
-            1,
-            1, // width
+            Math.floor(subPortionId / 512), // yoffset
+            // 1,
+            4, // width
             1, // height
             gl.RGBA,
             gl.FLOAT,
