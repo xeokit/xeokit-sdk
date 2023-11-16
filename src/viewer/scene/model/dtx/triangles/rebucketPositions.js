@@ -86,6 +86,13 @@ function preSortEdgeIndices(edgeIndices) {
     return sortedEdgeIndices;
 }
 
+/**
+ * @param {{positionsCompressed: number[], indices: number[], edgeIndices: number[]}} mesh 
+ * @param {number} bitsPerBucket 
+ * @param {boolean} checkResult 
+ * 
+ * @returns {{positionsCompressed: number[], indices: number[], edgeIndices: number[]}[]}
+ */
 function rebucketPositions(mesh, bitsPerBucket, checkResult = false) {
     const positionsCompressed = (mesh.positionsCompressed || []);
     const indices = preSortIndices(mesh.indices || [], bitsPerBucket);
