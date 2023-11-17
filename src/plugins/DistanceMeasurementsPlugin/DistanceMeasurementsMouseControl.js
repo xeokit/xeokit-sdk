@@ -161,6 +161,8 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
             return;
         }
 
+        this.fire("activated", true);
+
         const distanceMeasurementsPlugin = this.distanceMeasurementsPlugin;
         const scene = this.scene;
         const cameraControl = distanceMeasurementsPlugin.viewer.cameraControl;
@@ -307,6 +309,9 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
         if (!this._active) {
             return;
         }
+
+        this.fire("activated", false);
+
         if (this.pointerLens) {
             this.pointerLens.visible = false;
         }
