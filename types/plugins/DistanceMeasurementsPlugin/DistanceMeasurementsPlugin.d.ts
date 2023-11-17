@@ -126,6 +126,20 @@ export declare class DistanceMeasurementsPlugin extends Plugin {
   on(event: "measurementCreated", callback: (measurement: DistanceMeasurement)=> void): void;
 
   /**
+   * Fires when a measurement is completed.
+   * @param {String} event The measurementEnd event
+   * @param {Function} callback Callback fired on the event
+   */
+  on(event: "measurementEnd", callback: (measurement: DistanceMeasurement)=> void): void;
+
+  /**
+   * Fires when a measurement is cancelled.
+   * @param {String} event The measurementCancel event
+   * @param {Function} callback Callback fired on the event
+   */
+  on(event: "measurementCancel", callback: (measurement: DistanceMeasurement)=> void): void;
+
+  /**
    * Fires when a measurement is destroyed.
    * @param {String} event The measurementDestroyed event
    * @param {Function} callback Callback fired on the event
