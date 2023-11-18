@@ -52,8 +52,7 @@ export class SceneModelEntity {
         this._aabb = aabb;
         this._worldAABB = math.AABB3(aabb); // Computed from Meshes and SceneModel.matrix
         this._offsetAABB = math.AABB3(aabb); // TODO - only used for offsets, current disabled
-        this._localAABBDirty = true;
-        this._worldAABBDirty = true;
+        this._aabbDirty = true;
 
         this._offset = math.vec3();
         this._colorizeUpdated = false;
@@ -69,36 +68,40 @@ export class SceneModelEntity {
         }
     }
 
-    _setLocalAABBDirty() { // Called when mesh AABBs updated
-        this._localAABBDirty = true;
+    _transformDirty() {
+        this._aabbDirty = true;
+        this.model._transformDirty();
     }
 
-    _setWorldAABBDirty() { // called when SceneModel world transform updated
-        this._worldAABBDirty = true;
+    _sceneModelDirty() {
+        this._aabbDirty = true;
+        for (let i = 0, len = this.meshes.length; i < len; i++) {
+            this.meshes[i]._sceneModelDirty();
+        }
     }
 
     get aabb() {
-        if (this._localAABBDirty) {
+        if (this._aabbDirty) {
             math.collapseAABB3(this._aabb);
             for (let i = 0, len = this.meshes.length; i < len; i++) {
                 math.expandAABB3(this._aabb, this.meshes[i].aabb);
             }
-            this._localAABBDirty = false;
-            this._worldAABBDirty = true;
+            this._aabbDirty = false;
+            this._aabbDirty = true;
         }
-        if (this._worldAABBDirty) {
-            math.AABB3ToOBB3(this._aabb, tempOBB3a);
-            math.transformOBB3(this.model.matrix, tempOBB3a);
-            math.OBB3ToAABB3(tempOBB3a, this._worldAABB);
-            this._worldAABB[0] += this._offset[0];
-            this._worldAABB[1] += this._offset[1];
-            this._worldAABB[2] += this._offset[2];
-            this._worldAABB[3] += this._offset[0];
-            this._worldAABB[4] += this._offset[1];
-            this._worldAABB[5] += this._offset[2];
-            this._worldAABBDirty = false;
-        }
-        return this._worldAABB;
+        // if (this._aabbDirty) {
+        //     math.AABB3ToOBB3(this._aabb, tempOBB3a);
+        //     math.transformOBB3(this.model.matrix, tempOBB3a);
+        //     math.OBB3ToAABB3(tempOBB3a, this._worldAABB);
+        //     this._worldAABB[0] += this._offset[0];
+        //     this._worldAABB[1] += this._offset[1];
+        //     this._worldAABB[2] += this._offset[2];
+        //     this._worldAABB[3] += this._offset[0];
+        //     this._worldAABB[4] += this._offset[1];
+        //     this._worldAABB[5] += this._offset[2];
+        //     this._aabbDirty = false;
+        // }
+        return this._aabb;
     }
 
     get isEntity() {
@@ -417,7 +420,7 @@ export class SceneModelEntity {
         for (let i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setOffset(this._offset);
         }
-        this._worldAABBDirty  = true;
+        this._aabbDirty  = true;
         this.model._aabbDirty = true;
         this.scene._aabbDirty = true;
         this.scene._objectOffsetUpdated(this, offset);

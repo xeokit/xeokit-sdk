@@ -15,6 +15,8 @@ const tempVec4c = math.vec4([0, 0, 0, 1]);
 
 const tempVec3fa = new Float32Array(3);
 
+const tempFloat32Vec4 = new Float32Array(4);
+
 /**
  * @private
  */
@@ -517,6 +519,34 @@ class LinesInstancingLayer {
         tempVec3fa[1] = offset[1];
         tempVec3fa[2] = offset[2];
         this._state.offsetsBuf.setData(tempVec3fa, portionId * 3, 3);
+    }
+
+    setMatrix(portionId, matrix) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        const offset = portionId * 4;
+
+        tempFloat32Vec4[0] = matrix[0];
+        tempFloat32Vec4[1] = matrix[4];
+        tempFloat32Vec4[2] = matrix[8];
+        tempFloat32Vec4[3] = matrix[12];
+
+        this._state.modelMatrixCol0Buf.setData(tempFloat32Vec4, offset);
+
+        tempFloat32Vec4[0] = matrix[1];
+        tempFloat32Vec4[1] = matrix[5];
+        tempFloat32Vec4[2] = matrix[9];
+        tempFloat32Vec4[3] = matrix[13];
+
+        this._state.modelMatrixCol1Buf.setData(tempFloat32Vec4, offset);
+
+        tempFloat32Vec4[0] = matrix[2];
+        tempFloat32Vec4[1] = matrix[6];
+        tempFloat32Vec4[2] = matrix[10];
+        tempFloat32Vec4[3] = matrix[14];
+
+        this._state.modelMatrixCol2Buf.setData(tempFloat32Vec4, offset);
     }
 
     // ---------------------- NORMAL RENDERING -----------------------------------

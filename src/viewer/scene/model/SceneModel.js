@@ -1449,7 +1449,7 @@ export class SceneModel extends Component {
     set position(value) {
         this._position.set(value || [0, 0, 0]);
         this._setWorldMatrixDirty();
-        this._setWorldAABBDirty();
+        this._sceneModelDirty();
         this.glRedraw();
     }
 
@@ -1475,7 +1475,7 @@ export class SceneModel extends Component {
         this._rotation.set(value || [0, 0, 0]);
         math.eulerToQuaternion(this._rotation, "XYZ", this._quaternion);
         this._setWorldMatrixDirty();
-        this._setWorldAABBDirty();
+        this._sceneModelDirty();
         this.glRedraw();
     }
 
@@ -1501,7 +1501,7 @@ export class SceneModel extends Component {
         this._quaternion.set(value || [0, 0, 0, 1]);
         math.quaternionToEuler(this._quaternion, "XYZ", this._rotation);
         this._setWorldMatrixDirty();
-        this._setWorldAABBDirty();
+        this._sceneModelDirty();
         this.glRedraw();
     }
 
@@ -1558,7 +1558,7 @@ export class SceneModel extends Component {
 
         this._matrixDirty = false;
         this._setWorldMatrixDirty();
-        this._setWorldAABBDirty();
+        this._sceneModelDirty();
         this.glRedraw();
     }
 
@@ -1617,18 +1617,16 @@ export class SceneModel extends Component {
         this._matrixDirty = true;
     }
 
-    _setLocalAABBDirty() {
-        for (let i = 0, len = this._entityList.length; i < len; i++) {
-            this._entityList[i]._setLocalAABBDirty(); // Entities need to rebuild their Local AABBs from their Mesh's local AABBs
-        }
+    _transformDirty() {
+        this._matrixDirty = true;
     }
 
-    _setWorldAABBDirty() {
+    _sceneModelDirty() {
         this._aabbDirty = true;
         this.scene._aabbDirty = true;
         this._matrixDirty = true;
         for (let i = 0, len = this._entityList.length; i < len; i++) {
-            this._entityList[i]._setWorldAABBDirty(); // Entities need to retransform their World AABBs by SceneModel's worldMatrix
+            this._entityList[i]._sceneModelDirty(); // Entities need to retransform their World AABBs by SceneModel's worldMatrix
         }
     }
 
@@ -3436,7 +3434,7 @@ export class SceneModel extends Component {
         this._aabbDirty = true;
 
         this._setWorldMatrixDirty();
-        this._setWorldAABBDirty();
+        this._sceneModelDirty();
 
         this.position = this._position;
     }
@@ -3930,7 +3928,7 @@ createGeometryOBB(geometry) {
         math.AABB3ToOBB3(localAABB, geometry.obb);
     } else if (geometry.buckets) {
         const localAABB = math.collapseAABB3();
-        for (let i = 0, len = geometry.buckets.length; i , len; i++) {
+        for (let i = 0, len = geometry.buckets.length; i < len; i++) {
             const bucket = geometry.buckets[i];
             math.expandAABB3Points3(localAABB, bucket.positionsCompressed);
         }

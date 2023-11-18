@@ -207,7 +207,7 @@ export class SceneModelTransform {
         this._localMatrix.set(value || identityMat);
         math.decomposeMat4(this._localMatrix, this._position, this._quaternion, this._scale);
         this._localMatrixDirty = false;
-        this._setWorldMatrixDirty();
+        this._transformDirty();
         this._model.glRedraw();
     }
 
@@ -358,25 +358,25 @@ export class SceneModelTransform {
 
     _setLocalMatrixDirty() {
         this._localMatrixDirty = true;
-        this._setWorldMatrixDirty();
+        this._transformDirty();
     }
 
-    _setWorldMatrixDirty() {
+    _transformDirty() {
         this._worldMatrixDirty = true;
         for (let i = 0, len = this._childTransforms.length; i < len; i++) {
             const childTransform = this._childTransforms[i];
-            childTransform._setWorldMatrixDirty();
+            childTransform._transformDirty();
             if (childTransform._meshes && childTransform._meshes.length > 0) {
                const meshes = childTransform._meshes;
                for (let j =0, lenj = meshes.length; j < lenj; j++) {
-                 meshes[j]._setMatrixDirty();
+                 meshes[j]._transformDirty();
                }
             }
         }
         if (this._meshes && this._meshes.length > 0) {
             const meshes = this._meshes;
             for (let j =0, lenj = meshes.length; j < lenj; j++) {
-                meshes[j]._setMatrixDirty();
+                meshes[j]._transformDirty();
             }
         }
     }
