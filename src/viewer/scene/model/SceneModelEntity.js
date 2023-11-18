@@ -41,6 +41,7 @@ export class SceneModelEntity {
         for (let i = 0, len = this.meshes.length; i < len; i++) {  // TODO: tidier way? Refactor?
             const mesh = this.meshes[i];
             mesh.parent = this;
+            mesh.entity = this;
             this._numPrimitives += mesh.numPrimitives;
         }
 

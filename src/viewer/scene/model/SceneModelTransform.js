@@ -370,7 +370,6 @@ export class SceneModelTransform {
                const meshes = childTransform._meshes;
                for (let j =0, lenj = meshes.length; j < lenj; j++) {
                  meshes[j]._setMatrixDirty();
-
                }
             }
         }

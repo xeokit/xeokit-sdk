@@ -1,3 +1,7 @@
+import {math} from "../math/math.js";
+
+const tempOBB3 = math.OBB3();
+
 /**
  * A mesh within a {@link SceneModel}.
  *
@@ -61,7 +65,13 @@ export class SceneModelMesh {
          */
         this.id = id;
 
+        /**
+         * @private
+         */
+        this.obb = null;
+
         this._aabb = null;
+        this._abbDirty = false;
 
         /**
          * @private
@@ -86,6 +96,8 @@ export class SceneModelMesh {
 
         this.origin = null;
 
+        this.entity = null;
+
         if (transform) {
             transform._addMesh(this);
         }
@@ -95,7 +107,11 @@ export class SceneModelMesh {
         if (!this._matrixDirty && !this._matrixUpdateScheduled) {
             this.model._meshMatrixDirty(this);
             this._matrixDirty = true;
+            this._aabbDirty = true;
             this._matrixUpdateScheduled = true;
+            if (this.entity) {
+                this.entity._setLocalAABBDirty();
+            }
         }
     }
 
@@ -271,6 +287,13 @@ export class SceneModelMesh {
      * @private
      */
     get aabb() { // called by SceneModelEntity
+        if (this._aabbDirty) {
+            if (this.obb && this.transform) {
+                math.transformOBB3(this.transform.worldMatrix, this.obb,  tempOBB3);
+                math.OBB3ToAABB3(tempOBB3, this._aabb);
+            }
+        }
+        this._aabbDirty = false;
         return this._aabb;
     }
 

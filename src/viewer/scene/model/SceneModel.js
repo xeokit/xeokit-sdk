@@ -2940,6 +2940,7 @@ export class SceneModel extends Component {
                 }
                 cfg.buckets = buckets;
 
+                createGeometryOBB(cfg);
             } else {
 
                 // VBO
@@ -2965,7 +2966,7 @@ export class SceneModel extends Component {
 
                 // OBB - used for fast AABB calculation
 
-                createGeometryOBB(cfg.geometry)
+                createGeometryOBB(cfg.geometry);
             }
         }
 
@@ -3007,6 +3008,7 @@ export class SceneModel extends Component {
         }
         mesh.portionId = mesh.layer.createPortion(cfg);
         mesh.aabb = cfg.worldAABB;
+        mesh.obb = cfg.obb || (cfg.geometry ? cfg.geometry.obb : null);
         mesh.numPrimitives = cfg.numPrimitives;
         math.expandAABB3(this._aabb, mesh.aabb);
         this._meshes[cfg.id] = mesh;
@@ -3925,6 +3927,14 @@ createGeometryOBB(geometry) {
     } else if (geometry.positions && geometry.positions.length > 0) {
         const localAABB = math.collapseAABB3();
         math.expandAABB3Points3(localAABB, geometry.positions);
+        math.AABB3ToOBB3(localAABB, geometry.obb);
+    } else if (geometry.buckets) {
+        const localAABB = math.collapseAABB3();
+        for (let i = 0, len = geometry.buckets.length; i , len; i++) {
+            const bucket = geometry.buckets[i];
+            math.expandAABB3Points3(localAABB, bucket.positionsCompressed);
+        }
+        geometryCompressionUtils.decompressAABB(localAABB, geometry.positionsDecodeMatrix);
         math.AABB3ToOBB3(localAABB, geometry.obb);
     }
 }
