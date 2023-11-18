@@ -1615,13 +1615,17 @@ export class SceneModel extends Component {
 
     _setWorldMatrixDirty() {
         this._matrixDirty = true;
+        this._aabbDirty = true;
     }
 
     _transformDirty() {
         this._matrixDirty = true;
+        this._aabbDirty = true;
+        this.scene._aabbDirty = true;
     }
 
     _sceneModelDirty() {
+        this.scene._aabbDirty = true;
         this._aabbDirty = true;
         this.scene._aabbDirty = true;
         this._matrixDirty = true;

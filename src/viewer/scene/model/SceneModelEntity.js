@@ -71,6 +71,7 @@ export class SceneModelEntity {
     _transformDirty() {
         this._aabbDirty = true;
         this.model._transformDirty();
+
     }
 
     _sceneModelDirty() {
@@ -87,7 +88,6 @@ export class SceneModelEntity {
                 math.expandAABB3(this._aabb, this.meshes[i].aabb);
             }
             this._aabbDirty = false;
-            this._aabbDirty = true;
         }
         // if (this._aabbDirty) {
         //     math.AABB3ToOBB3(this._aabb, tempOBB3a);

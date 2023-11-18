@@ -112,11 +112,11 @@ export class SceneModelMesh {
         if (!this._matrixDirty && !this._matrixUpdateScheduled) {
             this.model._meshMatrixDirty(this);
             this._matrixDirty = true;
-            this._aabbDirty = true;
             this._matrixUpdateScheduled = true;
-            if (this.entity) {
-                this.entity._transformDirty();
-            }
+        }
+        this._aabbDirty = true;
+        if (this.entity) {
+            this.entity._transformDirty();
         }
     }
 
@@ -298,8 +298,8 @@ export class SceneModelMesh {
                 math.transformOBB3(this.model.worldMatrix, tempOBB3, tempOBB3b);
                 math.OBB3ToAABB3(tempOBB3b, this._aabb);
             }
+            this._aabbDirty = false;
         }
-        this._aabbDirty = false;
         return this._aabb;
     }
 
