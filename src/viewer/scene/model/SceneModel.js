@@ -1384,7 +1384,8 @@ export class SceneModel extends Component {
     /**
      * The {@link SceneModelTexture}s in this SceneModel.
      *
-     * Each {@link SceneModelTexture} is stored here against its {@link SceneModelTexture.id}.
+     * * Each {@link SceneModelTexture} is created with {@link SceneModel.createTexture}.
+     * * Each {@link SceneModelTexture} is stored here against its {@link SceneModelTexture.id}.
      *
      * @returns {*|{}}
      */
