@@ -194,6 +194,7 @@ class SnapInstancingDepthBufInitRenderer extends VBOSceneModelRenderer {
         src.push("precision mediump sampler2D;");
         src.push("#endif");
         src.push("uniform int renderPass;");
+        src.push("in vec4 pickColor;");
         src.push("in vec3 position;");
         if (scene.entityOffsetsEnabled) {
             src.push("in vec3 offset;");
@@ -222,6 +223,7 @@ class SnapInstancingDepthBufInitRenderer extends VBOSceneModelRenderer {
         src.push("    float y = (clipPos.y - snapVectorA.y) * snapInvVectorAB.y;");
         src.push("    return vec2(x, y);")
         src.push("}");
+        src.push("flat out vec4 vPickColor;");
         src.push("out vec4 vWorldPosition;");
         if (clipping) {
             src.push("out float vFlags;");
@@ -245,6 +247,7 @@ class SnapInstancingDepthBufInitRenderer extends VBOSceneModelRenderer {
         if (clipping) {
             src.push("  vFlags = flags;");
         }
+        src.push("vPickColor = pickColor;");
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         src.push("float tmp = clipPos.w;")
         src.push("clipPos.xyzw /= tmp;")
@@ -282,6 +285,7 @@ class SnapInstancingDepthBufInitRenderer extends VBOSceneModelRenderer {
         src.push("uniform int layerNumber;");
         src.push("uniform vec3 coordinateScaler;");
         src.push("in vec4 vWorldPosition;");
+        src.push("flat in vec4 vPickColor;");
         if (clipping) {
             src.push("in float vFlags;");
             for (let i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
@@ -293,6 +297,7 @@ class SnapInstancingDepthBufInitRenderer extends VBOSceneModelRenderer {
         src.push("in highp vec3 relativeToOriginPosition;");
         src.push("layout(location = 0) out highp ivec4 outCoords;");
         src.push("layout(location = 1) out highp ivec4 outNormal;");
+        src.push("layout(location = 2) out lowp uvec4 outPickColor;");
         src.push("void main(void) {");
         if (clipping) {
             src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
@@ -318,6 +323,7 @@ class SnapInstancingDepthBufInitRenderer extends VBOSceneModelRenderer {
         src.push("vec3 yTangent = dFdy( vWorldPosition.xyz );");
         src.push("vec3 worldNormal = normalize( cross( xTangent, yTangent ) );");
         src.push(`outNormal = ivec4(worldNormal * float(${math.MAX_INT}), 1.0);`);
+        src.push("outPickColor = uvec4(vPickColor);");
         src.push("}");
         return src;
     }

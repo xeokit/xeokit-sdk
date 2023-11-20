@@ -280,6 +280,7 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
         src.push("    return vec2(x, y);")
         src.push("}");
 
+        src.push("flat out vec4 vPickColor;");
         src.push("out vec4 vWorldPosition;");
         if (clipping) {
             src.push("flat out uint vFlags2;");
@@ -367,6 +368,7 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
         if (clipping) {
             src.push("vFlags2 = flags2.r;");
         }
+        src.push("vPickColor = vec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0));");
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         src.push("float tmp = clipPos.w;")
         src.push("clipPos.xyzw /= tmp;")
@@ -404,6 +406,7 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
         src.push("uniform int uLayerNumber;");
         src.push("uniform vec3 uCoordinateScaler;");
         src.push("in vec4 vWorldPosition;");
+        src.push("flat in vec4 vPickColor;");
         if (clipping) {
             src.push("flat in uint vFlags2;");
             for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
@@ -415,6 +418,7 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
         src.push("in highp vec3 relativeToOriginPosition;");
         src.push("layout(location = 0) out highp ivec4 outCoords;");
         src.push("layout(location = 1) out highp ivec4 outNormal;");
+        src.push("layout(location = 2) out lowp uvec4 outPickColor;");
         src.push("void main(void) {");
         if (clipping) {
             src.push("  bool clippable = vFlags2 > 0u;");
@@ -440,6 +444,7 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
         src.push("vec3 yTangent = dFdy( vWorldPosition.xyz );");
         src.push("vec3 worldNormal = normalize( cross( xTangent, yTangent ) );");
         src.push(`outNormal = ivec4(worldNormal * float(${math.MAX_INT}), 1.0);`);
+        src.push("outPickColor = uvec4(vPickColor);");
         src.push("}");
         return src;
     }
