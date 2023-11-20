@@ -13,7 +13,7 @@ const vecb = math.vec3(3);
 const identityMat = math.identityMat4();
 
 /**
- * A dynically-updatable transform within a {@link SceneModel}.
+ * A dynamically-updatable transform within a {@link SceneModel}.
  *
  * * Can be composed into hierarchies
  * * Shared by multiple {@link SceneModelMesh}es

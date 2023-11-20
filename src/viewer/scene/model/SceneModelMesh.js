@@ -19,6 +19,11 @@ export class SceneModelMesh {
      */
     constructor(model, id, color, opacity, transform, textureSet, layer = null, portionId = 0) {
 
+        /**
+         * The {@link SceneModel} that owns this SceneModelMesh.
+         *
+         * @type {SceneModel}
+         */
         this.model = model;
 
         /**
@@ -38,7 +43,7 @@ export class SceneModelMesh {
          *
          * * This only exists when the SceneModelMesh is instancing its geometry.
          * * These are created with {@link SceneModel#createTransform}
-         * * Each of these is also registered in {@ilnk SceneModel#transforms}.
+         * * Each of these is also registered in {@link SceneModel#transforms}.
          *
          * @type {SceneModelTransform}
          */
@@ -89,14 +94,22 @@ export class SceneModelMesh {
         this._colorizing = false;
         this._transparent = (opacity < 255);
 
-
         /**
          * @private
          */
         this.numTriangles = 0;
 
+        /**
+         * @private
+         * @type {null}
+         */
         this.origin = null;
 
+        /**
+         * The {@link SceneModelEntity} that owns this SceneModelMesh.
+         *
+         * @type {SceneModelEntity}
+         */
         this.entity = null;
 
         if (transform) {

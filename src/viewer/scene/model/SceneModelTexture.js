@@ -20,6 +20,9 @@ export class SceneModelTexture {
          */
         this.id = cfg.id;
 
+        /**
+         * @private
+         */
         this.texture = cfg.texture;
     }
 
