@@ -87,7 +87,7 @@ const PRESETS = {
         fillColor: [1.0, 1.0, 0.0],
         fillAlpha: 0.5,
         edges: true,
-        edgeColor: [0.529411792755127, 0.4577854573726654, 0.4100345969200134],
+        edgeColor: [1.0, 1.0, 1.0],
         edgeAlpha: 1.0,
         edgeWidth: 1
     },
@@ -96,7 +96,7 @@ const PRESETS = {
         fillColor: [0.0, 1.0, 0.0],
         fillAlpha: 0.5,
         edges: true,
-        edgeColor: [0.4577854573726654, 0.529411792755127, 0.4100345969200134],
+        edgeColor: [1.0, 1.0, 1.0],
         edgeAlpha: 1.0,
         edgeWidth: 1
     },
