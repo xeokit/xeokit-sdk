@@ -13,6 +13,9 @@ const tempVec3a = math.vec3();
 const tempVec3c = math.vec3();
 const tempMat4a = math.mat4();
 
+/**
+ * @private
+ */
 class VBOSceneModelRenderer {
     constructor(scene, withSAO = false, {instancing = false, edges = false} = {}) {
         this._scene = scene;
@@ -242,6 +245,9 @@ class VBOSceneModelRenderer {
         this._uAOMap = "uAOMap";
 
         if (this._instancing) {
+
+            this._aModelMatrix = program.getAttribute("modelMatrix");
+
             this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
             this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");
             this._aModelMatrixCol2 = program.getAttribute("modelMatrixCol2");
@@ -633,6 +639,10 @@ class VBOSceneModelRenderer {
     }
 }
 
+
+/**
+ * @private
+ */
 class VBOSceneModelTriangleBatchingRenderer extends VBOSceneModelRenderer {
     constructor(scene, withSAO, {instancing = false, edges = false} = {}) {
         super(scene, withSAO, {instancing, edges});
@@ -662,6 +672,10 @@ class VBOSceneModelTriangleBatchingRenderer extends VBOSceneModelRenderer {
     }
 }
 
+
+/**
+ * @private
+ */
 class VBOSceneModelTriangleBatchingEdgesRenderer extends VBOSceneModelTriangleBatchingRenderer {
     constructor(scene, withSAO) {
         super(scene, withSAO, {instancing: false, edges: true});
@@ -669,6 +683,10 @@ class VBOSceneModelTriangleBatchingEdgesRenderer extends VBOSceneModelTriangleBa
 }
 
 
+
+/**
+ * @private
+ */
 class VBOSceneModelTriangleInstancingRenderer extends VBOSceneModelRenderer {
     constructor(scene, withSAO, { edges = false} = {}) {
         super(scene, withSAO, {instancing: true, edges});
@@ -694,12 +712,20 @@ class VBOSceneModelTriangleInstancingRenderer extends VBOSceneModelRenderer {
     }
 }
 
+
+/**
+ * @private
+ */
 class VBOSceneModelTriangleInstancingEdgesRenderer extends VBOSceneModelTriangleInstancingRenderer {
     constructor(scene, withSAO) {
         super(scene, withSAO, {instancing: true, edges: true});
     }
 }
 
+
+/**
+ * @private
+ */
 class VBOSceneModelPointBatchingRenderer extends VBOSceneModelRenderer {
     _draw(drawCfg) {
         const {gl} = this._scene.canvas;
@@ -718,6 +744,10 @@ class VBOSceneModelPointBatchingRenderer extends VBOSceneModelRenderer {
     }
 }
 
+
+/**
+ * @private
+ */
 class VBOSceneModelPointInstancingRenderer extends VBOSceneModelRenderer {
     constructor(scene, withSAO) {
         super(scene, withSAO, {instancing: true});
@@ -740,6 +770,10 @@ class VBOSceneModelPointInstancingRenderer extends VBOSceneModelRenderer {
     }
 }
 
+
+/**
+ * @private
+ */
 class VBOSceneModelLineBatchingRenderer extends VBOSceneModelRenderer {
     _draw(drawCfg) {
         const {gl} = this._scene.canvas;
@@ -758,6 +792,10 @@ class VBOSceneModelLineBatchingRenderer extends VBOSceneModelRenderer {
     }
 }
 
+
+/**
+ * @private
+ */
 class VBOSceneModelLineInstancingRenderer extends VBOSceneModelRenderer {
     constructor(scene, withSAO) {
         super(scene, withSAO, {instancing: true});

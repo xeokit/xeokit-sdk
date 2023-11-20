@@ -1,23 +1,144 @@
+import {math} from "../math/math.js";
+
+const tempOBB3 = math.OBB3();
+const tempOBB3b = math.OBB3();
 
 /**
- * @private
+ * A mesh within a {@link SceneModel}.
+ *
+ * * Created with {@link SceneModel#createMesh}
+ * * Belongs to exactly one {@link SceneModelEntity}
+ * * Stored by ID in {@link SceneModel#meshes}
+ * * Referenced by {@link SceneModelEntity#meshes}
+ * * Can have a {@link SceneModelTransform} to dynamically scale, rotate and translate it.
  */
 export class SceneModelMesh {
 
-    constructor(model, id, color, opacity, layer = null, portionId = 0) {
+    /**
+     * @private
+     */
+    constructor(model, id, color, opacity, transform, textureSet, layer = null, portionId = 0) {
+
+        /**
+         * The {@link SceneModel} that owns this SceneModelMesh.
+         *
+         * @type {SceneModel}
+         */
         this.model = model;
+
+        /**
+         * The {@link SceneModelEntity} that owns this SceneModelMesh.
+         *
+         * @type {SceneModelEntity}
+         */
         this.object = null;
+
+        /**
+         * @private
+         */
         this.parent = null;
+
+        /**
+         * The {@link SceneModelTransform} that transforms this SceneModelMesh.
+         *
+         * * This only exists when the SceneModelMesh is instancing its geometry.
+         * * These are created with {@link SceneModel#createTransform}
+         * * Each of these is also registered in {@link SceneModel#transforms}.
+         *
+         * @type {SceneModelTransform}
+         */
+        this.transform = transform;
+
+
+        /**
+         * The {@link SceneModelTextureSet} that optionally textures this SceneModelMesh.
+         *
+         * * This only exists when the SceneModelMesh has texture.
+         * * These are created with {@link SceneModel#createTextureSet}
+         * * Each of these is also registered in {@link SceneModel#textureSets}.
+         *
+         * @type {SceneModelTextureSet}
+         */
+        this.textureSet = textureSet;
+
+        this._matrixDirty = false;
+        this._matrixUpdateScheduled = false;
+
+        /**
+         * Unique ID of this SceneModelMesh.
+         *
+         * The SceneModelMesh is registered against this ID in {@link SceneModel#meshes}.
+         */
         this.id = id;
+
+        /**
+         * @private
+         */
+        this.obb = null;
+
         this._aabb = null;
+        this._abbDirty = false;
+
+        /**
+         * @private
+         */
         this.layer = layer;
+
+        /**
+         * @private
+         */
         this.portionId = portionId;
-        this._color = [color[0], color[1], color[2], opacity]; // [0..255]
-        this._colorize = [color[0], color[1], color[2], opacity]; // [0..255]
+
+        this._color = new Uint8Array([color[0], color[1], color[2], opacity]); // [0..255]
+        this._colorize = new Uint8Array([color[0], color[1], color[2], opacity]); // [0..255]
         this._colorizing = false;
         this._transparent = (opacity < 255);
+
+        /**
+         * @private
+         */
         this.numTriangles = 0;
+
+        /**
+         * @private
+         * @type {null}
+         */
         this.origin = null;
+
+        /**
+         * The {@link SceneModelEntity} that owns this SceneModelMesh.
+         *
+         * @type {SceneModelEntity}
+         */
+        this.entity = null;
+
+        if (transform) {
+            transform._addMesh(this);
+        }
+    }
+
+    _sceneModelDirty() {
+        this._aabbDirty = true;
+    }
+
+    _transformDirty() {
+        if (!this._matrixDirty && !this._matrixUpdateScheduled) {
+            this.model._meshMatrixDirty(this);
+            this._matrixDirty = true;
+            this._matrixUpdateScheduled = true;
+        }
+        this._aabbDirty = true;
+        if (this.entity) {
+            this.entity._transformDirty();
+        }
+    }
+
+    _updateMatrix() {
+        if (this.transform && this._matrixDirty) {
+            this.layer.setMatrix(this.portionId, this.transform.worldMatrix);
+        }
+        this._matrixDirty = false;
+        this._matrixUpdateScheduled = false;
     }
 
     _finalize(entityFlags) {
@@ -110,50 +231,94 @@ export class SceneModelMesh {
         this.layer.setCulled(this.portionId, flags, this._transparent);
     }
 
+    /**
+     * @private
+     */
     canPickTriangle() {
         return false;
     }
 
+    /**
+     * @private
+     */
     drawPickTriangles(renderFlags, frameCtx) {
         // NOP
     }
 
+    /**
+     * @private
+     */
     pickTriangleSurface(pickResult) {
         // NOP
     }
 
+    /**
+     * @private
+     */
     precisionRayPickSurface(worldRayOrigin, worldRayDir, worldSurfacePos, worldSurfaceNormal) {
         return this.layer.precisionRayPickSurface ? this.layer.precisionRayPickSurface(this.portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldSurfaceNormal) : false;
     }
 
+    /**
+     * @private
+     */
     canPickWorldPos() {
         return true;
     }
 
+    /**
+     * @private
+     */
     drawPickDepths(frameCtx) {
         this.model.drawPickDepths(frameCtx);
     }
 
+    /**
+     * @private
+     */
     drawPickNormals(frameCtx) {
         this.model.drawPickNormals(frameCtx);
     }
 
+    /**
+     * @private
+     */
     delegatePickedEntity() {
         return this.parent;
     }
 
+    /**
+     * @private
+     */
     getEachVertex(callback) {
         this.layer.getEachVertex(this.portionId, callback);
     }
 
+    /**
+     * @private
+     */
     set aabb(aabb) { // Called by SceneModel
         this._aabb = aabb;
     }
 
+    /**
+     * @private
+     */
     get aabb() { // called by SceneModelEntity
+        if (this._aabbDirty) {
+            if (this.obb && this.transform) {
+                math.transformOBB3(this.transform.worldMatrix, this.obb, tempOBB3);
+                math.transformOBB3(this.model.worldMatrix, tempOBB3, tempOBB3b);
+                math.OBB3ToAABB3(tempOBB3b, this._aabb);
+            }
+            this._aabbDirty = false;
+        }
         return this._aabb;
     }
 
+    /**
+     * @private
+     */
     _destroy() {
         this.model.scene._renderer.putPickID(this.pickId);
     }

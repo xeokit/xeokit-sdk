@@ -7,33 +7,65 @@ const tempIntRGB = new Uint16Array([0, 0, 0]);
 const tempOBB3a = math.OBB3();
 
 /**
- * @private
+ * An entity within a {@link SceneModel}
+ *
+ * * Created with {@link SceneModel#createEntity}
+ * * Stored by ID in {@link SceneModel#entities}
+ * * Has one or more {@link SceneModelMesh}es
+ *
+ * @implements {Entity}
  */
 export class SceneModelEntity {
 
+    /**
+     * @private
+     */
     constructor(model, isObject, id, meshes, flags, aabb, lodCullable) {
 
         this._isObject = isObject;
+
+        /**
+         * The {@link Scene} to which this SceneModelEntity belongs.
+         */
         this.scene = model.scene;
+
+        /**
+         * The {@link SceneModel} to which this SceneModelEntity belongs.
+         */
         this.model = model;
+
+        /**
+         * The {@link SceneModelMesh}es belonging to this SceneModelEntity.
+         *
+         * * These are created with {@link SceneModel#createMesh} and registered in {@ilnk SceneModel#meshes}
+         * * Each SceneModelMesh belongs to one SceneModelEntity
+         */
         this.meshes = meshes;
+
         this._numPrimitives = 0;
 
         for (let i = 0, len = this.meshes.length; i < len; i++) {  // TODO: tidier way? Refactor?
             const mesh = this.meshes[i];
             mesh.parent = this;
+            mesh.entity = this;
             this._numPrimitives += mesh.numPrimitives;
         }
 
+        /**
+         * The unique ID of this SceneModelEntity.
+         */
         this.id = id;
+
+        /**
+         * The original system ID of this SceneModelEntity.
+         */
         this.originalSystemId = math.unglobalizeObjectId(model.id, id);
 
         this._flags = flags;
         this._aabb = aabb;
         this._worldAABB = math.AABB3(aabb); // Computed from Meshes and SceneModel.matrix
         this._offsetAABB = math.AABB3(aabb); // TODO - only used for offsets, current disabled
-        this._localAABBDirty = true;
-        this._worldAABBDirty = true;
+        this._aabbDirty = true;
 
         this._offset = math.vec3();
         this._colorizeUpdated = false;
@@ -49,63 +81,114 @@ export class SceneModelEntity {
         }
     }
 
-    _setLocalAABBDirty() { // Called when mesh AABBs updated
-        this._localAABBDirty = true;
+    _transformDirty() {
+        this._aabbDirty = true;
+        this.model._transformDirty();
+
     }
 
-    _setWorldAABBDirty() { // called when SceneModel world transform updated
-        this._worldAABBDirty = true;
+    _sceneModelDirty() { // Called by SceneModel when SceneModel's matrix is updated
+        this._aabbDirty = true;
+        for (let i = 0, len = this.meshes.length; i < len; i++) {
+            this.meshes[i]._sceneModelDirty();
+        }
     }
 
+    /**
+     * World-space 3D axis-aligned bounding box (AABB) of this SceneModelEntity.
+     *
+     * Represented by a six-element Float64Array containing the min/max extents of the
+     * axis-aligned volume, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````.
+     *
+     * @type {Float64Array}
+     */
     get aabb() {
-        if (this._localAABBDirty) {
+        if (this._aabbDirty) {
             math.collapseAABB3(this._aabb);
             for (let i = 0, len = this.meshes.length; i < len; i++) {
                 math.expandAABB3(this._aabb, this.meshes[i].aabb);
             }
-            this._localAABBDirty = false;
-            this._worldAABBDirty = true;
+            this._aabbDirty = false;
         }
-        if (this._worldAABBDirty) {
-            math.AABB3ToOBB3(this._aabb, tempOBB3a);
-            math.transformOBB3(this.model.matrix, tempOBB3a);
-            math.OBB3ToAABB3(tempOBB3a, this._worldAABB);
-            this._worldAABB[0] += this._offset[0];
-            this._worldAABB[1] += this._offset[1];
-            this._worldAABB[2] += this._offset[2];
-            this._worldAABB[3] += this._offset[0];
-            this._worldAABB[4] += this._offset[1];
-            this._worldAABB[5] += this._offset[2];
-            this._worldAABBDirty = false;
-        }
-        return this._worldAABB;
+        // if (this._aabbDirty) {
+        //     math.AABB3ToOBB3(this._aabb, tempOBB3a);
+        //     math.transformOBB3(this.model.matrix, tempOBB3a);
+        //     math.OBB3ToAABB3(tempOBB3a, this._worldAABB);
+        //     this._worldAABB[0] += this._offset[0];
+        //     this._worldAABB[1] += this._offset[1];
+        //     this._worldAABB[2] += this._offset[2];
+        //     this._worldAABB[3] += this._offset[0];
+        //     this._worldAABB[4] += this._offset[1];
+        //     this._worldAABB[5] += this._offset[2];
+        //     this._aabbDirty = false;
+        // }
+        return this._aabb;
     }
 
     get isEntity() {
         return true;
     }
 
+    /**
+     * Returns false to indicate that this Entity subtype is not a model.
+     * @returns {boolean}
+     */
     get isModel() {
         return false;
     }
 
+    /**
+     * Returns ````true```` if this SceneModelEntity represents an object.
+     *
+     * When this is ````true````, the SceneModelEntity will be registered by {@link SceneModelEntity#id}
+     * in {@link Scene#objects} and may also have a corresponding {@link MetaObject}.
+     *
+     * @type {Boolean}
+     */
     get isObject() {
         return this._isObject;
     }
-
 
     get numPrimitives() {
         return this._numPrimitives;
     }
 
+    /**
+     * The approximate number of triangles in this SceneModelEntity.
+     *
+     * @type {Number}
+     */
     get numTriangles() {
         return this._numPrimitives;
     }
 
+    /**
+     * Gets if this SceneModelEntity is visible.
+     *
+     * Only rendered when {@link SceneModelEntity#visible} is ````true````
+     * and {@link SceneModelEntity#culled} is ````false````.
+     *
+     * When {@link SceneModelEntity#isObject} and {@link SceneModelEntity#visible} are
+     * both ````true```` the SceneModelEntity will be registered
+     * by {@link SceneModelEntity#id} in {@link Scene#visibleObjects}.
+     *
+     * @type {Boolean}
+     */
     get visible() {
         return this._getFlag(ENTITY_FLAGS.VISIBLE);
     }
 
+    /**
+     * Sets if this SceneModelEntity is visible.
+     *
+     * Only rendered when {@link SceneModelEntity#visible} is ````true```` and {@link SceneModelEntity#culled} is ````false````.
+     *
+     * When {@link SceneModelEntity#isObject} and {@link SceneModelEntity#visible} are
+     * both ````true```` the SceneModelEntity will be
+     * registered by {@link SceneModelEntity#id} in {@link Scene#visibleObjects}.
+     *
+     * @type {Boolean}
+     */
     set visible(visible) {
         if (!!(this._flags & ENTITY_FLAGS.VISIBLE) === visible) {
             return; // Redundant update
@@ -124,14 +207,31 @@ export class SceneModelEntity {
         this.model.glRedraw();
     }
 
+    /**
+     * Gets if this SceneModelEntity is highlighted.
+     *
+     * When {@link SceneModelEntity#isObject} and {@link SceneModelEntity#highlighted} are both ````true```` the SceneModelEntity will be
+     * registered by {@link SceneModelEntity#id} in {@link Scene#highlightedObjects}.
+     *
+     * @type {Boolean}
+     */
     get highlighted() {
         return this._getFlag(ENTITY_FLAGS.HIGHLIGHTED);
     }
 
+    /**
+     * Sets if this SceneModelEntity is highlighted.
+     *
+     * When {@link SceneModelEntity#isObject} and {@link SceneModelEntity#highlighted} are both ````true```` the SceneModelEntity will be
+     * registered by {@link SceneModelEntity#id} in {@link Scene#highlightedObjects}.
+     *
+     * @type {Boolean}
+     */
     set highlighted(highlighted) {
         if (!!(this._flags & ENTITY_FLAGS.HIGHLIGHTED) === highlighted) {
             return; // Redundant update
         }
+
         if (highlighted) {
             this._flags = this._flags | ENTITY_FLAGS.HIGHLIGHTED;
         } else {
@@ -146,10 +246,26 @@ export class SceneModelEntity {
         this.model.glRedraw();
     }
 
+    /**
+     * Gets if this SceneModelEntity is xrayed.
+     *
+     * When {@link SceneModelEntity#isObject} and {@link SceneModelEntity#xrayed} are both ````true``` the SceneModelEntity will be
+     * registered by {@link SceneModelEntity#id} in {@link Scene#xrayedObjects}.
+     *
+     * @type {Boolean}
+     */
     get xrayed() {
         return this._getFlag(ENTITY_FLAGS.XRAYED);
     }
 
+    /**
+     * Sets if this SceneModelEntity is xrayed.
+     *
+     * When {@link SceneModelEntity#isObject} and {@link SceneModelEntity#xrayed} are both ````true``` the SceneModelEntity will be
+     * registered by {@link SceneModelEntity#id} in {@link Scene#xrayedObjects}.
+     *
+     * @type {Boolean}
+     */
     set xrayed(xrayed) {
         if (!!(this._flags & ENTITY_FLAGS.XRAYED) === xrayed) {
             return; // Redundant update
@@ -168,10 +284,26 @@ export class SceneModelEntity {
         this.model.glRedraw();
     }
 
+    /**
+     * Gets if this SceneModelEntity is selected.
+     *
+     * When {@link SceneModelEntity#isObject} and {@link SceneModelEntity#selected} are both ````true``` the SceneModelEntity will be
+     * registered by {@link SceneModelEntity#id} in {@link Scene#selectedObjects}.
+     *
+     * @type {Boolean}
+     */
     get selected() {
         return this._getFlag(ENTITY_FLAGS.SELECTED);
     }
 
+    /**
+     * Gets if this SceneModelEntity is selected.
+     *
+     * When {@link SceneModelEntity#isObject} and {@link SceneModelEntity#selected} are both ````true``` the SceneModelEntity will be
+     * registered by {@link SceneModelEntity#id} in {@link Scene#selectedObjects}.
+     *
+     * @type {Boolean}
+     */
     set selected(selected) {
         if (!!(this._flags & ENTITY_FLAGS.SELECTED) === selected) {
             return; // Redundant update
@@ -190,10 +322,20 @@ export class SceneModelEntity {
         this.model.glRedraw();
     }
 
+    /**
+     * Gets if this SceneModelEntity's edges are enhanced.
+     *
+     * @type {Boolean}
+     */
     get edges() {
         return this._getFlag(ENTITY_FLAGS.EDGES);
     }
 
+    /**
+     * Sets if this SceneModelEntity's edges are enhanced.
+     *
+     * @type {Boolean}
+     */
     set edges(edges) {
         if (!!(this._flags & ENTITY_FLAGS.EDGES) === edges) {
             return; // Redundant update
@@ -208,6 +350,7 @@ export class SceneModelEntity {
         }
         this.model.glRedraw();
     }
+
 
     get culledVFC() {
         return !!(this._culledVFC);
@@ -227,11 +370,25 @@ export class SceneModelEntity {
         this._setCulled();
     }
 
+    /**
+     * Gets if this SceneModelEntity is culled.
+     *
+     * Only rendered when {@link SceneModelEntity#visible} is ````true```` and {@link SceneModelEntity#culled} is ````false````.
+     *
+     * @type {Boolean}
+     */
     get culled() {
         return !!(this._culled);
         // return this._getFlag(ENTITY_FLAGS.CULLED);
     }
 
+    /**
+     * Sets if this SceneModelEntity is culled.
+     *
+     * Only rendered when {@link SceneModelEntity#visible} is ````true```` and {@link SceneModelEntity#culled} is ````false````.
+     *
+     * @type {Boolean}
+     */
     set culled(culled) {
         this._culled = culled;
         this._setCulled();
@@ -253,10 +410,24 @@ export class SceneModelEntity {
         this.model.glRedraw();
     }
 
+    /**
+     * Gets if this SceneModelEntity is clippable.
+     *
+     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
+     *
+     * @type {Boolean}
+     */
     get clippable() {
         return this._getFlag(ENTITY_FLAGS.CLIPPABLE);
     }
 
+    /**
+     * Sets if this SceneModelEntity is clippable.
+     *
+     * Clipping is done by the {@link SectionPlane}s in {@link Scene#sectionPlanes}.
+     *
+     * @type {Boolean}
+     */
     set clippable(clippable) {
         if ((!!(this._flags & ENTITY_FLAGS.CLIPPABLE)) === clippable) {
             return; // Redundant update
@@ -272,10 +443,20 @@ export class SceneModelEntity {
         this.model.glRedraw();
     }
 
+    /**
+     * Gets if this SceneModelEntity is included in boundary calculations.
+     *
+     * @type {Boolean}
+     */
     get collidable() {
         return this._getFlag(ENTITY_FLAGS.COLLIDABLE);
     }
 
+    /**
+     * Sets if this SceneModelEntity is included in boundary calculations.
+     *
+     * @type {Boolean}
+     */
     set collidable(collidable) {
         if (!!(this._flags & ENTITY_FLAGS.COLLIDABLE) === collidable) {
             return; // Redundant update
@@ -290,10 +471,24 @@ export class SceneModelEntity {
         }
     }
 
+    /**
+     * Gets if this SceneModelEntity is pickable.
+     *
+     * Picking is done via calls to {@link Scene#pick}.
+     *
+     * @type {Boolean}
+     */
     get pickable() {
         return this._getFlag(ENTITY_FLAGS.PICKABLE);
     }
 
+    /**
+     * Sets if this SceneModelEntity is pickable.
+     *
+     * Picking is done via calls to {@link Scene#pick}.
+     *
+     * @type {Boolean}
+     */
     set pickable(pickable) {
         if (!!(this._flags & ENTITY_FLAGS.PICKABLE) === pickable) {
             return; // Redundant update
@@ -308,6 +503,13 @@ export class SceneModelEntity {
         }
     }
 
+    /**
+     * Gets the SceneModelEntity's RGB colorize color, multiplies by the SceneModelEntity's rendered fragment colors.
+     *
+     * Each element of the color is in range ````[0..1]````.
+     *
+     * @type {Number[]}
+     */
     get colorize() { // [0..1, 0..1, 0..1]
         if (this.meshes.length === 0) {
             return null;
@@ -319,6 +521,13 @@ export class SceneModelEntity {
         return tempFloatRGB;
     }
 
+    /**
+     * Sets the SceneModelEntity's RGB colorize color, multiplies by the SceneModelEntity's rendered fragment colors.
+     *
+     * Each element of the color is in range ````[0..1]````.
+     *
+     * @type {Number[]}
+     */
     set colorize(color) { // [0..1, 0..1, 0..1]
         if (color) {
             tempIntRGB[0] = Math.floor(color[0] * 255.0); // Quantize
@@ -340,6 +549,13 @@ export class SceneModelEntity {
         this.model.glRedraw();
     }
 
+    /**
+     * Gets the SceneModelEntity's opacity factor.
+     *
+     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
+     *
+     * @type {Number}
+     */
     get opacity() {
         if (this.meshes.length > 0) {
             return (this.meshes[0]._colorize[3] / 255.0);
@@ -348,6 +564,13 @@ export class SceneModelEntity {
         }
     }
 
+    /**
+     * Sets the SceneModelEntity's opacity factor.
+     *
+     * This is a factor in range ````[0..1]```` which multiplies by the rendered fragment alphas.
+     *
+     * @type {Number}
+     */
     set opacity(opacity) {
         if (this.meshes.length === 0) {
             return;
@@ -381,10 +604,24 @@ export class SceneModelEntity {
         this.model.glRedraw();
     }
 
+    /**
+     * Gets the SceneModelEntity's 3D World-space offset.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @type {Number[]}
+     */
     get offset() {
         return this._offset;
     }
 
+    /**
+     * Sets the SceneModelEntity's 3D World-space offset.
+     *
+     * Default value is ````[0,0,0]````.
+     *
+     * @type {Number[]}
+     */
     set offset(offset) {
         if (offset) {
             this._offset[0] = offset[0];
@@ -398,7 +635,7 @@ export class SceneModelEntity {
         for (let i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._setOffset(this._offset);
         }
-        this._worldAABBDirty  = true;
+        this._aabbDirty  = true;
         this.model._aabbDirty = true;
         this.scene._aabbDirty = true;
         this.scene._objectOffsetUpdated(this, offset);

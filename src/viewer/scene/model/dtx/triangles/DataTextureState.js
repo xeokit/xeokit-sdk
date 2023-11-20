@@ -13,7 +13,7 @@ export class DataTextureState {
          *
          * @type BindableDataTexture
          */
-        this.texturePerObjectIdColorsAndFlags = null;
+        this.texturePerObjectColorsAndFlags = null;
 
         /**
          * Texture that holds the XYZ offsets per-object:
@@ -22,16 +22,18 @@ export class DataTextureState {
          *
          * @type BindableDataTexture
          */
-        this.texturePerObjectIdOffsets = null;
+        this.texturePerObjectOffsets = null;
+
+        this.texturePerObjectInstanceMatrices = null;
 
         /**
-         * Texture that holds the positionsDecodeMatrix per-object:
+         * Texture that holds the objectDecodeAndInstanceMatrix per-object:
          * - columns: each column is one column of the matrix
          * - row: the object Id
          *
          * @type BindableDataTexture
          */
-        this.texturePerObjectIdPositionsDecodeMatrix = null;
+        this.texturePerObjectPositionsDecodeMatrix = null;
 
         /**
          * Texture that holds all the `different-vertices` used by the layer.
@@ -175,43 +177,22 @@ export class DataTextureState {
     /**
      *
      * @param {Program} glProgram
-     * @param {string} objectMatricesTextureShaderName
+     * @param {string} objectDecodeMatricesShaderName
      * @param {string} vertexTextureShaderName
      * @param {string} objectAttributesTextureShaderName
-     * @param {string} modelMatricesShaderName
-     * @param objectOffsetsShaderName
+     * @param {string} objectMatricesShaderName
      */
     bindCommonTextures(
         glProgram,
-        objectMatricesTextureShaderName,
+        objectDecodeMatricesShaderName,
         vertexTextureShaderName,
         objectAttributesTextureShaderName,
-        modelMatricesShaderName,
-        objectOffsetsShaderName
+        objectMatricesShaderName
     ) {
-        this.texturePerObjectIdPositionsDecodeMatrix.bindTexture(
-            glProgram,
-            objectMatricesTextureShaderName,
-            1 // webgl texture unit
-        );
-
-        this.texturePerVertexIdCoordinates.bindTexture(
-            glProgram,
-            vertexTextureShaderName,
-            2 // webgl texture unit
-        );
-
-        this.texturePerObjectIdColorsAndFlags.bindTexture(
-            glProgram,
-            objectAttributesTextureShaderName,
-            3 // webgl texture unit
-        );
-
-        this.texturePerObjectIdOffsets.bindTexture(
-            glProgram,
-            objectOffsetsShaderName,
-            4 // webgl texture unit
-        );
+        this.texturePerObjectPositionsDecodeMatrix.bindTexture(glProgram, objectDecodeMatricesShaderName, 1);
+        this.texturePerVertexIdCoordinates.bindTexture(glProgram, vertexTextureShaderName, 2);
+        this.texturePerObjectColorsAndFlags.bindTexture(glProgram, objectAttributesTextureShaderName, 3);
+        this.texturePerObjectInstanceMatrices.bindTexture(glProgram, objectMatricesShaderName, 4);
     }
 
     /**

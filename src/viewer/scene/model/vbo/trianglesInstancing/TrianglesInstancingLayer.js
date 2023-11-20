@@ -22,6 +22,8 @@ const tempVec3e = math.vec3();
 const tempVec3f = math.vec3();
 const tempVec3g = math.vec3();
 
+const tempFloat32Vec4 = new Float32Array(4);
+
 /**
  * @private
  */
@@ -37,7 +39,7 @@ class TrianglesInstancingLayer {
      */
     constructor(cfg) {
 
-       // console.info("Creating TrianglesInstancingLayer");
+        // console.info("Creating TrianglesInstancingLayer");
 
         /**
          * Owner model
@@ -74,6 +76,7 @@ class TrianglesInstancingLayer {
             metallicRoughnessBuf: null,
             flagsBuf: null,
             offsetsBuf: null,
+            modelMatrixBuf: null,
             modelMatrixCol0Buf: null,
             modelMatrixCol1Buf: null,
             modelMatrixCol2Buf: null,
@@ -105,6 +108,9 @@ class TrianglesInstancingLayer {
         this._offsets = [];
 
         // Modeling matrix per instance, array for each column
+
+        this._modelMatrix = [];
+
         this._modelMatrixCol0 = [];
         this._modelMatrixCol1 = [];
         this._modelMatrixCol2 = [];
@@ -249,7 +255,7 @@ class TrianglesInstancingLayer {
             tempVec4a[2] = positions[i + 2];
             math.transformPoint4(positionsDecodeMatrix, tempVec4a, tempVec4b);
             math.transformPoint4(meshMatrix, tempVec4b, tempVec4a);
-                math.expandAABB3Point3(worldAABB, tempVec4a);
+            math.expandAABB3Point3(worldAABB, tempVec4a);
         }
 
         if (this._state.origin) {
@@ -742,6 +748,34 @@ class TrianglesInstancingLayer {
         }
     }
 
+    setMatrix(portionId, matrix) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+            var offset = portionId * 4;
+
+            tempFloat32Vec4[0] = matrix[0];
+            tempFloat32Vec4[1] = matrix[4];
+            tempFloat32Vec4[2] = matrix[8];
+            tempFloat32Vec4[3] = matrix[12];
+
+            this._state.modelMatrixCol0Buf.setData(tempFloat32Vec4, offset);
+
+            tempFloat32Vec4[0] = matrix[1];
+            tempFloat32Vec4[1] = matrix[5];
+            tempFloat32Vec4[2] = matrix[9];
+            tempFloat32Vec4[3] = matrix[13];
+
+            this._state.modelMatrixCol1Buf.setData(tempFloat32Vec4, offset);
+
+            tempFloat32Vec4[0] = matrix[2];
+            tempFloat32Vec4[1] = matrix[6];
+            tempFloat32Vec4[2] = matrix[10];
+            tempFloat32Vec4[3] = matrix[14];
+
+            this._state.modelMatrixCol2Buf.setData(tempFloat32Vec4, offset);
+    }
+
     // ---------------------- COLOR RENDERING -----------------------------------
 
     drawColorOpaque(renderFlags, frameCtx) {
@@ -985,9 +1019,9 @@ class TrianglesInstancingLayer {
         //     }
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // } else {
-            if (this._instancingRenderers.pickNormalsFlatRenderer) {
-                this._instancingRenderers.pickNormalsFlatRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
-            }
+        if (this._instancingRenderers.pickNormalsFlatRenderer) {
+            this._instancingRenderers.pickNormalsFlatRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        }
         // }
     }
 
