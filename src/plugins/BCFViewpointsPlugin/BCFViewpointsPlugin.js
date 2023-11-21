@@ -563,6 +563,7 @@ class BCFViewpointsPlugin extends Plugin {
         }
 
         bcfViewpoint.components.selection = this._createBCFComponents(selectedObjectIds);
+        bcfViewpoint.components.xray = this._createBCFComponents(scene.xrayedObjectIds); // Not in BCF standard
 
         if (options.snapshot !== false) {
             bcfViewpoint.snapshot = {
@@ -763,6 +764,12 @@ class BCFViewpointsPlugin extends Plugin {
             if (bcfViewpoint.components.selection) {
                 scene.setObjectsSelected(scene.selectedObjectIds, false);
                 bcfViewpoint.components.selection.forEach(component => this._withBCFComponent(options, component, entity => entity.selected = true));
+
+            }
+
+            if (bcfViewpoint.components.xray) {
+                scene.setObjectsSelected(scene.xrayedObjectIds, false);
+                bcfViewpoint.components.xray.forEach(component => this._withBCFComponent(options, component, entity => entity.xrayed = true));
 
             }
 
