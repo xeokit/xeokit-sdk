@@ -752,28 +752,33 @@ class TrianglesInstancingLayer {
         if (!this._finalized) {
             throw "Not finalized";
         }
-            var offset = portionId * 4;
 
-            tempFloat32Vec4[0] = matrix[0];
-            tempFloat32Vec4[1] = matrix[4];
-            tempFloat32Vec4[2] = matrix[8];
-            tempFloat32Vec4[3] = matrix[12];
+        ////////////////////////////////////////
+        // TODO: Update portion matrix
+        ////////////////////////////////////////
 
-            this._state.modelMatrixCol0Buf.setData(tempFloat32Vec4, offset);
+        var offset = portionId * 4;
 
-            tempFloat32Vec4[0] = matrix[1];
-            tempFloat32Vec4[1] = matrix[5];
-            tempFloat32Vec4[2] = matrix[9];
-            tempFloat32Vec4[3] = matrix[13];
+        tempFloat32Vec4[0] = matrix[0];
+        tempFloat32Vec4[1] = matrix[4];
+        tempFloat32Vec4[2] = matrix[8];
+        tempFloat32Vec4[3] = matrix[12];
 
-            this._state.modelMatrixCol1Buf.setData(tempFloat32Vec4, offset);
+        this._state.modelMatrixCol0Buf.setData(tempFloat32Vec4, offset);
 
-            tempFloat32Vec4[0] = matrix[2];
-            tempFloat32Vec4[1] = matrix[6];
-            tempFloat32Vec4[2] = matrix[10];
-            tempFloat32Vec4[3] = matrix[14];
+        tempFloat32Vec4[0] = matrix[1];
+        tempFloat32Vec4[1] = matrix[5];
+        tempFloat32Vec4[2] = matrix[9];
+        tempFloat32Vec4[3] = matrix[13];
 
-            this._state.modelMatrixCol2Buf.setData(tempFloat32Vec4, offset);
+        this._state.modelMatrixCol1Buf.setData(tempFloat32Vec4, offset);
+
+        tempFloat32Vec4[0] = matrix[2];
+        tempFloat32Vec4[1] = matrix[6];
+        tempFloat32Vec4[2] = matrix[10];
+        tempFloat32Vec4[3] = matrix[14];
+
+        this._state.modelMatrixCol2Buf.setData(tempFloat32Vec4, offset);
     }
 
     // ---------------------- COLOR RENDERING -----------------------------------

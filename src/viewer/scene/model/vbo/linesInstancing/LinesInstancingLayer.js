@@ -522,6 +522,11 @@ class LinesInstancingLayer {
     }
 
     setMatrix(portionId, matrix) {
+
+        ////////////////////////////////////////
+        // TODO: Update portion matrix
+        ////////////////////////////////////////
+
         if (!this._finalized) {
             throw "Not finalized";
         }
