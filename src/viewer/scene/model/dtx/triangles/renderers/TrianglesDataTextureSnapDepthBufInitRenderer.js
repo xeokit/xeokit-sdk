@@ -366,7 +366,7 @@ export class TrianglesDataTextureSnapDepthBufInitRenderer {
         if (clipping) {
             src.push("vFlags2 = flags2.r;");
         }
-        src.push("vPickColor = vec4(texelFetch (uTexturePerObjectIdColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0));");
+        src.push("vPickColor = vec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0));");
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         src.push("float tmp = clipPos.w;")
         src.push("clipPos.xyzw /= tmp;")
