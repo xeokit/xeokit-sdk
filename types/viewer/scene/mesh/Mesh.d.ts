@@ -783,4 +783,11 @@ export declare class Mesh extends Component implements Omit<Entity, 'parent'> {
    * @returns {number}
    */
   stateSortCompare(mesh1: Mesh, mesh2: Mesh): number;
+
+  /**
+   * Gets the World, View and Canvas-space positions of each vertex in a callback.
+   *
+   * @param callback
+   */
+  getEachVertex(callback: any): void;
 }
