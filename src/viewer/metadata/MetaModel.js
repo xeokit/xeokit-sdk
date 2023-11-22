@@ -234,7 +234,7 @@ class MetaModel {
             if (Number.isInteger(property)) {
                 const lookupProperty = propertyLookup[property];
                 if (lookupProperty) {
-                    properties[property] = lookupProperty;
+                    properties[i] = lookupProperty;
                 }
             }
         }
