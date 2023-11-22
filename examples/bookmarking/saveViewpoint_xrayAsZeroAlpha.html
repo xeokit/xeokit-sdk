@@ -12,7 +12,7 @@
             position: absolute;
             font-size: 18px;
             left: 75px;
-            top: 80px;
+            top: 120px;
             pointer-events: all;
         }
     </style>
@@ -24,7 +24,7 @@
 <div id="downloadLink"></div>
 <div class="slideout-sidebar">
     <img class="info-icon" src="../../assets/images/bcf_logo.png"/>
-    <h1>BCFViewpointsPlugin / X-Ray</h1>
+    <h1>BCFViewpointsPlugin / xrayAsZeroAlpha</h1>
     <h2>Saving a BCF Viewpoint Containing X-Rayed Objects</h2>
     <p>The BIM Collaboration Format (BCF) is a structured file format used for issue tracking with a building
         information model. BCF defines views of a building model and associated information on collisions
@@ -32,7 +32,7 @@
     <p>In this example, to simulate logging a model issue via BCF, we're loading a BIM model from the file system,
         slicing it with a section plane, creating a grid groundplane and a bitmap plan view, selecting some objects,
         X-raying some objects, then saving the viewer state as a JSON-encoded BCF
-        viewpoint.</p>
+        viewpoint using the BCFViewpointsPlugin xrayAsZeroAlpha option.</p>
     <h3>Components Used</h3>
     <ul>
         <li>
@@ -116,9 +116,20 @@
 
     //------------------------------------------------------------------------------------------------------------------
     // Add a BCFViewpointsPlugin - we'll use this to save the BCF viewpoint
+    //
+    // Configure the plugin with `xrayAsZeroAlpha` set `true`, so that:
+    //
+    // * when saving a viewpoint, set the `A` channel of each `coloring` component to `0` for
+    //   each X-rayed object
+    //
+    // * when loading a viewpoint saved from a xeokit application
+    //   (i.e. when the viewpoint's `originating_system == "xeokit.io"`), set an object
+    //   X-rayed if the `A` channel of its corresponding `coloring` component equals `0`
     //------------------------------------------------------------------------------------------------------------------
 
-    const bcfViewpoints = new BCFViewpointsPlugin(viewer);
+    const bcfViewpoints = new BCFViewpointsPlugin(viewer, {
+        xrayAsZeroAlpha: true
+    });
 
     //------------------------------------------------------------------------------------------------------------------
     // Load the .xkt model and IFC metadata
