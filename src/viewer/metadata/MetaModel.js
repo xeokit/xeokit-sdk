@@ -151,8 +151,7 @@ class MetaModel {
      * @property rootMetaObject
      * @type {MetaObject|null}
      */
-    get rootMetaObject()
-    {
+    get rootMetaObject() {
         if (this.rootMetaObjects.length == 1) {
             return this.rootMetaObjects[0];
         }
@@ -172,6 +171,7 @@ class MetaModel {
         this._globalizeIDs(metaModelData, options)
 
         const metaScene = this.metaScene;
+        const propertyLookup = metaModelData.properties;
 
         // Create global Property Sets
 
@@ -180,6 +180,9 @@ class MetaModel {
                 const propertySetData = metaModelData.propertySets[i];
                 let propertySet = metaScene.propertySets[propertySetData.id];
                 if (!propertySet) {
+                    if (propertyLookup) {
+                        this._decompressProperties(propertyLookup, propertySetData.properties);
+                    }
                     propertySet = new PropertySet({
                         id: propertySetData.id,
                         originalSystemId: propertySetData.originalSystemId || propertySetData.id,
@@ -221,6 +224,18 @@ class MetaModel {
                     metaScene.rootMetaObjects[id] = metaObject;
                 }
                 this.metaObjects.push(metaObject);
+            }
+        }
+    }
+
+    _decompressProperties(propertyLookup, properties) {
+        for (let i = 0, len = properties.length; i < len; i++) {
+            const property = properties[i];
+            if (Number.isInteger(property)) {
+                const lookupProperty = propertyLookup[property];
+                if (lookupProperty) {
+                    properties[i] = lookupProperty;
+                }
             }
         }
     }
