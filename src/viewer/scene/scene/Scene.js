@@ -338,7 +338,7 @@ class Scene extends Component {
      * @param {Viewer} viewer The Viewer this Scene belongs to.
      * @param {Object} cfg Scene configuration.
      * @param {String} [cfg.canvasId]  ID of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
-      * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
+     * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @param {HTMLElement} [cfg.keyboardEventsElement] Optional reference to HTML element on which key events should be handled. Defaults to the HTML Document.
      * @throws {String} Throws an exception when both canvasId or canvasElement are missing or they aren't pointing to a valid HTMLCanvasElement.
      */
@@ -1841,7 +1841,12 @@ class Scene extends Component {
     get xrayMaterial() {
         return this.components["default.xrayMaterial"] || new EmphasisMaterial(this, {
             id: "default.xrayMaterial",
-            preset: "sepia",
+            fill: true,
+            fillAlpha: 0.2,
+            fillColor: [0.5, 0.5, 0.5],
+            edges: true,
+            edgeAlpha: 0.5,
+            edgeColor: [0.3, 0.3, 0.3],
             dontClear: true
         });
     }
