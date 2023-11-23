@@ -53,6 +53,9 @@
     // Mouse hover to snap to vertices
     //------------------------------------------------------------------------------------------------------------------
 
+    viewer.scene.highlightMaterial.fill = false;
+    viewer.scene.highlightMaterial.edgeAlpha = 0.5;
+
     const markerDiv = document.createElement('div');
     const canvas = viewer.scene.canvas.canvas;
     canvas.parentNode.insertBefore(markerDiv, canvas);
@@ -67,7 +70,9 @@
     markerDiv.style.position = "absolute";
     markerDiv.style.pointerEvents = "none";
 
-    // Mouse and touch input
+    // Mouse input
+
+    var lastEntity = null;
 
     function updateCursorPosition(canvasPos) {
         const snapPickResult = viewer.scene.snapPick({
@@ -81,11 +86,26 @@
             markerDiv.style.marginTop = `${snapPickResult.snappedCanvasPos[1] - 10}px`;
             markerDiv.style.background = "greenyellow";
             markerDiv.style.border = "3px solid green";
+
+            if (!lastEntity || (snapPickResult.snappedEntity && snapPickResult.snappedEntity.id !== lastEntity.id)) {
+                if (lastEntity) {
+                    lastEntity.highlighted = false;
+                }
+                lastEntity = snapPickResult.snappedEntity;
+                if (snapPickResult.snappedEntity) {
+                    snapPickResult.snappedEntity.highlighted = true;
+                }
+            }
         } else {
             markerDiv.style.marginLeft = `${canvasPos[0] - 10}px`;
             markerDiv.style.marginTop = `${canvasPos[1] - 10}px`;
             markerDiv.style.background = "white";
             markerDiv.style.border = "1px solid black";
+
+            if (lastEntity) {
+                lastEntity.highlighted = false;
+                lastEntity = null;
+            }
         }
     }
 
