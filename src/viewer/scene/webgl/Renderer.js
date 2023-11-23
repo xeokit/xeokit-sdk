@@ -1517,6 +1517,8 @@ const Renderer = function (scene, options) {
             snappedCanvasPos = scene.camera.projectWorldPos(snappedWorldPos);
         }
 
+        const snappedEntity = (snappedPickable && snappedPickable.delegatePickedEntity) ? snappedPickable.delegatePickedEntity() : snappedPickable;
+
         return {
             snapType,
             snappedToVertex: snapType === "vertex",
@@ -1526,8 +1528,8 @@ const Renderer = function (scene, options) {
             snappedWorldPos,
             snappedWorldNormal,
             snappedCanvasPos,
-            snappedEntity: snappedPickable,
-            entity: pickable
+            snappedEntity,
+            entity: snappedEntity
         };
     };
 
