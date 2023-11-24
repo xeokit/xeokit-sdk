@@ -40,23 +40,23 @@
     "filePath": "src/viewer/metadata/MetaModel.js",
     "lines": [
       {
-        "lineNumber": 156,
+        "lineNumber": 160,
         "line": "    /**"
       },
       {
-        "lineNumber": 157,
+        "lineNumber": 161,
         "line": "     * Load metamodel data into this MetaModel."
       },
       {
-        "lineNumber": 158,
+        "lineNumber": 162,
         "line": "     * @param metaModelData"
       },
       {
-        "lineNumber": 159,
+        "lineNumber": 163,
         "line": "     */"
       },
       {
-        "lineNumber": 160,
+        "lineNumber": 164,
         "line": "    loadData(metaModelData, options = {}) {"
       }
     ],
@@ -66,6 +66,47 @@
     ],
     "docParams": [
       "metaModelData"
+    ]
+  },
+  {
+    "name": "SceneModelTransform#translate",
+    "filePath": "src/viewer/scene/model/SceneModelTransform.js",
+    "lines": [
+      {
+        "lineNumber": 307,
+        "line": "    /**"
+      },
+      {
+        "lineNumber": 308,
+        "line": "     * Translates the SceneModelTransform along the local axis by the given increment."
+      },
+      {
+        "lineNumber": 309,
+        "line": "     *"
+      },
+      {
+        "lineNumber": 310,
+        "line": "     * @param {Number[]} axis Normalized local space 3D vector along which to translate."
+      },
+      {
+        "lineNumber": 311,
+        "line": "     * @param {Number} distance Distance to translate along  the vector."
+      },
+      {
+        "lineNumber": 312,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 313,
+        "line": "    translate(axis) {"
+      }
+    ],
+    "codeParams": [
+      "axis"
+    ],
+    "docParams": [
+      "axis",
+      "distance"
     ]
   },
   {
