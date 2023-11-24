@@ -4,6 +4,82 @@ import {Frustum, frustumIntersectsAABB3, setFrustum} from "../../viewer/scene/ma
 
 /**
  * Picks a {@link Viewer}'s {@link Entity}s with a canvas-space 2D marquee box.
+ * 
+ * # Usage
+ *
+ * In the example below, we
+ *
+ * 1. Create a {@link Viewer}, arrange the {@link Camera}
+ * 2. Use an {@link XKTLoaderPlugin} to load a BIM model,
+ * 3. Create a {@link ObjectsKdTree3} to automatically index the `Viewer's` {@link Entity}s for fast spatial lookup,
+ * 4. Create a `MarqueePicker` to pick {@link Entity}s in the {@link Viewer}, using the {@link ObjectsKdTree3} to accelerate picking
+ * 5. Create a {@link MarqueePickerMouseControl} to perform the marquee-picking with the `MarqueePicker`, using mouse input to draw the marquee box on the `Viewer's` canvas.
+ *
+ * When the {@link MarqueePickerMouseControl} is active:
+ *
+ * * Long-click, drag and release on the canvas to define a marque box that picks {@link Entity}s.
+ * * Drag left-to-right to pick {@link Entity}s that intersect the box.
+ * * Drag right-to-left to pick {@link Entity}s that are fully inside the box.
+ * * On release, the `MarqueePicker` will fire a "picked" event with IDs of the picked {@link Entity}s, if any.
+ * * Handling that event, we mark the {@link Entity}s as selected.
+ * * Hold down CTRL to multi-pick.
+ *
+ * ````javascript
+ * import {
+ *         Viewer,
+ *         XKTLoaderPlugin,
+ *         ObjectsKdTree3,
+ *         MarqueePicker,
+ *         MarqueePickerMouseControl
+ * } from "xeokit-sdk.es.js";
+ *
+ * // 1
+ *
+ * const viewer = new Viewer({
+ *     canvasId: "myCanvas"
+ * });
+ *
+ * viewer.scene.camera.eye = [14.9, 14.3, 5.4];
+ * viewer.scene.camera.look = [6.5, 8.3, -4.1];
+ * viewer.scene.camera.up = [-0.28, 0.9, -0.3];
+ *
+ * // 2
+ *
+ * const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ * const sceneModel = xktLoader.load({
+ *     id: "myModel",
+ *     src: "../../assets/models/xkt/v8/ifc/HolterTower.ifc.xkt"
+ * });
+ *
+ * // 3
+ *
+ * const objectsKdTree3 = new ObjectsKdTree3({viewer});
+ *
+ * // 4
+ *
+ * const marqueePicker = new MarqueePicker({viewer, objectsKdTree3});
+ *
+ * // 5
+ *
+ * const marqueePickerMouseControl = new MarqueePickerMouseControl({marqueePicker});
+ *
+ * marqueePicker.on("clear", () => {
+ *     viewer.scene.setObjectsSelected(viewer.scene.selectedObjectIds, false);
+ * });
+ *
+ * marqueePicker.on("picked", (objectIds) => {
+ *     viewer.scene.setObjectsSelected(objectIds, true);
+ * });
+ *
+ * marqueePickerMouseControl.setActive(true);
+ * ````
+ *
+ * # Design Notes
+ *
+ * * The {@link ObjectsKdTree3} can be shared with any other components that want to use it to spatially search for {@link Entity}s.
+ * * The {@link MarqueePickerMouseControl} can be replaced with other types of controllers (i.e. touch), or used alongside them.
+ * * The `MarqueePicker` has no input handlers of its own, and provides an API through which to programmatically control marquee picking. By firing the "picked" events, `MarqueePicker` implements the *Blackboard Pattern*.
  */
 export class MarqueePicker extends Component {
 

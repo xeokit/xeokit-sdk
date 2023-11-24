@@ -4,6 +4,8 @@ import {MarqueePicker} from "./MarqueePicker";
 /**
  * Controls a {@link MarqueePicker} with mouse input.
  *
+ * See {@link MarqueePicker} for usage example.
+ *
  * When the MarqueePickerMouseControl is active:
  *
  * * Long-click, drag and release on the canvas to define a marque box that picks {@link Entity}s.
