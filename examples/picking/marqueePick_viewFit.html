@@ -110,7 +110,7 @@
     // * Drag left-to-right to pick Entities that intersect the box.
     // * Drag right-to-left to pick Entities that are fully inside the box.
     // * On release, the MarqueePicker will fire a "picked" event with IDs of the picked Entities, if any.
-    // * Handling that event, we mark the Entities as selected.
+    // * Handling that event, we momentarily highlight the Entities and fit them to view.
     //---------------------------------------------------------------------------
 
     const objectsKdTree3 = new ObjectsKdTree3({viewer});
