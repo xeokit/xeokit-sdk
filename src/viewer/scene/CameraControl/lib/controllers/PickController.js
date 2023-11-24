@@ -69,7 +69,7 @@ class PickController {
 
         this._lastPickedEntityId = null;
 
-        this._needFireEvents = false;
+        this._needFireEvents = 0;
     }
 
     /**
@@ -90,7 +90,7 @@ class PickController {
         this.snappedOrPicked = false;
         this.hoveredSnappedOrSurfaceOff = false;
 
-        this._needFireEvents = false;
+        // this._needFireEvents = false;
 
         const hasHoverSurfaceSubs = this._cameraControl.hasSubs("hoverSurface");
 
@@ -104,7 +104,7 @@ class PickController {
             if (snapPickResult && snapPickResult.snappedWorldPos) {
                 this.snapPickResult = snapPickResult;
                 this.snappedOrPicked = true;
-                this._needFireEvents = true;
+                this._needFireEvents++;
             } else {
                 this.schedulePickSurface = true; // Fallback
                 this.snapPickResult = null;
@@ -117,7 +117,7 @@ class PickController {
                 if (pickResultCanvasPos[0] === this.pickCursorPos[0] && pickResultCanvasPos[1] === this.pickCursorPos[1]) {
                     this.picked = true;
                     this.pickedSurface = true;
-                    this._needFireEvents = hasHoverSurfaceSubs;
+                    this._needFireEvents += hasHoverSurfaceSubs ? 1 : 0;
                     this.schedulePickEntity = false;
                     this.schedulePickSurface = false;
                     if (this.scheduleSnapOrPick) {
@@ -137,7 +137,7 @@ class PickController {
                 if (pickResultCanvasPos[0] === this.pickCursorPos[0] && pickResultCanvasPos[1] === this.pickCursorPos[1]) {
                     this.picked = true;
                     this.pickedSurface = false;
-                    this._needFireEvents = false;
+                    // this._needFireEvents = false;
                     this.schedulePickEntity = false;
                     this.schedulePickSurface = false;
                     return;
@@ -158,10 +158,10 @@ class PickController {
                 } else {
                     this.pickedSurface = true;
                 }
-                this._needFireEvents = true;
+                this._needFireEvents++;
             } else if (this.scheduleSnapOrPick) {
                 this.hoveredSnappedOrSurfaceOff = true;
-                this._needFireEvents = true;
+                this._needFireEvents++;
             }
 
         } else { // schedulePickEntity == true
@@ -173,7 +173,7 @@ class PickController {
             if (this.pickResult) {
                 this.picked = true;
                 this.pickedSurface = false;
-                this._needFireEvents = true;
+                this._needFireEvents++;
             }
         }
 
@@ -184,7 +184,7 @@ class PickController {
 
     fireEvents() {
 
-        if (!this._needFireEvents) {
+        if (this._needFireEvents == 0) {
             return;
         }
 
@@ -254,7 +254,7 @@ class PickController {
 
         this.pickResult = null;
 
-        this._needFireEvents = false;
+        this._needFireEvents = 0;
     }
 
     destroy() {
