@@ -106,8 +106,6 @@ class PickController {
         this.snappedOrPicked = false;
         this.hoveredSnappedOrSurfaceOff = false;
 
-        // this._needFireEvents = false;
-
         const hasHoverSurfaceSubs = this._cameraControl.hasSubs("hoverSurface");
 
         if (this.scheduleSnapOrPick) {
@@ -153,7 +151,6 @@ class PickController {
                 if (pickResultCanvasPos[0] === this.pickCursorPos[0] && pickResultCanvasPos[1] === this.pickCursorPos[1]) {
                     this.picked = true;
                     this.pickedSurface = false;
-                    // this._needFireEvents = false;
                     this.schedulePickEntity = false;
                     this.schedulePickSurface = false;
                     return;
