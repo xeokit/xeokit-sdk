@@ -8,20 +8,6 @@ import {Frustum, frustumIntersectsAABB3, setFrustum} from "../../viewer/scene/ma
 export class MarqueePicker extends Component {
 
     /**
-     * Pick mode that picks {@link Entity}s that intersect the marquee box.
-     *
-     * @type {number}
-     */
-    static PICK_MODE_INTERSECTS = 0;
-
-    /**
-     * Pick mode that picks {@link Entity}s that are completely inside the marquee box.
-     *
-     * @type {number}
-     */
-    static PICK_MODE_INSIDE = 1;
-
-    /**
      * Creates a MarqueePicker.
      *
      * @param {*} cfg Configuration
@@ -269,3 +255,17 @@ export class MarqueePicker extends Component {
         }
     }
 }
+
+/**
+ * Pick mode that picks {@link Entity}s that intersect the marquee box.
+ *
+ * @type {number}
+ */
+MarqueePicker.PICK_MODE_INTERSECTS = 0;
+
+/**
+ * Pick mode that picks {@link Entity}s that are completely inside the marquee box.
+ *
+ * @type {number}
+ */
+MarqueePicker.PICK_MODE_INSIDE = 1;
