@@ -1,4 +1,3 @@
-
 import {Component} from "../../viewer/scene/Component.js";
 import {MarqueePicker} from "./MarqueePicker";
 
@@ -28,18 +27,20 @@ export class MarqueePickerMouseControl extends Component {
         const scene = marqueePicker.viewer.scene;
         const canvas = scene.canvas.canvas;
 
-        let canvasDragStartX;
-        let canvasDragStartY;
-        let canvasDragEndX;
-        let canvasDragEndY;
+        let pageStartX;
+        let pageStartY;
+        let pageEndX;
+        let pageEndY;
 
-        let canvasMarqueeStartX;
-        let canvasMarqueeStartY;
-        let canvasMarqueeEndX;
-        let canvasMarqueeEndY;
+        let canvasStartX;
+        let canvasStartY;
+        let canvasEndX;
+        let canvasEndY;
 
         let isMouseDragging = false;
+        let isMouseDown = false;
         let mouseWasUpOffCanvas = false;
+        let mouseDownTimer;
 
         canvas.addEventListener("mousedown", (e) => {
             if (!this.getActive()) {
@@ -48,17 +49,23 @@ export class MarqueePickerMouseControl extends Component {
             if (e.button !== 0) { // Left button only
                 return;
             }
-            const input = marqueePicker.viewer.scene.input;
-            if (!input.keyDown[input.KEY_CTRL]) { // Clear selection unless CTRL down
-                this.fire("clear", true);
-            }
-            canvasDragStartX = e.pageX;
-            canvasDragStartY = e.pageY;
-            canvasMarqueeStartX = e.offsetX;
-            canvasMarqueeStartY = e.offsetY;
-            marqueePicker.setMarqueeCorner1([canvasMarqueeStartX, canvasMarqueeStartY]);
-            isMouseDragging = true;
-            marqueePicker.viewer.cameraControl.pointerEnabled = false; // Disable camera rotation
+            mouseDownTimer = setTimeout(function () {
+                const input = marqueePicker.viewer.scene.input;
+                if (!input.keyDown[input.KEY_CTRL]) { // Clear selection unless CTRL down
+                    marqueePicker.clear();
+                }
+                pageStartX = e.pageX;
+                pageStartY = e.pageY;
+                canvasStartX = e.offsetX;
+                canvasStartY = e.offsetY;
+                marqueePicker.setMarqueeCorner1([pageStartX, pageStartY]);
+                isMouseDragging = true;
+                marqueePicker.viewer.cameraControl.pointerEnabled = false; // Disable camera rotation
+                marqueePicker.setMarqueeVisible(true);
+                canvas.style.cursor = "crosshair";
+            }, 400);
+
+            isMouseDown = true;
         });
 
         canvas.addEventListener("mouseup", (e) => {
@@ -71,10 +78,11 @@ export class MarqueePickerMouseControl extends Component {
             if (e.button !== 0) {
                 return;
             }
-            canvasDragEndX = e.pageX;
-            canvasDragEndY = e.pageY;
-            const width = Math.abs(canvasDragEndX - canvasDragStartX);
-            const height = Math.abs(canvasDragEndY - canvasDragStartY);
+            clearTimeout(mouseDownTimer);
+            pageEndX = e.pageX;
+            pageEndY = e.pageY;
+            const width = Math.abs(pageEndX - pageStartX);
+            const height = Math.abs(pageEndY - pageStartY);
             isMouseDragging = false;
             marqueePicker.viewer.cameraControl.pointerEnabled = true; // Enable camera rotation
             if (mouseWasUpOffCanvas) {
@@ -92,11 +100,13 @@ export class MarqueePickerMouseControl extends Component {
             if (e.button !== 0) { // check if left button was clicked
                 return;
             }
+            clearTimeout(mouseDownTimer);
             if (!isMouseDragging) {
                 return
             }
             marqueePicker.setMarqueeVisible(false);
             isMouseDragging = false;
+            isMouseDown = false;
             mouseWasUpOffCanvas = true;
             marqueePicker.viewer.cameraControl.pointerEnabled = true;
         }, true); // Capturing
@@ -108,14 +118,26 @@ export class MarqueePickerMouseControl extends Component {
             if (e.button !== 0) { // check if left button was clicked
                 return;
             }
+
+            if (!isMouseDown) {
+                return;
+            }
+
+            clearTimeout(mouseDownTimer);
+
             if (!isMouseDragging) {
                 return
             }
-            canvasMarqueeEndX = e.offsetX;
-            canvasMarqueeEndY = e.offsetY;
+
+            pageEndX = e.pageX;
+            pageEndY = e.pageY;
+            canvasEndX = e.offsetX;
+            canvasEndY = e.offsetY;
+
             marqueePicker.setMarqueeVisible(true);
-            marqueePicker.setMarqueeCorner2([canvasMarqueeEndX, canvasMarqueeEndY]);
-            marqueePicker.setPickMode((canvasMarqueeStartX < canvasMarqueeEndX) ? MarqueePicker.PICK_MODE_INSIDE : MarqueePicker.PICK_MODE_INTERSECTS);
+            marqueePicker.setMarqueeCorner2([pageEndX, pageEndY]);
+            marqueePicker.setPickMode((canvasStartX < canvasEndX) ? MarqueePicker.PICK_MODE_INSIDE : MarqueePicker.PICK_MODE_INTERSECTS);
+
         });
     }
 

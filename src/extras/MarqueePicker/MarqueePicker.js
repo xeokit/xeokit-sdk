@@ -3,7 +3,7 @@ import {math} from "../../viewer/scene/math/math.js";
 import {Frustum, frustumIntersectsAABB3, setFrustum} from "../../viewer/scene/math/Frustum.js";
 
 /**
- * Picks {@link Entity}s in a {@link Viewer} with a canvas-space 2D marquee box.
+ * Picks a {@link Viewer}'s {@link Entity}s with a canvas-space 2D marquee box.
  */
 export class MarqueePicker extends Component {
 
@@ -26,7 +26,7 @@ export class MarqueePicker extends Component {
      *
      * @param {*} cfg Configuration
      * @param {Viewer} cfg.viewer The Viewer to pick Entities from.
-     * @param {ObjectsKdTree3} cfg.objectsKdTree3 A k-d tree containing the Entities in the Viewer.
+     * @param {ObjectsKdTree3} cfg.objectsKdTree3 A k-d tree that indexes the Entities in the Viewer for fast spatial lookup.
      */
     constructor(cfg = {}) {
 
@@ -120,10 +120,10 @@ export class MarqueePicker extends Component {
      * Sets the pick mode.
      *
      * Supported pick modes are:
-     * 
+     *
      * * MarqueePicker.PICK_MODE_INSIDE - picks {@link Entity}s that are completely inside the marquee box.
      * * MarqueePicker.PICK_MODE_INTERSECTS - picks {@link Entity}s that intersect the marquee box.
-     * 
+     *
      * @param {number} pickMode The pick mode.
      */
     setPickMode(pickMode) {
@@ -151,6 +151,13 @@ export class MarqueePicker extends Component {
      */
     getPickMode() {
         return this._pickMode;
+    }
+
+    /**
+     * Fires a "clear" event on this MarqueePicker.
+     */
+    clear() {
+        this.fire("clear", {})
     }
 
     /**
@@ -216,22 +223,24 @@ export class MarqueePicker extends Component {
         this._marqueeElement.style.width = `${this._canvasMarquee[2] - this._canvasMarquee[0]}px`;
         this._marqueeElement.style.height = `${this._canvasMarquee[3] - this._canvasMarquee[1]}px`;
         this._marqueeElement.style.left = `${this._canvasMarquee[0]}px`;
-        this._marqueeElement.style.top = `${this._canvasMarquee[2]}px`;
+        this._marqueeElement.style.top = `${this._canvasMarquee[1]}px`;
     }
 
     _buildMarqueeFrustum() { // https://github.com/xeokit/xeokit-sdk/issues/869#issuecomment-1165375770
         const canvas = this.viewer.scene.canvas.canvas;
         const canvasWidth = canvas.clientWidth;
         const canvasHeight = canvas.clientHeight;
+        const canvasLeft = canvas.clientLeft;
+        const canvasTop = canvas.clientTop;
         const xCanvasToClip = 2.0 / canvasWidth;
         const yCanvasToClip = 2.0 / canvasHeight;
         const NEAR_SCALING = 17;
         const ratio = canvas.clientHeight / canvas.clientWidth;
         const FAR_PLANE = 10000;
-        const left = this._canvasMarquee[0] * xCanvasToClip + -1;
-        const right = this._canvasMarquee[2] * xCanvasToClip + -1;
-        const bottom = -this._canvasMarquee[3] * yCanvasToClip + 1;
-        const top = -this._canvasMarquee[1] * yCanvasToClip + 1;
+        const left = (this._canvasMarquee[0] - canvasLeft) * xCanvasToClip + -1;
+        const right = (this._canvasMarquee[2] - canvasLeft) * xCanvasToClip + -1;
+        const bottom = -(this._canvasMarquee[3] - canvasTop) * yCanvasToClip + 1;
+        const top = -(this._canvasMarquee[1] - canvasTop) * yCanvasToClip + 1;
         const near = this.viewer.scene.camera.frustum.near * (NEAR_SCALING * ratio);
         const far = FAR_PLANE;
         math.frustumMat4(

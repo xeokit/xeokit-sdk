@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html>
 <head>
@@ -14,7 +15,7 @@
 <canvas id="myCanvas"></canvas>
 <div class="slideout-sidebar">
     <h1>Picking Objects with marqueePicker</h1>
-    <h2>Long-clock then drag left-to-right to select objects that intsect the box; drag right-to-left to select objects inside the
+    <h2>Long-clock then drag left-to-right to view-fit objects that intsect the box; drag right-to-left to view-fit objects inside the
         box.</h2>
     <h3>Components Used</h3>
     <ul>
@@ -119,11 +120,20 @@
     const marqueePickerMouseControl = new MarqueePickerMouseControl({marqueePicker});
 
     marqueePicker.on("clear", () => {
-        viewer.scene.setObjectsSelected(viewer.scene.selectedObjectIds, false);
+        viewer.scene.setObjectsHighlighted(viewer.scene.highlightedObjectIds, false);
     });
 
     marqueePicker.on("picked", (objectIds) => {
-        viewer.scene.setObjectsSelected(objectIds, true);
+        viewer.scene.setObjectsHighlighted(objectIds, true);
+        viewer.cameraFlight.flyTo({
+            projection: "perspective",
+            aabb: viewer.scene.getAABB(objectIds),
+            duration: 0.5
+        }, () => {
+            setTimeout(() =>{
+                viewer.scene.setObjectsHighlighted(viewer.scene.highlightedObjectIds, false);
+            }, 500);
+        });
     });
 
     marqueePickerMouseControl.setActive(true);

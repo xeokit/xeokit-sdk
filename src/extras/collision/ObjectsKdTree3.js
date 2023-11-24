@@ -4,7 +4,7 @@ const MAX_KD_TREE_DEPTH = 15; // Increase if greater precision needed
 const kdTreeDimLength = new Float32Array(3);
 
 /**
- * Automtically organizes a {@link Viewer}'s {@link Entity}s in a 3D k-d tree
+ * Automatically indexes a {@link Viewer}'s {@link Entity}s in a 3D k-d tree
  * to support fast collision detection with 3D World-space axis-aligned boundaries (AABBs) and frustums.
  *
  * An ObjectsKdTree3 is configured with a Viewer, and will then automatically
