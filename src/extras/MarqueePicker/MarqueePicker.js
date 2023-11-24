@@ -5,7 +5,7 @@ import {Frustum, frustumIntersectsAABB3, setFrustum} from "../../viewer/scene/ma
 /**
  * Picks a {@link Viewer}'s {@link Entity}s with a canvas-space 2D marquee box.
  *
- * [<img src="/assets/images/MarqueeSelect.gif">](https://xeokit.github.io/xeokit-sdk/examples/picking/#marqueePick_select)
+ * [<img src="https://xeokit.github.io/xeokit-sdk/assets/images/MarqueeSelect.gif">](https://xeokit.github.io/xeokit-sdk/examples/picking/#marqueePick_select)
  *
  * * [[Example 1: Select Objects with Marquee](https://xeokit.github.io/xeokit-sdk/examples/picking/#marqueePick_select)]
  * * [[Example 2: View-Fit Objects with Marquee](https://xeokit.github.io/xeokit-sdk/examples/picking/#marqueePick_viewFit)]
