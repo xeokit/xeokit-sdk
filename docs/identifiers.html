@@ -318,6 +318,18 @@
         
         
         <div data-ice="description"><p>Picks a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s with a canvas-space 2D marquee box.</p>
+<p><a href="https://xeokit.github.io/xeokit-sdk/examples/picking/#marqueePick_select"><img src="/assets/images/MarqueeSelect.gif"></a></p>
+<ul>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/picking/#marqueePick_select">Example 1: Select Objects with Marquee</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/picking/#marqueePick_viewFit">Example 2: View-Fit Objects with Marquee</a>]</li>
+</ul>
+<h1 id="usage">Usage</h1><p>In the example below, we</p>
+<ol>
+<li>Create a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>, arrange the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></li>
+<li>Use an <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> to load a BIM model,</li>
+<li>Create a <span><a href="class/src/extras/collision/ObjectsKdTree3.js~ObjectsKdTree3.html">ObjectsKdTree3</a></span> to automatically index the <code>Viewer&apos;s</code> <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s for fast spatial lookup,
+4.</li>
+</ol>
 </div>
       </div>
     </td>
@@ -460,6 +472,7 @@ to help position the pointer when snap-to-vertex or snap-toedge is enabled.</p>
         
         <div data-ice="description"><p>Automatically indexes a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in a 3D k-d tree
 to support fast collision detection with 3D World-space axis-aligned boundaries (AABBs) and frustums.</p>
+<p>See <span><a href="class/src/extras/MarqueePicker/MarqueePicker.js~MarqueePicker.html">MarqueePicker</a></span> for usage example.</p>
 <p>An ObjectsKdTree3 is configured with a Viewer, and will then automatically
 keep itself populated with k-d nodes that contain the Viewer&apos;s Entitys.</p>
 </div>

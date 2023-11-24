@@ -248,13 +248,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {MarqueePicker} from &apos;<span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber8">@xeokit/xeokit-sdk/src/extras/MarqueePicker/MarqueePicker.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {MarqueePicker} from &apos;<span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber89">@xeokit/xeokit-sdk/src/extras/MarqueePicker/MarqueePicker.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber8">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber89">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -275,6 +275,82 @@
   
   
   <div class="description" data-ice="description"><p>Picks a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>&apos;s <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s with a canvas-space 2D marquee box.</p>
+<p><a href="https://xeokit.github.io/xeokit-sdk/examples/picking/#marqueePick_select"><img src="/assets/images/MarqueeSelect.gif"></a></p>
+<ul>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/picking/#marqueePick_select">Example 1: Select Objects with Marquee</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/picking/#marqueePick_viewFit">Example 2: View-Fit Objects with Marquee</a>]</li>
+</ul>
+<h1 id="usage">Usage</h1><p>In the example below, we</p>
+<ol>
+<li>Create a <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>, arrange the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></li>
+<li>Use an <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> to load a BIM model,</li>
+<li>Create a <span><a href="class/src/extras/collision/ObjectsKdTree3.js~ObjectsKdTree3.html">ObjectsKdTree3</a></span> to automatically index the <code>Viewer&apos;s</code> <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s for fast spatial lookup,</li>
+<li>Create a <code>MarqueePicker</code> to pick <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s in the <span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span>, using the <span><a href="class/src/extras/collision/ObjectsKdTree3.js~ObjectsKdTree3.html">ObjectsKdTree3</a></span> to accelerate picking</li>
+<li>Create a <span><a href="class/src/extras/MarqueePicker/MarqueePickerMouseControl.js~MarqueePickerMouseControl.html">MarqueePickerMouseControl</a></span> to perform the marquee-picking with the <code>MarqueePicker</code>, using mouse input to draw the marquee box on the <code>Viewer&apos;s</code> canvas.</li>
+</ol>
+<p>When the <span><a href="class/src/extras/MarqueePicker/MarqueePickerMouseControl.js~MarqueePickerMouseControl.html">MarqueePickerMouseControl</a></span> is active:</p>
+<ul>
+<li>Long-click, drag and release on the canvas to define a marque box that picks <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.</li>
+<li>Drag left-to-right to pick <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s that intersect the box.</li>
+<li>Drag right-to-left to pick <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s that are fully inside the box.</li>
+<li>On release, the <code>MarqueePicker</code> will fire a &quot;picked&quot; event with IDs of the picked <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s, if any.</li>
+<li>Handling that event, we mark the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s as selected.</li>
+<li>Hold down CTRL to multi-pick.</li>
+</ul>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {
+        Viewer,
+        XKTLoaderPlugin,
+        ObjectsKdTree3,
+        MarqueePicker,
+        MarqueePickerMouseControl
+} from &quot;xeokit-sdk.es.js&quot;;
+
+// 1
+
+const viewer = new Viewer({
+    canvasId: &quot;myCanvas&quot;
+});
+
+viewer.scene.camera.eye = [14.9, 14.3, 5.4];
+viewer.scene.camera.look = [6.5, 8.3, -4.1];
+viewer.scene.camera.up = [-0.28, 0.9, -0.3];
+
+// 2
+
+const xktLoader = new XKTLoaderPlugin(viewer);
+
+const sceneModel = xktLoader.load({
+    id: &quot;myModel&quot;,
+    src: &quot;../../assets/models/xkt/v8/ifc/HolterTower.ifc.xkt&quot;
+});
+
+// 3
+
+const objectsKdTree3 = new ObjectsKdTree3({viewer});
+
+// 4
+
+const marqueePicker = new MarqueePicker({viewer, objectsKdTree3});
+
+// 5
+
+const marqueePickerMouseControl = new MarqueePickerMouseControl({marqueePicker});
+
+marqueePicker.on(&quot;clear&quot;, () =&gt; {
+    viewer.scene.setObjectsSelected(viewer.scene.selectedObjectIds, false);
+});
+
+marqueePicker.on(&quot;picked&quot;, (objectIds) =&gt; {
+    viewer.scene.setObjectsSelected(objectIds, true);
+});
+
+marqueePickerMouseControl.setActive(true);</code>
+</code></pre>
+<h1 id="design-notes">Design Notes</h1><ul>
+<li>The <span><a href="class/src/extras/collision/ObjectsKdTree3.js~ObjectsKdTree3.html">ObjectsKdTree3</a></span> can be shared with any other components that want to use it to spatially search for <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.</li>
+<li>The <span><a href="class/src/extras/MarqueePicker/MarqueePickerMouseControl.js~MarqueePickerMouseControl.html">MarqueePickerMouseControl</a></span> can be replaced with other types of controllers (i.e. touch), or used alongside them.</li>
+<li>The <code>MarqueePicker</code> has no input handlers of its own, and provides an API through which to programmatically control marquee picking. By firing the &quot;picked&quot; events, <code>MarqueePicker</code> implements the <em>Blackboard Pattern</em>.</li>
+</ul>
 </div>
   
 
@@ -1175,7 +1251,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber17">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber98">source</a></span></span>
     </span>
   </h3>
 
@@ -1253,7 +1329,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber29">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber110">source</a></span></span>
     </span>
   </h3>
 
@@ -1300,7 +1376,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber145">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber226">source</a></span></span>
     </span>
   </h3>
 
@@ -1344,7 +1420,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber249">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber330">source</a></span></span>
     </span>
   </h3>
 
@@ -1389,7 +1465,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber101">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber182">source</a></span></span>
     </span>
   </h3>
 
@@ -1446,7 +1522,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber138">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber219">source</a></span></span>
     </span>
   </h3>
 
@@ -1508,7 +1584,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber156">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber237">source</a></span></span>
     </span>
   </h3>
 
@@ -1566,7 +1642,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber80">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber161">source</a></span></span>
     </span>
   </h3>
 
@@ -1632,7 +1708,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber58">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber139">source</a></span></span>
     </span>
   </h3>
 
@@ -1692,7 +1768,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber69">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber150">source</a></span></span>
     </span>
   </h3>
 
@@ -1752,7 +1828,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber91">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber172">source</a></span></span>
     </span>
   </h3>
 
@@ -1813,7 +1889,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber115">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/extras/MarqueePicker/MarqueePicker.js.html#lineNumber196">source</a></span></span>
     </span>
   </h3>
 

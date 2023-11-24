@@ -1,6 +1,6 @@
 {
-  "coverage": "41.75%",
-  "expectCount": 6588,
+  "coverage": "41.73%",
+  "expectCount": 6591,
   "actualCount": 2751,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
@@ -56,25 +56,25 @@
       "expectCount": 24,
       "actualCount": 12,
       "undocumentLines": [
-        29,
-        30,
-        31,
-        32,
-        33,
-        34,
-        35,
-        36,
-        38,
-        92,
-        204,
-        215
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        119,
+        173,
+        285,
+        296
       ]
     },
     "src/extras/MarqueePicker/MarqueePickerMouseControl.js": {
       "expectCount": 6,
       "actualCount": 5,
       "undocumentLines": [
-        153
+        155
       ]
     },
     "src/extras/PointerLens/PointerLens.js": {
@@ -106,14 +106,14 @@
       "undocumentLines": [
         3,
         4,
-        35,
         37,
-        38,
         39,
+        40,
         41,
-        45,
-        63,
-        77
+        43,
+        47,
+        65,
+        79
       ]
     },
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js": {
@@ -1378,7 +1378,7 @@
       ]
     },
     "src/viewer/scene/CameraControl/lib/controllers/PickController.js": {
-      "expectCount": 22,
+      "expectCount": 25,
       "actualCount": 10,
       "undocumentLines": [
         5,
@@ -1388,11 +1388,14 @@
         26,
         70,
         72,
-        90,
-        91,
-        105,
-        185,
-        260
+        74,
+        76,
+        81,
+        106,
+        107,
+        119,
+        198,
+        273
       ]
     },
     "src/viewer/scene/CameraControl/lib/controllers/PivotController.js": {
