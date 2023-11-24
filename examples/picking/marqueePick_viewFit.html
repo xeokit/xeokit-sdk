@@ -1,0 +1,142 @@
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <h1>Picking Objects with marqueePicker</h1>
+    <h2>Long-clock then drag left-to-right to view-fit objects that intsect the box; drag right-to-left to view-fit objects inside the
+        box.</h2>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/MarqueePicker/MarqueePicker.js~MarqueePicker.html"
+               target="_other">MarqueePicker</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/MarqueePicker/MarqueePickerMouseControl.js~MarqueePickerMouseControl.html"
+               target="_other">MarqueePickerMouseControl</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/extras/collision/ObjectsKdTree3.js~ObjectsKdTree3.html"
+               target="_other">ObjectsKdTree3</a>
+        </li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    import {
+        Viewer,
+        XKTLoaderPlugin,
+        ObjectsKdTree3,
+        MarqueePicker,
+        MarqueePickerMouseControl
+    } from "../../dist/xeokit-sdk.es.js";
+
+    //---------------------------------------------------------------------------
+    // Create a Viewer and arrange the camera
+    //---------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        dtxEnabled: true
+    });
+
+    viewer.scene.camera.eye = [14.915582703146043, 14.396781491179095, 5.431098754133695];
+    viewer.scene.camera.look = [6.599999999999998, 8.34099990051474, -4.159999575600315];
+    viewer.scene.camera.up = [-0.2820584034861215, 0.9025563895259413, -0.3253229483893775];
+
+    //---------------------------------------------------------------------------
+    // Load a BIM model into the Viewer from XKT format
+    //---------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const sceneModel = xktLoader.load({
+        id: "myModel",
+        src: "../../assets/models/xkt/v8/ifc/HolterTower.ifc.xkt",
+        edges: true,
+        dtxEnabled: true,
+        objectDefaults: { // This model has opaque windows / spaces; make them transparent
+            "IfcPlate": {
+                opacity: 0.3 // These are used as windows in this model - make transparent
+            },
+            "IfcWindow": {
+                opacity: 0.4
+            },
+            "IfcSpace": {
+                opacity: 0.4
+            }
+        }
+    });
+
+    sceneModel.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(sceneModel);
+    });
+
+    //---------------------------------------------------------------------------
+    // Create marquee picking components:
+    //
+    // * ObjectsKdTree3 to automatically index the Viewer's Entities for
+    //   fast spatial lookup.
+    // * MarqueePicker to pick Entities in the Viewer, using the
+    //   ObjectsKdTree3 to accelerate picking.
+    // * MarqueePickerMouseControl to perform the marquee-picking with
+    //   the MarqueePicker, using mouse input to draw the marquee box on the
+    //   Viewer's canvas.
+    //
+    // When the MarqueePickerMouseControl is active:
+    //
+    // * Long-click, drag and release on the canvas to define a marque box that picks Entities.
+    // * Drag left-to-right to pick Entities that intersect the box.
+    // * Drag right-to-left to pick Entities that are fully inside the box.
+    // * On release, the MarqueePicker will fire a "picked" event with IDs of the picked Entities, if any.
+    // * Handling that event, we mark the Entities as selected.
+    //---------------------------------------------------------------------------
+
+    const objectsKdTree3 = new ObjectsKdTree3({viewer});
+
+    const marqueePicker = new MarqueePicker({viewer, objectsKdTree3});
+
+    const marqueePickerMouseControl = new MarqueePickerMouseControl({marqueePicker});
+
+    marqueePicker.on("clear", () => {
+        viewer.scene.setObjectsHighlighted(viewer.scene.highlightedObjectIds, false);
+    });
+
+    marqueePicker.on("picked", (objectIds) => {
+        viewer.scene.setObjectsHighlighted(objectIds, true);
+        viewer.cameraFlight.flyTo({
+            projection: "perspective",
+            aabb: viewer.scene.getAABB(objectIds),
+            duration: 0.5
+        }, () => {
+            setTimeout(() =>{
+                viewer.scene.setObjectsHighlighted(viewer.scene.highlightedObjectIds, false);
+            }, 500);
+        });
+    });
+
+    marqueePickerMouseControl.setActive(true);
+
+</script>
+</html>
