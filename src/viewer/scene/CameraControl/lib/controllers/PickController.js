@@ -71,27 +71,19 @@ class PickController {
 
         this._needFireEvents = 0;
 
-        this._needToUpdate = false;
+        this._lastHash = null;
 
-        this._tickSub = this._scene.on("tick", () => {
-            this.runUpdate();
+        this._tickSub = this._scene.on("rendered", () => {
+            this._lastHash = null;
         });
     }
 
     update() {
-        this._needToUpdate = true;
-    }
-
-    /**
-     * Immediately attempts a pick, if scheduled.
-     */
-    runUpdate() {
-
-        if (!this._needToUpdate) {
+        const hash = `${~~this.pickCursorPos[0]}-${~~this.pickCursorPos[1]}-${this.scheduleSnapOrPick}-${this.schedulePickSurface}-${this.schedulePickEntity}`;
+        if (this._lastHash === hash) {
             return;
         }
-
-        this._needToUpdate = false;
+        this._lastHash = hash;
 
         if (!this._configs.pointerEnabled) {
             return;
