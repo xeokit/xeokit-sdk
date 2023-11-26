@@ -352,6 +352,11 @@ class Scene extends Component {
             throw "Mandatory config expected: valid canvasId or canvasElement";
         }
 
+        /**
+         * @type {{[key: string]: {wrapperFunc: Function, tickSubId: string}}}
+         */
+        this._tickifiedFunctions = {};
+
         const transparent = (!!cfg.transparent);
         const alphaDepthMask = (!!cfg.alphaDepthMask);
 
@@ -2560,6 +2565,63 @@ class Scene extends Component {
             }
         }
         return changed;
+    }
+
+    /**
+     * This method will "tickify" the provided `cb` function.
+     * 
+     * This means, the function will be wrapped so:
+     * 
+     * - it runs time-aligned to scene ticks
+     * - it runs maximum once per scene-tick
+     * 
+     * @param {Function} cb The function to tickify
+     * @returns {Function)}
+     */
+    tickify(cb) {
+        const cbString = cb.toString();
+
+        /**
+         * Check if the function is already tickified, and if so return the cached one.
+         */
+        if (cbString in this._tickifiedFunctions) {
+            return this._tickifiedFunctions[cbString].wrapperFunc;
+        }
+
+        let alreadyRun = 0;
+        let needToRun = 0;
+
+        let lastArgs;
+
+        /**
+         * The provided `cb` function is replaced with a "set-dirty" function
+         * 
+         * @type {Function}
+         */
+        const wrapperFunc = function (...args) {
+            lastArgs = args;
+            needToRun++;
+        };
+
+        /**
+         * An each scene tick, if the "dirty-flag" is set, run the `cb` function.
+         * 
+         * This will make it run time-aligned to the scene tick.
+         */
+        const tickSubId = this.on("tick", () => {
+            const tmp = needToRun;
+            if (tmp > alreadyRun) {
+                alreadyRun = tmp;
+                cb(...lastArgs);
+            }
+        });
+
+        /**
+         * And, store the list of subscribers.
+         */
+        this._tickifiedFunctions[cbString] = { tickSubId, wrapperFunc };
+
+        return wrapperFunc;
     }
 
     /**
