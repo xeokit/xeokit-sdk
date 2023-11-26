@@ -1190,12 +1190,16 @@ class Input extends Component {
             }
         });
 
+        const tickifiedMouseWheelFn = this.scene.tickify(
+            (delta) => { this.fire("mousewheel", delta, true); }
+        );
+
         this.element.addEventListener("wheel", this._mouseWheelListener = (e, d) => {
             if (!this.enabled) {
                 return;
             }
             const delta = Math.max(-1, Math.min(1, -e.deltaY * 40));
-            this.fire("mousewheel", delta, true);
+            tickifiedMouseWheelFn(delta);
         }, {passive: true});
 
         // mouseclicked
