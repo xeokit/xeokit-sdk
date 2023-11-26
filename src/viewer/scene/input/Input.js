@@ -1175,12 +1175,16 @@ class Input extends Component {
             }
         });
 
+        const tickifedMouseMoveFn = this.scene.tickify(
+            () => this.fire("mousemove", this.mouseCanvasPos, true)
+        );
+
         this.element.addEventListener("mousemove", this._mouseMoveListener = (e) => {
             if (!this.enabled) {
                 return;
             }
             this._getMouseCanvasPos(e);
-            this.fire("mousemove", this.mouseCanvasPos, true);
+            tickifedMouseMoveFn();  
             if (this.mouseover) {
                 e.preventDefault();
             }
