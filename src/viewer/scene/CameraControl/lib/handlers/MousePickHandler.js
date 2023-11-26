@@ -45,75 +45,78 @@ class MousePickHandler {
             }
         };
 
-        canvas.addEventListener("mousemove", this._canvasMouseMoveHandler = (e) => {
+        const tickifiedMouseMoveFn = scene.tickify (
+            this._canvasMouseMoveHandler = (e) => {
+                if (!(configs.active && configs.pointerEnabled)) {
+                    return;
+                }
 
-            if (!(configs.active && configs.pointerEnabled)) {
-                return;
-            }
+                if (leftDown || rightDown) {
+                    return;
+                }
 
-            if (leftDown || rightDown) {
-                return;
-            }
+                const hoverSubs = cameraControl.hasSubs("hover");
+                const hoverEnterSubs = cameraControl.hasSubs("hoverEnter");
+                const hoverOutSubs = cameraControl.hasSubs("hoverOut");
+                const hoverOffSubs = cameraControl.hasSubs("hoverOff");
+                const hoverSurfaceSubs = cameraControl.hasSubs("hoverSurface");
+                const hoverSnapOrSurfaceSubs = cameraControl.hasSubs("hoverSnapOrSurface");
 
-            const hoverSubs = cameraControl.hasSubs("hover");
-            const hoverEnterSubs = cameraControl.hasSubs("hoverEnter");
-            const hoverOutSubs = cameraControl.hasSubs("hoverOut");
-            const hoverOffSubs = cameraControl.hasSubs("hoverOff");
-            const hoverSurfaceSubs = cameraControl.hasSubs("hoverSurface");
-            const hoverSnapOrSurfaceSubs = cameraControl.hasSubs("hoverSnapOrSurface");
+                if (hoverSubs || hoverEnterSubs || hoverOutSubs || hoverOffSubs || hoverSurfaceSubs || hoverSnapOrSurfaceSubs) {
 
-            if (hoverSubs || hoverEnterSubs || hoverOutSubs || hoverOffSubs || hoverSurfaceSubs || hoverSnapOrSurfaceSubs) {
+                    pickController.pickCursorPos = states.pointerCanvasPos;
+                    pickController.schedulePickEntity = true;
+                    pickController.schedulePickSurface = hoverSurfaceSubs;
+                    pickController.scheduleSnapOrPick = hoverSnapOrSurfaceSubs
 
-                pickController.pickCursorPos = states.pointerCanvasPos;
-                pickController.schedulePickEntity = true;
-                pickController.schedulePickSurface = hoverSurfaceSubs;
-                pickController.scheduleSnapOrPick = hoverSnapOrSurfaceSubs
+                    pickController.update();
 
-                pickController.update();
+                    if (pickController.pickResult) {
 
-                if (pickController.pickResult) {
+                        if (pickController.pickResult.entity) {
+                            const pickedEntityId = pickController.pickResult.entity.id;
 
-                    if (pickController.pickResult.entity) {
-                        const pickedEntityId = pickController.pickResult.entity.id;
+                            if (this._lastPickedEntityId !== pickedEntityId) {
 
-                        if (this._lastPickedEntityId !== pickedEntityId) {
+                                if (this._lastPickedEntityId !== undefined) {
 
-                            if (this._lastPickedEntityId !== undefined) {
+                                    cameraControl.fire("hoverOut", { // Hovered off an entity
+                                        entity: scene.objects[this._lastPickedEntityId]
+                                    }, true);
+                                }
 
-                                cameraControl.fire("hoverOut", { // Hovered off an entity
-                                    entity: scene.objects[this._lastPickedEntityId]
-                                }, true);
+                                cameraControl.fire("hoverEnter", pickController.pickResult, true); // Hovering over a new entity
+
+                                this._lastPickedEntityId = pickedEntityId;
                             }
-
-                            cameraControl.fire("hoverEnter", pickController.pickResult, true); // Hovering over a new entity
-
-                            this._lastPickedEntityId = pickedEntityId;
                         }
-                    }
 
-                    cameraControl.fire("hover", pickController.pickResult, true);
+                        cameraControl.fire("hover", pickController.pickResult, true);
 
-                    if (pickController.pickResult.worldPos || pickController.pickResult.snappedWorldPos) { // Hovering the surface of an entity
-                        cameraControl.fire("hoverSurface", pickController.pickResult, true);
-                    }
+                        if (pickController.pickResult.worldPos || pickController.pickResult.snappedWorldPos) { // Hovering the surface of an entity
+                            cameraControl.fire("hoverSurface", pickController.pickResult, true);
+                        }
 
-                } else {
+                    } else {
 
-                    if (this._lastPickedEntityId !== undefined) {
+                        if (this._lastPickedEntityId !== undefined) {
 
-                        cameraControl.fire("hoverOut", { // Hovered off an entity
-                            entity: scene.objects[this._lastPickedEntityId]
+                            cameraControl.fire("hoverOut", { // Hovered off an entity
+                                entity: scene.objects[this._lastPickedEntityId]
+                            }, true);
+
+                            this._lastPickedEntityId = undefined;
+                        }
+
+                        cameraControl.fire("hoverOff", { // Not hovering on any entity
+                            canvasPos: pickController.pickCursorPos
                         }, true);
-
-                        this._lastPickedEntityId = undefined;
                     }
-
-                    cameraControl.fire("hoverOff", { // Not hovering on any entity
-                        canvasPos: pickController.pickCursorPos
-                    }, true);
                 }
             }
-        });
+        );
+
+        canvas.addEventListener("mousemove", tickifiedMouseMoveFn);
 
         canvas.addEventListener('mousedown', this._canvasMouseDownHandler = (e) => {
 
