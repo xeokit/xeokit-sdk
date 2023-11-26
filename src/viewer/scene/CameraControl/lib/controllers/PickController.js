@@ -70,29 +70,12 @@ class PickController {
         this._lastPickedEntityId = null;
 
         this._needFireEvents = 0;
-
-        this._needToUpdate = false;
-
-        this._tickSub = this._scene.on("tick", () => {
-            this.runUpdate();
-        });
-    }
-
-    update() {
-        this._needToUpdate = true;
     }
 
     /**
      * Immediately attempts a pick, if scheduled.
      */
-    runUpdate() {
-
-        if (!this._needToUpdate) {
-            return;
-        }
-
-        this._needToUpdate = false;
-
+    update() {
         if (!this._configs.pointerEnabled) {
             return;
         }
@@ -268,10 +251,6 @@ class PickController {
         this.pickResult = null;
 
         this._needFireEvents = 0;
-    }
-
-    destroy() {
-        this._scene.off(this._tickSub);
     }
 }
 

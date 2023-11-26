@@ -1175,23 +1175,31 @@ class Input extends Component {
             }
         });
 
+        const tickifedMouseMoveFn = this.scene.tickify(
+            () => this.fire("mousemove", this.mouseCanvasPos, true)
+        );
+
         this.element.addEventListener("mousemove", this._mouseMoveListener = (e) => {
             if (!this.enabled) {
                 return;
             }
             this._getMouseCanvasPos(e);
-            this.fire("mousemove", this.mouseCanvasPos, true);
+            tickifedMouseMoveFn();  
             if (this.mouseover) {
                 e.preventDefault();
             }
         });
+
+        const tickifiedMouseWheelFn = this.scene.tickify(
+            (delta) => { this.fire("mousewheel", delta, true); }
+        );
 
         this.element.addEventListener("wheel", this._mouseWheelListener = (e, d) => {
             if (!this.enabled) {
                 return;
             }
             const delta = Math.max(-1, Math.min(1, -e.deltaY * 40));
-            this.fire("mousewheel", delta, true);
+            tickifiedMouseWheelFn(delta);
         }, {passive: true});
 
         // mouseclicked
