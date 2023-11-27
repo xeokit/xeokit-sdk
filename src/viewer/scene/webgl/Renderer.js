@@ -1283,255 +1283,260 @@ const Renderer = function (scene, options) {
      * @param {number} [snapRadiusInPixels=30]
      * @param {boolean} [snapToVertex=true]
      * @param {boolean} [snapToEdge=true]
-     *
-     * @returns {{worldPos:number[],snappedWorldPos:null|number[],snappedCanvasPos:null|number[], snapType:null|"vertex"|"edge"}}
+     * @param pickResult
+     * @returns {PickResult}
      */
-    this.snapPick = function (canvasPos, snapRadiusInPixels = 30, snapToVertex = true, snapToEdge = true) {
+    this.snapPick = (function () {
 
-        if (!snapToVertex && !snapToEdge) {
-            return this.pick({canvasPos, pickSurface: true});
-        }
+        const _pickResult = new PickResult();
 
-        const resolutionScale = scene.canvas.resolutionScale;
+        return function (canvasPos, snapRadiusInPixels, snapToVertex, snapToEdge, pickResult = _pickResult) {
 
-        frameCtx.reset();
-        frameCtx.backfaces = true;
-        frameCtx.frontface = true; // "ccw"
-        frameCtx.pickZNear = scene.camera.project.near;
-        frameCtx.pickZFar = scene.camera.project.far;
+            if (!snapToVertex && !snapToEdge) {
+                return this.pick({canvasPos, pickSurface: true});
+            }
 
-        const vertexPickBuffer = renderBufferManager.getRenderBuffer("uniquePickColors-aabs", {
-            depthTexture: true,
-            size: [
-                2 * snapRadiusInPixels + 1,
-                2 * snapRadiusInPixels + 1,
-            ]
-        });
+            const resolutionScale = scene.canvas.resolutionScale;
 
-        frameCtx.snapVectorA = [
-            getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
-            getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight),
-        ];
+            frameCtx.reset();
+            frameCtx.backfaces = true;
+            frameCtx.frontface = true; // "ccw"
+            frameCtx.pickZNear = scene.camera.project.near;
+            frameCtx.pickZFar = scene.camera.project.far;
 
-        frameCtx.snapInvVectorAB = [
-            gl.drawingBufferWidth / (2 * snapRadiusInPixels),
-            gl.drawingBufferHeight / (2 * snapRadiusInPixels),
-        ];
+            snapRadiusInPixels = snapRadiusInPixels || 30;
 
-        // Bind and clear the snap render target
+            const vertexPickBuffer = renderBufferManager.getRenderBuffer("uniquePickColors-aabs", {
+                depthTexture: true,
+                size: [
+                    2 * snapRadiusInPixels + 1,
+                    2 * snapRadiusInPixels + 1,
+                ]
+            });
 
-        vertexPickBuffer.bind(gl.RGBA32I, gl.RGBA32I, gl.RGBA8UI);
-        gl.viewport(0, 0, vertexPickBuffer.size[0], vertexPickBuffer.size[1]);
-        gl.enable(gl.DEPTH_TEST);
-        gl.frontFace(gl.CCW);
-        gl.disable(gl.CULL_FACE);
-        gl.depthMask(true);
-        gl.disable(gl.BLEND);
-        gl.depthFunc(gl.LEQUAL);
-        gl.clear(gl.DEPTH_BUFFER_BIT);
-        gl.clearBufferiv(gl.COLOR, 0, new Int32Array([0, 0, 0, 0]));
-        gl.clearBufferiv(gl.COLOR, 1, new Int32Array([0, 0, 0, 0]));
-        gl.clearBufferuiv(gl.COLOR, 2, new Uint32Array([0, 0, 0, 0]));
+            frameCtx.snapVectorA = [
+                getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
+                getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight),
+            ];
 
-        //////////////////////////////////
-        // Set view and proj mats for VBO renderers
-        ///////////////////////////////////////
+            frameCtx.snapInvVectorAB = [
+                gl.drawingBufferWidth / (2 * snapRadiusInPixels),
+                gl.drawingBufferHeight / (2 * snapRadiusInPixels),
+            ];
 
-        const pickViewMatrix = scene.camera.viewMatrix;
-        const pickProjMatrix = scene.camera.projMatrix;
+            // Bind and clear the snap render target
 
-        for (let type in drawableTypeInfo) {
-            if (drawableTypeInfo.hasOwnProperty(type)) {
-                const drawableList = drawableTypeInfo[type].drawableList;
-                for (let i = 0, len = drawableList.length; i < len; i++) {
-                    const drawable = drawableList[i];
-                    if (drawable.setPickMatrices) { // Eg. SceneModel, which needs pre-loading into texture
-                        drawable.setPickMatrices(pickViewMatrix, pickProjMatrix);
+            vertexPickBuffer.bind(gl.RGBA32I, gl.RGBA32I, gl.RGBA8UI);
+            gl.viewport(0, 0, vertexPickBuffer.size[0], vertexPickBuffer.size[1]);
+            gl.enable(gl.DEPTH_TEST);
+            gl.frontFace(gl.CCW);
+            gl.disable(gl.CULL_FACE);
+            gl.depthMask(true);
+            gl.disable(gl.BLEND);
+            gl.depthFunc(gl.LEQUAL);
+            gl.clear(gl.DEPTH_BUFFER_BIT);
+            gl.clearBufferiv(gl.COLOR, 0, new Int32Array([0, 0, 0, 0]));
+            gl.clearBufferiv(gl.COLOR, 1, new Int32Array([0, 0, 0, 0]));
+            gl.clearBufferuiv(gl.COLOR, 2, new Uint32Array([0, 0, 0, 0]));
+
+            //////////////////////////////////
+            // Set view and proj mats for VBO renderers
+            ///////////////////////////////////////
+
+            const pickViewMatrix = scene.camera.viewMatrix;
+            const pickProjMatrix = scene.camera.projMatrix;
+
+            for (let type in drawableTypeInfo) {
+                if (drawableTypeInfo.hasOwnProperty(type)) {
+                    const drawableList = drawableTypeInfo[type].drawableList;
+                    for (let i = 0, len = drawableList.length; i < len; i++) {
+                        const drawable = drawableList[i];
+                        if (drawable.setPickMatrices) { // Eg. SceneModel, which needs pre-loading into texture
+                            drawable.setPickMatrices(pickViewMatrix, pickProjMatrix);
+                        }
                     }
                 }
             }
-        }
 
-        // a) init z-buffer
-        gl.drawBuffers([gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1, gl.COLOR_ATTACHMENT2]);
-        const layerParamsSurface = snapInitDepthBuf(frameCtx);
+            // a) init z-buffer
+            gl.drawBuffers([gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1, gl.COLOR_ATTACHMENT2]);
+            const layerParamsSurface = snapInitDepthBuf(frameCtx);
 
-        // b) snap-pick
-        const layerParamsSnap = []
-        frameCtx.snapPickLayerParams = layerParamsSnap;
+            // b) snap-pick
+            const layerParamsSnap = []
+            frameCtx.snapPickLayerParams = layerParamsSnap;
 
-        gl.depthMask(false);
-        gl.drawBuffers([gl.COLOR_ATTACHMENT0]);
+            gl.depthMask(false);
+            gl.drawBuffers([gl.COLOR_ATTACHMENT0]);
 
-        if (snapToVertex && snapToEdge) {
-            frameCtx.snapMode = "edge";
-            snapPickDrawSnapDepths(frameCtx);
+            if (snapToVertex && snapToEdge) {
+                frameCtx.snapMode = "edge";
+                snapPickDrawSnapDepths(frameCtx);
 
-            frameCtx.snapMode = "vertex";
-            frameCtx.snapPickLayerNumber++;
+                frameCtx.snapMode = "vertex";
+                frameCtx.snapPickLayerNumber++;
 
-            snapPickDrawSnapDepths(frameCtx);
-        } else {
-            frameCtx.snapMode = snapToVertex ? "vertex" : "edge";
+                snapPickDrawSnapDepths(frameCtx);
+            } else {
+                frameCtx.snapMode = snapToVertex ? "vertex" : "edge";
 
-            snapPickDrawSnapDepths(frameCtx);
-        }
-
-        gl.depthMask(true);
-
-        // Read and decode the snapped coordinates
-
-        const snapPickResultArray = vertexPickBuffer.readArray(gl.RGBA_INTEGER, gl.INT, Int32Array, 4);
-        const snapPickNormalResultArray = vertexPickBuffer.readArray(gl.RGBA_INTEGER, gl.INT, Int32Array, 4, 1);
-        const snapPickIdResultArray = vertexPickBuffer.readArray(gl.RGBA_INTEGER, gl.UNSIGNED_INT, Uint32Array, 4, 2);
-
-        vertexPickBuffer.unbind();
-
-        // result 1) regular hi-precision world position
-
-        let worldPos = null;
-        let worldNormal = null;
-        let pickable = null;
-
-        const middleX = snapRadiusInPixels;
-        const middleY = snapRadiusInPixels;
-        const middleIndex = (middleX * 4) + (middleY * vertexPickBuffer.size[0] * 4);
-        const pickResultMiddleXY = snapPickResultArray.slice(middleIndex, middleIndex + 4);
-        const pickNormalResultMiddleXY = snapPickNormalResultArray.slice(middleIndex, middleIndex + 4);
-        const pickPickableResultMiddleXY = snapPickIdResultArray.slice(middleIndex, middleIndex + 4);
-
-        if (pickResultMiddleXY[3] !== 0) {
-            const pickedLayerParmasSurface = layerParamsSurface[Math.abs(pickResultMiddleXY[3]) % layerParamsSurface.length];
-            const origin = pickedLayerParmasSurface.origin;
-            const scale = pickedLayerParmasSurface.coordinateScale;
-            worldPos = [
-                pickResultMiddleXY[0] * scale[0] + origin[0],
-                pickResultMiddleXY[1] * scale[1] + origin[1],
-                pickResultMiddleXY[2] * scale[2] + origin[2],
-            ];
-            worldNormal = math.normalizeVec3([
-                pickNormalResultMiddleXY[0] / math.MAX_INT,
-                pickNormalResultMiddleXY[1] / math.MAX_INT,
-                pickNormalResultMiddleXY[2] / math.MAX_INT,
-            ]);
-
-            const pickID =
-                pickPickableResultMiddleXY[0]
-                + (pickPickableResultMiddleXY[1] << 8)
-                + (pickPickableResultMiddleXY[2] << 16)
-                + (pickPickableResultMiddleXY[3] << 24);
-    
-            pickable = pickIDs.items[pickID];
-        }
-
-        // result 2) hi-precision snapped (to vertex/edge) world position
-
-        let snapPickResult = [];
-
-        for (let i = 0; i < snapPickResultArray.length; i += 4) {
-            if (snapPickResultArray[i + 3] > 0) {
-                const pixelNumber = Math.floor(i / 4);
-                const w = vertexPickBuffer.size[0];
-                const x = pixelNumber % w - Math.floor(w / 2);
-                const y = Math.floor(pixelNumber / w) - Math.floor(w / 2);
-                const dist = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-                snapPickResult.push({
-                    x,
-                    y,
-                    dist,
-                    isVertex: snapToVertex && snapToEdge ? snapPickResultArray[i + 3] > layerParamsSnap.length / 2 : snapToVertex,
-                    result: [
-                        snapPickResultArray[i + 0],
-                        snapPickResultArray[i + 1],
-                        snapPickResultArray[i + 2],
-                        snapPickResultArray[i + 3],
-                    ],
-                    normal: [
-                        snapPickNormalResultArray[i + 0],
-                        snapPickNormalResultArray[i + 1],
-                        snapPickNormalResultArray[i + 2],
-                        snapPickNormalResultArray[i + 3],
-                    ],
-                    id: [
-                        snapPickIdResultArray[i + 0],
-                        snapPickIdResultArray[i + 1],
-                        snapPickIdResultArray[i + 2],
-                        snapPickIdResultArray[i + 3],
-                    ]
-                });
+                snapPickDrawSnapDepths(frameCtx);
             }
-        }
 
-        let snappedWorldPos = null;
-        let snappedWorldNormal = null;
-        let snappedPickable = null;
-        let snapType = null;
+            gl.depthMask(true);
 
-        if (snapPickResult.length > 0) {
-            // vertex snap first, then edge snap
-            snapPickResult.sort((a, b) => {
-                if (a.isVertex !== b.isVertex) {
-                    return a.isVertex ? -1 : 1;
-                } else {
-                    return a.dist - b.dist;
+            // Read and decode the snapped coordinates
+
+            const snapPickResultArray = vertexPickBuffer.readArray(gl.RGBA_INTEGER, gl.INT, Int32Array, 4);
+            const snapPickNormalResultArray = vertexPickBuffer.readArray(gl.RGBA_INTEGER, gl.INT, Int32Array, 4, 1);
+            const snapPickIdResultArray = vertexPickBuffer.readArray(gl.RGBA_INTEGER, gl.UNSIGNED_INT, Uint32Array, 4, 2);
+
+            vertexPickBuffer.unbind();
+
+            // result 1) regular hi-precision world position
+
+            let worldPos = null;
+            let worldNormal = null;
+            let pickable = null;
+
+            const middleX = snapRadiusInPixels;
+            const middleY = snapRadiusInPixels;
+            const middleIndex = (middleX * 4) + (middleY * vertexPickBuffer.size[0] * 4);
+            const pickResultMiddleXY = snapPickResultArray.slice(middleIndex, middleIndex + 4);
+            const pickNormalResultMiddleXY = snapPickNormalResultArray.slice(middleIndex, middleIndex + 4);
+            const pickPickableResultMiddleXY = snapPickIdResultArray.slice(middleIndex, middleIndex + 4);
+
+            if (pickResultMiddleXY[3] !== 0) {
+                const pickedLayerParmasSurface = layerParamsSurface[Math.abs(pickResultMiddleXY[3]) % layerParamsSurface.length];
+                const origin = pickedLayerParmasSurface.origin;
+                const scale = pickedLayerParmasSurface.coordinateScale;
+                worldPos = [
+                    pickResultMiddleXY[0] * scale[0] + origin[0],
+                    pickResultMiddleXY[1] * scale[1] + origin[1],
+                    pickResultMiddleXY[2] * scale[2] + origin[2],
+                ];
+                worldNormal = math.normalizeVec3([
+                    pickNormalResultMiddleXY[0] / math.MAX_INT,
+                    pickNormalResultMiddleXY[1] / math.MAX_INT,
+                    pickNormalResultMiddleXY[2] / math.MAX_INT,
+                ]);
+
+                const pickID =
+                    pickPickableResultMiddleXY[0]
+                    + (pickPickableResultMiddleXY[1] << 8)
+                    + (pickPickableResultMiddleXY[2] << 16)
+                    + (pickPickableResultMiddleXY[3] << 24);
+
+                pickable = pickIDs.items[pickID];
+            }
+
+            // result 2) hi-precision snapped (to vertex/edge) world position
+
+            let snapPickResult = [];
+
+            for (let i = 0; i < snapPickResultArray.length; i += 4) {
+                if (snapPickResultArray[i + 3] > 0) {
+                    const pixelNumber = Math.floor(i / 4);
+                    const w = vertexPickBuffer.size[0];
+                    const x = pixelNumber % w - Math.floor(w / 2);
+                    const y = Math.floor(pixelNumber / w) - Math.floor(w / 2);
+                    const dist = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+                    snapPickResult.push({
+                        x,
+                        y,
+                        dist,
+                        isVertex: snapToVertex && snapToEdge ? snapPickResultArray[i + 3] > layerParamsSnap.length / 2 : snapToVertex,
+                        result: [
+                            snapPickResultArray[i + 0],
+                            snapPickResultArray[i + 1],
+                            snapPickResultArray[i + 2],
+                            snapPickResultArray[i + 3],
+                        ],
+                        normal: [
+                            snapPickNormalResultArray[i + 0],
+                            snapPickNormalResultArray[i + 1],
+                            snapPickNormalResultArray[i + 2],
+                            snapPickNormalResultArray[i + 3],
+                        ],
+                        id: [
+                            snapPickIdResultArray[i + 0],
+                            snapPickIdResultArray[i + 1],
+                            snapPickIdResultArray[i + 2],
+                            snapPickIdResultArray[i + 3],
+                        ]
+                    });
                 }
-            });
+            }
 
-            snapType = snapPickResult[0].isVertex ? "vertex" : "edge";
-            const snapPick = snapPickResult[0].result;
-            const snapPickNormal = snapPickResult[0].normal;
-            const snapPickId = snapPickResult[0].id;
+            let snappedWorldPos = null;
+            let snappedWorldNormal = null;
+            let snappedPickable = null;
+            let snapType = null;
 
-            const pickedLayerParmas = layerParamsSnap[snapPick[3]];
+            if (snapPickResult.length > 0) {
+                // vertex snap first, then edge snap
+                snapPickResult.sort((a, b) => {
+                    if (a.isVertex !== b.isVertex) {
+                        return a.isVertex ? -1 : 1;
+                    } else {
+                        return a.dist - b.dist;
+                    }
+                });
 
-            const origin = pickedLayerParmas.origin;
-            const scale = pickedLayerParmas.coordinateScale;
+                snapType = snapPickResult[0].isVertex ? "vertex" : "edge";
+                const snapPick = snapPickResult[0].result;
+                const snapPickNormal = snapPickResult[0].normal;
+                const snapPickId = snapPickResult[0].id;
 
-            snappedWorldNormal = math.normalizeVec3([
-                snapPickNormal[0] / math.MAX_INT,
-                snapPickNormal[1] / math.MAX_INT,
-                snapPickNormal[2] / math.MAX_INT,
-            ]);
+                const pickedLayerParmas = layerParamsSnap[snapPick[3]];
 
-            snappedWorldPos = [
-                snapPick[0] * scale[0] + origin[0],
-                snapPick[1] * scale[1] + origin[1],
-                snapPick[2] * scale[2] + origin[2],
-            ];
+                const origin = pickedLayerParmas.origin;
+                const scale = pickedLayerParmas.coordinateScale;
 
-            snappedPickable = pickIDs.items[
+                snappedWorldNormal = math.normalizeVec3([
+                    snapPickNormal[0] / math.MAX_INT,
+                    snapPickNormal[1] / math.MAX_INT,
+                    snapPickNormal[2] / math.MAX_INT,
+                ]);
+
+                snappedWorldPos = [
+                    snapPick[0] * scale[0] + origin[0],
+                    snapPick[1] * scale[1] + origin[1],
+                    snapPick[2] * scale[2] + origin[2],
+                ];
+
+                snappedPickable = pickIDs.items[
                 snapPickId[0]
                 + (snapPickId[1] << 8)
                 + (snapPickId[2] << 16)
                 + (snapPickId[3] << 24)
-            ];
-        }
+                    ];
+            }
 
-        if (null === worldPos && null == snappedWorldPos) {   // If neither regular pick or snap pick, return null
-            return null;
-        }
+            if (null === worldPos && null == snappedWorldPos) {   // If neither regular pick or snap pick, return null
+                return null;
+            }
 
-        let snappedCanvasPos = null;
+            let snappedCanvasPos = null;
 
-        if (null !== snappedWorldPos) {
-            snappedCanvasPos = scene.camera.projectWorldPos(snappedWorldPos);
-        }
+            if (null !== snappedWorldPos) {
+                snappedCanvasPos = scene.camera.projectWorldPos(snappedWorldPos);
+            }
 
-        const snappedEntity = (snappedPickable && snappedPickable.delegatePickedEntity) ? snappedPickable.delegatePickedEntity() : snappedPickable;
+            const snappedEntity = (snappedPickable && snappedPickable.delegatePickedEntity) ? snappedPickable.delegatePickedEntity() : snappedPickable;
 
-        return {
-            snapType,
-            snappedToVertex: snapType === "vertex",
-            snappedToEdge: snapType === "edge",
-            worldPos,
-            worldNormal,
-            snappedWorldPos,
-            snappedWorldNormal,
-            snappedCanvasPos,
-            snappedEntity,
-            entity: snappedEntity
+            pickResult.reset();
+            pickResult.snappedToEdge = (snapType === "edge");
+            pickResult.snappedToVertex = (snapType === "vertex");
+            pickResult.worldPos = snappedWorldPos;
+            pickResult.worldNormal = snappedWorldNormal;
+            pickResult.entity = snappedEntity;
+            pickResult.canvasPos = canvasPos;
+            pickResult.snappedCanvasPos = snappedCanvasPos || canvasPos;
+
+            return pickResult;
         };
-    };
+    })();
 
     function unpackDepth(depthZ) {
         const vec = [depthZ[0] / 256.0, depthZ[1] / 256.0, depthZ[2] / 256.0, depthZ[3] / 256.0];

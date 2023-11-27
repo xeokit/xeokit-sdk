@@ -92,13 +92,13 @@ class PickController {
         const hasHoverSurfaceSubs = this._cameraControl.hasSubs("hoverSurface");
 
         if (this.scheduleSnapOrPick) {
-            const snapPickResult = this._scene.snapPick({
+            const snapPickResult = this._scene.pick({
                 canvasPos: this.pickCursorPos,
                 snapRadius: this._configs.snapRadius,
                 snapToVertex: this._configs.snapToVertex,
                 snapToEdge: this._configs.snapToEdge,
             });
-            if (snapPickResult && snapPickResult.snappedWorldPos) {
+            if (snapPickResult && (snapPickResult.snappedToEdge || snapPickResult.snappedToVertex)) {
                 this.snapPickResult = snapPickResult;
                 this.snappedOrPicked = true;
                 this._needFireEvents++;
@@ -180,14 +180,14 @@ class PickController {
 
     fireEvents() {
 
-        if (this._needFireEvents == 0) {
+        if (this._needFireEvents === 0) {
             return;
         }
 
         if (this.hoveredSnappedOrSurfaceOff) {
             this._cameraControl.fire("hoverSnapOrSurfaceOff", {
                 canvasPos: this.pickCursorPos,
-                cursorPos : this.pickCursorPos
+                pointerPos : this.pickCursorPos
             }, true);
         }
 
@@ -196,9 +196,9 @@ class PickController {
                 const pickResult = new PickResult();
                 pickResult.snappedToVertex = this.snapPickResult.snappedToVertex;
                 pickResult.snappedToEdge = this.snapPickResult.snappedToEdge;
-                pickResult.worldPos = this.snapPickResult.snappedWorldPos;
-                pickResult.cursorPos = this.pickCursorPos;
-                pickResult.canvasPos = this.snapPickResult.snappedCanvasPos;
+                pickResult.worldPos = this.snapPickResult.worldPos;
+                pickResult.canvasPos = this.pickCursorPos
+                pickResult.snappedCanvasPos = this.snapPickResult.snappedCanvasPos;
                 this._cameraControl.fire("hoverSnapOrSurface", pickResult, true);
                 this.snapPickResult = null;
             } else {
