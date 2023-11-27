@@ -69,6 +69,8 @@ class PickController {
 
         this._lastPickedEntityId = null;
 
+        this._lastHash = null;
+
         this._needFireEvents = 0;
     }
 
@@ -76,11 +78,17 @@ class PickController {
      * Immediately attempts a pick, if scheduled.
      */
     update() {
+
         if (!this._configs.pointerEnabled) {
             return;
         }
 
         if (!this.schedulePickEntity && !this.schedulePickSurface) {
+            return;
+        }
+
+        const hash = `${~~this.pickCursorPos[0]}-${~~this.pickCursorPos[1]}-${this.scheduleSnapOrPick}-${this.schedulePickSurface}-${this.schedulePickEntity}`;
+        if (this._lastHash === hash) {
             return;
         }
 
