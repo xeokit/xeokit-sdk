@@ -71,15 +71,15 @@
     // Mouse and touch input
 
     function updateCursorPosition(canvasPos) {
-        const snapPickResult = viewer.scene.snapPick({
+        const pickResult = viewer.scene.pick({
             canvasPos,
             snapRadius: 30,
             snapToEdge: false, // Default is true
             snapToVertex: true // Default is true
         });
-        if (snapPickResult && snapPickResult.snappedCanvasPos) {
-            markerDiv.style.marginLeft = `${snapPickResult.snappedCanvasPos[0] - 10}px`;
-            markerDiv.style.marginTop = `${snapPickResult.snappedCanvasPos[1] - 10}px`;
+        if (pickResult && pickResult.snappedCanvasPos) {
+            markerDiv.style.marginLeft = `${pickResult.snappedCanvasPos[0] - 10}px`;
+            markerDiv.style.marginTop = `${pickResult.snappedCanvasPos[1] - 10}px`;
             markerDiv.style.background = "greenyellow";
             markerDiv.style.border = "3px solid green";
         } else {

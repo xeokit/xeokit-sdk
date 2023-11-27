@@ -60,13 +60,14 @@ class PickResult {
          */
         this.snappedToVertex = false;
 
-        this._canvasPos = new Int16Array([0, 0]);
         this._origin = new Float64Array([0, 0, 0]);
         this._direction = new Float64Array([0, 0, 0]);
         this._indices = new Int32Array(3);
         this._localPos = new Float64Array([0, 0, 0]);
         this._worldPos = new Float64Array([0, 0, 0]);
         this._viewPos = new Float64Array([0, 0, 0]);
+        this._canvasPos = new Int16Array([0, 0]);
+        this._snappedCanvasPos = new Int16Array([0, 0]);
         this._bary = new Float64Array([0, 0, 0]);
         this._worldNormal = new Float64Array([0, 0, 0]);
         this._uv = new Float64Array([0, 0]);
@@ -75,7 +76,7 @@ class PickResult {
     }
 
     /**
-     * Canvas coordinates when picking with a 2D pointer.
+     * Canvas pick coordinates.
      * @property canvasPos
      * @type {Number[]}
      */
@@ -190,6 +191,29 @@ class PickResult {
             this._gotLocalPos = true;
         } else {
             this._gotLocalPos = false;
+        }
+    }
+
+    /**
+     * Canvas cursor coordinates, snapped when snap picking, otherwise same as {@link PickResult#pointerPos}.
+     * @property snappedCanvasPos
+     * @type {Number[]}
+     */
+    get snappedCanvasPos() {
+        return this._gotSnappedCanvasPos ? this._snappedCanvasPos : null;
+    }
+
+    /**
+     * @private
+     * @param value
+     */
+    set snappedCanvasPos(value) {
+        if (value) {
+            this._snappedCanvasPos[0] = value[0];
+            this._snappedCanvasPos[1] = value[1];
+            this._gotSnappedCanvasPos = true;
+        } else {
+            this._gotSnappedCanvasPos = false;
         }
     }
 
@@ -321,6 +345,7 @@ class PickResult {
         this.primitive = null;
         this.pickSurfacePrecision = false;
         this._gotCanvasPos = false;
+        this._gotSnappedCanvasPos = false;
         this._gotOrigin = false;
         this._gotDirection = false;
         this._gotIndices = false;

@@ -181,18 +181,19 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
             this._snapping
                 ? "hoverSnapOrSurface"
                 : "hoverSurface", event => {
+                const canvasPos = event.snappedCanvasPos || event.canvasPos;
                 mouseHovering = true;
                 pointerWorldPos.set(event.worldPos);
                 pointerCanvasPos.set(event.canvasPos);
                 if (this._mouseState === MOUSE_FIRST_CLICK_EXPECTED) {
-                    this._markerDiv.style.marginLeft = `${event.canvasPos[0] - 5}px`;
-                    this._markerDiv.style.marginTop = `${event.canvasPos[1] - 5}px`;
+                    this._markerDiv.style.marginLeft = `${canvasPos[0] - 5}px`;
+                    this._markerDiv.style.marginTop = `${canvasPos[1] - 5}px`;
                     this._markerDiv.style.background = "pink";
                     if (event.snappedToVertex || event.snappedToEdge) {
                         if (this.pointerLens) {
                             this.pointerLens.visible = true;
-                            this.pointerLens.centerPos = event.cursorPos || event.canvasPos;
-                            this.pointerLens.cursorPos = event.canvasPos;
+                            this.pointerLens.canvasPos = event.canvasPos;
+                            this.pointerLens.snappedCanvasPos = event.snappedCanvasPos || event.canvasPos;
                             this.pointerLens.snapped = true;
                         }
                         this._markerDiv.style.background = "greenyellow";
@@ -200,8 +201,8 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
                     } else {
                         if (this.pointerLens) {
                             this.pointerLens.visible = true;
-                            this.pointerLens.centerPos = event.cursorPos || event.canvasPos;
-                            this.pointerLens.cursorPos = event.canvasPos;
+                            this.pointerLens.canvasPos =  event.canvasPos;
+                            this.pointerLens.snappedCanvasPos = event.canvasPos;
                             this.pointerLens.snapped = false;
                         }
                         this._markerDiv.style.background = "pink";
@@ -283,8 +284,8 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
                 : "hoverOff", event => {
             if (this.pointerLens) {
                 this.pointerLens.visible = true;
-                this.pointerLens.centerPos = event.cursorPos || event.canvasPos;
-                this.pointerLens.cursorPos = event.canvasPos;
+                this.pointerLens.canvasPos =  event.canvasPos;
+                this.pointerLens.snappedCanvasPos = event.snappedCanvasPos || event.canvasPos;
             }
             mouseHovering = false;
             this._markerDiv.style.marginLeft = `-100px`;

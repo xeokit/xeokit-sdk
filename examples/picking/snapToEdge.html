@@ -77,25 +77,25 @@
     })
 
     function updateCursorPosition(canvasPos) {
-        const snapPickResult = viewer.scene.snapPick({
+        const pickResult = viewer.scene.pick({
             canvasPos,
             snapRadius: 30,
             snapToEdge: true, // Default is true
             snapToVertex: false // Default is true
         });
-        if (snapPickResult && snapPickResult.snappedCanvasPos) {
-            markerDiv.style.marginLeft = `${snapPickResult.snappedCanvasPos[0] - 10}px`;
-            markerDiv.style.marginTop = `${snapPickResult.snappedCanvasPos[1] - 10}px`;
+        if (pickResult && pickResult.snappedCanvasPos) {
+            markerDiv.style.marginLeft = `${pickResult.snappedCanvasPos[0] - 10}px`;
+            markerDiv.style.marginTop = `${pickResult.snappedCanvasPos[1] - 10}px`;
             markerDiv.style.background = "greenyellow";
             markerDiv.style.border = "3px solid green";
 
-            if (!lastEntity || (snapPickResult.snappedEntity && snapPickResult.snappedEntity.id !== lastEntity.id)) {
+            if (!lastEntity || (pickResult.entity && pickResult.entity.id !== lastEntity.id)) {
                 if (lastEntity) {
                     lastEntity.highlighted = false;
                 }
-                lastEntity = snapPickResult.snappedEntity;
-                if (snapPickResult.snappedEntity) {
-                    snapPickResult.snappedEntity.highlighted = true;
+                lastEntity = pickResult.entity;
+                if (pickResult.entity) {
+                    pickResult.entity.highlighted = true;
                 }
             }
         } else {

@@ -93,8 +93,8 @@ export class PointerLens {
         this._lensCanvasContext = this._lensCanvas.getContext('2d');
         this._canvasElement = this.viewer.scene.canvas.canvas;
 
-        this._centerPos = null;
-        this._cursorPos = null;
+        this._canvasPos = null;
+        this._snappedCanvasPos = null;
         this._lensPosToggle = true;
 
         this._zoomLevel = cfg.zoomLevel || 2;
@@ -117,14 +117,14 @@ export class PointerLens {
         if (!this._active || !this._visible) {
             return;
         }
-        if (!this._centerPos) {
+        if (!this._canvasPos) {
             return;
         }
         const lensRect = this._lensContainer.getBoundingClientRect();
         const canvasRect = this._canvasElement.getBoundingClientRect();
         const pointerOnLens =
-            this._centerPos[0] < lensRect.right && this._centerPos[0] > lensRect.left &&
-            this._centerPos[1] < lensRect.bottom && this._centerPos[1] > lensRect.top;
+            this._canvasPos[0] < lensRect.right && this._canvasPos[0] > lensRect.left &&
+            this._canvasPos[1] < lensRect.bottom && this._canvasPos[1] > lensRect.top;
         this._lensContainer.style.marginLeft = `25px`;
         if (pointerOnLens) {
             if (this._lensPosToggle) {
@@ -138,8 +138,8 @@ export class PointerLens {
         const size = Math.max(this._lensCanvas.width, this._lensCanvas.height) / this._zoomLevel;
         this._lensCanvasContext.drawImage(
             this._canvasElement, // source canvas
-            this._centerPos[0] - size / 2, // source x (zoom center)
-            this._centerPos[1] - size / 2, // source y (zoom center)
+            this._canvasPos[0] - size / 2, // source x (zoom center)
+            this._canvasPos[1] - size / 2, // source y (zoom center)
             size, // source width
             size, // source height
             0, // destination x
@@ -153,9 +153,9 @@ export class PointerLens {
             (lensRect.top + lensRect.bottom) / 2
         ];
 
-        if (this._cursorPos) {
-            const deltaX = this._cursorPos[0] - this._centerPos[0];
-            const deltaY = this._cursorPos[1] - this._centerPos[1];
+        if (this._snappedCanvasPos) {
+            const deltaX = this._snappedCanvasPos[0] - this._canvasPos[0];
+            const deltaY = this._snappedCanvasPos[1] - this._canvasPos[1];
 
             this._lensCursorDiv.style.marginLeft = `${centerLensCanvas[0] + deltaX * this._zoomLevel - 10}px`;
             this._lensCursorDiv.style.marginTop = `${centerLensCanvas[1] + deltaY * this._zoomLevel - 10}px`;
@@ -191,10 +191,10 @@ export class PointerLens {
 
     /**
      * Sets the canvas central position of the lens.
-     * @param centerPos
+     * @param canvasPos
      */
-    set centerPos(centerPos) {
-        this._centerPos = centerPos;
+    set canvasPos(canvasPos) {
+        this._canvasPos = canvasPos;
         this.update();
     }
 
@@ -202,25 +202,25 @@ export class PointerLens {
      * Gets the canvas central position of the lens.
      * @returns {Number[]}
      */
-    get centerPos() {
-        return this._centerPos;
+    get canvasPos() {
+        return this._canvasPos;
     }
 
     /**
      * Sets the canvas coordinates of the pointer.
-     * @param cursorPos
+     * @param snappedCanvasPos
      */
-    set cursorPos(cursorPos) {
-        this._cursorPos = cursorPos;
+    set snappedCanvasPos(snappedCanvasPos) {
+        this._snappedCanvasPos = snappedCanvasPos;
         this.update();
     }
 
     /**
-     * Gets the canvas coordinates of the pointer.
+     * Gets the canvas coordinates of the snapped pointer.
      * @returns {Number[]}
      */
-    get cursorPos() {
-        return this._cursorPos;
+    get snappedCanvasPos() {
+        return this._snappedCanvasPos;
     }
 
     /**

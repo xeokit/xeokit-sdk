@@ -2154,6 +2154,9 @@ class Scene extends Component {
      * @param {Number[]} [params.matrix] 4x4 transformation matrix to define the World-space ray origin and direction, as an alternative to ````origin```` and ````direction````.
      * @param {String[]} [params.includeEntities] IDs of {@link Entity}s to restrict picking to. When given, ignores {@link Entity}s whose IDs are not in this list.
      * @param {String[]} [params.excludeEntities] IDs of {@link Entity}s to ignore. When given, will pick *through* these {@link Entity}s, as if they were not there.
+     * @param {Number} [params.snapRadius=30] The snap radius, in canvas pixels
+     * @param {boolean} [params.snapToVertex=true] Whether to snap to vertex.
+     * @param {boolean} [params.snapToEdge=true] Whether to snap to edge.
      * @param {PickResult} [pickResult] Holds the results of the pick attempt. Will use the Scene's singleton PickResult if you don't supply your own.
      * @returns {PickResult} Holds results of the pick attempt, returned when an {@link Entity} is picked, else null. See method comments for description.
      */
@@ -2188,14 +2191,25 @@ class Scene extends Component {
             this._needRecompile = false;
         }
 
-        pickResult = this._renderer.pick(params, pickResult);
+        if (params.snapToEdge || params.snapToVertex) {
+            pickResult = this._renderer.snapPick(
+                params.canvasPos,
+                params.snapRadius || 30,
+                params.snapToVertex,
+                params.snapToEdge,
+                pickResult
+            );
+        } else {
+            pickResult = this._renderer.pick(params, pickResult);
+        }
 
         if (pickResult) {
             if (pickResult.entity && pickResult.entity.fire) {
-                pickResult.entity.fire("picked", pickResult); // TODO: PerformanceModelNode doesn't fire events
+                pickResult.entity.fire("picked", pickResult); // TODO: SceneModelEntity doesn't fire events
             }
-            return pickResult;
         }
+
+        return pickResult;
     }
 
     /**
@@ -2204,8 +2218,13 @@ class Scene extends Component {
      * @param {Number} [params.snapRadius=30] The snap radius, in canvas pixels
      * @param {boolean} [params.snapToVertex=true] Whether to snap to vertex.
      * @param {boolean} [params.snapToEdge=true] Whether to snap to edge.
+     * @deprecated
      */
     snapPick(params) {
+        if (undefined === this._warnSnapPickDeprecated) {
+            this._warnSnapPickDeprecated = true;
+            this.warn("Scene.snapPick() is deprecated since v2.4.2 - use Scene.pick() instead")
+        }
         return this._renderer.snapPick(
             params.canvasPos,
             params.snapRadius || 30,

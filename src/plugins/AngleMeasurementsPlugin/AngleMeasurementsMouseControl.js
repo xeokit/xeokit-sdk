@@ -177,8 +177,8 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                 if (event.snappedToVertex || event.snappedToEdge) {
                     if (pointerLens) {
                         pointerLens.visible = true;
-                        pointerLens.centerPos = event.cursorPos || event.canvasPos;
-                        pointerLens.cursorPos = event.canvasPos;
+                        pointerLens.canvasPos = event.canvasPos;
+                        pointerLens.snappedCanvasPos = event.snappedCanvasPos || event.canvasPos;
                         pointerLens.snapped = true;
                     }
                     this.markerDiv.style.background = "greenyellow";
@@ -186,21 +186,22 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                 } else {
                     if (pointerLens) {
                         pointerLens.visible = true;
-                        pointerLens.centerPos = event.cursorPos || event.canvasPos;
-                        pointerLens.cursorPos = event.canvasPos;
+                        pointerLens.canvasPos =  event.canvasPos;
+                        pointerLens.snappedCanvasPos = event.canvasPos;
                         pointerLens.snapped = false;
                     }
                     this.markerDiv.style.background = "pink";
                     this.markerDiv.style.border = "2px solid red";
                 }
+                const canvasPos = event.snappedCanvasPos || event.canvasPos;
                 mouseHovering = true;
                 mouseHoverEntity = event.entity;
                 mouseWorldPos.set(event.worldPos);
-                mouseHoverCanvasPos.set(event.canvasPos);
+                mouseHoverCanvasPos.set(canvasPos);
                 switch (this._mouseState) {
                     case MOUSE_FINDING_ORIGIN:
-                        this.markerDiv.style.marginLeft = `${event.canvasPos[0] - 5}px`;
-                        this.markerDiv.style.marginTop = `${event.canvasPos[1] - 5}px`;
+                        this.markerDiv.style.marginLeft = `${canvasPos[0] - 5}px`;
+                        this.markerDiv.style.marginTop = `${canvasPos[1] - 5}px`;
                         break;
                     case MOUSE_FINDING_CORNER:
                         if (this._currentAngleMeasurement) {
@@ -316,8 +317,8 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                 mouseHovering = false;
                 if (pointerLens) {
                     pointerLens.visible = true;
-                    pointerLens.centerPos = event.cursorPos;
-                    pointerLens.cursorPos = event.cursorPos;
+                    pointerLens.pointerPos = event.canvasPos;
+                    pointerLens.snappedCanvasPos = event.snappedCanvasPos || event.canvasPos;
                     pointerLens.snapped = false;
                 }
                 this.markerDiv.style.marginLeft = `-100px`;
