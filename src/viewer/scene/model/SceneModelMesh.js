@@ -306,10 +306,15 @@ export class SceneModelMesh {
      */
     get aabb() { // called by SceneModelEntity
         if (this._aabbDirty) {
-            if (this.obb && this.transform) {
-                math.transformOBB3(this.transform.worldMatrix, this.obb, tempOBB3);
-                math.transformOBB3(this.model.worldMatrix, tempOBB3, tempOBB3b);
-                math.OBB3ToAABB3(tempOBB3b, this._aabb);
+            if (this.obb) {
+                if (this.transform) {
+                    math.transformOBB3(this.transform.worldMatrix, this.obb, tempOBB3);
+                    math.transformOBB3(this.model.worldMatrix, tempOBB3, tempOBB3b);
+                    math.OBB3ToAABB3(tempOBB3b, this._aabb);
+                } else {
+                    math.transformOBB3(this.model.worldMatrix, this.obb, tempOBB3);
+                    math.OBB3ToAABB3(tempOBB3, this._aabb);
+                }
             }
             this._aabbDirty = false;
         }
