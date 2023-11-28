@@ -208,7 +208,7 @@ EmphasisFillRenderer.prototype._allocate = function (mesh) {
         }
     }
     this._uSectionPlanes = [];
-    for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+    for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
         this._uSectionPlanes.push({
             active: program.getLocation("sectionPlaneActive" + i),
             pos: program.getLocation("sectionPlanePos" + i),

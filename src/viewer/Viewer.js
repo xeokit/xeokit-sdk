@@ -60,7 +60,7 @@ class Viewer {
      * @param {number} [cfg.numPreallocatedSectionPlanes=0] Enhances the efficiency of SectionPlane creation by proactively allocating Viewer resources for a specified quantity
      * of SectionPlanes. Introducing this parameter streamlines the initial creation speed of SectionPlanes, particularly up to the designated quantity. This parameter internally
      * configures renderer logic for the specified number of SectionPlanes, eliminating the need for setting up logic with each SectionPlane creation and thereby enhancing
-     * responsiveness. It is important to consider that each SectionPlane imposes rendering performance, so it is recommended to set this value to a quantity that aligns with
+     * responsiveness. It is important to consider that each SectionPlane impacts rendering performance, so it is recommended to set this value to a quantity that aligns with
      * your expected usage.
      */
     constructor(cfg) {
