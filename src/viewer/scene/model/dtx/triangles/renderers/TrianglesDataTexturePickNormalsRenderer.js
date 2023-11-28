@@ -81,25 +81,31 @@ export class TrianglesDataTexturePickNormalsRenderer {
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
 
+        const numAllocatedSectionPlanes = scene._sectionPlanesState.getNumAllocatedSectionPlanes();
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
-        if (numSectionPlanes > 0) {
+        if (numAllocatedSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
             const baseIndex = dataTextureLayer.layerIndex * numSectionPlanes;
             const renderFlags = model.renderFlags;
-            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
+            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numAllocatedSectionPlanes; sectionPlaneIndex++) {
                 const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
                 if (sectionPlaneUniforms) {
-                    const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                    if (active) {
-                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (origin) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
-                            gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
-                        } else {
-                            gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
+                    if (sectionPlaneIndex < numSectionPlanes) {
+                        const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
+                        gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                        if (active) {
+                            const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                            const origin = layer._state.origin;
+                            if (origin) {
+                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
+                                gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
+                            } else {
+                                gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
+                            }
+                            gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                         }
-                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+                    } else {
+                        gl.uniform1i(sectionPlaneUniforms.active, 0);
                     }
                 }
             }
@@ -162,7 +168,7 @@ export class TrianglesDataTexturePickNormalsRenderer {
 
         this._uSectionPlanes = [];
 
-        for (let i = 0, len = scene._sectionPlanesState.sectionPlanes.length; i < len; i++) {
+        for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
             this._uSectionPlanes.push({
                 active: program.getLocation("sectionPlaneActive" + i),
                 pos: program.getLocation("sectionPlanePos" + i),
@@ -197,7 +203,7 @@ export class TrianglesDataTexturePickNormalsRenderer {
 
     _buildVertexShader() {
         const scene = this._scene;
-        const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
+        const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push("#version 300 es");
         src.push("// Triangles dataTexture pick normals vertex shader");
@@ -371,8 +377,7 @@ export class TrianglesDataTexturePickNormalsRenderer {
 
     _buildFragmentShader() {
         const scene = this._scene;
-        const sectionPlanesState = scene._sectionPlanesState;
-        const clipping = sectionPlanesState.sectionPlanes.length > 0;
+        const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push('#version 300 es');
         src.push("// Triangles dataTexture pick normals fragment shader");
@@ -392,7 +397,7 @@ export class TrianglesDataTexturePickNormalsRenderer {
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
             src.push("flat in uint vFlags2;");
-            for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
+            for (var i = 0; i < scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
@@ -405,7 +410,7 @@ export class TrianglesDataTexturePickNormalsRenderer {
             src.push("  bool clippable = vFlags2 > 0u;");
             src.push("  if (clippable) {");
             src.push("      float dist = 0.0;");
-            for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
+            for (var i = 0; i < scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i++) {
                 src.push("      if (sectionPlaneActive" + i + ") {");
                 src.push("          dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
                 src.push("      }");

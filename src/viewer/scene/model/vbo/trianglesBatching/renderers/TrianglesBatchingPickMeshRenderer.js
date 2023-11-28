@@ -7,7 +7,7 @@ class TrianglesBatchingPickMeshRenderer extends VBOSceneModelTriangleBatchingRen
 
     _buildVertexShader() {
         const scene = this._scene;
-        const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
+        const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push("#version 300 es");
         src.push("// Batched geometry picking vertex shader");
@@ -79,7 +79,7 @@ class TrianglesBatchingPickMeshRenderer extends VBOSceneModelTriangleBatchingRen
     _buildFragmentShader() {
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
-        const clipping = sectionPlanesState.sectionPlanes.length > 0;
+        const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push("#version 300 es");
         src.push("// Batched geometry picking fragment shader");
@@ -99,7 +99,7 @@ class TrianglesBatchingPickMeshRenderer extends VBOSceneModelTriangleBatchingRen
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
             src.push("in float vFlags;");
-            for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
+            for (var i = 0; i < sectionPlanesState.getNumAllocatedSectionPlanes(); i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
@@ -112,7 +112,7 @@ class TrianglesBatchingPickMeshRenderer extends VBOSceneModelTriangleBatchingRen
             src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
             src.push("  if (clippable) {");
             src.push("      float dist = 0.0;");
-            for (let i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
+            for (let i = 0; i < sectionPlanesState.getNumAllocatedSectionPlanes(); i++) {
                 src.push("      if (sectionPlaneActive" + i + ") {");
                 src.push("          dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
                 src.push("      }");

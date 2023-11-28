@@ -338,8 +338,13 @@ class Scene extends Component {
      * @param {Viewer} viewer The Viewer this Scene belongs to.
      * @param {Object} cfg Scene configuration.
      * @param {String} [cfg.canvasId]  ID of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
-      * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
+     * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @param {HTMLElement} [cfg.keyboardEventsElement] Optional reference to HTML element on which key events should be handled. Defaults to the HTML Document.
+     * @param {number} [cfg.numPreallocatedSectionPlanes=0] Enhances the efficiency of SectionPlane creation by proactively allocating Viewer resources for a specified quantity
+     * of SectionPlanes. Introducing this parameter streamlines the initial creation speed of SectionPlanes, particularly up to the designated quantity. This parameter internally
+     * configures renderer logic for the specified number of SectionPlanes, eliminating the need for setting up logic with each SectionPlane creation and thereby enhancing
+     * responsiveness. It is important to consider that each SectionPlane imposes rendering performance, so it is recommended to set this value to a quantity that aligns with
+     * your expected usage.
      * @throws {String} Throws an exception when both canvasId or canvasElement are missing or they aren't pointing to a valid HTMLCanvasElement.
      */
     constructor(viewer, cfg = {}) {
@@ -361,6 +366,8 @@ class Scene extends Component {
         const alphaDepthMask = (!!cfg.alphaDepthMask);
 
         this._aabbDirty = true;
+
+        this._numPreallocatedSectionPlanes = cfg.numPreallocatedSectionPlanes || 0;
 
         /**
          * The {@link Viewer} this Scene belongs to.
@@ -624,6 +631,8 @@ class Scene extends Component {
             alphaDepthMask: alphaDepthMask
         });
 
+        const numPreallocatedSectionPlanes = this._numPreallocatedSectionPlanes;
+
         this._sectionPlanesState = new (function () {
 
             this.sectionPlanes = [];
@@ -636,14 +645,15 @@ class Scene extends Component {
                 if (hash) {
                     return hash;
                 }
+                const numAllocatedSectionPlanes = this.getNumAllocatedSectionPlanes();
                 const sectionPlanes = this.sectionPlanes;
-                if (sectionPlanes.length === 0) {
+                if (numAllocatedSectionPlanes === 0) {
                     return this.hash = ";";
                 }
                 let sectionPlane;
 
                 const hashParts = [];
-                for (let i = 0, len = sectionPlanes.length; i < len; i++) {
+                for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
                     sectionPlane = sectionPlanes[i];
                     hashParts.push("cp");
                 }
@@ -665,6 +675,11 @@ class Scene extends Component {
                         return;
                     }
                 }
+            };
+
+            this.getNumAllocatedSectionPlanes = function () {
+                const num = this.sectionPlanes.length;
+                return (num > numPreallocatedSectionPlanes) ? num : numPreallocatedSectionPlanes;
             };
         })();
 
@@ -2588,12 +2603,12 @@ class Scene extends Component {
 
     /**
      * This method will "tickify" the provided `cb` function.
-     * 
+     *
      * This means, the function will be wrapped so:
-     * 
+     *
      * - it runs time-aligned to scene ticks
      * - it runs maximum once per scene-tick
-     * 
+     *
      * @param {Function} cb The function to tickify
      * @returns {Function)}
      */
@@ -2614,7 +2629,7 @@ class Scene extends Component {
 
         /**
          * The provided `cb` function is replaced with a "set-dirty" function
-         * 
+         *
          * @type {Function}
          */
         const wrapperFunc = function (...args) {
@@ -2624,7 +2639,7 @@ class Scene extends Component {
 
         /**
          * An each scene tick, if the "dirty-flag" is set, run the `cb` function.
-         * 
+         *
          * This will make it run time-aligned to the scene tick.
          */
         const tickSubId = this.on("tick", () => {
@@ -2638,7 +2653,7 @@ class Scene extends Component {
         /**
          * And, store the list of subscribers.
          */
-        this._tickifiedFunctions[cbString] = { tickSubId, wrapperFunc };
+        this._tickifiedFunctions[cbString] = {tickSubId, wrapperFunc};
 
         return wrapperFunc;
     }
