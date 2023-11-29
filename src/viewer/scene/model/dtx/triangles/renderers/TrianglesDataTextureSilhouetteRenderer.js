@@ -137,7 +137,6 @@ export class TrianglesDataTextureSilhouetteRenderer {
                         gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
                         if (active) {
                             const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                            const origin = layer._state.origin;
                             if (origin) {
                                 const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
                                 gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);

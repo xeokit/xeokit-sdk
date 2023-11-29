@@ -84,19 +84,29 @@ EmphasisFillRenderer.prototype.drawMesh = function (frameCtx, mesh, mode) {
     gl.uniformMatrix4fv(this._uViewNormalMatrix, false, camera.viewNormalMatrix);
 
     if (meshState.clippable) {
+        const numAllocatedSectionPlanes = scene._sectionPlanesState.getNumAllocatedSectionPlanes();
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
-        if (numSectionPlanes > 0) {
+        if (numAllocatedSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
             const renderFlags = mesh.renderFlags;
-            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numSectionPlanes; sectionPlaneIndex++) {
+            for (let sectionPlaneIndex = 0; sectionPlaneIndex < numAllocatedSectionPlanes; sectionPlaneIndex++) {
                 const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
                 if (sectionPlaneUniforms) {
-                    const active = renderFlags.sectionPlanesActivePerLayer[sectionPlaneIndex];
-                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                    if (active) {
-                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        gl.uniform3fv(sectionPlaneUniforms.pos, origin ? getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a) : sectionPlane.pos);
-                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+                    if (sectionPlaneIndex < numSectionPlanes) {
+                        const active = renderFlags.sectionPlanesActivePerLayer[sectionPlaneIndex];
+                        gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                        if (active) {
+                            const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                            if (origin) {
+                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
+                                gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
+                            } else {
+                                gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
+                            }
+                            gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+                        }
+                    } else {
+                        gl.uniform1i(sectionPlaneUniforms.active, 0);
                     }
                 }
             }
