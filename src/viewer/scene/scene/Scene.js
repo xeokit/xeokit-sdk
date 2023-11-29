@@ -340,7 +340,7 @@ class Scene extends Component {
      * @param {String} [cfg.canvasId]  ID of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasElement is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @param {HTMLCanvasElement} [cfg.canvasElement] Reference of an existing HTML canvas for the {@link Scene#canvas} - either this or canvasId is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @param {HTMLElement} [cfg.keyboardEventsElement] Optional reference to HTML element on which key events should be handled. Defaults to the HTML Document.
-     * @param {number} [cfg.numPreallocatedSectionPlanes=0] Enhances the efficiency of SectionPlane creation by proactively allocating Viewer resources for a specified quantity
+     * @param {number} [cfg.numCachedSectionPlanes=0] Enhances the efficiency of SectionPlane creation by proactively allocating Viewer resources for a specified quantity
      * of SectionPlanes. Introducing this parameter streamlines the initial creation speed of SectionPlanes, particularly up to the designated quantity. This parameter internally
      * configures renderer logic for the specified number of SectionPlanes, eliminating the need for setting up logic with each SectionPlane creation and thereby enhancing
      * responsiveness. It is important to consider that each SectionPlane imposes rendering performance, so it is recommended to set this value to a quantity that aligns with
@@ -367,7 +367,7 @@ class Scene extends Component {
 
         this._aabbDirty = true;
 
-        this._numPreallocatedSectionPlanes = cfg.numPreallocatedSectionPlanes || 0;
+        this._numCachedSectionPlanes = cfg.numCachedSectionPlanes || 0;
 
         /**
          * The {@link Viewer} this Scene belongs to.
@@ -631,7 +631,7 @@ class Scene extends Component {
             alphaDepthMask: alphaDepthMask
         });
 
-        const numPreallocatedSectionPlanes = this._numPreallocatedSectionPlanes;
+        const numCachedSectionPlanes = this._numCachedSectionPlanes;
 
         this._sectionPlanesState = new (function () {
 
@@ -679,7 +679,7 @@ class Scene extends Component {
 
             this.getNumAllocatedSectionPlanes = function () {
                 const num = this.sectionPlanes.length;
-                return (num > numPreallocatedSectionPlanes) ? num : numPreallocatedSectionPlanes;
+                return (num > numCachedSectionPlanes) ? num : numCachedSectionPlanes;
             };
         })();
 
@@ -1259,11 +1259,42 @@ class Scene extends Component {
     }
 
     /**
+     * Sets the number of {@link SectionPlane}s for which this Scene pre-caches resources.
+     *
+     * This property enhances the efficiency of SectionPlane creation by proactively allocating and caching Viewer resources for a specified quantity
+     * of SectionPlanes. Introducing this parameter streamlines the initial creation speed of SectionPlanes, particularly up to the designated quantity. This parameter internally
+     * configures renderer logic for the specified number of SectionPlanes, eliminating the need for setting up logic with each SectionPlane creation and thereby enhancing
+     * responsiveness. It is important to consider that each SectionPlane impacts rendering performance, so it is recommended to set this value to a quantity that aligns with
+     * your expected usage.
+     *
+     * Default is ````0````.
+     */
+    set numCachedSectionPlanes(numCachedSectionPlanes) {
+        this._numCachedSectionPlanes = numCachedSectionPlanes;
+        this._recompile();
+    }
+
+    /**
+     * Gets the number of {@link SectionPlane}s for which this Scene pre-caches resources.
+     *
+     * This property enhances the efficiency of SectionPlane creation by proactively allocating and caching Viewer resources for a specified quantity
+     * of SectionPlanes. Introducing this parameter streamlines the initial creation speed of SectionPlanes, particularly up to the designated quantity. This parameter internally
+     * configures renderer logic for the specified number of SectionPlanes, eliminating the need for setting up logic with each SectionPlane creation and thereby enhancing
+     * responsiveness. It is important to consider that each SectionPlane impacts rendering performance, so it is recommended to set this value to a quantity that aligns with
+     * your expected usage.
+     *
+     * Default is ````0````.
+     *
+     * @returns {number} The number of {@link SectionPlane}s for which this Scene pre-caches resources.
+     */
+    get numCachedSectionPlanes() {
+        return this._numCachedSectionPlanes;
+    }
+
+    /**
      * Sets whether physically-based rendering is enabled.
      *
      * Default is ````false````.
-     *
-     * @returns {Boolean} True if quality rendering is enabled.
      */
     set pbrEnabled(pbrEnabled) {
         this._pbrEnabled = !!pbrEnabled;

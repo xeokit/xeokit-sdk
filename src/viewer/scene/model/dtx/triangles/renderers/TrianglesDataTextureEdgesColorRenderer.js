@@ -86,7 +86,7 @@ export class TrianglesDataTextureEdgesColorRenderer {
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
         gl.uniformMatrix4fv(this._uProjMatrix, false, camera.projMatrix);
 
-        const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
+        const numSectionPlanes = scene.getMaxSectionPlanes();
         if (numSectionPlanes > 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
             const baseIndex = dataTextureLayer.layerIndex * numSectionPlanes;
