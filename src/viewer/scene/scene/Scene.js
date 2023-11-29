@@ -1279,9 +1279,12 @@ class Scene extends Component {
      * Default is ````0````.
      */
     set numCachedSectionPlanes(numCachedSectionPlanes) {
-        this._sectionPlanesState.setNumCachedSectionPlanes(numCachedSectionPlanes || 0);
-        this._needRecompile = true;
-        this.glRedraw();
+        numCachedSectionPlanes = numCachedSectionPlanes || 0;
+        if (this._sectionPlanesState.getNumCachedSectionPlanes() !== numCachedSectionPlanes) {
+            this._sectionPlanesState.setNumCachedSectionPlanes(numCachedSectionPlanes);
+            this._needRecompile = true;
+            this.glRedraw();
+        }
     }
 
     /**
