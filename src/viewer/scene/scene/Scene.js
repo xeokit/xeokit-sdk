@@ -367,8 +367,6 @@ class Scene extends Component {
 
         this._aabbDirty = true;
 
-        this._numCachedSectionPlanes = cfg.numCachedSectionPlanes || 0;
-
         /**
          * The {@link Viewer} this Scene belongs to.
          * @type {Viewer}
@@ -631,13 +629,13 @@ class Scene extends Component {
             alphaDepthMask: alphaDepthMask
         });
 
-        const numCachedSectionPlanes = this._numCachedSectionPlanes;
-
         this._sectionPlanesState = new (function () {
 
             this.sectionPlanes = [];
 
             this.clippingCaps = false;
+
+            this._numCachedSectionPlanes = 0;
 
             let hash = null;
 
@@ -677,11 +675,22 @@ class Scene extends Component {
                 }
             };
 
+            this.setNumCachedSectionPlanes = function(numCachedSectionPlanes) {
+                this._numCachedSectionPlanes = numCachedSectionPlanes;
+                hash = null;
+            }
+
+            this.getNumCachedSectionPlanes = function() {
+                return this._numCachedSectionPlanes;
+            }
+
             this.getNumAllocatedSectionPlanes = function () {
                 const num = this.sectionPlanes.length;
-                return (num > numCachedSectionPlanes) ? num : numCachedSectionPlanes;
+                return (num > this._numCachedSectionPlanes) ? num : this._numCachedSectionPlanes;
             };
         })();
+
+        this._sectionPlanesState.setNumCachedSectionPlanes(cfg.numCachedSectionPlanes || 0);
 
         this._lightsState = new (function () {
 
@@ -1270,8 +1279,9 @@ class Scene extends Component {
      * Default is ````0````.
      */
     set numCachedSectionPlanes(numCachedSectionPlanes) {
-        this._numCachedSectionPlanes = numCachedSectionPlanes;
-        this._recompile();
+        this._sectionPlanesState.setNumCachedSectionPlanes(numCachedSectionPlanes || 0);
+        this._needRecompile = true;
+        this.glRedraw();
     }
 
     /**
@@ -1288,7 +1298,7 @@ class Scene extends Component {
      * @returns {number} The number of {@link SectionPlane}s for which this Scene pre-caches resources.
      */
     get numCachedSectionPlanes() {
-        return this._numCachedSectionPlanes;
+        return this._sectionPlanesState.getNumCachedSectionPlanes();
     }
 
     /**
