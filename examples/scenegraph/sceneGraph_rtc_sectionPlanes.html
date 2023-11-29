@@ -75,7 +75,8 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
-        transparent: true
+        transparent: true,
+        numPreallocatedSectionPlanes: 4
     });
 
     viewer.scene.camera.eye = [-21.80, 4.01, 6.56];
