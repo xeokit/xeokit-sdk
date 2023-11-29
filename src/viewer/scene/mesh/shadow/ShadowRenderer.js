@@ -186,7 +186,7 @@ ShadowRenderer.prototype._bindProgram = function (frame) {
     this._lastMaterialId = null;
     this._lastVertexBufsId = null;
     this._lastGeometryId = null;
-    if (sectionPlanesState.sectionPlanes.length > 0) {
+    if (sectionPlanesState.getNumAllocatedSectionPlanes() > 0) {
         let sectionPlaneUniforms;
         let uSectionPlaneActive;
         let sectionPlane;

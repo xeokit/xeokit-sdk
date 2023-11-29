@@ -57,6 +57,11 @@ class Viewer {
      * store geometry on the GPU for triangle meshes that don't have textures. This gives a much lower memory footprint for these types of model element. This mode may not perform well on low-end GPUs that are optimized
      * to use textures to hold geometry data. Works great on most medium/high-end GPUs found in desktop computers, including the nVIDIA and Intel HD chipsets. Set this false to use the default vertex buffer object (VBO)
      * mode for storing geometry, which is the standard technique used in most graphics engines, and will work adequately on most low-end GPUs.
+     * @param {number} [cfg.numPreallocatedSectionPlanes=0] Enhances the efficiency of SectionPlane creation by proactively allocating Viewer resources for a specified quantity
+     * of SectionPlanes. Introducing this parameter streamlines the initial creation speed of SectionPlanes, particularly up to the designated quantity. This parameter internally
+     * configures renderer logic for the specified number of SectionPlanes, eliminating the need for setting up logic with each SectionPlane creation and thereby enhancing
+     * responsiveness. It is important to consider that each SectionPlane impacts rendering performance, so it is recommended to set this value to a quantity that aligns with
+     * your expected usage.
      */
     constructor(cfg) {
 
@@ -114,7 +119,8 @@ class Viewer {
             logarithmicDepthBufferEnabled: (!!cfg.logarithmicDepthBufferEnabled),
             pbrEnabled: (!!cfg.pbrEnabled),
             colorTextureEnabled: (cfg.colorTextureEnabled !== false),
-            dtxEnabled: (!!cfg.dtxEnabled)
+            dtxEnabled: (!!cfg.dtxEnabled),
+            numPreallocatedSectionPlanes: cfg.numPreallocatedSectionPlanes
         });
 
         /**

@@ -71,7 +71,7 @@ function buildVertexLambert(mesh) {
     const geometryState = mesh._geometry._state;
     const billboard = mesh._state.billboard;
     const stationary = mesh._state.stationary;
-    const clipping = sectionPlanesState.sectionPlanes.length > 0;
+    const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
     const quantizedGeometry = !!geometryState.compressGeometry;
 
     const src = [];
@@ -248,7 +248,7 @@ function buildFragmentLambert(mesh) {
     const sectionPlanesState = scene._sectionPlanesState;
     const materialState = mesh._material._state;
     const geometryState = mesh._geometry._state;
-    const clipping = sectionPlanesState.sectionPlanes.length > 0;
+    const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
     const solid = false && materialState.backfaces;
     const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
     const src = [];
@@ -269,7 +269,7 @@ function buildFragmentLambert(mesh) {
     if (clipping) {
         src.push("in vec4 vWorldPosition;");
         src.push("uniform bool clippable;");
-        for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+        for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
             src.push("uniform bool sectionPlaneActive" + i + ";");
             src.push("uniform vec3 sectionPlanePos" + i + ";");
             src.push("uniform vec3 sectionPlaneDir" + i + ";");
@@ -287,7 +287,7 @@ function buildFragmentLambert(mesh) {
     if (clipping) {
         src.push("if (clippable) {");
         src.push("  float dist = 0.0;");
-        for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+        for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
             src.push("if (sectionPlaneActive" + i + ") {");
             src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
             src.push("}");
@@ -336,7 +336,7 @@ function buildVertexDraw(mesh) {
     const stationary = meshState.stationary;
     const texturing = hasTextures(mesh);
     const normals = hasNormals(mesh);
-    const clipping = sectionPlanesState.sectionPlanes.length > 0;
+    const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
     const receivesShadow = getReceivesShadow(mesh);
     const quantizedGeometry = !!geometryState.compressGeometry;
     const src = [];
@@ -558,7 +558,7 @@ function buildFragmentDraw(mesh) {
     const sectionPlanesState = mesh.scene._sectionPlanesState;
     const lightsState = mesh.scene._lightsState;
     const materialState = mesh._material._state;
-    const clipping = sectionPlanesState.sectionPlanes.length > 0;
+    const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
     const normals = hasNormals(mesh);
     const uvs = geometryState.uvBuf;
     const solid = false && materialState.backfaces;
@@ -622,7 +622,7 @@ function buildFragmentDraw(mesh) {
     if (clipping) {
         src.push("in vec4 vWorldPosition;");
         src.push("uniform bool clippable;");
-        for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
+        for (var i = 0; i < sectionPlanesState.getNumAllocatedSectionPlanes(); i++) {
             src.push("uniform bool sectionPlaneActive" + i + ";");
             src.push("uniform vec3 sectionPlanePos" + i + ";");
             src.push("uniform vec3 sectionPlaneDir" + i + ";");
@@ -1112,7 +1112,7 @@ function buildFragmentDraw(mesh) {
     if (clipping) {
         src.push("if (clippable) {");
         src.push("  float dist = 0.0;");
-        for (var i = 0; i < sectionPlanesState.sectionPlanes.length; i++) {
+        for (var i = 0; i < sectionPlanesState.getNumAllocatedSectionPlanes(); i++) {
             src.push("if (sectionPlaneActive" + i + ") {");
             src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
             src.push("}");

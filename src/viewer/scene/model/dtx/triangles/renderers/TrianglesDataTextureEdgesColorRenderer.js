@@ -166,7 +166,7 @@ export class TrianglesDataTextureEdgesColorRenderer {
         this._uProjMatrix = program.getLocation("projMatrix");
         this._uSectionPlanes = [];
 
-        for (let i = 0, len = scene._sectionPlanesState.sectionPlanes.length; i < len; i++) {
+        for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
             this._uSectionPlanes.push({
                 active: program.getLocation("sectionPlaneActive" + i),
                 pos: program.getLocation("sectionPlanePos" + i),
@@ -212,8 +212,7 @@ export class TrianglesDataTextureEdgesColorRenderer {
 
     _buildVertexShader() {
         const scene = this._scene;
-        const sectionPlanesState = scene._sectionPlanesState;
-        const clipping = sectionPlanesState.sectionPlanes.length > 0;
+        const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push("#version 300 es");
         src.push("// TrianglesDataTextureEdgesColorRenderer");
@@ -350,8 +349,7 @@ export class TrianglesDataTextureEdgesColorRenderer {
 
     _buildFragmentShader() {
         const scene = this._scene;
-        const sectionPlanesState = scene._sectionPlanesState;
-        const clipping = sectionPlanesState.sectionPlanes.length > 0;
+        const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push('#version 300 es');
         src.push("// TrianglesDataTextureEdgesColorRenderer");
@@ -370,7 +368,7 @@ export class TrianglesDataTextureEdgesColorRenderer {
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
             src.push("flat in uint vFlags2;");
-            for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+            for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
@@ -383,7 +381,7 @@ export class TrianglesDataTextureEdgesColorRenderer {
             src.push("  bool clippable = vFlags2 > 0u;");
             src.push("  if (clippable) {");
             src.push("  float dist = 0.0;");
-            for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i < len; i++) {
+            for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
                 src.push("if (sectionPlaneActive" + i + ") {");
                 src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
                 src.push("}");
@@ -392,8 +390,7 @@ export class TrianglesDataTextureEdgesColorRenderer {
             src.push("}");
         }
         if (scene.logarithmicDepthBufferEnabled) {
-            //   src.push("gl_FragDepth = log2( vFragDepth ) * logDepthBufFC * 0.5;");
-            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
+              src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
         src.push("   outColor            = vColor;");
         src.push("}");
