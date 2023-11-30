@@ -316,28 +316,10 @@ class BCFViewpointsPlugin extends Plugin {
      * @param {String} [cfg.id="BCFViewpoints"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {String} [cfg.originatingSystem] Identifies the originating system for BCF records.
      * @param {String} [cfg.authoringTool] Identifies the authoring tool for BCF records.
-     * @param {Boolean} [cfg.xrayAsZeroAlpha=false] Specifies how xeokit's X-ray emphasis effect is handled in BCF viewpoints. See {@link BCFViewpointsPlugin#xrayAsZeroAlpha} for details.
      */
     constructor(viewer, cfg = {}) {
 
         super("BCFViewpoints", viewer, cfg);
-
-        /**
-         * Specifies how xeokit's X-ray emphasis effect is handled in BCF viewpoints.
-         *
-         * When `xrayAsZeroAlpha` is `true`:
-         *
-         * * when saving a viewpoint, set the `A` channel of each `coloring` component to `0` for each X-rayed object, and
-         * * when loading a viewpoint saved from a xeokit application (i.e. when the viewpoint's `originating_system == "xeokit.io"`), set an object X-rayed if the `A` channel of its corresponding `coloring` component equals `0`
-         *
-         * When `xrayAsZeroAlpha` is `false`:
-         *
-         * * don't save any X-ray information in viewpoints, and
-         * * reset all objects as not X-rayed whenever loading a viewpoint.
-         *
-         * @type {boolean}
-         */
-        this.xrayAsZeroAlpha = !!cfg.xrayAsZeroAlpha;
 
         /**
          * Identifies the originating system to include in BCF viewpoints saved by this plugin.
@@ -363,6 +345,9 @@ class BCFViewpointsPlugin extends Plugin {
      * @param {Boolean} [options.spacesVisible=false] Indicates whether ````IfcSpace```` types should be forced visible in the viewpoint.
      * @param {Boolean} [options.openingsVisible=false] Indicates whether ````IfcOpening```` types should be forced visible in the viewpoint.
      * @param {Boolean} [options.spaceBoundariesVisible=false] Indicates whether the boundaries of ````IfcSpace```` types should be visible in the viewpoint.
+     * @param {Boolean} [options.spacesTranslucent=false] Indicates whether ````IfcSpace```` types should be forced translucent in the viewpoint.
+     * @param {Boolean} [options.spaceBoundariesTranslucent=false] Indicates whether the boundaries of ````IfcSpace```` types should be forced translucent in the viewpoint.
+     * @param {Boolean} [options.openingsTranslucent=true] Indicates whether ````IfcOpening```` types should be forced translucent in the viewpoint.
      * @param {Boolean} [options.snapshot=true] Indicates whether the snapshot should be included in the viewpoint.
      * @param {Boolean} [options.defaultInvisible=false] When ````true````, will save the default visibility of all objects
      * as ````false````. This means that when we load the viewpoint again, and there are additional models loaded that
@@ -510,7 +495,10 @@ class BCFViewpointsPlugin extends Plugin {
                 view_setup_hints: {
                     spaces_visible: !!options.spacesVisible,
                     space_boundaries_visible: !!options.spaceBoundariesVisible,
-                    openings_visible: !!options.openingsVisible
+                    openings_visible: !!options.openingsVisible,
+                    spaces_translucent: !!options.spaces_translucent,
+                    space_boundaries_translucent: !!options.space_boundaries_translucent,
+                    openings_translucent: !!options.openings_translucent
                 }
             }
         };
@@ -527,15 +515,11 @@ class BCFViewpointsPlugin extends Plugin {
                 let alpha;
 
                 if (entity.xrayed) {
-                    if (this.xrayAsZeroAlpha) {
-                        alpha = 0;
+                    if (scene.xrayMaterial.fillAlpha === 0.0 && scene.xrayMaterial.edgeAlpha !== 0.0) {
+                        // BCF can't deal with edges. If xRay is implemented only with edges, set an arbitrary opacity
+                        alpha = 0.1;
                     } else {
-                        if (scene.xrayMaterial.fillAlpha === 0.0 && scene.xrayMaterial.edgeAlpha !== 0.0) {
-                            // BCF can't deal with edges. If xRay is implemented only with edges, set an arbitrary opacity
-                            alpha = 0.1;
-                        } else {
-                            alpha = scene.xrayMaterial.fillAlpha;
-                        }
+                        alpha = scene.xrayMaterial.fillAlpha;
                     }
                     alpha = Math.round(alpha * 255).toString(16).padStart(2, "0");
                     color = alpha + color;
@@ -585,6 +569,8 @@ class BCFViewpointsPlugin extends Plugin {
         }
 
         bcfViewpoint.components.selection = this._createBCFComponents(selectedObjectIds);
+
+        bcfViewpoint.components.translucency = this._createBCFComponents(scene.xrayedObjectIds);
 
         if (options.snapshot !== false) {
             bcfViewpoint.snapshot = {
@@ -771,13 +757,22 @@ class BCFViewpointsPlugin extends Plugin {
                 const view_setup_hints = bcfViewpoint.components.visibility.view_setup_hints;
                 if (view_setup_hints) {
                     if (view_setup_hints.spaces_visible === false) {
-                        scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType("IfcSpace"), false);
+                        scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType("IfcSpace"), true);
                     }
-                    if (view_setup_hints.openings_visible === false) {
-                        scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType("IfcOpening"), false);
+                    if (view_setup_hints.spaces_translucent !== undefined) {
+                        scene.setObjectsXRayed(viewer.metaScene.getObjectIDsByType("IfcSpace"), true);
                     }
                     if (view_setup_hints.space_boundaries_visible !== undefined) {
-                        // TODO: Ability to show boundaries
+
+                    }
+                    if (view_setup_hints.openings_visible === false) {
+                        scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType("IfcOpening"), true);
+                    }
+                    if (view_setup_hints.space_boundaries_translucent !== undefined) {
+
+                    }
+                    if (view_setup_hints.openings_translucent !== undefined) {
+                        scene.setObjectsXRayed(viewer.metaScene.getObjectIDsByType("IfcOpening"), true);
                     }
                 }
             }
@@ -786,6 +781,11 @@ class BCFViewpointsPlugin extends Plugin {
                 scene.setObjectsSelected(scene.selectedObjectIds, false);
                 bcfViewpoint.components.selection.forEach(component => this._withBCFComponent(options, component, entity => entity.selected = true));
 
+            }
+
+            if (bcfViewpoint.components.translucency) {
+                scene.setObjectsXRayed(scene.xrayedObjectIds, false);
+                bcfViewpoint.components.translucency.forEach(component => this._withBCFComponent(options, component, entity => entity.xrayed = true));
             }
 
             if (bcfViewpoint.components.coloring) {
@@ -814,16 +814,7 @@ class BCFViewpointsPlugin extends Plugin {
                         this._withBCFComponent(options, component, entity => {
                             entity.colorize = colorize;
                             if (alphaDefined) {
-                                if (alpha === 0 && this.xrayAsZeroAlpha) {
-                                    const savedFromXeokit = (component.originating_system === this.originatingSystem);
-                                    if (savedFromXeokit) {
-                                        entity.xrayed = true;
-                                    } else {
-                                        entity.opacity = alpha;
-                                    }
-                                } else {
-                                    entity.opacity = alpha;
-                                }
+                                entity.opacity = alpha;
                             }
                         }));
                 });
