@@ -345,6 +345,9 @@ class BCFViewpointsPlugin extends Plugin {
      * @param {Boolean} [options.spacesVisible=false] Indicates whether ````IfcSpace```` types should be forced visible in the viewpoint.
      * @param {Boolean} [options.openingsVisible=false] Indicates whether ````IfcOpening```` types should be forced visible in the viewpoint.
      * @param {Boolean} [options.spaceBoundariesVisible=false] Indicates whether the boundaries of ````IfcSpace```` types should be visible in the viewpoint.
+     * @param {Boolean} [options.spacesTranslucent=false] Indicates whether ````IfcSpace```` types should be forced translucent in the viewpoint.
+     * @param {Boolean} [options.spaceBoundariesTranslucent=false] Indicates whether the boundaries of ````IfcSpace```` types should be forced translucent in the viewpoint.
+     * @param {Boolean} [options.openingsTranslucent=true] Indicates whether ````IfcOpening```` types should be forced translucent in the viewpoint.
      * @param {Boolean} [options.snapshot=true] Indicates whether the snapshot should be included in the viewpoint.
      * @param {Boolean} [options.defaultInvisible=false] When ````true````, will save the default visibility of all objects
      * as ````false````. This means that when we load the viewpoint again, and there are additional models loaded that
@@ -492,7 +495,10 @@ class BCFViewpointsPlugin extends Plugin {
                 view_setup_hints: {
                     spaces_visible: !!options.spacesVisible,
                     space_boundaries_visible: !!options.spaceBoundariesVisible,
-                    openings_visible: !!options.openingsVisible
+                    openings_visible: !!options.openingsVisible,
+                    spaces_translucent: !!options.spaces_translucent,
+                    space_boundaries_translucent: !!options.space_boundaries_translucent,
+                    openings_translucent: !!options.openings_translucent
                 }
             }
         };
@@ -751,13 +757,22 @@ class BCFViewpointsPlugin extends Plugin {
                 const view_setup_hints = bcfViewpoint.components.visibility.view_setup_hints;
                 if (view_setup_hints) {
                     if (view_setup_hints.spaces_visible === false) {
-                        scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType("IfcSpace"), false);
+                        scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType("IfcSpace"), true);
                     }
-                    if (view_setup_hints.openings_visible === false) {
-                        scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType("IfcOpening"), false);
+                    if (view_setup_hints.spaces_translucent !== undefined) {
+                        scene.setObjectsXRayed(viewer.metaScene.getObjectIDsByType("IfcSpace"), true);
                     }
                     if (view_setup_hints.space_boundaries_visible !== undefined) {
-                        // TODO: Ability to show boundaries
+
+                    }
+                    if (view_setup_hints.openings_visible === false) {
+                        scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType("IfcOpening"), true);
+                    }
+                    if (view_setup_hints.space_boundaries_translucent !== undefined) {
+
+                    }
+                    if (view_setup_hints.openings_translucent !== undefined) {
+                        scene.setObjectsXRayed(viewer.metaScene.getObjectIDsByType("IfcOpening"), true);
                     }
                 }
             }
