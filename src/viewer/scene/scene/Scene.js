@@ -2654,7 +2654,7 @@ class Scene extends Component {
      * - it runs maximum once per scene-tick
      *
      * @param {Function} cb The function to tickify
-     * @returns {Function)}
+     * @returns {Function}
      */
     tickify(cb) {
         const cbString = cb.toString();
