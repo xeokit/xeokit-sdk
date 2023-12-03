@@ -1,1 +1,18 @@
-{"inputFile":"assets/models/gltf/Karhumaki/model.glb.manifest.json","converterApplication":"convert2xkt","converterApplicationVersion":"v1.1.10","conversionDate":"09-11-2023- 18-29-01","outputDir":"/home/lindsay/xeolabs/xeokit-sdk-zfight-snap/assets/models/xkt/v10/split/Karhumaki-Bridge/","xktFiles":["model.xkt","model_1.xkt","model_2.xkt","model_3.xkt","model_4.xkt","model_5.xkt","model_6.xkt","model_7.xkt","model_8.xkt"]}
+{
+  "inputFile": "assets/models/gltf/Karhumaki/model.glb.manifest.json",
+  "converterApplication": "convert2xkt",
+  "converterApplicationVersion": "v1.1.10",
+  "conversionDate": "09-11-2023- 18-29-01",
+  "outputDir": "/home/lindsay/xeolabs/xeokit-sdk-zfight-snap/assets/models/xkt/v10/split/Karhumaki-Bridge/",
+  "xktFiles": [
+    "model.xkt",
+    "model_1.xkt",
+    "model_2.xkt",
+    "model_3.xkt",
+    "model_4.xkt",
+    "model_5.xkt",
+    "model_6.xkt",
+    "model_7.xkt",
+    "model_8.xkt"
+  ]
+}
