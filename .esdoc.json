@@ -2,7 +2,7 @@
     "source": "./src/",
     "destination": "./docs",
     "excludes": [
-        "(workers|zipjs)"
+        "(workers|zipjs|TrianglesDataTextureLayer.js|loadLASHeader.js)"
     ],
     "plugins": [
         {
