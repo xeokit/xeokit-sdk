@@ -230,6 +230,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache.html">SectionPlaneCache</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils">viewer/scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/FileLoader.js~FileLoader.html">FileLoader</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/Loader.js~Loader.html">Loader</a></span></span></li>
@@ -321,7 +322,7 @@ function buildVertexLambert(mesh) {
     const geometryState = mesh._geometry._state;
     const billboard = mesh._state.billboard;
     const stationary = mesh._state.stationary;
-    const clipping = sectionPlanesState.sectionPlanes.length &gt; 0;
+    const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() &gt; 0;
     const quantizedGeometry = !!geometryState.compressGeometry;
 
     const src = [];
@@ -498,7 +499,7 @@ function buildFragmentLambert(mesh) {
     const sectionPlanesState = scene._sectionPlanesState;
     const materialState = mesh._material._state;
     const geometryState = mesh._geometry._state;
-    const clipping = sectionPlanesState.sectionPlanes.length &gt; 0;
+    const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() &gt; 0;
     const solid = false &amp;&amp; materialState.backfaces;
     const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
     const src = [];
@@ -519,7 +520,7 @@ function buildFragmentLambert(mesh) {
     if (clipping) {
         src.push(&quot;in vec4 vWorldPosition;&quot;);
         src.push(&quot;uniform bool clippable;&quot;);
-        for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i &lt; len; i++) {
+        for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i &lt; len; i++) {
             src.push(&quot;uniform bool sectionPlaneActive&quot; + i + &quot;;&quot;);
             src.push(&quot;uniform vec3 sectionPlanePos&quot; + i + &quot;;&quot;);
             src.push(&quot;uniform vec3 sectionPlaneDir&quot; + i + &quot;;&quot;);
@@ -537,7 +538,7 @@ function buildFragmentLambert(mesh) {
     if (clipping) {
         src.push(&quot;if (clippable) {&quot;);
         src.push(&quot;  float dist = 0.0;&quot;);
-        for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i &lt; len; i++) {
+        for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i &lt; len; i++) {
             src.push(&quot;if (sectionPlaneActive&quot; + i + &quot;) {&quot;);
             src.push(&quot;   dist += clamp(dot(-sectionPlaneDir&quot; + i + &quot;.xyz, vWorldPosition.xyz - sectionPlanePos&quot; + i + &quot;.xyz), 0.0, 1000.0);&quot;);
             src.push(&quot;}&quot;);
@@ -586,7 +587,7 @@ function buildVertexDraw(mesh) {
     const stationary = meshState.stationary;
     const texturing = hasTextures(mesh);
     const normals = hasNormals(mesh);
-    const clipping = sectionPlanesState.sectionPlanes.length &gt; 0;
+    const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() &gt; 0;
     const receivesShadow = getReceivesShadow(mesh);
     const quantizedGeometry = !!geometryState.compressGeometry;
     const src = [];
@@ -808,7 +809,7 @@ function buildFragmentDraw(mesh) {
     const sectionPlanesState = mesh.scene._sectionPlanesState;
     const lightsState = mesh.scene._lightsState;
     const materialState = mesh._material._state;
-    const clipping = sectionPlanesState.sectionPlanes.length &gt; 0;
+    const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() &gt; 0;
     const normals = hasNormals(mesh);
     const uvs = geometryState.uvBuf;
     const solid = false &amp;&amp; materialState.backfaces;
@@ -872,7 +873,7 @@ function buildFragmentDraw(mesh) {
     if (clipping) {
         src.push(&quot;in vec4 vWorldPosition;&quot;);
         src.push(&quot;uniform bool clippable;&quot;);
-        for (var i = 0; i &lt; sectionPlanesState.sectionPlanes.length; i++) {
+        for (var i = 0; i &lt; sectionPlanesState.getNumAllocatedSectionPlanes(); i++) {
             src.push(&quot;uniform bool sectionPlaneActive&quot; + i + &quot;;&quot;);
             src.push(&quot;uniform vec3 sectionPlanePos&quot; + i + &quot;;&quot;);
             src.push(&quot;uniform vec3 sectionPlaneDir&quot; + i + &quot;;&quot;);
@@ -1362,7 +1363,7 @@ function buildFragmentDraw(mesh) {
     if (clipping) {
         src.push(&quot;if (clippable) {&quot;);
         src.push(&quot;  float dist = 0.0;&quot;);
-        for (var i = 0; i &lt; sectionPlanesState.sectionPlanes.length; i++) {
+        for (var i = 0; i &lt; sectionPlanesState.getNumAllocatedSectionPlanes(); i++) {
             src.push(&quot;if (sectionPlaneActive&quot; + i + &quot;) {&quot;);
             src.push(&quot;   dist += clamp(dot(-sectionPlaneDir&quot; + i + &quot;.xyz, vWorldPosition.xyz - sectionPlanePos&quot; + i + &quot;.xyz), 0.0, 1000.0);&quot;);
             src.push(&quot;}&quot;);

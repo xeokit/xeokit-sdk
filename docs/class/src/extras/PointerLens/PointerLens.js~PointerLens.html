@@ -230,6 +230,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache.html">SectionPlaneCache</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils">viewer/scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/FileLoader.js~FileLoader.html">FileLoader</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/Loader.js~Loader.html">Loader</a></span></span></li>
@@ -435,7 +436,7 @@ to help position the pointer when snap-to-vertex or snap-toedge is enabled.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-set-centerPos">centerPos</a></span></span><span class="code" data-ice="signature">(centerPos: <span>*</span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-set-canvasPos">canvasPos</a></span></span><span class="code" data-ice="signature">(canvasPos: <span>*</span>)</span>
         </p>
       </div>
       <div>
@@ -464,71 +465,13 @@ to help position the pointer when snap-to-vertex or snap-toedge is enabled.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-get-centerPos">centerPos</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-get-canvasPos">canvasPos</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
         <div data-ice="description"><p>Gets the canvas central position of the lens.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-set-cursorPos">cursorPos</a></span></span><span class="code" data-ice="signature">(cursorPos: <span>*</span>)</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets the canvas coordinates of the pointer.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-get-cursorPos">cursorPos</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Gets the canvas coordinates of the pointer.</p>
 </div>
       </div>
     </td>
@@ -558,6 +501,64 @@ to help position the pointer when snap-to-vertex or snap-toedge is enabled.</p>
         
         
         
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-set-snappedCanvasPos">snappedCanvasPos</a></span></span><span class="code" data-ice="signature">(snappedCanvasPos: <span>*</span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the canvas coordinates of the pointer.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-get-snappedCanvasPos">snappedCanvasPos</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the canvas coordinates of the snapped pointer.</p>
+</div>
       </div>
     </td>
     <td>
@@ -906,14 +907,14 @@ to help position the pointer when snap-to-vertex or snap-toedge is enabled.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-centerPos">
+  <h3 data-ice="anchor" id="instance-set-canvasPos">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">set</span>
     
     
     
-    <span class="code" data-ice="name">centerPos</span><span class="code" data-ice="signature">(centerPos: <span>*</span>)</span>
+    <span class="code" data-ice="name">canvasPos</span><span class="code" data-ice="signature">(canvasPos: <span>*</span>)</span>
     <span class="right-info">
       
       
@@ -950,14 +951,14 @@ to help position the pointer when snap-to-vertex or snap-toedge is enabled.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-centerPos">
+  <h3 data-ice="anchor" id="instance-get-canvasPos">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
     
-    <span class="code" data-ice="name">centerPos</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
+    <span class="code" data-ice="name">canvasPos</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
     <span class="right-info">
       
       
@@ -969,106 +970,6 @@ to help position the pointer when snap-to-vertex or snap-toedge is enabled.</p>
   
   
   <div data-ice="description"><p>Gets the canvas central position of the lens.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  <div class="return-params" data-ice="returnParams">
-    <h4>Return:</h4>
-    <table>
-      <tbody>
-        <tr>
-          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
-          
-        </tr>
-      </tbody>
-    </table>
-    <div data-ice="returnProperties">
-</div>
-  </div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-cursorPos">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">cursorPos</span><span class="code" data-ice="signature">(cursorPos: <span>*</span>)</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/extras/PointerLens/PointerLens.js.html#lineNumber213">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets the canvas coordinates of the pointer.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-cursorPos">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">cursorPos</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/extras/PointerLens/PointerLens.js.html#lineNumber222">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets the canvas coordinates of the pointer.</p>
 </div>
 
   
@@ -1132,6 +1033,106 @@ to help position the pointer when snap-to-vertex or snap-toedge is enabled.</p>
 </div>
 
   
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-snappedCanvasPos">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">snappedCanvasPos</span><span class="code" data-ice="signature">(snappedCanvasPos: <span>*</span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/extras/PointerLens/PointerLens.js.html#lineNumber213">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the canvas coordinates of the pointer.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-snappedCanvasPos">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">snappedCanvasPos</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/extras/PointerLens/PointerLens.js.html#lineNumber222">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the canvas coordinates of the snapped pointer.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span><span>[]</span></span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 

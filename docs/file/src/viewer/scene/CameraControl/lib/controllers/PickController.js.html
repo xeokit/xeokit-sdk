@@ -230,6 +230,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache.html">SectionPlaneCache</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils">viewer/scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/FileLoader.js~FileLoader.html">FileLoader</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/Loader.js~Loader.html">Loader</a></span></span></li>
@@ -319,35 +320,26 @@ class PickController {
 
         this._lastPickedEntityId = null;
 
+        this._lastHash = null;
+
         this._needFireEvents = 0;
-
-        this._needToUpdate = false;
-
-        this._tickSub = this._scene.on(&quot;tick&quot;, () =&gt; {
-            this.runUpdate();
-        });
-    }
-
-    update() {
-        this._needToUpdate = true;
     }
 
     /**
      * Immediately attempts a pick, if scheduled.
      */
-    runUpdate() {
-
-        if (!this._needToUpdate) {
-            return;
-        }
-
-        this._needToUpdate = false;
+    update() {
 
         if (!this._configs.pointerEnabled) {
             return;
         }
 
         if (!this.schedulePickEntity &amp;&amp; !this.schedulePickSurface) {
+            return;
+        }
+
+        const hash = `${~~this.pickCursorPos[0]}-${~~this.pickCursorPos[1]}-${this.scheduleSnapOrPick}-${this.schedulePickSurface}-${this.schedulePickEntity}`;
+        if (this._lastHash === hash) {
             return;
         }
 
@@ -359,13 +351,13 @@ class PickController {
         const hasHoverSurfaceSubs = this._cameraControl.hasSubs(&quot;hoverSurface&quot;);
 
         if (this.scheduleSnapOrPick) {
-            const snapPickResult = this._scene.snapPick({
+            const snapPickResult = this._scene.pick({
                 canvasPos: this.pickCursorPos,
                 snapRadius: this._configs.snapRadius,
                 snapToVertex: this._configs.snapToVertex,
                 snapToEdge: this._configs.snapToEdge,
             });
-            if (snapPickResult &amp;&amp; snapPickResult.snappedWorldPos) {
+            if (snapPickResult &amp;&amp; (snapPickResult.snappedToEdge || snapPickResult.snappedToVertex)) {
                 this.snapPickResult = snapPickResult;
                 this.snappedOrPicked = true;
                 this._needFireEvents++;
@@ -447,14 +439,14 @@ class PickController {
 
     fireEvents() {
 
-        if (this._needFireEvents == 0) {
+        if (this._needFireEvents === 0) {
             return;
         }
 
         if (this.hoveredSnappedOrSurfaceOff) {
             this._cameraControl.fire(&quot;hoverSnapOrSurfaceOff&quot;, {
                 canvasPos: this.pickCursorPos,
-                cursorPos : this.pickCursorPos
+                pointerPos : this.pickCursorPos
             }, true);
         }
 
@@ -463,9 +455,9 @@ class PickController {
                 const pickResult = new PickResult();
                 pickResult.snappedToVertex = this.snapPickResult.snappedToVertex;
                 pickResult.snappedToEdge = this.snapPickResult.snappedToEdge;
-                pickResult.worldPos = this.snapPickResult.snappedWorldPos;
-                pickResult.cursorPos = this.pickCursorPos;
-                pickResult.canvasPos = this.snapPickResult.snappedCanvasPos;
+                pickResult.worldPos = this.snapPickResult.worldPos;
+                pickResult.canvasPos = this.pickCursorPos
+                pickResult.snappedCanvasPos = this.snapPickResult.snappedCanvasPos;
                 this._cameraControl.fire(&quot;hoverSnapOrSurface&quot;, pickResult, true);
                 this.snapPickResult = null;
             } else {
@@ -518,10 +510,6 @@ class PickController {
         this.pickResult = null;
 
         this._needFireEvents = 0;
-    }
-
-    destroy() {
-        this._scene.off(this._tickSub);
     }
 }
 

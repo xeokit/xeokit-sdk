@@ -230,6 +230,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache.html">SectionPlaneCache</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils">viewer/scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/FileLoader.js~FileLoader.html">FileLoader</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/Loader.js~Loader.html">Loader</a></span></span></li>
@@ -1425,23 +1426,31 @@ class Input extends Component {
             }
         });
 
+        const tickifedMouseMoveFn = this.scene.tickify(
+            () =&gt; this.fire(&quot;mousemove&quot;, this.mouseCanvasPos, true)
+        );
+
         this.element.addEventListener(&quot;mousemove&quot;, this._mouseMoveListener = (e) =&gt; {
             if (!this.enabled) {
                 return;
             }
             this._getMouseCanvasPos(e);
-            this.fire(&quot;mousemove&quot;, this.mouseCanvasPos, true);
+            tickifedMouseMoveFn();  
             if (this.mouseover) {
                 e.preventDefault();
             }
         });
+
+        const tickifiedMouseWheelFn = this.scene.tickify(
+            (delta) =&gt; { this.fire(&quot;mousewheel&quot;, delta, true); }
+        );
 
         this.element.addEventListener(&quot;wheel&quot;, this._mouseWheelListener = (e, d) =&gt; {
             if (!this.enabled) {
                 return;
             }
             const delta = Math.max(-1, Math.min(1, -e.deltaY * 40));
-            this.fire(&quot;mousewheel&quot;, delta, true);
+            tickifiedMouseWheelFn(delta);
         }, {passive: true});
 
         // mouseclicked

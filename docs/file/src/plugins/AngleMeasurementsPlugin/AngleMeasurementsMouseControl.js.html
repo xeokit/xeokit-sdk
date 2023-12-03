@@ -230,6 +230,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache.html">SectionPlaneCache</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils">viewer/scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/FileLoader.js~FileLoader.html">FileLoader</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/Loader.js~Loader.html">Loader</a></span></span></li>
@@ -427,8 +428,8 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                 if (event.snappedToVertex || event.snappedToEdge) {
                     if (pointerLens) {
                         pointerLens.visible = true;
-                        pointerLens.centerPos = event.cursorPos || event.canvasPos;
-                        pointerLens.cursorPos = event.canvasPos;
+                        pointerLens.canvasPos = event.canvasPos;
+                        pointerLens.snappedCanvasPos = event.snappedCanvasPos || event.canvasPos;
                         pointerLens.snapped = true;
                     }
                     this.markerDiv.style.background = &quot;greenyellow&quot;;
@@ -436,21 +437,22 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                 } else {
                     if (pointerLens) {
                         pointerLens.visible = true;
-                        pointerLens.centerPos = event.cursorPos || event.canvasPos;
-                        pointerLens.cursorPos = event.canvasPos;
+                        pointerLens.canvasPos =  event.canvasPos;
+                        pointerLens.snappedCanvasPos = event.canvasPos;
                         pointerLens.snapped = false;
                     }
                     this.markerDiv.style.background = &quot;pink&quot;;
                     this.markerDiv.style.border = &quot;2px solid red&quot;;
                 }
+                const canvasPos = event.snappedCanvasPos || event.canvasPos;
                 mouseHovering = true;
                 mouseHoverEntity = event.entity;
                 mouseWorldPos.set(event.worldPos);
-                mouseHoverCanvasPos.set(event.canvasPos);
+                mouseHoverCanvasPos.set(canvasPos);
                 switch (this._mouseState) {
                     case MOUSE_FINDING_ORIGIN:
-                        this.markerDiv.style.marginLeft = `${event.canvasPos[0] - 5}px`;
-                        this.markerDiv.style.marginTop = `${event.canvasPos[1] - 5}px`;
+                        this.markerDiv.style.marginLeft = `${canvasPos[0] - 5}px`;
+                        this.markerDiv.style.marginTop = `${canvasPos[1] - 5}px`;
                         break;
                     case MOUSE_FINDING_CORNER:
                         if (this._currentAngleMeasurement) {
@@ -566,8 +568,8 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                 mouseHovering = false;
                 if (pointerLens) {
                     pointerLens.visible = true;
-                    pointerLens.centerPos = event.cursorPos;
-                    pointerLens.cursorPos = event.cursorPos;
+                    pointerLens.pointerPos = event.canvasPos;
+                    pointerLens.snappedCanvasPos = event.snappedCanvasPos || event.canvasPos;
                     pointerLens.snapped = false;
                 }
                 this.markerDiv.style.marginLeft = `-100px`;

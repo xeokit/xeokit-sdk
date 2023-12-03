@@ -230,6 +230,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache.html">SectionPlaneCache</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils">viewer/scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/FileLoader.js~FileLoader.html">FileLoader</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/Loader.js~Loader.html">Loader</a></span></span></li>
@@ -248,13 +249,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {XKTLoaderPlugin} from &apos;<span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber522">@xeokit/xeokit-sdk/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {XKTLoaderPlugin} from &apos;<span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber590">@xeokit/xeokit-sdk/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber522">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber590">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -595,6 +596,12 @@ the given ID to refer to the instances of that Entity in both models.</p>
 <p>We can also, of course, reference each Entity directly, using its globalized ID:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">myViewer.scene.setObjectVisibilities(&quot;myModel1#0BTBFw6f90Nfh9rP1dlXrb&quot;, true);</code>
 </code></pre>
+<p>We can also provide an HTTP URL to the XKT file:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const sceneModel = xktLoader.load({
+  manifestSrc: &quot;https://xeokit.github.io/xeokit-sdk/assets/models/models/xkt/Schependomlaan.xkt&quot;,
+  id: &quot;myModel&quot;,
+});</code>
+</code></pre>
 <h1 id="loading-a-model-from-a-manifest-of-xkt-files">Loading a model from a manifest of XKT files</h1><p>The <code>ifc2gltf</code> tool from Creoox, which converts IFC files into glTF geometry and JSON metadata files, has the option to
 split its output into multiple pairs of glTF and JSON files, accompanied by a JSON manifest that lists the files.</p>
 <p>To integrate with that option, the <code>convert2xkt</code> tool, which converts glTF geometry and JSON metadata files into XKT files,
@@ -664,6 +671,56 @@ metaModel.destroy();</code>
 is to reduce the memory pressure on each of the <code>ifc2gltf</code>, <code>convert2xkt</code> and XKTLoaderPlugin components.
 They work much reliably (and faster) when processing smaller files (eg. 20MB) than when processing large files (eg. 500MB), where
 they have less trouble allocating the system memory they need for conversion and parsing.</p>
+<p>We can also provide an HTTP URL to the manifest:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const sceneModel = xktLoader.load({
+  manifestSrc: &quot;https://xeokit.github.io/xeokit-sdk/assets/models/xkt/v10/split/Karhumaki-Bridge/model.xkt.manifest.json&quot;,
+  id: &quot;myModel&quot;,
+});</code>
+</code></pre>
+<p>We can also provide the manifest as parameter object:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const sceneModel = xktLoader.load({
+  id: &quot;myModel&quot;,
+  manifest: {
+  inputFile: &quot;assets/models/gltf/Karhumaki/model.glb.manifest.json&quot;,
+  converterApplication: &quot;convert2xkt&quot;,
+  converterApplicationVersion: &quot;v1.1.10&quot;,
+  conversionDate&quot;: &quot;09-11-2023- 18-29-01&quot;,
+    xktFiles: [
+      &quot;../../assets/models/xkt/v10/split/Karhumaki-Bridge/model.xkt&quot;,
+      &quot;../../assets/models/xkt/v10/split/Karhumaki-Bridge/model_1.xkt&quot;,
+      &quot;../../assets/models/xkt/v10/split/Karhumaki-Bridge/model_2.xkt&quot;,
+      &quot;../../assets/models/xkt/v10/split/Karhumaki-Bridge/model_3.xkt&quot;,
+      &quot;../../assets/models/xkt/v10/split/Karhumaki-Bridge/model_4.xkt&quot;,
+      &quot;../../assets/models/xkt/v10/split/Karhumaki-Bridge/model_5.xkt&quot;,
+      &quot;../../assets/models/xkt/v10/split/Karhumaki-Bridge/model_6.xkt&quot;,
+      &quot;../../assets/models/xkt/v10/split/Karhumaki-Bridge/model_7.xkt&quot;,
+      &quot;../../assets/models/xkt/v10/split/Karhumaki-Bridge/model_8.xkt&quot;
+    ]
+  }
+});</code>
+</code></pre>
+<p>We can also provide the paths to the XKT files as HTTP URLs:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const sceneModel = xktLoader.load({
+  id: &quot;myModel&quot;,
+  manifest: {
+  inputFile: &quot;assets/models/gltf/Karhumaki/model.glb.manifest.json&quot;,
+  converterApplication: &quot;convert2xkt&quot;,
+  converterApplicationVersion: &quot;v1.1.10&quot;,
+  conversionDate&quot;: &quot;09-11-2023- 18-29-01&quot;,
+    xktFiles: [
+      &quot;https://xeokit.github.io/xeokit-sdk/assets/models/xkt/v10/split/Karhumaki-Bridge/model.xkt&quot;,
+      &quot;https://xeokit.github.io/xeokit-sdk/assets/models/xkt/v10/split/Karhumaki-Bridge/model_1.xkt&quot;,
+      &quot;https://xeokit.github.io/xeokit-sdk/assets/models/xkt/v10/split/Karhumaki-Bridge/model_2.xkt&quot;,
+      &quot;https://xeokit.github.io/xeokit-sdk/assets/models/xkt/v10/split/Karhumaki-Bridge/model_3.xkt&quot;,
+      &quot;https://xeokit.github.io/xeokit-sdk/assets/models/xkt/v10/split/Karhumaki-Bridge/model_4.xkt&quot;,
+      &quot;https://xeokit.github.io/xeokit-sdk/assets/models/xkt/v10/split/Karhumaki-Bridge/model_5.xkt&quot;,
+      &quot;https://xeokit.github.io/xeokit-sdk/assets/models/xkt/v10/split/Karhumaki-Bridge/model_6.xkt&quot;,
+      &quot;https://xeokit.github.io/xeokit-sdk/assets/models/xkt/v10/split/Karhumaki-Bridge/model_7.xkt&quot;,
+      &quot;https://xeokit.github.io/xeokit-sdk/assets/models/xkt/v10/split/Karhumaki-Bridge/model_8.xkt&quot;
+    ]
+  }
+});</code>
+</code></pre>
 </div>
   
 
@@ -1602,7 +1659,7 @@ in data pipelines), then that metamodel will be loaded and the metamodel in the 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber547">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber615">source</a></span></span>
     </span>
   </h3>
 
@@ -1748,7 +1805,7 @@ textures within the XKT. Only required when the XKT is version 10 or later, and 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber595">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber663">source</a></span></span>
     </span>
   </h3>
 
@@ -1793,7 +1850,7 @@ textures within the XKT. Only required when the XKT is version 10 or later, and 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber606">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber674">source</a></span></span>
     </span>
   </h3>
 
@@ -1838,7 +1895,7 @@ textures within the XKT. Only required when the XKT is version 10 or later, and 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber670">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber738">source</a></span></span>
     </span>
   </h3>
 
@@ -1885,7 +1942,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber684">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber752">source</a></span></span>
     </span>
   </h3>
 
@@ -1932,7 +1989,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber698">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber766">source</a></span></span>
     </span>
   </h3>
 
@@ -1979,7 +2036,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber712">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber780">source</a></span></span>
     </span>
   </h3>
 
@@ -2026,7 +2083,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber723">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber791">source</a></span></span>
     </span>
   </h3>
 
@@ -2071,7 +2128,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber744">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber812">source</a></span></span>
     </span>
   </h3>
 
@@ -2122,7 +2179,7 @@ prefixed by the ID of the model, ie. <code>&lt;modelId&gt;#&lt;objectId&gt;</cod
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber642">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber710">source</a></span></span>
     </span>
   </h3>
 
@@ -2169,7 +2226,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber656">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber724">source</a></span></span>
     </span>
   </h3>
 
@@ -2216,7 +2273,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber617">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber685">source</a></span></span>
     </span>
   </h3>
 
@@ -2261,7 +2318,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber628">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber696">source</a></span></span>
     </span>
   </h3>
 
@@ -2306,7 +2363,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber755">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber823">source</a></span></span>
     </span>
   </h3>
 
@@ -2351,7 +2408,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber774">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber842">source</a></span></span>
     </span>
   </h3>
 
@@ -2401,7 +2458,7 @@ this reason, we can set this <code>false</code> to disable geometry reuse for mo
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber566">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber634">source</a></span></span>
     </span>
   </h3>
 
@@ -2457,7 +2514,7 @@ this reason, we can set this <code>false</code> to disable geometry reuse for mo
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber575">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber643">source</a></span></span>
     </span>
   </h3>
 
@@ -2501,7 +2558,7 @@ this reason, we can set this <code>false</code> to disable geometry reuse for mo
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber584">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber652">source</a></span></span>
     </span>
   </h3>
 
@@ -2548,7 +2605,7 @@ this reason, we can set this <code>false</code> to disable geometry reuse for mo
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber821">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js.html#lineNumber893">source</a></span></span>
     </span>
   </h3>
 
@@ -2591,7 +2648,7 @@ in data pipelines), then that metamodel will be loaded and the metamodel in the 
       <td data-ice="name" class="code" data-depth="1">params.src</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Path to a <em><code>.xkt</code></em> file, as an alternative to the <code>xkt</code> parameter.</p>
+      <td data-ice="description"><p>Path or URL to an <em><code>.xkt</code></em> file, as an alternative to the <code>xkt</code> parameter.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -2605,7 +2662,7 @@ in data pipelines), then that metamodel will be loaded and the metamodel in the 
       <td data-ice="name" class="code" data-depth="1">params.metaModelSrc</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Path to an optional metadata file, as an alternative to the <code>metaModelData</code> parameter.</p>
+      <td data-ice="description"><p>Path or URL to an optional metadata file, as an alternative to the <code>metaModelData</code> parameter.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -2613,6 +2670,22 @@ in data pipelines), then that metamodel will be loaded and the metamodel in the 
       <td data-ice="type" class="code"><span>*</span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
       <td data-ice="description"><p>JSON model metadata, as an alternative to the <code>metaModelSrc</code> parameter.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.manifestSrc</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Path or URL to a JSON manifest file that provides paths to <code>.xkt</code> files to load as parts of the model. Use this option to load models that have been split into
+multiple XKT files. See <a href="https://www.notion.so/xeokit/Automatically-Splitting-Large-Models-for-Better-Performance-165fc022e94742cf966ee50003572259">tutorial</a> for more info.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.manifest</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>A JSON manifest object (as an alternative to a path or URL) that provides paths to <code>.xkt</code> files to load as parts of the model. Use this option to load models that have been split into
+multiple XKT files. See <a href="https://www.notion.so/xeokit/Automatically-Splitting-Large-Models-for-Better-Performance-165fc022e94742cf966ee50003572259">tutorial</a> for more info.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">

@@ -230,6 +230,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache.html">SectionPlaneCache</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils">viewer/scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/FileLoader.js~FileLoader.html">FileLoader</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/Loader.js~Loader.html">Loader</a></span></span></li>
@@ -929,7 +930,7 @@ element is only rendered once, so it&apos;s OK for plugins to share the same con
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber61">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber66">source</a></span></span>
     </span>
   </h3>
 
@@ -1180,6 +1181,18 @@ to use textures to hold geometry data. Works great on most medium/high-end GPUs 
 mode for storing geometry, which is the standard technique used in most graphics engines, and will work adequately on most low-end GPUs.</p>
 </td>
     </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.numCachedSectionPlanes</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 0</li></ul></td>
+      <td data-ice="description"><p>Enhances the efficiency of SectionPlane creation by proactively allocating Viewer resources for a specified quantity
+of SectionPlanes. Introducing this parameter streamlines the initial creation speed of SectionPlanes, particularly up to the designated quantity. This parameter internally
+configures renderer logic for the specified number of SectionPlanes, eliminating the need for setting up logic with each SectionPlane creation and thereby enhancing
+responsiveness. It is important to consider that each SectionPlane impacts rendering performance, so it is recommended to set this value to a quantity that aligns with
+your expected usage.</p>
+</td>
+    </tr>
 </tbody>
   </table>
 </div>
@@ -1229,7 +1242,7 @@ mode for storing geometry, which is the standard technique used in most graphics
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber141">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber147">source</a></span></span>
     </span>
   </h3>
 
@@ -1289,7 +1302,7 @@ mode for storing geometry, which is the standard technique used in most graphics
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber159">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber165">source</a></span></span>
     </span>
   </h3>
 
@@ -1350,7 +1363,7 @@ controls the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Sc
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber149">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber155">source</a></span></span>
     </span>
   </h3>
 
@@ -1411,7 +1424,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber178">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber184">source</a></span></span>
     </span>
   </h3>
 
@@ -1467,7 +1480,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber134">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber140">source</a></span></span>
     </span>
   </h3>
 
@@ -1527,7 +1540,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber69">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber74">source</a></span></span>
     </span>
   </h3>
 
@@ -1587,7 +1600,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       <span class="since" data-ice="since">since 2.0</span>
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber83">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber88">source</a></span></span>
     </span>
   </h3>
 
@@ -1650,7 +1663,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber126">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber132">source</a></span></span>
     </span>
   </h3>
 
@@ -1710,7 +1723,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber90">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber95">source</a></span></span>
     </span>
   </h3>
 
@@ -1773,7 +1786,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber303">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber309">source</a></span></span>
     </span>
   </h3>
 
@@ -1819,7 +1832,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber523">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber529">source</a></span></span>
     </span>
   </h3>
 
@@ -1863,7 +1876,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber512">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber518">source</a></span></span>
     </span>
   </h3>
 
@@ -1908,7 +1921,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber234">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber240">source</a></span></span>
     </span>
   </h3>
 
@@ -1969,7 +1982,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber203">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber209">source</a></span></span>
     </span>
   </h3>
 
@@ -2037,7 +2050,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber330">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber336">source</a></span></span>
     </span>
   </h3>
 
@@ -2147,7 +2160,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber417">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber423">source</a></span></span>
     </span>
   </h3>
 
@@ -2263,7 +2276,7 @@ element is only rendered once, so it&apos;s OK for plugins to share the same con
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber225">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber231">source</a></span></span>
     </span>
   </h3>
 
@@ -2324,7 +2337,7 @@ element is only rendered once, so it&apos;s OK for plugins to share the same con
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber216">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber222">source</a></span></span>
     </span>
   </h3>
 
@@ -2384,7 +2397,7 @@ element is only rendered once, so it&apos;s OK for plugins to share the same con
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber188">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber194">source</a></span></span>
     </span>
   </h3>
 

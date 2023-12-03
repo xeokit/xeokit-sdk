@@ -230,6 +230,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache.html">SectionPlaneCache</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils">viewer/scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/FileLoader.js~FileLoader.html">FileLoader</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/Loader.js~Loader.html">Loader</a></span></span></li>
@@ -615,40 +616,6 @@ target viewer.</p>
         
         
         <div data-ice="description"><p>Identifies the originating system to include in BCF viewpoints saved by this plugin.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-member-xrayAsZeroAlpha">xrayAsZeroAlpha</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Specifies how xeokit&apos;s X-ray emphasis effect is handled in BCF viewpoints.</p>
-<p>When <code>xrayAsZeroAlpha</code> is <code>true</code>:</p>
-<ul>
-<li>when saving a viewpoint, set the <code>A</code> channel of each <code>coloring</code> component to <code>0</code> for each X-rayed object, and</li>
-<li>when loading a viewpoint saved from a xeokit application (i.e. when the viewpoint&apos;s <code>originating_system == &quot;xeokit.io&quot;</code>), set an object X-rayed if the <code>A</code> channel of its corresponding <code>coloring</code> component equals <code>0</code></li>
-</ul>
 </div>
       </div>
     </td>
@@ -1098,7 +1065,7 @@ target viewer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber321">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber320">source</a></span></span>
     </span>
   </h3>
 
@@ -1154,14 +1121,6 @@ target viewer.</p>
       <td data-ice="description"><p>Identifies the authoring tool for BCF records.</p>
 </td>
     </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.xrayAsZeroAlpha</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: false</li></ul></td>
-      <td data-ice="description"><p>Specifies how xeokit&apos;s X-ray emphasis effect is handled in BCF viewpoints. See <span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-member-xrayAsZeroAlpha">BCFViewpointsPlugin#xrayAsZeroAlpha</a></span> for details.</p>
-</td>
-    </tr>
 </tbody>
   </table>
 </div>
@@ -1199,7 +1158,7 @@ target viewer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber354">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber336">source</a></span></span>
     </span>
   </h3>
 
@@ -1259,7 +1218,7 @@ target viewer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber347">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber329">source</a></span></span>
     </span>
   </h3>
 
@@ -1307,60 +1266,6 @@ target viewer.</p>
   
   
 </div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-xrayAsZeroAlpha">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">xrayAsZeroAlpha</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber340">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Specifies how xeokit&apos;s X-ray emphasis effect is handled in BCF viewpoints.</p>
-<p>When <code>xrayAsZeroAlpha</code> is <code>true</code>:</p>
-<ul>
-<li>when saving a viewpoint, set the <code>A</code> channel of each <code>coloring</code> component to <code>0</code> for each X-rayed object, and</li>
-<li>when loading a viewpoint saved from a xeokit application (i.e. when the viewpoint&apos;s <code>originating_system == &quot;xeokit.io&quot;</code>), set an object X-rayed if the <code>A</code> channel of its corresponding <code>coloring</code> component equals <code>0</code></li>
-</ul>
-<p>When <code>xrayAsZeroAlpha</code> is <code>false</code>:</p>
-<ul>
-<li>don&apos;t save any X-ray information in viewpoints, and</li>
-<li>reset all objects as not X-rayed whenever loading a viewpoint.</li>
-</ul>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
 </div>
 <div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
 
@@ -1376,7 +1281,7 @@ target viewer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber953">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber944">source</a></span></span>
     </span>
   </h3>
 
@@ -1420,7 +1325,7 @@ target viewer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber374">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber359">source</a></span></span>
     </span>
   </h3>
 
@@ -1470,6 +1375,30 @@ target viewer.</p>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: false</li></ul></td>
       <td data-ice="description"><p>Indicates whether the boundaries of <code>IfcSpace</code> types should be visible in the viewpoint.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.spacesTranslucent</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Indicates whether <code>IfcSpace</code> types should be forced translucent in the viewpoint.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.spaceBoundariesTranslucent</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Indicates whether the boundaries of <code>IfcSpace</code> types should be forced translucent in the viewpoint.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.openingsTranslucent</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>Indicates whether <code>IfcOpening</code> types should be forced translucent in the viewpoint.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1546,7 +1475,7 @@ objects in the viewpoint will be visible.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber642">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js.html#lineNumber628">source</a></span></span>
     </span>
   </h3>
 

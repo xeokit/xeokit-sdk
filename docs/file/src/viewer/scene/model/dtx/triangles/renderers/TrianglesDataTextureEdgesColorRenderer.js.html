@@ -230,6 +230,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache.html">SectionPlaneCache</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils">viewer/scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/FileLoader.js~FileLoader.html">FileLoader</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/Loader.js~Loader.html">Loader</a></span></span></li>
@@ -336,25 +337,30 @@ export class TrianglesDataTextureEdgesColorRenderer {
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
         gl.uniformMatrix4fv(this._uProjMatrix, false, camera.projMatrix);
 
+        const numAllocatedSectionPlanes = scene._sectionPlanesState.getNumAllocatedSectionPlanes();
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
-        if (numSectionPlanes &gt; 0) {
+        if (numAllocatedSectionPlanes &gt; 0) {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
             const baseIndex = dataTextureLayer.layerIndex * numSectionPlanes;
             const renderFlags = model.renderFlags;
-            for (let sectionPlaneIndex = 0; sectionPlaneIndex &lt; numSectionPlanes; sectionPlaneIndex++) {
+            for (let sectionPlaneIndex = 0; sectionPlaneIndex &lt; numAllocatedSectionPlanes; sectionPlaneIndex++) {
                 const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
                 if (sectionPlaneUniforms) {
-                    const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                    gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                    if (active) {
-                        const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                        if (origin) {
-                            const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3c);
-                            gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
-                        } else {
-                            gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
+                    if (sectionPlaneIndex &lt; numSectionPlanes) {
+                        const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
+                        gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                        if (active) {
+                            const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                            if (origin) {
+                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
+                                gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
+                            } else {
+                                gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
+                            }
+                            gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
                         }
-                        gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+                    } else {
+                        gl.uniform1i(sectionPlaneUniforms.active, 0);
                     }
                 }
             }
@@ -416,7 +422,7 @@ export class TrianglesDataTextureEdgesColorRenderer {
         this._uProjMatrix = program.getLocation(&quot;projMatrix&quot;);
         this._uSectionPlanes = [];
 
-        for (let i = 0, len = scene._sectionPlanesState.sectionPlanes.length; i &lt; len; i++) {
+        for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i &lt; len; i++) {
             this._uSectionPlanes.push({
                 active: program.getLocation(&quot;sectionPlaneActive&quot; + i),
                 pos: program.getLocation(&quot;sectionPlanePos&quot; + i),
@@ -462,8 +468,7 @@ export class TrianglesDataTextureEdgesColorRenderer {
 
     _buildVertexShader() {
         const scene = this._scene;
-        const sectionPlanesState = scene._sectionPlanesState;
-        const clipping = sectionPlanesState.sectionPlanes.length &gt; 0;
+        const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() &gt; 0;
         const src = [];
         src.push(&quot;#version 300 es&quot;);
         src.push(&quot;// TrianglesDataTextureEdgesColorRenderer&quot;);
@@ -600,8 +605,7 @@ export class TrianglesDataTextureEdgesColorRenderer {
 
     _buildFragmentShader() {
         const scene = this._scene;
-        const sectionPlanesState = scene._sectionPlanesState;
-        const clipping = sectionPlanesState.sectionPlanes.length &gt; 0;
+        const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() &gt; 0;
         const src = [];
         src.push(&apos;#version 300 es&apos;);
         src.push(&quot;// TrianglesDataTextureEdgesColorRenderer&quot;);
@@ -620,7 +624,7 @@ export class TrianglesDataTextureEdgesColorRenderer {
         if (clipping) {
             src.push(&quot;in vec4 vWorldPosition;&quot;);
             src.push(&quot;flat in uint vFlags2;&quot;);
-            for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i &lt; len; i++) {
+            for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i &lt; len; i++) {
                 src.push(&quot;uniform bool sectionPlaneActive&quot; + i + &quot;;&quot;);
                 src.push(&quot;uniform vec3 sectionPlanePos&quot; + i + &quot;;&quot;);
                 src.push(&quot;uniform vec3 sectionPlaneDir&quot; + i + &quot;;&quot;);
@@ -633,7 +637,7 @@ export class TrianglesDataTextureEdgesColorRenderer {
             src.push(&quot;  bool clippable = vFlags2 &gt; 0u;&quot;);
             src.push(&quot;  if (clippable) {&quot;);
             src.push(&quot;  float dist = 0.0;&quot;);
-            for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i &lt; len; i++) {
+            for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i &lt; len; i++) {
                 src.push(&quot;if (sectionPlaneActive&quot; + i + &quot;) {&quot;);
                 src.push(&quot;   dist += clamp(dot(-sectionPlaneDir&quot; + i + &quot;.xyz, vWorldPosition.xyz - sectionPlanePos&quot; + i + &quot;.xyz), 0.0, 1000.0);&quot;);
                 src.push(&quot;}&quot;);
@@ -642,8 +646,7 @@ export class TrianglesDataTextureEdgesColorRenderer {
             src.push(&quot;}&quot;);
         }
         if (scene.logarithmicDepthBufferEnabled) {
-            //   src.push(&quot;gl_FragDepth = log2( vFragDepth ) * logDepthBufFC * 0.5;&quot;);
-            src.push(&quot;    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;&quot;);
+              src.push(&quot;    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;&quot;);
         }
         src.push(&quot;   outColor            = vColor;&quot;);
         src.push(&quot;}&quot;);

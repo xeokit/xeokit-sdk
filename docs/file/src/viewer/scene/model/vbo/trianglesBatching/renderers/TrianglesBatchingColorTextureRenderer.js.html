@@ -230,6 +230,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache.html">SectionPlaneCache</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils">viewer/scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/FileLoader.js~FileLoader.html">FileLoader</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/Loader.js~Loader.html">Loader</a></span></span></li>
@@ -267,7 +268,7 @@ class TrianglesBatchingColorTextureRenderer extends VBOSceneModelTriangleBatchin
 
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
-        const clipping = sectionPlanesState.sectionPlanes.length &gt; 0;
+        const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() &gt; 0;
         const src = [];
         src.push(&quot;#version 300 es&quot;);
         src.push(&quot;// Triangles batching color texture vertex shader&quot;);
@@ -344,7 +345,7 @@ class TrianglesBatchingColorTextureRenderer extends VBOSceneModelTriangleBatchin
         const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
         const lightsState = scene._lightsState;
         const sectionPlanesState = scene._sectionPlanesState;
-        const clipping = sectionPlanesState.sectionPlanes.length &gt; 0;
+        const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() &gt; 0;
         const src = [];
         src.push(&quot;#version 300 es&quot;);
         src.push(&quot;// Triangles batching color texture fragment shader&quot;);
@@ -394,7 +395,7 @@ class TrianglesBatchingColorTextureRenderer extends VBOSceneModelTriangleBatchin
         if (clipping) {
             src.push(&quot;in vec4 vWorldPosition;&quot;);
             src.push(&quot;in float vFlags;&quot;);
-            for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i &lt; len; i++) {
+            for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i &lt; len; i++) {
                 src.push(&quot;uniform bool sectionPlaneActive&quot; + i + &quot;;&quot;);
                 src.push(&quot;uniform vec3 sectionPlanePos&quot; + i + &quot;;&quot;);
                 src.push(&quot;uniform vec3 sectionPlaneDir&quot; + i + &quot;;&quot;);
@@ -431,7 +432,7 @@ class TrianglesBatchingColorTextureRenderer extends VBOSceneModelTriangleBatchin
             src.push(&quot;  bool clippable = (int(vFlags) &gt;&gt; 16 &amp; 0xF) == 1;&quot;);
             src.push(&quot;  if (clippable) {&quot;);
             src.push(&quot;  float dist = 0.0;&quot;);
-            for (let i = 0, len = sectionPlanesState.sectionPlanes.length; i &lt; len; i++) {
+            for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i &lt; len; i++) {
                 src.push(&quot;if (sectionPlaneActive&quot; + i + &quot;) {&quot;);
                 src.push(&quot;   dist += clamp(dot(-sectionPlaneDir&quot; + i + &quot;.xyz, vWorldPosition.xyz - sectionPlanePos&quot; + i + &quot;.xyz), 0.0, 1000.0);&quot;);
                 src.push(&quot;}&quot;);

@@ -996,6 +996,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/sectionplane/sectionplanecache.js~sectionplanecache",
+    "class/src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache.html",
+    "<span>SectionPlaneCache</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/sectionPlane/SectionPlaneCache.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/plugins/sectionplanesplugin/sectionplanesplugin.js~sectionplanesplugin",
     "class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html",
     "<span>SectionPlanesPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js</span>",
@@ -1788,15 +1794,15 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/extras/pointerlens/pointerlens.js~pointerlens#centerpos",
-    "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-set-centerPos",
-    "src/extras/PointerLens/PointerLens.js~PointerLens#centerPos",
+    "src/extras/pointerlens/pointerlens.js~pointerlens#canvaspos",
+    "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-set-canvasPos",
+    "src/extras/PointerLens/PointerLens.js~PointerLens#canvasPos",
     "member"
   ],
   [
-    "src/extras/pointerlens/pointerlens.js~pointerlens#centerpos",
-    "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-get-centerPos",
-    "src/extras/PointerLens/PointerLens.js~PointerLens#centerPos",
+    "src/extras/pointerlens/pointerlens.js~pointerlens#canvaspos",
+    "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-get-canvasPos",
+    "src/extras/PointerLens/PointerLens.js~PointerLens#canvasPos",
     "member"
   ],
   [
@@ -1804,18 +1810,6 @@ window.esdocSearchIndex = [
     "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-constructor-constructor",
     "src/extras/PointerLens/PointerLens.js~PointerLens#constructor",
     "method"
-  ],
-  [
-    "src/extras/pointerlens/pointerlens.js~pointerlens#cursorpos",
-    "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-set-cursorPos",
-    "src/extras/PointerLens/PointerLens.js~PointerLens#cursorPos",
-    "member"
-  ],
-  [
-    "src/extras/pointerlens/pointerlens.js~pointerlens#cursorpos",
-    "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-get-cursorPos",
-    "src/extras/PointerLens/PointerLens.js~PointerLens#cursorPos",
-    "member"
   ],
   [
     "src/extras/pointerlens/pointerlens.js~pointerlens#destroy",
@@ -1827,6 +1821,18 @@ window.esdocSearchIndex = [
     "src/extras/pointerlens/pointerlens.js~pointerlens#scene",
     "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-member-scene",
     "src/extras/PointerLens/PointerLens.js~PointerLens#scene",
+    "member"
+  ],
+  [
+    "src/extras/pointerlens/pointerlens.js~pointerlens#snappedcanvaspos",
+    "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-set-snappedCanvasPos",
+    "src/extras/PointerLens/PointerLens.js~PointerLens#snappedCanvasPos",
+    "member"
+  ],
+  [
+    "src/extras/pointerlens/pointerlens.js~pointerlens#snappedcanvaspos",
+    "class/src/extras/PointerLens/PointerLens.js~PointerLens.html#instance-get-snappedCanvasPos",
+    "src/extras/PointerLens/PointerLens.js~PointerLens#snappedCanvasPos",
     "member"
   ],
   [
@@ -2518,12 +2524,6 @@ window.esdocSearchIndex = [
     "class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-setViewpoint",
     "src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#setViewpoint",
     "method"
-  ],
-  [
-    "src/plugins/bcfviewpointsplugin/bcfviewpointsplugin.js~bcfviewpointsplugin#xrayaszeroalpha",
-    "class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-member-xrayAsZeroAlpha",
-    "src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin#xrayAsZeroAlpha",
-    "member"
   ],
   [
     "src/plugins/bcfviewpointsplugin/index.js",
@@ -14040,6 +14040,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/scene/scene.js~scene#numcachedsectionplanes",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-set-numCachedSectionPlanes",
+    "src/viewer/scene/scene/Scene.js~Scene#numCachedSectionPlanes",
+    "member"
+  ],
+  [
+    "src/viewer/scene/scene/scene.js~scene#numcachedsectionplanes",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-numCachedSectionPlanes",
+    "src/viewer/scene/scene/Scene.js~Scene#numCachedSectionPlanes",
+    "member"
+  ],
+  [
     "src/viewer/scene/scene/scene.js~scene#numcolorizedobjects",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-numColorizedObjects",
     "src/viewer/scene/scene/Scene.js~Scene#numColorizedObjects",
@@ -14280,6 +14292,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/scene/scene.js~scene#tickify",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-tickify",
+    "src/viewer/scene/scene/Scene.js~Scene#tickify",
+    "method"
+  ],
+  [
     "src/viewer/scene/scene/scene.js~scene#ticksperocclusiontest",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-set-ticksPerOcclusionTest",
     "src/viewer/scene/scene/Scene.js~Scene#ticksPerOcclusionTest",
@@ -14422,6 +14440,48 @@ window.esdocSearchIndex = [
     "class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html#instance-get-pos",
     "src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane#pos",
     "member"
+  ],
+  [
+    "src/viewer/scene/sectionplane/sectionplanecache.js",
+    "file/src/viewer/scene/sectionPlane/SectionPlaneCache.js.html",
+    "src/viewer/scene/sectionPlane/SectionPlaneCache.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/sectionplane/sectionplanecache.js~sectionplanecache#constructor",
+    "class/src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache.html#instance-constructor-constructor",
+    "src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/sectionplane/sectionplanecache.js~sectionplanecache#destroy",
+    "class/src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache.html#instance-method-destroy",
+    "src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/scene/sectionplane/sectionplanecache.js~sectionplanecache#getsectionplane",
+    "class/src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache.html#instance-method-getSectionPlane",
+    "src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache#getSectionPlane",
+    "method"
+  ],
+  [
+    "src/viewer/scene/sectionplane/sectionplanecache.js~sectionplanecache#getsectionplanesinuse",
+    "class/src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache.html#instance-method-getSectionPlanesInUse",
+    "src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache#getSectionPlanesInUse",
+    "method"
+  ],
+  [
+    "src/viewer/scene/sectionplane/sectionplanecache.js~sectionplanecache#putallsectionplanes",
+    "class/src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache.html#instance-method-putAllSectionPlanes",
+    "src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache#putAllSectionPlanes",
+    "method"
+  ],
+  [
+    "src/viewer/scene/sectionplane/sectionplanecache.js~sectionplanecache#putsectionplane",
+    "class/src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache.html#instance-method-putSectionPlane",
+    "src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache#putSectionPlane",
+    "method"
   ],
   [
     "src/viewer/scene/sectionplane/index.js",
@@ -15003,6 +15063,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/webgl/pickresult.js~pickresult#primitive",
     "class/src/viewer/scene/webgl/PickResult.js~PickResult.html#instance-member-primitive",
     "src/viewer/scene/webgl/PickResult.js~PickResult#primitive",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/pickresult.js~pickresult#snappedcanvaspos",
+    "class/src/viewer/scene/webgl/PickResult.js~PickResult.html#instance-get-snappedCanvasPos",
+    "src/viewer/scene/webgl/PickResult.js~PickResult#snappedCanvasPos",
     "member"
   ],
   [

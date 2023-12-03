@@ -230,6 +230,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache.html">SectionPlaneCache</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils">viewer/scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/FileLoader.js~FileLoader.html">FileLoader</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/Loader.js~Loader.html">Loader</a></span></span></li>
@@ -310,13 +311,14 @@ class PickResult {
          */
         this.snappedToVertex = false;
 
-        this._canvasPos = new Int16Array([0, 0]);
         this._origin = new Float64Array([0, 0, 0]);
         this._direction = new Float64Array([0, 0, 0]);
         this._indices = new Int32Array(3);
         this._localPos = new Float64Array([0, 0, 0]);
         this._worldPos = new Float64Array([0, 0, 0]);
         this._viewPos = new Float64Array([0, 0, 0]);
+        this._canvasPos = new Int16Array([0, 0]);
+        this._snappedCanvasPos = new Int16Array([0, 0]);
         this._bary = new Float64Array([0, 0, 0]);
         this._worldNormal = new Float64Array([0, 0, 0]);
         this._uv = new Float64Array([0, 0]);
@@ -325,7 +327,7 @@ class PickResult {
     }
 
     /**
-     * Canvas coordinates when picking with a 2D pointer.
+     * Canvas pick coordinates.
      * @property canvasPos
      * @type {Number[]}
      */
@@ -440,6 +442,29 @@ class PickResult {
             this._gotLocalPos = true;
         } else {
             this._gotLocalPos = false;
+        }
+    }
+
+    /**
+     * Canvas cursor coordinates, snapped when snap picking, otherwise same as {@link PickResult#pointerPos}.
+     * @property snappedCanvasPos
+     * @type {Number[]}
+     */
+    get snappedCanvasPos() {
+        return this._gotSnappedCanvasPos ? this._snappedCanvasPos : null;
+    }
+
+    /**
+     * @private
+     * @param value
+     */
+    set snappedCanvasPos(value) {
+        if (value) {
+            this._snappedCanvasPos[0] = value[0];
+            this._snappedCanvasPos[1] = value[1];
+            this._gotSnappedCanvasPos = true;
+        } else {
+            this._gotSnappedCanvasPos = false;
         }
     }
 
@@ -571,6 +596,7 @@ class PickResult {
         this.primitive = null;
         this.pickSurfacePrecision = false;
         this._gotCanvasPos = false;
+        this._gotSnappedCanvasPos = false;
         this._gotOrigin = false;
         this._gotDirection = false;
         this._gotIndices = false;
