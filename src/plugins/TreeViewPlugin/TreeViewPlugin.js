@@ -350,6 +350,7 @@ export class TreeViewPlugin extends Plugin {
      *
      * @param {Viewer} viewer The Viewer.
      * @param {*} cfg Plugin configuration.
+     * @param {String} [cfg.containerElementId]  ID of an existing HTML element to contain the TreeViewPlugin - either this or containerElement is mandatory. When both values are given, the element reference is always preferred to the ID.
      * @param {HTMLElement} cfg.containerElement DOM element to contain the TreeViewPlugin.
      * @param {Boolean} [cfg.autoAddModels=true] When ````true```` (default), will automatically add each model as it's created. Set this ````false```` if you want to manually add models using {@link TreeViewPlugin#addModel} instead.
      * @param {Number} [cfg.autoExpandDepth] Optional depth to which to initially expand the tree.
@@ -375,8 +376,10 @@ export class TreeViewPlugin extends Plugin {
          */
         this.valid = true;
 
-        if (!cfg.containerElement) {
-            this.error("Config expected: containerElement");
+        const containerElement = cfg.containerElement || document.getElementById(cfg.containerElementId);
+
+        if (!(containerElement instanceof HTMLElement)) {
+            this.error("Mandatory config expected: valid containerElementId or containerElement");
             return;
         }
 
@@ -390,7 +393,7 @@ export class TreeViewPlugin extends Plugin {
         }
 
 
-        this._containerElement = cfg.containerElement;
+        this._containerElement = containerElement;
         this._metaModels = {};
         this._autoAddModels = (cfg.autoAddModels !== false);
         this._autoExpandDepth = (cfg.autoExpandDepth || 0);
