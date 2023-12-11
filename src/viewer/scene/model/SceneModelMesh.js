@@ -2,6 +2,7 @@ import {math} from "../math/math.js";
 
 const tempOBB3 = math.OBB3();
 const tempOBB3b = math.OBB3();
+const tempOBB3c = math.OBB3();
 
 /**
  * A mesh within a {@link SceneModel}.
@@ -49,7 +50,6 @@ export class SceneModelMesh {
          */
         this.transform = transform;
 
-
         /**
          * The {@link SceneModelTextureSet} that optionally textures this SceneModelMesh.
          *
@@ -76,8 +76,9 @@ export class SceneModelMesh {
          */
         this.obb = null;
 
-        this._aabb = null;
-        this._abbDirty = false;
+        this._aabbLocal = null;
+        this._aabbWorld = math.AABB3();
+        this._aabbWorldDirty = false;
 
         /**
          * @private
@@ -103,7 +104,7 @@ export class SceneModelMesh {
          * @private
          * @type {null}
          */
-        this.origin = null;
+        this.origin = null; // Set By SceneModel
 
         /**
          * The {@link SceneModelEntity} that owns this SceneModelMesh.
@@ -118,7 +119,7 @@ export class SceneModelMesh {
     }
 
     _sceneModelDirty() {
-        this._aabbDirty = true;
+        this._aabbWorldDirty = true;
     }
 
     _transformDirty() {
@@ -127,7 +128,7 @@ export class SceneModelMesh {
             this._matrixDirty = true;
             this._matrixUpdateScheduled = true;
         }
-        this._aabbDirty = true;
+        this._aabbWorldDirty = true;
         if (this.entity) {
             this.entity._transformDirty();
         }
@@ -298,27 +299,35 @@ export class SceneModelMesh {
      * @private
      */
     set aabb(aabb) { // Called by SceneModel
-        this._aabb = aabb;
+        this._aabbLocal = aabb;
     }
 
     /**
      * @private
      */
     get aabb() { // called by SceneModelEntity
-        if (this._aabbDirty) {
-            if (this.obb) {
-                if (this.transform) {
-                    math.transformOBB3(this.transform.worldMatrix, this.obb, tempOBB3);
-                    math.transformOBB3(this.model.worldMatrix, tempOBB3, tempOBB3b);
-                    math.OBB3ToAABB3(tempOBB3b, this._aabb);
-                } else {
-                    math.transformOBB3(this.model.worldMatrix, this.obb, tempOBB3);
-                    math.OBB3ToAABB3(tempOBB3, this._aabb);
-                }
+        if (this._aabbWorldDirty) {
+            math.AABB3ToOBB3(this._aabbLocal, tempOBB3);
+            if (this.transform) {
+                math.transformOBB3(this.transform.worldMatrix, tempOBB3, tempOBB3b);
+                math.transformOBB3(this.model.worldMatrix, tempOBB3b, tempOBB3c);
+                math.OBB3ToAABB3(tempOBB3c, this._aabbWorld);
+            } else {
+                math.transformOBB3(this.model.worldMatrix, tempOBB3, tempOBB3b);
+                math.OBB3ToAABB3(tempOBB3b, this._aabbWorld);
             }
-            this._aabbDirty = false;
+            if (this.origin) {
+                const origin = this.origin;
+                this._aabbWorld[0] += origin[0];
+                this._aabbWorld[1] += origin[1];
+                this._aabbWorld[2] += origin[2];
+                this._aabbWorld[3] += origin[0];
+                this._aabbWorld[4] += origin[1];
+                this._aabbWorld[5] += origin[2];
+            }
+            this._aabbWorldDirty = false;
         }
-        return this._aabb;
+        return this._aabbWorld;
     }
 
     /**

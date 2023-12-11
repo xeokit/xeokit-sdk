@@ -129,12 +129,6 @@ class TrianglesInstancingLayer {
         this._finalized = false;
 
         /**
-         * The axis-aligned World-space boundary of this InstancingLayer's positions.
-         * @type {*|Float64Array}
-         */
-        this.aabb = math.collapseAABB3();
-
-        /**
          * When true, this layer contains solid triangle meshes, otherwise this layer contains surface triangle meshes
          * @type {boolean}
          */
@@ -161,7 +155,6 @@ class TrianglesInstancingLayer {
      * @param cfg.opacity Opacity [0..255].
      * @param cfg.meshMatrix Flat float 4x4 matrix.
      * @param [cfg.worldMatrix] Flat float 4x4 matrix.
-     * @param cfg.worldAABB Flat float AABB.
      * @param cfg.pickColor Quantized pick color
      * @returns {number} Portion ID.
      */
@@ -172,14 +165,11 @@ class TrianglesInstancingLayer {
         const roughness = cfg.roughness;
         const opacity = cfg.opacity !== null && cfg.opacity !== undefined ? cfg.opacity : 255;
         const meshMatrix = cfg.meshMatrix;
-        const worldAABB = cfg.aabb;
         const pickColor = cfg.pickColor;
 
         if (this._finalized) {
             throw "Already finalized";
         }
-
-        // TODO: find AABB for portion by transforming the geometry local AABB by the given meshMatrix?
 
         const r = color[0]; // Color is pre-quantized by SceneModel
         const g = color[1];
@@ -243,32 +233,6 @@ class TrianglesInstancingLayer {
         this._pickColors.push(pickColor[1]);
         this._pickColors.push(pickColor[2]);
         this._pickColors.push(pickColor[3]);
-
-        // Expand AABB
-
-        const lenPositions = this._state.geometry.positionsCompressed.length;
-        const positions = this._state.geometry.positionsCompressed;
-        const positionsDecodeMatrix = this._state.geometry.positionsDecodeMatrix;
-        for (let i = 0; i < lenPositions; i += 3) {
-            tempVec4a[0] = positions[i + 0];
-            tempVec4a[1] = positions[i + 1];
-            tempVec4a[2] = positions[i + 2];
-            math.transformPoint4(positionsDecodeMatrix, tempVec4a, tempVec4b);
-            math.transformPoint4(meshMatrix, tempVec4b, tempVec4a);
-            math.expandAABB3Point3(worldAABB, tempVec4a);
-        }
-
-        if (this._state.origin) {
-            const origin = this._state.origin;
-            worldAABB[0] += origin[0];
-            worldAABB[1] += origin[1];
-            worldAABB[2] += origin[2];
-            worldAABB[3] += origin[0];
-            worldAABB[4] += origin[1];
-            worldAABB[5] += origin[2];
-        }
-
-        math.expandAABB3(this.aabb, worldAABB);
 
         this._state.numInstances++;
 

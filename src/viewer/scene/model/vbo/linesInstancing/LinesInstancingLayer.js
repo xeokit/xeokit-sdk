@@ -106,12 +106,6 @@ class LinesInstancingLayer {
         }
 
         this._finalized = false;
-
-        /**
-         * The axis-aligned World-space boundary of this InstancingLayer's positions.
-         * @type {*|Float64Array}
-         */
-        this.aabb = math.collapseAABB3();
     }
 
     /**
@@ -125,7 +119,6 @@ class LinesInstancingLayer {
      * @param cfg.color Color [0..255,0..255,0..255]
      * @param cfg.opacity Opacity [0..255].
      * @param cfg.meshMatrix Flat float 4x4 matrix.
-     * @param cfg.aabb Flat float AABB.
      * @returns {number} Portion ID.
      */
     createPortion(cfg) {
@@ -133,13 +126,10 @@ class LinesInstancingLayer {
         const color = cfg.color;
         const opacity = cfg.opacity;
         const meshMatrix = cfg.meshMatrix;
-        const worldAABB = cfg.aabb;
 
         if (this._finalized) {
             throw "Already finalized";
         }
-
-        // TODO: find AABB for portion by transforming the geometry local AABB by the given meshMatrix?
 
         const r = color[0]; // Color is pre-quantized by VBOSceneModel
         const g = color[1];
@@ -171,31 +161,6 @@ class LinesInstancingLayer {
         this._modelMatrixCol2.push(meshMatrix[6]);
         this._modelMatrixCol2.push(meshMatrix[10]);
         this._modelMatrixCol2.push(meshMatrix[14]);
-
-        // Expand AABB
-
-        math.collapseAABB3(worldAABB);
-        const obb = this._state.obb;
-        const lenPositions = obb.length;
-        for (let i = 0; i < lenPositions; i += 4) {
-            tempVec4a[0] = obb[i + 0];
-            tempVec4a[1] = obb[i + 1];
-            tempVec4a[2] = obb[i + 2];
-            math.transformPoint4(meshMatrix, tempVec4a, tempVec4b);
-            math.expandAABB3Point3(worldAABB, tempVec4b);
-        }
-
-        if (this._state.origin) {
-            const origin = this._state.origin;
-            worldAABB[0] += origin[0];
-            worldAABB[1] += origin[1];
-            worldAABB[2] += origin[2];
-            worldAABB[3] += origin[0];
-            worldAABB[4] += origin[1];
-            worldAABB[5] += origin[2];
-        }
-
-        math.expandAABB3(this.aabb, worldAABB);
 
         this._state.numInstances++;
 
