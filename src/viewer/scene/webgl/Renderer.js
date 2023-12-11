@@ -969,7 +969,8 @@ const Renderer = function (scene, options) {
                     math.cross3Vec3(worldRayDir, randomVec3, up);
 
                     pickViewMatrix = math.lookAtMat4v(worldRayOrigin, look, up, tempMat4b);
-                    pickProjMatrix = scene.camera.projMatrix;
+                //    pickProjMatrix = scene.camera.projMatrix;
+                    pickProjMatrix = scene.camera.ortho.matrix;
 
                     pickResult.origin = worldRayOrigin;
                     pickResult.direction = worldRayDir;
