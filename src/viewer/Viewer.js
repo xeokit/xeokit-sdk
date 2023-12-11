@@ -349,7 +349,10 @@ class Viewer {
         }
 
         if (!this._snapshotBegun) {
-            this.beginSnapshot();
+            this.beginSnapshot({
+                width,
+                height
+            });
         }
 
         if (!params.includeGizmos) {

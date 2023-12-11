@@ -45,8 +45,6 @@ class TrianglesBatchingLayer {
      */
     constructor(cfg) {
 
-        console.info("Creating TrianglesBatchingLayer");
-
         /**
          * Owner model
          * @type {VBOSceneModel}
