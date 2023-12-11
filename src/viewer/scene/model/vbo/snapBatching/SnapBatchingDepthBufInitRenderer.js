@@ -35,7 +35,7 @@ export class SnapBatchingDepthBufInitRenderer extends VBOSceneModelRenderer {
         const state = batchingLayer._state;
         const origin = batchingLayer._state.origin;
         const {position, rotationMatrix, rotationMatrixConjugate} = model;
-        const aabb = batchingLayer.aabb;
+        const aabb = model.aabb;
         const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
 
         if (this._vaoCache.has(batchingLayer)) {

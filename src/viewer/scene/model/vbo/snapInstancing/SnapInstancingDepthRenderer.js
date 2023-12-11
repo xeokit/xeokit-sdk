@@ -40,7 +40,7 @@ class SnapInstancingDepthRenderer extends VBOSceneModelRenderer {
         const state = instancingLayer._state;
         const origin = instancingLayer._state.origin;
         const {position, rotationMatrix, rotationMatrixConjugate} = model;
-        const aabb = instancingLayer.aabb;
+        const aabb = model.aabb;
         const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
 
         if (this._vaoCache.has(instancingLayer)) {
