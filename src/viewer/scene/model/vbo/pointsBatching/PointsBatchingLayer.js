@@ -122,7 +122,7 @@ class PointsBatchingLayer {
      * @param [cfg.colors] Flat float colors array.
      * @param cfg.color Float RGB color [0..1,0..1,0..1]
      * @param [cfg.meshMatrix] Flat float 4x4 matrix
-     * @param cfg.worldAABB Flat float AABB World-space AABB
+     * @param cfg.aabb Flat float AABB World-space AABB
      * @param cfg.pickColor Quantized pick color
      * @returns {number} Portion ID
      */
@@ -137,15 +137,15 @@ class PointsBatchingLayer {
         const color = cfg.color;
         const colorsCompressed = cfg.colorsCompressed;
         const colors = cfg.colors;
-        const meshMatrix = cfg.meshMatrix;
-        const worldAABB = cfg.worldAABB;
-        const pickColor = cfg.pickColor;
+         const pickColor = cfg.pickColor;
 
         const buffer = this._buffer;
         const positionsIndex = buffer.positions.length;
         const vertsIndex = positionsIndex / 3;
 
         let numVerts;
+
+        math.expandAABB3(this._modelAABB, cfg.aabb);
 
         if (this._preCompressedPositionsExpected) {
 
@@ -156,18 +156,6 @@ class PointsBatchingLayer {
             for (let i = 0, len = positionsCompressed.length; i < len; i++) {
                 buffer.positions.push(positionsCompressed[i]);
             }
-
-            const bounds = geometryCompressionUtils.getPositionsBounds(positionsCompressed);
-
-            const min = geometryCompressionUtils.decompressPosition(bounds.min, this._state.positionsDecodeMatrix, tempVec3a);
-            const max = geometryCompressionUtils.decompressPosition(bounds.max, this._state.positionsDecodeMatrix, tempVec3b);
-
-            worldAABB[0] = min[0];
-            worldAABB[1] = min[1];
-            worldAABB[2] = min[2];
-            worldAABB[3] = max[0];
-            worldAABB[4] = max[1];
-            worldAABB[5] = max[2];
 
             numVerts = positionsCompressed.length / 3;
 
@@ -185,50 +173,7 @@ class PointsBatchingLayer {
             for (let i = 0, len = positions.length; i < len; i++) {
                 buffer.positions.push(positions[i]);
             }
-
-            if (meshMatrix) {
-
-                for (let i = positionsBase, len = positionsBase + lenPositions; i < len; i += 3) {
-
-                    tempVec4a[0] = buffer.positions[i + 0];
-                    tempVec4a[1] = buffer.positions[i + 1];
-                    tempVec4a[2] = buffer.positions[i + 2];
-
-                    math.transformPoint4(meshMatrix, tempVec4a, tempVec4b);
-
-                    buffer.positions[i + 0] = tempVec4b[0];
-                    buffer.positions[i + 1] = tempVec4b[1];
-                    buffer.positions[i + 2] = tempVec4b[2];
-
-                    math.expandAABB3Point3(this._modelAABB, tempVec4b);
-                        math.expandAABB3Point3(worldAABB, tempVec4b);
-                }
-
-            } else {
-
-                for (let i = positionsBase, len = positionsBase + lenPositions; i < len; i += 3) {
-
-                    tempVec4a[0] = buffer.positions[i + 0];
-                    tempVec4a[1] = buffer.positions[i + 1];
-                    tempVec4a[2] = buffer.positions[i + 2];
-
-                    math.expandAABB3Point3(this._modelAABB, tempVec4a);
-                        math.expandAABB3Point3(worldAABB, tempVec4a);
-                }
-            }
         }
-
-        if (this._state.origin) {
-            const origin = this._state.origin;
-            worldAABB[0] += origin[0];
-            worldAABB[1] += origin[1];
-            worldAABB[2] += origin[2];
-            worldAABB[3] += origin[0];
-            worldAABB[4] += origin[1];
-            worldAABB[5] += origin[2];
-        }
-
-        math.expandAABB3(this.aabb, worldAABB);
 
         if (colorsCompressed) {
             for (let i = 0, len = colorsCompressed.length; i < len; i++) {

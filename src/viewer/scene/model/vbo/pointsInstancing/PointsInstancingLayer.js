@@ -99,12 +99,6 @@ class PointsInstancingLayer {
         this._portions = [];
 
         this._finalized = false;
-
-        /**
-         * The axis-aligned World-space boundary of this InstancingLayer's positions.
-         * @type {*|Float64Array}
-         */
-        this.aabb = math.collapseAABB3();
     }
 
     /**
@@ -117,14 +111,12 @@ class PointsInstancingLayer {
      * @param cfg Portion params
      * @param cfg.meshMatrix Flat float 4x4 matrix.
      * @param [cfg.worldMatrix] Flat float 4x4 matrix.
-     * @param cfg.aabb Flat float AABB.
      * @param cfg.pickColor Quantized pick color
      * @returns {number} Portion ID.
      */
     createPortion(cfg) {
 
         const meshMatrix = cfg.meshMatrix;
-        const worldAABB = cfg.aabb;
         const pickColor = cfg.pickColor;
 
         if (this._finalized) {
@@ -158,31 +150,6 @@ class PointsInstancingLayer {
         this._pickColors.push(pickColor[1]);
         this._pickColors.push(pickColor[2]);
         this._pickColors.push(pickColor[3]);
-
-        // Expand AABB
-
-        math.collapseAABB3(worldAABB);
-        const obb = this._state.obb;
-        const lenPositions = obb.length;
-        for (let i = 0; i < lenPositions; i += 4) {
-            tempVec4a[0] = obb[i + 0];
-            tempVec4a[1] = obb[i + 1];
-            tempVec4a[2] = obb[i + 2];
-            math.transformPoint4(meshMatrix, tempVec4a, tempVec4b);
-            math.expandAABB3Point3(worldAABB, tempVec4b);
-        }
-
-        if (this._state.origin) {
-            const origin = this._state.origin;
-            worldAABB[0] += origin[0];
-            worldAABB[1] += origin[1];
-            worldAABB[2] += origin[2];
-            worldAABB[3] += origin[0];
-            worldAABB[4] += origin[1];
-            worldAABB[5] += origin[2];
-        }
-
-        math.expandAABB3(this.aabb, worldAABB);
 
         this._state.numInstances++;
 
