@@ -115,10 +115,6 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  * });
  * ````
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_showStoreyObjects"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/showStoreyObjects.gif"></a>
- *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_showStoreyObjects)]
- *
  * When using this option, at some point later you'll probably want to restore all Entitys to their original visibilities and
  * appearances.
  *
@@ -146,10 +142,6 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  *
  * The {@link StoreyViewsPlugin#gotoStoreyCamera} method positions the {@link Camera} for a plan view of
  * the {@link Entity}s within the given storey.
- *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_gotoStoreyCamera"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/gotoStoreyCamera.gif"></a>
- *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_gotoStoreyCamera)]
  *
  * Let's fly the {@link Camera} to a downward-looking orthographic view of the Entitys within our storey.
  *
@@ -197,10 +189,6 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  *
  * The {@link StoreyViewsPlugin#createStoreyMap} method creates a 2D orthographic plan image of the given storey.
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/navigation/#StoreyViewsPlugin_recipe1"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/createStoreyMap.png"></a>
- *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/navigation/#StoreyViewsPlugin_recipe1)]
- *
  * This method creates a {@link StoreyMap}, which provides the plan image as a Base64-encoded string.
  *
  * Let's create a 2D plan image of our building storey:
@@ -229,10 +217,6 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  * ## Picking Entities in StoreyMaps
  *
  * We can use {@link StoreyViewsPlugin#pickStoreyMap} to pick Entities in our building storey, using 2D coordinates from mouse or touch events on our {@link StoreyMap}'s 2D plan image.
- *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/navigation/#StoreyViewsPlugin_recipe1"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/recipe2.gif"></a>
- *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/navigation/#StoreyViewsPlugin_recipe1)]
  *
  * Let's programmatically pick the Entity at the given 2D pixel coordinates within our image:
  *
