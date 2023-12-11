@@ -52,7 +52,7 @@ export class TrianglesDataTextureSnapDepthRenderer {
         const textureState = state.textureState;
         const origin = dataTextureLayer._state.origin;
         const {position, rotationMatrix, rotationMatrixConjugate} = model;
-        const aabb = dataTextureLayer.aabb;
+        const aabb = model.aabb;
         const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
 
         const coordinateScaler = tempVec3a;
