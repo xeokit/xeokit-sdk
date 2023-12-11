@@ -55,6 +55,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lasloaderplugin">plugins/LASLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LASLoaderPlugin/LASDefaultDataSource.js~LASDefaultDataSource.html">LASDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html">LASLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lodcullingplugin">plugins/LODCullingPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html">LODCullingPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLDefaultDataSource.js~STLDefaultDataSource.html">STLDefaultDataSource</a></span></span></li>
@@ -64,7 +65,6 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-storeyviewsplugin">plugins/StoreyViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html">Storey</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyPlanObjectStates">IFCStoreyPlanObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-treeviewplugin">plugins/TreeViewPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/TreeViewNode.js~TreeViewNode.html">TreeViewNode</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-viewcullplugin">plugins/ViewCullPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin.html">ViewCullPlugin</a></span></span></li>
@@ -309,7 +309,34 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
 
         this._active = false;
 
+        this._currentDistanceMeasurement = null;
+
+        this._currentDistanceMeasurementInitState = {
+            wireVisible: null,
+            axisVisible: null,
+            xAxisVisible: null,
+            yaxisVisible: null,
+            zAxisVisible: null,
+            targetVisible: null,
+        }
+
+        this._initMarkerDiv()
+
+        this._onCameraControlHoverSnapOrSurface = null;
+        this._onCameraControlHoverSnapOrSurfaceOff = null;
+        this._onMouseDown = null;
+        this._onMouseUp = null;
+        this._onCanvasTouchStart = null;
+        this._onCanvasTouchEnd = null;
+        this._snapping = cfg.snapping !== false;
+        this._mouseState = MOUSE_FIRST_CLICK_EXPECTED;
+
+        this._attachPlugin(distanceMeasurementsPlugin, cfg);
+    }
+
+    _initMarkerDiv() {
         const markerDiv = document.createElement(&apos;div&apos;);
+        markerDiv.setAttribute(&apos;id&apos;, &apos;myMarkerDiv&apos;);
         const canvas = this.scene.canvas.canvas;
         canvas.parentNode.insertBefore(markerDiv, canvas);
         markerDiv.style.background = &quot;black&quot;;
@@ -323,28 +350,14 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
         markerDiv.style.pointerEvents = &quot;none&quot;;
 
         this._markerDiv = markerDiv;
+    }
 
-        this._currentDistanceMeasurement = null;
-
-        this._currentDistanceMeasurementInitState = {
-            wireVisible: null,
-            axisVisible: null,
-            xAxisVisible: null,
-            yaxisVisible: null,
-            zAxisVisible: null,
-            targetVisible: null,
+    _destroyMarkerDiv() {
+        if (this._markerDiv) {
+            const element = document.getElementById(&apos;myMarkerDiv&apos;)
+            element.parentNode.removeChild(element)
+            this._markerDiv = null
         }
-
-        this._onCameraControlHoverSnapOrSurface = null;
-        this._onCameraControlHoverSnapOrSurfaceOff = null;
-        this._onMouseDown = null;
-        this._onMouseUp = null;
-        this._onCanvasTouchStart = null;
-        this._onCanvasTouchEnd = null;
-        this._snapping = cfg.snapping !== false;
-        this._mouseState = MOUSE_FIRST_CLICK_EXPECTED;
-
-        this._attachPlugin(distanceMeasurementsPlugin, cfg);
     }
 
     _attachPlugin(distanceMeasurementsPlugin, cfg = {}) {
@@ -410,6 +423,10 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
 
         if (this._active) {
             return;
+        }
+
+        if (!this._markerDiv) {
+            this._initMarkerDiv()
         }
 
         this.fire(&quot;activated&quot;, true);
@@ -567,6 +584,9 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
         if (this.pointerLens) {
             this.pointerLens.visible = false;
         }
+        if (this._markerDiv) {
+            this._destroyMarkerDiv()
+        }
         this.reset();
         const canvas = this.scene.canvas.canvas;
         canvas.removeEventListener(&quot;mousedown&quot;, this._onMouseDown);
@@ -593,6 +613,10 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
         if (!this._active) {
             return;
         }
+
+        this._destroyMarkerDiv()
+        this._initMarkerDiv()
+
         if (this._currentDistanceMeasurement) {
             this.distanceMeasurementsPlugin.fire(&quot;measurementCancel&quot;, this._currentDistanceMeasurement);
             this._currentDistanceMeasurement.destroy();

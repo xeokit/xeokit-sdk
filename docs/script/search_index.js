@@ -342,12 +342,6 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/plugins/storeyviewsplugin/ifcstoreyplanobjectstates.js~ifcstoreyplanobjectstates",
-    "variable/index.html#static-variable-IFCStoreyPlanObjectStates",
-    "<span>IFCStoreyPlanObjectStates</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/StoreyViewsPlugin/IFCStoreyPlanObjectStates.js</span>",
-    "variable"
-  ],
-  [
     "@xeokit/xeokit-sdk/src/viewer/scene/imageplane/imageplane.js~imageplane",
     "class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html",
     "<span>ImagePlane</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/ImagePlane/ImagePlane.js</span>",
@@ -387,6 +381,12 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin",
     "class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html",
     "<span>LASLoaderPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin",
+    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html",
+    "<span>LODCullingPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/LODCullingPlugin/LODCullingPlugin.js</span>",
     "class"
   ],
   [
@@ -3522,6 +3522,72 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/plugins/lodcullingplugin/lodcullingplugin.js",
+    "file/src/plugins/LODCullingPlugin/LODCullingPlugin.js.html",
+    "src/plugins/LODCullingPlugin/LODCullingPlugin.js",
+    "file"
+  ],
+  [
+    "src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin#constructor",
+    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html#instance-constructor-constructor",
+    "src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin#enabled",
+    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html#instance-set-enabled",
+    "src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin#enabled",
+    "member"
+  ],
+  [
+    "src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin#enabled",
+    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html#instance-get-enabled",
+    "src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin#enabled",
+    "member"
+  ],
+  [
+    "src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin#neverculltypes",
+    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html#instance-set-neverCullTypes",
+    "src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin#neverCullTypes",
+    "member"
+  ],
+  [
+    "src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin#neverculltypes",
+    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html#instance-get-neverCullTypes",
+    "src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin#neverCullTypes",
+    "member"
+  ],
+  [
+    "src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin#targetfps",
+    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html#instance-set-targetFPS",
+    "src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin#targetFPS",
+    "member"
+  ],
+  [
+    "src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin#targetfps",
+    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html#instance-get-targetFPS",
+    "src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin#targetFPS",
+    "member"
+  ],
+  [
+    "src/plugins/lodcullingplugin/lodmanager.js",
+    "file/src/plugins/LODCullingPlugin/LODManager.js.html",
+    "src/plugins/LODCullingPlugin/LODManager.js",
+    "file"
+  ],
+  [
+    "src/plugins/lodcullingplugin/lodstate.js",
+    "file/src/plugins/LODCullingPlugin/LODState.js.html",
+    "src/plugins/LODCullingPlugin/LODState.js",
+    "file"
+  ],
+  [
+    "src/plugins/lodcullingplugin/index.js",
+    "file/src/plugins/LODCullingPlugin/index.js.html",
+    "src/plugins/LODCullingPlugin/index.js",
+    "file"
+  ],
+  [
     "src/plugins/navcubeplugin/cubetexturecanvas.js",
     "file/src/plugins/NavCubePlugin/CubeTextureCanvas.js.html",
     "src/plugins/NavCubePlugin/CubeTextureCanvas.js",
@@ -3894,12 +3960,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/plugins/storeyviewsplugin/ifcstoreyplanobjectstates.js",
-    "file/src/plugins/StoreyViewsPlugin/IFCStoreyPlanObjectStates.js.html",
-    "src/plugins/StoreyViewsPlugin/IFCStoreyPlanObjectStates.js",
-    "file"
-  ],
-  [
     "src/plugins/storeyviewsplugin/storey.js",
     "file/src/plugins/StoreyViewsPlugin/Storey.js.html",
     "src/plugins/StoreyViewsPlugin/Storey.js",
@@ -3909,6 +3969,12 @@ window.esdocSearchIndex = [
     "src/plugins/storeyviewsplugin/storey.js~storey#aabb",
     "class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html#instance-member-aabb",
     "src/plugins/StoreyViewsPlugin/Storey.js~Storey#aabb",
+    "member"
+  ],
+  [
+    "src/plugins/storeyviewsplugin/storey.js~storey#modelaabb",
+    "class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html#instance-member-modelAABB",
+    "src/plugins/StoreyViewsPlugin/Storey.js~Storey#modelAABB",
     "member"
   ],
   [
@@ -3927,6 +3993,12 @@ window.esdocSearchIndex = [
     "src/plugins/storeyviewsplugin/storey.js~storey#plugin",
     "class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html#instance-member-plugin",
     "src/plugins/StoreyViewsPlugin/Storey.js~Storey#plugin",
+    "member"
+  ],
+  [
+    "src/plugins/storeyviewsplugin/storey.js~storey#storeyaabb",
+    "class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html#instance-member-storeyAABB",
+    "src/plugins/StoreyViewsPlugin/Storey.js~Storey#storeyAABB",
     "member"
   ],
   [
@@ -3996,6 +4068,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#fitstoreymaps",
+    "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-get-fitStoreyMaps",
+    "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#fitStoreyMaps",
+    "member"
+  ],
+  [
     "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#getstoreycontainingworldpos",
     "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-getStoreyContainingWorldPos",
     "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#getStoreyContainingWorldPos",
@@ -4014,18 +4092,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#objectstates",
-    "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-set-objectStates",
-    "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#objectStates",
-    "member"
-  ],
-  [
-    "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#objectstates",
-    "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-get-objectStates",
-    "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#objectStates",
-    "member"
-  ],
-  [
     "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#pickstoreymap",
     "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-pickStoreyMap",
     "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#pickStoreyMap",
@@ -4035,6 +4101,12 @@ window.esdocSearchIndex = [
     "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#showstoreyobjects",
     "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-showStoreyObjects",
     "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#showStoreyObjects",
+    "method"
+  ],
+  [
+    "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#storeymaptoworldpos",
+    "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-storeyMapToWorldPos",
+    "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#storeyMapToWorldPos",
     "method"
   ],
   [
@@ -15153,6 +15225,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/webgl/renderer.js",
     "file/src/viewer/scene/webgl/Renderer.js.html",
     "src/viewer/scene/webgl/Renderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/webgl/renderer2.js",
+    "file/src/viewer/scene/webgl/Renderer2.js.html",
+    "src/viewer/scene/webgl/Renderer2.js",
     "file"
   ],
   [

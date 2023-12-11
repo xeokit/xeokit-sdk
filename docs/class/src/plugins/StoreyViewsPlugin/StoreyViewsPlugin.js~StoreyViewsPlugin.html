@@ -55,6 +55,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lasloaderplugin">plugins/LASLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LASLoaderPlugin/LASDefaultDataSource.js~LASDefaultDataSource.html">LASDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html">LASLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lodcullingplugin">plugins/LODCullingPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html">LODCullingPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLDefaultDataSource.js~STLDefaultDataSource.html">STLDefaultDataSource</a></span></span></li>
@@ -64,7 +65,6 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-storeyviewsplugin">plugins/StoreyViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html">Storey</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCStoreyPlanObjectStates">IFCStoreyPlanObjectStates</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-treeviewplugin">plugins/TreeViewPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/TreeViewNode.js~TreeViewNode.html">TreeViewNode</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-viewcullplugin">plugins/ViewCullPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin.html">ViewCullPlugin</a></span></span></li>
@@ -249,13 +249,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {StoreyViewsPlugin} from &apos;<span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber270">@xeokit/xeokit-sdk/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {StoreyViewsPlugin} from &apos;<span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber233">@xeokit/xeokit-sdk/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber270">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber233">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -342,14 +342,11 @@ const aabb     = storey.aabb;     // Axis-aligned 3D World-space boundary of the
     hideOthers: true
 });</code>
 </code></pre>
-<p>Showing only the storey Entitys, applying custom appearances configured on <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-set-objectStates">StoreyViewsPlugin#objectStates</a></span>:</p>
+<p>Showing only the storey Entitys:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">storeyViewsPlugin.showStoreyObjects(&quot;2SWZMQPyD9pfT9q87pgXa1&quot;, {
-    hideOthers: true,
-    useObjectStates: true
+    hideOthers: true
 });</code>
 </code></pre>
-<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_showStoreyObjects"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/showStoreyObjects.gif"></a></p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_showStoreyObjects">Run this example</a>]</p>
 <p>When using this option, at some point later you&apos;ll probably want to restore all Entitys to their original visibilities and
 appearances.</p>
 <p>To do that, save their visibility and appearance states in an <span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span> beforehand, from
@@ -360,11 +357,9 @@ which you can restore them later:</p>
 
 objectsMemento.saveObjects(viewer.scene);
 
-// Show storey view Entitys, with custom appearances as configured for IFC types
+// Show storey view Entitys
 
-storeyViewsPlugin.showStoreyObjects(&quot;2SWZMQPyD9pfT9q87pgXa1&quot;, {
-    useObjectStates: true // &lt;&lt;--------- Apply custom appearances
-});
+storeyViewsPlugin.showStoreyObjects(&quot;2SWZMQPyD9pfT9q87pgXa1&quot;);
 
 //...
 
@@ -373,8 +368,6 @@ objectsMemento.restoreObjects(viewer.scene);</code>
 </code></pre>
 <h2 id="arranging-the-camera-for-storey-plan-views">Arranging the Camera for Storey Plan Views</h2><p>The <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-gotoStoreyCamera">StoreyViewsPlugin#gotoStoreyCamera</a></span> method positions the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> for a plan view of
 the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s within the given storey.</p>
-<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_gotoStoreyCamera"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/gotoStoreyCamera.gif"></a></p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_gotoStoreyCamera">Run this example</a>]</p>
 <p>Let&apos;s fly the <span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span> to a downward-looking orthographic view of the Entitys within our storey.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">storeyViewsPlugin.gotoStoreyCamera(&quot;2SWZMQPyD9pfT9q87pgXa1&quot;, {
     projection: &quot;ortho&quot;, // Orthographic projection
@@ -411,8 +404,6 @@ storeyViewsPlugin.gotoStoreyCamera(&quot;2SWZMQPyD9pfT9q87pgXa1&quot;, {
 cameraMemento.restoreCamera(viewer.scene);</code>
 </code></pre>
 <h2 id="creating-storeymaps">Creating StoreyMaps</h2><p>The <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-createStoreyMap">StoreyViewsPlugin#createStoreyMap</a></span> method creates a 2D orthographic plan image of the given storey.</p>
-<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_createStoreyMap"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/createStoreyMap.png"></a></p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_createStoreyMap">Run this example</a>]</p>
 <p>This method creates a <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span>, which provides the plan image as a Base64-encoded string.</p>
 <p>Let&apos;s create a 2D plan image of our building storey:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const storeyMap = storeyViewsPlugin.createStoreyMap(&quot;2SWZMQPyD9pfT9q87pgXa1&quot;, {
@@ -425,27 +416,13 @@ const width     = storeyMap.width; // 300
 const height    = storeyMap.height; // Automatically derived from width
 const format    = storeyMap.format; // &quot;png&quot;</code>
 </code></pre>
-<p>As with <code>showStoreyEntitys</code>,  We also have the option to customize the appearance of the Entitys in our plan
-images according to their IFC types, using the lookup table configured on <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-set-objectStates">StoreyViewsPlugin#objectStates</a></span>.</p>
-<p>For example, we usually want to show only element types like <code>IfcWall</code>,  <code>IfcDoor</code> and
-<code>IfcFloor</code> in our plan images.</p>
-<p>Let&apos;s create another StoreyMap, this time applying the custom appearances:</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">const storeyMap = storeyViewsPlugin.createStoreyMap(&quot;2SWZMQPyD9pfT9q87pgXa1&quot;, {
-    width: 300,
-    format: &quot;png&quot;,
-    useObjectStates: true // &lt;&lt;--------- Apply custom appearances
-});</code>
-</code></pre>
 <p>We can also specify a <code>height</code> for the plan image, as an alternative to <code>width</code>:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint"> const storeyMap = storeyViewsPlugin.createStoreyMap(&quot;2SWZMQPyD9pfT9q87pgXa1&quot;, {
      height: 200,
-     format: &quot;png&quot;,
-     useObjectStates: true
+     format: &quot;png&quot;
 });</code>
 </code></pre>
 <h2 id="picking-entities-in-storeymaps">Picking Entities in StoreyMaps</h2><p>We can use <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-pickStoreyMap">StoreyViewsPlugin#pickStoreyMap</a></span> to pick Entities in our building storey, using 2D coordinates from mouse or touch events on our <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span>&apos;s 2D plan image.</p>
-<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/recipe2.gif"></a></p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2">Run this example</a>]</p>
 <p>Let&apos;s programmatically pick the Entity at the given 2D pixel coordinates within our image:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const mouseCoords = [65, 120]; // Mouse coords within the image extents
 
@@ -512,6 +489,35 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <td>
       <span class="access" data-ice="access">public</span>
       
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-get-fitStoreyMaps">fitStoreyMaps</a></span></span><span class="code" data-ice="signature">: <span>*</span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>When true, the elements of each floor map image will be proportionally resized to encompass the entire image.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
       
       
       <span class="override" data-ice="override"></span>
@@ -529,64 +535,6 @@ if (pickResult &amp;&amp; pickResult.entity) {
         
         
         <div data-ice="description"><p>A set of <span><a href="class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html">Storey</a></span>s for each <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span>.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-set-objectStates">objectStates</a></span></span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets map of visual states for the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s as rendered within each <span><a href="class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html">Storey</a></span>.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-get-objectStates">objectStates</a></span></span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Gets map of visual states for the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s as rendered within each <span><a href="class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html">Storey</a></span>.</p>
 </div>
       </div>
     </td>
@@ -798,6 +746,34 @@ if (pickResult &amp;&amp; pickResult.entity) {
         
         <div data-ice="description"><p>Shows the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s within the given storey.</p>
 </div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-storeyMapToWorldPos">storeyMapToWorldPos</a></span></span><span class="code" data-ice="signature">(storeyMap: <span>*</span>, imagePos: <span>*</span>, options: {}): <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
       </div>
     </td>
     <td>
@@ -1239,7 +1215,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber280">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber243">source</a></span></span>
     </span>
   </h3>
 
@@ -1282,10 +1258,11 @@ if (pickResult &amp;&amp; pickResult.entity) {
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.objectStates</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Map of visual states for the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s as rendered within each <span><a href="class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html">Storey</a></span>.  Default value is <span><a href="variable/index.html#static-variable-IFCStoreyPlanObjectStates">IFCStoreyPlanObjectStates</a></span>.</p>
+      <td data-ice="name" class="code" data-depth="1">cfg.fitStoreyMaps</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>If enabled, the elements of each floor map image will be proportionally resized to encompass the entire image. This leads to varying scales among different floor map images. If disabled, each floor map image will display the model&apos;s extents, ensuring a consistent scale across all images.</p>
 </td>
     </tr>
 </tbody>
@@ -1314,6 +1291,63 @@ if (pickResult &amp;&amp; pickResult.entity) {
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-fitStoreyMaps">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">fitStoreyMaps</span><span class="code" data-ice="signature">: <span>*</span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber333">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>When true, the elements of each floor map image will be proportionally resized to encompass the entire image. This leads to varying scales among different
+floor map images. If false, each floor map image will display the model&apos;s extents, ensuring a consistent scale across all images.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span>*</span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-member-modelStoreys">
     <span class="access" data-ice="access">public</span>
     
@@ -1325,7 +1359,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber305">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber268">source</a></span></span>
     </span>
   </h3>
 
@@ -1334,96 +1368,6 @@ if (pickResult &amp;&amp; pickResult.entity) {
   
   <div data-ice="description"><p>A set of <span><a href="class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html">Storey</a></span>s for each <span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span>.</p>
 <p>These are created and destroyed automatically as models are loaded and destroyed.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-objectStates">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">objectStates</span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber372">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets map of visual states for the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s as rendered within each <span><a href="class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html">Storey</a></span>.</p>
-<p>Default value is <span><a href="variable/index.html#static-variable-IFCStoreyPlanObjectStates">IFCStoreyPlanObjectStates</a></span>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-objectStates">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">objectStates</span><span class="code" data-ice="signature">: {String: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>}</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber383">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Gets map of visual states for the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s as rendered within each <span><a href="class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html">Storey</a></span>.</p>
-<p>Default value is <span><a href="variable/index.html#static-variable-IFCStoreyPlanObjectStates">IFCStoreyPlanObjectStates</a></span>.</p>
 </div>
 
   
@@ -1460,7 +1404,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber296">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber259">source</a></span></span>
     </span>
   </h3>
 
@@ -1509,7 +1453,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber576">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber505">source</a></span></span>
     </span>
   </h3>
 
@@ -1614,7 +1558,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber819">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber767">source</a></span></span>
     </span>
   </h3>
 
@@ -1658,7 +1602,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber727">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber675">source</a></span></span>
     </span>
   </h3>
 
@@ -1733,7 +1677,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber397">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber347">source</a></span></span>
     </span>
   </h3>
 
@@ -1816,7 +1760,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber672">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber596">source</a></span></span>
     </span>
   </h3>
 
@@ -1912,7 +1856,7 @@ if (pickResult &amp;&amp; pickResult.entity) {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber481">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber427">source</a></span></span>
     </span>
   </h3>
 
@@ -1921,8 +1865,6 @@ if (pickResult &amp;&amp; pickResult.entity) {
   
   <div data-ice="description"><p>Shows the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s within the given storey.</p>
 <p>Optionally hides all other Entitys.</p>
-<p>Optionally sets the visual appearance of each of the Entitys according to its IFC type. The appearance of
-IFC types in plan views is configured by <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-set-objectStates">StoreyViewsPlugin#objectStates</a></span>.</p>
 <p>See also: <span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span>, which saves and restores a memento of the visual state
 of the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>&apos;s that represent objects within a <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span>.</p>
 </div>
@@ -1959,20 +1901,96 @@ of the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></
       <td data-ice="description"><p>When <code>true</code>, hide all other <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span>s.</p>
 </td>
     </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">options.useObjectStates</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: false</li></ul></td>
-      <td data-ice="description"><p>When <code>true</code>, apply the custom visibilities and appearances configured for IFC types in <span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-set-objectStates">StoreyViewsPlugin#objectStates</a></span>.</p>
-</td>
-    </tr>
 </tbody>
   </table>
 </div>
 </div>
 
   
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-storeyMapToWorldPos">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">storeyMapToWorldPos</span><span class="code" data-ice="signature">(storeyMap: <span>*</span>, imagePos: <span>*</span>, options: {}): <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber637">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">storeyMap</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">imagePos</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">options</td>
+      <td data-ice="type" class="code">{}</td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: {}</li></ul></td>
+      <td data-ice="description"></td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span>*</span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -2001,7 +2019,7 @@ of the <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber547">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber476">source</a></span></span>
     </span>
   </h3>
 
@@ -2078,7 +2096,7 @@ an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber794">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber742">source</a></span></span>
     </span>
   </h3>
 
@@ -2153,7 +2171,7 @@ an <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber747">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js.html#lineNumber695">source</a></span></span>
     </span>
   </h3>
 
