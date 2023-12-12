@@ -9,10 +9,6 @@ import {getInstancingRenderers} from "./LinesInstancingRenderers.js";
 const tempUint8Vec4 = new Uint8Array(4);
 const tempFloat32 = new Float32Array(1);
 
-const tempVec4a = math.vec4([0, 0, 0, 1]);
-const tempVec4b = math.vec4([0, 0, 0, 1]);
-const tempVec4c = math.vec4([0, 0, 0, 1]);
-
 const tempVec3fa = new Float32Array(3);
 
 const tempFloat32Vec4 = new Float32Array(4);

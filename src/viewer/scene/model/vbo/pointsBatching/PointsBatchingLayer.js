@@ -8,13 +8,6 @@ import {getPointsBatchingRenderers} from "./PointsBatchingRenderers.js";
 import {PointsBatchingBuffer} from "./PointsBatchingBuffer.js";
 import {quantizePositions} from "../../compression.js";
 
-const tempVec3a = math.vec4();
-const tempVec3b = math.vec4();
-const tempVec4a = math.vec4([0, 0, 0, 1]);
-const tempVec4b = math.vec4([0, 0, 0, 1]);
-const tempVec4c = math.vec4([0, 0, 0, 1]);
-const tempOBB3 = math.OBB3();
-
 /**
  * @private
  */

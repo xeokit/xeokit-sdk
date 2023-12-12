@@ -8,11 +8,6 @@ import {getBatchingRenderers} from "./LinesBatchingRenderers.js";
 import {LinesBatchingBuffer} from "./LinesBatchingBuffer.js";
 import {quantizePositions} from "../../compression.js";
 
-const tempVec4a = math.vec4([0, 0, 0, 1]);
-const tempVec4b = math.vec4([0, 0, 0, 1]);
-const tempVec4c = math.vec4([0, 0, 0, 1]);
-const tempOBB3 = math.OBB3();
-
 /**
  * @private
  */

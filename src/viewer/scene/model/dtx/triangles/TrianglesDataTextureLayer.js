@@ -35,14 +35,9 @@ const INDICES_EDGE_INDICES_ALIGNEMENT_SIZE = 8;
  */
 const MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE = 10;
 
-const tempVec4a = math.vec4([0, 0, 0, 1]);
-const tempVec4b = math.vec4([0, 0, 0, 1]);
-const tempVec4c = math.vec4([0, 0, 0, 1]);
 const tempMat4a = new Float32Array(16);
 const tempUint8Array4 = new Uint8Array(4);
 const tempFloat32Array3 = new Float32Array(3);
-
-const tempAABB3b = math.AABB3();
 
 let numLayers = 0;
 

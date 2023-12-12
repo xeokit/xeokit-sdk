@@ -13,9 +13,6 @@ import {getSnapBatchingRenderers} from "../snapBatching/SnapBatchingRenderers.js
 const tempMat4 = math.mat4();
 const tempMat4b = math.mat4();
 const tempVec4a = math.vec4([0, 0, 0, 1]);
-const tempVec4b = math.vec4([0, 0, 0, 1]);
-const tempVec4c = math.vec4([0, 0, 0, 1]);
-const tempOBB3 = math.OBB3();
 
 const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();

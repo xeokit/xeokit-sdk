@@ -7,11 +7,8 @@ import {ArrayBuf} from "../../../webgl/ArrayBuf.js";
 import {getInstancingRenderers} from "./TrianglesInstancingRenderers.js";
 import {getSnapInstancingRenderers} from "../snapInstancing/SnapInstancingRenderers.js";
 
-const tempUint8Vec4 = new Uint8Array(4);
 const tempFloat32 = new Float32Array(1);
 const tempVec4a = math.vec4([0, 0, 0, 1]);
-const tempVec4b = math.vec4([0, 0, 0, 1]);
-const tempVec4c = math.vec4([0, 0, 0, 1]);
 const tempVec3fa = new Float32Array(3);
 
 const tempVec3a = math.vec3();

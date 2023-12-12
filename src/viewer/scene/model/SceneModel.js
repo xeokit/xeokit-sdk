@@ -39,7 +39,6 @@ import {geometryCompressionUtils} from "../math/geometryCompressionUtils.js";
 import {SceneModelTransform} from "./SceneModelTransform";
 
 const tempVec3a = math.vec3();
-const tempMat4 = math.mat4();
 
 const tempOBB3 = math.OBB3();
 
