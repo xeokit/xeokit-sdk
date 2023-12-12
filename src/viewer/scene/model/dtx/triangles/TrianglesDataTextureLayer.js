@@ -215,16 +215,6 @@ export class TrianglesDataTextureLayer {
             //math.expandAABB3(portionAABB, subPortionAABB);
             subPortionIds.push(subPortionId);
         });
-        // const origin = this._state.origin;
-        // if (origin[0] !== 0 || origin[1] !== 0 || origin[2] !== 0) {
-        //     portionAABB[0] += origin[0];
-        //     portionAABB[1] += origin[1];
-        //     portionAABB[2] += origin[2];
-        //     portionAABB[3] += origin[0];
-        //     portionAABB[4] += origin[1];
-        //     portionAABB[5] += origin[2];
-        // }
-        // math.expandAABB3(this.aabb, portionAABB);
         const portionId = this._portionToSubPortionsMap.length;
         this._portionToSubPortionsMap.push(subPortionIds);
         this.model.numPortions++;
@@ -322,10 +312,6 @@ export class TrianglesDataTextureLayer {
 
         dataTextureRamStats.numberOfGeometries++;
 
-        // const aabb = math.collapseAABB3();
-        // math.expandAABB3Points3(aabb, bucket.positionsCompressed);
-        // geometryCompressionUtils.decompressAABB(aabb, portionCfg.positionsDecodeMatrix);
-
         const bucketGeometry = {
             vertexBase,
             numVertices,
@@ -333,7 +319,6 @@ export class TrianglesDataTextureLayer {
             numEdges,
             indicesBase,
             edgeIndicesBase,
-            // aabb,
             obb: null // Lazy-created in _createSubPortion if needed
         };
 
@@ -354,26 +339,6 @@ export class TrianglesDataTextureLayer {
 
         buffer.perObjectPositionsDecodeMatrices.push(portionCfg.positionsDecodeMatrix);
         buffer.perObjectInstancePositioningMatrices.push(meshMatrix || DEFAULT_MATRIX);
-
-        // if (meshMatrix) { // NB: SceneModel world matrix is used in shaders and SceneModelMesh.aabb
-        //
-        //     if (!bucketGeometry.obb) {
-        //         bucketGeometry.obb = math.AABB3ToOBB3(bucketGeometry.aabb);
-        //     }
-        //     const geometryOBB = bucketGeometry.obb;
-        //     for (let i = 0, len = geometryOBB.length; i < len; i += 4) {
-        //         tempVec4a[0] = geometryOBB[i + 0];
-        //         tempVec4a[1] = geometryOBB[i + 1];
-        //         tempVec4a[2] = geometryOBB[i + 2];
-        //         tempVec4a[3] = 1.0;
-        //         if (meshMatrix) {
-        //             math.transformPoint4(meshMatrix, tempVec4a, tempVec4b);
-        //         }
-        //         math.expandAABB3Point3(subPortionAABB, tempVec4b);
-        //     }
-        // } else {
-        //     math.expandAABB3(subPortionAABB, bucketGeometry.aabb);
-        // }
 
         buffer.perObjectSolid.push(!!portionCfg.solid);
 
@@ -502,13 +467,6 @@ export class TrianglesDataTextureLayer {
             = this._dataTextureGenerator.generateTextureForPositionsDecodeMatrices(
             gl,
             buffer.perObjectPositionsDecodeMatrices);
-
-        // const positionsCompressed = new Uint16Array(buffer.lenPositionsCompressed);
-        // for (let i = 0, j = 0, len = buffer.positionsCompressed.length; i < len; i++) {
-        //     const pc = buffer.positionsCompressed[i];
-        //     positionsCompressed.set(pc, j);
-        //     j += pc.length;
-        // }
 
         textureState.texturePerVertexIdCoordinates = this._dataTextureGenerator.generateTextureForPositions(
             gl,
@@ -758,7 +716,6 @@ export class TrianglesDataTextureLayer {
      * flags/flags2 set since the previous invocation of `_beginDeferredFlags`.
      */
     _uploadDeferredFlags() {
-        console.info("_uploadDeferredFlags")
         this._deferredSetFlagsActive = false;
         if (!this._deferredSetFlagsDirty) {
             return;
