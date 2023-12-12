@@ -52,7 +52,7 @@ export class TrianglesDataTextureSnapDepthRenderer {
         const textureState = state.textureState;
         const origin = dataTextureLayer._state.origin;
         const {position, rotationMatrix, rotationMatrixConjugate} = model;
-        const aabb = model.aabb;
+        const aabb = model.aabb; // TODO: Should be per-layer for best RTC accuracy
         const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
 
         const coordinateScaler = tempVec3a;

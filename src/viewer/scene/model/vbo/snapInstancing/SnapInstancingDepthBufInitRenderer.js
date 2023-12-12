@@ -40,7 +40,7 @@ class SnapInstancingDepthBufInitRenderer extends VBOSceneModelRenderer {
         const state = instancingLayer._state;
         const origin = instancingLayer._state.origin;
         const {position, rotationMatrix, rotationMatrixConjugate} = model;
-        const aabb = model.aabb;
+        const aabb = model.aabb; // TODO: Should be per-layer for best RTC accuracy
         const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
 
         if (this._vaoCache.has(instancingLayer)) {
