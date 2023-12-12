@@ -191,6 +191,7 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
         let pointerDownCanvasX;
         let pointerDownCanvasY;
         const clickTolerance = 20;
+        let originEntity = null;
 
         this._mouseState = MOUSE_FIRST_CLICK_EXPECTED;
 
@@ -225,6 +226,7 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
                         this._markerDiv.style.background = "pink";
                         this._markerDiv.style.border = "2px solid red";
                     }
+                    originEntity = event.entity;
                 } else {
                     this._markerDiv.style.marginLeft = `-10000px`;
                     this._markerDiv.style.marginTop = `-10000px`;
@@ -238,6 +240,7 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
                     this._currentDistanceMeasurement.zAxisVisible = this._currentDistanceMeasurementInitState.zAxisVisible && this.distanceMeasurementsPlugin.defaultZAxisVisible;
                     this._currentDistanceMeasurement.targetVisible = this._currentDistanceMeasurementInitState.targetVisible;
                     this._currentDistanceMeasurement.target.worldPos = pointerWorldPos.slice();
+                    this._currentDistanceMeasurement.target.entity = event.entity;
                     this._markerDiv.style.marginLeft = `-10000px`;
                     this._markerDiv.style.marginTop = `-10000px`;
                 }
@@ -266,10 +269,12 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
                     this._currentDistanceMeasurement.clickable = true;
                     this.distanceMeasurementsPlugin.fire("measurementEnd", this._currentDistanceMeasurement);
                     this._currentDistanceMeasurement = null;
+                    originEntity = null;
                 } else {
                     this._currentDistanceMeasurement.destroy();
                     this.distanceMeasurementsPlugin.fire("measurementCancel", this._currentDistanceMeasurement);
                     this._currentDistanceMeasurement = null;
+                    originEntity = null;
                 }
             } else {
                 if (mouseHovering) {
@@ -290,6 +295,8 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
                     this._currentDistanceMeasurementInitState.wireVisible = this._currentDistanceMeasurement.wireVisible;
                     this._currentDistanceMeasurementInitState.targetVisible = this._currentDistanceMeasurement.targetVisible;
                     this._currentDistanceMeasurement.clickable = false;
+                    this._currentDistanceMeasurement.origin.entity = originEntity;
+                    originEntity = null;
                     this.fire("measurementStart", this._currentDistanceMeasurement);
                 }
             }
