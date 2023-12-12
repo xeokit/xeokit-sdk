@@ -904,7 +904,7 @@ export class TrianglesDataTextureLayer {
 
         // Pick
 
-        let f3 = (visible && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
+        let f3 = (visible && (!culled) && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
         const textureState = this._dataTextureState;
         const gl = this.model.scene.canvas.gl;
         tempUint8Array4 [0] = f0;
