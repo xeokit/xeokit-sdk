@@ -7,6 +7,9 @@ import {TrianglesDataTextureBuffer} from "./TrianglesDataTextureBuffer.js";
 import {DataTextureState} from "./DataTextureState.js"
 import {DataTextureGenerator} from "./DataTextureGenerator.js";
 import {dataTextureRamStats} from "./dataTextureRamStats.js";
+import {Configs} from "../../../../Configs";
+
+const configs = new Configs();
 
 /**
  * 12-bits allowed for object ids.
@@ -18,7 +21,7 @@ const MAX_NUMBER_OF_OBJECTS_IN_LAYER = (1 << 16);
  * 4096 is max data texture height.
  * Limits the aggregated geometry texture height in the layer.
  */
-const MAX_DATA_TEXTURE_HEIGHT = (1 << 12);
+const MAX_DATA_TEXTURE_HEIGHT = configs.maxDataTextureHeight;
 
 /**
  * Align `indices` and `edgeIndices` memory layout to 8 elements.
