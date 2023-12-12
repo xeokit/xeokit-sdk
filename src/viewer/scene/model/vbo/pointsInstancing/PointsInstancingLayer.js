@@ -97,8 +97,22 @@ class PointsInstancingLayer {
         this._modelMatrixCol2 = [];
 
         this._portions = [];
+        this._meshes = [];
+        this._aabb = math.collapseAABB3();
+        this.aabbDirty = true;
 
         this._finalized = false;
+    }
+
+    get aabb() {
+        if (this.aabbDirty) {
+            math.collapseAABB3(this._aabb);
+            for (let i = 0, len = this._meshes.length; i < len; i++) {
+                math.expandAABB3(this._aabb, this._meshes[i].aabb);
+            }
+            this.aabbDirty = false;
+        }
+        return this._aabb;
     }
 
     /**
@@ -108,13 +122,14 @@ class PointsInstancingLayer {
      *
      * Gives the portion the specified color and matrix.
      *
+     * @param mesh The SceneModelMesh that owns the portion
      * @param cfg Portion params
      * @param cfg.meshMatrix Flat float 4x4 matrix.
      * @param [cfg.worldMatrix] Flat float 4x4 matrix.
      * @param cfg.pickColor Quantized pick color
      * @returns {number} Portion ID.
      */
-    createPortion(cfg) {
+    createPortion(mesh, cfg) {
 
         const meshMatrix = cfg.meshMatrix;
         const pickColor = cfg.pickColor;
@@ -158,7 +173,7 @@ class PointsInstancingLayer {
 
         this._numPortions++;
         this.model.numPortions++;
-
+        this._meshes.push(mesh);
         return portionId;
     }
 

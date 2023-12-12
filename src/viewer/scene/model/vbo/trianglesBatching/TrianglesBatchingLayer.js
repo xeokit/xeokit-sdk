@@ -106,8 +106,11 @@ class TrianglesBatchingLayer {
 
         this._modelAABB = math.collapseAABB3(); // Model-space AABB
         this._portions = [];
-
+        this._meshes = [];
         this._numVerts = 0;
+
+        this._aabb = math.collapseAABB3();
+        this.aabbDirty = true;
 
         this._finalized = false;
 
@@ -139,6 +142,16 @@ class TrianglesBatchingLayer {
         this.solid = !!cfg.solid;
     }
 
+    get aabb() {
+        if (this.aabbDirty) {
+            math.collapseAABB3(this._aabb);
+            for (let i = 0, len = this._meshes.length; i < len; i++) {
+                math.expandAABB3(this._aabb, this._meshes[i].aabb);
+            }
+            this.aabbDirty = false;
+        }
+    }
+
     /**
      * Tests if there is room for another portion in this TrianglesBatchingLayer.
      *
@@ -158,6 +171,7 @@ class TrianglesBatchingLayer {
      *
      * Gives the portion the specified geometry, color and matrix.
      *
+     * @param mesh The SceneModelMesh that owns the portion
      * @param cfg.positions Flat float Local-space positions array.
      * @param cfg.positionsCompressed Flat quantized positions array - decompressed with TrianglesBatchingLayer positionsDecodeMatrix
      * @param [cfg.normals] Flat float normals array.
@@ -176,7 +190,7 @@ class TrianglesBatchingLayer {
      * @param cfg.pickColor Quantized pick color
      * @returns {number} Portion ID
      */
-    createPortion(cfg) {
+    createPortion(mesh, cfg) {
 
         if (this._finalized) {
             throw "Already finalized";
@@ -215,8 +229,7 @@ class TrianglesBatchingLayer {
             for (let i = 0, len = positionsCompressed.length; i < len; i++) {
                 buffer.positions.push(positionsCompressed[i]);
             }
-        }
-        else {
+        } else {
             if (!positions) {
                 throw "positions expected";
             }
@@ -333,13 +346,10 @@ class TrianglesBatchingLayer {
         }
 
         this._portions.push(portion);
-
         this._numPortions++;
-
         this.model.numPortions++;
-
         this._numVerts += portion.numVerts;
-
+        this._meshes.push(mesh);
         return portionId;
     }
 

@@ -2,7 +2,6 @@ import {ENTITY_FLAGS} from '../../ENTITY_FLAGS.js';
 import {RENDER_PASSES} from '../../RENDER_PASSES.js';
 import {math} from "../../../math/math.js";
 import {RenderState} from "../../../webgl/RenderState.js";
-import {geometryCompressionUtils} from "../../../math/geometryCompressionUtils.js";
 import {getDataTextureRenderers} from "./TrianglesDataTextureRenderers.js";
 import {TrianglesDataTextureBuffer} from "./TrianglesDataTextureBuffer.js";
 import {DataTextureState} from "./DataTextureState.js"
@@ -110,10 +109,13 @@ export class TrianglesDataTextureLayer {
 
         this._bucketGeometries = {};
 
+        this._meshes = [];
+
         /**
          * The axis-aligned World-space boundary of this TrianglesDataTextureLayer's positions.
          */
-        this.aabb = math.collapseAABB3();
+        this._aabb = math.collapseAABB3();
+        this.aabbDirty = true;
 
         /**
          * The number of updates in the current frame;
@@ -121,6 +123,17 @@ export class TrianglesDataTextureLayer {
         this._numUpdatesInFrame = 0;
 
         this._finalized = false;
+    }
+
+    get aabb() {
+        if (this.aabbDirty) {
+            math.collapseAABB3(this._aabb);
+            for (let i = 0, len = this._meshes.length; i < len; i++) {
+                math.expandAABB3(this._aabb, this._meshes[i].aabb);
+            }
+            this.aabbDirty = false;
+        }
+        return this._aabb;
     }
 
     /**
@@ -167,6 +180,7 @@ export class TrianglesDataTextureLayer {
      *
      * Gives the portion the specified geometry, color and matrix.
      *
+     * @param mesh The SceneModelMesh that owns the portion
      * @param portionCfg.positionsCompressed Flat float Local-space positionsCompressed array.
      * @param [portionCfg.normals] Flat float normals array.
      * @param [portionCfg.colors] Flat float colors array.
@@ -181,12 +195,12 @@ export class TrianglesDataTextureLayer {
      * @param portionCfg.pickColor Quantized pick color
      * @returns {number} Portion ID
      */
-    createPortion(portionCfg) {
+    createPortion(mesh, portionCfg) {
         if (this._finalized) {
             throw "Already finalized";
         }
         const subPortionIds = [];
-     //   const portionAABB = portionCfg.worldAABB;
+        //   const portionAABB = portionCfg.worldAABB;
         portionCfg.buckets.forEach((bucket, bucketIndex) => {
             const bucketGeometryId = portionCfg.geometryId !== undefined && portionCfg.geometryId !== null
                 ? `${portionCfg.geometryId}#${bucketIndex}`
@@ -196,7 +210,7 @@ export class TrianglesDataTextureLayer {
                 bucketGeometry = this._createBucketGeometry(portionCfg, bucket);
                 this._bucketGeometries[bucketGeometryId] = bucketGeometry;
             }
-          //  const subPortionAABB = math.collapseAABB3(tempAABB3b);
+            //  const subPortionAABB = math.collapseAABB3(tempAABB3b);
             const subPortionId = this._createSubPortion(portionCfg, bucketGeometry, bucket);
             //math.expandAABB3(portionAABB, subPortionAABB);
             subPortionIds.push(subPortionId);
@@ -214,6 +228,7 @@ export class TrianglesDataTextureLayer {
         const portionId = this._portionToSubPortionsMap.length;
         this._portionToSubPortionsMap.push(subPortionIds);
         this.model.numPortions++;
+        this._meshes.push(mesh);
         return portionId;
     }
 
@@ -318,7 +333,7 @@ export class TrianglesDataTextureLayer {
             numEdges,
             indicesBase,
             edgeIndicesBase,
-           // aabb,
+            // aabb,
             obb: null // Lazy-created in _createSubPortion if needed
         };
 
@@ -498,7 +513,7 @@ export class TrianglesDataTextureLayer {
         textureState.texturePerVertexIdCoordinates = this._dataTextureGenerator.generateTextureForPositions(
             gl,
             buffer.positionsCompressed,
-            buffer.lenPositionsCompressed );
+            buffer.lenPositionsCompressed);
 
         textureState.texturePerPolygonIdPortionIds8Bits = this._dataTextureGenerator.generateTextureForPackedPortionIds(
             gl,
@@ -1079,7 +1094,7 @@ export class TrianglesDataTextureLayer {
         const textureState = this._dataTextureState;
         const gl = this.model.scene.canvas.gl;
         tempMat4a.set(matrix);
-        textureState.texturePerObjectInstanceMatrices._textureData.set(tempMat4a, subPortionId*16);
+        textureState.texturePerObjectInstanceMatrices._textureData.set(tempMat4a, subPortionId * 16);
         if (this._deferredSetFlagsActive) {
             this._deferredSetFlagsDirty = true;
             return;
@@ -1102,7 +1117,7 @@ export class TrianglesDataTextureLayer {
         );
         // gl.bindTexture (gl.TEXTURE_2D, null);
     }
-    
+
     // ---------------------- COLOR RENDERING -----------------------------------
 
     drawColorOpaque(renderFlags, frameCtx) {

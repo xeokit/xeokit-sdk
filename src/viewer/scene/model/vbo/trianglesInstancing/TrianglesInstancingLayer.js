@@ -121,6 +121,10 @@ class TrianglesInstancingLayer {
         this._modelNormalMatrixCol2 = [];
 
         this._portions = [];
+        this._meshes = [];
+
+        this._aabb = math.collapseAABB3();
+        this.aabbDirty = true;
 
         if (cfg.origin) {
             this._state.origin.set(cfg.origin);
@@ -141,6 +145,17 @@ class TrianglesInstancingLayer {
         this.numIndices = cfg.geometry.numIndices;
     }
 
+    get aabb() {
+        if (this.aabbDirty) {
+            math.collapseAABB3(this._aabb);
+            for (let i = 0, len = this._meshes.length; i < len; i++) {
+                math.expandAABB3(this._aabb, this._meshes[i].aabb);
+            }
+            this.aabbDirty = false;
+        }
+        return this._aabb;
+    }
+
     /**
      * Creates a new portion within this InstancingLayer, returns the new portion ID.
      *
@@ -148,6 +163,7 @@ class TrianglesInstancingLayer {
      *
      * Gives the portion the specified color and matrix.
      *
+     * @param mesh The SceneModelMesh that owns the portion
      * @param cfg Portion params
      * @param cfg.color Color [0..255,0..255,0..255]
      * @param cfg.metallic Metalness factor [0..255]
@@ -158,7 +174,7 @@ class TrianglesInstancingLayer {
      * @param cfg.pickColor Quantized pick color
      * @returns {number} Portion ID.
      */
-    createPortion(cfg) {
+    createPortion(mesh, cfg) {
 
         const color = cfg.color;
         const metallic = cfg.metallic;
@@ -250,7 +266,7 @@ class TrianglesInstancingLayer {
 
         this._numPortions++;
         this.model.numPortions++;
-
+        this._meshes.push(mesh);
         return portionId;
     }
 

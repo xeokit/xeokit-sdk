@@ -39,7 +39,7 @@ export class SnapBatchingDepthRenderer extends VBOSceneModelRenderer{
         const state = batchingLayer._state;
         const origin = batchingLayer._state.origin;
         const {position, rotationMatrix, rotationMatrixConjugate} = model;
-        const aabb = model.aabb; // TODO: Should be per-layer for best RTC accuracy
+        const aabb = batchingLayer.aabb; // Per-layer AABB for best RTC accuracy
         const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
 
         if (this._vaoCache.has(batchingLayer)) {

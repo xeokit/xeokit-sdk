@@ -4,7 +4,6 @@ import {RENDER_PASSES} from '../../RENDER_PASSES.js';
 import {math} from "../../../math/math.js";
 import {RenderState} from "../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../webgl/ArrayBuf.js";
-import {geometryCompressionUtils} from "../../../math/geometryCompressionUtils.js";
 import {getBatchingRenderers} from "./LinesBatchingRenderers.js";
 import {LinesBatchingBuffer} from "./LinesBatchingBuffer.js";
 import {quantizePositions} from "../../compression.js";
@@ -65,8 +64,11 @@ class LinesBatchingLayer {
 
         this._modelAABB = math.collapseAABB3(); // Model-space AABB
         this._portions = [];
-
+        this._meshes = [];
         this._numVerts = 0;
+
+        this._aabb = math.collapseAABB3();
+        this.aabbDirty = true;
 
         this._finalized = false;
 
@@ -88,6 +90,17 @@ class LinesBatchingLayer {
         this.aabb = math.collapseAABB3();
     }
 
+    get aabb() {
+        if (this.aabbDirty) {
+            math.collapseAABB3(this._aabb);
+            for (let i = 0, len = this._meshes.length; i < len; i++) {
+                math.expandAABB3(this._aabb, this._meshes[i].aabb);
+            }
+            this.aabbDirty = false;
+        }
+        return this._aabb;
+    }
+
     /**
      * Tests if there is room for another portion in this LinesBatchingLayer.
      *
@@ -107,6 +120,7 @@ class LinesBatchingLayer {
      *
      * Gives the portion the specified geometry, color and matrix.
      *
+     * @param mesh The SceneModelMesh that owns the portion
      * @param cfg.positions Flat float Local-space positions array.
      * @param cfg.positionsCompressed Flat quantized positions array - decompressed with TrianglesBatchingLayer positionsDecodeMatrix
      * @param cfg.indices  Flat int indices array.
@@ -117,7 +131,7 @@ class LinesBatchingLayer {
      * @param cfg.pickColor Quantized pick color
      * @returns {number} Portion ID
      */
-    createPortion(cfg) {
+    createPortion(mesh, cfg) {
 
         if (this._finalized) {
             throw "Already finalized";
@@ -193,6 +207,8 @@ class LinesBatchingLayer {
         this.model.numPortions++;
 
         this._numVerts += numVerts;
+
+        this._meshes.push(mesh);
 
         return portionId;
     }

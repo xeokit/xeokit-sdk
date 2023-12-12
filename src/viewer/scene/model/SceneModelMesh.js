@@ -120,6 +120,7 @@ export class SceneModelMesh {
 
     _sceneModelDirty() {
         this._aabbWorldDirty = true;
+        this.layer.aabbDirty = true;
     }
 
     _transformDirty() {
@@ -129,6 +130,7 @@ export class SceneModelMesh {
             this._matrixUpdateScheduled = true;
         }
         this._aabbWorldDirty = true;
+        this.layer.aabbDirty = true;
         if (this.entity) {
             this.entity._transformDirty();
         }
