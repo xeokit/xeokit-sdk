@@ -130,12 +130,6 @@ class TrianglesBatchingLayer {
         }
 
         /**
-         * The axis-aligned World-space boundary of this TrianglesBatchingLayer's positions.
-         * @type {*|Float64Array}
-         */
-        this.aabb = math.collapseAABB3();
-
-        /**
          * When true, this layer contains solid triangle meshes, otherwise this layer contains surface triangle meshes
          * @type {boolean}
          */
