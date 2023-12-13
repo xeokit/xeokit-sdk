@@ -15,7 +15,8 @@ function buildVertex(mesh) {
     const scene = mesh.scene;
     const lightsState = scene._lightsState;
     const normals = hasNormals(mesh);
-    const clipping = scene._sectionPlanesState.sectionPlanes.length > 0;
+    const sectionPlanesState = scene._sectionPlanesState;
+    const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
     const quantizedGeometry = !!mesh._geometry._state.compressGeometry;
     const billboard = mesh._state.billboard;
     const stationary = mesh._state.stationary;
