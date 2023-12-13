@@ -1,9 +1,5 @@
 import {Component} from '../Component.js';
-import {Mesh} from "../mesh/Mesh.js";
-import {PhongMaterial} from "../materials/PhongMaterial.js";
-import {math} from "../math/math.js";
-import {VBOGeometry} from "../geometry/VBOGeometry.js";
-import {worldToRTCPositions} from "../math";
+import {SceneModel} from "../model";
 
 /**
  * A set of 3D line segments.
@@ -79,10 +75,6 @@ class LineSet extends Component {
         super(owner, cfg);
 
         this._positions = cfg.positions || [];
-        const rtcPositions = new Float32Array(this._positions.length);
-        const rtcCenter = math.vec3();
-        const cellSize = 100;
-        const rtcNeeded = worldToRTCPositions(this._positions, new Float32Array(this._positions.length), rtcCenter, cellSize);
 
         if (cfg.indices) {
             this._indices = cfg.indices;
@@ -94,21 +86,25 @@ class LineSet extends Component {
             }
         }
 
-        this._mesh = new Mesh(this, {
+        this._sceneModel = new SceneModel(this, {
+            isModel: false // Don't register in Scene.models
+        });
+
+        this._sceneModel.createMesh({
+            id: "linesMesh",
+            primitive: "lines",
+            positions: this._positions,
+            indices: this._indices
+        })
+
+        this._sceneModel.createEntity({
+            meshIds: ["linesMesh"],
             visible: cfg.visible,
             clippable: cfg.clippable,
-            collidable: cfg.collidable,
-            geometry: new VBOGeometry(this, {
-                primitive: "lines",
-                positions: rtcNeeded ? rtcPositions : this._positions,
-                indices: this._indices,
-                origin: rtcNeeded ? rtcCenter : null
-            }),
-            material: new PhongMaterial(this, {
-                diffuse: cfg.color || [0, 0, 0],
-                emissive: cfg.color || [0, 0, 0]
-            })
+               collidable: cfg.collidable
         });
+
+        this._sceneModel.finalize();
 
         this.scene._lineSetCreated(this);
     }
@@ -121,7 +117,7 @@ class LineSet extends Component {
      * @param {Boolean} visible Set ````true```` to make this ````LineSet```` visible.
      */
     set visible(visible) {
-        this._mesh.visible = visible;
+        this._sceneModel.visible = visible;
     }
 
     /**
@@ -132,7 +128,7 @@ class LineSet extends Component {
      * @returns {Boolean} Returns ````true```` if visible.
      */
     get visible() {
-        return this._mesh.visible;
+        return this._sceneModel.visible;
     }
 
     /**
@@ -159,7 +155,7 @@ class LineSet extends Component {
      * Removes the ```LineSet```` from {@link Scene#lineSets}; causes Scene to fire a "lineSetDestroyed" event.
      */
     destroy() {
-        super.destroy();
+        super.destroy(); // destroyes _sceneModel
         this.scene._lineSetDestroyed(this);
     }
 }
