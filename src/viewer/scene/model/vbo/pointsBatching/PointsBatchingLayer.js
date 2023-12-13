@@ -86,12 +86,6 @@ class PointsBatchingLayer {
         if (cfg.origin) {
             this._state.origin = math.vec3(cfg.origin);
         }
-
-        /**
-         * The axis-aligned World-space boundary of this PointsBatchingLayer's positions.
-         * @type {*|Float64Array}
-         */
-        this.aabb = math.collapseAABB3();
     }
 
     get aabb() {
