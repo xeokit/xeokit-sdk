@@ -62,11 +62,25 @@ class DistanceMeasurement extends Component {
 
         const onMouseOver = cfg.onMouseOver ? (event) => {
             cfg.onMouseOver(event, this);
+            this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new MouseEvent('mouseover', event));
         } : null;
 
         const onMouseLeave = cfg.onMouseLeave ? (event) => {
             cfg.onMouseLeave(event, this);
+            this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new MouseEvent('mouseleave', event));
         } : null;
+
+        const onMouseDown = (event) => {
+            this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new MouseEvent('mousedown', event));
+        } ;
+
+        const onMouseUp =  (event) => {
+            this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new MouseEvent('mouseup', event));
+        };
+
+        const onMouseMove =  (event) => {
+            this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new MouseEvent('mousemove', event));
+        };
 
         const onContextMenu = cfg.onContextMenu ? (event) => {
             cfg.onContextMenu(event, this);
@@ -82,6 +96,9 @@ class DistanceMeasurement extends Component {
             onMouseOver,
             onMouseLeave,
             onMouseWheel,
+            onMouseDown,
+            onMouseUp,
+            onMouseMove,
             onContextMenu
         });
 
@@ -91,6 +108,9 @@ class DistanceMeasurement extends Component {
             onMouseOver,
             onMouseLeave,
             onMouseWheel,
+            onMouseDown,
+            onMouseUp,
+            onMouseMove,
             onContextMenu
         });
 
@@ -102,6 +122,9 @@ class DistanceMeasurement extends Component {
             onMouseOver,
             onMouseLeave,
             onMouseWheel,
+            onMouseDown,
+            onMouseUp,
+            onMouseMove,
             onContextMenu
         });
 
@@ -113,6 +136,9 @@ class DistanceMeasurement extends Component {
             onMouseOver,
             onMouseLeave,
             onMouseWheel,
+            onMouseDown,
+            onMouseUp,
+            onMouseMove,
             onContextMenu
         });
 
@@ -124,6 +150,9 @@ class DistanceMeasurement extends Component {
             onMouseOver,
             onMouseLeave,
             onMouseWheel,
+            onMouseDown,
+            onMouseUp,
+            onMouseMove,
             onContextMenu
         });
 
@@ -135,6 +164,9 @@ class DistanceMeasurement extends Component {
             onMouseOver,
             onMouseLeave,
             onMouseWheel,
+            onMouseDown,
+            onMouseUp,
+            onMouseMove,
             onContextMenu
         });
 
@@ -146,6 +178,9 @@ class DistanceMeasurement extends Component {
             onMouseOver,
             onMouseLeave,
             onMouseWheel,
+            onMouseDown,
+            onMouseUp,
+            onMouseMove,
             onContextMenu
         });
 
@@ -157,6 +192,9 @@ class DistanceMeasurement extends Component {
             onMouseOver,
             onMouseLeave,
             onMouseWheel,
+            onMouseDown,
+            onMouseUp,
+            onMouseMove,
             onContextMenu
         });
 
@@ -168,6 +206,9 @@ class DistanceMeasurement extends Component {
             onMouseOver,
             onMouseLeave,
             onMouseWheel,
+            onMouseDown,
+            onMouseUp,
+            onMouseMove,
             onContextMenu
         });
 
@@ -179,6 +220,9 @@ class DistanceMeasurement extends Component {
             onMouseOver,
             onMouseLeave,
             onMouseWheel,
+            onMouseDown,
+            onMouseUp,
+            onMouseMove,
             onContextMenu
         });
 

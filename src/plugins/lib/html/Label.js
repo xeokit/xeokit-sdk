@@ -63,6 +63,24 @@ class Label {
             });
         }
 
+        if (cfg.onMouseDown) {
+            label.addEventListener('mousedown', (event) => {
+                cfg.onMouseDown(event, this);
+            });
+        }
+
+        if (cfg.onMouseUp) {
+            label.addEventListener('mouseup', (event) => {
+                cfg.onMouseUp(event, this);
+            });
+        }
+
+        if (cfg.onMouseMove) {
+            label.addEventListener('mousemove', (event) => {
+                cfg.onMouseMove(event, this);
+            });
+        }
+
         if (cfg.onContextMenu) {
             label.addEventListener('contextmenu', (event) => {
                 cfg.onContextMenu(event, this);

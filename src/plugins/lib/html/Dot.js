@@ -56,9 +56,14 @@ class Dot {
         }
         parentElement.appendChild(dotClickable);
 
+        dotClickable.addEventListener('click', (event) => {
+            parentElement.dispatchEvent(new MouseEvent('mouseover', event));
+        });
+
         if (cfg.onMouseOver) {
             dotClickable.addEventListener('mouseover', (event) => {
                 cfg.onMouseOver(event, this);
+                parentElement.dispatchEvent(new MouseEvent('mouseover', event));
             });
         }
 
@@ -71,6 +76,24 @@ class Dot {
         if (cfg.onMouseWheel) {
             dotClickable.addEventListener('wheel', (event) => {
                 cfg.onMouseWheel(event, this);
+            });
+        }
+
+        if (cfg.onMouseDown) {
+            dotClickable.addEventListener('mousedown', (event) => {
+                cfg.onMouseDown(event, this);
+            });
+        }
+
+        if (cfg.onMouseUp) {
+            dotClickable.addEventListener('mouseup', (event) => {
+                cfg.onMouseUp(event, this);
+            });
+        }
+
+        if (cfg.onMouseMove) {
+            dotClickable.addEventListener('mousemove', (event) => {
+                cfg.onMouseMove(event, this);
             });
         }
 
