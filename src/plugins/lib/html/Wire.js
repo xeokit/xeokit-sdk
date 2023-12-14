@@ -95,6 +95,24 @@ class Wire {
             });
         }
 
+        if (cfg.onMouseDown) {
+            wireClickable.addEventListener('mousedown', (event) => {
+                cfg.onMouseDown(event, this);
+            });
+        }
+
+        if (cfg.onMouseUp) {
+            wireClickable.addEventListener('mouseup', (event) => {
+                cfg.onMouseUp(event, this);
+            });
+        }
+
+        if (cfg.onMouseMove) {
+            wireClickable.addEventListener('mousemove', (event) => {
+                cfg.onMouseMove(event, this);
+            });
+        }
+
         if (cfg.onContextMenu) {
             wireClickable.addEventListener('contextmenu', (event) => {
                 cfg.onContextMenu(event, this);

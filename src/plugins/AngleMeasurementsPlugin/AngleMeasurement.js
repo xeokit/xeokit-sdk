@@ -52,10 +52,12 @@ class AngleMeasurement extends Component {
 
         const onMouseOver = cfg.onMouseOver ? (event) => {
             cfg.onMouseOver(event, this);
+            this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new MouseEvent('mouseover', event));
         } : null;
 
         const onMouseLeave = cfg.onMouseLeave ? (event) => {
             cfg.onMouseLeave(event, this);
+            this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new MouseEvent('mouseleave', event));
         } : null;
 
         const onContextMenu = cfg.onContextMenu ? (event) => {
@@ -66,12 +68,27 @@ class AngleMeasurement extends Component {
             this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new WheelEvent('wheel', event));
         };
 
+        const onMouseDown = (event) => {
+            this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new MouseEvent('mousedown', event));
+        } ;
+
+        const onMouseUp =  (event) => {
+            this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new MouseEvent('mouseup', event));
+        };
+
+        const onMouseMove =  (event) => {
+            this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new MouseEvent('mousemove', event));
+        };
+
         this._originDot = new Dot(this._container, {
             fillColor: this._color,
             zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2 : undefined,
             onMouseOver,
             onMouseLeave,
             onMouseWheel,
+            onMouseDown,
+            onMouseUp,
+            onMouseMove,
             onContextMenu
         });
         this._cornerDot = new Dot(this._container, {
@@ -80,6 +97,9 @@ class AngleMeasurement extends Component {
             onMouseOver,
             onMouseLeave,
             onMouseWheel,
+            onMouseDown,
+            onMouseUp,
+            onMouseMove,
             onContextMenu
         });
         this._targetDot = new Dot(this._container, {
@@ -88,6 +108,9 @@ class AngleMeasurement extends Component {
             onMouseOver,
             onMouseLeave,
             onMouseWheel,
+            onMouseDown,
+            onMouseUp,
+            onMouseMove,
             onContextMenu
         });
 
@@ -98,6 +121,9 @@ class AngleMeasurement extends Component {
             onMouseOver,
             onMouseLeave,
             onMouseWheel,
+            onMouseDown,
+            onMouseUp,
+            onMouseMove,
             onContextMenu
         });
         this._targetWire = new Wire(this._container, {
@@ -107,6 +133,9 @@ class AngleMeasurement extends Component {
             onMouseOver,
             onMouseLeave,
             onMouseWheel,
+            onMouseDown,
+            onMouseUp,
+            onMouseMove,
             onContextMenu
         });
 
@@ -118,6 +147,9 @@ class AngleMeasurement extends Component {
             onMouseOver,
             onMouseLeave,
             onMouseWheel,
+            onMouseDown,
+            onMouseUp,
+            onMouseMove,
             onContextMenu
         });
 

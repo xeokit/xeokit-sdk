@@ -352,6 +352,7 @@ export class AngleMeasurementsPlugin extends Plugin {
         measurement.on("destroyed", () => {
             delete this._measurements[measurement.id];
         });
+        measurement.clickable = true;
         this.fire("measurementCreated", measurement);
         return measurement;
     }
