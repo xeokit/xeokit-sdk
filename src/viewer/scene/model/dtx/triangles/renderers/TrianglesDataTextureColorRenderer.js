@@ -344,6 +344,7 @@ export class TrianglesDataTextureColorRenderer {
         src.push("uniform mediump usampler2D uTexturePerVertexIdCoordinates;");
         src.push("uniform highp usampler2D uTexturePerPolygonIdIndices;");
         src.push("uniform mediump usampler2D uTexturePerPolygonIdPortionIds;");
+
         src.push("uniform vec3 uCameraEyeRtc;");
 
         src.push("vec3 positions[3];")

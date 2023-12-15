@@ -37,6 +37,7 @@ import {TrianglesDataTextureLayer} from "./dtx/triangles/TrianglesDataTextureLay
 import {SceneModelEntity} from "./SceneModelEntity.js";
 import {geometryCompressionUtils} from "../math/geometryCompressionUtils.js";
 import {SceneModelTransform} from "./SceneModelTransform";
+import {LinesDataTextureLayer} from "./dtx/lines/LinesDataTextureLayer";
 
 const tempVec3a = math.vec3();
 
@@ -2723,7 +2724,7 @@ export class SceneModel extends Component {
      * @param {Number} [cfg.opacity=1] Opacity in range ````[0..1]````. Overridden by texture set ````colorTexture````.
      * @param {Number} [cfg.metallic=0] Metallic factor in range ````[0..1]````. Overridden by texture set ````metallicRoughnessTexture````.
      * @param {Number} [cfg.roughness=1] Roughness factor in range ````[0..1]````. Overridden by texture set ````metallicRoughnessTexture````.
-     * @returns {@link SceneModelMesh} The new mesh.
+     * @returns {SceneModelMesh} The new mesh.
      */
     createMesh(cfg) {
 
@@ -2776,7 +2777,10 @@ export class SceneModel extends Component {
                 return null;
             }
 
+            //const useDTX = (!!this._dtxEnabled && (cfg.primitive === "triangles" || cfg.primitive === "solid" || cfg.primitive === "surface" || cfg.primitive === "lines"));
+
             const useDTX = (!!this._dtxEnabled && (cfg.primitive === "triangles" || cfg.primitive === "solid" || cfg.primitive === "surface"));
+
 
             cfg.origin = cfg.origin ? math.addVec3(this._origin, cfg.origin, math.vec3()) : this._origin;
 
@@ -3136,7 +3140,7 @@ export class SceneModel extends Component {
 
     _getDTXLayer(cfg) {
         const origin = cfg.origin;
-        const layerId = `${Math.round(origin[0])}.${Math.round(origin[1])}.${Math.round(origin[2])}`;
+        const layerId = `.${cfg.primitive}.${Math.round(origin[0])}.${Math.round(origin[1])}.${Math.round(origin[2])}`;
         let dtxLayer = this._dtxLayers[layerId];
         if (dtxLayer) {
             if (!dtxLayer.canCreatePortion(cfg)) {
@@ -3147,8 +3151,18 @@ export class SceneModel extends Component {
                 return dtxLayer;
             }
         }
-        // console.info(`[SceneModel ${this.id}]: creating TrianglesDataTextureLayer`);
-        dtxLayer = new TrianglesDataTextureLayer(this, {layerIndex: 0, origin}); // layerIndex is set in #finalize()
+        switch (cfg.primitive) {
+            case "triangles":
+            case "solid":
+            case "surface":
+                dtxLayer = new TrianglesDataTextureLayer(this, {layerIndex: 0, origin}); // layerIndex is set in #finalize()
+                break;
+            case "lines":
+                dtxLayer = new LinesDataTextureLayer(this, {layerIndex: 0, origin}); // layerIndex is set in #finalize()
+                break;
+            default:
+                return;
+        }
         this._dtxLayers[layerId] = dtxLayer;
         this.layerList.push(dtxLayer);
         return dtxLayer;
@@ -3933,9 +3947,7 @@ export class SceneModel extends Component {
  * @param enableIndexBucketing
  * @returns {object} The mesh information enrichened with `.buckets` key.
  */
-function
-
-createDTXBuckets(geometry, enableVertexWelding, enableIndexBucketing) {
+function createDTXBuckets(geometry, enableVertexWelding, enableIndexBucketing) {
     let uniquePositionsCompressed, uniqueIndices, uniqueEdgeIndices;
     if (enableVertexWelding || enableIndexBucketing) { // Expensive - careful!
         [
