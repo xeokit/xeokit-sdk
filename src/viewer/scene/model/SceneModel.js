@@ -3,12 +3,14 @@ import {math} from "../math/math.js";
 import {buildEdgeIndices} from '../math/buildEdgeIndices.js';
 import {SceneModelMesh} from './SceneModelMesh.js';
 import {getScratchMemory, putScratchMemory} from "./vbo/ScratchMemory.js";
-import {TrianglesBatchingLayer} from './vbo/trianglesBatching/TrianglesBatchingLayer.js';
-import {TrianglesInstancingLayer} from './vbo/trianglesInstancing/TrianglesInstancingLayer.js';
-import {LinesBatchingLayer} from './vbo/linesBatching/LinesBatchingLayer.js';
-import {LinesInstancingLayer} from './vbo/linesInstancing/LinesInstancingLayer.js';
-import {PointsBatchingLayer} from './vbo/pointsBatching/PointsBatchingLayer.js';
-import {PointsInstancingLayer} from './vbo/pointsInstancing/PointsInstancingLayer.js';
+import {VBOBatchingTrianglesLayer} from './vbo/batching/triangles/VBOBatchingTrianglesLayer.js';
+import {VBOInstancingTrianglesLayer} from './vbo/instancing/triangles/VBOInstancingTrianglesLayer.js';
+import {VBOBatchingLinesLayer} from './vbo/batching/lines/VBOBatchingLinesLayer.js';
+import {VBOInstancingLinesLayer} from './vbo/instancing/lines/VBOInstancingLinesLayer.js';
+import {VBOBatchingPointsLayer} from './vbo/batching/points/VBOBatchingPointsLayer.js';
+import {VBOInstancingPointsLayer} from './vbo/instancing/points/VBOInstancingPointsLayer.js';
+import {DTXLinesLayer} from "./dtx/lines/DTXLinesLayer";
+import {DTXTrianglesLayer} from "./dtx/triangles/DTXTrianglesLayer.js";
 import {ENTITY_FLAGS} from './ENTITY_FLAGS.js';
 import {RenderFlags} from "../webgl/RenderFlags.js";
 import {worldToRTCPositions} from "../math/rtcCoords.js";
@@ -31,13 +33,12 @@ import {
     sRGBEncoding
 } from "../constants/constants.js";
 import {createPositionsDecodeMatrix, quantizePositions} from "./compression.js";
-import {uniquifyPositions} from "./dtx/triangles/calculateUniquePositions.js";
-import {rebucketPositions} from "./dtx/triangles/rebucketPositions.js";
-import {TrianglesDataTextureLayer} from "./dtx/triangles/TrianglesDataTextureLayer.js";
+import {uniquifyPositions} from "./calculateUniquePositions.js";
+import {rebucketPositions} from "./rebucketPositions.js";
 import {SceneModelEntity} from "./SceneModelEntity.js";
 import {geometryCompressionUtils} from "../math/geometryCompressionUtils.js";
 import {SceneModelTransform} from "./SceneModelTransform";
-import {LinesDataTextureLayer} from "./dtx/lines/LinesDataTextureLayer";
+
 
 const tempVec3a = math.vec3();
 
@@ -3140,7 +3141,8 @@ export class SceneModel extends Component {
 
     _getDTXLayer(cfg) {
         const origin = cfg.origin;
-        const layerId = `.${cfg.primitive}.${Math.round(origin[0])}.${Math.round(origin[1])}.${Math.round(origin[2])}`;
+        const primitive = cfg.geometry ? cfg.geometry.primitive : cfg.primitive;
+        const layerId = `.${primitive}.${Math.round(origin[0])}.${Math.round(origin[1])}.${Math.round(origin[2])}`;
         let dtxLayer = this._dtxLayers[layerId];
         if (dtxLayer) {
             if (!dtxLayer.canCreatePortion(cfg)) {
@@ -3151,14 +3153,14 @@ export class SceneModel extends Component {
                 return dtxLayer;
             }
         }
-        switch (cfg.primitive) {
+        switch (primitive) {
             case "triangles":
             case "solid":
             case "surface":
-                dtxLayer = new TrianglesDataTextureLayer(this, {layerIndex: 0, origin}); // layerIndex is set in #finalize()
+                dtxLayer = new DTXTrianglesLayer(this, {layerIndex: 0, origin}); // layerIndex is set in #finalize()
                 break;
             case "lines":
-                dtxLayer = new LinesDataTextureLayer(this, {layerIndex: 0, origin}); // layerIndex is set in #finalize()
+                dtxLayer = new DTXLinesLayer(this, {layerIndex: 0, origin}); // layerIndex is set in #finalize()
                 break;
             default:
                 return;
@@ -3185,7 +3187,7 @@ export class SceneModel extends Component {
             switch (cfg.primitive) {
                 case "triangles":
                     // console.info(`[SceneModel ${this.id}]: creating TrianglesBatchingLayer`);
-                    vboBatchingLayer = new TrianglesBatchingLayer({
+                    vboBatchingLayer = new VBOBatchingTrianglesLayer({
                         model,
                         textureSet,
                         layerIndex: 0, // This is set in #finalize()
@@ -3200,7 +3202,7 @@ export class SceneModel extends Component {
                     break;
                 case "solid":
                     // console.info(`[SceneModel ${this.id}]: creating TrianglesBatchingLayer`);
-                    vboBatchingLayer = new TrianglesBatchingLayer({
+                    vboBatchingLayer = new VBOBatchingTrianglesLayer({
                         model,
                         textureSet,
                         layerIndex: 0, // This is set in #finalize()
@@ -3215,7 +3217,7 @@ export class SceneModel extends Component {
                     break;
                 case "surface":
                     // console.info(`[SceneModel ${this.id}]: creating TrianglesBatchingLayer`);
-                    vboBatchingLayer = new TrianglesBatchingLayer({
+                    vboBatchingLayer = new VBOBatchingTrianglesLayer({
                         model,
                         textureSet,
                         layerIndex: 0, // This is set in #finalize()
@@ -3229,8 +3231,8 @@ export class SceneModel extends Component {
                     });
                     break;
                 case "lines":
-                    // console.info(`[SceneModel ${this.id}]: creating LinesBatchingLayer`);
-                    vboBatchingLayer = new LinesBatchingLayer({
+                    // console.info(`[SceneModel ${this.id}]: creating VBOBatchingLinesLayer`);
+                    vboBatchingLayer = new VBOBatchingLinesLayer({
                         model,
                         layerIndex: 0, // This is set in #finalize()
                         scratchMemory: this._vboBatchingLayerScratchMemory,
@@ -3241,8 +3243,8 @@ export class SceneModel extends Component {
                     });
                     break;
                 case "points":
-                    // console.info(`[SceneModel ${this.id}]: creating PointsBatchingLayer`);
-                    vboBatchingLayer = new PointsBatchingLayer({
+                    // console.info(`[SceneModel ${this.id}]: creating VBOBatchingPointsLayer`);
+                    vboBatchingLayer = new VBOBatchingPointsLayer({
                         model,
                         layerIndex: 0, // This is set in #finalize()
                         scratchMemory: this._vboBatchingLayerScratchMemory,
@@ -3296,7 +3298,7 @@ export class SceneModel extends Component {
             switch (geometry.primitive) {
                 case "triangles":
                     // console.info(`[SceneModel ${this.id}]: creating TrianglesInstancingLayer`);
-                    vboInstancingLayer = new TrianglesInstancingLayer({
+                    vboInstancingLayer = new VBOInstancingTrianglesLayer({
                         model,
                         textureSet,
                         geometry,
@@ -3307,7 +3309,7 @@ export class SceneModel extends Component {
                     break;
                 case "solid":
                     // console.info(`[SceneModel ${this.id}]: creating TrianglesInstancingLayer`);
-                    vboInstancingLayer = new TrianglesInstancingLayer({
+                    vboInstancingLayer = new VBOInstancingTrianglesLayer({
                         model,
                         textureSet,
                         geometry,
@@ -3318,7 +3320,7 @@ export class SceneModel extends Component {
                     break;
                 case "surface":
                     // console.info(`[SceneModel ${this.id}]: creating TrianglesInstancingLayer`);
-                    vboInstancingLayer = new TrianglesInstancingLayer({
+                    vboInstancingLayer = new VBOInstancingTrianglesLayer({
                         model,
                         textureSet,
                         geometry,
@@ -3328,8 +3330,8 @@ export class SceneModel extends Component {
                     });
                     break;
                 case "lines":
-                    // console.info(`[SceneModel ${this.id}]: creating LinesInstancingLayer`);
-                    vboInstancingLayer = new LinesInstancingLayer({
+                    // console.info(`[SceneModel ${this.id}]: creating VBOInstancingLinesLayer`);
+                    vboInstancingLayer = new VBOInstancingLinesLayer({
                         model,
                         textureSet,
                         geometry,
@@ -3339,7 +3341,7 @@ export class SceneModel extends Component {
                     break;
                 case "points":
                     // console.info(`[SceneModel ${this.id}]: creating PointsInstancingLayer`);
-                    vboInstancingLayer = new PointsInstancingLayer({
+                    vboInstancingLayer = new VBOInstancingPointsLayer({
                         model,
                         textureSet,
                         geometry,
@@ -3835,7 +3837,7 @@ export class SceneModel extends Component {
     /**
      * @private
      */
-    drawSnapInitDepthBuf(frameCtx) {
+    drawSnapInit(frameCtx) {
         if (this.numVisibleLayerPortions === 0) {
             return;
         }
@@ -3843,11 +3845,11 @@ export class SceneModel extends Component {
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
             const layer = this.layerList[layerIndex];
-            if (layer.drawSnapInitDepthBuf) {
+            if (layer.drawSnapInit) {
                 frameCtx.snapPickOrigin = [0, 0, 0];
                 frameCtx.snapPickCoordinateScale = [1, 1, 1];
                 frameCtx.snapPickLayerNumber++;
-                layer.drawSnapInitDepthBuf(renderFlags, frameCtx);
+                layer.drawSnapInit(renderFlags, frameCtx);
                 frameCtx.snapPickLayerParams[frameCtx.snapPickLayerNumber] = {
                     origin: frameCtx.snapPickOrigin.slice(),
                     coordinateScale: frameCtx.snapPickCoordinateScale.slice(),
@@ -3859,7 +3861,7 @@ export class SceneModel extends Component {
     /**
      * @private
      */
-    drawSnapDepths(frameCtx) {
+    drawSnap(frameCtx) {
         if (this.numVisibleLayerPortions === 0) {
             return;
         }
@@ -3867,11 +3869,11 @@ export class SceneModel extends Component {
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
             const layer = this.layerList[layerIndex];
-            if (layer.drawSnapDepths) {
+            if (layer.drawSnap) {
                 frameCtx.snapPickOrigin = [0, 0, 0];
                 frameCtx.snapPickCoordinateScale = [1, 1, 1];
                 frameCtx.snapPickLayerNumber++;
-                layer.drawSnapDepths(renderFlags, frameCtx);
+                layer.drawSnap(renderFlags, frameCtx);
                 frameCtx.snapPickLayerParams[frameCtx.snapPickLayerNumber] = {
                     origin: frameCtx.snapPickOrigin.slice(),
                     coordinateScale: frameCtx.snapPickCoordinateScale.slice(),
