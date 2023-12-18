@@ -28,6 +28,8 @@ class VBOInstancingLinesLayer {
      */
     constructor(cfg) {
 
+        console.info("VBOInstancingLinesLayer");
+
         /**
          * Owner model
          * @type {VBOSceneModel}
@@ -192,6 +194,8 @@ class VBOInstancingLinesLayer {
             throw "Already finalized";
         }
         const gl = this.model.scene.canvas.gl;
+        const state = this._state;
+        const geometry = state.geometry;
         const colorsLength = this._colors.length;
         const flagsLength = colorsLength / 4;
         if (colorsLength > 0) {
@@ -211,6 +215,20 @@ class VBOInstancingLinesLayer {
                 this._state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._offsets), this._offsets.length, 3, gl.DYNAMIC_DRAW, notNormalized);
                 this._offsets = []; // Release memory
             }
+        }
+        if (geometry.colorsCompressed && geometry.colorsCompressed.length > 0) {
+            const colorsCompressed = new Uint8Array(geometry.colorsCompressed);
+            const notNormalized = false;
+            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colorsCompressed, colorsCompressed.length, 4, gl.STATIC_DRAW, notNormalized);
+        }
+        if (geometry.positionsCompressed && geometry.positionsCompressed.length > 0) {
+            const normalized = false;
+            state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, geometry.positionsCompressed, geometry.positionsCompressed.length, 3, gl.STATIC_DRAW, normalized);
+            state.positionsDecodeMatrix = math.mat4(geometry.positionsDecodeMatrix);
+        }
+        if (geometry.indices && geometry.indices.length > 0) {
+            state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(geometry.indices), geometry.indices.length, 1, gl.STATIC_DRAW);
+            state.numIndices = geometry.indices.length;
         }
         if (this._modelMatrixCol0.length > 0) {
             const normalized = false;

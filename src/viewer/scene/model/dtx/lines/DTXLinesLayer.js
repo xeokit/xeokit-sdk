@@ -31,6 +31,8 @@ export class DTXLinesLayer {
 
     constructor(model, cfg) {
 
+        console.info("Creating DTXLinesLayer");
+
         dataTextureRamStats.numberOfLayers++;
 
         this._layerNumber = numLayers++;

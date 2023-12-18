@@ -36,7 +36,7 @@ export class VBOInstancingTrianglesLayer {
      */
     constructor(cfg) {
 
-        // console.info("Creating TrianglesInstancingLayer");
+         console.info("Creating VBOInstancingTrianglesLayer");
 
         /**
          * Owner model

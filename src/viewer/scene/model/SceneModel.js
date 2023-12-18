@@ -2778,10 +2778,9 @@ export class SceneModel extends Component {
                 return null;
             }
 
-            //const useDTX = (!!this._dtxEnabled && (cfg.primitive === "triangles" || cfg.primitive === "solid" || cfg.primitive === "surface" || cfg.primitive === "lines"));
-
-            const useDTX = (!!this._dtxEnabled && (cfg.primitive === "triangles" || cfg.primitive === "solid" || cfg.primitive === "surface"));
-
+            const useDTX = (!!this._dtxEnabled && (cfg.primitive === "triangles"
+                || cfg.primitive === "solid"
+                || cfg.primitive === "surface"));
 
             cfg.origin = cfg.origin ? math.addVec3(this._origin, cfg.origin, math.vec3()) : this._origin;
 
@@ -2996,7 +2995,10 @@ export class SceneModel extends Component {
                 cfg.aabb = math.OBB3ToAABB3(tempOBB3, math.AABB3());
             }
 
-            const useDTX = (!!this._dtxEnabled && (cfg.geometry.primitive === "triangles" || cfg.geometry.primitive === "solid" || cfg.geometry.primitive === "surface"));
+            const useDTX = (!!this._dtxEnabled
+                && (cfg.geometry.primitive === "triangles"
+                    || cfg.geometry.primitive === "solid"
+                    || cfg.geometry.primitive === "surface"));
 
             if (useDTX) {
 

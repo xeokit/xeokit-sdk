@@ -1,6 +1,7 @@
-import {VBORenderer} from "../VBORenderers.js";
-import {createRTCViewMat} from "../../../math/rtcCoords.js";
-import {math} from "../../../math/math.js";
+
+import {createRTCViewMat} from "../../../../../math/rtcCoords.js";
+import {math} from "../../../../../math/math.js";
+import {VBORenderer} from "../../../VBORenderer";
 
 const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
@@ -13,7 +14,7 @@ const SNAPPING_LOG_DEPTH_BUF_ENABLED = true; // Improves occlusion accuracy at d
 /**
  * @private
  */
-export class LineSnapBatchingDepthRenderer extends VBORenderer{
+export class VBOBatchingPointsSnapRenderer extends VBORenderer{
     _getHash() {
         return this._scene._sectionPlanesState.getHash() + (this._scene.pointsMaterial.hash);
     }
@@ -127,13 +128,7 @@ export class LineSnapBatchingDepthRenderer extends VBORenderer{
         // TODO: Use drawElements count and offset to draw only one entity
         //=============================================================
 
-        if (frameCtx.snapMode === "edge") {
-            state.edgeIndicesBuf.bind();
-            gl.drawElements(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0);
-            state.edgeIndicesBuf.unbind(); // needed?
-        } else {
-            gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
-        }
+        gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
     }
 
     _allocate() {
@@ -162,7 +157,7 @@ export class LineSnapBatchingDepthRenderer extends VBORenderer{
         const pointsMaterial = scene.pointsMaterial._state;
         const src = [];
         src.push ('#version 300 es');
-        src.push("// SnapBatchingDepthRenderer vertex shader");
+        src.push("// VBOBatchingPointsSnapRenderer vertex shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -248,7 +243,7 @@ export class LineSnapBatchingDepthRenderer extends VBORenderer{
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push ('#version 300 es');
-        src.push("// SnapBatchingDepthRenderer fragment shader");
+        src.push("// VBOBatchingPointsSnapRenderer fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");

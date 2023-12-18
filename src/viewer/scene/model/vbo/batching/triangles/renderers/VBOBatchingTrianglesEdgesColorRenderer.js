@@ -1,9 +1,9 @@
-import {VBOBatchingTrianglesRenderer} from "./VBOBatchingTrianglesRenderer.js";
+import {VBOSceneModelTriangleBatchingEdgesRenderer} from "./VBOSceneModelTriangleBatchingEdgesRenderer";
 
 /**
  * @private
  */
-export class VBOBatchingTrianglesEdgesColorRenderer extends VBOBatchingTrianglesRenderer {
+export class VBOBatchingTrianglesEdgesColorRenderer extends VBOSceneModelTriangleBatchingEdgesRenderer {
 
     _buildVertexShader() {
         const scene = this._scene;

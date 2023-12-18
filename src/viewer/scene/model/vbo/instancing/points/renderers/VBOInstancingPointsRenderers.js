@@ -5,6 +5,8 @@ import {VBOInstancingPointsPickDepthRenderer} from "./VBOInstancingPointsPickDep
 import {VBOInstancingPointsOcclusionRenderer} from "./VBOInstancingPointsOcclusionRenderer.js";
 import {VBOInstancingPointsDepthRenderer} from "./VBOInstancingPointsDepthRenderer.js";
 import {VBOInstancingPointsShadowRenderer} from "./VBOInstancingPointsShadowRenderer.js";
+import {VBOInstancingPointsSnapInitRenderer} from "./VBOInstancingPointsSnapInitRenderer";
+import {VBOInstancingPointsSnapRenderer} from "./VBOInstancingPointsSnapRenderer";
 
 /**
  * @private
@@ -43,6 +45,14 @@ import {VBOInstancingPointsShadowRenderer} from "./VBOInstancingPointsShadowRend
         if (this._shadowRenderer && (!this._shadowRenderer.getValid())) {
             this._shadowRenderer.destroy();
             this._shadowRenderer = null;
+        }
+        if (this._snapInitRenderer && (!this._snapInitRenderer.getValid())) {
+            this._snapInitRenderer.destroy();
+            this._snapInitRenderer = null;
+        }
+        if (this._snapRenderer && (!this._snapRenderer.getValid())) {
+            this._snapRenderer.destroy();
+            this._snapRenderer = null;
         }
     }
 
@@ -95,6 +105,20 @@ import {VBOInstancingPointsShadowRenderer} from "./VBOInstancingPointsShadowRend
         return this._shadowRenderer;
     }
 
+    get snapInitRenderer() {
+        if (!this._snapInitRenderer) {
+            this._snapInitRenderer = new VBOInstancingPointsSnapInitRenderer(this._scene, false);
+        }
+        return this._snapInitRenderer;
+    }
+
+    get snapRenderer() {
+        if (!this._snapRenderer) {
+            this._snapRenderer = new VBOInstancingPointsSnapRenderer(this._scene);
+        }
+        return this._snapRenderer;
+    }
+
     _destroy() {
         if (this._colorRenderer) {
             this._colorRenderer.destroy();
@@ -116,6 +140,12 @@ import {VBOInstancingPointsShadowRenderer} from "./VBOInstancingPointsShadowRend
         }
         if (this._shadowRenderer) {
             this._shadowRenderer.destroy();
+        }
+        if (this._snapInitRenderer) {
+            this._snapInitRenderer.destroy();
+        }
+        if (this._snapRenderer) {
+            this._snapRenderer.destroy();
         }
     }
 }

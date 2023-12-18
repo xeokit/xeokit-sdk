@@ -41,6 +41,8 @@ export class VBOBatchingTrianglesLayer {
      */
     constructor(cfg) {
 
+        console.info("Creating VBOBatchingTrianglesLayer");
+
         /**
          * Owner model
          * @type {VBOSceneModel}
@@ -139,6 +141,7 @@ export class VBOBatchingTrianglesLayer {
             }
             this.aabbDirty = false;
         }
+        return this._aabb;
     }
 
     /**

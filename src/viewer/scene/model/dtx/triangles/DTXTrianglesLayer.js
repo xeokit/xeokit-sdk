@@ -53,6 +53,8 @@ export class DTXTrianglesLayer {
 
     constructor(model, cfg) {
 
+        console.info("Creating DTXTrianglesLayer");
+
         dataTextureRamStats.numberOfLayers++;
 
         this._layerNumber = numLayers++;
@@ -316,8 +318,7 @@ export class DTXTrianglesLayer {
             numTriangles,
             numEdges,
             indicesBase,
-            edgeIndicesBase,
-            obb: null // Lazy-created in _createSubPortion if needed
+            edgeIndicesBase
         };
 
         return bucketGeometry;

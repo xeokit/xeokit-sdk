@@ -3,6 +3,8 @@ import {VBOBatchingPointsSilhouetteRenderer} from "./VBOBatchingPointsSilhouette
 import {VBOBatchingPointsPickMeshRenderer} from "./VBOBatchingPointsPickMeshRenderer.js";
 import {VBOBatchingPointsPickDepthRenderer} from "./VBOBatchingPointsPickDepthRenderer.js";
 import {VBOBatchingPointsOcclusionRenderer} from "./VBOBatchingPointsOcclusionRenderer.js";
+import {VBOBatchingPointsSnapInitRenderer} from "./VBOBatchingPointsSnapInitRenderer";
+import {VBOBatchingPointsSnapRenderer} from "./VBOBatchingPointsSnapRenderer";
 
 /**
  * @private
@@ -33,6 +35,14 @@ class VBOBatchingPointsRenderers {
         if (this._occlusionRenderer && this._occlusionRenderer.getValid() === false) {
             this._occlusionRenderer.destroy();
             this._occlusionRenderer = null;
+        }
+        if (this._snapInitRenderer && (!this._snapInitRenderer.getValid())) {
+            this._snapInitRenderer.destroy();
+            this._snapInitRenderer = null;
+        }
+        if (this._snapRenderer && (!this._snapRenderer.getValid())) {
+            this._snapRenderer.destroy();
+            this._snapRenderer = null;
         }
     }
 
@@ -71,6 +81,20 @@ class VBOBatchingPointsRenderers {
         return this._occlusionRenderer;
     }
 
+    get snapInitRenderer() {
+        if (!this._snapInitRenderer) {
+            this._snapInitRenderer = new VBOBatchingPointsSnapInitRenderer(this._scene, false);
+        }
+        return this._snapInitRenderer;
+    }
+
+    get snapRenderer() {
+        if (!this._snapRenderer) {
+            this._snapRenderer = new VBOBatchingPointsSnapRenderer(this._scene);
+        }
+        return this._snapRenderer;
+    }
+
     _destroy() {
         if (this._colorRenderer) {
             this._colorRenderer.destroy();
@@ -86,6 +110,12 @@ class VBOBatchingPointsRenderers {
         }
         if (this._occlusionRenderer) {
             this._occlusionRenderer.destroy();
+        }
+        if (this._snapInitRenderer) {
+            this._snapInitRenderer.destroy();
+        }
+        if (this._snapRenderer) {
+            this._snapRenderer.destroy();
         }
     }
 }

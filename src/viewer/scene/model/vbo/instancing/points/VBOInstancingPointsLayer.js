@@ -27,6 +27,8 @@ export class VBOInstancingPointsLayer {
      */
     constructor(cfg) {
 
+        console.info("VBOInstancingPointsLayer");
+
         /**
          * Owner model
          * @type {VBOSceneModel}
@@ -671,6 +673,24 @@ export class VBOInstancingPointsLayer {
     }
 
     drawPickNormals(renderFlags, frameCtx) {
+    }
+
+    drawSnapInit(renderFlags, frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (this._renderers.snapInitRenderer) {
+            this._renderers.snapInitRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        }
+    }
+
+    drawSnap(renderFlags, frameCtx) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (this._renderers.snapRenderer) {
+            this._renderers.snapRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        }
     }
 
     destroy() {

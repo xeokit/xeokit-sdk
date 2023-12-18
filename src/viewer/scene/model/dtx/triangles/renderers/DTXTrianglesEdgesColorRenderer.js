@@ -4,7 +4,6 @@ import {math} from "../../../../math/math.js";
 
 const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
-const tempVec3c = math.vec3();
 const tempMat4a = math.mat4();
 
 /**
