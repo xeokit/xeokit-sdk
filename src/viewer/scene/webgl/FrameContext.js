@@ -243,7 +243,7 @@ class FrameContext {
         this.lineWidth = 1;
 
         /**
-         * Collects info from SceneModel.drawSnapInitDepthBuf and SceneModel.drawSnapDepths,
+         * Collects info from SceneModel.drawSnapInit and SceneModel.drawSnap,
          * which is then used in Renderer to determine snap-picking results.
          *
          * @type {{}}
@@ -251,21 +251,21 @@ class FrameContext {
         this.snapPickLayerParams = {};
 
         /**
-         * Collects info from SceneModel.drawSnapInitDepthBuf and SceneModel.drawSnapDepths,
+         * Collects info from SceneModel.drawSnapInit and SceneModel.drawSnap,
          * which is then used in Renderer to determine snap-picking results.
          * @type {number}
          */
         this.snapPickLayerNumber = 0;
 
         /**
-         * Collects info from SceneModel.drawSnapInitDepthBuf and SceneModel.drawSnapDepths,
+         * Collects info from SceneModel.drawSnapInit and SceneModel.drawSnap,
          * which is then used in Renderer to determine snap-picking results.
          * @type {Number[]}
          */
         this.snapPickCoordinateScale = math.vec3();
 
         /**
-         * Collects info from SceneModel.drawSnapInitDepthBuf and SceneModel.drawSnapDepths,
+         * Collects info from SceneModel.drawSnapInit and SceneModel.drawSnap,
          * which is then used in Renderer to determine snap-picking results.
          * @type {Number[]}
          */

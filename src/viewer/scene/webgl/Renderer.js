@@ -1235,7 +1235,7 @@ const Renderer = function (scene, options) {
         }
     })();
 
-    function snapInitDepthBuf(frameCtx) {
+    function drawSnapInit(frameCtx) {
         frameCtx.snapPickLayerParams = [];
         frameCtx.snapPickLayerNumber = 0;
         for (let type in drawableTypeInfo) {
@@ -1243,9 +1243,9 @@ const Renderer = function (scene, options) {
             const drawableList = drawableInfo.drawableList;
             for (let i = 0, len = drawableList.length; i < len; i++) {
                 const drawable = drawableList[i];
-                if (drawable.drawSnapInitDepthBuf) {
+                if (drawable.drawSnapInit) {
                     if (!drawable.culled && drawable.visible && drawable.pickable) {
-                        drawable.drawSnapInitDepthBuf(frameCtx);
+                        drawable.drawSnapInit(frameCtx);
                     }
                 }
             }
@@ -1253,7 +1253,7 @@ const Renderer = function (scene, options) {
         return frameCtx.snapPickLayerParams;
     }
 
-    function snapPickDrawSnapDepths(frameCtx) {
+    function drawSnap(frameCtx) {
         frameCtx.snapPickLayerParams = frameCtx.snapPickLayerParams || [];
         frameCtx.snapPickLayerNumber = frameCtx.snapPickLayerParams.length;
         for (let type in drawableTypeInfo) {
@@ -1261,9 +1261,9 @@ const Renderer = function (scene, options) {
             const drawableList = drawableInfo.drawableList;
             for (let i = 0, len = drawableList.length; i < len; i++) {
                 const drawable = drawableList[i];
-                if (drawable.drawSnapDepths) {
+                if (drawable.drawSnap) {
                     if (!drawable.culled && drawable.visible && drawable.pickable) {
-                        drawable.drawSnapDepths(frameCtx);
+                        drawable.drawSnap(frameCtx);
                     }
                 }
             }
@@ -1361,7 +1361,7 @@ const Renderer = function (scene, options) {
 
             // a) init z-buffer
             gl.drawBuffers([gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1, gl.COLOR_ATTACHMENT2]);
-            const layerParamsSurface = snapInitDepthBuf(frameCtx);
+            const layerParamsSurface = drawSnapInit(frameCtx);
 
             // b) snap-pick
             const layerParamsSnap = []
@@ -1372,16 +1372,16 @@ const Renderer = function (scene, options) {
 
             if (snapToVertex && snapToEdge) {
                 frameCtx.snapMode = "edge";
-                snapPickDrawSnapDepths(frameCtx);
+                drawSnap(frameCtx);
 
                 frameCtx.snapMode = "vertex";
                 frameCtx.snapPickLayerNumber++;
 
-                snapPickDrawSnapDepths(frameCtx);
+                drawSnap(frameCtx);
             } else {
                 frameCtx.snapMode = snapToVertex ? "vertex" : "edge";
 
-                snapPickDrawSnapDepths(frameCtx);
+                drawSnap(frameCtx);
             }
 
             gl.depthMask(true);
