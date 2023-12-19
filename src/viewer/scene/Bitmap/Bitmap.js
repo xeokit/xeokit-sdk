@@ -466,7 +466,7 @@ class Bitmap extends Component {
 
     _updateBitmapMeshScale() {
         const aspect = this._imageSize[1] / this._imageSize[0];
-        this._bitmapMesh.scale = [this._height * aspect, 1.0, this._height];
+        this._bitmapMesh.scale = [this._height / aspect, 1.0, this._height];
     }
 }
 
