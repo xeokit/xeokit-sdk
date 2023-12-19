@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <style>
+
+        /* ----------------------------------------------------------------------------------------------------------*/
+        /* NavCubePlugin */
+        /* ----------------------------------------------------------------------------------------------------------*/
+
+        #myNavCubeCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 50px;
+            right: 10px;
+            z-index: 200000;
+        }
+
+    </style>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<canvas id="myNavCubeCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/bim_icon.png"/>
+    <h1>XKTLoaderPlugin and Data Textures</h1>
+    <h2>Loading a BIM model from an XKT file into a VBO model representation</h2>
+    <h3>Stats</h3>
+    <ul>
+        <li>
+            <div id="time">Loading JavaScript modules...</div>
+        </li>
+    </ul>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+    </ul>
+    <h3>Tutorials</h3>
+    <ul>
+        <li>
+            <a href="https://www.notion.so/xeokit/Compact-Model-Representation-using-Data-Textures-e8093ae372fa47bf9995c26dc24ccd53?pvs=4"
+               target="_other">Compact Model Representation using Data Textures</a>
+        </li>
+    </ul>
+    <h3>Assets</h3>
+    <ul>
+        <li>
+            <a href="http://openifcmodel.cs.auckland.ac.nz/Model/Details/322"
+               target="_other">Model source</a>
+        </li>
+
+    </ul>
+</div>
+</body>
+
+<script type="module">
+
+    import {Viewer, FastNavPlugin, NavCubePlugin, XKTLoaderPlugin, Configs} from "../../dist/xeokit-sdk.min.es.js";
+
+    //--------------------------------------------------------------------------------
+    // Sets the maximum batched geometry VBO size. Default value is 5000000, which is
+    // the maximum size. Minimum size is 100000. Larger values mean less draw calls,
+    // ie. more responsive rendering.
+    //
+    // Only applies when the Viewer is NOT configured with dtxEnabled: true.
+    //--------------------------------------------------------------------------------
+
+    const configs = new Configs();
+
+    configs.maxGeometryBatchSize = 1000000;
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true,
+        saoEnabled: true
+    });
+
+    viewer.camera.eye = [-23.68, 96.85, 30.65];
+    viewer.camera.look = [60.59, 42.37, -25.39];
+    viewer.camera.up = [0.39, 0.88, -0.26];
+
+    new NavCubePlugin(viewer, {
+        canvasId: "myNavCubeCanvas",
+        visible: true,
+        size: 250,
+        alignment: "bottomRight",
+        bottomMargin: 100,
+        rightMargin: 10
+    });
+
+    new FastNavPlugin(viewer, {
+        hideEdges: true,
+        hideSAO: true,
+        hideColorTexture: true,
+        hidePBR: true,
+        hideTransparentObjects: false,
+        scaleCanvasResolution: false,
+        scaleCanvasResolutionFactor: 0.5,
+        delayBeforeRestore: true,
+        delayBeforeRestoreSeconds: 0.4
+    });
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const sceneModel = xktLoader.load({
+        id: "myModel",
+        src: "../../assets/models/xkt/v6/APHS/APHS.xkt",
+       edges: true,
+        saoEnabled: false
+    });
+
+    const t0 = performance.now();
+    document.getElementById("time").innerHTML = "Loading model...";
+    sceneModel.on("loaded", function () {
+        const t1 = performance.now();
+        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
+    });
+
+</script>
+</html>

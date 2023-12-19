@@ -1,0 +1,33 @@
+import {VBORenderer} from "./../../../VBORenderer.js";
+
+/**
+ * @private
+ */
+export class VBOBatchingTrianglesRenderer extends VBORenderer {
+    constructor(scene, withSAO, {instancing = false, edges = false} = {}) {
+        super(scene, withSAO, {instancing, edges});
+    }
+
+    _draw(drawCfg) {
+        const {gl} = this._scene.canvas;
+
+        const {
+            state,
+            frameCtx,
+            incrementDrawState
+        } = drawCfg;
+
+        if (this._edges) {
+            gl.drawElements(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0);
+        } else {
+            const count = frameCtx.pickElementsCount || state.indicesBuf.numItems;
+            const offset = frameCtx.pickElementsOffset ? frameCtx.pickElementsOffset * state.indicesBuf.itemByteSize : 0;
+
+            gl.drawElements(gl.TRIANGLES, count, state.indicesBuf.itemType, offset);
+
+            if (incrementDrawState) {
+                frameCtx.drawElements++;
+            }
+        }
+    }
+}

@@ -1041,7 +1041,7 @@ class XKTLoaderPlugin extends Plugin {
                                     globalizeObjectIds: options.globalizeObjectIds
                                 });
                                 i++;
-                                loadNext();
+                                this.viewer.scene.once("tick", loadNext);
                             }, error);
                         }
                     }
@@ -1056,7 +1056,7 @@ class XKTLoaderPlugin extends Plugin {
                             this._dataSource.getXKT(`${baseDir}${xktFiles[i]}`, (arrayBuffer) => {
                                 this._parseModel(arrayBuffer, params, options, sceneModel, metaModel, manifestCtx);
                                 i++;
-                                loadNext();
+                                this.viewer.scene.once("tick", loadNext);
                             }, error);
                         }
                     }

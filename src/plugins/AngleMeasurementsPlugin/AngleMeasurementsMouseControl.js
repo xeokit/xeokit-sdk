@@ -181,7 +181,7 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
         const cameraControl = this.angleMeasurementsPlugin.viewer.cameraControl;
         const pointerLens = this.pointerLens;
         let mouseHovering = false;
-        let mouseHoverEntity = false;
+        let hoveredEntity = null;
         let lastMouseCanvasX = 0;
         let lastMouseCanvasY = 0;
         const mouseWorldPos = math.vec3();
@@ -213,7 +213,7 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                 }
                 const canvasPos = event.snappedCanvasPos || event.canvasPos;
                 mouseHovering = true;
-                mouseHoverEntity = event.entity;
+                hoveredEntity = event.entity;
                 mouseWorldPos.set(event.worldPos);
                 mouseHoverCanvasPos.set(canvasPos);
                 switch (this._mouseState) {
@@ -228,6 +228,7 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                             this._currentAngleMeasurement.cornerVisible = true;
                             this._currentAngleMeasurement.angleVisible = false;
                             this._currentAngleMeasurement.corner.worldPos = event.worldPos;
+                            this._currentAngleMeasurement.corner.entity = event.entity;
                         }
                         this.markerDiv.style.marginLeft = `-10000px`;
                         this.markerDiv.style.marginTop = `-10000px`;
@@ -239,6 +240,7 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                             this._currentAngleMeasurement.targetVisible = true;
                             this._currentAngleMeasurement.angleVisible = true;
                             this._currentAngleMeasurement.target.worldPos = event.worldPos;
+                            this._currentAngleMeasurement.target.entity = event.entity;
                         }
                         this.markerDiv.style.marginLeft = `-10000px`;
                         this.markerDiv.style.marginTop = `-10000px`;
@@ -269,15 +271,12 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                         this._currentAngleMeasurement = this.angleMeasurementsPlugin.createMeasurement({
                             id: math.createUUID(),
                             origin: {
-                                entity: mouseHoverEntity,
                                 worldPos: mouseWorldPos
                             },
                             corner: {
-                                entity: mouseHoverEntity,
                                 worldPos: mouseWorldPos
                             },
                             target: {
-                                entity: mouseHoverEntity,
                                 worldPos: mouseWorldPos
                             },
                             approximate: true
@@ -289,6 +288,7 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                         this._currentAngleMeasurement.targetWireVisible = false;
                         this._currentAngleMeasurement.targetVisible = false;
                         this._currentAngleMeasurement.angleVisible = false;
+                        this._currentAngleMeasurement.origin.entity = hoveredEntity;
                         this._mouseState = MOUSE_FINDING_CORNER;
                         this.angleMeasurementsPlugin.fire("measurementStart", this._currentAngleMeasurement);
                     }
@@ -298,11 +298,13 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                         this._currentAngleMeasurement.targetWireVisible = false;
                         this._currentAngleMeasurement.targetVisible = true;
                         this._currentAngleMeasurement.angleVisible = true;
+                        this._currentAngleMeasurement.corner.entity = hoveredEntity;
                         this._mouseState = MOUSE_FINDING_TARGET;
                     } else {
                         if (this._currentAngleMeasurement) {
                             this._currentAngleMeasurement.destroy();
                             this._currentAngleMeasurement = null;
+                            hoveredEntity = null;
                             this._mouseState = MOUSE_FINDING_ORIGIN
                             this.angleMeasurementsPlugin.fire("measurementCancel", this._currentAngleMeasurement);
                         }
@@ -312,7 +314,9 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                     if (mouseHovering) {
                         this._currentAngleMeasurement.targetVisible = true;
                         this._currentAngleMeasurement.angleVisible = true;
+                        this._currentAngleMeasurement.target.entity = hoveredEntity;
                         this._currentAngleMeasurement.clickable = true;
+                        hoveredEntity = null;
                         this.angleMeasurementsPlugin.fire("measurementEnd", this._currentAngleMeasurement);
                         this._currentAngleMeasurement = null;
                         this._mouseState = MOUSE_FINDING_ORIGIN;
@@ -320,6 +324,7 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                         if (this._currentAngleMeasurement) {
                             this._currentAngleMeasurement.destroy();
                             this._currentAngleMeasurement = null;
+                            hoveredEntity = null;
                             this._mouseState = MOUSE_FINDING_ORIGIN;
                             this.angleMeasurementsPlugin.fire("measurementCancel", this._currentAngleMeasurement);
                         }

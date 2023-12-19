@@ -39,6 +39,28 @@ export declare class Storey {
    */
   aabb: number[];
 
+  /**
+   * Axis-aligned World-space boundary of the {@link Entity}s that represent the IfcBuildingStorey.
+   *
+   * The boundary is a six-element Float32Array containing the min/max extents of the
+   * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````
+   *
+   * @property storeyAABB
+   * @type {Number[]}
+   */
+  storeyAABB :number[];
+
+  /**
+   * Axis-aligned World-space boundary of the {@link Entity}s that represent the model.
+   *
+   * The boundary is a six-element Float32Array containing the min/max extents of the
+   * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````
+   *
+   * @property modelAABB
+   * @type {Number[]}
+   */
+  modelAABB : number[];
+
   /** Number of {@link Entity}s within the IfcBuildingStorey.
    *
    * @type {Number}

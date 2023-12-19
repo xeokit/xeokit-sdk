@@ -191,6 +191,7 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
         let pointerDownCanvasX;
         let pointerDownCanvasY;
         const clickTolerance = 20;
+        let hoveredEntity = null;
 
         this._mouseState = MOUSE_FIRST_CLICK_EXPECTED;
 
@@ -225,6 +226,7 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
                         this._markerDiv.style.background = "pink";
                         this._markerDiv.style.border = "2px solid red";
                     }
+                    hoveredEntity = event.entity;
                 } else {
                     this._markerDiv.style.marginLeft = `-10000px`;
                     this._markerDiv.style.marginTop = `-10000px`;
@@ -263,6 +265,8 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
             }
             if (this._currentDistanceMeasurement) {
                 if (mouseHovering) {
+                    this._currentDistanceMeasurement.target.entity = hoveredEntity;
+                    hoveredEntity = null;
                     this._currentDistanceMeasurement.clickable = true;
                     this.distanceMeasurementsPlugin.fire("measurementEnd", this._currentDistanceMeasurement);
                     this._currentDistanceMeasurement = null;
@@ -270,6 +274,7 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
                     this._currentDistanceMeasurement.destroy();
                     this.distanceMeasurementsPlugin.fire("measurementCancel", this._currentDistanceMeasurement);
                     this._currentDistanceMeasurement = null;
+                    hoveredEntity = null;
                 }
             } else {
                 if (mouseHovering) {
@@ -290,6 +295,8 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
                     this._currentDistanceMeasurementInitState.wireVisible = this._currentDistanceMeasurement.wireVisible;
                     this._currentDistanceMeasurementInitState.targetVisible = this._currentDistanceMeasurement.targetVisible;
                     this._currentDistanceMeasurement.clickable = false;
+                    this._currentDistanceMeasurement.origin.entity = hoveredEntity;
+                    hoveredEntity = null;
                     this.fire("measurementStart", this._currentDistanceMeasurement);
                 }
             }

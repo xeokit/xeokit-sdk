@@ -3,19 +3,9 @@ import { Plugin, Viewer } from "../../viewer";
 import { Storey } from "./Storey";
 import { StoreyMap } from "./StoreyMap";
 
-export declare type IFCStoreyPlanObjectStates = {
-  [key: string] : {
-    visible: boolean;
-    edges?: boolean;
-    colorize?: number[]
-  }
-};
-
 export declare type StoreyViewsPluginConfiguration = {
   /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
   id?: string;
-  /** Map of visual states for the {@link Entity}s as rendered within each {@link Storey}.  Default value is {@link IFCStoreyPlanObjectStates}. */
-  objectStates?: IFCStoreyPlanObjectStates;
 };
 
 /**
@@ -51,24 +41,6 @@ export declare class StoreyViewsPlugin extends Plugin {
   modelStoreys: {[key: string]: { [key: string]: Storey} };
 
   /**
-   * Sets map of visual states for the {@link Entity}s as rendered within each {@link Storey}.
-   *
-   * Default value is {@link IFCStoreyPlanObjectStates}.
-   *
-   * @type {IFCStoreyPlanObjectStates}
-   */
-  set objectStates(arg: IFCStoreyPlanObjectStates);
-
-  /**
-   * Gets map of visual states for the {@link Entity}s as rendered within each {@link Storey}.
-   *
-   * Default value is {@link IFCStoreyPlanObjectStates}.
-   *
-   * @type {IFCStoreyPlanObjectStates}
-   */
-  get objectStates(): IFCStoreyPlanObjectStates;
-
-  /**
    * Arranges the {@link Camera} for a 3D orthographic view of the {@link Entity}s within the given storey.
    *
    * See also: {@link CameraMemento}, which saves and restores the state of the {@link Scene}'s {@link Camera}
@@ -88,20 +60,14 @@ export declare class StoreyViewsPlugin extends Plugin {
    *
    * Optionally hides all other Entitys.
    *
-   * Optionally sets the visual appearance of each of the Entitys according to its IFC type. The appearance of
-   * IFC types in plan views is configured by {@link StoreyViewsPlugin.objectStates}.
-   *
    * See also: {@link ObjectsMemento}, which saves and restores a memento of the visual state
    * of the {@link Entity}'s that represent objects within a {@link Scene}.
    *
    * @param {String} storeyId ID of the ````IfcBuildingStorey```` object.
    * @param {*} [options] Options for showing the Entitys within the storey.
-   * @param {Boolean} [options.hideOthers=false] When ````true````, hide all other {@link Entity}s.
-   * @param {Boolean} [options.useObjectStates=false] When ````true````, apply the custom visibilities and appearances configured for IFC types in {@link StoreyViewsPlugin.objectStates}.
    */
   showStoreyObjects(storeyId: string, options?: {
     hideOthers?: boolean;
-    useObjectStates?: boolean
   }): void;
 
   /**

@@ -8,7 +8,7 @@ class Storey {
     /**
      * @private
      */
-    constructor(plugin, aabb, modelId, storeyId, numObjects) {
+    constructor(plugin, modelAABB, storeyAABB, modelId, storeyId, numObjects) {
 
         /**
          * The {@link StoreyViewsPlugin} this Storey belongs to.
@@ -44,10 +44,33 @@ class Storey {
          * The boundary is a six-element Float32Array containing the min/max extents of the
          * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````
          *
-         * @property aabb
+         * @property storeyAABB
          * @type {Number[]}
          */
-        this.aabb = aabb.slice();
+        this.storeyAABB = storeyAABB.slice();
+
+        /**
+         * Axis-aligned World-space boundary of the {@link Entity}s that represent the IfcBuildingStorey.
+         *
+         * The boundary is a six-element Float32Array containing the min/max extents of the
+         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````
+         *
+         * @deprecated
+         * @property storeyAABB
+         * @type {Number[]}
+         */
+        this.aabb = this.storeyAABB;
+
+        /**
+         * Axis-aligned World-space boundary of the {@link Entity}s that represent the model.
+         *
+         * The boundary is a six-element Float32Array containing the min/max extents of the
+         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````
+         *
+         * @property modelAABB
+         * @type {Number[]}
+         */
+        this.modelAABB = modelAABB.slice();
 
         /** Number of {@link Entity}s within the IfcBuildingStorey.
          *

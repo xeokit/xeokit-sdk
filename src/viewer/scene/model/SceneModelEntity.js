@@ -20,7 +20,7 @@ export class SceneModelEntity {
     /**
      * @private
      */
-    constructor(model, isObject, id, meshes, flags, aabb, lodCullable) {
+    constructor(model, isObject, id, meshes, flags, lodCullable) {
 
         this._isObject = isObject;
 
@@ -62,9 +62,7 @@ export class SceneModelEntity {
         this.originalSystemId = math.unglobalizeObjectId(model.id, id);
 
         this._flags = flags;
-        this._aabb = aabb;
-        this._worldAABB = math.AABB3(aabb); // Computed from Meshes and SceneModel.matrix
-        this._offsetAABB = math.AABB3(aabb); // TODO - only used for offsets, current disabled
+        this._aabb = math.AABB3();
         this._aabbDirty = true;
 
         this._offset = math.vec3();

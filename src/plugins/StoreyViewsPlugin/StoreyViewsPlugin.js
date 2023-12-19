@@ -1,6 +1,5 @@
 import {Plugin} from "../../viewer/Plugin.js";
 import {Storey} from "./Storey.js";
-import {IFCStoreyPlanObjectStates} from "./IFCStoreyPlanObjectStates.js";
 import {math} from "../../viewer/scene/math/math.js";
 import {ObjectsMemento} from "../../viewer/scene/mementos/ObjectsMemento.js";
 import {CameraMemento} from "../../viewer/scene/mementos/CameraMemento.js";
@@ -108,18 +107,13 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  *     hideOthers: true
  * });
  * ````
- * Showing only the storey Entitys, applying custom appearances configured on {@link StoreyViewsPlugin#objectStates}:
+ * Showing only the storey Entitys:
  *
  * ````javascript
  * storeyViewsPlugin.showStoreyObjects("2SWZMQPyD9pfT9q87pgXa1", {
- *     hideOthers: true,
- *     useObjectStates: true
+ *     hideOthers: true
  * });
  * ````
- *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_showStoreyObjects"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/showStoreyObjects.gif"></a>
- *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_showStoreyObjects)]
  *
  * When using this option, at some point later you'll probably want to restore all Entitys to their original visibilities and
  * appearances.
@@ -134,11 +128,9 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  *
  * objectsMemento.saveObjects(viewer.scene);
  *
- * // Show storey view Entitys, with custom appearances as configured for IFC types
+ * // Show storey view Entitys
  *
- * storeyViewsPlugin.showStoreyObjects("2SWZMQPyD9pfT9q87pgXa1", {
- *     useObjectStates: true // <<--------- Apply custom appearances
- * });
+ * storeyViewsPlugin.showStoreyObjects("2SWZMQPyD9pfT9q87pgXa1");
  *
  * //...
  *
@@ -150,10 +142,6 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  *
  * The {@link StoreyViewsPlugin#gotoStoreyCamera} method positions the {@link Camera} for a plan view of
  * the {@link Entity}s within the given storey.
- *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_gotoStoreyCamera"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/gotoStoreyCamera.gif"></a>
- *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_gotoStoreyCamera)]
  *
  * Let's fly the {@link Camera} to a downward-looking orthographic view of the Entitys within our storey.
  *
@@ -201,10 +189,6 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  *
  * The {@link StoreyViewsPlugin#createStoreyMap} method creates a 2D orthographic plan image of the given storey.
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_createStoreyMap"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/createStoreyMap.png"></a>
- *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_createStoreyMap)]
- *
  * This method creates a {@link StoreyMap}, which provides the plan image as a Base64-encoded string.
  *
  * Let's create a 2D plan image of our building storey:
@@ -221,39 +205,18 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
  * const format    = storeyMap.format; // "png"
  * ````
  *
- * As with ````showStoreyEntitys````,  We also have the option to customize the appearance of the Entitys in our plan
- * images according to their IFC types, using the lookup table configured on {@link StoreyViewsPlugin#objectStates}.
- *
- * For example, we usually want to show only element types like ````IfcWall````,  ````IfcDoor```` and
- * ````IfcFloor```` in our plan images.
- *
- * Let's create another StoreyMap, this time applying the custom appearances:
- *
- * ````javascript
- * const storeyMap = storeyViewsPlugin.createStoreyMap("2SWZMQPyD9pfT9q87pgXa1", {
- *     width: 300,
- *     format: "png",
- *     useObjectStates: true // <<--------- Apply custom appearances
- * });
- *````
- *
  * We can also specify a ````height```` for the plan image, as an alternative to ````width````:
  *
  *  ````javascript
  *  const storeyMap = storeyViewsPlugin.createStoreyMap("2SWZMQPyD9pfT9q87pgXa1", {
  *      height: 200,
- *      format: "png",
- *      useObjectStates: true
+ *      format: "png"
  * });
  * ````
  *
  * ## Picking Entities in StoreyMaps
  *
  * We can use {@link StoreyViewsPlugin#pickStoreyMap} to pick Entities in our building storey, using 2D coordinates from mouse or touch events on our {@link StoreyMap}'s 2D plan image.
- *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/recipe2.gif"></a>
- *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2)]
  *
  * Let's programmatically pick the Entity at the given 2D pixel coordinates within our image:
  *
@@ -275,7 +238,7 @@ class StoreyViewsPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
      * @param {String} [cfg.id="StoreyViews"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
-     * @param {Object} [cfg.objectStates] Map of visual states for the {@link Entity}s as rendered within each {@link Storey}.  Default value is {@link IFCStoreyPlanObjectStates}.
+     * @param {Boolean} [cfg.fitStoreyMaps=false] If enabled, the elements of each floor map image will be proportionally resized to encompass the entire image. This leads to varying scales among different floor map images. If disabled, each floor map image will display the model's extents, ensuring a consistent scale across all images.
      */
     constructor(viewer, cfg = {}) {
 
@@ -304,7 +267,7 @@ class StoreyViewsPlugin extends Plugin {
          */
         this.modelStoreys = {};
 
-        this.objectStates = cfg.objectStates;
+        this._fitStoreyMaps = (!!cfg.fitStoreyMaps);
 
         this._onModelLoaded = this.viewer.scene.on("modelLoaded", (modelId) => {
             this._registerModelStoreys(modelId);
@@ -328,9 +291,9 @@ class StoreyViewsPlugin extends Plugin {
                 const storeyId = storeyIds[i];
                 const metaObject = metaScene.metaObjects[storeyId];
                 const childObjectIds = metaObject.getObjectIDsInSubtree();
-                const aabb = scene.getAABB(childObjectIds);
+                const storeyAABB = scene.getAABB(childObjectIds);
                 const numObjects = (Math.random() > 0.5) ? childObjectIds.length : 0;
-                const storey = new Storey(this, aabb, modelId, storeyId, numObjects);
+                const storey = new Storey(this, model.aabb, storeyAABB, modelId, storeyId, numObjects);
                 storey._onModelDestroyed = model.once("destroyed", () => {
                     this._deregisterModelStoreys(modelId);
                     this.fire("storeys", this.storeys);
@@ -363,25 +326,12 @@ class StoreyViewsPlugin extends Plugin {
     }
 
     /**
-     * Sets map of visual states for the {@link Entity}s as rendered within each {@link Storey}.
-     *
-     * Default value is {@link IFCStoreyPlanObjectStates}.
-     *
-     * @type {{String: Object}}
+     * When true, the elements of each floor map image will be proportionally resized to encompass the entire image. This leads to varying scales among different
+     * floor map images. If false, each floor map image will display the model's extents, ensuring a consistent scale across all images.
+     * @returns {*|boolean}
      */
-    set objectStates(value) {
-        this._objectStates = value || IFCStoreyPlanObjectStates;
-    }
-
-    /**
-     * Gets map of visual states for the {@link Entity}s as rendered within each {@link Storey}.
-     *
-     * Default value is {@link IFCStoreyPlanObjectStates}.
-     *
-     * @type {{String: Object}}
-     */
-    get objectStates() {
-        return this._objectStates;
+    get fitStoreyMaps() {
+        return this._fitStoreyMaps;
     }
 
     /**
@@ -409,22 +359,22 @@ class StoreyViewsPlugin extends Plugin {
         const viewer = this.viewer;
         const scene = viewer.scene;
         const camera = scene.camera;
-        const aabb = storey.aabb;
+        const storeyAABB = storey.storeyAABB;
 
-        if (aabb[3] < aabb[0] || aabb[4] < aabb[1] || aabb[5] < aabb[2]) { // Don't fly to an inverted boundary
+        if (storeyAABB[3] < storeyAABB[0] || storeyAABB[4] < storeyAABB[1] || storeyAABB[5] < storeyAABB[2]) { // Don't fly to an inverted boundary
             if (options.done) {
                 options.done();
             }
             return;
         }
-        if (aabb[3] === aabb[0] && aabb[4] === aabb[1] && aabb[5] === aabb[2]) { // Don't fly to an empty boundary
+        if (storeyAABB[3] === storeyAABB[0] && storeyAABB[4] === storeyAABB[1] && storeyAABB[5] === storeyAABB[2]) { // Don't fly to an empty boundary
             if (options.done) {
                 options.done();
             }
             return;
         }
-        const look2 = math.getAABB3Center(aabb);
-        const diag = math.getAABB3Diag(aabb);
+        const look2 = math.getAABB3Center(storeyAABB);
+        const diag = math.getAABB3Diag(storeyAABB);
         const fitFOV = 45; // fitFOV;
         const sca = Math.abs(diag / Math.tan(fitFOV * math.DEGTORAD));
 
@@ -467,17 +417,13 @@ class StoreyViewsPlugin extends Plugin {
      *
      * Optionally hides all other Entitys.
      *
-     * Optionally sets the visual appearance of each of the Entitys according to its IFC type. The appearance of
-     * IFC types in plan views is configured by {@link StoreyViewsPlugin#objectStates}.
-     *
      * See also: {@link ObjectsMemento}, which saves and restores a memento of the visual state
      * of the {@link Entity}'s that represent objects within a {@link Scene}.
      *
      * @param {String} storeyId ID of the ````IfcBuildingStorey```` object.
      * @param {*} [options] Options for showing the Entitys within the storey.
      * @param {Boolean} [options.hideOthers=false] When ````true````, hide all other {@link Entity}s.
-     * @param {Boolean} [options.useObjectStates=false] When ````true````, apply the custom visibilities and appearances configured for IFC types in {@link StoreyViewsPlugin#objectStates}.
-     */
+    */
     showStoreyObjects(storeyId, options = {}) {
 
         const storey = this.storeys[storeyId];
@@ -502,24 +448,7 @@ class StoreyViewsPlugin extends Plugin {
 
         this.withStoreyObjects(storeyId, (entity, metaObject) => {
             if (entity) {
-                if (options.useObjectStates) {
-                    const props = this._objectStates[metaObject.type] || this._objectStates["DEFAULT"];
-                    if (props) {
-                        entity.visible = props.visible;
-                        entity.edges = props.edges;
-                        // entity.xrayed = props.xrayed; // FIXME: Buggy
-                        // entity.highlighted = props.highlighted;
-                        // entity.selected = props.selected;
-                        if (props.colorize) {
-                            entity.colorize = props.colorize;
-                        }
-                        if (props.opacity !== null && props.opacity !== undefined) {
-                            entity.opacity = props.opacity;
-                        }
-                    }
-                } else {
                     entity.visible = true;
-                }
             }
         });
     }
@@ -584,7 +513,7 @@ class StoreyViewsPlugin extends Plugin {
         const viewer = this.viewer;
         const scene = viewer.scene;
         const format = options.format || "png";
-        const aabb = storey.aabb;
+        const aabb = (this._fitStoreyMaps) ? storey.storeyAABB : storey.modelAABB;
         const aspect = Math.abs((aabb[5] - aabb[2]) / (aabb[3] - aabb[0]));
         const padding = options.padding || 0;
 
@@ -611,10 +540,7 @@ class StoreyViewsPlugin extends Plugin {
         this._objectsMemento.saveObjects(scene);
         this._cameraMemento.saveCamera(scene);
 
-        viewer.beginSnapshot();
-
         this.showStoreyObjects(storeyId, utils.apply(options, {
-            useObjectStates: true,
             hideOthers: true
         }));
 
@@ -629,8 +555,6 @@ class StoreyViewsPlugin extends Plugin {
         this._objectsMemento.restoreObjects(scene);
         this._cameraMemento.restoreCamera(scene);
 
-        viewer.endSnapshot();
-
         return new StoreyMap(storeyId, src, format, width, height, padding);
     }
 
@@ -638,7 +562,7 @@ class StoreyViewsPlugin extends Plugin {
         const viewer = this.viewer;
         const scene = viewer.scene;
         const camera = scene.camera;
-        const aabb = storey.aabb;
+        const aabb = (this._fitStoreyMaps) ? storey.storeyAABB : storey.modelAABB;
         const look = math.getAABB3Center(aabb);
         const sca = 0.5;
         const eye = tempVec3a;
@@ -682,7 +606,7 @@ class StoreyViewsPlugin extends Plugin {
         const normX = 1.0 - (imagePos[0] / storeyMap.width);
         const normZ = 1.0 - (imagePos[1] / storeyMap.height);
 
-        const aabb = storey.aabb;
+        const aabb = (this._fitStoreyMaps) ? storey.storeyAABB : storey.modelAABB;
 
         const xmin = aabb[0];
         const ymin = aabb[1];
@@ -704,19 +628,43 @@ class StoreyViewsPlugin extends Plugin {
         const pickResult = this.viewer.scene.pick({  // Picking with arbitrarily-positioned ray
             pickSurface: options.pickSurface,
             pickInvisible: true,
-            matrix: matrix
+            matrix
         });
-
-        if (pickResult) {
-            const metaObject = this.viewer.metaScene.metaObjects[pickResult.entity.id];
-            const objectState = this.objectStates[metaObject.type];
-            if (!objectState || !objectState.visible) {
-                return null;
-            }
-        }
 
         return pickResult;
     }
+
+    storeyMapToWorldPos(storeyMap, imagePos, options = {}) {
+
+        const storeyId = storeyMap.storeyId;
+        const storey = this.storeys[storeyId];
+
+        if (!storey) {
+            this.error("IfcBuildingStorey not found with this ID: " + storeyId);
+            return null
+        }
+
+        const normX = 1.0 - (imagePos[0] / storeyMap.width);
+        const normZ = 1.0 - (imagePos[1] / storeyMap.height);
+
+        const aabb = (this._fitStoreyMaps) ? storey.storeyAABB : storey.modelAABB;
+
+        const xmin = aabb[0];
+        const ymin = aabb[1];
+        const zmin = aabb[2];
+        const xmax = aabb[3];
+        const ymax = aabb[4];
+        const zmax = aabb[5];
+
+        const xWorldSize = xmax - xmin;
+        const yWorldSize = ymax - ymin;
+        const zWorldSize = zmax - zmin;
+
+        const origin = math.vec3([xmin + (xWorldSize * normX), ymin + (yWorldSize * 0.5), zmin + (zWorldSize * normZ)]);
+
+        return origin;
+    }
+
 
     /**
      * Gets the ID of the storey that contains the given 3D World-space position.
@@ -727,7 +675,7 @@ class StoreyViewsPlugin extends Plugin {
     getStoreyContainingWorldPos(worldPos) {
         for (var storeyId in this.storeys) {
             const storey = this.storeys[storeyId];
-            if (math.point3AABB3Intersect(storey.aabb, worldPos)) {
+            if (math.point3AABB3Intersect(storey.storeyAABB, worldPos)) {
                 return storeyId;
             }
         }
@@ -754,7 +702,7 @@ class StoreyViewsPlugin extends Plugin {
             return false
         }
 
-        const aabb = storey.aabb;
+        const aabb = (this._fitStoreyMaps) ? storey.storeyAABB : storey.modelAABB;
 
         const xmin = aabb[0];
         const ymin = aabb[1];
