@@ -1,7 +1,7 @@
 import {math} from "./scene/math/math.js";
 
 let maxDataTextureHeight = 1 << 16;
-let maxGeometryBatchSize = 4096
+let maxGeometryBatchSize = 5000000
 
 /**
  * Manages global configurations for all {@link Viewer}s.
