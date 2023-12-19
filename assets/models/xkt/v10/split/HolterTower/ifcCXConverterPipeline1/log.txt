@@ -1,0 +1,83 @@
+#----------------------------------------------------------------------------
+# CxConverter IFC Conversion Pipeline Log
+#
+# Converting file: Holter_Tower_10.ifc
+# Using tools: ifc2gltf and convert2xkt
+# Date: Tue Dec 19 2023 15:11:52 GMT+0100 (Central European Standard Time)
+#----------------------------------------------------------------------------
+
+
+
+# ~/xeolabs/xeokit/ifc2gltf/3_0_6/ifc2gltfcxconverter-3.0.6/linux/bin/ifc2gltfcxconverter -i /home/lindsay/xeolabs/xeokit-model-conversion-tests-sep8/inputFiles/HolterTower/Holter_Tower_10.ifc -o /home/lindsay/xeolabs/xeokit-model-conversion-tests-sep8/results/HolterTower/Holter_Tower_10/ifcCXConverterPipeline1/model.glb -m /home/lindsay/xeolabs/xeokit-model-conversion-tests-sep8/results/HolterTower/Holter_Tower_10/ifcCXConverterPipeline1/model.json -s 10 -e 3 >> /home/lindsay/xeolabs/xeokit-model-conversion-tests-sep8/results/HolterTower/Holter_Tower_10/ifcCXConverterPipeline1/log.txt
+
+__ IFC to GLTF converter __ version: 3.0.6 ____________
+Loading file "/home/lindsay/xe...Holter_Tower_10.ifc"Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 5%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 6%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 7%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 8%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 9%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 10%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 11%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 12%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 13%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 14%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 15%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 16%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 17%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 18%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 19%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 20%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 21%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 22%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 23%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 24%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 30%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 33%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 36%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 39%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 42%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 45%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 48%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 51%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 54%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 57%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 60%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 63%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 66%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 69%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 72%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 75%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 78%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 81%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 84%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 87%Loading file "/home/lindsay/xe...Holter_Tower_10.ifc": 100%
+Converting IFC geometryConverting IFC geometry: 0%Converting IFC geometry: 0%Converting IFC geometry: 1%Converting IFC geometry: 2%Converting IFC geometry: 3%Converting IFC geometry: 4%Converting IFC geometry: 5%Converting IFC geometry: 6%Converting IFC geometry: 7%Converting IFC geometry: 8%Converting IFC geometry: 9%Converting IFC geometry: 9%Converting IFC geometry: 10%Converting IFC geometry: 11%Converting IFC geometry: 12%Converting IFC geometry: 13%Converting IFC geometry: 14%Converting IFC geometry: 15%Converting IFC geometry: 16%Converting IFC geometry: 17%Converting IFC geometry: 18%Converting IFC geometry: 18%Converting IFC geometry: 19%Converting IFC geometry: 20%Converting IFC geometry: 21%Converting IFC geometry: 22%Converting IFC geometry: 23%Converting IFC geometry: 24%Converting IFC geometry: 25%Converting IFC geometry: 26%Converting IFC geometry: 27%Converting IFC geometry: 27%Converting IFC geometry: 28%Converting IFC geometry: 29%Converting IFC geometry: 30%Converting IFC geometry: 31%Converting IFC geometry: 32%Converting IFC geometry: 33%Converting IFC geometry: 34%Converting IFC geometry: 35%Converting IFC geometry: 36%Converting IFC geometry: 36%Converting IFC geometry: 37%Converting IFC geometry: 38%Converting IFC geometry: 39%Converting IFC geometry: 40%Converting IFC geometry: 41%Converting IFC geometry: 42%Converting IFC geometry: 43%Converting IFC geometry: 44%Converting IFC geometry: 45%Converting IFC geometry: 45%Converting IFC geometry: 46%Converting IFC geometry: 47%Converting IFC geometry: 48%Converting IFC geometry: 49%Converting IFC geometry: 50%Converting IFC geometry: 51%Converting IFC geometry: 52%Converting IFC geometry: 53%Converting IFC geometry: 54%Converting IFC geometry: 54%Converting IFC geometry: 55%Converting IFC geometry: 56%Converting IFC geometry: 57%Converting IFC geometry: 58%Converting IFC geometry: 59%Converting IFC geometry: 60%Converting IFC geometry: 61%Converting IFC geometry: 62%Converting IFC geometry: 63%Converting IFC geometry: 63%Converting IFC geometry: 64%Converting IFC geometry: 65%Converting IFC geometry: 66%Converting IFC geometry: 67%Converting IFC geometry: 68%Converting IFC geometry: 69%Converting IFC geometry: 70%Converting IFC geometry: 71%Converting IFC geometry: 72%Converting IFC geometry: 72%Converting IFC geometry: 73%Converting IFC geometry: 74%Converting IFC geometry: 75%Converting IFC geometry: 76%Converting IFC geometry: 77%Converting IFC geometry: 78%Converting IFC geometry: 79%Converting IFC geometry: 80%Converting IFC geometry: 81%Converting IFC geometry: 82%Converting IFC geometry: 82%Converting IFC geometry: 83%Converting IFC geometry: 84%Converting IFC geometry: 85%Converting IFC geometry: 86%Converting IFC geometry: 87%Converting IFC geometry: 88%Converting IFC geometry: 89%Converting IFC geometry: 100%
+Exporting to gltfExporting to gltf: 50%Exporting to gltf: 100%
+Accessors: 13, reused: 7
+Exporting meta dataExporting meta data: 75%Exporting meta data: 81%Exporting meta data: 88%Exporting meta data: 100%Exporting meta data: 50%Exporting meta data: 51%Exporting meta data: 53%Exporting meta data: 54%Exporting meta data: 56%Exporting meta data: 57%Exporting meta data: 59%Exporting meta data: 60%Exporting meta data: 62%Exporting meta data: 63%Exporting meta data: 65%Exporting meta data: 66%Exporting meta data: 68%Exporting meta data: 69%Exporting meta data: 71%Exporting meta data: 72%Exporting meta data: 74%Exporting meta data: 75%Exporting meta data: 77%Exporting meta data: 78%Exporting meta data: 80%Exporting meta data: 81%Exporting meta data: 83%Exporting meta data: 84%Exporting meta data: 86%Exporting meta data: 87%Exporting meta data: 89%Exporting meta data: 90%Exporting meta data: 92%Exporting meta data: 93%Exporting meta data: 100%
+Accessors: 35599, reused: 108376
+Exporting meta dataExporting meta data: 75%Exporting meta data: 76%Exporting meta data: 78%Exporting meta data: 79%Exporting meta data: 81%Exporting meta data: 82%Exporting meta data: 84%Exporting meta data: 85%Exporting meta data: 87%Exporting meta data: 88%Exporting meta data: 90%Exporting meta data: 91%Exporting meta data: 93%Exporting meta data: 94%Exporting meta data: 100%
+done in 79 seconds
+
+
+
+# node --max-old-space-size=24000 ~/xeolabs/xeokit-convert-aug9/convert2xkt.js -t -n -a results/HolterTower/Holter_Tower_10/ifcCXConverterPipeline1/model.glb.manifest.json -o results/HolterTower/Holter_Tower_10/ifcCXConverterPipeline1/model.xkt.manifest.json -l >> /home/lindsay/xeolabs/xeokit-model-conversion-tests-sep8/results/HolterTower/Holter_Tower_10/ifcCXConverterPipeline1/log.txt
+[convert2xkt] Running convert2xkt v1.1.11...
+[convert2xkt] Converting glTF files in manifest results/HolterTower/Holter_Tower_10/ifcCXConverterPipeline1/model.glb.manifest.json...
+[convert2xkt] Reading input file: /home/lindsay/xeolabs/xeokit-model-conversion-tests-sep8/results/HolterTower/Holter_Tower_10/ifcCXConverterPipeline1/model.glb
+[convert2xkt] Input file size: 11.43 kB
+[convert2xkt] Reading input metadata file: /home/lindsay/xeolabs/xeokit-model-conversion-tests-sep8/results/HolterTower/Holter_Tower_10/ifcCXConverterPipeline1/model.json
+[convert2xkt] Using parser: parseGLTFIntoXKTModel
+[convert2xkt] Parsing normals: enabled
+[convert2xkt] Parsing textures: enabled
+[convert2xkt] Input file parsed OK. Building XKT document...
+[convert2xkt] XKT document built OK. Writing to XKT file...
+[convert2xkt] Converted to: XKT v10
+[convert2xkt] XKT size: 2.41 kB
+[convert2xkt] XKT textures size: 0.01kB
+[convert2xkt] Compression ratio: 4.74
+[convert2xkt] Conversion time: 0.04 s
+[convert2xkt] Converted metaobjects: 0
+[convert2xkt] Converted property sets: 0
+[convert2xkt] Converted drawable objects: 1
+[convert2xkt] Converted geometries: 10
+[convert2xkt] Converted textures: 0
+[convert2xkt] Converted textureSets: 0
+[convert2xkt] Converted triangles: 176
+[convert2xkt] Converted vertices: 528
+[convert2xkt] Converted UVs: 0
+[convert2xkt] Converted normals: 0
+[convert2xkt] Number of tiles: 1
+[convert2xkt] minTileSize: 500
+[convert2xkt] Writing XKT file: results/HolterTower/Holter_Tower_10/ifcCXConverterPipeline1/model.xkt
+[convert2xkt] Converted model1.xkt (1 of 2)
+[convert2xkt] Reading input file: /home/lindsay/xeolabs/xeokit-model-conversion-tests-sep8/results/HolterTower/Holter_Tower_10/ifcCXConverterPipeline1/model_1.glb
+[convert2xkt] Input file size: 42604.93 kB
+[convert2xkt] Reading input metadata file: /home/lindsay/xeolabs/xeokit-model-conversion-tests-sep8/results/HolterTower/Holter_Tower_10/ifcCXConverterPipeline1/model_1.json
+[convert2xkt] Using parser: parseGLTFIntoXKTModel
+[convert2xkt] Parsing normals: enabled
+[convert2xkt] Parsing textures: enabled
+[convert2xkt] Input file parsed OK. Building XKT document...
+[convert2xkt] XKT document built OK. Writing to XKT file...
+[convert2xkt] Converted to: XKT v10
+[convert2xkt] XKT size: 12002.36 kB
+[convert2xkt] XKT textures size: 0.01kB
+[convert2xkt] Compression ratio: 3.55
+[convert2xkt] Conversion time: 26.83 s
+[convert2xkt] Converted metaobjects: 0
+[convert2xkt] Converted property sets: 0
+[convert2xkt] Converted drawable objects: 60283
+[convert2xkt] Converted geometries: 108514
+[convert2xkt] Converted textures: 0
+[convert2xkt] Converted textureSets: 0
+[convert2xkt] Converted triangles: 2241591
+[convert2xkt] Converted vertices: 6724773
+[convert2xkt] Converted UVs: 0
+[convert2xkt] Converted normals: 0
+[convert2xkt] Number of tiles: 1
+[convert2xkt] minTileSize: 500
+[convert2xkt] Writing XKT file: results/HolterTower/Holter_Tower_10/ifcCXConverterPipeline1/model_1.xkt
+[convert2xkt] Converted model2.xkt (2 of 2)
+[convert2xkt] Done.
+node --max-old-space-size=24000 ~/xeolabs/xeokit-convert-aug9/convert2xkt.js -t -n -a results/HolterTower/Holter_Tower_10/ifcCXConverterPipeline1/model.glb.manifest.json -o results/HolterTower/Holter_Tower_10/ifcCXConverterPipeline1/model.xkt.manifest.json -l >> /home/lindsay/xeolabs/xeokit-model-conversion-tests-sep8/results/HolterTower/Holter_Tower_10/ifcCXConverterPipeline1/log.txt
