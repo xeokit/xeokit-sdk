@@ -127,9 +127,9 @@
         dtxEnabled: true
     });
 
-    viewer.camera.eye = [102.07185264355974, 45.23873322531372, -54.1001537318987];
-    viewer.camera.look = [35.0291287591034, -3.5295781673428905, -20.312957533628705];
-    viewer.camera.up = [-0.48646319926706455, 0.8385999559445908, 0.24516049773277654];
+    viewer.camera.eye = [40.78, 36.15, 62.99];
+    viewer.camera.look = [34.96, 1.84, 6.76];
+    viewer.camera.up = [-0.05, 0.85, -0.51];
 
     const xktLoader = new XKTLoaderPlugin(viewer);
 
@@ -150,6 +150,7 @@
             }
         }
     });
+
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a context menu to delete and configure measurements
@@ -220,48 +221,6 @@
         };
         angleMeasurementsContextMenu.show(e.event.clientX, e.event.clientY);
         e.event.preventDefault();
-    });
-
-    sceneModel.on("loaded", () => {
-
-        //------------------------------------------------------------------------------------------------------------------
-        // Create some AngleMeasurements
-        //------------------------------------------------------------------------------------------------------------------
-
-        angleMeasurementsPlugin.createMeasurement({
-            id: "angleMeasurement1",
-            origin: {
-                entity: viewer.scene.objects["1CZILmCaHETO8tf3SgGEXu"],
-                worldPos: [0.4158603637281142, 2.5193106917110457, 17.79972838299403]
-            },
-            corner: {
-                entity: viewer.scene.objects["1CZILmCaHETO8tf3SgGEXu"],
-                worldPos: [0.41857741956197625,0.0987169929481646,17.799763071093395]
-            },
-            target: {
-                entity: viewer.scene.objects["1CZILmCaHETO8tf3SgGEXu"],
-                worldPos: [5.235526066859247, 0.11580773869801986, 17.824891550941565]
-            },
-            visible: true
-        });
-
-        angleMeasurementsPlugin.createMeasurement({
-            id: "angleMeasurement2",
-            origin: {
-                entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FNr2"],
-                worldPos: [-0.00003814187850181838, 5.9996748076205115,17.79996871551525]
-            },
-            corner: {
-                entity: viewer.scene.objects["2O2Fr$t4X7Zf8NOew3FNqI"],
-                worldPos: [-0.0005214119318139865, 3.1010044228517595, 17.787656604483363]
-
-            },
-            target: {
-                entity: viewer.scene.objects["1s1jVhK8z0pgKYcr9jt7AB"],
-                worldPos: [ 8.380657312957396, 3.1055697628459553, 17.799220108187185]
-            },
-            visible: true
-        });
     });
 
     const objectContextMenu = new ContextMenu({
