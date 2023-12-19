@@ -4,9 +4,9 @@ import { TreeViewNode } from "./TreeViewNode";
 
 export declare type TreeViewPluginConfiguration = {
   /** DOM element ID to contain the TreeViewPlugin */
-  containerElementId: string;
+  containerElementId?: string;
   /** DOM element to contain the TreeViewPlugin. */
-  containerElement: HTMLElement;
+  containerElement?: HTMLElement;
   /** When ````true```` (default), will automatically add each model as it's created. Set this ````false```` if you want to manually add models using {@link TreeViewPlugin.addModel} instead. */
   autoAddModels?: boolean;
   /** Optional depth to which to initially expand the tree. */
