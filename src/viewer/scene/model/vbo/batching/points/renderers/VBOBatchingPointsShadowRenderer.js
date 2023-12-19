@@ -1,4 +1,4 @@
-import {VBOBatchingPointsRenderer} from "../VBOBatchingPointsRenderer";
+import {VBOBatchingPointsRenderer} from "../VBOBatchingPointsRenderer.js";
 
 /**
  * Renders pointsBatchingLayer fragment depths to a shadow map.

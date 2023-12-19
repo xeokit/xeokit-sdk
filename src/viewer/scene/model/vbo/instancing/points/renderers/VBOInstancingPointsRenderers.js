@@ -5,8 +5,8 @@ import {VBOInstancingPointsPickDepthRenderer} from "./VBOInstancingPointsPickDep
 import {VBOInstancingPointsOcclusionRenderer} from "./VBOInstancingPointsOcclusionRenderer.js";
 import {VBOInstancingPointsDepthRenderer} from "./VBOInstancingPointsDepthRenderer.js";
 import {VBOInstancingPointsShadowRenderer} from "./VBOInstancingPointsShadowRenderer.js";
-import {VBOInstancingPointsSnapInitRenderer} from "./VBOInstancingPointsSnapInitRenderer";
-import {VBOInstancingPointsSnapRenderer} from "./VBOInstancingPointsSnapRenderer";
+import {VBOInstancingPointsSnapInitRenderer} from "./VBOInstancingPointsSnapInitRenderer.js";
+import {VBOInstancingPointsSnapRenderer} from "./VBOInstancingPointsSnapRenderer.js";
 
 /**
  * @private

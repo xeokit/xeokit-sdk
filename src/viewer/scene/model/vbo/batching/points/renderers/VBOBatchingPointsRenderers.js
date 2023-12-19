@@ -3,8 +3,8 @@ import {VBOBatchingPointsSilhouetteRenderer} from "./VBOBatchingPointsSilhouette
 import {VBOBatchingPointsPickMeshRenderer} from "./VBOBatchingPointsPickMeshRenderer.js";
 import {VBOBatchingPointsPickDepthRenderer} from "./VBOBatchingPointsPickDepthRenderer.js";
 import {VBOBatchingPointsOcclusionRenderer} from "./VBOBatchingPointsOcclusionRenderer.js";
-import {VBOBatchingPointsSnapInitRenderer} from "./VBOBatchingPointsSnapInitRenderer";
-import {VBOBatchingPointsSnapRenderer} from "./VBOBatchingPointsSnapRenderer";
+import {VBOBatchingPointsSnapInitRenderer} from "./VBOBatchingPointsSnapInitRenderer.js";
+import {VBOBatchingPointsSnapRenderer} from "./VBOBatchingPointsSnapRenderer.js";
 
 /**
  * @private

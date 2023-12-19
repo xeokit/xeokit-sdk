@@ -1,5 +1,5 @@
 import {Component} from '../Component.js';
-import {SceneModel} from "../model";
+import {SceneModel} from "../model/SceneModel.js";
 
 /**
  * A set of 3D line segments.

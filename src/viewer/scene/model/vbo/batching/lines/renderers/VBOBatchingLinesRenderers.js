@@ -1,7 +1,7 @@
 import {VBOBatchingLinesColorRenderer} from "./VBOBatchingLinesColorRenderer.js";
 import {VBOBatchingLinesSilhouetteRenderer} from "./VBOBatchingLinesSilhouetteRenderer.js";
-import {VBOBatchingLinesSnapInitRenderer} from "./VBOBatchingLinesSnapInitRenderer";
-import {VBOBatchingLinesSnapRenderer} from "./VBOBatchingLinesSnapRenderer";
+import {VBOBatchingLinesSnapInitRenderer} from "./VBOBatchingLinesSnapInitRenderer.js";
+import {VBOBatchingLinesSnapRenderer} from "./VBOBatchingLinesSnapRenderer.js";
 
 /**
  * @private

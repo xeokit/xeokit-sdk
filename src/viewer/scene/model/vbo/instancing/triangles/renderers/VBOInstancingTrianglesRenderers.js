@@ -13,8 +13,8 @@ import {VBOInstancingTrianglesShadowRenderer} from "./VBOInstancingTrianglesShad
 import {VBOInstancingTrianglesPBRRenderer} from "./VBOInstancingTrianglesPBRRenderer.js";
 import {VBOInstancingTrianglesPickNormalsFlatRenderer} from "./VBOInstancingTrianglesPickNormalsFlatRenderer.js";
 import {VBOInstancingTrianglesColorTextureRenderer} from "./VBOInstancingTrianglesColorTextureRenderer.js";
-import {VBOInstancingTrianglesSnapInitRenderer} from "./VBOInstancingTrianglesSnapInitRenderer";
-import {VBOInstancingTrianglesSnapRenderer} from "./VBOInstancingTrianglesSnapRenderer";
+import {VBOInstancingTrianglesSnapInitRenderer} from "./VBOInstancingTrianglesSnapInitRenderer.js";
+import {VBOInstancingTrianglesSnapRenderer} from "./VBOInstancingTrianglesSnapRenderer.js";
 
 /**
  * @private

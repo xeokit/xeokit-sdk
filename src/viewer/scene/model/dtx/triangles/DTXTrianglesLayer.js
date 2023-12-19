@@ -1,13 +1,13 @@
 import {math} from "../../../math/math.js";
 import {RenderState} from "../../../webgl/RenderState.js";
-import {Configs} from "../../../../Configs";
+import {Configs} from "../../../../Configs.js";
 import {ENTITY_FLAGS} from '../../ENTITY_FLAGS.js';
 import {RENDER_PASSES} from '../../RENDER_PASSES.js';
 import {getRenderers} from "./renderers/DTXTrianglesRenderers.js";
 import {DTXTrianglesBuffer} from "./lib/DTXTrianglesBuffer.js";
 import {DTXTrianglesState} from "./lib/DTXTrianglesState.js"
 import {dataTextureRamStats} from "./lib/dataTextureRamStats.js";
-import {DTXTrianglesTextureFactory} from "./lib/DTXTrianglesTextureFactory";
+import {DTXTrianglesTextureFactory} from "./lib/DTXTrianglesTextureFactory.js";
 
 const configs = new Configs();
 

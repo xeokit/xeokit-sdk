@@ -1,4 +1,4 @@
-import {VBORenderer} from "../../VBORenderer";
+import {VBORenderer} from "../../VBORenderer.js";
 
 /**
  * @private

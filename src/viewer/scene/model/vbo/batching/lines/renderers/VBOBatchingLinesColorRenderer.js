@@ -1,4 +1,4 @@
-import {VBOSceneModelLineBatchingRenderer} from "./VBOSceneModelLineBatchingRenderer";
+import {VBOSceneModelLineBatchingRenderer} from "./VBOSceneModelLineBatchingRenderer.js";
 
 /**
  * @private

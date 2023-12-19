@@ -1,4 +1,4 @@
-import {VBOInstancingLinesRenderer} from "./VBOInstancingLinesRenderer";
+import {VBOInstancingLinesRenderer} from "./VBOInstancingLinesRenderer.js";
 
 /**
  * @private

@@ -1,4 +1,4 @@
-import {VBOSceneModelTriangleInstancingEdgesRenderer} from "./VBOSceneModelTriangleInstancingEdgesRenderer";
+import {VBOSceneModelTriangleInstancingEdgesRenderer} from "./VBOSceneModelTriangleInstancingEdgesRenderer.js";
 
 /**
  * @private

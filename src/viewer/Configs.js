@@ -42,7 +42,7 @@ let maxGeometryBatchSize = 5000000
  * });
  * ````
  */
-class Configs {
+export class Configs {
 
     /**
      * Creates a Configs.
@@ -125,4 +125,3 @@ class Configs {
     }
 }
 
-export {Configs};

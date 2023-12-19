@@ -1,4 +1,4 @@
-import {math} from "../math";
+import {math} from "../math/index.js";
 
 const angleAxis = math.vec4(4);
 const q1 = math.vec4();

@@ -13,8 +13,8 @@ import {VBOBatchingTrianglesShadowRenderer} from "./VBOBatchingTrianglesShadowRe
 import {VBOBatchingTrianglesPBRRenderer} from "./VBOBatchingTrianglesPBRRenderer.js";
 import {VBOBatchingTrianglesPickNormalsFlatRenderer} from "./VBOBatchingTrianglesPickNormalsFlatRenderer.js";
 import {VBOBatchingTrianglesColorTextureRenderer} from "./VBOBatchingTrianglesColorTextureRenderer.js";
-import {VBOBatchingTrianglesSnapInitRenderer} from "./VBOBatchingTrianglesSnapInitRenderer";
-import {VBOBatchingTrianglesSnapRenderer} from "./VBOBatchingTrianglesSnapRenderer";
+import {VBOBatchingTrianglesSnapInitRenderer} from "./VBOBatchingTrianglesSnapInitRenderer.js";
+import {VBOBatchingTrianglesSnapRenderer} from "./VBOBatchingTrianglesSnapRenderer.js";
 
 /**
  * @private

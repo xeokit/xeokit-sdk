@@ -1,4 +1,4 @@
-import {Configs} from "../../../../../Configs";
+import {Configs} from "../../../../../Configs.js";
 
 const configs = new Configs();
 

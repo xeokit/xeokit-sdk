@@ -7,7 +7,7 @@ import {DTXLinesBuffer} from "./DTXLinesBuffer.js";
 import {DTXLinesState} from "./DTXLinesState.js"
 import {DTXLinesTextureFactory} from "./DTXLinesTextureFactory.js";
 import {dataTextureRamStats} from "./dataTextureRamStats.js";
-import {Configs} from "../../../../Configs";
+import {Configs} from "../../../../Configs.js";
 
 const configs = new Configs();
 

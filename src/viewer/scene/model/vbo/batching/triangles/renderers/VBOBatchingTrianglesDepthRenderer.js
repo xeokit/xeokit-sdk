@@ -1,4 +1,4 @@
-import {VBOBatchingTrianglesRenderer} from "./VBOBatchingTrianglesRenderer";
+import {VBOBatchingTrianglesRenderer} from "./VBOBatchingTrianglesRenderer.js";
 
 
 /**

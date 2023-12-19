@@ -9,7 +9,7 @@ import {VBOBatchingLinesLayer} from './vbo/batching/lines/VBOBatchingLinesLayer.
 import {VBOInstancingLinesLayer} from './vbo/instancing/lines/VBOInstancingLinesLayer.js';
 import {VBOBatchingPointsLayer} from './vbo/batching/points/VBOBatchingPointsLayer.js';
 import {VBOInstancingPointsLayer} from './vbo/instancing/points/VBOInstancingPointsLayer.js';
-import {DTXLinesLayer} from "./dtx/lines/DTXLinesLayer";
+import {DTXLinesLayer} from "./dtx/lines/DTXLinesLayer.js";
 import {DTXTrianglesLayer} from "./dtx/triangles/DTXTrianglesLayer.js";
 import {ENTITY_FLAGS} from './ENTITY_FLAGS.js';
 import {RenderFlags} from "../webgl/RenderFlags.js";
@@ -37,7 +37,7 @@ import {uniquifyPositions} from "./calculateUniquePositions.js";
 import {rebucketPositions} from "./rebucketPositions.js";
 import {SceneModelEntity} from "./SceneModelEntity.js";
 import {geometryCompressionUtils} from "../math/geometryCompressionUtils.js";
-import {SceneModelTransform} from "./SceneModelTransform";
+import {SceneModelTransform} from "./SceneModelTransform.js";
 
 
 const tempVec3a = math.vec3();

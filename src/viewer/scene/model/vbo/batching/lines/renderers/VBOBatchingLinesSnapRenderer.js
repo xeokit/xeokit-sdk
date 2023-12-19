@@ -1,7 +1,7 @@
 
 import {createRTCViewMat} from "../../../../../math/rtcCoords.js";
 import {math} from "../../../../../math/math.js";
-import {VBORenderer} from "../../../VBORenderer";
+import {VBORenderer} from "../../../VBORenderer.js";
 
 const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
