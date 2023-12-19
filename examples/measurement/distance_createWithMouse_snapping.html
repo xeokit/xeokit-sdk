@@ -145,9 +145,9 @@
         dtxEnabled: true
     });
 
-    viewer.camera.eye = [40.78, 36.15, 62.99];
-    viewer.camera.look = [34.96, 1.84, 6.76];
-    viewer.camera.up = [-0.05, 0.85, -0.51];
+    viewer.camera.eye = [-3.93, 2.85, 27.01];
+    viewer.camera.look = [4.40, 3.72, 8.89];
+    viewer.camera.up = [-0.01, 0.99, 0.039];
 
     //------------------------------------------------------------------------------------------------------------------
     // Load a model
@@ -157,20 +157,12 @@
 
     const sceneModel = xktLoader.load({
         id: "myModel",
-        src: "../../assets/models/xkt/v10/glb/archicad-demoprojekt.xkt",
-        excludeTypes: ["IfcSpace"],
-        edges: true,
-        objectDefaults: { // This model has opaque windows / spaces; make them transparent
-            "IfcPlate": {
-                opacity: 0.3 // These are used as windows in this model - make transparent
-            },
-            "IfcWindow": {
-                opacity: 0.4
-            },
-            "IfcSpace": {
-                opacity: 0.4
-            }
-        }
+        src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt",
+        edges: true
+    });
+
+    sceneModel.on("loaded", ()=>{
+        viewer.cameraFlight.jumpTo(sceneModel);
     });
 
     //------------------------------------------------------------------------------------------------------------------
