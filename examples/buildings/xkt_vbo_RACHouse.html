@@ -128,9 +128,9 @@
 <div id="treeViewContainer"></div>
 <div class="slideout-sidebar">
     <img class="info-icon" style="width:280px; padding-bottom:10px;" src="../../assets/images/bim_icon.png"/>
-    <h1>XKTLoaderPlugin and Data Textures</h1>
-    <h2>Loading a BIM model from an XKT file into a data texture model representation</h2>
-    <h3>Stats</h3>
+    <h1>XKTLoaderPlugin</h1>
+    <h2>Loading an XKT model</h2>
+     <h3>Stats</h3>
     <ul>
         <li>
             <div id="time">Loading JavaScript modules...</div>
@@ -155,13 +155,6 @@
                target="_other">NavCubePlugin</a>
         </li>
     </ul>
-    <h3>Tutorials</h3>
-    <ul>
-        <li>
-            <a href="https://www.notion.so/xeokit/Compact-Model-Representation-using-Data-Textures-e8093ae372fa47bf9995c26dc24ccd53?pvs=4"
-               target="_other">Compact Model Representation using Data Textures</a>
-        </li>
-    </ul>
     <h3>Assets</h3>
     <ul>
         <li><a href="https://help.autodesk.com/view/RVT/2023/ENU/?guid=GUID-61EF2F22-3A1F-4317-B925-1E85F138BE88" target="_other">Model source</a></li>
@@ -176,13 +169,12 @@
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true,
-        saoEnabled: true,
-        dtxEnabled: true // Enable data texture model representation
+        saoEnabled: true
     });
 
-    viewer.scene.camera.eye = [14.915582703146043, 14.396781491179095, 5.431098754133695];
-    viewer.scene.camera.look = [6.599999999999998, 8.34099990051474, -4.159999575600315];
-    viewer.scene.camera.up = [-0.2820584034861215, 0.9025563895259413, -0.3253229483893775];
+    viewer.scene.camera.eye = [-37.1356047775136, 13.019223731456176, 58.51748229729708];
+    viewer.scene.camera.look = [-21.930914776596467, 1.3515918520952024, 29.454670463302506];
+    viewer.scene.camera.up = [0.15536164462465452, 0.9421651211030125, -0.2969640448883814];
 
     new NavCubePlugin(viewer, {
         canvasId: "myNavCubeCanvas",
@@ -193,36 +185,32 @@
         rightMargin: 10
     });
 
+    new FastNavPlugin(viewer, {
+        hideEdges: true,
+        hideSAO: true,
+        hideColorTexture: false,
+        hidePBR: false,
+        hideTransparentObjects: false,
+        scaleCanvasResolution: false,
+        scaleCanvasResolutionFactor: 0.5,
+        delayBeforeRestore: true,
+        delayBeforeRestoreSeconds: 0.4
+    });
+
     new TreeViewPlugin(viewer, {
         containerElement: document.getElementById("treeViewContainer"),
         hierarchy: "types",
         autoExpandDepth: 1
     });
 
-    new FastNavPlugin(viewer, {
-        hideEdges: true,
-        hideSAO: true,
-        hideColorTexture: true,
-        hidePBR: true,
-        hideTransparentObjects: false,
-        // scaleCanvasResolution: true,
-        // scaleCanvasResolutionFactor: 0.5,
-        delayBeforeRestore: true,
-        delayBeforeRestoreSeconds: 0.4
-    });
-
     const xktLoader = new XKTLoaderPlugin(viewer);
 
     const sceneModel = xktLoader.load({
         id: "myModel",
-        src: "../../assets/models/xkt/v9/ifc/rac_advanced_sample_project.IFC2glTFConverter.ifc.xkt",
+        src: "../../assets/models/xkt/v10/ifc/rac.xkt",
         saoEnabled: true,
-        dtxEnabled: true,
-        edges: false
-    });
-
-    sceneModel.on("loaded", ()=>{
-       viewer.cameraFlight.jumpTo(sceneModel);
+        edges: false,
+        dtxEnabled: true
     });
 
     const t0 = performance.now();
