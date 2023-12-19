@@ -1,5 +1,5 @@
 import {Component} from "../../viewer/scene/Component.js";
-import {MarqueePicker} from "./MarqueePicker";
+import {MarqueePicker} from "./MarqueePicker.js";
 
 /**
  * Controls a {@link MarqueePicker} with mouse input.
