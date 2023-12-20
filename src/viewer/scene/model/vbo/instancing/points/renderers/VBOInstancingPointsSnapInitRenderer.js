@@ -286,10 +286,7 @@ export class VBOInstancingPointsSnapInitRenderer extends VBORenderer {
         }
         src.push("in highp vec3 relativeToOriginPosition;");
         src.push("layout(location = 0) out highp ivec4 outCoords;");
-        ///////////////////////////////////////////
-        // TODO: normal placeholder?
-        // Primitive type?
-        ///////////////////////////////////////////
+        src.push("layout(location = 1) out highp ivec4 outNormal;");
         src.push("layout(location = 2) out lowp uvec4 outPickColor;");
         src.push("void main(void) {");
         if (clipping) {
@@ -311,6 +308,10 @@ export class VBOInstancingPointsSnapInitRenderer extends VBORenderer {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth + diff ) * logDepthBufFC * 0.5;");
         }
         src.push("outCoords = ivec4(relativeToOriginPosition.xyz*coordinateScaler.xyz, -layerNumber);")
+        // src.push("vec3 xTangent = dFdx( vWorldPosition.xyz );");
+        // src.push("vec3 yTangent = dFdy( vWorldPosition.xyz );");
+        // src.push("vec3 worldNormal = normalize( cross( xTangent, yTangent ) );");
+        src.push(`outNormal = ivec4(1.0, 1.0, 1.0, 1.0);`);
         src.push("outPickColor = uvec4(vPickColor);");
         src.push("}");
         return src;

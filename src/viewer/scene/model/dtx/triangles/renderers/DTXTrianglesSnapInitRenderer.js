@@ -229,7 +229,7 @@ export class DTXTrianglesSnapInitRenderer {
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push("#version 300 es");
-        src.push("// TrianglesDataTextureSnapDepthBufInitRenderer vertex shader");
+        src.push("// DTXTrianglesSnapInitRenderer vertex shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -371,6 +371,9 @@ export class DTXTrianglesSnapInitRenderer {
             src.push("vFlags2 = flags2.r;");
         }
         src.push("vPickColor = vec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0));");
+
+        // TODO: Normalized color? See here:
+        //src.push("vPickColor = vec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0)) /255.0;");
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         src.push("float tmp = clipPos.w;")
         src.push("clipPos.xyzw /= tmp;")
@@ -391,7 +394,7 @@ export class DTXTrianglesSnapInitRenderer {
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push('#version 300 es');
-        src.push("// TrianglesDataTextureSnapDepthBufInitRenderer fragment shader");
+        src.push("// DTXTrianglesSnapInitRenderer fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");

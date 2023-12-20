@@ -287,10 +287,10 @@ export class VBOBatchingPointsSnapInitRenderer extends VBORenderer {
         }
         src.push("outCoords = ivec4(relativeToOriginPosition.xyz*coordinateScaler.xyz, -layerNumber);");
 
-        src.push("vec3 xTangent = dFdx( vWorldPosition.xyz );");
-        src.push("vec3 yTangent = dFdy( vWorldPosition.xyz );");
-        src.push("vec3 worldNormal = normalize( cross( xTangent, yTangent ) );");
-        src.push(`outNormal = ivec4(worldNormal * float(${math.MAX_INT}), 1.0);`);
+        // src.push("vec3 xTangent = dFdx( vWorldPosition.xyz );");
+        // src.push("vec3 yTangent = dFdy( vWorldPosition.xyz );");
+        // src.push("vec3 worldNormal = normalize( cross( xTangent, yTangent ) );");
+         src.push(`outNormal = ivec4(1.0, 1.0, 1.0, 1.0);`);
         src.push("outPickColor = uvec4(vPickColor);");
         src.push("}");
         return src;
