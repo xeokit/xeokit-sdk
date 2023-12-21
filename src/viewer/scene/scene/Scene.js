@@ -675,12 +675,12 @@ class Scene extends Component {
                 }
             };
 
-            this.setNumCachedSectionPlanes = function(numCachedSectionPlanes) {
+            this.setNumCachedSectionPlanes = function (numCachedSectionPlanes) {
                 this._numCachedSectionPlanes = numCachedSectionPlanes;
                 hash = null;
             }
 
-            this.getNumCachedSectionPlanes = function() {
+            this.getNumCachedSectionPlanes = function () {
                 return this._numCachedSectionPlanes;
             }
 
@@ -1092,6 +1092,12 @@ class Scene extends Component {
         }
     }
 
+    _deRegisterVisibleObject(entity) {
+        delete this.visibleObjects[entity.id];
+        this._numVisibleObjects--;
+        this._visibleObjectIds = null; // Lazy regenerate
+    }
+
     _objectXRayedUpdated(entity, notify = true) {
         if (entity.xrayed) {
             if (ASSERT_OBJECT_STATE_UPDATE && this.xrayedObjects[entity.id]) {
@@ -1114,7 +1120,13 @@ class Scene extends Component {
         }
     }
 
-    _objectHighlightedUpdated(entity, notify = true) {
+    _deRegisterXRayedObject(entity) {
+        delete this.xrayedObjects[entity.id];
+        this._numXRayedObjects--;
+        this._xrayedObjectIds = null; // Lazy regenerate
+    }
+
+    _objectHighlightedUpdated(entity) {
         if (entity.highlighted) {
             if (ASSERT_OBJECT_STATE_UPDATE && this.highlightedObjects[entity.id]) {
                 console.error("Redundant object highlight update (highlighted=true)");
@@ -1131,9 +1143,12 @@ class Scene extends Component {
             this._numHighlightedObjects--;
         }
         this._highlightedObjectIds = null; // Lazy regenerate
-        if (notify) {
-            this.fire("objectHighlighted", entity, true);
-        }
+    }
+
+    _deRegisterHighlightedObject(entity) {
+        delete this.highlightedObjects[entity.id];
+        this._numHighlightedObjects--;
+        this._highlightedObjectIds = null; // Lazy regenerate
     }
 
     _objectSelectedUpdated(entity, notify = true) {
@@ -1158,6 +1173,13 @@ class Scene extends Component {
         }
     }
 
+    _deRegisterSelectedObject(entity) {
+        delete this.selectedObjects[entity.id];
+        this._numSelectedObjects--;
+        this._selectedObjectIds = null; // Lazy regenerate
+    }
+
+
     _objectColorizeUpdated(entity, colorized) {
         if (colorized) {
             this.colorizedObjects[entity.id] = entity;
@@ -1166,6 +1188,12 @@ class Scene extends Component {
             delete this.colorizedObjects[entity.id];
             this._numColorizedObjects--;
         }
+        this._colorizedObjectIds = null; // Lazy regenerate
+    }
+
+    _deRegisterColorizedObject(entity) {
+       delete this.colorizedObjects[entity.id];
+        this._numColorizedObjects--;
         this._colorizedObjectIds = null; // Lazy regenerate
     }
 
@@ -1180,6 +1208,12 @@ class Scene extends Component {
         this._opacityObjectIds = null; // Lazy regenerate
     }
 
+    _deRegisterOpacityObject(entity) {
+      delete  this.opacityObjects[entity.id];
+        this._numOpacityObjects--;
+        this._opacityObjectIds = null; // Lazy regenerate
+    }
+
     _objectOffsetUpdated(entity, offset) {
         if (!offset || offset[0] === 0 && offset[1] === 0 && offset[2] === 0) {
             this.offsetObjects[entity.id] = entity;
@@ -1188,6 +1222,12 @@ class Scene extends Component {
             delete this.offsetObjects[entity.id];
             this._numOffsetObjects--;
         }
+        this._offsetObjectIds = null; // Lazy regenerate
+    }
+
+    _deRegisterOffsetObject(entity) {
+       delete this.offsetObjects[entity.id];
+        this._numOffsetObjects--;
         this._offsetObjectIds = null; // Lazy regenerate
     }
 
