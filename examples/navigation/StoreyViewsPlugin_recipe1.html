@@ -66,7 +66,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, StoreyViewsPlugin, math, XKTLoaderPlugin, CameraMemento} from "../../dist/xeokit-sdk.es.js";
+    import {Viewer, StoreyViewsPlugin, math, XKTLoaderPlugin, CameraMemento, Skybox} from "../../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera
@@ -82,8 +82,12 @@
     viewer.camera.look = [13.44, 3.31, -14.83];
     viewer.camera.up = [0.10, 0.98, -0.14];
 
-    viewer.cameraControl.navMode = "firstPerson";
-    viewer.cameraControl.followPointer = true;
+    viewer.camera.project.fovy = 70;
+
+    new Skybox(viewer.scene, {
+        src: "../../assets/textures/skybox/cloudySkyBox.jpg",
+        size: 1000
+    });
 
     //------------------------------------------------------------------------------------------------------------------
     // Load a model
@@ -93,16 +97,31 @@
 
     const sceneModel = xktLoader.load({
         id: "myModel",
-        src: "../../assets/models/xkt/v10/ifc/ar-demo-sample-single-building-01.xkt",
-        edges: true
+         //src: "../../assets/models/xkt/v10/ifc/ar-demo-sample-single-building-01.xkt",
+         //      src: "../../assets/models/xkt/v10/ifc/rac.xkt",
+
+        src: "../../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
+        //src: "../../assets/models/xkt/v8/ifc/OTCConferenceCenter.ifc.xkt",
+        //  src: "../../assets/models/xkt/v10/glb/archicad-demoprojekt.xkt",
+        edges: true,
+        objectDefaults: { // This model has opaque windows / spaces; make them transparent
+            "IfcPlate": {
+                opacity: 0.3 // These are used as windows in this model - make transparent
+            },
+            "IfcWindow": {
+                opacity: 0.4
+            },
+            "IfcSpace": {
+                opacity: 0.4
+            }
+        }
     });
 
     //------------------------------------------------------------------------------------------------------------------
     // Add a StoreyViewsPlugin
     //------------------------------------------------------------------------------------------------------------------
 
-    const storeyViewsPlugin = new StoreyViewsPlugin(viewer, {
-    });
+    const storeyViewsPlugin = new StoreyViewsPlugin(viewer, {});
 
     //------------------------------------------------------------------------------------------------------------------
     // When model loaded, build a clickable set of storey plan images from the StoreyViewsPlugin, bind mouse
@@ -128,8 +147,13 @@
         const storeyDiv = document.getElementById("storeys");
         const storeyIds = Object.keys(storeyViewsPlugin.storeys);
 
-        for (var i = storeyIds.length - 1; i >= 0; i--) { // Bottom to top
+        let i = storeyIds.length - 1;
 
+        function next() {
+
+            if (i < 0) {
+                return;
+            }
             const storeyId = storeyIds[i];
 
             const storeyMap = storeyViewsPlugin.createStoreyMap(storeyId, {
@@ -180,15 +204,16 @@
                         duration: 1.5
                     }, () => {
                         viewer.cameraControl.navMode = "firstPerson";
-                        viewer.cameraControl.followPointer = false;
-                    });
-                } else {
-                    cameraMemento.restoreCamera(viewer.scene, () => {
-                        viewer.cameraControl.navMode = "planView";
                     });
                 }
             };
+
+            viewer.scene.once("tick", next);
+
+            i--;
         }
+
+        next();
     }
 
 </script>

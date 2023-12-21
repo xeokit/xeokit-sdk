@@ -94,7 +94,18 @@
     const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
-        edges: true
+        edges: true,
+        objectDefaults: { // This model has opaque windows / spaces; make them transparent
+            "IfcPlate": {
+                opacity: 0.3 // These are used as windows in this model - make transparent
+            },
+            "IfcWindow": {
+                opacity: 0.4
+            },
+            "IfcSpace": {
+                opacity: 0.4
+            }
+        }
     });
 
     //------------------------------------------------------------------------------------------------------------------
@@ -197,11 +208,6 @@
                         duration: 1.5
                     }, () => {
                         viewer.cameraControl.navMode = "firstPerson";
-                        viewer.cameraControl.followPointer = false;
-                    });
-                } else {
-                    cameraMemento.restoreCamera(viewer.scene, () => {
-                        viewer.cameraControl.navMode = "planView";
                     });
                 }
             };
