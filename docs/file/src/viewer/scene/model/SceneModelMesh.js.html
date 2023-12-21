@@ -55,7 +55,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lasloaderplugin">plugins/LASLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LASLoaderPlugin/LASDefaultDataSource.js~LASDefaultDataSource.html">LASDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html">LASLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lodcullingplugin">plugins/LODCullingPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html">LODCullingPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLDefaultDataSource.js~STLDefaultDataSource.html">STLDefaultDataSource</a></span></span></li>
@@ -218,9 +217,11 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/SceneModelTextureSet.js~SceneModelTextureSet.html">SceneModelTextureSet</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/SceneModelTransform.js~SceneModelTransform.html">SceneModelTransform</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/VBOSceneModel.js~VBOSceneModel.html">VBOSceneModel</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-model-dtx-triangles">viewer/scene/model/dtx/triangles</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-uniquifyPositions">uniquifyPositions</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-uniquifyPositions">uniquifyPositions</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rebucketPositions">rebucketPositions</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-model-dtx-lines">viewer/scene/model/dtx/lines</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rebucketPositions">rebucketPositions</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-dataTextureRamStats">dataTextureRamStats</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-model-dtx-triangles-lib">viewer/scene/model/dtx/triangles/lib</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-dataTextureRamStats">dataTextureRamStats</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-nodes">viewer/scene/nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-paths">viewer/scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
@@ -253,6 +254,7 @@
 
 const tempOBB3 = math.OBB3();
 const tempOBB3b = math.OBB3();
+const tempOBB3c = math.OBB3();
 
 /**
  * A mesh within a {@link SceneModel}.
@@ -300,7 +302,6 @@ export class SceneModelMesh {
          */
         this.transform = transform;
 
-
         /**
          * The {@link SceneModelTextureSet} that optionally textures this SceneModelMesh.
          *
@@ -327,8 +328,9 @@ export class SceneModelMesh {
          */
         this.obb = null;
 
-        this._aabb = null;
-        this._abbDirty = false;
+        this._aabbLocal = null;
+        this._aabbWorld = math.AABB3();
+        this._aabbWorldDirty = false;
 
         /**
          * @private
@@ -354,7 +356,7 @@ export class SceneModelMesh {
          * @private
          * @type {null}
          */
-        this.origin = null;
+        this.origin = null; // Set By SceneModel
 
         /**
          * The {@link SceneModelEntity} that owns this SceneModelMesh.
@@ -369,7 +371,8 @@ export class SceneModelMesh {
     }
 
     _sceneModelDirty() {
-        this._aabbDirty = true;
+        this._aabbWorldDirty = true;
+        this.layer.aabbDirty = true;
     }
 
     _transformDirty() {
@@ -378,7 +381,8 @@ export class SceneModelMesh {
             this._matrixDirty = true;
             this._matrixUpdateScheduled = true;
         }
-        this._aabbDirty = true;
+        this._aabbWorldDirty = true;
+        this.layer.aabbDirty = true;
         if (this.entity) {
             this.entity._transformDirty();
         }
@@ -549,27 +553,35 @@ export class SceneModelMesh {
      * @private
      */
     set aabb(aabb) { // Called by SceneModel
-        this._aabb = aabb;
+        this._aabbLocal = aabb;
     }
 
     /**
      * @private
      */
     get aabb() { // called by SceneModelEntity
-        if (this._aabbDirty) {
-            if (this.obb) {
-                if (this.transform) {
-                    math.transformOBB3(this.transform.worldMatrix, this.obb, tempOBB3);
-                    math.transformOBB3(this.model.worldMatrix, tempOBB3, tempOBB3b);
-                    math.OBB3ToAABB3(tempOBB3b, this._aabb);
-                } else {
-                    math.transformOBB3(this.model.worldMatrix, this.obb, tempOBB3);
-                    math.OBB3ToAABB3(tempOBB3, this._aabb);
-                }
+        if (this._aabbWorldDirty) {
+            math.AABB3ToOBB3(this._aabbLocal, tempOBB3);
+            if (this.transform) {
+                math.transformOBB3(this.transform.worldMatrix, tempOBB3, tempOBB3b);
+                math.transformOBB3(this.model.worldMatrix, tempOBB3b, tempOBB3c);
+                math.OBB3ToAABB3(tempOBB3c, this._aabbWorld);
+            } else {
+                math.transformOBB3(this.model.worldMatrix, tempOBB3, tempOBB3b);
+                math.OBB3ToAABB3(tempOBB3b, this._aabbWorld);
             }
-            this._aabbDirty = false;
+            if (this.origin) {
+                const origin = this.origin;
+                this._aabbWorld[0] += origin[0];
+                this._aabbWorld[1] += origin[1];
+                this._aabbWorld[2] += origin[2];
+                this._aabbWorld[3] += origin[0];
+                this._aabbWorld[4] += origin[1];
+                this._aabbWorld[5] += origin[2];
+            }
+            this._aabbWorldDirty = false;
         }
-        return this._aabb;
+        return this._aabbWorld;
     }
 
     /**

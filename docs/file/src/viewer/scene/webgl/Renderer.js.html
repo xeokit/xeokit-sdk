@@ -55,7 +55,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lasloaderplugin">plugins/LASLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LASLoaderPlugin/LASDefaultDataSource.js~LASDefaultDataSource.html">LASDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html">LASLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lodcullingplugin">plugins/LODCullingPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html">LODCullingPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLDefaultDataSource.js~STLDefaultDataSource.html">STLDefaultDataSource</a></span></span></li>
@@ -218,9 +217,11 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/SceneModelTextureSet.js~SceneModelTextureSet.html">SceneModelTextureSet</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/SceneModelTransform.js~SceneModelTransform.html">SceneModelTransform</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/VBOSceneModel.js~VBOSceneModel.html">VBOSceneModel</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-model-dtx-triangles">viewer/scene/model/dtx/triangles</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-uniquifyPositions">uniquifyPositions</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-uniquifyPositions">uniquifyPositions</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rebucketPositions">rebucketPositions</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-model-dtx-lines">viewer/scene/model/dtx/lines</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rebucketPositions">rebucketPositions</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-dataTextureRamStats">dataTextureRamStats</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-model-dtx-triangles-lib">viewer/scene/model/dtx/triangles/lib</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-dataTextureRamStats">dataTextureRamStats</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-nodes">viewer/scene/nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-paths">viewer/scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
@@ -1486,7 +1487,7 @@ const Renderer = function (scene, options) {
         }
     })();
 
-    function snapInitDepthBuf(frameCtx) {
+    function drawSnapInit(frameCtx) {
         frameCtx.snapPickLayerParams = [];
         frameCtx.snapPickLayerNumber = 0;
         for (let type in drawableTypeInfo) {
@@ -1494,9 +1495,9 @@ const Renderer = function (scene, options) {
             const drawableList = drawableInfo.drawableList;
             for (let i = 0, len = drawableList.length; i &lt; len; i++) {
                 const drawable = drawableList[i];
-                if (drawable.drawSnapInitDepthBuf) {
+                if (drawable.drawSnapInit) {
                     if (!drawable.culled &amp;&amp; drawable.visible &amp;&amp; drawable.pickable) {
-                        drawable.drawSnapInitDepthBuf(frameCtx);
+                        drawable.drawSnapInit(frameCtx);
                     }
                 }
             }
@@ -1504,7 +1505,7 @@ const Renderer = function (scene, options) {
         return frameCtx.snapPickLayerParams;
     }
 
-    function snapPickDrawSnapDepths(frameCtx) {
+    function drawSnap(frameCtx) {
         frameCtx.snapPickLayerParams = frameCtx.snapPickLayerParams || [];
         frameCtx.snapPickLayerNumber = frameCtx.snapPickLayerParams.length;
         for (let type in drawableTypeInfo) {
@@ -1512,9 +1513,9 @@ const Renderer = function (scene, options) {
             const drawableList = drawableInfo.drawableList;
             for (let i = 0, len = drawableList.length; i &lt; len; i++) {
                 const drawable = drawableList[i];
-                if (drawable.drawSnapDepths) {
+                if (drawable.drawSnap) {
                     if (!drawable.culled &amp;&amp; drawable.visible &amp;&amp; drawable.pickable) {
-                        drawable.drawSnapDepths(frameCtx);
+                        drawable.drawSnap(frameCtx);
                     }
                 }
             }
@@ -1612,7 +1613,7 @@ const Renderer = function (scene, options) {
 
             // a) init z-buffer
             gl.drawBuffers([gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1, gl.COLOR_ATTACHMENT2]);
-            const layerParamsSurface = snapInitDepthBuf(frameCtx);
+            const layerParamsSurface = drawSnapInit(frameCtx);
 
             // b) snap-pick
             const layerParamsSnap = []
@@ -1623,16 +1624,16 @@ const Renderer = function (scene, options) {
 
             if (snapToVertex &amp;&amp; snapToEdge) {
                 frameCtx.snapMode = &quot;edge&quot;;
-                snapPickDrawSnapDepths(frameCtx);
+                drawSnap(frameCtx);
 
                 frameCtx.snapMode = &quot;vertex&quot;;
                 frameCtx.snapPickLayerNumber++;
 
-                snapPickDrawSnapDepths(frameCtx);
+                drawSnap(frameCtx);
             } else {
                 frameCtx.snapMode = snapToVertex ? &quot;vertex&quot; : &quot;edge&quot;;
 
-                snapPickDrawSnapDepths(frameCtx);
+                drawSnap(frameCtx);
             }
 
             gl.depthMask(true);

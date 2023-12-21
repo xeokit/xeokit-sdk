@@ -384,12 +384,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin",
-    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html",
-    "<span>LODCullingPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/LODCullingPlugin/LODCullingPlugin.js</span>",
-    "class"
-  ],
-  [
     "@xeokit/xeokit-sdk/src/viewer/scene/materials/lambertmaterial.js~lambertmaterial",
     "class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html",
     "<span>LambertMaterial</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/materials/LambertMaterial.js</span>",
@@ -1248,9 +1242,15 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/triangles/datatextureramstats.js~datatextureramstats",
+    "@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/lines/datatextureramstats.js~datatextureramstats",
     "variable/index.html#static-variable-dataTextureRamStats",
-    "<span>dataTextureRamStats</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/triangles/dataTextureRamStats.js</span>",
+    "<span>dataTextureRamStats</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/lines/dataTextureRamStats.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/triangles/lib/datatextureramstats.js~datatextureramstats",
+    "variable/index.html#static-variable-dataTextureRamStats",
+    "<span>dataTextureRamStats</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/triangles/lib/dataTextureRamStats.js</span>",
     "variable"
   ],
   [
@@ -1266,9 +1266,15 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/triangles/rebucketpositions.js~rebucketpositions",
+    "@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/lines/rebucketpositions.js~rebucketpositions",
     "function/index.html#static-function-rebucketPositions",
-    "<span>rebucketPositions</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/triangles/rebucketPositions.js</span>",
+    "<span>rebucketPositions</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/lines/rebucketPositions.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/model/rebucketpositions.js~rebucketpositions",
+    "function/index.html#static-function-rebucketPositions",
+    "<span>rebucketPositions</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/rebucketPositions.js</span>",
     "function"
   ],
   [
@@ -1284,9 +1290,9 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/triangles/calculateuniquepositions.js~uniquifypositions",
+    "@xeokit/xeokit-sdk/src/viewer/scene/model/calculateuniquepositions.js~uniquifypositions",
     "function/index.html#static-function-uniquifyPositions",
-    "<span>uniquifyPositions</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/triangles/calculateUniquePositions.js</span>",
+    "<span>uniquifyPositions</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/calculateUniquePositions.js</span>",
     "function"
   ],
   [
@@ -3522,72 +3528,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/plugins/lodcullingplugin/lodcullingplugin.js",
-    "file/src/plugins/LODCullingPlugin/LODCullingPlugin.js.html",
-    "src/plugins/LODCullingPlugin/LODCullingPlugin.js",
-    "file"
-  ],
-  [
-    "src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin#constructor",
-    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html#instance-constructor-constructor",
-    "src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin#constructor",
-    "method"
-  ],
-  [
-    "src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin#enabled",
-    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html#instance-set-enabled",
-    "src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin#enabled",
-    "member"
-  ],
-  [
-    "src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin#enabled",
-    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html#instance-get-enabled",
-    "src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin#enabled",
-    "member"
-  ],
-  [
-    "src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin#neverculltypes",
-    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html#instance-set-neverCullTypes",
-    "src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin#neverCullTypes",
-    "member"
-  ],
-  [
-    "src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin#neverculltypes",
-    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html#instance-get-neverCullTypes",
-    "src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin#neverCullTypes",
-    "member"
-  ],
-  [
-    "src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin#targetfps",
-    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html#instance-set-targetFPS",
-    "src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin#targetFPS",
-    "member"
-  ],
-  [
-    "src/plugins/lodcullingplugin/lodcullingplugin.js~lodcullingplugin#targetfps",
-    "class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html#instance-get-targetFPS",
-    "src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin#targetFPS",
-    "member"
-  ],
-  [
-    "src/plugins/lodcullingplugin/lodmanager.js",
-    "file/src/plugins/LODCullingPlugin/LODManager.js.html",
-    "src/plugins/LODCullingPlugin/LODManager.js",
-    "file"
-  ],
-  [
-    "src/plugins/lodcullingplugin/lodstate.js",
-    "file/src/plugins/LODCullingPlugin/LODState.js.html",
-    "src/plugins/LODCullingPlugin/LODState.js",
-    "file"
-  ],
-  [
-    "src/plugins/lodcullingplugin/index.js",
-    "file/src/plugins/LODCullingPlugin/index.js.html",
-    "src/plugins/LODCullingPlugin/index.js",
-    "file"
-  ],
-  [
     "src/plugins/navcubeplugin/cubetexturecanvas.js",
     "file/src/plugins/NavCubePlugin/CubeTextureCanvas.js.html",
     "src/plugins/NavCubePlugin/CubeTextureCanvas.js",
@@ -4761,6 +4701,30 @@ window.esdocSearchIndex = [
     "src/viewer/configs.js~configs#doubleprecisionenabled",
     "class/src/viewer/Configs.js~Configs.html#instance-get-doublePrecisionEnabled",
     "src/viewer/Configs.js~Configs#doublePrecisionEnabled",
+    "member"
+  ],
+  [
+    "src/viewer/configs.js~configs#maxdatatextureheight",
+    "class/src/viewer/Configs.js~Configs.html#instance-set-maxDataTextureHeight",
+    "src/viewer/Configs.js~Configs#maxDataTextureHeight",
+    "member"
+  ],
+  [
+    "src/viewer/configs.js~configs#maxdatatextureheight",
+    "class/src/viewer/Configs.js~Configs.html#instance-get-maxDataTextureHeight",
+    "src/viewer/Configs.js~Configs#maxDataTextureHeight",
+    "member"
+  ],
+  [
+    "src/viewer/configs.js~configs#maxgeometrybatchsize",
+    "class/src/viewer/Configs.js~Configs.html#instance-set-maxGeometryBatchSize",
+    "src/viewer/Configs.js~Configs#maxGeometryBatchSize",
+    "member"
+  ],
+  [
+    "src/viewer/configs.js~configs#maxgeometrybatchsize",
+    "class/src/viewer/Configs.js~Configs.html#instance-get-maxGeometryBatchSize",
+    "src/viewer/Configs.js~Configs#maxGeometryBatchSize",
     "member"
   ],
   [
@@ -12336,135 +12300,171 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/viewer/scene/model/calculateuniquepositions.js",
+    "file/src/viewer/scene/model/calculateUniquePositions.js.html",
+    "src/viewer/scene/model/calculateUniquePositions.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/model/compression.js",
     "file/src/viewer/scene/model/compression.js.html",
     "src/viewer/scene/model/compression.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/dtx/triangles/bindabledatatexture.js",
-    "file/src/viewer/scene/model/dtx/triangles/BindableDataTexture.js.html",
-    "src/viewer/scene/model/dtx/triangles/BindableDataTexture.js",
+    "src/viewer/scene/model/dtx/bindabledatatexture.js",
+    "file/src/viewer/scene/model/dtx/BindableDataTexture.js.html",
+    "src/viewer/scene/model/dtx/BindableDataTexture.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/dtx/triangles/datatexturegenerator.js",
-    "file/src/viewer/scene/model/dtx/triangles/DataTextureGenerator.js.html",
-    "src/viewer/scene/model/dtx/triangles/DataTextureGenerator.js",
+    "src/viewer/scene/model/dtx/lines/dtxlinesbuffer.js",
+    "file/src/viewer/scene/model/dtx/lines/DTXLinesBuffer.js.html",
+    "src/viewer/scene/model/dtx/lines/DTXLinesBuffer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/dtx/triangles/datatexturestate.js",
-    "file/src/viewer/scene/model/dtx/triangles/DataTextureState.js.html",
-    "src/viewer/scene/model/dtx/triangles/DataTextureState.js",
+    "src/viewer/scene/model/dtx/lines/dtxlinesstate.js",
+    "file/src/viewer/scene/model/dtx/lines/DTXLinesState.js.html",
+    "src/viewer/scene/model/dtx/lines/DTXLinesState.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/dtx/triangles/trianglesdatatexturebuffer.js",
-    "file/src/viewer/scene/model/dtx/triangles/TrianglesDataTextureBuffer.js.html",
-    "src/viewer/scene/model/dtx/triangles/TrianglesDataTextureBuffer.js",
+    "src/viewer/scene/model/dtx/lines/dtxlinestexturefactory.js",
+    "file/src/viewer/scene/model/dtx/lines/DTXLinesTextureFactory.js.html",
+    "src/viewer/scene/model/dtx/lines/DTXLinesTextureFactory.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/dtx/triangles/trianglesdatatexturerenderers.js",
-    "file/src/viewer/scene/model/dtx/triangles/TrianglesDataTextureRenderers.js.html",
-    "src/viewer/scene/model/dtx/triangles/TrianglesDataTextureRenderers.js",
+    "src/viewer/scene/model/dtx/lines/datatextureramstats.js",
+    "file/src/viewer/scene/model/dtx/lines/dataTextureRamStats.js.html",
+    "src/viewer/scene/model/dtx/lines/dataTextureRamStats.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/dtx/triangles/calculateuniquepositions.js",
-    "file/src/viewer/scene/model/dtx/triangles/calculateUniquePositions.js.html",
-    "src/viewer/scene/model/dtx/triangles/calculateUniquePositions.js",
+    "src/viewer/scene/model/dtx/lines/rebucketpositions.js",
+    "file/src/viewer/scene/model/dtx/lines/rebucketPositions.js.html",
+    "src/viewer/scene/model/dtx/lines/rebucketPositions.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/dtx/triangles/datatextureramstats.js",
-    "file/src/viewer/scene/model/dtx/triangles/dataTextureRamStats.js.html",
-    "src/viewer/scene/model/dtx/triangles/dataTextureRamStats.js",
+    "src/viewer/scene/model/dtx/lines/renderers/dtxlinescolorrenderer.js",
+    "file/src/viewer/scene/model/dtx/lines/renderers/DTXLinesColorRenderer.js.html",
+    "src/viewer/scene/model/dtx/lines/renderers/DTXLinesColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/dtx/triangles/rebucketpositions.js",
-    "file/src/viewer/scene/model/dtx/triangles/rebucketPositions.js.html",
-    "src/viewer/scene/model/dtx/triangles/rebucketPositions.js",
+    "src/viewer/scene/model/dtx/lines/renderers/dtxlinesrenderers.js",
+    "file/src/viewer/scene/model/dtx/lines/renderers/DTXLinesRenderers.js.html",
+    "src/viewer/scene/model/dtx/lines/renderers/DTXLinesRenderers.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturecolorrenderer.js",
-    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureColorRenderer.js.html",
-    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureColorRenderer.js",
+    "src/viewer/scene/model/dtx/triangles/lib/dtxtrianglesbuffer.js",
+    "file/src/viewer/scene/model/dtx/triangles/lib/DTXTrianglesBuffer.js.html",
+    "src/viewer/scene/model/dtx/triangles/lib/DTXTrianglesBuffer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturedepthrenderer.js",
-    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureDepthRenderer.js.html",
-    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureDepthRenderer.js",
+    "src/viewer/scene/model/dtx/triangles/lib/dtxtrianglesstate.js",
+    "file/src/viewer/scene/model/dtx/triangles/lib/DTXTrianglesState.js.html",
+    "src/viewer/scene/model/dtx/triangles/lib/DTXTrianglesState.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatextureedgescolorrenderer.js",
-    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureEdgesColorRenderer.js.html",
-    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureEdgesColorRenderer.js",
+    "src/viewer/scene/model/dtx/triangles/lib/dtxtrianglestexturefactory.js",
+    "file/src/viewer/scene/model/dtx/triangles/lib/DTXTrianglesTextureFactory.js.html",
+    "src/viewer/scene/model/dtx/triangles/lib/DTXTrianglesTextureFactory.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatextureedgesrenderer.js",
-    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureEdgesRenderer.js.html",
-    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureEdgesRenderer.js",
+    "src/viewer/scene/model/dtx/triangles/lib/datatextureramstats.js",
+    "file/src/viewer/scene/model/dtx/triangles/lib/dataTextureRamStats.js.html",
+    "src/viewer/scene/model/dtx/triangles/lib/dataTextureRamStats.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturenormalsrenderer.js",
-    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureNormalsRenderer.js.html",
-    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureNormalsRenderer.js",
+    "src/viewer/scene/model/dtx/triangles/renderers/dtxtrianglescolorrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesColorRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatextureocclusionrenderer.js",
-    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureOcclusionRenderer.js.html",
-    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureOcclusionRenderer.js",
+    "src/viewer/scene/model/dtx/triangles/renderers/dtxtrianglesdepthrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesDepthRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesDepthRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturepickdepthrenderer.js",
-    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickDepthRenderer.js.html",
-    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickDepthRenderer.js",
+    "src/viewer/scene/model/dtx/triangles/renderers/dtxtrianglesedgescolorrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesEdgesColorRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesEdgesColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturepickmeshrenderer.js",
-    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickMeshRenderer.js.html",
-    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickMeshRenderer.js",
+    "src/viewer/scene/model/dtx/triangles/renderers/dtxtrianglesedgesrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesEdgesRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesEdgesRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturepicknormalsflatrenderer.js",
-    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickNormalsFlatRenderer.js.html",
-    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickNormalsFlatRenderer.js",
+    "src/viewer/scene/model/dtx/triangles/renderers/dtxtrianglesnormalsrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesNormalsRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesNormalsRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturepicknormalsrenderer.js",
-    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickNormalsRenderer.js.html",
-    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTexturePickNormalsRenderer.js",
+    "src/viewer/scene/model/dtx/triangles/renderers/dtxtrianglesocclusionrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesOcclusionRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesOcclusionRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturesilhouetterenderer.js",
-    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureSilhouetteRenderer.js.html",
-    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureSilhouetteRenderer.js",
+    "src/viewer/scene/model/dtx/triangles/renderers/dtxtrianglespickdepthrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesPickDepthRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesPickDepthRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturesnapdepthbufinitrenderer.js",
-    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureSnapDepthBufInitRenderer.js.html",
-    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureSnapDepthBufInitRenderer.js",
+    "src/viewer/scene/model/dtx/triangles/renderers/dtxtrianglespickmeshrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesPickMeshRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesPickMeshRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/dtx/triangles/renderers/trianglesdatatexturesnapdepthrenderer.js",
-    "file/src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureSnapDepthRenderer.js.html",
-    "src/viewer/scene/model/dtx/triangles/renderers/TrianglesDataTextureSnapDepthRenderer.js",
+    "src/viewer/scene/model/dtx/triangles/renderers/dtxtrianglespicknormalsflatrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesPickNormalsFlatRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesPickNormalsFlatRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/renderers/dtxtrianglespicknormalsrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesPickNormalsRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesPickNormalsRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/renderers/dtxtrianglesrenderers.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesRenderers.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesRenderers.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/renderers/dtxtrianglessilhouetterenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesSilhouetteRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesSilhouetteRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/renderers/dtxtrianglessnapinitrenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesSnapInitRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesSnapInitRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/dtx/triangles/renderers/dtxtrianglessnaprenderer.js",
+    "file/src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesSnapRenderer.js.html",
+    "src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesSnapRenderer.js",
     "file"
   ],
   [
@@ -12474,15 +12474,279 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/viewer/scene/model/rebucketpositions.js",
+    "file/src/viewer/scene/model/rebucketPositions.js.html",
+    "src/viewer/scene/model/rebucketPositions.js",
+    "file"
+  ],
+  [
     "src/viewer/scene/model/vbo/scratchmemory.js",
     "file/src/viewer/scene/model/vbo/ScratchMemory.js.html",
     "src/viewer/scene/model/vbo/ScratchMemory.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/vboscenemodelrenderers.js",
-    "file/src/viewer/scene/model/vbo/VBOSceneModelRenderers.js.html",
-    "src/viewer/scene/model/vbo/VBOSceneModelRenderers.js",
+    "src/viewer/scene/model/vbo/vborenderer.js",
+    "file/src/viewer/scene/model/vbo/VBORenderer.js.html",
+    "src/viewer/scene/model/vbo/VBORenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/lines/vbobatchinglineslayer.js",
+    "file/src/viewer/scene/model/vbo/batching/lines/VBOBatchingLinesLayer.js.html",
+    "src/viewer/scene/model/vbo/batching/lines/VBOBatchingLinesLayer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/lines/lib/vbobatchinglinesbuffer.js",
+    "file/src/viewer/scene/model/vbo/batching/lines/lib/VBOBatchingLinesBuffer.js.html",
+    "src/viewer/scene/model/vbo/batching/lines/lib/VBOBatchingLinesBuffer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/lines/renderers/vbobatchinglinesnapinitrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/lines/renderers/VBOBatchingLineSnapInitRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/lines/renderers/VBOBatchingLineSnapInitRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/lines/renderers/vbobatchinglinescolorrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/lines/renderers/VBOBatchingLinesColorRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/lines/renderers/VBOBatchingLinesColorRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/lines/renderers/vbobatchinglinesrenderers.js",
+    "file/src/viewer/scene/model/vbo/batching/lines/renderers/VBOBatchingLinesRenderers.js.html",
+    "src/viewer/scene/model/vbo/batching/lines/renderers/VBOBatchingLinesRenderers.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/lines/renderers/vbobatchinglinessilhouetterenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/lines/renderers/VBOBatchingLinesSilhouetteRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/lines/renderers/VBOBatchingLinesSilhouetteRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/lines/renderers/vbobatchinglinessnapinitrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/lines/renderers/VBOBatchingLinesSnapInitRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/lines/renderers/VBOBatchingLinesSnapInitRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/lines/renderers/vbobatchinglinessnaprenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/lines/renderers/VBOBatchingLinesSnapRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/lines/renderers/VBOBatchingLinesSnapRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/lines/renderers/vboscenemodellinebatchingrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/lines/renderers/VBOSceneModelLineBatchingRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/lines/renderers/VBOSceneModelLineBatchingRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/points/vbobatchingpointsbuffer.js",
+    "file/src/viewer/scene/model/vbo/batching/points/VBOBatchingPointsBuffer.js.html",
+    "src/viewer/scene/model/vbo/batching/points/VBOBatchingPointsBuffer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/points/vbobatchingpointslayer.js",
+    "file/src/viewer/scene/model/vbo/batching/points/VBOBatchingPointsLayer.js.html",
+    "src/viewer/scene/model/vbo/batching/points/VBOBatchingPointsLayer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/points/vbobatchingpointsrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/points/VBOBatchingPointsRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/points/VBOBatchingPointsRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/points/renderers/vbobatchingpointscolorrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/points/renderers/VBOBatchingPointsColorRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/points/renderers/VBOBatchingPointsColorRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/points/renderers/vbobatchingpointsocclusionrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/points/renderers/VBOBatchingPointsOcclusionRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/points/renderers/VBOBatchingPointsOcclusionRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/points/renderers/vbobatchingpointspickdepthrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/points/renderers/VBOBatchingPointsPickDepthRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/points/renderers/VBOBatchingPointsPickDepthRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/points/renderers/vbobatchingpointspickmeshrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/points/renderers/VBOBatchingPointsPickMeshRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/points/renderers/VBOBatchingPointsPickMeshRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/points/renderers/vbobatchingpointsrenderers.js",
+    "file/src/viewer/scene/model/vbo/batching/points/renderers/VBOBatchingPointsRenderers.js.html",
+    "src/viewer/scene/model/vbo/batching/points/renderers/VBOBatchingPointsRenderers.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/points/renderers/vbobatchingpointsshadowrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/points/renderers/VBOBatchingPointsShadowRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/points/renderers/VBOBatchingPointsShadowRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/points/renderers/vbobatchingpointssilhouetterenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/points/renderers/VBOBatchingPointsSilhouetteRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/points/renderers/VBOBatchingPointsSilhouetteRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/points/renderers/vbobatchingpointssnapinitrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/points/renderers/VBOBatchingPointsSnapInitRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/points/renderers/VBOBatchingPointsSnapInitRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/points/renderers/vbobatchingpointssnaprenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/points/renderers/VBOBatchingPointsSnapRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/points/renderers/VBOBatchingPointsSnapRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/triangles/vbobatchingtrianglesbuffer.js",
+    "file/src/viewer/scene/model/vbo/batching/triangles/VBOBatchingTrianglesBuffer.js.html",
+    "src/viewer/scene/model/vbo/batching/triangles/VBOBatchingTrianglesBuffer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/triangles/vbobatchingtriangleslayer.js",
+    "file/src/viewer/scene/model/vbo/batching/triangles/VBOBatchingTrianglesLayer.js.html",
+    "src/viewer/scene/model/vbo/batching/triangles/VBOBatchingTrianglesLayer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/vbobatchingtrianglescolorrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesColorRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesColorRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/vbobatchingtrianglescolortexturerenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesColorTextureRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesColorTextureRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/vbobatchingtrianglesdepthrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesDepthRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesDepthRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/vbobatchingtrianglesedgescolorrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesEdgesColorRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesEdgesColorRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/vbobatchingtrianglesedgesrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesEdgesRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesEdgesRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/vbobatchingtrianglesflatcolorrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesFlatColorRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesFlatColorRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/vbobatchingtrianglesnormalsrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesNormalsRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesNormalsRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/vbobatchingtrianglesocclusionrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesOcclusionRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesOcclusionRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/vbobatchingtrianglespbrrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesPBRRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesPBRRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/vbobatchingtrianglespickdepthrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesPickDepthRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesPickDepthRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/vbobatchingtrianglespickmeshrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesPickMeshRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesPickMeshRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/vbobatchingtrianglespicknormalsflatrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesPickNormalsFlatRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesPickNormalsFlatRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/vbobatchingtrianglespicknormalsrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesPickNormalsRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesPickNormalsRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/vbobatchingtrianglesrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/vbobatchingtrianglesrenderers.js",
+    "file/src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesRenderers.js.html",
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesRenderers.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/vbobatchingtrianglesshadowrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesShadowRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesShadowRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/vbobatchingtrianglessilhouetterenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesSilhouetteRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesSilhouetteRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/vbobatchingtrianglessnapinitrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesSnapInitRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesSnapInitRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/vbobatchingtrianglessnaprenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesSnapRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/VBOBatchingTrianglesSnapRenderer.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/vboscenemodeltrianglebatchingedgesrenderer.js",
+    "file/src/viewer/scene/model/vbo/batching/triangles/renderers/VBOSceneModelTriangleBatchingEdgesRenderer.js.html",
+    "src/viewer/scene/model/vbo/batching/triangles/renderers/VBOSceneModelTriangleBatchingEdgesRenderer.js",
     "file"
   ],
   [
@@ -12492,417 +12756,255 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/linesbatching/linesbatchingbuffer.js",
-    "file/src/viewer/scene/model/vbo/linesBatching/LinesBatchingBuffer.js.html",
-    "src/viewer/scene/model/vbo/linesBatching/LinesBatchingBuffer.js",
+    "src/viewer/scene/model/vbo/instancing/lines/vboinstancinglineslayer.js",
+    "file/src/viewer/scene/model/vbo/instancing/lines/VBOInstancingLinesLayer.js.html",
+    "src/viewer/scene/model/vbo/instancing/lines/VBOInstancingLinesLayer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/linesbatching/linesbatchinglayer.js",
-    "file/src/viewer/scene/model/vbo/linesBatching/LinesBatchingLayer.js.html",
-    "src/viewer/scene/model/vbo/linesBatching/LinesBatchingLayer.js",
+    "src/viewer/scene/model/vbo/instancing/lines/renderers/vboinstancinglinescolorrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/lines/renderers/VBOInstancingLinesColorRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/lines/renderers/VBOInstancingLinesColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/linesbatching/linesbatchingrenderers.js",
-    "file/src/viewer/scene/model/vbo/linesBatching/LinesBatchingRenderers.js.html",
-    "src/viewer/scene/model/vbo/linesBatching/LinesBatchingRenderers.js",
+    "src/viewer/scene/model/vbo/instancing/lines/renderers/vboinstancinglinesrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/lines/renderers/VBOInstancingLinesRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/lines/renderers/VBOInstancingLinesRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/linesbatching/renderers/linesbatchingcolorrenderer.js",
-    "file/src/viewer/scene/model/vbo/linesBatching/renderers/LinesBatchingColorRenderer.js.html",
-    "src/viewer/scene/model/vbo/linesBatching/renderers/LinesBatchingColorRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/lines/renderers/vboinstancinglinesrenderers.js",
+    "file/src/viewer/scene/model/vbo/instancing/lines/renderers/VBOInstancingLinesRenderers.js.html",
+    "src/viewer/scene/model/vbo/instancing/lines/renderers/VBOInstancingLinesRenderers.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/linesbatching/renderers/linesbatchingsilhouetterenderer.js",
-    "file/src/viewer/scene/model/vbo/linesBatching/renderers/LinesBatchingSilhouetteRenderer.js.html",
-    "src/viewer/scene/model/vbo/linesBatching/renderers/LinesBatchingSilhouetteRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/lines/renderers/vboinstancinglinessilhouetterenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/lines/renderers/VBOInstancingLinesSilhouetteRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/lines/renderers/VBOInstancingLinesSilhouetteRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/linesinstancing/linesinstancinglayer.js",
-    "file/src/viewer/scene/model/vbo/linesInstancing/LinesInstancingLayer.js.html",
-    "src/viewer/scene/model/vbo/linesInstancing/LinesInstancingLayer.js",
+    "src/viewer/scene/model/vbo/instancing/lines/renderers/vboinstancinglinessnapinitrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/lines/renderers/VBOInstancingLinesSnapInitRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/lines/renderers/VBOInstancingLinesSnapInitRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/linesinstancing/linesinstancingrenderers.js",
-    "file/src/viewer/scene/model/vbo/linesInstancing/LinesInstancingRenderers.js.html",
-    "src/viewer/scene/model/vbo/linesInstancing/LinesInstancingRenderers.js",
+    "src/viewer/scene/model/vbo/instancing/lines/renderers/vboinstancinglinessnaprenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/lines/renderers/VBOInstancingLinesSnapRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/lines/renderers/VBOInstancingLinesSnapRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/linesinstancing/renderers/linesinstancingcolorrenderer.js",
-    "file/src/viewer/scene/model/vbo/linesInstancing/renderers/LinesInstancingColorRenderer.js.html",
-    "src/viewer/scene/model/vbo/linesInstancing/renderers/LinesInstancingColorRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/points/vboinstancingpointslayer.js",
+    "file/src/viewer/scene/model/vbo/instancing/points/VBOInstancingPointsLayer.js.html",
+    "src/viewer/scene/model/vbo/instancing/points/VBOInstancingPointsLayer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/linesinstancing/renderers/linesinstancingsilhouetterenderer.js",
-    "file/src/viewer/scene/model/vbo/linesInstancing/renderers/LinesInstancingSilhouetteRenderer.js.html",
-    "src/viewer/scene/model/vbo/linesInstancing/renderers/LinesInstancingSilhouetteRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/vboinstancingpointscolorrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingPointsColorRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingPointsColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/pointsbatching/pointsbatchingbuffer.js",
-    "file/src/viewer/scene/model/vbo/pointsBatching/PointsBatchingBuffer.js.html",
-    "src/viewer/scene/model/vbo/pointsBatching/PointsBatchingBuffer.js",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/vboinstancingpointsdepthrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingPointsDepthRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingPointsDepthRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/pointsbatching/pointsbatchinglayer.js",
-    "file/src/viewer/scene/model/vbo/pointsBatching/PointsBatchingLayer.js.html",
-    "src/viewer/scene/model/vbo/pointsBatching/PointsBatchingLayer.js",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/vboinstancingpointsocclusionrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingPointsOcclusionRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingPointsOcclusionRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/pointsbatching/pointsbatchingrenderers.js",
-    "file/src/viewer/scene/model/vbo/pointsBatching/PointsBatchingRenderers.js.html",
-    "src/viewer/scene/model/vbo/pointsBatching/PointsBatchingRenderers.js",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/vboinstancingpointspickdepthrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingPointsPickDepthRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingPointsPickDepthRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/pointsbatching/renderers/pointsbatchingcolorrenderer.js",
-    "file/src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingColorRenderer.js.html",
-    "src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingColorRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/vboinstancingpointspickmeshrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingPointsPickMeshRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingPointsPickMeshRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/pointsbatching/renderers/pointsbatchingocclusionrenderer.js",
-    "file/src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingOcclusionRenderer.js.html",
-    "src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingOcclusionRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/vboinstancingpointsrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingPointsRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingPointsRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/pointsbatching/renderers/pointsbatchingpickdepthrenderer.js",
-    "file/src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingPickDepthRenderer.js.html",
-    "src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingPickDepthRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/vboinstancingpointsrenderers.js",
+    "file/src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingPointsRenderers.js.html",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingPointsRenderers.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/pointsbatching/renderers/pointsbatchingpickmeshrenderer.js",
-    "file/src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingPickMeshRenderer.js.html",
-    "src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingPickMeshRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/vboinstancingpointsshadowrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingPointsShadowRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingPointsShadowRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/pointsbatching/renderers/pointsbatchingshadowrenderer.js",
-    "file/src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingShadowRenderer.js.html",
-    "src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingShadowRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/vboinstancingpointssilhouetterenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingPointsSilhouetteRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingPointsSilhouetteRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/pointsbatching/renderers/pointsbatchingsilhouetterenderer.js",
-    "file/src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingSilhouetteRenderer.js.html",
-    "src/viewer/scene/model/vbo/pointsBatching/renderers/PointsBatchingSilhouetteRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/vboinstancingpointssnapinitrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingPointsSnapInitRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingPointsSnapInitRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/pointsinstancing/pointsinstancinglayer.js",
-    "file/src/viewer/scene/model/vbo/pointsInstancing/PointsInstancingLayer.js.html",
-    "src/viewer/scene/model/vbo/pointsInstancing/PointsInstancingLayer.js",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/vboinstancingpointssnaprenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingPointsSnapRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingPointsSnapRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/pointsinstancing/pointsinstancingrenderers.js",
-    "file/src/viewer/scene/model/vbo/pointsInstancing/PointsInstancingRenderers.js.html",
-    "src/viewer/scene/model/vbo/pointsInstancing/PointsInstancingRenderers.js",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/vboinstancingtrianglesrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingTrianglesRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/points/renderers/VBOInstancingTrianglesRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/pointsinstancing/renderers/pointsinstancingcolorrenderer.js",
-    "file/src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingColorRenderer.js.html",
-    "src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingColorRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/triangles/vboinstancingtriangleslayer.js",
+    "file/src/viewer/scene/model/vbo/instancing/triangles/VBOInstancingTrianglesLayer.js.html",
+    "src/viewer/scene/model/vbo/instancing/triangles/VBOInstancingTrianglesLayer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/pointsinstancing/renderers/pointsinstancingdepthrenderer.js",
-    "file/src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingDepthRenderer.js.html",
-    "src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingDepthRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/vboinstancingtrianglescolorrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesColorRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/pointsinstancing/renderers/pointsinstancingocclusionrenderer.js",
-    "file/src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingOcclusionRenderer.js.html",
-    "src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingOcclusionRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/vboinstancingtrianglescolortexturerenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesColorTextureRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesColorTextureRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/pointsinstancing/renderers/pointsinstancingpickdepthrenderer.js",
-    "file/src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingPickDepthRenderer.js.html",
-    "src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingPickDepthRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/vboinstancingtrianglesdepthrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesDepthRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesDepthRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/pointsinstancing/renderers/pointsinstancingpickmeshrenderer.js",
-    "file/src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingPickMeshRenderer.js.html",
-    "src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingPickMeshRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/vboinstancingtrianglesedgescolorrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesEdgesColorRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesEdgesColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/pointsinstancing/renderers/pointsinstancingshadowrenderer.js",
-    "file/src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingShadowRenderer.js.html",
-    "src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingShadowRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/vboinstancingtrianglesedgesrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesEdgesRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesEdgesRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/pointsinstancing/renderers/pointsinstancingsilhouetterenderer.js",
-    "file/src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingSilhouetteRenderer.js.html",
-    "src/viewer/scene/model/vbo/pointsInstancing/renderers/PointsInstancingSilhouetteRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/vboinstancingtrianglesflatcolorrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesFlatColorRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesFlatColorRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/snapbatching/snapbatchingdepthbufinitrenderer.js",
-    "file/src/viewer/scene/model/vbo/snapBatching/SnapBatchingDepthBufInitRenderer.js.html",
-    "src/viewer/scene/model/vbo/snapBatching/SnapBatchingDepthBufInitRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/vboinstancingtrianglesflatnormalsrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesFlatNormalsRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesFlatNormalsRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/snapbatching/snapbatchingdepthrenderer.js",
-    "file/src/viewer/scene/model/vbo/snapBatching/SnapBatchingDepthRenderer.js.html",
-    "src/viewer/scene/model/vbo/snapBatching/SnapBatchingDepthRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/vboinstancingtrianglesnormalsrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesNormalsRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesNormalsRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/snapbatching/snapbatchingrenderers.js",
-    "file/src/viewer/scene/model/vbo/snapBatching/SnapBatchingRenderers.js.html",
-    "src/viewer/scene/model/vbo/snapBatching/SnapBatchingRenderers.js",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/vboinstancingtrianglesocclusionrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesOcclusionRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesOcclusionRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/snapinstancing/snapinstancingdepthbufinitrenderer.js",
-    "file/src/viewer/scene/model/vbo/snapInstancing/SnapInstancingDepthBufInitRenderer.js.html",
-    "src/viewer/scene/model/vbo/snapInstancing/SnapInstancingDepthBufInitRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/vboinstancingtrianglespbrrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesPBRRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesPBRRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/snapinstancing/snapinstancingdepthrenderer.js",
-    "file/src/viewer/scene/model/vbo/snapInstancing/SnapInstancingDepthRenderer.js.html",
-    "src/viewer/scene/model/vbo/snapInstancing/SnapInstancingDepthRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/vboinstancingtrianglespickdepthrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesPickDepthRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesPickDepthRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/snapinstancing/snapinstancingrenderers.js",
-    "file/src/viewer/scene/model/vbo/snapInstancing/SnapInstancingRenderers.js.html",
-    "src/viewer/scene/model/vbo/snapInstancing/SnapInstancingRenderers.js",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/vboinstancingtrianglespickmeshrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesPickMeshRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesPickMeshRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/trianglesbatching/trianglesbatchingbuffer.js",
-    "file/src/viewer/scene/model/vbo/trianglesBatching/TrianglesBatchingBuffer.js.html",
-    "src/viewer/scene/model/vbo/trianglesBatching/TrianglesBatchingBuffer.js",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/vboinstancingtrianglespicknormalsflatrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesPickNormalsFlatRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesPickNormalsFlatRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/trianglesbatching/trianglesbatchinglayer.js",
-    "file/src/viewer/scene/model/vbo/trianglesBatching/TrianglesBatchingLayer.js.html",
-    "src/viewer/scene/model/vbo/trianglesBatching/TrianglesBatchingLayer.js",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/vboinstancingtrianglespicknormalsrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesPickNormalsRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesPickNormalsRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/trianglesbatching/trianglesbatchingrenderers.js",
-    "file/src/viewer/scene/model/vbo/trianglesBatching/TrianglesBatchingRenderers.js.html",
-    "src/viewer/scene/model/vbo/trianglesBatching/TrianglesBatchingRenderers.js",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/vboinstancingtrianglesrenderers.js",
+    "file/src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesRenderers.js.html",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesRenderers.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingcolorrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingColorRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingColorRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/vboinstancingtrianglesshadowrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesShadowRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesShadowRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingcolortexturerenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingColorTextureRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingColorTextureRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/vboinstancingtrianglessilhouetterenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesSilhouetteRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesSilhouetteRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingdepthrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingDepthRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingDepthRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/vboinstancingtrianglessnapinitrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesSnapInitRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesSnapInitRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingedgescolorrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingEdgesColorRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingEdgesColorRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/vboinstancingtrianglessnaprenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesSnapRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOInstancingTrianglesSnapRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingedgesrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingEdgesRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingEdgesRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/vboscenemodeltriangleinstancingedgesrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOSceneModelTriangleInstancingEdgesRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOSceneModelTriangleInstancingEdgesRenderer.js",
     "file"
   ],
   [
-    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingflatcolorrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingFlatColorRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingFlatColorRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingnormalsrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingNormalsRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingNormalsRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingocclusionrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingOcclusionRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingOcclusionRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingpbrrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPBRRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPBRRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingpickdepthrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPickDepthRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPickDepthRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingpickmeshrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPickMeshRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPickMeshRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingpicknormalsflatrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPickNormalsFlatRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPickNormalsFlatRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingpicknormalsrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPickNormalsRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingPickNormalsRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingshadowrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingShadowRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingShadowRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesbatching/renderers/trianglesbatchingsilhouetterenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingSilhouetteRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesBatching/renderers/TrianglesBatchingSilhouetteRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesinstancing/trianglesinstancinglayer.js",
-    "file/src/viewer/scene/model/vbo/trianglesInstancing/TrianglesInstancingLayer.js.html",
-    "src/viewer/scene/model/vbo/trianglesInstancing/TrianglesInstancingLayer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesinstancing/trianglesinstancingrenderers.js",
-    "file/src/viewer/scene/model/vbo/trianglesInstancing/TrianglesInstancingRenderers.js.html",
-    "src/viewer/scene/model/vbo/trianglesInstancing/TrianglesInstancingRenderers.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingcolorrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingColorRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingColorRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingcolortexturerenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingColorTextureRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingColorTextureRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingdepthrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingDepthRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingDepthRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingedgescolorrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingEdgesColorRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingEdgesColorRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingedgesrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingEdgesRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingEdgesRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingflatcolorrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingFlatColorRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingFlatColorRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingflatnormalsrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingFlatNormalsRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingFlatNormalsRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingnormalsrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingNormalsRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingNormalsRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingocclusionrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingOcclusionRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingOcclusionRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingpbrrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPBRRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPBRRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingpickdepthrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPickDepthRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPickDepthRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingpickmeshrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPickMeshRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPickMeshRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingpicknormalsflatrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPickNormalsFlatRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPickNormalsFlatRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingpicknormalsrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPickNormalsRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingPickNormalsRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingshadowrenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingShadowRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingShadowRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/trianglesinstancing/renderers/trianglesinstancingsilhouetterenderer.js",
-    "file/src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingSilhouetteRenderer.js.html",
-    "src/viewer/scene/model/vbo/trianglesInstancing/renderers/TrianglesInstancingSilhouetteRenderer.js",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/vboscenemodeltriangleinstancingrenderer.js",
+    "file/src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOSceneModelTriangleInstancingRenderer.js.html",
+    "src/viewer/scene/model/vbo/instancing/triangles/renderers/VBOSceneModelTriangleInstancingRenderer.js",
     "file"
   ],
   [
@@ -15225,12 +15327,6 @@ window.esdocSearchIndex = [
     "src/viewer/scene/webgl/renderer.js",
     "file/src/viewer/scene/webgl/Renderer.js.html",
     "src/viewer/scene/webgl/Renderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/webgl/renderer2.js",
-    "file/src/viewer/scene/webgl/Renderer2.js.html",
-    "src/viewer/scene/webgl/Renderer2.js",
     "file"
   ],
   [

@@ -16850,7 +16850,7 @@
                               },
                               "computed": false
                             },
-                            "operator": "*",
+                            "operator": "/",
                             "right": {
                               "type": "Identifier",
                               "start": 14834,
@@ -33223,7 +33223,7 @@
                                 },
                                 "computed": false
                               },
-                              "operator": "*",
+                              "operator": "/",
                               "right": {
                                 "type": "Identifier",
                                 "start": 14834,
@@ -65899,7 +65899,7 @@
     },
     {
       "type": {
-        "label": "*",
+        "label": "/",
         "beforeExpr": true,
         "startsExpr": false,
         "rightAssociative": false,
@@ -65910,7 +65910,7 @@
         "binop": 10,
         "updateContext": null
       },
-      "value": "*",
+      "value": "/",
       "start": 14832,
       "end": 14833,
       "loc": {

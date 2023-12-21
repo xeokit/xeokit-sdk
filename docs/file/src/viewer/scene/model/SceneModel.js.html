@@ -55,7 +55,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lasloaderplugin">plugins/LASLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LASLoaderPlugin/LASDefaultDataSource.js~LASDefaultDataSource.html">LASDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html">LASLoaderPlugin</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lodcullingplugin">plugins/LODCullingPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LODCullingPlugin/LODCullingPlugin.js~LODCullingPlugin.html">LODCullingPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLDefaultDataSource.js~STLDefaultDataSource.html">STLDefaultDataSource</a></span></span></li>
@@ -218,9 +217,11 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/SceneModelTextureSet.js~SceneModelTextureSet.html">SceneModelTextureSet</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/SceneModelTransform.js~SceneModelTransform.html">SceneModelTransform</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/VBOSceneModel.js~VBOSceneModel.html">VBOSceneModel</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-model-dtx-triangles">viewer/scene/model/dtx/triangles</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-uniquifyPositions">uniquifyPositions</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-uniquifyPositions">uniquifyPositions</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rebucketPositions">rebucketPositions</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-model-dtx-lines">viewer/scene/model/dtx/lines</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rebucketPositions">rebucketPositions</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-dataTextureRamStats">dataTextureRamStats</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-model-dtx-triangles-lib">viewer/scene/model/dtx/triangles/lib</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-dataTextureRamStats">dataTextureRamStats</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-nodes">viewer/scene/nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-paths">viewer/scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
@@ -254,12 +255,14 @@ import {math} from &quot;../math/math.js&quot;;
 import {buildEdgeIndices} from &apos;../math/buildEdgeIndices.js&apos;;
 import {SceneModelMesh} from &apos;./SceneModelMesh.js&apos;;
 import {getScratchMemory, putScratchMemory} from &quot;./vbo/ScratchMemory.js&quot;;
-import {TrianglesBatchingLayer} from &apos;./vbo/trianglesBatching/TrianglesBatchingLayer.js&apos;;
-import {TrianglesInstancingLayer} from &apos;./vbo/trianglesInstancing/TrianglesInstancingLayer.js&apos;;
-import {LinesBatchingLayer} from &apos;./vbo/linesBatching/LinesBatchingLayer.js&apos;;
-import {LinesInstancingLayer} from &apos;./vbo/linesInstancing/LinesInstancingLayer.js&apos;;
-import {PointsBatchingLayer} from &apos;./vbo/pointsBatching/PointsBatchingLayer.js&apos;;
-import {PointsInstancingLayer} from &apos;./vbo/pointsInstancing/PointsInstancingLayer.js&apos;;
+import {VBOBatchingTrianglesLayer} from &apos;./vbo/batching/triangles/VBOBatchingTrianglesLayer.js&apos;;
+import {VBOInstancingTrianglesLayer} from &apos;./vbo/instancing/triangles/VBOInstancingTrianglesLayer.js&apos;;
+import {VBOBatchingLinesLayer} from &apos;./vbo/batching/lines/VBOBatchingLinesLayer.js&apos;;
+import {VBOInstancingLinesLayer} from &apos;./vbo/instancing/lines/VBOInstancingLinesLayer.js&apos;;
+import {VBOBatchingPointsLayer} from &apos;./vbo/batching/points/VBOBatchingPointsLayer.js&apos;;
+import {VBOInstancingPointsLayer} from &apos;./vbo/instancing/points/VBOInstancingPointsLayer.js&apos;;
+import {DTXLinesLayer} from &quot;./dtx/lines/DTXLinesLayer.js&quot;;
+import {DTXTrianglesLayer} from &quot;./dtx/triangles/DTXTrianglesLayer.js&quot;;
 import {ENTITY_FLAGS} from &apos;./ENTITY_FLAGS.js&apos;;
 import {RenderFlags} from &quot;../webgl/RenderFlags.js&quot;;
 import {worldToRTCPositions} from &quot;../math/rtcCoords.js&quot;;
@@ -282,15 +285,16 @@ import {
     sRGBEncoding
 } from &quot;../constants/constants.js&quot;;
 import {createPositionsDecodeMatrix, quantizePositions} from &quot;./compression.js&quot;;
-import {uniquifyPositions} from &quot;./dtx/triangles/calculateUniquePositions.js&quot;;
-import {rebucketPositions} from &quot;./dtx/triangles/rebucketPositions.js&quot;;
-import {TrianglesDataTextureLayer} from &quot;./dtx/triangles/TrianglesDataTextureLayer.js&quot;;
+import {uniquifyPositions} from &quot;./calculateUniquePositions.js&quot;;
+import {rebucketPositions} from &quot;./rebucketPositions.js&quot;;
 import {SceneModelEntity} from &quot;./SceneModelEntity.js&quot;;
 import {geometryCompressionUtils} from &quot;../math/geometryCompressionUtils.js&quot;;
-import {SceneModelTransform} from &quot;./SceneModelTransform&quot;;
+import {SceneModelTransform} from &quot;./SceneModelTransform.js&quot;;
+
 
 const tempVec3a = math.vec3();
-const tempMat4 = math.mat4();
+
+const tempOBB3 = math.OBB3();
 
 const DEFAULT_SCALE = math.vec3([1, 1, 1]);
 const DEFAULT_POSITION = math.vec3([0, 0, 0]);
@@ -2595,9 +2599,29 @@ export class SceneModel extends Component {
             cfg.positionsDecodeMatrix = math.mat4();
             math.expandAABB3Points3(aabb, cfg.positions);
             cfg.positionsCompressed = quantizePositions(cfg.positions, aabb, cfg.positionsDecodeMatrix);
-        } else {
+            cfg.aabb = aabb;
+        } else if (cfg.positionsCompressed) {
+            const aabb = math.collapseAABB3();
             cfg.positionsDecodeMatrix = new Float64Array(cfg.positionsDecodeMatrix);
             cfg.positionsCompressed = new Uint16Array(cfg.positionsCompressed);
+            math.expandAABB3Points3(aabb, cfg.positionsCompressed);
+            geometryCompressionUtils.decompressAABB(aabb, cfg.positionsDecodeMatrix);
+            cfg.aabb = aabb;
+        } else if (cfg.buckets) {
+            const aabb = math.collapseAABB3();
+            this._dtxBuckets[cfg.id] = cfg.buckets;
+            for (let i = 0, len = cfg.buckets.length; i &lt; len; i++) {
+                const bucket = cfg.buckets[i];
+                if (bucket.positions) {
+                    math.expandAABB3Points3(aabb, bucket.positions);
+                } else if (bucket.positionsCompressed) {
+                    math.expandAABB3Points3(aabb, bucket.positionsCompressed);
+                }
+            }
+            if (cfg.positionsDecodeMatrix) {
+                geometryCompressionUtils.decompressAABB(aabb, cfg.positionsDecodeMatrix);
+            }
+            cfg.aabb = aabb;
         }
         if (cfg.colorsCompressed &amp;&amp; cfg.colorsCompressed.length &gt; 0) {
             cfg.colorsCompressed = new Uint8Array(cfg.colorsCompressed);
@@ -2615,9 +2639,6 @@ export class SceneModel extends Component {
             } else {
                 cfg.edgeIndices = buildEdgeIndices(cfg.positionsCompressed, cfg.indices, cfg.positionsDecodeMatrix, 2.0);
             }
-        }
-        if (cfg.buckets) {
-            this._dtxBuckets[cfg.id] = cfg.buckets;
         }
         if (cfg.uv) {
             const bounds = geometryCompressionUtils.getUVBounds(cfg.uv);
@@ -2868,7 +2889,6 @@ export class SceneModel extends Component {
             occlusionTexture
         });
         this._textureSets[textureSetId] = textureSet;
-
         return textureSet;
     }
 
@@ -2889,17 +2909,14 @@ export class SceneModel extends Component {
      * @returns {SceneModelTransform} The new transform.
      */
     createTransform(cfg) {
-
         if (cfg.id === undefined || cfg.id === null) {
             this.error(&quot;[createTransform] SceneModel.createTransform() config missing: id&quot;);
             return;
         }
-
         if (this._transforms[cfg.id]) {
             this.error(`[createTransform] SceneModel already has a transform with this ID: ${cfg.id}`);
             return;
         }
-
         let parentTransform;
         if (this.parentTransformId) {
             parentTransform = this._transforms[cfg.parentTransformId];
@@ -2908,7 +2925,6 @@ export class SceneModel extends Component {
                 return;
             }
         }
-
         const transform = new SceneModelTransform({
             id: cfg.id,
             model: this,
@@ -2919,9 +2935,7 @@ export class SceneModel extends Component {
             rotation: cfg.rotation,
             quaternion: cfg.quaternion
         });
-
         this._transforms[transform.id] = transform;
-
         return transform;
     }
 
@@ -2963,7 +2977,7 @@ export class SceneModel extends Component {
      * @param {Number} [cfg.opacity=1] Opacity in range ````[0..1]````. Overridden by texture set ````colorTexture````.
      * @param {Number} [cfg.metallic=0] Metallic factor in range ````[0..1]````. Overridden by texture set ````metallicRoughnessTexture````.
      * @param {Number} [cfg.roughness=1] Roughness factor in range ````[0..1]````. Overridden by texture set ````metallicRoughnessTexture````.
-     * @returns {@link SceneModelMesh} The new mesh.
+     * @returns {SceneModelMesh} The new mesh.
      */
     createMesh(cfg) {
 
@@ -3016,7 +3030,9 @@ export class SceneModel extends Component {
                 return null;
             }
 
-            const useDTX = (!!this._dtxEnabled &amp;&amp; (cfg.primitive === &quot;triangles&quot; || cfg.primitive === &quot;solid&quot; || cfg.primitive === &quot;surface&quot;));
+            const useDTX = (!!this._dtxEnabled &amp;&amp; (cfg.primitive === &quot;triangles&quot;
+                || cfg.primitive === &quot;solid&quot;
+                || cfg.primitive === &quot;surface&quot;));
 
             cfg.origin = cfg.origin ? math.addVec3(this._origin, cfg.origin, math.vec3()) : this._origin;
 
@@ -3065,7 +3081,36 @@ export class SceneModel extends Component {
                     const aabb = math.collapseAABB3();
                     cfg.positionsDecodeMatrix = math.mat4();
                     math.expandAABB3Points3(aabb, cfg.positions);
-                    cfg.positionsCompressed = quantizePositions(cfg.positions, aabb, cfg.positionsDecodeMatrix)
+                    cfg.positionsCompressed = quantizePositions(cfg.positions, aabb, cfg.positionsDecodeMatrix);
+                    cfg.aabb = aabb;
+
+                } else if (cfg.positionsCompressed) {
+                    const aabb = math.collapseAABB3();
+                    math.expandAABB3Points3(aabb, cfg.positionsCompressed);
+                    geometryCompressionUtils.decompressAABB(aabb, cfg.positionsDecodeMatrix);
+                    cfg.aabb = aabb;
+
+                }
+                if (cfg.buckets) {
+                    const aabb = math.collapseAABB3();
+                    for (let i = 0, len = cfg.buckets.length; i &lt; len; i++) {
+                        const bucket = cfg.buckets[i];
+                        if (bucket.positions) {
+                            math.expandAABB3Points3(aabb, bucket.positions);
+                        } else if (bucket.positionsCompressed) {
+                            math.expandAABB3Points3(aabb, bucket.positionsCompressed);
+                        }
+                    }
+                    if (cfg.positionsDecodeMatrix) {
+                        geometryCompressionUtils.decompressAABB(aabb, cfg.positionsDecodeMatrix);
+                    }
+                    cfg.aabb = aabb;
+                }
+
+                if (cfg.meshMatrix) {
+                    math.AABB3ToOBB3(cfg.aabb, tempOBB3);
+                    math.transformOBB3(cfg.meshMatrix, tempOBB3);
+                    math.OBB3ToAABB3(tempOBB3, cfg.aabb);
                 }
 
                 // EDGES
@@ -3106,6 +3151,28 @@ export class SceneModel extends Component {
                         cfg.positions = rtcPositions;
                         cfg.origin = math.addVec3(cfg.origin, tempVec3a, math.vec3());
                     }
+                }
+
+                if (cfg.positions) {
+                    const aabb = math.collapseAABB3();
+                    if (cfg.meshMatrix) {
+                        math.transformPositions3(cfg.meshMatrix, cfg.positions, cfg.positions);
+                        cfg.meshMatrix = null; // Positions now baked, don&apos;t need any more
+                    }
+                    math.expandAABB3Points3(aabb, cfg.positions);
+                    cfg.aabb = aabb;
+
+                } else {
+                    const aabb = math.collapseAABB3();
+                    math.expandAABB3Points3(aabb, cfg.positionsCompressed);
+                    geometryCompressionUtils.decompressAABB(aabb, cfg.positionsDecodeMatrix);
+                    cfg.aabb = aabb;
+                }
+
+                if (cfg.meshMatrix) {
+                    math.AABB3ToOBB3(cfg.aabb, tempOBB3);
+                    math.transformOBB3(cfg.meshMatrix, tempOBB3);
+                    math.OBB3ToAABB3(tempOBB3, cfg.aabb);
                 }
 
                 // EDGES
@@ -3150,6 +3217,8 @@ export class SceneModel extends Component {
 
             if (cfg.transformId) {
 
+                // TRANSFORM
+
                 cfg.transform = this._transforms[cfg.transformId];
 
                 if (!cfg.transform) {
@@ -3157,9 +3226,11 @@ export class SceneModel extends Component {
                     return;
                 }
 
+                cfg.aabb = cfg.geometry.aabb;
+
             } else {
 
-                // MATRIX - always have a matrix for instancing
+                // MATRIX
 
                 if (cfg.matrix) {
                     cfg.meshMatrix = cfg.matrix.slice();
@@ -3170,9 +3241,16 @@ export class SceneModel extends Component {
                     math.eulerToQuaternion(rotation, &quot;XYZ&quot;, DEFAULT_QUATERNION);
                     cfg.meshMatrix = math.composeMat4(position, DEFAULT_QUATERNION, scale, math.mat4());
                 }
+
+                math.AABB3ToOBB3(cfg.geometry.aabb, tempOBB3);
+                math.transformOBB3(cfg.meshMatrix, tempOBB3);
+                cfg.aabb = math.OBB3ToAABB3(tempOBB3, math.AABB3());
             }
 
-            const useDTX = (!!this._dtxEnabled &amp;&amp; (cfg.geometry.primitive === &quot;triangles&quot; || cfg.geometry.primitive === &quot;solid&quot; || cfg.geometry.primitive === &quot;surface&quot;));
+            const useDTX = (!!this._dtxEnabled
+                &amp;&amp; (cfg.geometry.primitive === &quot;triangles&quot;
+                    || cfg.geometry.primitive === &quot;solid&quot;
+                    || cfg.geometry.primitive === &quot;surface&quot;));
 
             if (useDTX) {
 
@@ -3194,7 +3272,6 @@ export class SceneModel extends Component {
                 }
                 cfg.buckets = buckets;
 
-                createGeometryOBB(cfg);
             } else {
 
                 // VBO
@@ -3217,10 +3294,6 @@ export class SceneModel extends Component {
                     //     return;
                     // }
                 }
-
-                // OBB - used for fast AABB calculation
-
-                createGeometryOBB(cfg.geometry);
             }
         }
 
@@ -3230,41 +3303,34 @@ export class SceneModel extends Component {
     }
 
     _createMesh(cfg) {
-
         const mesh = new SceneModelMesh(this, cfg.id, cfg.color, cfg.opacity, cfg.transform, cfg.textureSet);
-
         mesh.pickId = this.scene._renderer.getPickID(mesh);
-
         const pickId = mesh.pickId;
         const a = pickId &gt;&gt; 24 &amp; 0xFF;
         const b = pickId &gt;&gt; 16 &amp; 0xFF;
         const g = pickId &gt;&gt; 8 &amp; 0xFF;
         const r = pickId &amp; 0xFF;
-
         cfg.pickColor = new Uint8Array([r, g, b, a]); // Quantized pick color
-        cfg.worldAABB = math.collapseAABB3();
-        cfg.aabb = cfg.worldAABB; /// Hack for VBOInstancing layer
         cfg.solid = (cfg.primitive === &quot;solid&quot;);
         mesh.origin = math.vec3(cfg.origin);
         switch (cfg.type) {
             case DTX:
                 mesh.layer = this._getDTXLayer(cfg);
+                mesh.aabb = cfg.aabb;
                 break;
             case VBO_BATCHED:
                 mesh.layer = this._getVBOBatchingLayer(cfg);
+                mesh.aabb = cfg.aabb;
                 break;
             case VBO_INSTANCED:
                 mesh.layer = this._getVBOInstancingLayer(cfg);
+                mesh.aabb = cfg.aabb;
                 break;
         }
         if (cfg.transform) {
             cfg.meshMatrix = cfg.transform.worldMatrix;
         }
-        mesh.portionId = mesh.layer.createPortion(cfg);
-        mesh.aabb = cfg.worldAABB;
-        mesh.obb = cfg.obb || (cfg.geometry ? cfg.geometry.obb : null);
-        mesh.numPrimitives = cfg.numPrimitives;
-        math.expandAABB3(this._aabb, mesh.aabb);
+        mesh.portionId = mesh.layer.createPortion(mesh, cfg);
         this._meshes[cfg.id] = mesh;
         this._meshList.push(mesh);
         return mesh;
@@ -3329,7 +3395,8 @@ export class SceneModel extends Component {
 
     _getDTXLayer(cfg) {
         const origin = cfg.origin;
-        const layerId = `${Math.round(origin[0])}.${Math.round(origin[1])}.${Math.round(origin[2])}`;
+        const primitive = cfg.geometry ? cfg.geometry.primitive : cfg.primitive;
+        const layerId = `.${primitive}.${Math.round(origin[0])}.${Math.round(origin[1])}.${Math.round(origin[2])}`;
         let dtxLayer = this._dtxLayers[layerId];
         if (dtxLayer) {
             if (!dtxLayer.canCreatePortion(cfg)) {
@@ -3340,8 +3407,18 @@ export class SceneModel extends Component {
                 return dtxLayer;
             }
         }
-        // console.info(`[SceneModel ${this.id}]: creating TrianglesDataTextureLayer`);
-        dtxLayer = new TrianglesDataTextureLayer(this, {layerIndex: 0, origin}); // layerIndex is set in #finalize()
+        switch (primitive) {
+            case &quot;triangles&quot;:
+            case &quot;solid&quot;:
+            case &quot;surface&quot;:
+                dtxLayer = new DTXTrianglesLayer(this, {layerIndex: 0, origin}); // layerIndex is set in #finalize()
+                break;
+            case &quot;lines&quot;:
+                dtxLayer = new DTXLinesLayer(this, {layerIndex: 0, origin}); // layerIndex is set in #finalize()
+                break;
+            default:
+                return;
+        }
         this._dtxLayers[layerId] = dtxLayer;
         this.layerList.push(dtxLayer);
         return dtxLayer;
@@ -3364,7 +3441,7 @@ export class SceneModel extends Component {
             switch (cfg.primitive) {
                 case &quot;triangles&quot;:
                     // console.info(`[SceneModel ${this.id}]: creating TrianglesBatchingLayer`);
-                    vboBatchingLayer = new TrianglesBatchingLayer({
+                    vboBatchingLayer = new VBOBatchingTrianglesLayer({
                         model,
                         textureSet,
                         layerIndex: 0, // This is set in #finalize()
@@ -3379,7 +3456,7 @@ export class SceneModel extends Component {
                     break;
                 case &quot;solid&quot;:
                     // console.info(`[SceneModel ${this.id}]: creating TrianglesBatchingLayer`);
-                    vboBatchingLayer = new TrianglesBatchingLayer({
+                    vboBatchingLayer = new VBOBatchingTrianglesLayer({
                         model,
                         textureSet,
                         layerIndex: 0, // This is set in #finalize()
@@ -3394,7 +3471,7 @@ export class SceneModel extends Component {
                     break;
                 case &quot;surface&quot;:
                     // console.info(`[SceneModel ${this.id}]: creating TrianglesBatchingLayer`);
-                    vboBatchingLayer = new TrianglesBatchingLayer({
+                    vboBatchingLayer = new VBOBatchingTrianglesLayer({
                         model,
                         textureSet,
                         layerIndex: 0, // This is set in #finalize()
@@ -3408,8 +3485,8 @@ export class SceneModel extends Component {
                     });
                     break;
                 case &quot;lines&quot;:
-                    // console.info(`[SceneModel ${this.id}]: creating LinesBatchingLayer`);
-                    vboBatchingLayer = new LinesBatchingLayer({
+                    // console.info(`[SceneModel ${this.id}]: creating VBOBatchingLinesLayer`);
+                    vboBatchingLayer = new VBOBatchingLinesLayer({
                         model,
                         layerIndex: 0, // This is set in #finalize()
                         scratchMemory: this._vboBatchingLayerScratchMemory,
@@ -3420,8 +3497,8 @@ export class SceneModel extends Component {
                     });
                     break;
                 case &quot;points&quot;:
-                    // console.info(`[SceneModel ${this.id}]: creating PointsBatchingLayer`);
-                    vboBatchingLayer = new PointsBatchingLayer({
+                    // console.info(`[SceneModel ${this.id}]: creating VBOBatchingPointsLayer`);
+                    vboBatchingLayer = new VBOBatchingPointsLayer({
                         model,
                         layerIndex: 0, // This is set in #finalize()
                         scratchMemory: this._vboBatchingLayerScratchMemory,
@@ -3475,7 +3552,7 @@ export class SceneModel extends Component {
             switch (geometry.primitive) {
                 case &quot;triangles&quot;:
                     // console.info(`[SceneModel ${this.id}]: creating TrianglesInstancingLayer`);
-                    vboInstancingLayer = new TrianglesInstancingLayer({
+                    vboInstancingLayer = new VBOInstancingTrianglesLayer({
                         model,
                         textureSet,
                         geometry,
@@ -3486,7 +3563,7 @@ export class SceneModel extends Component {
                     break;
                 case &quot;solid&quot;:
                     // console.info(`[SceneModel ${this.id}]: creating TrianglesInstancingLayer`);
-                    vboInstancingLayer = new TrianglesInstancingLayer({
+                    vboInstancingLayer = new VBOInstancingTrianglesLayer({
                         model,
                         textureSet,
                         geometry,
@@ -3497,7 +3574,7 @@ export class SceneModel extends Component {
                     break;
                 case &quot;surface&quot;:
                     // console.info(`[SceneModel ${this.id}]: creating TrianglesInstancingLayer`);
-                    vboInstancingLayer = new TrianglesInstancingLayer({
+                    vboInstancingLayer = new VBOInstancingTrianglesLayer({
                         model,
                         textureSet,
                         geometry,
@@ -3507,8 +3584,8 @@ export class SceneModel extends Component {
                     });
                     break;
                 case &quot;lines&quot;:
-                    // console.info(`[SceneModel ${this.id}]: creating LinesInstancingLayer`);
-                    vboInstancingLayer = new LinesInstancingLayer({
+                    // console.info(`[SceneModel ${this.id}]: creating VBOInstancingLinesLayer`);
+                    vboInstancingLayer = new VBOInstancingLinesLayer({
                         model,
                         textureSet,
                         geometry,
@@ -3518,7 +3595,7 @@ export class SceneModel extends Component {
                     break;
                 case &quot;points&quot;:
                     // console.info(`[SceneModel ${this.id}]: creating PointsInstancingLayer`);
-                    vboInstancingLayer = new PointsInstancingLayer({
+                    vboInstancingLayer = new VBOInstancingPointsLayer({
                         model,
                         textureSet,
                         geometry,
@@ -3612,7 +3689,6 @@ export class SceneModel extends Component {
 
     _createEntity(cfg) {
         let meshes = [];
-        const aabb = math.collapseAABB3();
         for (let i = 0, len = cfg.meshIds.length; i &lt; len; i++) {
             const meshId = cfg.meshIds[i];
             const mesh = this._meshes[meshId];
@@ -3624,7 +3700,6 @@ export class SceneModel extends Component {
                 this.error(`Mesh with ID &quot;${meshId}&quot; already belongs to object with ID &quot;${mesh.parent.id}&quot; - ignoring this mesh`);
                 continue;
             }
-            math.expandAABB3(aabb, mesh.aabb);
             meshes.push(mesh);
         }
         const lodCullable = true;
@@ -3634,7 +3709,6 @@ export class SceneModel extends Component {
             cfg.id,
             meshes,
             cfg.flags,
-            aabb,
             lodCullable); // Internally sets SceneModelEntity#parent to this SceneModel
         this._entityList.push(entity);
         this._entities[cfg.id] = entity;
@@ -4017,7 +4091,7 @@ export class SceneModel extends Component {
     /**
      * @private
      */
-    drawSnapInitDepthBuf(frameCtx) {
+    drawSnapInit(frameCtx) {
         if (this.numVisibleLayerPortions === 0) {
             return;
         }
@@ -4025,11 +4099,11 @@ export class SceneModel extends Component {
         for (let i = 0, len = renderFlags.visibleLayers.length; i &lt; len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
             const layer = this.layerList[layerIndex];
-            if (layer.drawSnapInitDepthBuf) {
+            if (layer.drawSnapInit) {
                 frameCtx.snapPickOrigin = [0, 0, 0];
                 frameCtx.snapPickCoordinateScale = [1, 1, 1];
                 frameCtx.snapPickLayerNumber++;
-                layer.drawSnapInitDepthBuf(renderFlags, frameCtx);
+                layer.drawSnapInit(renderFlags, frameCtx);
                 frameCtx.snapPickLayerParams[frameCtx.snapPickLayerNumber] = {
                     origin: frameCtx.snapPickOrigin.slice(),
                     coordinateScale: frameCtx.snapPickCoordinateScale.slice(),
@@ -4041,7 +4115,7 @@ export class SceneModel extends Component {
     /**
      * @private
      */
-    drawSnapDepths(frameCtx) {
+    drawSnap(frameCtx) {
         if (this.numVisibleLayerPortions === 0) {
             return;
         }
@@ -4049,11 +4123,11 @@ export class SceneModel extends Component {
         for (let i = 0, len = renderFlags.visibleLayers.length; i &lt; len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
             const layer = this.layerList[layerIndex];
-            if (layer.drawSnapDepths) {
+            if (layer.drawSnap) {
                 frameCtx.snapPickOrigin = [0, 0, 0];
                 frameCtx.snapPickCoordinateScale = [1, 1, 1];
                 frameCtx.snapPickLayerNumber++;
-                layer.drawSnapDepths(renderFlags, frameCtx);
+                layer.drawSnap(renderFlags, frameCtx);
                 frameCtx.snapPickLayerParams[frameCtx.snapPickLayerNumber] = {
                     origin: frameCtx.snapPickOrigin.slice(),
                     coordinateScale: frameCtx.snapPickCoordinateScale.slice(),
@@ -4129,9 +4203,7 @@ export class SceneModel extends Component {
  * @param enableIndexBucketing
  * @returns {object} The mesh information enrichened with `.buckets` key.
  */
-function
-
-createDTXBuckets(geometry, enableVertexWelding, enableIndexBucketing) {
+function createDTXBuckets(geometry, enableVertexWelding, enableIndexBucketing) {
     let uniquePositionsCompressed, uniqueIndices, uniqueEdgeIndices;
     if (enableVertexWelding || enableIndexBucketing) { // Expensive - careful!
         [
