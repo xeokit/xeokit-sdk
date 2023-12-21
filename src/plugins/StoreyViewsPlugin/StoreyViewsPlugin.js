@@ -15,9 +15,9 @@ const EMPTY_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAA
 /**
  * @desc A {@link Viewer} plugin that provides methods for visualizing IfcBuildingStoreys.
  *
- *  <a href="https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/minimap.gif"></a>
+ *  <a href="https://xeokit.github.io/xeokit-sdk/examples/navigation/#StoreyViewsPlugin_recipe3"><img src="http://xeokit.io/img/docs/StoreyViewsPlugin/minimap.gif"></a>
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#storeyViews_StoreyViewsPlugin_recipe2)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/navigation/#StoreyViewsPlugin_recipe3)]
  *
  * ## Overview
  *
