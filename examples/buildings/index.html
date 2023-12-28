@@ -2,11 +2,10 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <title>xeokit Examples</title>
-    <link href='https://fonts.googleapis.com/css?family=Exo+2:400,800,900,700,600,500|Roboto:100,300,400,500,700,900'
-          rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Exo+2:400,800,900,700,600,500|Roboto:100,300,400,500,700,900' rel='stylesheet' type='text/css'>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
 
@@ -242,8 +241,8 @@
     </style>
 </head>
 <body>
-<input type="checkbox" id="index_toggle"/>
-<label for="index_toggle" class="index-button"><i class="fas fa-2x fa-bars"></i></label>
+<input id="index_toggle" type="checkbox"/>
+<label class="index-button" for="index_toggle"><i class="fas fa-2x fa-bars"></i></label>
 <div class="page-title" id="page-title"></div>
 <div class="viewSourceButton" id="viewSourceButton"><i class="fas fa-2x fa-code"></i></div>
 <div class="content-overlay" id="viewer-overlay"></div>
@@ -303,6 +302,7 @@
             ["xkt_manifest_KarhumakiBridge", "Loading a BIM model split into multiple XKT models"],
             ["xkt_manifest_KarhumakiBridge_inline", "Loading BIM from split XKT, manifest as parameter"],
             ["xkt_manifest_KarhumakiBridge_inline_urls", "Loading BIM from split XKT, manifest as parameter, files as URLs"],
+            ["xkt_manifest_KarhumakiBridge_hotlink", "Loading BIM model from split XKT at xeokit.github.io/xeokit-model-conversion-tests"],
             ["xkt_manifest_Clinic", "Loading a federated BIM model split into multiple XKT models"],
             ["xkt_manifest_WestRiverSideHospital", "Loading a BIM model split into multiple XKT models"]
         ],

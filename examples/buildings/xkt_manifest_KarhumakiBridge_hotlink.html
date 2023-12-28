@@ -270,7 +270,7 @@
 
 <script type="module">
 
-    import {Viewer, XKTLoaderPlugin, TreeViewPlugin,  ContextMenu} from "../../dist/xeokit-sdk.min.es.js";
+    import {Viewer, XKTLoaderPlugin, TreeViewPlugin,  ContextMenu} from "../../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -292,7 +292,7 @@
 
    const sceneModel =  xktLoader.load({
         //manifestSrc: "../../assets/models/xkt/v10/split/Karhumaki-Bridge/manifest.json",
-       manifestSrc:"https://xeokit.github.io/xeokit-model-conversion-tests/convertedModels//Karhumaki/Karhumaki-Bridge/ifcCXConverterPipeline1/model.xkt.manifest.json",
+       manifestSrc:"https://xeokit.github.io/xeokit-model-conversion-tests/convertedModels//projects/Karhumaki/models/Karhumaki-Bridge/model.xkt.manifest.json",
         id: "myModel"
     });
 
