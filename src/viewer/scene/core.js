@@ -230,4 +230,13 @@ function renderScenes() {
 
 (window.requestPostAnimationFrame !== undefined) ? window.requestPostAnimationFrame(frame) : requestAnimationFrame(frame);
 
+function compileScenes() {
+
+    for (let id in core.scenes) {
+        core.scenes[id].compile();
+    }
+}
+
+window.setInterval(compileScenes, 1000 / 60);
+
 export {core};

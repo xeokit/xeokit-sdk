@@ -1192,7 +1192,7 @@ class Scene extends Component {
     }
 
     _deRegisterColorizedObject(entity) {
-       delete this.colorizedObjects[entity.id];
+        delete this.colorizedObjects[entity.id];
         this._numColorizedObjects--;
         this._colorizedObjectIds = null; // Lazy regenerate
     }
@@ -1209,7 +1209,7 @@ class Scene extends Component {
     }
 
     _deRegisterOpacityObject(entity) {
-      delete  this.opacityObjects[entity.id];
+        delete this.opacityObjects[entity.id];
         this._numOpacityObjects--;
         this._opacityObjectIds = null; // Lazy regenerate
     }
@@ -1226,7 +1226,7 @@ class Scene extends Component {
     }
 
     _deRegisterOffsetObject(entity) {
-       delete this.offsetObjects[entity.id];
+        delete this.offsetObjects[entity.id];
         this._numOffsetObjects--;
         this._offsetObjectIds = null; // Lazy regenerate
     }
@@ -1497,6 +1497,18 @@ class Scene extends Component {
         }
 
         this._saveAmbientColor();
+    }
+
+
+    /**
+     * @private
+     */
+    compile() {
+        if (this._needRecompile) {
+            this._recompile();
+            this._renderer.imageDirty();
+            this._needRecompile = false;
+        }
     }
 
     _recompile() {
