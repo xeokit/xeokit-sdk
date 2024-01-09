@@ -354,9 +354,9 @@ parsers[ParserV10.version] = ParserV10;
  *      }
  *
  *      // Gets the contents of the given .XKT file in an arraybuffer
- *      getXKT(src, ok, error) {
+ *      getXKT(xKTSrc, ok, error) {
  *          console.log("MyDataSource#getXKT(" + xKTSrc + ", ... )");
- *          utils.loadArraybuffer(src,
+ *          utils.loadArraybuffer(xKTSrc,
  *              (arraybuffer) => {
  *                  ok(arraybuffer);
  *              },
