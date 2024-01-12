@@ -398,7 +398,6 @@ export class TreeViewPlugin extends Plugin {
         this._autoAddModels = (cfg.autoAddModels !== false);
         this._autoExpandDepth = (cfg.autoExpandDepth || 0);
         this._sortNodes = (cfg.sortNodes !== false);
-        this._pruneEmptyNodes = (cfg.pruneEmptyNodes !== false);
         this._viewer = viewer;
         this._rootElement = null;
         this._muteSceneEvents = false;
