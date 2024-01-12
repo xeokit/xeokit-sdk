@@ -1,5 +1,4 @@
 import { Plugin, Viewer } from "../../viewer";
-import { ModelTreeView } from "./ModelTreeView";
 import { TreeViewNode } from "./TreeViewNode";
 
 export declare type TreeViewPluginConfiguration = {
@@ -48,15 +47,6 @@ export declare class TreeViewPlugin extends Plugin {
   get hierarchy(): "containment" | "storeys" | "types";
 
   /**
-   * Returns the map of {@link ModelTreeView}s.
-   *
-   * Each ModelTreeView is mapped to the ID of its model.
-   *
-   * @return {*|{}}
-   */
-  get modelTreeViews(): any;
-
-  /**
    * Adds a model to this tree view.
    *
    * The model will be automatically removed when destroyed.
@@ -69,13 +59,10 @@ export declare class TreeViewPlugin extends Plugin {
    * @param {String} [options.rootName] Optional display name for the root node. Ordinary, for "containment"
    * and "storeys" hierarchy types, the tree would derive the root node name from the model's "IfcProject" element
    * name. This option allows to override that name when it is not suitable as a display name.
-   * @returns {ModelTreeView} ModelTreeView for the newly-added model. If this method succeeded in adding the model,
-   * then {@link ModelTreeView.valid} will equal ````true````. Otherwise, that property will be ````false````
-   * and {@link ModelTreeView.errors} will contain error messages.
    */
   addModel(modelId: string, options?: {
-      rootName?: string;
-  }): ModelTreeView;
+    rootName?: string;
+  }): void;
 
   /**
    * Removes a model from this tree view.
@@ -85,11 +72,6 @@ export declare class TreeViewPlugin extends Plugin {
    * @param {String} modelId ID of a model {@link Entity} in {@link Scene.models}.
    */
   removeModel(modelId: string): void;
-
-  /**
-   * Collapses all trees within this tree view.
-   */
-  collapse(): void;
 
   /**
    * Highlights the tree view node that represents the given object {@link Entity}.
@@ -127,6 +109,12 @@ export declare class TreeViewPlugin extends Plugin {
    */
   expandToDepth(depth: number): void;
 
+
+  /**
+   * Closes all the nodes in the tree.
+   */
+  collapse(): void;
+
   /**
    * Iterates over a subtree of the tree view's {@link TreeViewNode}s, calling the given callback for each
    * node in depth-first pre-order.
@@ -137,16 +125,21 @@ export declare class TreeViewPlugin extends Plugin {
   withNodeTree(node: TreeViewNode, callback: (node: TreeViewNode) => void): void;
 
   /**
+   * Destroys this TreeViewPlugin.
+   */
+  destroy(): void;
+
+  /**
    * Fires on right click to show contextmenu.
    * @param {String} event The contextmenu event
    * @param {Function} callback Callback fired on the event
   */
-  on(event: "contextmenu", callback: (data: {event: MouseEvent, viewer: Viewer, treeViewPlugin: TreeViewPlugin, treeViewNode: TreeViewNode })=> void): void;
+  on(event: "contextmenu", callback: (data: { event: MouseEvent, viewer: Viewer, treeViewPlugin: TreeViewPlugin, treeViewNode: TreeViewNode }) => void): void;
 
   /**
    * Fires when an title is clicked.
    * @param {String} event The nodeTitleClicked event
    * @param {Function} callback Callback fired on the event
   */
-   on(event: "nodeTitleClicked", callback: (data: {event: MouseEvent, viewer: Viewer, treeViewPlugin: TreeViewPlugin, treeViewNode: TreeViewNode })=> void): void;
+  on(event: "nodeTitleClicked", callback: (data: { event: MouseEvent, viewer: Viewer, treeViewPlugin: TreeViewPlugin, treeViewNode: TreeViewNode }) => void): void;
 }

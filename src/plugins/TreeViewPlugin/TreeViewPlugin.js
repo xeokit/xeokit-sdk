@@ -398,7 +398,6 @@ export class TreeViewPlugin extends Plugin {
         this._autoAddModels = (cfg.autoAddModels !== false);
         this._autoExpandDepth = (cfg.autoExpandDepth || 0);
         this._sortNodes = (cfg.sortNodes !== false);
-        this._pruneEmptyNodes = (cfg.pruneEmptyNodes !== false);
         this._viewer = viewer;
         this._rootElement = null;
         this._muteSceneEvents = false;
@@ -406,7 +405,7 @@ export class TreeViewPlugin extends Plugin {
         this._rootNodes = [];
         this._objectNodes = {}; // Object ID -> Node
         this._nodeNodes = {}; // Node ID -> Node
-        this._rootName = cfg.rootName;
+        this._rootNames = {}; // Node ID -> Root name
         this._sortNodes = cfg.sortNodes;
         this._pruneEmptyNodes = cfg.pruneEmptyNodes;
         this._showListItemElementId = null;
@@ -641,6 +640,11 @@ export class TreeViewPlugin extends Plugin {
             return;
         }
         this._metaModels[modelId] = metaModel;
+
+        if (options && options.rootName) {
+            this._rootNames[modelId] = options.rootName;
+        }
+        
         model.on("destroyed", () => {
             this.removeModel(model.id);
         });
@@ -662,6 +666,11 @@ export class TreeViewPlugin extends Plugin {
         if (!metaModel) {
             return;
         }
+
+        if (this._rootNames[modelId]) {
+            delete this._rootNames[modelId];
+        }
+
         delete this._metaModels[modelId];
         this._createNodes();
     }
@@ -984,7 +993,7 @@ export class TreeViewPlugin extends Plugin {
             buildingNode = {
                 nodeId: `${this._id}-${objectId}`,
                 objectId: objectId,
-                title: this._rootName || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
+                title: this._rootNames[metaObject.metaModels[0].id] || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
                 type: metaObjectType,
                 parent: null,
                 numEntities: 0,
@@ -1087,7 +1096,7 @@ export class TreeViewPlugin extends Plugin {
             rootNode = {
                 nodeId: `${this._id}-${objectId}`,
                 objectId: objectId,
-                title: this._rootName || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
+                title: this._rootNames[metaObject.metaModels[0].id] || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
                 type: metaObjectType,
                 parent: null,
                 numEntities: 0,
@@ -1168,7 +1177,7 @@ export class TreeViewPlugin extends Plugin {
         const node = {
             nodeId: `${this._id}-${objectId}`,
             objectId: objectId,
-            title: (!parent) ? (this._rootName || metaObjectName) : (metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
+            title: (!parent) ? (this._rootNames[metaObject.metaModels[0].id] || metaObjectName) : (metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
             type: metaObjectType,
             parent: parent,
             numEntities: 0,
