@@ -1,10 +1,6 @@
 import {math} from "../../viewer/scene/math/math.js";
 import {utils} from "../../viewer/scene/utils.js";
 import {core} from "../../viewer/scene/core.js";
-import {sRGBEncoding} from "../../viewer/scene/constants/constants.js";
-import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords.js";
-import {parse} from '@loaders.gl/core';
-import {GLTFLoader} from '@loaders.gl/gltf/dist/esm/gltf-loader.js';
 import {
     ClampToEdgeWrapping,
     LinearFilter,
@@ -14,8 +10,12 @@ import {
     NearestFilter,
     NearestMipMapLinearFilter,
     NearestMipMapNearestFilter,
-    RepeatWrapping
+    RepeatWrapping,
+    sRGBEncoding
 } from "../../viewer/scene/constants/constants.js";
+import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords.js";
+import {parse} from '@loaders.gl/core';
+import {GLTFLoader, postProcessGLTF} from '@loaders.gl/gltf';
 
 /**
  * @private
@@ -118,6 +118,8 @@ function loadGLTF(plugin, src, metaModelJSON, options, sceneModel, ok, error) {
     } else {
         plugin.dataSource.getGLTF(src, (gltf) => { // OK
                 options.basePath = getBasePath(src);
+                options.loadImages = true;
+                options.loadBuffers = true;
                 parseGLTF(plugin, src, gltf, metaModelJSON, options, sceneModel, ok, error);
                 spinner.processes--;
             },
@@ -139,6 +141,7 @@ function parseGLTF(plugin, src, gltf, metaModelJSON, options, sceneModel, ok) {
     parse(gltf, GLTFLoader, {
         baseUri: options.basePath
     }).then((gltfData) => {
+        const postProcessedGLTF = postProcessGLTF(gltfData);
         const ctx = {
             src: src,
             metaModelCorrections: metaModelJSON ? getMetaModelCorrections(metaModelJSON) : null,
@@ -146,6 +149,8 @@ function parseGLTF(plugin, src, gltf, metaModelJSON, options, sceneModel, ok) {
             basePath: options.basePath,
             handlenode: options.handlenode,
             gltfData: gltfData,
+            json: gltfData.json,
+            postProcessedGLTF,
             scene: sceneModel.scene,
             plugin: plugin,
             sceneModel: sceneModel,
@@ -167,8 +172,8 @@ function parseGLTF(plugin, src, gltf, metaModelJSON, options, sceneModel, ok) {
 }
 
 function loadTextures(ctx) {
-    const gltfData = ctx.gltfData;
-    const textures = gltfData.textures;
+    const postProcessedGLTF = ctx.postProcessedGLTF;
+    const textures = postProcessedGLTF.textures;
     if (textures) {
         for (let i = 0, len = textures.length; i < len; i++) {
             loadTexture(ctx, textures[i]);
@@ -267,8 +272,8 @@ function loadTexture(ctx, texture) {
 }
 
 function loadMaterials(ctx) {
-    const gltfData = ctx.gltfData;
-    const materials = gltfData.materials;
+    const postProcessedGLTF = ctx.postProcessedGLTF;
+    const materials = postProcessedGLTF.materials;
     if (materials) {
         for (let i = 0, len = materials.length; i < len; i++) {
             const material = materials[i];
@@ -314,11 +319,11 @@ function loadTextureSet(ctx, material) {
             if (baseColorTexture.texture) {
                 textureSetCfg.colorTextureId = baseColorTexture.texture._textureId;
             } else {
-                textureSetCfg.colorTextureId = ctx.gltfData.textures[baseColorTexture.index]._textureId;
+                textureSetCfg.colorTextureId = ctx.postProcessedGLTF.textures[baseColorTexture.index]._textureId;
             }
         }
         if (metallicPBR.metallicRoughnessTexture) {
-            textureSetCfg.metallicRoughnessTextureId = metallicPBR.metallicRoughnessTexture.texture._textureId;
+            textureSetCfg.metallicRoughnessTextureId = ctx.postProcessedGLTF.textures[metallicPBR.metallicRoughnessTexture.index]._textureId;
         }
     }
     const extensions = material.extensions;
@@ -327,11 +332,11 @@ function loadTextureSet(ctx, material) {
         if (specularPBR) {
             const specularTexture = specularPBR.specularTexture;
             if (specularTexture !== null && specularTexture !== undefined) {
-                //  textureSetCfg.colorTextureId = ctx.gltfData.textures[specularColorTexture.index]._textureId;
+                //  textureSetCfg.colorTextureId = ctx.gltfData.json.textures[specularColorTexture.index]._textureId;
             }
             const specularColorTexture = specularPBR.specularColorTexture;
             if (specularColorTexture !== null && specularColorTexture !== undefined) {
-                textureSetCfg.colorTextureId = ctx.gltfData.textures[specularColorTexture.index]._textureId;
+                textureSetCfg.colorTextureId = ctx.postProcessedGLTF.textures[specularColorTexture.index]._textureId;
             }
         }
     }
@@ -408,8 +413,8 @@ function loadMaterialAttributes(ctx, material) { // Substitute RGBA for material
 }
 
 function loadDefaultScene(ctx) {
-    const gltfData = ctx.gltfData;
-    const scene = gltfData.scene || gltfData.scenes[0];
+    const postProcessedGLTF = ctx.postProcessedGLTF;
+    const scene = postProcessedGLTF.scene || postProcessedGLTF.scenes[0];
     if (!scene) {
         error(ctx, "glTF has no default scene");
         return;
@@ -504,90 +509,90 @@ function loadNode(ctx, node, depth, matrix) {
         const worldMatrix = matrix ? matrix.slice() : math.identityMat4();
         const numPrimitives = mesh.primitives.length;
 
-        if (numPrimitives > 0) {
+            if (numPrimitives > 0) {
 
-            for (let i = 0; i < numPrimitives; i++) {
+                for (let i = 0; i < numPrimitives; i++) {
 
-                const primitive = mesh.primitives[i];
-                if (primitive.mode < 4) {
-                    continue;
-                }
+                    const primitive = mesh.primitives[i];
+                    if (primitive.mode < 4) {
+                        continue;
+                    }
 
-                const meshCfg = {
-                    id: sceneModel.id + "." + ctx.numObjects++
-                };
+                    const meshCfg = {
+                        id: sceneModel.id + "." + ctx.numObjects++
+                    };
 
-                switch (primitive.mode) {
-                    case 0: // POINTS
-                        meshCfg.primitive = "points";
-                        break;
-                    case 1: // LINES
-                        meshCfg.primitive = "lines";
-                        break;
-                    case 2: // LINE_LOOP
-                        meshCfg.primitive = "lines";
-                        break;
-                    case 3: // LINE_STRIP
-                        meshCfg.primitive = "lines";
-                        break;
-                    case 4: // TRIANGLES
-                        meshCfg.primitive = "triangles";
-                        break;
-                    case 5: // TRIANGLE_STRIP
-                        meshCfg.primitive = "triangles";
-                        break;
-                    case 6: // TRIANGLE_FAN
-                        meshCfg.primitive = "triangles";
-                        break;
-                    default:
-                        meshCfg.primitive = "triangles";
-                }
+                    switch (primitive.mode) {
+                        case 0: // POINTS
+                            meshCfg.primitive = "points";
+                            break;
+                        case 1: // LINES
+                            meshCfg.primitive = "lines";
+                            break;
+                        case 2: // LINE_LOOP
+                            meshCfg.primitive = "lines";
+                            break;
+                        case 3: // LINE_STRIP
+                            meshCfg.primitive = "lines";
+                            break;
+                        case 4: // TRIANGLES
+                            meshCfg.primitive = "triangles";
+                            break;
+                        case 5: // TRIANGLE_STRIP
+                            meshCfg.primitive = "triangles";
+                            break;
+                        case 6: // TRIANGLE_FAN
+                            meshCfg.primitive = "triangles";
+                            break;
+                        default:
+                            meshCfg.primitive = "triangles";
+                    }
 
-                const POSITION = primitive.attributes.POSITION;
-                if (!POSITION) {
-                    continue;
-                }
-                meshCfg.localPositions = POSITION.value;
-                meshCfg.positions = new Float64Array(meshCfg.localPositions.length);
+                    const POSITION = primitive.attributes.POSITION;
+                    if (!POSITION) {
+                        continue;
+                    }
+                    meshCfg.localPositions = POSITION.value;
+                    meshCfg.positions = new Float64Array(meshCfg.localPositions.length);
 
-                if (primitive.attributes.NORMAL) {
-                    meshCfg.normals = primitive.attributes.NORMAL.value;
-                }
+                    if (primitive.attributes.NORMAL) {
+                        meshCfg.normals = primitive.attributes.NORMAL.value;
+                    }
 
-                if (primitive.attributes.TEXCOORD_0) {
-                    meshCfg.uv = primitive.attributes.TEXCOORD_0.value;
-                }
+                    if (primitive.attributes.TEXCOORD_0) {
+                        meshCfg.uv = primitive.attributes.TEXCOORD_0.value;
+                    }
 
-                if (primitive.indices) {
-                    meshCfg.indices = primitive.indices.value;
-                }
+                    if (primitive.indices) {
+                        meshCfg.indices = primitive.indices.value;
+                    }
 
-                math.transformPositions3(worldMatrix, meshCfg.localPositions, meshCfg.positions);
-                const origin = math.vec3();
-                const rtcNeeded = worldToRTCPositions(meshCfg.positions, meshCfg.positions, origin); // Small cellsize guarantees better accuracy
-                if (rtcNeeded) {
-                    meshCfg.origin = origin;
-                }
+                    math.transformPositions3(worldMatrix, meshCfg.localPositions, meshCfg.positions);
+                    const origin = math.vec3();
+                    const rtcNeeded = worldToRTCPositions(meshCfg.positions, meshCfg.positions, origin); // Small cellsize guarantees better accuracy
+                    if (rtcNeeded) {
+                        meshCfg.origin = origin;
+                    }
 
-                const material = primitive.material;
-                if (material) {
-                    meshCfg.textureSetId = material._textureSetId;
-                    meshCfg.color = material._attributes.color;
-                    meshCfg.opacity = material._attributes.opacity;
-                    meshCfg.metallic = material._attributes.metallic;
-                    meshCfg.roughness = material._attributes.roughness;
-                } else {
-                    meshCfg.color = new Float32Array([1.0, 1.0, 1.0]);
-                    meshCfg.opacity = 1.0;
-                }
-                // if (createEntity) {
-                //     if (createEntity.colorize) {
-                //         meshCfg.color = createEntity.colorize;
-                //     }
-                //     if (createEntity.opacity !== undefined && createEntity.opacity !== null) {
-                //         meshCfg.opacity = createEntity.opacity;
-                //     }
-                // }
+                    const material = primitive.material;
+                    if (material) {
+                        meshCfg.textureSetId = material._textureSetId;
+                        meshCfg.color = material._attributes.color;
+                        meshCfg.opacity = material._attributes.opacity;
+                        meshCfg.metallic = material._attributes.metallic;
+                        meshCfg.roughness = material._attributes.roughness;
+                    } else {
+                        meshCfg.color = new Float32Array([1.0, 1.0, 1.0]);
+                        meshCfg.opacity = 1.0;
+                    }
+                    // if (createEntity) {
+                    //     if (createEntity.colorize) {
+                    //         meshCfg.color = createEntity.colorize;
+                    //     }
+                    //     if (createEntity.opacity !== undefined && createEntity.opacity !== null) {
+                    //         meshCfg.opacity = createEntity.opacity;
+                    //     }
+                    // }
 
                 sceneModel.createMesh(meshCfg);
                 deferredMeshIds.push(meshCfg.id);
