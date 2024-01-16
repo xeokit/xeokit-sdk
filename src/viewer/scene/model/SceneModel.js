@@ -2892,7 +2892,7 @@ export class SceneModel extends Component {
 
                 // RTC
 
-                if (cfg.positions) {
+                if (cfg.positions && !cfg.origin) { // We'll assume the RTC origin is good
                     const rtcPositions = [];
                     const rtcNeeded = worldToRTCPositions(cfg.positions, rtcPositions, tempVec3a);
                     if (rtcNeeded) {
