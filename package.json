@@ -49,9 +49,10 @@
   },
   "homepage": "https://xeokit.io",
   "dependencies": {
-    "@loaders.gl/core": "^3.2.6",
-    "@loaders.gl/gltf": "^3.2.6",
-    "@loaders.gl/las": "^3.2.6",
+    "@loaders.gl/math": "^4.0.4",
+    "@loaders.gl/core": "^4.0.4",
+    "@loaders.gl/gltf": "^4.0.4",
+    "@loaders.gl/las": "^4.0.4",
     "html2canvas": "^1.4.1",
     "web-ifc": "^0.0.41"
   },
