@@ -88,7 +88,7 @@ class NavCubePlugin extends Plugin {
      * @param {String} [cfg.cameraFly=true] Whether the {@link Camera} flies or jumps to each selected axis or diagonal.
      * @param {String} [cfg.cameraFitFOV=45] How much of the field-of-view, in degrees, that the 3D scene should fill the {@link Canvas} when the {@link Camera} moves to an axis or diagonal.
      * @param {String} [cfg.cameraFlyDuration=0.5] When flying the {@link Camera} to each new axis or diagonal, how long, in seconds, that the Camera takes to get there.
-     * @param {String} [cfg.color="lightgrey] Custom uniform color for the faces of the NavCube.
+     * @param {String} [cfg.color="lightgrey"] Custom uniform color for the faces of the NavCube.
      * @param {String} [cfg.frontColor="#55FF55"] Custom color for the front face of the NavCube. Overrides ````color````.
      * @param {String} [cfg.backColor="#55FF55"] Custom color for the back face of the NavCube. Overrides ````color````.
      * @param {String} [cfg.leftColor="#FF5555"] Custom color for the left face of the NavCube. Overrides ````color````.
@@ -96,6 +96,7 @@ class NavCubePlugin extends Plugin {
      * @param {String} [cfg.topColor="#5555FF"] Custom color for the top face of the NavCube. Overrides ````color````.
      * @param {String} [cfg.bottomColor="#5555FF"] Custom color for the bottom face of the NavCube. Overrides ````color````.
      * @param {String} [cfg.hoverColor="rgba(0,0,0,0.4)"] Custom color for highlighting regions on the NavCube as we hover the pointer over them.
+     * @param {String} [cfg.textColor="black"] Custom text color for labels of the NavCube.
      * @param {Boolean} [cfg.fitVisible=false] Sets whether the axis, corner and edge-aligned views will fit the
      * view to the entire {@link Scene} or just to visible object-{@link Entity}s. Entitys are visible objects when {@link Entity#isObject} and {@link Entity#visible} are both ````true````.
      * @param {Boolean} [cfg.synchProjection=false] Sets whether the NavCube switches between perspective and orthographic projections in synchrony with the {@link Camera}. When ````false````, the NavCube will always be rendered with perspective projection.

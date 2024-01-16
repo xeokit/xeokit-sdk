@@ -7,6 +7,7 @@ function CubeTextureCanvas(viewer, navCubeScene, cfg = {}) {
 
     const cubeColor = "lightgrey";
     const cubeHighlightColor = cfg.hoverColor || "rgba(0,0,0,0.4)";
+    const textColor = cfg.textColor || "black";
 
     const height = 500;
     const width = height + (height / 3);
@@ -158,7 +159,7 @@ function CubeTextureCanvas(viewer, navCubeScene, cfg = {}) {
                 }
             }
             if (area.label) {
-                context.fillStyle = "black";
+                context.fillStyle = textColor;
                 context.font = '60px sans-serif';
                 context.textAlign = "center";
                 var xcenter = xmin + (width * 0.5);
