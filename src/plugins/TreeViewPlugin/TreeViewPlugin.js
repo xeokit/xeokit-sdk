@@ -1,4 +1,5 @@
 import {Plugin} from "../../viewer/Plugin.js";
+import {RenderService} from "./RenderService.js";
 
 const treeViews = [];
 
@@ -359,6 +360,7 @@ export class TreeViewPlugin extends Plugin {
      * ````IfcBuildingStorey```` nodes will be ordered spatially, from the highest storey down to the lowest, on the
      * vertical World axis. For all hierarchy types, other node types will be ordered in the ascending alphanumeric order of their titles.
      * @param {Boolean} [cfg.pruneEmptyNodes=true] When true, will not contain nodes that don't have content in the {@link Scene}. These are nodes whose {@link MetaObject}s don't have {@link Entity}s.
+     * @param {RenderService} [cfg.renderService] Optional {@link RenderService} to use. Defaults to the {@link TreeViewPlugin}'s default {@link RenderService}.
      */
     constructor(viewer, cfg = {}) {
 
@@ -409,6 +411,11 @@ export class TreeViewPlugin extends Plugin {
         this._sortNodes = cfg.sortNodes;
         this._pruneEmptyNodes = cfg.pruneEmptyNodes;
         this._showListItemElementId = null;
+        this._renderService = cfg.renderService || new RenderService();
+
+        if (!this._renderService) {
+            throw new Error('TreeViewPlugin: no render service set');
+        }
 
         this._containerElement.oncontextmenu = (e) => {
             e.preventDefault();
@@ -435,10 +442,9 @@ export class TreeViewPlugin extends Plugin {
             } else {
                 node.numVisibleEntities--;
             }
-            const checkbox = document.getElementById(`checkbox-${node.nodeId}`);
-            if (checkbox) {
-                checkbox.checked = visible;
-            }
+
+            this._renderService.setCheckbox(node.nodeId, visible);
+
             let parent = node.parent;
             while (parent) {
                 parent.checked = visible;
@@ -447,15 +453,12 @@ export class TreeViewPlugin extends Plugin {
                 } else {
                     parent.numVisibleEntities--;
                 }
-                const parentCheckbox = document.getElementById(`checkbox-${parent.nodeId}`);
-                if (parentCheckbox) {
-                    const newChecked = (parent.numVisibleEntities > 0);
-                    if (newChecked !== parentCheckbox.checked) {
-                        parentCheckbox.checked = newChecked;
-                    }
-                }
+
+                this._renderService.setCheckbox(parent.nodeId, (parent.numVisibleEntities > 0));
+
                 parent = parent.parent;
             }
+
             this._muteTreeEvents = false;
         });
 
@@ -475,15 +478,8 @@ export class TreeViewPlugin extends Plugin {
                 return;
             }
             node.xrayed = xrayed;
-            const listItemElementId = node.nodeId;
-            const listItemElement = document.getElementById(listItemElementId);
-            if (listItemElement !== null) {
-                if (xrayed) {
-                    listItemElement.classList.add('xrayed-node');
-                } else {
-                    listItemElement.classList.remove('xrayed-node');
-                }
-            }
+
+            this._renderService.setXRayed(node.nodeId, xrayed);
             this._muteTreeEvents = false;
         });
 
@@ -507,14 +503,15 @@ export class TreeViewPlugin extends Plugin {
             }
             this._muteSceneEvents = true;
             const checkbox = event.target;
-            const visible = checkbox.checked;
-            const nodeId = checkbox.id.replace('checkbox-', '');
+            const visible = this._renderService.isChecked(checkbox);
+            const nodeId = this._renderService.getIdFromCheckbox(checkbox);
+
             const checkedNode = this._nodeNodes[nodeId];
             const objects = this._viewer.scene.objects;
             let numUpdated = 0;
+            
             this._withNodeTree(checkedNode, (node) => {
                 const objectId = node.objectId;
-                const checkBoxId = `checkbox-${node.nodeId}`;
                 const entity = objects[objectId];
                 const isLeaf = (node.children.length === 0);
                 node.numVisibleEntities = visible ? node.numEntities : 0;
@@ -522,27 +519,26 @@ export class TreeViewPlugin extends Plugin {
                     numUpdated++;
                 }
                 node.checked = visible;
-                const checkbox2 = document.getElementById(checkBoxId);
-                if (checkbox2) {
-                    checkbox2.checked = visible;
-                }
+
+                this._renderService.setCheckbox(node.nodeId, visible);
+                
                 if (entity) {
                     entity.visible = visible;
                 }
             });
+
             let parent = checkedNode.parent;
             while (parent) {
                 parent.checked = visible;
-                const checkbox2 = document.getElementById(`checkbox-${parent.nodeId}`); // Parent checkboxes are always in DOM
+                
                 if (visible) {
                     parent.numVisibleEntities += numUpdated;
                 } else {
                     parent.numVisibleEntities -= numUpdated;
                 }
-                const newChecked = (parent.numVisibleEntities > 0);
-                if (newChecked !== checkbox2.checked) {
-                    checkbox2.checked = newChecked;
-                }
+
+                this._renderService.setCheckbox(parent.nodeId, (parent.numVisibleEntities > 0));
+                
                 parent = parent.parent;
             }
             this._muteSceneEvents = false;
@@ -692,21 +688,22 @@ export class TreeViewPlugin extends Plugin {
      * @param {String} objectId ID of the {@link Entity}.
      */
     showNode(objectId) {
-        if (this._showListItemElementId) {
-            this.unShowNode();
-        }
+        this.unShowNode();
+
         const node = this._objectNodes[objectId];
         if (!node) {
             return; // Node may not exist for the given object if (this._pruneEmptyNodes == true)
         }
+
         const nodeId = node.nodeId;
-        const switchElementId = "switch-" + nodeId;
-        const switchElement = document.getElementById(switchElementId);
+
+        const switchElement = this._renderService.getSwitchElement(nodeId);
         if (switchElement) {
             this._expandSwitchElement(switchElement);
             switchElement.scrollIntoView();
-            return;
+            return true;
         }
+        
         const path = [];
         path.unshift(node);
         let parent = node.parent;
@@ -714,20 +711,17 @@ export class TreeViewPlugin extends Plugin {
             path.unshift(parent);
             parent = parent.parent;
         }
+
         for (let i = 0, len = path.length; i < len; i++) {
-            const node = path[i];
-            const nodeId = node.nodeId;
-            const switchElementId = "switch-" + nodeId;
-            const switchElement = document.getElementById(switchElementId);
+            const switchElement = this._renderService.getSwitchElement(path[i].nodeId);
             if (switchElement) {
                 this._expandSwitchElement(switchElement);
             }
         }
-        const listItemElementId = nodeId;
-        const listItemElement = document.getElementById(listItemElementId);
-        listItemElement.scrollIntoView({block: "center"});
-        listItemElement.classList.add("highlighted-node");
-        this._showListItemElementId = listItemElementId;
+
+        this._renderService.setHighlighted(nodeId, true);
+
+        this._showListItemElementId = nodeId;
     }
 
     /**
@@ -741,12 +735,9 @@ export class TreeViewPlugin extends Plugin {
         if (!this._showListItemElementId) {
             return;
         }
-        const listItemElement = document.getElementById(this._showListItemElementId);
-        if (!listItemElement) {
-            this._showListItemElementId = null;
-            return;
-        }
-        listItemElement.classList.remove("highlighted-node");
+
+        this._renderService.setHighlighted(this._showListItemElementId, false)
+        
         this._showListItemElementId = null;
     }
 
@@ -763,9 +754,8 @@ export class TreeViewPlugin extends Plugin {
             if (countDepth === depth) {
                 return;
             }
-            const nodeId = node.nodeId;
-            const switchElementId = "switch-" + nodeId;
-            const switchElement = document.getElementById(switchElementId);
+
+            const switchElement = this._renderService.getSwitchElement(node.nodeId);
             if (switchElement) {
                 this._expandSwitchElement(switchElement);
                 const childNodes = node.children;
@@ -920,11 +910,12 @@ export class TreeViewPlugin extends Plugin {
 
     _createDisabledNodes() {
 
-        const ul = document.createElement('ul');
-        this._rootElement = ul;
-        this._containerElement.appendChild(ul);
+        const rootNode = this._renderService.createRootNode();
+        this._rootElement = rootNode;
+        this._containerElement.appendChild(rootNode);
 
         const rootMetaObjects = this._viewer.metaScene.rootMetaObjects;
+
         for (let objectId in rootMetaObjects) {
             const rootMetaObject = rootMetaObjects[objectId];
             const metaObjectType = rootMetaObject.type;
@@ -932,17 +923,9 @@ export class TreeViewPlugin extends Plugin {
             const rootName = ((metaObjectName && metaObjectName !== ""
                 && metaObjectName !== "Undefined"
                 && metaObjectName !== "Default") ? metaObjectName : metaObjectType);
-            const li = document.createElement('li');
-            ul.appendChild(li);
-            const switchElement = document.createElement('a');
-            switchElement.href = '#';
-            switchElement.textContent = '!';
-            switchElement.classList.add('warn');
-            switchElement.classList.add('warning');
-            li.appendChild(switchElement);
-            const span = document.createElement('span');
-            span.textContent = rootName;
-            li.appendChild(span);
+
+            const childNode = this._renderService.createDisabledNodeElement(rootName);
+            rootNode.appendChild(childNode);
         }
     }
 
@@ -1325,112 +1308,63 @@ export class TreeViewPlugin extends Plugin {
         const rootNodeElements = this._rootNodes.map((rootNode) => {
             return this._createNodeElement(rootNode);
         });
-        const ul = document.createElement('ul');
+
+        const rootNode = this._renderService.createRootNode();
         rootNodeElements.forEach((nodeElement) => {
-            ul.appendChild(nodeElement);
+            rootNode.appendChild(nodeElement);
         });
-        this._containerElement.appendChild(ul);
-        this._rootElement = ul;
+
+        this._containerElement.appendChild(rootNode);
+        this._rootElement = rootNode;
     }
 
     _createNodeElement(node) {
-        const nodeElement = document.createElement('li');
-        //const nodeId = this._objectToNodeID(node.objectId);
-        const nodeId = node.nodeId;
-        if (node.xrayed) {
-            nodeElement.classList.add('xrayed-node');
-        }
-        nodeElement.id = nodeId;
-        if (node.children.length > 0) {
-            const switchElementId = "switch-" + nodeId;
-            const switchElement = document.createElement('a');
-            switchElement.href = '#';
-            switchElement.id = switchElementId;
-            switchElement.textContent = '+';
-            switchElement.classList.add('plus');
-            switchElement.addEventListener('click', this._switchExpandHandler);
-            nodeElement.appendChild(switchElement);
-        }
-        const checkbox = document.createElement('input');
-        checkbox.id = `checkbox-${nodeId}`;
-        checkbox.type = "checkbox";
-        checkbox.checked = node.checked;
-        checkbox.style["pointer-events"] = "all";
-        checkbox.addEventListener("change", this._checkboxChangeHandler);
-        nodeElement.appendChild(checkbox);
-        const span = document.createElement('span');
-        span.textContent = node.title;
-        nodeElement.appendChild(span);
-        span.oncontextmenu = (e) => {
-            this.fire("contextmenu", {
-                event: e,
+        const contextmenuHandler = (event) =>{
+                this.fire("contextmenu", {
+                event: event,
                 viewer: this._viewer,
                 treeViewPlugin: this,
                 treeViewNode: node
             });
-            e.preventDefault();
+            event.preventDefault();
         };
-        span.onclick = (e) => {
+        const onclickHandler = (event) => {
             this.fire("nodeTitleClicked", {
-                event: e,
+                event: event,
                 viewer: this._viewer,
                 treeViewPlugin: this,
                 treeViewNode: node
             });
-            e.preventDefault();
+            event.preventDefault();
         };
-        return nodeElement;
+
+        return this._renderService.createNodeElement(node, this._switchExpandHandler, this._checkboxChangeHandler, contextmenuHandler, onclickHandler);
     }
 
     _expandSwitchElement(switchElement) {
-        const parentElement = switchElement.parentElement;
-        const expanded = parentElement.getElementsByTagName('li')[0];
+        const expanded = this._renderService.isExpanded(switchElement); 
         if (expanded) {
             return;
         }
-        const nodeId = parentElement.id;
-        const switchNode = this._nodeNodes[nodeId];
-        const childNodes = switchNode.children;
-        const nodeElements = childNodes.map((node) => {
+
+        const nodeId = this._renderService.getId(switchElement);
+
+        const nodeElements = this._nodeNodes[nodeId].children.map((node) => {
             return this._createNodeElement(node);
         });
-        const ul = document.createElement('ul');
-        nodeElements.forEach((nodeElement) => {
-            ul.appendChild(nodeElement);
-        });
-        parentElement.appendChild(ul);
-        switchElement.classList.remove('plus');
-        switchElement.classList.add('minus');
-        switchElement.textContent = '-';
-        switchElement.removeEventListener('click', this._switchExpandHandler);
-        switchElement.addEventListener('click', this._switchCollapseHandler);
+
+        this._renderService.addChildren(switchElement, nodeElements)
+
+        this._renderService.expand(switchElement, this._switchExpandHandler, this._switchCollapseHandler);
     }
 
-    _collapseNode(objectId) {
-        const nodeId = objectId;
-        const switchElementId = "switch-" + nodeId;
-        const switchElement = document.getElementById(switchElementId);
+    _collapseNode(nodeId) {
+        const switchElement = this._renderService.getSwitchElement(nodeId);
         this._collapseSwitchElement(switchElement);
     }
 
     _collapseSwitchElement(switchElement) {
-        if (!switchElement) {
-            return;
-        }
-        const parent = switchElement.parentElement;
-        if (!parent) {
-            return;
-        }
-        const ul = parent.querySelector('ul');
-        if (!ul) {
-            return;
-        }
-        parent.removeChild(ul);
-        switchElement.classList.remove('minus');
-        switchElement.classList.add('plus');
-        switchElement.textContent = '+';
-        switchElement.removeEventListener('click', this._switchCollapseHandler);
-        switchElement.addEventListener('click', this._switchExpandHandler);
+        this._renderService.collapse(switchElement, this._switchExpandHandler, this._switchCollapseHandler);
     }
 }
 
