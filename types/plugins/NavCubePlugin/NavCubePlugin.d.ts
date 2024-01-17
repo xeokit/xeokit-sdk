@@ -34,6 +34,8 @@ export declare type NavCubePluginConfiguration = {
   bottomColor?: string;
   /** Custom color for highlighting regions on the NavCube as we hover the pointer over them. */
   hoverColor?: string;
+  /** Custom text color for labels of the NavCube. */
+  textColor?: string;
   /** Sets whether the axis, corner and edge-aligned views will fit the view to the entire {@link Scene} or just to visible object-{@link Entity}s. Entitys are visible objects when {@link Entity.isObject} and {@link Entity.visible} are both ````true````. */
   fitVisible?: boolean;
   /** Sets whether the NavCube switches between perspective and orthographic projections in synchrony with the {@link Camera}. When ````false````, the NavCube will always be rendered with perspective projection. */
