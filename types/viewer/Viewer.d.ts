@@ -38,7 +38,7 @@ export declare type ViewerConfiguration = {
   /**When ````transparent```` is false, set this ````true```` to derive the canvas background color from {@link AmbientLight.color}, or ````false```` to set the canvas background to ````backgroundColor````. */
   backgroundColorFromAmbientLight?: boolean;
   /** The measurement unit type. */
-  units?: "meters" | "centimeters" | "millimeters" | "yards" | "feet" | "inches" ;
+  units?: "meters" | "centimeters" | "millimeters" | "yards" | "feet" | "inches";
   /** The number of Real-space units in each World-space coordinate system unit. */
   scale?: number;
   /** The Real-space 3D origin, in current measurement units, at which the World-space coordinate origin ````[0,0,0]```` sits. */
@@ -55,10 +55,16 @@ export declare type ViewerConfiguration = {
   pickSurfacePrecisionEnabled?: boolean;
   /** Whether to enable logarithmic depth buffer. */
   logarithmicDepthBufferEnabled?: boolean;
+  /** Whether to enable base color texture rendering. */
+  colorTextureEnabled?: boolean;
   /** Whether to enable physically-based rendering. */
   pbrEnabled?: boolean;
   /** Optional locale-based translation service. */
   localeService?: LocaleService;
+  /** Whether to enable data texture-based (DTX) scene representation within the Viewer. */
+  dtxEnabled?: boolean;
+  /** Enhances the efficiency of SectionPlane creation by proactively allocating Viewer resources for a specified quantity of SectionPlanes.*/
+  numCachedSectionPlanes?: number;
 };
 
 /**
@@ -196,7 +202,7 @@ export declare class Viewer {
    * @param {Boolean} [params.includeGizmos=false] When true, will include gizmos like {@link SectionPlane} in the snapshot.
    * @returns {String} String-encoded image data URI.
    */
-  getSnapshot(params: { width?: number, height?: number, format?: "jpeg" | "png"| "bmp", includeGizmos?: boolean }): string;
+  getSnapshot(params: { width?: number, height?: number, format?: "jpeg" | "png" | "bmp", includeGizmos?: boolean }): string;
 
   /**
    * Gets a snapshot of this Viewer's {@link Scene} as a Base64-encoded image which includes
@@ -224,8 +230,8 @@ export declare class Viewer {
    * @param {Boolean} [params.includeGizmos=false] When true, will include gizmos like {@link SectionPlane} in the snapshot.
    * @returns {Promise} Promise which returns a string-encoded image data URI.
    */
-  getSnapshotWithPlugins(params: { width?: number, height?: number, format?: "jpeg" | "png"| "bmp", includeGizmos?: boolean }): Promise<String>;
-  
+  getSnapshotWithPlugins(params: { width?: number, height?: number, format?: "jpeg" | "png" | "bmp", includeGizmos?: boolean }): Promise<String>;
+
   /**
    * Exits snapshot mode.
    *
