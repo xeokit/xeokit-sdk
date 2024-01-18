@@ -247,6 +247,7 @@
         "IfcRamp": "mdi-triangle-outline",
         "IfcRampFlight": "mdi-triangle-outline",
         "IfcBuildingElementProxy": "mdi-help",
+        "IfcBuildingElementPart": "mdi-land-plots",
         "IfcSensor": "mdi-access-point",
         "IfcSanitaryTerminal": "mdi-bathtub-outline",
         "IfcAudioVisualAppliance": "mdi-television",
@@ -291,6 +292,7 @@
             if (iconType) {
                 const icon = document.createElement('i');
                 icon.classList.add('v-ifcicon', 'mdi', iconType);
+                icon.title = node.type;
                 wrapperDiv.appendChild(icon);
             } else {
                 console.warn(`No icon for type ${node.type}`);
