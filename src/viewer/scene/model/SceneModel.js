@@ -3472,6 +3472,9 @@ export class SceneModel extends Component {
         if (this.destroyed) {
             return;
         }
+        if (!this._areAllMeshesUsedByEntities()){
+            throw "All meshes should be used by entities to finalize SceneModel"
+        }
         for (let i = 0, len = this.layerList.length; i < len; i++) {
             const layer = this.layerList[i];
             layer.finalize();
@@ -3546,6 +3549,31 @@ export class SceneModel extends Component {
                 renderFlags.visibleLayers[renderFlags.numVisibleLayers++] = layerIndex;
             }
         }
+    }
+
+    /** @private */
+    _areAllMeshesUsedByEntities(){
+        let isMeshUsedDictionary = []
+        for (let i = 0; i < this._meshList.length; i++){
+            let currentMeshId = this._meshList[i].id;
+            isMeshUsedDictionary[currentMeshId] = false;
+        }
+        for (let i = 0; i < this._entityList.length; i++) {
+            let currentEntity = this._entityList[i];
+            let currentMeshes = currentEntity.meshes;
+            for (let j = 0; j < currentMeshes.length; j++){
+                let currentMeshId = currentMeshes[j].id;
+                isMeshUsedDictionary[currentMeshId] = true;
+            }
+        }
+        for (let key in isMeshUsedDictionary){
+            let currentMeshResult = isMeshUsedDictionary[key];
+            if (!currentMeshResult){
+                return false;
+            }
+        }
+
+        return true;
     }
 
     _getActiveSectionPlanesForLayer(layer) {
