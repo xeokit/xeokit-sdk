@@ -29,7 +29,7 @@
 
         #treeViewContainer {
             pointer-events: all;
-            height: 100%;
+            height: calc(100% - 80px);
             overflow-y: scroll;
             overflow-x: hidden;
             position: absolute;
@@ -155,6 +155,11 @@
             font-size: 1.5em;
             cursor: pointer;
         }
+        .v-ifcicon {
+            margin-left: 6px;
+            font-size: 1.5em;
+            color: #398684;
+        }
 
     </style>
 </head>
@@ -205,6 +210,49 @@
 
 <script type="module">
 
+    // see: https://pictogrammers.com/library/mdi/
+    const ifcIcons = {
+        "IfcProject": "mdi-file-cad",
+        "IfcSite": "mdi-earth",
+        "IfcBuilding": "mdi-office-building",
+        "IfcBuildingStorey": "mdi-menu",
+        "IfcDoor": "mdi-door",
+        "IfcWindow": "mdi-window-closed-variant",
+        "IfcAirTerminal": "mdi-weather-windy",
+        "IfcLamp": "mdi-lightbulb",
+        "IfcLightFixture": "\uf02a",
+        "IfcSpace": "mdi-lamp",
+        "IfcWall": "mdi-wall",
+        "IfcWallStandardCase": "mdi-wall",
+        "IfcSlab": "mdi-border-bottom",
+        "IfcFurnishingElement": "mdi-sofa",
+        "IfcOpeningElement": "mdi-square-outline",
+        "IfcProduct": "mdi-square",
+        "IfcGrid": "mdi-grid",
+        "IfcPort": "mdi-ev-plug-type2",
+        "IfcCivilElement": "mdi-forest",
+        "IfcGeographicElement": "mdi-forest",
+        "IfcBeam": "mdi-drag-vertical-variant",
+        "IfcColumn": "mdi-border-vertical",
+        "IfcSpaceHeater": "mdi-thermometer-lines",
+        "IfcRoof": "mdi-home-roof",
+        "IfcFooting": "mdi-warehouse",
+        "IfcRailing": "mdi-fence",
+        "IfcStair": "mdi-stairs-box",
+        "IfcStairFlight": "mdi-stairs-box",
+        "IfcTransportElement": "mdi-elevator-passenger",
+        "IfcLinearElement": "mdi-chart-timeline-variant",
+        "IfcAnnotation": "mdi-message-alert-outline",
+        "IfcElementAssembly": "mdi-land-plots",
+        "IfcRamp": "mdi-triangle-outline",
+        "IfcRampFlight": "mdi-triangle-outline",
+        "IfcBuildingElementProxy": "mdi-help",
+        "IfcBuildingElementPart": "mdi-land-plots",
+        "IfcSensor": "mdi-access-point",
+        "IfcSanitaryTerminal": "mdi-bathtub-outline",
+        "IfcAudioVisualAppliance": "mdi-television",
+    };
+
     const treeRender = {
         createRootNode: () => {
             return document.createElement('ul')
@@ -239,6 +287,16 @@
             checkbox.style.pointerEvents = 'all';
             if (checkHandler) checkbox.addEventListener("change", checkHandler);
             wrapperDiv.appendChild(checkbox);
+
+            const iconType = ifcIcons[node.type];
+            if (iconType) {
+                const icon = document.createElement('i');
+                icon.classList.add('v-ifcicon', 'mdi', iconType);
+                icon.title = node.type;
+                wrapperDiv.appendChild(icon);
+            } else {
+                console.warn(`No icon for type ${node.type}`);
+            }
             
             const span = document.createElement('span');
             span.textContent = node.title;
