@@ -46,7 +46,7 @@
             -ms-user-select: none;
             -moz-user-select: none;
             -webkit-user-select: none;
-            width: 350px;
+            width: 450px;
         }
 
         #treeViewContainer button, 
@@ -200,10 +200,9 @@
     </ul>
     <h3>Resources</h3>
     <ul>
-        <li>
-            <a href="https://github.com/openBIMstandards/DataSetSchependomlaan"
-               target="_other">Model source</a>
-        </li>
+        <ul>
+            <li><a href="https://help.autodesk.com/view/RVT/2023/ENU/?guid=GUID-61EF2F22-3A1F-4317-B925-1E85F138BE88" target="_other">Model source</a></li>
+        </ul>
     </ul>
 </div>
 </body>
@@ -416,16 +415,15 @@
     cameraFlight.duration = 1.0;
     cameraFlight.fitFOV = 25;
 
-    viewer.camera.eye = [-2.56, 8.38, 8.27];
-    viewer.camera.look = [13.44, 3.31, -14.83];
-    viewer.camera.up = [0.10, 0.98, -0.14];
+    viewer.scene.camera.eye = [-37.1356047775136, 13.019223731456176, 58.51748229729708];
+    viewer.scene.camera.look = [-21.930914776596467, 1.3515918520952024, 29.454670463302506];
+    viewer.scene.camera.up = [0.15536164462465452, 0.9421651211030125, -0.2969640448883814];
 
     viewer.scene.xrayMaterial.fillAlpha = 0.1;
     viewer.scene.xrayMaterial.fillColor = [0, 0, 0];
     viewer.scene.xrayMaterial.edgeAlpha = 0.4;
     viewer.scene.xrayMaterial.edgeColor = [0, 0, 0];
 
-    viewer.scene.highlightMaterial.fill = false;
     viewer.scene.highlightMaterial.fillAlpha = 0.3;
     viewer.scene.highlightMaterial.edgeColor = [1, 1, 0];
 
@@ -461,7 +459,7 @@
 
     const sceneModel = xktLoader.load({
         id: "Widget",
-        src: "../../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
+        src: "../../assets/models/xkt/v10/ifc/rac.xkt",
         edges: true,
         excludeUnclassifiedObjects: false
     });
