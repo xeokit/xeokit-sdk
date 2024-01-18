@@ -28,12 +28,20 @@ class TreeViewNode {
     get title() {
     }
 
+    /** Type of the corresponding {@link MetaObject}.
+     *
+     * @type {String}
+     * @abstract
+     */
+    get type() {
+    }
+
     /**
      * ID of the corresponding {@link MetaObject}.
      *
      * This is only defined if the TreeViewNode represents an object.
      *
-     * @type {Number|String}
+     * @type {String}
      * @abstract
      */
     get objectId() {
@@ -54,7 +62,6 @@ class TreeViewNode {
      * @abstract
      */
     get parent() {
-
     }
 
     /** The number of {@link Entity}s within the subtree of this TreeViewNode.
@@ -72,7 +79,6 @@ class TreeViewNode {
      * @abstract
      */
     get numVisibleEntities() {
-
     }
 
     /** Whether or not the TreeViewNode is currently checked.
@@ -81,7 +87,6 @@ class TreeViewNode {
      * @abstract
      */
     get checked() {
-
     }
 
     /** Whether or not the TreeViewNode is currently xrayed.
@@ -89,8 +94,7 @@ class TreeViewNode {
      * @type {Boolean}
      * @abstract
      */
-     get xrayed() {
-
+    get xrayed() {
     }
 }
 

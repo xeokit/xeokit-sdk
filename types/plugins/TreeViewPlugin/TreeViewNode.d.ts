@@ -6,7 +6,6 @@ export declare class TreeViewNode {
    * Globally unique node ID.
    *
    * @type {String}
-   * @abstract
    */
   get nodeId(): string;
 
@@ -14,7 +13,6 @@ export declare class TreeViewNode {
    * Title of the TreeViewNode.
    *
    * @type {String}
-   * @abstract
    */
   get title(): string;
 
@@ -23,51 +21,51 @@ export declare class TreeViewNode {
    *
    * This is only defined if the TreeViewNode represents an object.
    *
-   * @type {Number|String}
-   * @abstract
+   * @type {String}
    */
-  get objectId(): string | number;
+  get objectId(): string;
+
+  /**
+   * Type of the corresponding {@link MetaObject}.
+   *
+   * @type {String}
+   */
+  get type(): string;
 
   /**
    * The child TreeViewNodes.
    *
    * @type {Array}
-   * @abstract
    */
   get children(): any[];
 
   /** The parent TreeViewNode.
    *
-   * @type {TreeViewNode}
-   * @abstract
+   * @type {TreeViewNode|null}
    */
-  get parent(): TreeViewNode;
+  get parent(): TreeViewNode | null;
 
   /** The number of {@link Entity}s within the subtree of this TreeViewNode.
    *
    * @type {Number}
-   * @abstract
    */
   get numEntities(): number;
 
   /** The number of {@link Entity}s that are currently visible within the subtree of this TreeViewNode.
    *
    * @type {Number}
-   * @abstract
    */
   get numVisibleEntities(): number;
 
   /** Whether or not the TreeViewNode is currently checked.
    *
    * @type {Boolean}
-   * @abstract
    */
   get checked(): boolean;
 
   /** Whether or not the TreeViewNode is currently xrayed.
    *
    * @type {Boolean}
-   * @abstract
    */
-     get xrayed(): boolean;
+  get xrayed(): boolean;
 }
