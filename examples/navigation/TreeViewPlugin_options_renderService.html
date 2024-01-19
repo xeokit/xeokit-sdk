@@ -408,7 +408,8 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
-        transparent: true
+        transparent: true,
+        dtxEnabled: true
     });
 
     const cameraControl = viewer.cameraControl;
@@ -476,37 +477,7 @@
         document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
     });
 
-    //------------------------------------------------------------------------------------------------------------------
-    // Mouse over entities to highlight them
-    //------------------------------------------------------------------------------------------------------------------
 
-    var lastEntity = null;
-
-    viewer.scene.input.on("mousemove", function (coords) {
-
-        var hit = viewer.scene.pick({
-            canvasPos: coords
-        });
-
-        if (hit) {
-
-            if (!lastEntity || hit.entity.id !== lastEntity.id) {
-
-                if (lastEntity) {
-                    lastEntity.highlighted = false;
-                }
-
-                lastEntity = hit.entity;
-                hit.entity.highlighted = true;
-            }
-        } else {
-
-            if (lastEntity) {
-                lastEntity.highlighted = false;
-                lastEntity = null;
-            }
-        }
-    });
 
 </script>
 </html>
