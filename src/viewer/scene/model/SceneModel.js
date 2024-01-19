@@ -1146,8 +1146,6 @@ export class SceneModel extends Component {
         this._vboBatchingLayers = {};
         this._dtxLayers = {};
 
-        this._meshList = [];
-
         this.layerList = []; // For GL state efficiency when drawing, InstancingLayers are in first part, BatchingLayers are in second
         this._entityList = [];
 
@@ -1159,7 +1157,8 @@ export class SceneModel extends Component {
         this._meshes = {};
         this._entities = {};
 
-        this._scheduledMeshes = {}
+        this._scheduledMeshes = {};
+        this._meshesCfgsBeforeMeshCreation = {};
 
         /** @private **/
         this.renderFlags = new RenderFlags();
@@ -2690,7 +2689,7 @@ export class SceneModel extends Component {
     /**
      * Creates a new {@link SceneModelMesh} within this SceneModel.
      *
-     * * Stores the new SceneModelMesh in {@link SceneModel#meshes}.
+     * * It prepares and saves data for a SceneModelMesh {@link SceneModel#meshes} creation. SceneModelMesh will be created only once the SceneModelEntity (which references this particular SceneModelMesh) will be created.
      * * The SceneModelMesh can either define its own geometry or share it with other SceneModelMeshes. To define own geometry, provide the
      * various geometry arrays to this method. To share a geometry, provide the ID of a geometry created earlier
      * with {@link SceneModel#createGeometry}.
@@ -2725,18 +2724,18 @@ export class SceneModel extends Component {
      * @param {Number} [cfg.opacity=1] Opacity in range ````[0..1]````. Overridden by texture set ````colorTexture````.
      * @param {Number} [cfg.metallic=0] Metallic factor in range ````[0..1]````. Overridden by texture set ````metallicRoughnessTexture````.
      * @param {Number} [cfg.roughness=1] Roughness factor in range ````[0..1]````. Overridden by texture set ````metallicRoughnessTexture````.
-     * @returns {SceneModelMesh} The new mesh.
+     * @returns {Boolean} True = successfully mesh was created. False = error during creation of a mesh.
      */
     createMesh(cfg) {
 
         if (cfg.id === undefined || cfg.id === null) {
             this.error("[createMesh] SceneModel.createMesh() config missing: id");
-            return;
+            return false;
         }
 
         if (this._scheduledMeshes[cfg.id]) {
             this.error(`[createMesh] SceneModel already has a mesh with this ID: ${cfg.id}`);
-            return;
+            return false;
         }
 
         const instancing = (cfg.geometryId !== undefined);
@@ -2751,31 +2750,31 @@ export class SceneModel extends Component {
             }
             if (cfg.primitive !== "points" && cfg.primitive !== "lines" && cfg.primitive !== "triangles" && cfg.primitive !== "solid" && cfg.primitive !== "surface") {
                 this.error(`Unsupported value for 'primitive': '${primitive}'  ('geometryId' is absent) - supported values are 'points', 'lines', 'triangles', 'solid' and 'surface'.`);
-                return;
+                return false;
             }
             if (!cfg.positions && !cfg.positionsCompressed && !cfg.buckets) {
                 this.error("Param expected: 'positions',  'positionsCompressed' or `buckets`  ('geometryId' is absent)");
-                return null;
+                return false;
             }
             if (cfg.positions && (cfg.positionsDecodeMatrix || cfg.positionsDecodeBoundary)) {
                 this.error("Illegal params: 'positions' not expected with 'positionsDecodeMatrix'/'positionsDecodeBoundary' ('geometryId' is absent)");
-                return null;
+                return false;
             }
             if (cfg.positionsCompressed && !cfg.positionsDecodeMatrix && !cfg.positionsDecodeBoundary) {
                 this.error("Param expected: 'positionsCompressed' should be accompanied by 'positionsDecodeMatrix'/'positionsDecodeBoundary' ('geometryId' is absent)");
-                return null;
+                return false;
             }
             if (cfg.uvCompressed && !cfg.uvDecodeMatrix) {
                 this.error("Param expected: 'uvCompressed' should be accompanied by `uvDecodeMatrix` ('geometryId' is absent)");
-                return null;
+                return false;
             }
             if (!cfg.buckets && !cfg.indices && cfg.primitive !== "points") {
                 this.error(`Param expected: indices (required for '${cfg.primitive}' primitive type)`);
-                return null;
+                return false;
             }
             if ((cfg.matrix || cfg.position || cfg.rotation || cfg.scale) && (cfg.positionsCompressed || cfg.positionsDecodeBoundary)) {
                 this.error("Unexpected params: 'matrix', 'rotation', 'scale', 'position' not allowed with 'positionsCompressed'");
-                return null;
+                return false;
             }
 
             const useDTX = (!!this._dtxEnabled && (cfg.primitive === "triangles"
@@ -2940,7 +2939,7 @@ export class SceneModel extends Component {
                     cfg.textureSet = this._textureSets[cfg.textureSetId];
                     if (!cfg.textureSet) {
                         this.error(`[createMesh] Texture set not found: ${cfg.textureSetId} - ensure that you create it first with createTextureSet()`);
-                        return;
+                        return false;
                     }
                 }
             }
@@ -2951,13 +2950,13 @@ export class SceneModel extends Component {
 
             if (cfg.positions || cfg.positionsCompressed || cfg.indices || cfg.edgeIndices || cfg.normals || cfg.normalsCompressed || cfg.uv || cfg.uvCompressed || cfg.positionsDecodeMatrix) {
                 this.error(`Mesh geometry parameters not expected when instancing a geometry (not expected: positions, positionsCompressed, indices, edgeIndices, normals, normalsCompressed, uv, uvCompressed, positionsDecodeMatrix)`);
-                return;
+                return false;
             }
 
             cfg.geometry = this._geometries[cfg.geometryId];
             if (!cfg.geometry) {
                 this.error(`[createMesh] Geometry not found: ${cfg.geometryId} - ensure that you create it first with createGeometry()`);
-                return;
+                return false;
             }
 
             cfg.origin = cfg.origin ? math.addVec3(this._origin, cfg.origin, math.vec3()) : this._origin;
@@ -2971,7 +2970,7 @@ export class SceneModel extends Component {
 
                 if (!cfg.transform) {
                     this.error(`[createMesh] Transform not found: ${cfg.transformId} - ensure that you create it first with createTransform()`);
-                    return;
+                    return false;
                 }
 
                 cfg.aabb = cfg.geometry.aabb;
@@ -3039,7 +3038,7 @@ export class SceneModel extends Component {
                     cfg.textureSet = this._textureSets[cfg.textureSetId];
                     // if (!cfg.textureSet) {
                     //     this.error(`[createMesh] Texture set not found: ${cfg.textureSetId} - ensure that you create it first with createTextureSet()`);
-                    //     return;
+                    //     return false;
                     // }
                 }
             }
@@ -3047,7 +3046,9 @@ export class SceneModel extends Component {
 
         cfg.numPrimitives = this._getNumPrimitives(cfg);
 
-        return this._createMesh(cfg);
+        this._meshesCfgsBeforeMeshCreation[cfg.id] = cfg;
+
+        return true;
     }
 
     _createMesh(cfg) {
@@ -3079,8 +3080,6 @@ export class SceneModel extends Component {
             cfg.meshMatrix = cfg.transform.worldMatrix;
         }
         mesh.portionId = mesh.layer.createPortion(mesh, cfg);
-        this._meshes[cfg.id] = mesh;
-        this._meshList.push(mesh);
         return mesh;
     }
 
@@ -3439,10 +3438,15 @@ export class SceneModel extends Component {
         let meshes = [];
         for (let i = 0, len = cfg.meshIds.length; i < len; i++) {
             const meshId = cfg.meshIds[i];
-            const mesh = this._meshes[meshId];
-            if (!mesh) {
-                this.error(`Mesh with this ID not found: "${meshId}" - ignoring this mesh`);
-                continue;
+            let mesh = this._meshes[meshId]; // Trying to get already created mesh
+            if (!mesh) { // Checks if there is already created mesh for this meshId
+                let meshCfg = this._meshesCfgsBeforeMeshCreation[meshId]; // Trying to get already created cfg
+                if (!meshCfg) { // Checks if there is already created cfg for this meshId
+                    this.error(`Mesh with this ID not found: "${meshId}" - ignoring this mesh`); // There is no such cfg
+                    continue;
+                }
+                mesh = this._createMesh(meshCfg) // There is no such mesh yet, but there is already created cfg, so it creates this mesh
+                this._meshes[cfg.id] = mesh; // Now it will also add this mesh to dictionary of created meshes
             }
             if (mesh.parent) {
                 this.error(`Mesh with ID "${meshId}" already belongs to object with ID "${mesh.parent.id}" - ignoring this mesh`);
@@ -3471,9 +3475,6 @@ export class SceneModel extends Component {
     finalize() {
         if (this.destroyed) {
             return;
-        }
-        if (!this._areAllMeshesUsedByEntities()){
-            throw "All meshes should be used by entities to finalize SceneModel"
         }
         for (let i = 0, len = this.layerList.length; i < len; i++) {
             const layer = this.layerList[i];
@@ -3549,31 +3550,6 @@ export class SceneModel extends Component {
                 renderFlags.visibleLayers[renderFlags.numVisibleLayers++] = layerIndex;
             }
         }
-    }
-
-    /** @private */
-    _areAllMeshesUsedByEntities(){
-        let isMeshUsedDictionary = []
-        for (let i = 0; i < this._meshList.length; i++){
-            let currentMeshId = this._meshList[i].id;
-            isMeshUsedDictionary[currentMeshId] = false;
-        }
-        for (let i = 0; i < this._entityList.length; i++) {
-            let currentEntity = this._entityList[i];
-            let currentMeshes = currentEntity.meshes;
-            for (let j = 0; j < currentMeshes.length; j++){
-                let currentMeshId = currentMeshes[j].id;
-                isMeshUsedDictionary[currentMeshId] = true;
-            }
-        }
-        for (let key in isMeshUsedDictionary){
-            let currentMeshResult = isMeshUsedDictionary[key];
-            if (!currentMeshResult){
-                return false;
-            }
-        }
-
-        return true;
     }
 
     _getActiveSectionPlanesForLayer(layer) {
