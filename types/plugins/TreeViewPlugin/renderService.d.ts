@@ -72,7 +72,7 @@ export declare interface ITreeViewRenderService {
    *
    * @returns {String} The node id.
    */
-  getId(element: HTMLElement): string;
+  getId(element: HTMLElement): string | undefined;
 
   /**
    * Returns the node id from the checkbox element.
