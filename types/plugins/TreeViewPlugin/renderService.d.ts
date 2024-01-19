@@ -90,7 +90,7 @@ export declare interface ITreeViewRenderService {
    *
    * @returns {HTMLElement} The expand/collapse element.
    */
-  getSwitchElement(nodeId: string): HTMLElement
+  getSwitchElement(nodeId: string): HTMLElement | null;
 
   /**
    * Returns the node's checkbox state.
