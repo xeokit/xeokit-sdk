@@ -1,8 +1,8 @@
-import {Component} from "../Component";
-import {SceneModelEntity} from "./SceneModelEntity";
-import {EdgeMaterial, EmphasisMaterial} from "../materials";
-import {SceneModelMesh} from "./SceneModelMesh";
-import {SceneModelTextureSet} from "./SceneModelTextureSet";
+import { Component } from "../Component";
+import { SceneModelEntity } from "./SceneModelEntity";
+import { EdgeMaterial, EmphasisMaterial } from "../materials";
+import { SceneModelMesh } from "./SceneModelMesh";
+import { SceneModelTextureSet } from "./SceneModelTextureSet";
 
 /**
  * A high-performance model representation for efficient rendering and low memory usage.
@@ -168,6 +168,16 @@ export declare class SceneModel extends Component {
      */
     get aabb(): number[];
 
+
+    get numEntities(): number;
+
+    /**
+     * The number of entities in this SceneModel.
+     *
+     * @type {number}
+     */
+    get numEntities(): number;
+
     /**
      * The approximate number of triangle primitives in this SceneModel.
      *
@@ -297,7 +307,7 @@ export declare class SceneModel extends Component {
      *
      * @type {Boolean}
      */
-    set clippable(clippable: boolean) ;
+    set clippable(clippable: boolean);
 
     /**
      * Gets if this SceneModel is collidable.
@@ -395,7 +405,7 @@ export declare class SceneModel extends Component {
      *
      * @type {Boolean}
      */
-    set receivesShadow(receivesShadow: boolean) ;
+    set receivesShadow(receivesShadow: boolean);
 
     /**
      * Gets if Scalable Ambient Obscurance (SAO) will apply to this SceneModel.
