@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 **Is this feature critical for your commercial enterprise?**
-Please [get in touch](http://xeokit.io/for-business.html) if your enterprise needs prioritised support.
+If your enterprise needs prioritised support, please get in touch here: http://xeokit.io/for-business.html 
 
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
