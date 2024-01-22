@@ -597,67 +597,63 @@ export declare class SceneModel extends Component {
     }): SceneModelMesh;
 
     /**
-     * Creates a mesh within this SceneModel.
+     * Creates a new {@link SceneModelMesh} within this SceneModel.
      *
-     * A mesh can either share geometry with other meshes, or have its own unique geometry.
-     *
-     * To share a geometry with other meshes, provide the ID of a geometry created earlier
-     * with {@link SceneModel.createGeometry}.
-     *
-     * To create unique geometry for the mesh, provide geometry data arrays.
-     *
-     * Internally, SceneModel will batch all unique mesh geometries into the same arrays, which improves
-     * rendering performance.
-     *
-     * If you accompany the arrays with a  ````positionsDecodeMatrix```` , then ````createMesh()```` will assume
-     * that the ````positions```` and ````normals```` arrays are compressed. When compressed, ````positions```` will be
-     * quantized and in World-space, and ````normals```` will be oct-encoded and in World-space.
-     *
-     * If you accompany the arrays with an  ````origin````, then ````createMesh()```` will assume
-     * that the ````positions```` are in relative-to-center (RTC) coordinates, with ````origin```` being the origin of their
-     * RTC coordinate system.
-     *
-     * When providing either ````positionsDecodeMatrix```` or ````origin````, ````createMesh()```` will start a new
-     * batch each time either of those two parameters change since the last call. Therefore, to combine arrays into the
-     * minimum number of batches, it's best for performance to create your shared meshes in runs that have the same value
-     * for ````positionsDecodeMatrix```` and ````origin````.
-     *
-     * Note that ````positions````, ````normals```` and ````indices```` are all required together.
+     * * It prepares and saves data for a SceneModelMesh {@link SceneModel#meshes} creation. SceneModelMesh will be created only once the SceneModelEntity (which references this particular SceneModelMesh) will be created.
+     * * The SceneModelMesh can either define its own geometry or share it with other SceneModelMeshes. To define own geometry, provide the
+     * various geometry arrays to this method. To share a geometry, provide the ID of a geometry created earlier
+     * with {@link SceneModel#createGeometry}.
+     * * If you accompany the arrays with an  ````origin````, then ````createMesh()```` will assume
+     * that the geometry ````positions```` are in relative-to-center (RTC) coordinates, with ````origin```` being the
+     * origin of their RTC coordinate system.
      *
      * @param {object} cfg Object properties.
-     * @param {string} cfg.id Mandatory ID for the new mesh. Must not clash with any existing components within the {@link Scene}.
-     * @param {string|number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link SceneModel.createGeometry:method"}}createMesh(){{/crossLink}}. Overrides all other geometry parameters given to this method.
-     * @param {string} [cfg.primitive="triangles"]  Geometry primitive type. Ignored when ````geometryId```` is given. Accepted values are 'points', 'lines' and 'triangles'.
-     * @param {number[]} [cfg.positions] Flat array of vertex positions. Ignored when ````geometryId```` is given.
-     * @param {number[]} [cfg.colors] Flat array of RGB vertex colors as float values in range ````[0..1]````. Ignored when ````geometryId```` is given, overriden by ````color```` and ````colorsCompressed````.
-     * @param {number[]} [cfg.colorsCompressed] Flat array of RGB vertex colors as unsigned short integers in range ````[0..255]````. Ignored when ````geometryId```` is given, overrides ````colors```` and is overriden by ````color````.
-     * @param {number[]} [cfg.normals] Flat array of normal vectors. Only used with 'triangles' primitives. When no normals are given, the mesh will be flat shaded using auto-generated face-aligned normals.
-     * @param {number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positions````.
-     * @param {number[]} [cfg.origin] Optional geometry origin, relative to {@link SceneModel.origin}. When this is given, then ````positions```` are assumed to be relative to this.
-     * @param {number[]} [cfg.indices] Array of triangle indices. Ignored when ````geometryId```` is given.
-     * @param {number[]} [cfg.edgeIndices] Array of edge line indices. If ````geometryId```` is not given, edge line indices are
-     * automatically generated internally if not given, using the ````edgeThreshold```` given to the ````SceneModel````
-     * constructor. This parameter is ignored when ````geometryId```` is given.
-     * @param {number[]} [cfg.position=[0,0,0]] Local 3D position. of the mesh
-     * @param {number[]} [cfg.scale=[1,1,1]] Scale of the mesh.
-     * @param {number[]} [cfg.rotation=[0,0,0]] Rotation of the mesh as Euler angles given in degrees, for each of the X, Y and Z axis.
-     * @param {number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Mesh modelling transform matrix. Overrides the ````position````, ````scale```` and ````rotation```` parameters.
-     * @param {number[]} [cfg.color=[1,1,1]] RGB color in range ````[0..1, 0..`, 0..1]````. Overrides ````colors```` and ````colorsCompressed````.
-     * @param {number} [cfg.opacity=1] Opacity in range ````[0..1]````.
+     * @param {String} cfg.id Mandatory ID for the new mesh. Must not clash with any existing components within the {@link Scene}.
+     * @param {String|Number} [cfg.textureSetId] ID of a {@link SceneModelTextureSet} previously created with {@link SceneModel#createTextureSet}.
+     * @param {String|Number} [cfg.transformId] ID of a {@link SceneModelTransform} to instance, previously created with {@link SceneModel#createTransform}. Overrides all other transform parameters given to this method.
+     * @param {String|Number} [cfg.geometryId] ID of a geometry to instance, previously created with {@link SceneModel#createGeometry}. Overrides all other geometry parameters given to this method.
+     * @param {String} cfg.primitive The primitive type. Accepted values are 'points', 'lines', 'triangles', 'solid' and 'surface'.
+     * @param {Number[]} [cfg.positions] Flat array of uncompressed 3D vertex positions positions. Required for all primitive types. Overridden by ````positionsCompressed````.
+     * @param {Number[]} [cfg.positionsCompressed] Flat array of quantized 3D vertex positions. Overrides ````positions````, and must be accompanied by ````positionsDecodeMatrix````.
+     * @param {Number[]} [cfg.positionsDecodeMatrix] A 4x4 matrix for decompressing ````positionsCompressed````. Must be accompanied by ````positionsCompressed````.
+     * @param {Number[]} [cfg.normals] Flat array of normal vectors. Only used with "triangles", "solid" and "surface" primitives. When no normals are given, the geometry will be flat shaded using auto-generated face-aligned normals.
+     * @param {Number[]} [cfg.normalsCompressed] Flat array of oct-encoded normal vectors. Overrides ````normals````. Only used with "triangles", "solid" and "surface" primitives. When no normals are given, the geometry will be flat shaded using auto-generated face-aligned normals.
+     * @param {Number[]} [cfg.colors] Flat array of uncompressed RGBA vertex colors, as float values in range ````[0..1]````. Ignored when ````geometryId```` is given. Overridden by ````color```` and ````colorsCompressed````.
+     * @param {Number[]} [cfg.colorsCompressed] Flat array of compressed RGBA vertex colors, as unsigned short integers in range ````[0..255]````. Ignored when ````geometryId```` is given. Overrides ````colors```` and is overridden by ````color````.
+     * @param {Number[]} [cfg.uv] Flat array of uncompressed vertex UV coordinates. Only used with "triangles", "solid" and "surface" primitives. Required for textured rendering.
+     * @param {Number[]} [cfg.uvCompressed] Flat array of compressed vertex UV coordinates. Only used with "triangles", "solid" and "surface" primitives. Overrides ````uv````. Must be accompanied by ````uvDecodeMatrix````. Only used with "triangles", "solid" and "surface" primitives. Required for textured rendering.
+     * @param {Number[]} [cfg.uvDecodeMatrix] A 3x3 matrix for decompressing ````uvCompressed````.
+     * @param {Number[]} [cfg.indices] Array of primitive connectivity indices. Not required for `points` primitives.
+     * @param {Number[]} [cfg.edgeIndices] Array of edge line indices. Used only with 'triangles', 'solid' and 'surface' primitives. Automatically generated internally if not supplied, using the optional ````edgeThreshold```` given to the ````SceneModel```` constructor.
+     * @param {Number[]} [cfg.origin] Optional geometry origin, relative to {@link SceneModel#origin}. When this is given, then ````positions```` are assumed to be relative to this.
+     * @param {Number[]} [cfg.position=[0,0,0]] Local 3D position of the mesh. Overridden by ````transformId````.
+     * @param {Number[]} [cfg.scale=[1,1,1]] Scale of the mesh.  Overridden by ````transformId````.
+     * @param {Number[]} [cfg.rotation=[0,0,0]] Rotation of the mesh as Euler angles given in degrees, for each of the X, Y and Z axis.  Overridden by ````transformId````.
+     * @param {Number[]} [cfg.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] Mesh modelling transform matrix. Overrides the ````position````, ````scale```` and ````rotation```` parameters. Also  overridden by ````transformId````.
+     * @param {Number[]} [cfg.color=[1,1,1]] RGB color in range ````[0..1, 0..1, 0..1]````. Overridden by texture set ````colorTexture````. Overrides ````colors```` and ````colorsCompressed````.
+     * @param {Number} [cfg.opacity=1] Opacity in range ````[0..1]````. Overridden by texture set ````colorTexture````.
+     * @param {Number} [cfg.metallic=0] Metallic factor in range ````[0..1]````. Overridden by texture set ````metallicRoughnessTexture````.
+     * @param {Number} [cfg.roughness=1] Roughness factor in range ````[0..1]````. Overridden by texture set ````metallicRoughnessTexture````.
+     * @returns {Boolean} True = successfully mesh was created. False = error during creation of a mesh.
      */
     createMesh(cfg: {
         id: string;
-        geometryId?: string | number;
-        transformId?: string | number;
         textureSetId?: string | number;
+        transformId?: string | number;
+        geometryId?: string | number;
         primitive: "lines" | "triangles" | "points";
         positions: number[];
+        positionsCompressed: number[];
+        positionsDecodeMatrix: number[];
         normals: number[];
+        normalsCompressed: number[];
         colors: number[];
         colorsCompressed: number[];
+        uv: number[];
+        uvCompressed: number[];
+        uvDecodeMatrix: number[];
         indices: number[];
         edgeIndices: number[];
-        positionsDecodeMatrix: number[];
         origin?: number[];
         position?: number[];
         scale?: number[];
@@ -665,7 +661,9 @@ export declare class SceneModel extends Component {
         matrix?: number[];
         color?: number[];
         opacity?: number;
-    }): SceneModelMesh;
+        metallic?: number;
+        roughness?: number;
+    }): boolean;
 
     /**
      * Creates an {@link SceneModelEntity} within this SceneModel, giving it one or more meshes previously created with {@link SceneModel.createMesh}.
