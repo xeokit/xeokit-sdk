@@ -750,7 +750,7 @@ class WebIFCLoaderPlugin extends Plugin {
     }
 
     _parseSpatialChildren(ctx, ifcElement, parentMetaObjectId) {
-        const metaObjectType = ifcElement.__proto__.constructor.name;
+        const metaObjectType = this._ifcAPI.GetNameFromTypeCode(ifcElement.type);
         if (ctx.includeTypes && (!ctx.includeTypes[metaObjectType])) {
             return;
         }
@@ -765,7 +765,7 @@ class WebIFCLoaderPlugin extends Plugin {
 
     _createMetaObject(ctx, ifcElement, parentMetaObjectId) {
         const id = ifcElement.GlobalId.value;
-        const metaObjectType = ifcElement.__proto__.constructor.name;
+        const metaObjectType = this._ifcAPI.GetNameFromTypeCode(ifcElement.type);
         const metaObjectName = (ifcElement.Name && ifcElement.Name.value !== "") ? ifcElement.Name.value : metaObjectType;
         const metaObject = {
             id: id,
