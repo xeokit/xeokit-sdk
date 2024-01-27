@@ -245,11 +245,11 @@ export class DTXLinesTextureFactory {
             return {texture: null, textureHeight: 0,};
         }
         const textureWidth = 4096;
-        const textureHeight = Math.ceil(lenIndices / 3 / textureWidth);
+        const textureHeight = Math.ceil(lenIndices / 2 / textureWidth);
         if (textureHeight === 0) {
             throw "texture height===0";
         }
-        const texArraySize = textureWidth * textureHeight * 3;
+        const texArraySize = textureWidth * textureHeight * 2;
         const texArray = new Uint8Array(texArraySize);
         dataTextureRamStats.sizeDataTextureIndices += texArray.byteLength;
         dataTextureRamStats.numberOfTextures++;
@@ -279,11 +279,11 @@ export class DTXLinesTextureFactory {
             return {texture: null, textureHeight: 0,};
         }
         const textureWidth = 4096;
-        const textureHeight = Math.ceil(lenIndices / 3 / textureWidth);
+        const textureHeight = Math.ceil(lenIndices / 2 / textureWidth);
         if (textureHeight === 0) {
             throw "texture height===0";
         }
-        const texArraySize = textureWidth * textureHeight * 3;
+        const texArraySize = textureWidth * textureHeight * 2;
         const texArray = new Uint16Array(texArraySize);
         dataTextureRamStats.sizeDataTextureIndices += texArray.byteLength;
         dataTextureRamStats.numberOfTextures++;
@@ -313,11 +313,11 @@ export class DTXLinesTextureFactory {
             return {texture: null, textureHeight: 0,};
         }
         const textureWidth = 4096;
-        const textureHeight = Math.ceil(lenIndices / 3 / textureWidth);
+        const textureHeight = Math.ceil(lenIndices / 2 / textureWidth);
         if (textureHeight === 0) {
             throw "texture height===0";
         }
-        const texArraySize = textureWidth * textureHeight * 3;
+        const texArraySize = textureWidth * textureHeight * 2;
         const texArray = new Uint32Array(texArraySize);
         dataTextureRamStats.sizeDataTextureIndices += texArray.byteLength;
         dataTextureRamStats.numberOfTextures++;
