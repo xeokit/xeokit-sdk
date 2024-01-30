@@ -131,7 +131,6 @@
     }
 
     sceneModel.on("loaded", () => {
-        sceneModel.children.forEach(moveAwayFromModelCenter);
         viewer.cameraFlight.jumpTo(sceneModel);
     });
 
