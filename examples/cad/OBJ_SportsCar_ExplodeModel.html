@@ -7,11 +7,46 @@
     <title>xeokit Example</title>
     <link href="../css/pageStyle.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <style>
+        #sliderContainer {
+            pointer-events: all;
+            height: 100%;
+            /*overflow-y: scroll;*/
+            overflow-x: hidden;
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: black;
+            top: 80px;
+            z-index: 200000;
+            float: left;
+            left: 0;
+            padding-left: 10px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            width: 250px;
+        }
+        input {
+            vertical-align: middle;
+            padding:0px;
+            margin:5px;
+        }
+    </style>
 </head>
 <body>
 <input type="checkbox" id="info-button"/>
 <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
+<div id="sliderContainer">
+    <p>Sliders</p>
+    <label>
+        Explode factor
+        <input id="explode_factor" type="range" min="0" max="2" value="0" step="0.05">
+    </label>
+</div>
 <div class="slideout-sidebar">
     <img class="info-icon" src="../../assets/images/obj_logo.png"/>
     <h1>OBJLoaderPlugin</h1>
@@ -64,7 +99,7 @@
     // Explodes a model
     //------------------------------------------------------------------------------------------------------------------
 
-    let explodeFactor = 1.5; // Can be changed to decide how much you'd like to move parts from the center
+    let explodeFactor = 0.0;
 
     function getCenter(aabb){
         return [
@@ -90,10 +125,21 @@
         ];
     }
 
+    function resetExplode(){
+        explodeFactor = 0.0;
+        sceneModel.children.forEach(moveAwayFromModelCenter);
+    }
+
     sceneModel.on("loaded", () => {
         sceneModel.children.forEach(moveAwayFromModelCenter);
         viewer.cameraFlight.jumpTo(sceneModel);
     });
+
+    document.getElementById("explode_factor").oninput = function() {
+        resetExplode();
+        explodeFactor = document.getElementById("explode_factor").value;
+        sceneModel.children.forEach(moveAwayFromModelCenter);
+    };
 
 </script>
 </html>
