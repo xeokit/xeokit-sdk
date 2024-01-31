@@ -151,7 +151,7 @@ class Annotation extends Marker {
             if (utils.isArray(markerHTML)) {
                 markerHTML = markerHTML.join("");
             }
-            markerHTML = this._renderTemplate(markerHTML);
+            markerHTML = this._renderTemplate(markerHTML.trim());
             const markerFragment = document.createRange().createContextualFragment(markerHTML);
             this._marker = markerFragment.firstChild;
             this._container.appendChild(this._marker);
@@ -178,7 +178,7 @@ class Annotation extends Marker {
             if (utils.isArray(labelHTML)) {
                 labelHTML = labelHTML.join("");
             }
-            labelHTML = this._renderTemplate(labelHTML);
+            labelHTML = this._renderTemplate(labelHTML.trim());
             const labelFragment = document.createRange().createContextualFragment(labelHTML);
             this._label = labelFragment.firstChild;
             this._container.appendChild(this._label);
