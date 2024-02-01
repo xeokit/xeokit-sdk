@@ -18,7 +18,7 @@ const MAX_VERTICES = 500000; // TODO: Rough estimate
  *
  * ## Summary
  *
- * * Loads [LAS 1.4 Format](https://www.asprs.org/divisions-committees/lidar-division/laser-las-file-format-exchange-activities) from both *.las* and *.laz* files.
+ * * Loads [LAS formats up to LAS v1.3](https://www.asprs.org/divisions-committees/lidar-division/laser-las-file-format-exchange-activities) from both *.las* and *.laz* files.
  * * Loads lidar point cloud positions, colors and intensities.
  * * Supports 32 and 64-bit positions.
  * * Supports 8 and 16-bit color depths.
