@@ -5,7 +5,7 @@ import {math} from "../../../../math/math.js";
 import {RenderState} from "../../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
 import {geometryCompressionUtils} from "../../../../math/geometryCompressionUtils.js";
-import {getRenderers} from "./renderers/VBOBatchingTrianglesRenderers.js";
+import {getRenderers} from "./renderers/Renderers.js";
 import {VBOBatchingTrianglesBuffer} from "./VBOBatchingTrianglesBuffer.js";
 import {quantizePositions, transformAndOctEncodeNormals} from "../../../compression.js";
 

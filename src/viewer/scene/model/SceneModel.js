@@ -3653,7 +3653,7 @@ export class SceneModel extends Component {
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
             this.layerList[layerIndex].drawColorOpaque(renderFlags, frameCtx);
-        }
+       }
     }
 
     /** @private */
