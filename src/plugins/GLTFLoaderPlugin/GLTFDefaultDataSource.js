@@ -1,4 +1,5 @@
 import {utils} from "../../viewer/scene/utils.js";
+import {core} from "../../viewer/scene/core";
 
 /**
  * Default data access strategy for {@link GLTFLoaderPlugin}.
@@ -104,13 +105,13 @@ function loadArraybuffer(glTFSrc, binarySrc, ok, err) {
             for (var i = 0; i < data.length; i++) {
                 view[i] = data.charCodeAt(i);
             }
-            window.setTimeout(function () {
+            core.scheduleTask(function () {
                 ok(buffer);
-            }, 0);
+            });
         } catch (error) {
-            window.setTimeout(function () {
+            core.scheduleTask(function () {
                 err(error);
-            }, 0);
+            });
         }
     } else {
         const basePath = getBasePath(glTFSrc);

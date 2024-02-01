@@ -957,14 +957,13 @@ class XKTLoaderPlugin extends Plugin {
             sceneModel.once("destroyed", () => {
                 this.viewer.metaScene.destroyMetaModel(metaModel.id);
             });
-            window.setTimeout(() => {
-
+            this.scheduleTask(() => {
                 if (sceneModel.destroyed) {
                     return;
                 }
                 sceneModel.scene.fire("modelLoaded", sceneModel.id); // FIXME: Assumes listeners know order of these two events
                 sceneModel.fire("loaded", true, false); // Don't forget the event, for late subscribers
-            }, 100);
+            });
         }
 
         const error = (errMsg) => {
@@ -1042,7 +1041,7 @@ class XKTLoaderPlugin extends Plugin {
                                     globalizeObjectIds: options.globalizeObjectIds
                                 });
                                 i++;
-                                window.setTimeout( loadNext, 100);
+                                this.scheduleTask( loadNext, 100);
                             }, error);
                         }
                     }
@@ -1057,7 +1056,7 @@ class XKTLoaderPlugin extends Plugin {
                             this._dataSource.getXKT(`${baseDir}${xktFiles[i]}`, (arrayBuffer) => {
                                 this._parseModel(arrayBuffer, params, options, sceneModel, metaModel, manifestCtx);
                                 i++;
-                                window.setTimeout(loadNext, 100);
+                                this.scheduleTask(loadNext, 100);
                             }, error);
                         }
                     }

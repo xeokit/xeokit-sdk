@@ -815,6 +815,14 @@ class Component {
     }
 
     /**
+     * Schedule a task to perform on the next browser interval
+     * @param task
+     */
+    scheduleTask(task) {
+        core.scheduleTask(task, null);
+    }
+
+    /**
      * Protected virtual template method, optionally implemented
      * by sub-classes to perform a scheduled task.
      *
