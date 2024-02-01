@@ -1,5 +1,6 @@
 import {Cache} from './Cache.js';
 import {Loader} from './Loader.js';
+import {core} from "../core";
 
 const loading = {};
 
@@ -20,7 +21,7 @@ class FileLoader extends Loader {
         const cached = Cache.get(url);
         if (cached !== undefined) {
             this.manager.itemStart(url);
-            setTimeout(() => {
+            core.scheduleTask(() => {
                 if (onLoad) {
                     onLoad(cached);
                 }

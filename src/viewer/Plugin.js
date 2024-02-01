@@ -1,4 +1,5 @@
 import {Map} from "./scene/utils/Map.js";
+import {core} from "./scene/core";
 
 /**
  @desc Base class for {@link Viewer} plugin classes.
@@ -36,6 +37,14 @@ class Plugin {
         this._eventCallDepth = 0; // Helps us catch stack overflows from recursive events
 
         viewer.addPlugin(this);
+    }
+
+    /**
+     * Schedule a task to perform on the next browser interval
+     * @param task
+     */
+    scheduleTask(task) {
+        core.scheduleTask(task, null);
     }
 
     /**

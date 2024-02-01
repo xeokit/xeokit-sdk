@@ -1,6 +1,8 @@
 /**
  * @private
  */
+import {core} from "./core";
+
 function xmlToJson(node, attributeRenamer) {
     if (node.nodeType === node.TEXT_NODE) {
         var v = node.nodeValue;
@@ -206,13 +208,13 @@ function loadArraybuffer(url, ok, err) {
             for (var i = 0; i < data.length; i++) {
                 view[i] = data.charCodeAt(i);
             }
-            window.setTimeout(function () {
+            core.scheduleTask(() => {
                 ok(buffer);
-            }, 0);
+            });
         } catch (error) {
-            window.setTimeout(function () {
+            core.scheduleTask(() => {
                 err(error);
-            }, 0);
+            });
         }
     } else {
         const request = new XMLHttpRequest();
