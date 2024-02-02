@@ -217,9 +217,9 @@ class MetaModel {
                         external: metaObjectData.external,
                     });
                     this.metaScene.metaObjects[id] = metaObject;
-                    this.metaObjects.push(metaObject);
+                    metaObject.metaModels = [];
                 }
-                metaObject.metaModels.push(this);
+                this.metaObjects.push(metaObject);
                 if (!metaObjectData.parent) {
                     this.rootMetaObjects.push(metaObject);
                     metaScene.rootMetaObjects[id] = metaObject;
@@ -283,8 +283,8 @@ class MetaModel {
 
         // Relink MetaObjects to their MetaModels
 
-        for (let objectId in this.metaObjects) {
-            const metaObject = this.metaObjects[objectId];
+        for (let objectId in metaScene.metaObjects) {
+            const metaObject = metaScene.metaObjects[objectId];
             metaObject.metaModels = [];
         }
 

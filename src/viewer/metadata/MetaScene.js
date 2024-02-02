@@ -157,11 +157,11 @@ class MetaScene {
      *
      * Fires a "metaModelDestroyed" event with the value of the {@link MetaModel#id}.
      *
-     * @param {String} id ID of the target {@link MetaModel}.
+     * @param {String} metaModelId ID of the target {@link MetaModel}.
      */
-    destroyMetaModel(id) {
+    destroyMetaModel(metaModelId) {
 
-        const metaModel = this.metaModels[id];
+        const metaModel = this.metaModels[metaModelId];
         if (!metaModel) {
             return;
         }
@@ -171,12 +171,12 @@ class MetaScene {
         if (metaModel.propertySets) {
             for (let i = 0, len = metaModel.propertySets.length; i < len; i++) {
                 const propertySet = metaModel.propertySets[i];
-                if (propertySet.metaModels.length === 1) { // Property set owned by one model, delete
+                if (propertySet.metaModels.length === 1 && propertySet.metaModels[0].id === metaModelId) { // Property set owned only by this model, delete
                     delete this.propertySets[propertySet.id];
                 } else {
                     const newMetaModels = [];
                     for (let j = 0, lenj = propertySet.metaModels.length; j < lenj; j++) {
-                        if (propertySet.metaModels[j].id !== id) {
+                        if (propertySet.metaModels[j].id !== metaModelId) {
                             newMetaModels.push(propertySet.metaModels[j]);
                         }
                     }
@@ -192,7 +192,7 @@ class MetaScene {
                 const metaObject = metaModel.metaObjects[i];
                 const type = metaObject.type;
                 const id = metaObject.id;
-                if (metaObject.metaModels.length === 1) { // MetaObject owned by one model, delete
+                if (metaObject.metaModels.length === 1&& metaObject.metaModels[0].id === metaModelId) { // MetaObject owned only by this model, delete
                     delete this.metaObjects[id];
                     if (!metaObject.parent) {
                         delete this.rootMetaObjects[id];
@@ -245,7 +245,7 @@ class MetaScene {
             }
         }
 
-        delete this.metaModels[id];
+        delete this.metaModels[metaModelId];
 
         // Relink MetaObjects to their MetaModels
 
@@ -262,7 +262,7 @@ class MetaScene {
             }
         }
 
-        this.fire("metaModelDestroyed", id);
+        this.fire("metaModelDestroyed", metaModelId);
     }
 
     /**
