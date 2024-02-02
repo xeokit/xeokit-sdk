@@ -281,6 +281,21 @@ class MetaModel {
             }
         }
 
+        // Relink MetaObjects to their MetaModels
+
+        for (let objectId in metaScene.metaObjects) {
+            const metaObject = metaScene.metaObjects[objectId];
+            metaObject.metaModels = [];
+        }
+
+        for (let modelId in metaScene.metaModels) {
+            const metaModel = metaScene.metaModels[modelId];
+            for (let i = 0, len = metaModel.metaObjects.length; i < len; i++) {
+                const metaObject = metaModel.metaObjects[i];
+                metaObject.metaModels.push(metaModel);
+            }
+        }
+
         // Rebuild MetaScene's MetaObjects-by-type lookup
 
         metaScene.metaObjectsByType = {};

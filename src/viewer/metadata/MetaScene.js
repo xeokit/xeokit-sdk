@@ -197,15 +197,6 @@ class MetaScene {
                     if (!metaObject.parent) {
                         delete this.rootMetaObjects[id];
                     }
-                } else {
-                    const newMetaModels = [];
-                    const metaModelId = metaModel.id;
-                    for (let j = 0, lenj = metaObject.metaModels.length; j < lenj; j++) {
-                        if (metaObject.metaModels[j].id !== metaModelId) {
-                            newMetaModels.push(metaObject.metaModels[j]);
-                        }
-                    }
-                    metaObject.metaModels = newMetaModels;
                 }
             }
         }
@@ -255,6 +246,21 @@ class MetaScene {
         }
 
         delete this.metaModels[id];
+
+        // Relink MetaObjects to their MetaModels
+
+        for (let objectId in this.metaObjects) {
+            const metaObject = this.metaObjects[objectId];
+            metaObject.metaModels = [];
+        }
+
+        for (let modelId in this.metaModels) {
+            const metaModel = this.metaModels[modelId];
+            for (let i = 0, len = metaModel.metaObjects.length; i < len; i++) {
+                const metaObject = metaModel.metaObjects[i];
+                metaObject.metaModels.push(metaModel);
+            }
+        }
 
         this.fire("metaModelDestroyed", id);
     }
