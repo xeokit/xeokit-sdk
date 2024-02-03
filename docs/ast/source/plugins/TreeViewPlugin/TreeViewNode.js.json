@@ -1,29 +1,29 @@
 {
   "type": "File",
   "start": 0,
-  "end": 1731,
+  "end": 1852,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 97,
-      "column": 22
+      "line": 102,
+      "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 1731,
+    "end": 1852,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 97,
-        "column": 22
+        "line": 102,
+        "column": 0
       }
     },
     "sourceType": "module",
@@ -31,14 +31,14 @@
       {
         "type": "Identifier",
         "start": 325,
-        "end": 1707,
+        "end": 1827,
         "loc": {
           "start": {
             "line": 11,
             "column": 0
           },
           "end": {
-            "line": 95,
+            "line": 99,
             "column": 1
           }
         },
@@ -64,14 +64,14 @@
         "body": {
           "type": "ClassBody",
           "start": 344,
-          "end": 1707,
+          "end": 1827,
           "loc": {
             "start": {
               "line": 11,
               "column": 19
             },
             "end": {
-              "line": 95,
+              "line": 99,
               "column": 1
             }
           },
@@ -250,16 +250,16 @@
               "trailingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * ID of the corresponding {@link MetaObject}.\n     *\n     * This is only defined if the TreeViewNode represents an object.\n     *\n     * @type {Number|String}\n     * @abstract\n     ",
+                  "value": "* Type of the corresponding {@link MetaObject}.\n     *\n     * @type {String}\n     * @abstract\n     ",
                   "start": 592,
-                  "end": 784,
+                  "end": 695,
                   "loc": {
                     "start": {
                       "line": 31,
                       "column": 4
                     },
                     "end": {
-                      "line": 38,
+                      "line": 35,
                       "column": 7
                     }
                   }
@@ -268,15 +268,15 @@
             },
             {
               "type": "ClassMethod",
-              "start": 789,
-              "end": 811,
+              "start": 700,
+              "end": 718,
               "loc": {
                 "start": {
-                  "line": 39,
+                  "line": 36,
                   "column": 4
                 },
                 "end": {
-                  "line": 40,
+                  "line": 37,
                   "column": 5
                 }
               },
@@ -284,15 +284,110 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 793,
-                "end": 801,
+                "start": 704,
+                "end": 708,
                 "loc": {
                   "start": {
-                    "line": 39,
+                    "line": 36,
                     "column": 8
                   },
                   "end": {
-                    "line": 39,
+                    "line": 36,
+                    "column": 12
+                  },
+                  "identifierName": "type"
+                },
+                "name": "type"
+              },
+              "kind": "get",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 711,
+                "end": 718,
+                "loc": {
+                  "start": {
+                    "line": 36,
+                    "column": 15
+                  },
+                  "end": {
+                    "line": 37,
+                    "column": 5
+                  }
+                },
+                "body": [],
+                "directives": [],
+                "leadingComments": null,
+                "trailingComments": null
+              },
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "* Type of the corresponding {@link MetaObject}.\n     *\n     * @type {String}\n     * @abstract\n     ",
+                  "start": 592,
+                  "end": 695,
+                  "loc": {
+                    "start": {
+                      "line": 31,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 35,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * ID of the corresponding {@link MetaObject}.\n     *\n     * This is only defined if the TreeViewNode represents an object.\n     *\n     * @type {String}\n     * @abstract\n     ",
+                  "start": 724,
+                  "end": 909,
+                  "loc": {
+                    "start": {
+                      "line": 39,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 46,
+                      "column": 7
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "ClassMethod",
+              "start": 914,
+              "end": 936,
+              "loc": {
+                "start": {
+                  "line": 47,
+                  "column": 4
+                },
+                "end": {
+                  "line": 48,
+                  "column": 5
+                }
+              },
+              "static": false,
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 918,
+                "end": 926,
+                "loc": {
+                  "start": {
+                    "line": 47,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 47,
                     "column": 16
                   },
                   "identifierName": "objectId"
@@ -307,15 +402,15 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 804,
-                "end": 811,
+                "start": 929,
+                "end": 936,
                 "loc": {
                   "start": {
-                    "line": 39,
+                    "line": 47,
                     "column": 19
                   },
                   "end": {
-                    "line": 40,
+                    "line": 48,
                     "column": 5
                   }
                 },
@@ -327,16 +422,16 @@
               "leadingComments": [
                 {
                   "type": "CommentBlock",
-                  "value": "*\n     * ID of the corresponding {@link MetaObject}.\n     *\n     * This is only defined if the TreeViewNode represents an object.\n     *\n     * @type {Number|String}\n     * @abstract\n     ",
-                  "start": 592,
-                  "end": 784,
+                  "value": "*\n     * ID of the corresponding {@link MetaObject}.\n     *\n     * This is only defined if the TreeViewNode represents an object.\n     *\n     * @type {String}\n     * @abstract\n     ",
+                  "start": 724,
+                  "end": 909,
                   "loc": {
                     "start": {
-                      "line": 31,
+                      "line": 39,
                       "column": 4
                     },
                     "end": {
-                      "line": 38,
+                      "line": 46,
                       "column": 7
                     }
                   }
@@ -346,15 +441,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * The child TreeViewNodes.\n     *\n     * @type {Array}\n     * @abstract\n     ",
-                  "start": 817,
-                  "end": 905,
+                  "start": 942,
+                  "end": 1030,
                   "loc": {
                     "start": {
-                      "line": 42,
+                      "line": 50,
                       "column": 4
                     },
                     "end": {
-                      "line": 47,
+                      "line": 55,
                       "column": 7
                     }
                   }
@@ -363,15 +458,15 @@
             },
             {
               "type": "ClassMethod",
-              "start": 910,
-              "end": 932,
+              "start": 1035,
+              "end": 1057,
               "loc": {
                 "start": {
-                  "line": 48,
+                  "line": 56,
                   "column": 4
                 },
                 "end": {
-                  "line": 49,
+                  "line": 57,
                   "column": 5
                 }
               },
@@ -379,15 +474,15 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 914,
-                "end": 922,
+                "start": 1039,
+                "end": 1047,
                 "loc": {
                   "start": {
-                    "line": 48,
+                    "line": 56,
                     "column": 8
                   },
                   "end": {
-                    "line": 48,
+                    "line": 56,
                     "column": 16
                   },
                   "identifierName": "children"
@@ -402,15 +497,15 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 925,
-                "end": 932,
+                "start": 1050,
+                "end": 1057,
                 "loc": {
                   "start": {
-                    "line": 48,
+                    "line": 56,
                     "column": 19
                   },
                   "end": {
-                    "line": 49,
+                    "line": 57,
                     "column": 5
                   }
                 },
@@ -423,15 +518,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "*\n     * The child TreeViewNodes.\n     *\n     * @type {Array}\n     * @abstract\n     ",
-                  "start": 817,
-                  "end": 905,
+                  "start": 942,
+                  "end": 1030,
                   "loc": {
                     "start": {
-                      "line": 42,
+                      "line": 50,
                       "column": 4
                     },
                     "end": {
-                      "line": 47,
+                      "line": 55,
                       "column": 7
                     }
                   }
@@ -441,15 +536,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "* The parent TreeViewNode.\n     *\n     * @type {TreeViewNode}\n     * @abstract\n     ",
-                  "start": 938,
-                  "end": 1026,
+                  "start": 1063,
+                  "end": 1151,
                   "loc": {
                     "start": {
-                      "line": 51,
+                      "line": 59,
                       "column": 4
                     },
                     "end": {
-                      "line": 55,
+                      "line": 63,
                       "column": 7
                     }
                   }
@@ -458,15 +553,15 @@
             },
             {
               "type": "ClassMethod",
-              "start": 1031,
-              "end": 1052,
+              "start": 1156,
+              "end": 1176,
               "loc": {
                 "start": {
-                  "line": 56,
+                  "line": 64,
                   "column": 4
                 },
                 "end": {
-                  "line": 58,
+                  "line": 65,
                   "column": 5
                 }
               },
@@ -474,15 +569,15 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 1035,
-                "end": 1041,
+                "start": 1160,
+                "end": 1166,
                 "loc": {
                   "start": {
-                    "line": 56,
+                    "line": 64,
                     "column": 8
                   },
                   "end": {
-                    "line": 56,
+                    "line": 64,
                     "column": 14
                   },
                   "identifierName": "parent"
@@ -497,15 +592,15 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 1044,
-                "end": 1052,
+                "start": 1169,
+                "end": 1176,
                 "loc": {
                   "start": {
-                    "line": 56,
+                    "line": 64,
                     "column": 17
                   },
                   "end": {
-                    "line": 58,
+                    "line": 65,
                     "column": 5
                   }
                 },
@@ -518,15 +613,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "* The parent TreeViewNode.\n     *\n     * @type {TreeViewNode}\n     * @abstract\n     ",
-                  "start": 938,
-                  "end": 1026,
+                  "start": 1063,
+                  "end": 1151,
                   "loc": {
                     "start": {
-                      "line": 51,
+                      "line": 59,
                       "column": 4
                     },
                     "end": {
-                      "line": 55,
+                      "line": 63,
                       "column": 7
                     }
                   }
@@ -536,15 +631,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "* The number of {@link Entity}s within the subtree of this TreeViewNode.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-                  "start": 1058,
-                  "end": 1186,
+                  "start": 1182,
+                  "end": 1310,
                   "loc": {
                     "start": {
-                      "line": 60,
+                      "line": 67,
                       "column": 4
                     },
                     "end": {
-                      "line": 64,
+                      "line": 71,
                       "column": 7
                     }
                   }
@@ -553,15 +648,15 @@
             },
             {
               "type": "ClassMethod",
-              "start": 1191,
-              "end": 1217,
+              "start": 1315,
+              "end": 1341,
               "loc": {
                 "start": {
-                  "line": 65,
+                  "line": 72,
                   "column": 4
                 },
                 "end": {
-                  "line": 67,
+                  "line": 74,
                   "column": 5
                 }
               },
@@ -569,15 +664,15 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 1195,
-                "end": 1206,
+                "start": 1319,
+                "end": 1330,
                 "loc": {
                   "start": {
-                    "line": 65,
+                    "line": 72,
                     "column": 8
                   },
                   "end": {
-                    "line": 65,
+                    "line": 72,
                     "column": 19
                   },
                   "identifierName": "numEntities"
@@ -592,15 +687,15 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 1209,
-                "end": 1217,
+                "start": 1333,
+                "end": 1341,
                 "loc": {
                   "start": {
-                    "line": 65,
+                    "line": 72,
                     "column": 22
                   },
                   "end": {
-                    "line": 67,
+                    "line": 74,
                     "column": 5
                   }
                 },
@@ -613,15 +708,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "* The number of {@link Entity}s within the subtree of this TreeViewNode.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-                  "start": 1058,
-                  "end": 1186,
+                  "start": 1182,
+                  "end": 1310,
                   "loc": {
                     "start": {
-                      "line": 60,
+                      "line": 67,
                       "column": 4
                     },
                     "end": {
-                      "line": 64,
+                      "line": 71,
                       "column": 7
                     }
                   }
@@ -631,15 +726,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "* The number of {@link Entity}s that are currently visible within the subtree of this TreeViewNode.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-                  "start": 1223,
-                  "end": 1378,
+                  "start": 1347,
+                  "end": 1502,
                   "loc": {
                     "start": {
-                      "line": 69,
+                      "line": 76,
                       "column": 4
                     },
                     "end": {
-                      "line": 73,
+                      "line": 80,
                       "column": 7
                     }
                   }
@@ -648,15 +743,15 @@
             },
             {
               "type": "ClassMethod",
-              "start": 1383,
-              "end": 1416,
+              "start": 1507,
+              "end": 1539,
               "loc": {
                 "start": {
-                  "line": 74,
+                  "line": 81,
                   "column": 4
                 },
                 "end": {
-                  "line": 76,
+                  "line": 82,
                   "column": 5
                 }
               },
@@ -664,15 +759,15 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 1387,
-                "end": 1405,
+                "start": 1511,
+                "end": 1529,
                 "loc": {
                   "start": {
-                    "line": 74,
+                    "line": 81,
                     "column": 8
                   },
                   "end": {
-                    "line": 74,
+                    "line": 81,
                     "column": 26
                   },
                   "identifierName": "numVisibleEntities"
@@ -687,15 +782,15 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 1408,
-                "end": 1416,
+                "start": 1532,
+                "end": 1539,
                 "loc": {
                   "start": {
-                    "line": 74,
+                    "line": 81,
                     "column": 29
                   },
                   "end": {
-                    "line": 76,
+                    "line": 82,
                     "column": 5
                   }
                 },
@@ -708,15 +803,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "* The number of {@link Entity}s that are currently visible within the subtree of this TreeViewNode.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-                  "start": 1223,
-                  "end": 1378,
+                  "start": 1347,
+                  "end": 1502,
                   "loc": {
                     "start": {
-                      "line": 69,
+                      "line": 76,
                       "column": 4
                     },
                     "end": {
-                      "line": 73,
+                      "line": 80,
                       "column": 7
                     }
                   }
@@ -726,15 +821,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "* Whether or not the TreeViewNode is currently checked.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                  "start": 1422,
-                  "end": 1534,
+                  "start": 1545,
+                  "end": 1657,
                   "loc": {
                     "start": {
-                      "line": 78,
+                      "line": 84,
                       "column": 4
                     },
                     "end": {
-                      "line": 82,
+                      "line": 88,
                       "column": 7
                     }
                   }
@@ -743,15 +838,15 @@
             },
             {
               "type": "ClassMethod",
-              "start": 1539,
-              "end": 1561,
+              "start": 1662,
+              "end": 1683,
               "loc": {
                 "start": {
-                  "line": 83,
+                  "line": 89,
                   "column": 4
                 },
                 "end": {
-                  "line": 85,
+                  "line": 90,
                   "column": 5
                 }
               },
@@ -759,15 +854,15 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 1543,
-                "end": 1550,
+                "start": 1666,
+                "end": 1673,
                 "loc": {
                   "start": {
-                    "line": 83,
+                    "line": 89,
                     "column": 8
                   },
                   "end": {
-                    "line": 83,
+                    "line": 89,
                     "column": 15
                   },
                   "identifierName": "checked"
@@ -782,15 +877,15 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 1553,
-                "end": 1561,
+                "start": 1676,
+                "end": 1683,
                 "loc": {
                   "start": {
-                    "line": 83,
+                    "line": 89,
                     "column": 18
                   },
                   "end": {
-                    "line": 85,
+                    "line": 90,
                     "column": 5
                   }
                 },
@@ -803,15 +898,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "* Whether or not the TreeViewNode is currently checked.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                  "start": 1422,
-                  "end": 1534,
+                  "start": 1545,
+                  "end": 1657,
                   "loc": {
                     "start": {
-                      "line": 78,
+                      "line": 84,
                       "column": 4
                     },
                     "end": {
-                      "line": 82,
+                      "line": 88,
                       "column": 7
                     }
                   }
@@ -821,15 +916,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "* Whether or not the TreeViewNode is currently xrayed.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                  "start": 1567,
-                  "end": 1678,
+                  "start": 1689,
+                  "end": 1800,
                   "loc": {
                     "start": {
-                      "line": 87,
+                      "line": 92,
                       "column": 4
                     },
                     "end": {
-                      "line": 91,
+                      "line": 96,
                       "column": 7
                     }
                   }
@@ -838,15 +933,15 @@
             },
             {
               "type": "ClassMethod",
-              "start": 1684,
-              "end": 1705,
+              "start": 1805,
+              "end": 1825,
               "loc": {
                 "start": {
-                  "line": 92,
-                  "column": 5
+                  "line": 97,
+                  "column": 4
                 },
                 "end": {
-                  "line": 94,
+                  "line": 98,
                   "column": 5
                 }
               },
@@ -854,16 +949,16 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 1688,
-                "end": 1694,
+                "start": 1809,
+                "end": 1815,
                 "loc": {
                   "start": {
-                    "line": 92,
-                    "column": 9
+                    "line": 97,
+                    "column": 8
                   },
                   "end": {
-                    "line": 92,
-                    "column": 15
+                    "line": 97,
+                    "column": 14
                   },
                   "identifierName": "xrayed"
                 },
@@ -877,15 +972,15 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 1697,
-                "end": 1705,
+                "start": 1818,
+                "end": 1825,
                 "loc": {
                   "start": {
-                    "line": 92,
-                    "column": 18
+                    "line": 97,
+                    "column": 17
                   },
                   "end": {
-                    "line": 94,
+                    "line": 98,
                     "column": 5
                   }
                 },
@@ -896,15 +991,15 @@
                 {
                   "type": "CommentBlock",
                   "value": "* Whether or not the TreeViewNode is currently xrayed.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                  "start": 1567,
-                  "end": 1678,
+                  "start": 1689,
+                  "end": 1800,
                   "loc": {
                     "start": {
-                      "line": 87,
+                      "line": 92,
                       "column": 4
                     },
                     "end": {
-                      "line": 91,
+                      "line": 96,
                       "column": 7
                     }
                   }
@@ -919,15 +1014,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 1709,
-        "end": 1731,
+        "start": 1829,
+        "end": 1851,
         "loc": {
           "start": {
-            "line": 97,
+            "line": 101,
             "column": 0
           },
           "end": {
-            "line": 97,
+            "line": 101,
             "column": 22
           }
         },
@@ -935,29 +1030,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 1717,
-            "end": 1729,
+            "start": 1837,
+            "end": 1849,
             "loc": {
               "start": {
-                "line": 97,
+                "line": 101,
                 "column": 8
               },
               "end": {
-                "line": 97,
+                "line": 101,
                 "column": 20
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 1717,
-              "end": 1729,
+              "start": 1837,
+              "end": 1849,
               "loc": {
                 "start": {
-                  "line": 97,
+                  "line": 101,
                   "column": 8
                 },
                 "end": {
-                  "line": 97,
+                  "line": 101,
                   "column": 20
                 },
                 "identifierName": "TreeViewNode"
@@ -966,15 +1061,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 1717,
-              "end": 1729,
+              "start": 1837,
+              "end": 1849,
               "loc": {
                 "start": {
-                  "line": 97,
+                  "line": 101,
                   "column": 8
                 },
                 "end": {
-                  "line": 97,
+                  "line": 101,
                   "column": 20
                 },
                 "identifierName": "TreeViewNode"
@@ -987,29 +1082,29 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 1709,
-        "end": 1731,
+        "start": 1829,
+        "end": 1851,
         "loc": {
           "start": {
-            "line": 97,
+            "line": 101,
             "column": 0
           },
           "end": {
-            "line": 97,
+            "line": 101,
             "column": 22
           }
         },
         "declaration": {
           "type": "ClassDeclaration",
           "start": 325,
-          "end": 1707,
+          "end": 1827,
           "loc": {
             "start": {
               "line": 11,
               "column": 0
             },
             "end": {
-              "line": 95,
+              "line": 99,
               "column": 1
             }
           },
@@ -1035,14 +1130,14 @@
           "body": {
             "type": "ClassBody",
             "start": 344,
-            "end": 1707,
+            "end": 1827,
             "loc": {
               "start": {
                 "line": 11,
                 "column": 19
               },
               "end": {
-                "line": 95,
+                "line": 99,
                 "column": 1
               }
             },
@@ -1221,16 +1316,16 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * ID of the corresponding {@link MetaObject}.\n     *\n     * This is only defined if the TreeViewNode represents an object.\n     *\n     * @type {Number|String}\n     * @abstract\n     ",
+                    "value": "* Type of the corresponding {@link MetaObject}.\n     *\n     * @type {String}\n     * @abstract\n     ",
                     "start": 592,
-                    "end": 784,
+                    "end": 695,
                     "loc": {
                       "start": {
                         "line": 31,
                         "column": 4
                       },
                       "end": {
-                        "line": 38,
+                        "line": 35,
                         "column": 7
                       }
                     }
@@ -1239,15 +1334,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 789,
-                "end": 811,
+                "start": 700,
+                "end": 718,
                 "loc": {
                   "start": {
-                    "line": 39,
+                    "line": 36,
                     "column": 4
                   },
                   "end": {
-                    "line": 40,
+                    "line": 37,
                     "column": 5
                   }
                 },
@@ -1255,15 +1350,110 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 793,
-                  "end": 801,
+                  "start": 704,
+                  "end": 708,
                   "loc": {
                     "start": {
-                      "line": 39,
+                      "line": 36,
                       "column": 8
                     },
                     "end": {
-                      "line": 39,
+                      "line": 36,
+                      "column": 12
+                    },
+                    "identifierName": "type"
+                  },
+                  "name": "type"
+                },
+                "kind": "get",
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 711,
+                  "end": 718,
+                  "loc": {
+                    "start": {
+                      "line": 36,
+                      "column": 15
+                    },
+                    "end": {
+                      "line": 37,
+                      "column": 5
+                    }
+                  },
+                  "body": [],
+                  "directives": [],
+                  "leadingComments": null,
+                  "trailingComments": null
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "* Type of the corresponding {@link MetaObject}.\n     *\n     * @type {String}\n     * @abstract\n     ",
+                    "start": 592,
+                    "end": 695,
+                    "loc": {
+                      "start": {
+                        "line": 31,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 35,
+                        "column": 7
+                      }
+                    }
+                  }
+                ],
+                "trailingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * ID of the corresponding {@link MetaObject}.\n     *\n     * This is only defined if the TreeViewNode represents an object.\n     *\n     * @type {String}\n     * @abstract\n     ",
+                    "start": 724,
+                    "end": 909,
+                    "loc": {
+                      "start": {
+                        "line": 39,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 46,
+                        "column": 7
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "ClassMethod",
+                "start": 914,
+                "end": 936,
+                "loc": {
+                  "start": {
+                    "line": 47,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 48,
+                    "column": 5
+                  }
+                },
+                "static": false,
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 918,
+                  "end": 926,
+                  "loc": {
+                    "start": {
+                      "line": 47,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 47,
                       "column": 16
                     },
                     "identifierName": "objectId"
@@ -1278,15 +1468,15 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 804,
-                  "end": 811,
+                  "start": 929,
+                  "end": 936,
                   "loc": {
                     "start": {
-                      "line": 39,
+                      "line": 47,
                       "column": 19
                     },
                     "end": {
-                      "line": 40,
+                      "line": 48,
                       "column": 5
                     }
                   },
@@ -1298,16 +1488,16 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * ID of the corresponding {@link MetaObject}.\n     *\n     * This is only defined if the TreeViewNode represents an object.\n     *\n     * @type {Number|String}\n     * @abstract\n     ",
-                    "start": 592,
-                    "end": 784,
+                    "value": "*\n     * ID of the corresponding {@link MetaObject}.\n     *\n     * This is only defined if the TreeViewNode represents an object.\n     *\n     * @type {String}\n     * @abstract\n     ",
+                    "start": 724,
+                    "end": 909,
                     "loc": {
                       "start": {
-                        "line": 31,
+                        "line": 39,
                         "column": 4
                       },
                       "end": {
-                        "line": 38,
+                        "line": 46,
                         "column": 7
                       }
                     }
@@ -1317,15 +1507,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * The child TreeViewNodes.\n     *\n     * @type {Array}\n     * @abstract\n     ",
-                    "start": 817,
-                    "end": 905,
+                    "start": 942,
+                    "end": 1030,
                     "loc": {
                       "start": {
-                        "line": 42,
+                        "line": 50,
                         "column": 4
                       },
                       "end": {
-                        "line": 47,
+                        "line": 55,
                         "column": 7
                       }
                     }
@@ -1334,15 +1524,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 910,
-                "end": 932,
+                "start": 1035,
+                "end": 1057,
                 "loc": {
                   "start": {
-                    "line": 48,
+                    "line": 56,
                     "column": 4
                   },
                   "end": {
-                    "line": 49,
+                    "line": 57,
                     "column": 5
                   }
                 },
@@ -1350,15 +1540,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 914,
-                  "end": 922,
+                  "start": 1039,
+                  "end": 1047,
                   "loc": {
                     "start": {
-                      "line": 48,
+                      "line": 56,
                       "column": 8
                     },
                     "end": {
-                      "line": 48,
+                      "line": 56,
                       "column": 16
                     },
                     "identifierName": "children"
@@ -1373,15 +1563,15 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 925,
-                  "end": 932,
+                  "start": 1050,
+                  "end": 1057,
                   "loc": {
                     "start": {
-                      "line": 48,
+                      "line": 56,
                       "column": 19
                     },
                     "end": {
-                      "line": 49,
+                      "line": 57,
                       "column": 5
                     }
                   },
@@ -1394,15 +1584,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * The child TreeViewNodes.\n     *\n     * @type {Array}\n     * @abstract\n     ",
-                    "start": 817,
-                    "end": 905,
+                    "start": 942,
+                    "end": 1030,
                     "loc": {
                       "start": {
-                        "line": 42,
+                        "line": 50,
                         "column": 4
                       },
                       "end": {
-                        "line": 47,
+                        "line": 55,
                         "column": 7
                       }
                     }
@@ -1412,15 +1602,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "* The parent TreeViewNode.\n     *\n     * @type {TreeViewNode}\n     * @abstract\n     ",
-                    "start": 938,
-                    "end": 1026,
+                    "start": 1063,
+                    "end": 1151,
                     "loc": {
                       "start": {
-                        "line": 51,
+                        "line": 59,
                         "column": 4
                       },
                       "end": {
-                        "line": 55,
+                        "line": 63,
                         "column": 7
                       }
                     }
@@ -1429,15 +1619,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 1031,
-                "end": 1052,
+                "start": 1156,
+                "end": 1176,
                 "loc": {
                   "start": {
-                    "line": 56,
+                    "line": 64,
                     "column": 4
                   },
                   "end": {
-                    "line": 58,
+                    "line": 65,
                     "column": 5
                   }
                 },
@@ -1445,15 +1635,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1035,
-                  "end": 1041,
+                  "start": 1160,
+                  "end": 1166,
                   "loc": {
                     "start": {
-                      "line": 56,
+                      "line": 64,
                       "column": 8
                     },
                     "end": {
-                      "line": 56,
+                      "line": 64,
                       "column": 14
                     },
                     "identifierName": "parent"
@@ -1468,15 +1658,15 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1044,
-                  "end": 1052,
+                  "start": 1169,
+                  "end": 1176,
                   "loc": {
                     "start": {
-                      "line": 56,
+                      "line": 64,
                       "column": 17
                     },
                     "end": {
-                      "line": 58,
+                      "line": 65,
                       "column": 5
                     }
                   },
@@ -1489,15 +1679,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "* The parent TreeViewNode.\n     *\n     * @type {TreeViewNode}\n     * @abstract\n     ",
-                    "start": 938,
-                    "end": 1026,
+                    "start": 1063,
+                    "end": 1151,
                     "loc": {
                       "start": {
-                        "line": 51,
+                        "line": 59,
                         "column": 4
                       },
                       "end": {
-                        "line": 55,
+                        "line": 63,
                         "column": 7
                       }
                     }
@@ -1507,15 +1697,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "* The number of {@link Entity}s within the subtree of this TreeViewNode.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-                    "start": 1058,
-                    "end": 1186,
+                    "start": 1182,
+                    "end": 1310,
                     "loc": {
                       "start": {
-                        "line": 60,
+                        "line": 67,
                         "column": 4
                       },
                       "end": {
-                        "line": 64,
+                        "line": 71,
                         "column": 7
                       }
                     }
@@ -1524,15 +1714,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 1191,
-                "end": 1217,
+                "start": 1315,
+                "end": 1341,
                 "loc": {
                   "start": {
-                    "line": 65,
+                    "line": 72,
                     "column": 4
                   },
                   "end": {
-                    "line": 67,
+                    "line": 74,
                     "column": 5
                   }
                 },
@@ -1540,15 +1730,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1195,
-                  "end": 1206,
+                  "start": 1319,
+                  "end": 1330,
                   "loc": {
                     "start": {
-                      "line": 65,
+                      "line": 72,
                       "column": 8
                     },
                     "end": {
-                      "line": 65,
+                      "line": 72,
                       "column": 19
                     },
                     "identifierName": "numEntities"
@@ -1563,15 +1753,15 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1209,
-                  "end": 1217,
+                  "start": 1333,
+                  "end": 1341,
                   "loc": {
                     "start": {
-                      "line": 65,
+                      "line": 72,
                       "column": 22
                     },
                     "end": {
-                      "line": 67,
+                      "line": 74,
                       "column": 5
                     }
                   },
@@ -1584,15 +1774,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "* The number of {@link Entity}s within the subtree of this TreeViewNode.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-                    "start": 1058,
-                    "end": 1186,
+                    "start": 1182,
+                    "end": 1310,
                     "loc": {
                       "start": {
-                        "line": 60,
+                        "line": 67,
                         "column": 4
                       },
                       "end": {
-                        "line": 64,
+                        "line": 71,
                         "column": 7
                       }
                     }
@@ -1602,15 +1792,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "* The number of {@link Entity}s that are currently visible within the subtree of this TreeViewNode.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-                    "start": 1223,
-                    "end": 1378,
+                    "start": 1347,
+                    "end": 1502,
                     "loc": {
                       "start": {
-                        "line": 69,
+                        "line": 76,
                         "column": 4
                       },
                       "end": {
-                        "line": 73,
+                        "line": 80,
                         "column": 7
                       }
                     }
@@ -1619,15 +1809,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 1383,
-                "end": 1416,
+                "start": 1507,
+                "end": 1539,
                 "loc": {
                   "start": {
-                    "line": 74,
+                    "line": 81,
                     "column": 4
                   },
                   "end": {
-                    "line": 76,
+                    "line": 82,
                     "column": 5
                   }
                 },
@@ -1635,15 +1825,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1387,
-                  "end": 1405,
+                  "start": 1511,
+                  "end": 1529,
                   "loc": {
                     "start": {
-                      "line": 74,
+                      "line": 81,
                       "column": 8
                     },
                     "end": {
-                      "line": 74,
+                      "line": 81,
                       "column": 26
                     },
                     "identifierName": "numVisibleEntities"
@@ -1658,15 +1848,15 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1408,
-                  "end": 1416,
+                  "start": 1532,
+                  "end": 1539,
                   "loc": {
                     "start": {
-                      "line": 74,
+                      "line": 81,
                       "column": 29
                     },
                     "end": {
-                      "line": 76,
+                      "line": 82,
                       "column": 5
                     }
                   },
@@ -1679,15 +1869,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "* The number of {@link Entity}s that are currently visible within the subtree of this TreeViewNode.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-                    "start": 1223,
-                    "end": 1378,
+                    "start": 1347,
+                    "end": 1502,
                     "loc": {
                       "start": {
-                        "line": 69,
+                        "line": 76,
                         "column": 4
                       },
                       "end": {
-                        "line": 73,
+                        "line": 80,
                         "column": 7
                       }
                     }
@@ -1697,15 +1887,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "* Whether or not the TreeViewNode is currently checked.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                    "start": 1422,
-                    "end": 1534,
+                    "start": 1545,
+                    "end": 1657,
                     "loc": {
                       "start": {
-                        "line": 78,
+                        "line": 84,
                         "column": 4
                       },
                       "end": {
-                        "line": 82,
+                        "line": 88,
                         "column": 7
                       }
                     }
@@ -1714,15 +1904,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 1539,
-                "end": 1561,
+                "start": 1662,
+                "end": 1683,
                 "loc": {
                   "start": {
-                    "line": 83,
+                    "line": 89,
                     "column": 4
                   },
                   "end": {
-                    "line": 85,
+                    "line": 90,
                     "column": 5
                   }
                 },
@@ -1730,15 +1920,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1543,
-                  "end": 1550,
+                  "start": 1666,
+                  "end": 1673,
                   "loc": {
                     "start": {
-                      "line": 83,
+                      "line": 89,
                       "column": 8
                     },
                     "end": {
-                      "line": 83,
+                      "line": 89,
                       "column": 15
                     },
                     "identifierName": "checked"
@@ -1753,15 +1943,15 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1553,
-                  "end": 1561,
+                  "start": 1676,
+                  "end": 1683,
                   "loc": {
                     "start": {
-                      "line": 83,
+                      "line": 89,
                       "column": 18
                     },
                     "end": {
-                      "line": 85,
+                      "line": 90,
                       "column": 5
                     }
                   },
@@ -1774,15 +1964,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "* Whether or not the TreeViewNode is currently checked.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                    "start": 1422,
-                    "end": 1534,
+                    "start": 1545,
+                    "end": 1657,
                     "loc": {
                       "start": {
-                        "line": 78,
+                        "line": 84,
                         "column": 4
                       },
                       "end": {
-                        "line": 82,
+                        "line": 88,
                         "column": 7
                       }
                     }
@@ -1792,15 +1982,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "* Whether or not the TreeViewNode is currently xrayed.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                    "start": 1567,
-                    "end": 1678,
+                    "start": 1689,
+                    "end": 1800,
                     "loc": {
                       "start": {
-                        "line": 87,
+                        "line": 92,
                         "column": 4
                       },
                       "end": {
-                        "line": 91,
+                        "line": 96,
                         "column": 7
                       }
                     }
@@ -1809,15 +1999,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 1684,
-                "end": 1705,
+                "start": 1805,
+                "end": 1825,
                 "loc": {
                   "start": {
-                    "line": 92,
-                    "column": 5
+                    "line": 97,
+                    "column": 4
                   },
                   "end": {
-                    "line": 94,
+                    "line": 98,
                     "column": 5
                   }
                 },
@@ -1825,16 +2015,16 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1688,
-                  "end": 1694,
+                  "start": 1809,
+                  "end": 1815,
                   "loc": {
                     "start": {
-                      "line": 92,
-                      "column": 9
+                      "line": 97,
+                      "column": 8
                     },
                     "end": {
-                      "line": 92,
-                      "column": 15
+                      "line": 97,
+                      "column": 14
                     },
                     "identifierName": "xrayed"
                   },
@@ -1848,15 +2038,15 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1697,
-                  "end": 1705,
+                  "start": 1818,
+                  "end": 1825,
                   "loc": {
                     "start": {
-                      "line": 92,
-                      "column": 18
+                      "line": 97,
+                      "column": 17
                     },
                     "end": {
-                      "line": 94,
+                      "line": 98,
                       "column": 5
                     }
                   },
@@ -1867,15 +2057,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "* Whether or not the TreeViewNode is currently xrayed.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-                    "start": 1567,
-                    "end": 1678,
+                    "start": 1689,
+                    "end": 1800,
                     "loc": {
                       "start": {
-                        "line": 87,
+                        "line": 92,
                         "column": 4
                       },
                       "end": {
-                        "line": 91,
+                        "line": 96,
                         "column": 7
                       }
                     }
@@ -1963,16 +2153,32 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * ID of the corresponding {@link MetaObject}.\n     *\n     * This is only defined if the TreeViewNode represents an object.\n     *\n     * @type {Number|String}\n     * @abstract\n     ",
+      "value": "* Type of the corresponding {@link MetaObject}.\n     *\n     * @type {String}\n     * @abstract\n     ",
       "start": 592,
-      "end": 784,
+      "end": 695,
       "loc": {
         "start": {
           "line": 31,
           "column": 4
         },
         "end": {
-          "line": 38,
+          "line": 35,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * ID of the corresponding {@link MetaObject}.\n     *\n     * This is only defined if the TreeViewNode represents an object.\n     *\n     * @type {String}\n     * @abstract\n     ",
+      "start": 724,
+      "end": 909,
+      "loc": {
+        "start": {
+          "line": 39,
+          "column": 4
+        },
+        "end": {
+          "line": 46,
           "column": 7
         }
       }
@@ -1980,27 +2186,11 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * The child TreeViewNodes.\n     *\n     * @type {Array}\n     * @abstract\n     ",
-      "start": 817,
-      "end": 905,
+      "start": 942,
+      "end": 1030,
       "loc": {
         "start": {
-          "line": 42,
-          "column": 4
-        },
-        "end": {
-          "line": 47,
-          "column": 7
-        }
-      }
-    },
-    {
-      "type": "CommentBlock",
-      "value": "* The parent TreeViewNode.\n     *\n     * @type {TreeViewNode}\n     * @abstract\n     ",
-      "start": 938,
-      "end": 1026,
-      "loc": {
-        "start": {
-          "line": 51,
+          "line": 50,
           "column": 4
         },
         "end": {
@@ -2011,16 +2201,32 @@
     },
     {
       "type": "CommentBlock",
-      "value": "* The number of {@link Entity}s within the subtree of this TreeViewNode.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-      "start": 1058,
-      "end": 1186,
+      "value": "* The parent TreeViewNode.\n     *\n     * @type {TreeViewNode}\n     * @abstract\n     ",
+      "start": 1063,
+      "end": 1151,
       "loc": {
         "start": {
-          "line": 60,
+          "line": 59,
           "column": 4
         },
         "end": {
-          "line": 64,
+          "line": 63,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "* The number of {@link Entity}s within the subtree of this TreeViewNode.\n     *\n     * @type {Number}\n     * @abstract\n     ",
+      "start": 1182,
+      "end": 1310,
+      "loc": {
+        "start": {
+          "line": 67,
+          "column": 4
+        },
+        "end": {
+          "line": 71,
           "column": 7
         }
       }
@@ -2028,15 +2234,15 @@
     {
       "type": "CommentBlock",
       "value": "* The number of {@link Entity}s that are currently visible within the subtree of this TreeViewNode.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-      "start": 1223,
-      "end": 1378,
+      "start": 1347,
+      "end": 1502,
       "loc": {
         "start": {
-          "line": 69,
+          "line": 76,
           "column": 4
         },
         "end": {
-          "line": 73,
+          "line": 80,
           "column": 7
         }
       }
@@ -2044,15 +2250,15 @@
     {
       "type": "CommentBlock",
       "value": "* Whether or not the TreeViewNode is currently checked.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-      "start": 1422,
-      "end": 1534,
+      "start": 1545,
+      "end": 1657,
       "loc": {
         "start": {
-          "line": 78,
+          "line": 84,
           "column": 4
         },
         "end": {
-          "line": 82,
+          "line": 88,
           "column": 7
         }
       }
@@ -2060,15 +2266,15 @@
     {
       "type": "CommentBlock",
       "value": "* Whether or not the TreeViewNode is currently xrayed.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-      "start": 1567,
-      "end": 1678,
+      "start": 1689,
+      "end": 1800,
       "loc": {
         "start": {
-          "line": 87,
+          "line": 92,
           "column": 4
         },
         "end": {
-          "line": 91,
+          "line": 96,
           "column": 7
         }
       }
@@ -2508,16 +2714,16 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * ID of the corresponding {@link MetaObject}.\n     *\n     * This is only defined if the TreeViewNode represents an object.\n     *\n     * @type {Number|String}\n     * @abstract\n     ",
+      "value": "* Type of the corresponding {@link MetaObject}.\n     *\n     * @type {String}\n     * @abstract\n     ",
       "start": 592,
-      "end": 784,
+      "end": 695,
       "loc": {
         "start": {
           "line": 31,
           "column": 4
         },
         "end": {
-          "line": 38,
+          "line": 35,
           "column": 7
         }
       }
@@ -2535,15 +2741,15 @@
         "binop": null
       },
       "value": "get",
-      "start": 789,
-      "end": 792,
+      "start": 700,
+      "end": 703,
       "loc": {
         "start": {
-          "line": 39,
+          "line": 36,
           "column": 4
         },
         "end": {
-          "line": 39,
+          "line": 36,
           "column": 7
         }
       }
@@ -2560,17 +2766,17 @@
         "postfix": false,
         "binop": null
       },
-      "value": "objectId",
-      "start": 793,
-      "end": 801,
+      "value": "type",
+      "start": 704,
+      "end": 708,
       "loc": {
         "start": {
-          "line": 39,
+          "line": 36,
           "column": 8
         },
         "end": {
-          "line": 39,
-          "column": 16
+          "line": 36,
+          "column": 12
         }
       }
     },
@@ -2586,16 +2792,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 801,
-      "end": 802,
+      "start": 708,
+      "end": 709,
       "loc": {
         "start": {
-          "line": 39,
-          "column": 16
+          "line": 36,
+          "column": 12
         },
         "end": {
-          "line": 39,
-          "column": 17
+          "line": 36,
+          "column": 13
         }
       }
     },
@@ -2611,16 +2817,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 802,
-      "end": 803,
+      "start": 709,
+      "end": 710,
       "loc": {
         "start": {
-          "line": 39,
-          "column": 17
+          "line": 36,
+          "column": 13
         },
         "end": {
-          "line": 39,
-          "column": 18
+          "line": 36,
+          "column": 14
         }
       }
     },
@@ -2636,16 +2842,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 804,
-      "end": 805,
+      "start": 711,
+      "end": 712,
       "loc": {
         "start": {
-          "line": 39,
-          "column": 19
+          "line": 36,
+          "column": 15
         },
         "end": {
-          "line": 39,
-          "column": 20
+          "line": 36,
+          "column": 16
         }
       }
     },
@@ -2661,27 +2867,53 @@
         "postfix": false,
         "binop": null
       },
-      "start": 810,
-      "end": 811,
+      "start": 717,
+      "end": 718,
       "loc": {
         "start": {
-          "line": 40,
+          "line": 37,
           "column": 4
         },
         "end": {
-          "line": 40,
+          "line": 37,
           "column": 5
         }
       }
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * The child TreeViewNodes.\n     *\n     * @type {Array}\n     * @abstract\n     ",
-      "start": 817,
-      "end": 905,
+      "value": "*\n     * ID of the corresponding {@link MetaObject}.\n     *\n     * This is only defined if the TreeViewNode represents an object.\n     *\n     * @type {String}\n     * @abstract\n     ",
+      "start": 724,
+      "end": 909,
       "loc": {
         "start": {
-          "line": 42,
+          "line": 39,
+          "column": 4
+        },
+        "end": {
+          "line": 46,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "get",
+      "start": 914,
+      "end": 917,
+      "loc": {
+        "start": {
+          "line": 47,
           "column": 4
         },
         "end": {
@@ -2702,42 +2934,16 @@
         "postfix": false,
         "binop": null
       },
-      "value": "get",
-      "start": 910,
-      "end": 913,
+      "value": "objectId",
+      "start": 918,
+      "end": 926,
       "loc": {
         "start": {
-          "line": 48,
-          "column": 4
-        },
-        "end": {
-          "line": 48,
-          "column": 7
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "children",
-      "start": 914,
-      "end": 922,
-      "loc": {
-        "start": {
-          "line": 48,
+          "line": 47,
           "column": 8
         },
         "end": {
-          "line": 48,
+          "line": 47,
           "column": 16
         }
       }
@@ -2754,15 +2960,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 922,
-      "end": 923,
+      "start": 926,
+      "end": 927,
       "loc": {
         "start": {
-          "line": 48,
+          "line": 47,
           "column": 16
         },
         "end": {
-          "line": 48,
+          "line": 47,
           "column": 17
         }
       }
@@ -2779,15 +2985,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 923,
-      "end": 924,
+      "start": 927,
+      "end": 928,
       "loc": {
         "start": {
-          "line": 48,
+          "line": 47,
           "column": 17
         },
         "end": {
-          "line": 48,
+          "line": 47,
           "column": 18
         }
       }
@@ -2804,15 +3010,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 925,
-      "end": 926,
+      "start": 929,
+      "end": 930,
       "loc": {
         "start": {
-          "line": 48,
+          "line": 47,
           "column": 19
         },
         "end": {
-          "line": 48,
+          "line": 47,
           "column": 20
         }
       }
@@ -2829,27 +3035,27 @@
         "postfix": false,
         "binop": null
       },
-      "start": 931,
-      "end": 932,
+      "start": 935,
+      "end": 936,
       "loc": {
         "start": {
-          "line": 49,
+          "line": 48,
           "column": 4
         },
         "end": {
-          "line": 49,
+          "line": 48,
           "column": 5
         }
       }
     },
     {
       "type": "CommentBlock",
-      "value": "* The parent TreeViewNode.\n     *\n     * @type {TreeViewNode}\n     * @abstract\n     ",
-      "start": 938,
-      "end": 1026,
+      "value": "*\n     * The child TreeViewNodes.\n     *\n     * @type {Array}\n     * @abstract\n     ",
+      "start": 942,
+      "end": 1030,
       "loc": {
         "start": {
-          "line": 51,
+          "line": 50,
           "column": 4
         },
         "end": {
@@ -2871,8 +3077,8 @@
         "binop": null
       },
       "value": "get",
-      "start": 1031,
-      "end": 1034,
+      "start": 1035,
+      "end": 1038,
       "loc": {
         "start": {
           "line": 56,
@@ -2896,9 +3102,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "parent",
-      "start": 1035,
-      "end": 1041,
+      "value": "children",
+      "start": 1039,
+      "end": 1047,
       "loc": {
         "start": {
           "line": 56,
@@ -2906,7 +3112,7 @@
         },
         "end": {
           "line": 56,
-          "column": 14
+          "column": 16
         }
       }
     },
@@ -2922,16 +3128,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1041,
-      "end": 1042,
+      "start": 1047,
+      "end": 1048,
       "loc": {
         "start": {
           "line": 56,
-          "column": 14
+          "column": 16
         },
         "end": {
           "line": 56,
-          "column": 15
+          "column": 17
         }
       }
     },
@@ -2947,16 +3153,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1042,
-      "end": 1043,
+      "start": 1048,
+      "end": 1049,
       "loc": {
         "start": {
           "line": 56,
-          "column": 15
+          "column": 17
         },
         "end": {
           "line": 56,
-          "column": 16
+          "column": 18
         }
       }
     },
@@ -2972,16 +3178,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1044,
-      "end": 1045,
+      "start": 1050,
+      "end": 1051,
       "loc": {
         "start": {
           "line": 56,
-          "column": 17
+          "column": 19
         },
         "end": {
           "line": 56,
-          "column": 18
+          "column": 20
         }
       }
     },
@@ -2997,27 +3203,53 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1051,
-      "end": 1052,
+      "start": 1056,
+      "end": 1057,
       "loc": {
         "start": {
-          "line": 58,
+          "line": 57,
           "column": 4
         },
         "end": {
-          "line": 58,
+          "line": 57,
           "column": 5
         }
       }
     },
     {
       "type": "CommentBlock",
-      "value": "* The number of {@link Entity}s within the subtree of this TreeViewNode.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-      "start": 1058,
-      "end": 1186,
+      "value": "* The parent TreeViewNode.\n     *\n     * @type {TreeViewNode}\n     * @abstract\n     ",
+      "start": 1063,
+      "end": 1151,
       "loc": {
         "start": {
-          "line": 60,
+          "line": 59,
+          "column": 4
+        },
+        "end": {
+          "line": 63,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "get",
+      "start": 1156,
+      "end": 1159,
+      "loc": {
+        "start": {
+          "line": 64,
           "column": 4
         },
         "end": {
@@ -3038,9 +3270,109 @@
         "postfix": false,
         "binop": null
       },
-      "value": "get",
-      "start": 1191,
-      "end": 1194,
+      "value": "parent",
+      "start": 1160,
+      "end": 1166,
+      "loc": {
+        "start": {
+          "line": 64,
+          "column": 8
+        },
+        "end": {
+          "line": 64,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 1166,
+      "end": 1167,
+      "loc": {
+        "start": {
+          "line": 64,
+          "column": 14
+        },
+        "end": {
+          "line": 64,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 1167,
+      "end": 1168,
+      "loc": {
+        "start": {
+          "line": 64,
+          "column": 15
+        },
+        "end": {
+          "line": 64,
+          "column": 16
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 1169,
+      "end": 1170,
+      "loc": {
+        "start": {
+          "line": 64,
+          "column": 17
+        },
+        "end": {
+          "line": 64,
+          "column": 18
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 1175,
+      "end": 1176,
       "loc": {
         "start": {
           "line": 65,
@@ -3048,6 +3380,48 @@
         },
         "end": {
           "line": 65,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "* The number of {@link Entity}s within the subtree of this TreeViewNode.\n     *\n     * @type {Number}\n     * @abstract\n     ",
+      "start": 1182,
+      "end": 1310,
+      "loc": {
+        "start": {
+          "line": 67,
+          "column": 4
+        },
+        "end": {
+          "line": 71,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "get",
+      "start": 1315,
+      "end": 1318,
+      "loc": {
+        "start": {
+          "line": 72,
+          "column": 4
+        },
+        "end": {
+          "line": 72,
           "column": 7
         }
       }
@@ -3065,15 +3439,15 @@
         "binop": null
       },
       "value": "numEntities",
-      "start": 1195,
-      "end": 1206,
+      "start": 1319,
+      "end": 1330,
       "loc": {
         "start": {
-          "line": 65,
+          "line": 72,
           "column": 8
         },
         "end": {
-          "line": 65,
+          "line": 72,
           "column": 19
         }
       }
@@ -3090,15 +3464,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1206,
-      "end": 1207,
+      "start": 1330,
+      "end": 1331,
       "loc": {
         "start": {
-          "line": 65,
+          "line": 72,
           "column": 19
         },
         "end": {
-          "line": 65,
+          "line": 72,
           "column": 20
         }
       }
@@ -3115,15 +3489,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1207,
-      "end": 1208,
+      "start": 1331,
+      "end": 1332,
       "loc": {
         "start": {
-          "line": 65,
+          "line": 72,
           "column": 20
         },
         "end": {
-          "line": 65,
+          "line": 72,
           "column": 21
         }
       }
@@ -3140,15 +3514,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1209,
-      "end": 1210,
+      "start": 1333,
+      "end": 1334,
       "loc": {
         "start": {
-          "line": 65,
+          "line": 72,
           "column": 22
         },
         "end": {
-          "line": 65,
+          "line": 72,
           "column": 23
         }
       }
@@ -3165,15 +3539,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1216,
-      "end": 1217,
+      "start": 1340,
+      "end": 1341,
       "loc": {
         "start": {
-          "line": 67,
+          "line": 74,
           "column": 4
         },
         "end": {
-          "line": 67,
+          "line": 74,
           "column": 5
         }
       }
@@ -3181,15 +3555,15 @@
     {
       "type": "CommentBlock",
       "value": "* The number of {@link Entity}s that are currently visible within the subtree of this TreeViewNode.\n     *\n     * @type {Number}\n     * @abstract\n     ",
-      "start": 1223,
-      "end": 1378,
+      "start": 1347,
+      "end": 1502,
       "loc": {
         "start": {
-          "line": 69,
+          "line": 76,
           "column": 4
         },
         "end": {
-          "line": 73,
+          "line": 80,
           "column": 7
         }
       }
@@ -3207,15 +3581,15 @@
         "binop": null
       },
       "value": "get",
-      "start": 1383,
-      "end": 1386,
+      "start": 1507,
+      "end": 1510,
       "loc": {
         "start": {
-          "line": 74,
+          "line": 81,
           "column": 4
         },
         "end": {
-          "line": 74,
+          "line": 81,
           "column": 7
         }
       }
@@ -3233,15 +3607,15 @@
         "binop": null
       },
       "value": "numVisibleEntities",
-      "start": 1387,
-      "end": 1405,
+      "start": 1511,
+      "end": 1529,
       "loc": {
         "start": {
-          "line": 74,
+          "line": 81,
           "column": 8
         },
         "end": {
-          "line": 74,
+          "line": 81,
           "column": 26
         }
       }
@@ -3258,15 +3632,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1405,
-      "end": 1406,
+      "start": 1529,
+      "end": 1530,
       "loc": {
         "start": {
-          "line": 74,
+          "line": 81,
           "column": 26
         },
         "end": {
-          "line": 74,
+          "line": 81,
           "column": 27
         }
       }
@@ -3283,15 +3657,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1406,
-      "end": 1407,
+      "start": 1530,
+      "end": 1531,
       "loc": {
         "start": {
-          "line": 74,
+          "line": 81,
           "column": 27
         },
         "end": {
-          "line": 74,
+          "line": 81,
           "column": 28
         }
       }
@@ -3308,15 +3682,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1408,
-      "end": 1409,
+      "start": 1532,
+      "end": 1533,
       "loc": {
         "start": {
-          "line": 74,
+          "line": 81,
           "column": 29
         },
         "end": {
-          "line": 74,
+          "line": 81,
           "column": 30
         }
       }
@@ -3333,15 +3707,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1415,
-      "end": 1416,
+      "start": 1538,
+      "end": 1539,
       "loc": {
         "start": {
-          "line": 76,
+          "line": 82,
           "column": 4
         },
         "end": {
-          "line": 76,
+          "line": 82,
           "column": 5
         }
       }
@@ -3349,15 +3723,15 @@
     {
       "type": "CommentBlock",
       "value": "* Whether or not the TreeViewNode is currently checked.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-      "start": 1422,
-      "end": 1534,
+      "start": 1545,
+      "end": 1657,
       "loc": {
         "start": {
-          "line": 78,
+          "line": 84,
           "column": 4
         },
         "end": {
-          "line": 82,
+          "line": 88,
           "column": 7
         }
       }
@@ -3375,15 +3749,15 @@
         "binop": null
       },
       "value": "get",
-      "start": 1539,
-      "end": 1542,
+      "start": 1662,
+      "end": 1665,
       "loc": {
         "start": {
-          "line": 83,
+          "line": 89,
           "column": 4
         },
         "end": {
-          "line": 83,
+          "line": 89,
           "column": 7
         }
       }
@@ -3401,15 +3775,15 @@
         "binop": null
       },
       "value": "checked",
-      "start": 1543,
-      "end": 1550,
+      "start": 1666,
+      "end": 1673,
       "loc": {
         "start": {
-          "line": 83,
+          "line": 89,
           "column": 8
         },
         "end": {
-          "line": 83,
+          "line": 89,
           "column": 15
         }
       }
@@ -3426,15 +3800,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1550,
-      "end": 1551,
+      "start": 1673,
+      "end": 1674,
       "loc": {
         "start": {
-          "line": 83,
+          "line": 89,
           "column": 15
         },
         "end": {
-          "line": 83,
+          "line": 89,
           "column": 16
         }
       }
@@ -3451,15 +3825,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1551,
-      "end": 1552,
+      "start": 1674,
+      "end": 1675,
       "loc": {
         "start": {
-          "line": 83,
+          "line": 89,
           "column": 16
         },
         "end": {
-          "line": 83,
+          "line": 89,
           "column": 17
         }
       }
@@ -3476,15 +3850,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1553,
-      "end": 1554,
+      "start": 1676,
+      "end": 1677,
       "loc": {
         "start": {
-          "line": 83,
+          "line": 89,
           "column": 18
         },
         "end": {
-          "line": 83,
+          "line": 89,
           "column": 19
         }
       }
@@ -3501,15 +3875,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1560,
-      "end": 1561,
+      "start": 1682,
+      "end": 1683,
       "loc": {
         "start": {
-          "line": 85,
+          "line": 90,
           "column": 4
         },
         "end": {
-          "line": 85,
+          "line": 90,
           "column": 5
         }
       }
@@ -3517,15 +3891,15 @@
     {
       "type": "CommentBlock",
       "value": "* Whether or not the TreeViewNode is currently xrayed.\n     *\n     * @type {Boolean}\n     * @abstract\n     ",
-      "start": 1567,
-      "end": 1678,
+      "start": 1689,
+      "end": 1800,
       "loc": {
         "start": {
-          "line": 87,
+          "line": 92,
           "column": 4
         },
         "end": {
-          "line": 91,
+          "line": 96,
           "column": 7
         }
       }
@@ -3543,16 +3917,16 @@
         "binop": null
       },
       "value": "get",
-      "start": 1684,
-      "end": 1687,
+      "start": 1805,
+      "end": 1808,
       "loc": {
         "start": {
-          "line": 92,
-          "column": 5
+          "line": 97,
+          "column": 4
         },
         "end": {
-          "line": 92,
-          "column": 8
+          "line": 97,
+          "column": 7
         }
       }
     },
@@ -3569,16 +3943,16 @@
         "binop": null
       },
       "value": "xrayed",
-      "start": 1688,
-      "end": 1694,
+      "start": 1809,
+      "end": 1815,
       "loc": {
         "start": {
-          "line": 92,
-          "column": 9
+          "line": 97,
+          "column": 8
         },
         "end": {
-          "line": 92,
-          "column": 15
+          "line": 97,
+          "column": 14
         }
       }
     },
@@ -3594,16 +3968,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1694,
-      "end": 1695,
+      "start": 1815,
+      "end": 1816,
       "loc": {
         "start": {
-          "line": 92,
-          "column": 15
+          "line": 97,
+          "column": 14
         },
         "end": {
-          "line": 92,
-          "column": 16
+          "line": 97,
+          "column": 15
         }
       }
     },
@@ -3619,16 +3993,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1695,
-      "end": 1696,
+      "start": 1816,
+      "end": 1817,
       "loc": {
         "start": {
-          "line": 92,
-          "column": 16
+          "line": 97,
+          "column": 15
         },
         "end": {
-          "line": 92,
-          "column": 17
+          "line": 97,
+          "column": 16
         }
       }
     },
@@ -3644,16 +4018,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1697,
-      "end": 1698,
+      "start": 1818,
+      "end": 1819,
       "loc": {
         "start": {
-          "line": 92,
-          "column": 18
+          "line": 97,
+          "column": 17
         },
         "end": {
-          "line": 92,
-          "column": 19
+          "line": 97,
+          "column": 18
         }
       }
     },
@@ -3669,15 +4043,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1704,
-      "end": 1705,
+      "start": 1824,
+      "end": 1825,
       "loc": {
         "start": {
-          "line": 94,
+          "line": 98,
           "column": 4
         },
         "end": {
-          "line": 94,
+          "line": 98,
           "column": 5
         }
       }
@@ -3694,15 +4068,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1706,
-      "end": 1707,
+      "start": 1826,
+      "end": 1827,
       "loc": {
         "start": {
-          "line": 95,
+          "line": 99,
           "column": 0
         },
         "end": {
-          "line": 95,
+          "line": 99,
           "column": 1
         }
       }
@@ -3722,15 +4096,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 1709,
-      "end": 1715,
+      "start": 1829,
+      "end": 1835,
       "loc": {
         "start": {
-          "line": 97,
+          "line": 101,
           "column": 0
         },
         "end": {
-          "line": 97,
+          "line": 101,
           "column": 6
         }
       }
@@ -3747,15 +4121,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1716,
-      "end": 1717,
+      "start": 1836,
+      "end": 1837,
       "loc": {
         "start": {
-          "line": 97,
+          "line": 101,
           "column": 7
         },
         "end": {
-          "line": 97,
+          "line": 101,
           "column": 8
         }
       }
@@ -3773,15 +4147,15 @@
         "binop": null
       },
       "value": "TreeViewNode",
-      "start": 1717,
-      "end": 1729,
+      "start": 1837,
+      "end": 1849,
       "loc": {
         "start": {
-          "line": 97,
+          "line": 101,
           "column": 8
         },
         "end": {
-          "line": 97,
+          "line": 101,
           "column": 20
         }
       }
@@ -3798,15 +4172,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1729,
-      "end": 1730,
+      "start": 1849,
+      "end": 1850,
       "loc": {
         "start": {
-          "line": 97,
+          "line": 101,
           "column": 20
         },
         "end": {
-          "line": 97,
+          "line": 101,
           "column": 21
         }
       }
@@ -3824,15 +4198,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1730,
-      "end": 1731,
+      "start": 1850,
+      "end": 1851,
       "loc": {
         "start": {
-          "line": 97,
+          "line": 101,
           "column": 21
         },
         "end": {
-          "line": 97,
+          "line": 101,
           "column": 22
         }
       }
@@ -3850,16 +4224,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1731,
-      "end": 1731,
+      "start": 1852,
+      "end": 1852,
       "loc": {
         "start": {
-          "line": 97,
-          "column": 22
+          "line": 102,
+          "column": 0
         },
         "end": {
-          "line": 97,
-          "column": 22
+          "line": 102,
+          "column": 0
         }
       }
     }
