@@ -242,6 +242,7 @@ class DistanceMeasurementsPlugin extends Plugin {
      * @param {boolean} [cfg.defaultZAxisVisible=true] The default value of the DistanceMeasurements `zAxisVisible` property.
      * @param {string} [cfg.defaultColor=#00BBFF] The default color of the length dots, wire and label.
      * @param {number} [cfg.zIndex] If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
+     * @param {boolean} [cfg.labelsOnWires=true] If true = labels will be set on wires, false = labels will be set one above the other.
      * @param {PointerCircle} [cfg.pointerLens] A PointerLens to help the user position the pointer. This can be shared with other plugins.
      */
     constructor(viewer, cfg = {}) {
@@ -269,6 +270,7 @@ class DistanceMeasurementsPlugin extends Plugin {
         this.defaultZAxisVisible = cfg.defaultZAxisVisible !== false;
         this.defaultColor = cfg.defaultColor !== undefined ? cfg.defaultColor : "#00BBFF";
         this.zIndex = cfg.zIndex || 10000;
+        this.labelsOnWires = cfg.labelsOnWires || true;
 
         this._onMouseOver = (event, measurement) => {
             this.fire("mouseOver", {
