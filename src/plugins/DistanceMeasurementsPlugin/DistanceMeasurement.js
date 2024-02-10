@@ -241,7 +241,7 @@ class DistanceMeasurement extends Component {
         this._zAxisVisible = false;
         this._axisEnabled = true;
         this._labelsVisible = false;
-        this._labelsOnWires = true;
+        this._labelsOnWires = false;
         this._clickable = false;
 
         this._originMarker.on("worldPos", (value) => {
@@ -893,6 +893,7 @@ class DistanceMeasurement extends Component {
      * @type {Boolean}
      */
     set labelsOnWires(value) {
+        value = value !== undefined ? Boolean(value) : this.plugin.defaultLabelsOnWires;
         this._labelsOnWires = value;
     }
 

@@ -85,10 +85,10 @@
 <canvas id="myCanvas"></canvas>
 <div class="slideout-sidebar">
     <img class="info-icon" src="../../assets/images/measure_distance_icon.png"/>
-    <h1>DistanceMeasurementPlugin with DistanceMeasurementsMouseControl and PointerLens with Labels one under the other</h1>
+    <h1>DistanceMeasurementPlugin with DistanceMeasurementsMouseControl and PointerLens with Labels one below the other</h1>
     <h2>Click on the model to create distance measurements, with no vertex and edge snapping</h2>
     <p>In this example, we're loading a BIM model from the file system, then creating distance measurements wherever the
-        user clicks on the model with the mouse. However, in this example we can see the X, Y, Z values one under the other.</p>
+        user clicks on the model with the mouse. However, in this example we can see the X, Y, Z values one below the other.</p>
     <h3>Components Used</h3>
     <ul>
         <li>
@@ -171,7 +171,7 @@
 
     const distanceMeasurementsPlugin = new DistanceMeasurementsPlugin(viewer);
 
-    distanceMeasurementsPlugin.labelsOnWires = false; // Changes the labels visibility mode, so one can be under the other.
+    distanceMeasurementsPlugin.defaultLabelsOnWires = false; // Changes the labels visibility mode, so one can be under the other.
 
     distanceMeasurementsPlugin.on("mouseOver", (e) => {
         e.measurement.setHighlighted(true);
