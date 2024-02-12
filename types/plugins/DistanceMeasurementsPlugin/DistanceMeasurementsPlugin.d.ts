@@ -21,6 +21,8 @@ export declare type DistanceMeasurementsPluginConfiguration = {
   defaultAxisVisible?: boolean;
   /** The default color of the length dots, wire and label. */
   defaultColor?: string;
+  /** The default value of the DistanceMeasurements `labelsOnWires` property. */
+  defaultLabelsOnWires?: boolean;
   /** If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels). */
   zIndex?: number;
 };
@@ -86,6 +88,7 @@ export declare class DistanceMeasurementsPlugin extends Plugin {
    * @param {Boolean} [params.wireVisible=true] Whether to initially show the direct point-to-point wire between {@link DistanceMeasurement.origin} and {@link DistanceMeasurement.target}.
    * @param {Boolean} [params.axisVisible=true] Whether to initially show the axis-aligned wires between {@link DistanceMeasurement.origin} and {@link DistanceMeasurement.target}.
    * @param {string} [params.color] The color of the length dot, wire and label.
+   * @param {Boolean} [params.labelsOnWires=true] Determines if labels will be set on wires or one below the other.
    * @returns {DistanceMeasurement} The new {@link DistanceMeasurement}.
    */
   createMeasurement(params?: {
@@ -104,6 +107,7 @@ export declare class DistanceMeasurementsPlugin extends Plugin {
       wireVisible?: boolean;
       axisVisible?: boolean;
       color?: string;
+      labelsOnWires?: boolean;
   }): DistanceMeasurement;
   
   /**
