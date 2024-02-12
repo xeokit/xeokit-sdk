@@ -134,4 +134,18 @@ export declare class DistanceMeasurement extends Component {
    * @type {String}
    */
   get color(): string;
+
+  /**
+   * Sets if labels should be positioned on the wires.
+   *
+   * @type {Boolean}
+   */
+  set labelsOnWires(arg: boolean);
+
+  /**
+   * Gets if labels should be positioned on the wires.
+   *
+   * @type {Boolean}
+   */
+  get labelsOnWires() : boolean;
 }
