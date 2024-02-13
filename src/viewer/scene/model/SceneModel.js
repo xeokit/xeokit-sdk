@@ -2779,7 +2779,8 @@ export class SceneModel extends Component {
 
             const useDTX = (!!this._dtxEnabled && (cfg.primitive === "triangles"
                 || cfg.primitive === "solid"
-                || cfg.primitive === "surface"));
+                || cfg.primitive === "surface"))
+            && (!cfg.textureSetId);
 
             cfg.origin = cfg.origin ? math.addVec3(this._origin, cfg.origin, math.vec3()) : this._origin;
 
@@ -2997,7 +2998,8 @@ export class SceneModel extends Component {
             const useDTX = (!!this._dtxEnabled
                 && (cfg.geometry.primitive === "triangles"
                     || cfg.geometry.primitive === "solid"
-                    || cfg.geometry.primitive === "surface"));
+                    || cfg.geometry.primitive === "surface"))
+                && (!cfg.textureSetId);
 
             if (useDTX) {
 
