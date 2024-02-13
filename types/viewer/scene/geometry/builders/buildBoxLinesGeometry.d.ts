@@ -13,6 +13,13 @@ export declare type buildBoxLinesGeometryConfiguration = {
   zSize?: number;
 };
 
+export declare type buildBoxLinesGeometryFromAABBConfiguration = {
+  /* Optional ID for the {@link Geometry}, unique among all components in the parent {@link Scene}, generated automatically when omitted. */
+  id?: string;
+  /* AABB for which box will be created. */
+  aabb?: number[];
+};
+
 /**
  * @desc Creates a box-shaped lines {@link Geometry}.
  *
@@ -20,3 +27,11 @@ export declare type buildBoxLinesGeometryConfiguration = {
  * @returns {Object} Configuration for a {@link Geometry} subtype.
  */
 export function buildBoxLinesGeometry(cfg: buildBoxLinesGeometryConfiguration): Geometry;
+
+/**
+ * @desc Creates a box-shaped lines {@link Geometry} from AABB.
+ *
+ * @param {buildBoxLinesGeometryConfiguration} [cfg] Configs
+ * @returns {Object} Configuration for a {@link Geometry} subtype.
+ */
+export function buildBoxLinesGeometryFromAABB(cfg: buildBoxLinesGeometryFromAABBConfiguration): Geometry;
