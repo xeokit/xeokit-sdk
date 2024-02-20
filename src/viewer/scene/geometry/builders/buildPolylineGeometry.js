@@ -54,6 +54,13 @@ import {utils} from '../../utils.js';
  *         emissive: [0, 1,]
  *     })
  * });
+ * ````
+ *
+ * @function buildPolylineGeometry
+ * @param {*} [cfg] Configs
+ * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.
+ * @param {Number[]} [cfg.points]  3D points indicating vertices position.
+ * @returns {Object} Configuration for a {@link Geometry} subtype.
  */
 function buildPolylineGeometry(cfg = {}) {
 
