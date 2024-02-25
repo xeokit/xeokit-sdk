@@ -223,8 +223,8 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                         const canvasLeftEdge = canvasBoundRect.left + scrollLeft;
                         const canvasTopEdge = canvasBoundRect.top + scrollTop;
-                        this._markerDiv.style.marginLeft = `${canvasLeftEdge + canvasPos[0] - 5}px`;
-                        this._markerDiv.style.marginTop = `${canvasTopEdge + canvasPos[1] - 5}px`;
+                        this.markerDiv.style.marginLeft = `${canvasLeftEdge + canvasPos[0] - 5}px`;
+                        this.markerDiv.style.marginTop = `${canvasTopEdge + canvasPos[1] - 5}px`;
                         break;
                     case MOUSE_FINDING_CORNER:
                         if (this._currentAngleMeasurement) {
@@ -387,7 +387,7 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
         if (this.pointerLens) {
             this.pointerLens.visible = false;
         }
-        if (this._markerDiv) {
+        if (this.markerDiv) {
             this._destroyMarkerDiv()
         }
         this.reset();
