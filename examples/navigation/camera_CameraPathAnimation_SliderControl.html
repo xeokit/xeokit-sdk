@@ -28,15 +28,16 @@
             -ms-user-select: none;
             -moz-user-select: none;
             -webkit-user-select: none;
-            width: 90%;
+            width: 95%;
         }
         input {
             vertical-align: middle;
-            padding:0px;
-            margin:5px;
         }
         .slider {
             width: 100%;
+        }
+        #info-button:checked ~ #sliderContainer {
+            width: calc(95% - 400px);
         }
     </style>
 </head>
