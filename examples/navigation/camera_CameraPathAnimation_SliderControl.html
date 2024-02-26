@@ -151,7 +151,7 @@
     const sceneModel = xktLoader.load({
         id: "myModel",
         src: "../../assets/models/xkt/v8/ifc/OTCConferenceCenter.ifc.xkt",
-        edges: false,
+        edges: true,
         objectDefaults: { // This model has opaque windows / spaces; make them transparent
             "IfcPlate": {
                 opacity: 0.3 // These are used as windows in this model - make transparent
@@ -165,10 +165,10 @@
         }
     });
 
-    // new Skybox(viewer.scene, {
-    //     src: "../../assets/textures/skybox/cloudySkyBox.jpg",
-    //     size: 1000
-    // });
+    new Skybox(viewer.scene, {
+        src: "../../assets/textures/skybox/cloudySkyBox.jpg",
+        size: 1000
+    });
 
     //----------------------------------------------------------------------------------------------------------------------
     // When model loaded, fly camera long a path
