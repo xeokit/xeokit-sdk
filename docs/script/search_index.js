@@ -1212,6 +1212,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildboxlinesgeometry.js~buildboxlinesgeometryfromaabb",
+    "function/index.html#static-function-buildBoxLinesGeometryFromAABB",
+    "<span>buildBoxLinesGeometryFromAABB</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildBoxLinesGeometry.js</span>",
+    "function"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildcylindergeometry.js~buildcylindergeometry",
     "function/index.html#static-function-buildCylinderGeometry",
     "<span>buildCylinderGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildCylinderGeometry.js</span>",
@@ -1227,6 +1233,12 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildplanegeometry.js~buildplanegeometry",
     "function/index.html#static-function-buildPlaneGeometry",
     "<span>buildPlaneGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildPlaneGeometry.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildpolylinegeometry.js~buildpolylinegeometry",
+    "function/index.html#static-function-buildPolylineGeometry",
+    "<span>buildPolylineGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildPolylineGeometry.js</span>",
     "function"
   ],
   [
@@ -2664,6 +2676,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#labelsonwires",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-set-labelsOnWires",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#labelsOnWires",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#labelsonwires",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-get-labelsOnWires",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#labelsOnWires",
+    "member"
+  ],
+  [
     "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#labelsvisible",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-set-labelsVisible",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#labelsVisible",
@@ -2949,6 +2973,12 @@ window.esdocSearchIndex = [
     "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#defaultcolor",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-member-defaultColor",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#defaultColor",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#defaultlabelsonwires",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-member-defaultLabelsOnWires",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#defaultLabelsOnWires",
     "member"
   ],
   [
@@ -7977,6 +8007,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/geometry/builders/buildplanegeometry.js",
     "file/src/viewer/scene/geometry/builders/buildPlaneGeometry.js.html",
     "src/viewer/scene/geometry/builders/buildPlaneGeometry.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/geometry/builders/buildpolylinegeometry.js",
+    "file/src/viewer/scene/geometry/builders/buildPolylineGeometry.js.html",
+    "src/viewer/scene/geometry/builders/buildPolylineGeometry.js",
     "file"
   ],
   [

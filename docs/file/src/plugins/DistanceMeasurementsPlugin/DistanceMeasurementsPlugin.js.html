@@ -174,9 +174,11 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/VBOGeometry.js~VBOGeometry.html">VBOGeometry</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry-builders">viewer/scene/geometry/builders</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxGeometry">buildBoxGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxLinesGeometry">buildBoxLinesGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxLinesGeometryFromAABB">buildBoxLinesGeometryFromAABB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildCylinderGeometry">buildCylinderGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildGridGeometry">buildGridGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometry">buildPolylineGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildSphereGeometry">buildSphereGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildTorusGeometry">buildTorusGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildVectorTextGeometry">buildVectorTextGeometry</a></span></span></li>
@@ -495,6 +497,7 @@ class DistanceMeasurementsPlugin extends Plugin {
      * @param {boolean} [cfg.defaultZAxisVisible=true] The default value of the DistanceMeasurements `zAxisVisible` property.
      * @param {string} [cfg.defaultColor=#00BBFF] The default color of the length dots, wire and label.
      * @param {number} [cfg.zIndex] If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
+     * @param {boolean} [cfg.defaultLabelsOnWires=true] The default value of the DistanceMeasurements `labelsOnWires` property.
      * @param {PointerCircle} [cfg.pointerLens] A PointerLens to help the user position the pointer. This can be shared with other plugins.
      */
     constructor(viewer, cfg = {}) {
@@ -522,6 +525,7 @@ class DistanceMeasurementsPlugin extends Plugin {
         this.defaultZAxisVisible = cfg.defaultZAxisVisible !== false;
         this.defaultColor = cfg.defaultColor !== undefined ? cfg.defaultColor : &quot;#00BBFF&quot;;
         this.zIndex = cfg.zIndex || 10000;
+        this.defaultLabelsOnWires = cfg.defaultLabelsOnWires !== false;
 
         this._onMouseOver = (event, measurement) =&gt; {
             this.fire(&quot;mouseOver&quot;, {
@@ -644,6 +648,7 @@ class DistanceMeasurementsPlugin extends Plugin {
      * @param {Boolean} [params.zAxisVisible=true] Whether to initially show the Z-axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
      * @param {Boolean} [params.labelsVisible=true] Whether to initially show the labels.
      * @param {string} [params.color] The color of the length dot, wire and label.
+     * @param {Boolean} [params.labelsOnWires=true] Determines if labels will be set on wires or one below the other.
      * @returns {DistanceMeasurement} The new {@link DistanceMeasurement}.
      */
     createMeasurement(params = {}) {
@@ -675,6 +680,7 @@ class DistanceMeasurementsPlugin extends Plugin {
             originVisible: params.originVisible,
             targetVisible: params.targetVisible,
             color: params.color,
+            labelsOnWires: params.labelsOnWires !== false &amp;&amp; this.defaultLabelsOnWires !== false,
             onMouseOver: this._onMouseOver,
             onMouseLeave: this._onMouseLeave,
             onContextMenu: this._onContextMenu

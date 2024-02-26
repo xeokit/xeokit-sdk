@@ -174,9 +174,11 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/VBOGeometry.js~VBOGeometry.html">VBOGeometry</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry-builders">viewer/scene/geometry/builders</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxGeometry">buildBoxGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxLinesGeometry">buildBoxLinesGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxLinesGeometryFromAABB">buildBoxLinesGeometryFromAABB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildCylinderGeometry">buildCylinderGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildGridGeometry">buildGridGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometry">buildPolylineGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildSphereGeometry">buildSphereGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildTorusGeometry">buildTorusGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildVectorTextGeometry">buildVectorTextGeometry</a></span></span></li>
@@ -593,6 +595,34 @@ model.on(&quot;loaded&quot;, () =&gt; {
           
           
           <span class="code" data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-member-defaultColor">defaultColor</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-member-defaultLabelsOnWires">defaultLabelsOnWires</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
         </p>
       </div>
       <div>
@@ -1589,7 +1619,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber247">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber248">source</a></span></span>
     </span>
   </h3>
 
@@ -1734,6 +1764,14 @@ model.on(&quot;loaded&quot;, () =&gt; {
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.defaultLabelsOnWires</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>The default value of the DistanceMeasurements <code>labelsOnWires</code> property.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.pointerLens</td>
       <td data-ice="type" class="code"><span>PointerCircle</span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
@@ -1777,7 +1815,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber330">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber332">source</a></span></span>
     </span>
   </h3>
 
@@ -1821,7 +1859,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber266">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber267">source</a></span></span>
     </span>
   </h3>
 
@@ -1864,7 +1902,50 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber270">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber271">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-defaultLabelsOnWires">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">defaultLabelsOnWires</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber273">source</a></span></span>
     </span>
   </h3>
 
@@ -1907,7 +1988,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber265">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber266">source</a></span></span>
     </span>
   </h3>
 
@@ -1950,7 +2031,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber262">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber263">source</a></span></span>
     </span>
   </h3>
 
@@ -1993,7 +2074,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber263">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber264">source</a></span></span>
     </span>
   </h3>
 
@@ -2036,7 +2117,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber261">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber262">source</a></span></span>
     </span>
   </h3>
 
@@ -2079,7 +2160,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber264">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber265">source</a></span></span>
     </span>
   </h3>
 
@@ -2122,7 +2203,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber267">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber268">source</a></span></span>
     </span>
   </h3>
 
@@ -2165,7 +2246,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber268">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber269">source</a></span></span>
     </span>
   </h3>
 
@@ -2208,7 +2289,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber269">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber270">source</a></span></span>
     </span>
   </h3>
 
@@ -2251,7 +2332,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber357">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber359">source</a></span></span>
     </span>
   </h3>
 
@@ -2298,7 +2379,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber369">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber371">source</a></span></span>
     </span>
   </h3>
 
@@ -2354,7 +2435,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber342">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber344">source</a></span></span>
     </span>
   </h3>
 
@@ -2398,7 +2479,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber320">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber322">source</a></span></span>
     </span>
   </h3>
 
@@ -2454,7 +2535,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber271">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber272">source</a></span></span>
     </span>
   </h3>
 
@@ -2500,7 +2581,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber487">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber491">source</a></span></span>
     </span>
   </h3>
 
@@ -2544,7 +2625,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber396">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber399">source</a></span></span>
     </span>
   </h3>
 
@@ -2686,6 +2767,14 @@ model.on(&quot;loaded&quot;, () =&gt; {
       <td data-ice="description"><p>The color of the length dot, wire and label.</p>
 </td>
     </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">params.labelsOnWires</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>Determines if labels will be set on wires or one below the other.</p>
+</td>
+    </tr>
 </tbody>
   </table>
 </div>
@@ -2733,7 +2822,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber499">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber503">source</a></span></span>
     </span>
   </h3>
 
@@ -2778,7 +2867,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber442">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber446">source</a></span></span>
     </span>
   </h3>
 
@@ -2839,7 +2928,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber480">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber484">source</a></span></span>
     </span>
   </h3>
 
@@ -2896,7 +2985,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber305">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber307">source</a></span></span>
     </span>
   </h3>
 
@@ -2952,7 +3041,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber468">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber472">source</a></span></span>
     </span>
   </h3>
 
@@ -3013,7 +3102,7 @@ model.on(&quot;loaded&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber457">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber461">source</a></span></span>
     </span>
   </h3>
 

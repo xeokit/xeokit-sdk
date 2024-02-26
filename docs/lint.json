@@ -4,27 +4,27 @@
     "filePath": "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js",
     "lines": [
       {
-        "lineNumber": 462,
+        "lineNumber": 466,
         "line": "    /**"
       },
       {
-        "lineNumber": 463,
+        "lineNumber": 467,
         "line": "     * Shows all or hides the axis wires of each {@link DistanceMeasurement}."
       },
       {
-        "lineNumber": 464,
+        "lineNumber": 468,
         "line": "     *"
       },
       {
-        "lineNumber": 465,
+        "lineNumber": 469,
         "line": "     * @param {Boolean} labelsShown Whether or not to show the axis wires."
       },
       {
-        "lineNumber": 466,
+        "lineNumber": 470,
         "line": "     */"
       },
       {
-        "lineNumber": 467,
+        "lineNumber": 471,
         "line": "    setAxisVisible(axisVisible) {"
       }
     ],

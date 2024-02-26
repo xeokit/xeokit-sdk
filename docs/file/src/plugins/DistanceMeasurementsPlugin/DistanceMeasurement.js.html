@@ -174,9 +174,11 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/VBOGeometry.js~VBOGeometry.html">VBOGeometry</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry-builders">viewer/scene/geometry/builders</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxGeometry">buildBoxGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxLinesGeometry">buildBoxLinesGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxLinesGeometryFromAABB">buildBoxLinesGeometryFromAABB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildCylinderGeometry">buildCylinderGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildGridGeometry">buildGridGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometry">buildPolylineGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildSphereGeometry">buildSphereGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildTorusGeometry">buildTorusGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildVectorTextGeometry">buildVectorTextGeometry</a></span></span></li>
@@ -494,6 +496,7 @@ class DistanceMeasurement extends Component {
         this._zAxisVisible = false;
         this._axisEnabled = true;
         this._labelsVisible = false;
+        this._labelsOnWires = false;
         this._clickable = false;
 
         this._originMarker.on(&quot;worldPos&quot;, (value) =&gt; {
@@ -553,6 +556,7 @@ class DistanceMeasurement extends Component {
         this.yAxisVisible = cfg.yAxisVisible;
         this.zAxisVisible = cfg.zAxisVisible;
         this.labelsVisible = cfg.labelsVisible;
+        this.labelsOnWires = cfg.labelsOnWires;
     }
 
     _update() {
@@ -704,9 +708,19 @@ class DistanceMeasurement extends Component {
 
                 this._lengthLabel.setPosOnWire(cp[0], cp[1], cp[6], cp[7]);
 
-                this._xAxisLabel.setPosOnWire(cp[0], cp[1], cp[2], cp[3]);
-                this._yAxisLabel.setPosOnWire(cp[2], cp[3], cp[4], cp[5]);
-                this._zAxisLabel.setPosOnWire(cp[4], cp[5], cp[6], cp[7]);
+                if (this.labelsOnWires) {
+                    this._xAxisLabel.setPosOnWire(cp[0], cp[1], cp[2], cp[3]);
+                    this._yAxisLabel.setPosOnWire(cp[2], cp[3], cp[4], cp[5]);
+                    this._zAxisLabel.setPosOnWire(cp[4], cp[5], cp[6], cp[7]);
+                } else {
+                    const labelOffset = 35;
+                    let currentLabelOffset = labelOffset;
+                    this._xAxisLabel.setPosOnWire(cp[0], cp[1] + currentLabelOffset, cp[6], cp[7] + currentLabelOffset);
+                    currentLabelOffset += labelOffset;
+                    this._yAxisLabel.setPosOnWire(cp[0], cp[1] + currentLabelOffset, cp[6], cp[7] + currentLabelOffset);
+                    currentLabelOffset += labelOffset;
+                    this._zAxisLabel.setPosOnWire(cp[0], cp[1] + currentLabelOffset, cp[6], cp[7] + currentLabelOffset);
+                }
 
                 const tilde = this._approximate ? &quot; ~ &quot; : &quot; = &quot;;
 
@@ -719,9 +733,15 @@ class DistanceMeasurement extends Component {
 
                 const labelMinAxisLength = this.plugin.labelMinAxisLength;
 
-                this._xAxisLabelCulled = (xAxisCanvasLength &lt; labelMinAxisLength);
-                this._yAxisLabelCulled = (yAxisCanvasLength &lt; labelMinAxisLength);
-                this._zAxisLabelCulled = (zAxisCanvasLength &lt; labelMinAxisLength);
+                if (this.labelsOnWires){
+                    this._xAxisLabelCulled = (xAxisCanvasLength &lt; labelMinAxisLength);
+                    this._yAxisLabelCulled = (yAxisCanvasLength &lt; labelMinAxisLength);
+                    this._zAxisLabelCulled = (zAxisCanvasLength &lt; labelMinAxisLength);
+                } else {
+                    this._xAxisLabelCulled = false;
+                    this._yAxisLabelCulled = false;
+                    this._zAxisLabelCulled = false;
+                }
 
                 if (!this._xAxisLabelCulled) {
                     this._xAxisLabel.setText(tilde + Math.abs((this._targetWorld[0] - this._originWorld[0]) * scale).toFixed(2) + unitAbbrev);
@@ -1120,6 +1140,25 @@ class DistanceMeasurement extends Component {
      */
     get labelsVisible() {
         return this._labelsVisible;
+    }
+
+    /**
+     * Sets if labels should be positioned on the wires.
+     *
+     * @type {Boolean}
+     */
+    set labelsOnWires(value) {
+        value = value !== undefined ? Boolean(value) : this.plugin.defaultLabelsOnWires;
+        this._labelsOnWires = value;
+    }
+
+    /**
+     * Gets if labels should be positioned on the wires.
+     *
+     * @type {Boolean}
+     */
+    get labelsOnWires() {
+        return this._labelsOnWires;
     }
 
     /**

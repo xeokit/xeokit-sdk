@@ -1,7 +1,7 @@
 {
-  "coverage": "40.14%",
-  "expectCount": 6930,
-  "actualCount": 2782,
+  "coverage": "40.16%",
+  "expectCount": 6936,
+  "actualCount": 2786,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 61,
@@ -300,8 +300,8 @@
       ]
     },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js": {
-      "expectCount": 86,
-      "actualCount": 32,
+      "expectCount": 89,
+      "actualCount": 34,
       "undocumentLines": [
         9,
         11,
@@ -344,19 +344,20 @@
         242,
         243,
         244,
-        258,
-        263,
-        268,
-        273,
-        278,
-        283,
-        288,
-        305,
-        460,
-        514,
-        537,
-        582,
-        586
+        245,
+        259,
+        264,
+        269,
+        274,
+        279,
+        284,
+        289,
+        307,
+        472,
+        532,
+        555,
+        600,
+        604
       ]
     },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js": {
@@ -389,14 +390,13 @@
       ]
     },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js": {
-      "expectCount": 35,
+      "expectCount": 36,
       "actualCount": 16,
       "undocumentLines": [
-        251,
-        253,
-        255,
-        257,
-        261,
+        252,
+        254,
+        256,
+        258,
         262,
         263,
         264,
@@ -407,10 +407,12 @@
         269,
         270,
         271,
+        272,
         273,
-        282,
-        291,
-        362
+        275,
+        284,
+        293,
+        364
       ]
     },
     "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js": {
@@ -1877,8 +1879,8 @@
       "undocumentLines": []
     },
     "src/viewer/scene/geometry/builders/buildBoxLinesGeometry.js": {
-      "expectCount": 1,
-      "actualCount": 1,
+      "expectCount": 2,
+      "actualCount": 2,
       "undocumentLines": []
     },
     "src/viewer/scene/geometry/builders/buildCylinderGeometry.js": {
@@ -1892,6 +1894,11 @@
       "undocumentLines": []
     },
     "src/viewer/scene/geometry/builders/buildPlaneGeometry.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/viewer/scene/geometry/builders/buildPolylineGeometry.js": {
       "expectCount": 1,
       "actualCount": 1,
       "undocumentLines": []
@@ -2699,16 +2706,16 @@
         2047,
         2122,
         2144,
-        3054,
-        3086,
-        3143,
-        3174,
-        3274,
-        3286,
-        3437,
-        3555,
-        3574,
-        3996
+        3056,
+        3088,
+        3145,
+        3176,
+        3276,
+        3288,
+        3439,
+        3557,
+        3576,
+        3998
       ]
     },
     "src/viewer/scene/model/SceneModelEntity.js": {

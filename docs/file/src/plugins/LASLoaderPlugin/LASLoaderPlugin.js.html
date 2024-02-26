@@ -174,9 +174,11 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/VBOGeometry.js~VBOGeometry.html">VBOGeometry</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry-builders">viewer/scene/geometry/builders</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxGeometry">buildBoxGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxLinesGeometry">buildBoxLinesGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxLinesGeometryFromAABB">buildBoxLinesGeometryFromAABB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildCylinderGeometry">buildCylinderGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildGridGeometry">buildGridGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometry">buildPolylineGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildSphereGeometry">buildSphereGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildTorusGeometry">buildTorusGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildVectorTextGeometry">buildVectorTextGeometry</a></span></span></li>
@@ -271,7 +273,7 @@ const MAX_VERTICES = 500000; // TODO: Rough estimate
  *
  * ## Summary
  *
- * * Loads [LAS 1.4 Format](https://www.asprs.org/divisions-committees/lidar-division/laser-las-file-format-exchange-activities) from both *.las* and *.laz* files.
+ * * Loads [LAS Formats](https://www.asprs.org/divisions-committees/lidar-division/laser-las-file-format-exchange-activities) up to v1.3 from both *.las* and *.laz* files. It does not support LAS v1.4.
  * * Loads lidar point cloud positions, colors and intensities.
  * * Supports 32 and 64-bit positions.
  * * Supports 8 and 16-bit color depths.
