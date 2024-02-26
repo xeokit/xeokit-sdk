@@ -11,29 +11,32 @@
     <style>
         #sliderContainer {
             pointer-events: all;
-            height: 100%;
+            height: 100px;
             /*overflow-y: scroll;*/
             overflow-x: hidden;
             position: absolute;
-            background-color: rgba(255, 255, 255, 0.2);
+            bottom: 0;
             color: black;
-            top: 80px;
             z-index: 200000;
             float: left;
             left: 0;
             padding-left: 10px;
+            padding-right: 10px;
             font-family: 'Roboto', sans-serif;
             font-size: 15px;
             user-select: none;
             -ms-user-select: none;
             -moz-user-select: none;
             -webkit-user-select: none;
-            width: 250px;
+            width: 90%;
         }
         input {
             vertical-align: middle;
             padding:0px;
             margin:5px;
+        }
+        .slider {
+            width: 100%;
         }
     </style>
 </head>
@@ -42,10 +45,8 @@
 <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
 <canvas id="myCanvas"></canvas>
 <div id="sliderContainer">
-    <p>Sliders</p>
     <label>
-        Camera path
-        <input id="camera_path" type="range" min="0" max="1" value="0" step="0.0001">
+        <input id="camera_path" type="range" min="0" max="1" value="0" step="0.0001" class="slider">
     </label>
 </div>
 <div class="slideout-sidebar">
