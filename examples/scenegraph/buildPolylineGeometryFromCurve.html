@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <style>
+        /* ----------------------------------------------------------------------------------------------------------*/
+        /* NavCubePlugin */
+        /* ----------------------------------------------------------------------------------------------------------*/
+
+        #myNavCubeCanvas {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            bottom: 50px;
+            right: 10px;
+            z-index: 200000;
+        }
+    </style>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<canvas id="myNavCubeCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/geometry_icon.png"/>
+    <h1>buildPolylineGeometryFromCurve()</h1>
+    <h2>Builds polyline geometry from curve</h2>
+    <p>In this example, we're creating a simple 3D scene that contains polylines geometry, which we're
+        generating using the buildPolylineGeometryFromCurve function.</p>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/mesh/Mesh.js~Mesh.html"
+               target="_other">Mesh</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html"
+               target="_other">ReadableGeometry</a>
+        </li>
+        <li>
+            <a href="../../docs/function/index.html#static-function-buildPolylineGeometryFromCurve"
+               target="_other">buildPolylineGeometryFromCurve()</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html"
+               target="_other">PhongMaterial</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/viewer/scene/materials/Texture.js~Texture.html"
+               target="_other">Texture</a>
+        </li>
+    </ul>
+</div>
+</body>
+
+<script id="source" type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {buildPolylineGeometryFromCurve, Viewer, Mesh, PhongMaterial, NavCubePlugin, CubicBezierCurve, SplineCurve, QuadraticBezierCurve, ReadableGeometry} from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer and arrange the camera
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas"
+    });
+
+    new NavCubePlugin(viewer, {
+        canvasId: "myNavCubeCanvas",
+        visible: true,
+        size: 250,
+        alignment: "bottomRight",
+        bottomMargin: 100,
+        rightMargin: 10
+    });
+
+    viewer.camera.eye = [0, -250, 1];
+    viewer.camera.look = [0, 0, 0];
+    viewer.camera.up = [0, 1, 0];
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a mesh with polyline shape from Spline
+    //------------------------------------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildPolylineGeometryFromCurve({
+            id: "SplineCurve",
+            curve: new SplineCurve(viewer.scene, {
+                points: [
+                    [-65.77614, 0, -88.881992],
+                    [90.020852, 0, -61.589088],
+                    [-67.766247, 0, -22.071238],
+                    [93.148164, 0, -13.826507],
+                    [-14.033343, 0, 3.231558],
+                    [32.592034, 0, 9.20188],
+                    [3.309023, 0, 22.848332],
+                    [23.210098, 0, 28.818655],
+                ],
+            }),
+            divisions: 100,
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            emissive: [1, 0, 0]
+        })
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a mesh with polyline shape from CubicBezier
+    //------------------------------------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildPolylineGeometryFromCurve({
+            id: "CubicBezierCurve",
+            curve: new CubicBezierCurve(viewer.scene, {
+                v0: [120, 0, 100],
+                v1: [120, 0, 0],
+                v2: [80, 0, 100],
+                v3: [80, 0, 0],
+            }),
+            divisions: 50,
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            emissive: [0, 1, 0]
+        })
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a mesh with polyline shape from QuadraticBezier
+    //------------------------------------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildPolylineGeometryFromCurve({
+            id: "QuadraticBezierCurve",
+            curve: new QuadraticBezierCurve(viewer.scene, {
+                v0: [-100, 0, 100],
+                v1: [-50, 0, 150],
+                v2: [-50, 0, 0],
+            }),
+            divisions: 20,
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            emissive: [0, 0, 1]
+        })
+    });
+
+</script>
+</html>
