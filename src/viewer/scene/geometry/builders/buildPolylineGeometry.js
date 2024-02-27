@@ -197,7 +197,6 @@ function buildPolylineGeometry(cfg = {}) {
 function buildPolylineGeometryFromCurve(cfg = {}) {
 
     let polylinePoints = cfg.curve.getPoints(cfg.divisions).map(a => [...a]).flat();
-    console.log(polylinePoints);
     return buildPolylineGeometry({
         id: cfg.id,
         points: polylinePoints
