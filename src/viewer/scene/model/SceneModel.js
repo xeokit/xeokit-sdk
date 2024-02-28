@@ -2334,6 +2334,10 @@ export class SceneModel extends Component {
             this.error("[createGeometry] Param expected: `uvDecodeMatrix` (required for `uvCompressed')");
             return null;
         }
+        if (!cfg.buckets && !cfg.indices && (cfg.primitive === "triangles" || cfg.primitive === "solid" || cfg.primitive === "surface")) {
+            const numPositions = (cfg.positions || cfg.positionsCompressed).length / 3;
+            cfg.indices = this._createDefaultIndices(numPositions);
+        }
         if (!cfg.buckets && !cfg.indices && cfg.primitive !== "points") {
             this.error(`[createGeometry] Param expected: indices (required for '${cfg.primitive}' primitive type)`);
             return null;
@@ -2768,7 +2772,12 @@ export class SceneModel extends Component {
                 this.error("Param expected: 'uvCompressed' should be accompanied by `uvDecodeMatrix` ('geometryId' is absent)");
                 return false;
             }
+            if (!cfg.buckets && !cfg.indices && (cfg.primitive === "triangles" || cfg.primitive === "solid" || cfg.primitive === "surface")) {
+                const numPositions = (cfg.positions || cfg.positionsCompressed).length / 3;
+                cfg.indices = this._createDefaultIndices(numPositions);
+            }
             if (!cfg.buckets && !cfg.indices && cfg.primitive !== "points") {
+                cfg.indices = this._createDefaultIndices(numIndices)
                 this.error(`Param expected: indices (required for '${cfg.primitive}' primitive type)`);
                 return false;
             }
@@ -2778,9 +2787,9 @@ export class SceneModel extends Component {
             }
 
             const useDTX = (!!this._dtxEnabled && (cfg.primitive === "triangles"
-                || cfg.primitive === "solid"
-                || cfg.primitive === "surface"))
-            && (!cfg.textureSetId);
+                    || cfg.primitive === "solid"
+                    || cfg.primitive === "surface"))
+                && (!cfg.textureSetId);
 
             cfg.origin = cfg.origin ? math.addVec3(this._origin, cfg.origin, math.vec3()) : this._origin;
 
@@ -2996,9 +3005,9 @@ export class SceneModel extends Component {
             }
 
             const useDTX = (!!this._dtxEnabled
-                && (cfg.geometry.primitive === "triangles"
-                    || cfg.geometry.primitive === "solid"
-                    || cfg.geometry.primitive === "surface"))
+                    && (cfg.geometry.primitive === "triangles"
+                        || cfg.geometry.primitive === "solid"
+                        || cfg.geometry.primitive === "surface"))
                 && (!cfg.textureSetId);
 
             if (useDTX) {
@@ -3051,6 +3060,14 @@ export class SceneModel extends Component {
         this._meshesCfgsBeforeMeshCreation[cfg.id] = cfg;
 
         return true;
+    }
+
+    _createDefaultIndices(numIndices) {
+        const indices = [];
+        for (let i = 0; i < numIndices; i++) {
+            indices.push(i);
+        }
+        return indices;
     }
 
     _createMesh(cfg) {
@@ -3655,7 +3672,7 @@ export class SceneModel extends Component {
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
             this.layerList[layerIndex].drawColorOpaque(renderFlags, frameCtx);
-       }
+        }
     }
 
     /** @private */
