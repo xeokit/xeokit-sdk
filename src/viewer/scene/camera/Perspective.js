@@ -40,7 +40,7 @@ class Perspective extends Component {
             inverseMatrix: math.mat4(),
             transposedMatrix: math.mat4(),
             near: 0.1,
-            far: 2000.0
+            far: 10000.0
         });
 
         this._inverseMatrixDirty = true;
@@ -190,10 +190,12 @@ class Perspective extends Component {
      *
      * Fires a "far" event on change.
      *
+     * Default value is ````10000.0````.
+     *
      * @param {Number} value New Perspective far plane position.
      */
     set far(value) {
-        const far = (value !== undefined && value !== null) ? value : 2000.0;
+        const far = (value !== undefined && value !== null) ? value : 10000.0;
         if (this._state.far === far) {
             return;
         }
@@ -204,6 +206,8 @@ class Perspective extends Component {
 
     /**
      * Gets the position of this Perspective's far plane on the positive View-space Z-axis.
+     *
+     * Default value is ````10000.0````.
      *
      * @return {Number} The Perspective's far plane position.
      */
