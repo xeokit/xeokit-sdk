@@ -48,17 +48,20 @@
 </body>
 <script type="module">
 
-    import {Viewer, GLTFLoaderPlugin, ReflectionMap, FastNavPlugin, sRGBEncoding} from "../../dist/xeokit-sdk.min.es.js";
+    import {Viewer, GLTFLoaderPlugin, ReflectionMap, FastNavPlugin, sRGBEncoding} from "../../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true,
-        pbrEnabled: true
+        dtxEnabled: false,
+        colorTextureEnabled: true
     });
 
     viewer.camera.eye = [1394.38, 3.78, -247.05];
     viewer.camera.look = [1391.46, 0.89, -244.24];
     viewer.camera.up = [-0.41, 0.81, 0.40];
+
+    viewer.camera.project.far = 10000000
 
     viewer.scene.gammaInput = true;
     viewer.scene.gammaOutput = true;
@@ -69,17 +72,17 @@
     viewer.scene.sao.kernelRadius = 170;
     viewer.scene.sao.intensity = 0.2;
 
-    new FastNavPlugin(viewer, {
-        hideEdges: true,
-        hideSAO: true,
-        hideColorTexture: false,
-        hidePBR: false,
-        hideTransparentObjects: false,
-        scaleCanvasResolution: false,
-        scaleCanvasResolutionFactor: 0.5,
-        delayBeforeRestore: true,
-        delayBeforeRestoreSeconds: 0.4
-    });
+    // new FastNavPlugin(viewer, {
+    //     hideEdges: true,
+    //     hideSAO: true,
+    //     hideColorTexture: false,
+    //     hidePBR: false,
+    //     hideTransparentObjects: false,
+    //     scaleCanvasResolution: false,
+    //     scaleCanvasResolutionFactor: 0.5,
+    //     delayBeforeRestore: true,
+    //     delayBeforeRestoreSeconds: 0.4
+    // });
 
     new ReflectionMap(viewer.scene, {
         src: [
@@ -97,13 +100,14 @@
 
     const sceneModel = gltfLoader.load({
         id: "myHousePlan",
-        src: "../../assets/models/gltf/HousePlan/glTF-Binary/HousePlan.glb",
-        edges: true
+        src: "../../assets/Bexel/Beograd_Centar_Google_maps.glb",
+       // edges: true
     });
 
     sceneModel.on("loaded", () => {
         viewer.cameraFlight.jumpTo(sceneModel);
     });
 
+    window.viewer = viewer;
 </script>
 </html>
