@@ -36,6 +36,16 @@ body {
     background-image: linear-gradient(lightblue, white);
 }
 
+#myCanvas-medium {
+    width: 600px;
+    height: 600px;
+    left:200px;
+    top: 100px;
+    position: absolute;
+    background: lightblue;
+    background-image: linear-gradient(lightblue, white);
+}
+
 .slideout-sidebar {
     background: white;
     position: fixed;
