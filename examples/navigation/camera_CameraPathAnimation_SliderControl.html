@@ -658,7 +658,7 @@
 
     let cameraPathT = 0.0;
     document.getElementById("camera_path").oninput = function() {
-        cameraPathT = document.getElementById("camera_path").value;
+        cameraPathT = Number(document.getElementById("camera_path").value);
         cameraPathAnimation.scrubToT(cameraPathT);
     };
 

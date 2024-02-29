@@ -136,7 +136,7 @@
 
     document.getElementById("explode_factor").oninput = function() {
         resetExplode();
-        explodeFactor = document.getElementById("explode_factor").value;
+        explodeFactor = Number(document.getElementById("explode_factor").value);
         sceneModel.children.forEach(moveAwayFromModelCenter);
     };
 
