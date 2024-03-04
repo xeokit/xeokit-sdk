@@ -139,7 +139,7 @@ export class TrianglesColorRenderer extends TrianglesBatchingRenderer {
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
-           src.push("vFragDepth = 1.0 + clipPos.w;");
+            src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
         if (clipping) {
@@ -200,6 +200,9 @@ export class TrianglesColorRenderer extends TrianglesBatchingRenderer {
         src.push("void main(void) {");
 
         if (clipping) {
+            console.log("Triangles renderer with clipping");
+            src.push("  vec4 newColor;");
+            src.push("  newColor = vColor;");
             src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
             src.push("  if (clippable) {");
             src.push("  float dist = 0.0;");
@@ -208,9 +211,12 @@ export class TrianglesColorRenderer extends TrianglesBatchingRenderer {
                 src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
                 src.push("}");
             }
-                src.push("  if (dist > 0.0) { ");
-                src.push("      discard;")
-                src.push("  }");
+            src.push("  if (dist > 0.1) { ");
+            src.push("      discard;")
+            src.push("  }");
+            src.push("  if (dist > 0.0) { ");
+            src.push("      newColor = vec4(0.0, 0.0, 0.0, 1.0);");
+            src.push("  }");
             src.push("}");
         }
 
@@ -227,9 +233,9 @@ export class TrianglesColorRenderer extends TrianglesBatchingRenderer {
             src.push("   float blendFactor       = uSAOParams[3];");
             src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
             src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBToFloat(texture(uOcclusionTexture, uv))) * blendFactor;");
-            src.push("   outColor            = vec4(vColor.rgb * ambient, 1.0);");
+            src.push("   outColor            = vec4(newColor.rgb * ambient, 1.0);");
         } else {
-            src.push("   outColor            = vColor;");
+            src.push("   outColor            = newColor;");
         }
 
         src.push("}");
