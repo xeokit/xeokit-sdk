@@ -89,7 +89,9 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
         markerDiv.style.borderRadius = "10px";
         markerDiv.style.width = "5px";
         markerDiv.style.height = "5px";
-        markerDiv.style.margin = "-200px -200px";
+        markerDiv.style.top = "-200px";
+        markerDiv.style.left = "-200px";
+        markerDiv.style.margin = "0 0";
         markerDiv.style.zIndex = "100";
         markerDiv.style.position = "absolute";
         markerDiv.style.pointerEvents = "none";
@@ -223,8 +225,8 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                         const canvasLeftEdge = canvasBoundRect.left + scrollLeft;
                         const canvasTopEdge = canvasBoundRect.top + scrollTop;
-                        this.markerDiv.style.marginLeft = `${canvasLeftEdge + canvasPos[0] - 5}px`;
-                        this.markerDiv.style.marginTop = `${canvasTopEdge + canvasPos[1] - 5}px`;
+                        this.markerDiv.style.left = `${canvasLeftEdge + canvasPos[0] - 5}px`;
+                        this.markerDiv.style.top = `${canvasTopEdge + canvasPos[1] - 5}px`;
                         break;
                     case MOUSE_FINDING_CORNER:
                         if (this._currentAngleMeasurement) {
@@ -235,8 +237,8 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                             this._currentAngleMeasurement.corner.worldPos = event.worldPos;
                             this._currentAngleMeasurement.corner.entity = event.entity;
                         }
-                        this.markerDiv.style.marginLeft = `-10000px`;
-                        this.markerDiv.style.marginTop = `-10000px`;
+                        this.markerDiv.style.left = `-10000px`;
+                        this.markerDiv.style.top = `-10000px`;
                         canvas.style.cursor = "pointer";
                         break;
                     case MOUSE_FINDING_TARGET:
@@ -247,8 +249,8 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                             this._currentAngleMeasurement.target.worldPos = event.worldPos;
                             this._currentAngleMeasurement.target.entity = event.entity;
                         }
-                        this.markerDiv.style.marginLeft = `-10000px`;
-                        this.markerDiv.style.marginTop = `-10000px`;
+                        this.markerDiv.style.left = `-10000px`;
+                        this.markerDiv.style.top = `-10000px`;
                         canvas.style.cursor = "pointer";
                         break;
                 }
@@ -349,8 +351,8 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                     pointerLens.snappedCanvasPos = event.snappedCanvasPos || event.canvasPos;
                     pointerLens.snapped = false;
                 }
-                this.markerDiv.style.marginLeft = `-100px`;
-                this.markerDiv.style.marginTop = `-100px`;
+                this.markerDiv.style.left = `-100px`;
+                this.markerDiv.style.top = `-100px`;
                 if (this._currentAngleMeasurement) {
                     switch (this._mouseState) {
                         case MOUSE_FINDING_ORIGIN:

@@ -93,7 +93,9 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
         markerDiv.style.borderRadius = "10px";
         markerDiv.style.width = "5px";
         markerDiv.style.height = "5px";
-        markerDiv.style.margin = "-200px -200px";
+        markerDiv.style.top = "-200px";
+        markerDiv.style.left = "-200px";
+        markerDiv.style.margin = "0 0";
         markerDiv.style.zIndex = "100";
         markerDiv.style.position = "absolute";
         markerDiv.style.pointerEvents = "none";
@@ -199,20 +201,23 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
             this._snapping
                 ? "hoverSnapOrSurface"
                 : "hoverSurface", event => {
-                const canvasPos = event.snappedCanvasPos || event.canvasPos;
+               const canvasPos = event.snappedCanvasPos ||event.canvasPos;
                 mouseHovering = true;
                 pointerWorldPos.set(event.worldPos);
                 pointerCanvasPos.set(event.canvasPos);
                 if (this._mouseState === MOUSE_FIRST_CLICK_EXPECTED) {
-                    
+
+                   // const canvasBoundary = getCanvasBoundary();
+
                     const canvasBoundRect = canvas.getBoundingClientRect();
                     const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
                     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                     const canvasLeftEdge = canvasBoundRect.left + scrollLeft;
                     const canvasTopEdge = canvasBoundRect.top + scrollTop;
-                    
-                    this._markerDiv.style.marginLeft = `${canvasLeftEdge + canvasPos[0] - 5}px`;
-                    this._markerDiv.style.marginTop = `${canvasTopEdge + canvasPos[1] - 5}px`;
+
+                    this._markerDiv.style.left = `${canvasLeftEdge + canvasPos[0] - 5}px`;
+                    this._markerDiv.style.top = `${canvasTopEdge + canvasPos[1] - 5}px`;
+
                     this._markerDiv.style.background = "pink";
                     if (event.snappedToVertex || event.snappedToEdge) {
                         if (this.pointerLens) {
@@ -235,8 +240,8 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
                     }
                     hoveredEntity = event.entity;
                 } else {
-                    this._markerDiv.style.marginLeft = `-10000px`;
-                    this._markerDiv.style.marginTop = `-10000px`;
+                    this._markerDiv.style.left = `-10000px`;
+                    this._markerDiv.style.top = `-10000px`;
                 }
                 canvas.style.cursor = "pointer";
                 if (this._currentDistanceMeasurement) {
@@ -247,8 +252,8 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
                     this._currentDistanceMeasurement.zAxisVisible = this._currentDistanceMeasurementInitState.zAxisVisible && this.distanceMeasurementsPlugin.defaultZAxisVisible;
                     this._currentDistanceMeasurement.targetVisible = this._currentDistanceMeasurementInitState.targetVisible;
                     this._currentDistanceMeasurement.target.worldPos = pointerWorldPos.slice();
-                    this._markerDiv.style.marginLeft = `-10000px`;
-                    this._markerDiv.style.marginTop = `-10000px`;
+                    this._markerDiv.style.left = `-10000px`;
+                    this._markerDiv.style.top = `-10000px`;
                 }
             });
 
@@ -319,8 +324,8 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
                 this.pointerLens.snappedCanvasPos = event.snappedCanvasPos || event.canvasPos;
             }
             mouseHovering = false;
-            this._markerDiv.style.marginLeft = `-100px`;
-            this._markerDiv.style.marginTop = `-100px`;
+            this._markerDiv.style.left = `-100px`;
+            this._markerDiv.style.top = `-100px`;
             if (this._currentDistanceMeasurement) {
                 this._currentDistanceMeasurement.wireVisible = false;
                 this._currentDistanceMeasurement.targetVisible = false;
