@@ -8,98 +8,98 @@
 
 	addEventListener("message", function(event) {
 		var message = event.data, type = message.type, sn = message.sn;
-		var handler = handlers[type];
-		if (handler) {
-			try {
-				handler(message);
-			} catch (e) {
-				onError(type, sn, e);
-			}
+		if (!api.hasOwnProperty(message.type)) {
+			return;
+		}
+		try {
+			api[message.type](message);
+		} catch (e) {
+			onError(type, sn, e);
 		}
 		//for debug
 		//postMessage({type: 'echo', originalType: type, sn: sn});
 	});
 
-	var handlers = {
-		importScripts: doImportScripts,
-		newTask: newTask,
-		append: processData,
-		flush: processData,
-	};
+	// performance may not be supported
+	var now = global.performance ? global.performance.now.bind(global.performance) : Date.now;
 
 	// deflater/inflater tasks indexed by serial numbers
 	var tasks = {};
 
-	function doImportScripts(msg) {
-		if (msg.scripts && msg.scripts.length > 0)
-			importScripts.apply(undefined, msg.scripts);
-		postMessage({type: 'importScripts'});
-	}
+	// API methods
+	let api = {
+		newTask: function (msg) {
+			var CodecClass = global[msg.codecClass];
+			var sn = msg.sn;
+			if (tasks[sn])
+				throw Error('duplicated sn');
+			tasks[sn] =  {
+				codec: new CodecClass(msg.options),
+				crcInput: msg.crcType === 'input',
+				crcOutput: msg.crcType === 'output',
+				crc: new Crc32(),
+			};
+			postMessage({type: 'newTask', sn: sn});
+		},
 
-	function newTask(msg) {
-		var CodecClass = global[msg.codecClass];
-		var sn = msg.sn;
-		if (tasks[sn])
-			throw Error('duplicated sn');
-		tasks[sn] =  {
-			codec: new CodecClass(msg.options),
-			crcInput: msg.crcType === 'input',
-			crcOutput: msg.crcType === 'output',
-			crc: new Crc32(),
-		};
-		postMessage({type: 'newTask', sn: sn});
-	}
-
-	// performance may not be supported
-	var now = global.performance ? global.performance.now.bind(global.performance) : Date.now;
-
-	function processData(msg) {
-		var sn = msg.sn, type = msg.type, input = msg.data;
-		var task = tasks[sn];
-		// allow creating codec on first append
-		if (!task && msg.codecClass) {
-			newTask(msg);
-			task = tasks[sn];
-		}
-		var isAppend = type === 'append';
-		var start = now();
-		var output;
-		if (isAppend) {
-			try {
-				output = task.codec.append(input, function onprogress(loaded) {
-					postMessage({type: 'progress', sn: sn, loaded: loaded});
-				});
-			} catch (e) {
-				delete tasks[sn];
-				throw e;
+		append: function(msg) {
+			var sn = msg.sn, type = msg.type, input = msg.data;
+			var task = tasks[sn];
+			// allow creating codec on first append
+			if (!task && msg.codecClass) {
+				api.newTask(msg);
+				task = tasks[sn];
 			}
-		} else {
-			delete tasks[sn];
-			output = task.codec.flush();
-		}
-		var codecTime = now() - start;
+			var isAppend = type === 'append';
+			var start = now();
+			var output;
+			if (isAppend) {
+				try {
+					output = task.codec.append(input, function onprogress(loaded) {
+						postMessage({type: 'progress', sn: sn, loaded: loaded});
+					});
+				} catch (e) {
+					delete tasks[sn];
+					throw e;
+				}
+			} else {
+				delete tasks[sn];
+				output = task.codec.flush();
+			}
+			var codecTime = now() - start;
 
-		start = now();
-		if (input && task.crcInput)
-			task.crc.append(input);
-		if (output && task.crcOutput)
-			task.crc.append(output);
-		var crcTime = now() - start;
+			start = now();
+			if (input && task.crcInput)
+				task.crc.append(input);
+			if (output && task.crcOutput)
+				task.crc.append(output);
+			var crcTime = now() - start;
 
-		var rmsg = {type: type, sn: sn, codecTime: codecTime, crcTime: crcTime};
-		var transferables = [];
-		if (output) {
-			rmsg.data = output;
-			transferables.push(output.buffer);
-		}
-		if (!isAppend && (task.crcInput || task.crcOutput))
-			rmsg.crc = task.crc.get();
-		
-		// posting a message with transferables will fail on IE10
-		try {
-			postMessage(rmsg, transferables);
-		} catch(ex) {
-			postMessage(rmsg); // retry without transferables
+			var rmsg = {type: type, sn: sn, codecTime: codecTime, crcTime: crcTime};
+			var transferables = [];
+			if (output) {
+				rmsg.data = output;
+				transferables.push(output.buffer);
+			}
+			if (!isAppend && (task.crcInput || task.crcOutput))
+				rmsg.crc = task.crc.get();
+
+			// posting a message with transferables will fail on IE10
+			try {
+				postMessage(rmsg, transferables);
+			} catch(ex) {
+				postMessage(rmsg); // retry without transferables
+			}
+		},
+
+		flush: function (msg){
+			api.append(msg);
+		},
+
+		importScripts: function (msg) {
+			if (msg.scripts && msg.scripts.length > 0)
+				importScripts.apply(undefined, msg.scripts);
+			postMessage({type: 'importScripts'});
 		}
 	}
 
