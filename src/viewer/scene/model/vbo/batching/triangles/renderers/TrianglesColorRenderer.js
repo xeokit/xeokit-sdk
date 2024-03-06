@@ -200,7 +200,6 @@ export class TrianglesColorRenderer extends TrianglesBatchingRenderer {
         src.push("void main(void) {");
 
         if (clipping) {
-            console.log("Triangles renderer with clipping");
             src.push("  vec4 newColor;");
             src.push("  newColor = vColor;");
             src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
@@ -211,11 +210,14 @@ export class TrianglesColorRenderer extends TrianglesBatchingRenderer {
                 src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
                 src.push("}");
             }
-            src.push("  if (dist > 0.1) { ");
+            src.push("  if (dist > " + scene.crossSections.sliceThickness.toPrecision(6) + ") { ");
             src.push("      discard;")
             src.push("  }");
             src.push("  if (dist > 0.0) { ");
-            src.push("      newColor = vec4(0.0, 0.0, 0.0, 1.0);");
+            src.push("      newColor = vec4(" + scene.crossSections.sliceColor[0].toPrecision(6) + ", "
+                + scene.crossSections.sliceColor[1].toPrecision(6) + ", "
+                + scene.crossSections.sliceColor[2].toPrecision(6) + ", "
+                + scene.crossSections.sliceColor[3].toPrecision(6) + ");");
             src.push("  }");
             src.push("}");
         }
