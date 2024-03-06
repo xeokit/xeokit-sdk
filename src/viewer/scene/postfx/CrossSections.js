@@ -43,13 +43,13 @@ class CrossSections extends Component {
     /**
      * Sets the color of a slice created by a section.
      *
-     * Default value is ````[1.0, 0.0, 0.0, 1.0]````.
+     * Default value is ````[0.0, 0.0, 0.0, 1.0]````.
      *
      * @type {Number}
      */
     set sliceColor(value) {
         if (value === undefined || value === null) {
-            value = [1.0, 0.0, 0.0, 1.0];
+            value = [0.0, 0.0, 0.0, 1.0];
         }
         if (this._sliceColor === value) {
             return;
@@ -61,7 +61,7 @@ class CrossSections extends Component {
     /**
      * Gets the thickness of a slice created by a section.
      *
-     * Default value is ````[1.0, 0.0, 0.0, 1.0]````.
+     * Default value is ````[0.0, 0.0, 0.0, 1.0]````.
      *
      * @type {Number}
      */
