@@ -177,7 +177,8 @@
 
 <script type="module">
 
-    import {Viewer, WebIFCLoaderPlugin, NavCubePlugin, TreeViewPlugin} from "../../dist/xeokit-sdk.min.es.js";
+    import {Viewer, WebIFCLoaderPlugin, NavCubePlugin, TreeViewPlugin} from "../../dist/xeokit-sdk.es.js";
+    import * as WebIFC from "https://cdn.jsdelivr.net/npm/web-ifc@0.0.51/web-ifc-api.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -203,30 +204,41 @@
         autoExpandDepth: 3 // Initially expand the root tree node
     });
 
-    const ifcLoader = new WebIFCLoaderPlugin(viewer, {
-        //wasmPath: "../dist/" // <<------- Path to web-ifc.wasm, which does the IFC parsing for us
-        wasmPath: "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/"
-    });
+    const IfcAPI = new WebIFC.IfcAPI();
 
-    const sceneModel = ifcLoader.load({
-        id: "myModel",
-        src: "../../assets/models/ifc/Duplex.ifc",
-        loadMetadata: true, // Default
-        excludeTypes: ["IfcSpace"],
-        edges: true,
-        dtxEnabled: true
-    });
+    IfcAPI.SetWasmPath("https://cdn.jsdelivr.net/npm/web-ifc@0.0.51/");
 
-    sceneModel.on("loaded", ()=>{
-        viewer.cameraFlight.jumpTo(sceneModel);
-    });
+    IfcAPI.Init().then(() => {
 
-    const t0 = performance.now();
-    document.getElementById("time").innerHTML = "Loading model...";
-    sceneModel.on("loaded", function () {
-        const t1 = performance.now();
-        document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
-    });
+        const ifcLoader = new WebIFCLoaderPlugin(viewer, {
+            WebIFC,
+            IfcAPI
+        });
+
+        const sceneModel = ifcLoader.load({
+            id: "myModel",
+            src: "../../assets/models/ifc/Duplex.ifc",
+            loadMetadata: true, // Default
+            excludeTypes: ["IfcSpace"],
+            edges: true,
+            dtxEnabled: true
+        });
+
+        sceneModel.on("loaded", () => {
+            viewer.cameraFlight.jumpTo(sceneModel);
+        });
+
+        const t0 = performance.now();
+        document.getElementById("time").innerHTML = "Loading model...";
+        sceneModel.on("loaded", function () {
+            const t1 = performance.now();
+            document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
+        });
+
+    }).catch((e) => {
+        console.error(`Failed to initialize WebIFC: ${e}`);
+    })
+
 
 </script>
 </html>

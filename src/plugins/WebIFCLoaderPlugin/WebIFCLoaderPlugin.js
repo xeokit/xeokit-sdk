@@ -85,23 +85,24 @@ import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords.js";
  *
  * // 1
  *
- * const ifcAPI = new WebIFC.IfcAPI();
+ * const IfcAPI = new this._webIFC.IfcAPI();
  *
  * // 2
  *
- * ifcAPI.SetWasmPath("https://cdn.jsdelivr.net/npm/web-ifc@0.0.51/");
+ * IfcAPI.SetWasmPath("https://cdn.jsdelivr.net/npm/web-ifc@0.0.51/");
  *
  * // 3
  *
- * ifcAPI.Init().then(() => {
+ * IfcAPI.Init().then(() => {
  *
  *      //------------------------------------------------------------------------------------------------------------
- *      // 1. Create a WebIFCLoaderPlugin, configured with the web-ifc API
+ *      // 1. Create a WebIFCLoaderPlugin, configured with the web-ifc module and a web-ifc API instance
  *      // 2. Load a BIM model fom an IFC file, excluding its IfcSpace elements, and highlighting edges
  *      //------------------------------------------------------------------------------------------------------------
  *
  *     const ifcLoader = new WebIFCLoaderPlugin(viewer, {
- *         ifcAPI
+ *         WebIFC,
+ *         IfcAPI
  *     });
  *
  *     // 2
@@ -362,8 +363,8 @@ class WebIFCLoaderPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
      * @param {String} [cfg.id="ifcLoader"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
-     * @param {Object} cfg.ifcAPI A pre-initialized instance of the web-ifc API, required by WebIFCLoaderPlugin.
-     * @param {Object} [cfg.objectDefaults] Map of initial default states for each loaded {@link Entity} that represents an object.  Default value is {@link IFCObjectDefaults}.
+     * @param {Object} cfg.WebIFC The web-ifc module, required by WebIFCLoaderPlugin. WebIFCLoaderPlugin uses various IFC type constants defined on this module.
+     * @param {Object} cfg.IfcAPI A pre-initialized instance of the web-ifc API. WebIFCLoaderPlugin uses this to parse IFC.  * @param {Object} [cfg.objectDefaults] Map of initial default states for each loaded {@link Entity} that represents an object.  Default value is {@link IFCObjectDefaults}.
      * @param {Object} [cfg.dataSource] A custom data source through which the WebIFCLoaderPlugin can load model and metadata files. Defaults to an instance of {@link WebIFCDefaultDataSource}, which loads over HTTP.
      * @param {String[]} [cfg.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {String[]} [cfg.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
@@ -379,11 +380,17 @@ class WebIFCLoaderPlugin extends Plugin {
         this.excludeTypes = cfg.excludeTypes;
         this.excludeUnclassifiedObjects = cfg.excludeUnclassifiedObjects;
 
-        if (!cfg.ifcAPI) {
-            throw "Parameter expected: ifcAPI";
+        if (!cfg.WebIFC) {
+            throw "Parameter expected: WebIFC";
+        }
+        
+        if (!cfg.IfcAPI) {
+            throw "Parameter expected: IfcAPI";
         }
 
-        this._ifcAPI = cfg.ifcAPI;
+        this._webIFC = cfg.WebIFC;
+        
+        this._ifcAPI = cfg.IfcAPI;
     }
 
     /**
@@ -681,14 +688,11 @@ class WebIFCLoaderPlugin extends Plugin {
             throw "WebIFCLoaderPlugin has no WebIFC instance configured - please inject via WebIFCLoaderPlugin constructor";
         }
 
-        if (options.wasmPath) {
-            this._ifcAPI.SetWasmPath(options.wasmPath);
-        }
-
         const dataArray = new Uint8Array(arrayBuffer);
         const modelID = this._ifcAPI.OpenModel(dataArray);
+        const modelSchema = this._ifcAPI.GetModelSchema(modelID);
 
-        const lines = this._ifcAPI.GetLineIDsWithType(modelID, WebIFC.IFCPROJECT);
+        const lines = this._ifcAPI.GetLineIDsWithType(modelID, this._webIFC.IFCPROJECT);
         const ifcProjectId = lines.get(0);
 
         const loadMetadata = (params.loadMetadata !== false);
@@ -706,6 +710,7 @@ class WebIFCLoaderPlugin extends Plugin {
 
         const ctx = {
             modelID,
+            modelSchema,
             sceneModel,
             loadMetadata,
             metadata,
@@ -756,7 +761,7 @@ class WebIFCLoaderPlugin extends Plugin {
     }
 
     _parseMetaObjects(ctx) {
-        const lines = this._ifcAPI.GetLineIDsWithType(ctx.modelID, WebIFC.IFCPROJECT);
+        const lines = this._ifcAPI.GetLineIDsWithType(ctx.modelID, this._webIFC.IFCPROJECT);
         const ifcProjectId = lines.get(0);
         const ifcProject = this._ifcAPI.GetLine(ctx.modelID, ifcProjectId);
         this._parseSpatialChildren(ctx, ifcProject);
@@ -772,8 +777,8 @@ class WebIFCLoaderPlugin extends Plugin {
         }
         this._createMetaObject(ctx, ifcElement, parentMetaObjectId);
         const metaObjectId = ifcElement.GlobalId.value;
-        this._parseRelatedItemsOfType(ctx, ifcElement.expressID, 'RelatingObject', 'RelatedObjects', WebIFC.IFCRELAGGREGATES, metaObjectId);
-        this._parseRelatedItemsOfType(ctx, ifcElement.expressID, 'RelatingStructure', 'RelatedElements', WebIFC.IFCRELCONTAINEDINSPATIALSTRUCTURE, metaObjectId);
+        this._parseRelatedItemsOfType(ctx, ifcElement.expressID, 'RelatingObject', 'RelatedObjects', this._webIFC.IFCRELAGGREGATES, metaObjectId);
+        this._parseRelatedItemsOfType(ctx, ifcElement.expressID, 'RelatingStructure', 'RelatedElements', this._webIFC.IFCRELCONTAINEDINSPATIALSTRUCTURE, metaObjectId);
     }
 
     _createMetaObject(ctx, ifcElement, parentMetaObjectId) {
@@ -820,7 +825,7 @@ class WebIFCLoaderPlugin extends Plugin {
     }
 
     _parsePropertySets(ctx) {
-        const lines = this._ifcAPI.GetLineIDsWithType(ctx.modelID, WebIFC.IFCRELDEFINESBYPROPERTIES);
+        const lines = this._ifcAPI.GetLineIDsWithType(ctx.modelID, this._webIFC.IFCRELDEFINESBYPROPERTIES);
         for (let i = 0; i < lines.size(); i++) {
             let relID = lines.get(i);
             let rel = this._ifcAPI.GetLine(ctx.modelID, relID, true);
