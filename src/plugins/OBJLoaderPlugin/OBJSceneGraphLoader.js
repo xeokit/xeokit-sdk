@@ -532,7 +532,6 @@ var parseMTL = (function () {
         var materialCfg = {
             id: "Default"
         };
-        var needCreate = false;
         var line;
         var pos;
         var key;
@@ -560,13 +559,10 @@ var parseMTL = (function () {
             switch (key.toLowerCase()) {
 
                 case "newmtl": // New material
-                    //if (needCreate) {
-                    createMaterial(modelNode, materialCfg);
-                    //}
                     materialCfg = {
                         id: value
                     };
-                    needCreate = true;
+                    createMaterial(modelNode, materialCfg);
                     break;
 
                 case 'ka':
@@ -623,10 +619,6 @@ var parseMTL = (function () {
                 default:
                 // modelNode.error("Unrecognized token: " + key);
             }
-        }
-
-        if (needCreate) {
-            createMaterial(modelNode, materialCfg);
         }
     };
 
