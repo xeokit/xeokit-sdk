@@ -560,7 +560,7 @@ var parseMTL = (function () {
 
                 case "newmtl": // New material
                     materialCfg = {
-                        id: value
+                        id: value ? `${modelNode.id}_${value}` : ""
                     };
                     createMaterial(modelNode, materialCfg);
                     break;
