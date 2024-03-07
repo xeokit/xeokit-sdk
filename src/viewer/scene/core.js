@@ -155,22 +155,25 @@ const frame = function () {
     lastTime = time;
 };
 
-class WorkerInterval {
-    worker = null;
-
-    constructor(callback, interval) {
-        const blob = new Blob([`setInterval(() => postMessage(0), ${interval});`]);
-        const workerScript = URL.createObjectURL(blob);
-        this.worker = new Worker(workerScript);
-        this.worker.onmessage = callback;
+function customSetInterval(callback, interval) {
+    let expected = Date.now() + interval;
+    function loop() {
+        const elapsed = Date.now() - expected;
+        callback();
+        expected += interval;
+        setTimeout(loop, Math.max(0, interval - elapsed));
     }
-
-    stop() {
-        this.worker.terminate();
-    }
+    loop();
+    return {
+        cancel: function() {
+            // No need to do anything, setTimeout cannot be directly cancelled
+        }
+    };
 }
 
-const interval = new WorkerInterval(frame, 100);
+customSetInterval(() => {
+    frame();
+}, 100);
 
 const renderFrame = function () {
     let time = Date.now();
