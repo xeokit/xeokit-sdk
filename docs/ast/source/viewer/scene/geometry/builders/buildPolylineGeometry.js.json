@@ -1,29 +1,29 @@
 {
   "type": "File",
   "start": 0,
-  "end": 3175,
+  "end": 7943,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 87,
-      "column": 31
+      "line": 206,
+      "column": 63
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 3175,
+    "end": 7943,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 87,
-        "column": 31
+        "line": 206,
+        "column": 63
       }
     },
     "sourceType": "module",
@@ -1579,6 +1579,703 @@
               }
             }
           ],
+          "directives": [],
+          "trailingComments": null
+        },
+        "leadingComments": [],
+        "trailingComments": [],
+        "name": "_"
+      },
+      {
+        "type": "Identifier",
+        "start": 7645,
+        "end": 7878,
+        "loc": {
+          "start": {
+            "line": 197,
+            "column": 0
+          },
+          "end": {
+            "line": 204,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 7654,
+          "end": 7684,
+          "loc": {
+            "start": {
+              "line": 197,
+              "column": 9
+            },
+            "end": {
+              "line": 197,
+              "column": 39
+            },
+            "identifierName": "buildPolylineGeometryFromCurve"
+          },
+          "name": "buildPolylineGeometryFromCurve",
+          "leadingComments": null
+        },
+        "generator": false,
+        "expression": false,
+        "async": false,
+        "params": [
+          {
+            "type": "AssignmentPattern",
+            "start": 7685,
+            "end": 7693,
+            "loc": {
+              "start": {
+                "line": 197,
+                "column": 40
+              },
+              "end": {
+                "line": 197,
+                "column": 48
+              }
+            },
+            "left": {
+              "type": "Identifier",
+              "start": 7685,
+              "end": 7688,
+              "loc": {
+                "start": {
+                  "line": 197,
+                  "column": 40
+                },
+                "end": {
+                  "line": 197,
+                  "column": 43
+                },
+                "identifierName": "cfg"
+              },
+              "name": "cfg"
+            },
+            "right": {
+              "type": "ObjectExpression",
+              "start": 7691,
+              "end": 7693,
+              "loc": {
+                "start": {
+                  "line": 197,
+                  "column": 46
+                },
+                "end": {
+                  "line": 197,
+                  "column": 48
+                }
+              },
+              "properties": []
+            }
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start": 7695,
+          "end": 7878,
+          "loc": {
+            "start": {
+              "line": 197,
+              "column": 50
+            },
+            "end": {
+              "line": 204,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start": 7702,
+              "end": 7782,
+              "loc": {
+                "start": {
+                  "line": 199,
+                  "column": 4
+                },
+                "end": {
+                  "line": 199,
+                  "column": 84
+                }
+              },
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start": 7706,
+                  "end": 7781,
+                  "loc": {
+                    "start": {
+                      "line": 199,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 199,
+                      "column": 83
+                    }
+                  },
+                  "id": {
+                    "type": "Identifier",
+                    "start": 7706,
+                    "end": 7720,
+                    "loc": {
+                      "start": {
+                        "line": 199,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 199,
+                        "column": 22
+                      },
+                      "identifierName": "polylinePoints"
+                    },
+                    "name": "polylinePoints"
+                  },
+                  "init": {
+                    "type": "CallExpression",
+                    "start": 7723,
+                    "end": 7781,
+                    "loc": {
+                      "start": {
+                        "line": 199,
+                        "column": 25
+                      },
+                      "end": {
+                        "line": 199,
+                        "column": 83
+                      }
+                    },
+                    "callee": {
+                      "type": "MemberExpression",
+                      "start": 7723,
+                      "end": 7779,
+                      "loc": {
+                        "start": {
+                          "line": 199,
+                          "column": 25
+                        },
+                        "end": {
+                          "line": 199,
+                          "column": 81
+                        }
+                      },
+                      "object": {
+                        "type": "CallExpression",
+                        "start": 7723,
+                        "end": 7774,
+                        "loc": {
+                          "start": {
+                            "line": 199,
+                            "column": 25
+                          },
+                          "end": {
+                            "line": 199,
+                            "column": 76
+                          }
+                        },
+                        "callee": {
+                          "type": "MemberExpression",
+                          "start": 7723,
+                          "end": 7761,
+                          "loc": {
+                            "start": {
+                              "line": 199,
+                              "column": 25
+                            },
+                            "end": {
+                              "line": 199,
+                              "column": 63
+                            }
+                          },
+                          "object": {
+                            "type": "CallExpression",
+                            "start": 7723,
+                            "end": 7757,
+                            "loc": {
+                              "start": {
+                                "line": 199,
+                                "column": 25
+                              },
+                              "end": {
+                                "line": 199,
+                                "column": 59
+                              }
+                            },
+                            "callee": {
+                              "type": "MemberExpression",
+                              "start": 7723,
+                              "end": 7742,
+                              "loc": {
+                                "start": {
+                                  "line": 199,
+                                  "column": 25
+                                },
+                                "end": {
+                                  "line": 199,
+                                  "column": 44
+                                }
+                              },
+                              "object": {
+                                "type": "MemberExpression",
+                                "start": 7723,
+                                "end": 7732,
+                                "loc": {
+                                  "start": {
+                                    "line": 199,
+                                    "column": 25
+                                  },
+                                  "end": {
+                                    "line": 199,
+                                    "column": 34
+                                  }
+                                },
+                                "object": {
+                                  "type": "Identifier",
+                                  "start": 7723,
+                                  "end": 7726,
+                                  "loc": {
+                                    "start": {
+                                      "line": 199,
+                                      "column": 25
+                                    },
+                                    "end": {
+                                      "line": 199,
+                                      "column": 28
+                                    },
+                                    "identifierName": "cfg"
+                                  },
+                                  "name": "cfg"
+                                },
+                                "property": {
+                                  "type": "Identifier",
+                                  "start": 7727,
+                                  "end": 7732,
+                                  "loc": {
+                                    "start": {
+                                      "line": 199,
+                                      "column": 29
+                                    },
+                                    "end": {
+                                      "line": 199,
+                                      "column": 34
+                                    },
+                                    "identifierName": "curve"
+                                  },
+                                  "name": "curve"
+                                },
+                                "computed": false
+                              },
+                              "property": {
+                                "type": "Identifier",
+                                "start": 7733,
+                                "end": 7742,
+                                "loc": {
+                                  "start": {
+                                    "line": 199,
+                                    "column": 35
+                                  },
+                                  "end": {
+                                    "line": 199,
+                                    "column": 44
+                                  },
+                                  "identifierName": "getPoints"
+                                },
+                                "name": "getPoints"
+                              },
+                              "computed": false
+                            },
+                            "arguments": [
+                              {
+                                "type": "MemberExpression",
+                                "start": 7743,
+                                "end": 7756,
+                                "loc": {
+                                  "start": {
+                                    "line": 199,
+                                    "column": 45
+                                  },
+                                  "end": {
+                                    "line": 199,
+                                    "column": 58
+                                  }
+                                },
+                                "object": {
+                                  "type": "Identifier",
+                                  "start": 7743,
+                                  "end": 7746,
+                                  "loc": {
+                                    "start": {
+                                      "line": 199,
+                                      "column": 45
+                                    },
+                                    "end": {
+                                      "line": 199,
+                                      "column": 48
+                                    },
+                                    "identifierName": "cfg"
+                                  },
+                                  "name": "cfg"
+                                },
+                                "property": {
+                                  "type": "Identifier",
+                                  "start": 7747,
+                                  "end": 7756,
+                                  "loc": {
+                                    "start": {
+                                      "line": 199,
+                                      "column": 49
+                                    },
+                                    "end": {
+                                      "line": 199,
+                                      "column": 58
+                                    },
+                                    "identifierName": "divisions"
+                                  },
+                                  "name": "divisions"
+                                },
+                                "computed": false
+                              }
+                            ]
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 7758,
+                            "end": 7761,
+                            "loc": {
+                              "start": {
+                                "line": 199,
+                                "column": 60
+                              },
+                              "end": {
+                                "line": 199,
+                                "column": 63
+                              },
+                              "identifierName": "map"
+                            },
+                            "name": "map"
+                          },
+                          "computed": false
+                        },
+                        "arguments": [
+                          {
+                            "type": "ArrowFunctionExpression",
+                            "start": 7762,
+                            "end": 7773,
+                            "loc": {
+                              "start": {
+                                "line": 199,
+                                "column": 64
+                              },
+                              "end": {
+                                "line": 199,
+                                "column": 75
+                              }
+                            },
+                            "id": null,
+                            "generator": false,
+                            "expression": true,
+                            "async": false,
+                            "params": [
+                              {
+                                "type": "Identifier",
+                                "start": 7762,
+                                "end": 7763,
+                                "loc": {
+                                  "start": {
+                                    "line": 199,
+                                    "column": 64
+                                  },
+                                  "end": {
+                                    "line": 199,
+                                    "column": 65
+                                  },
+                                  "identifierName": "a"
+                                },
+                                "name": "a"
+                              }
+                            ],
+                            "body": {
+                              "type": "ArrayExpression",
+                              "start": 7767,
+                              "end": 7773,
+                              "loc": {
+                                "start": {
+                                  "line": 199,
+                                  "column": 69
+                                },
+                                "end": {
+                                  "line": 199,
+                                  "column": 75
+                                }
+                              },
+                              "elements": [
+                                {
+                                  "type": "SpreadElement",
+                                  "start": 7768,
+                                  "end": 7772,
+                                  "loc": {
+                                    "start": {
+                                      "line": 199,
+                                      "column": 70
+                                    },
+                                    "end": {
+                                      "line": 199,
+                                      "column": 74
+                                    }
+                                  },
+                                  "argument": {
+                                    "type": "Identifier",
+                                    "start": 7771,
+                                    "end": 7772,
+                                    "loc": {
+                                      "start": {
+                                        "line": 199,
+                                        "column": 73
+                                      },
+                                      "end": {
+                                        "line": 199,
+                                        "column": 74
+                                      },
+                                      "identifierName": "a"
+                                    },
+                                    "name": "a"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "property": {
+                        "type": "Identifier",
+                        "start": 7775,
+                        "end": 7779,
+                        "loc": {
+                          "start": {
+                            "line": 199,
+                            "column": 77
+                          },
+                          "end": {
+                            "line": 199,
+                            "column": 81
+                          },
+                          "identifierName": "flat"
+                        },
+                        "name": "flat"
+                      },
+                      "computed": false
+                    },
+                    "arguments": []
+                  }
+                }
+              ],
+              "kind": "let"
+            },
+            {
+              "type": "ReturnStatement",
+              "start": 7787,
+              "end": 7876,
+              "loc": {
+                "start": {
+                  "line": 200,
+                  "column": 4
+                },
+                "end": {
+                  "line": 203,
+                  "column": 7
+                }
+              },
+              "argument": {
+                "type": "CallExpression",
+                "start": 7794,
+                "end": 7875,
+                "loc": {
+                  "start": {
+                    "line": 200,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 203,
+                    "column": 6
+                  }
+                },
+                "callee": {
+                  "type": "Identifier",
+                  "start": 7794,
+                  "end": 7815,
+                  "loc": {
+                    "start": {
+                      "line": 200,
+                      "column": 11
+                    },
+                    "end": {
+                      "line": 200,
+                      "column": 32
+                    },
+                    "identifierName": "buildPolylineGeometry"
+                  },
+                  "name": "buildPolylineGeometry"
+                },
+                "arguments": [
+                  {
+                    "type": "ObjectExpression",
+                    "start": 7816,
+                    "end": 7874,
+                    "loc": {
+                      "start": {
+                        "line": 200,
+                        "column": 33
+                      },
+                      "end": {
+                        "line": 203,
+                        "column": 5
+                      }
+                    },
+                    "properties": [
+                      {
+                        "type": "ObjectProperty",
+                        "start": 7826,
+                        "end": 7836,
+                        "loc": {
+                          "start": {
+                            "line": 201,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 201,
+                            "column": 18
+                          }
+                        },
+                        "method": false,
+                        "shorthand": false,
+                        "computed": false,
+                        "key": {
+                          "type": "Identifier",
+                          "start": 7826,
+                          "end": 7828,
+                          "loc": {
+                            "start": {
+                              "line": 201,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 201,
+                              "column": 10
+                            },
+                            "identifierName": "id"
+                          },
+                          "name": "id"
+                        },
+                        "value": {
+                          "type": "MemberExpression",
+                          "start": 7830,
+                          "end": 7836,
+                          "loc": {
+                            "start": {
+                              "line": 201,
+                              "column": 12
+                            },
+                            "end": {
+                              "line": 201,
+                              "column": 18
+                            }
+                          },
+                          "object": {
+                            "type": "Identifier",
+                            "start": 7830,
+                            "end": 7833,
+                            "loc": {
+                              "start": {
+                                "line": 201,
+                                "column": 12
+                              },
+                              "end": {
+                                "line": 201,
+                                "column": 15
+                              },
+                              "identifierName": "cfg"
+                            },
+                            "name": "cfg"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 7834,
+                            "end": 7836,
+                            "loc": {
+                              "start": {
+                                "line": 201,
+                                "column": 16
+                              },
+                              "end": {
+                                "line": 201,
+                                "column": 18
+                              },
+                              "identifierName": "id"
+                            },
+                            "name": "id"
+                          },
+                          "computed": false
+                        }
+                      },
+                      {
+                        "type": "ObjectProperty",
+                        "start": 7846,
+                        "end": 7868,
+                        "loc": {
+                          "start": {
+                            "line": 202,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 202,
+                            "column": 30
+                          }
+                        },
+                        "method": false,
+                        "shorthand": false,
+                        "computed": false,
+                        "key": {
+                          "type": "Identifier",
+                          "start": 7846,
+                          "end": 7852,
+                          "loc": {
+                            "start": {
+                              "line": 202,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 202,
+                              "column": 14
+                            },
+                            "identifierName": "points"
+                          },
+                          "name": "points"
+                        },
+                        "value": {
+                          "type": "Identifier",
+                          "start": 7854,
+                          "end": 7868,
+                          "loc": {
+                            "start": {
+                              "line": 202,
+                              "column": 16
+                            },
+                            "end": {
+                              "line": 202,
+                              "column": 30
+                            },
+                            "identifierName": "polylinePoints"
+                          },
+                          "name": "polylinePoints"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
           "directives": []
         },
         "leadingComments": [],
@@ -1587,45 +2284,45 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 3144,
-        "end": 3175,
+        "start": 7880,
+        "end": 7943,
         "loc": {
           "start": {
-            "line": 87,
+            "line": 206,
             "column": 0
           },
           "end": {
-            "line": 87,
-            "column": 31
+            "line": 206,
+            "column": 63
           }
         },
         "declaration": null,
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 3152,
-            "end": 3173,
+            "start": 7888,
+            "end": 7909,
             "loc": {
               "start": {
-                "line": 87,
+                "line": 206,
                 "column": 8
               },
               "end": {
-                "line": 87,
+                "line": 206,
                 "column": 29
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 3152,
-              "end": 3173,
+              "start": 7888,
+              "end": 7909,
               "loc": {
                 "start": {
-                  "line": 87,
+                  "line": 206,
                   "column": 8
                 },
                 "end": {
-                  "line": 87,
+                  "line": 206,
                   "column": 29
                 },
                 "identifierName": "buildPolylineGeometry"
@@ -1634,20 +2331,69 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 3152,
-              "end": 3173,
+              "start": 7888,
+              "end": 7909,
               "loc": {
                 "start": {
-                  "line": 87,
+                  "line": 206,
                   "column": 8
                 },
                 "end": {
-                  "line": 87,
+                  "line": 206,
                   "column": 29
                 },
                 "identifierName": "buildPolylineGeometry"
               },
               "name": "buildPolylineGeometry"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 7911,
+            "end": 7941,
+            "loc": {
+              "start": {
+                "line": 206,
+                "column": 31
+              },
+              "end": {
+                "line": 206,
+                "column": 61
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 7911,
+              "end": 7941,
+              "loc": {
+                "start": {
+                  "line": 206,
+                  "column": 31
+                },
+                "end": {
+                  "line": 206,
+                  "column": 61
+                },
+                "identifierName": "buildPolylineGeometryFromCurve"
+              },
+              "name": "buildPolylineGeometryFromCurve"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 7911,
+              "end": 7941,
+              "loc": {
+                "start": {
+                  "line": 206,
+                  "column": 31
+                },
+                "end": {
+                  "line": 206,
+                  "column": 61
+                },
+                "identifierName": "buildPolylineGeometryFromCurve"
+              },
+              "name": "buildPolylineGeometryFromCurve"
             }
           }
         ],
@@ -1655,16 +2401,16 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 3144,
-        "end": 3175,
+        "start": 7880,
+        "end": 7943,
         "loc": {
           "start": {
-            "line": 87,
+            "line": 206,
             "column": 0
           },
           "end": {
-            "line": 87,
-            "column": 31
+            "line": 206,
+            "column": 63
           }
         },
         "declaration": {
@@ -3114,7 +3860,8 @@
                 }
               }
             ],
-            "directives": []
+            "directives": [],
+            "trailingComments": null
           },
           "leadingComments": [
             {
@@ -3129,6 +3876,753 @@
                 },
                 "end": {
                   "line": 64,
+                  "column": 3
+                }
+              }
+            }
+          ],
+          "trailingComments": [
+            {
+              "type": "CommentBlock",
+              "value": "*\n * @desc Creates a 3D polyline from curve {@link Geometry}.\n *\n * ## Usage\n *\n * In the example below we'll create a {@link Mesh} with a polyline {@link ReadableGeometry} created from curves.\n *\n * [[Run this example](/examples/#geometry_builders_buildPolylineGeometryFromCurve)]\n *\n * ````javascript\n * //------------------------------------------------------------------------------------------------------------------\n * // Import the modules we need for this example\n * //------------------------------------------------------------------------------------------------------------------\n *\n * import {buildPolylineGeometryFromCurve, Viewer, Mesh, PhongMaterial, NavCubePlugin, CubicBezierCurve, SplineCurve, QuadraticBezierCurve, ReadableGeometry} from \"../../dist/xeokit-sdk.min.es.js\";\n *\n * //------------------------------------------------------------------------------------------------------------------\n * // Create a Viewer and arrange the camera\n * //------------------------------------------------------------------------------------------------------------------\n *\n * const viewer = new Viewer({\n *     canvasId: \"myCanvas\"\n * });\n *\n * new NavCubePlugin(viewer, {\n *     canvasId: \"myNavCubeCanvas\",\n *     visible: true,\n *     size: 250,\n *     alignment: \"bottomRight\",\n *     bottomMargin: 100,\n *     rightMargin: 10\n * });\n *\n * viewer.camera.eye = [0, -250, 1];\n * viewer.camera.look = [0, 0, 0];\n * viewer.camera.up = [0, 1, 0];\n *\n * //------------------------------------------------------------------------------------------------------------------\n * // Create a mesh with polyline shape from Spline\n * //------------------------------------------------------------------------------------------------------------------\n *\n * new Mesh(viewer.scene, {\n *     geometry: new ReadableGeometry(viewer.scene, buildPolylineGeometryFromCurve({\n *         id: \"SplineCurve\",\n *         curve: new SplineCurve(viewer.scene, {\n *             points: [\n *                 [-65.77614, 0, -88.881992],\n *                 [90.020852, 0, -61.589088],\n *                 [-67.766247, 0, -22.071238],\n *                 [93.148164, 0, -13.826507],\n *                 [-14.033343, 0, 3.231558],\n *                 [32.592034, 0, 9.20188],\n *                 [3.309023, 0, 22.848332],\n *                 [23.210098, 0, 28.818655],\n *             ],\n *         }),\n *         divisions: 100,\n *     })),\n *     material: new PhongMaterial(viewer.scene, {\n *         emissive: [1, 0, 0]\n *     })\n * });\n *\n * //------------------------------------------------------------------------------------------------------------------\n * // Create a mesh with polyline shape from CubicBezier\n * //------------------------------------------------------------------------------------------------------------------\n *\n * new Mesh(viewer.scene, {\n *     geometry: new ReadableGeometry(viewer.scene, buildPolylineGeometryFromCurve({\n *         id: \"CubicBezierCurve\",\n *         curve: new CubicBezierCurve(viewer.scene, {\n *             v0: [120, 0, 100],\n *             v1: [120, 0, 0],\n *             v2: [80, 0, 100],\n *             v3: [80, 0, 0],\n *         }),\n *         divisions: 50,\n *     })),\n *     material: new PhongMaterial(viewer.scene, {\n *         emissive: [0, 1, 0]\n *     })\n * });\n *\n * //------------------------------------------------------------------------------------------------------------------\n * // Create a mesh with polyline shape from QuadraticBezier\n * //------------------------------------------------------------------------------------------------------------------\n *\n * new Mesh(viewer.scene, {\n *     geometry: new ReadableGeometry(viewer.scene, buildPolylineGeometryFromCurve({\n *         id: \"QuadraticBezierCurve\",\n *         curve: new QuadraticBezierCurve(viewer.scene, {\n *             v0: [-100, 0, 100],\n *             v1: [-50, 0, 150],\n *             v2: [-50, 0, 0],\n *         }),\n *         divisions: 20,\n *     })),\n *     material: new PhongMaterial(viewer.scene, {\n *         emissive: [0, 0, 1]\n *     })\n * });\n * ````\n *\n * @function buildPolylineGeometryFromCurve\n * @param {*} [cfg] Configs\n * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.\n * @param {Object} [cfg.curve]  Curve for which polyline will be created.\n * @param {Number} [cfg.divisions]  The number of divisions.\n * @returns {Object} Configuration for a {@link Geometry} subtype.\n ",
+              "start": 3144,
+              "end": 7644,
+              "loc": {
+                "start": {
+                  "line": 87,
+                  "column": 0
+                },
+                "end": {
+                  "line": 196,
+                  "column": 3
+                }
+              }
+            }
+          ]
+        },
+        "specifiers": null,
+        "source": null,
+        "leadingComments": null
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 7880,
+        "end": 7943,
+        "loc": {
+          "start": {
+            "line": 206,
+            "column": 0
+          },
+          "end": {
+            "line": 206,
+            "column": 63
+          }
+        },
+        "declaration": {
+          "type": "FunctionDeclaration",
+          "start": 7645,
+          "end": 7878,
+          "loc": {
+            "start": {
+              "line": 197,
+              "column": 0
+            },
+            "end": {
+              "line": 204,
+              "column": 1
+            }
+          },
+          "id": {
+            "type": "Identifier",
+            "start": 7654,
+            "end": 7684,
+            "loc": {
+              "start": {
+                "line": 197,
+                "column": 9
+              },
+              "end": {
+                "line": 197,
+                "column": 39
+              },
+              "identifierName": "buildPolylineGeometryFromCurve"
+            },
+            "name": "buildPolylineGeometryFromCurve",
+            "leadingComments": null
+          },
+          "generator": false,
+          "expression": false,
+          "async": false,
+          "params": [
+            {
+              "type": "AssignmentPattern",
+              "start": 7685,
+              "end": 7693,
+              "loc": {
+                "start": {
+                  "line": 197,
+                  "column": 40
+                },
+                "end": {
+                  "line": 197,
+                  "column": 48
+                }
+              },
+              "left": {
+                "type": "Identifier",
+                "start": 7685,
+                "end": 7688,
+                "loc": {
+                  "start": {
+                    "line": 197,
+                    "column": 40
+                  },
+                  "end": {
+                    "line": 197,
+                    "column": 43
+                  },
+                  "identifierName": "cfg"
+                },
+                "name": "cfg"
+              },
+              "right": {
+                "type": "ObjectExpression",
+                "start": 7691,
+                "end": 7693,
+                "loc": {
+                  "start": {
+                    "line": 197,
+                    "column": 46
+                  },
+                  "end": {
+                    "line": 197,
+                    "column": 48
+                  }
+                },
+                "properties": []
+              }
+            }
+          ],
+          "body": {
+            "type": "BlockStatement",
+            "start": 7695,
+            "end": 7878,
+            "loc": {
+              "start": {
+                "line": 197,
+                "column": 50
+              },
+              "end": {
+                "line": 204,
+                "column": 1
+              }
+            },
+            "body": [
+              {
+                "type": "VariableDeclaration",
+                "start": 7702,
+                "end": 7782,
+                "loc": {
+                  "start": {
+                    "line": 199,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 199,
+                    "column": 84
+                  }
+                },
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start": 7706,
+                    "end": 7781,
+                    "loc": {
+                      "start": {
+                        "line": 199,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 199,
+                        "column": 83
+                      }
+                    },
+                    "id": {
+                      "type": "Identifier",
+                      "start": 7706,
+                      "end": 7720,
+                      "loc": {
+                        "start": {
+                          "line": 199,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 199,
+                          "column": 22
+                        },
+                        "identifierName": "polylinePoints"
+                      },
+                      "name": "polylinePoints"
+                    },
+                    "init": {
+                      "type": "CallExpression",
+                      "start": 7723,
+                      "end": 7781,
+                      "loc": {
+                        "start": {
+                          "line": 199,
+                          "column": 25
+                        },
+                        "end": {
+                          "line": 199,
+                          "column": 83
+                        }
+                      },
+                      "callee": {
+                        "type": "MemberExpression",
+                        "start": 7723,
+                        "end": 7779,
+                        "loc": {
+                          "start": {
+                            "line": 199,
+                            "column": 25
+                          },
+                          "end": {
+                            "line": 199,
+                            "column": 81
+                          }
+                        },
+                        "object": {
+                          "type": "CallExpression",
+                          "start": 7723,
+                          "end": 7774,
+                          "loc": {
+                            "start": {
+                              "line": 199,
+                              "column": 25
+                            },
+                            "end": {
+                              "line": 199,
+                              "column": 76
+                            }
+                          },
+                          "callee": {
+                            "type": "MemberExpression",
+                            "start": 7723,
+                            "end": 7761,
+                            "loc": {
+                              "start": {
+                                "line": 199,
+                                "column": 25
+                              },
+                              "end": {
+                                "line": 199,
+                                "column": 63
+                              }
+                            },
+                            "object": {
+                              "type": "CallExpression",
+                              "start": 7723,
+                              "end": 7757,
+                              "loc": {
+                                "start": {
+                                  "line": 199,
+                                  "column": 25
+                                },
+                                "end": {
+                                  "line": 199,
+                                  "column": 59
+                                }
+                              },
+                              "callee": {
+                                "type": "MemberExpression",
+                                "start": 7723,
+                                "end": 7742,
+                                "loc": {
+                                  "start": {
+                                    "line": 199,
+                                    "column": 25
+                                  },
+                                  "end": {
+                                    "line": 199,
+                                    "column": 44
+                                  }
+                                },
+                                "object": {
+                                  "type": "MemberExpression",
+                                  "start": 7723,
+                                  "end": 7732,
+                                  "loc": {
+                                    "start": {
+                                      "line": 199,
+                                      "column": 25
+                                    },
+                                    "end": {
+                                      "line": 199,
+                                      "column": 34
+                                    }
+                                  },
+                                  "object": {
+                                    "type": "Identifier",
+                                    "start": 7723,
+                                    "end": 7726,
+                                    "loc": {
+                                      "start": {
+                                        "line": 199,
+                                        "column": 25
+                                      },
+                                      "end": {
+                                        "line": 199,
+                                        "column": 28
+                                      },
+                                      "identifierName": "cfg"
+                                    },
+                                    "name": "cfg"
+                                  },
+                                  "property": {
+                                    "type": "Identifier",
+                                    "start": 7727,
+                                    "end": 7732,
+                                    "loc": {
+                                      "start": {
+                                        "line": 199,
+                                        "column": 29
+                                      },
+                                      "end": {
+                                        "line": 199,
+                                        "column": 34
+                                      },
+                                      "identifierName": "curve"
+                                    },
+                                    "name": "curve"
+                                  },
+                                  "computed": false
+                                },
+                                "property": {
+                                  "type": "Identifier",
+                                  "start": 7733,
+                                  "end": 7742,
+                                  "loc": {
+                                    "start": {
+                                      "line": 199,
+                                      "column": 35
+                                    },
+                                    "end": {
+                                      "line": 199,
+                                      "column": 44
+                                    },
+                                    "identifierName": "getPoints"
+                                  },
+                                  "name": "getPoints"
+                                },
+                                "computed": false
+                              },
+                              "arguments": [
+                                {
+                                  "type": "MemberExpression",
+                                  "start": 7743,
+                                  "end": 7756,
+                                  "loc": {
+                                    "start": {
+                                      "line": 199,
+                                      "column": 45
+                                    },
+                                    "end": {
+                                      "line": 199,
+                                      "column": 58
+                                    }
+                                  },
+                                  "object": {
+                                    "type": "Identifier",
+                                    "start": 7743,
+                                    "end": 7746,
+                                    "loc": {
+                                      "start": {
+                                        "line": 199,
+                                        "column": 45
+                                      },
+                                      "end": {
+                                        "line": 199,
+                                        "column": 48
+                                      },
+                                      "identifierName": "cfg"
+                                    },
+                                    "name": "cfg"
+                                  },
+                                  "property": {
+                                    "type": "Identifier",
+                                    "start": 7747,
+                                    "end": 7756,
+                                    "loc": {
+                                      "start": {
+                                        "line": 199,
+                                        "column": 49
+                                      },
+                                      "end": {
+                                        "line": 199,
+                                        "column": 58
+                                      },
+                                      "identifierName": "divisions"
+                                    },
+                                    "name": "divisions"
+                                  },
+                                  "computed": false
+                                }
+                              ]
+                            },
+                            "property": {
+                              "type": "Identifier",
+                              "start": 7758,
+                              "end": 7761,
+                              "loc": {
+                                "start": {
+                                  "line": 199,
+                                  "column": 60
+                                },
+                                "end": {
+                                  "line": 199,
+                                  "column": 63
+                                },
+                                "identifierName": "map"
+                              },
+                              "name": "map"
+                            },
+                            "computed": false
+                          },
+                          "arguments": [
+                            {
+                              "type": "ArrowFunctionExpression",
+                              "start": 7762,
+                              "end": 7773,
+                              "loc": {
+                                "start": {
+                                  "line": 199,
+                                  "column": 64
+                                },
+                                "end": {
+                                  "line": 199,
+                                  "column": 75
+                                }
+                              },
+                              "id": null,
+                              "generator": false,
+                              "expression": true,
+                              "async": false,
+                              "params": [
+                                {
+                                  "type": "Identifier",
+                                  "start": 7762,
+                                  "end": 7763,
+                                  "loc": {
+                                    "start": {
+                                      "line": 199,
+                                      "column": 64
+                                    },
+                                    "end": {
+                                      "line": 199,
+                                      "column": 65
+                                    },
+                                    "identifierName": "a"
+                                  },
+                                  "name": "a"
+                                }
+                              ],
+                              "body": {
+                                "type": "ArrayExpression",
+                                "start": 7767,
+                                "end": 7773,
+                                "loc": {
+                                  "start": {
+                                    "line": 199,
+                                    "column": 69
+                                  },
+                                  "end": {
+                                    "line": 199,
+                                    "column": 75
+                                  }
+                                },
+                                "elements": [
+                                  {
+                                    "type": "SpreadElement",
+                                    "start": 7768,
+                                    "end": 7772,
+                                    "loc": {
+                                      "start": {
+                                        "line": 199,
+                                        "column": 70
+                                      },
+                                      "end": {
+                                        "line": 199,
+                                        "column": 74
+                                      }
+                                    },
+                                    "argument": {
+                                      "type": "Identifier",
+                                      "start": 7771,
+                                      "end": 7772,
+                                      "loc": {
+                                        "start": {
+                                          "line": 199,
+                                          "column": 73
+                                        },
+                                        "end": {
+                                          "line": 199,
+                                          "column": 74
+                                        },
+                                        "identifierName": "a"
+                                      },
+                                      "name": "a"
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "start": 7775,
+                          "end": 7779,
+                          "loc": {
+                            "start": {
+                              "line": 199,
+                              "column": 77
+                            },
+                            "end": {
+                              "line": 199,
+                              "column": 81
+                            },
+                            "identifierName": "flat"
+                          },
+                          "name": "flat"
+                        },
+                        "computed": false
+                      },
+                      "arguments": []
+                    }
+                  }
+                ],
+                "kind": "let"
+              },
+              {
+                "type": "ReturnStatement",
+                "start": 7787,
+                "end": 7876,
+                "loc": {
+                  "start": {
+                    "line": 200,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 203,
+                    "column": 7
+                  }
+                },
+                "argument": {
+                  "type": "CallExpression",
+                  "start": 7794,
+                  "end": 7875,
+                  "loc": {
+                    "start": {
+                      "line": 200,
+                      "column": 11
+                    },
+                    "end": {
+                      "line": 203,
+                      "column": 6
+                    }
+                  },
+                  "callee": {
+                    "type": "Identifier",
+                    "start": 7794,
+                    "end": 7815,
+                    "loc": {
+                      "start": {
+                        "line": 200,
+                        "column": 11
+                      },
+                      "end": {
+                        "line": 200,
+                        "column": 32
+                      },
+                      "identifierName": "buildPolylineGeometry"
+                    },
+                    "name": "buildPolylineGeometry"
+                  },
+                  "arguments": [
+                    {
+                      "type": "ObjectExpression",
+                      "start": 7816,
+                      "end": 7874,
+                      "loc": {
+                        "start": {
+                          "line": 200,
+                          "column": 33
+                        },
+                        "end": {
+                          "line": 203,
+                          "column": 5
+                        }
+                      },
+                      "properties": [
+                        {
+                          "type": "ObjectProperty",
+                          "start": 7826,
+                          "end": 7836,
+                          "loc": {
+                            "start": {
+                              "line": 201,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 201,
+                              "column": 18
+                            }
+                          },
+                          "method": false,
+                          "shorthand": false,
+                          "computed": false,
+                          "key": {
+                            "type": "Identifier",
+                            "start": 7826,
+                            "end": 7828,
+                            "loc": {
+                              "start": {
+                                "line": 201,
+                                "column": 8
+                              },
+                              "end": {
+                                "line": 201,
+                                "column": 10
+                              },
+                              "identifierName": "id"
+                            },
+                            "name": "id"
+                          },
+                          "value": {
+                            "type": "MemberExpression",
+                            "start": 7830,
+                            "end": 7836,
+                            "loc": {
+                              "start": {
+                                "line": 201,
+                                "column": 12
+                              },
+                              "end": {
+                                "line": 201,
+                                "column": 18
+                              }
+                            },
+                            "object": {
+                              "type": "Identifier",
+                              "start": 7830,
+                              "end": 7833,
+                              "loc": {
+                                "start": {
+                                  "line": 201,
+                                  "column": 12
+                                },
+                                "end": {
+                                  "line": 201,
+                                  "column": 15
+                                },
+                                "identifierName": "cfg"
+                              },
+                              "name": "cfg"
+                            },
+                            "property": {
+                              "type": "Identifier",
+                              "start": 7834,
+                              "end": 7836,
+                              "loc": {
+                                "start": {
+                                  "line": 201,
+                                  "column": 16
+                                },
+                                "end": {
+                                  "line": 201,
+                                  "column": 18
+                                },
+                                "identifierName": "id"
+                              },
+                              "name": "id"
+                            },
+                            "computed": false
+                          }
+                        },
+                        {
+                          "type": "ObjectProperty",
+                          "start": 7846,
+                          "end": 7868,
+                          "loc": {
+                            "start": {
+                              "line": 202,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 202,
+                              "column": 30
+                            }
+                          },
+                          "method": false,
+                          "shorthand": false,
+                          "computed": false,
+                          "key": {
+                            "type": "Identifier",
+                            "start": 7846,
+                            "end": 7852,
+                            "loc": {
+                              "start": {
+                                "line": 202,
+                                "column": 8
+                              },
+                              "end": {
+                                "line": 202,
+                                "column": 14
+                              },
+                              "identifierName": "points"
+                            },
+                            "name": "points"
+                          },
+                          "value": {
+                            "type": "Identifier",
+                            "start": 7854,
+                            "end": 7868,
+                            "loc": {
+                              "start": {
+                                "line": 202,
+                                "column": 16
+                              },
+                              "end": {
+                                "line": 202,
+                                "column": 30
+                              },
+                              "identifierName": "polylinePoints"
+                            },
+                            "name": "polylinePoints"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ],
+            "directives": []
+          },
+          "leadingComments": [
+            {
+              "type": "CommentBlock",
+              "value": "*\n * @desc Creates a 3D polyline from curve {@link Geometry}.\n *\n * ## Usage\n *\n * In the example below we'll create a {@link Mesh} with a polyline {@link ReadableGeometry} created from curves.\n *\n * [[Run this example](/examples/#geometry_builders_buildPolylineGeometryFromCurve)]\n *\n * ````javascript\n * //------------------------------------------------------------------------------------------------------------------\n * // Import the modules we need for this example\n * //------------------------------------------------------------------------------------------------------------------\n *\n * import {buildPolylineGeometryFromCurve, Viewer, Mesh, PhongMaterial, NavCubePlugin, CubicBezierCurve, SplineCurve, QuadraticBezierCurve, ReadableGeometry} from \"../../dist/xeokit-sdk.min.es.js\";\n *\n * //------------------------------------------------------------------------------------------------------------------\n * // Create a Viewer and arrange the camera\n * //------------------------------------------------------------------------------------------------------------------\n *\n * const viewer = new Viewer({\n *     canvasId: \"myCanvas\"\n * });\n *\n * new NavCubePlugin(viewer, {\n *     canvasId: \"myNavCubeCanvas\",\n *     visible: true,\n *     size: 250,\n *     alignment: \"bottomRight\",\n *     bottomMargin: 100,\n *     rightMargin: 10\n * });\n *\n * viewer.camera.eye = [0, -250, 1];\n * viewer.camera.look = [0, 0, 0];\n * viewer.camera.up = [0, 1, 0];\n *\n * //------------------------------------------------------------------------------------------------------------------\n * // Create a mesh with polyline shape from Spline\n * //------------------------------------------------------------------------------------------------------------------\n *\n * new Mesh(viewer.scene, {\n *     geometry: new ReadableGeometry(viewer.scene, buildPolylineGeometryFromCurve({\n *         id: \"SplineCurve\",\n *         curve: new SplineCurve(viewer.scene, {\n *             points: [\n *                 [-65.77614, 0, -88.881992],\n *                 [90.020852, 0, -61.589088],\n *                 [-67.766247, 0, -22.071238],\n *                 [93.148164, 0, -13.826507],\n *                 [-14.033343, 0, 3.231558],\n *                 [32.592034, 0, 9.20188],\n *                 [3.309023, 0, 22.848332],\n *                 [23.210098, 0, 28.818655],\n *             ],\n *         }),\n *         divisions: 100,\n *     })),\n *     material: new PhongMaterial(viewer.scene, {\n *         emissive: [1, 0, 0]\n *     })\n * });\n *\n * //------------------------------------------------------------------------------------------------------------------\n * // Create a mesh with polyline shape from CubicBezier\n * //------------------------------------------------------------------------------------------------------------------\n *\n * new Mesh(viewer.scene, {\n *     geometry: new ReadableGeometry(viewer.scene, buildPolylineGeometryFromCurve({\n *         id: \"CubicBezierCurve\",\n *         curve: new CubicBezierCurve(viewer.scene, {\n *             v0: [120, 0, 100],\n *             v1: [120, 0, 0],\n *             v2: [80, 0, 100],\n *             v3: [80, 0, 0],\n *         }),\n *         divisions: 50,\n *     })),\n *     material: new PhongMaterial(viewer.scene, {\n *         emissive: [0, 1, 0]\n *     })\n * });\n *\n * //------------------------------------------------------------------------------------------------------------------\n * // Create a mesh with polyline shape from QuadraticBezier\n * //------------------------------------------------------------------------------------------------------------------\n *\n * new Mesh(viewer.scene, {\n *     geometry: new ReadableGeometry(viewer.scene, buildPolylineGeometryFromCurve({\n *         id: \"QuadraticBezierCurve\",\n *         curve: new QuadraticBezierCurve(viewer.scene, {\n *             v0: [-100, 0, 100],\n *             v1: [-50, 0, 150],\n *             v2: [-50, 0, 0],\n *         }),\n *         divisions: 20,\n *     })),\n *     material: new PhongMaterial(viewer.scene, {\n *         emissive: [0, 0, 1]\n *     })\n * });\n * ````\n *\n * @function buildPolylineGeometryFromCurve\n * @param {*} [cfg] Configs\n * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.\n * @param {Object} [cfg.curve]  Curve for which polyline will be created.\n * @param {Number} [cfg.divisions]  The number of divisions.\n * @returns {Object} Configuration for a {@link Geometry} subtype.\n ",
+              "start": 3144,
+              "end": 7644,
+              "loc": {
+                "start": {
+                  "line": 87,
+                  "column": 0
+                },
+                "end": {
+                  "line": 196,
                   "column": 3
                 }
               }
@@ -3156,6 +4650,22 @@
         },
         "end": {
           "line": 64,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n * @desc Creates a 3D polyline from curve {@link Geometry}.\n *\n * ## Usage\n *\n * In the example below we'll create a {@link Mesh} with a polyline {@link ReadableGeometry} created from curves.\n *\n * [[Run this example](/examples/#geometry_builders_buildPolylineGeometryFromCurve)]\n *\n * ````javascript\n * //------------------------------------------------------------------------------------------------------------------\n * // Import the modules we need for this example\n * //------------------------------------------------------------------------------------------------------------------\n *\n * import {buildPolylineGeometryFromCurve, Viewer, Mesh, PhongMaterial, NavCubePlugin, CubicBezierCurve, SplineCurve, QuadraticBezierCurve, ReadableGeometry} from \"../../dist/xeokit-sdk.min.es.js\";\n *\n * //------------------------------------------------------------------------------------------------------------------\n * // Create a Viewer and arrange the camera\n * //------------------------------------------------------------------------------------------------------------------\n *\n * const viewer = new Viewer({\n *     canvasId: \"myCanvas\"\n * });\n *\n * new NavCubePlugin(viewer, {\n *     canvasId: \"myNavCubeCanvas\",\n *     visible: true,\n *     size: 250,\n *     alignment: \"bottomRight\",\n *     bottomMargin: 100,\n *     rightMargin: 10\n * });\n *\n * viewer.camera.eye = [0, -250, 1];\n * viewer.camera.look = [0, 0, 0];\n * viewer.camera.up = [0, 1, 0];\n *\n * //------------------------------------------------------------------------------------------------------------------\n * // Create a mesh with polyline shape from Spline\n * //------------------------------------------------------------------------------------------------------------------\n *\n * new Mesh(viewer.scene, {\n *     geometry: new ReadableGeometry(viewer.scene, buildPolylineGeometryFromCurve({\n *         id: \"SplineCurve\",\n *         curve: new SplineCurve(viewer.scene, {\n *             points: [\n *                 [-65.77614, 0, -88.881992],\n *                 [90.020852, 0, -61.589088],\n *                 [-67.766247, 0, -22.071238],\n *                 [93.148164, 0, -13.826507],\n *                 [-14.033343, 0, 3.231558],\n *                 [32.592034, 0, 9.20188],\n *                 [3.309023, 0, 22.848332],\n *                 [23.210098, 0, 28.818655],\n *             ],\n *         }),\n *         divisions: 100,\n *     })),\n *     material: new PhongMaterial(viewer.scene, {\n *         emissive: [1, 0, 0]\n *     })\n * });\n *\n * //------------------------------------------------------------------------------------------------------------------\n * // Create a mesh with polyline shape from CubicBezier\n * //------------------------------------------------------------------------------------------------------------------\n *\n * new Mesh(viewer.scene, {\n *     geometry: new ReadableGeometry(viewer.scene, buildPolylineGeometryFromCurve({\n *         id: \"CubicBezierCurve\",\n *         curve: new CubicBezierCurve(viewer.scene, {\n *             v0: [120, 0, 100],\n *             v1: [120, 0, 0],\n *             v2: [80, 0, 100],\n *             v3: [80, 0, 0],\n *         }),\n *         divisions: 50,\n *     })),\n *     material: new PhongMaterial(viewer.scene, {\n *         emissive: [0, 1, 0]\n *     })\n * });\n *\n * //------------------------------------------------------------------------------------------------------------------\n * // Create a mesh with polyline shape from QuadraticBezier\n * //------------------------------------------------------------------------------------------------------------------\n *\n * new Mesh(viewer.scene, {\n *     geometry: new ReadableGeometry(viewer.scene, buildPolylineGeometryFromCurve({\n *         id: \"QuadraticBezierCurve\",\n *         curve: new QuadraticBezierCurve(viewer.scene, {\n *             v0: [-100, 0, 100],\n *             v1: [-50, 0, 150],\n *             v2: [-50, 0, 0],\n *         }),\n *         divisions: 20,\n *     })),\n *     material: new PhongMaterial(viewer.scene, {\n *         emissive: [0, 0, 1]\n *     })\n * });\n * ````\n *\n * @function buildPolylineGeometryFromCurve\n * @param {*} [cfg] Configs\n * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.\n * @param {Object} [cfg.curve]  Curve for which polyline will be created.\n * @param {Number} [cfg.divisions]  The number of divisions.\n * @returns {Object} Configuration for a {@link Geometry} subtype.\n ",
+      "start": 3144,
+      "end": 7644,
+      "loc": {
+        "start": {
+          "line": 87,
+          "column": 0
+        },
+        "end": {
+          "line": 196,
           "column": 3
         }
       }
@@ -6340,6 +7850,1417 @@
       }
     },
     {
+      "type": "CommentBlock",
+      "value": "*\n * @desc Creates a 3D polyline from curve {@link Geometry}.\n *\n * ## Usage\n *\n * In the example below we'll create a {@link Mesh} with a polyline {@link ReadableGeometry} created from curves.\n *\n * [[Run this example](/examples/#geometry_builders_buildPolylineGeometryFromCurve)]\n *\n * ````javascript\n * //------------------------------------------------------------------------------------------------------------------\n * // Import the modules we need for this example\n * //------------------------------------------------------------------------------------------------------------------\n *\n * import {buildPolylineGeometryFromCurve, Viewer, Mesh, PhongMaterial, NavCubePlugin, CubicBezierCurve, SplineCurve, QuadraticBezierCurve, ReadableGeometry} from \"../../dist/xeokit-sdk.min.es.js\";\n *\n * //------------------------------------------------------------------------------------------------------------------\n * // Create a Viewer and arrange the camera\n * //------------------------------------------------------------------------------------------------------------------\n *\n * const viewer = new Viewer({\n *     canvasId: \"myCanvas\"\n * });\n *\n * new NavCubePlugin(viewer, {\n *     canvasId: \"myNavCubeCanvas\",\n *     visible: true,\n *     size: 250,\n *     alignment: \"bottomRight\",\n *     bottomMargin: 100,\n *     rightMargin: 10\n * });\n *\n * viewer.camera.eye = [0, -250, 1];\n * viewer.camera.look = [0, 0, 0];\n * viewer.camera.up = [0, 1, 0];\n *\n * //------------------------------------------------------------------------------------------------------------------\n * // Create a mesh with polyline shape from Spline\n * //------------------------------------------------------------------------------------------------------------------\n *\n * new Mesh(viewer.scene, {\n *     geometry: new ReadableGeometry(viewer.scene, buildPolylineGeometryFromCurve({\n *         id: \"SplineCurve\",\n *         curve: new SplineCurve(viewer.scene, {\n *             points: [\n *                 [-65.77614, 0, -88.881992],\n *                 [90.020852, 0, -61.589088],\n *                 [-67.766247, 0, -22.071238],\n *                 [93.148164, 0, -13.826507],\n *                 [-14.033343, 0, 3.231558],\n *                 [32.592034, 0, 9.20188],\n *                 [3.309023, 0, 22.848332],\n *                 [23.210098, 0, 28.818655],\n *             ],\n *         }),\n *         divisions: 100,\n *     })),\n *     material: new PhongMaterial(viewer.scene, {\n *         emissive: [1, 0, 0]\n *     })\n * });\n *\n * //------------------------------------------------------------------------------------------------------------------\n * // Create a mesh with polyline shape from CubicBezier\n * //------------------------------------------------------------------------------------------------------------------\n *\n * new Mesh(viewer.scene, {\n *     geometry: new ReadableGeometry(viewer.scene, buildPolylineGeometryFromCurve({\n *         id: \"CubicBezierCurve\",\n *         curve: new CubicBezierCurve(viewer.scene, {\n *             v0: [120, 0, 100],\n *             v1: [120, 0, 0],\n *             v2: [80, 0, 100],\n *             v3: [80, 0, 0],\n *         }),\n *         divisions: 50,\n *     })),\n *     material: new PhongMaterial(viewer.scene, {\n *         emissive: [0, 1, 0]\n *     })\n * });\n *\n * //------------------------------------------------------------------------------------------------------------------\n * // Create a mesh with polyline shape from QuadraticBezier\n * //------------------------------------------------------------------------------------------------------------------\n *\n * new Mesh(viewer.scene, {\n *     geometry: new ReadableGeometry(viewer.scene, buildPolylineGeometryFromCurve({\n *         id: \"QuadraticBezierCurve\",\n *         curve: new QuadraticBezierCurve(viewer.scene, {\n *             v0: [-100, 0, 100],\n *             v1: [-50, 0, 150],\n *             v2: [-50, 0, 0],\n *         }),\n *         divisions: 20,\n *     })),\n *     material: new PhongMaterial(viewer.scene, {\n *         emissive: [0, 0, 1]\n *     })\n * });\n * ````\n *\n * @function buildPolylineGeometryFromCurve\n * @param {*} [cfg] Configs\n * @param {String} [cfg.id] Optional ID, unique among all components in the parent {@link Scene}, generated automatically when omitted.\n * @param {Object} [cfg.curve]  Curve for which polyline will be created.\n * @param {Number} [cfg.divisions]  The number of divisions.\n * @returns {Object} Configuration for a {@link Geometry} subtype.\n ",
+      "start": 3144,
+      "end": 7644,
+      "loc": {
+        "start": {
+          "line": 87,
+          "column": 0
+        },
+        "end": {
+          "line": 196,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "function",
+        "keyword": "function",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "function",
+      "start": 7645,
+      "end": 7653,
+      "loc": {
+        "start": {
+          "line": 197,
+          "column": 0
+        },
+        "end": {
+          "line": 197,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "buildPolylineGeometryFromCurve",
+      "start": 7654,
+      "end": 7684,
+      "loc": {
+        "start": {
+          "line": 197,
+          "column": 9
+        },
+        "end": {
+          "line": 197,
+          "column": 39
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7684,
+      "end": 7685,
+      "loc": {
+        "start": {
+          "line": 197,
+          "column": 39
+        },
+        "end": {
+          "line": 197,
+          "column": 40
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "cfg",
+      "start": 7685,
+      "end": 7688,
+      "loc": {
+        "start": {
+          "line": 197,
+          "column": 40
+        },
+        "end": {
+          "line": 197,
+          "column": 43
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "=",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": true,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "=",
+      "start": 7689,
+      "end": 7690,
+      "loc": {
+        "start": {
+          "line": 197,
+          "column": 44
+        },
+        "end": {
+          "line": 197,
+          "column": 45
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7691,
+      "end": 7692,
+      "loc": {
+        "start": {
+          "line": 197,
+          "column": 46
+        },
+        "end": {
+          "line": 197,
+          "column": 47
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7692,
+      "end": 7693,
+      "loc": {
+        "start": {
+          "line": 197,
+          "column": 47
+        },
+        "end": {
+          "line": 197,
+          "column": 48
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7693,
+      "end": 7694,
+      "loc": {
+        "start": {
+          "line": 197,
+          "column": 48
+        },
+        "end": {
+          "line": 197,
+          "column": 49
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7695,
+      "end": 7696,
+      "loc": {
+        "start": {
+          "line": 197,
+          "column": 50
+        },
+        "end": {
+          "line": 197,
+          "column": 51
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "let",
+        "keyword": "let",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "let",
+      "start": 7702,
+      "end": 7705,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 4
+        },
+        "end": {
+          "line": 199,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "polylinePoints",
+      "start": 7706,
+      "end": 7720,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 8
+        },
+        "end": {
+          "line": 199,
+          "column": 22
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "=",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": true,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "=",
+      "start": 7721,
+      "end": 7722,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 23
+        },
+        "end": {
+          "line": 199,
+          "column": 24
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "cfg",
+      "start": 7723,
+      "end": 7726,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 25
+        },
+        "end": {
+          "line": 199,
+          "column": 28
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7726,
+      "end": 7727,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 28
+        },
+        "end": {
+          "line": 199,
+          "column": 29
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "curve",
+      "start": 7727,
+      "end": 7732,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 29
+        },
+        "end": {
+          "line": 199,
+          "column": 34
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7732,
+      "end": 7733,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 34
+        },
+        "end": {
+          "line": 199,
+          "column": 35
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "getPoints",
+      "start": 7733,
+      "end": 7742,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 35
+        },
+        "end": {
+          "line": 199,
+          "column": 44
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7742,
+      "end": 7743,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 44
+        },
+        "end": {
+          "line": 199,
+          "column": 45
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "cfg",
+      "start": 7743,
+      "end": 7746,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 45
+        },
+        "end": {
+          "line": 199,
+          "column": 48
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7746,
+      "end": 7747,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 48
+        },
+        "end": {
+          "line": 199,
+          "column": 49
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "divisions",
+      "start": 7747,
+      "end": 7756,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 49
+        },
+        "end": {
+          "line": 199,
+          "column": 58
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7756,
+      "end": 7757,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 58
+        },
+        "end": {
+          "line": 199,
+          "column": 59
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7757,
+      "end": 7758,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 59
+        },
+        "end": {
+          "line": 199,
+          "column": 60
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "map",
+      "start": 7758,
+      "end": 7761,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 60
+        },
+        "end": {
+          "line": 199,
+          "column": 63
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7761,
+      "end": 7762,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 63
+        },
+        "end": {
+          "line": 199,
+          "column": 64
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "a",
+      "start": 7762,
+      "end": 7763,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 64
+        },
+        "end": {
+          "line": 199,
+          "column": 65
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "=>",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7764,
+      "end": 7766,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 66
+        },
+        "end": {
+          "line": 199,
+          "column": 68
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "[",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7767,
+      "end": 7768,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 69
+        },
+        "end": {
+          "line": 199,
+          "column": 70
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "...",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7768,
+      "end": 7771,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 70
+        },
+        "end": {
+          "line": 199,
+          "column": 73
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "a",
+      "start": 7771,
+      "end": 7772,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 73
+        },
+        "end": {
+          "line": 199,
+          "column": 74
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "]",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7772,
+      "end": 7773,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 74
+        },
+        "end": {
+          "line": 199,
+          "column": 75
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7773,
+      "end": 7774,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 75
+        },
+        "end": {
+          "line": 199,
+          "column": 76
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7774,
+      "end": 7775,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 76
+        },
+        "end": {
+          "line": 199,
+          "column": 77
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "flat",
+      "start": 7775,
+      "end": 7779,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 77
+        },
+        "end": {
+          "line": 199,
+          "column": 81
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7779,
+      "end": 7780,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 81
+        },
+        "end": {
+          "line": 199,
+          "column": 82
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7780,
+      "end": 7781,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 82
+        },
+        "end": {
+          "line": 199,
+          "column": 83
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7781,
+      "end": 7782,
+      "loc": {
+        "start": {
+          "line": 199,
+          "column": 83
+        },
+        "end": {
+          "line": 199,
+          "column": 84
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "return",
+        "keyword": "return",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "return",
+      "start": 7787,
+      "end": 7793,
+      "loc": {
+        "start": {
+          "line": 200,
+          "column": 4
+        },
+        "end": {
+          "line": 200,
+          "column": 10
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "buildPolylineGeometry",
+      "start": 7794,
+      "end": 7815,
+      "loc": {
+        "start": {
+          "line": 200,
+          "column": 11
+        },
+        "end": {
+          "line": 200,
+          "column": 32
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7815,
+      "end": 7816,
+      "loc": {
+        "start": {
+          "line": 200,
+          "column": 32
+        },
+        "end": {
+          "line": 200,
+          "column": 33
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7816,
+      "end": 7817,
+      "loc": {
+        "start": {
+          "line": 200,
+          "column": 33
+        },
+        "end": {
+          "line": 200,
+          "column": 34
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "id",
+      "start": 7826,
+      "end": 7828,
+      "loc": {
+        "start": {
+          "line": 201,
+          "column": 8
+        },
+        "end": {
+          "line": 201,
+          "column": 10
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7828,
+      "end": 7829,
+      "loc": {
+        "start": {
+          "line": 201,
+          "column": 10
+        },
+        "end": {
+          "line": 201,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "cfg",
+      "start": 7830,
+      "end": 7833,
+      "loc": {
+        "start": {
+          "line": 201,
+          "column": 12
+        },
+        "end": {
+          "line": 201,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7833,
+      "end": 7834,
+      "loc": {
+        "start": {
+          "line": 201,
+          "column": 15
+        },
+        "end": {
+          "line": 201,
+          "column": 16
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "id",
+      "start": 7834,
+      "end": 7836,
+      "loc": {
+        "start": {
+          "line": 201,
+          "column": 16
+        },
+        "end": {
+          "line": 201,
+          "column": 18
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7836,
+      "end": 7837,
+      "loc": {
+        "start": {
+          "line": 201,
+          "column": 18
+        },
+        "end": {
+          "line": 201,
+          "column": 19
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "points",
+      "start": 7846,
+      "end": 7852,
+      "loc": {
+        "start": {
+          "line": 202,
+          "column": 8
+        },
+        "end": {
+          "line": 202,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ":",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7852,
+      "end": 7853,
+      "loc": {
+        "start": {
+          "line": 202,
+          "column": 14
+        },
+        "end": {
+          "line": 202,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "polylinePoints",
+      "start": 7854,
+      "end": 7868,
+      "loc": {
+        "start": {
+          "line": 202,
+          "column": 16
+        },
+        "end": {
+          "line": 202,
+          "column": 30
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7873,
+      "end": 7874,
+      "loc": {
+        "start": {
+          "line": 203,
+          "column": 4
+        },
+        "end": {
+          "line": 203,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7874,
+      "end": 7875,
+      "loc": {
+        "start": {
+          "line": 203,
+          "column": 5
+        },
+        "end": {
+          "line": 203,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7875,
+      "end": 7876,
+      "loc": {
+        "start": {
+          "line": 203,
+          "column": 6
+        },
+        "end": {
+          "line": 203,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 7877,
+      "end": 7878,
+      "loc": {
+        "start": {
+          "line": 204,
+          "column": 0
+        },
+        "end": {
+          "line": 204,
+          "column": 1
+        }
+      }
+    },
+    {
       "type": {
         "label": "export",
         "keyword": "export",
@@ -6354,15 +9275,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 3144,
-      "end": 3150,
+      "start": 7880,
+      "end": 7886,
       "loc": {
         "start": {
-          "line": 87,
+          "line": 206,
           "column": 0
         },
         "end": {
-          "line": 87,
+          "line": 206,
           "column": 6
         }
       }
@@ -6379,15 +9300,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3151,
-      "end": 3152,
+      "start": 7887,
+      "end": 7888,
       "loc": {
         "start": {
-          "line": 87,
+          "line": 206,
           "column": 7
         },
         "end": {
-          "line": 87,
+          "line": 206,
           "column": 8
         }
       }
@@ -6405,16 +9326,68 @@
         "binop": null
       },
       "value": "buildPolylineGeometry",
-      "start": 3152,
-      "end": 3173,
+      "start": 7888,
+      "end": 7909,
       "loc": {
         "start": {
-          "line": 87,
+          "line": 206,
           "column": 8
         },
         "end": {
-          "line": 87,
+          "line": 206,
           "column": 29
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 7909,
+      "end": 7910,
+      "loc": {
+        "start": {
+          "line": 206,
+          "column": 29
+        },
+        "end": {
+          "line": 206,
+          "column": 30
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "buildPolylineGeometryFromCurve",
+      "start": 7911,
+      "end": 7941,
+      "loc": {
+        "start": {
+          "line": 206,
+          "column": 31
+        },
+        "end": {
+          "line": 206,
+          "column": 61
         }
       }
     },
@@ -6430,16 +9403,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3173,
-      "end": 3174,
+      "start": 7941,
+      "end": 7942,
       "loc": {
         "start": {
-          "line": 87,
-          "column": 29
+          "line": 206,
+          "column": 61
         },
         "end": {
-          "line": 87,
-          "column": 30
+          "line": 206,
+          "column": 62
         }
       }
     },
@@ -6456,16 +9429,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3174,
-      "end": 3175,
+      "start": 7942,
+      "end": 7943,
       "loc": {
         "start": {
-          "line": 87,
-          "column": 30
+          "line": 206,
+          "column": 62
         },
         "end": {
-          "line": 87,
-          "column": 31
+          "line": 206,
+          "column": 63
         }
       }
     },
@@ -6482,16 +9455,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3175,
-      "end": 3175,
+      "start": 7943,
+      "end": 7943,
       "loc": {
         "start": {
-          "line": 87,
-          "column": 31
+          "line": 206,
+          "column": 63
         },
         "end": {
-          "line": 87,
-          "column": 31
+          "line": 206,
+          "column": 63
         }
       }
     }

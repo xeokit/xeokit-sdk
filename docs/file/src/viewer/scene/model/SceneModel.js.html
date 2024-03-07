@@ -179,6 +179,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildGridGeometry">buildGridGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometry">buildPolylineGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometryFromCurve">buildPolylineGeometryFromCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildSphereGeometry">buildSphereGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildTorusGeometry">buildTorusGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildVectorTextGeometry">buildVectorTextGeometry</a></span></span></li>
@@ -2589,6 +2590,10 @@ export class SceneModel extends Component {
             this.error(&quot;[createGeometry] Param expected: `uvDecodeMatrix` (required for `uvCompressed&apos;)&quot;);
             return null;
         }
+        if (!cfg.buckets &amp;&amp; !cfg.indices &amp;&amp; (cfg.primitive === &quot;triangles&quot; || cfg.primitive === &quot;solid&quot; || cfg.primitive === &quot;surface&quot;)) {
+            const numPositions = (cfg.positions || cfg.positionsCompressed).length / 3;
+            cfg.indices = this._createDefaultIndices(numPositions);
+        }
         if (!cfg.buckets &amp;&amp; !cfg.indices &amp;&amp; cfg.primitive !== &quot;points&quot;) {
             this.error(`[createGeometry] Param expected: indices (required for &apos;${cfg.primitive}&apos; primitive type)`);
             return null;
@@ -3023,7 +3028,12 @@ export class SceneModel extends Component {
                 this.error(&quot;Param expected: &apos;uvCompressed&apos; should be accompanied by `uvDecodeMatrix` (&apos;geometryId&apos; is absent)&quot;);
                 return false;
             }
+            if (!cfg.buckets &amp;&amp; !cfg.indices &amp;&amp; (cfg.primitive === &quot;triangles&quot; || cfg.primitive === &quot;solid&quot; || cfg.primitive === &quot;surface&quot;)) {
+                const numPositions = (cfg.positions || cfg.positionsCompressed).length / 3;
+                cfg.indices = this._createDefaultIndices(numPositions);
+            }
             if (!cfg.buckets &amp;&amp; !cfg.indices &amp;&amp; cfg.primitive !== &quot;points&quot;) {
+                cfg.indices = this._createDefaultIndices(numIndices)
                 this.error(`Param expected: indices (required for &apos;${cfg.primitive}&apos; primitive type)`);
                 return false;
             }
@@ -3033,9 +3043,9 @@ export class SceneModel extends Component {
             }
 
             const useDTX = (!!this._dtxEnabled &amp;&amp; (cfg.primitive === &quot;triangles&quot;
-                || cfg.primitive === &quot;solid&quot;
-                || cfg.primitive === &quot;surface&quot;))
-            &amp;&amp; (!cfg.textureSetId);
+                    || cfg.primitive === &quot;solid&quot;
+                    || cfg.primitive === &quot;surface&quot;))
+                &amp;&amp; (!cfg.textureSetId);
 
             cfg.origin = cfg.origin ? math.addVec3(this._origin, cfg.origin, math.vec3()) : this._origin;
 
@@ -3251,9 +3261,9 @@ export class SceneModel extends Component {
             }
 
             const useDTX = (!!this._dtxEnabled
-                &amp;&amp; (cfg.geometry.primitive === &quot;triangles&quot;
-                    || cfg.geometry.primitive === &quot;solid&quot;
-                    || cfg.geometry.primitive === &quot;surface&quot;))
+                    &amp;&amp; (cfg.geometry.primitive === &quot;triangles&quot;
+                        || cfg.geometry.primitive === &quot;solid&quot;
+                        || cfg.geometry.primitive === &quot;surface&quot;))
                 &amp;&amp; (!cfg.textureSetId);
 
             if (useDTX) {
@@ -3306,6 +3316,14 @@ export class SceneModel extends Component {
         this._meshesCfgsBeforeMeshCreation[cfg.id] = cfg;
 
         return true;
+    }
+
+    _createDefaultIndices(numIndices) {
+        const indices = [];
+        for (let i = 0; i &lt; numIndices; i++) {
+            indices.push(i);
+        }
+        return indices;
     }
 
     _createMesh(cfg) {
@@ -3910,7 +3928,7 @@ export class SceneModel extends Component {
         for (let i = 0, len = renderFlags.visibleLayers.length; i &lt; len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
             this.layerList[layerIndex].drawColorOpaque(renderFlags, frameCtx);
-       }
+        }
     }
 
     /** @private */

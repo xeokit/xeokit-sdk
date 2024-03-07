@@ -1242,6 +1242,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildpolylinegeometry.js~buildpolylinegeometryfromcurve",
+    "function/index.html#static-function-buildPolylineGeometryFromCurve",
+    "<span>buildPolylineGeometryFromCurve</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildPolylineGeometry.js</span>",
+    "function"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildspheregeometry.js~buildspheregeometry",
     "function/index.html#static-function-buildSphereGeometry",
     "<span>buildSphereGeometry</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildSphereGeometry.js</span>",

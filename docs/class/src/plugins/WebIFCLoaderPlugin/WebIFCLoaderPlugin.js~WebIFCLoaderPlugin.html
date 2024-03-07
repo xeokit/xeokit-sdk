@@ -179,6 +179,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildGridGeometry">buildGridGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometry">buildPolylineGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometryFromCurve">buildPolylineGeometryFromCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildSphereGeometry">buildSphereGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildTorusGeometry">buildTorusGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildVectorTextGeometry">buildVectorTextGeometry</a></span></span></li>
@@ -253,13 +254,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {WebIFCLoaderPlugin} from &apos;<span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber340">@xeokit/xeokit-sdk/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {WebIFCLoaderPlugin} from &apos;<span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber358">@xeokit/xeokit-sdk/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   <span data-ice="since">| since 2.0.13</span>
-  <span data-ice="source">| <span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber340">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber358">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -284,7 +285,7 @@
 <p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_WebIFCLoaderPlugin_Duplex">Run this example</a>]</p>
 <h2 id="overview">Overview</h2><ul>
 <li>Loads small-to-medium sized BIM models directly from IFC files.</li>
-<li>Uses <a href="https://github.com/tomvandig/web-ifc">web-ifc</a> internally, to parse IFC files in the browser.</li>
+<li>Uses <a href="https://github.com/tomvandig/web-ifc">web-ifc</a> to parse IFC files in the browser.</li>
 <li>Loads IFC geometry, element structure metadata, and property sets.</li>
 <li>Not for large models. For best performance with large models, we recommend using <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span>.</li>
 <li>Loads double-precision coordinates, enabling models to be viewed at global coordinates without accuracy loss.</li>
@@ -314,6 +315,7 @@ that hold their metadata.</p>
 <li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_WebIFCLoaderPlugin_isolateStorey">Run example</a>]</li>
 </ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, WebIFCLoaderPlugin} from &quot;xeokit-sdk.es.js&quot;;
+import * as WebIFC from &quot;https://cdn.jsdelivr.net/npm/web-ifc@0.0.51/web-ifc-api.js&quot;;
 
 //------------------------------------------------------------------------------------------------------------------
 // 1. Create a Viewer,
@@ -332,57 +334,76 @@ viewer.camera.look = [13.44, 3.31, -14.83];
 viewer.camera.up = [0.10, 0.98, -0.14];
 
 //------------------------------------------------------------------------------------------------------------------
-// 1. Create a WebIFCLoaderPlugin, configured with a path to the bundled third-party web-ifc.wasm module
-// 2. Load a BIM model fom an IFC file, excluding its IfcSpace elements, and highlighting edges
+// 1. Create a web-ifc API, which will parse IFC for our WebIFCLoaderPlugin
+// 2. Connect the API to the web-ifc WASM module, which powers the parsing
+// 3. Initialize the web-ifc API
 //------------------------------------------------------------------------------------------------------------------
 
 // 1
-const ifcLoader = new WebIFCLoaderPlugin(viewer, {
-    wasmPath: &quot;../dist/&quot; // &lt;&lt;------- Path to web-ifc.wasm, which does the IFC parsing for us
-});
+
+const IfcAPI = new this._webIFC.IfcAPI();
 
 // 2
-const model = ifcLoader.load({          // Returns an Entity that represents the model
-    id: &quot;myModel&quot;,
-    src: &quot;../assets/models/ifc/Duplex.ifc&quot;,
-    excludeTypes: [&quot;IfcSpace&quot;],
-    edges: true
-});
 
-model.on(&quot;loaded&quot;, () =&gt; {
+IfcAPI.SetWasmPath(&quot;https://cdn.jsdelivr.net/npm/web-ifc@0.0.51/&quot;);
 
-    //--------------------------------------------------------------------------------------------------------------
-    // 1. Find metadata on the bottom storey
-    // 2. X-ray all the objects except for the bottom storey
-    // 3. Fit the bottom storey in view
-    //--------------------------------------------------------------------------------------------------------------
+// 3
 
-    // 1
-    const metaModel = viewer.metaScene.metaModels[&quot;myModel&quot;];       // MetaModel with ID &quot;myModel&quot;
-    const metaObject
-         = viewer.metaScene.metaObjects[&quot;1xS3BCk291UvhgP2dvNsgp&quot;];  // MetaObject with ID &quot;1xS3BCk291UvhgP2dvNsgp&quot;
+IfcAPI.Init().then(() =&gt; {
 
-    const name = metaObject.name;                                   // &quot;01 eerste verdieping&quot;
-    const type = metaObject.type;                                   // &quot;IfcBuildingStorey&quot;
-    const parent = metaObject.parent;                               // MetaObject with type &quot;IfcBuilding&quot;
-    const children = metaObject.children;                           // Array of child MetaObjects
-    const objectId = metaObject.id;                                 // &quot;1xS3BCk291UvhgP2dvNsgp&quot;
-    const objectIds = viewer.metaScene.getObjectIDsInSubtree(objectId);   // IDs of leaf sub-objects
-    const aabb = viewer.scene.getAABB(objectIds);                   // Axis-aligned boundary of the leaf sub-objects
+     //------------------------------------------------------------------------------------------------------------
+     // 1. Create a WebIFCLoaderPlugin, configured with the web-ifc module and a web-ifc API instance
+     // 2. Load a BIM model fom an IFC file, excluding its IfcSpace elements, and highlighting edges
+     //------------------------------------------------------------------------------------------------------------
+
+    const ifcLoader = new WebIFCLoaderPlugin(viewer, {
+        WebIFC,
+        IfcAPI
+    });
 
     // 2
-    viewer.scene.setObjectsXRayed(viewer.scene.objectIds, true);
-    viewer.scene.setObjectsXRayed(objectIds, false);
+    const model = ifcLoader.load({          // Returns an Entity that represents the model
+        id: &quot;myModel&quot;,
+        src: &quot;../assets/models/ifc/Duplex.ifc&quot;,
+        excludeTypes: [&quot;IfcSpace&quot;],
+        edges: true
+    });
 
-    // 3
-    viewer.cameraFlight.flyTo(aabb);
-});
+    model.on(&quot;loaded&quot;, () =&gt; {
 
-// Find the model Entity by ID
-model = viewer.scene.models[&quot;myModel&quot;];
+        //----------------------------------------------------------------------------------------------------------
+        // 1. Find metadata on the bottom storey
+        // 2. X-ray all the objects except for the bottom storey
+        // 3. Fit the bottom storey in view
+        //----------------------------------------------------------------------------------------------------------
 
-// Destroy the model
-model.destroy();</code>
+        // 1
+        const metaModel = viewer.metaScene.metaModels[&quot;myModel&quot;];       // MetaModel with ID &quot;myModel&quot;
+        const metaObject
+                = viewer.metaScene.metaObjects[&quot;1xS3BCk291UvhgP2dvNsgp&quot;];  // MetaObject with ID &quot;1xS3BCk291UvhgP2dvNsgp&quot;
+
+        const name = metaObject.name;                                   // &quot;01 eerste verdieping&quot;
+        const type = metaObject.type;                                   // &quot;IfcBuildingStorey&quot;
+        const parent = metaObject.parent;                               // MetaObject with type &quot;IfcBuilding&quot;
+        const children = metaObject.children;                           // Array of child MetaObjects
+        const objectId = metaObject.id;                                 // &quot;1xS3BCk291UvhgP2dvNsgp&quot;
+        const objectIds = viewer.metaScene.getObjectIDsInSubtree(objectId);   // IDs of leaf sub-objects
+        const aabb = viewer.scene.getAABB(objectIds);                   // Axis-aligned boundary of the leaf sub-objects
+
+        // 2
+        viewer.scene.setObjectsXRayed(viewer.scene.objectIds, true);
+        viewer.scene.setObjectsXRayed(objectIds, false);
+
+        // 3
+        viewer.cameraFlight.flyTo(aabb);
+
+        // Find the model Entity by ID
+        model = viewer.scene.models[&quot;myModel&quot;];
+
+        // Destroy the model
+        model.destroy();
+    });
+});</code>
 </code></pre>
 <h2 id="transforming">Transforming</h2><p>We have the option to rotate, scale and translate each  IFC model as we load it.</p>
 <p>This lets us load multiple models, or even multiple copies of the same model, and position them apart from each other.</p>
@@ -1375,7 +1396,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber355">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber373">source</a></span></span>
     </span>
   </h3>
 
@@ -1418,17 +1439,17 @@ that don&apos;t have IFC types.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.wasmPath</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="name" class="code" data-depth="1">cfg.WebIFC</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>Path to <code>web-ifc.wasm</code>, required by WebIFCLoaderPlugin.</p>
+      <td data-ice="description"><p>The web-ifc module, required by WebIFCLoaderPlugin. WebIFCLoaderPlugin uses various IFC type constants defined on this module.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">cfg.objectDefaults</td>
+      <td data-ice="name" class="code" data-depth="1">cfg.IfcAPI</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Map of initial default states for each loaded <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> that represents an object.  Default value is <span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span>.</p>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>A pre-initialized instance of the web-ifc API. WebIFCLoaderPlugin uses this to parse IFC.  * @param {Object} [cfg.objectDefaults] Map of initial default states for each loaded <span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span> that represents an object.  Default value is <span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1497,7 +1518,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber393">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber411">source</a></span></span>
     </span>
   </h3>
 
@@ -1542,7 +1563,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber404">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber422">source</a></span></span>
     </span>
   </h3>
 
@@ -1587,7 +1608,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber468">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber486">source</a></span></span>
     </span>
   </h3>
 
@@ -1634,7 +1655,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber482">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber500">source</a></span></span>
     </span>
   </h3>
 
@@ -1681,7 +1702,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber496">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber514">source</a></span></span>
     </span>
   </h3>
 
@@ -1728,7 +1749,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber510">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber528">source</a></span></span>
     </span>
   </h3>
 
@@ -1775,7 +1796,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber521">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber539">source</a></span></span>
     </span>
   </h3>
 
@@ -1820,7 +1841,7 @@ that don&apos;t have IFC types.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber542">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber560">source</a></span></span>
     </span>
   </h3>
 
@@ -1871,7 +1892,7 @@ prefixed by the ID of the model, ie. <code>&lt;modelId&gt;#&lt;objectId&gt;</cod
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber440">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber458">source</a></span></span>
     </span>
   </h3>
 
@@ -1918,7 +1939,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber454">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber472">source</a></span></span>
     </span>
   </h3>
 
@@ -1965,7 +1986,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber415">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber433">source</a></span></span>
     </span>
   </h3>
 
@@ -2010,7 +2031,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber426">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber444">source</a></span></span>
     </span>
   </h3>
 
@@ -2055,7 +2076,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber382">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber400">source</a></span></span>
     </span>
   </h3>
 
@@ -2114,7 +2135,7 @@ list. An object&apos;s type is indicated by its <span><a href="class/src/viewer/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber576">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js.html#lineNumber594">source</a></span></span>
     </span>
   </h3>
 

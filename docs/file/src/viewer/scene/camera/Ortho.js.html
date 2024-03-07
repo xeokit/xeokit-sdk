@@ -179,6 +179,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildGridGeometry">buildGridGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometry">buildPolylineGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometryFromCurve">buildPolylineGeometryFromCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildSphereGeometry">buildSphereGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildTorusGeometry">buildTorusGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildVectorTextGeometry">buildVectorTextGeometry</a></span></span></li>
@@ -297,7 +298,7 @@ class Ortho extends Component {
             inverseMatrix: math.mat4(),
             transposedMatrix: math.mat4(),
             near: 0.1,
-            far: 2000.0
+            far: 10000.0
         });
 
         this._inverseMatrixDirty = true;
@@ -423,12 +424,12 @@ class Ortho extends Component {
      *
      * Fires a &quot;far&quot; event on change.
      *
-     * Default value is ````2000.0````.
+     * Default value is ````10000.0````.
      *
      * @param {Number} value New far ortho plane position.
      */
     set far(value) {
-        const far = (value !== undefined &amp;&amp; value !== null) ? value : 2000.0;
+        const far = (value !== undefined &amp;&amp; value !== null) ? value : 10000.0;
         if (this._state.far === far) {
             return;
         }

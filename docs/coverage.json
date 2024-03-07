@@ -1,7 +1,7 @@
 {
   "coverage": "40.16%",
-  "expectCount": 6936,
-  "actualCount": 2786,
+  "expectCount": 6939,
+  "actualCount": 2787,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 61,
@@ -187,11 +187,11 @@
         74,
         76,
         81,
-        97,
-        100,
-        104,
-        108,
-        340
+        99,
+        102,
+        106,
+        110,
+        342
       ]
     },
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js": {
@@ -384,9 +384,9 @@
         80,
         81,
         86,
-        101,
-        104,
-        112
+        103,
+        106,
+        114
       ]
     },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js": {
@@ -902,24 +902,25 @@
       ]
     },
     "src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js": {
-      "expectCount": 31,
+      "expectCount": 32,
       "actualCount": 16,
       "undocumentLines": [
-        365,
-        405,
-        427,
-        455,
-        483,
-        511,
-        543,
-        640,
-        654,
-        745,
-        752,
-        766,
-        781,
-        809,
-        872
+        391,
+        393,
+        423,
+        445,
+        473,
+        501,
+        529,
+        561,
+        656,
+        670,
+        763,
+        770,
+        784,
+        799,
+        827,
+        890
       ]
     },
     "src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js": {
@@ -1899,8 +1900,8 @@
       "undocumentLines": []
     },
     "src/viewer/scene/geometry/builders/buildPolylineGeometry.js": {
-      "expectCount": 1,
-      "actualCount": 1,
+      "expectCount": 2,
+      "actualCount": 2,
       "undocumentLines": []
     },
     "src/viewer/scene/geometry/builders/buildSphereGeometry.js": {
@@ -2615,7 +2616,7 @@
       "undocumentLines": []
     },
     "src/viewer/scene/model/SceneModel.js": {
-      "expectCount": 214,
+      "expectCount": 215,
       "actualCount": 116,
       "undocumentLines": [
         43,
@@ -2706,16 +2707,17 @@
         2047,
         2122,
         2144,
-        3056,
-        3088,
-        3145,
-        3176,
-        3276,
-        3288,
-        3439,
-        3557,
-        3576,
-        3998
+        3065,
+        3073,
+        3105,
+        3162,
+        3193,
+        3293,
+        3305,
+        3456,
+        3574,
+        3593,
+        4015
       ]
     },
     "src/viewer/scene/model/SceneModelEntity.js": {
@@ -3394,9 +3396,9 @@
         189,
         196,
         203,
-        375,
-        426,
-        430
+        370,
+        421,
+        425
       ]
     },
     "src/viewer/scene/model/dtx/triangles/renderers/DTXTrianglesPickNormalsFlatRenderer.js": {
