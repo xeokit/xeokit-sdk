@@ -650,7 +650,14 @@ var parseMTL = (function () {
     }
 
     function createMaterial(modelNode, materialCfg) {
-        new PhongMaterial(modelNode, materialCfg);
+        var material = modelNode.scene.components[materialCfg.id];
+        if(material){
+            console.warn("Material already loaded");
+            if(!modelNode._ownedComponents)  modelNode._ownedComponents = {};
+            modelNode._ownedComponents[materialCfg.id] = material;
+        }else{
+            new PhongMaterial(modelNode, materialCfg);
+        }
     }
 
     function parseRGB(value) {
