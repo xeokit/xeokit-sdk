@@ -87,6 +87,14 @@ var loadOBJ = function (modelNode, url, ok) {
         });
 };
 
+//--------------------------------------------------------------------------------------------
+// How to format materialId
+//--------------------------------------------------------------------------------------------
+var formatMaterialId = function (modelId, materialId) {
+    return `${modelId}_${materialId}`;
+};
+
+
 var parseOBJ = (function () {
 
     const regexp = {
@@ -292,7 +300,7 @@ var parseOBJ = (function () {
                 // material
 
                 var id = line.substring(7).trim();
-                state.object.material.id = id;
+                state.object.material.id = formatMaterialId(modelNode.id, id);
 
             } else if (regexp.material_library_pattern.test(line)) {
 
@@ -560,7 +568,7 @@ var parseMTL = (function () {
 
                 case "newmtl": // New material
                     materialCfg = {
-                        id: value ? `${modelNode.id}_${value}` : ""
+                        id: value ? formatMaterialId(modelNode.id , value) : ""
                     };
                     createMaterial(modelNode, materialCfg);
                     break;
