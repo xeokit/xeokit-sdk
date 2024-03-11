@@ -15,7 +15,7 @@ class Dot {
         this._dotClickable = document.createElement('div');
         this._dotClickable.className += this._dotClickable.className ? ' viewer-ruler-dot-clickable' : 'viewer-ruler-dot-clickable';
 
-        this._visible = true;
+        this._visible = !!cfg.visible;
         this._culled = false;
 
         var dot = this._dot;
