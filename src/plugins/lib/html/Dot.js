@@ -8,14 +8,13 @@ class Dot {
         this._x = 0;
         this._y = 0;
 
-        this._visible = true;
         this._dot = document.createElement('div');
         this._dot.className += this._dot.className ? ' viewer-ruler-dot' : 'viewer-ruler-dot';
 
         this._dotClickable = document.createElement('div');
         this._dotClickable.className += this._dotClickable.className ? ' viewer-ruler-dot-clickable' : 'viewer-ruler-dot-clickable';
 
-        this._visible = true;
+        this._visible = !!cfg.visible;
         this._culled = false;
 
         var dot = this._dot;
