@@ -27271,9 +27271,9 @@ var _primitiveType4=eachGeometryPrimitiveType[_geometryIndex4];var primitiveName
  *      }
  *
  *      // Gets the contents of the given .XKT file in an arraybuffer
- *      getXKT(xKTSrc, ok, error) {
+ *      getXKT(src, ok, error) {
  *          console.log("MyDataSource#getXKT(" + xKTSrc + ", ... )");
- *          utils.loadArraybuffer(xKTSrc,
+ *          utils.loadArraybuffer(src,
  *              (arraybuffer) => {
  *                  ok(arraybuffer);
  *              },
@@ -27706,56 +27706,9 @@ var _primitiveType4=eachGeometryPrimitiveType[_geometryIndex4];var primitiveName
 var metaModel=new MetaModel({metaScene:this.viewer.metaScene,id:modelId});this.viewer.scene.canvas.spinner.processes++;var finish=function finish(){// this._createDefaultMetaModelIfNeeded(sceneModel, params, options);
 sceneModel.finalize();metaModel.finalize();_this154.viewer.scene.canvas.spinner.processes--;sceneModel.once("destroyed",function(){_this154.viewer.metaScene.destroyMetaModel(metaModel.id);});_this154.scheduleTask(function(){if(sceneModel.destroyed){return;}sceneModel.scene.fire("modelLoaded",sceneModel.id);// FIXME: Assumes listeners know order of these two events
 sceneModel.fire("loaded",true,false);// Don't forget the event, for late subscribers
-});};var error=function error(errMsg){_this154.viewer.scene.canvas.spinner.processes--;_this154.error(errMsg);sceneModel.fire("error",errMsg);};var nextId=0;var manifestCtx={getNextId:function getNextId(){return"".concat(modelId,".").concat(nextId++);}};if(params.metaModelSrc||params.metaModelData){if(params.metaModelSrc){var metaModelSrc=params.metaModelSrc;this._dataSource.getMetaModel(metaModelSrc,function(metaModelData){if(sceneModel.destroyed){return;}metaModel.loadData(metaModelData,{includeTypes:includeTypes,excludeTypes:excludeTypes,globalizeObjectIds:options.globalizeObjectIds});if(params.src){_this154._loadModel(params.src,params,options,sceneModel,null,manifestCtx,finish,error);}else{_this154._parseModel(params.xkt,params,options,sceneModel,null,manifestCtx);finish();}},function(errMsg){error("load(): Failed to load model metadata for model '".concat(modelId," from  '").concat(metaModelSrc,"' - ").concat(errMsg));});}else if(params.metaModelData){metaModel.loadData(params.metaModelData,{includeTypes:includeTypes,excludeTypes:excludeTypes,globalizeObjectIds:options.globalizeObjectIds});if(params.src){this._loadModel(params.src,params,options,sceneModel,null,manifestCtx,finish,error);}else{this._parseModel(params.xkt,params,options,sceneModel,null,manifestCtx);finish();}}}else{if(params.src){this._loadModel(params.src,params,options,sceneModel,metaModel,manifestCtx,finish,error);}else if(params.xkt){this._parseModel(params.xkt,params,options,sceneModel,metaModel,manifestCtx);finish();}else if(params.manifestSrc||params.manifest){var baseDir=params.manifestSrc?getBaseDirectory(params.manifestSrc):"";var loadJSONs=function loadJSONs(metaDataFiles,done,error){var i=0;var loadNext=function loadNext(){if(i>=metaDataFiles.length){done();}else{_this154._dataSource.getMetaModel("".concat(baseDir).concat(metaDataFiles[i]),function(metaModelData){metaModel.loadData(metaModelData,{includeTypes:includeTypes,excludeTypes:excludeTypes,globalizeObjectIds:options.globalizeObjectIds});i++;_this154.scheduleTask(loadNext,100);},error);}};loadNext();};var loadXKTs=function loadXKTs(xktFiles,done,error){var i=0;var loadNext=function loadNext(){if(i>=xktFiles.length){done();}else{_this154._dataSource.getXKT("".concat(baseDir).concat(xktFiles[i]),function(arrayBuffer){_this154._parseModel(arrayBuffer,params,options,sceneModel,metaModel,manifestCtx);i++;_this154.scheduleTask(loadNext,100);},error);}};loadNext();};if(params.manifest){var manifestData=params.manifest;var xktFiles=manifestData.xktFiles;if(!xktFiles||xktFiles.length===0){error("load(): Failed to load model manifest - manifest not valid");return;}var metaModelFiles=manifestData.metaModelFiles;if(metaModelFiles){loadJSONs(metaModelFiles,function(){loadXKTs(xktFiles,finish,error);},error);}else{loadXKTs(xktFiles,finish,error);}}else{this._dataSource.getManifest(params.manifestSrc,function(manifestData){if(sceneModel.destroyed){return;}var xktFiles=manifestData.xktFiles;if(!xktFiles||xktFiles.length===0){error("load(): Failed to load model manifest - manifest not valid");return;}var metaModelFiles=manifestData.metaModelFiles;if(metaModelFiles){loadJSONs(metaModelFiles,function(){loadXKTs(xktFiles,finish,error);},error);}else{loadXKTs(xktFiles,finish,error);}},error);}}}return sceneModel;}},{key:"_loadModel",value:function _loadModel(src,params,options,sceneModel,metaModel,manifestCtx,done,error){var _this155=this;this._dataSource.getXKT(params.src,function(arrayBuffer){_this155._parseModel(arrayBuffer,params,options,sceneModel,metaModel,manifestCtx);done();},error);}},{key:"_parseModel",value:function _parseModel(arrayBuffer,params,options,sceneModel,metaModel,manifestCtx){if(sceneModel.destroyed){return;}var dataView=new DataView(arrayBuffer);var dataArray=new Uint8Array(arrayBuffer);var xktVersion=dataView.getUint32(0,true);var parser=parsers[xktVersion];if(!parser){this.error("Unsupported .XKT file version: "+xktVersion+" - this XKTLoaderPlugin supports versions "+Object.keys(parsers));return;}this.log("Loading .xkt V"+xktVersion);var numElements=dataView.getUint32(4,true);var elements=[];var byteOffset=(numElements+2)*4;for(var _i568=0;_i568<numElements;_i568++){var elementSize=dataView.getUint32((_i568+2)*4,true);elements.push(dataArray.subarray(byteOffset,byteOffset+elementSize));byteOffset+=elementSize;}parser.parse(this.viewer,options,elements,sceneModel,metaModel,manifestCtx);}// _createDefaultMetaModelIfNeeded(sceneModel, params, options) {
-//
-//     const metaModelId = sceneModel.id;
-//
-//     if (!this.viewer.metaScene.metaModels[metaModelId]) {
-//
-//         const metaModelData = {
-//             metaObjects: []
-//         };
-//
-//         metaModelData.metaObjects.push({
-//             id: metaModelId,
-//             type: "default",
-//             name: metaModelId,
-//             parent: null
-//         });
-//
-//         const entityList = sceneModel.entityList;
-//
-//         for (let i = 0, len = entityList.length; i < len; i++) {
-//             const entity = entityList[i];
-//             if (entity.isObject) {
-//                 metaModelData.metaObjects.push({
-//                     id: entity.id,
-//                     type: "default",
-//                     name: entity.id,
-//                     parent: metaModelId
-//                 });
-//             }
-//         }
-//
-//         const src = params.src;
-//
-//         this.viewer.metaScene.createMetaModel(metaModelId, metaModelData, {
-//
-//             includeTypes: options.includeTypes,
-//             excludeTypes: options.excludeTypes,
-//             globalizeObjectIds: options.globalizeObjectIds,
-//
-//             getProperties: async (propertiesId) => {
-//                 return await this._dataSource.getProperties(src, propertiesId);
-//             }
-//         });
-//
-//         sceneModel.once("destroyed", () => {
-//             this.viewer.metaScene.destroyMetaModel(metaModelId);
-//         });
-//     }
-// }
-}]);return XKTLoaderPlugin;}(Plugin);function getBaseDirectory(filePath){var pathArray=filePath.split('/');pathArray.pop();// Remove the file name or the last segment of the path
+});};var error=function error(errMsg){_this154.viewer.scene.canvas.spinner.processes--;_this154.error(errMsg);sceneModel.fire("error",errMsg);};var nextId=0;var manifestCtx={getNextId:function getNextId(){return"".concat(modelId,".").concat(nextId++);}};if(params.metaModelSrc||params.metaModelData){if(params.metaModelSrc){var metaModelSrc=params.metaModelSrc;this._dataSource.getMetaModel(metaModelSrc,function(metaModelData){if(sceneModel.destroyed){return;}metaModel.loadData(metaModelData,{includeTypes:includeTypes,excludeTypes:excludeTypes,globalizeObjectIds:options.globalizeObjectIds});if(params.src){_this154._loadModel(params.src,params,options,sceneModel,null,manifestCtx,finish,error);}else{_this154._parseModel(params.xkt,params,options,sceneModel,null,manifestCtx);finish();}},function(errMsg){error("load(): Failed to load model metadata for model '".concat(modelId," from  '").concat(metaModelSrc,"' - ").concat(errMsg));});}else if(params.metaModelData){metaModel.loadData(params.metaModelData,{includeTypes:includeTypes,excludeTypes:excludeTypes,globalizeObjectIds:options.globalizeObjectIds});if(params.src){this._loadModel(params.src,params,options,sceneModel,null,manifestCtx,finish,error);}else{this._parseModel(params.xkt,params,options,sceneModel,null,manifestCtx);finish();}}}else{if(params.src){this._loadModel(params.src,params,options,sceneModel,metaModel,manifestCtx,finish,error);}else if(params.xkt){this._parseModel(params.xkt,params,options,sceneModel,metaModel,manifestCtx);finish();}else if(params.manifestSrc||params.manifest){var baseDir=params.manifestSrc?getBaseDirectory(params.manifestSrc):"";var loadJSONs=function loadJSONs(metaDataFiles,done,error){var i=0;var loadNext=function loadNext(){if(i>=metaDataFiles.length){done();}else{_this154._dataSource.getMetaModel("".concat(baseDir).concat(metaDataFiles[i]),function(metaModelData){metaModel.loadData(metaModelData,{includeTypes:includeTypes,excludeTypes:excludeTypes,globalizeObjectIds:options.globalizeObjectIds});i++;_this154.scheduleTask(loadNext,100);},error);}};loadNext();};var loadXKTs_excludeTheirMetaModels=function loadXKTs_excludeTheirMetaModels(xktFiles,done,error){// Load XKTs, ignore metamodels in the XKT
+var i=0;var loadNext=function loadNext(){if(i>=xktFiles.length){done();}else{_this154._dataSource.getXKT("".concat(baseDir).concat(xktFiles[i]),function(arrayBuffer){_this154._parseModel(arrayBuffer,params,options,sceneModel,null/* Ignore metamodel in XKT */,manifestCtx);i++;_this154.scheduleTask(loadNext,100);},error);}};loadNext();};var loadXKTs_includeTheirMetaModels=function loadXKTs_includeTheirMetaModels(xktFiles,done,error){// Load XKTs, parse metamodels from the XKT
+var i=0;var loadNext=function loadNext(){if(i>=xktFiles.length){done();}else{_this154._dataSource.getXKT("".concat(baseDir).concat(xktFiles[i]),function(arrayBuffer){_this154._parseModel(arrayBuffer,params,options,sceneModel,metaModel,manifestCtx);i++;_this154.scheduleTask(loadNext,100);},error);}};loadNext();};if(params.manifest){var manifestData=params.manifest;var xktFiles=manifestData.xktFiles;if(!xktFiles||xktFiles.length===0){error("load(): Failed to load model manifest - manifest not valid");return;}var metaModelFiles=manifestData.metaModelFiles;if(metaModelFiles){loadJSONs(metaModelFiles,function(){loadXKTs_excludeTheirMetaModels(xktFiles,finish,error);},error);}else{loadXKTs_includeTheirMetaModels(xktFiles,finish,error);}}else{this._dataSource.getManifest(params.manifestSrc,function(manifestData){if(sceneModel.destroyed){return;}var xktFiles=manifestData.xktFiles;if(!xktFiles||xktFiles.length===0){error("load(): Failed to load model manifest - manifest not valid");return;}var metaModelFiles=manifestData.metaModelFiles;if(metaModelFiles){loadJSONs(metaModelFiles,function(){loadXKTs_excludeTheirMetaModels(xktFiles,finish,error);},error);}else{loadXKTs_includeTheirMetaModels(xktFiles,finish,error);}},error);}}}return sceneModel;}},{key:"_loadModel",value:function _loadModel(src,params,options,sceneModel,metaModel,manifestCtx,done,error){var _this155=this;this._dataSource.getXKT(params.src,function(arrayBuffer){_this155._parseModel(arrayBuffer,params,options,sceneModel,metaModel,manifestCtx);done();},error);}},{key:"_parseModel",value:function _parseModel(arrayBuffer,params,options,sceneModel,metaModel,manifestCtx){if(sceneModel.destroyed){return;}var dataView=new DataView(arrayBuffer);var dataArray=new Uint8Array(arrayBuffer);var xktVersion=dataView.getUint32(0,true);var parser=parsers[xktVersion];if(!parser){this.error("Unsupported .XKT file version: "+xktVersion+" - this XKTLoaderPlugin supports versions "+Object.keys(parsers));return;}this.log("Loading .xkt V"+xktVersion);var numElements=dataView.getUint32(4,true);var elements=[];var byteOffset=(numElements+2)*4;for(var _i568=0;_i568<numElements;_i568++){var elementSize=dataView.getUint32((_i568+2)*4,true);elements.push(dataArray.subarray(byteOffset,byteOffset+elementSize));byteOffset+=elementSize;}parser.parse(this.viewer,options,elements,sceneModel,metaModel,manifestCtx);}}]);return XKTLoaderPlugin;}(Plugin);function getBaseDirectory(filePath){var pathArray=filePath.split('/');pathArray.pop();// Remove the file name or the last segment of the path
 return pathArray.join('/')+'/';}/*
  Copyright (c) 2013 Gildas Lormeau. All rights reserved.
 
