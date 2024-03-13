@@ -178,6 +178,9 @@ class MetaModel {
         if (metaModelData.propertySets) {
             for (let i = 0, len = metaModelData.propertySets.length; i < len; i++) {
                 const propertySetData = metaModelData.propertySets[i];
+                if (!propertySetData.properties) { // HACK: https://github.com/Creoox/creoox-ifc2gltfcxconverter/issues/8
+                    propertySetData.properties = [];
+                }
                 let propertySet = metaScene.propertySets[propertySetData.id];
                 if (!propertySet) {
                     if (propertyLookup) {
