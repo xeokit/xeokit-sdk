@@ -1146,6 +1146,8 @@ export class SceneModel extends Component {
         this._vboBatchingLayers = {};
         this._dtxLayers = {};
 
+        this._meshList = [];
+
         this.layerList = []; // For GL state efficiency when drawing, InstancingLayers are in first part, BatchingLayers are in second
         this._entityList = [];
 
@@ -1155,10 +1157,8 @@ export class SceneModel extends Component {
         this._textureSets = {};
         this._transforms = {};
         this._meshes = {};
+        this._unusedMeshes = {};
         this._entities = {};
-
-        this._scheduledMeshes = {};
-        this._meshesCfgsBeforeMeshCreation = {};
 
         /** @private **/
         this.renderFlags = new RenderFlags();
@@ -2728,7 +2728,7 @@ export class SceneModel extends Component {
      * @param {Number} [cfg.opacity=1] Opacity in range ````[0..1]````. Overridden by texture set ````colorTexture````.
      * @param {Number} [cfg.metallic=0] Metallic factor in range ````[0..1]````. Overridden by texture set ````metallicRoughnessTexture````.
      * @param {Number} [cfg.roughness=1] Roughness factor in range ````[0..1]````. Overridden by texture set ````metallicRoughnessTexture````.
-     * @returns {Boolean} True = successfully mesh was created. False = error during creation of a mesh.
+     * @returns {SceneModelMesh} The new mesh.
      */
     createMesh(cfg) {
 
@@ -2737,7 +2737,7 @@ export class SceneModel extends Component {
             return false;
         }
 
-        if (this._scheduledMeshes[cfg.id]) {
+        if (this._meshes[cfg.id]) {
             this.error(`[createMesh] SceneModel already has a mesh with this ID: ${cfg.id}`);
             return false;
         }
@@ -3057,17 +3057,7 @@ export class SceneModel extends Component {
 
         cfg.numPrimitives = this._getNumPrimitives(cfg);
 
-        this._meshesCfgsBeforeMeshCreation[cfg.id] = cfg;
-
-        return true;
-    }
-
-    _createDefaultIndices(numIndices) {
-        const indices = [];
-        for (let i = 0; i < numIndices; i++) {
-            indices.push(i);
-        }
-        return indices;
+        return this._createMesh(cfg);
     }
 
     _createMesh(cfg) {
@@ -3099,6 +3089,9 @@ export class SceneModel extends Component {
             cfg.meshMatrix = cfg.transform.worldMatrix;
         }
         mesh.portionId = mesh.layer.createPortion(mesh, cfg);
+        this._meshes[cfg.id] = mesh;
+        this._unusedMeshes[cfg.id] = mesh;
+        this._meshList.push(mesh);
         return mesh;
     }
 
@@ -3459,19 +3452,15 @@ export class SceneModel extends Component {
             const meshId = cfg.meshIds[i];
             let mesh = this._meshes[meshId]; // Trying to get already created mesh
             if (!mesh) { // Checks if there is already created mesh for this meshId
-                let meshCfg = this._meshesCfgsBeforeMeshCreation[meshId]; // Trying to get already created cfg
-                if (!meshCfg) { // Checks if there is already created cfg for this meshId
-                    this.error(`Mesh with this ID not found: "${meshId}" - ignoring this mesh`); // There is no such cfg
-                    continue;
-                }
-                mesh = this._createMesh(meshCfg) // There is no such mesh yet, but there is already created cfg, so it creates this mesh
-                this._meshes[cfg.id] = mesh; // Now it will also add this mesh to dictionary of created meshes
+                this.error(`Mesh with this ID not found: "${meshId}" - ignoring this mesh`); // There is no such cfg
+                continue;
             }
             if (mesh.parent) {
                 this.error(`Mesh with ID "${meshId}" already belongs to object with ID "${mesh.parent.id}" - ignoring this mesh`);
                 continue;
             }
             meshes.push(mesh);
+            delete this._unusedMeshes[meshId];
         }
         const lodCullable = true;
         const entity = new SceneModelEntity(
@@ -3495,6 +3484,7 @@ export class SceneModel extends Component {
         if (this.destroyed) {
             return;
         }
+        this._createDummyEntityForUnusedMeshes();
         for (let i = 0, len = this.layerList.length; i < len; i++) {
             const layer = this.layerList[i];
             layer.finalize();
@@ -3569,6 +3559,21 @@ export class SceneModel extends Component {
                 renderFlags.visibleLayers[renderFlags.numVisibleLayers++] = layerIndex;
             }
         }
+    }
+
+    /** @private */
+    _createDummyEntityForUnusedMeshes() {
+        const unusedMeshIds = Object.keys(this._unusedMeshes);
+        if (unusedMeshIds.length > 0) {
+            const entityId = `${this.id}-dummyEntityForUnusedMeshes`;
+            this.warn(`Creating dummy SceneModelEntity "${entityId}" for unused SceneMeshes: [${unusedMeshIds.join(",")}]`)
+            this.createEntity({
+                id: entityId,
+                meshIds: unusedMeshIds,
+                isObject: true
+            });
+        }
+        this._unusedMeshes = {};
     }
 
     _getActiveSectionPlanesForLayer(layer) {
