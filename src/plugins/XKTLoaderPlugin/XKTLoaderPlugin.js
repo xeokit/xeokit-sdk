@@ -355,9 +355,9 @@ parsers[ParserV10.version] = ParserV10;
  *      }
  *
  *      // Gets the contents of the given .XKT file in an arraybuffer
- *      getXKT(xKTSrc, ok, error) {
+ *      getXKT(src, ok, error) {
  *          console.log("MyDataSource#getXKT(" + xKTSrc + ", ... )");
- *          utils.loadArraybuffer(xKTSrc,
+ *          utils.loadArraybuffer(src,
  *              (arraybuffer) => {
  *                  ok(arraybuffer);
  *              },
@@ -1041,13 +1041,28 @@ class XKTLoaderPlugin extends Plugin {
                                     globalizeObjectIds: options.globalizeObjectIds
                                 });
                                 i++;
-                                this.scheduleTask( loadNext, 100);
+                                this.scheduleTask(loadNext, 100);
                             }, error);
                         }
                     }
                     loadNext();
                 }
-                const loadXKTs = (xktFiles, done, error) => {
+                const loadXKTs_excludeTheirMetaModels = (xktFiles, done, error) => { // Load XKTs, ignore metamodels in the XKT
+                    let i = 0;
+                    const loadNext = () => {
+                        if (i >= xktFiles.length) {
+                            done();
+                        } else {
+                            this._dataSource.getXKT(`${baseDir}${xktFiles[i]}`, (arrayBuffer) => {
+                                this._parseModel(arrayBuffer, params, options, sceneModel, null /* Ignore metamodel in XKT */, manifestCtx);
+                                i++;
+                                this.scheduleTask(loadNext, 100);
+                            }, error);
+                        }
+                    }
+                    loadNext();
+                };
+                const loadXKTs_includeTheirMetaModels = (xktFiles, done, error) => { // Load XKTs, parse metamodels from the XKT
                     let i = 0;
                     const loadNext = () => {
                         if (i >= xktFiles.length) {
@@ -1072,10 +1087,10 @@ class XKTLoaderPlugin extends Plugin {
                     const metaModelFiles = manifestData.metaModelFiles;
                     if (metaModelFiles) {
                         loadJSONs(metaModelFiles, () => {
-                            loadXKTs(xktFiles, finish, error);
+                            loadXKTs_excludeTheirMetaModels(xktFiles, finish, error);
                         }, error);
                     } else {
-                        loadXKTs(xktFiles, finish, error);
+                        loadXKTs_includeTheirMetaModels(xktFiles, finish, error);
                     }
                 } else {
                     this._dataSource.getManifest(params.manifestSrc, (manifestData) => {
@@ -1090,10 +1105,10 @@ class XKTLoaderPlugin extends Plugin {
                         const metaModelFiles = manifestData.metaModelFiles;
                         if (metaModelFiles) {
                             loadJSONs(metaModelFiles, () => {
-                                loadXKTs(xktFiles, finish, error);
+                                loadXKTs_excludeTheirMetaModels(xktFiles, finish, error);
                             }, error);
                         } else {
-                            loadXKTs(xktFiles, finish, error);
+                            loadXKTs_includeTheirMetaModels(xktFiles, finish, error);
                         }
                     }, error);
                 }
@@ -1133,56 +1148,6 @@ class XKTLoaderPlugin extends Plugin {
         }
         parser.parse(this.viewer, options, elements, sceneModel, metaModel, manifestCtx);
     }
-
-// _createDefaultMetaModelIfNeeded(sceneModel, params, options) {
-//
-//     const metaModelId = sceneModel.id;
-//
-//     if (!this.viewer.metaScene.metaModels[metaModelId]) {
-//
-//         const metaModelData = {
-//             metaObjects: []
-//         };
-//
-//         metaModelData.metaObjects.push({
-//             id: metaModelId,
-//             type: "default",
-//             name: metaModelId,
-//             parent: null
-//         });
-//
-//         const entityList = sceneModel.entityList;
-//
-//         for (let i = 0, len = entityList.length; i < len; i++) {
-//             const entity = entityList[i];
-//             if (entity.isObject) {
-//                 metaModelData.metaObjects.push({
-//                     id: entity.id,
-//                     type: "default",
-//                     name: entity.id,
-//                     parent: metaModelId
-//                 });
-//             }
-//         }
-//
-//         const src = params.src;
-//
-//         this.viewer.metaScene.createMetaModel(metaModelId, metaModelData, {
-//
-//             includeTypes: options.includeTypes,
-//             excludeTypes: options.excludeTypes,
-//             globalizeObjectIds: options.globalizeObjectIds,
-//
-//             getProperties: async (propertiesId) => {
-//                 return await this._dataSource.getProperties(src, propertiesId);
-//             }
-//         });
-//
-//         sceneModel.once("destroyed", () => {
-//             this.viewer.metaScene.destroyMetaModel(metaModelId);
-//         });
-//     }
-// }
 }
 
 function getBaseDirectory(filePath) {
