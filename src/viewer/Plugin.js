@@ -1,5 +1,5 @@
 import {Map} from "./scene/utils/Map.js";
-import {core} from "./scene/core";
+import {core} from "./scene/core.js";
 
 /**
  @desc Base class for {@link Viewer} plugin classes.

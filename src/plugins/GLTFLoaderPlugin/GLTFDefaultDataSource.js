@@ -1,5 +1,5 @@
 import {utils} from "../../viewer/scene/utils.js";
-import {core} from "../../viewer/scene/core";
+import {core} from "../../viewer/scene/core.js";
 
 /**
  * Default data access strategy for {@link GLTFLoaderPlugin}.

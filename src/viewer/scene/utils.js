@@ -1,7 +1,7 @@
 /**
  * @private
  */
-import {core} from "./core";
+import {core} from "./core.js";
 
 function xmlToJson(node, attributeRenamer) {
     if (node.nodeType === node.TEXT_NODE) {
