@@ -1,5 +1,5 @@
 import {TrianglesBatchingRenderer} from "./TrianglesBatchingRenderer.js";
-import {EdgesRenderer} from "./EdgesRenderer";
+import {EdgesRenderer} from "./EdgesRenderer.js";
 
 
 /**

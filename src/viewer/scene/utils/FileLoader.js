@@ -1,6 +1,6 @@
 import {Cache} from './Cache.js';
 import {Loader} from './Loader.js';
-import {core} from "../core";
+import {core} from "../core.js";
 
 const loading = {};
 
