@@ -189,6 +189,10 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
         const mouseWorldPos = math.vec3();
         const mouseHoverCanvasPos = math.vec2();
         this._currentAngleMeasurement = null;
+
+        const getTop = el => el.offsetTop + (el.offsetParent && getTop(el.offsetParent));
+        const getLeft = el => el.offsetLeft + (el.offsetParent && getLeft(el.offsetParent));
+
         this._onMouseHoverSurface = cameraControl.on(
             this._snapping
                 ? "hoverSnapOrSurface"
@@ -220,13 +224,9 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                 mouseHoverCanvasPos.set(canvasPos);
                 switch (this._mouseState) {
                     case MOUSE_FINDING_ORIGIN:
-                        const canvasBoundRect = canvas.getBoundingClientRect();
-                        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-                        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                        const canvasLeftEdge = canvasBoundRect.left + scrollLeft;
-                        const canvasTopEdge = canvasBoundRect.top + scrollTop;
-                        this.markerDiv.style.left = `${canvasLeftEdge + canvasPos[0] - 5}px`;
-                        this.markerDiv.style.top = `${canvasTopEdge + canvasPos[1] - 5}px`;
+                        this.markerDiv.style.left = `${getLeft(canvas) + canvasPos[0] - 5}px`;
+                        this.markerDiv.style.top = `${getTop(canvas) + canvasPos[1] - 5}px`;
+
                         break;
                     case MOUSE_FINDING_CORNER:
                         if (this._currentAngleMeasurement) {
