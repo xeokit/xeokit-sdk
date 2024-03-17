@@ -197,6 +197,9 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
 
         this._mouseState = MOUSE_FIRST_CLICK_EXPECTED;
 
+        const getTop = el => el.offsetTop + (el.offsetParent && getTop(el.offsetParent));
+        const getLeft = el => el.offsetLeft + (el.offsetParent && getLeft(el.offsetParent));
+
         this._onCameraControlHoverSnapOrSurface = cameraControl.on(
             this._snapping
                 ? "hoverSnapOrSurface"
@@ -207,16 +210,8 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
                 pointerCanvasPos.set(event.canvasPos);
                 if (this._mouseState === MOUSE_FIRST_CLICK_EXPECTED) {
 
-                   // const canvasBoundary = getCanvasBoundary();
-
-                    const canvasBoundRect = canvas.getBoundingClientRect();
-                    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                    const canvasLeftEdge = canvasBoundRect.left + scrollLeft;
-                    const canvasTopEdge = canvasBoundRect.top + scrollTop;
-
-                    this._markerDiv.style.left = `${canvasLeftEdge + canvasPos[0] - 5}px`;
-                    this._markerDiv.style.top = `${canvasTopEdge + canvasPos[1] - 5}px`;
+                    this._markerDiv.style.left = `${getLeft(canvas) + canvasPos[0] - 5}px`;
+                    this._markerDiv.style.top = `${getTop(canvas) + canvasPos[1] - 5}px`;
 
                     this._markerDiv.style.background = "pink";
                     if (event.snappedToVertex || event.snappedToEdge) {
