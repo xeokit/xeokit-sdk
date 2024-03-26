@@ -103,6 +103,9 @@ class CameraUpdater {
                         }
                     }
                 }
+            } else {
+              dollyDistFactor = 1;
+              followPointerWorldPos = null;
             }
 
             const dollyDeltaForDist = (updates.dollyDelta * dollyDistFactor);
