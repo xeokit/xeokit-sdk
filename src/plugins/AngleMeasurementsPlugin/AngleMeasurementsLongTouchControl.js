@@ -62,8 +62,8 @@ export class AngleMeasurementsLongTouchControl extends AngleMeasurementsControl 
 
         this._longTouchTimeoutMs = 400;
 
-        this._snapEdge = cfg.snapEdge !== false;
-        this._snapVertex = cfg.snapVertex !== false;
+        this._snapToEdge = cfg.snapToEdge !== false;
+        this._snapToVertex = cfg.snapToVertex !== false;
 
         this._attachPlugin(angleMeasurementsPlugin, cfg);
     }
@@ -95,10 +95,10 @@ export class AngleMeasurementsLongTouchControl extends AngleMeasurementsControl 
     /**
      * Sets whether snap-to-vertex is enabled for this AngleMeasurementsControl.
      * This is `true` by default.
-     * @param snapVertex
+     * @param snapToVertex
      */
-    set snapVertex(snapVertex) {
-        this._snapVertex = snapVertex;
+    set snapToVertex(snapToVertex) {
+        this._snapToVertex = snapToVertex;
     }
 
     /**
@@ -106,17 +106,17 @@ export class AngleMeasurementsLongTouchControl extends AngleMeasurementsControl 
      * This is `true` by default.
      * @returns {*}
      */
-    get snapVertex() {
-        return this._snapVertex;
+    get snapToVertex() {
+        return this._snapToVertex;
     }
 
     /**
      * Sets whether snap-to-edge is enabled for this AngleMeasurementsControl.
      * This is `true` by default.
-     * @param snapEdge
+     * @param snapToEdge
      */
-    set snapEdge(snapEdge) {
-        this._snapEdge = snapEdge;
+    set snapToEdge(snapToEdge) {
+        this._snapToEdge = snapToEdge;
     }
 
     /**
@@ -124,8 +124,8 @@ export class AngleMeasurementsLongTouchControl extends AngleMeasurementsControl 
      * This is `true` by default.
      * @returns {*}
      */
-    get snapEdge() {
-        return this._snapEdge;
+    get snapToEdge() {
+        return this._snapToEdge;
     }
 
     /**
@@ -216,10 +216,10 @@ export class AngleMeasurementsLongTouchControl extends AngleMeasurementsControl 
                             if (pointerLens) {
                                 pointerLens.centerPos = touchMoveCanvasPos;
                             }
-                            const snapPickResult = scene.snapPick({
+                            const snapPickResult = scene.pick({
                                 canvasPos: touchMoveCanvasPos,
-                                snapVertex: this._snapVertex,
-                                snapEdge: this._snapEdge
+                                snapToVertex: this._snapToVertex,
+                                snapToEdge: this._snapToEdge
                             });
                             if (snapPickResult && snapPickResult.snappedWorldPos) {
                                 if (pointerLens) {
@@ -334,10 +334,10 @@ export class AngleMeasurementsLongTouchControl extends AngleMeasurementsControl 
                             if (pointerLens) {
                                 pointerLens.centerPos = touchMoveCanvasPos;
                             }
-                            const snapPickResult = scene.snapPick({
+                            const snapPickResult = scene.pick({
                                 canvasPos: touchMoveCanvasPos,
-                                snapVertex: this._snapVertex,
-                                snapEdge: this._snapEdge
+                                snapToVertex: this._snapToVertex,
+                                snapToEdge: this._snapToEdge
                             });
                             if (snapPickResult && snapPickResult.snappedWorldPos) {
                                 if (pointerLens) {
@@ -411,10 +411,10 @@ export class AngleMeasurementsLongTouchControl extends AngleMeasurementsControl 
                                 pointerLens.centerPos = touchStartCanvasPos;
                             }
 
-                            const snapPickResult = scene.snapPick({
+                            const snapPickResult = scene.pick({
                                 canvasPos: touchMoveCanvasPos,
-                                snapVertex: this._snapVertex,
-                                snapEdge: this._snapEdge
+                                snapToVertex: this._snapToVertex,
+                                snapToEdge: this._snapToEdge
                             });
                             if (snapPickResult && snapPickResult.snappedWorldPos) {
                                 if (pointerLens) {
@@ -508,10 +508,10 @@ export class AngleMeasurementsLongTouchControl extends AngleMeasurementsControl 
                     if (pointerLens) {
                         pointerLens.centerPos = touchMoveCanvasPos;
                     }
-                    snapPickResult = scene.snapPick({
+                    snapPickResult = scene.pick({
                         canvasPos: touchMoveCanvasPos,
-                        snapVertex: this._snapVertex,
-                        snapEdge: this._snapEdge
+                        snapToVertex: this._snapToVertex,
+                        snapToEdge: this._snapToEdge
                     });
                     if (snapPickResult && snapPickResult.snappedWorldPos) {
                         if (pointerLens) {
@@ -605,10 +605,10 @@ export class AngleMeasurementsLongTouchControl extends AngleMeasurementsControl 
                     if (pointerLens) {
                         pointerLens.centerPos = touchMoveCanvasPos;
                     }
-                    snapPickResult = scene.snapPick({
+                    snapPickResult = scene.pick({
                         canvasPos: touchMoveCanvasPos,
-                        snapVertex: this._snapVertex,
-                        snapEdge: this._snapEdge
+                        snapToVertex: this._snapToVertex,
+                        snapToEdge: this._snapToEdge
                     });
                     if (snapPickResult && snapPickResult.snappedWorldPos) {
                         if (pointerLens) {
@@ -679,10 +679,10 @@ export class AngleMeasurementsLongTouchControl extends AngleMeasurementsControl 
                     if (pointerLens) {
                         pointerLens.centerPos = touchMoveCanvasPos;
                     }
-                    snapPickResult = scene.snapPick({
+                    snapPickResult = scene.pick({
                         canvasPos: touchMoveCanvasPos,
-                        snapVertex: this._snapVertex,
-                        snapEdge: this._snapEdge
+                        snapToVertex: this._snapToVertex,
+                        snapToEdge: this._snapToEdge
                     });
                     if (snapPickResult && snapPickResult.snappedWorldPos) {
                         if (pointerLens) {
