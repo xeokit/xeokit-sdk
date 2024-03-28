@@ -71,6 +71,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  *      hidePBR: true,                  // No physically-based rendering while we interact (default is true)
  *      hideTransparentObjects: true,   // Hide transparent objects while we interact (default is false)
  *      scaleCanvasResolution: true,    // Scale canvas resolution while we interact (default is false)
+ *      defaultScaleCanvasResolutionFactor: 1.0, // Factor by which we scale canvas resolution when we stop interacting (default is 1.0)
  *      scaleCanvasResolutionFactor: 0.5,  // Factor by which we scale canvas resolution when we interact (default is 0.6)
  *      delayBeforeRestore: true,       // When we stop interacting, delay before restoring normal render (default is true)
  *      delayBeforeRestoreSeconds: 0.5  // The delay duration, in seconds (default is 0.5)
@@ -103,6 +104,7 @@ class FastNavPlugin extends Plugin {
      * @param {Boolean} [cfg.hideEdges=true] Whether to temporarily hide edges whenever we interact with the Viewer.
      * @param {Boolean} [cfg.hideTransparentObjects=false] Whether to temporarily hide transparent objects whenever we interact with the Viewer.
      * @param {Number} [cfg.scaleCanvasResolution=false] Whether to temporarily down-scale the canvas resolution whenever we interact with the Viewer.
+     * @param {Number} [cfg.defaultScaleCanvasResolutionFactor=0.6] The factor by which we downscale the canvas resolution whenever we stop interacting with the Viewer.
      * @param {Number} [cfg.scaleCanvasResolutionFactor=0.6] The factor by which we downscale the canvas resolution whenever we interact with the Viewer.
      * @param {Boolean} [cfg.delayBeforeRestore=true] Whether to temporarily have a delay before restoring normal rendering after we stop interacting with the Viewer.
      * @param {Number} [cfg.delayBeforeRestoreSeconds=0.5] Delay in seconds before restoring normal rendering after we stop interacting with the Viewer.
@@ -117,6 +119,7 @@ class FastNavPlugin extends Plugin {
         this._hideEdges = cfg.hideEdges !== false;
         this._hideTransparentObjects = !!cfg.hideTransparentObjects;
         this._scaleCanvasResolution = !!cfg.scaleCanvasResolution;
+        this._defaultScaleCanvasResolutionFactor = cfg.defaultScaleCanvasResolutionFactor || 1.0;
         this._scaleCanvasResolutionFactor = cfg.scaleCanvasResolutionFactor || 0.6;
         this._delayBeforeRestore = (cfg.delayBeforeRestore !== false);
         this._delayBeforeRestoreSeconds = cfg.delayBeforeRestoreSeconds || 0.5;
@@ -135,14 +138,14 @@ class FastNavPlugin extends Plugin {
                 if (this._scaleCanvasResolution) {
                     viewer.scene.canvas.resolutionScale = this._scaleCanvasResolutionFactor;
                 } else {
-                    viewer.scene.canvas.resolutionScale = 1;
+                    viewer.scene.canvas.resolutionScale = this._defaultScaleCanvasResolutionFactor;
                 }
                 fastMode = true;
             }
         };
 
         const switchToHighQuality = () => {
-            viewer.scene.canvas.resolutionScale = 1;
+            viewer.scene.canvas.resolutionScale = this._defaultScaleCanvasResolutionFactor;
             viewer.scene._renderer.setEdgesEnabled(true);
             viewer.scene._renderer.setColorTextureEnabled(true);
             viewer.scene._renderer.setPBREnabled(true);
@@ -310,7 +313,7 @@ class FastNavPlugin extends Plugin {
     }
 
     /**
-     * Sets whether to temporarily scale the canvas resolution whenever we interact with the Viewer.
+     * Sets the factor to which we restore the canvas resolution scale when we stop interacting with the viewer.
      *
      * Default is ````false````.
      *
@@ -320,6 +323,34 @@ class FastNavPlugin extends Plugin {
      */
     set scaleCanvasResolution(scaleCanvasResolution) {
         this._scaleCanvasResolution = scaleCanvasResolution;
+    }
+
+    /**
+     * Gets the factor to which we restore the canvas resolution scale when we stop interacting with the viewer.
+     *
+     * Default is ````1.0````.
+     *
+     * Enable canvas resolution scaling by setting {@link FastNavPlugin#scaleCanvasResolution} ````true````.
+     *
+     * @return {Number} Factor by scale canvas resolution when we stop interacting with the viewer.
+     */
+    get defaultScaleCanvasResolutionFactor() {
+        return this._defaultScaleCanvasResolutionFactor;
+    }
+
+    /**
+     * Sets the factor to which we restore the canvas resolution scale when we stop interacting with the viewer.
+     *
+     * Accepted range is ````[0.0 .. 1.0]````.
+     *
+     * Default is ````1.0````.
+     *
+     * Enable canvas resolution scaling by setting {@link FastNavPlugin#scaleCanvasResolution} ````true````.
+     *
+     * @param {Number} defaultScaleCanvasResolutionFactor Factor by scale canvas resolution when we stop interacting with the viewer.
+     */
+    set defaultScaleCanvasResolutionFactor(defaultScaleCanvasResolutionFactor) {
+        this._defaultScaleCanvasResolutionFactor = defaultScaleCanvasResolutionFactor || 1.0;
     }
 
     /**
