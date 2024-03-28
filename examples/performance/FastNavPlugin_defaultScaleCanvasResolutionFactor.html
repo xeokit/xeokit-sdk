@@ -16,12 +16,14 @@
 <canvas id="myCanvas"></canvas>
 <div class="slideout-sidebar">
     <img class="info-icon" src="../../assets/images/performance_icon.png"/>
-    <h1>FastNavPlugin</h1>
+    <h1>FastNavPlugin with defaultScaleCanvasResolutionFactor</h1>
     <h2>Makes interaction smoother</h2>
     <p>Whenever the camera moves, <a href="../../docs/class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html"
                                      target="_other">FastNavPlugin</a> temporarily reduces the canvas resolution and
         disables certain rendering
         effects, to make interaction smoother.</p>
+    <p>In this example, we configure FastNavPlugin with a value for defaultScaleCanvasResolutionFactor, which sets a
+    canvas scaling factor to revert to when we stop interacting.</p>
     <h3>Stats</h3>
     <ul>
         <li>
@@ -95,8 +97,8 @@
         hidePBR: true,
         hideTransparentObjects: false,
         scaleCanvasResolution: true,
-        defaultScaleCanvasResolutionFactor: 1.0,
-        scaleCanvasResolutionFactor: 0.5,
+        defaultScaleCanvasResolutionFactor: 0.5,
+        scaleCanvasResolutionFactor: 0.25,
         delayBeforeRestore: true,
         delayBeforeRestoreSeconds: 0.4
     });
