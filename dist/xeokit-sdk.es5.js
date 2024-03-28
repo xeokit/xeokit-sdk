@@ -19648,6 +19648,7 @@ this._originDot.setVisible(this._visible&&this._originVisible);this._targetDot.s
  *      hidePBR: true,                  // No physically-based rendering while we interact (default is true)
  *      hideTransparentObjects: true,   // Hide transparent objects while we interact (default is false)
  *      scaleCanvasResolution: true,    // Scale canvas resolution while we interact (default is false)
+ *      defaultScaleCanvasResolutionFactor: 1.0, // Factor by which we scale canvas resolution when we stop interacting (default is 1.0)
  *      scaleCanvasResolutionFactor: 0.5,  // Factor by which we scale canvas resolution when we interact (default is 0.6)
  *      delayBeforeRestore: true,       // When we stop interacting, delay before restoring normal render (default is true)
  *      delayBeforeRestoreSeconds: 0.5  // The delay duration, in seconds (default is 0.5)
@@ -19677,10 +19678,11 @@ this._originDot.setVisible(this._visible&&this._originVisible);this._targetDot.s
      * @param {Boolean} [cfg.hideEdges=true] Whether to temporarily hide edges whenever we interact with the Viewer.
      * @param {Boolean} [cfg.hideTransparentObjects=false] Whether to temporarily hide transparent objects whenever we interact with the Viewer.
      * @param {Number} [cfg.scaleCanvasResolution=false] Whether to temporarily down-scale the canvas resolution whenever we interact with the Viewer.
+     * @param {Number} [cfg.defaultScaleCanvasResolutionFactor=0.6] The factor by which we downscale the canvas resolution whenever we stop interacting with the Viewer.
      * @param {Number} [cfg.scaleCanvasResolutionFactor=0.6] The factor by which we downscale the canvas resolution whenever we interact with the Viewer.
      * @param {Boolean} [cfg.delayBeforeRestore=true] Whether to temporarily have a delay before restoring normal rendering after we stop interacting with the Viewer.
      * @param {Number} [cfg.delayBeforeRestoreSeconds=0.5] Delay in seconds before restoring normal rendering after we stop interacting with the Viewer.
-     */function FastNavPlugin(viewer){var _this85;var cfg=arguments.length>1&&arguments[1]!==undefined?arguments[1]:{};_classCallCheck(this,FastNavPlugin);_this85=_super119.call(this,"FastNav",viewer);_this85._hideColorTexture=cfg.hideColorTexture!==false;_this85._hidePBR=cfg.hidePBR!==false;_this85._hideSAO=cfg.hideSAO!==false;_this85._hideEdges=cfg.hideEdges!==false;_this85._hideTransparentObjects=!!cfg.hideTransparentObjects;_this85._scaleCanvasResolution=!!cfg.scaleCanvasResolution;_this85._scaleCanvasResolutionFactor=cfg.scaleCanvasResolutionFactor||0.6;_this85._delayBeforeRestore=cfg.delayBeforeRestore!==false;_this85._delayBeforeRestoreSeconds=cfg.delayBeforeRestoreSeconds||0.5;var timer=_this85._delayBeforeRestoreSeconds*1000;var fastMode=false;var switchToLowQuality=function switchToLowQuality(){timer=_this85._delayBeforeRestoreSeconds*1000;if(!fastMode){viewer.scene._renderer.setColorTextureEnabled(!_this85._hideColorTexture);viewer.scene._renderer.setPBREnabled(!_this85._hidePBR);viewer.scene._renderer.setSAOEnabled(!_this85._hideSAO);viewer.scene._renderer.setTransparentEnabled(!_this85._hideTransparentObjects);viewer.scene._renderer.setEdgesEnabled(!_this85._hideEdges);if(_this85._scaleCanvasResolution){viewer.scene.canvas.resolutionScale=_this85._scaleCanvasResolutionFactor;}else{viewer.scene.canvas.resolutionScale=1;}fastMode=true;}};var switchToHighQuality=function switchToHighQuality(){viewer.scene.canvas.resolutionScale=1;viewer.scene._renderer.setEdgesEnabled(true);viewer.scene._renderer.setColorTextureEnabled(true);viewer.scene._renderer.setPBREnabled(true);viewer.scene._renderer.setSAOEnabled(true);viewer.scene._renderer.setTransparentEnabled(true);fastMode=false;};_this85._onCanvasBoundary=viewer.scene.canvas.on("boundary",switchToLowQuality);_this85._onCameraMatrix=viewer.scene.camera.on("matrix",switchToLowQuality);_this85._onSceneTick=viewer.scene.on("tick",function(tickEvent){if(!fastMode){return;}timer-=tickEvent.deltaTime;if(!_this85._delayBeforeRestore||timer<=0){switchToHighQuality();}});var down=false;_this85._onSceneMouseDown=viewer.scene.input.on("mousedown",function(){down=true;});_this85._onSceneMouseUp=viewer.scene.input.on("mouseup",function(){down=false;});_this85._onSceneMouseMove=viewer.scene.input.on("mousemove",function(){if(!down){return;}switchToLowQuality();});return _this85;}/**
+     */function FastNavPlugin(viewer){var _this85;var cfg=arguments.length>1&&arguments[1]!==undefined?arguments[1]:{};_classCallCheck(this,FastNavPlugin);_this85=_super119.call(this,"FastNav",viewer);_this85._hideColorTexture=cfg.hideColorTexture!==false;_this85._hidePBR=cfg.hidePBR!==false;_this85._hideSAO=cfg.hideSAO!==false;_this85._hideEdges=cfg.hideEdges!==false;_this85._hideTransparentObjects=!!cfg.hideTransparentObjects;_this85._scaleCanvasResolution=!!cfg.scaleCanvasResolution;_this85._defaultScaleCanvasResolutionFactor=cfg.defaultScaleCanvasResolutionFactor||1.0;_this85._scaleCanvasResolutionFactor=cfg.scaleCanvasResolutionFactor||0.6;_this85._delayBeforeRestore=cfg.delayBeforeRestore!==false;_this85._delayBeforeRestoreSeconds=cfg.delayBeforeRestoreSeconds||0.5;var timer=_this85._delayBeforeRestoreSeconds*1000;var fastMode=false;var switchToLowQuality=function switchToLowQuality(){timer=_this85._delayBeforeRestoreSeconds*1000;if(!fastMode){viewer.scene._renderer.setColorTextureEnabled(!_this85._hideColorTexture);viewer.scene._renderer.setPBREnabled(!_this85._hidePBR);viewer.scene._renderer.setSAOEnabled(!_this85._hideSAO);viewer.scene._renderer.setTransparentEnabled(!_this85._hideTransparentObjects);viewer.scene._renderer.setEdgesEnabled(!_this85._hideEdges);if(_this85._scaleCanvasResolution){viewer.scene.canvas.resolutionScale=_this85._scaleCanvasResolutionFactor;}else{viewer.scene.canvas.resolutionScale=_this85._defaultScaleCanvasResolutionFactor;}fastMode=true;}};var switchToHighQuality=function switchToHighQuality(){viewer.scene.canvas.resolutionScale=_this85._defaultScaleCanvasResolutionFactor;viewer.scene._renderer.setEdgesEnabled(true);viewer.scene._renderer.setColorTextureEnabled(true);viewer.scene._renderer.setPBREnabled(true);viewer.scene._renderer.setSAOEnabled(true);viewer.scene._renderer.setTransparentEnabled(true);fastMode=false;};_this85._onCanvasBoundary=viewer.scene.canvas.on("boundary",switchToLowQuality);_this85._onCameraMatrix=viewer.scene.camera.on("matrix",switchToLowQuality);_this85._onSceneTick=viewer.scene.on("tick",function(tickEvent){if(!fastMode){return;}timer-=tickEvent.deltaTime;if(!_this85._delayBeforeRestore||timer<=0){switchToHighQuality();}});var down=false;_this85._onSceneMouseDown=viewer.scene.input.on("mousedown",function(){down=true;});_this85._onSceneMouseUp=viewer.scene.input.on("mouseup",function(){down=false;});_this85._onSceneMouseMove=viewer.scene.input.on("mousemove",function(){if(!down){return;}switchToLowQuality();});return _this85;}/**
      * Gets whether to temporarily hide color textures whenever we interact with the Viewer.
      *
      * Default is ````true````.
@@ -19753,7 +19755,7 @@ this._originDot.setVisible(this._visible&&this._originVisible);this._targetDot.s
      *
      * @return {Boolean} ````true```` if scaling the canvas resolution.
      */},{key:"scaleCanvasResolution",get:function get(){return this._scaleCanvasResolution;}/**
-     * Sets whether to temporarily scale the canvas resolution whenever we interact with the Viewer.
+     * Sets the factor to which we restore the canvas resolution scale when we stop interacting with the viewer.
      *
      * Default is ````false````.
      *
@@ -19761,6 +19763,24 @@ this._originDot.setVisible(this._visible&&this._originVisible);this._targetDot.s
      *
      * @param {Boolean} scaleCanvasResolution ````true```` to scale the canvas resolution.
      */,set:function set(scaleCanvasResolution){this._scaleCanvasResolution=scaleCanvasResolution;}/**
+     * Gets the factor to which we restore the canvas resolution scale when we stop interacting with the viewer.
+     *
+     * Default is ````1.0````.
+     *
+     * Enable canvas resolution scaling by setting {@link FastNavPlugin#scaleCanvasResolution} ````true````.
+     *
+     * @return {Number} Factor by scale canvas resolution when we stop interacting with the viewer.
+     */},{key:"defaultScaleCanvasResolutionFactor",get:function get(){return this._defaultScaleCanvasResolutionFactor;}/**
+     * Sets the factor to which we restore the canvas resolution scale when we stop interacting with the viewer.
+     *
+     * Accepted range is ````[0.0 .. 1.0]````.
+     *
+     * Default is ````1.0````.
+     *
+     * Enable canvas resolution scaling by setting {@link FastNavPlugin#scaleCanvasResolution} ````true````.
+     *
+     * @param {Number} defaultScaleCanvasResolutionFactor Factor by scale canvas resolution when we stop interacting with the viewer.
+     */,set:function set(defaultScaleCanvasResolutionFactor){this._defaultScaleCanvasResolutionFactor=defaultScaleCanvasResolutionFactor||1.0;}/**
      * Gets the factor by which we temporarily scale the canvas resolution when we interact with the viewer.
      *
      * Default is ````0.6````.
