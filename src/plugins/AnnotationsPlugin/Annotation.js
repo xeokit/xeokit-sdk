@@ -90,6 +90,20 @@ class Annotation extends Marker {
             }
         });
 
+        this._onSectionPlaneUpdated = this.scene.on('sectionPlaneUpdated', () => {
+          if (this._isSliced(this._worldPos) && this._markerShown) {
+            this._markerShown = false;
+            this._buildHTML();
+            this._layoutDirty = true;
+            this._visibilityDirty = true;
+          } else if (!this._isSliced(this._worldPos) && !this._markerShown) {
+            this._markerShown = true;
+            this._buildHTML();
+            this._layoutDirty = true;
+            this._visibilityDirty = true;
+          }
+        });
+
         this.on("canvasPos", () => {
             this._layoutDirty = true;
         });
@@ -218,6 +232,19 @@ class Annotation extends Marker {
             }
         }
         return template;
+    }
+
+    /**
+   * @private
+   */
+    _isSliced(positions) {
+            const sectionPlanes = this.scene._sectionPlanesState.sectionPlanes;
+            for (let i = 0, len = sectionPlanes.length; i < len; i++) {
+            const sectionPlane = sectionPlanes[i];
+            if (math.planeClipsPositions3(sectionPlane.pos, sectionPlane.dir, positions, 4)) {
+                return true;
+            }
+        }
     }
 
     /**
