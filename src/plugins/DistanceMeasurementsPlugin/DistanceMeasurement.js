@@ -353,7 +353,7 @@ class DistanceMeasurement extends Component {
 
         if (this._sectionPlanesDirty) {
 
-            if (this._isSliced(this._wp)) {
+            if (this._isSliced(this._originWorld) || this._isSliced(this._targetWorld)) {
                 this._xAxisLabel.setCulled(true);
                 this._yAxisLabel.setCulled(true);
                 this._zAxisLabel.setCulled(true);
