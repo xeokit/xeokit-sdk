@@ -48,12 +48,15 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
      *
      * @param {AngleMeasurementsPlugin} angleMeasurementsPlugin The AngleMeasurementsPlugin to control.
      * @param {*} [cfg] Configuration
+     * @param {function} [cfg.canvasToPagePos] Optional function to map canvas-space coordinates to page coordinates.
      * @param {PointerLens} [cfg.pointerLens] A PointerLens to use to provide a magnified view of the cursor when snapping is enabled.
      * @param {boolean} [cfg.snapping=true] Whether to initially enable snap-to-vertex and snap-to-edge for this AngleMeasurementsMouseControl.
      */
     constructor(angleMeasurementsPlugin, cfg = {}) {
 
         super(angleMeasurementsPlugin.viewer.scene);
+
+        this._canvasToPagePos = cfg.canvasToPagePos;
 
         this.pointerLens = cfg.pointerLens;
 
@@ -193,6 +196,8 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
         const getTop = el => el.offsetTop + (el.offsetParent && getTop(el.offsetParent));
         const getLeft = el => el.offsetLeft + (el.offsetParent && getLeft(el.offsetParent));
 
+        const pagePos = math.vec2();
+
         this._onMouseHoverSurface = cameraControl.on(
             this._snapping
                 ? "hoverSnapOrSurface"
@@ -224,9 +229,14 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                 mouseHoverCanvasPos.set(canvasPos);
                 switch (this._mouseState) {
                     case MOUSE_FINDING_ORIGIN:
-                        this.markerDiv.style.left = `${getLeft(canvas) + canvasPos[0] - 5}px`;
-                        this.markerDiv.style.top = `${getTop(canvas) + canvasPos[1] - 5}px`;
-
+                        if (this._canvasToPagePos) {
+                            this._canvasToPagePos(canvas, canvasPos, pagePos);
+                            this.markerDiv.style.left = `${pagePos[0] - 5}px`;
+                            this.markerDiv.style.top = `${pagePos[1] - 5}px`;
+                        } else {
+                            this.markerDiv.style.left = `${getLeft(canvas) + canvasPos[0] - 5}px`;
+                            this.markerDiv.style.top = `${getTop(canvas) + canvasPos[1] - 5}px`;
+                        }
                         break;
                     case MOUSE_FINDING_CORNER:
                         if (this._currentAngleMeasurement) {
