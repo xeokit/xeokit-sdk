@@ -47,12 +47,15 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
      *
      * @param {DistanceMeasurementsPlugin} distanceMeasurementsPlugin The AngleMeasurementsPlugin to control.
      * @param [cfg] Configuration
+     * @param {function} [cfg.canvasToPagePos] Optional function to map canvas-space coordinates to page coordinates.
      * @param {PointerLens} [cfg.pointerLens] A PointerLens to use to provide a magnified view of the cursor when snapping is enabled.
      * @param {boolean} [cfg.snapping=true] Whether to initially enable snap-to-vertex and snap-to-edge for this DistanceMeasurementsMouseControl.
      */
     constructor(distanceMeasurementsPlugin, cfg = {}) {
 
         super(distanceMeasurementsPlugin.viewer.scene);
+
+        this._canvasToPagePos = cfg.canvasToPagePos;
 
         this.pointerLens = cfg.pointerLens;
 
@@ -200,6 +203,8 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
         const getTop = el => el.offsetTop + (el.offsetParent && getTop(el.offsetParent));
         const getLeft = el => el.offsetLeft + (el.offsetParent && getLeft(el.offsetParent));
 
+        const pagePos = math.vec2();
+
         this._onCameraControlHoverSnapOrSurface = cameraControl.on(
             this._snapping
                 ? "hoverSnapOrSurface"
@@ -210,8 +215,14 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
                 pointerCanvasPos.set(event.canvasPos);
                 if (this._mouseState === MOUSE_FIRST_CLICK_EXPECTED) {
 
-                    this._markerDiv.style.left = `${getLeft(canvas) + canvasPos[0] - 5}px`;
-                    this._markerDiv.style.top = `${getTop(canvas) + canvasPos[1] - 5}px`;
+                    if (this._canvasToPagePos) {
+                        this._canvasToPagePos(canvas, canvasPos, pagePos);
+                        this._markerDiv.style.left = `${pagePos[0] - 5}px`;
+                        this._markerDiv.style.top = `${pagePos[1] - 5}px`;
+                    } else {
+                        this._markerDiv.style.left = `${getLeft(canvas) + canvasPos[0] - 5}px`;
+                        this._markerDiv.style.top = `${getTop(canvas) + canvasPos[1] - 5}px`;
+                    }
 
                     this._markerDiv.style.background = "pink";
                     if (event.snappedToVertex || event.snappedToEdge) {
