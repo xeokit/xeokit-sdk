@@ -182,6 +182,10 @@ export class DistanceMeasurementsLongTouchControl extends DistanceMeasurementsCo
             const currentNumTouches = event.touches.length;
 
             if (currentNumTouches !== 1) {
+                if (longTouchTimeout) {
+                    clearTimeout(longTouchTimeout);
+                    longTouchTimeout = null;
+                }
                 return;
             }
 
@@ -383,6 +387,10 @@ export class DistanceMeasurementsLongTouchControl extends DistanceMeasurementsCo
             const currentNumTouches = event.touches.length;
 
             if (currentNumTouches !== 1 || event.changedTouches.length !== 1) {
+                if (longTouchTimeout) {
+                    clearTimeout(longTouchTimeout);
+                    longTouchTimeout = null;
+                }
                 return;
             }
 
