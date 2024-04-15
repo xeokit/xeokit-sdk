@@ -337,6 +337,14 @@ class PickResult {
     }
 
     /**
+     * True if snapped to edge or vertex.
+     * @returns {boolean}
+     */
+    get snapped() {
+        return this.snappedToEdge || this.snappedToVertex;
+    }
+
+    /**
      * @private
      */
     reset() {
