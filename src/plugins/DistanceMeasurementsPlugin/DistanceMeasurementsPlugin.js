@@ -221,6 +221,46 @@ import {DistanceMeasurementsMouseControl} from "./DistanceMeasurementsMouseContr
  *      });
  * });
  * ````
+ *
+ * ## Example 5: Creating DistanceMeasurements with Touch Input
+ *
+ * In our fifth example, we'll show how to create distance measurements with touch input, with snapping
+ * to the nearest vertex or edge. While creating the measurements, a long-touch when setting the
+ * start or end point will cause the point to snap to the nearest vertex or edge. A quick
+ * touch-release will immediately set the point at the tapped position on the object surface.
+ *
+ * [[Run example](/examples/measurement/#distance_createWithTouch_snapping)]
+ *
+ * ````javascript
+ * import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin, DistanceMeasurementsTouchControl} from "xeokit-sdk.es.js";
+ *
+ * const viewer = new Viewer({
+ *     canvasId: "myCanvas",
+ *     transparent: true
+ * });
+ *
+ * viewer.scene.camera.eye = [-2.37, 18.97, -26.12];
+ * viewer.scene.camera.look = [10.97, 5.82, -11.22];
+ * viewer.scene.camera.up = [0.36, 0.83, 0.40];
+ *
+ * const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ * const distanceMeasurements = new DistanceMeasurementsPlugin(viewer);
+ *
+ * const model = xktLoader.load({
+ *      src: "./models/xkt/duplex/duplex.xkt"
+ * });
+ *
+ * const distanceMeasurements = new DistanceMeasurementsPlugin(viewer);
+ *
+ * const distanceMeasurementsTouchControl  = new DistanceMeasurementsTouchControl(distanceMeasurements, {
+ *     pointerLens : new PointerLens(viewer),
+ *     snapToVertex: true,
+ *     snapToEdge: true
+ * })
+ *
+ * distanceMeasurementsTouchControl.activate();
+ * ````
  */
 class DistanceMeasurementsPlugin extends Plugin {
 
@@ -454,7 +494,7 @@ class DistanceMeasurementsPlugin extends Plugin {
     }
 
     /**
-     * Shows all or hides the angle label of each {@link DistanceMeasurement}.
+     * Shows all or hides the distance label of each {@link DistanceMeasurement}.
      *
      * @param {Boolean} labelsShown Whether or not to show the labels.
      */

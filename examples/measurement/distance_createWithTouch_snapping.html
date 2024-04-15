@@ -127,7 +127,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, ContextMenu, DistanceMeasurementsPlugin, DistanceMeasurementDoubleTouchControl, PointerLens} from "../../dist/xeokit-sdk.es.js";
+    import {Viewer, XKTLoaderPlugin, ContextMenu, DistanceMeasurementsPlugin, DistanceMeasurementsTouchControl, PointerLens} from "../../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -141,14 +141,6 @@
     viewer.camera.eye = [-3.93, 2.85, 27.01];
     viewer.camera.look = [4.40, 3.72, 8.89];
     viewer.camera.up = [-0.01, 0.99, 0.039];
-
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Vertex-snapping mode
-    //------------------------------------------------------------------------------------------------------------------
-
-    viewer.cameraControl.doublePickFlyTo  = false;
-    viewer.cameraControl.doublePickjumpTo = false;
 
     //------------------------------------------------------------------------------------------------------------------
     // Load a model
@@ -172,11 +164,13 @@
 
     const distanceMeasurements = new DistanceMeasurementsPlugin(viewer);
 
-    const distanceMeasurementDoubleTouchControl  = new DistanceMeasurementDoubleTouchControl(distanceMeasurements, {
-        pointerLens : new PointerLens(viewer)
+    const distanceMeasurementsTouchControl  = new DistanceMeasurementsTouchControl(distanceMeasurements, {
+        pointerLens : new PointerLens(viewer),
+        snapToVertex: true,
+        snapToEdge: true
     });
 
-    distanceMeasurementDoubleTouchControl.activate();
+    distanceMeasurementsTouchControl.activate();
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a context menu to delete and configure measurements

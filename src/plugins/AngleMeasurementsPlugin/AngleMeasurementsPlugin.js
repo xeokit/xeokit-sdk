@@ -203,6 +203,46 @@ import {AngleMeasurementsMouseControl} from "./AngleMeasurementsMouseControl.js"
  *         });
  * });
  * ````
+ *
+ * ## Example 5: Creating AngleMeasurements with Touch Input
+ *
+ * In our fifth example, we'll show how to create angle measurements with touch input, with snapping
+ * to the nearest vertex or edge. While creating the measurements, a long-touch when setting the
+ * start, corner or end point will cause the point to snap to the nearest vertex or edge. A quick
+ * touch-release will immediately set the point at the tapped position on the object surface.
+ *
+ * [[Run example](/examples/measurement/#angle_createWithTouch_snapping)]
+ *
+ * ````javascript
+ * import {Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin, AngleMeasurementsTouchControl} from "xeokit-sdk.es.js";
+ *
+ * const viewer = new Viewer({
+ *     canvasId: "myCanvas",
+ *     transparent: true
+ * });
+ *
+ * viewer.scene.camera.eye = [-2.37, 18.97, -26.12];
+ * viewer.scene.camera.look = [10.97, 5.82, -11.22];
+ * viewer.scene.camera.up = [0.36, 0.83, 0.40];
+ *
+ * const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ * const angleMeasurements = new AngleMeasurementsPlugin(viewer);
+ *
+ * const model = xktLoader.load({
+ *      src: "./models/xkt/duplex/duplex.xkt"
+ * });
+ *
+ * const angleMeasurements = new AngleMeasurementsPlugin(viewer);
+ *
+ * const angleMeasurementsTouchControl  = new AngleMeasurementsTouchControl(angleMeasurements, {
+ *     pointerLens : new PointerLens(viewer),
+ *     snapToVertex: true,
+ *     snapToEdge: true
+ * })
+ *
+ * angleMeasurementsTouchControl.activate();
+ * ````
  */
 export class AngleMeasurementsPlugin extends Plugin {
 

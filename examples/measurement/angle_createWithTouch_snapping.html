@@ -48,7 +48,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin, AngleMeasurementsLongTouchControl, PointerLens} from "../../dist/xeokit-sdk.es.js";
+    import {Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin, AngleMeasurementsTouchControl, PointerLens} from "../../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -81,8 +81,10 @@
 
     const angleMeasurements = new AngleMeasurementsPlugin(viewer);
 
-    const angleMeasurementsTouchControl  = new AngleMeasurementsLongTouchControl(angleMeasurements, {
-        pointerLens : new PointerLens(viewer)
+    const angleMeasurementsTouchControl  = new AngleMeasurementsTouchControl(angleMeasurements, {
+        pointerLens : new PointerLens(viewer),
+        snapToVertex: true,
+        snapToEdge: true
     })
 
     angleMeasurementsTouchControl.activate();
