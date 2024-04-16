@@ -229,7 +229,7 @@ import {DistanceMeasurementsMouseControl} from "./DistanceMeasurementsMouseContr
  * start or end point will cause the point to snap to the nearest vertex or edge. A quick
  * touch-release will immediately set the point at the tapped position on the object surface.
  *
- * [[Run example](/examples/measurement/#distance_createWithTouch_snapping)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/measurement/#distance_createWithTouch_snapping)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin, DistanceMeasurementsTouchControl} from "xeokit-sdk.es.js";
