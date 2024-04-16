@@ -36,6 +36,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html",
+    "<span>AngleMeasurementsTouchControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/plugins/annotationsplugin/annotation.js~annotation",
     "class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html",
     "<span>Annotation</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/AnnotationsPlugin/Annotation.js</span>",
@@ -222,6 +228,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/plugins/distancemeasurementsplugin/distancemeasurementscontrollegacy.js~distancemeasurementscontrollegacy",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy.html",
+    "<span>DistanceMeasurementsControlLegacy</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/plugins/distancemeasurementsplugin/distancemeasurementsmousecontrol.js~distancemeasurementsmousecontrol",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl.html",
     "<span>DistanceMeasurementsMouseControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js</span>",
@@ -231,6 +243,12 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html",
     "<span>DistanceMeasurementsPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html",
+    "<span>DistanceMeasurementsTouchControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js</span>",
     "class"
   ],
   [
@@ -675,6 +693,12 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/lights/pointlight.js~pointlight",
     "class/src/viewer/scene/lights/PointLight.js~PointLight.html",
     "<span>PointLight</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/lights/PointLight.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/extras/pointercircle/pointercircle.js~pointercircle",
+    "class/src/extras/PointerCircle/PointerCircle.js~PointerCircle.html",
+    "<span>PointerCircle</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/extras/PointerCircle/PointerCircle.js</span>",
     "class"
   ],
   [
@@ -1806,6 +1830,66 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/extras/pointercircle/pointercircle.js",
+    "file/src/extras/PointerCircle/PointerCircle.js.html",
+    "src/extras/PointerCircle/PointerCircle.js",
+    "file"
+  ],
+  [
+    "src/extras/pointercircle/pointercircle.js~pointercircle#constructor",
+    "class/src/extras/PointerCircle/PointerCircle.js~PointerCircle.html#instance-constructor-constructor",
+    "src/extras/PointerCircle/PointerCircle.js~PointerCircle#constructor",
+    "method"
+  ],
+  [
+    "src/extras/pointercircle/pointercircle.js~pointercircle#destroy",
+    "class/src/extras/PointerCircle/PointerCircle.js~PointerCircle.html#instance-method-destroy",
+    "src/extras/PointerCircle/PointerCircle.js~PointerCircle#destroy",
+    "method"
+  ],
+  [
+    "src/extras/pointercircle/pointercircle.js~pointercircle#durationms",
+    "class/src/extras/PointerCircle/PointerCircle.js~PointerCircle.html#instance-set-durationMs",
+    "src/extras/PointerCircle/PointerCircle.js~PointerCircle#durationMs",
+    "member"
+  ],
+  [
+    "src/extras/pointercircle/pointercircle.js~pointercircle#durationms",
+    "class/src/extras/PointerCircle/PointerCircle.js~PointerCircle.html#instance-get-durationMs",
+    "src/extras/PointerCircle/PointerCircle.js~PointerCircle#durationMs",
+    "member"
+  ],
+  [
+    "src/extras/pointercircle/pointercircle.js~pointercircle#scene",
+    "class/src/extras/PointerCircle/PointerCircle.js~PointerCircle.html#instance-member-scene",
+    "src/extras/PointerCircle/PointerCircle.js~PointerCircle#scene",
+    "member"
+  ],
+  [
+    "src/extras/pointercircle/pointercircle.js~pointercircle#start",
+    "class/src/extras/PointerCircle/PointerCircle.js~PointerCircle.html#instance-method-start",
+    "src/extras/PointerCircle/PointerCircle.js~PointerCircle#start",
+    "method"
+  ],
+  [
+    "src/extras/pointercircle/pointercircle.js~pointercircle#stop",
+    "class/src/extras/PointerCircle/PointerCircle.js~PointerCircle.html#instance-method-stop",
+    "src/extras/PointerCircle/PointerCircle.js~PointerCircle#stop",
+    "method"
+  ],
+  [
+    "src/extras/pointercircle/pointercircle.js~pointercircle#viewer",
+    "class/src/extras/PointerCircle/PointerCircle.js~PointerCircle.html#instance-member-viewer",
+    "src/extras/PointerCircle/PointerCircle.js~PointerCircle#viewer",
+    "member"
+  ],
+  [
+    "src/extras/pointercircle/index.js",
+    "file/src/extras/PointerCircle/index.js.html",
+    "src/extras/PointerCircle/index.js",
+    "file"
+  ],
+  [
     "src/extras/pointerlens/pointerlens.js",
     "file/src/extras/PointerLens/PointerLens.js.html",
     "src/extras/PointerLens/PointerLens.js",
@@ -2319,6 +2403,102 @@ window.esdocSearchIndex = [
     "src/plugins/anglemeasurementsplugin/anglemeasurementsplugin.js~anglemeasurementsplugin#zindex",
     "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html#instance-member-zIndex",
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin#zIndex",
+    "member"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js",
+    "file/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js.html",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js",
+    "file"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#activate",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-method-activate",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#activate",
+    "method"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#active",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-get-active",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#active",
+    "member"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#anglemeasurementsplugin",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-member-angleMeasurementsPlugin",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#angleMeasurementsPlugin",
+    "member"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#constructor",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-constructor-constructor",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#deactivate",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-method-deactivate",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#deactivate",
+    "method"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#destroy",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-method-destroy",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#destroy",
+    "method"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#markerdiv",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-member-markerDiv",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#markerDiv",
+    "member"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#plugin",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-member-plugin",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#plugin",
+    "member"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#pointercircle",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-member-pointerCircle",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#pointerCircle",
+    "member"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#pointerlens",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-member-pointerLens",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#pointerLens",
+    "member"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#reset",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-method-reset",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#reset",
+    "method"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#snaptoedge",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-set-snapToEdge",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#snapToEdge",
+    "member"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#snaptoedge",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-get-snapToEdge",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#snapToEdge",
+    "member"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#snaptovertex",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-set-snapToVertex",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#snapToVertex",
+    "member"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#snaptovertex",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-get-snapToVertex",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#snapToVertex",
     "member"
   ],
   [
@@ -2868,6 +3048,60 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrollegacy.js",
+    "file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js.html",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js",
+    "file"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrollegacy.js~distancemeasurementscontrollegacy#activate",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy.html#instance-method-activate",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy#activate",
+    "method"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrollegacy.js~distancemeasurementscontrollegacy#active",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy.html#instance-get-active",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy#active",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrollegacy.js~distancemeasurementscontrollegacy#deactivate",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy.html#instance-method-deactivate",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy#deactivate",
+    "method"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrollegacy.js~distancemeasurementscontrollegacy#markerdiv",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy.html#instance-member-markerDiv",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy#markerDiv",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrollegacy.js~distancemeasurementscontrollegacy#plugin",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy.html#instance-member-plugin",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy#plugin",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrollegacy.js~distancemeasurementscontrollegacy#reset",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy.html#instance-method-reset",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy#reset",
+    "method"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrollegacy.js~distancemeasurementscontrollegacy#snapmode",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy.html#instance-set-snapMode",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy#snapMode",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrollegacy.js~distancemeasurementscontrollegacy#snapmode",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy.html#instance-get-snapMode",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy#snapMode",
+    "member"
+  ],
+  [
     "src/plugins/distancemeasurementsplugin/distancemeasurementsmousecontrol.js",
     "file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js.html",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js",
@@ -3102,6 +3336,102 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js",
+    "file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js.html",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js",
+    "file"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#activate",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-method-activate",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#activate",
+    "method"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#active",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-get-active",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#active",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#constructor",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-constructor-constructor",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#deactivate",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-method-deactivate",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#deactivate",
+    "method"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#destroy",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-method-destroy",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#destroy",
+    "method"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#distancemeasurementsplugin",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-member-distanceMeasurementsPlugin",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#distanceMeasurementsPlugin",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#markerdiv",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-member-markerDiv",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#markerDiv",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#plugin",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-member-plugin",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#plugin",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#pointercircle",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-member-pointerCircle",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#pointerCircle",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#pointerlens",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-member-pointerLens",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#pointerLens",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#reset",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-method-reset",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#reset",
+    "method"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#snaptoedge",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-set-snapToEdge",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#snapToEdge",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#snaptoedge",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-get-snapToEdge",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#snapToEdge",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#snaptovertex",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-set-snapToVertex",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#snapToVertex",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#snaptovertex",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-get-snapToVertex",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#snapToVertex",
+    "member"
+  ],
+  [
     "src/plugins/distancemeasurementsplugin/index.js",
     "file/src/plugins/DistanceMeasurementsPlugin/index.js.html",
     "src/plugins/DistanceMeasurementsPlugin/index.js",
@@ -3262,6 +3592,18 @@ window.esdocSearchIndex = [
     "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-constructor-constructor",
     "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#constructor",
     "method"
+  ],
+  [
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#defaultscalecanvasresolutionfactor",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-get-defaultScaleCanvasResolutionFactor",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#defaultScaleCanvasResolutionFactor",
+    "member"
+  ],
+  [
+    "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#defaultscalecanvasresolutionfactor",
+    "class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html#instance-set-defaultScaleCanvasResolutionFactor",
+    "src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin#defaultScaleCanvasResolutionFactor",
+    "member"
   ],
   [
     "src/plugins/fastnavplugin/fastnavplugin.js~fastnavplugin#delaybeforerestore",
@@ -7821,6 +8163,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/constants/constants.js",
     "file/src/viewer/scene/constants/constants.js.html",
     "src/viewer/scene/constants/constants.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/core.js",
+    "file/src/viewer/scene/core.js.html",
+    "src/viewer/scene/core.js",
     "file"
   ],
   [
@@ -15387,6 +15735,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/webgl/pickresult.js~pickresult#primitive",
     "class/src/viewer/scene/webgl/PickResult.js~PickResult.html#instance-member-primitive",
     "src/viewer/scene/webgl/PickResult.js~PickResult#primitive",
+    "member"
+  ],
+  [
+    "src/viewer/scene/webgl/pickresult.js~pickresult#snapped",
+    "class/src/viewer/scene/webgl/PickResult.js~PickResult.html#instance-get-snapped",
+    "src/viewer/scene/webgl/PickResult.js~PickResult#snapped",
     "member"
   ],
   [

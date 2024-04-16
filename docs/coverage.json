@@ -1,7 +1,7 @@
 {
-  "coverage": "40.16%",
-  "expectCount": 6939,
-  "actualCount": 2787,
+  "coverage": "40.07%",
+  "expectCount": 7076,
+  "actualCount": 2836,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 61,
@@ -75,6 +75,25 @@
       "actualCount": 5,
       "undocumentLines": [
         155
+      ]
+    },
+    "src/extras/PointerCircle/PointerCircle.js": {
+      "expectCount": 20,
+      "actualCount": 7,
+      "undocumentLines": [
+        1,
+        17,
+        18,
+        19,
+        31,
+        33,
+        34,
+        36,
+        37,
+        39,
+        40,
+        52,
+        111
       ]
     },
     "src/extras/PointerLens/PointerLens.js": {
@@ -169,44 +188,73 @@
       "undocumentLines": []
     },
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js": {
-      "expectCount": 31,
+      "expectCount": 32,
       "actualCount": 11,
       "undocumentLines": [
         4,
         5,
         6,
-        58,
-        60,
+        59,
         61,
         63,
-        68,
-        69,
-        70,
+        64,
+        66,
         71,
+        72,
         73,
         74,
         76,
-        81,
-        99,
+        77,
+        79,
+        84,
         102,
-        106,
-        110,
-        342
+        105,
+        109,
+        113,
+        352
       ]
     },
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js": {
       "expectCount": 20,
       "actualCount": 11,
       "undocumentLines": [
-        224,
-        226,
-        228,
-        230,
-        231,
-        232,
-        234,
-        243,
-        252
+        264,
+        266,
+        268,
+        270,
+        271,
+        272,
+        274,
+        283,
+        292
+      ]
+    },
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js": {
+      "expectCount": 35,
+      "actualCount": 13,
+      "undocumentLines": [
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        14,
+        15,
+        16,
+        18,
+        35,
+        36,
+        38,
+        54,
+        56,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        68
       ]
     },
     "src/plugins/AnnotationsPlugin/Annotation.js": {
@@ -365,54 +413,103 @@
       "actualCount": 8,
       "undocumentLines": []
     },
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js": {
+      "expectCount": 26,
+      "actualCount": 10,
+      "undocumentLines": [
+        31,
+        32,
+        33,
+        50,
+        55,
+        57,
+        67,
+        74,
+        84,
+        85,
+        86,
+        89,
+        90,
+        93,
+        94,
+        454
+      ]
+    },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js": {
-      "expectCount": 29,
+      "expectCount": 30,
       "actualCount": 11,
       "undocumentLines": [
         4,
         5,
-        57,
-        59,
-        61,
-        63,
-        74,
-        75,
-        76,
+        58,
+        60,
+        62,
+        64,
+        66,
         77,
         78,
         79,
         80,
         81,
-        86,
-        103,
+        82,
+        83,
+        84,
+        89,
         106,
-        114
+        109,
+        117
       ]
     },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js": {
       "expectCount": 36,
       "actualCount": 16,
       "undocumentLines": [
-        252,
-        254,
-        256,
-        258,
-        262,
-        263,
-        264,
-        265,
-        266,
-        267,
-        268,
-        269,
-        270,
-        271,
-        272,
-        273,
-        275,
-        284,
-        293,
-        364
+        292,
+        294,
+        296,
+        298,
+        302,
+        303,
+        304,
+        305,
+        306,
+        307,
+        308,
+        309,
+        310,
+        311,
+        312,
+        313,
+        315,
+        324,
+        333,
+        404
+      ]
+    },
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js": {
+      "expectCount": 33,
+      "actualCount": 13,
+      "undocumentLines": [
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        14,
+        31,
+        32,
+        34,
+        50,
+        52,
+        54,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        73
       ]
     },
     "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js": {
@@ -497,11 +594,9 @@
       ]
     },
     "src/plugins/FastNavPlugin/FastNavPlugin.js": {
-      "expectCount": 37,
-      "actualCount": 22,
+      "expectCount": 40,
+      "actualCount": 24,
       "undocumentLines": [
-        114,
-        115,
         116,
         117,
         118,
@@ -509,12 +604,15 @@
         120,
         121,
         122,
-        154,
-        155,
+        123,
+        124,
+        125,
         157,
-        169,
-        173,
-        177
+        158,
+        160,
+        172,
+        176,
+        180
       ]
     },
     "src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js": {
@@ -935,7 +1033,7 @@
       "actualCount": 20,
       "undocumentLines": [
         20,
-        1188,
+        1153,
         619,
         653,
         675,
@@ -945,8 +1043,8 @@
         781,
         813,
         843,
-        1106,
-        1113
+        1121,
+        1128
       ]
     },
     "src/plugins/XKTLoaderPlugin/parsers/ParserV1.js": {
@@ -1179,19 +1277,19 @@
         8,
         9,
         11,
-        12,
-        15,
-        19,
-        112,
-        124,
-        128,
-        132,
-        136,
-        144,
-        152,
-        156,
-        160,
-        168
+        14,
+        17,
+        18,
+        111,
+        123,
+        127,
+        131,
+        135,
+        143,
+        151,
+        155,
+        159,
+        167
       ]
     },
     "src/plugins/lib/html/Label.js": {
@@ -1310,9 +1408,9 @@
       "expectCount": 21,
       "actualCount": 18,
       "undocumentLines": [
-        231,
-        243,
-        375
+        234,
+        246,
+        378
       ]
     },
     "src/viewer/metadata/MetaObject.js": {
@@ -1384,7 +1482,7 @@
         14,
         16,
         26,
-        307
+        310
       ]
     },
     "src/viewer/scene/CameraControl/lib/controllers/PanController.js": {
@@ -1809,6 +1907,27 @@
       "expectCount": 68,
       "actualCount": 68,
       "undocumentLines": []
+    },
+    "src/viewer/scene/core.js": {
+      "expectCount": 17,
+      "actualCount": 2,
+      "undocumentLines": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        14,
+        16,
+        139,
+        158,
+        178,
+        198,
+        206,
+        230
+      ]
     },
     "src/viewer/scene/geometry/Geometry.js": {
       "expectCount": 5,
@@ -2617,7 +2736,7 @@
     },
     "src/viewer/scene/model/SceneModel.js": {
       "expectCount": 215,
-      "actualCount": 116,
+      "actualCount": 117,
       "undocumentLines": [
         43,
         45,
@@ -2649,14 +2768,14 @@
         1146,
         1147,
         1149,
-        1150,
+        1151,
         1152,
-        1153,
         1154,
         1155,
         1156,
         1157,
         1158,
+        1159,
         1160,
         1161,
         1224,
@@ -2707,17 +2826,16 @@
         2047,
         2122,
         2144,
-        3065,
-        3073,
-        3105,
-        3162,
-        3193,
-        3293,
-        3305,
-        3456,
-        3574,
-        3593,
-        4015
+        3063,
+        3098,
+        3155,
+        3186,
+        3286,
+        3298,
+        3449,
+        3579,
+        3598,
+        4020
       ]
     },
     "src/viewer/scene/model/SceneModelEntity.js": {
@@ -5810,8 +5928,8 @@
       ]
     },
     "src/viewer/scene/webgl/PickResult.js": {
-      "expectCount": 54,
-      "actualCount": 32,
+      "expectCount": 55,
+      "actualCount": 33,
       "undocumentLines": [
         63,
         64,
