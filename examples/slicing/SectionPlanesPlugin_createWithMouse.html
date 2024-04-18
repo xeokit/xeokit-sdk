@@ -133,6 +133,12 @@
 
         if (pickResult && pickResult.worldNormal) { // Disallow SectionPlanes on point clouds, because points don't have normals
 
+            if (pickResult.entity) {
+                if (!pickResult.entity.isObject) {
+                    return;
+                }
+            }
+
             const sectionPlane = sectionPlanes.createSectionPlane({
                 pos: pickResult.worldPos,
                 dir: math.mulVec3Scalar(pickResult.worldNormal, -1)

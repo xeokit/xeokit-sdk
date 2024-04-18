@@ -187,7 +187,8 @@ class Control {
 
         this._rootNode = new Node(scene, {
             position: [0, 0, 0],
-            scale: [5, 5, 5]
+            scale: [5, 5, 5],
+            isObject: false
         });
 
         const rootNode = this._rootNode;
@@ -378,7 +379,8 @@ class Control {
                 collidable: true,
                 clippable: false,
                 visible: false,
-                scale: [2.4, 2.4, 1]
+                scale: [2.4, 2.4, 1],
+                isObject: false
             }), NO_STATE_INHERIT),
 
             planeFrame: rootNode.addChild(new Mesh(rootNode, { // Visible frame
@@ -409,7 +411,8 @@ class Control {
                 clippable: false,
                 visible: false,
                 scale: [1, 1, .1],
-                rotation: [0, 0, 45]
+                rotation: [0, 0, 45],
+                isObject: false
             }), NO_STATE_INHERIT),
 
             //----------------------------------------------------------------------------------------------------------
@@ -428,7 +431,8 @@ class Control {
                 collidable: true,
                 clippable: false,
                 backfaces: true,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             xCurveHandle: rootNode.addChild(new Mesh(rootNode, { // Red hoop about Y-axis
@@ -443,7 +447,8 @@ class Control {
                 collidable: true,
                 clippable: false,
                 backfaces: true,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             xCurveArrow1: rootNode.addChild(new Mesh(rootNode, {
@@ -458,7 +463,8 @@ class Control {
                 pickable: true,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             xCurveArrow2: rootNode.addChild(new Mesh(rootNode, {
@@ -473,7 +479,8 @@ class Control {
                 pickable: true,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             //----------------------------------------------------------------------------------------------------------
@@ -488,7 +495,8 @@ class Control {
                 collidable: true,
                 clippable: false,
                 backfaces: true,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             yCurveHandle: rootNode.addChild(new Mesh(rootNode, {
@@ -499,7 +507,8 @@ class Control {
                 collidable: true,
                 clippable: false,
                 backfaces: true,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             yCurveArrow1: rootNode.addChild(new Mesh(rootNode, {
@@ -514,7 +523,8 @@ class Control {
                 pickable: true,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             yCurveArrow2: rootNode.addChild(new Mesh(rootNode, {
@@ -529,7 +539,8 @@ class Control {
                 pickable: true,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             //----------------------------------------------------------------------------------------------------------
@@ -543,7 +554,8 @@ class Control {
                 pickable: false,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             zCurveHandle: rootNode.addChild(new Mesh(rootNode, {
@@ -553,7 +565,8 @@ class Control {
                 pickable: true,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             zCurveCurveArrow1: rootNode.addChild(new Mesh(rootNode, {
@@ -567,7 +580,8 @@ class Control {
                 pickable: true,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             zCurveArrow2: rootNode.addChild(new Mesh(rootNode, {
@@ -582,7 +596,8 @@ class Control {
                 pickable: true,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             //----------------------------------------------------------------------------------------------------------
@@ -597,7 +612,8 @@ class Control {
                 pickable: false,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             //----------------------------------------------------------------------------------------------------------
@@ -615,7 +631,8 @@ class Control {
                 pickable: false,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             xAxisArrowHandle: rootNode.addChild(new Mesh(rootNode, {
@@ -629,7 +646,8 @@ class Control {
                 pickable: true,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             xAxis: rootNode.addChild(new Mesh(rootNode, {
@@ -643,7 +661,8 @@ class Control {
                 pickable: false,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             xAxisHandle: rootNode.addChild(new Mesh(rootNode, {
@@ -657,7 +676,8 @@ class Control {
                 pickable: true,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             //----------------------------------------------------------------------------------------------------------
@@ -675,7 +695,8 @@ class Control {
                 pickable: false,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             yAxisArrowHandle: rootNode.addChild(new Mesh(rootNode, {
@@ -690,7 +711,8 @@ class Control {
                 collidable: true,
                 clippable: false,
                 visible: false,
-                opacity: 0.2
+                opacity: 0.2,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             yShaft: rootNode.addChild(new Mesh(rootNode, {
@@ -700,7 +722,8 @@ class Control {
                 pickable: false,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             yShaftHandle: rootNode.addChild(new Mesh(rootNode, {
@@ -710,7 +733,8 @@ class Control {
                 pickable: true,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             //----------------------------------------------------------------------------------------------------------
@@ -728,7 +752,8 @@ class Control {
                 pickable: false,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             zAxisArrowHandle: rootNode.addChild(new Mesh(rootNode, {
@@ -742,7 +767,8 @@ class Control {
                 pickable: true,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
 
@@ -757,7 +783,8 @@ class Control {
                 clippable: false,
                 pickable: false,
                 collidable: true,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             zAxisHandle: rootNode.addChild(new Mesh(rootNode, {
@@ -771,7 +798,8 @@ class Control {
                 clippable: false,
                 pickable: true,
                 collidable: true,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT)
         };
 
@@ -803,7 +831,8 @@ class Control {
                 clippable: false,
                 visible: false,
                 scale: [1, 1, 1],
-                rotation: [0, 0, 45]
+                rotation: [0, 0, 45],
+                isObject: false
             }), NO_STATE_INHERIT),
 
             xHoop: rootNode.addChild(new Mesh(rootNode, { // Full
@@ -819,7 +848,8 @@ class Control {
                 pickable: false,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             yHoop: rootNode.addChild(new Mesh(rootNode, {
@@ -831,7 +861,8 @@ class Control {
                 pickable: false,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             zHoop: rootNode.addChild(new Mesh(rootNode, { // Blue hoop about Z-axis
@@ -844,7 +875,8 @@ class Control {
                 collidable: true,
                 clippable: false,
                 backfaces: true,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             xAxisArrow: rootNode.addChild(new Mesh(rootNode, {
@@ -858,7 +890,8 @@ class Control {
                 pickable: false,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             yAxisArrow: rootNode.addChild(new Mesh(rootNode, {
@@ -872,7 +905,8 @@ class Control {
                 pickable: false,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT),
 
             zAxisArrow: rootNode.addChild(new Mesh(rootNode, {
@@ -886,7 +920,8 @@ class Control {
                 pickable: false,
                 collidable: true,
                 clippable: false,
-                visible: false
+                visible: false,
+                isObject: false
             }), NO_STATE_INHERIT)
         };
     }
