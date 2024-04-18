@@ -156,7 +156,7 @@ class MousePanRotateDollyHandler {
             }
         });
 
-        document.addEventListener("mousemove", this._documentMouseMoveHandler = () => {
+        document.addEventListener("mousemove", this._documentMouseMoveHandler = (e) => {
 
             if (!(configs.active && configs.pointerEnabled)) {
                 return;
@@ -177,10 +177,10 @@ class MousePanRotateDollyHandler {
 
             const panning = keyDown[scene.input.KEY_SHIFT] || configs.planView || (!configs.panRightClick && mouseDownMiddle) || (configs.panRightClick && mouseDownRight);
 
-            if (panning) {
+            const xDelta = document.pointerLockElement ? e.movementX : (x - lastX);
+            const yDelta = document.pointerLockElement ? e.movementY : (y - lastY);
 
-                const xPanDelta = (x - lastX);
-                const yPanDelta = (y - lastY);
+            if (panning) {
 
                 const camera = scene.camera;
 
@@ -191,13 +191,13 @@ class MousePanRotateDollyHandler {
                     const depth = Math.abs(mouseDownPicked ? math.lenVec3(math.subVec3(pickedWorldPos, scene.camera.eye, [])) : scene.camera.eyeLookDist);
                     const targetDistance = depth * Math.tan((camera.perspective.fov / 2) * Math.PI / 180.0);
 
-                    updates.panDeltaX += (1.5 * xPanDelta * targetDistance / canvasHeight);
-                    updates.panDeltaY += (1.5 * yPanDelta * targetDistance / canvasHeight);
+                    updates.panDeltaX += (1.5 * xDelta * targetDistance / canvasHeight);
+                    updates.panDeltaY += (1.5 * yDelta * targetDistance / canvasHeight);
 
                 } else {
 
-                    updates.panDeltaX += 0.5 * camera.ortho.scale * (xPanDelta / canvasHeight);
-                    updates.panDeltaY += 0.5 * camera.ortho.scale * (yPanDelta / canvasHeight);
+                    updates.panDeltaX += 0.5 * camera.ortho.scale * (xDelta / canvasHeight);
+                    updates.panDeltaY += 0.5 * camera.ortho.scale * (yDelta / canvasHeight);
                 }
 
             } else if (mouseDownLeft && !mouseDownMiddle && !mouseDownRight) {
@@ -205,12 +205,12 @@ class MousePanRotateDollyHandler {
                 if (!configs.planView) { // No rotating in plan-view mode
 
                     if (configs.firstPerson) {
-                        updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * configs.dragRotationRate / 2;
-                        updates.rotateDeltaX += ((y - lastY) / canvasHeight) * (configs.dragRotationRate / 4);
+                        updates.rotateDeltaY -= (xDelta / canvasWidth) * configs.dragRotationRate / 2;
+                        updates.rotateDeltaX += (yDelta / canvasHeight) * (configs.dragRotationRate / 4);
 
                     } else {
-                        updates.rotateDeltaY -= ((x - lastX) / canvasWidth) * (configs.dragRotationRate * 1.5);
-                        updates.rotateDeltaX += ((y - lastY) / canvasHeight) * (configs.dragRotationRate * 1.5);
+                        updates.rotateDeltaY -= (xDelta / canvasWidth) * (configs.dragRotationRate * 1.5);
+                        updates.rotateDeltaX += (yDelta / canvasHeight) * (configs.dragRotationRate * 1.5);
                     }
                 }
             }
