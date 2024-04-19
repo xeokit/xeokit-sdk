@@ -2669,7 +2669,7 @@ export class SceneModel extends Component {
             return;
         }
         let parentTransform;
-        if (this.parentTransformId) {
+        if (cfg.parentTransformId) {
             parentTransform = this._transforms[cfg.parentTransformId];
             if (!parentTransform) {
                 this.error("[createTransform] SceneModel.createTransform() config missing: id");
