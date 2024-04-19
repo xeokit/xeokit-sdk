@@ -7,6 +7,9 @@ assignees: ''
 
 ---
 
+**Is this bug fix critical for your commercial enterprise?**
+If your enterprise needs prioritised support, please get in touch here: https://creoox.com/en/contact/
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 
