@@ -145,6 +145,7 @@ function parseGLTF(plugin, src, gltf, metaModelJSON, options, sceneModel, ok) {
             loadBuffer: options.loadBuffer,
             basePath: options.basePath,
             handlenode: options.handlenode,
+            backfaces: !!options.backfaces,
             gltfData: gltfData,
             scene: sceneModel.scene,
             plugin: plugin,
@@ -353,7 +354,8 @@ function loadMaterialAttributes(ctx, material) { // Substitute RGBA for material
         color: new Float32Array([1, 1, 1, 1]),
         opacity: 1,
         metallic: 0,
-        roughness: 1
+        roughness: 1,
+        doubleSided : true
     };
     if (extensions) {
         const specularPBR = extensions["KHR_materials_pbrSpecularGlossiness"];
@@ -404,6 +406,7 @@ function loadMaterialAttributes(ctx, material) { // Substitute RGBA for material
             materialAttributes.roughness = roughnessFactor;
         }
     }
+    materialAttributes.doubleSided = (material.doubleSided !== false);
     return materialAttributes;
 }
 
@@ -517,6 +520,20 @@ function loadNode(ctx, node, depth, matrix) {
                     id: sceneModel.id + "." + ctx.numObjects++
                 };
 
+                const material = primitive.material;
+                if (material) {
+                    meshCfg.textureSetId = material._textureSetId;
+                    meshCfg.color = material._attributes.color;
+                    meshCfg.opacity = material._attributes.opacity;
+                    meshCfg.metallic = material._attributes.metallic;
+                    meshCfg.roughness = material._attributes.roughness;
+                } else {
+                    meshCfg.color = new Float32Array([1.0, 1.0, 1.0]);
+                    meshCfg.opacity = 1.0;
+                }
+
+                const backfaces = ((ctx.backfaces !== false) || (material.doubleSided !== false));
+
                 switch (primitive.mode) {
                     case 0: // POINTS
                         meshCfg.primitive = "points";
@@ -531,16 +548,16 @@ function loadNode(ctx, node, depth, matrix) {
                         meshCfg.primitive = "lines";
                         break;
                     case 4: // TRIANGLES
-                        meshCfg.primitive = "triangles";
+                        meshCfg.primitive = backfaces ? "triangles" : "solid";
                         break;
                     case 5: // TRIANGLE_STRIP
-                        meshCfg.primitive = "triangles";
+                        meshCfg.primitive = backfaces ? "triangles" : "solid";
                         break;
                     case 6: // TRIANGLE_FAN
-                        meshCfg.primitive = "triangles";
+                        meshCfg.primitive = backfaces ? "triangles" : "solid";
                         break;
                     default:
-                        meshCfg.primitive = "triangles";
+                        meshCfg.primitive = backfaces ? "triangles" : "solid";
                 }
 
                 const POSITION = primitive.attributes.POSITION;
@@ -569,17 +586,6 @@ function loadNode(ctx, node, depth, matrix) {
                     meshCfg.origin = origin;
                 }
 
-                const material = primitive.material;
-                if (material) {
-                    meshCfg.textureSetId = material._textureSetId;
-                    meshCfg.color = material._attributes.color;
-                    meshCfg.opacity = material._attributes.opacity;
-                    meshCfg.metallic = material._attributes.metallic;
-                    meshCfg.roughness = material._attributes.roughness;
-                } else {
-                    meshCfg.color = new Float32Array([1.0, 1.0, 1.0]);
-                    meshCfg.opacity = 1.0;
-                }
                 // if (createEntity) {
                 //     if (createEntity.colorize) {
                 //         meshCfg.color = createEntity.colorize;
