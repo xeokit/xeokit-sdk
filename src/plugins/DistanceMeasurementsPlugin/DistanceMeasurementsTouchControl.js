@@ -250,10 +250,12 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                             this._currentDistanceMeasurement = plugin.createMeasurement({
                                 id: math.createUUID(),
                                 origin: {
-                                    worldPos: pointerWorldPos
+                                    worldPos: pointerWorldPos,
+                                    entity: snapPickResult.entity
                                 },
                                 target: {
-                                    worldPos: pointerWorldPos
+                                    worldPos: pointerWorldPos,
+                                    entity: snapPickResult.entity
                                 }
                             });
                             this._currentDistanceMeasurement.labelsVisible = false;
@@ -323,6 +325,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                                 this.pointerCircle.start(snapPickResult.snappedCanvasPos);
                                 pointerWorldPos.set(snapPickResult.worldPos);
                                 this._currentDistanceMeasurement.target.worldPos = snapPickResult.worldPos;
+                                this._currentDistanceMeasurement.target.entity = snapPickResult.entity;
                                 this._currentDistanceMeasurement.targetVisible = true;
                                 this._currentDistanceMeasurement.wireVisible = true;
                                 this._currentDistanceMeasurement.labelsVisible = true;
@@ -340,6 +343,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                                     this.pointerCircle.start(pickResult.canvasPos);
                                     pointerWorldPos.set(pickResult.worldPos);
                                     this._currentDistanceMeasurement.target.worldPos = pickResult.worldPos;
+                                    this._currentDistanceMeasurement.target.entity = pickResult.entity;
                                     this._currentDistanceMeasurement.targetVisible = true;
                                     this._currentDistanceMeasurement.wireVisible = true;
                                     this._currentDistanceMeasurement.labelsVisible = true;
@@ -430,10 +434,12 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                             this._currentDistanceMeasurement = plugin.createMeasurement({
                                 id: math.createUUID(),
                                 origin: {
-                                    worldPos: snapPickResult.worldPos
+                                    worldPos: snapPickResult.worldPos,
+                                    entity: snapPickResult.entity
                                 },
                                 target: {
-                                    worldPos: snapPickResult.worldPos
+                                    worldPos: snapPickResult.worldPos,
+                                    entity: snapPickResult.entity
                                 }
                             });
                             this._currentDistanceMeasurement.labelsVisible = false;
@@ -464,10 +470,12 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                                 this._currentDistanceMeasurement = plugin.createMeasurement({
                                     id: math.createUUID(),
                                     origin: {
-                                        worldPos: pickResult.worldPos
+                                        worldPos: pickResult.worldPos,
+                                        entity: pickResult.entity
                                     },
                                     target: {
-                                        worldPos: pickResult.worldPos
+                                        worldPos: pickResult.worldPos,
+                                        entity: pickResult.entity
                                     }
                                 });
                                 this._currentDistanceMeasurement.labelsVisible = false;
@@ -524,6 +532,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                             this.pointerLens.snapped = true;
                         }
                         this._currentDistanceMeasurement.target.worldPos = snapPickResult.worldPos;
+                        this._currentDistanceMeasurement.target.entity = snapPickResult.entity;
                         this._currentDistanceMeasurement.targetVisible = true;
                         this._currentDistanceMeasurement.wireVisible = true;
                         this._currentDistanceMeasurement.labelsVisible = true;
@@ -538,6 +547,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                                 this.pointerLens.snapped = false;
                             }
                             this._currentDistanceMeasurement.target.worldPos = pickResult.worldPos;
+                            this._currentDistanceMeasurement.target.entity = pickResult.entity;
                             this._currentDistanceMeasurement.targetVisible = true;
                             this._currentDistanceMeasurement.wireVisible = true;
                             this._currentDistanceMeasurement.labelsVisible = true;
@@ -596,10 +606,12 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                         this._currentDistanceMeasurement = plugin.createMeasurement({
                             id: math.createUUID(),
                             origin: {
-                                worldPos: pickResult.worldPos
+                                worldPos: pickResult.worldPos,
+                                entity: pickResult.entity
                             },
                             target: {
-                                worldPos: pickResult.worldPos
+                                worldPos: pickResult.worldPos,
+                                entity: pickResult.entity
                             }
                         });
                         this._currentDistanceMeasurement.labelsVisible = false;
@@ -611,6 +623,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                         this._currentDistanceMeasurement.targetVisible = false;
                         this._currentDistanceMeasurement.clickable = false;
                         this._touchState = WAITING_FOR_TARGET_TOUCH_START;
+                        this.distanceMeasurementsPlugin.fire("measurementStart", this._currentDistanceMeasurement);
                         //  console.log("touchend: this._touchState= WAITING_FOR_ORIGIN_QUICK_TOUCH_END -> WAITING_FOR_ORIGIN_TOUCH_START")
                     } else {
                         if (this._currentDistanceMeasurement) {
@@ -656,6 +669,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                     });
                     if (pickResult && pickResult.worldPos) {
                         this._currentDistanceMeasurement.target.worldPos = pickResult.worldPos;
+                        this._currentDistanceMeasurement.target.entity = pickResult.entity;
                         this._currentDistanceMeasurement.targetVisible = true;
                         this._currentDistanceMeasurement.wireVisible = true;
                         this._currentDistanceMeasurement.labelsVisible = true;

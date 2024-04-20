@@ -171,6 +171,24 @@
 
     const distanceMeasurementsPlugin = new DistanceMeasurementsPlugin(viewer);
 
+    distanceMeasurementsPlugin.on("measurementStart", (measurement) => {
+        console.log("measurementStart");
+        console.log("origin", measurement.origin.entity);
+        console.log("target", measurement.target.entity);
+    });
+
+    distanceMeasurementsPlugin.on("measurementEnd", (measurement) => {
+        console.log("measurementEnd");
+        console.log("origin", measurement.origin.entity);
+        console.log("target", measurement.target.entity);
+    });
+
+    distanceMeasurementsPlugin.on("measurementCancel", (measurement) => {
+        console.log("measurementCancel");
+        console.log("origin", measurement.origin.entity);
+        console.log("target", measurement.target.entity);
+    });
+
     distanceMeasurementsPlugin.on("mouseOver", (e) => {
         e.measurement.setHighlighted(true);
     });

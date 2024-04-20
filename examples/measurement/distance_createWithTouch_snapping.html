@@ -162,9 +162,27 @@
     // DistanceMeasurementsPlugin, DistanceMeasurementsTouchControl and PointerLens
     //------------------------------------------------------------------------------------------------------------------
 
-    const distanceMeasurements = new DistanceMeasurementsPlugin(viewer);
+    const distanceMeasurementsPlugin = new DistanceMeasurementsPlugin(viewer);
 
-    const distanceMeasurementsTouchControl  = new DistanceMeasurementsTouchControl(distanceMeasurements, {
+    distanceMeasurementsPlugin.on("measurementStart", (measurement) => {
+        console.log("measurementStart");
+        console.log("origin", measurement.origin.entity);
+        console.log("target", measurement.target.entity);
+    });
+
+    distanceMeasurementsPlugin.on("measurementEnd", (measurement) => {
+        console.log("measurementEnd");
+        console.log("origin", measurement.origin.entity);
+        console.log("target", measurement.target.entity);
+    });
+
+    distanceMeasurementsPlugin.on("measurementCancel", (measurement) => {
+        console.log("measurementCancel");
+        console.log("origin", measurement.origin.entity);
+        console.log("target", measurement.target.entity);
+    });
+    
+    const distanceMeasurementsTouchControl  = new DistanceMeasurementsTouchControl(distanceMeasurementsPlugin, {
         pointerLens : new PointerLens(viewer),
         snapToVertex: true,
         snapToEdge: true
@@ -234,12 +252,12 @@
             [
                 {
                     getTitle: (context) => {
-                        return distanceMeasurements.control.active ? "Deactivate Control" : "Activate Control";
+                        return distanceMeasurementsPlugin.control.active ? "Deactivate Control" : "Activate Control";
                     },
                     doAction: function (context) {
-                        distanceMeasurements.control.active
-                            ? distanceMeasurements.control.deactivate()
-                            : distanceMeasurements.control.activate();
+                        distanceMeasurementsPlugin.control.active
+                            ? distanceMeasurementsPlugin.control.deactivate()
+                            : distanceMeasurementsPlugin.control.activate();
                     }
                 }
             ]
@@ -255,21 +273,21 @@
     // Create an DistanceMeasurementsPlugin, activate its DistanceMeasuremntsControl
     //------------------------------------------------------------------------------------------------------------------
 
-    distanceMeasurements.on("mouseOver", (e) => {
+    distanceMeasurementsPlugin.on("mouseOver", (e) => {
         e.distanceMeasurement.setHighlighted(true);
     });
 
-    distanceMeasurements.on("mouseLeave", (e) => {
+    distanceMeasurementsPlugin.on("mouseLeave", (e) => {
         if (distanceMeasurementsContextMenu.shown && distanceMeasurementsContextMenu.context.distanceMeasurement.id === e.distanceMeasurement.id) {
             return;
         }
         e.distanceMeasurement.setHighlighted(false);
     });
 
-    distanceMeasurements.on("contextMenu", (e) => {
+    distanceMeasurementsPlugin.on("contextMenu", (e) => {
         distanceMeasurementsContextMenu.context = { // Must set context before showing menu
             viewer: viewer,
-            distanceMeasurementsPlugin: distanceMeasurements,
+            distanceMeasurementsPlugin: distanceMeasurementsPlugin,
             distanceMeasurement: e.distanceMeasurement
         };
         distanceMeasurementsContextMenu.show(e.event.clientX, e.event.clientY);
