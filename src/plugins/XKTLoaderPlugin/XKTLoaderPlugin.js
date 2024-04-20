@@ -33,9 +33,9 @@ parsers[ParserV10.version] = ParserV10;
 /**
  * {@link Viewer} plugin that loads models from xeokit's optimized *````.XKT````* format.
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_OTCConferenceCenter"><img src="http://xeokit.io/img/docs/XKTLoaderPlugin/XKTLoaderPlugin.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_XKT_OTCConferenceCenter"><img src="http://xeokit.io/img/docs/XKTLoaderPlugin/XKTLoaderPlugin.png"></a>
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_OTCConferenceCenter)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_XKT_OTCConferenceCenter)]
  *
  * # Overview
  *
@@ -91,7 +91,7 @@ parsers[ParserV10.version] = ParserV10;
  *
  * Read more about this example in the user guide on [Viewing BIM Models Offline](https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-xeokit-c373e48bc4094ff5b6e5c5700ff580ee).
  *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_metadata_Schependomlaan)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#BIMOffline_XKT_metadata_Schependomlaan)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin} from "xeokit-sdk.es.js";
@@ -374,7 +374,7 @@ parsers[ParserV10.version] = ParserV10;
  *
  * As shown in the example below, we do this by setting {@link XKTLoaderPlugin#globalizeObjectIds} ````true```` before we load our models.
  *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#TreeViewPlugin_Containment_MultipleModels)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#TreeViewPlugin_Containment_MultipleModels)]
  *
  * ````javascript
  * xktLoader.globalizeObjectIds = true;

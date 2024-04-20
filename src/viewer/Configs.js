@@ -13,7 +13,7 @@ let maxGeometryBatchSize = 5000000
  *
  * That's OK if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.
  *
- * [[Run this example](/examples/#Configs_disableDoublePrecisionAndRAF)]
+ * [[Run this example](/examples/index.html#Configs_disableDoublePrecisionAndRAF)]
  *
  * ````javascript
  * import {Configs, Viewer, XKTLoaderPlugin} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";

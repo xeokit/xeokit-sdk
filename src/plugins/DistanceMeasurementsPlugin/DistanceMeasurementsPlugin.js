@@ -5,9 +5,9 @@ import {DistanceMeasurementsMouseControl} from "./DistanceMeasurementsMouseContr
 /**
  * {@link Viewer} plugin for measuring point-to-point distances.
  *
- * [<img src="https://user-images.githubusercontent.com/83100/63047331-867a0a80-bed4-11e9-892f-398740013c5f.gif">](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_createWithMouse)
+ * [<img src="https://user-images.githubusercontent.com/83100/63047331-867a0a80-bed4-11e9-892f-398740013c5f.gif">](https://xeokit.github.io/xeokit-sdk/examples/index.html#measurements_distance_createWithMouse)
  *
- * * [[Example 1: Model with distance measurements](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_modelWithMeasurements)]
+ * * [[Example 1: Model with distance measurements](https://xeokit.github.io/xeokit-sdk/examples/index.html#measurements_distance_modelWithMeasurements)]
  * * [[Example 2: Create distance measurements with mouse](https://xeokit.github.io/xeokit-sdk/examples/measurement/#distance_createWithMouse_snapping)]
  * * [[Example 3: Configuring units and scale](https://xeokit.github.io/xeokit-sdk/examples/measurement/#distance_unitsAndScale)
  *
@@ -132,7 +132,7 @@ import {DistanceMeasurementsMouseControl} from "./DistanceMeasurementsMouseContr
  *
  * The wires belonging to our DistanceMeasurements show their lengths in Real-space coordinates, in the current unit of measurement. They will dynamically update as we set these configurations.
  *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_unitsAndScale)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#measurements_distance_unitsAndScale)]
  *
  * ````JavaScript
  * const metrics = viewer.scene.metrics;
@@ -146,7 +146,7 @@ import {DistanceMeasurementsMouseControl} from "./DistanceMeasurementsMouseContr
  * In our fourth example, we'll attach event handlers to our plugin, to catch when the user
  * hovers or right-clicks over our measurements.
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_modelWithMeasurements)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#measurements_distance_modelWithMeasurements)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin, DistanceMeasurementsMouseControl, PointerLens} from "xeokit-sdk.es.js";

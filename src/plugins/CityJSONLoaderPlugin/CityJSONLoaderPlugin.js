@@ -11,9 +11,9 @@ const tempVec3c = math.vec3();
 /**
  * {@link Viewer} plugin that loads models from CityJSON files.
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_CityJSONLoaderPlugin_Railway"><img src="https://xeokit.io/img/docs/CityJSONLoaderPlugin/CityJSONLoaderPlugin.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_CityJSONLoaderPlugin_Railway"><img src="https://xeokit.io/img/docs/CityJSONLoaderPlugin/CityJSONLoaderPlugin.png"></a>
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_CityJSONLoaderPlugin_Railway)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_CityJSONLoaderPlugin_Railway)]
  *
  * ## Overview
  *
@@ -53,7 +53,7 @@ const tempVec3c = math.vec3();
  * We'll also scale our model to half its size, rotate it 90 degrees about its local X-axis, then
  * translate it 100 units along its X axis.
  *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_CityJSONLoaderPlugin_Railway)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_CityJSONLoaderPlugin_Railway)]
  *
  * ````javascript
  * import {Viewer, CityJSONLoaderPlugin} from "xeokit-sdk.es.js";

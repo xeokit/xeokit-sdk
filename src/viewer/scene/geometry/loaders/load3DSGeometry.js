@@ -8,8 +8,6 @@ import {K3D} from '../../libs/k3d.js';
  *
  * In the example below we'll create a {@link Mesh} with {@link PhongMaterial}, {@link Texture} and a {@link ReadableGeometry} loaded from 3DS.
  *
- * [[Run this example](/examples/#geometry_loaders_3DS)]
- *
  * ````javascript
  * import {Viewer, Mesh, load3DSGeometry, ReadableGeometry, PhongMaterial, Texture} from "xeokit-sdk.es.js";
  *

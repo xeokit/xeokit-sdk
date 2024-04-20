@@ -12,9 +12,9 @@ const MAX_VERTICES = 500000; // TODO: Rough estimate
 /**
  * {@link Viewer} plugin that loads lidar point cloud geometry from LAS files.
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_LASLoaderPlugin_Autzen"><img src="https://xeokit.github.io/xeokit-sdk/assets/images/autzen.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_LASLoaderPlugin_Autzen"><img src="https://xeokit.github.io/xeokit-sdk/assets/images/autzen.png"></a>
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_LASLoaderPlugin_Autzen)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_LASLoaderPlugin_Autzen)]
  *
  * ## Summary
  *
@@ -53,7 +53,7 @@ const MAX_VERTICES = 500000; // TODO: Rough estimate
  * a [LAS file](/assets/models/las/). Once the model has
  * loaded, we'll then find its {@link MetaModel}, and the {@link MetaObject} and {@link Entity} that represent its point cloud.
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_LASLoaderPlugin_Autzen)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_LASLoaderPlugin_Autzen)]
  *
  * ````javascript
  * import {Viewer, LASLoaderPlugin} from "xeokit-sdk.es.js";

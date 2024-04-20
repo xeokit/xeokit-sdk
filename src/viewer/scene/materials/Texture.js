@@ -52,7 +52,7 @@ function nextHighestPowerOfTwo(x) {
  * with {@link PhongMaterial#diffuseMap} and {@link PhongMaterial#specularMap}. The {@link Texture} pixel colors directly
  * provide the diffuse and specular components for each fragment across the {@link ReadableGeometry} surface.
  *
- * [[Run this example](/examples/#materials_Texture)]
+ * [[Run this example](/examples/index.html#materials_Texture)]
  *
  * ```` javascript
  * import {Viewer, Mesh, buildTorusGeometry,

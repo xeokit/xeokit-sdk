@@ -18,7 +18,7 @@ const tempAABB = math.AABB3();
  *
  * Creating a {@link Mesh} with a VBOGeometry that defines a single triangle, plus a {@link PhongMaterial} with diffuse {@link Texture}:
  *
- * [[Run this example](/examples/#geometry_VBOGeometry)]
+ * [[Run this example](/examples/index.html#geometry_VBOGeometry)]
  *
  * ````javascript
  * import {Viewer, Mesh, VBOGeometry, PhongMaterial, Texture} from "xeokit-sdk.es.js";

@@ -8,7 +8,7 @@ import {math} from "../scene/math/math.js";
  *
  * * Located in {@link Viewer#metaScene}.
  * * Contains {@link MetaModel}s and {@link MetaObject}s.
- * * [Scene graph example with metadata](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneGraph_metadata)
+ * * [Scene graph example with metadata](http://xeokit.github.io/xeokit-sdk/examples/index.html#sceneRepresentation_SceneGraph_metadata)
  */
 class MetaScene {
 

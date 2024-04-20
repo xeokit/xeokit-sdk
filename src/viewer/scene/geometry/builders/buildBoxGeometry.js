@@ -7,7 +7,7 @@ import {utils} from '../../utils.js';
  *
  * In the example below we'll create a {@link Mesh} with a box-shaped {@link ReadableGeometry}.
  *
- * [[Run this example](/examples/#geometry_builders_buildBoxGeometry)]
+ * [[Run this example](/examples/index.html#geometry_builders_buildBoxGeometry)]
  *
  * ````javascript
  * import {Viewer, Mesh, buildBoxGeometry, ReadableGeometry, PhongMaterial, Texture} from "xeokit-sdk.es.js";

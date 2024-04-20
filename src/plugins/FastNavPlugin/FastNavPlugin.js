@@ -4,7 +4,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  * {@link Viewer} plugin that makes interaction smoother with large models, by temporarily switching
  * the Viewer to faster, lower-quality rendering modes whenever we interact.
  *
- * [<img src="https://xeokit.io/img/docs/FastNavPlugin/FastNavPlugin.gif">](https://xeokit.github.io/xeokit-sdk/examples/#performance_FastNavPlugin)
+ * [<img src="https://xeokit.io/img/docs/FastNavPlugin/FastNavPlugin.gif">](https://xeokit.github.io/xeokit-sdk/examples/index.html#performance_FastNavPlugin)
  *
  * FastNavPlugin works by hiding specified Viewer rendering features, and optionally scaling the Viewer's canvas
  * resolution, whenever we interact with the Viewer. Then, once we've finished interacting, FastNavPlugin restores those
@@ -38,7 +38,7 @@ import {Plugin} from "../../viewer/Plugin.js";
  * not continually flipping between low and high quality as we interact. Since we're only rendering ambient shadows when not interacting, we'll also treat ourselves
  * to expensive, high-quality SAO settings, that we wouldn't normally configure for an interactive SAO effect.
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#performance_FastNavPlugin)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#performance_FastNavPlugin)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin, FastNavPlugin} from "xeokit-sdk.es.js";

@@ -149,7 +149,7 @@ const DTX = 2;
  * Then, for each object in our model we'll add an {@link Entity}
  * that has a mesh that instances our box geometry, transforming and coloring the instance.
  *
- * [![](http://xeokit.io/img/docs/sceneGraph.png)](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneModel_instancing)
+ * [![](http://xeokit.io/img/docs/sceneGraph.png)](https://xeokit.github.io/xeokit-sdk/examples/index.html#sceneRepresentation_SceneModel_instancing)
  *
  * ````javascript
  * import {Viewer, SceneModel} from "xeokit-sdk.es.js";
@@ -349,7 +349,7 @@ const DTX = 2;
  * Let's once more use a ````SceneModel````
  * to build the simple table model, this time exploiting geometry batching.
  *
- *  [![](http://xeokit.io/img/docs/sceneGraph.png)](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneModel_batching)
+ *  [![](http://xeokit.io/img/docs/sceneGraph.png)](https://xeokit.github.io/xeokit-sdk/examples/index.html#sceneRepresentation_SceneModel_batching)
  *
  * ````javascript
  * import {Viewer, SceneModel} from "xeokit-sdk.es.js";
@@ -617,7 +617,7 @@ const DTX = 2;
  * ````
  *
  * Given an {@link Entity}, we can find the object or model of which it is a part, or the objects that comprise it. We can also generate UI
- * components from the metadata, such as the tree view demonstrated in [this demo](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_glTF_OTCConferenceCenter).
+ * components from the metadata, such as the tree view demonstrated in [this demo](https://xeokit.github.io/xeokit-sdk/examples/index.html#BIMOffline_glTF_OTCConferenceCenter).
  *
  * This hierarchy allows us to express the hierarchical structure of a model while representing it in
  * various ways in the 3D scene (such as with ````SceneModel````, which
@@ -650,7 +650,7 @@ const DTX = 2;
  *
  * Note that the axis-aligned World-space boundary (AABB) of our model is ````[ -6, -9, -6, 1000000006, -2.5, 1000000006]````.
  *
- * [![](http://xeokit.io/img/docs/sceneGraph.png)](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneModel_batching)
+ * [![](http://xeokit.io/img/docs/sceneGraph.png)](https://xeokit.github.io/xeokit-sdk/examples/index.html#sceneRepresentation_SceneModel_batching)
  *
  * ````javascript
  * const origin = [100000000, 0, 100000000];
@@ -747,7 +747,7 @@ const DTX = 2;
  *
  * The axis-aligned World-space boundary (AABB) of our model is ````[ -6, -9, -6, 1000000006, -2.5, 1000000006]````.
  *
- * [![](http://xeokit.io/img/docs/sceneGraph.png)](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneModel_batching)
+ * [![](http://xeokit.io/img/docs/sceneGraph.png)](https://xeokit.github.io/xeokit-sdk/examples/index.html#sceneRepresentation_SceneModel_batching)
  *
  * ````javascript
  * const origin = [100000000, 0, 100000000];

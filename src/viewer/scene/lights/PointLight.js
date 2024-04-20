@@ -18,7 +18,7 @@ import {math} from '../math/math.js';
  *
  * In the example below we'll replace the {@link Scene}'s default light sources with three World-space PointLights.
  *
- * [[Run this example](/examples/#lights_PointLight_world)]
+ * [[Run this example](/examples/index.html#lights_PointLight_world)]
  *
  * ````javascript
  * import {Viewer, Mesh, buildSphereGeometry, buildPlaneGeometry,

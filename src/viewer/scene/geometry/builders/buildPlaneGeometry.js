@@ -7,7 +7,7 @@ import {utils} from '../../utils.js';
  *
  * Creating a {@link Mesh} with a PlaneGeometry and a {@link PhongMaterial} with diffuse {@link Texture}:
  *
- * [[Run this example](/examples/#geometry_builders_buildPlaneGeometry)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/scenegraph/#buildPlaneGeometry)]
  *
  * ````javascript
  * import {Viewer, Mesh, buildPlaneGeometry, ReadableGeometry, PhongMaterial, Texture} from "xeokit-sdk.es.js";

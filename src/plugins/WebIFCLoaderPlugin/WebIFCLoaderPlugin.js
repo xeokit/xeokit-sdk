@@ -9,9 +9,9 @@ import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords.js";
 /**
  * {@link Viewer} plugin that uses [web-ifc](https://github.com/tomvandig/web-ifc) to load BIM models directly from IFC files.
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_WebIFCLoaderPlugin_Duplex"><img src="https://xeokit.io/img/docs/WebIFCLoaderPlugin/WebIFCLoaderPlugin.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#BIMOffline_WebIFCLoaderPlugin_Duplex"><img src="https://xeokit.io/img/docs/WebIFCLoaderPlugin/WebIFCLoaderPlugin.png"></a>
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_WebIFCLoaderPlugin_Duplex)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#BIMOffline_WebIFCLoaderPlugin_Duplex)]
  *
  * ## Overview
  *
@@ -55,7 +55,7 @@ import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords.js";
  * Since this model contains IFC types, the WebIFCLoaderPlugin will set the initial appearance of each object
  * {@link Entity} according to its IFC type in {@link WebIFCLoaderPlugin#objectDefaults}.
  *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_WebIFCLoaderPlugin_isolateStorey)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#BIMOffline_WebIFCLoaderPlugin_isolateStorey)]
  *
  * ````javascript
  * import {Viewer, WebIFCLoaderPlugin} from "xeokit-sdk.es.js";

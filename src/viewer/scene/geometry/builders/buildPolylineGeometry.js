@@ -7,7 +7,7 @@ import {utils} from '../../utils.js';
  *
  * In the example below we'll create a {@link Mesh} with a polyline {@link ReadableGeometry} that has lines primitives.
  *
- * [[Run this example](/examples/#geometry_builders_buildPolylineGeometry)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/scenegraph/#buildPolylineGeometry)]
  *
  * ````javascript
  * //------------------------------------------------------------------------------------------------------------------
@@ -91,7 +91,7 @@ function buildPolylineGeometry(cfg = {}) {
  *
  * In the example below we'll create a {@link Mesh} with a polyline {@link ReadableGeometry} created from curves.
  *
- * [[Run this example](/examples/#geometry_builders_buildPolylineGeometryFromCurve)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/scenegraph/#buildPolylineGeometryFromCurve)]
  *
  * ````javascript
  * //------------------------------------------------------------------------------------------------------------------
