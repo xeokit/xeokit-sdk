@@ -405,6 +405,7 @@ function parseGLTF(plugin, src, gltf, metaModelJSON, options, sceneModel, ok) {
             loadBuffer: options.loadBuffer,
             basePath: options.basePath,
             handlenode: options.handlenode,
+            backfaces: !!options.backfaces,
             gltfData: gltfData,
             scene: sceneModel.scene,
             plugin: plugin,
@@ -613,7 +614,8 @@ function loadMaterialAttributes(ctx, material) { // Substitute RGBA for material
         color: new Float32Array([1, 1, 1, 1]),
         opacity: 1,
         metallic: 0,
-        roughness: 1
+        roughness: 1,
+        doubleSided : true
     };
     if (extensions) {
         const specularPBR = extensions[&quot;KHR_materials_pbrSpecularGlossiness&quot;];
@@ -664,6 +666,7 @@ function loadMaterialAttributes(ctx, material) { // Substitute RGBA for material
             materialAttributes.roughness = roughnessFactor;
         }
     }
+    materialAttributes.doubleSided = (material.doubleSided !== false);
     return materialAttributes;
 }
 
@@ -777,6 +780,20 @@ function loadNode(ctx, node, depth, matrix) {
                     id: sceneModel.id + &quot;.&quot; + ctx.numObjects++
                 };
 
+                const material = primitive.material;
+                if (material) {
+                    meshCfg.textureSetId = material._textureSetId;
+                    meshCfg.color = material._attributes.color;
+                    meshCfg.opacity = material._attributes.opacity;
+                    meshCfg.metallic = material._attributes.metallic;
+                    meshCfg.roughness = material._attributes.roughness;
+                } else {
+                    meshCfg.color = new Float32Array([1.0, 1.0, 1.0]);
+                    meshCfg.opacity = 1.0;
+                }
+
+                const backfaces = ((ctx.backfaces !== false) || (material.doubleSided !== false));
+
                 switch (primitive.mode) {
                     case 0: // POINTS
                         meshCfg.primitive = &quot;points&quot;;
@@ -791,16 +808,16 @@ function loadNode(ctx, node, depth, matrix) {
                         meshCfg.primitive = &quot;lines&quot;;
                         break;
                     case 4: // TRIANGLES
-                        meshCfg.primitive = &quot;triangles&quot;;
+                        meshCfg.primitive = backfaces ? &quot;triangles&quot; : &quot;solid&quot;;
                         break;
                     case 5: // TRIANGLE_STRIP
-                        meshCfg.primitive = &quot;triangles&quot;;
+                        meshCfg.primitive = backfaces ? &quot;triangles&quot; : &quot;solid&quot;;
                         break;
                     case 6: // TRIANGLE_FAN
-                        meshCfg.primitive = &quot;triangles&quot;;
+                        meshCfg.primitive = backfaces ? &quot;triangles&quot; : &quot;solid&quot;;
                         break;
                     default:
-                        meshCfg.primitive = &quot;triangles&quot;;
+                        meshCfg.primitive = backfaces ? &quot;triangles&quot; : &quot;solid&quot;;
                 }
 
                 const POSITION = primitive.attributes.POSITION;
@@ -829,17 +846,6 @@ function loadNode(ctx, node, depth, matrix) {
                     meshCfg.origin = origin;
                 }
 
-                const material = primitive.material;
-                if (material) {
-                    meshCfg.textureSetId = material._textureSetId;
-                    meshCfg.color = material._attributes.color;
-                    meshCfg.opacity = material._attributes.opacity;
-                    meshCfg.metallic = material._attributes.metallic;
-                    meshCfg.roughness = material._attributes.roughness;
-                } else {
-                    meshCfg.color = new Float32Array([1.0, 1.0, 1.0]);
-                    meshCfg.opacity = 1.0;
-                }
                 // if (createEntity) {
                 //     if (createEntity.colorize) {
                 //         meshCfg.color = createEntity.colorize;

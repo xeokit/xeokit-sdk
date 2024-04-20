@@ -1143,8 +1143,8 @@ objects that do not represent empty space.</p>
       <td data-ice="name" class="code" data-depth="1">params.backfaces</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: false</li></ul></td>
-      <td data-ice="description"><p>When true, allows visible backfaces, wherever specified in the glTF. When false, ignores backfaces.</p>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>When true, always show backfaces, even on objects for which the glTF material is single-sided. When false, only show backfaces on geometries whenever the glTF material is double-sided.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">

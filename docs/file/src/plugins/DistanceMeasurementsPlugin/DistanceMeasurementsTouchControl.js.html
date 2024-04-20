@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="3D engineering graphics in the browser"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="./images/logo.jpg"><meta property="og:description" content="3D engineering graphics in the browser"><meta property="og:author" content="http://xeolabs.com"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="3D engineering graphics in the browser"><meta property="twitter:image" content="./images/logo.jpg"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.jpg" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeokit/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#extras-contextmenu">extras/ContextMenu</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html">ContextMenu</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#extras-marqueepicker">extras/MarqueePicker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extras/MarqueePicker/MarqueePicker.js~MarqueePicker.html">MarqueePicker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extras/MarqueePicker/MarqueePickerMouseControl.js~MarqueePickerMouseControl.html">MarqueePickerMouseControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#extras-pointercircle">extras/PointerCircle</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extras/PointerCircle/PointerCircle.js~PointerCircle.html">PointerCircle</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#extras-pointerlens">extras/PointerLens</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extras/PointerLens/PointerLens.js~PointerLens.html">PointerLens</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#extras-collision">extras/collision</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extras/collision/ObjectsKdTree3.js~ObjectsKdTree3.html">ObjectsKdTree3</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-anglemeasurementsplugin">plugins/AngleMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl.html">AngleMeasurementsMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html">AngleMeasurementsTouchControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html">AngleMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-annotationsplugin">plugins/AnnotationsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html">AnnotationsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-cityjsonloaderplugin">plugins/CityJSONLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/CityJSONLoaderPlugin/CityJSONDefaultDataSource.js~CityJSONDefaultDataSource.html">CityJSONDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js~CityJSONLoaderPlugin.html">CityJSONLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy.html">DistanceMeasurementsControlLegacy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl.html">DistanceMeasurementsMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html">DistanceMeasurementsTouchControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-facealignedsectionplanesplugin">plugins/FaceAlignedSectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js~FaceAlignedSectionPlanesControl.html">FaceAlignedSectionPlanesControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html">FaceAlignedSectionPlanesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-fastnavplugin">plugins/FastNavPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html">FastNavPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lasloaderplugin">plugins/LASLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LASLoaderPlugin/LASDefaultDataSource.js~LASDefaultDataSource.html">LASDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html">LASLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLDefaultDataSource.js~STLDefaultDataSource.html">STLDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-storeyviewsplugin">plugins/StoreyViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html">Storey</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-treeviewplugin">plugins/TreeViewPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/RenderService.js~RenderService.html">RenderService</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/TreeViewNode.js~TreeViewNode.html">TreeViewNode</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-viewcullplugin">plugins/ViewCullPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin.html">ViewCullPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-webifcloaderplugin">plugins/WebIFCLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/WebIFCLoaderPlugin/WebIFCDefaultDataSource.js~WebIFCDefaultDataSource.html">WebIFCDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html">WebIFCLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Configs.js~Configs.html">Configs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-localization">viewer/localization</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/Property.js~Property.html">Property</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/PropertySet.js~PropertySet.html">PropertySet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaultColors">IFCObjectDefaultColors</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stats">stats</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-bitmap">viewer/scene/Bitmap</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html">Bitmap</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-lineset">viewer/scene/LineSet</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/LineSet/LineSet.js~LineSet.html">LineSet</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-camera">viewer/scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPath.js~CameraPath.html">CameraPath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html">CameraPathAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CustomProjection.js~CustomProjection.html">CustomProjection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Frustum.js~Frustum.html">Frustum</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Ortho.js~Ortho.html">Ortho</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Perspective.js~Perspective.html">Perspective</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-canvas">viewer/scene/canvas</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/canvas/Spinner.js~Spinner.html">Spinner</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-constants">viewer/scene/constants</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AlphaFormat">AlphaFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ByteType">ByteType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ClampToEdgeWrapping">ClampToEdgeWrapping</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CompressedMediaType">CompressedMediaType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DepthFormat">DepthFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DepthStencilFormat">DepthStencilFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-FloatType">FloatType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GIFMediaType">GIFMediaType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-HalfFloatType">HalfFloatType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IntType">IntType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-JPEGMediaType">JPEGMediaType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LinearEncoding">LinearEncoding</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LinearFilter">LinearFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LinearMipMapLinearFilter">LinearMipMapLinearFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LinearMipMapNearestFilter">LinearMipMapNearestFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LinearMipmapLinearFilter">LinearMipmapLinearFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LinearMipmapNearestFilter">LinearMipmapNearestFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LuminanceAlphaFormat">LuminanceAlphaFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LuminanceFormat">LuminanceFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MirroredRepeatWrapping">MirroredRepeatWrapping</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestFilter">NearestFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipMapLinearFilter">NearestMipMapLinearFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipMapNearestFilter">NearestMipMapNearestFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipmapLinearFilter">NearestMipmapLinearFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipmapNearestFilter">NearestMipmapNearestFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-PNGMediaType">PNGMediaType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBAFormat">RGBAFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBAIntegerFormat">RGBAIntegerFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_10x10_Format">RGBA_ASTC_10x10_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_10x5_Format">RGBA_ASTC_10x5_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_10x6_Format">RGBA_ASTC_10x6_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_10x8_Format">RGBA_ASTC_10x8_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_12x10_Format">RGBA_ASTC_12x10_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_12x12_Format">RGBA_ASTC_12x12_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_4x4_Format">RGBA_ASTC_4x4_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_5x4_Format">RGBA_ASTC_5x4_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_5x5_Format">RGBA_ASTC_5x5_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_6x5_Format">RGBA_ASTC_6x5_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_6x6_Format">RGBA_ASTC_6x6_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_8x5_Format">RGBA_ASTC_8x5_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_8x6_Format">RGBA_ASTC_8x6_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_8x8_Format">RGBA_ASTC_8x8_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_BPTC_Format">RGBA_BPTC_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ETC2_EAC_Format">RGBA_ETC2_EAC_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_PVRTC_2BPPV1_Format">RGBA_PVRTC_2BPPV1_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_PVRTC_4BPPV1_Format">RGBA_PVRTC_4BPPV1_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_S3TC_DXT1_Format">RGBA_S3TC_DXT1_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_S3TC_DXT3_Format">RGBA_S3TC_DXT3_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_S3TC_DXT5_Format">RGBA_S3TC_DXT5_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBFormat">RGBFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGB_ETC1_Format">RGB_ETC1_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGB_ETC2_Format">RGB_ETC2_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGB_PVRTC_2BPPV1_Format">RGB_PVRTC_2BPPV1_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGB_PVRTC_4BPPV1_Format">RGB_PVRTC_4BPPV1_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGB_S3TC_DXT1_Format">RGB_S3TC_DXT1_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGFormat">RGFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGIntegerFormat">RGIntegerFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RedFormat">RedFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RedIntegerFormat">RedIntegerFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RepeatWrapping">RepeatWrapping</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ShortType">ShortType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UnsignedByteType">UnsignedByteType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UnsignedInt248Type">UnsignedInt248Type</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UnsignedIntType">UnsignedIntType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UnsignedShort4444Type">UnsignedShort4444Type</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UnsignedShort5551Type">UnsignedShort5551Type</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UnsignedShortType">UnsignedShortType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sRGBEncoding">sRGBEncoding</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry">viewer/scene/geometry</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/VBOGeometry.js~VBOGeometry.html">VBOGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry-builders">viewer/scene/geometry/builders</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxGeometry">buildBoxGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxLinesGeometry">buildBoxLinesGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxLinesGeometryFromAABB">buildBoxLinesGeometryFromAABB</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildCylinderGeometry">buildCylinderGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildGridGeometry">buildGridGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometry">buildPolylineGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometryFromCurve">buildPolylineGeometryFromCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildSphereGeometry">buildSphereGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildTorusGeometry">buildTorusGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildVectorTextGeometry">buildVectorTextGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry-loaders">viewer/scene/geometry/loaders</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-load3DSGeometry">load3DSGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-loadOBJGeometry">loadOBJGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-input">viewer/scene/input</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/input/Input.js~Input.html">Input</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-lights">viewer/scene/lights</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/CubeTexture.js~CubeTexture.html">CubeTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/DirLight.js~DirLight.html">DirLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Light.js~Light.html">Light</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/LightMap.js~LightMap.html">LightMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html">SpriteMarker</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Fresnel.js~Fresnel.html">Fresnel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html">LambertMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/LinesMaterial.js~LinesMaterial.html">LinesMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Material.js~Material.html">Material</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html">MetallicMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html">PointsMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh">viewer/scene/mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh-draw">viewer/scene/mesh/draw</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-DrawShaderSource">DrawShaderSource</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-metriqs">viewer/scene/metriqs</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html">Metrics</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-model">viewer/scene/model</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/SceneModel.js~SceneModel.html">SceneModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity.html">SceneModelEntity</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/SceneModelMesh.js~SceneModelMesh.html">SceneModelMesh</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/SceneModelTexture.js~SceneModelTexture.html">SceneModelTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/SceneModelTextureSet.js~SceneModelTextureSet.html">SceneModelTextureSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/SceneModelTransform.js~SceneModelTransform.html">SceneModelTransform</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/VBOSceneModel.js~VBOSceneModel.html">VBOSceneModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-uniquifyPositions">uniquifyPositions</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rebucketPositions">rebucketPositions</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-model-dtx-lines">viewer/scene/model/dtx/lines</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rebucketPositions">rebucketPositions</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-dataTextureRamStats">dataTextureRamStats</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-model-dtx-triangles-lib">viewer/scene/model/dtx/triangles/lib</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-dataTextureRamStats">dataTextureRamStats</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-nodes">viewer/scene/nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-paths">viewer/scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache.html">SectionPlaneCache</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils">viewer/scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/FileLoader.js~FileLoader.html">FileLoader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/Loader.js~Loader.html">Loader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/LoadingManager.js~LoadingManager.html">LoadingManager</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/WorkerPool.js~WorkerPool.html">WorkerPool</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Cache">Cache</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DefaultLoadingManager">DefaultLoadingManager</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils-texturetranscoders">viewer/scene/utils/textureTranscoders</a><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js~TextureTranscoder.html">TextureTranscoder</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils-texturetranscoders-ktx2texturetranscoder">viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html">KTX2TextureTranscoder</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {math} from &quot;../../viewer/scene/math/math.js&quot;;
+import {PointerCircle} from &quot;../../extras/PointerCircle/PointerCircle.js&quot;;
+import {DistanceMeasurementsControl} from &quot;./DistanceMeasurementsControl.js&quot;;
+
+
+const WAITING_FOR_ORIGIN_TOUCH_START = 0;
+const WAITING_FOR_ORIGIN_QUICK_TOUCH_END = 1;
+const WAITING_FOR_ORIGIN_LONG_TOUCH_END = 2;
+
+const WAITING_FOR_TARGET_TOUCH_START = 3;
+const WAITING_FOR_TARGET_QUICK_TOUCH_END = 4;
+const WAITING_FOR_TARGET_LONG_TOUCH_END = 5;
+
+const TOUCH_CANCELING = 7;
+
+/**
+ * Creates {@link DistanceMeasurement}s from touch input.
+ *
+ * See {@link DistanceMeasurementsPlugin} for more info.
+ *
+ */
+export class DistanceMeasurementsTouchControl extends DistanceMeasurementsControl {
+
+    /**
+     * Creates a DistanceMeasurementsTouchControl bound to the given DistanceMeasurementsPlugin.
+     */
+    constructor(distanceMeasurementsPlugin, cfg = {}) {
+
+        super(distanceMeasurementsPlugin.viewer.scene);
+
+        this.pointerLens = cfg.pointerLens;
+        this.pointerCircle = new PointerCircle(distanceMeasurementsPlugin.viewer);
+
+        this._active = false;
+
+        const markerDiv = document.createElement(&apos;div&apos;);
+        const canvas = this.scene.canvas.canvas;
+        canvas.parentNode.insertBefore(markerDiv, canvas);
+
+        markerDiv.style.background = &quot;black&quot;;
+        markerDiv.style.border = &quot;2px solid blue&quot;;
+        markerDiv.style.borderRadius = &quot;10px&quot;;
+        markerDiv.style.width = &quot;5px&quot;;
+        markerDiv.style.height = &quot;5px&quot;;
+        markerDiv.style.margin = &quot;-200px -200px&quot;;
+        markerDiv.style.zIndex = &quot;100&quot;;
+        markerDiv.style.position = &quot;absolute&quot;;
+        markerDiv.style.pointerEvents = &quot;none&quot;;
+
+        this.markerDiv = markerDiv;
+
+        this._currentDistanceMeasurement = null;
+
+        this._currentDistanceMeasurementInitState = {
+            wireVisible: null,
+            axisVisible: null,
+            xAxisVisible: null,
+            yaxisVisible: null,
+            zAxisVisible: null,
+            targetVisible: null,
+        }
+
+        this._onCanvasTouchStart = null;
+        this._onCanvasTouchEnd = null;
+        this._longTouchTimeoutMs = 300;
+        this._snapToEdge = cfg.snapToEdge !== false;
+        this._snapToVertex = cfg.snapToVertex !== false;
+        this._touchState = WAITING_FOR_ORIGIN_TOUCH_START;
+
+        this._attachPlugin(distanceMeasurementsPlugin, cfg);
+    }
+
+    _attachPlugin(distanceMeasurementsPlugin) {
+
+        /**
+         * The {@link DistanceMeasurementsPlugin} that owns this DistanceMeasurementsTouchControl.
+         * @type {DistanceMeasurementsPlugin}
+         */
+        this.distanceMeasurementsPlugin = distanceMeasurementsPlugin;
+
+        /**
+         * The {@link DistanceMeasurementsPlugin} that owns this DistanceMeasurementsTouchControl.
+         * @type {DistanceMeasurementsPlugin}
+         */
+        this.plugin = distanceMeasurementsPlugin;
+    }
+
+    /** Gets if this DistanceMeasurementsTouchControl is currently active, where it is responding to input.
+     *
+     * @returns {Boolean}
+     */
+    get active() {
+        return this._active;
+    }
+
+    /**
+     * Sets whether snap-to-vertex is enabled for this DistanceMeasurementsTouchControl.
+     * This is `true` by default.
+     * @param snapToVertex
+     */
+    set snapToVertex(snapToVertex) {
+        this._snapToVertex = snapToVertex;
+    }
+
+    /**
+     * Gets whether snap-to-vertex is enabled for this DistanceMeasurementsTouchControl.
+     * This is `true` by default.
+     * @returns {*}
+     */
+    get snapToVertex() {
+        return this._snapToVertex;
+    }
+
+    /**
+     * Sets whether snap-to-edge is enabled for this DistanceMeasurementsTouchControl.
+     * This is `true` by default.
+     * @param snapToEdge
+     */
+    set snapToEdge(snapToEdge) {
+        this._snapToEdge = snapToEdge;
+    }
+
+    /**
+     * Gets whether snap-to-edge is enabled for this DistanceMeasurementsTouchControl.
+     * This is `true` by default.
+     * @returns {*}
+     */
+    get snapToEdge() {
+        return this._snapToEdge;
+    }
+
+    /**
+     * Activates this DistanceMeasurementsTouchControl, ready to respond to input.
+     */
+    activate() {
+
+        if (this._active) {
+            return;
+        }
+
+        const plugin = this.plugin;
+        const scene = this.scene;
+        const canvas = scene.canvas.canvas;
+        const pointerLens = plugin.pointerLens;
+        const pointerWorldPos = math.vec3();
+
+        const touchTolerance = 20;
+
+        let longTouchTimeout = null;
+
+        this._touchState = WAITING_FOR_ORIGIN_TOUCH_START;
+
+        const touchStartCanvasPos = math.vec2();
+        const touchMoveCanvasPos = math.vec2();
+        const touchEndCanvasPos = math.vec2();
+
+        let touchId = null;
+
+        const disableCameraMouseControl = () =&gt; {
+            this.plugin.viewer.cameraControl.active = false;
+        }
+
+        const enableCameraMouseControl = () =&gt; {
+            this.plugin.viewer.cameraControl.active = true;
+        }
+
+        const cancel = () =&gt; {
+            if (longTouchTimeout) {
+                clearTimeout(longTouchTimeout);
+                longTouchTimeout = null;
+            }
+            if (this._currentDistanceMeasurement) {
+                this._currentDistanceMeasurement.destroy();
+                this._currentDistanceMeasurement = null;
+            }
+            enableCameraMouseControl();
+            this._touchState = WAITING_FOR_ORIGIN_TOUCH_START;
+        }
+
+        canvas.addEventListener(&quot;touchstart&quot;, this._onCanvasTouchStart = (event) =&gt; {
+
+            const currentNumTouches = event.touches.length;
+
+            if (currentNumTouches !== 1) {
+                if (longTouchTimeout) {
+                    clearTimeout(longTouchTimeout);
+                    longTouchTimeout = null;
+                }
+                return;
+            }
+
+            const touch = event.touches[0];
+            const touchX = touch.clientX;
+            const touchY = touch.clientY;
+
+            touchStartCanvasPos.set([touchX, touchY]);
+            touchMoveCanvasPos.set([touchX, touchY]);
+
+            switch (this._touchState) {
+
+                case WAITING_FOR_ORIGIN_TOUCH_START:
+                    if (currentNumTouches !== 1 &amp;&amp; longTouchTimeout !== null) { // Two or more fingers down
+                        cancel();
+                        return;
+                    }
+                    const snapPickResult = scene.pick({
+                        canvasPos: touchMoveCanvasPos,
+                        snapToVertex: this._snapToVertex,
+                        snapToEdge: this._snapToEdge
+                    });
+                    if (snapPickResult &amp;&amp; snapPickResult.snapped) {
+                        pointerWorldPos.set(snapPickResult.worldPos);
+                        this.pointerCircle.start(snapPickResult.snappedCanvasPos);
+                    } else {
+                        const pickResult = scene.pick({
+                            canvasPos: touchMoveCanvasPos,
+                            pickSurface: true
+                        })
+                        if (pickResult &amp;&amp; pickResult.worldPos) {
+                            pointerWorldPos.set(pickResult.worldPos);
+                            this.pointerCircle.start(pickResult.canvasPos);
+                        } else {
+                            return;
+                        }
+                    }
+                    longTouchTimeout = setTimeout(() =&gt; {
+                        if (currentNumTouches !== 1 ||
+                            touchMoveCanvasPos[0] &gt; touchStartCanvasPos[0] + touchTolerance ||
+                            touchMoveCanvasPos[0] &lt; touchStartCanvasPos[0] - touchTolerance ||
+                            touchMoveCanvasPos[1] &gt; touchStartCanvasPos[1] + touchTolerance ||
+                            touchMoveCanvasPos[1] &lt; touchStartCanvasPos[1] - touchTolerance) {
+                            return;   // Has moved
+                        }
+                        // Long touch
+                        if (this.pointerLens) {
+                            this.pointerLens.visible = true;
+                            this.pointerLens.canvasPos = touchStartCanvasPos;
+                            this.pointerLens.cursorPos = touchStartCanvasPos;
+                        }
+                        if (this.pointerLens) {
+                            this.pointerLens.canvasPos = touchMoveCanvasPos;
+                            this.pointerLens.snapped = false;
+                        }
+                        if (this.pointerLens) {
+                            this.pointerLens.cursorPos = snapPickResult.canvasPos;
+                            this.pointerLens.snapped = true;
+                        }
+                        // pointerWorldPos.set(snapPickResult.snappedWorldPos);
+                        if (!this._currentDistanceMeasurement) {
+                            this._currentDistanceMeasurement = plugin.createMeasurement({
+                                id: math.createUUID(),
+                                origin: {
+                                    worldPos: pointerWorldPos,
+                                    entity: snapPickResult.entity
+                                },
+                                target: {
+                                    worldPos: pointerWorldPos,
+                                    entity: snapPickResult.entity
+                                }
+                            });
+                            this._currentDistanceMeasurement.labelsVisible = false;
+                            this._currentDistanceMeasurement.xAxisVisible = false;
+                            this._currentDistanceMeasurement.yAxisVisible = false;
+                            this._currentDistanceMeasurement.zAxisVisible = false;
+                            this._currentDistanceMeasurement.wireVisible = false;
+                            this._currentDistanceMeasurement.originVisible = true;
+                            this._currentDistanceMeasurement.targetVisible = false;
+                            this._currentDistanceMeasurement.clickable = false;
+                        } else {
+                            this._currentDistanceMeasurement.origin.worldPos = pointerWorldPos;
+                        }
+                        this.distanceMeasurementsPlugin.fire(&quot;measurementStart&quot;, this._currentDistanceMeasurement);
+                        // if (this.pointerLens) {
+                        //     this.pointerLens.cursorPos = pickResult.canvasPos;
+                        //     this.pointerLens.snapped = false;
+                        // }
+                        this._touchState = WAITING_FOR_ORIGIN_LONG_TOUCH_END;
+                        // console.log(&quot;touchstart: this._touchState= WAITING_FOR_ORIGIN_TOUCH_START -&gt; WAITING_FOR_ORIGIN_LONG_TOUCH_END&quot;)
+                        disableCameraMouseControl();
+                    }, this._longTouchTimeoutMs);
+                    this._touchState = WAITING_FOR_ORIGIN_QUICK_TOUCH_END;
+                    // console.log(&quot;touchstart: this._touchState= WAITING_FOR_ORIGIN_TOUCH_START -&gt; WAITING_FOR_ORIGIN_QUICK_TOUCH_END&quot;)
+
+                    touchId = touch.identifier;
+
+                    break;
+
+
+                case WAITING_FOR_TARGET_TOUCH_START:
+
+                    if (currentNumTouches !== 1 &amp;&amp; longTouchTimeout !== null) { // Two or more fingers down
+                        clearTimeout(longTouchTimeout);
+                        longTouchTimeout = null;
+                        return;
+                    }
+                    if (currentNumTouches === 1) { // One finger down
+                        longTouchTimeout = setTimeout(() =&gt; {
+                            longTouchTimeout = null;
+                            if (currentNumTouches !== 1 ||
+                                touchMoveCanvasPos[0] &gt; touchStartCanvasPos[0] + touchTolerance ||
+                                touchMoveCanvasPos[0] &lt; touchStartCanvasPos[0] - touchTolerance ||
+                                touchMoveCanvasPos[1] &gt; touchStartCanvasPos[1] + touchTolerance ||
+                                touchMoveCanvasPos[1] &lt; touchStartCanvasPos[1] - touchTolerance) {
+                                // Has moved
+                                return;
+                            }
+
+                            // Long touch
+                            if (this.pointerLens) {
+                                this.pointerLens.visible = true;
+                                this.pointerLens.canvasPos = touchStartCanvasPos;
+                                this.pointerLens.snapped = false;
+                            }
+
+                            const snapPickResult = scene.pick({
+                                canvasPos: touchMoveCanvasPos,
+                                snapToVertex: this._snapToVertex,
+                                snapToEdge: this._snapToEdge
+                            });
+                            if (snapPickResult &amp;&amp; snapPickResult.snapped) {
+                                if (this.pointerLens) {
+                                    this.pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
+                                    this.pointerLens.snapped = true;
+                                }
+                                this.pointerCircle.start(snapPickResult.snappedCanvasPos);
+                                pointerWorldPos.set(snapPickResult.worldPos);
+                                this._currentDistanceMeasurement.target.worldPos = snapPickResult.worldPos;
+                                this._currentDistanceMeasurement.target.entity = snapPickResult.entity;
+                                this._currentDistanceMeasurement.targetVisible = true;
+                                this._currentDistanceMeasurement.wireVisible = true;
+                                this._currentDistanceMeasurement.labelsVisible = true;
+                                this.distanceMeasurementsPlugin.fire(&quot;measurementStart&quot;, this._currentDistanceMeasurement);
+                            } else {
+                                const pickResult = scene.pick({
+                                    canvasPos: touchMoveCanvasPos,
+                                    pickSurface: true
+                                })
+                                if (pickResult &amp;&amp; pickResult.worldPos) {
+                                    if (this.pointerLens) {
+                                        this.pointerLens.cursorPos = pickResult.canvasPos;
+                                        this.pointerLens.snapped = false;
+                                    }
+                                    this.pointerCircle.start(pickResult.canvasPos);
+                                    pointerWorldPos.set(pickResult.worldPos);
+                                    this._currentDistanceMeasurement.target.worldPos = pickResult.worldPos;
+                                    this._currentDistanceMeasurement.target.entity = pickResult.entity;
+                                    this._currentDistanceMeasurement.targetVisible = true;
+                                    this._currentDistanceMeasurement.wireVisible = true;
+                                    this._currentDistanceMeasurement.labelsVisible = true;
+                                    this.distanceMeasurementsPlugin.fire(&quot;measurementStart&quot;, this._currentDistanceMeasurement);
+                                } else {
+                                    if (this.pointerLens) {
+                                        this.pointerLens.cursorPos = null;
+                                        this.pointerLens.snapped = false;
+
+                                    }
+                                }
+                            }
+                            this._touchState = WAITING_FOR_TARGET_LONG_TOUCH_END;
+                            // console.log(&quot;touchstart: this._touchState= WAITING_FOR_TARGET_TOUCH_START -&gt; WAITING_FOR_TARGET_LONG_TOUCH_END&quot;)
+
+                            disableCameraMouseControl();
+
+                        }, this._longTouchTimeoutMs);
+
+                        this._touchState = WAITING_FOR_TARGET_QUICK_TOUCH_END;
+                        // console.log(&quot;touchstart: this._touchState= WAITING_FOR_TARGET_TOUCH_START -&gt; WAITING_FOR_TARGET_QUICK_TOUCH_END&quot;)
+                    }
+
+                    touchId = touch.identifier;
+
+                    break;
+
+                default:
+                    if (longTouchTimeout !== null) {
+                        clearTimeout(longTouchTimeout);
+                        longTouchTimeout = null;
+                    }
+                    this._touchState = TOUCH_CANCELING;
+                    // console.log(&quot;touchstart: this._touchState= default -&gt; TOUCH_CANCELING&quot;)
+                    return;
+            }
+
+        }, {passive: true});
+
+
+        canvas.addEventListener(&quot;touchmove&quot;, (event) =&gt; {
+
+            this.pointerCircle.stop();
+
+            const currentNumTouches = event.touches.length;
+
+            if (currentNumTouches !== 1 || event.changedTouches.length !== 1) {
+                if (longTouchTimeout) {
+                    clearTimeout(longTouchTimeout);
+                    longTouchTimeout = null;
+                }
+                return;
+            }
+
+            const touch = event.touches[0];
+            const touchX = touch.clientX;
+            const touchY = touch.clientY;
+
+            if (touch.identifier !== touchId) {
+                return;
+            }
+
+            touchMoveCanvasPos.set([touchX, touchY]);
+
+            let snapPickResult;
+            let pickResult;
+
+            switch (this._touchState) {
+
+                case WAITING_FOR_ORIGIN_LONG_TOUCH_END:
+                    if (this.pointerLens) {
+                        this.pointerLens.canvasPos = touchMoveCanvasPos;
+                    }
+                    snapPickResult = scene.pick({
+                        canvasPos: touchMoveCanvasPos,
+
+
+                        snapToVertex: this._snapToVertex,
+                        snapToEdge: this._snapToEdge
+                    });
+                    if (snapPickResult &amp;&amp; (snapPickResult.snapped)) {
+                        if (this.pointerLens) {
+                            this.pointerLens.snappedCanvasPos = snapPickResult.snappedCanvasPos;
+                            this.pointerLens.snapped = true;
+                        }
+                        pointerWorldPos.set(snapPickResult.worldPos);
+                        if (!this._currentDistanceMeasurement) {
+                            this._currentDistanceMeasurement = plugin.createMeasurement({
+                                id: math.createUUID(),
+                                origin: {
+                                    worldPos: snapPickResult.worldPos,
+                                    entity: snapPickResult.entity
+                                },
+                                target: {
+                                    worldPos: snapPickResult.worldPos,
+                                    entity: snapPickResult.entity
+                                }
+                            });
+                            this._currentDistanceMeasurement.labelsVisible = false;
+                            this._currentDistanceMeasurement.xAxisVisible = false;
+                            this._currentDistanceMeasurement.yAxisVisible = false;
+                            this._currentDistanceMeasurement.zAxisVisible = false;
+                            this._currentDistanceMeasurement.wireVisible = false;
+                            this._currentDistanceMeasurement.originVisible = true;
+                            this._currentDistanceMeasurement.targetVisible = false;
+                            this._currentDistanceMeasurement.clickable = false;
+                        } else {
+                            this._currentDistanceMeasurement.origin.worldPos = snapPickResult.worldPos;
+                        }
+
+                        this.distanceMeasurementsPlugin.fire(&quot;measurementStart&quot;, this._currentDistanceMeasurement);
+                    } else {
+                        pickResult = scene.pick({
+                            canvasPos: touchMoveCanvasPos,
+                            pickSurface: true
+                        })
+                        if (pickResult &amp;&amp; pickResult.worldPos) {
+                            if (this.pointerLens) {
+                                this.pointerLens.cursorPos = pickResult.canvasPos;
+                                this.pointerLens.snapped = false;
+                            }
+                            pointerWorldPos.set(pickResult.worldPos);
+                            if (!this._currentDistanceMeasurement) {
+                                this._currentDistanceMeasurement = plugin.createMeasurement({
+                                    id: math.createUUID(),
+                                    origin: {
+                                        worldPos: pickResult.worldPos,
+                                        entity: pickResult.entity
+                                    },
+                                    target: {
+                                        worldPos: pickResult.worldPos,
+                                        entity: pickResult.entity
+                                    }
+                                });
+                                this._currentDistanceMeasurement.labelsVisible = false;
+                                this._currentDistanceMeasurement.xAxisVisible = false;
+                                this._currentDistanceMeasurement.yAxisVisible = false;
+                                this._currentDistanceMeasurement.zAxisVisible = false;
+                                this._currentDistanceMeasurement.wireVisible = false;
+                                this._currentDistanceMeasurement.originVisible = true;
+                                this._currentDistanceMeasurement.targetVisible = false;
+                                this._currentDistanceMeasurement.clickable = false;
+                            } else {
+                                this._currentDistanceMeasurement.origin.worldPos = pickResult.worldPos;
+                            }
+
+                            this.distanceMeasurementsPlugin.fire(&quot;measurementStart&quot;, this._currentDistanceMeasurement);
+                        } else {
+                            if (this.pointerLens) {
+                                this.pointerLens.cursorPos = null;
+                                this.pointerLens.snapped = false;
+                            }
+                        }
+                    }
+                    this._touchState = WAITING_FOR_ORIGIN_LONG_TOUCH_END;
+                    // console.log(&quot;touchmove: this._touchState= WAITING_FOR_ORIGIN_LONG_TOUCH_END -&gt; WAITING_FOR_ORIGIN_LONG_TOUCH_END&quot;)
+                    break;
+
+                // case WAITING_FOR_TARGET_TOUCH_START:
+                //     this._touchState = WAITING_FOR_TARGET_TOUCH_START;
+                //     console.log(&quot;touchmove: this._touchState= WAITING_FOR_TARGET_TOUCH_START -&gt; WAITING_FOR_TARGET_TOUCH_START&quot;)
+                //     break;
+
+                case WAITING_FOR_TARGET_LONG_TOUCH_END:
+                    if (currentNumTouches !== 1 &amp;&amp; longTouchTimeout !== null) { // Two or more fingers down
+                        clearTimeout(longTouchTimeout);
+                        longTouchTimeout = null;
+                        if (this.pointerLens) {
+                            this.pointerLens.visible = false;
+                        }
+                        this._touchState = TOUCH_CANCELING;
+                        // console.log(&quot;touchmove: this._touchState= QUICK_TOUCH_FINDING_TARGET -&gt; TOUCH_CANCELING&quot;)
+                        return;
+                    }
+                    if (this.pointerLens) {
+                        this.pointerLens.canvasPos = touchMoveCanvasPos;
+                    }
+                    snapPickResult = scene.pick({
+                        canvasPos: touchMoveCanvasPos,
+                        snapToVertex: this._snapToVertex,
+                        snapToEdge: this._snapToEdge
+                    });
+                    if (snapPickResult &amp;&amp; snapPickResult.worldPos) {
+                        if (this.pointerLens) {
+                            this.pointerLens.cursorPos = snapPickResult.snappedCanvasPos;
+                            this.pointerLens.snapped = true;
+                        }
+                        this._currentDistanceMeasurement.target.worldPos = snapPickResult.worldPos;
+                        this._currentDistanceMeasurement.target.entity = snapPickResult.entity;
+                        this._currentDistanceMeasurement.targetVisible = true;
+                        this._currentDistanceMeasurement.wireVisible = true;
+                        this._currentDistanceMeasurement.labelsVisible = true;
+                    } else {
+                        pickResult = scene.pick({
+                            canvasPos: touchMoveCanvasPos,
+                            pickSurface: true
+                        })
+                        if (pickResult &amp;&amp; pickResult.worldPos) {
+                            if (this.pointerLens) {
+                                this.pointerLens.cursorPos = pickResult.canvasPos;
+                                this.pointerLens.snapped = false;
+                            }
+                            this._currentDistanceMeasurement.target.worldPos = pickResult.worldPos;
+                            this._currentDistanceMeasurement.target.entity = pickResult.entity;
+                            this._currentDistanceMeasurement.targetVisible = true;
+                            this._currentDistanceMeasurement.wireVisible = true;
+                            this._currentDistanceMeasurement.labelsVisible = true;
+
+                        }
+                    }
+                    this._touchState = WAITING_FOR_TARGET_LONG_TOUCH_END;
+                    break;
+
+                default:
+                    break;
+            }
+        }, {passive: true});
+
+        canvas.addEventListener(&quot;touchend&quot;, this._onCanvasTouchEnd = (event) =&gt; {
+
+            this.pointerCircle.stop();
+
+            const numChangedTouches = event.changedTouches.length;
+
+            if (numChangedTouches !== 1) {
+                return;
+            }
+
+            const touch = event.changedTouches[0];
+            const touchX = touch.clientX;
+            const touchY = touch.clientY;
+
+            if (touch.identifier !== touchId) {
+                return;
+            }
+
+            if (longTouchTimeout) {
+                clearTimeout(longTouchTimeout);
+                longTouchTimeout = null;
+            }
+
+            touchEndCanvasPos.set([touchX, touchY]);
+
+            switch (this._touchState) {
+
+                case WAITING_FOR_ORIGIN_QUICK_TOUCH_END: {
+                    if (numChangedTouches !== 1 ||
+                        touchX &gt; touchStartCanvasPos[0] + touchTolerance ||
+                        touchX &lt; touchStartCanvasPos[0] - touchTolerance ||
+                        touchY &gt; touchStartCanvasPos[1] + touchTolerance ||
+                        touchY &lt; touchStartCanvasPos[1] - touchTolerance) {
+                        this._touchState = WAITING_FOR_ORIGIN_TOUCH_START;
+                        return;
+                    }
+                    const pickResult = scene.pick({
+                        canvasPos: touchMoveCanvasPos,
+                        pickSurface: true
+                    });
+                    if (pickResult &amp;&amp; pickResult.worldPos) {
+                        this._currentDistanceMeasurement = plugin.createMeasurement({
+                            id: math.createUUID(),
+                            origin: {
+                                worldPos: pickResult.worldPos,
+                                entity: pickResult.entity
+                            },
+                            target: {
+                                worldPos: pickResult.worldPos,
+                                entity: pickResult.entity
+                            }
+                        });
+                        this._currentDistanceMeasurement.labelsVisible = false;
+                        this._currentDistanceMeasurement.xAxisVisible = false;
+                        this._currentDistanceMeasurement.yAxisVisible = false;
+                        this._currentDistanceMeasurement.zAxisVisible = false;
+                        this._currentDistanceMeasurement.wireVisible = false;
+                        this._currentDistanceMeasurement.originVisible = true;
+                        this._currentDistanceMeasurement.targetVisible = false;
+                        this._currentDistanceMeasurement.clickable = false;
+                        this._touchState = WAITING_FOR_TARGET_TOUCH_START;
+                        this.distanceMeasurementsPlugin.fire(&quot;measurementStart&quot;, this._currentDistanceMeasurement);
+                        //  console.log(&quot;touchend: this._touchState= WAITING_FOR_ORIGIN_QUICK_TOUCH_END -&gt; WAITING_FOR_ORIGIN_TOUCH_START&quot;)
+                    } else {
+                        if (this._currentDistanceMeasurement) {
+                            this._currentDistanceMeasurement.destroy();
+                        }
+                        this._touchState = WAITING_FOR_ORIGIN_TOUCH_START;
+                        //  console.log(&quot;touchend: this._touchState= WAITING_FOR_ORIGIN_QUICK_TOUCH_END -&gt; WAITING_FOR_ORIGIN_TOUCH_START&quot;)
+                    }
+                }
+                    enableCameraMouseControl();
+                    break;
+
+                case WAITING_FOR_ORIGIN_LONG_TOUCH_END:
+                    if (this.pointerLens) {
+                        this.pointerLens.visible = false;
+                    }
+                    if (!this._currentDistanceMeasurement) {
+                        if (this.pointerLens) {
+                            this.pointerLens.snapped = false;
+                            this.pointerLens.visible = false;
+                        }
+                        this._touchState = WAITING_FOR_ORIGIN_TOUCH_START;
+                        //  console.log(&quot;touchend: this._touchState= WAITING_FOR_ORIGIN_LONG_TOUCH_END (no measurement) -&gt; WAITING_FOR_ORIGIN_TOUCH_START&quot;)
+                    } else {
+                        this._touchState = WAITING_FOR_TARGET_TOUCH_START;
+                        //  console.log(&quot;touchend: this._touchState= WAITING_FOR_ORIGIN_LONG_TOUCH_END (picked, begin measurement) -&gt; WAITING_FOR_TARGET_TOUCH_START&quot;)
+                    }
+                    enableCameraMouseControl();
+                    break;
+
+                case WAITING_FOR_TARGET_QUICK_TOUCH_END: {
+                    if (numChangedTouches !== 1 ||
+                        touchX &gt; touchStartCanvasPos[0] + touchTolerance ||
+                        touchX &lt; touchStartCanvasPos[0] - touchTolerance ||
+                        touchY &gt; touchStartCanvasPos[1] + touchTolerance ||
+                        touchY &lt; touchStartCanvasPos[1] - touchTolerance) {
+                        this._touchState = WAITING_FOR_TARGET_TOUCH_START;
+                        return;
+                    }
+                    const pickResult = scene.pick({
+                        canvasPos: touchMoveCanvasPos,
+                        pickSurface: true
+                    });
+                    if (pickResult &amp;&amp; pickResult.worldPos) {
+                        this._currentDistanceMeasurement.target.worldPos = pickResult.worldPos;
+                        this._currentDistanceMeasurement.target.entity = pickResult.entity;
+                        this._currentDistanceMeasurement.targetVisible = true;
+                        this._currentDistanceMeasurement.wireVisible = true;
+                        this._currentDistanceMeasurement.labelsVisible = true;
+                        this.distanceMeasurementsPlugin.fire(&quot;measurementEnd&quot;, this._currentDistanceMeasurement);
+                        this._currentDistanceMeasurement = null;
+                    } else {
+                        if (this._currentDistanceMeasurement) {
+                            this._currentDistanceMeasurement.destroy();
+                            this._currentDistanceMeasurement = null;
+                        }
+                    }
+                    this._touchState = WAITING_FOR_ORIGIN_TOUCH_START;
+                    //  console.log(&quot;touchend: this._touchState= WAITING_FOR_TARGET_TOUCH_START -&gt; WAITING_FOR_ORIGIN_TOUCH_START&quot;)
+                }
+                    enableCameraMouseControl();
+                    break;
+
+                case WAITING_FOR_TARGET_LONG_TOUCH_END:
+                    if (this.pointerLens) {
+                        this.pointerLens.visible = false;
+                    }
+                    if (!this._currentDistanceMeasurement || !this._currentDistanceMeasurement.targetVisible) {
+                        if (this._currentDistanceMeasurement) {
+                            this._currentDistanceMeasurement.destroy();
+                            this._currentDistanceMeasurement = null;
+                        }
+                        this._touchState = WAITING_FOR_ORIGIN_TOUCH_START;
+                        //  console.log(&quot;touchend: this._touchState= WAITING_FOR_TARGET_LONG_TOUCH_END (no target found) -&gt; WAITING_FOR_ORIGIN_TOUCH_START&quot;)
+                    } else {
+                        this._currentDistanceMeasurement.clickable = true;
+                        this.distanceMeasurementsPlugin.fire(&quot;measurementEnd&quot;, this._currentDistanceMeasurement);
+                        this._currentDistanceMeasurement = null;
+                        this._touchState = WAITING_FOR_ORIGIN_TOUCH_START;
+                        //  console.log(&quot;touchend: this._touchState= WAITING_FOR_TARGET_LONG_TOUCH_END  -&gt; WAITING_FOR_ORIGIN_TOUCH_START&quot;)
+                    }
+                    enableCameraMouseControl();
+                    break;
+            }
+
+        }, {passive: true});
+
+        this._active = true;
+    }
+
+    /**
+     * Deactivates this DistanceMeasurementsTouchControl, making it unresponsive to input.
+     *
+     * Destroys any {@link DistanceMeasurement} under construction.
+     */
+    deactivate() {
+        if (!this._active) {
+            return;
+        }
+        if (this.plugin.pointerLens) {
+            this.plugin.pointerLens.visible = false;
+        }
+        this.reset();
+        const canvas = this.plugin.viewer.scene.canvas.canvas;
+        canvas.removeEventListener(&quot;touchstart&quot;, this._onCanvasTouchStart);
+        canvas.removeEventListener(&quot;touchend&quot;, this._onCanvasTouchEnd);
+        if (this._currentDistanceMeasurement) {
+            this.distanceMeasurementsPlugin.fire(&quot;measurementCancel&quot;, this._currentDistanceMeasurement);
+            this._currentDistanceMeasurement.destroy();
+            this._currentDistanceMeasurement = null;
+        }
+        this._active = false;
+        this.plugin.viewer.cameraControl.active = true;
+    }
+
+    /**
+     * Resets this DistanceMeasurementsTouchControl.
+     *
+     * Destroys any {@link DistanceMeasurement} under construction.
+     *
+     * Does nothing if the DistanceMeasurementsTouchControl is not active.
+     */
+    reset() {
+        if (!this._active) {
+            return;
+        }
+        if (this._currentDistanceMeasurement) {
+            this.distanceMeasurementsPlugin.fire(&quot;measurementCancel&quot;, this._currentDistanceMeasurement);
+            this._currentDistanceMeasurement.destroy();
+            this._currentDistanceMeasurement = null;
+        }
+    }
+
+    /**
+     * Destroys this DistanceMeasurementsTouchControl.
+     */
+    destroy() {
+        this.deactivate();
+        super.destroy();
+    }
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

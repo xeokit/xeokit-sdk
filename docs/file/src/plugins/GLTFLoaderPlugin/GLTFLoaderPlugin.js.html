@@ -504,7 +504,7 @@ class GLTFLoaderPlugin extends Plugin {
      * @param {Boolean} [params.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) is enabled for the model. SAO is configured by the Scene&apos;s {@link SAO} component. Only works when {@link SAO#enabled} is also ````true````
      * @param {Boolean} [params.pbrEnabled=true] Indicates if physically-based rendering (PBR) is enabled for the model. Overrides ````colorTextureEnabled````. Only works when {@link Scene#pbrEnabled} is also ````true````.
      * @param {Boolean} [params.colorTextureEnabled=true] Indicates if base color texture rendering is enabled for the model. Overridden by ````pbrEnabled````.  Only works when {@link Scene#colorTextureEnabled} is also ````true````.
-     * @param {Boolean} [params.backfaces=false] When true, allows visible backfaces, wherever specified in the glTF. When false, ignores backfaces.
+     * @param {Boolean} [params.backfaces=true] When true, always show backfaces, even on objects for which the glTF material is single-sided. When false, only show backfaces on geometries whenever the glTF material is double-sided.
      * @param {Number} [params.edgeThreshold=10] When xraying, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
      * @param {Boolean} [params.dtxEnabled=true] When ````true```` (default) use data textures (DTX), where appropriate, to
      * represent the returned model. Set false to always use vertex buffer objects (VBOs). Note that DTX is only applicable
