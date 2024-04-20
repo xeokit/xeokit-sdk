@@ -47,7 +47,6 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-cityjsonloaderplugin">plugins/CityJSONLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/CityJSONLoaderPlugin/CityJSONDefaultDataSource.js~CityJSONDefaultDataSource.html">CityJSONDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js~CityJSONLoaderPlugin.html">CityJSONLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy.html">DistanceMeasurementsControlLegacy</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl.html">DistanceMeasurementsMouseControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html">DistanceMeasurementsTouchControl</a></span></span></li>
@@ -285,10 +284,10 @@
   
   
   <div class="description" data-ice="description"><p><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that saves and loads BCF viewpoints as JSON objects.</p>
-<p><a href="/examples/#BCF_SaveViewpoint"><img src="http://xeokit.github.io/xeokit-sdk/assets/images/BCFViewpointsPlugin.png"></a></p>
+<p><a href="/examples/index.html#BCF_SaveViewpoint"><img src="http://xeokit.github.io/xeokit-sdk/assets/images/BCFViewpointsPlugin.png"></a></p>
 <ul>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint">Example 1: Saving viewer state to a BCF viewpoint</a>]</li>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BCF_LoadViewpoint">Example 2: Loading viewer state from a BCF viewpoint</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#BCF_SaveViewpoint">Example 1: Saving viewer state to a BCF viewpoint</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#BCF_LoadViewpoint">Example 2: Loading viewer state from a BCF viewpoint</a>]</li>
 </ul>
 <h2 id="overview">Overview</h2><p>BCF is an open standard that enables workflow communications between BIM software tools. An XML schema, called
 Building Collaboration Format (BCF), encodes messages that inform one BIM tool of issues found by another.</p>
@@ -310,7 +309,7 @@ slice the model in half using a <span><a href="class/src/plugins/SectionPlanesPl
 plan view using a <span><a href="class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html">Bitmap</a></span>, then use a <span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-getViewpoint">BCFViewpointsPlugin#getViewpoint</a></span>
 to save a viewpoint to JSON, which we&apos;ll log to the JavaScript developer console.</p>
 <ul>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint">Run this example</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#BCF_SaveViewpoint">Run this example</a>]</li>
 </ul>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin,
      LineSet, Bitmap, buildGridGeometry, BCFViewpointsPlugin} from &quot;xeokit-sdk.es.js&quot;;
@@ -500,7 +499,7 @@ viewpoint visible (which will only be those of object &quot;duplex&quot;).</p>
     defaultInvisible: true
 });</code>
 </code></pre>
-<p>[<a href="/examples/#BCF_LoadViewpoint_defaultInvisible">Run an example</a>]</p>
+<p>[<a href="/examples/index.html#BCF_LoadViewpoint_defaultInvisible">Run an example</a>]</p>
 <h2 id="behaviour-with-xktloaderplugin-globalizeobjectids">Behaviour with XKTLoaderPlugin globalizeObjectIds</h2><p>Whenever we use <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span> to load duplicate copies of the same model, after configuring
 <span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html#instance-get-globalizeObjectIds">XKTLoaderPlugin#globalizeObjectIds</a></span> <code>true</code> to avoid <code>Entity</code> ID clashes, this has consequences
 for BCF viewpoints created by <span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html#instance-method-getViewpoint">BCFViewpointsPlugin#getViewpoint</a></span>.</p>
@@ -513,8 +512,8 @@ use <code>authoring_tool_id</code> fields to save the globalized <code>Entity#id
 capture the states of the individual <code>Entitys</code> that represent the duplicate IFC elements. Take a look at the
 following two examples to learn more.</p>
 <ul>
-<li><a href="https://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint_MultipleModels">Example: Saving a BCF viewpoint containing duplicate models</a></li>
-<li><a href="https://xeokit.github.io/xeokit-sdk/examples/#BCF_LoadViewpoint_MultipleModels">Example: Loading a BCF viewpoint containing duplicate models</a></li>
+<li><a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#BCF_SaveViewpoint_MultipleModels">Example: Saving a BCF viewpoint containing duplicate models</a></li>
+<li><a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#BCF_LoadViewpoint_MultipleModels">Example: Loading a BCF viewpoint containing duplicate models</a></li>
 </ul>
 <p><strong>Caveat:</strong> when loading a BCF viewpoint, we always assume that we have loaded in our target BIM viewer the same models that were
 loaded in the viewpoint&apos;s original authoring application when the viewpoint was created.  In the case of multi-model
