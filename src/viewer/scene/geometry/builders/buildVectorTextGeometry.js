@@ -1581,7 +1581,7 @@ const letters = {
  *
  * Creating a {@link Mesh} with vector text {@link ReadableGeometry} :
  *
- * [[Run this example](/examples/#geometry_builders_buildVectorTextGeometry)]
+ * [[Run this example](/examples/index.html#geometry_builders_buildVectorTextGeometry)]
  *
  * ````javascript
  *

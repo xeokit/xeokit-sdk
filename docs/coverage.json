@@ -1,7 +1,7 @@
 {
-  "coverage": "40.07%",
-  "expectCount": 7076,
-  "actualCount": 2836,
+  "coverage": "40.08%",
+  "expectCount": 7050,
+  "actualCount": 2826,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 61,
@@ -412,28 +412,6 @@
       "expectCount": 8,
       "actualCount": 8,
       "undocumentLines": []
-    },
-    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js": {
-      "expectCount": 26,
-      "actualCount": 10,
-      "undocumentLines": [
-        31,
-        32,
-        33,
-        50,
-        55,
-        57,
-        67,
-        74,
-        84,
-        85,
-        86,
-        89,
-        90,
-        93,
-        94,
-        454
-      ]
     },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js": {
       "expectCount": 30,
@@ -1033,18 +1011,18 @@
       "actualCount": 20,
       "undocumentLines": [
         20,
-        1153,
-        619,
-        653,
-        675,
-        697,
-        725,
-        753,
-        781,
-        813,
-        843,
-        1121,
-        1128
+        1145,
+        611,
+        645,
+        667,
+        689,
+        717,
+        745,
+        773,
+        805,
+        835,
+        1113,
+        1120
       ]
     },
     "src/plugins/XKTLoaderPlugin/parsers/ParserV1.js": {
@@ -2211,22 +2189,22 @@
       "undocumentLines": [
         6,
         7,
+        129,
+        130,
         131,
         132,
         133,
         134,
         135,
         136,
-        137,
         138,
-        140,
-        141,
-        145,
-        146,
-        150,
-        151,
-        160,
-        179
+        139,
+        143,
+        144,
+        148,
+        149,
+        158,
+        177
       ]
     },
     "src/viewer/scene/marker/SpriteMarker.js": {

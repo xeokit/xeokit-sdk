@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 3684,
+  "end": 3694,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 3684,
+    "end": 3694,
     "loc": {
       "start": {
         "line": 1,
@@ -295,9 +295,9 @@
         "trailingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n * Manages global configurations for all {@link Viewer}s.\n *\n * ## Example\n *\n * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost\n * on low-power devices, but also means that we can no longer render double-precision models without jittering.\n *\n * That's OK if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.\n *\n * [[Run this example](/examples/#Configs_disableDoublePrecisionAndRAF)]\n *\n * ````javascript\n * import {Configs, Viewer, XKTLoaderPlugin} from \"https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js\";\n *\n * // Access xeoit-sdk global configs.\n * // We typically set configs only before we create any Viewers.\n * const configs = new Configs();\n *\n * // Disable 64-bit precision for extra speed.\n * // Only set this config once, before you create any Viewers.\n * configs.doublePrecisionEnabled = false;\n *\n * // Create a Viewer, to which our configs apply\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n *  });\n *\n * viewer.camera.eye = [-3.933, 2.855, 27.018];\n * viewer.camera.look = [4.400, 3.724, 8.899];\n * viewer.camera.up = [-0.018, 0.999, 0.039];\n *\n * const xktLoader = new XKTLoaderPlugin(viewer);\n *\n * const model = xktLoader.load({\n *     src: \"../assets/models/xkt/v8/ifc/Duplex.ifc.xkt\"\n * });\n * ````\n ",
+            "value": "*\n * Manages global configurations for all {@link Viewer}s.\n *\n * ## Example\n *\n * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost\n * on low-power devices, but also means that we can no longer render double-precision models without jittering.\n *\n * That's OK if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.\n *\n * [[Run this example](/examples/index.html#Configs_disableDoublePrecisionAndRAF)]\n *\n * ````javascript\n * import {Configs, Viewer, XKTLoaderPlugin} from \"https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js\";\n *\n * // Access xeoit-sdk global configs.\n * // We typically set configs only before we create any Viewers.\n * const configs = new Configs();\n *\n * // Disable 64-bit precision for extra speed.\n * // Only set this config once, before you create any Viewers.\n * configs.doublePrecisionEnabled = false;\n *\n * // Create a Viewer, to which our configs apply\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n *  });\n *\n * viewer.camera.eye = [-3.933, 2.855, 27.018];\n * viewer.camera.look = [4.400, 3.724, 8.899];\n * viewer.camera.up = [-0.018, 0.999, 0.039];\n *\n * const xktLoader = new XKTLoaderPlugin(viewer);\n *\n * const model = xktLoader.load({\n *     src: \"../assets/models/xkt/v8/ifc/Duplex.ifc.xkt\"\n * });\n * ````\n ",
             "start": 116,
-            "end": 1522,
+            "end": 1532,
             "loc": {
               "start": {
                 "line": 6,
@@ -313,8 +313,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 1523,
-        "end": 3682,
+        "start": 1533,
+        "end": 3692,
         "loc": {
           "start": {
             "line": 45,
@@ -329,8 +329,8 @@
         "source": null,
         "declaration": {
           "type": "ClassDeclaration",
-          "start": 1530,
-          "end": 3682,
+          "start": 1540,
+          "end": 3692,
           "loc": {
             "start": {
               "line": 45,
@@ -343,8 +343,8 @@
           },
           "id": {
             "type": "Identifier",
-            "start": 1536,
-            "end": 1543,
+            "start": 1546,
+            "end": 1553,
             "loc": {
               "start": {
                 "line": 45,
@@ -362,8 +362,8 @@
           "superClass": null,
           "body": {
             "type": "ClassBody",
-            "start": 1544,
-            "end": 3682,
+            "start": 1554,
+            "end": 3692,
             "loc": {
               "start": {
                 "line": 45,
@@ -377,8 +377,8 @@
             "body": [
               {
                 "type": "ClassMethod",
-                "start": 1593,
-                "end": 1615,
+                "start": 1603,
+                "end": 1625,
                 "loc": {
                   "start": {
                     "line": 50,
@@ -393,8 +393,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 1593,
-                  "end": 1604,
+                  "start": 1603,
+                  "end": 1614,
                   "loc": {
                     "start": {
                       "line": 50,
@@ -417,8 +417,8 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 1607,
-                  "end": 1615,
+                  "start": 1617,
+                  "end": 1625,
                   "loc": {
                     "start": {
                       "line": 50,
@@ -438,8 +438,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Creates a Configs.\n     ",
-                    "start": 1551,
-                    "end": 1588,
+                    "start": 1561,
+                    "end": 1598,
                     "loc": {
                       "start": {
                         "line": 47,
@@ -456,8 +456,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {Boolean}\n     ",
-                    "start": 1621,
-                    "end": 2248,
+                    "start": 1631,
+                    "end": 2258,
                     "loc": {
                       "start": {
                         "line": 54,
@@ -473,8 +473,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 2253,
-                "end": 2361,
+                "start": 2263,
+                "end": 2371,
                 "loc": {
                   "start": {
                     "line": 68,
@@ -489,8 +489,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 2257,
-                  "end": 2279,
+                  "start": 2267,
+                  "end": 2289,
                   "loc": {
                     "start": {
                       "line": 68,
@@ -512,8 +512,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 2280,
-                    "end": 2295,
+                    "start": 2290,
+                    "end": 2305,
                     "loc": {
                       "start": {
                         "line": 68,
@@ -530,8 +530,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 2297,
-                  "end": 2361,
+                  "start": 2307,
+                  "end": 2371,
                   "loc": {
                     "start": {
                       "line": 68,
@@ -545,8 +545,8 @@
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 2307,
-                      "end": 2355,
+                      "start": 2317,
+                      "end": 2365,
                       "loc": {
                         "start": {
                           "line": 69,
@@ -559,8 +559,8 @@
                       },
                       "expression": {
                         "type": "CallExpression",
-                        "start": 2307,
-                        "end": 2354,
+                        "start": 2317,
+                        "end": 2364,
                         "loc": {
                           "start": {
                             "line": 69,
@@ -573,8 +573,8 @@
                         },
                         "callee": {
                           "type": "MemberExpression",
-                          "start": 2307,
-                          "end": 2337,
+                          "start": 2317,
+                          "end": 2347,
                           "loc": {
                             "start": {
                               "line": 69,
@@ -587,8 +587,8 @@
                           },
                           "object": {
                             "type": "Identifier",
-                            "start": 2307,
-                            "end": 2311,
+                            "start": 2317,
+                            "end": 2321,
                             "loc": {
                               "start": {
                                 "line": 69,
@@ -604,8 +604,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 2312,
-                            "end": 2337,
+                            "start": 2322,
+                            "end": 2347,
                             "loc": {
                               "start": {
                                 "line": 69,
@@ -624,8 +624,8 @@
                         "arguments": [
                           {
                             "type": "Identifier",
-                            "start": 2338,
-                            "end": 2353,
+                            "start": 2348,
+                            "end": 2363,
                             "loc": {
                               "start": {
                                 "line": 69,
@@ -650,8 +650,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {Boolean}\n     ",
-                    "start": 1621,
-                    "end": 2248,
+                    "start": 1631,
+                    "end": 2258,
                     "loc": {
                       "start": {
                         "line": 54,
@@ -668,8 +668,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {Boolean}\n     ",
-                    "start": 2367,
-                    "end": 2481,
+                    "start": 2377,
+                    "end": 2491,
                     "loc": {
                       "start": {
                         "line": 72,
@@ -685,8 +685,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 2486,
-                "end": 2571,
+                "start": 2496,
+                "end": 2581,
                 "loc": {
                   "start": {
                     "line": 77,
@@ -701,8 +701,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 2490,
-                  "end": 2512,
+                  "start": 2500,
+                  "end": 2522,
                   "loc": {
                     "start": {
                       "line": 77,
@@ -724,8 +724,8 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 2515,
-                  "end": 2571,
+                  "start": 2525,
+                  "end": 2581,
                   "loc": {
                     "start": {
                       "line": 77,
@@ -739,8 +739,8 @@
                   "body": [
                     {
                       "type": "ReturnStatement",
-                      "start": 2525,
-                      "end": 2565,
+                      "start": 2535,
+                      "end": 2575,
                       "loc": {
                         "start": {
                           "line": 78,
@@ -753,8 +753,8 @@
                       },
                       "argument": {
                         "type": "CallExpression",
-                        "start": 2532,
-                        "end": 2564,
+                        "start": 2542,
+                        "end": 2574,
                         "loc": {
                           "start": {
                             "line": 78,
@@ -767,8 +767,8 @@
                         },
                         "callee": {
                           "type": "MemberExpression",
-                          "start": 2532,
-                          "end": 2562,
+                          "start": 2542,
+                          "end": 2572,
                           "loc": {
                             "start": {
                               "line": 78,
@@ -781,8 +781,8 @@
                           },
                           "object": {
                             "type": "Identifier",
-                            "start": 2532,
-                            "end": 2536,
+                            "start": 2542,
+                            "end": 2546,
                             "loc": {
                               "start": {
                                 "line": 78,
@@ -798,8 +798,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 2537,
-                            "end": 2562,
+                            "start": 2547,
+                            "end": 2572,
                             "loc": {
                               "start": {
                                 "line": 78,
@@ -826,8 +826,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {Boolean}\n     ",
-                    "start": 2367,
-                    "end": 2481,
+                    "start": 2377,
+                    "end": 2491,
                     "loc": {
                       "start": {
                         "line": 72,
@@ -844,8 +844,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Sets the maximum data texture height.\n     *\n     * Should be a multiple of 1024. Default is 4096, which is the maximum allowed value.\n     ",
-                    "start": 2577,
-                    "end": 2730,
+                    "start": 2587,
+                    "end": 2740,
                     "loc": {
                       "start": {
                         "line": 81,
@@ -861,8 +861,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 2735,
-                "end": 2985,
+                "start": 2745,
+                "end": 2995,
                 "loc": {
                   "start": {
                     "line": 86,
@@ -877,8 +877,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 2739,
-                  "end": 2759,
+                  "start": 2749,
+                  "end": 2769,
                   "loc": {
                     "start": {
                       "line": 86,
@@ -900,8 +900,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 2760,
-                    "end": 2765,
+                    "start": 2770,
+                    "end": 2775,
                     "loc": {
                       "start": {
                         "line": 86,
@@ -918,8 +918,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 2767,
-                  "end": 2985,
+                  "start": 2777,
+                  "end": 2995,
                   "loc": {
                     "start": {
                       "line": 86,
@@ -933,8 +933,8 @@
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 2777,
-                      "end": 2816,
+                      "start": 2787,
+                      "end": 2826,
                       "loc": {
                         "start": {
                           "line": 87,
@@ -947,8 +947,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 2777,
-                        "end": 2815,
+                        "start": 2787,
+                        "end": 2825,
                         "loc": {
                           "start": {
                             "line": 87,
@@ -962,8 +962,8 @@
                         "operator": "=",
                         "left": {
                           "type": "Identifier",
-                          "start": 2777,
-                          "end": 2782,
+                          "start": 2787,
+                          "end": 2792,
                           "loc": {
                             "start": {
                               "line": 87,
@@ -979,8 +979,8 @@
                         },
                         "right": {
                           "type": "BinaryExpression",
-                          "start": 2785,
-                          "end": 2815,
+                          "start": 2795,
+                          "end": 2825,
                           "loc": {
                             "start": {
                               "line": 87,
@@ -993,8 +993,8 @@
                           },
                           "left": {
                             "type": "CallExpression",
-                            "start": 2785,
-                            "end": 2808,
+                            "start": 2795,
+                            "end": 2818,
                             "loc": {
                               "start": {
                                 "line": 87,
@@ -1007,8 +1007,8 @@
                             },
                             "callee": {
                               "type": "MemberExpression",
-                              "start": 2785,
-                              "end": 2794,
+                              "start": 2795,
+                              "end": 2804,
                               "loc": {
                                 "start": {
                                   "line": 87,
@@ -1021,8 +1021,8 @@
                               },
                               "object": {
                                 "type": "Identifier",
-                                "start": 2785,
-                                "end": 2789,
+                                "start": 2795,
+                                "end": 2799,
                                 "loc": {
                                   "start": {
                                     "line": 87,
@@ -1038,8 +1038,8 @@
                               },
                               "property": {
                                 "type": "Identifier",
-                                "start": 2790,
-                                "end": 2794,
+                                "start": 2800,
+                                "end": 2804,
                                 "loc": {
                                   "start": {
                                     "line": 87,
@@ -1058,8 +1058,8 @@
                             "arguments": [
                               {
                                 "type": "BinaryExpression",
-                                "start": 2795,
-                                "end": 2807,
+                                "start": 2805,
+                                "end": 2817,
                                 "loc": {
                                   "start": {
                                     "line": 87,
@@ -1072,8 +1072,8 @@
                                 },
                                 "left": {
                                   "type": "Identifier",
-                                  "start": 2795,
-                                  "end": 2800,
+                                  "start": 2805,
+                                  "end": 2810,
                                   "loc": {
                                     "start": {
                                       "line": 87,
@@ -1090,8 +1090,8 @@
                                 "operator": "/",
                                 "right": {
                                   "type": "NumericLiteral",
-                                  "start": 2803,
-                                  "end": 2807,
+                                  "start": 2813,
+                                  "end": 2817,
                                   "loc": {
                                     "start": {
                                       "line": 87,
@@ -1114,8 +1114,8 @@
                           "operator": "*",
                           "right": {
                             "type": "NumericLiteral",
-                            "start": 2811,
-                            "end": 2815,
+                            "start": 2821,
+                            "end": 2825,
                             "loc": {
                               "start": {
                                 "line": 87,
@@ -1137,8 +1137,8 @@
                     },
                     {
                       "type": "IfStatement",
-                      "start": 2825,
-                      "end": 2941,
+                      "start": 2835,
+                      "end": 2951,
                       "loc": {
                         "start": {
                           "line": 88,
@@ -1151,8 +1151,8 @@
                       },
                       "test": {
                         "type": "BinaryExpression",
-                        "start": 2829,
-                        "end": 2841,
+                        "start": 2839,
+                        "end": 2851,
                         "loc": {
                           "start": {
                             "line": 88,
@@ -1165,8 +1165,8 @@
                         },
                         "left": {
                           "type": "Identifier",
-                          "start": 2829,
-                          "end": 2834,
+                          "start": 2839,
+                          "end": 2844,
                           "loc": {
                             "start": {
                               "line": 88,
@@ -1183,8 +1183,8 @@
                         "operator": ">",
                         "right": {
                           "type": "NumericLiteral",
-                          "start": 2837,
-                          "end": 2841,
+                          "start": 2847,
+                          "end": 2851,
                           "loc": {
                             "start": {
                               "line": 88,
@@ -1204,8 +1204,8 @@
                       },
                       "consequent": {
                         "type": "BlockStatement",
-                        "start": 2843,
-                        "end": 2880,
+                        "start": 2853,
+                        "end": 2890,
                         "loc": {
                           "start": {
                             "line": 88,
@@ -1219,8 +1219,8 @@
                         "body": [
                           {
                             "type": "ExpressionStatement",
-                            "start": 2857,
-                            "end": 2870,
+                            "start": 2867,
+                            "end": 2880,
                             "loc": {
                               "start": {
                                 "line": 89,
@@ -1233,8 +1233,8 @@
                             },
                             "expression": {
                               "type": "AssignmentExpression",
-                              "start": 2857,
-                              "end": 2869,
+                              "start": 2867,
+                              "end": 2879,
                               "loc": {
                                 "start": {
                                   "line": 89,
@@ -1248,8 +1248,8 @@
                               "operator": "=",
                               "left": {
                                 "type": "Identifier",
-                                "start": 2857,
-                                "end": 2862,
+                                "start": 2867,
+                                "end": 2872,
                                 "loc": {
                                   "start": {
                                     "line": 89,
@@ -1265,8 +1265,8 @@
                               },
                               "right": {
                                 "type": "NumericLiteral",
-                                "start": 2865,
-                                "end": 2869,
+                                "start": 2875,
+                                "end": 2879,
                                 "loc": {
                                   "start": {
                                     "line": 89,
@@ -1290,8 +1290,8 @@
                       },
                       "alternate": {
                         "type": "IfStatement",
-                        "start": 2886,
-                        "end": 2941,
+                        "start": 2896,
+                        "end": 2951,
                         "loc": {
                           "start": {
                             "line": 90,
@@ -1304,8 +1304,8 @@
                         },
                         "test": {
                           "type": "BinaryExpression",
-                          "start": 2890,
-                          "end": 2902,
+                          "start": 2900,
+                          "end": 2912,
                           "loc": {
                             "start": {
                               "line": 90,
@@ -1318,8 +1318,8 @@
                           },
                           "left": {
                             "type": "Identifier",
-                            "start": 2890,
-                            "end": 2895,
+                            "start": 2900,
+                            "end": 2905,
                             "loc": {
                               "start": {
                                 "line": 90,
@@ -1336,8 +1336,8 @@
                           "operator": "<",
                           "right": {
                             "type": "NumericLiteral",
-                            "start": 2898,
-                            "end": 2902,
+                            "start": 2908,
+                            "end": 2912,
                             "loc": {
                               "start": {
                                 "line": 90,
@@ -1357,8 +1357,8 @@
                         },
                         "consequent": {
                           "type": "BlockStatement",
-                          "start": 2904,
-                          "end": 2941,
+                          "start": 2914,
+                          "end": 2951,
                           "loc": {
                             "start": {
                               "line": 90,
@@ -1372,8 +1372,8 @@
                           "body": [
                             {
                               "type": "ExpressionStatement",
-                              "start": 2918,
-                              "end": 2931,
+                              "start": 2928,
+                              "end": 2941,
                               "loc": {
                                 "start": {
                                   "line": 91,
@@ -1386,8 +1386,8 @@
                               },
                               "expression": {
                                 "type": "AssignmentExpression",
-                                "start": 2918,
-                                "end": 2930,
+                                "start": 2928,
+                                "end": 2940,
                                 "loc": {
                                   "start": {
                                     "line": 91,
@@ -1401,8 +1401,8 @@
                                 "operator": "=",
                                 "left": {
                                   "type": "Identifier",
-                                  "start": 2918,
-                                  "end": 2923,
+                                  "start": 2928,
+                                  "end": 2933,
                                   "loc": {
                                     "start": {
                                       "line": 91,
@@ -1418,8 +1418,8 @@
                                 },
                                 "right": {
                                   "type": "NumericLiteral",
-                                  "start": 2926,
-                                  "end": 2930,
+                                  "start": 2936,
+                                  "end": 2940,
                                   "loc": {
                                     "start": {
                                       "line": 91,
@@ -1446,8 +1446,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 2950,
-                      "end": 2979,
+                      "start": 2960,
+                      "end": 2989,
                       "loc": {
                         "start": {
                           "line": 93,
@@ -1460,8 +1460,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 2950,
-                        "end": 2978,
+                        "start": 2960,
+                        "end": 2988,
                         "loc": {
                           "start": {
                             "line": 93,
@@ -1475,8 +1475,8 @@
                         "operator": "=",
                         "left": {
                           "type": "Identifier",
-                          "start": 2950,
-                          "end": 2970,
+                          "start": 2960,
+                          "end": 2980,
                           "loc": {
                             "start": {
                               "line": 93,
@@ -1492,8 +1492,8 @@
                         },
                         "right": {
                           "type": "Identifier",
-                          "start": 2973,
-                          "end": 2978,
+                          "start": 2983,
+                          "end": 2988,
                           "loc": {
                             "start": {
                               "line": 93,
@@ -1517,8 +1517,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Sets the maximum data texture height.\n     *\n     * Should be a multiple of 1024. Default is 4096, which is the maximum allowed value.\n     ",
-                    "start": 2577,
-                    "end": 2730,
+                    "start": 2587,
+                    "end": 2740,
                     "loc": {
                       "start": {
                         "line": 81,
@@ -1535,8 +1535,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Sets maximum data texture height.\n     * @returns {*|number}\n     ",
-                    "start": 2991,
-                    "end": 3070,
+                    "start": 3001,
+                    "end": 3080,
                     "loc": {
                       "start": {
                         "line": 96,
@@ -1552,8 +1552,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 3075,
-                "end": 3146,
+                "start": 3085,
+                "end": 3156,
                 "loc": {
                   "start": {
                     "line": 100,
@@ -1568,8 +1568,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 3079,
-                  "end": 3099,
+                  "start": 3089,
+                  "end": 3109,
                   "loc": {
                     "start": {
                       "line": 100,
@@ -1591,8 +1591,8 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 3102,
-                  "end": 3146,
+                  "start": 3112,
+                  "end": 3156,
                   "loc": {
                     "start": {
                       "line": 100,
@@ -1606,8 +1606,8 @@
                   "body": [
                     {
                       "type": "ReturnStatement",
-                      "start": 3112,
-                      "end": 3140,
+                      "start": 3122,
+                      "end": 3150,
                       "loc": {
                         "start": {
                           "line": 101,
@@ -1620,8 +1620,8 @@
                       },
                       "argument": {
                         "type": "Identifier",
-                        "start": 3119,
-                        "end": 3139,
+                        "start": 3129,
+                        "end": 3149,
                         "loc": {
                           "start": {
                             "line": 101,
@@ -1644,8 +1644,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Sets maximum data texture height.\n     * @returns {*|number}\n     ",
-                    "start": 2991,
-                    "end": 3070,
+                    "start": 3001,
+                    "end": 3080,
                     "loc": {
                       "start": {
                         "line": 96,
@@ -1662,8 +1662,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Sets the maximum batched geometry VBO size.\n     *\n     * Default value is 5000000, which is the maximum size.\n     *\n     * Minimum size is 100000.\n     ",
-                    "start": 3152,
-                    "end": 3319,
+                    "start": 3162,
+                    "end": 3329,
                     "loc": {
                       "start": {
                         "line": 104,
@@ -1679,8 +1679,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 3324,
-                "end": 3536,
+                "start": 3334,
+                "end": 3546,
                 "loc": {
                   "start": {
                     "line": 111,
@@ -1695,8 +1695,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 3328,
-                  "end": 3348,
+                  "start": 3338,
+                  "end": 3358,
                   "loc": {
                     "start": {
                       "line": 111,
@@ -1718,8 +1718,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 3349,
-                    "end": 3354,
+                    "start": 3359,
+                    "end": 3364,
                     "loc": {
                       "start": {
                         "line": 111,
@@ -1736,8 +1736,8 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 3356,
-                  "end": 3536,
+                  "start": 3366,
+                  "end": 3546,
                   "loc": {
                     "start": {
                       "line": 111,
@@ -1751,8 +1751,8 @@
                   "body": [
                     {
                       "type": "IfStatement",
-                      "start": 3366,
-                      "end": 3492,
+                      "start": 3376,
+                      "end": 3502,
                       "loc": {
                         "start": {
                           "line": 112,
@@ -1765,8 +1765,8 @@
                       },
                       "test": {
                         "type": "BinaryExpression",
-                        "start": 3370,
-                        "end": 3384,
+                        "start": 3380,
+                        "end": 3394,
                         "loc": {
                           "start": {
                             "line": 112,
@@ -1779,8 +1779,8 @@
                         },
                         "left": {
                           "type": "Identifier",
-                          "start": 3370,
-                          "end": 3375,
+                          "start": 3380,
+                          "end": 3385,
                           "loc": {
                             "start": {
                               "line": 112,
@@ -1797,8 +1797,8 @@
                         "operator": "<",
                         "right": {
                           "type": "NumericLiteral",
-                          "start": 3378,
-                          "end": 3384,
+                          "start": 3388,
+                          "end": 3394,
                           "loc": {
                             "start": {
                               "line": 112,
@@ -1818,8 +1818,8 @@
                       },
                       "consequent": {
                         "type": "BlockStatement",
-                        "start": 3386,
-                        "end": 3425,
+                        "start": 3396,
+                        "end": 3435,
                         "loc": {
                           "start": {
                             "line": 112,
@@ -1833,8 +1833,8 @@
                         "body": [
                           {
                             "type": "ExpressionStatement",
-                            "start": 3400,
-                            "end": 3415,
+                            "start": 3410,
+                            "end": 3425,
                             "loc": {
                               "start": {
                                 "line": 113,
@@ -1847,8 +1847,8 @@
                             },
                             "expression": {
                               "type": "AssignmentExpression",
-                              "start": 3400,
-                              "end": 3414,
+                              "start": 3410,
+                              "end": 3424,
                               "loc": {
                                 "start": {
                                   "line": 113,
@@ -1862,8 +1862,8 @@
                               "operator": "=",
                               "left": {
                                 "type": "Identifier",
-                                "start": 3400,
-                                "end": 3405,
+                                "start": 3410,
+                                "end": 3415,
                                 "loc": {
                                   "start": {
                                     "line": 113,
@@ -1879,8 +1879,8 @@
                               },
                               "right": {
                                 "type": "NumericLiteral",
-                                "start": 3408,
-                                "end": 3414,
+                                "start": 3418,
+                                "end": 3424,
                                 "loc": {
                                   "start": {
                                     "line": 113,
@@ -1904,8 +1904,8 @@
                       },
                       "alternate": {
                         "type": "IfStatement",
-                        "start": 3431,
-                        "end": 3492,
+                        "start": 3441,
+                        "end": 3502,
                         "loc": {
                           "start": {
                             "line": 114,
@@ -1918,8 +1918,8 @@
                         },
                         "test": {
                           "type": "BinaryExpression",
-                          "start": 3435,
-                          "end": 3450,
+                          "start": 3445,
+                          "end": 3460,
                           "loc": {
                             "start": {
                               "line": 114,
@@ -1932,8 +1932,8 @@
                           },
                           "left": {
                             "type": "Identifier",
-                            "start": 3435,
-                            "end": 3440,
+                            "start": 3445,
+                            "end": 3450,
                             "loc": {
                               "start": {
                                 "line": 114,
@@ -1950,8 +1950,8 @@
                           "operator": ">",
                           "right": {
                             "type": "NumericLiteral",
-                            "start": 3443,
-                            "end": 3450,
+                            "start": 3453,
+                            "end": 3460,
                             "loc": {
                               "start": {
                                 "line": 114,
@@ -1971,8 +1971,8 @@
                         },
                         "consequent": {
                           "type": "BlockStatement",
-                          "start": 3452,
-                          "end": 3492,
+                          "start": 3462,
+                          "end": 3502,
                           "loc": {
                             "start": {
                               "line": 114,
@@ -1986,8 +1986,8 @@
                           "body": [
                             {
                               "type": "ExpressionStatement",
-                              "start": 3466,
-                              "end": 3482,
+                              "start": 3476,
+                              "end": 3492,
                               "loc": {
                                 "start": {
                                   "line": 115,
@@ -2000,8 +2000,8 @@
                               },
                               "expression": {
                                 "type": "AssignmentExpression",
-                                "start": 3466,
-                                "end": 3481,
+                                "start": 3476,
+                                "end": 3491,
                                 "loc": {
                                   "start": {
                                     "line": 115,
@@ -2015,8 +2015,8 @@
                                 "operator": "=",
                                 "left": {
                                   "type": "Identifier",
-                                  "start": 3466,
-                                  "end": 3471,
+                                  "start": 3476,
+                                  "end": 3481,
                                   "loc": {
                                     "start": {
                                       "line": 115,
@@ -2032,8 +2032,8 @@
                                 },
                                 "right": {
                                   "type": "NumericLiteral",
-                                  "start": 3474,
-                                  "end": 3481,
+                                  "start": 3484,
+                                  "end": 3491,
                                   "loc": {
                                     "start": {
                                       "line": 115,
@@ -2060,8 +2060,8 @@
                     },
                     {
                       "type": "ExpressionStatement",
-                      "start": 3501,
-                      "end": 3530,
+                      "start": 3511,
+                      "end": 3540,
                       "loc": {
                         "start": {
                           "line": 117,
@@ -2074,8 +2074,8 @@
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 3501,
-                        "end": 3529,
+                        "start": 3511,
+                        "end": 3539,
                         "loc": {
                           "start": {
                             "line": 117,
@@ -2089,8 +2089,8 @@
                         "operator": "=",
                         "left": {
                           "type": "Identifier",
-                          "start": 3501,
-                          "end": 3521,
+                          "start": 3511,
+                          "end": 3531,
                           "loc": {
                             "start": {
                               "line": 117,
@@ -2106,8 +2106,8 @@
                         },
                         "right": {
                           "type": "Identifier",
-                          "start": 3524,
-                          "end": 3529,
+                          "start": 3534,
+                          "end": 3539,
                           "loc": {
                             "start": {
                               "line": 117,
@@ -2131,8 +2131,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Sets the maximum batched geometry VBO size.\n     *\n     * Default value is 5000000, which is the maximum size.\n     *\n     * Minimum size is 100000.\n     ",
-                    "start": 3152,
-                    "end": 3319,
+                    "start": 3162,
+                    "end": 3329,
                     "loc": {
                       "start": {
                         "line": 104,
@@ -2149,8 +2149,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Gets the maximum batched geometry VBO size.\n     ",
-                    "start": 3542,
-                    "end": 3604,
+                    "start": 3552,
+                    "end": 3614,
                     "loc": {
                       "start": {
                         "line": 120,
@@ -2166,8 +2166,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 3609,
-                "end": 3680,
+                "start": 3619,
+                "end": 3690,
                 "loc": {
                   "start": {
                     "line": 123,
@@ -2182,8 +2182,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 3613,
-                  "end": 3633,
+                  "start": 3623,
+                  "end": 3643,
                   "loc": {
                     "start": {
                       "line": 123,
@@ -2205,8 +2205,8 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 3636,
-                  "end": 3680,
+                  "start": 3646,
+                  "end": 3690,
                   "loc": {
                     "start": {
                       "line": 123,
@@ -2220,8 +2220,8 @@
                   "body": [
                     {
                       "type": "ReturnStatement",
-                      "start": 3646,
-                      "end": 3674,
+                      "start": 3656,
+                      "end": 3684,
                       "loc": {
                         "start": {
                           "line": 124,
@@ -2234,8 +2234,8 @@
                       },
                       "argument": {
                         "type": "Identifier",
-                        "start": 3653,
-                        "end": 3673,
+                        "start": 3663,
+                        "end": 3683,
                         "loc": {
                           "start": {
                             "line": 124,
@@ -2257,8 +2257,8 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Gets the maximum batched geometry VBO size.\n     ",
-                    "start": 3542,
-                    "end": 3604,
+                    "start": 3552,
+                    "end": 3614,
                     "loc": {
                       "start": {
                         "line": 120,
@@ -2277,9 +2277,9 @@
           "leadingComments": [
             {
               "type": "CommentBlock",
-              "value": "*\n * Manages global configurations for all {@link Viewer}s.\n *\n * ## Example\n *\n * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost\n * on low-power devices, but also means that we can no longer render double-precision models without jittering.\n *\n * That's OK if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.\n *\n * [[Run this example](/examples/#Configs_disableDoublePrecisionAndRAF)]\n *\n * ````javascript\n * import {Configs, Viewer, XKTLoaderPlugin} from \"https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js\";\n *\n * // Access xeoit-sdk global configs.\n * // We typically set configs only before we create any Viewers.\n * const configs = new Configs();\n *\n * // Disable 64-bit precision for extra speed.\n * // Only set this config once, before you create any Viewers.\n * configs.doublePrecisionEnabled = false;\n *\n * // Create a Viewer, to which our configs apply\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n *  });\n *\n * viewer.camera.eye = [-3.933, 2.855, 27.018];\n * viewer.camera.look = [4.400, 3.724, 8.899];\n * viewer.camera.up = [-0.018, 0.999, 0.039];\n *\n * const xktLoader = new XKTLoaderPlugin(viewer);\n *\n * const model = xktLoader.load({\n *     src: \"../assets/models/xkt/v8/ifc/Duplex.ifc.xkt\"\n * });\n * ````\n ",
+              "value": "*\n * Manages global configurations for all {@link Viewer}s.\n *\n * ## Example\n *\n * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost\n * on low-power devices, but also means that we can no longer render double-precision models without jittering.\n *\n * That's OK if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.\n *\n * [[Run this example](/examples/index.html#Configs_disableDoublePrecisionAndRAF)]\n *\n * ````javascript\n * import {Configs, Viewer, XKTLoaderPlugin} from \"https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js\";\n *\n * // Access xeoit-sdk global configs.\n * // We typically set configs only before we create any Viewers.\n * const configs = new Configs();\n *\n * // Disable 64-bit precision for extra speed.\n * // Only set this config once, before you create any Viewers.\n * configs.doublePrecisionEnabled = false;\n *\n * // Create a Viewer, to which our configs apply\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n *  });\n *\n * viewer.camera.eye = [-3.933, 2.855, 27.018];\n * viewer.camera.look = [4.400, 3.724, 8.899];\n * viewer.camera.up = [-0.018, 0.999, 0.039];\n *\n * const xktLoader = new XKTLoaderPlugin(viewer);\n *\n * const model = xktLoader.load({\n *     src: \"../assets/models/xkt/v8/ifc/Duplex.ifc.xkt\"\n * });\n * ````\n ",
               "start": 116,
-              "end": 1522,
+              "end": 1532,
               "loc": {
                 "start": {
                   "line": 6,
@@ -2297,9 +2297,9 @@
         "leadingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n * Manages global configurations for all {@link Viewer}s.\n *\n * ## Example\n *\n * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost\n * on low-power devices, but also means that we can no longer render double-precision models without jittering.\n *\n * That's OK if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.\n *\n * [[Run this example](/examples/#Configs_disableDoublePrecisionAndRAF)]\n *\n * ````javascript\n * import {Configs, Viewer, XKTLoaderPlugin} from \"https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js\";\n *\n * // Access xeoit-sdk global configs.\n * // We typically set configs only before we create any Viewers.\n * const configs = new Configs();\n *\n * // Disable 64-bit precision for extra speed.\n * // Only set this config once, before you create any Viewers.\n * configs.doublePrecisionEnabled = false;\n *\n * // Create a Viewer, to which our configs apply\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n *  });\n *\n * viewer.camera.eye = [-3.933, 2.855, 27.018];\n * viewer.camera.look = [4.400, 3.724, 8.899];\n * viewer.camera.up = [-0.018, 0.999, 0.039];\n *\n * const xktLoader = new XKTLoaderPlugin(viewer);\n *\n * const model = xktLoader.load({\n *     src: \"../assets/models/xkt/v8/ifc/Duplex.ifc.xkt\"\n * });\n * ````\n ",
+            "value": "*\n * Manages global configurations for all {@link Viewer}s.\n *\n * ## Example\n *\n * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost\n * on low-power devices, but also means that we can no longer render double-precision models without jittering.\n *\n * That's OK if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.\n *\n * [[Run this example](/examples/index.html#Configs_disableDoublePrecisionAndRAF)]\n *\n * ````javascript\n * import {Configs, Viewer, XKTLoaderPlugin} from \"https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js\";\n *\n * // Access xeoit-sdk global configs.\n * // We typically set configs only before we create any Viewers.\n * const configs = new Configs();\n *\n * // Disable 64-bit precision for extra speed.\n * // Only set this config once, before you create any Viewers.\n * configs.doublePrecisionEnabled = false;\n *\n * // Create a Viewer, to which our configs apply\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n *  });\n *\n * viewer.camera.eye = [-3.933, 2.855, 27.018];\n * viewer.camera.look = [4.400, 3.724, 8.899];\n * viewer.camera.up = [-0.018, 0.999, 0.039];\n *\n * const xktLoader = new XKTLoaderPlugin(viewer);\n *\n * const model = xktLoader.load({\n *     src: \"../assets/models/xkt/v8/ifc/Duplex.ifc.xkt\"\n * });\n * ````\n ",
             "start": 116,
-            "end": 1522,
+            "end": 1532,
             "loc": {
               "start": {
                 "line": 6,
@@ -2319,9 +2319,9 @@
   "comments": [
     {
       "type": "CommentBlock",
-      "value": "*\n * Manages global configurations for all {@link Viewer}s.\n *\n * ## Example\n *\n * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost\n * on low-power devices, but also means that we can no longer render double-precision models without jittering.\n *\n * That's OK if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.\n *\n * [[Run this example](/examples/#Configs_disableDoublePrecisionAndRAF)]\n *\n * ````javascript\n * import {Configs, Viewer, XKTLoaderPlugin} from \"https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js\";\n *\n * // Access xeoit-sdk global configs.\n * // We typically set configs only before we create any Viewers.\n * const configs = new Configs();\n *\n * // Disable 64-bit precision for extra speed.\n * // Only set this config once, before you create any Viewers.\n * configs.doublePrecisionEnabled = false;\n *\n * // Create a Viewer, to which our configs apply\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n *  });\n *\n * viewer.camera.eye = [-3.933, 2.855, 27.018];\n * viewer.camera.look = [4.400, 3.724, 8.899];\n * viewer.camera.up = [-0.018, 0.999, 0.039];\n *\n * const xktLoader = new XKTLoaderPlugin(viewer);\n *\n * const model = xktLoader.load({\n *     src: \"../assets/models/xkt/v8/ifc/Duplex.ifc.xkt\"\n * });\n * ````\n ",
+      "value": "*\n * Manages global configurations for all {@link Viewer}s.\n *\n * ## Example\n *\n * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost\n * on low-power devices, but also means that we can no longer render double-precision models without jittering.\n *\n * That's OK if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.\n *\n * [[Run this example](/examples/index.html#Configs_disableDoublePrecisionAndRAF)]\n *\n * ````javascript\n * import {Configs, Viewer, XKTLoaderPlugin} from \"https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js\";\n *\n * // Access xeoit-sdk global configs.\n * // We typically set configs only before we create any Viewers.\n * const configs = new Configs();\n *\n * // Disable 64-bit precision for extra speed.\n * // Only set this config once, before you create any Viewers.\n * configs.doublePrecisionEnabled = false;\n *\n * // Create a Viewer, to which our configs apply\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n *  });\n *\n * viewer.camera.eye = [-3.933, 2.855, 27.018];\n * viewer.camera.look = [4.400, 3.724, 8.899];\n * viewer.camera.up = [-0.018, 0.999, 0.039];\n *\n * const xktLoader = new XKTLoaderPlugin(viewer);\n *\n * const model = xktLoader.load({\n *     src: \"../assets/models/xkt/v8/ifc/Duplex.ifc.xkt\"\n * });\n * ````\n ",
       "start": 116,
-      "end": 1522,
+      "end": 1532,
       "loc": {
         "start": {
           "line": 6,
@@ -2336,8 +2336,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Creates a Configs.\n     ",
-      "start": 1551,
-      "end": 1588,
+      "start": 1561,
+      "end": 1598,
       "loc": {
         "start": {
           "line": 47,
@@ -2352,8 +2352,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {Boolean}\n     ",
-      "start": 1621,
-      "end": 2248,
+      "start": 1631,
+      "end": 2258,
       "loc": {
         "start": {
           "line": 54,
@@ -2368,8 +2368,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {Boolean}\n     ",
-      "start": 2367,
-      "end": 2481,
+      "start": 2377,
+      "end": 2491,
       "loc": {
         "start": {
           "line": 72,
@@ -2384,8 +2384,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Sets the maximum data texture height.\n     *\n     * Should be a multiple of 1024. Default is 4096, which is the maximum allowed value.\n     ",
-      "start": 2577,
-      "end": 2730,
+      "start": 2587,
+      "end": 2740,
       "loc": {
         "start": {
           "line": 81,
@@ -2400,8 +2400,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Sets maximum data texture height.\n     * @returns {*|number}\n     ",
-      "start": 2991,
-      "end": 3070,
+      "start": 3001,
+      "end": 3080,
       "loc": {
         "start": {
           "line": 96,
@@ -2416,8 +2416,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Sets the maximum batched geometry VBO size.\n     *\n     * Default value is 5000000, which is the maximum size.\n     *\n     * Minimum size is 100000.\n     ",
-      "start": 3152,
-      "end": 3319,
+      "start": 3162,
+      "end": 3329,
       "loc": {
         "start": {
           "line": 104,
@@ -2432,8 +2432,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Gets the maximum batched geometry VBO size.\n     ",
-      "start": 3542,
-      "end": 3604,
+      "start": 3552,
+      "end": 3614,
       "loc": {
         "start": {
           "line": 120,
@@ -2928,9 +2928,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n * Manages global configurations for all {@link Viewer}s.\n *\n * ## Example\n *\n * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost\n * on low-power devices, but also means that we can no longer render double-precision models without jittering.\n *\n * That's OK if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.\n *\n * [[Run this example](/examples/#Configs_disableDoublePrecisionAndRAF)]\n *\n * ````javascript\n * import {Configs, Viewer, XKTLoaderPlugin} from \"https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js\";\n *\n * // Access xeoit-sdk global configs.\n * // We typically set configs only before we create any Viewers.\n * const configs = new Configs();\n *\n * // Disable 64-bit precision for extra speed.\n * // Only set this config once, before you create any Viewers.\n * configs.doublePrecisionEnabled = false;\n *\n * // Create a Viewer, to which our configs apply\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n *  });\n *\n * viewer.camera.eye = [-3.933, 2.855, 27.018];\n * viewer.camera.look = [4.400, 3.724, 8.899];\n * viewer.camera.up = [-0.018, 0.999, 0.039];\n *\n * const xktLoader = new XKTLoaderPlugin(viewer);\n *\n * const model = xktLoader.load({\n *     src: \"../assets/models/xkt/v8/ifc/Duplex.ifc.xkt\"\n * });\n * ````\n ",
+      "value": "*\n * Manages global configurations for all {@link Viewer}s.\n *\n * ## Example\n *\n * In the example below, we'll disable xeokit's double-precision support, which gives a performance and memory boost\n * on low-power devices, but also means that we can no longer render double-precision models without jittering.\n *\n * That's OK if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.\n *\n * [[Run this example](/examples/index.html#Configs_disableDoublePrecisionAndRAF)]\n *\n * ````javascript\n * import {Configs, Viewer, XKTLoaderPlugin} from \"https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js\";\n *\n * // Access xeoit-sdk global configs.\n * // We typically set configs only before we create any Viewers.\n * const configs = new Configs();\n *\n * // Disable 64-bit precision for extra speed.\n * // Only set this config once, before you create any Viewers.\n * configs.doublePrecisionEnabled = false;\n *\n * // Create a Viewer, to which our configs apply\n * const viewer = new Viewer({\n *      canvasId: \"myCanvas\"\n *  });\n *\n * viewer.camera.eye = [-3.933, 2.855, 27.018];\n * viewer.camera.look = [4.400, 3.724, 8.899];\n * viewer.camera.up = [-0.018, 0.999, 0.039];\n *\n * const xktLoader = new XKTLoaderPlugin(viewer);\n *\n * const model = xktLoader.load({\n *     src: \"../assets/models/xkt/v8/ifc/Duplex.ifc.xkt\"\n * });\n * ````\n ",
       "start": 116,
-      "end": 1522,
+      "end": 1532,
       "loc": {
         "start": {
           "line": 6,
@@ -2957,8 +2957,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 1523,
-      "end": 1529,
+      "start": 1533,
+      "end": 1539,
       "loc": {
         "start": {
           "line": 45,
@@ -2985,8 +2985,8 @@
         "updateContext": null
       },
       "value": "class",
-      "start": 1530,
-      "end": 1535,
+      "start": 1540,
+      "end": 1545,
       "loc": {
         "start": {
           "line": 45,
@@ -3011,8 +3011,8 @@
         "binop": null
       },
       "value": "Configs",
-      "start": 1536,
-      "end": 1543,
+      "start": 1546,
+      "end": 1553,
       "loc": {
         "start": {
           "line": 45,
@@ -3036,8 +3036,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1544,
-      "end": 1545,
+      "start": 1554,
+      "end": 1555,
       "loc": {
         "start": {
           "line": 45,
@@ -3052,8 +3052,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Creates a Configs.\n     ",
-      "start": 1551,
-      "end": 1588,
+      "start": 1561,
+      "end": 1598,
       "loc": {
         "start": {
           "line": 47,
@@ -3078,8 +3078,8 @@
         "binop": null
       },
       "value": "constructor",
-      "start": 1593,
-      "end": 1604,
+      "start": 1603,
+      "end": 1614,
       "loc": {
         "start": {
           "line": 50,
@@ -3103,8 +3103,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1604,
-      "end": 1605,
+      "start": 1614,
+      "end": 1615,
       "loc": {
         "start": {
           "line": 50,
@@ -3128,8 +3128,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1605,
-      "end": 1606,
+      "start": 1615,
+      "end": 1616,
       "loc": {
         "start": {
           "line": 50,
@@ -3153,8 +3153,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1607,
-      "end": 1608,
+      "start": 1617,
+      "end": 1618,
       "loc": {
         "start": {
           "line": 50,
@@ -3178,8 +3178,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1614,
-      "end": 1615,
+      "start": 1624,
+      "end": 1625,
       "loc": {
         "start": {
           "line": 52,
@@ -3194,8 +3194,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Sets whether double precision mode is enabled for Viewers.\n     *\n     * When double precision mode is enabled (default), Viewers will accurately render models that contain\n     * double-precision coordinates, without jittering.\n     *\n     * Internally, double precision incurs extra performance and memory overhead, so if we're certain that\n     * we're not going to render models that rely on double-precision coordinates, then it's a good idea to disable\n     * it, especially on low-power devices.\n     *\n     * This should only be set once, before creating any Viewers.\n     *\n     * @returns {Boolean}\n     ",
-      "start": 1621,
-      "end": 2248,
+      "start": 1631,
+      "end": 2258,
       "loc": {
         "start": {
           "line": 54,
@@ -3220,8 +3220,8 @@
         "binop": null
       },
       "value": "set",
-      "start": 2253,
-      "end": 2256,
+      "start": 2263,
+      "end": 2266,
       "loc": {
         "start": {
           "line": 68,
@@ -3246,8 +3246,8 @@
         "binop": null
       },
       "value": "doublePrecisionEnabled",
-      "start": 2257,
-      "end": 2279,
+      "start": 2267,
+      "end": 2289,
       "loc": {
         "start": {
           "line": 68,
@@ -3271,8 +3271,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2279,
-      "end": 2280,
+      "start": 2289,
+      "end": 2290,
       "loc": {
         "start": {
           "line": 68,
@@ -3297,8 +3297,8 @@
         "binop": null
       },
       "value": "doublePrecision",
-      "start": 2280,
-      "end": 2295,
+      "start": 2290,
+      "end": 2305,
       "loc": {
         "start": {
           "line": 68,
@@ -3322,8 +3322,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2295,
-      "end": 2296,
+      "start": 2305,
+      "end": 2306,
       "loc": {
         "start": {
           "line": 68,
@@ -3347,8 +3347,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2297,
-      "end": 2298,
+      "start": 2307,
+      "end": 2308,
       "loc": {
         "start": {
           "line": 68,
@@ -3373,8 +3373,8 @@
         "binop": null
       },
       "value": "math",
-      "start": 2307,
-      "end": 2311,
+      "start": 2317,
+      "end": 2321,
       "loc": {
         "start": {
           "line": 69,
@@ -3399,8 +3399,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2311,
-      "end": 2312,
+      "start": 2321,
+      "end": 2322,
       "loc": {
         "start": {
           "line": 69,
@@ -3425,8 +3425,8 @@
         "binop": null
       },
       "value": "setDoublePrecisionEnabled",
-      "start": 2312,
-      "end": 2337,
+      "start": 2322,
+      "end": 2347,
       "loc": {
         "start": {
           "line": 69,
@@ -3450,8 +3450,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2337,
-      "end": 2338,
+      "start": 2347,
+      "end": 2348,
       "loc": {
         "start": {
           "line": 69,
@@ -3476,8 +3476,8 @@
         "binop": null
       },
       "value": "doublePrecision",
-      "start": 2338,
-      "end": 2353,
+      "start": 2348,
+      "end": 2363,
       "loc": {
         "start": {
           "line": 69,
@@ -3501,8 +3501,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2353,
-      "end": 2354,
+      "start": 2363,
+      "end": 2364,
       "loc": {
         "start": {
           "line": 69,
@@ -3527,8 +3527,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2354,
-      "end": 2355,
+      "start": 2364,
+      "end": 2365,
       "loc": {
         "start": {
           "line": 69,
@@ -3552,8 +3552,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2360,
-      "end": 2361,
+      "start": 2370,
+      "end": 2371,
       "loc": {
         "start": {
           "line": 70,
@@ -3568,8 +3568,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Gets whether double precision mode is enabled for all Viewers.\n     *\n     * @returns {Boolean}\n     ",
-      "start": 2367,
-      "end": 2481,
+      "start": 2377,
+      "end": 2491,
       "loc": {
         "start": {
           "line": 72,
@@ -3594,8 +3594,8 @@
         "binop": null
       },
       "value": "get",
-      "start": 2486,
-      "end": 2489,
+      "start": 2496,
+      "end": 2499,
       "loc": {
         "start": {
           "line": 77,
@@ -3620,8 +3620,8 @@
         "binop": null
       },
       "value": "doublePrecisionEnabled",
-      "start": 2490,
-      "end": 2512,
+      "start": 2500,
+      "end": 2522,
       "loc": {
         "start": {
           "line": 77,
@@ -3645,8 +3645,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2512,
-      "end": 2513,
+      "start": 2522,
+      "end": 2523,
       "loc": {
         "start": {
           "line": 77,
@@ -3670,8 +3670,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2513,
-      "end": 2514,
+      "start": 2523,
+      "end": 2524,
       "loc": {
         "start": {
           "line": 77,
@@ -3695,8 +3695,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2515,
-      "end": 2516,
+      "start": 2525,
+      "end": 2526,
       "loc": {
         "start": {
           "line": 77,
@@ -3723,8 +3723,8 @@
         "updateContext": null
       },
       "value": "return",
-      "start": 2525,
-      "end": 2531,
+      "start": 2535,
+      "end": 2541,
       "loc": {
         "start": {
           "line": 78,
@@ -3749,8 +3749,8 @@
         "binop": null
       },
       "value": "math",
-      "start": 2532,
-      "end": 2536,
+      "start": 2542,
+      "end": 2546,
       "loc": {
         "start": {
           "line": 78,
@@ -3775,8 +3775,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2536,
-      "end": 2537,
+      "start": 2546,
+      "end": 2547,
       "loc": {
         "start": {
           "line": 78,
@@ -3801,8 +3801,8 @@
         "binop": null
       },
       "value": "getDoublePrecisionEnabled",
-      "start": 2537,
-      "end": 2562,
+      "start": 2547,
+      "end": 2572,
       "loc": {
         "start": {
           "line": 78,
@@ -3826,8 +3826,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2562,
-      "end": 2563,
+      "start": 2572,
+      "end": 2573,
       "loc": {
         "start": {
           "line": 78,
@@ -3851,8 +3851,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2563,
-      "end": 2564,
+      "start": 2573,
+      "end": 2574,
       "loc": {
         "start": {
           "line": 78,
@@ -3877,8 +3877,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2564,
-      "end": 2565,
+      "start": 2574,
+      "end": 2575,
       "loc": {
         "start": {
           "line": 78,
@@ -3902,8 +3902,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2570,
-      "end": 2571,
+      "start": 2580,
+      "end": 2581,
       "loc": {
         "start": {
           "line": 79,
@@ -3918,8 +3918,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Sets the maximum data texture height.\n     *\n     * Should be a multiple of 1024. Default is 4096, which is the maximum allowed value.\n     ",
-      "start": 2577,
-      "end": 2730,
+      "start": 2587,
+      "end": 2740,
       "loc": {
         "start": {
           "line": 81,
@@ -3944,8 +3944,8 @@
         "binop": null
       },
       "value": "set",
-      "start": 2735,
-      "end": 2738,
+      "start": 2745,
+      "end": 2748,
       "loc": {
         "start": {
           "line": 86,
@@ -3970,8 +3970,8 @@
         "binop": null
       },
       "value": "maxDataTextureHeight",
-      "start": 2739,
-      "end": 2759,
+      "start": 2749,
+      "end": 2769,
       "loc": {
         "start": {
           "line": 86,
@@ -3995,8 +3995,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2759,
-      "end": 2760,
+      "start": 2769,
+      "end": 2770,
       "loc": {
         "start": {
           "line": 86,
@@ -4021,8 +4021,8 @@
         "binop": null
       },
       "value": "value",
-      "start": 2760,
-      "end": 2765,
+      "start": 2770,
+      "end": 2775,
       "loc": {
         "start": {
           "line": 86,
@@ -4046,8 +4046,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2765,
-      "end": 2766,
+      "start": 2775,
+      "end": 2776,
       "loc": {
         "start": {
           "line": 86,
@@ -4071,8 +4071,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2767,
-      "end": 2768,
+      "start": 2777,
+      "end": 2778,
       "loc": {
         "start": {
           "line": 86,
@@ -4097,8 +4097,8 @@
         "binop": null
       },
       "value": "value",
-      "start": 2777,
-      "end": 2782,
+      "start": 2787,
+      "end": 2792,
       "loc": {
         "start": {
           "line": 87,
@@ -4124,8 +4124,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 2783,
-      "end": 2784,
+      "start": 2793,
+      "end": 2794,
       "loc": {
         "start": {
           "line": 87,
@@ -4150,8 +4150,8 @@
         "binop": null
       },
       "value": "Math",
-      "start": 2785,
-      "end": 2789,
+      "start": 2795,
+      "end": 2799,
       "loc": {
         "start": {
           "line": 87,
@@ -4176,8 +4176,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2789,
-      "end": 2790,
+      "start": 2799,
+      "end": 2800,
       "loc": {
         "start": {
           "line": 87,
@@ -4202,8 +4202,8 @@
         "binop": null
       },
       "value": "ceil",
-      "start": 2790,
-      "end": 2794,
+      "start": 2800,
+      "end": 2804,
       "loc": {
         "start": {
           "line": 87,
@@ -4227,8 +4227,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2794,
-      "end": 2795,
+      "start": 2804,
+      "end": 2805,
       "loc": {
         "start": {
           "line": 87,
@@ -4253,8 +4253,8 @@
         "binop": null
       },
       "value": "value",
-      "start": 2795,
-      "end": 2800,
+      "start": 2805,
+      "end": 2810,
       "loc": {
         "start": {
           "line": 87,
@@ -4280,8 +4280,8 @@
         "updateContext": null
       },
       "value": "/",
-      "start": 2801,
-      "end": 2802,
+      "start": 2811,
+      "end": 2812,
       "loc": {
         "start": {
           "line": 87,
@@ -4307,8 +4307,8 @@
         "updateContext": null
       },
       "value": 1024,
-      "start": 2803,
-      "end": 2807,
+      "start": 2813,
+      "end": 2817,
       "loc": {
         "start": {
           "line": 87,
@@ -4332,8 +4332,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2807,
-      "end": 2808,
+      "start": 2817,
+      "end": 2818,
       "loc": {
         "start": {
           "line": 87,
@@ -4359,8 +4359,8 @@
         "updateContext": null
       },
       "value": "*",
-      "start": 2809,
-      "end": 2810,
+      "start": 2819,
+      "end": 2820,
       "loc": {
         "start": {
           "line": 87,
@@ -4386,8 +4386,8 @@
         "updateContext": null
       },
       "value": 1024,
-      "start": 2811,
-      "end": 2815,
+      "start": 2821,
+      "end": 2825,
       "loc": {
         "start": {
           "line": 87,
@@ -4412,8 +4412,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2815,
-      "end": 2816,
+      "start": 2825,
+      "end": 2826,
       "loc": {
         "start": {
           "line": 87,
@@ -4440,8 +4440,8 @@
         "updateContext": null
       },
       "value": "if",
-      "start": 2825,
-      "end": 2827,
+      "start": 2835,
+      "end": 2837,
       "loc": {
         "start": {
           "line": 88,
@@ -4465,8 +4465,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2828,
-      "end": 2829,
+      "start": 2838,
+      "end": 2839,
       "loc": {
         "start": {
           "line": 88,
@@ -4491,8 +4491,8 @@
         "binop": null
       },
       "value": "value",
-      "start": 2829,
-      "end": 2834,
+      "start": 2839,
+      "end": 2844,
       "loc": {
         "start": {
           "line": 88,
@@ -4518,8 +4518,8 @@
         "updateContext": null
       },
       "value": ">",
-      "start": 2835,
-      "end": 2836,
+      "start": 2845,
+      "end": 2846,
       "loc": {
         "start": {
           "line": 88,
@@ -4545,8 +4545,8 @@
         "updateContext": null
       },
       "value": 4096,
-      "start": 2837,
-      "end": 2841,
+      "start": 2847,
+      "end": 2851,
       "loc": {
         "start": {
           "line": 88,
@@ -4570,8 +4570,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2841,
-      "end": 2842,
+      "start": 2851,
+      "end": 2852,
       "loc": {
         "start": {
           "line": 88,
@@ -4595,8 +4595,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2843,
-      "end": 2844,
+      "start": 2853,
+      "end": 2854,
       "loc": {
         "start": {
           "line": 88,
@@ -4621,8 +4621,8 @@
         "binop": null
       },
       "value": "value",
-      "start": 2857,
-      "end": 2862,
+      "start": 2867,
+      "end": 2872,
       "loc": {
         "start": {
           "line": 89,
@@ -4648,8 +4648,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 2863,
-      "end": 2864,
+      "start": 2873,
+      "end": 2874,
       "loc": {
         "start": {
           "line": 89,
@@ -4675,8 +4675,8 @@
         "updateContext": null
       },
       "value": 4096,
-      "start": 2865,
-      "end": 2869,
+      "start": 2875,
+      "end": 2879,
       "loc": {
         "start": {
           "line": 89,
@@ -4701,8 +4701,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2869,
-      "end": 2870,
+      "start": 2879,
+      "end": 2880,
       "loc": {
         "start": {
           "line": 89,
@@ -4726,8 +4726,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2879,
-      "end": 2880,
+      "start": 2889,
+      "end": 2890,
       "loc": {
         "start": {
           "line": 90,
@@ -4754,8 +4754,8 @@
         "updateContext": null
       },
       "value": "else",
-      "start": 2881,
-      "end": 2885,
+      "start": 2891,
+      "end": 2895,
       "loc": {
         "start": {
           "line": 90,
@@ -4782,8 +4782,8 @@
         "updateContext": null
       },
       "value": "if",
-      "start": 2886,
-      "end": 2888,
+      "start": 2896,
+      "end": 2898,
       "loc": {
         "start": {
           "line": 90,
@@ -4807,8 +4807,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2889,
-      "end": 2890,
+      "start": 2899,
+      "end": 2900,
       "loc": {
         "start": {
           "line": 90,
@@ -4833,8 +4833,8 @@
         "binop": null
       },
       "value": "value",
-      "start": 2890,
-      "end": 2895,
+      "start": 2900,
+      "end": 2905,
       "loc": {
         "start": {
           "line": 90,
@@ -4860,8 +4860,8 @@
         "updateContext": null
       },
       "value": "<",
-      "start": 2896,
-      "end": 2897,
+      "start": 2906,
+      "end": 2907,
       "loc": {
         "start": {
           "line": 90,
@@ -4887,8 +4887,8 @@
         "updateContext": null
       },
       "value": 1024,
-      "start": 2898,
-      "end": 2902,
+      "start": 2908,
+      "end": 2912,
       "loc": {
         "start": {
           "line": 90,
@@ -4912,8 +4912,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2902,
-      "end": 2903,
+      "start": 2912,
+      "end": 2913,
       "loc": {
         "start": {
           "line": 90,
@@ -4937,8 +4937,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2904,
-      "end": 2905,
+      "start": 2914,
+      "end": 2915,
       "loc": {
         "start": {
           "line": 90,
@@ -4963,8 +4963,8 @@
         "binop": null
       },
       "value": "value",
-      "start": 2918,
-      "end": 2923,
+      "start": 2928,
+      "end": 2933,
       "loc": {
         "start": {
           "line": 91,
@@ -4990,8 +4990,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 2924,
-      "end": 2925,
+      "start": 2934,
+      "end": 2935,
       "loc": {
         "start": {
           "line": 91,
@@ -5017,8 +5017,8 @@
         "updateContext": null
       },
       "value": 1024,
-      "start": 2926,
-      "end": 2930,
+      "start": 2936,
+      "end": 2940,
       "loc": {
         "start": {
           "line": 91,
@@ -5043,8 +5043,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2930,
-      "end": 2931,
+      "start": 2940,
+      "end": 2941,
       "loc": {
         "start": {
           "line": 91,
@@ -5068,8 +5068,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2940,
-      "end": 2941,
+      "start": 2950,
+      "end": 2951,
       "loc": {
         "start": {
           "line": 92,
@@ -5094,8 +5094,8 @@
         "binop": null
       },
       "value": "maxDataTextureHeight",
-      "start": 2950,
-      "end": 2970,
+      "start": 2960,
+      "end": 2980,
       "loc": {
         "start": {
           "line": 93,
@@ -5121,8 +5121,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 2971,
-      "end": 2972,
+      "start": 2981,
+      "end": 2982,
       "loc": {
         "start": {
           "line": 93,
@@ -5147,8 +5147,8 @@
         "binop": null
       },
       "value": "value",
-      "start": 2973,
-      "end": 2978,
+      "start": 2983,
+      "end": 2988,
       "loc": {
         "start": {
           "line": 93,
@@ -5173,8 +5173,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2978,
-      "end": 2979,
+      "start": 2988,
+      "end": 2989,
       "loc": {
         "start": {
           "line": 93,
@@ -5198,8 +5198,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2984,
-      "end": 2985,
+      "start": 2994,
+      "end": 2995,
       "loc": {
         "start": {
           "line": 94,
@@ -5214,8 +5214,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Sets maximum data texture height.\n     * @returns {*|number}\n     ",
-      "start": 2991,
-      "end": 3070,
+      "start": 3001,
+      "end": 3080,
       "loc": {
         "start": {
           "line": 96,
@@ -5240,8 +5240,8 @@
         "binop": null
       },
       "value": "get",
-      "start": 3075,
-      "end": 3078,
+      "start": 3085,
+      "end": 3088,
       "loc": {
         "start": {
           "line": 100,
@@ -5266,8 +5266,8 @@
         "binop": null
       },
       "value": "maxDataTextureHeight",
-      "start": 3079,
-      "end": 3099,
+      "start": 3089,
+      "end": 3109,
       "loc": {
         "start": {
           "line": 100,
@@ -5291,8 +5291,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3099,
-      "end": 3100,
+      "start": 3109,
+      "end": 3110,
       "loc": {
         "start": {
           "line": 100,
@@ -5316,8 +5316,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3100,
-      "end": 3101,
+      "start": 3110,
+      "end": 3111,
       "loc": {
         "start": {
           "line": 100,
@@ -5341,8 +5341,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3102,
-      "end": 3103,
+      "start": 3112,
+      "end": 3113,
       "loc": {
         "start": {
           "line": 100,
@@ -5369,8 +5369,8 @@
         "updateContext": null
       },
       "value": "return",
-      "start": 3112,
-      "end": 3118,
+      "start": 3122,
+      "end": 3128,
       "loc": {
         "start": {
           "line": 101,
@@ -5395,8 +5395,8 @@
         "binop": null
       },
       "value": "maxDataTextureHeight",
-      "start": 3119,
-      "end": 3139,
+      "start": 3129,
+      "end": 3149,
       "loc": {
         "start": {
           "line": 101,
@@ -5421,8 +5421,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3139,
-      "end": 3140,
+      "start": 3149,
+      "end": 3150,
       "loc": {
         "start": {
           "line": 101,
@@ -5446,8 +5446,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3145,
-      "end": 3146,
+      "start": 3155,
+      "end": 3156,
       "loc": {
         "start": {
           "line": 102,
@@ -5462,8 +5462,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Sets the maximum batched geometry VBO size.\n     *\n     * Default value is 5000000, which is the maximum size.\n     *\n     * Minimum size is 100000.\n     ",
-      "start": 3152,
-      "end": 3319,
+      "start": 3162,
+      "end": 3329,
       "loc": {
         "start": {
           "line": 104,
@@ -5488,8 +5488,8 @@
         "binop": null
       },
       "value": "set",
-      "start": 3324,
-      "end": 3327,
+      "start": 3334,
+      "end": 3337,
       "loc": {
         "start": {
           "line": 111,
@@ -5514,8 +5514,8 @@
         "binop": null
       },
       "value": "maxGeometryBatchSize",
-      "start": 3328,
-      "end": 3348,
+      "start": 3338,
+      "end": 3358,
       "loc": {
         "start": {
           "line": 111,
@@ -5539,8 +5539,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3348,
-      "end": 3349,
+      "start": 3358,
+      "end": 3359,
       "loc": {
         "start": {
           "line": 111,
@@ -5565,8 +5565,8 @@
         "binop": null
       },
       "value": "value",
-      "start": 3349,
-      "end": 3354,
+      "start": 3359,
+      "end": 3364,
       "loc": {
         "start": {
           "line": 111,
@@ -5590,8 +5590,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3354,
-      "end": 3355,
+      "start": 3364,
+      "end": 3365,
       "loc": {
         "start": {
           "line": 111,
@@ -5615,8 +5615,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3356,
-      "end": 3357,
+      "start": 3366,
+      "end": 3367,
       "loc": {
         "start": {
           "line": 111,
@@ -5643,8 +5643,8 @@
         "updateContext": null
       },
       "value": "if",
-      "start": 3366,
-      "end": 3368,
+      "start": 3376,
+      "end": 3378,
       "loc": {
         "start": {
           "line": 112,
@@ -5668,8 +5668,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3369,
-      "end": 3370,
+      "start": 3379,
+      "end": 3380,
       "loc": {
         "start": {
           "line": 112,
@@ -5694,8 +5694,8 @@
         "binop": null
       },
       "value": "value",
-      "start": 3370,
-      "end": 3375,
+      "start": 3380,
+      "end": 3385,
       "loc": {
         "start": {
           "line": 112,
@@ -5721,8 +5721,8 @@
         "updateContext": null
       },
       "value": "<",
-      "start": 3376,
-      "end": 3377,
+      "start": 3386,
+      "end": 3387,
       "loc": {
         "start": {
           "line": 112,
@@ -5748,8 +5748,8 @@
         "updateContext": null
       },
       "value": 100000,
-      "start": 3378,
-      "end": 3384,
+      "start": 3388,
+      "end": 3394,
       "loc": {
         "start": {
           "line": 112,
@@ -5773,8 +5773,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3384,
-      "end": 3385,
+      "start": 3394,
+      "end": 3395,
       "loc": {
         "start": {
           "line": 112,
@@ -5798,8 +5798,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3386,
-      "end": 3387,
+      "start": 3396,
+      "end": 3397,
       "loc": {
         "start": {
           "line": 112,
@@ -5824,8 +5824,8 @@
         "binop": null
       },
       "value": "value",
-      "start": 3400,
-      "end": 3405,
+      "start": 3410,
+      "end": 3415,
       "loc": {
         "start": {
           "line": 113,
@@ -5851,8 +5851,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 3406,
-      "end": 3407,
+      "start": 3416,
+      "end": 3417,
       "loc": {
         "start": {
           "line": 113,
@@ -5878,8 +5878,8 @@
         "updateContext": null
       },
       "value": 100000,
-      "start": 3408,
-      "end": 3414,
+      "start": 3418,
+      "end": 3424,
       "loc": {
         "start": {
           "line": 113,
@@ -5904,8 +5904,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3414,
-      "end": 3415,
+      "start": 3424,
+      "end": 3425,
       "loc": {
         "start": {
           "line": 113,
@@ -5929,8 +5929,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3424,
-      "end": 3425,
+      "start": 3434,
+      "end": 3435,
       "loc": {
         "start": {
           "line": 114,
@@ -5957,8 +5957,8 @@
         "updateContext": null
       },
       "value": "else",
-      "start": 3426,
-      "end": 3430,
+      "start": 3436,
+      "end": 3440,
       "loc": {
         "start": {
           "line": 114,
@@ -5985,8 +5985,8 @@
         "updateContext": null
       },
       "value": "if",
-      "start": 3431,
-      "end": 3433,
+      "start": 3441,
+      "end": 3443,
       "loc": {
         "start": {
           "line": 114,
@@ -6010,8 +6010,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3434,
-      "end": 3435,
+      "start": 3444,
+      "end": 3445,
       "loc": {
         "start": {
           "line": 114,
@@ -6036,8 +6036,8 @@
         "binop": null
       },
       "value": "value",
-      "start": 3435,
-      "end": 3440,
+      "start": 3445,
+      "end": 3450,
       "loc": {
         "start": {
           "line": 114,
@@ -6063,8 +6063,8 @@
         "updateContext": null
       },
       "value": ">",
-      "start": 3441,
-      "end": 3442,
+      "start": 3451,
+      "end": 3452,
       "loc": {
         "start": {
           "line": 114,
@@ -6090,8 +6090,8 @@
         "updateContext": null
       },
       "value": 5000000,
-      "start": 3443,
-      "end": 3450,
+      "start": 3453,
+      "end": 3460,
       "loc": {
         "start": {
           "line": 114,
@@ -6115,8 +6115,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3450,
-      "end": 3451,
+      "start": 3460,
+      "end": 3461,
       "loc": {
         "start": {
           "line": 114,
@@ -6140,8 +6140,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3452,
-      "end": 3453,
+      "start": 3462,
+      "end": 3463,
       "loc": {
         "start": {
           "line": 114,
@@ -6166,8 +6166,8 @@
         "binop": null
       },
       "value": "value",
-      "start": 3466,
-      "end": 3471,
+      "start": 3476,
+      "end": 3481,
       "loc": {
         "start": {
           "line": 115,
@@ -6193,8 +6193,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 3472,
-      "end": 3473,
+      "start": 3482,
+      "end": 3483,
       "loc": {
         "start": {
           "line": 115,
@@ -6220,8 +6220,8 @@
         "updateContext": null
       },
       "value": 5000000,
-      "start": 3474,
-      "end": 3481,
+      "start": 3484,
+      "end": 3491,
       "loc": {
         "start": {
           "line": 115,
@@ -6246,8 +6246,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3481,
-      "end": 3482,
+      "start": 3491,
+      "end": 3492,
       "loc": {
         "start": {
           "line": 115,
@@ -6271,8 +6271,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3491,
-      "end": 3492,
+      "start": 3501,
+      "end": 3502,
       "loc": {
         "start": {
           "line": 116,
@@ -6297,8 +6297,8 @@
         "binop": null
       },
       "value": "maxGeometryBatchSize",
-      "start": 3501,
-      "end": 3521,
+      "start": 3511,
+      "end": 3531,
       "loc": {
         "start": {
           "line": 117,
@@ -6324,8 +6324,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 3522,
-      "end": 3523,
+      "start": 3532,
+      "end": 3533,
       "loc": {
         "start": {
           "line": 117,
@@ -6350,8 +6350,8 @@
         "binop": null
       },
       "value": "value",
-      "start": 3524,
-      "end": 3529,
+      "start": 3534,
+      "end": 3539,
       "loc": {
         "start": {
           "line": 117,
@@ -6376,8 +6376,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3529,
-      "end": 3530,
+      "start": 3539,
+      "end": 3540,
       "loc": {
         "start": {
           "line": 117,
@@ -6401,8 +6401,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3535,
-      "end": 3536,
+      "start": 3545,
+      "end": 3546,
       "loc": {
         "start": {
           "line": 118,
@@ -6417,8 +6417,8 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Gets the maximum batched geometry VBO size.\n     ",
-      "start": 3542,
-      "end": 3604,
+      "start": 3552,
+      "end": 3614,
       "loc": {
         "start": {
           "line": 120,
@@ -6443,8 +6443,8 @@
         "binop": null
       },
       "value": "get",
-      "start": 3609,
-      "end": 3612,
+      "start": 3619,
+      "end": 3622,
       "loc": {
         "start": {
           "line": 123,
@@ -6469,8 +6469,8 @@
         "binop": null
       },
       "value": "maxGeometryBatchSize",
-      "start": 3613,
-      "end": 3633,
+      "start": 3623,
+      "end": 3643,
       "loc": {
         "start": {
           "line": 123,
@@ -6494,8 +6494,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3633,
-      "end": 3634,
+      "start": 3643,
+      "end": 3644,
       "loc": {
         "start": {
           "line": 123,
@@ -6519,8 +6519,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3634,
-      "end": 3635,
+      "start": 3644,
+      "end": 3645,
       "loc": {
         "start": {
           "line": 123,
@@ -6544,8 +6544,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3636,
-      "end": 3637,
+      "start": 3646,
+      "end": 3647,
       "loc": {
         "start": {
           "line": 123,
@@ -6572,8 +6572,8 @@
         "updateContext": null
       },
       "value": "return",
-      "start": 3646,
-      "end": 3652,
+      "start": 3656,
+      "end": 3662,
       "loc": {
         "start": {
           "line": 124,
@@ -6598,8 +6598,8 @@
         "binop": null
       },
       "value": "maxGeometryBatchSize",
-      "start": 3653,
-      "end": 3673,
+      "start": 3663,
+      "end": 3683,
       "loc": {
         "start": {
           "line": 124,
@@ -6624,8 +6624,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3673,
-      "end": 3674,
+      "start": 3683,
+      "end": 3684,
       "loc": {
         "start": {
           "line": 124,
@@ -6649,8 +6649,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3679,
-      "end": 3680,
+      "start": 3689,
+      "end": 3690,
       "loc": {
         "start": {
           "line": 125,
@@ -6674,8 +6674,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 3681,
-      "end": 3682,
+      "start": 3691,
+      "end": 3692,
       "loc": {
         "start": {
           "line": 126,
@@ -6700,8 +6700,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3684,
-      "end": 3684,
+      "start": 3694,
+      "end": 3694,
       "loc": {
         "start": {
           "line": 128,

@@ -38,8 +38,6 @@ const tempVec4b = math.vec4();
  * We'll also demonstrate how to query the Marker's visibility status and position (in the World, View and
  * Canvas coordinate systems), and how to subscribe to change events on those properties.
  *
- * [[Run this example](/examples/#Markers_SimpleExample)]
- *
  * ````javascript
  * import {Viewer, GLTFLoaderPlugin, Marker} from "xeokit-sdk.es.js";
  *

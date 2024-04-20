@@ -228,12 +228,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/plugins/distancemeasurementsplugin/distancemeasurementscontrollegacy.js~distancemeasurementscontrollegacy",
-    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy.html",
-    "<span>DistanceMeasurementsControlLegacy</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js</span>",
-    "class"
-  ],
-  [
     "@xeokit/xeokit-sdk/src/plugins/distancemeasurementsplugin/distancemeasurementsmousecontrol.js~distancemeasurementsmousecontrol",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl.html",
     "<span>DistanceMeasurementsMouseControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js</span>",
@@ -3045,60 +3039,6 @@ window.esdocSearchIndex = [
     "src/plugins/distancemeasurementsplugin/distancemeasurementscontrol.js~distancemeasurementscontrol#snapping",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html#instance-get-snapping",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl#snapping",
-    "member"
-  ],
-  [
-    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrollegacy.js",
-    "file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js.html",
-    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js",
-    "file"
-  ],
-  [
-    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrollegacy.js~distancemeasurementscontrollegacy#activate",
-    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy.html#instance-method-activate",
-    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy#activate",
-    "method"
-  ],
-  [
-    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrollegacy.js~distancemeasurementscontrollegacy#active",
-    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy.html#instance-get-active",
-    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy#active",
-    "member"
-  ],
-  [
-    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrollegacy.js~distancemeasurementscontrollegacy#deactivate",
-    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy.html#instance-method-deactivate",
-    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy#deactivate",
-    "method"
-  ],
-  [
-    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrollegacy.js~distancemeasurementscontrollegacy#markerdiv",
-    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy.html#instance-member-markerDiv",
-    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy#markerDiv",
-    "member"
-  ],
-  [
-    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrollegacy.js~distancemeasurementscontrollegacy#plugin",
-    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy.html#instance-member-plugin",
-    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy#plugin",
-    "member"
-  ],
-  [
-    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrollegacy.js~distancemeasurementscontrollegacy#reset",
-    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy.html#instance-method-reset",
-    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy#reset",
-    "method"
-  ],
-  [
-    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrollegacy.js~distancemeasurementscontrollegacy#snapmode",
-    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy.html#instance-set-snapMode",
-    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy#snapMode",
-    "member"
-  ],
-  [
-    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrollegacy.js~distancemeasurementscontrollegacy#snapmode",
-    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy.html#instance-get-snapMode",
-    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy#snapMode",
     "member"
   ],
   [

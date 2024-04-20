@@ -58,9 +58,9 @@ let activeTranscoders = 0;
  * KTX2TextureTranscoder altogether, and let the XKTLoaderPlugin use its internal default KTX2TextureTranscoder, which is configured to
  * load the Codec from the CDN. We'll stick with loading our own Codec, in case we want to run our app without an Internet connection.
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Textures_HousePlan"><img src="https://xeokit.github.io/xeokit-sdk/assets/images/xktWithTextures.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/buildings/#xkt_vbo_textures_HousePlan"><img src="https://xeokit.github.io/xeokit-sdk/assets/images/xktWithTextures.png"></a>
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Textures_HousePlan)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/buildings/#xkt_vbo_textures_HousePlan)]
  *
  * ````javascript
  * const viewer = new Viewer({
@@ -101,7 +101,7 @@ let activeTranscoders = 0;
  *
  * As in the previous example, we'll configure our KTX2TextureTranscoder to load the Basis Codec from a local directory.
  *
- * * [Run a similar example](http://localhost:8080/examples/sceneRepresentation_VBOSceneModel_batching_textures_ktx2.html)
+ * * [Run a similar example](https://xeokit.github.io/xeokit-sdk/examples/scenemodel/#vbo_batching_autocompressed_triangles_textures_ktx2)
  *
  * ````javascript
  * const viewer = new Viewer({

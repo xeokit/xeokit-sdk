@@ -16,7 +16,7 @@ import {math} from '../math/math.js';
  *
  * In the example below we'll replace the {@link Scene}'s default light sources with three View-space DirLights.
  *
- * [[Run this example](/examples/#lights_DirLight_view)]
+ * [[Run this example](/examples/index.html#lights_DirLight_view)]
  *
  * ````javascript
  * import {Viewer, Mesh, buildSphereGeometry,

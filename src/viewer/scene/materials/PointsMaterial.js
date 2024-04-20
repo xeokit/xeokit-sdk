@@ -32,7 +32,7 @@ const PRESETS = {
  * In the example below, we'll customize the {@link Scene}'s global ````PointsMaterial````, then use
  * an {@link XKTLoaderPlugin} to load a model containing a point cloud.
  *
- * [[Run this example](/examples/#materials_PointsMaterial)]
+ * [[Run this example](/examples/index.html#materials_PointsMaterial)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin} from "xeokit-sdk.es.js";

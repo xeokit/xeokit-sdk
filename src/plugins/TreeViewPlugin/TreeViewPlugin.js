@@ -7,9 +7,9 @@ const treeViews = [];
  * @desc A {@link Viewer} plugin that provides an HTML tree view to navigate the IFC elements in models.
  * <br>
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_WestRiverSideHospital" style="border: 1px solid black;"><img src="http://xeokit.io/img/docs/TreeViewPlugin/TreeViewPlugin.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#BIMOffline_XKT_WestRiverSideHospital" style="border: 1px solid black;"><img src="http://xeokit.io/img/docs/TreeViewPlugin/TreeViewPlugin.png"></a>
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_WestRiverSideHospital)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#BIMOffline_XKT_WestRiverSideHospital)]
  *
  * ## Overview
  *
@@ -33,7 +33,7 @@ const treeViews = [];
  * Then we'll use an {@link XKTLoaderPlugin} to load the Schependomlaan model from an
  * [.xkt file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan).
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_Schependomlaan)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/navigation/#TreeViewPlugin_Containment)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin, TreeViewPlugin} from "xeokit-sdk.es.js";
@@ -215,7 +215,7 @@ const treeViews = [];
  *
  * Let's use {@link ContextMenu} to show a simple context menu for the node we clicked.
  *
- * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom)]
+ * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/index.html#ContextMenu_Canvas_TreeViewPlugin_Custom)]
  *
  * ````javascript
  * import {ContextMenu} from "../src/extras/ContextMenu/ContextMenu.js";
@@ -306,7 +306,7 @@ const treeViews = [];
  * Let's register a callback to isolate and fit-to-view the {@link Entity}(s) represented by the node. This callback is
  * going to X-ray all the other Entitys, fly the camera to fit the Entity(s) for the clicked node, then hide the other Entitys.
  *
- * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom)]
+ * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/index.html#ContextMenu_Canvas_TreeViewPlugin_Custom)]
  *
  * ````javascript
  * treeView.on("nodeTitleClicked", (e) => {

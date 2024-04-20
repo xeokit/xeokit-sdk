@@ -47,7 +47,6 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-cityjsonloaderplugin">plugins/CityJSONLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/CityJSONLoaderPlugin/CityJSONDefaultDataSource.js~CityJSONDefaultDataSource.html">CityJSONDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js~CityJSONLoaderPlugin.html">CityJSONLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControlLegacy.js~DistanceMeasurementsControlLegacy.html">DistanceMeasurementsControlLegacy</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl.html">DistanceMeasurementsMouseControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html">DistanceMeasurementsTouchControl</a></span></span></li>
@@ -285,13 +284,13 @@
   
   
   <div class="description" data-ice="description"><p><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span> plugin that creates <span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span>s.</p>
-<p><a href="https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickFlyToPosition"><img src="https://user-images.githubusercontent.com/83100/58403089-26589280-8062-11e9-8652-aed61a4e8c64.gif"></a></p>
+<p><a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#annotations_clickFlyToPosition"><img src="https://user-images.githubusercontent.com/83100/58403089-26589280-8062-11e9-8652-aed61a4e8c64.gif"></a></p>
 <ul>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#annotations_createWithMouse">Example 1: Create annotations with mouse</a>]</li>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickShowLabels">Example 2: Click annotations to toggle labels</a>]</li>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#annotations_hoverShowLabels">Example 3: Hover annotations to show labels</a>]</li>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickFlyToPosition">Example 4: Click annotations to fly to viewpoint</a>]</li>
-<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#annotations_externalElements">Example 5: Create Annotations with externally-created elements</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#annotations_createWithMouse">Example 1: Create annotations with mouse</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#annotations_clickShowLabels">Example 2: Click annotations to toggle labels</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#annotations_hoverShowLabels">Example 3: Hover annotations to show labels</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#annotations_clickFlyToPosition">Example 4: Click annotations to fly to viewpoint</a>]</li>
+<li>[<a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#annotations_externalElements">Example 5: Create Annotations with externally-created elements</a>]</li>
 </ul>
 <h2 id="overview">Overview</h2><ul>
 <li>An <span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span> is a 3D position with a label attached.</li>
@@ -313,7 +312,7 @@ and the keys in the values map.</p>
 <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span> periodically occlusion-tests all Annotations on every 20th &quot;tick&quot; (which represents a rendered frame). We
 can adjust that frequency via property <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-set-ticksPerOcclusionTest">Scene#ticksPerOcclusionTest</a></span>.</p>
 <p>Finally, we&apos;ll query the Annotation&apos;s position occlusion/visibility status, and subscribe to change events on those properties.</p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickShowLabels">Run example</a>]</p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#annotations_clickShowLabels">Run example</a>]</p>
 <pre><code class="lang-JavaScript"><code class="source-code prettyprint">import {Viewer, XKTLoaderPlugin,AnnotationsPlugin} from &quot;xeokit-sdk.es.js&quot;;
 
 const viewer = new Viewer({
@@ -542,7 +541,7 @@ by <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-meth
 <span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html#instance-set-entity">Annotation#entity</a></span>. Note that this only works when <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-pick">Scene#pick</a></span> was configured to perform a 3D
 surface-intersection pick (see <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html#instance-method-pick">Scene#pick</a></span> for more info).</p>
 <p>Let&apos;s now extend our example to create an Annotation wherever we click on the surface of of our model:</p>
-<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/#annotations_createWithMouse">Run example</a>]</p>
+<p>[<a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#annotations_createWithMouse">Run example</a>]</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">var i = 1; // Used to create unique Annotation IDs
 
 viewer.scene.input.on(&quot;mouseclicked&quot;, (coords) =&gt; {

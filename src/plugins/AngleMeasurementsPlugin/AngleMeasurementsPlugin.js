@@ -5,10 +5,10 @@ import {AngleMeasurementsMouseControl} from "./AngleMeasurementsMouseControl.js"
 /**
  * {@link Viewer} plugin for measuring angles.
  *
- * [<img src="https://user-images.githubusercontent.com/83100/63641903-61488180-c6b6-11e9-8e00-895b9d16dc4b.gif">](https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_createWithMouse)
+ * [<img src="https://user-images.githubusercontent.com/83100/63641903-61488180-c6b6-11e9-8e00-895b9d16dc4b.gif">](https://xeokit.github.io/xeokit-sdk/examples/index.html#measurements_angle_createWithMouse)
  *
- * * [[Example 1: Model with angle measurements](https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_modelWithMeasurements)]
- * * [[Example 2: Create angle measurements with mouse](https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_createWithMouse)]
+ * * [[Example 1: Model with angle measurements](https://xeokit.github.io/xeokit-sdk/examples/index.html#measurements_angle_modelWithMeasurements)]
+ * * [[Example 2: Create angle measurements with mouse](https://xeokit.github.io/xeokit-sdk/examples/measurement/#angle_createWithMouse_snapping)]
  *
  * ## Overview
  *
@@ -28,7 +28,7 @@ import {AngleMeasurementsMouseControl} from "./AngleMeasurementsMouseControl.js"
  * Note how each AngleMeasurement has ````origin````, ````corner```` and  ````target````, which each indicate a 3D World-space
  * position on the surface of an {@link Entity}. These can be aon the same Entity, or on different Entitys.
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_modelWithMeasurements)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#measurements_angle_modelWithMeasurements)]
  *
  * ````JavaScript
  * import {Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin} from "xeokit-sdk.es.js";
@@ -99,7 +99,7 @@ import {AngleMeasurementsMouseControl} from "./AngleMeasurementsMouseControl.js"
  * The AngleMeasurementControl will then wait for the next click on any Entity, to begin constructing
  * another AngleMeasurement, and so on, until deactivated again.
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_createWithMouse)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/measurement/#angle_createWithMouse_snapping)]
  *
  * ````JavaScript
  * import {Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin, AngleMeasurementsMouseControl, PointerLens} from "xeokit-sdk.es.js";

@@ -10,9 +10,9 @@ const tempVec3 = math.vec3();
 /**
  * FaceAlignedSectionPlanesPlugin is a {@link Viewer} plugin that creates and edits face-aligned {@link SectionPlane}s.
  *
- * [<img src="https://xeokit.github.io/xeokit-sdk/assets/images/FaceAlignedSectionPlanesPlugin.gif">](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_FaceAlignedSectionPlanesPlugin)
+ * [<img src="https://xeokit.github.io/xeokit-sdk/assets/images/FaceAlignedSectionPlanesPlugin.gif">](https://xeokit.github.io/xeokit-sdk/examples/index.html#gizmos_FaceAlignedSectionPlanesPlugin)
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_FaceAlignedSectionPlanesPlugin)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/slicing/#FaceAlignedSectionPlanesPlugin)]
  *
  * ## Overview
  *

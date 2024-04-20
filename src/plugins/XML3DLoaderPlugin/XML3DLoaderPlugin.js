@@ -6,9 +6,9 @@ import {XML3DSceneGraphLoader} from "./XML3DSceneGraphLoader.js";
 /**
  * {@link Viewer} plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.
  *
- * [<img src="https://xeokit.io/img/docs/XML3DLoaderPlugin/XML3DPluginTreeView.png">](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_TreeView)
+ * [<img src="https://xeokit.io/img/docs/XML3DLoaderPlugin/XML3DPluginTreeView.png">](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_3DXML_TreeView)
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_TreeView)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_3DXML_TreeView)]
  *
  * ## Overview
  *
@@ -32,7 +32,7 @@ import {XML3DSceneGraphLoader} from "./XML3DSceneGraphLoader.js";
  * we'll use the {@link CameraFlightAnimation} to fly the {@link Camera} to look at boundary of the model. We'll
  * then get the model's {@link Entity} from the {@link Scene} and highlight the whole model.
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_Widget)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_3DXML_Widget)]
  *
  * ````javascript
  * // Create a xeokit Viewer
@@ -123,7 +123,7 @@ import {XML3DSceneGraphLoader} from "./XML3DSceneGraphLoader.js";
  * does not make sense because XML3DLoaderPlugin will set each {@link MetaObject#type} to "Default", and "storeys"
  * does not make sense because that requires some of the MetaObject#type values to be "IfcBuildingStorey".
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_TreeView)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_3DXML_TreeView)]
  *
  * ## Material Type
  *
@@ -133,9 +133,9 @@ import {XML3DSceneGraphLoader} from "./XML3DSceneGraphLoader.js";
  *
  * | Material Type | Material Components Loaded  | Description | Example |
  * |:--------:|:----:|:-----:|:-----:|
- * | "PhongMaterial" (default) | {@link PhongMaterial}  | Non-physically-correct Blinn-Phong shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Phong) |
- * | "MetallicMaterial" | {@link MetallicMaterial} | Physically-accurate specular-glossiness shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Metallic) |
- * | "SpecularMaterial" | {@link SpecularMaterial} | Physically-accurate metallic-roughness shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Specular) |
+ * | "PhongMaterial" (default) | {@link PhongMaterial}  | Non-physically-correct Blinn-Phong shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_3DXML_materialType_Phong) |
+ * | "MetallicMaterial" | {@link MetallicMaterial} | Physically-accurate specular-glossiness shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_3DXML_materialType_Metallic) |
+ * | "SpecularMaterial" | {@link SpecularMaterial} | Physically-accurate metallic-roughness shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_3DXML_materialType_Specular) |
  *
  * <br>
  * Let's load our model again, this time converting the 3DXML Blinn-Phong materials to {@link SpecularMaterial}s:
@@ -148,7 +148,7 @@ import {XML3DSceneGraphLoader} from "./XML3DSceneGraphLoader.js";
  * });
  * ````
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Specular)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_3DXML_materialType_Specular)]
  *
  * @class XML3DLoaderPlugin
  */

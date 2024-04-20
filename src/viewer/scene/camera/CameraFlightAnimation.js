@@ -72,7 +72,7 @@ const newLookEyeVec = math.vec3();
  *
  * Let's transition the Camera to orthographic projection:
  *
- * [[Run example](/examples/#camera_CameraFlightAnimation_projection)]
+ * [[Run example](/examples/index.html#camera_CameraFlightAnimation_projection)]
  *
  * ````Javascript
  * viewer.cameraFlight.flyTo({ projection: "ortho", () => {
