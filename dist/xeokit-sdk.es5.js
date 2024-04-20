@@ -17,9 +17,9 @@ this.groups=[];this.menuElement=null;this.shown=false;this.mouseOver=0;});/**
  */var Item=/*#__PURE__*/_createClass(function Item(id,getTitle,doAction,getEnabled,getShown){_classCallCheck(this,Item);this.id=id;this.getTitle=getTitle;this.doAction=doAction;this.getEnabled=getEnabled;this.getShown=getShown;this.itemElement=null;this.subMenu=null;this.enabled=true;});/**
  * @desc A customizable HTML context menu.
  *
- * [<img src="http://xeokit.io/img/docs/ContextMenu/ContextMenu.gif">](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom)
+ * [<img src="http://xeokit.io/img/docs/ContextMenu/ContextMenu.gif">](https://xeokit.github.io/xeokit-sdk/examples/index.html#ContextMenu_Canvas_TreeViewPlugin_Custom)
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#ContextMenu_Canvas_TreeViewPlugin_Custom)]
  *
  * ## Overview
  *
@@ -62,7 +62,7 @@ this.groups=[];this.menuElement=null;this.shown=false;this.mouseOver=0;});/**
  *
  * We'll also initially enable the ````ContextMenu````.
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_Custom)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#ContextMenu_Canvas_Custom)]
  *
  * ````javascript
  * const canvasContextMenu = new ContextMenu({
@@ -153,7 +153,7 @@ this.groups=[];this.menuElement=null;this.shown=false;this.mouseOver=0;});/**
  * In the example below, we'll create a simple ````ContextMenu```` that allows us to toggle the selection of an object
  * via its first item, which changes text depending on whether we are selecting or deselecting the object.
  *
- * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_dynamicItemTitles)]
+ * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/index.html#ContextMenu_dynamicItemTitles)]
  *
  * ````javascript
  * const canvasContextMenu = new ContextMenu({
@@ -194,7 +194,7 @@ this.groups=[];this.menuElement=null;this.shown=false;this.mouseOver=0;});/**
  * Note that our "Effects" item has no ````doAction```` callback, because an item with a sub-menu performs no
  * action of its own.
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_subMenus)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#ContextMenu_subMenus)]
  *
  * ````javascript
  * const canvasContextMenu = new ContextMenu({
@@ -349,7 +349,7 @@ menuElement.style.display='block';var menuHeight=menuElement.offsetHeight;var me
  * This component is used by {@link DistanceMeasurementsControl} and {@link AngleMeasurementsControl}
  * to help position the pointer when snap-to-vertex or snap-toedge is enabled.
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/measurements/#distance_modelWithMeasurements)]
+ * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/measurement/#distance_createWithMouse_snapping)]
  *
  * ````JavaScript
  *
@@ -2588,8 +2588,6 @@ if(lastOpacityQuantized===opacityQuantized){return;}}else{opacityQuantized=255.0
  * We'll also demonstrate how to query the Marker's visibility status and position (in the World, View and
  * Canvas coordinate systems), and how to subscribe to change events on those properties.
  *
- * [[Run this example](/examples/#Markers_SimpleExample)]
- *
  * ````javascript
  * import {Viewer, GLTFLoaderPlugin, Marker} from "xeokit-sdk.es.js";
  *
@@ -3030,10 +3028,10 @@ _this19._initMarkerDiv();_this19._onMouseHoverSurface=null;_this19._onHoverNothi
      */},{key:"destroy",value:function destroy(){this.deactivate();_get(_getPrototypeOf(AngleMeasurementsMouseControl.prototype),"destroy",this).call(this);}}]);return AngleMeasurementsMouseControl;}(AngleMeasurementsControl);/**
  * {@link Viewer} plugin for measuring angles.
  *
- * [<img src="https://user-images.githubusercontent.com/83100/63641903-61488180-c6b6-11e9-8e00-895b9d16dc4b.gif">](https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_createWithMouse)
+ * [<img src="https://user-images.githubusercontent.com/83100/63641903-61488180-c6b6-11e9-8e00-895b9d16dc4b.gif">](https://xeokit.github.io/xeokit-sdk/examples/index.html#measurements_angle_createWithMouse)
  *
- * * [[Example 1: Model with angle measurements](https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_modelWithMeasurements)]
- * * [[Example 2: Create angle measurements with mouse](https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_createWithMouse)]
+ * * [[Example 1: Model with angle measurements](https://xeokit.github.io/xeokit-sdk/examples/index.html#measurements_angle_modelWithMeasurements)]
+ * * [[Example 2: Create angle measurements with mouse](https://xeokit.github.io/xeokit-sdk/examples/measurement/#angle_createWithMouse_snapping)]
  *
  * ## Overview
  *
@@ -3053,7 +3051,7 @@ _this19._initMarkerDiv();_this19._onMouseHoverSurface=null;_this19._onHoverNothi
  * Note how each AngleMeasurement has ````origin````, ````corner```` and  ````target````, which each indicate a 3D World-space
  * position on the surface of an {@link Entity}. These can be aon the same Entity, or on different Entitys.
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_modelWithMeasurements)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#measurements_angle_modelWithMeasurements)]
  *
  * ````JavaScript
  * import {Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin} from "xeokit-sdk.es.js";
@@ -3124,7 +3122,7 @@ _this19._initMarkerDiv();_this19._onMouseHoverSurface=null;_this19._onHoverNothi
  * The AngleMeasurementControl will then wait for the next click on any Entity, to begin constructing
  * another AngleMeasurement, and so on, until deactivated again.
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_createWithMouse)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/measurement/#angle_createWithMouse_snapping)]
  *
  * ````JavaScript
  * import {Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin, AngleMeasurementsMouseControl, PointerLens} from "xeokit-sdk.es.js";
@@ -3517,13 +3515,13 @@ if(utils.isArray(labelHTML)){labelHTML=labelHTML.join("");}labelHTML=this._rende
      */},{key:"destroy",value:function destroy(){if(this._marker){if(!this._markerExternal){this._marker.parentNode.removeChild(this._marker);}else{this._marker.removeEventListener("click",this._onMouseClickedExternalMarker);this._marker.removeEventListener("mouseenter",this._onMouseEnterExternalMarker);this._marker.removeEventListener("mouseleave",this._onMouseLeaveExternalMarker);this._marker=null;}}if(this._label){if(!this._labelExternal){this._label.parentNode.removeChild(this._label);}this._label=null;}this.scene.off(this._onTick);_get(_getPrototypeOf(Annotation.prototype),"destroy",this).call(this);}}]);return Annotation;}(Marker);var tempVec3a$K=math.vec3();var tempVec3b$z=math.vec3();var tempVec3c$v=math.vec3();/**
  * {@link Viewer} plugin that creates {@link Annotation}s.
  *
- * [<img src="https://user-images.githubusercontent.com/83100/58403089-26589280-8062-11e9-8652-aed61a4e8c64.gif">](https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickFlyToPosition)
+ * [<img src="https://user-images.githubusercontent.com/83100/58403089-26589280-8062-11e9-8652-aed61a4e8c64.gif">](https://xeokit.github.io/xeokit-sdk/examples/index.html#annotations_clickFlyToPosition)
  *
- * * [[Example 1: Create annotations with mouse](https://xeokit.github.io/xeokit-sdk/examples/#annotations_createWithMouse)]
- * * [[Example 2: Click annotations to toggle labels](https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickShowLabels)]
- * * [[Example 3: Hover annotations to show labels](https://xeokit.github.io/xeokit-sdk/examples/#annotations_hoverShowLabels)]
- * * [[Example 4: Click annotations to fly to viewpoint](https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickFlyToPosition)]
- * * [[Example 5: Create Annotations with externally-created elements](https://xeokit.github.io/xeokit-sdk/examples/#annotations_externalElements)]
+ * * [[Example 1: Create annotations with mouse](https://xeokit.github.io/xeokit-sdk/examples/index.html#annotations_createWithMouse)]
+ * * [[Example 2: Click annotations to toggle labels](https://xeokit.github.io/xeokit-sdk/examples/index.html#annotations_clickShowLabels)]
+ * * [[Example 3: Hover annotations to show labels](https://xeokit.github.io/xeokit-sdk/examples/index.html#annotations_hoverShowLabels)]
+ * * [[Example 4: Click annotations to fly to viewpoint](https://xeokit.github.io/xeokit-sdk/examples/index.html#annotations_clickFlyToPosition)]
+ * * [[Example 5: Create Annotations with externally-created elements](https://xeokit.github.io/xeokit-sdk/examples/index.html#annotations_externalElements)]
  *
  * ## Overview
  *
@@ -3553,7 +3551,7 @@ if(utils.isArray(labelHTML)){labelHTML=labelHTML.join("");}labelHTML=this._rende
  *
  * Finally, we'll query the Annotation's position occlusion/visibility status, and subscribe to change events on those properties.
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#annotations_clickShowLabels)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#annotations_clickShowLabels)]
  *
  * ````JavaScript
  * import {Viewer, XKTLoaderPlugin,AnnotationsPlugin} from "xeokit-sdk.es.js";
@@ -3826,7 +3824,7 @@ if(utils.isArray(labelHTML)){labelHTML=labelHTML.join("");}labelHTML=this._rende
  *
  * Let's now extend our example to create an Annotation wherever we click on the surface of of our model:
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#annotations_createWithMouse)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#annotations_createWithMouse)]
  *
  * ````javascript
  * var i = 1; // Used to create unique Annotation IDs
@@ -4645,7 +4643,9 @@ this.validated=true;if(!this.linked||!this.validated){this.errors=[];this.errors
  * @private
  */var ArrayBuf=/*#__PURE__*/function(){function ArrayBuf(gl,type,data,numItems,itemSize,usage,normalized,stride,offset){_classCallCheck(this,ArrayBuf);this._gl=gl;this.type=type;this.allocated=false;switch(data.constructor){case Uint8Array:this.itemType=gl.UNSIGNED_BYTE;this.itemByteSize=1;break;case Int8Array:this.itemType=gl.BYTE;this.itemByteSize=1;break;case Uint16Array:this.itemType=gl.UNSIGNED_SHORT;this.itemByteSize=2;break;case Int16Array:this.itemType=gl.SHORT;this.itemByteSize=2;break;case Uint32Array:this.itemType=gl.UNSIGNED_INT;this.itemByteSize=4;break;case Int32Array:this.itemType=gl.INT;this.itemByteSize=4;break;default:this.itemType=gl.FLOAT;this.itemByteSize=4;}this.usage=usage;this.length=0;this.dataLength=numItems;this.numItems=0;this.itemSize=itemSize;this.normalized=!!normalized;this.stride=stride||0;this.offset=offset||0;this._allocate(data);}_createClass(ArrayBuf,[{key:"_allocate",value:function _allocate(data){this.allocated=false;this._handle=this._gl.createBuffer();if(!this._handle){throw"Failed to allocate WebGL ArrayBuffer";}if(this._handle){this._gl.bindBuffer(this.type,this._handle);this._gl.bufferData(this.type,data.length>this.dataLength?data.slice(0,this.dataLength):data,this.usage);this._gl.bindBuffer(this.type,null);this.length=data.length;this.numItems=this.length/this.itemSize;this.allocated=true;}}},{key:"setData",value:function setData(data,offset){if(!this.allocated){return;}if(data.length+(offset||0)>this.length){// Needs reallocation
 this.destroy();this._allocate(data);}else{// No reallocation needed
-this._gl.bindBuffer(this.type,this._handle);if(offset||offset===0){this._gl.bufferSubData(this.type,offset*this.itemByteSize,data);}else{this._gl.bufferData(this.type,data,this.usage);}this._gl.bindBuffer(this.type,null);}}},{key:"bind",value:function bind(){if(!this.allocated){return;}this._gl.bindBuffer(this.type,this._handle);}},{key:"unbind",value:function unbind(){if(!this.allocated){return;}this._gl.bindBuffer(this.type,null);}},{key:"destroy",value:function destroy(){if(!this.allocated){return;}this._gl.deleteBuffer(this._handle);this._handle=null;this.allocated=false;}}]);return ArrayBuf;}();var OcclusionLayer=/*#__PURE__*/function(){function OcclusionLayer(scene,origin){_classCallCheck(this,OcclusionLayer);this.scene=scene;this.aabb=math.AABB3();this.origin=math.vec3(origin);this.originHash=this.origin.join();this.numMarkers=0;this.markers={};this.markerList=[];// Ordered array of Markers
+this._gl.bindBuffer(this.type,this._handle);if(offset||offset===0){this._gl.bufferSubData(this.type,offset*this.itemByteSize,data);}else{this._gl.bufferData(this.type,data,this.usage);}this._gl.bindBuffer(this.type,null);}}},{key:"bind",value:function bind(){if(!this.allocated){return;}this._gl.bindBuffer(this.type,this._handle);}},{key:"unbind",value:function unbind(){if(!this.allocated){return;}this._gl.bindBuffer(this.type,null);}},{key:"destroy",value:function destroy(){if(!this.allocated){return;}this._gl.deleteBuffer(this._handle);this._handle=null;this.allocated=false;}}]);return ArrayBuf;}();/**
+ * @private
+ */var OcclusionLayer=/*#__PURE__*/function(){function OcclusionLayer(scene,origin){_classCallCheck(this,OcclusionLayer);this.scene=scene;this.aabb=math.AABB3();this.origin=math.vec3(origin);this.originHash=this.origin.join();this.numMarkers=0;this.markers={};this.markerList=[];// Ordered array of Markers
 this.markerIndices={};// ID map of Marker indices in _markerList
 this.positions=[];// Packed array of World-space marker positions
 this.indices=[];// Indices corresponding to array above
@@ -4660,6 +4660,7 @@ var boundary=canvas.boundary;var canvasWidth=boundary[2];var canvasHeight=bounda
 marker._setVisible(false);continue;}var _canvasPos=marker.canvasPos;var canvasX=_canvasPos[0];var canvasY=_canvasPos[1];if(canvasX+10<0||canvasY+10<0||canvasX-10>canvasWidth||canvasY-10>canvasHeight){marker._setVisible(false);continue;}if(marker.entity&&!marker.entity.visible){marker._setVisible(false);continue;}if(marker.occludable){this.occlusionTestList[this.lenOcclusionTestList++]=marker;this.pixels[lenPixels++]=canvasX;this.pixels[lenPixels++]=canvasY;continue;}marker._setVisible(true);}}},{key:"_updateActiveSectionPlanes",value:function _updateActiveSectionPlanes(){var sectionPlanes=this.scene._sectionPlanesState.sectionPlanes;var numSectionPlanes=sectionPlanes.length;if(numSectionPlanes>0){for(var _i51=0;_i51<numSectionPlanes;_i51++){var sectionPlane=sectionPlanes[_i51];if(!sectionPlane.active){this.sectionPlanesActive[_i51]=false;}else{var intersect=math.planeAABB3Intersect(sectionPlane.dir,sectionPlane.dist,this.aabb);var outside=intersect===-1;if(outside){this.culledBySectionPlanes=true;return;}var intersecting=intersect===0;this.sectionPlanesActive[_i51]=intersecting;}}}this.culledBySectionPlanes=false;}},{key:"destroy",value:function destroy(){this.markers={};this.markerList.length=0;if(this.positionsBuf){this.positionsBuf.destroy();}if(this.indicesBuf){this.indicesBuf.destroy();}}}]);return OcclusionLayer;}();var MARKER_COLOR=math.vec3([1.0,0.0,0.0]);var POINT_SIZE=20;var MARKER_SPRITE_CLIPZ_OFFSET=-0.001;// Amount that we offset sprite clip Z coords to raise them from surfaces
 var tempVec3a$J=math.vec3();/**
  * Manages occlusion testing. Private member of a Renderer.
+ * @private
  */var OcclusionTester=/*#__PURE__*/function(){function OcclusionTester(scene,renderBufferManager){var _this31=this;_classCallCheck(this,OcclusionTester);this._scene=scene;this._renderBufferManager=renderBufferManager;this._occlusionLayers={};this._occlusionLayersList=[];this._occlusionLayersListDirty=false;this._shaderSource=null;this._program=null;this._shaderSourceHash=null;this._shaderSourceDirty=true;// Need to build shader source code ?
 this._programDirty=false;// Need to build shader program ?
 this._markersToOcclusionLayersMap={};this._onCameraViewMatrix=scene.camera.on("viewMatrix",function(){_this31._occlusionTestListDirty=true;});this._onCameraProjMatrix=scene.camera.on("projMatrix",function(){_this31._occlusionTestListDirty=true;});this._onCanvasBoundary=scene.canvas.on("boundary",function(){_this31._occlusionTestListDirty=true;});}/**
@@ -6574,7 +6575,7 @@ this.fire("dirty");this.fire("projection",this._projectionType);this.fire("projM
  *
  * In the example below we'll replace the {@link Scene}'s default light sources with three View-space DirLights.
  *
- * [[Run this example](/examples/#lights_DirLight_view)]
+ * [[Run this example](/examples/index.html#lights_DirLight_view)]
  *
  * ````javascript
  * import {Viewer, Mesh, buildSphereGeometry,
@@ -6727,7 +6728,7 @@ _this43._shadowProjMatrixDirty=false;}return _this43._shadowProjMatrix;},getShad
  *
  * In the example below we'll destroy the {@link Scene}'s default light sources then create an AmbientLight and a couple of {@link @DirLight}s:
  *
- * [[Run this example](/examples/#lights_AmbientLight)]
+ * [[Run this example](/examples/index.html#lights_AmbientLight)]
  *
  * ````javascript
  * import {Viewer, Mesh, buildTorusGeometry,
@@ -6900,7 +6901,7 @@ var x=array[i]/(Math.abs(array[i])+Math.abs(array[i+1])+Math.abs(array[i+2]));va
  *
  * Creating a {@link Mesh} with a ReadableGeometry that defines a single triangle, plus a {@link PhongMaterial} with diffuse {@link Texture}:
  *
- * [[Run this example](/examples/#geometry_ReadableGeometry)]
+ * [[Run this example](/examples/index.html#geometry_ReadableGeometry)]
  *
  * ````javascript
  * import {Viewer, Mesh, ReadableGeometry, PhongMaterial, Texture} from "xeokit-sdk.es.js";
@@ -7081,7 +7082,7 @@ return;}var state=this._state;var colors=state.colors;if(!colors){this.error("ca
  *
  * In the example below we'll create a {@link Mesh} with a box-shaped {@link ReadableGeometry}.
  *
- * [[Run this example](/examples/#geometry_builders_buildBoxGeometry)]
+ * [[Run this example](/examples/index.html#geometry_builders_buildBoxGeometry)]
  *
  * ````javascript
  * import {Viewer, Mesh, buildBoxGeometry, ReadableGeometry, PhongMaterial, Texture} from "xeokit-sdk.es.js";
@@ -7186,7 +7187,7 @@ indices:[0,1,2,0,2,3,// front
  *
  * In the example below, we'll create a {@link Mesh} with a PhongMaterial with a diffuse {@link Texture} and a specular {@link Fresnel}, using a {@link buildTorusGeometry} to create the {@link Geometry}.
  *
- * [[Run this example](/examples/#materials_PhongMaterial)]
+ * [[Run this example](/examples/index.html#materials_PhongMaterial)]
  *
  *  ```` javascript
  * import {Viewer, Mesh, buildTorusGeometry,
@@ -7824,7 +7825,7 @@ _this49.preset=cfg.preset;if(cfg.fill!==undefined){_this49.fill=cfg.fill;}if(cfg
  *
  * Recall that {@link Mesh} is a concrete subtype of the abstract {@link Entity} base class.
  *
- * [[Run this example](/examples/#materials_EdgeMaterial)]
+ * [[Run this example](/examples/index.html#materials_EdgeMaterial)]
  *
  * ````javascript
  * import {Viewer, Mesh, buildSphereGeometry,
@@ -8132,9 +8133,9 @@ var unitsInfo={meters:{abbrev:"m"},metres:{abbrev:"m"},centimeters:{abbrev:"cm"}
      */},{key:"realToWorldPos",value:function realToWorldPos(realPos){var worldPos=arguments.length>1&&arguments[1]!==undefined?arguments[1]:math.vec3(3);worldPos[0]=(realPos[0]-this._origin[0])/this._scale;worldPos[1]=(realPos[1]-this._origin[1])/this._scale;worldPos[2]=(realPos[2]-this._origin[2])/this._scale;return worldPos;}}]);return Metrics;}(Component);/**
  * @desc Configures Scalable Ambient Obscurance (SAO) for a {@link Scene}.
  *
- *  <a href="https://xeokit.github.io/xeokit-sdk/examples/#postEffects_SAO_OTCConferenceCenter"><img src="http://xeokit.io/img/docs/SAO/saoEnabledDisabled.gif"></a>
+ *  <a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#postEffects_SAO_OTCConferenceCenter"><img src="http://xeokit.io/img/docs/SAO/saoEnabledDisabled.gif"></a>
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#postEeffects_SAO_OTCConferenceCenter)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/viewer/#sao_ConferenceCenter)]
  *
  * ## Overview
  *
@@ -8156,7 +8157,7 @@ var unitsInfo={meters:{abbrev:"m"},metres:{abbrev:"m"},centimeters:{abbrev:"cm"}
  * {@link SAO#scale} and {@link SAO#intensity} must be tuned to the distance
  * between {@link Perspective#near} and {@link Perspective#far}, or the distance
  * between {@link Ortho#near} and {@link Ortho#far}, depending on which of those two projections the {@link Camera} is currently
- * using. Use the [live example](https://xeokit.github.io/xeokit-sdk/examples/#postEeffects_SAO_OTCConferenceCenter) to get a
+ * using. Use the [live example](https://xeokit.github.io/xeokit-sdk/examples/viewer/#sao_ConferenceCenter) to get a
  * feel for that.
  *
  * ## Usage
@@ -8212,7 +8213,7 @@ var unitsInfo={meters:{abbrev:"m"},metres:{abbrev:"m"},centimeters:{abbrev:"cm"}
  * });
  * ````
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#postEeffects_SAO_OTCConferenceCenter)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/viewer/#sao_ConferenceCenter)]
  *
  * ## Efficiency
  *
@@ -8295,7 +8296,7 @@ var unitsInfo={meters:{abbrev:"m"},metres:{abbrev:"m"},centimeters:{abbrev:"cm"}
  * });
  * ````
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#techniques_nonInteractiveQuality)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#techniques_nonInteractiveQuality)]
  */var SAO=/*#__PURE__*/function(_Component19){_inherits(SAO,_Component19);var _super31=_createSuper(SAO);/** @private */function SAO(owner){var _this52;var cfg=arguments.length>1&&arguments[1]!==undefined?arguments[1]:{};_classCallCheck(this,SAO);_this52=_super31.call(this,owner,cfg);_this52._supported=WEBGL_INFO.SUPPORTED_EXTENSIONS["OES_standard_derivatives"];// For computing normals in SAO fragment shader
 _this52.enabled=cfg.enabled;_this52.kernelRadius=cfg.kernelRadius;_this52.intensity=cfg.intensity;_this52.bias=cfg.bias;_this52.scale=cfg.scale;_this52.minResolution=cfg.minResolution;_this52.numSamples=cfg.numSamples;_this52.blur=cfg.blur;_this52.blendCutoff=cfg.blendCutoff;_this52.blendFactor=cfg.blendFactor;return _this52;}/**
      * Gets whether or not SAO is supported by this browser and GPU.
@@ -8460,7 +8461,7 @@ _this52.enabled=cfg.enabled;_this52.kernelRadius=cfg.kernelRadius;_this52.intens
  * In the example below, we'll customize the {@link Scene}'s global ````PointsMaterial````, then use
  * an {@link XKTLoaderPlugin} to load a model containing a point cloud.
  *
- * [[Run this example](/examples/#materials_PointsMaterial)]
+ * [[Run this example](/examples/index.html#materials_PointsMaterial)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin} from "xeokit-sdk.es.js";
@@ -8635,7 +8636,7 @@ _this53.preset=cfg.preset;if(cfg.pointSize!==undefined){_this53.pointSize=cfg.po
  * In the example below, we'll customize the {@link Scene}'s global ````LinesMaterial````, then use
  * an {@link XKTLoaderPlugin} to load a model containing line segments.
  *
- * [[Run this example](/examples/#materials_LinesMaterial)]
+ * [[Run this example](/examples/index.html#materials_LinesMaterial)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin} from "xeokit-sdk.es.js";
@@ -10304,7 +10305,7 @@ if(geometryState.indicesBufCombined){geometryState.indicesBufCombined.bind();fra
  *
  * We can also update properties of our object-Meshes via calls to {@link Scene#setObjectsHighlighted} etc.
  *
- * [[Run this example](/examples/#sceneRepresentation_SceneGraph)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/scenegraph/#sceneGraph)]
  *
  * ````javascript
  * import {Viewer, Mesh, Node, PhongMaterial, buildBoxGeometry, ReadableGeometry} from "xeokit-sdk.es.js";
@@ -11020,7 +11021,7 @@ var uvDecodeMatrix=geometry.uvDecodeMatrix;if(uvDecodeMatrix){geometryCompressio
  *
  * Creating a {@link Mesh} with a cylinder-shaped {@link ReadableGeometry} :
  *
- * [[Run this example](/examples/#geometry_builders_buildCylinderGeometry)]
+ * [[Run this example](/examples/index.html#geometry_builders_buildCylinderGeometry)]
  *
  * ````javascript
  *
@@ -11080,7 +11081,7 @@ for(i=0;i<=radialSegments;i++){x=Math.sin(i*radialAngle);z=Math.cos(i*radialAngl
  *
  * Creating a {@link Mesh} with a sphere-shaped {@link ReadableGeometry} :
  *
- * [[Run this example](/examples/#geometry_builders_buildSphereGeometry)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/scenegraph/#buildSphereGeometry)]
  *
  * ````javascript
  * import {Viewer, Mesh, buildSphereGeometry, ReadableGeometry, PhongMaterial, Texture} from "xeokit-sdk.es.js";
@@ -11123,7 +11124,7 @@ for(i=0;i<=radialSegments;i++){x=Math.sin(i*radialAngle);z=Math.cos(i*radialAngl
  *
  * Creating a {@link Mesh} with vector text {@link ReadableGeometry} :
  *
- * [[Run this example](/examples/#geometry_builders_buildVectorTextGeometry)]
+ * [[Run this example](/examples/index.html#geometry_builders_buildVectorTextGeometry)]
  *
  * ````javascript
  *
@@ -11163,7 +11164,7 @@ for(i=0;i<=radialSegments;i++){x=Math.sin(i*radialAngle);z=Math.cos(i*radialAngl
  *
  * ## Usage
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_AxisGizmoPlugin)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#gizmos_AxisGizmoPlugin)]
  *
  * ````JavaScript````
  * import {Viewer, XKTLoaderPlugin, AxisGizmoPlugin} from "xeokit-sdk.es.js";
@@ -11340,7 +11341,7 @@ geometry:new ReadableGeometry(axisGizmoScene,buildVectorTextGeometry({text:"Z",s
  *
  * We can also update properties of our object-Meshes via calls to {@link Scene#setObjectsHighlighted} etc.
  *
- * [[Run this example](/examples/#sceneRepresentation_SceneGraph)]
+ * [[Run this example](/examples/index.html#sceneRepresentation_SceneGraph)]
  *
  * ````javascript
  * import {Viewer, Mesh, Node, PhongMaterial} from "xeokit-sdk.es.js";
@@ -11903,7 +11904,7 @@ var tempChildList=this._children.splice();var child;for(var _i148=0,len=tempChil
  *
  * ## Usage
  *
- * [[Run this example](/examples/#materials_LambertMaterial)]
+ * [[Run this example](/examples/index.html#materials_LambertMaterial)]
  *
  * In the example below we'll create a {@link Mesh} with a shape defined by a {@link buildTorusGeometry} and normal rendering appearance configured with a LambertMaterial.
  *
@@ -12091,7 +12092,7 @@ hash:"/lam;"});_this60.ambient=cfg.ambient;_this60.color=cfg.color;_this60.emiss
  * channels, which allows us a little creative flexibility. Then, in the next example further down, we'll combine those channels
  * within the same {@link Texture} for efficiency.
  *
- * [[Run this example](/examples/#materials_MetallicMaterial)]
+ * [[Run this example](/examples/index.html#materials_MetallicMaterial)]
  *
  * ````javascript
  * import {Viewer, Mesh, loadOBJGeometry, ReadableGeometry, MetallicMaterial, Texture} from "xeokit-sdk.es.js";
@@ -12964,7 +12965,7 @@ gl.bindTexture(this.target,null);}},{key:"setProps",value:function setProps(prop
  * with {@link PhongMaterial#diffuseMap} and {@link PhongMaterial#specularMap}. The {@link Texture} pixel colors directly
  * provide the diffuse and specular components for each fragment across the {@link ReadableGeometry} surface.
  *
- * [[Run this example](/examples/#materials_Texture)]
+ * [[Run this example](/examples/index.html#materials_Texture)]
  *
  * ```` javascript
  * import {Viewer, Mesh, buildTorusGeometry,
@@ -13176,7 +13177,7 @@ if(cfg.src){_this63.src=cfg.src;// Image file
  *
  * In the example below we'll create a {@link Mesh} with a {@link PhongMaterial} that applies a Fresnel to its alpha channel to give a glasss-like effect.
  *
- * [[Run this example](/examples/#materials_Fresnel)]
+ * [[Run this example](/examples/index.html#materials_Fresnel)]
  *
  * ````javascript
  * import {Viewer, Mesh, buildTorusGeometry,
@@ -13303,7 +13304,7 @@ v               edgeBias: 0.2,
  *
  * Creating a {@link Mesh} with a VBOGeometry that defines a single triangle, plus a {@link PhongMaterial} with diffuse {@link Texture}:
  *
- * [[Run this example](/examples/#geometry_VBOGeometry)]
+ * [[Run this example](/examples/index.html#geometry_VBOGeometry)]
  *
  * ````javascript
  * import {Viewer, Mesh, VBOGeometry, PhongMaterial, Texture} from "xeokit-sdk.es.js";
@@ -13450,8 +13451,6 @@ K3D.edit.remap=function(ind,nind,arr,cpi){var ncrd=new Array(arr.length);for(var
  *
  * In the example below we'll create a {@link Mesh} with {@link PhongMaterial}, {@link Texture} and a {@link ReadableGeometry} loaded from 3DS.
  *
- * [[Run this example](/examples/#geometry_loaders_3DS)]
- *
  * ````javascript
  * import {Viewer, Mesh, load3DSGeometry, ReadableGeometry, PhongMaterial, Texture} from "xeokit-sdk.es.js";
  *
@@ -13502,8 +13501,6 @@ var mesh=m.edit.objects[0].mesh;var positions=mesh.vertices;var uv=mesh.uvt;var 
  * ## Usage
  *
  * In the example below we'll create a {@link Mesh} with {@link MetallicMaterial} and {@link ReadableGeometry} loaded from OBJ.
- *
- * [[Run this example](/examples/#geometry_loaders_OBJ)]
  *
  * ````javascript
  * import {Viewer, Mesh, loadOBJGeometry, ReadableGeometry,
@@ -13577,7 +13574,7 @@ var positions=K3D.edit.unwrap(m.i_verts,m.c_verts,3);var normals=K3D.edit.unwrap
  *
  * In the example below we'll create a {@link Mesh} with a box-shaped {@link ReadableGeometry} that has lines primitives.
  *
- * [[Run this example](/examples/#geometry_builders_buildBoxLinesGeometry)]
+ * [[Run this example](/examples/index.html#geometry_builders_buildBoxLinesGeometry)]
  *
  * ````javascript
  * import {Viewer, Mesh, buildBoxLinesGeometry, ReadableGeometry, PhongMaterial} from "xeokit-sdk.es.js";
@@ -13619,7 +13616,7 @@ var positions=K3D.edit.unwrap(m.i_verts,m.c_verts,3);var normals=K3D.edit.unwrap
  * In the example below we'll create a {@link Mesh} with a box-shaped {@link ReadableGeometry} that has lines primitives.
  * This box will be created from AABB of a model.
  *
- * [[Run this example](/examples/#geometry_builders_buildBoxLinesGeometryFromAABB)]
+ * [[Run this example](/examples/index.html#geometry_builders_buildBoxLinesGeometryFromAABB)]
  *
  * ````javascript
  *     import {Viewer, Mesh, Node, buildBoxGeometry, buildBoxLinesGeometryFromAABB, ReadableGeometry, PhongMaterial} from "../../dist/xeokit-sdk.min.es.js";
@@ -13735,7 +13732,7 @@ var positions=K3D.edit.unwrap(m.i_verts,m.c_verts,3);var normals=K3D.edit.unwrap
  *
  * Creating a {@link Mesh} with a GridGeometry and a {@link PhongMaterial}:
  *
- * [[Run this example](/examples/#geometry_builders_buildGridGeometry)]
+ * [[Run this example](/examples/index.html#geometry_builders_buildGridGeometry)]
  *
  * ````javascript
  * import {Viewer, Mesh, buildGridGeometry, VBOGeometry, PhongMaterial, Texture} from "xeokit-sdk.es.js";
@@ -13774,7 +13771,7 @@ var positions=K3D.edit.unwrap(m.i_verts,m.c_verts,3);var normals=K3D.edit.unwrap
  *
  * Creating a {@link Mesh} with a PlaneGeometry and a {@link PhongMaterial} with diffuse {@link Texture}:
  *
- * [[Run this example](/examples/#geometry_builders_buildPlaneGeometry)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/scenegraph/#buildPlaneGeometry)]
  *
  * ````javascript
  * import {Viewer, Mesh, buildPlaneGeometry, ReadableGeometry, PhongMaterial, Texture} from "xeokit-sdk.es.js";
@@ -13818,7 +13815,7 @@ var positions=K3D.edit.unwrap(m.i_verts,m.c_verts,3);var normals=K3D.edit.unwrap
  * ## Usage
  * Creating a {@link Mesh} with a torus-shaped {@link ReadableGeometry} :
  *
- * [[Run this example](/examples/#geometry_builders_buildTorusGeometry)]
+ * [[Run this example](/examples/index.html#geometry_builders_buildTorusGeometry)]
  * 
  * ````javascript
  * import {Viewer, Mesh, buildTorusGeometry, ReadableGeometry, PhongMaterial, Texture} from "xeokit-sdk.es.js";
@@ -13865,7 +13862,7 @@ var positions=K3D.edit.unwrap(m.i_verts,m.c_verts,3);var normals=K3D.edit.unwrap
  *
  * In the example below we'll create a {@link Mesh} with a polyline {@link ReadableGeometry} that has lines primitives.
  *
- * [[Run this example](/examples/#geometry_builders_buildPolylineGeometry)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/scenegraph/#buildPolylineGeometry)]
  *
  * ````javascript
  * //------------------------------------------------------------------------------------------------------------------
@@ -13926,7 +13923,7 @@ var positions=K3D.edit.unwrap(m.i_verts,m.c_verts,3);var normals=K3D.edit.unwrap
  *
  * In the example below we'll create a {@link Mesh} with a polyline {@link ReadableGeometry} created from curves.
  *
- * [[Run this example](/examples/#geometry_builders_buildPolylineGeometryFromCurve)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/scenegraph/#buildPolylineGeometryFromCurve)]
  *
  * ````javascript
  * //------------------------------------------------------------------------------------------------------------------
@@ -14040,9 +14037,9 @@ var positions=K3D.edit.unwrap(m.i_verts,m.c_verts,3);var normals=K3D.edit.unwrap
  * In the example below, we'll load the Schependomlaan model, then use
  * an ````Bitmap```` to show a storey plan next to the model.
  *
- * [<img src="http://xeokit.github.io/xeokit-sdk/assets/images/Bitmap_storeyPlan.png">](/examples/#Bitmap_storeyPlan)
+ * [<img src="http://xeokit.github.io/xeokit-sdk/assets/images/Bitmap_storeyPlan.png">](https://xeokit.github.io/xeokit-sdk/examples/scenegraph/#ImagePlane_imageInSectionPlane)
  *
- * [[Run this example](/examples/#Bitmap_grid)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/scenegraph/#ImagePlane_imageInSectionPlane)]
  *
  * ````javascript
  * import {Viewer, Bitmap, XKTLoaderPlugin} from "xeokit-sdk.es.js";
@@ -14518,7 +14515,7 @@ this._silhouetteRenderer=new TrianglesSilhouetteRenderer$1(this._scene);}if(!thi
  *
  * That's OK if we know that we're not going to view models that are geographically vast, or offset far from the World coordinate origin.
  *
- * [[Run this example](/examples/#Configs_disableDoublePrecisionAndRAF)]
+ * [[Run this example](/examples/index.html#Configs_disableDoublePrecisionAndRAF)]
  *
  * ````javascript
  * import {Configs, Viewer, XKTLoaderPlugin} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
@@ -16503,9 +16500,9 @@ _this73.manager.itemError(url);throw err;}delete loading[url];for(var _i376=0,il
  * KTX2TextureTranscoder altogether, and let the XKTLoaderPlugin use its internal default KTX2TextureTranscoder, which is configured to
  * load the Codec from the CDN. We'll stick with loading our own Codec, in case we want to run our app without an Internet connection.
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Textures_HousePlan"><img src="https://xeokit.github.io/xeokit-sdk/assets/images/xktWithTextures.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/buildings/#xkt_vbo_textures_HousePlan"><img src="https://xeokit.github.io/xeokit-sdk/assets/images/xktWithTextures.png"></a>
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Textures_HousePlan)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/buildings/#xkt_vbo_textures_HousePlan)]
  *
  * ````javascript
  * const viewer = new Viewer({
@@ -16546,7 +16543,7 @@ _this73.manager.itemError(url);throw err;}delete loading[url];for(var _i376=0,il
  *
  * As in the previous example, we'll configure our KTX2TextureTranscoder to load the Basis Codec from a local directory.
  *
- * * [Run a similar example](http://localhost:8080/examples/sceneRepresentation_VBOSceneModel_batching_textures_ktx2.html)
+ * * [Run a similar example](https://xeokit.github.io/xeokit-sdk/examples/scenemodel/#vbo_batching_autocompressed_triangles_textures_ktx2)
  *
  * ````javascript
  * const viewer = new Viewer({
@@ -16995,7 +16992,7 @@ return this;}/**
  * Then, for each object in our model we'll add an {@link Entity}
  * that has a mesh that instances our box geometry, transforming and coloring the instance.
  *
- * [![](http://xeokit.io/img/docs/sceneGraph.png)](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneModel_instancing)
+ * [![](http://xeokit.io/img/docs/sceneGraph.png)](https://xeokit.github.io/xeokit-sdk/examples/index.html#sceneRepresentation_SceneModel_instancing)
  *
  * ````javascript
  * import {Viewer, SceneModel} from "xeokit-sdk.es.js";
@@ -17195,7 +17192,7 @@ return this;}/**
  * Let's once more use a ````SceneModel````
  * to build the simple table model, this time exploiting geometry batching.
  *
- *  [![](http://xeokit.io/img/docs/sceneGraph.png)](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneModel_batching)
+ *  [![](http://xeokit.io/img/docs/sceneGraph.png)](https://xeokit.github.io/xeokit-sdk/examples/index.html#sceneRepresentation_SceneModel_batching)
  *
  * ````javascript
  * import {Viewer, SceneModel} from "xeokit-sdk.es.js";
@@ -17463,7 +17460,7 @@ return this;}/**
  * ````
  *
  * Given an {@link Entity}, we can find the object or model of which it is a part, or the objects that comprise it. We can also generate UI
- * components from the metadata, such as the tree view demonstrated in [this demo](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_glTF_OTCConferenceCenter).
+ * components from the metadata, such as the tree view demonstrated in [this demo](https://xeokit.github.io/xeokit-sdk/examples/index.html#BIMOffline_glTF_OTCConferenceCenter).
  *
  * This hierarchy allows us to express the hierarchical structure of a model while representing it in
  * various ways in the 3D scene (such as with ````SceneModel````, which
@@ -17496,7 +17493,7 @@ return this;}/**
  *
  * Note that the axis-aligned World-space boundary (AABB) of our model is ````[ -6, -9, -6, 1000000006, -2.5, 1000000006]````.
  *
- * [![](http://xeokit.io/img/docs/sceneGraph.png)](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneModel_batching)
+ * [![](http://xeokit.io/img/docs/sceneGraph.png)](https://xeokit.github.io/xeokit-sdk/examples/index.html#sceneRepresentation_SceneModel_batching)
  *
  * ````javascript
  * const origin = [100000000, 0, 100000000];
@@ -17593,7 +17590,7 @@ return this;}/**
  *
  * The axis-aligned World-space boundary (AABB) of our model is ````[ -6, -9, -6, 1000000006, -2.5, 1000000006]````.
  *
- * [![](http://xeokit.io/img/docs/sceneGraph.png)](https://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneModel_batching)
+ * [![](http://xeokit.io/img/docs/sceneGraph.png)](https://xeokit.github.io/xeokit-sdk/examples/index.html#sceneRepresentation_SceneModel_batching)
  *
  * ````javascript
  * const origin = [100000000, 0, 100000000];
@@ -18677,9 +18674,9 @@ var _uniquifyPositions=uniquifyPositions({positionsCompressed:geometry.positions
  * In the example below, we'll load the Schependomlaan model, then use
  * a ````LineSet```` to show a grid underneath the model.
  *
- * [<img src="http://xeokit.github.io/xeokit-sdk/assets/images/LineSet_grid.png">](/examples/#LineSet_grid)
+ * [<img src="http://xeokit.github.io/xeokit-sdk/assets/images/LineSet_grid.png">](https://xeokit.github.io/xeokit-sdk/examples/scenegraph/#LineSet_grid)
  *
- * [[Run this example](/examples/#LineSet_grid)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/scenegraph/#LineSet_grid)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin, LineSet, buildGridGeometry} from "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
@@ -18758,10 +18755,10 @@ var _uniquifyPositions=uniquifyPositions({positionsCompressed:geometry.positions
 this.scene._lineSetDestroyed(this);}}]);return LineSet;}(Component);var tempVec3$5=math.vec3();var tempVec3a$9=math.vec3();var tempVec3b$6=math.vec3();var tempVec3c$4=math.vec3();/**
  * {@link Viewer} plugin that saves and loads BCF viewpoints as JSON objects.
  *
- * [<img src="http://xeokit.github.io/xeokit-sdk/assets/images/BCFViewpointsPlugin.png">](/examples/#BCF_SaveViewpoint)
+ * [<img src="http://xeokit.github.io/xeokit-sdk/assets/images/BCFViewpointsPlugin.png">](/examples/index.html#BCF_SaveViewpoint)
  *
- * * [[Example 1: Saving viewer state to a BCF viewpoint](https://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint)]
- * * [[Example 2: Loading viewer state from a BCF viewpoint](https://xeokit.github.io/xeokit-sdk/examples/#BCF_LoadViewpoint)]
+ * * [[Example 1: Saving viewer state to a BCF viewpoint](https://xeokit.github.io/xeokit-sdk/examples/index.html#BCF_SaveViewpoint)]
+ * * [[Example 2: Loading viewer state from a BCF viewpoint](https://xeokit.github.io/xeokit-sdk/examples/index.html#BCF_LoadViewpoint)]
  *
  * ## Overview
  *
@@ -18793,7 +18790,7 @@ this.scene._lineSetDestroyed(this);}}]);return LineSet;}(Component);var tempVec3
  * plan view using a {@link Bitmap}, then use a {@link BCFViewpointsPlugin#getViewpoint}
  * to save a viewpoint to JSON, which we'll log to the JavaScript developer console.
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#BCF_SaveViewpoint)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin,
@@ -19022,7 +19019,7 @@ this.scene._lineSetDestroyed(this);}}]);return LineSet;}(Component);var tempVec3
  * });
  * ````
  *
- * [[Run an example](/examples/#BCF_LoadViewpoint_defaultInvisible)]
+ * [[Run an example](/examples/index.html#BCF_LoadViewpoint_defaultInvisible)]
  *
  * ## Behaviour with XKTLoaderPlugin globalizeObjectIds
  *
@@ -19040,8 +19037,8 @@ this.scene._lineSetDestroyed(this);}}]);return LineSet;}(Component);var tempVec3
  * capture the states of the individual ````Entitys```` that represent the duplicate IFC elements. Take a look at the
  * following two examples to learn more.
  *
- * * [Example: Saving a BCF viewpoint containing duplicate models](https://xeokit.github.io/xeokit-sdk/examples/#BCF_SaveViewpoint_MultipleModels)
- * * [Example: Loading a BCF viewpoint containing duplicate models](https://xeokit.github.io/xeokit-sdk/examples/#BCF_LoadViewpoint_MultipleModels)
+ * * [Example: Saving a BCF viewpoint containing duplicate models](https://xeokit.github.io/xeokit-sdk/examples/index.html#BCF_SaveViewpoint_MultipleModels)
+ * * [Example: Loading a BCF viewpoint containing duplicate models](https://xeokit.github.io/xeokit-sdk/examples/index.html#BCF_LoadViewpoint_MultipleModels)
  *
  * **Caveat:** when loading a BCF viewpoint, we always assume that we have loaded in our target BIM viewer the same models that were
  * loaded in the viewpoint's original authoring application when the viewpoint was created.  In the case of multi-model
@@ -19421,11 +19418,11 @@ this._originDot.setVisible(this._visible&&this._originVisible);this._targetDot.s
      */},{key:"destroy",value:function destroy(){this.deactivate();_get(_getPrototypeOf(DistanceMeasurementsMouseControl.prototype),"destroy",this).call(this);}}]);return DistanceMeasurementsMouseControl;}(DistanceMeasurementsControl);/**
  * {@link Viewer} plugin for measuring point-to-point distances.
  *
- * [<img src="https://user-images.githubusercontent.com/83100/63047331-867a0a80-bed4-11e9-892f-398740013c5f.gif">](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_createWithMouse)
+ * [<img src="https://user-images.githubusercontent.com/83100/63047331-867a0a80-bed4-11e9-892f-398740013c5f.gif">](https://xeokit.github.io/xeokit-sdk/examples/index.html#measurements_distance_createWithMouse)
  *
- * * [[Example 1: Model with distance measurements](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_modelWithMeasurements)]
- * * [[Example 2: Create distance measurements with mouse](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_createWithMouse)]
- * * [[Example 3: Configuring units and scale](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_unitsAndScale)
+ * * [[Example 1: Model with distance measurements](https://xeokit.github.io/xeokit-sdk/examples/index.html#measurements_distance_modelWithMeasurements)]
+ * * [[Example 2: Create distance measurements with mouse](https://xeokit.github.io/xeokit-sdk/examples/measurement/#distance_createWithMouse_snapping)]
+ * * [[Example 3: Configuring units and scale](https://xeokit.github.io/xeokit-sdk/examples/measurement/#distance_unitsAndScale)
  *
  * ## Overview
  *
@@ -19445,7 +19442,7 @@ this._originDot.setVisible(this._visible&&this._originVisible);this._targetDot.s
  * Note how each DistanceMeasurement has ````origin```` and ````target```` endpoints, which each indicate a 3D World-space
  * position on the surface of an {@link Entity}. The endpoints can be attached to the same Entity, or to different Entitys.
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/measurements/#distance_modelWithMeasurements)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/measurement/#distance_modelWithMeasurements)]
  *
  * ````JavaScript
  * import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin} from "xeokit-sdk.es.js";
@@ -19510,7 +19507,7 @@ this._originDot.setVisible(this._visible&&this._originVisible);this._targetDot.s
  * The DistanceMeasurementsMouseControl will then wait for the next click on any Entity, to begin constructing
  * another DistanceMeasurement, and so on, until deactivated again.
  *
- * [[Run example](/examples/measurement/#distance_createWithMouse)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/measurement/#distance_createWithMouse_snapping)]
  *
  * ````JavaScript
  * import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin, DistanceMeasurementsMouseControl, PointerLens} from "xeokit-sdk.es.js";
@@ -19548,7 +19545,7 @@ this._originDot.setVisible(this._visible&&this._originVisible);this._targetDot.s
  *
  * The wires belonging to our DistanceMeasurements show their lengths in Real-space coordinates, in the current unit of measurement. They will dynamically update as we set these configurations.
  *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_unitsAndScale)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#measurements_distance_unitsAndScale)]
  *
  * ````JavaScript
  * const metrics = viewer.scene.metrics;
@@ -19562,7 +19559,7 @@ this._originDot.setVisible(this._visible&&this._originVisible);this._targetDot.s
  * In our fourth example, we'll attach event handlers to our plugin, to catch when the user
  * hovers or right-clicks over our measurements.
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_modelWithMeasurements)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#measurements_distance_modelWithMeasurements)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin, DistanceMeasurementsMouseControl, PointerLens} from "xeokit-sdk.es.js";
@@ -19853,7 +19850,7 @@ return;}if(_this89.pointerLens){_this89.pointerLens.canvasPos=touchMoveCanvasPos
  * {@link Viewer} plugin that makes interaction smoother with large models, by temporarily switching
  * the Viewer to faster, lower-quality rendering modes whenever we interact.
  *
- * [<img src="https://xeokit.io/img/docs/FastNavPlugin/FastNavPlugin.gif">](https://xeokit.github.io/xeokit-sdk/examples/#performance_FastNavPlugin)
+ * [<img src="https://xeokit.io/img/docs/FastNavPlugin/FastNavPlugin.gif">](https://xeokit.github.io/xeokit-sdk/examples/index.html#performance_FastNavPlugin)
  *
  * FastNavPlugin works by hiding specified Viewer rendering features, and optionally scaling the Viewer's canvas
  * resolution, whenever we interact with the Viewer. Then, once we've finished interacting, FastNavPlugin restores those
@@ -19887,7 +19884,7 @@ return;}if(_this89.pointerLens){_this89.pointerLens.canvasPos=touchMoveCanvasPos
  * not continually flipping between low and high quality as we interact. Since we're only rendering ambient shadows when not interacting, we'll also treat ourselves
  * to expensive, high-quality SAO settings, that we wouldn't normally configure for an interactive SAO effect.
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#performance_FastNavPlugin)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#performance_FastNavPlugin)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin, FastNavPlugin} from "xeokit-sdk.es.js";
@@ -20179,7 +20176,7 @@ var isBase64=!!dataUriRegexResult[2];var data=dataUriRegexResult[3];data=window.
  * If we didn't provide that particular translation in our LocaleService, or any translations for that locale,
  * then the NavCubePlugin will just fall back on its own default hard-coded translation, which in this case is "BACK".
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#localization_NavCubePlugin)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#localization_NavCubePlugin)]
  *
  * ````javascript
  * import {Viewer, LocaleService, NavCubePlugin, XKTLoaderPlugin} from "xeokit-sdk.es.js";
@@ -20645,7 +20642,7 @@ comparison=arcLengths[i]-targetArcLength;if(comparison<0){low=i+1;}else if(compa
  *
  * Let's transition the Camera to orthographic projection:
  *
- * [[Run example](/examples/#camera_CameraFlightAnimation_projection)]
+ * [[Run example](/examples/index.html#camera_CameraFlightAnimation_projection)]
  *
  * ````Javascript
  * viewer.cameraFlight.flyTo({ projection: "ortho", () => {
@@ -20801,7 +20798,7 @@ t/=d;return-c*t*(t-2)+b;}},{key:"_easeInCubic",value:function _easeInCubic(t,b,c
  * In the example below, we'll load a model using a {@link GLTFLoaderPlugin}, then animate a {@link Camera}
  * through the frames in a {@link CameraPath}.
  *
- *  * [[Run this example](/examples/#camera_CameraPathAnimation)]
+ *  * [[Run this example](/examples/index.html#camera_CameraPathAnimation)]
  *
  * ````Javascript
  * import {Viewer, GLTFLoaderPlugin, CameraPath, CameraPathAnimation} from "xeokit-sdk.es.js";
@@ -20934,9 +20931,9 @@ t/=d;return-c*t*(t-2)+b;}},{key:"_easeInCubic",value:function _easeInCubic(t,b,c
  *
  * <img src="http://xeokit.io/img/docs/ImagePlane/schependomlaanGoogleSatMapMed.png">
  *
- * [<img src="http://xeokit.io/img/docs/ImagePlane/ImagePlane.png">](/examples/#ImagePlane_groundPlane)
+ * [<img src="http://xeokit.io/img/docs/ImagePlane/ImagePlane.png">](https://xeokit.github.io/xeokit-sdk/examples/scenegraph/#ImagePlane_groundPlane)
  *
- * [[Run this example](/examples/#ImagePlane_groundPlane)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/scenegraph/#ImagePlane_groundPlane)]
  *
  * ````javascript
  * import {Viewer, ImagePlane, XKTLoaderPlugin} from "xeokit-sdk.es.js";
@@ -20984,9 +20981,9 @@ t/=d;return-c*t*(t-2)+b;}},{key:"_easeInCubic",value:function _easeInCubic(t,b,c
  *
  * <img src="http://xeokit.io/img/docs/ImagePlane/schependomlaanPlanViewMed.png">
  *
- * [<img src="http://xeokit.io/img/docs/ImagePlane/ImagePlane_planView.png">](/examples/#ImagePlane_imageInSectionPlane)
+ * [<img src="http://xeokit.io/img/docs/ImagePlane/ImagePlane_planView.png">](https://xeokit.github.io/xeokit-sdk/examples/scenegraph/#ImagePlane_imageInSectionPlane)
  *
- * [[Run this example](/examples/#ImagePlane_imageInSectionPlane)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/scenegraph/#ImagePlane_imageInSectionPlane)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, ImagePlane} from "xeokit-sdk.es.js";
@@ -21217,7 +21214,7 @@ t/=d;return-c*t*(t-2)+b;}},{key:"_easeInCubic",value:function _easeInCubic(t,b,c
  *
  * In the example below we'll replace the {@link Scene}'s default light sources with three World-space PointLights.
  *
- * [[Run this example](/examples/#lights_PointLight_world)]
+ * [[Run this example](/examples/index.html#lights_PointLight_world)]
  *
  * ````javascript
  * import {Viewer, Mesh, buildSphereGeometry, buildPlaneGeometry,
@@ -21538,7 +21535,7 @@ if(this._src){this._loadSrc(this._src);}}},{key:"_loadSrc",value:function _loadS
  *
  * ## Usage
  *
- * [[Run this example](/examples/#markers_SpriteMarker)]
+ * [[Run this example](/examples/index.html#markers_SpriteMarker)]
  *
  * ```` javascript
  * import {Viewer, SpriteMarker } from "./https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
@@ -22530,12 +22527,12 @@ getCanvasPosFromEvent(changedTouches[0],pickController.pickCursorPos);pickContro
  *
  * # Examples
  *
- * * [Orbit Navigation - Duplex Model](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_orbit_Duplex)
- * * [Orbit Navigation - Holter Tower Model](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_orbit_HolterTower)
- * * [First-Person Navigation - Duplex Model](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_firstPerson_Duplex)
- * * [First-Person Navigation - Holter Tower Model](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_firstPerson_HolterTower)
- * * [Plan-view Navigation - Schependomlaan Model](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_planView_Schependomlaan)
- * * [Custom Keyboard Mapping](https://xeokit.github.io/xeokit-sdk/examples/#CameraControl_keyMap)
+ * * [Orbit Navigation - Duplex Model](https://xeokit.github.io/xeokit-sdk/examples/index.html#CameraControl_orbit_Duplex)
+ * * [Orbit Navigation - Holter Tower Model](https://xeokit.github.io/xeokit-sdk/examples/index.html#CameraControl_orbit_HolterTower)
+ * * [First-Person Navigation - Duplex Model](https://xeokit.github.io/xeokit-sdk/examples/index.html#CameraControl_firstPerson_Duplex)
+ * * [First-Person Navigation - Holter Tower Model](https://xeokit.github.io/xeokit-sdk/examples/index.html#CameraControl_firstPerson_HolterTower)
+ * * [Plan-view Navigation - Schependomlaan Model](https://xeokit.github.io/xeokit-sdk/examples/index.html#CameraControl_planView_Schependomlaan)
+ * * [Custom Keyboard Mapping](https://xeokit.github.io/xeokit-sdk/examples/index.html#CameraControl_keyMap)
  * <br><br>
  *
  * # Orbit Mode
@@ -23811,7 +23808,7 @@ if(metaModelData.propertySets){for(var _i480=0,_len96=metaModelData.propertySets
  *
  * * Located in {@link Viewer#metaScene}.
  * * Contains {@link MetaModel}s and {@link MetaObject}s.
- * * [Scene graph example with metadata](http://xeokit.github.io/xeokit-sdk/examples/#sceneRepresentation_SceneGraph_metadata)
+ * * [Scene graph example with metadata](http://xeokit.github.io/xeokit-sdk/examples/index.html#sceneRepresentation_SceneGraph_metadata)
  */var MetaScene=/*#__PURE__*/function(){/**
      * @private
      */function MetaScene(viewer,scene){_classCallCheck(this,MetaScene);/**
@@ -24777,9 +24774,9 @@ id:id,isObject:true// Registers the Entity in Scene#objects
 for(var i=0,len=areas.length;i<len;i++){var _area3=areas[i];var boundaries=_area3.boundaries;for(var j=0,lenj=boundaries.length;j<lenj;j++){var boundary=boundaries[j];if(s>=boundary[0]*scale&&s<=(boundary[0]+boundary[2])*scale&&t>=boundary[1]*scale&&t<=(boundary[1]+boundary[3])*scale){return i;}}}return-1;};this.setAreaHighlighted=function(areaId,highlighted){var area=areas[areaId];if(!area){throw"Area not found: "+areaId;}area.highlighted=!!highlighted;paint();};this.getAreaDir=function(areaId){var area=areas[areaId];if(!area){throw"Unknown area: "+areaId;}return area.dir;};this.getAreaUp=function(areaId){var area=areas[areaId];if(!area){throw"Unknown area: "+areaId;}return area.up;};this.getImage=function(){return this._textureCanvas;};this.destroy=function(){if(this._textureCanvas){this._textureCanvas.parentNode.removeChild(this._textureCanvas);this._textureCanvas=null;}};}var tempVec3a$4=math.vec3();var tempVec3b$1=math.vec3();math.mat4();/**
  * {@link Viewer} plugin that lets us look at the entire {@link Scene} from along a chosen axis or diagonal.
  *
- *  [<img src="https://user-images.githubusercontent.com/83100/55674490-c93c2e00-58b5-11e9-8a28-eb08876947c0.gif">](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_NavCubePlugin)
+ *  [<img src="https://user-images.githubusercontent.com/83100/55674490-c93c2e00-58b5-11e9-8a28-eb08876947c0.gif">](https://xeokit.github.io/xeokit-sdk/examples/index.html#gizmos_NavCubePlugin)
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_NavCubePlugin)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#gizmos_NavCubePlugin)]
  *
  * ## Overview
  *
@@ -25068,7 +25065,7 @@ console.warn('loadFile: HTTP Status 0 received.');if(ok){ok(response);}}else{if(
  *
  * ## Usage
  *
- * [[Run this example](/examples/#loading_OBJ_SportsCar)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/cad/#OBJ_SportsCar_ExplodeModel)]
  *
  * ````javascript
  * import {Viewer, OBJLoaderPlugin} from "xeokit-sdk.es.js";
@@ -25304,9 +25301,9 @@ this.setVisible(cfg.overviewVisible);}/** Called by SectionPlanesPlugin#createSe
      */},{key:"destroy",value:function destroy(){this._viewer.camera.off(this._onViewerCameraMatrix);this._viewer.camera.off(this._onViewerCameraWorldAxis);this._viewer.camera.perspective.off(this._onViewerCameraFOV);this._scene.input.off(this._onInputMouseMove);this._scene.canvas.canvas.removeEventListener("mouseup",this._onCanvasMouseUp);this._scene.canvas.canvas.removeEventListener("mouseout",this._onCanvasMouseOut);this._scene.destroy();}}]);return Overview$1;}();var tempAABB$1=math.AABB3();var tempVec3$1=math.vec3();/**
  * SectionPlanesPlugin is a {@link Viewer} plugin that manages {@link SectionPlane}s.
  *
- * [<img src="https://user-images.githubusercontent.com/83100/57724962-406e9a00-768c-11e9-9f1f-3d178a3ec11f.gif">](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_SectionPlanesPlugin)
+ * [<img src="https://user-images.githubusercontent.com/83100/57724962-406e9a00-768c-11e9-9f1f-3d178a3ec11f.gif">](https://xeokit.github.io/xeokit-sdk/examples/index.html#gizmos_SectionPlanesPlugin)
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_SectionPlanesPlugin)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#gizmos_SectionPlanesPlugin)]
  *
  * ## Overview
  *
@@ -25996,9 +25993,9 @@ this.setVisible(cfg.overviewVisible);}/** Called by SectionPlanesPlugin#createSe
      */},{key:"destroy",value:function destroy(){this._viewer.camera.off(this._onViewerCameraMatrix);this._viewer.camera.off(this._onViewerCameraWorldAxis);this._viewer.camera.perspective.off(this._onViewerCameraFOV);this._scene.input.off(this._onInputMouseMove);this._scene.canvas.canvas.removeEventListener("mouseup",this._onCanvasMouseUp);this._scene.canvas.canvas.removeEventListener("mouseout",this._onCanvasMouseOut);this._scene.destroy();}}]);return Overview;}();var tempAABB=math.AABB3();var tempVec3=math.vec3();/**
  * FaceAlignedSectionPlanesPlugin is a {@link Viewer} plugin that creates and edits face-aligned {@link SectionPlane}s.
  *
- * [<img src="https://xeokit.github.io/xeokit-sdk/assets/images/FaceAlignedSectionPlanesPlugin.gif">](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_FaceAlignedSectionPlanesPlugin)
+ * [<img src="https://xeokit.github.io/xeokit-sdk/assets/images/FaceAlignedSectionPlanesPlugin.gif">](https://xeokit.github.io/xeokit-sdk/examples/index.html#gizmos_FaceAlignedSectionPlanesPlugin)
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_FaceAlignedSectionPlanesPlugin)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/slicing/#FaceAlignedSectionPlanesPlugin)]
  *
  * ## Overview
  *
@@ -26295,7 +26292,7 @@ addMesh(modelNode,positions,normals,colors,material,options);}function addMesh(m
  * we'll use the {@link CameraFlightAnimation} to fly the {@link Camera} to look at boundary of the model. We'll
  * then get the model's {@link Entity} from the {@link Scene} and highlight the whole model.
  *
- *  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_STL_SpurGear)]
+ *  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_STL_SpurGear)]
  *
  * ````javascript
  * // Create a xeokit Viewer
@@ -26340,7 +26337,7 @@ addMesh(modelNode,positions,normals,colors,material,options);}function addMesh(m
  * file data straight into the {@link STLLoaderPlugin#load} method. In the example below, to show how it's done, we'll pre-load
  * our STL file data, then pass it straight into that method.
  *
- *  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_STL_dataAsParam)]
+ *  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_STL_dataAsParam)]
  *
  * ````javascript
  * loadSTL("./models/stl/binary/spurGear.stl", (stlData) =>{
@@ -26383,7 +26380,7 @@ addMesh(modelNode,positions,normals,colors,material,options);}function addMesh(m
  * custom data source object, through which it can load STL files. For this example, our data source just loads
  * them via HTTP, for simplicity. Once we've created the STLLoaderPlugin, we'll load our STL file as before.
  *
- *  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_STL_dataSource)]
+ *  * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_STL_dataSource)]
  *
  * ````javascript
  * // Our custom STL data access strategy - implementation happens to be the same as STLDefaultDataSource
@@ -26483,9 +26480,9 @@ addMesh(modelNode,positions,normals,colors,material,options);}function addMesh(m
  * @desc A {@link Viewer} plugin that provides an HTML tree view to navigate the IFC elements in models.
  * <br>
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_WestRiverSideHospital" style="border: 1px solid black;"><img src="http://xeokit.io/img/docs/TreeViewPlugin/TreeViewPlugin.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#BIMOffline_XKT_WestRiverSideHospital" style="border: 1px solid black;"><img src="http://xeokit.io/img/docs/TreeViewPlugin/TreeViewPlugin.png"></a>
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_WestRiverSideHospital)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#BIMOffline_XKT_WestRiverSideHospital)]
  *
  * ## Overview
  *
@@ -26509,7 +26506,7 @@ addMesh(modelNode,positions,normals,colors,material,options);}function addMesh(m
  * Then we'll use an {@link XKTLoaderPlugin} to load the Schependomlaan model from an
  * [.xkt file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan).
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_Schependomlaan)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/navigation/#TreeViewPlugin_Containment)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin, TreeViewPlugin} from "xeokit-sdk.es.js";
@@ -26691,7 +26688,7 @@ addMesh(modelNode,positions,normals,colors,material,options);}function addMesh(m
  *
  * Let's use {@link ContextMenu} to show a simple context menu for the node we clicked.
  *
- * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom)]
+ * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/index.html#ContextMenu_Canvas_TreeViewPlugin_Custom)]
  *
  * ````javascript
  * import {ContextMenu} from "../src/extras/ContextMenu/ContextMenu.js";
@@ -26782,7 +26779,7 @@ addMesh(modelNode,positions,normals,colors,material,options);}function addMesh(m
  * Let's register a callback to isolate and fit-to-view the {@link Entity}(s) represented by the node. This callback is
  * going to X-ray all the other Entitys, fly the camera to fit the Entity(s) for the clicked node, then hide the other Entitys.
  *
- * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/#ContextMenu_Canvas_TreeViewPlugin_Custom)]
+ * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/index.html#ContextMenu_Canvas_TreeViewPlugin_Custom)]
  *
  * ````javascript
  * treeView.on("nodeTitleClicked", (e) => {
@@ -27239,9 +27236,9 @@ var geometryArrays=geometryArraysCache[geometryId];if(!geometryArrays){geometryA
 var _primitiveType4=eachGeometryPrimitiveType[_geometryIndex4];var primitiveName=void 0;var _geometryPositions4=void 0;var geometryNormals=void 0;var geometryUVs=void 0;var geometryColors=void 0;var geometryIndices=void 0;var geometryEdgeIndices=void 0;var _geometryValid3=false;switch(_primitiveType4){case 0:primitiveName="solid";_geometryPositions4=positions.subarray(eachGeometryPositionsPortion[_geometryIndex4],atLastGeometry?positions.length:eachGeometryPositionsPortion[_geometryIndex4+1]);geometryNormals=normals.subarray(eachGeometryNormalsPortion[_geometryIndex4],atLastGeometry?normals.length:eachGeometryNormalsPortion[_geometryIndex4+1]);geometryUVs=uvs.subarray(eachGeometryUVsPortion[_geometryIndex4],atLastGeometry?uvs.length:eachGeometryUVsPortion[_geometryIndex4+1]);geometryIndices=indices.subarray(eachGeometryIndicesPortion[_geometryIndex4],atLastGeometry?indices.length:eachGeometryIndicesPortion[_geometryIndex4+1]);geometryEdgeIndices=edgeIndices.subarray(eachGeometryEdgeIndicesPortion[_geometryIndex4],atLastGeometry?edgeIndices.length:eachGeometryEdgeIndicesPortion[_geometryIndex4+1]);_geometryValid3=_geometryPositions4.length>0&&geometryIndices.length>0;break;case 1:primitiveName="surface";_geometryPositions4=positions.subarray(eachGeometryPositionsPortion[_geometryIndex4],atLastGeometry?positions.length:eachGeometryPositionsPortion[_geometryIndex4+1]);geometryNormals=normals.subarray(eachGeometryNormalsPortion[_geometryIndex4],atLastGeometry?normals.length:eachGeometryNormalsPortion[_geometryIndex4+1]);geometryUVs=uvs.subarray(eachGeometryUVsPortion[_geometryIndex4],atLastGeometry?uvs.length:eachGeometryUVsPortion[_geometryIndex4+1]);geometryIndices=indices.subarray(eachGeometryIndicesPortion[_geometryIndex4],atLastGeometry?indices.length:eachGeometryIndicesPortion[_geometryIndex4+1]);geometryEdgeIndices=edgeIndices.subarray(eachGeometryEdgeIndicesPortion[_geometryIndex4],atLastGeometry?edgeIndices.length:eachGeometryEdgeIndicesPortion[_geometryIndex4+1]);_geometryValid3=_geometryPositions4.length>0&&geometryIndices.length>0;break;case 2:primitiveName="points";_geometryPositions4=positions.subarray(eachGeometryPositionsPortion[_geometryIndex4],atLastGeometry?positions.length:eachGeometryPositionsPortion[_geometryIndex4+1]);geometryColors=colors.subarray(eachGeometryColorsPortion[_geometryIndex4],atLastGeometry?colors.length:eachGeometryColorsPortion[_geometryIndex4+1]);_geometryValid3=_geometryPositions4.length>0;break;case 3:primitiveName="lines";_geometryPositions4=positions.subarray(eachGeometryPositionsPortion[_geometryIndex4],atLastGeometry?positions.length:eachGeometryPositionsPortion[_geometryIndex4+1]);geometryIndices=indices.subarray(eachGeometryIndicesPortion[_geometryIndex4],atLastGeometry?indices.length:eachGeometryIndicesPortion[_geometryIndex4+1]);_geometryValid3=_geometryPositions4.length>0&&geometryIndices.length>0;break;case 4:primitiveName="lines";_geometryPositions4=positions.subarray(eachGeometryPositionsPortion[_geometryIndex4],atLastGeometry?positions.length:eachGeometryPositionsPortion[_geometryIndex4+1]);geometryIndices=lineStripToLines(_geometryPositions4,indices.subarray(eachGeometryIndicesPortion[_geometryIndex4],atLastGeometry?indices.length:eachGeometryIndicesPortion[_geometryIndex4+1]));_geometryValid3=_geometryPositions4.length>0&&geometryIndices.length>0;break;default:continue;}if(_geometryValid3){sceneModel.createMesh(utils.apply(meshDefaults,{id:meshId,textureSetId:_textureSetId,origin:tileCenter,primitive:primitiveName,positionsCompressed:_geometryPositions4,normalsCompressed:geometryNormals,uv:geometryUVs&&geometryUVs.length>0?geometryUVs:null,colorsCompressed:geometryColors,indices:geometryIndices,edgeIndices:geometryEdgeIndices,positionsDecodeMatrix:tileDecodeMatrix,color:meshColor,metallic:meshMetallic,roughness:meshRoughness,opacity:meshOpacity}));meshIds.push(meshId);}}}if(meshIds.length>0){sceneModel.createEntity(utils.apply(entityDefaults,{id:entityId,isObject:true,meshIds:meshIds}));}}}}function lineStripToLines(positions,indices){var linesIndices=[];if(indices.length>1){for(var _i564=0,len=indices.length-1;_i564<len;_i564++){linesIndices.push(indices[_i564]);linesIndices.push(indices[_i564+1]);}}else if(positions.length>1){for(var _i565=0,_len117=positions.length/3-1;_i565<_len117;_i565++){linesIndices.push(_i565);linesIndices.push(_i565+1);}}return linesIndices;}/** @private */var ParserV10={version:10,parse:function parse(viewer,options,elements,sceneModel,metaModel,manifestCtx){var deflatedData=extract(elements);var inflatedData=inflate(deflatedData);load(viewer,options,inflatedData,sceneModel,metaModel,manifestCtx);}};var parsers={};parsers[ParserV1.version]=ParserV1;parsers[ParserV2.version]=ParserV2;parsers[ParserV3.version]=ParserV3;parsers[ParserV4.version]=ParserV4;parsers[ParserV5.version]=ParserV5;parsers[ParserV6.version]=ParserV6;parsers[ParserV7.version]=ParserV7;parsers[ParserV8.version]=ParserV8;parsers[ParserV9.version]=ParserV9;parsers[ParserV10.version]=ParserV10;/**
  * {@link Viewer} plugin that loads models from xeokit's optimized *````.XKT````* format.
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_OTCConferenceCenter"><img src="http://xeokit.io/img/docs/XKTLoaderPlugin/XKTLoaderPlugin.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_XKT_OTCConferenceCenter"><img src="http://xeokit.io/img/docs/XKTLoaderPlugin/XKTLoaderPlugin.png"></a>
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_OTCConferenceCenter)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_XKT_OTCConferenceCenter)]
  *
  * # Overview
  *
@@ -27297,7 +27294,7 @@ var _primitiveType4=eachGeometryPrimitiveType[_geometryIndex4];var primitiveName
  *
  * Read more about this example in the user guide on [Viewing BIM Models Offline](https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-xeokit-c373e48bc4094ff5b6e5c5700ff580ee).
  *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_metadata_Schependomlaan)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#BIMOffline_XKT_metadata_Schependomlaan)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin} from "xeokit-sdk.es.js";
@@ -27384,9 +27381,9 @@ var _primitiveType4=eachGeometryPrimitiveType[_geometryIndex4];var primitiveName
  * KTX2TextureTranscoder altogether, and let the XKTLoaderPlugin use its internal default KTX2TextureTranscoder, which is configured to
  * load the Codec from the CDN. We'll stick with loading our own Codec, in case we want to run our app without an Internet connection.
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Textures_HousePlan"><img src="https://xeokit.github.io/xeokit-sdk/assets/images/xktWithTextures.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/buildings/#xkt_vbo_textures_HousePlan"><img src="https://xeokit.github.io/xeokit-sdk/assets/images/xktWithTextures.png"></a>
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Textures_HousePlan)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/buildings/#xkt_vbo_textures_HousePlan)]
  *
  * ````javascript
  * const viewer = new Viewer({
@@ -27422,8 +27419,6 @@ var _primitiveType4=eachGeometryPrimitiveType[_geometryIndex4];var primitiveName
  * In the example below, we'll scale our model to half its size, rotate it 90 degrees about its local X-axis, then
  * translate it 100 units along its X axis.
  *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Duplex_transform)]
- *
  * ````javascript
  * xktLoader.load({
  *      src: "./models/xkt/Duplex.ifc.xkt",
@@ -27439,8 +27434,6 @@ var _primitiveType4=eachGeometryPrimitiveType[_geometryIndex4];var primitiveName
  *
  * In the example below, we'll load only the objects that represent walls.
  *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_includeTypes)]
- *
  * ````javascript
  * const model2 = xktLoader.load({
  *     id: "myModel2",
@@ -27452,8 +27445,6 @@ var _primitiveType4=eachGeometryPrimitiveType[_geometryIndex4];var primitiveName
  * We can also load only those objects that **don't** have the specified IFC types.
  *
  * In the example below, we'll load only the objects that do not represent empty space.
- *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_excludeTypes)]
  *
  * ````javascript
  * const model3 = xktLoader.load({
@@ -27475,8 +27466,6 @@ var _primitiveType4=eachGeometryPrimitiveType[_geometryIndex4];var primitiveName
  * <br>
  * In the example below, we'll load a model, while configuring ````IfcSpace```` elements to be always initially invisible,
  * and ````IfcWindow```` types to be always translucent blue.
- *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_objectDefaults)]
  *
  * ````javascript
  * const myObjectDefaults = {
@@ -27538,8 +27527,6 @@ var _primitiveType4=eachGeometryPrimitiveType[_geometryIndex4];var primitiveName
  * In the example below, we'll customize the way XKTLoaderPlugin loads the files by configuring it with our own data source
  * object. For simplicity, our custom data source example also uses HTTP, using a couple of xeokit utility functions.
  *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_dataSource)]
- *
  * ````javascript
  * import {utils} from "xeokit-sdk.es.js";
  *
@@ -27590,7 +27577,7 @@ var _primitiveType4=eachGeometryPrimitiveType[_geometryIndex4];var primitiveName
  *
  * As shown in the example below, we do this by setting {@link XKTLoaderPlugin#globalizeObjectIds} ````true```` before we load our models.
  *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#TreeViewPlugin_Containment_MultipleModels)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#TreeViewPlugin_Containment_MultipleModels)]
  *
  * ````javascript
  * xktLoader.globalizeObjectIds = true;
@@ -27695,6 +27682,8 @@ var _primitiveType4=eachGeometryPrimitiveType[_geometryIndex4];var primitiveName
  *
  * Now, to load all those XKT files into a single SceneModel and MetaModel in one operation, we pass a path to the XKT
  * manifest to `XKTLoaderPlugin.load`, as shown in the example below:
+ *
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/buildings/#xkt_manifest_KarhumakiBridge)]
  *
  * ````javascript
  * import {
@@ -28184,9 +28173,9 @@ var json=xmlToJSON(xmlDoc,{});ok(xmlDoc,json);});};function xmlToJSON(node,attri
 });};};function loadZIP(src,ok,err){var zip=new ZIP();zip.load(src,function(){ok(zip);},function(errMsg){err("Error loading ZIP archive: "+errMsg);});}function stripURN(str){var subStr="urn:3DXML:";return str.indexOf(subStr)===0?str.substring(subStr.length):str;}function getIDFromURI(str){var hashIdx=str.lastIndexOf("#");return hashIdx!==-1?str.substring(hashIdx+1):str;}/**
  * {@link Viewer} plugin that loads models from [3DXML](https://en.wikipedia.org/wiki/3DXML) files.
  *
- * [<img src="https://xeokit.io/img/docs/XML3DLoaderPlugin/XML3DPluginTreeView.png">](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_TreeView)
+ * [<img src="https://xeokit.io/img/docs/XML3DLoaderPlugin/XML3DPluginTreeView.png">](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_3DXML_TreeView)
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_TreeView)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_3DXML_TreeView)]
  *
  * ## Overview
  *
@@ -28210,7 +28199,7 @@ var json=xmlToJSON(xmlDoc,{});ok(xmlDoc,json);});};function xmlToJSON(node,attri
  * we'll use the {@link CameraFlightAnimation} to fly the {@link Camera} to look at boundary of the model. We'll
  * then get the model's {@link Entity} from the {@link Scene} and highlight the whole model.
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_Widget)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_3DXML_Widget)]
  *
  * ````javascript
  * // Create a xeokit Viewer
@@ -28301,7 +28290,7 @@ var json=xmlToJSON(xmlDoc,{});ok(xmlDoc,json);});};function xmlToJSON(node,attri
  * does not make sense because XML3DLoaderPlugin will set each {@link MetaObject#type} to "Default", and "storeys"
  * does not make sense because that requires some of the MetaObject#type values to be "IfcBuildingStorey".
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_TreeView)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_3DXML_TreeView)]
  *
  * ## Material Type
  *
@@ -28311,9 +28300,9 @@ var json=xmlToJSON(xmlDoc,{});ok(xmlDoc,json);});};function xmlToJSON(node,attri
  *
  * | Material Type | Material Components Loaded  | Description | Example |
  * |:--------:|:----:|:-----:|:-----:|
- * | "PhongMaterial" (default) | {@link PhongMaterial}  | Non-physically-correct Blinn-Phong shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Phong) |
- * | "MetallicMaterial" | {@link MetallicMaterial} | Physically-accurate specular-glossiness shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Metallic) |
- * | "SpecularMaterial" | {@link SpecularMaterial} | Physically-accurate metallic-roughness shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Specular) |
+ * | "PhongMaterial" (default) | {@link PhongMaterial}  | Non-physically-correct Blinn-Phong shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_3DXML_materialType_Phong) |
+ * | "MetallicMaterial" | {@link MetallicMaterial} | Physically-accurate specular-glossiness shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_3DXML_materialType_Metallic) |
+ * | "SpecularMaterial" | {@link SpecularMaterial} | Physically-accurate metallic-roughness shading model | [Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_3DXML_materialType_Specular) |
  *
  * <br>
  * Let's load our model again, this time converting the 3DXML Blinn-Phong materials to {@link SpecularMaterial}s:
@@ -28326,7 +28315,7 @@ var json=xmlToJSON(xmlDoc,{});ok(xmlDoc,json);});};function xmlToJSON(node,attri
  * });
  * ````
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_3DXML_materialType_Specular)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_3DXML_materialType_Specular)]
  *
  * @class XML3DLoaderPlugin
  */var XML3DLoaderPlugin=/*#__PURE__*/function(_Plugin18){_inherits(XML3DLoaderPlugin,_Plugin18);var _super161=_createSuper(XML3DLoaderPlugin);/**
@@ -28376,9 +28365,9 @@ var json=xmlToJSON(xmlDoc,{});ok(xmlDoc,json);});};function xmlToJSON(node,attri
 var isBase64=!!dataUriRegexResult[2];var data=dataUriRegexResult[3];data=window.decodeURIComponent(data);if(isBase64){data=window.atob(data);}try{var buffer=new ArrayBuffer(data.length);var view=new Uint8Array(buffer);for(var i=0;i<data.length;i++){view[i]=data.charCodeAt(i);}ok(buffer);}catch(errMsg){error(errMsg);}}else{var request=new XMLHttpRequest();request.open('GET',src,true);request.responseType='arraybuffer';request.onreadystatechange=function(){if(request.readyState===4){if(request.status===200){ok(request.response);}else{error('getXKT error : '+request.response);}}};request.send(null);}}}]);return WebIFCDefaultDataSource;}();/**
  * {@link Viewer} plugin that uses [web-ifc](https://github.com/tomvandig/web-ifc) to load BIM models directly from IFC files.
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_WebIFCLoaderPlugin_Duplex"><img src="https://xeokit.io/img/docs/WebIFCLoaderPlugin/WebIFCLoaderPlugin.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#BIMOffline_WebIFCLoaderPlugin_Duplex"><img src="https://xeokit.io/img/docs/WebIFCLoaderPlugin/WebIFCLoaderPlugin.png"></a>
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_WebIFCLoaderPlugin_Duplex)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#BIMOffline_WebIFCLoaderPlugin_Duplex)]
  *
  * ## Overview
  *
@@ -28422,7 +28411,7 @@ var isBase64=!!dataUriRegexResult[2];var data=dataUriRegexResult[3];data=window.
  * Since this model contains IFC types, the WebIFCLoaderPlugin will set the initial appearance of each object
  * {@link Entity} according to its IFC type in {@link WebIFCLoaderPlugin#objectDefaults}.
  *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_WebIFCLoaderPlugin_isolateStorey)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#BIMOffline_WebIFCLoaderPlugin_isolateStorey)]
  *
  * ````javascript
  * import {Viewer, WebIFCLoaderPlugin} from "xeokit-sdk.es.js";
@@ -28889,9 +28878,9 @@ var headerBlockItems=[{item:'FileSignature',format:'char',size:4},{item:'FileSou
 /**
  * {@link Viewer} plugin that loads lidar point cloud geometry from LAS files.
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_LASLoaderPlugin_Autzen"><img src="https://xeokit.github.io/xeokit-sdk/assets/images/autzen.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_LASLoaderPlugin_Autzen"><img src="https://xeokit.github.io/xeokit-sdk/assets/images/autzen.png"></a>
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_LASLoaderPlugin_Autzen)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_LASLoaderPlugin_Autzen)]
  *
  * ## Summary
  *
@@ -28930,7 +28919,7 @@ var headerBlockItems=[{item:'FileSignature',format:'char',size:4},{item:'FileSou
  * a [LAS file](/assets/models/las/). Once the model has
  * loaded, we'll then find its {@link MetaModel}, and the {@link MetaObject} and {@link Entity} that represent its point cloud.
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_LASLoaderPlugin_Autzen)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_LASLoaderPlugin_Autzen)]
  *
  * ````javascript
  * import {Viewer, LASLoaderPlugin} from "xeokit-sdk.es.js";
@@ -29214,9 +29203,9 @@ earcut.deviation=function(data,holeIndices,dim,triangles){var hasHoles=holeIndic
 earcut.flatten=function(data){var dim=data[0][0].length,result={vertices:[],holes:[],dimensions:dim},holeIndex=0;for(var i=0;i<data.length;i++){for(var j=0;j<data[i].length;j++){for(var d=0;d<dim;d++){result.vertices.push(data[i][j][d]);}}if(i>0){holeIndex+=data[i-1].length;result.holes.push(holeIndex);}}return result;};var tempVec2a=math.vec2();var tempVec3a=math.vec3();var tempVec3b=math.vec3();var tempVec3c=math.vec3();/**
  * {@link Viewer} plugin that loads models from CityJSON files.
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_CityJSONLoaderPlugin_Railway"><img src="https://xeokit.io/img/docs/CityJSONLoaderPlugin/CityJSONLoaderPlugin.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_CityJSONLoaderPlugin_Railway"><img src="https://xeokit.io/img/docs/CityJSONLoaderPlugin/CityJSONLoaderPlugin.png"></a>
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_CityJSONLoaderPlugin_Railway)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_CityJSONLoaderPlugin_Railway)]
  *
  * ## Overview
  *
@@ -29256,7 +29245,7 @@ earcut.flatten=function(data){var dim=data[0][0].length,result={vertices:[],hole
  * We'll also scale our model to half its size, rotate it 90 degrees about its local X-axis, then
  * translate it 100 units along its X axis.
  *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_CityJSONLoaderPlugin_Railway)]
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/index.html#loading_CityJSONLoaderPlugin_Railway)]
  *
  * ````javascript
  * import {Viewer, CityJSONLoaderPlugin} from "xeokit-sdk.es.js";
