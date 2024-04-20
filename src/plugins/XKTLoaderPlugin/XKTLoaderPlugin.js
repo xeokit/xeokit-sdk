@@ -178,9 +178,9 @@ parsers[ParserV10.version] = ParserV10;
  * KTX2TextureTranscoder altogether, and let the XKTLoaderPlugin use its internal default KTX2TextureTranscoder, which is configured to
  * load the Codec from the CDN. We'll stick with loading our own Codec, in case we want to run our app without an Internet connection.
  *
- * <a href="https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Textures_HousePlan"><img src="https://xeokit.github.io/xeokit-sdk/assets/images/xktWithTextures.png"></a>
+ * <a href="https://xeokit.github.io/xeokit-sdk/examples/buildings/#xkt_vbo_textures_HousePlan"><img src="https://xeokit.github.io/xeokit-sdk/assets/images/xktWithTextures.png"></a>
  *
- * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Textures_HousePlan)]
+ * * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/buildings/#xkt_vbo_textures_HousePlan)]
  *
  * ````javascript
  * const viewer = new Viewer({
@@ -216,8 +216,6 @@ parsers[ParserV10.version] = ParserV10;
  * In the example below, we'll scale our model to half its size, rotate it 90 degrees about its local X-axis, then
  * translate it 100 units along its X axis.
  *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_Duplex_transform)]
- *
  * ````javascript
  * xktLoader.load({
  *      src: "./models/xkt/Duplex.ifc.xkt",
@@ -233,8 +231,6 @@ parsers[ParserV10.version] = ParserV10;
  *
  * In the example below, we'll load only the objects that represent walls.
  *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_includeTypes)]
- *
  * ````javascript
  * const model2 = xktLoader.load({
  *     id: "myModel2",
@@ -246,8 +242,6 @@ parsers[ParserV10.version] = ParserV10;
  * We can also load only those objects that **don't** have the specified IFC types.
  *
  * In the example below, we'll load only the objects that do not represent empty space.
- *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_excludeTypes)]
  *
  * ````javascript
  * const model3 = xktLoader.load({
@@ -269,8 +263,6 @@ parsers[ParserV10.version] = ParserV10;
  * <br>
  * In the example below, we'll load a model, while configuring ````IfcSpace```` elements to be always initially invisible,
  * and ````IfcWindow```` types to be always translucent blue.
- *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_objectDefaults)]
  *
  * ````javascript
  * const myObjectDefaults = {
@@ -331,8 +323,6 @@ parsers[ParserV10.version] = ParserV10;
  *
  * In the example below, we'll customize the way XKTLoaderPlugin loads the files by configuring it with our own data source
  * object. For simplicity, our custom data source example also uses HTTP, using a couple of xeokit utility functions.
- *
- * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#loading_XKT_dataSource)]
  *
  * ````javascript
  * import {utils} from "xeokit-sdk.es.js";
@@ -489,6 +479,8 @@ parsers[ParserV10.version] = ParserV10;
  *
  * Now, to load all those XKT files into a single SceneModel and MetaModel in one operation, we pass a path to the XKT
  * manifest to `XKTLoaderPlugin.load`, as shown in the example below:
+ *
+ * * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/buildings/#xkt_manifest_KarhumakiBridge)]
  *
  * ````javascript
  * import {

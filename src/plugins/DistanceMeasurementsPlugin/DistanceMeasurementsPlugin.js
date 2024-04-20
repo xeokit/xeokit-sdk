@@ -8,8 +8,8 @@ import {DistanceMeasurementsMouseControl} from "./DistanceMeasurementsMouseContr
  * [<img src="https://user-images.githubusercontent.com/83100/63047331-867a0a80-bed4-11e9-892f-398740013c5f.gif">](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_createWithMouse)
  *
  * * [[Example 1: Model with distance measurements](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_modelWithMeasurements)]
- * * [[Example 2: Create distance measurements with mouse](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_createWithMouse)]
- * * [[Example 3: Configuring units and scale](https://xeokit.github.io/xeokit-sdk/examples/#measurements_distance_unitsAndScale)
+ * * [[Example 2: Create distance measurements with mouse](https://xeokit.github.io/xeokit-sdk/examples/measurement/#distance_createWithMouse_snapping)]
+ * * [[Example 3: Configuring units and scale](https://xeokit.github.io/xeokit-sdk/examples/measurement/#distance_unitsAndScale)
  *
  * ## Overview
  *
@@ -29,7 +29,7 @@ import {DistanceMeasurementsMouseControl} from "./DistanceMeasurementsMouseContr
  * Note how each DistanceMeasurement has ````origin```` and ````target```` endpoints, which each indicate a 3D World-space
  * position on the surface of an {@link Entity}. The endpoints can be attached to the same Entity, or to different Entitys.
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/measurements/#distance_modelWithMeasurements)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/measurement/#distance_modelWithMeasurements)]
  *
  * ````JavaScript
  * import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin} from "xeokit-sdk.es.js";
@@ -94,7 +94,7 @@ import {DistanceMeasurementsMouseControl} from "./DistanceMeasurementsMouseContr
  * The DistanceMeasurementsMouseControl will then wait for the next click on any Entity, to begin constructing
  * another DistanceMeasurement, and so on, until deactivated again.
  *
- * [[Run example](/examples/measurement/#distance_createWithMouse)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/measurement/#distance_createWithMouse_snapping)]
  *
  * ````JavaScript
  * import {Viewer, XKTLoaderPlugin, DistanceMeasurementsPlugin, DistanceMeasurementsMouseControl, PointerLens} from "xeokit-sdk.es.js";

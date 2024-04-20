@@ -5,7 +5,7 @@
  * This component is used by {@link DistanceMeasurementsControl} and {@link AngleMeasurementsControl}
  * to help position the pointer when snap-to-vertex or snap-toedge is enabled.
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/measurements/#distance_modelWithMeasurements)]
+ * [[Run an example](https://xeokit.github.io/xeokit-sdk/examples/measurement/#distance_createWithMouse_snapping)]
  *
  * ````JavaScript
  *

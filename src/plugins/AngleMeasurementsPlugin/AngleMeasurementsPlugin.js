@@ -8,7 +8,7 @@ import {AngleMeasurementsMouseControl} from "./AngleMeasurementsMouseControl.js"
  * [<img src="https://user-images.githubusercontent.com/83100/63641903-61488180-c6b6-11e9-8e00-895b9d16dc4b.gif">](https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_createWithMouse)
  *
  * * [[Example 1: Model with angle measurements](https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_modelWithMeasurements)]
- * * [[Example 2: Create angle measurements with mouse](https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_createWithMouse)]
+ * * [[Example 2: Create angle measurements with mouse](https://xeokit.github.io/xeokit-sdk/examples/measurement/#angle_createWithMouse_snapping)]
  *
  * ## Overview
  *
@@ -99,7 +99,7 @@ import {AngleMeasurementsMouseControl} from "./AngleMeasurementsMouseControl.js"
  * The AngleMeasurementControl will then wait for the next click on any Entity, to begin constructing
  * another AngleMeasurement, and so on, until deactivated again.
  *
- * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/#measurements_angle_createWithMouse)]
+ * [[Run example](https://xeokit.github.io/xeokit-sdk/examples/measurement/#angle_createWithMouse_snapping)]
  *
  * ````JavaScript
  * import {Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin, AngleMeasurementsMouseControl, PointerLens} from "xeokit-sdk.es.js";

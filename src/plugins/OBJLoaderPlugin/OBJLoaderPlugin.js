@@ -22,7 +22,7 @@ import {OBJSceneGraphLoader} from "./OBJSceneGraphLoader.js";
  *
  * ## Usage
  *
- * [[Run this example](/examples/#loading_OBJ_SportsCar)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/cad/#OBJ_SportsCar_ExplodeModel)]
  *
  * ````javascript
  * import {Viewer, OBJLoaderPlugin} from "xeokit-sdk.es.js";

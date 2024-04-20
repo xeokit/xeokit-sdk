@@ -33,7 +33,7 @@ const treeViews = [];
  * Then we'll use an {@link XKTLoaderPlugin} to load the Schependomlaan model from an
  * [.xkt file](https://github.com/xeokit/xeokit-sdk/tree/master/examples/models/xkt/schependomlaan).
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_XKT_Schependomlaan)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/navigation/#TreeViewPlugin_Containment)]
  *
  * ````javascript
  * import {Viewer, XKTLoaderPlugin, TreeViewPlugin} from "xeokit-sdk.es.js";

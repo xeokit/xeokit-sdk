@@ -12,7 +12,7 @@ const tempVec3 = math.vec3();
  *
  * [<img src="https://xeokit.github.io/xeokit-sdk/assets/images/FaceAlignedSectionPlanesPlugin.gif">](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_FaceAlignedSectionPlanesPlugin)
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/#gizmos_FaceAlignedSectionPlanesPlugin)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/slicing/#FaceAlignedSectionPlanesPlugin)]
  *
  * ## Overview
  *
