@@ -245,13 +245,16 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                             this._currentAngleMeasurement = plugin.createMeasurement({
                                 id: math.createUUID(),
                                 origin: {
-                                    worldPos: snapPickResult.worldPos
+                                    worldPos: snapPickResult.worldPos,
+                                    entity: snapPickResult.entity
                                 },
                                 corner: {
-                                    worldPos: snapPickResult.worldPos
+                                    worldPos: snapPickResult.worldPos,
+                                    entity: snapPickResult.entity
                                 },
                                 target: {
-                                    worldPos: snapPickResult.worldPos
+                                    worldPos: snapPickResult.worldPos,
+                                    entity: snapPickResult.entity
                                 }
                             });
                             this._currentAngleMeasurement.clickable = false;
@@ -320,6 +323,7 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                                 this.pointerCircle.start(snapPickResult.snappedCanvasPos);
                                 pointerWorldPos.set(snapPickResult.worldPos);
                                 this._currentAngleMeasurement.corner.worldPos = snapPickResult.worldPos;
+                                this._currentAngleMeasurement.corner.entity = snapPickResult.entity;
                                 this._currentAngleMeasurement.originVisible = true;
                                 this._currentAngleMeasurement.originWireVisible = true;
                                 this._currentAngleMeasurement.cornerVisible = true;
@@ -341,6 +345,7 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                                     this.pointerCircle.start(pickResult.canvasPos);
                                     pointerWorldPos.set(pickResult.worldPos);
                                     this._currentAngleMeasurement.corner.worldPos = pickResult.worldPos;
+                                    this._currentAngleMeasurement.corner.entity = pickResult.entity;
                                     this._currentAngleMeasurement.originVisible = true;
                                     this._currentAngleMeasurement.originWireVisible = true;
                                     this._currentAngleMeasurement.cornerVisible = true;
@@ -411,6 +416,7 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                                 this.pointerCircle.start(snapPickResult.snappedCanvasPos);
                                 pointerWorldPos.set(snapPickResult.worldPos);
                                 this._currentAngleMeasurement.target.worldPos = snapPickResult.worldPos;
+                                this._currentAngleMeasurement.target.entity = snapPickResult.entity;
                                 this._currentAngleMeasurement.originVisible = true;
                                 this._currentAngleMeasurement.originWireVisible = true;
                                 this._currentAngleMeasurement.cornerVisible = true;
@@ -432,6 +438,7 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                                     this.pointerCircle.start(pickResult.canvasPos);
                                     pointerWorldPos.set(pickResult.worldPos);
                                     this._currentAngleMeasurement.target.worldPos = pickResult.worldPos;
+                                    this._currentAngleMeasurement.target.entity = pickResult.entity;
                                     this._currentAngleMeasurement.originVisible = true;
                                     this._currentAngleMeasurement.originWireVisible = true;
                                     this._currentAngleMeasurement.cornerVisible = true;

@@ -202,6 +202,7 @@ class PickController {
         if (this.snappedOrPicked) {
             if (this.snapPickResult) {
                 const pickResult = new PickResult();
+                pickResult.entity = this.snapPickResult.entity;
                 pickResult.snappedToVertex = this.snapPickResult.snappedToVertex;
                 pickResult.snappedToEdge = this.snapPickResult.snappedToEdge;
                 pickResult.worldPos = this.snapPickResult.worldPos;

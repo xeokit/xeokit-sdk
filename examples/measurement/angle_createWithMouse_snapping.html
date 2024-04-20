@@ -189,6 +189,27 @@
         zIndex: 100000 // If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
     });
 
+    angleMeasurementsPlugin.on("measurementStart", (measurement) => {
+        console.log("measurementStart");
+        console.log("origin", measurement.origin.entity);
+        console.log("corner", measurement.corner.entity);
+        console.log("target", measurement.target.entity);
+    });
+
+    angleMeasurementsPlugin.on("measurementEnd", (measurement) => {
+        console.log("measurementEnd");
+        console.log("origin", measurement.origin.entity);
+        console.log("corner", measurement.corner.entity);
+        console.log("target", measurement.target.entity);
+    });
+
+    angleMeasurementsPlugin.on("measurementCancel", (measurement) => {
+        console.log("measurementCancel");
+        console.log("origin", measurement.origin.entity);
+        console.log("corner", measurement.corner.entity);
+        console.log("target", measurement.target.entity);
+    });
+
     const angleMeasurementsMouseControl  = new AngleMeasurementsMouseControl(angleMeasurementsPlugin, {
         pointerLens : new PointerLens(viewer)
     })

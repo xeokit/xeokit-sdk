@@ -288,13 +288,16 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                         this._currentAngleMeasurement = this.angleMeasurementsPlugin.createMeasurement({
                             id: math.createUUID(),
                             origin: {
-                                worldPos: mouseWorldPos
+                                worldPos: mouseWorldPos,
+                                entity: hoveredEntity
                             },
                             corner: {
-                                worldPos: mouseWorldPos
+                                worldPos: mouseWorldPos,
+                                entity: hoveredEntity
                             },
                             target: {
-                                worldPos: mouseWorldPos
+                                worldPos: mouseWorldPos,
+                                entity: hoveredEntity
                             },
                             approximate: true
                         });

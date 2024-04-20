@@ -299,10 +299,12 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
                     this._currentDistanceMeasurement = distanceMeasurementsPlugin.createMeasurement({
                         id: math.createUUID(),
                         origin: {
-                            worldPos: pointerWorldPos.slice()
+                            worldPos: pointerWorldPos.slice(),
+                            entity: hoveredEntity
                         },
                         target: {
-                            worldPos: pointerWorldPos.slice()
+                            worldPos: pointerWorldPos.slice(),
+                            entity: hoveredEntity
                         },
                         approximate: true
                     });
@@ -315,7 +317,7 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
                     this._currentDistanceMeasurement.clickable = false;
                     this._currentDistanceMeasurement.origin.entity = hoveredEntity;
                     hoveredEntity = null;
-                    this.fire("measurementStart", this._currentDistanceMeasurement);
+                    this.distanceMeasurementsPlugin.fire("measurementStart", this._currentDistanceMeasurement);
                 }
             }
         });
