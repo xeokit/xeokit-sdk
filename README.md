@@ -7,6 +7,17 @@
 [xeokit](http://xeokit.io) is a JavaScript software development kit created by [xeolabs](http://xeolabs.com) for viewing
 high-detail, full-precision 3D engineering and BIM models in the browser.
 
+## Resources
+
+* [xeokit.io](https://xeokit.io/)
+* [Examples](http://xeokit.github.io/xeokit-sdk/examples/)
+* [Guides](https://www.notion.so/xeokit/xeokit-Documentation-4598591fcedb4889bf8896750651f74e)
+* [API Docs](https://xeokit.github.io/xeokit-sdk/docs/)
+* [Features](https://xeokit.io/index.html?foo=1#features)
+* [Changelog](https://github.com/xeokit/xeokit-sdk/blob/master/CHANGELOG.md)
+* [FAQ](https://xeokit.io/index.html?foo=1#faq)
+* [License](https://xeokit.io/index.html#pricing)
+
 ## Installing
 
 ````bash
@@ -89,16 +100,7 @@ which we can pre-convert offline from other formats.
 </html>
 ````
 
-## Resources
 
-* [xeokit.io](https://xeokit.io/)
-* [Examples](http://xeokit.github.io/xeokit-sdk/examples/)
-* [Guides](https://www.notion.so/xeokit/xeokit-Documentation-4598591fcedb4889bf8896750651f74e)
-* [API Docs](https://xeokit.github.io/xeokit-sdk/docs/)
-* [Features](https://xeokit.io/index.html?foo=1#features)
-* [Changelog](https://github.com/xeokit/xeokit-sdk/blob/master/CHANGELOG.md)
-* [FAQ](https://xeokit.io/index.html?foo=1#faq)
-* [License](https://xeokit.io/index.html#pricing)
 
 
 
