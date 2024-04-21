@@ -55,6 +55,7 @@
 <script type="module">
 
     import {Viewer, WebIFCLoaderPlugin, math} from "../../dist/xeokit-sdk.min.es.js";
+    import * as WebIFC from "https://cdn.jsdelivr.net/npm/web-ifc@0.0.51/web-ifc-api.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -76,28 +77,35 @@
     // Make sure we don't clip our model
     viewer.camera.project.far = 10000.0;
 
-    // Install plugin to load models from IFC files
-    const webIFCLoader = new WebIFCLoaderPlugin(viewer, {
-        wasmPath: "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/"
-    });
+    const IfcAPI = new WebIFC.IfcAPI();
 
-    // Load a model, positioning it at the specified geodesic coordinates, which we'll first project to mercator
-    const sceneModel = webIFCLoader.load({
-        id: "myModel",
-        src: "../../assets/models/ifc/Duplex.ifc",
-        loadMetadata: false,
-        edges: true,
-        origin: projectLongLatToMercator(48.981900, 35.398470, 0.0),
-        rotation: [90, 0, 0]
-    });
+    IfcAPI.SetWasmPath("https://cdn.jsdelivr.net/npm/web-ifc@0.0.51/");
 
-    // Fit model to view once loaded
-    const t0 = performance.now();
-    document.getElementById("time").innerHTML = "Loading model...";
-    sceneModel.on("loaded", () => {
-        const t1 = performance.now();
-        document.getElementById("time").innerHTML = `Model loaded in ${Math.floor(t1 - t0) / 1000.0} seconds<br>Objects: ${sceneModel.numEntities}`;
-        viewer.cameraFlight.jumpTo(viewer.scene);
+    IfcAPI.Init().then(() => {
+
+        const webIFCLoader = new WebIFCLoaderPlugin(viewer, {
+            WebIFC,
+            IfcAPI
+        });
+
+        // Load a model, positioning it at the specified geodesic coordinates, which we'll first project to mercator
+        const sceneModel = webIFCLoader.load({
+            id: "myModel",
+            src: "../../assets/models/ifc/Duplex.ifc",
+            loadMetadata: false,
+            edges: true,
+            position: projectLongLatToMercator(48.981900, 35.398470, 0.0),
+            rotation: [90, 0, 0]
+        });
+
+        // Fit model to view once loaded
+        const t0 = performance.now();
+        document.getElementById("time").innerHTML = "Loading model...";
+        sceneModel.on("loaded", () => {
+            const t1 = performance.now();
+            document.getElementById("time").innerHTML = `Model loaded in ${Math.floor(t1 - t0) / 1000.0} seconds<br>Objects: ${sceneModel.numEntities}`;
+            viewer.cameraFlight.jumpTo(viewer.scene);
+        });
     });
 
     // Projects geodesic longitude and latitude coordinates into our mercator coordinate system.

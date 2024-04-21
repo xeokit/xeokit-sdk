@@ -49,33 +49,42 @@
 <script type="module">
 
     import {Viewer, WebIFCLoaderPlugin} from "../../dist/xeokit-sdk.min.es.js";
+    import * as WebIFC from "https://cdn.jsdelivr.net/npm/web-ifc@0.0.51/web-ifc-api.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
         transparent: true
     });
 
-    const webIFCLoader = new WebIFCLoaderPlugin(viewer, {
-        wasmPath: "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/"
-    });
+    const IfcAPI = new WebIFC.IfcAPI();
 
-    const sceneModel = webIFCLoader.load({
-        id: "myModel",
-        src: "../../assets/models/ifc/Duplex.ifc",
-        origin: [18201100000000.79, 9.91, -51729900000000.84]
-    });
+    IfcAPI.SetWasmPath("https://cdn.jsdelivr.net/npm/web-ifc@0.0.51/");
 
-    const t0 = performance.now();
+    IfcAPI.Init().then(() => {
 
-    document.getElementById("time").innerHTML = "Loading model...";
+        const webIFCLoader = new WebIFCLoaderPlugin(viewer, {
+            WebIFC,
+            IfcAPI
+        });
 
-    sceneModel.on("loaded", () => {
+        const sceneModel = webIFCLoader.load({
+            id: "myModel",
+            src: "../../assets/models/ifc/Duplex.ifc",
+            position: [18201100000000.79, 9.91, -51729900000000.84]
+        });
 
-        const t1 = performance.now();
+        const t0 = performance.now();
 
-        document.getElementById("time").innerHTML = `Model loaded in ${Math.floor(t1 - t0) / 1000.0} seconds<br>Objects: ${sceneModel.numEntities}`;
+        document.getElementById("time").innerHTML = "Loading model...";
 
-        viewer.cameraFlight.jumpTo(sceneModel);
+        sceneModel.on("loaded", () => {
+
+            const t1 = performance.now();
+
+            document.getElementById("time").innerHTML = `Model loaded in ${Math.floor(t1 - t0) / 1000.0} seconds<br>Objects: ${sceneModel.numEntities}`;
+
+            viewer.cameraFlight.jumpTo(sceneModel);
+        });
     });
 
     window.viewer = viewer;
