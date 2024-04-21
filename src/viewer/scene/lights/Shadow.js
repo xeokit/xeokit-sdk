@@ -52,6 +52,7 @@
  @module xeokit
  @submodule lighting
  @constructor
+ @private
  @extends Component
  @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.
  @param {*} [cfg] The Shadow configuration
