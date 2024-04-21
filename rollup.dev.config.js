@@ -1,5 +1,4 @@
 import {nodeResolve} from '@rollup/plugin-node-resolve';
-import { getBabelOutputPlugin } from '@rollup/plugin-babel';
 
 export default {
     input: './src/index.js',

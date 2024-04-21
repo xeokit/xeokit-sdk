@@ -6,8 +6,8 @@
   "main": "./dist/xeokit-sdk.cjs.js",
   "types": "./types/index.d.ts",
   "scripts": {
-    "build": "rollup --config rollup.config.js; rollup --config rollup.minified.config.js; cp node_modules/web-ifc/web-ifc.wasm dist/.",
-    "dev-build": "rollup --config rollup.dev.config.js; cp node_modules/web-ifc/web-ifc.wasm dist/.",
+    "build": "rollup --config rollup.config.js; rollup --config rollup.minified.config.js",
+    "dev-build": "rollup --config rollup.dev.config.js",
     "docs": "rm -Rf ./docs/*; ./node_modules/.bin/esdoc",
     "typedocs": "rm -Rf ./docs/*; typedoc --tsconfig tsconfig.json",
     "publish": "npm publish --access public"
