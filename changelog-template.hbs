@@ -1,15 +1,19 @@
-## xeokit SDK Changelog
+## xeokit-sdk Changelog
 
 {{#each releases}}
-    # [{{title}}]({{href}})
 
-    ### {{niceDate}}
+    {{#if merges}}
 
-    {{#if summary}}
-        {{summary}}
+        # [{{title}}]({{href}})
+
+        ### {{niceDate}}
+
+        {{#if summary}}
+            {{summary}}
+        {{/if}}
+
+        {{#each merges}}
+            - {{#if commit.breaking}}**Breaking change:** {{/if}} {{message}} - [{{id}}]({{href}})
+        {{/each}}
     {{/if}}
-
-    {{#each merges}}
-        - {{#if commit.breaking}}**Breaking change:** {{/if}} {{message}} - [{{id}}]({{href}})
-    {{/each}}
 {{/each}}
