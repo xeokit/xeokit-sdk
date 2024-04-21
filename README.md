@@ -95,10 +95,8 @@ which we can pre-convert offline from other formats.
 * [Examples](http://xeokit.github.io/xeokit-sdk/examples/)
 * [Guides](https://www.notion.so/xeokit/xeokit-Documentation-4598591fcedb4889bf8896750651f74e)
 * [API Docs](https://xeokit.github.io/xeokit-sdk/docs/)
-* [Changelog](https://xeokit.github.io/xeokit-sdk/CHANGE_LOG)
 * [Features](https://xeokit.io/index.html?foo=1#features)
 * [FAQ](https://xeokit.io/index.html?foo=1#faq)
-* [Blog](https://xeokit.io/blog.html)
 * [License](https://xeokit.io/index.html#pricing)
 
 
