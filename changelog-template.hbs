@@ -5,7 +5,11 @@
 
     ### {{niceDate}}
 
+    {{#if summary}}
+        {{summary}}
+    {{/if}}
+
     {{#each merges}}
-        - {{message}} - [{{id}}]({{href}})
+        - {{#if commit.breaking}}**Breaking change:** {{/if}} {{message}} - [{{id}}]({{href}})
     {{/each}}
 {{/each}}
