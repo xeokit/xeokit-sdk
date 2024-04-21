@@ -10,7 +10,8 @@
     "dev-build": "rollup --config rollup.dev.config.js",
     "docs": "rm -Rf ./docs/*; ./node_modules/.bin/esdoc",
     "typedocs": "rm -Rf ./docs/*; typedoc --tsconfig tsconfig.json",
-    "publish": "npm publish --access public"
+    "publish": "npm publish --access public",
+    "changelog": "auto-changelog"
   },
   "repository": {
     "type": "git",
@@ -66,7 +67,8 @@
     "parse5": "^7.0.0",
     "rollup": "^2.70.2",
     "rollup-plugin-terser": "^7.0.2",
-    "typedoc": "^0.22.15"
+    "typedoc": "^0.22.15",
+    "auto-changelog": "^2.4.0"
   },
   "files": [
     "/src",
