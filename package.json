@@ -11,11 +11,17 @@
     "docs": "rm -Rf ./docs/*; ./node_modules/.bin/esdoc",
     "typedocs": "rm -Rf ./docs/*; typedoc --tsconfig tsconfig.json",
     "publish": "npm publish --access public",
-    "changelog": "auto-changelog"
+    "changelog": "auto-changelog --commit-limit false --package --template changelog-template.hbs"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/xeokit/xeokit-sdk.git"
+  },
+  "auto-changelog": {
+    "output": "CHANGELOG.md",
+    "template": "keepachangelog",
+    "unreleased": true,
+    "commitLimit": false
   },
   "keywords": [
     "webgl",
