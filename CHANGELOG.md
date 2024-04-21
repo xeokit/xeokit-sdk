@@ -1,8 +1,4 @@
-## xeokit SDK Changelog
-
-# [v2.6.0](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0...v2.6.0)
-
-### 21 April 2024
+## xeokit-sdk Changelog
 
 # [v2.6.0](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-9...v2.6.0)
 
@@ -21,47 +17,51 @@
 -  FIX Viewer.js breaking import - [1434](https://github.com/xeokit/xeokit-sdk/pull/1434)
 -  Add canvasToPagePos callback for measurement controls - [1433](https://github.com/xeokit/xeokit-sdk/pull/1433)
 -  [FIX] Distance measurement tool not working when model has a slice on specific axis #1428 - [1429](https://github.com/xeokit/xeokit-sdk/pull/1429)
+
 # [v2.6.0-beta-9](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-8...v2.6.0-beta-9)
 
 ### 28 March 2024
 
 -  Add FastNavPlugin.defaultScaleCanvasResolutionFactor - [1426](https://github.com/xeokit/xeokit-sdk/pull/1426)
+
 # [v2.6.0-beta-8](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-7...v2.6.0-beta-8)
 
 ### 28 March 2024
 
 -  Add selection glowThrough support to DTX triangles renderer layer - [1425](https://github.com/xeokit/xeokit-sdk/pull/1425)
 -  [FIX] Reset CameraControl default values when followPointer config is dynamically changed - [1423](https://github.com/xeokit/xeokit-sdk/pull/1423)
+
 # [v2.6.0-beta-7](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-6...v2.6.0-beta-7)
 
 ### 17 March 2024
 
 -  Robust placement of measurement dot - [1418](https://github.com/xeokit/xeokit-sdk/pull/1418)
 -  Add missing .js endings for import - [1416](https://github.com/xeokit/xeokit-sdk/pull/1416)
+
 # [v2.6.0-beta-6](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-5...v2.6.0-beta-6)
 
 ### 14 March 2024
 
 -  [FIX] No default metaobjects when loading XKTs and JSONs from manifest - [1413](https://github.com/xeokit/xeokit-sdk/pull/1413)
+
 # [v2.6.0-beta-5](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-4...v2.6.0-beta-5)
 
 ### 13 March 2024
 
 -  [FIX] Tolerate metamodel PropertySets with missing properties - [1412](https://github.com/xeokit/xeokit-sdk/pull/1412)
+
 # [v2.6.0-beta-4](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-3...v2.6.0-beta-4)
 
 ### 13 March 2024
 
 -  [FIX] Create dummy SceneEntity for unused SceneMeshes - [1410](https://github.com/xeokit/xeokit-sdk/pull/1410)
-# [v2.6.0-beta-3](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-16...v2.6.0-beta-3)
-
-### 13 March 2024
 
 # [v2.6.0-beta-16](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-15...v2.6.0-beta-16)
 
 ### 20 April 2024
 
 -  Make PickResult public part of API #1314 - [1451](https://github.com/xeokit/xeokit-sdk/pull/1451)
+
 # [v2.6.0-beta-15](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-13...v2.6.0-beta-15)
 
 ### 20 April 2024
@@ -71,21 +71,25 @@
 -  Fix SceneModel.createTransform() parentTransformId - [1448](https://github.com/xeokit/xeokit-sdk/pull/1448)
 -  Feature - Add support for Pointer Lock Web API - [1445](https://github.com/xeokit/xeokit-sdk/pull/1445)
 -  Prevent ability to create SectionPlanes on SectionPlane Control - [1444](https://github.com/xeokit/xeokit-sdk/pull/1444)
+
 # [v2.6.0-beta-13](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-12...v2.6.0-beta-13)
 
 ### 16 April 2024
 
 -  Touch measurements - [1440](https://github.com/xeokit/xeokit-sdk/pull/1440)
+
 # [v2.6.0-beta-12](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-11...v2.6.0-beta-12)
 
 ### 10 April 2024
 
 -  FIX Viewer.js breaking import - [1434](https://github.com/xeokit/xeokit-sdk/pull/1434)
+
 # [v2.6.0-beta-11](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-10...v2.6.0-beta-11)
 
 ### 9 April 2024
 
 -  Add canvasToPagePos callback for measurement controls - [1433](https://github.com/xeokit/xeokit-sdk/pull/1433)
+
 # [v2.6.0-beta-10](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-1...v2.6.0-beta-10)
 
 ### 1 April 2024
@@ -101,6 +105,7 @@
 -  [FIX] Create dummy SceneEntity for unused SceneMeshes - [1410](https://github.com/xeokit/xeokit-sdk/pull/1410)
 -  Fix dot initial visibility - [1406](https://github.com/xeokit/xeokit-sdk/pull/1406)
 -  An alternative setInterval that does not use a Worker - [1402](https://github.com/xeokit/xeokit-sdk/pull/1402)
+
 # [v2.6.0-beta-1](https://github.com/xeokit/xeokit-sdk/compare/v2.5.2-beta-8...v2.6.0-beta-1)
 
 ### 6 March 2024
@@ -130,6 +135,7 @@
 -  Use custom setTimeout that works in an unfocused browser tab - [1361](https://github.com/xeokit/xeokit-sdk/pull/1361)
 -  fix for issue #1356 - [1357](https://github.com/xeokit/xeokit-sdk/pull/1357)
 -  [EXAMPLE] Add slider control to exploding OBJ model example - [1359](https://github.com/xeokit/xeokit-sdk/pull/1359)
+
 # [v2.5.2-beta-8](https://github.com/xeokit/xeokit-sdk/compare/v2.5.2-beta-7...v2.5.2-beta-8)
 
 ### 26 January 2024
@@ -138,6 +144,7 @@
 -  [Fix] Correct AngleMeasurementsMouseControl pointer for offset canvas - [1350](https://github.com/xeokit/xeokit-sdk/pull/1350)
 -  Adding exploded model example - [1347](https://github.com/xeokit/xeokit-sdk/pull/1347)
 -  Update SceneModel.createMesh() types - [1346](https://github.com/xeokit/xeokit-sdk/pull/1346)
+
 # [v2.5.2-beta-7](https://github.com/xeokit/xeokit-sdk/compare/v2.5.2-beta-5...v2.5.2-beta-7)
 
 ### 20 January 2024
@@ -149,9 +156,6 @@
 -  [EXAMPLE] Add icons for different types of nodes in tree view - [1334](https://github.com/xeokit/xeokit-sdk/pull/1334)
 -  [FIX] Update TreeViewNode class documentation - [1333](https://github.com/xeokit/xeokit-sdk/pull/1333)
 -  [Fix] Fixed links to assets, removed link to roboto condensed - [1332](https://github.com/xeokit/xeokit-sdk/pull/1332)
-# [v2.5.2-beta-5](https://github.com/xeokit/xeokit-sdk/compare/v2.5.2-beta-32...v2.5.2-beta-5)
-
-### 17 January 2024
 
 # [v2.5.2-beta-32](https://github.com/xeokit/xeokit-sdk/compare/v2.5.2-beta-3...v2.5.2-beta-32)
 
@@ -201,9 +205,6 @@
 -  fix code comment typo in XKTLoaderPlugin.js - [1322](https://github.com/xeokit/xeokit-sdk/pull/1322)
 -  FIX: Enable model to load while different tab is open - [1318](https://github.com/xeokit/xeokit-sdk/pull/1318)
 -  Use setTimeout to pump XKTLoaderPlugin XKT loading queue, not RAF - [1317](https://github.com/xeokit/xeokit-sdk/pull/1317)
-# [v2.5.2-beta-3](https://github.com/xeokit/xeokit-sdk/compare/v2.5.2-beta-29...v2.5.2-beta-3)
-
-### 21 December 2023
 
 # [v2.5.2-beta-29](https://github.com/xeokit/xeokit-sdk/compare/v2.5.2-beta-27...v2.5.2-beta-29)
 
@@ -211,12 +212,14 @@
 
 -  Align measurement marker div correctly for canvas offset by div - [1395](https://github.com/xeokit/xeokit-sdk/pull/1395)
 -  [EXAMPLE] Section path example - [1390](https://github.com/xeokit/xeokit-sdk/pull/1390)
+
 # [v2.5.2-beta-27](https://github.com/xeokit/xeokit-sdk/compare/v2.5.2-beta-26...v2.5.2-beta-27)
 
 ### 29 February 2024
 
 -  Fix transparent DTX mesh picking - [1389](https://github.com/xeokit/xeokit-sdk/pull/1389)
 -  Updating types for buildPolylineGeometryFromCurve method - [1387](https://github.com/xeokit/xeokit-sdk/pull/1387)
+
 # [v2.5.2-beta-26](https://github.com/xeokit/xeokit-sdk/compare/v2.5.2-beta-22...v2.5.2-beta-26)
 
 ### 28 February 2024
@@ -230,11 +233,13 @@
 -  Adding missing types for Polyline geometry - [1376](https://github.com/xeokit/xeokit-sdk/pull/1376)
 -  [FEATURE] Adding ability to draw 3d polylines - [1374](https://github.com/xeokit/xeokit-sdk/pull/1374)
 -  Add missing types for buildBoxLinesGeometryFromAABB - [1369](https://github.com/xeokit/xeokit-sdk/pull/1369)
+
 # [v2.5.2-beta-22](https://github.com/xeokit/xeokit-sdk/compare/v2.5.2-beta-21...v2.5.2-beta-22)
 
 ### 13 February 2024
 
 -  [FIX] Ensure DTX-enabled SceneModel still uses VBOs for textures - [1368](https://github.com/xeokit/xeokit-sdk/pull/1368)
+
 # [v2.5.2-beta-21](https://github.com/xeokit/xeokit-sdk/compare/v2.5.2-beta-13...v2.5.2-beta-21)
 
 ### 13 February 2024
@@ -243,6 +248,7 @@
 -  .d.ts file update for DistanceMeasurement - [1366](https://github.com/xeokit/xeokit-sdk/pull/1366)
 -  [FEATURE] Adding ability to show labels one below the other for measurement plugin - [1365](https://github.com/xeokit/xeokit-sdk/pull/1365)
 -  [FIX] Fix MetaObject.metaModels value after unloading multiple metamodels with shared metaobjects - [1363](https://github.com/xeokit/xeokit-sdk/pull/1363)
+
 # [v2.5.2-beta-13](https://github.com/xeokit/xeokit-sdk/compare/v2.5.1-beta...v2.5.2-beta-13)
 
 ### 2 February 2024
@@ -274,6 +280,7 @@
 -  fix: make containerElement and containerElementId optioanl on TreeViewPluginConfiguration - [1310](https://github.com/xeokit/xeokit-sdk/pull/1310)
 -  Fix BitMap auto-scaling - [1309](https://github.com/xeokit/xeokit-sdk/pull/1309)
 -  Refactor SceneModel; Add snapping for line and point primitives - [1308](https://github.com/xeokit/xeokit-sdk/pull/1308)
+
 # [v2.5.1-beta](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-9...v2.5.1-beta)
 
 ### 14 December 2023
@@ -300,11 +307,13 @@
 -  FEATURE: Marquee Picking - [1260](https://github.com/xeokit/xeokit-sdk/pull/1260)
 -  Make snap pick result return snapped Entity, not Mesh #1248 - [1259](https://github.com/xeokit/xeokit-sdk/pull/1259)
 -  FEATURE: Save and load object X-ray states in BCF - [1257](https://github.com/xeokit/xeokit-sdk/pull/1257)
+
 # [v2.4.2-beta-9](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-8...v2.4.2-beta-9)
 
 ### 22 November 2023
 
 -  OPTIMIZATION: Properties reuse to compress metadata JSON - [1256](https://github.com/xeokit/xeokit-sdk/pull/1256)
+
 # [v2.4.2-beta-8](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-7...v2.4.2-beta-8)
 
 ### 21 November 2023
@@ -318,6 +327,7 @@
 -  Fire `"activated"` events from `DistanceMeasurementsMouseControl` - [1242](https://github.com/xeokit/xeokit-sdk/pull/1242)
 -  Fix `_subPortionSetMatrix` in `TrianglesDataTextureLayer` - [1241](https://github.com/xeokit/xeokit-sdk/pull/1241)
 -  chore: JSDoc types for `uniquifyPositions` and `rebucketPositions` - [1238](https://github.com/xeokit/xeokit-sdk/pull/1238)
+
 # [v2.4.2-beta-7](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-6...v2.4.2-beta-7)
 
 ### 15 November 2023
@@ -326,45 +336,30 @@
 -  Fix: also unserialize `metaObject.external` when generating the `MetaModel` - [1233](https://github.com/xeokit/xeokit-sdk/pull/1233)
 -  Add a backwards-compatible `MetaObject.metaModel` property - [1235](https://github.com/xeokit/xeokit-sdk/pull/1235)
 -  Add a backwards-compatible `MetaModel.rootMetaObject property - [1237](https://github.com/xeokit/xeokit-sdk/pull/1237)
-# [v2.4.2-beta-6](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-49...v2.4.2-beta-6)
-
-### 15 November 2023
-
-# [v2.4.2-beta-49](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-48...v2.4.2-beta-49)
-
-### 13 December 2023
 
 # [v2.4.2-beta-48](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-47...v2.4.2-beta-48)
 
 ### 13 December 2023
 
 -  Fix LineSet precision - [1300](https://github.com/xeokit/xeokit-sdk/pull/1300)
-# [v2.4.2-beta-47](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-46...v2.4.2-beta-47)
-
-### 13 December 2023
 
 # [v2.4.2-beta-46](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-43...v2.4.2-beta-46)
 
 ### 13 December 2023
 
 -  Expose configs to experiment with SceneModel buffer sizes - [1296](https://github.com/xeokit/xeokit-sdk/pull/1296)
+
 # [v2.4.2-beta-43](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-42...v2.4.2-beta-43)
 
 ### 12 December 2023
 
 -  Make culled DTX objects un-pickable - [1295](https://github.com/xeokit/xeokit-sdk/pull/1295)
-# [v2.4.2-beta-42](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-41...v2.4.2-beta-42)
-
-### 12 December 2023
 
 # [v2.4.2-beta-41](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-38...v2.4.2-beta-41)
 
 ### 12 December 2023
 
 -  Add entity to measurement endpoints - [1292](https://github.com/xeokit/xeokit-sdk/pull/1292)
-# [v2.4.2-beta-38](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-35...v2.4.2-beta-38)
-
-### 12 December 2023
 
 # [v2.4.2-beta-35](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-32...v2.4.2-beta-35)
 
@@ -373,11 +368,13 @@
 -  Refactor SceneModel AABB / transforms management - [1291](https://github.com/xeokit/xeokit-sdk/pull/1291)
 -  Fix StoreyViewsPlugin - [1290](https://github.com/xeokit/xeokit-sdk/pull/1290)
 -  extend treeViewPlugin to support HTMLElement and ID of an HTMLElement - [1288](https://github.com/xeokit/xeokit-sdk/pull/1288)
+
 # [v2.4.2-beta-32](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-31...v2.4.2-beta-32)
 
 ### 6 December 2023
 
 -  added logic to destroy MarkerDiv on deactivation and on reset, on bot… - [1286](https://github.com/xeokit/xeokit-sdk/pull/1286)
+
 # [v2.4.2-beta-31](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-3...v2.4.2-beta-31)
 
 ### 3 December 2023
@@ -409,28 +406,19 @@
 -  Fix: also unserialize `metaObject.external` when generating the `MetaModel` - [1233](https://github.com/xeokit/xeokit-sdk/pull/1233)
 -  Add a backwards-compatible `MetaObject.metaModel` property - [1235](https://github.com/xeokit/xeokit-sdk/pull/1235)
 -  Add a backwards-compatible `MetaModel.rootMetaObject property - [1237](https://github.com/xeokit/xeokit-sdk/pull/1237)
-# [v2.4.2-beta-3](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-29...v2.4.2-beta-3)
-
-### 10 November 2023
-
-# [v2.4.2-beta-29](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-28...v2.4.2-beta-29)
-
-### 29 November 2023
-
-# [v2.4.2-beta-28](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-24...v2.4.2-beta-28)
-
-### 29 November 2023
 
 # [v2.4.2-beta-24](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-21...v2.4.2-beta-24)
 
 ### 29 November 2023
 
 -  OPTIMIZATION: Optimize SectionPlane creation and destruction  - [1273](https://github.com/xeokit/xeokit-sdk/pull/1273)
+
 # [v2.4.2-beta-21](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-20...v2.4.2-beta-21)
 
 ### 28 November 2023
 
 -  FIX: SceneModel AABB not updating when moving model - [1277](https://github.com/xeokit/xeokit-sdk/pull/1277)
+
 # [v2.4.2-beta-20](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-14...v2.4.2-beta-20)
 
 ### 27 November 2023
@@ -438,17 +426,20 @@
 -  Cache and reuse pick results on CameraControl PickController - [1269](https://github.com/xeokit/xeokit-sdk/pull/1269)
 -  FEATURE: Unify pick and snap within Scene.pick() - [1268](https://github.com/xeokit/xeokit-sdk/pull/1268)
 -  OPTIMIZATION: tickify `mousemove` and `mousewheel` events - [1265](https://github.com/xeokit/xeokit-sdk/pull/1265)
+
 # [v2.4.2-beta-14](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-13...v2.4.2-beta-14)
 
 ### 24 November 2023
 
 -  Fix race condtion and optimize `PickControler.js` - [1261](https://github.com/xeokit/xeokit-sdk/pull/1261)
+
 # [v2.4.2-beta-13](https://github.com/xeokit/xeokit-sdk/compare/v2.4.2-beta-10...v2.4.2-beta-13)
 
 ### 24 November 2023
 
 -  FEATURE: Marquee Picking - [1260](https://github.com/xeokit/xeokit-sdk/pull/1260)
 -  Make snap pick result return snapped Entity, not Mesh #1248 - [1259](https://github.com/xeokit/xeokit-sdk/pull/1259)
+
 # [v2.4.2-beta-10](https://github.com/xeokit/xeokit-sdk/compare/2.4.2-beta-1...v2.4.2-beta-10)
 
 ### 22 November 2023
@@ -471,17 +462,20 @@
 -  Fix TreeView rendering when using globalizeObjectIds #1224 - [1227](https://github.com/xeokit/xeokit-sdk/pull/1227)
 -  Update MetaScene.d.ts - [1226](https://github.com/xeokit/xeokit-sdk/pull/1226)
 -  Make measurements sliced by SectionPlanes #1217 - [1222](https://github.com/xeokit/xeokit-sdk/pull/1222)
+
 # [2.4.2-beta-1](https://github.com/xeokit/xeokit-sdk/compare/v2.4.1...2.4.2-beta-1)
 
 ### 9 November 2023
 
 -  FIX: force triangle instancing pick normals flat renderer - [1214](https://github.com/xeokit/xeokit-sdk/pull/1214)
+
 # [v2.4.1](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-beta-2...v2.4.1)
 
 ### 2 November 2023
 
 -  Add multi output Renderbuffer feature and snap pick normals with it - [1209](https://github.com/xeokit/xeokit-sdk/pull/1209)
 -  fix: make sure to weld vertices when `index-bucketting` is enabled - [1207](https://github.com/xeokit/xeokit-sdk/pull/1207)
+
 # [v2.4.0-beta-2](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-alpha-99...v2.4.0-beta-2)
 
 ### 29 October 2023
@@ -491,17 +485,20 @@
 -  Fix BCF line set rounding error and bitmap Y-flipping - [1200](https://github.com/xeokit/xeokit-sdk/pull/1200)
 -  Fix SceneModel DTX edge renderer for entity offsetting #1196 - [1197](https://github.com/xeokit/xeokit-sdk/pull/1197)
 -  Use gradient technique to depth-init snapping buffers - [1195](https://github.com/xeokit/xeokit-sdk/pull/1195)
+
 # [v2.4.0-alpha-99](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-alpha-96...v2.4.0-alpha-99)
 
 ### 21 October 2023
 
 -  Fix name &lt;-&gt; type in IFC loader - [1191](https://github.com/xeokit/xeokit-sdk/pull/1191)
+
 # [v2.4.0-alpha-96](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-alpha-90...v2.4.0-alpha-96)
 
 ### 18 October 2023
 
 -  Pick normals using a 3x3 viewport - [1177](https://github.com/xeokit/xeokit-sdk/pull/1177)
 -  fix pick normal - [1176](https://github.com/xeokit/xeokit-sdk/pull/1176)
+
 # [v2.4.0-alpha-90](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-alpha-82...v2.4.0-alpha-90)
 
 ### 13 October 2023
@@ -518,6 +515,7 @@
 -  Feature: add dual snap mode =&gt; vertex + edge - [1158](https://github.com/xeokit/xeokit-sdk/pull/1158)
 -  replace some console.log with console.info - [1143](https://github.com/xeokit/xeokit-sdk/pull/1143)
 -  Fix XKT 9 globalize IDs - [1152](https://github.com/xeokit/xeokit-sdk/pull/1152)
+
 # [v2.4.0-alpha-82](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-alpha-80...v2.4.0-alpha-82)
 
 ### 2 October 2023
@@ -525,16 +523,19 @@
 -  Add ./src to package dist - [1151](https://github.com/xeokit/xeokit-sdk/pull/1151)
 -  Fixed occlusion shader for data textures #1148 - [1150](https://github.com/xeokit/xeokit-sdk/pull/1150)
 -  Load LAS/LAZ header data into MetaModel - [1149](https://github.com/xeokit/xeokit-sdk/pull/1149)
+
 # [v2.4.0-alpha-80](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-alpha-78...v2.4.0-alpha-80)
 
 ### 22 September 2023
 
 -  Add pivot sphere - [529](https://github.com/xeokit/xeokit-sdk/pull/529)
+
 # [v2.4.0-alpha-78](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-alpha-73...v2.4.0-alpha-78)
 
 ### 20 September 2023
 
 -  Ability to dynamically position & rotate SceneModel anywhere within World coordinate system  - [1136](https://github.com/xeokit/xeokit-sdk/pull/1136)
+
 # [v2.4.0-alpha-73](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-alpha-54...v2.4.0-alpha-73)
 
 ### 13 September 2023
@@ -546,18 +547,12 @@
 -  Add MetaModel types for multi XKT loading support - [1127](https://github.com/xeokit/xeokit-sdk/pull/1127)
 -  Extend XKTLoaderPlugin, MetaScene & MetaModel to batch-load split XKT… - [1126](https://github.com/xeokit/xeokit-sdk/pull/1126)
 -  Integrate refactorings - [1125](https://github.com/xeokit/xeokit-sdk/pull/1125)
+
 # [v2.4.0-alpha-54](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-alpha-53...v2.4.0-alpha-54)
 
 ### 21 August 2023
 
 -  Use a `ResizeObserver` to detect changes in canvas size - [1121](https://github.com/xeokit/xeokit-sdk/pull/1121)
-# [v2.4.0-alpha-53](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-alpha-52...v2.4.0-alpha-53)
-
-### 13 August 2023
-
-# [v2.4.0-alpha-52](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-alpha-51...v2.4.0-alpha-52)
-
-### 13 August 2023
 
 # [v2.4.0-alpha-51](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-alpha-49...v2.4.0-alpha-51)
 
@@ -568,6 +563,7 @@
 -  simplify getSnapshotWithPlugins - [1118](https://github.com/xeokit/xeokit-sdk/pull/1118)
 -  VBOSceneModel: Support skew in instancing matrices for AABB initialization - [1115](https://github.com/xeokit/xeokit-sdk/pull/1115)
 -  DataTextureSceneModel: Support skew in instancing matrices for AABB initialization - [1116](https://github.com/xeokit/xeokit-sdk/pull/1116)
+
 # [v2.4.0-alpha-49](https://github.com/xeokit/xeokit-sdk/compare/2.4.0-alpha-47...v2.4.0-alpha-49)
 
 ### 3 August 2023
@@ -575,6 +571,7 @@
 -  Support line-strip geometry in XKT - [1114](https://github.com/xeokit/xeokit-sdk/pull/1114)
 -  VBO Scene Model Renderers refactoring and performance improvement - [1113](https://github.com/xeokit/xeokit-sdk/pull/1113)
 -  use Uniform Block Buffer for main matrices in VBO Scene Model triangle layers - [9](https://github.com/xeokit/xeokit-sdk/pull/9)
+
 # [2.4.0-alpha-47](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-alpha-39...2.4.0-alpha-47)
 
 ### 29 July 2023
@@ -584,6 +581,7 @@
 -  Fix snapshots =&gt; flip Y - [1104](https://github.com/xeokit/xeokit-sdk/pull/1104)
 -  Improved merging algorithm for federated models - [1103](https://github.com/xeokit/xeokit-sdk/pull/1103)
 -  Update MousePanRotateDollyHandler.js - Add page scroll support - [1100](https://github.com/xeokit/xeokit-sdk/pull/1100)
+
 # [v2.4.0-alpha-39](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-alpha-27...v2.4.0-alpha-39)
 
 ### 12 July 2023
@@ -602,6 +600,7 @@
 -  Remove useless Renderer picking commented code - [1071](https://github.com/xeokit/xeokit-sdk/pull/1071)
 -  Fix full precision picking in triangle instancing layer - [1074](https://github.com/xeokit/xeokit-sdk/pull/1074)
 -  Adapt the `DistanceMeasurementControl` so it can snap to vertex. - [6](https://github.com/xeokit/xeokit-sdk/pull/6)
+
 # [v2.4.0-alpha-27](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-alpha-23...v2.4.0-alpha-27)
 
 ### 1 June 2023
@@ -610,6 +609,7 @@
 -  Reduce VBOSceneModel flags memory footprint - [1060](https://github.com/xeokit/xeokit-sdk/pull/1060)
 -  Fire error event when loading a modal fails - [1058](https://github.com/xeokit/xeokit-sdk/pull/1058)
 -  Expose rtc maths globally - [1056](https://github.com/xeokit/xeokit-sdk/pull/1056)
+
 # [v2.4.0-alpha-23](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-alpha-22...v2.4.0-alpha-23)
 
 ### 22 May 2023
@@ -617,9 +617,6 @@
 -  remove buffer.flags & flags2 arrays - [1051](https://github.com/xeokit/xeokit-sdk/pull/1051)
 -  Fix missing GLSL version on top of PointsBatchingOcclusionRenderer fragment shader - [1047](https://github.com/xeokit/xeokit-sdk/pull/1047)
 -  [fix]: make sure to restore `gl.pixelStatei` changes in `Texture2D` class - [1044](https://github.com/xeokit/xeokit-sdk/pull/1044)
-# [v2.4.0-alpha-22](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-alpha-21...v2.4.0-alpha-22)
-
-### 12 May 2023
 
 # [v2.4.0-alpha-21](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-alpha-2...v2.4.0-alpha-21)
 
@@ -635,15 +632,13 @@
 -  Add SAO support when using data-textures - [1028](https://github.com/xeokit/xeokit-sdk/pull/1028)
 -  Additional data-textures feature toggles - [1027](https://github.com/xeokit/xeokit-sdk/pull/1027)
 -  data-textures: make `VFC` mechanism support non-identity `model.worldMatrix` - [1026](https://github.com/xeokit/xeokit-sdk/pull/1026)
-# [v2.4.0-alpha-2](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-alpha-17...v2.4.0-alpha-2)
-
-### 6 April 2023
 
 # [v2.4.0-alpha-17](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-alpha-16...v2.4.0-alpha-17)
 
 ### 9 May 2023
 
 -  Upgrade CodeSee workflow to version 2 - [968](https://github.com/xeokit/xeokit-sdk/pull/968)
+
 # [v2.4.0-alpha-16](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-alpha-12...v2.4.0-alpha-16)
 
 ### 4 May 2023
@@ -653,9 +648,6 @@
 -  [data-textures]: implement a smart deferred flags update mechanism - [1037](https://github.com/xeokit/xeokit-sdk/pull/1037)
 -  use project north - [1035](https://github.com/xeokit/xeokit-sdk/pull/1035)
 -  Remove duplicated line in Component.js - [1036](https://github.com/xeokit/xeokit-sdk/pull/1036)
-# [v2.4.0-alpha-12](https://github.com/xeokit/xeokit-sdk/compare/v2.4.0-alpha-105...v2.4.0-alpha-12)
-
-### 28 April 2023
 
 # [v2.4.0-alpha-105](https://github.com/xeokit/xeokit-sdk/compare/v2.3.9...v2.4.0-alpha-105)
 
@@ -746,16 +738,19 @@
 -  fix typo in LineBatchingLayer - [1010](https://github.com/xeokit/xeokit-sdk/pull/1010)
 -  Metadata improvements - [1005](https://github.com/xeokit/xeokit-sdk/pull/1005)
 -  Skip inactive section planes in BCF getViewpoint - [1003](https://github.com/xeokit/xeokit-sdk/pull/1003)
+
 # [v2.3.9](https://github.com/xeokit/xeokit-sdk/compare/v2.3.7...v2.3.9)
 
 ### 2 February 2023
 
 -  Added github actions workflows - [987](https://github.com/xeokit/xeokit-sdk/pull/987)
+
 # [v2.3.7](https://github.com/xeokit/xeokit-sdk/compare/v2.3.3...v2.3.7)
 
 ### 13 January 2023
 
 -  Updated typings - [984](https://github.com/xeokit/xeokit-sdk/pull/984)
+
 # [v2.3.3](https://github.com/xeokit/xeokit-sdk/compare/v2.3.2...v2.3.3)
 
 ### 5 December 2022
@@ -764,6 +759,7 @@
 -  Added a dot to package.json field module and main - [955](https://github.com/xeokit/xeokit-sdk/pull/955)
 -  Added light typings And fixed small error - [949](https://github.com/xeokit/xeokit-sdk/pull/949)
 -  Missing xrayed initialization - [933](https://github.com/xeokit/xeokit-sdk/pull/933)
+
 # [v2.3.2](https://github.com/xeokit/xeokit-sdk/compare/v2.3.1...v2.3.2)
 
 ### 16 September 2022
@@ -773,11 +769,13 @@
 -  Scene object events for XRayed, Highlighted and Selected - [930](https://github.com/xeokit/xeokit-sdk/pull/930)
 -  Fixed that aspect ratio in imagePlanes only worked for images where width &gt;= height - [923](https://github.com/xeokit/xeokit-sdk/pull/923)
 -  Bump terser from 5.10.0 to 5.14.2 - [895](https://github.com/xeokit/xeokit-sdk/pull/895)
+
 # [v2.3.1](https://github.com/xeokit/xeokit-sdk/compare/v2.3.0...v2.3.1)
 
 ### 19 August 2022
 
 -  Fix quantization underflow for reused geometries #917 - [918](https://github.com/xeokit/xeokit-sdk/pull/918)
+
 # [v2.3.0](https://github.com/xeokit/xeokit-sdk/compare/v2.2.5-beta-4...v2.3.0)
 
 ### 16 August 2022
@@ -792,6 +790,7 @@
 -  Rename PerformanceModel as VBOSceneModel #866 - [867](https://github.com/xeokit/xeokit-sdk/pull/867)
 -  Fix XKT v10 transparency; texture loading hack; added example - [860](https://github.com/xeokit/xeokit-sdk/pull/860)
 -  Fixed CameraControl picking and made double click time frame configurable - [855](https://github.com/xeokit/xeokit-sdk/pull/855)
+
 # [v2.2.5-beta-4](https://github.com/xeokit/xeokit-sdk/compare/2.2.2...v2.2.5-beta-4)
 
 ### 12 April 2022
@@ -809,12 +808,14 @@
 -  Bump node-fetch from 2.6.1 to 2.6.7 - [810](https://github.com/xeokit/xeokit-sdk/pull/810)
 -  Fix JS imports - [809](https://github.com/xeokit/xeokit-sdk/pull/809)
 -  Fix init when canvas size is changed during initialization - [798](https://github.com/xeokit/xeokit-sdk/pull/798)
+
 # [2.2.2](https://github.com/xeokit/xeokit-sdk/compare/2.1.0...2.2.2)
 
 ### 26 December 2021
 
 -  prevent console warnings on scroll. - [783](https://github.com/xeokit/xeokit-sdk/pull/783)
 -  CityJSONLoaderPlugin - [782](https://github.com/xeokit/xeokit-sdk/pull/782)
+
 # [2.1.0](https://github.com/xeokit/xeokit-sdk/compare/1.9.0...2.1.0)
 
 ### 30 November 2021
@@ -844,6 +845,7 @@
 -  XKT v9 - [682](https://github.com/xeokit/xeokit-sdk/pull/682)
 -  Fix safari user agent detector in SAO - [681](https://github.com/xeokit/xeokit-sdk/pull/681)
 -  Clean spinner destroy - [673](https://github.com/xeokit/xeokit-sdk/pull/673)
+
 # [1.9.0](https://github.com/xeokit/xeokit-sdk/compare/1.8.2...1.9.0)
 
 ### 14 May 2021
@@ -853,37 +855,25 @@
 -  Example tweaks - [643](https://github.com/xeokit/xeokit-sdk/pull/643)
 -  XKT V8 - [642](https://github.com/xeokit/xeokit-sdk/pull/642)
 -  Add index.js for base js files - [637](https://github.com/xeokit/xeokit-sdk/pull/637)
-# [1.8.2](https://github.com/xeokit/xeokit-sdk/compare/1.8.0...1.8.2)
-
-### 23 April 2021
-
-# [1.8.0](https://github.com/xeokit/xeokit-sdk/compare/1.8.0-alpha.2...1.8.0)
-
-### 21 April 2021
-
-# [1.8.0-alpha.2](https://github.com/xeokit/xeokit-sdk/compare/1.8.0-alpha.1...1.8.0-alpha.2)
-
-### 1 April 2021
-
-# [1.8.0-alpha.1](https://github.com/xeokit/xeokit-sdk/compare/1.7.1...1.8.0-alpha.1)
-
-### 1 April 2021
 
 # [1.7.1](https://github.com/xeokit/xeokit-sdk/compare/1.7.0-alpha.4...1.7.1)
 
 ### 18 March 2021
 
 -  XKT v7 - [584](https://github.com/xeokit/xeokit-sdk/pull/584)
+
 # [1.7.0-alpha.4](https://github.com/xeokit/xeokit-sdk/compare/1.7.0-alpha.1...1.7.0-alpha.4)
 
 ### 5 March 2021
 
 -  Take window scroll into account when placing follow pointer - [575](https://github.com/xeokit/xeokit-sdk/pull/575)
+
 # [1.7.0-alpha.1](https://github.com/xeokit/xeokit-sdk/compare/1.6.0...1.7.0-alpha.1)
 
 ### 27 January 2021
 
 -  Fix surface picking option to not pick surface normal #550 - [551](https://github.com/xeokit/xeokit-sdk/pull/551)
+
 # [1.6.0](https://github.com/xeokit/xeokit-sdk/compare/1.5.22...1.6.0)
 
 ### 19 January 2021
@@ -898,6 +888,7 @@
 -  Optional offsets - [517](https://github.com/xeokit/xeokit-sdk/pull/517)
 -  Fix unwanted "picked*" events from pinch-to-zoom on touch devices #438 - [512](https://github.com/xeokit/xeokit-sdk/pull/512)
 -  Remove duplicated line in Renderer.js - [508](https://github.com/xeokit/xeokit-sdk/pull/508)
+
 # [1.5.22](https://github.com/xeokit/xeokit-sdk/compare/1.5.14...1.5.22)
 
 ### 10 December 2020
@@ -905,9 +896,6 @@
 -  simplify BCF plugin - [497](https://github.com/xeokit/xeokit-sdk/pull/497)
 -  Fix sectionplane control size - [496](https://github.com/xeokit/xeokit-sdk/pull/496)
 -  Multimodels - [495](https://github.com/xeokit/xeokit-sdk/pull/495)
-# [1.5.14](https://github.com/xeokit/xeokit-sdk/compare/1.5.13...1.5.14)
-
-### 25 November 2020
 
 # [1.5.13](https://github.com/xeokit/xeokit-sdk/compare/1.5.11...1.5.13)
 
@@ -915,9 +903,6 @@
 
 -  CHANGE_LOG updates - [476](https://github.com/xeokit/xeokit-sdk/pull/476)
 -  Fix case for which SectionPlane does not clip everything #474 - [475](https://github.com/xeokit/xeokit-sdk/pull/475)
-# [1.5.11](https://github.com/xeokit/xeokit-sdk/compare/1.5.3...1.5.11)
-
-### 13 November 2020
 
 # [1.5.3](https://github.com/xeokit/xeokit-sdk/compare/1.5.2...1.5.3)
 
@@ -926,6 +911,7 @@
 -  Fix unwanted "picked*" events from pinch-to-zoom on touch devices #438 - [512](https://github.com/xeokit/xeokit-sdk/pull/512)
 -  Remove duplicated line in Renderer.js - [508](https://github.com/xeokit/xeokit-sdk/pull/508)
 -  simplify BCF plugin - [497](https://github.com/xeokit/xeokit-sdk/pull/497)
+
 # [1.5.2](https://github.com/xeokit/xeokit-sdk/compare/1.5.1...1.5.2)
 
 ### 9 December 2020
@@ -934,9 +920,6 @@
 -  Multimodels - [495](https://github.com/xeokit/xeokit-sdk/pull/495)
 -  CHANGE_LOG updates - [476](https://github.com/xeokit/xeokit-sdk/pull/476)
 -  Fix case for which SectionPlane does not clip everything #474 - [475](https://github.com/xeokit/xeokit-sdk/pull/475)
-# [1.5.1](https://github.com/xeokit/xeokit-sdk/compare/1.5.0...1.5.1)
-
-### 13 November 2020
 
 # [1.5.0](https://github.com/xeokit/xeokit-sdk/compare/v1.4.7...1.5.0)
 
@@ -946,18 +929,12 @@
 -  Add Scene#getAABB() full-precision coordinate support #457 - [459](https://github.com/xeokit/xeokit-sdk/pull/459)
 -  Add Scene#getAABB() full-precision coordinate support #457 - [458](https://github.com/xeokit/xeokit-sdk/pull/458)
 -  Support full-precision model geometry  - [456](https://github.com/xeokit/xeokit-sdk/pull/456)
+
 # [v1.4.7](https://github.com/xeokit/xeokit-sdk/compare/v1.4.4...v1.4.7)
 
 ### 28 October 2020
 
 -  Fix setViewpoint colors - [444](https://github.com/xeokit/xeokit-sdk/pull/444)
-# [v1.4.4](https://github.com/xeokit/xeokit-sdk/compare/v1.4.1...v1.4.4)
-
-### 30 September 2020
-
-# [v1.4.1](https://github.com/xeokit/xeokit-sdk/compare/v1.4.0...v1.4.1)
-
-### 10 September 2020
 
 # [v1.4.0](https://github.com/xeokit/xeokit-sdk/compare/v1.3.8...v1.4.0)
 
@@ -965,6 +942,7 @@
 
 -  Multilevel ContextMenu - [418](https://github.com/xeokit/xeokit-sdk/pull/418)
 -  Improve CameraControl touch dolly/pan - [415](https://github.com/xeokit/xeokit-sdk/pull/415)
+
 # [v1.3.8](https://github.com/xeokit/xeokit-sdk/compare/v1.3.7...v1.3.8)
 
 ### 14 August 2020
@@ -974,6 +952,7 @@
 -  Upgrade to bimserver 1.5.182 - [407](https://github.com/xeokit/xeokit-sdk/pull/407)
 -  Support BIMServer 1.5.182 #287 - [405](https://github.com/xeokit/xeokit-sdk/pull/405)
 -  CameraControl picking optimizations and fixes - [404](https://github.com/xeokit/xeokit-sdk/pull/404)
+
 # [v1.3.7](https://github.com/xeokit/xeokit-sdk/compare/1.3.6...v1.3.7)
 
 ### 7 August 2020
@@ -981,6 +960,7 @@
 -  Remappable cameracontrol keys - [395](https://github.com/xeokit/xeokit-sdk/pull/395)
 -  add cameraControl.touchDollyRate config and simplify touch code - [392](https://github.com/xeokit/xeokit-sdk/pull/392)
 -  Bump lodash from 4.17.15 to 4.17.19 - [383](https://github.com/xeokit/xeokit-sdk/pull/383)
+
 # [1.3.6](https://github.com/xeokit/xeokit-sdk/compare/1.3.4...1.3.6)
 
 ### 16 July 2020
@@ -990,6 +970,7 @@
 -  View culling - [355](https://github.com/xeokit/xeokit-sdk/pull/355)
 -  Dynamically movable Entities - [353](https://github.com/xeokit/xeokit-sdk/pull/353)
 -  Concurrent model loading - [348](https://github.com/xeokit/xeokit-sdk/pull/348)
+
 # [1.3.4](https://github.com/xeokit/xeokit-sdk/compare/1.1.0...1.3.4)
 
 ### 15 June 2020
@@ -1002,6 +983,7 @@
 -  Add creation/version/authoring properties to MetaModel - [330](https://github.com/xeokit/xeokit-sdk/pull/330)
 -  Fix clipping planes with yUp models and add option to reverse clippin… - [323](https://github.com/xeokit/xeokit-sdk/pull/323)
 -  Fix initializing BatchingLayer.colorsBuf - [314](https://github.com/xeokit/xeokit-sdk/pull/314)
+
 # [1.1.0](https://github.com/xeokit/xeokit-sdk/compare/v0.7.2-sao-deferred...1.1.0)
 
 ### 25 May 2020
@@ -1014,9 +996,6 @@
 -  Fixes: Tree Plugin not working when loading models from the BIMServer - [273](https://github.com/xeokit/xeokit-sdk/pull/273)
 -  Added support for BIMServer 1.5.180 - [270](https://github.com/xeokit/xeokit-sdk/pull/270)
 -  Preserve edge emphasis with SAO - [249](https://github.com/xeokit/xeokit-sdk/pull/249)
-# [v0.7.2-sao-deferred](https://github.com/xeokit/xeokit-sdk/compare/0.5.21...v0.7.2-sao-deferred)
-
-### 2 February 2020
 
 # [0.5.21](https://github.com/xeokit/xeokit-sdk/compare/v0.5.0...0.5.21)
 
@@ -1071,6 +1050,7 @@
 -  Implement real-world coordinates and z-up camera for BCF compliance - [207](https://github.com/xeokit/xeokit-sdk/pull/207)
 -  setViewpoint not immediate - [180](https://github.com/xeokit/xeokit-sdk/pull/180)
 -  Allow Z axis to be set as up in NavCubePlugin - [191](https://github.com/xeokit/xeokit-sdk/pull/191)
+
 # [v0.5.0](https://github.com/xeokit/xeokit-sdk/compare/v0.4.0...v0.5.0)
 
 ### 22 October 2019
@@ -1088,6 +1068,7 @@
 -  XKT V2 - [153](https://github.com/xeokit/xeokit-sdk/pull/153)
 -  Fixed BCF selection reset. - [141](https://github.com/xeokit/xeokit-sdk/pull/141)
 -  Bump eslint-utils from 1.3.1 to 1.4.2 - [136](https://github.com/xeokit/xeokit-sdk/pull/136)
+
 # [v0.4.0](https://github.com/xeokit/xeokit-sdk/compare/v0.3.0...v0.4.0)
 
 ### 25 August 2019
@@ -1102,6 +1083,7 @@
 -  Revert PR #98 - [113](https://github.com/xeokit/xeokit-sdk/pull/113)
 -  revert PR #99 - [112](https://github.com/xeokit/xeokit-sdk/pull/112)
 -  Fixed pako import to work with bundlers. - [119](https://github.com/xeokit/xeokit-sdk/pull/119)
+
 # [v0.3.0](https://github.com/xeokit/xeokit-sdk/compare/v0.2.0...v0.3.0)
 
 ### 8 July 2019
@@ -1114,6 +1096,7 @@
 -  arguments in the wrong order in GLTFQualityLoader - [98](https://github.com/xeokit/xeokit-sdk/pull/98)
 -  Include only src dir in package.json for node installs - [82](https://github.com/xeokit/xeokit-sdk/pull/82)
 -  Customizable spinner appearance - [80](https://github.com/xeokit/xeokit-sdk/pull/80)
+
 # [v0.2.0](https://github.com/xeokit/xeokit-sdk/compare/v0.1.7...v0.2.0)
 
 ### 27 May 2019
@@ -1132,6 +1115,7 @@
 -  PerformanceModel tiles benchmark for geometry batching - [38](https://github.com/xeokit/xeokit-sdk/pull/38)
 -  Performance model tiles - [37](https://github.com/xeokit/xeokit-sdk/pull/37)
 -  3D Picking for PerformanceModel - [36](https://github.com/xeokit/xeokit-sdk/pull/36)
+
 # [v0.1.7](https://github.com/xeokit/xeokit-sdk/compare/v0.1.6...v0.1.7)
 
 ### 9 March 2019
@@ -1139,9 +1123,6 @@
 -   Fix for - MetaDataReader.js 'Request' was not found in './request.js'  - [30](https://github.com/xeokit/xeokit-sdk/pull/30)
 -  Sync with master - [3](https://github.com/xeokit/xeokit-sdk/pull/3)
 -  Sync with master - [2](https://github.com/xeokit/xeokit-sdk/pull/2)
-# [v0.1.6](https://github.com/xeokit/xeokit-sdk/compare/v0.1.5...v0.1.6)
-
-### 6 March 2019
 
 # [v0.1.5](https://github.com/xeokit/xeokit-sdk/compare/v0.1.4...v0.1.5)
 
@@ -1150,28 +1131,15 @@
 -  Adds Support for loading IFC4 models - [21](https://github.com/xeokit/xeokit-sdk/pull/21)
 -  Sync with master - [1](https://github.com/xeokit/xeokit-sdk/pull/1)
 -  Fix for two minor bugs that cause the removePlugin() function to fail. - [18](https://github.com/xeokit/xeokit-sdk/pull/18)
+
 # [v0.1.4](https://github.com/xeokit/xeokit-sdk/compare/v0.1.3...v0.1.4)
 
 ### 18 February 2019
 
 -  Implemented colorize for PerformanceModel - [16](https://github.com/xeokit/xeokit-sdk/pull/16)
-# [v0.1.3](https://github.com/xeokit/xeokit-sdk/compare/v0.1.2...v0.1.3)
-
-### 7 February 2019
-
-# [v0.1.2](https://github.com/xeokit/xeokit-sdk/compare/0.1.1...v0.1.2)
-
-### 7 February 2019
-
-# [0.1.1](https://github.com/xeokit/xeokit-sdk/compare/v0.1...0.1.1)
-
-### 6 February 2019
 
 # [v0.1](https://github.com/xeokit/xeokit-sdk/compare/v0.1.0...v0.1)
 
 ### 21 January 2019
 
 -  Refactor duplicated loadJson helpers into the util one - [2](https://github.com/xeokit/xeokit-sdk/pull/2)
-# [v0.1.0]()
-
-### 3 February 2019
