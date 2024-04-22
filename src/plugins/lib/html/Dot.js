@@ -100,6 +100,7 @@ class Dot {
             dotClickable.addEventListener('contextmenu', (event) => {
                 cfg.onContextMenu(event, this);
                 event.preventDefault();
+                event.stopPropagation();
             });
         }
         

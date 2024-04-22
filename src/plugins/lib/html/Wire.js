@@ -117,6 +117,7 @@ class Wire {
             wireClickable.addEventListener('contextmenu', (event) => {
                 cfg.onContextMenu(event, this);
                 event.preventDefault();
+                event.stopPropagation();
             });
         }
 
