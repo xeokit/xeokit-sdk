@@ -532,7 +532,7 @@ function loadNode(ctx, node, depth, matrix) {
                     meshCfg.opacity = 1.0;
                 }
 
-                const backfaces = ((ctx.backfaces !== false) || (material.doubleSided !== false));
+                const backfaces = ((ctx.backfaces !== false) || (material && material.doubleSided !== false));
 
                 switch (primitive.mode) {
                     case 0: // POINTS
