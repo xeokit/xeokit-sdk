@@ -18,9 +18,10 @@
 <div class="slideout-sidebar">
     <img class="info-icon" src="../../assets/images/camera_icon.png"/>
     <h1>CameraControl</h1>
-    <h2>First-person mode</h2>
+    <h2>First-person mode with pointer lock</h2>
     <p>In this example, we're loading a double-pecision BIM model from the file system, then navigating it using
-        first-person mode.</p>
+        first-person mode. We'r also enabling pointer locking, which updates the camera without moving the pointer
+        and risking losing it in a corner of the screen.</p>
     <p>This model is centered at [1842022, 10, -5173301].</p>
     <h3>Stats</h3>
     <ul>
@@ -187,6 +188,11 @@
     };
 
     update();
+
+    // POINTER LOCK
+    const { canvas } = viewer.scene.canvas;
+    canvas.addEventListener("mousedown", () => canvas.requestPointerLock());
+    canvas.addEventListener("mouseup", () => document.exitPointerLock());
 
     const gui = new dat.GUI({autoPlace: false, width: "100%"});
 
