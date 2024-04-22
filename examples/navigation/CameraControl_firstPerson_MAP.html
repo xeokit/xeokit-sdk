@@ -188,6 +188,11 @@
 
     update();
 
+    // POINTER LOCK
+    const { canvas } = viewer.scene.canvas;
+    canvas.addEventListener("mousedown", () => canvas.requestPointerLock());
+    canvas.addEventListener("mouseup", () => document.exitPointerLock());
+
     const gui = new dat.GUI({autoPlace: false, width: "100%"});
 
     const cameraControlFolder = gui.addFolder('cameraControl');
