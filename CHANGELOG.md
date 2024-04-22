@@ -1,5 +1,13 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.1](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0...v2.6.1)
+
+### 22 April 2024
+
+-  [FIX] SceneModelTransform: parentTransformId parameter doesn't work - [#1457](https://github.com/xeokit/xeokit-sdk/pull/1457)
+-  [EXAMPLE] First-person pointer locking example - [#1456](https://github.com/xeokit/xeokit-sdk/pull/1456)
+-  [DOC] Add Pointer Lock on CameraControl firstPerson example - [#1455](https://github.com/xeokit/xeokit-sdk/pull/1455)
+
 # [v2.6.0](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-9...v2.6.0)
 
 ### 21 April 2024
