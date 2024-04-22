@@ -1,9 +1,11 @@
 ## xeokit-sdk Changelog
 
-# [v2.6.1](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0...v2.6.1)
+# [v2.6.2](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0...v2.6.2)
 
 ### 22 April 2024
 
+-  [FIX] Fix `undefined` TypeError for missing glTF material #1458 - [#1460](https://github.com/xeokit/xeokit-sdk/pull/1460)
+-  [FIX] SceneModelTransform: parentTransformId parameter doesn't work #… - [#1459](https://github.com/xeokit/xeokit-sdk/pull/1459)
 -  [FIX] SceneModelTransform: parentTransformId parameter doesn't work - [#1457](https://github.com/xeokit/xeokit-sdk/pull/1457)
 -  [EXAMPLE] First-person pointer locking example - [#1456](https://github.com/xeokit/xeokit-sdk/pull/1456)
 -  [DOC] Add Pointer Lock on CameraControl firstPerson example - [#1455](https://github.com/xeokit/xeokit-sdk/pull/1455)
