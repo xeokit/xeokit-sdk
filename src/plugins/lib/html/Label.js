@@ -66,12 +66,14 @@ class Label {
         if (cfg.onMouseDown) {
             label.addEventListener('mousedown', (event) => {
                 cfg.onMouseDown(event, this);
+                event.stopPropagation();
             });
         }
 
         if (cfg.onMouseUp) {
             label.addEventListener('mouseup', (event) => {
                 cfg.onMouseUp(event, this);
+                event.stopPropagation();
             });
         }
 
@@ -85,6 +87,8 @@ class Label {
             label.addEventListener('contextmenu', (event) => {
                 cfg.onContextMenu(event, this);
                 event.preventDefault();
+                event.stopPropagation();
+                console.log("Label context menu")
             });
         }
     }
