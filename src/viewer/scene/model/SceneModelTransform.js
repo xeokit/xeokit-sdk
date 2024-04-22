@@ -66,7 +66,7 @@ export class SceneModelTransform {
     _addChildTransform(childTransform) {
         this._childTransforms.push(childTransform);
         childTransform._parentTransform = this;
-        childTransform._setWorldMatrixDirty();
+        childTransform._transformDirty();
         childTransform._setAABBDirty();
     }
 
