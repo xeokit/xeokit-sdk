@@ -2679,7 +2679,7 @@ export class SceneModel extends Component {
         const transform = new SceneModelTransform({
             id: cfg.id,
             model: this,
-            parentTransform,
+            parent: parentTransform,
             matrix: cfg.matrix,
             position: cfg.position,
             scale: cfg.scale,
