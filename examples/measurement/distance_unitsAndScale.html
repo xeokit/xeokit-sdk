@@ -7,8 +7,8 @@
     <title>xeokit Example</title>
     <link href="../css/pageStyle.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
-    <script src="libs/dat.gui.min.js" type="text/javascript"></script>
-    <link href="../cssdat-gui-light-style.css" rel="stylesheet"/>
+    <script src="../libs/dat.gui.min.js" type="text/javascript"></script>
+    <link href="../css/dat-gui-light-style.css" rel="stylesheet"/>
 </head>
 <body>
 <input type="checkbox" id="info-button"/>
@@ -92,11 +92,11 @@
     const distanceMeasurementsPlugin = new DistanceMeasurementsPlugin(viewer);
 
     distanceMeasurementsPlugin.on("mouseOver", (e) => {
-        e.measurement.setHighlighted(true);
+        e.distanceMeasurement.setHighlighted(true);
     });
 
     distanceMeasurementsPlugin.on("mouseLeave", (e) => {
-        e.measurement.setHighlighted(false);
+        e.distanceMeasurement.setHighlighted(false);
     });
     
     sceneModel.on("loaded", () => {

@@ -133,6 +133,8 @@
     viewer.camera.look = [13.44, 3.31, -14.83];
     viewer.camera.up = [0.10, 0.98, -0.14];
 
+    viewer.cameraControl.panRightClick = false; // Prevents right-click-drag panning interfering with ContextMenus
+
     viewer.scene.xrayMaterial.fill = true;
     viewer.scene.xrayMaterial.fillAlpha = 0.1;
     viewer.scene.xrayMaterial.fillColor = [0, 0, 0];
@@ -230,23 +232,49 @@
         enabled: true
     });
 
-    viewer.cameraControl.on("rightClick", function (e) {
-        var hit = viewer.scene.pick({
-            canvasPos: e.canvasPos
+    const getCanvasPosFromEvent = function (event) {
+        const canvasPos = [];
+        if (!event) {
+            event = window.event;
+            canvasPos[0] = event.x;
+            canvasPos[1] = event.y;
+        } else {
+            let element = event.target;
+            let totalOffsetLeft = 0;
+            let totalOffsetTop = 0;
+            let totalScrollX = 0;
+            let totalScrollY = 0;
+            while (element.offsetParent) {
+                totalOffsetLeft += element.offsetLeft;
+                totalOffsetTop += element.offsetTop;
+                totalScrollX += element.scrollLeft;
+                totalScrollY += element.scrollTop;
+                element = element.offsetParent;
+            }
+            canvasPos[0] = event.pageX + totalScrollX - totalOffsetLeft;
+            canvasPos[1] = event.pageY + totalScrollY - totalOffsetTop;
+        }
+        return canvasPos;
+    };
+
+    viewer.scene.canvas.canvas.addEventListener('contextmenu', (event) => {
+        const canvasPos = getCanvasPosFromEvent(event);
+        const hit = viewer.scene.pick({
+            canvasPos
         });
         if (hit && hit.entity.isObject) {
             objectContextMenu.context = { // Must set context before showing menu
-                viewer: viewer,
+                viewer,
                 entity: hit.entity
             };
-            objectContextMenu.show(e.pagePos[0], e.pagePos[1]);
+            objectContextMenu.show(event.pageX, event.pageY);
         } else {
             canvasContextMenu.context = { // Must set context before showing menu
-                viewer: viewer
+                viewer
             };
-            canvasContextMenu.show(e.pagePos[0], e.pagePos[1]);
+            canvasContextMenu.show(event.pageX, event.pageY);
         }
-        e.event.preventDefault();
+        event.preventDefault();
     });
 
     //----------------------------------------------------------------------------------------------------------------------

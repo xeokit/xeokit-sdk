@@ -142,6 +142,8 @@
     viewer.camera.look = [4.40, 3.72, 8.89];
     viewer.camera.up = [-0.01, 0.99, 0.039];
 
+    viewer.cameraControl.panRightClick = false; // Prevents right-click-drag panning interfering with ContextMenus
+
     //------------------------------------------------------------------------------------------------------------------
     // Load a model
     //------------------------------------------------------------------------------------------------------------------
@@ -164,22 +166,22 @@
 
     const distanceMeasurementsPlugin = new DistanceMeasurementsPlugin(viewer);
 
-    distanceMeasurementsPlugin.on("measurementStart", (measurement) => {
+    distanceMeasurementsPlugin.on("measurementStart", (distanceMeasurement) => {
         console.log("measurementStart");
-        console.log("origin", measurement.origin.entity);
-        console.log("target", measurement.target.entity);
+        console.log("origin", distanceMeasurement.origin.entity);
+        console.log("target", distanceMeasurement.target.entity);
     });
 
-    distanceMeasurementsPlugin.on("measurementEnd", (measurement) => {
+    distanceMeasurementsPlugin.on("measurementEnd", (distanceMeasurement) => {
         console.log("measurementEnd");
-        console.log("origin", measurement.origin.entity);
-        console.log("target", measurement.target.entity);
+        console.log("origin", distanceMeasurement.origin.entity);
+        console.log("target", distanceMeasurement.target.entity);
     });
 
-    distanceMeasurementsPlugin.on("measurementCancel", (measurement) => {
+    distanceMeasurementsPlugin.on("measurementCancel", (distanceMeasurement) => {
         console.log("measurementCancel");
-        console.log("origin", measurement.origin.entity);
-        console.log("target", measurement.target.entity);
+        console.log("origin", distanceMeasurement.origin.entity);
+        console.log("target", distanceMeasurement.target.entity);
     });
     
     const distanceMeasurementsTouchControl  = new DistanceMeasurementsTouchControl(distanceMeasurementsPlugin, {
