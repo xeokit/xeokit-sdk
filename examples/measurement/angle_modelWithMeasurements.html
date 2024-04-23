@@ -134,6 +134,8 @@
     viewer.camera.look = [4.40, 3.72, 8.89];
     viewer.camera.up = [-0.01, 0.99, 0.039];
 
+    viewer.cameraControl.panRightClick = false; // Prevents right-click-drag panning interfering with ContextMenus
+
     viewer.cameraControl.followPointer = true;
 
     //------------------------------------------------------------------------------------------------------------------
@@ -158,17 +160,17 @@
             [
                 {
                     getTitle: (context) => {
-                        return context.measurement.labelsVisible ? "Hide Labels" : "Show Labels";
+                        return context.angleMeasurement.labelsVisible ? "Hide Labels" : "Show Labels";
                     },
                     doAction: function (context) {
-                        context.measurement.labelsVisible = !context.measurement.labelsVisible;
+                        context.angleMeasurement.labelsVisible = !context.angleMeasurement.labelsVisible;
                     }
                 }
             ], [
                 {
                     title: "Delete Measurement",
                     doAction: function (context) {
-                        context.measurement.destroy();
+                        context.angleMeasurement.destroy();
                     }
                 }
             ]
@@ -177,8 +179,8 @@
     });
 
     angleMeasurementsContextMenu.on("hidden", () => {
-        if (angleMeasurementsContextMenu.context.measurement) {
-            angleMeasurementsContextMenu.context.measurement.setHighlighted(false);
+        if (angleMeasurementsContextMenu.context.angleMeasurement) {
+            angleMeasurementsContextMenu.context.angleMeasurement.setHighlighted(false);
         }
     });
     
@@ -191,21 +193,21 @@
     });
 
     angleMeasurementsPlugin.on("mouseOver", (e) => {
-        e.measurement.setHighlighted(true);
+        e.angleMeasurement.setHighlighted(true);
     });
 
     angleMeasurementsPlugin.on("mouseLeave", (e) => {
-        if (angleMeasurementsContextMenu.shown && angleMeasurementsContextMenu.context.measurement.id === e.measurement.id) {
+        if (angleMeasurementsContextMenu.shown && angleMeasurementsContextMenu.context.angleMeasurement.id === e.angleMeasurement.id) {
             return;
         }
-        e.measurement.setHighlighted(false);
+        e.angleMeasurement.setHighlighted(false);
     });
 
     angleMeasurementsPlugin.on("contextMenu", (e) => {
         angleMeasurementsContextMenu.context = { // Must set context before showing menu
             viewer: viewer,
             angleMeasurementsPlugin: angleMeasurementsPlugin,
-            measurement: e.measurement
+            angleMeasurement: e.angleMeasurement
         };
         angleMeasurementsContextMenu.show(e.event.clientX, e.event.clientY);
         e.event.preventDefault();
@@ -729,31 +731,51 @@
         ]
     });
 
-    viewer.cameraControl.on("rightClick", (e) => {
-
+    viewer.scene.canvas.canvas.addEventListener('contextmenu', (event) => {
+        const canvasPos = getCanvasPosFromEvent(event);
         const hit = viewer.scene.pick({
-            canvasPos: e.canvasPos
+            canvasPos
         });
-
         if (hit && hit.entity.isObject) {
-
             objectContextMenu.context = { // Must set context before showing menu
-                viewer: viewer,
+                viewer,
                 entity: hit.entity
             };
-
-            objectContextMenu.show(e.pagePos[0], e.pagePos[1]);
+            objectContextMenu.show(event.pageX, event.pageY);
         } else {
-
             canvasContextMenu.context = { // Must set context before showing menu
-                viewer: viewer
+                viewer
             };
-
-            canvasContextMenu.show(e.pagePos[0], e.pagePos[1]);
+            canvasContextMenu.show(event.pageX, event.pageY);
         }
-
-        e.event.preventDefault();
+        event.preventDefault();
     });
+
+    const getCanvasPosFromEvent = function (event) {
+        const canvasPos = [];
+        if (!event) {
+            event = window.event;
+            canvasPos[0] = event.x;
+            canvasPos[1] = event.y;
+        } else {
+            let element = event.target;
+            let totalOffsetLeft = 0;
+            let totalOffsetTop = 0;
+            let totalScrollX = 0;
+            let totalScrollY = 0;
+            while (element.offsetParent) {
+                totalOffsetLeft += element.offsetLeft;
+                totalOffsetTop += element.offsetTop;
+                totalScrollX += element.scrollLeft;
+                totalScrollY += element.scrollTop;
+                element = element.offsetParent;
+            }
+            canvasPos[0] = event.pageX + totalScrollX - totalOffsetLeft;
+            canvasPos[1] = event.pageY + totalScrollY - totalOffsetTop;
+        }
+        return canvasPos;
+    };
+
 
     window.viewer = viewer;
 

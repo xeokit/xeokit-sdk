@@ -135,6 +135,8 @@
 
     viewer.cameraControl.followPointer = true;
 
+    viewer.cameraControl.panRightClick = false; // Prevents right-click-drag panning interfering with ContextMenus
+
     //------------------------------------------------------------------------------------------------------------------
     // Load a model
     //------------------------------------------------------------------------------------------------------------------
@@ -157,49 +159,49 @@
             [
                 {
                     getTitle: (context) => {
-                        return context.measurement.axisVisible ? "Hide Axis" : "Show Axis";
+                        return context.distanceMeasurement.axisVisible ? "Hide Axis" : "Show Axis";
                     },
                     doAction: function (context) {
-                        context.measurement.axisVisible = !context.measurement.axisVisible;
+                        context.distanceMeasurement.axisVisible = !context.distanceMeasurement.axisVisible;
                     }
                 },
                 {
                     getTitle: (context) => {
-                        return context.measurement.xAxisVisible ? "Hide X Axis" : "Show X Axis";
+                        return context.distanceMeasurement.xAxisVisible ? "Hide X Axis" : "Show X Axis";
                     },
                     doAction: function (context) {
-                        context.measurement.xAxisVisible = !context.measurement.xAxisVisible;
+                        context.distanceMeasurement.xAxisVisible = !context.distanceMeasurement.xAxisVisible;
                     }
                 },
                 {
                     getTitle: (context) => {
-                        return context.measurement.yAxisVisible ? "Hide Y Axis" : "Show Y Axis";
+                        return context.distanceMeasurement.yAxisVisible ? "Hide Y Axis" : "Show Y Axis";
                     },
                     doAction: function (context) {
-                        context.measurement.yAxisVisible = !context.measurement.yAxisVisible;
+                        context.distanceMeasurement.yAxisVisible = !context.distanceMeasurement.yAxisVisible;
                     }
                 },
                 {
                     getTitle: (context) => {
-                        return context.measurement.zAxisVisible ? "Hide Z Axis" : "Show Z Axis";
+                        return context.distanceMeasurement.zAxisVisible ? "Hide Z Axis" : "Show Z Axis";
                     },
                     doAction: function (context) {
-                        context.measurement.zAxisVisible = !context.measurement.zAxisVisible;
+                        context.distanceMeasurement.zAxisVisible = !context.distanceMeasurement.zAxisVisible;
                     }
                 },
                 {
                     getTitle: (context) => {
-                        return context.measurement.labelsVisible ? "Hide Labels" : "Show Labels";
+                        return context.distanceMeasurement.labelsVisible ? "Hide Labels" : "Show Labels";
                     },
                     doAction: function (context) {
-                        context.measurement.labelsVisible = !context.measurement.labelsVisible;
+                        context.distanceMeasurement.labelsVisible = !context.distanceMeasurement.labelsVisible;
                     }
                 }
             ], [
                 {
                     title: "Delete Measurement",
                     doAction: function (context) {
-                        context.measurement.destroy();
+                        context.distanceMeasurement.destroy();
                     }
                 }
             ]
@@ -208,8 +210,8 @@
     });
 
     distanceMeasurementsContextMenu.on("hidden", () => {
-        if (distanceMeasurementsContextMenu.context.measurement) {
-            distanceMeasurementsContextMenu.context.measurement.setHighlighted(false);
+        if (distanceMeasurementsContextMenu.context.distanceMeasurement) {
+            distanceMeasurementsContextMenu.context.distanceMeasurement.setHighlighted(false);
         }
     });
 
@@ -222,21 +224,21 @@
     });
 
     distanceMeasurementsPlugin.on("mouseOver", (e) => {
-        e.measurement.setHighlighted(true);
+        e.distanceMeasurement.setHighlighted(true);
     });
 
     distanceMeasurementsPlugin.on("mouseLeave", (e) => {
-        if (distanceMeasurementsContextMenu.shown && distanceMeasurementsContextMenu.context.measurement.id === e.measurement.id) {
+        if (distanceMeasurementsContextMenu.shown && distanceMeasurementsContextMenu.context.distanceMeasurement.id === e.distanceMeasurement.id) {
             return;
         }
-        e.measurement.setHighlighted(false);
+        e.distanceMeasurement.setHighlighted(false);
     });
 
     distanceMeasurementsPlugin.on("contextMenu", (e) => {
         distanceMeasurementsContextMenu.context = { // Must set context before showing menu
             viewer: viewer,
             distanceMeasurementsPlugin: distanceMeasurementsPlugin,
-            measurement: e.measurement
+            distanceMeasurement: e.distanceMeasurement
         };
         distanceMeasurementsContextMenu.show(e.event.clientX, e.event.clientY);
         e.event.preventDefault();
@@ -815,31 +817,50 @@
         ]
     });
 
-    viewer.cameraControl.on("rightClick", (e) => {
-
+    viewer.scene.canvas.canvas.addEventListener('contextmenu', (event) => {
+        const canvasPos = getCanvasPosFromEvent(event);
         const hit = viewer.scene.pick({
-            canvasPos: e.canvasPos
+            canvasPos
         });
-
         if (hit && hit.entity.isObject) {
-
             objectContextMenu.context = { // Must set context before showing menu
-                viewer: viewer,
+                viewer,
                 entity: hit.entity
             };
-
-            objectContextMenu.show(e.pagePos[0], e.pagePos[1]);
+            objectContextMenu.show(event.pageX, event.pageY);
         } else {
-
             canvasContextMenu.context = { // Must set context before showing menu
-                viewer: viewer
+                viewer
             };
-
-            canvasContextMenu.show(e.pagePos[0], e.pagePos[1]);
+            canvasContextMenu.show(event.pageX, event.pageY);
         }
-
-        e.event.preventDefault();
+        event.preventDefault();
     });
+
+    const getCanvasPosFromEvent = function (event) {
+        const canvasPos = [];
+        if (!event) {
+            event = window.event;
+            canvasPos[0] = event.x;
+            canvasPos[1] = event.y;
+        } else {
+            let element = event.target;
+            let totalOffsetLeft = 0;
+            let totalOffsetTop = 0;
+            let totalScrollX = 0;
+            let totalScrollY = 0;
+            while (element.offsetParent) {
+                totalOffsetLeft += element.offsetLeft;
+                totalOffsetTop += element.offsetTop;
+                totalScrollX += element.scrollLeft;
+                totalScrollY += element.scrollTop;
+                element = element.offsetParent;
+            }
+            canvasPos[0] = event.pageX + totalScrollX - totalOffsetLeft;
+            canvasPos[1] = event.pageY + totalScrollY - totalOffsetTop;
+        }
+        return canvasPos;
+    };
 
     window.viewer = viewer;
 

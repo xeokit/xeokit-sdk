@@ -159,6 +159,8 @@
     viewer.cameraControl.navMode = "orbit";
     viewer.cameraControl.followPointer = true;
 
+    viewer.cameraControl.panRightClick = false; // Prevents right-click-drag panning interfering with ContextMenus
+
     viewer.scene.pointsMaterial.roundPoints = true;
     viewer.scene.pointsMaterial.perspectivePoints = true;
     viewer.scene.pointsMaterial.pointSize = 2;
@@ -363,14 +365,14 @@
     const distanceMeasurementsPlugin = new DistanceMeasurementsPlugin(viewer);
 
     distanceMeasurementsPlugin.on("mouseOver", (e) => {
-        e.measurement.setHighlighted(true);
+        e.distanceMeasurement.setHighlighted(true);
     });
 
     distanceMeasurementsPlugin.on("mouseLeave", (e) => {
-        if (distanceMeasurementsContextMenu.shown && distanceMeasurementsContextMenu.context.measurement.id === e.measurement.id) {
+        if (distanceMeasurementsContextMenu.shown && distanceMeasurementsContextMenu.context.distanceMeasurement.id === e.distanceMeasurement.id) {
             return;
         }
-        e.measurement.setHighlighted(false);
+        e.distanceMeasurement.setHighlighted(false);
     });
 
     const distanceMeasurementsMouseControl = new DistanceMeasurementsMouseControl(distanceMeasurementsPlugin, {

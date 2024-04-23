@@ -766,6 +766,27 @@ class ContextMenu {
                                     self._updateItemsEnabledStatus();
                                 }
                             });
+                            item.itemElement.addEventListener("mouseup", (event) => {
+                                if (event.which !== 3) {
+                                    return;
+                                }
+                                event.preventDefault();
+                                if (!self._context) {
+                                    return;
+                                }
+                                if (item.enabled === false) {
+                                    return;
+                                }
+                                if (item.doAction) {
+                                    item.doAction(self._context);
+                                }
+                                if (this._hideOnAction) {
+                                    self.hide();
+                                } else {
+                                    self._updateItemsTitles();
+                                    self._updateItemsEnabledStatus();
+                                }
+                            });
                             item.itemElement.addEventListener("mouseenter", (event) => {
                                 event.preventDefault();
                                 if (item.enabled === false) {
