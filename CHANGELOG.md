@@ -1,9 +1,13 @@
 ## xeokit-sdk Changelog
 
-# [v2.6.2](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0...v2.6.2)
+# [v2.6.4](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0...v2.6.4)
 
-### 22 April 2024
+### 23 April 2024
 
+-  Context menu enhancements - [#1466](https://github.com/xeokit/xeokit-sdk/pull/1466)
+-  Fixed BCFViewpointsPlugin setViewpoint setting IfcSpaces visible when spaces_visible is false - [#1464](https://github.com/xeokit/xeokit-sdk/pull/1464)
+-  [FIX] Ensure no interference between ContextMenus on measurements and Canvas  - [#1463](https://github.com/xeokit/xeokit-sdk/pull/1463)
+-  [FIX] Fix interference between ContextMenus on measurements and Canvas - [#1462](https://github.com/xeokit/xeokit-sdk/pull/1462)
 -  [FIX] Fix `undefined` TypeError for missing glTF material #1458 - [#1460](https://github.com/xeokit/xeokit-sdk/pull/1460)
 -  [FIX] SceneModelTransform: parentTransformId parameter doesn't work #… - [#1459](https://github.com/xeokit/xeokit-sdk/pull/1459)
 -  [FIX] SceneModelTransform: parentTransformId parameter doesn't work - [#1457](https://github.com/xeokit/xeokit-sdk/pull/1457)
