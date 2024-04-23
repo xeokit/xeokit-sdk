@@ -757,7 +757,7 @@ class BCFViewpointsPlugin extends Plugin {
                 const view_setup_hints = bcfViewpoint.components.visibility.view_setup_hints;
                 if (view_setup_hints) {
                     if (view_setup_hints.spaces_visible === false) {
-                        scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType("IfcSpace"), true);
+                        scene.setObjectsVisible(viewer.metaScene.getObjectIDsByType("IfcSpace"), false);
                     }
                     if (view_setup_hints.spaces_translucent !== undefined) {
                         scene.setObjectsXRayed(viewer.metaScene.getObjectIDsByType("IfcSpace"), true);
