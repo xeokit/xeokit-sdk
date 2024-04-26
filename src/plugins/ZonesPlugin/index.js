@@ -113,7 +113,6 @@ class Zone extends Component {
             onMouseMove,
             onContextMenu
         });
-        this.labelText = cfg.labelText || "Label";
 
         this.color = cfg.color;
 
@@ -149,6 +148,7 @@ class Zone extends Component {
 
         this._visible = true;
         this._labelsVisible = true;
+        this.labelText = cfg.labelText;
 
         this._wp = new Float64Array([
             xmin, ymin, zmin, 1.0,
@@ -158,6 +158,7 @@ class Zone extends Component {
         ]);
 
         this._vpDirty = true;
+        this._center = math.vec3([ (xmin + xmax) / 2, (ymin + ymax) / 2, (zmin + zmax) / 2 ]);
 
         const c = this._basePoints.map(p => [ p[0], this._zoneAltitude, p[1] ]).concat(this._basePoints.map(p => [ p[0], this._zoneAltitude + this._zoneHeight, p[1] ]));
 
@@ -235,9 +236,14 @@ class Zone extends Component {
         }
     }
 
+    get center() {
+        return this._center;
+    }
+
     set labelText(text) {
         this._labelText = text;
         this._label.setText(this._labelText);
+        this._label.setVisible(this._visible && (this._labelText !== undefined));
     }
 
     get labelText() {
@@ -261,7 +267,7 @@ class Zone extends Component {
      */
     set visible(value) {
         this._visible = !!value;
-        this._label.setVisible(this._visible);
+        this._label.setVisible(this._visible && (this._labelText !== undefined));
         this._zoneMesh.visible = this._visible;
         this._cpDirty = true;
         this._needUpdate();
