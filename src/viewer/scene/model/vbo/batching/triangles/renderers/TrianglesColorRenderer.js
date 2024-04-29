@@ -194,6 +194,8 @@ export class TrianglesColorRenderer extends TrianglesBatchingRenderer {
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
+            src.push("uniform float sliceThickness;");
+            src.push("uniform vec4 sliceColor;");
         }
         src.push("in vec4 vColor;");
         src.push("out vec4 outColor;");
@@ -210,14 +212,11 @@ export class TrianglesColorRenderer extends TrianglesBatchingRenderer {
                 src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
                 src.push("}");
             }
-            src.push("  if (dist > " + scene.crossSections.sliceThickness.toPrecision(6) + ") { ");
+            src.push("  if (dist > sliceThickness) { ");
             src.push("      discard;")
             src.push("  }");
             src.push("  if (dist > 0.0) { ");
-            src.push("      newColor = vec4(" + scene.crossSections.sliceColor[0].toPrecision(6) + ", "
-                + scene.crossSections.sliceColor[1].toPrecision(6) + ", "
-                + scene.crossSections.sliceColor[2].toPrecision(6) + ", "
-                + scene.crossSections.sliceColor[3].toPrecision(6) + ");");
+            src.push("      newColor = sliceColor;");
             src.push("  }");
             src.push("}");
         }
