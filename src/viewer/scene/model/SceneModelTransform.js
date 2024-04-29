@@ -67,7 +67,7 @@ export class SceneModelTransform {
         this._childTransforms.push(childTransform);
         childTransform._parentTransform = this;
         childTransform._transformDirty();
-        childTransform._setAABBDirty();
+        childTransform._setSubtreeAABBsDirty(this);
     }
 
     _addMesh(mesh) {
