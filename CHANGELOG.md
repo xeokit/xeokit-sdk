@@ -1,9 +1,10 @@
 ## xeokit-sdk Changelog
 
-# [v2.6.4](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0...v2.6.4)
+# [v2.6.5](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-7...v2.6.5)
 
-### 23 April 2024
+### 29 April 2024
 
+-  Fix Marker/Annotation occlusion for scene graph rep - [#1470](https://github.com/xeokit/xeokit-sdk/pull/1470)
 -  Context menu enhancements - [#1466](https://github.com/xeokit/xeokit-sdk/pull/1466)
 -  Fixed BCFViewpointsPlugin setViewpoint setting IfcSpaces visible when spaces_visible is false - [#1464](https://github.com/xeokit/xeokit-sdk/pull/1464)
 -  [FIX] Ensure no interference between ContextMenus on measurements and Canvas  - [#1463](https://github.com/xeokit/xeokit-sdk/pull/1463)
@@ -13,11 +14,6 @@
 -  [FIX] SceneModelTransform: parentTransformId parameter doesn't work - [#1457](https://github.com/xeokit/xeokit-sdk/pull/1457)
 -  [EXAMPLE] First-person pointer locking example - [#1456](https://github.com/xeokit/xeokit-sdk/pull/1456)
 -  [DOC] Add Pointer Lock on CameraControl firstPerson example - [#1455](https://github.com/xeokit/xeokit-sdk/pull/1455)
-
-# [v2.6.0](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-9...v2.6.0)
-
-### 21 April 2024
-
 -  [FIX] Make Shadow class private - [#1454](https://github.com/xeokit/xeokit-sdk/pull/1454)
 -  [FIX] Fix building positioning examples #1379 - [#1453](https://github.com/xeokit/xeokit-sdk/pull/1453)
 -  [FIX] Fix broken example links - [#1452](https://github.com/xeokit/xeokit-sdk/pull/1452)
@@ -31,17 +27,7 @@
 -  FIX Viewer.js breaking import - [#1434](https://github.com/xeokit/xeokit-sdk/pull/1434)
 -  Add canvasToPagePos callback for measurement controls - [#1433](https://github.com/xeokit/xeokit-sdk/pull/1433)
 -  [FIX] Distance measurement tool not working when model has a slice on specific axis #1428 - [#1429](https://github.com/xeokit/xeokit-sdk/pull/1429)
-
-# [v2.6.0-beta-9](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-8...v2.6.0-beta-9)
-
-### 28 March 2024
-
 -  Add FastNavPlugin.defaultScaleCanvasResolutionFactor - [#1426](https://github.com/xeokit/xeokit-sdk/pull/1426)
-
-# [v2.6.0-beta-8](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-7...v2.6.0-beta-8)
-
-### 28 March 2024
-
 -  Add selection glowThrough support to DTX triangles renderer layer - [#1425](https://github.com/xeokit/xeokit-sdk/pull/1425)
 -  [FIX] Reset CameraControl default values when followPointer config is dynamically changed - [#1423](https://github.com/xeokit/xeokit-sdk/pull/1423)
 
@@ -70,53 +56,10 @@
 
 -  [FIX] Create dummy SceneEntity for unused SceneMeshes - [#1410](https://github.com/xeokit/xeokit-sdk/pull/1410)
 
-# [v2.6.0-beta-16](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-15...v2.6.0-beta-16)
+# [v2.6.0-beta-3](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-1...v2.6.0-beta-3)
 
-### 20 April 2024
+### 13 March 2024
 
--  Make PickResult public part of API #1314 - [#1451](https://github.com/xeokit/xeokit-sdk/pull/1451)
-
-# [v2.6.0-beta-15](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-13...v2.6.0-beta-15)
-
-### 20 April 2024
-
--  Include Entities on distance and angle measurements #1337 - [#1450](https://github.com/xeokit/xeokit-sdk/pull/1450)
--  Fix GLTFLoaderPlugin.load() backfaces option - [#1449](https://github.com/xeokit/xeokit-sdk/pull/1449)
--  Fix SceneModel.createTransform() parentTransformId - [#1448](https://github.com/xeokit/xeokit-sdk/pull/1448)
--  Feature - Add support for Pointer Lock Web API - [#1445](https://github.com/xeokit/xeokit-sdk/pull/1445)
--  Prevent ability to create SectionPlanes on SectionPlane Control - [#1444](https://github.com/xeokit/xeokit-sdk/pull/1444)
-
-# [v2.6.0-beta-13](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-12...v2.6.0-beta-13)
-
-### 16 April 2024
-
--  Touch measurements - [#1440](https://github.com/xeokit/xeokit-sdk/pull/1440)
-
-# [v2.6.0-beta-12](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-11...v2.6.0-beta-12)
-
-### 10 April 2024
-
--  FIX Viewer.js breaking import - [#1434](https://github.com/xeokit/xeokit-sdk/pull/1434)
-
-# [v2.6.0-beta-11](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-10...v2.6.0-beta-11)
-
-### 9 April 2024
-
--  Add canvasToPagePos callback for measurement controls - [#1433](https://github.com/xeokit/xeokit-sdk/pull/1433)
-
-# [v2.6.0-beta-10](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0-beta-1...v2.6.0-beta-10)
-
-### 1 April 2024
-
--  [FIX] Distance measurement tool not working when model has a slice on specific axis #1428 - [#1429](https://github.com/xeokit/xeokit-sdk/pull/1429)
--  Add FastNavPlugin.defaultScaleCanvasResolutionFactor - [#1426](https://github.com/xeokit/xeokit-sdk/pull/1426)
--  Add selection glowThrough support to DTX triangles renderer layer - [#1425](https://github.com/xeokit/xeokit-sdk/pull/1425)
--  [FIX] Reset CameraControl default values when followPointer config is dynamically changed - [#1423](https://github.com/xeokit/xeokit-sdk/pull/1423)
--  Robust placement of measurement dot - [#1418](https://github.com/xeokit/xeokit-sdk/pull/1418)
--  Add missing .js endings for import - [#1416](https://github.com/xeokit/xeokit-sdk/pull/1416)
--  [FIX] No default metaobjects when loading XKTs and JSONs from manifest - [#1413](https://github.com/xeokit/xeokit-sdk/pull/1413)
--  [FIX] Tolerate metamodel PropertySets with missing properties - [#1412](https://github.com/xeokit/xeokit-sdk/pull/1412)
--  [FIX] Create dummy SceneEntity for unused SceneMeshes - [#1410](https://github.com/xeokit/xeokit-sdk/pull/1410)
 -  Fix dot initial visibility - [#1406](https://github.com/xeokit/xeokit-sdk/pull/1406)
 -  An alternative setInterval that does not use a Worker - [#1402](https://github.com/xeokit/xeokit-sdk/pull/1402)
 
