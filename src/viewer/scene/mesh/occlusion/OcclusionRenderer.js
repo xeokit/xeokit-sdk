@@ -73,6 +73,10 @@ OcclusionRenderer.prototype.drawMesh = function (frameCtx, mesh) {
     const geometryState = mesh._geometry._state;
     const origin = mesh.origin;
 
+    if (materialState.alpha < 1.0) {
+        return;
+    }
+
     if (frameCtx.lastProgramId !== this._program.id) {
         frameCtx.lastProgramId = this._program.id;
         this._bindProgram(frameCtx);
