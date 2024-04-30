@@ -240,7 +240,7 @@ export class TrianglesColorTextureRenderer extends TrianglesBatchingRenderer {
             src.push("reflectedColor += lambertian * (lightColor" + i + ".rgb * lightColor" + i + ".a);");
         }
 
-        src.push("vec4 color =  vec4((lightAmbient.rgb * lightAmbient.a * vColor.rgb) + (reflectedColor * vColor.rgb), vColor.a);");
+        src.push("vec4 color =  vec4((lightAmbient.rgb * lightAmbient.a * newColor.rgb) + (reflectedColor * newColor.rgb), newColor.a);");
         if (gammaOutput) {
             src.push("vec4 colorTexel = color * sRGBToLinear(texture(uColorMap, vUV));");
         } else {
