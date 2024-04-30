@@ -116,7 +116,6 @@ export class EdgesEmphasisRenderer extends EdgesRenderer {
         src.push("out vec4 outColor;");
         src.push("void main(void) {");
         if (clipping) {
-            console.log("Edges renderer with clipping");
             src.push("  vec4 newColor;");
             src.push("  newColor = vColor;");
             src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
