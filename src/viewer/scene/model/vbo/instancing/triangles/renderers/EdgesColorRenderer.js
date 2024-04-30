@@ -5,10 +5,10 @@ import {EdgesRenderer} from "./EdgesRenderer.js";
  */
 
 
-export class EdgesEmphasisRenderer extends EdgesRenderer {
+export class EdgesColorRenderer extends EdgesRenderer {
 
-    drawLayer(frameCtx, instancingLayer, renderPass) {
-        super.drawLayer(frameCtx, instancingLayer, renderPass, {colorUniform: true});
+    drawLayer(frameCtx, batchingLayer, renderPass) {
+        super.drawLayer(frameCtx, batchingLayer, renderPass, { colorUniform: false });
     }
 
     _buildVertexShader() {
@@ -17,12 +17,11 @@ export class EdgesEmphasisRenderer extends EdgesRenderer {
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push("#version 300 es");
-        src.push("// EdgesEmphasisRenderer vertex shader");
+        src.push("// EdgesColorRenderer vertex shader");
 
         src.push("uniform int renderPass;");
-        src.push("uniform vec4 color;");
-
         src.push("in vec3 position;");
+        src.push("in vec4 color;");
         if (scene.entityOffsetsEnabled) {
             src.push("in vec3 offset;");
         }
@@ -59,9 +58,7 @@ export class EdgesEmphasisRenderer extends EdgesRenderer {
         src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
 
         src.push("} else {");
-
-        src.push("vec4 worldPosition = worldMatrix * positionsDecodeMatrix * vec4(position, 1.0); ");
-
+        src.push("vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
         src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
         if (scene.entityOffsetsEnabled) {
             src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
@@ -77,7 +74,8 @@ export class EdgesEmphasisRenderer extends EdgesRenderer {
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
         src.push("gl_Position = clipPos;");
-        src.push("vColor = vec4(color.r, color.g, color.b, color.a);");
+        //   src.push("vColor = vec4(float(color.r-100.0) / 255.0, float(color.g-100.0) / 255.0, float(color.b-100.0) / 255.0, float(color.a) / 255.0);");
+        src.push("vColor = vec4(float(color.r*0.5) / 255.0, float(color.g*0.5) / 255.0, float(color.b*0.5) / 255.0, float(color.a) / 255.0);");
         src.push("}");
         src.push("}");
         return src;
@@ -89,7 +87,7 @@ export class EdgesEmphasisRenderer extends EdgesRenderer {
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push("#version 300 es");
-        src.push("// EdgesEmphasisRenderer fragment shader");
+        src.push("// EdgesColorRenderer fragment shader");
 
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
