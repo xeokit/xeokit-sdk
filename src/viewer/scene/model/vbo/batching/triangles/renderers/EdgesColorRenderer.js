@@ -67,7 +67,7 @@ export class EdgesColorRenderer extends EdgesRenderer {
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
-           src.push("vFragDepth = 1.0 + clipPos.w;");
+            src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
         src.push("gl_Position = clipPos;");
@@ -105,11 +105,15 @@ export class EdgesColorRenderer extends EdgesRenderer {
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
+            src.push("uniform float sliceThickness;");
+            src.push("uniform vec4 sliceColor;");
         }
         src.push("in vec4 vColor;");
         src.push("out vec4 outColor;");
         src.push("void main(void) {");
         if (clipping) {
+            src.push("  vec4 newColor;");
+            src.push("  newColor = vColor;");
             src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
             src.push("  if (clippable) {");
             src.push("  float dist = 0.0;");
@@ -118,7 +122,12 @@ export class EdgesColorRenderer extends EdgesRenderer {
                 src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
                 src.push("}");
             }
-            src.push("  if (dist > 0.0) { discard; }");
+            src.push("  if (dist > sliceThickness) { ");
+            src.push("      discard;")
+            src.push("  }");
+            src.push("  if (dist > 0.0) { ");
+            src.push("      newColor = sliceColor;");
+            src.push("  }");
             src.push("}");
         }
         if (scene.logarithmicDepthBufferEnabled) {

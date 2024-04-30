@@ -18,7 +18,7 @@ export class TrianglesFlatColorRenderer extends TrianglesInstancingRenderer {
         const src = [];
         src.push("#version 300 es");
         src.push("// Instancing geometry flat-shading drawing vertex shader");
-        
+
         src.push("uniform int renderPass;");
 
         src.push("in vec3 position;");
@@ -43,7 +43,7 @@ export class TrianglesFlatColorRenderer extends TrianglesInstancingRenderer {
             src.push("}");
             src.push("out float isPerspective;");
         }
-        
+
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
             src.push("out float vFlags;");
@@ -75,7 +75,7 @@ export class TrianglesFlatColorRenderer extends TrianglesInstancingRenderer {
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
-           src.push("vFragDepth = 1.0 + clipPos.w;");
+            src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
 
@@ -100,7 +100,7 @@ export class TrianglesFlatColorRenderer extends TrianglesInstancingRenderer {
         const src = [];
         src.push("#version 300 es");
         src.push("// Instancing geometry flat-shading drawing fragment shader");
-        
+
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -109,9 +109,9 @@ export class TrianglesFlatColorRenderer extends TrianglesInstancingRenderer {
         src.push("precision mediump int;");
         src.push("#endif");
         if (scene.logarithmicDepthBufferEnabled) {
-                src.push("in float isPerspective;");
-                src.push("uniform float logDepthBufFC;");
-                src.push("in float vFragDepth;");
+            src.push("in float isPerspective;");
+            src.push("uniform float logDepthBufFC;");
+            src.push("in float vFragDepth;");
         }
         if (this._withSAO) {
             src.push("uniform sampler2D uOcclusionTexture;");
@@ -134,6 +134,8 @@ export class TrianglesFlatColorRenderer extends TrianglesInstancingRenderer {
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
+            src.push("uniform float sliceThickness;");
+            src.push("uniform vec4 sliceColor;");
         }
 
         this._addMatricesUniformBlockLines(src);
@@ -165,6 +167,8 @@ export class TrianglesFlatColorRenderer extends TrianglesInstancingRenderer {
         src.push("void main(void) {");
 
         if (clipping) {
+            src.push("  vec4 newColor;");
+            src.push("  newColor = vColor;");
             src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
             src.push("  if (clippable) {");
             src.push("  float dist = 0.0;");
@@ -173,8 +177,11 @@ export class TrianglesFlatColorRenderer extends TrianglesInstancingRenderer {
                 src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
                 src.push("}");
             }
-            src.push("  if (dist > 0.0) { ");
+            src.push("  if (dist > sliceThickness) { ");
             src.push("      discard;")
+            src.push("  }");
+            src.push("  if (dist > 0.0) { ");
+            src.push("      newColor = sliceColor;");
             src.push("  }");
             src.push("}");
         }

@@ -5,10 +5,10 @@ import {EdgesRenderer} from "./EdgesRenderer.js";
  */
 
 
-export class EdgesColorRenderer extends EdgesRenderer {
+export class EdgesEmphasisRenderer extends EdgesRenderer {
 
-    drawLayer(frameCtx, batchingLayer, renderPass) {
-        super.drawLayer(frameCtx, batchingLayer, renderPass, { colorUniform: false });
+    drawLayer(frameCtx, instancingLayer, renderPass) {
+        super.drawLayer(frameCtx, instancingLayer, renderPass, {colorUniform: true});
     }
 
     _buildVertexShader() {
@@ -17,11 +17,12 @@ export class EdgesColorRenderer extends EdgesRenderer {
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push("#version 300 es");
-        src.push("// EdgesColorRenderer vertex shader");
+        src.push("// EdgesEmphasisRenderer vertex shader");
 
         src.push("uniform int renderPass;");
+        src.push("uniform vec4 color;");
+
         src.push("in vec3 position;");
-        src.push("in vec4 color;");
         if (scene.entityOffsetsEnabled) {
             src.push("in vec3 offset;");
         }
@@ -58,7 +59,9 @@ export class EdgesColorRenderer extends EdgesRenderer {
         src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
 
         src.push("} else {");
-        src.push("vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
+
+        src.push("vec4 worldPosition = worldMatrix * positionsDecodeMatrix * vec4(position, 1.0); ");
+
         src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
         if (scene.entityOffsetsEnabled) {
             src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
@@ -74,8 +77,7 @@ export class EdgesColorRenderer extends EdgesRenderer {
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
         src.push("gl_Position = clipPos;");
-        //   src.push("vColor = vec4(float(color.r-100.0) / 255.0, float(color.g-100.0) / 255.0, float(color.b-100.0) / 255.0, float(color.a) / 255.0);");
-        src.push("vColor = vec4(float(color.r*0.5) / 255.0, float(color.g*0.5) / 255.0, float(color.b*0.5) / 255.0, float(color.a) / 255.0);");
+        src.push("vColor = vec4(color.r, color.g, color.b, color.a);");
         src.push("}");
         src.push("}");
         return src;
@@ -87,7 +89,7 @@ export class EdgesColorRenderer extends EdgesRenderer {
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push("#version 300 es");
-        src.push("// EdgesColorRenderer fragment shader");
+        src.push("// EdgesEmphasisRenderer fragment shader");
 
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
@@ -109,11 +111,15 @@ export class EdgesColorRenderer extends EdgesRenderer {
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
+            src.push("uniform float sliceThickness;");
+            src.push("uniform vec4 sliceColor;");
         }
         src.push("in vec4 vColor;");
         src.push("out vec4 outColor;");
         src.push("void main(void) {");
         if (clipping) {
+            src.push("  vec4 newColor;");
+            src.push("  newColor = vColor;");
             src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
             src.push("  if (clippable) {");
             src.push("  float dist = 0.0;");
@@ -122,7 +128,12 @@ export class EdgesColorRenderer extends EdgesRenderer {
                 src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
                 src.push("}");
             }
-            src.push("  if (dist > 0.0) { discard; }");
+            src.push("  if (dist > sliceThickness) { ");
+            src.push("      discard;")
+            src.push("  }");
+            src.push("  if (dist > 0.0) { ");
+            src.push("      newColor = sliceColor;");
+            src.push("  }");
             src.push("}");
         }
         if (scene.logarithmicDepthBufferEnabled) {
@@ -133,4 +144,3 @@ export class EdgesColorRenderer extends EdgesRenderer {
         return src;
     }
 }
-
