@@ -3,26 +3,37 @@ import { DistanceMeasurementsControl } from "./DistanceMeasurementsControl";
 import { DistanceMeasurement } from "./DistanceMeasurement";
 
 export declare type DistanceMeasurementsPluginConfiguration = {
+
   /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
   id?: string;
+
   /** The minimum length, in pixels, of an axis wire beyond which its label is shown. */
   labelMinAxisLength?: number;
+
   /** Container DOM element for markers and labels. Defaults to ````document.body````. */
   container?: HTMLElement;
+
   /** The default value of the DistanceMeasurements `visible` property. */
   defaultVisible?: boolean;
+
   /** The default value of the DistanceMeasurements `originVisible` property. */
   defaultOriginVisible?: boolean;
+
   /** The default value of the DistanceMeasurements `targetVisible` property. */
   defaultTargetVisible?: boolean;
+
   /** The default value of the DistanceMeasurements `wireVisible` property. */
   defaultWireVisible?: boolean;
+
   /** The default value of the DistanceMeasurements `axisVisible` property. */
   defaultAxisVisible?: boolean;
+
   /** The default color of the length dots, wire and label. */
   defaultColor?: string;
+
   /** The default value of the DistanceMeasurements `labelsOnWires` property. */
   defaultLabelsOnWires?: boolean;
+
   /** If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels). */
   zIndex?: number;
 };
@@ -31,7 +42,8 @@ export declare type DistanceMeasurementsPluginConfiguration = {
  * {@link Viewer} plugin for measuring point-to-point distances.
  */
 export declare class DistanceMeasurementsPlugin extends Plugin {
-  /**
+
+    /**
    * @constructor
    * @param {Viewer} viewer The Viewer.
    * @param {DistanceMeasurementsPluginConfiguration} [cfg]  Plugin configuration.
@@ -149,5 +161,4 @@ export declare class DistanceMeasurementsPlugin extends Plugin {
    * @param {Function} callback Callback fired on the event
    */
    on(event: "measurementDestroyed", callback: (measurement: DistanceMeasurement)=> void): string;
-  
 }

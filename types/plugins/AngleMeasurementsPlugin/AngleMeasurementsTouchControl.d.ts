@@ -1,12 +1,12 @@
-import { AngleMeasurementsControl } from "./AngleMeasurementsControl.js";
+import { AngleMeasurementsControl } from "./AngleMeasurementsControl";
 import {AngleMeasurementsPlugin} from "./AngleMeasurementsPlugin";
 import {PointerLens} from "../../extras/";
 
 /**
- * Creates {@link AngleMeasurement}s in an {@link AngleMeasurementsPlugin} from mouse input.
+ * Creates {@link AngleMeasurement}s in an {@link AngleMeasurementsPlugin} from touch input.
  *
  * @example
- * import { Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin, AngleMeasurementsMouseControl, PointerLens } from "xeokit-sdk.es.js";
+ * import { Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin, AngleMeasurementsTouchControl, PointerLens } from "xeokit-sdk.es.js";
  *
  * const viewer = new Viewer({
  *     canvasId: "myCanvas",
@@ -27,22 +27,22 @@ import {PointerLens} from "../../extras/";
  *
  * const pointerLens = new PointerLens(viewer); // Create a PointerLens instance
  *
- * const angleMeasurementsMouseControl = new AngleMeasurementsMouseControl(angleMeasurements, {
+ * const angleMeasurementsTouchControl = new AngleMeasurementsTouchControl(angleMeasurements, {
  *     pointerLens: pointerLens,
  *     snapping: true
  * });
  *
- * angleMeasurementsMouseControl.activate();
+ * angleMeasurementsTouchControl.activate();
  */
-export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
+export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
 
     /**
-     * Creates a new AngleMeasurementsMouseControl.
+     * Creates a new AngleMeasurementsTouchControl.
      *
      * @param {AngleMeasurementsPlugin} angleMeasurementsPlugin The AngleMeasurementsPlugin to control.
      * @param {Object} [cfg] Configuration options.
      * @param {PointerLens} [cfg.pointerLens] A PointerLens to use for providing a magnified view of the cursor when snapping is enabled.
-     * @param {boolean} [cfg.snapping=true] Whether to initially enable snap-to-vertex and snap-to-edge for this AngleMeasurementsMouseControl.
+     * @param {boolean} [cfg.snapping=true] Whether to initially enable snap-to-vertex and snap-to-edge for this AngleMeasurementsTouchControl.
      */
     constructor(angleMeasurementsPlugin: AngleMeasurementsPlugin, cfg?: {
         pointerLens?: PointerLens;
@@ -50,43 +50,43 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
     });
 
     /**
-     * Gets whether this AngleMeasurementsMouseControl is currently active, responding to input.
+     * Gets whether this AngleMeasurementsTouchControl is currently active, responding to input.
      *
      * @returns {boolean} True if active, false otherwise.
      */
     get active(): boolean;
 
     /**
-     * Sets whether snap-to-vertex and snap-to-edge are enabled for this AngleMeasurementsMouseControl.
+     * Sets whether snap-to-vertex and snap-to-edge are enabled for this AngleMeasurementsTouchControl.
      *
      * @param {boolean} snapping True to enable snap-to-vertex and snap-to-edge, false to disable.
      */
     set snapping(snapping: boolean);
 
     /**
-     * Gets whether snap-to-vertex and snap-to-edge are enabled for this AngleMeasurementsMouseControl.
+     * Gets whether snap-to-vertex and snap-to-edge are enabled for this AngleMeasurementsTouchControl.
      *
      * @returns {boolean} True if snap-to-vertex and snap-to-edge are enabled, false otherwise.
      */
     get snapping(): boolean;
 
     /**
-     * Activates this AngleMeasurementsMouseControl, making it responsive to input.
+     * Activates this AngleMeasurementsTouchControl, making it responsive to input.
      */
     activate(): void;
 
     /**
-     * Deactivates this AngleMeasurementsMouseControl, making it unresponsive to input.
+     * Deactivates this AngleMeasurementsTouchControl, making it unresponsive to input.
      */
     deactivate(): void;
 
     /**
-     * Resets this AngleMeasurementsMouseControl, destroying any AngleMeasurement under construction.
+     * Resets this AngleMeasurementsTouchControl, destroying any AngleMeasurement under construction.
      */
     reset(): void;
 
     /**
-     * Destroys this AngleMeasurementsMouseControl.
+     * Destroys this AngleMeasurementsTouchControl.
      */
     destroy(): void;
 }

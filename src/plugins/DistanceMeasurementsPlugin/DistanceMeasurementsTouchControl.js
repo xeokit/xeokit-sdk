@@ -63,8 +63,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
         this._onCanvasTouchStart = null;
         this._onCanvasTouchEnd = null;
         this._longTouchTimeoutMs = 300;
-        this._snapToEdge = cfg.snapToEdge !== false;
-        this._snapToVertex = cfg.snapToVertex !== false;
+        this._snapping = cfg.snapping !== false;
         this._touchState = WAITING_FOR_ORIGIN_TOUCH_START;
 
         this._attachPlugin(distanceMeasurementsPlugin, cfg);
@@ -94,39 +93,35 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
     }
 
     /**
-     * Sets whether snap-to-vertex is enabled for this DistanceMeasurementsTouchControl.
+     * Sets whether snap-to-vertex and snap-to-edge are enabled for this DistanceMeasurementsTouchControl.
+     *
      * This is `true` by default.
-     * @param snapToVertex
+     *
+     * Internally, this deactivates then activates the DistanceMeasurementsTouchControl when changed, which means that
+     * it will destroy any DistanceMeasurements currently under construction, and incurs some overhead, since it unbinds
+     * and rebinds various input handlers.
+     *
+     * @param {boolean} snapping Whether to enable snap-to-vertex and snap-edge for this DistanceMeasurementsTouchControl.
      */
-    set snapToVertex(snapToVertex) {
-        this._snapToVertex = snapToVertex;
+    set snapping(snapping) {
+        if (snapping !== this._snapping) {
+            this._snapping = snapping;
+            this.deactivate();
+            this.activate();
+        } else {
+            this._snapping = snapping;
+        }
     }
 
     /**
-     * Gets whether snap-to-vertex is enabled for this DistanceMeasurementsTouchControl.
+     * Gets whether snap-to-vertex and snap-to-edge are enabled for this DistanceMeasurementsTouchControl.
+     *
      * This is `true` by default.
-     * @returns {*}
+     *
+     * @returns {boolean} Whether snap-to-vertex and snap-to-edge are enabled for this DistanceMeasurementsTouchControl.
      */
-    get snapToVertex() {
-        return this._snapToVertex;
-    }
-
-    /**
-     * Sets whether snap-to-edge is enabled for this DistanceMeasurementsTouchControl.
-     * This is `true` by default.
-     * @param snapToEdge
-     */
-    set snapToEdge(snapToEdge) {
-        this._snapToEdge = snapToEdge;
-    }
-
-    /**
-     * Gets whether snap-to-edge is enabled for this DistanceMeasurementsTouchControl.
-     * This is `true` by default.
-     * @returns {*}
-     */
-    get snapToEdge() {
-        return this._snapToEdge;
+    get snapping() {
+        return this._snapping;
     }
 
     /**
@@ -156,11 +151,11 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
 
         let touchId = null;
 
-        const disableCameraMouseControl = () => {
+        const disableCameraNavigation = () => {
             this.plugin.viewer.cameraControl.active = false;
         }
 
-        const enableCameraMouseControl = () => {
+        const enableCameraNavigation = () => {
             this.plugin.viewer.cameraControl.active = true;
         }
 
@@ -173,7 +168,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                 this._currentDistanceMeasurement.destroy();
                 this._currentDistanceMeasurement = null;
             }
-            enableCameraMouseControl();
+            enableCameraNavigation();
             this._touchState = WAITING_FOR_ORIGIN_TOUCH_START;
         }
 
@@ -205,8 +200,8 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                     }
                     const snapPickResult = scene.pick({
                         canvasPos: touchMoveCanvasPos,
-                        snapToVertex: this._snapToVertex,
-                        snapToEdge: this._snapToEdge
+                        snapping: this._snapping,
+                        snapToEdge: this._snapping
                     });
                     if (snapPickResult && snapPickResult.snapped) {
                         pointerWorldPos.set(snapPickResult.worldPos);
@@ -276,7 +271,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                         // }
                         this._touchState = WAITING_FOR_ORIGIN_LONG_TOUCH_END;
                         // console.log("touchstart: this._touchState= WAITING_FOR_ORIGIN_TOUCH_START -> WAITING_FOR_ORIGIN_LONG_TOUCH_END")
-                        disableCameraMouseControl();
+                        disableCameraNavigation();
                     }, this._longTouchTimeoutMs);
                     this._touchState = WAITING_FOR_ORIGIN_QUICK_TOUCH_END;
                     // console.log("touchstart: this._touchState= WAITING_FOR_ORIGIN_TOUCH_START -> WAITING_FOR_ORIGIN_QUICK_TOUCH_END")
@@ -314,8 +309,8 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
 
                             const snapPickResult = scene.pick({
                                 canvasPos: touchMoveCanvasPos,
-                                snapToVertex: this._snapToVertex,
-                                snapToEdge: this._snapToEdge
+                                snapToVertex: this._snapping,
+                                snapToEdge: this._snapping
                             });
                             if (snapPickResult && snapPickResult.snapped) {
                                 if (this.pointerLens) {
@@ -359,7 +354,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                             this._touchState = WAITING_FOR_TARGET_LONG_TOUCH_END;
                             // console.log("touchstart: this._touchState= WAITING_FOR_TARGET_TOUCH_START -> WAITING_FOR_TARGET_LONG_TOUCH_END")
 
-                            disableCameraMouseControl();
+                            disableCameraNavigation();
 
                         }, this._longTouchTimeoutMs);
 
@@ -419,10 +414,8 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                     }
                     snapPickResult = scene.pick({
                         canvasPos: touchMoveCanvasPos,
-
-
-                        snapToVertex: this._snapToVertex,
-                        snapToEdge: this._snapToEdge
+                        snapToVertex: this._snapping,
+                        snapToEdge: this._snapping
                     });
                     if (snapPickResult && (snapPickResult.snapped)) {
                         if (this.pointerLens) {
@@ -523,8 +516,8 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                     }
                     snapPickResult = scene.pick({
                         canvasPos: touchMoveCanvasPos,
-                        snapToVertex: this._snapToVertex,
-                        snapToEdge: this._snapToEdge
+                        snapToVertex: this._snapping,
+                        snapToEdge: this._snapping
                     });
                     if (snapPickResult && snapPickResult.worldPos) {
                         if (this.pointerLens) {
@@ -633,7 +626,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                         //  console.log("touchend: this._touchState= WAITING_FOR_ORIGIN_QUICK_TOUCH_END -> WAITING_FOR_ORIGIN_TOUCH_START")
                     }
                 }
-                    enableCameraMouseControl();
+                    enableCameraNavigation();
                     break;
 
                 case WAITING_FOR_ORIGIN_LONG_TOUCH_END:
@@ -651,7 +644,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                         this._touchState = WAITING_FOR_TARGET_TOUCH_START;
                         //  console.log("touchend: this._touchState= WAITING_FOR_ORIGIN_LONG_TOUCH_END (picked, begin measurement) -> WAITING_FOR_TARGET_TOUCH_START")
                     }
-                    enableCameraMouseControl();
+                    enableCameraNavigation();
                     break;
 
                 case WAITING_FOR_TARGET_QUICK_TOUCH_END: {
@@ -684,7 +677,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                     this._touchState = WAITING_FOR_ORIGIN_TOUCH_START;
                     //  console.log("touchend: this._touchState= WAITING_FOR_TARGET_TOUCH_START -> WAITING_FOR_ORIGIN_TOUCH_START")
                 }
-                    enableCameraMouseControl();
+                    enableCameraNavigation();
                     break;
 
                 case WAITING_FOR_TARGET_LONG_TOUCH_END:
@@ -705,7 +698,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                         this._touchState = WAITING_FOR_ORIGIN_TOUCH_START;
                         //  console.log("touchend: this._touchState= WAITING_FOR_TARGET_LONG_TOUCH_END  -> WAITING_FOR_ORIGIN_TOUCH_START")
                     }
-                    enableCameraMouseControl();
+                    enableCameraNavigation();
                     break;
             }
 

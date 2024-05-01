@@ -88,7 +88,7 @@ export declare class DistanceMeasurementsControl extends Component {
     on(event: "measurementStart", callback: (measurement: DistanceMeasurement) => void, scope?: any): string
 
     /**
-     * Fires when the the control is (de)activated
+     * Fires when the control is (de)activated
      * @param event The activation event
      * @param callback Called fired on the event
      * @param scope  Scope for the callback
