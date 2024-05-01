@@ -15,5 +15,7 @@
         {{#each merges}}
             - {{#if commit.breaking}}**Breaking change:** {{/if}} {{message}} - [#{{id}}]({{href}})
         {{/each}}
+
     {{/if}}
+
 {{/each}}

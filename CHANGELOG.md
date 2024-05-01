@@ -1,15 +1,38 @@
 ## xeokit-sdk Changelog
 
-# [v2.6.4](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0...v2.6.4)
+# [v2.6.6](https://github.com/xeokit/xeokit-sdk/compare/v2.6.5...v2.6.6)
 
-### 23 April 2024
+### 2 May 2024
 
+-  Add missing TypeScript definitions for measurement plugins, plus tidy ups - [#1474](https://github.com/xeokit/xeokit-sdk/pull/1474)
+-  [FIX] SceneModelTransform: parentTransformId parameter doesn't work x… - [#1471](https://github.com/xeokit/xeokit-sdk/pull/1471)
+
+# [v2.6.5](https://github.com/xeokit/xeokit-sdk/compare/v2.6.3...v2.6.5)
+
+### 29 April 2024
+
+-  Fix Marker/Annotation occlusion for scene graph rep - [#1470](https://github.com/xeokit/xeokit-sdk/pull/1470)
 -  Context menu enhancements - [#1466](https://github.com/xeokit/xeokit-sdk/pull/1466)
 -  Fixed BCFViewpointsPlugin setViewpoint setting IfcSpaces visible when spaces_visible is false - [#1464](https://github.com/xeokit/xeokit-sdk/pull/1464)
+
+# [v2.6.3](https://github.com/xeokit/xeokit-sdk/compare/v2.6.2...v2.6.3)
+
+### 22 April 2024
+
 -  [FIX] Ensure no interference between ContextMenus on measurements and Canvas  - [#1463](https://github.com/xeokit/xeokit-sdk/pull/1463)
 -  [FIX] Fix interference between ContextMenus on measurements and Canvas - [#1462](https://github.com/xeokit/xeokit-sdk/pull/1462)
+
+# [v2.6.2](https://github.com/xeokit/xeokit-sdk/compare/v2.6.1...v2.6.2)
+
+### 22 April 2024
+
 -  [FIX] Fix `undefined` TypeError for missing glTF material #1458 - [#1460](https://github.com/xeokit/xeokit-sdk/pull/1460)
 -  [FIX] SceneModelTransform: parentTransformId parameter doesn't work #… - [#1459](https://github.com/xeokit/xeokit-sdk/pull/1459)
+
+# [v2.6.1](https://github.com/xeokit/xeokit-sdk/compare/v2.6.0...v2.6.1)
+
+### 22 April 2024
+
 -  [FIX] SceneModelTransform: parentTransformId parameter doesn't work - [#1457](https://github.com/xeokit/xeokit-sdk/pull/1457)
 -  [EXAMPLE] First-person pointer locking example - [#1456](https://github.com/xeokit/xeokit-sdk/pull/1456)
 -  [DOC] Add Pointer Lock on CameraControl firstPerson example - [#1455](https://github.com/xeokit/xeokit-sdk/pull/1455)
