@@ -163,7 +163,7 @@
         edges: true
     });
 
-    sceneModel.on("loaded", ()=>{
+    sceneModel.on("loaded", () => {
         viewer.cameraFlight.jumpTo(sceneModel);
     });
 
@@ -202,8 +202,9 @@
         e.distanceMeasurement.setHighlighted(false);
     });
 
-    const distanceMeasurementsMouseControl  = new DistanceMeasurementsMouseControl(distanceMeasurementsPlugin, {
-        pointerLens : new PointerLens(viewer)
+    const distanceMeasurementsMouseControl = new DistanceMeasurementsMouseControl(distanceMeasurementsPlugin, {
+        pointerLens: new PointerLens(viewer),
+        snapping: true // Default
     })
 
     distanceMeasurementsMouseControl.snapping = true;
@@ -285,11 +286,11 @@
     });
 
     viewer.scene.canvas.canvas.addEventListener('contextmenu', (event) => {
-       const canvasPos = getCanvasPosFromEvent(event);
+        const canvasPos = getCanvasPosFromEvent(event);
         console.log("canvas context menu")
         canvasContextMenu.show(canvasPos[0], canvasPos[1]);
         event.preventDefault();
-       event.stopPropagation();
+        event.stopPropagation();
     });
 
     //------------------------------------------------------------------------------------------------------------------
