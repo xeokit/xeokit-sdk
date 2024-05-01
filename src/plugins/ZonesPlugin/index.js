@@ -42,26 +42,13 @@ class Zone extends Component {
 
         this._eventSubs = {};
 
-        var scene = this.plugin.viewer.scene;
+        const scene = this.plugin.viewer.scene;
 
         this._vp = new Float64Array(24);
         this._pp = new Float64Array(24);
         this._cp = new Float64Array(8);
 
         this._geometry = cfg.geometry;
-        this._basePoints = cfg.geometry.planeCoordinates;
-        this._zoneAltitude = cfg.geometry.altitude;
-        this._zoneHeight = cfg.geometry.height;
-
-        const min = (idx) => (idx === 1) ?  this._zoneAltitude                     : Math.min(...this._basePoints.map(p => p[(idx === 2) ? 1 : 0]));
-        const max = (idx) => (idx === 1) ? (this._zoneAltitude + this._zoneHeight) : Math.max(...this._basePoints.map(p => p[(idx === 2) ? 1 : 0]));
-
-        const xmin = min(0);
-        const ymin = min(1);
-        const zmin = min(2);
-        const xmax = max(0);
-        const ymax = max(1);
-        const zmax = max(2);
 
         const onMouseOver = cfg.onMouseOver ? (event) => {
             cfg.onMouseOver(event, this);
@@ -92,14 +79,6 @@ class Zone extends Component {
         const onMouseWheel = (event) => {
             this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new WheelEvent('wheel', event));
         };
-
-        this._zoneMesh = new Mesh(scene, {
-            geometry: new ReadableGeometry(scene, buildBoxGeometry()),
-            material: new PhongMaterial(scene, {
-                alpha: 0.5,
-                backfaces: true
-            })
-        });
 
         this._label = new Label(this._container, {
             prefix: "",
@@ -150,6 +129,89 @@ class Zone extends Component {
         this._labelsVisible = true;
         this.labelText = cfg.labelText;
 
+        this._rebuildMesh();
+    }
+
+    _rebuildMesh() {
+        const scene       = this.plugin.viewer.scene;
+        const planeCoords = this._geometry.planeCoordinates.slice();
+        const altitude    = this._geometry.altitude;
+        const height      = this._geometry.height;
+
+        const baseTriangles = [ [ 0, 1, 3 ], [ 1, 2, 3 ] ];
+
+        const pos = [ ];
+        const ind = [ ];
+
+
+        const addPlane = (isCeiling) => {
+            const baseIdx = pos.length;
+
+            for (let c of planeCoords) {
+                pos.push([ c[0], altitude + (isCeiling ? height : 0), c[1] ]);
+            }
+
+            for (let t of baseTriangles) {
+                ind.push(...(isCeiling ? t : t.slice(0).reverse()).map(i => i + baseIdx));
+            }
+        };
+        addPlane(false);        // floor
+        addPlane(true);         // ceiling
+
+
+        // sides
+        for (let i = 0; i < planeCoords.length; ++i) {
+            const a = planeCoords[i];
+            const b = planeCoords[(i+1) % planeCoords.length];
+            const f = altitude;
+            const c = altitude + height;
+
+            const baseIdx = pos.length;
+
+            pos.push(
+                [ a[0], f, a[1] ],
+                [ b[0], f, b[1] ],
+                [ b[0], c, b[1] ],
+                [ a[0], c, a[1] ]
+            );
+
+            ind.push(...[ 0, 1, 2, 0, 2, 3 ].map(i => i + baseIdx));
+        }
+
+
+        if (this._zoneMesh) {
+            this._zoneMesh.destroy();
+        }
+
+
+        const positions = [].concat(...pos);
+        this._zoneMesh = new Mesh(scene, {
+            geometry: new ReadableGeometry(
+                scene,
+                {
+                    positions: positions,
+                    indices:   ind,
+                    normals:   math.buildNormals(positions, ind)
+                }),
+            material: new PhongMaterial(scene, {
+                alpha: 0.5,
+                backfaces: true,
+                diffuse: hex2rgb(this._color)
+            }),
+            visible: this._visible
+        });
+
+
+        const min = idx => Math.min(...pos.map(p => p[idx]));
+        const max = idx => Math.max(...pos.map(p => p[idx]));
+
+        const xmin = min(0);
+        const ymin = min(1);
+        const zmin = min(2);
+        const xmax = max(0);
+        const ymax = max(1);
+        const zmax = max(2);
+
         this._wp = new Float64Array([
             xmin, ymin, zmin, 1.0,
             xmax, ymin, zmin, 1.0,
@@ -157,19 +219,9 @@ class Zone extends Component {
             xmax, ymax, zmax, 1.0
         ]);
 
-        this._vpDirty = true;
         this._center = math.vec3([ (xmin + xmax) / 2, (ymin + ymax) / 2, (zmin + zmax) / 2 ]);
 
-        const c = this._basePoints.map(p => [ p[0], this._zoneAltitude, p[1] ]).concat(this._basePoints.map(p => [ p[0], this._zoneAltitude + this._zoneHeight, p[1] ]));
-
-        this._zoneMesh.geometry.positions = [].concat(
-            c[5], c[4], c[0], c[1], // front
-            c[5], c[1], c[2], c[6], // right
-            c[5], c[6], c[7], c[4], // top
-            c[4], c[7], c[3], c[0], // left
-            c[3], c[2], c[1], c[0], // bottom
-            c[2], c[3], c[7], c[6]  // back
-        );
+        this._vpDirty = true;
     }
 
     _update() {
@@ -253,7 +305,9 @@ class Zone extends Component {
     set color(value) {
         this._color = value;
         this._label.setFillColor(this._color);
-        this._zoneMesh.material.diffuse = hex2rgb(this._color);
+        if (this._zoneMesh) {
+            this._zoneMesh.material.diffuse = hex2rgb(this._color);
+        }
     }
 
     get color() {
