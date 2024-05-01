@@ -3,12 +3,16 @@ import { AngleMeasurement } from "./AngleMeasurement";
 import { AngleMeasurementsControl } from "./AngleMeasurementsControl";
 
 export declare type AngleMeasurementsPluginConfiguration = {
+
   /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
   id?: string;
+
   /** Container DOM element for markers and labels. Defaults to ````document.body````. */
   container?: HTMLElement;
+
   /** The default color of the dots, wire and label. */
   defaultColor?: string;
+
   /** If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels). */
   zIndex?: number;
 };
