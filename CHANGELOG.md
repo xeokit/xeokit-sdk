@@ -1,5 +1,15 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.7](https://github.com/xeokit/xeokit-sdk/compare/v2.6.6...v2.6.7)
+
+### 2 May 2024
+
+-  Fix SceneModel.createTransform - [#1478](https://github.com/xeokit/xeokit-sdk/pull/1478)
+-  Updates types for CrossSections and adds documentation description - [#1477](https://github.com/xeokit/xeokit-sdk/pull/1477)
+-  Revert "[FIX] SceneModelTransform: parentTransformId parameter doesn't work x…" - [#1476](https://github.com/xeokit/xeokit-sdk/pull/1476)
+-  [FEATURE] Cross section highlight - [#1394](https://github.com/xeokit/xeokit-sdk/pull/1394)
+-  [REFACTOR] Updates in examples - [#1475](https://github.com/xeokit/xeokit-sdk/pull/1475)
+
 # [v2.6.6](https://github.com/xeokit/xeokit-sdk/compare/v2.6.5...v2.6.6)
 
 ### 2 May 2024
