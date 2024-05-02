@@ -155,10 +155,9 @@ export class TrianglesFlatColorRenderer extends TrianglesBatchingRenderer {
         src.push("out vec4 outColor;");
 
         src.push("void main(void) {");
-
+        src.push("  vec4 newColor;");
+        src.push("  newColor = vColor;");
         if (clipping) {
-            src.push("  vec4 newColor;");
-            src.push("  newColor = vColor;");
             src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
             src.push("  if (clippable) {");
             src.push("  float dist = 0.0;");
