@@ -218,6 +218,8 @@
                 description: "Description..."
             },
         });
+
+        zone.on("destroyed", () => annotation.destroy());
     });
 
     const altitude = 0.01;
