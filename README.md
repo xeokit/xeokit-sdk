@@ -61,7 +61,7 @@ which we can pre-convert offline from other formats.
             user-select: none;
         }
 
-        #myCanvas {
+        #xeokit_canvas {
             width: 100%;
             height: 100%;
             position: absolute;
@@ -71,31 +71,37 @@ which we can pre-convert offline from other formats.
     </style>
 </head>
 <body>
-<canvas id="myCanvas"></canvas>
+<canvas id="xeokit_canvas"></canvas>
 </body>
 <script id="source" type="module">
 
-    import {Viewer, WebIFCLoaderPlugin} from
-                "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
-
+    import {WebIFCLoaderPlugin, Viewer} from
+                    "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
+    import * as WebIFC from "https://cdn.jsdelivr.net/npm/web-ifc@0.0.51/web-ifc-api.js";
     const viewer = new Viewer({
-        canvasId: "myCanvas",
-        transparent: true
+        canvasId: "xeokit_canvas",
+        transparent: true,
+        dtxEnabled: true
     });
 
     viewer.camera.eye = [-3.933, 2.855, 27.018];
     viewer.camera.look = [4.400, 3.724, 8.899];
     viewer.camera.up = [-0.018, 0.999, 0.039];
 
-    const webIFCLoader = new WebIFCLoaderPlugin(viewer, {
-        wasmPath: "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/"
-    });
+    const IfcAPI = new WebIFC.IfcAPI();
+    IfcAPI.SetWasmPath("https://cdn.jsdelivr.net/npm/web-ifc@0.0.51/");
 
-    const model = webIFCLoader.load({
-        src: "Duplex.ifc",
-        edges: true
-    });
+    IfcAPI.Init().then(() => {
+        const ifcLoader = new WebIFCLoaderPlugin(viewer, {
+            WebIFC,
+            IfcAPI
+        });
 
+        const model = ifcLoader.load({
+            src: "Duplex.ifc",
+            edges: true
+        });
+    });
 </script>
 </html>
 ````
