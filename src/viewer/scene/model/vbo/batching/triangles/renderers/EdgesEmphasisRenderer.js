@@ -71,7 +71,7 @@ export class EdgesEmphasisRenderer extends EdgesRenderer {
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
-           src.push("vFragDepth = 1.0 + clipPos.w;");
+            src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
         src.push("gl_Position = clipPos;");
@@ -88,7 +88,7 @@ export class EdgesEmphasisRenderer extends EdgesRenderer {
         const src = [];
         src.push("#version 300 es");
         src.push("// EdgesEmphasisRenderer fragment shader");
-        
+
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");

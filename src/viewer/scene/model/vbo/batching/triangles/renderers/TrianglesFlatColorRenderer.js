@@ -125,6 +125,8 @@ export class TrianglesFlatColorRenderer extends TrianglesBatchingRenderer {
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
+            src.push("uniform float sliceThickness;");
+            src.push("uniform vec4 sliceColor;");
         }
 
         this._addMatricesUniformBlockLines(src);
@@ -153,7 +155,8 @@ export class TrianglesFlatColorRenderer extends TrianglesBatchingRenderer {
         src.push("out vec4 outColor;");
 
         src.push("void main(void) {");
-
+        src.push("  vec4 newColor;");
+        src.push("  newColor = vColor;");
         if (clipping) {
             src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
             src.push("  if (clippable) {");
@@ -163,8 +166,11 @@ export class TrianglesFlatColorRenderer extends TrianglesBatchingRenderer {
                 src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
                 src.push("}");
             }
-            src.push("  if (dist > 0.0) { ");
+            src.push("  if (dist > sliceThickness) { ");
             src.push("      discard;")
+            src.push("  }");
+            src.push("  if (dist > 0.0) { ");
+            src.push("      newColor = sliceColor;");
             src.push("  }");
             src.push("}");
         }
@@ -209,7 +215,7 @@ export class TrianglesFlatColorRenderer extends TrianglesBatchingRenderer {
             src.push("reflectedColor += lambertian * (lightColor" + i + ".rgb * lightColor" + i + ".a);");
         }
 
-        src.push("vec4 fragColor =  vec4((lightAmbient.rgb * lightAmbient.a * vColor.rgb) + (reflectedColor * vColor.rgb), vColor.a);");
+        src.push("vec4 fragColor =  vec4((lightAmbient.rgb * lightAmbient.a * newColor.rgb) + (reflectedColor * newColor.rgb), newColor.a);");
 
         if (this._withSAO) {
             // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top

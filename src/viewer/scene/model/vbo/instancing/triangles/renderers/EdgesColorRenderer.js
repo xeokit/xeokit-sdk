@@ -133,4 +133,3 @@ export class EdgesColorRenderer extends EdgesRenderer {
         return src;
     }
 }
-

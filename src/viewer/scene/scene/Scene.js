@@ -16,6 +16,7 @@ import {EmphasisMaterial} from '../materials/EmphasisMaterial.js';
 import {EdgeMaterial} from '../materials/EdgeMaterial.js';
 import {Metrics} from "../metriqs/Metriqs.js";
 import {SAO} from "../postfx/SAO.js";
+import {CrossSections} from "../postfx/CrossSections.js";
 import {PointsMaterial} from "../materials/PointsMaterial.js";
 import {LinesMaterial} from "../materials/LinesMaterial.js";
 
@@ -838,6 +839,14 @@ class Scene extends Component {
          */
         this.sao = new SAO(this, {
             enabled: cfg.saoEnabled
+        });
+
+        /** Configures Cross Sections for this Scene.
+         * @type {CrossSections}
+         * @final
+         */
+        this.crossSections = new CrossSections(this, {
+
         });
 
         this.ticksPerRender = cfg.ticksPerRender;

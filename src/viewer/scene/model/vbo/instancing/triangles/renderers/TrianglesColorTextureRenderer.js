@@ -159,6 +159,8 @@ export class TrianglesColorTextureRenderer extends TrianglesInstancingRenderer {
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
+            src.push("uniform float sliceThickness;");
+            src.push("uniform vec4 sliceColor;");
         }
         this._addMatricesUniformBlockLines(src);
 
@@ -187,7 +189,8 @@ export class TrianglesColorTextureRenderer extends TrianglesInstancingRenderer {
         src.push("out vec4 outColor;");
 
         src.push("void main(void) {");
-
+        src.push("  vec4 newColor;");
+        src.push("  newColor = vColor;");
         if (clipping) {
             src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
             src.push("  if (clippable) {");
@@ -197,8 +200,11 @@ export class TrianglesColorTextureRenderer extends TrianglesInstancingRenderer {
                 src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
                 src.push("}");
             }
-            src.push("  if (dist > 0.0) { ");
+            src.push("  if (dist > sliceThickness) { ");
             src.push("      discard;")
+            src.push("  }");
+            src.push("  if (dist > 0.0) { ");
+            src.push("      newColor = sliceColor;");
             src.push("  }");
             src.push("}");
         }
@@ -242,7 +248,7 @@ export class TrianglesColorTextureRenderer extends TrianglesInstancingRenderer {
             src.push("reflectedColor += lambertian * (lightColor" + i + ".rgb * lightColor" + i + ".a);");
         }
 
-        src.push("vec4 color =  vec4((lightAmbient.rgb * lightAmbient.a * vColor.rgb) + (reflectedColor * vColor.rgb), vColor.a);");
+        src.push("vec4 color =  vec4((lightAmbient.rgb * lightAmbient.a * newColor.rgb) + (reflectedColor * newColor.rgb), newColor.a);");
         if (gammaOutput) {
             src.push("vec4 colorTexel = color * sRGBToLinear(texture(uColorMap, vUV));");
         } else {
@@ -259,9 +265,9 @@ export class TrianglesColorTextureRenderer extends TrianglesInstancingRenderer {
             src.push("   float blendFactor       = uSAOParams[3];");
             src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
             src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBToFloat(texture(uOcclusionTexture, uv))) * blendFactor;");
-            src.push("   outColor                = vec4(vColor.rgb * colorTexel.rgb * ambient, opacity);");
+            src.push("   outColor                = vec4(newColor.rgb * colorTexel.rgb * ambient, opacity);");
         } else {
-            src.push("   outColor                = vec4(vColor.rgb * colorTexel.rgb, opacity);");
+            src.push("   outColor                = vec4(newColor.rgb * colorTexel.rgb, opacity);");
         }
 
         if (gammaOutput) {

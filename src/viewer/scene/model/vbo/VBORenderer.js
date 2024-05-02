@@ -117,6 +117,10 @@ export class VBORenderer {
             const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
             const baseIndex = layerIndex * numSectionPlanes;
             const renderFlags = model.renderFlags;
+            if (scene.crossSections) {
+                gl.uniform4fv(this._uSliceColor, scene.crossSections.sliceColor);
+                gl.uniform1f(this._uSliceThickness, scene.crossSections.sliceThickness);
+            }
             for (let sectionPlaneIndex = 0; sectionPlaneIndex < numAllocatedSectionPlanes; sectionPlaneIndex++) {
                 const sectionPlaneUniforms = this._uSectionPlanes[sectionPlaneIndex];
                 if (sectionPlaneUniforms) {
@@ -278,6 +282,11 @@ export class VBORenderer {
 
         this._uPointSize = program.getLocation("pointSize");
         this._uNearPlaneHeight = program.getLocation("nearPlaneHeight");
+
+        if (scene.crossSections) {
+            this._uSliceColor = program.getLocation("sliceColor");
+            this._uSliceThickness = program.getLocation("sliceThickness");
+        }
     }
 
     _bindProgram(frameCtx) {
