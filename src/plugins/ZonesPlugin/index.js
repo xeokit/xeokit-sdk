@@ -947,5 +947,345 @@ class ZonesPlugin extends Plugin {
     }
 }
 
+import {PointerCircle} from "../../extras/PointerCircle/PointerCircle.js";
+
+export class ZonesTouchControl extends Component {
+
+    constructor(zonesPlugin, cfg = {}) {
+        super(zonesPlugin.viewer.scene);
+
+        this.zonesPlugin = zonesPlugin;
+        this.pointerLens = cfg.pointerLens;
+        this.pointerCircle = new PointerCircle(zonesPlugin.viewer);
+        this._deactivate = null;
+    }
+
+    get active() {
+        return !! this._deactivate;
+    }
+
+    activate(zoneAltitude, zoneHeight, zoneColor, zoneLabelText) {
+
+        if (this._deactivate) {
+            return;
+        }
+
+        const zonesPlugin = this.zonesPlugin;
+        const viewer = zonesPlugin.viewer;
+        const scene = viewer.scene;
+        const canvas = scene.canvas.canvas;
+        const pointerCircle = this.pointerCircle;
+        const pointerLens = this.pointerLens;
+        const longTouchTimeoutMs = 300;
+        const moveTolerance = 20;
+        const self = this;
+
+        const select3dPoint = function(onCancel, onChange, onCommit) {
+            const pickWorldPos = canvasPos => {
+                const origin = math.vec3();
+                const direction = math.vec3();
+                math.canvasPosToWorldRay(scene.canvas.canvas, scene.camera.viewMatrix, scene.camera.projMatrix, canvasPos, origin, direction);
+
+                const norm = math.vec3([ 0, 1, 0 ]);
+                const t = - (math.dotVec3(origin, norm) - zoneAltitude) / math.dotVec3(direction, norm);
+                if (false) // (t < 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    const worldPos = math.vec3();
+                    math.mulVec3Scalar(direction, t, worldPos);
+                    math.addVec3(origin, worldPos, worldPos);
+                    return worldPos;
+                }
+            };
+
+            let longTouchTimeout = null;
+            const nop = () => { };
+            let onSingleTouchMove = nop;
+            let startTouchIdentifier;
+
+            const resetAction = function() {
+                if (pointerLens)
+                {
+                    pointerLens.visible = false;
+                }
+                pointerCircle.stop();
+                clearTimeout(longTouchTimeout);
+                viewer.cameraControl.active = true;
+                onSingleTouchMove = nop;
+                startTouchIdentifier = null;
+            };
+
+            const cleanup = function() {
+                resetAction();
+                canvas.removeEventListener("touchstart", onCanvasTouchStart);
+                canvas.removeEventListener("touchmove",  onCanvasTouchMove);
+                canvas.removeEventListener("touchend",   onCanvasTouchEnd);
+            };
+
+            const onCanvasTouchStart = function(event) {
+                const touches = event.touches;
+
+                if (touches.length !== 1)
+                {
+                    resetAction();
+                    onCancel();
+                }
+                else
+                {
+                    const startTouch = touches[0];
+                    const startCanvasPos = math.vec2([ startTouch.clientX, startTouch.clientY ]);
+
+                    const startWorldPos = pickWorldPos(startCanvasPos);
+                    if (startWorldPos)
+                    {
+                        startTouchIdentifier = startTouch.identifier;
+
+                        onSingleTouchMove = canvasPos => {
+                            if (math.distVec2(startCanvasPos, canvasPos) > moveTolerance)
+                            {
+                                resetAction();
+                            }
+                        };
+
+                        longTouchTimeout = setTimeout(
+                            function() {
+                                pointerCircle.start(startCanvasPos);
+
+                                longTouchTimeout = setTimeout(
+                                    function() {
+                                        pointerCircle.stop();
+
+                                        viewer.cameraControl.active = false;
+
+                                        onSingleTouchMove = canvasPos => {
+                                            if (pointerLens)
+                                            {
+                                                pointerLens.canvasPos = canvasPos;
+                                            }
+                                            onChange(pickWorldPos(canvasPos));
+                                        };
+
+                                        if (pointerLens)
+                                        {
+                                            pointerLens.snapped = false;
+                                            pointerLens.visible = true;
+                                            pointerLens.canvasPos = startCanvasPos;
+                                        }
+                                        onChange(startWorldPos);
+                                    },
+                                    longTouchTimeoutMs);
+                            },
+                            250);
+                    }
+                }
+            };
+            canvas.addEventListener("touchstart", onCanvasTouchStart, {passive: true});
+
+            const onCanvasTouchMove = function(event) {
+                const touch = [...event.changedTouches].find(e => e.identifier === startTouchIdentifier);
+                if (touch)
+                {
+                    onSingleTouchMove(math.vec2([ touch.clientX, touch.clientY ]));
+                }
+            };
+            canvas.addEventListener("touchmove", onCanvasTouchMove, {passive: true});
+
+            const onCanvasTouchEnd = function(event) {
+                const touch = [...event.changedTouches].find(e => e.identifier === startTouchIdentifier);
+                if (touch)
+                {
+                    cleanup();
+                    onCommit(pickWorldPos(math.vec2([ touch.clientX, touch.clientY ])));
+                }
+            };
+            canvas.addEventListener("touchend", onCanvasTouchEnd, {passive: true});
+
+            return cleanup;
+        };
+
+        const startUI = function() {
+            const marker3D = function() {
+                const getTop  = el => el.offsetTop  + ((el.offsetParent && (el.offsetParent !== canvas.parentNode)) ? getTop(el.offsetParent)  : 0);
+                const getLeft = el => el.offsetLeft + ((el.offsetParent && (el.offsetParent !== canvas.parentNode)) ? getLeft(el.offsetParent) : 0);
+
+                const markerDiv = document.createElement("div");
+                canvas.parentNode.insertBefore(markerDiv, canvas);
+
+                markerDiv.style.background = zoneColor;
+                markerDiv.style.border = "2px solid white";
+                markerDiv.style.borderRadius = "10px";
+                markerDiv.style.width = "5px";
+                markerDiv.style.height = "5px";
+                markerDiv.style.top = "-200px";
+                markerDiv.style.left = "-200px";
+                markerDiv.style.margin = "0 0";
+                markerDiv.style.zIndex = "100";
+                markerDiv.style.position = "absolute";
+                markerDiv.style.pointerEvents = "none";
+                markerDiv.style.display = "none";
+
+                const marker = new Marker(scene, {});
+                const updatePos = function() {
+                    const canvasPos = marker.canvasPos;
+                    markerDiv.style.left = (getLeft(canvas) + canvasPos[0] - 5) + "px";
+                    markerDiv.style.top  = (getTop(canvas)  + canvasPos[1] - 5) + "px";
+                };
+                const onViewMatrix = scene.camera.on("viewMatrix", updatePos);
+                const onProjMatrix = scene.camera.on("projMatrix", updatePos);
+
+                return {
+                    update: function(worldPos) {
+                        if (worldPos)
+                        {
+                            marker.worldPos = worldPos;
+                            updatePos();
+                        }
+                        markerDiv.style.display = worldPos ? "" : "none";
+                    },
+
+                    destroy: function() {
+                        markerDiv.parentNode.removeChild(markerDiv);
+                        scene.camera.off(onViewMatrix);
+                        scene.camera.off(onProjMatrix);
+                        marker.destroy();
+                    }
+                };
+            };
+
+            const marker1 = marker3D();
+            const marker2 = marker3D();
+            let basePolygon = new Mesh(
+                scene,
+                {
+                    geometry: new ReadableGeometry(
+                        scene,
+                        {
+                            positions: new Array(4 * 3),
+                            normals:   [ 0, 1, 0,  0, 1, 0,  0, 1, 0,  0, 1, 0 ],
+                            uv:        [ 0, 1,  1, 1,  0, 0,  1, 0 ],
+                            indices:   [ 0, 1, 2, 2, 1, 3 ]
+                        }),
+                    material: new PhongMaterial(
+                        scene,
+                        {
+                            diffuse: hex2rgb(zoneColor),
+                            alpha: 0.5,
+                            backfaces: true
+                        })
+                });
+
+            const updateBase = points => {
+                if (points)
+                {
+                    const min = (idx) => Math.min(points[0][idx], points[1][idx]);
+                    const max = (idx) => Math.max(points[0][idx], points[1][idx]);
+
+                    const xmin = min(0);
+                    const ymin = min(1);
+                    const zmin = min(2);
+                    const xmax = max(0);
+                    const ymax = Math.max(max(1), ymin + 0.05);
+                    const zmax = max(2);
+
+                    basePolygon.geometry.positions = [
+                        xmin, ymin, zmax,
+                        xmax, ymin, zmax,
+                        xmin, ymin, zmin,
+                        xmax, ymin, zmin,
+                    ];
+                }
+                basePolygon.visible = !!points;
+            };
+            updateBase(null);
+
+            let deactivatePointSelection = select3dPoint(
+                () => marker1.update(null),
+                worldPos => marker1.update(worldPos),
+                function(point1WorldPos) {
+                    marker1.update(point1WorldPos);
+
+                    deactivatePointSelection = select3dPoint(
+                        function() {
+                            marker2.update(null);
+                            updateBase(null);
+                        },
+                        function(point2WorldPos) {
+                            marker2.update(point2WorldPos);
+                            updateBase([ point1WorldPos, point2WorldPos ]);
+                        },
+                        function(point2WorldPos) {
+                            marker1.destroy();
+                            marker2.destroy();
+                            basePolygon.destroy();
+
+                            const min = (idx) => Math.min(point1WorldPos[idx], point2WorldPos[idx]);
+                            const max = (idx) => Math.max(point1WorldPos[idx], point2WorldPos[idx]);
+
+                            const xmin = min(0);
+                            const ymin = min(1);
+                            const zmin = min(2);
+                            const xmax = max(0);
+                            const zmax = max(2);
+
+                            const zone = zonesPlugin.createZone(
+                                {
+                                    id: math.createUUID(),
+                                    geometry: {
+                                        planeCoordinates: [
+                                            [ xmin, zmax ],
+                                            [ xmax, zmax ],
+                                            [ xmax, zmin ],
+                                            [ xmin, zmin ]
+                                        ],
+                                        altitude: ymin,
+                                        height: zoneHeight
+                                    },
+                                    color: zoneColor,
+                                    labelText: zoneLabelText
+                                });
+
+                            self.fire("zoneEnd", zone);
+
+                            startUI();
+                        });
+                });
+
+            self._deactivate = function() {
+                deactivatePointSelection();
+                marker1.destroy();
+                marker2.destroy();
+                basePolygon.destroy();
+            };
+        };
+
+        startUI();
+    }
+
+    deactivate() {
+        if (this._deactivate)
+        {
+            this._deactivate();
+            this._deactivate = null;
+        }
+    }
+
+    reset() {
+        if (this._deactivate)
+        {
+            this._deactivate();
+            this.activate();
+        }
+    }
+
+    destroy() {
+        this.deactivate();
+        super.destroy();
+    }
+}
+
+
 export {ZonesMouseControl}
 export {ZonesPlugin}
