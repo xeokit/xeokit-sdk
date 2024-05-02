@@ -1,5 +1,8 @@
 import {Component} from '../Component.js';
 
+/**
+ * @desc Configures cross-section slices for a {@link Scene}.
+ */
 class CrossSections extends Component {
 
     /** @private */
@@ -59,7 +62,7 @@ class CrossSections extends Component {
     }
 
     /**
-     * Gets the thickness of a slice created by a section.
+     * Gets the color of a slice created by a section.
      *
      * Default value is ````[0.0, 0.0, 0.0, 1.0]````.
      *
