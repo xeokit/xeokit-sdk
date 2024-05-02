@@ -235,7 +235,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Path.js~Path.html">Path</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/CrossSections.js~CrossSections.html">CrossSections</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache.html">SectionPlaneCache</a></span></span></li>
@@ -250,8 +251,6 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils-texturetranscoders-ktx2texturetranscoder">viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html">KTX2TextureTranscoder</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -406,7 +405,7 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
      * it will destroy any DistanceMeasurements currently under construction, and incurs some overhead, since it unbinds
      * and rebinds various input handlers.
      *
-     * @param {boolean} snapping Whether to enable snap-to-vertex and snap-edge for this DistanceMeasurementsMouseControl.
+     * @param snapping
      */
     set snapping(snapping) {
         if (snapping !== this._snapping) {
@@ -422,13 +421,12 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
      * Gets whether snap-to-vertex and snap-to-edge are enabled for this DistanceMeasurementsMouseControl.
      *
      * This is `true` by default.
-     *
-     * @returns {boolean} Whether snap-to-vertex and snap-to-edge are enabled for this DistanceMeasurementsMouseControl.
+     * @returns {*}
      */
     get snapping() {
         return this._snapping;
     }
-
+    
     /**
      * Activates this DistanceMeasurementsMouseControl, ready to respond to input.
      */
@@ -463,12 +461,12 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
         const getLeft = el =&gt; el.offsetLeft + (el.offsetParent &amp;&amp; getLeft(el.offsetParent));
 
         const pagePos = math.vec2();
-
+        
         this._onCameraControlHoverSnapOrSurface = cameraControl.on(
             this._snapping
                 ? &quot;hoverSnapOrSurface&quot;
                 : &quot;hoverSurface&quot;, event =&gt; {
-               const canvasPos = event.snappedCanvasPos ||event.canvasPos;
+                const canvasPos = event.snappedCanvasPos || event.canvasPos;
                 mouseHovering = true;
                 pointerWorldPos.set(event.worldPos);
                 pointerCanvasPos.set(event.canvasPos);
@@ -496,7 +494,7 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
                     } else {
                         if (this.pointerLens) {
                             this.pointerLens.visible = true;
-                            this.pointerLens.canvasPos =  event.canvasPos;
+                            this.pointerLens.canvasPos = event.canvasPos;
                             this.pointerLens.snappedCanvasPos = event.canvasPos;
                             this.pointerLens.snapped = false;
                         }
@@ -530,7 +528,7 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
             pointerDownCanvasY = e.clientY;
         });
 
-        canvas.addEventListener(&quot;mouseup&quot;, this._onMouseUp =(e) =&gt; {
+        canvas.addEventListener(&quot;mouseup&quot;, this._onMouseUp = (e) =&gt; {
             if (e.which !== 1) {
                 return;
             }
@@ -585,21 +583,21 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
             this._snapping
                 ? &quot;hoverSnapOrSurfaceOff&quot;
                 : &quot;hoverOff&quot;, event =&gt; {
-            if (this.pointerLens) {
-                this.pointerLens.visible = true;
-                this.pointerLens.canvasPos =  event.canvasPos;
-                this.pointerLens.snappedCanvasPos = event.snappedCanvasPos || event.canvasPos;
-            }
-            mouseHovering = false;
-            this._markerDiv.style.left = `-100px`;
-            this._markerDiv.style.top = `-100px`;
-            if (this._currentDistanceMeasurement) {
-                this._currentDistanceMeasurement.wireVisible = false;
-                this._currentDistanceMeasurement.targetVisible = false;
-                this._currentDistanceMeasurement.axisVisible = false;
-            }
-            canvas.style.cursor = &quot;default&quot;;
-        });
+                if (this.pointerLens) {
+                    this.pointerLens.visible = true;
+                    this.pointerLens.canvasPos = event.canvasPos;
+                    this.pointerLens.snappedCanvasPos = event.snappedCanvasPos || event.canvasPos;
+                }
+                mouseHovering = false;
+                this._markerDiv.style.left = `-100px`;
+                this._markerDiv.style.top = `-100px`;
+                if (this._currentDistanceMeasurement) {
+                    this._currentDistanceMeasurement.wireVisible = false;
+                    this._currentDistanceMeasurement.targetVisible = false;
+                    this._currentDistanceMeasurement.axisVisible = false;
+                }
+                canvas.style.cursor = &quot;default&quot;;
+            });
 
         this._active = true;
     }

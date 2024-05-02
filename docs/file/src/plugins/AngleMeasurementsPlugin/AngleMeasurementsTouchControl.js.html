@@ -235,7 +235,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Path.js~Path.html">Path</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/CrossSections.js~CrossSections.html">CrossSections</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache.html">SectionPlaneCache</a></span></span></li>
@@ -250,8 +251,6 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils-texturetranscoders-ktx2texturetranscoder">viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html">KTX2TextureTranscoder</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
-<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl-occlusion">viewer/scene/webgl/occlusion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html">OcclusionLayer</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html">OcclusionTester</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -317,8 +316,7 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
         this._onCanvasTouchStart = null;
         this._onCanvasTouchEnd = null;
         this._longTouchTimeoutMs = 300;
-        this._snapToEdge = cfg.snapToEdge !== false;
-        this._snapToVertex = cfg.snapToVertex !== false;
+        this._snapping = cfg.snapping !== false;
         this._touchState = WAITING_FOR_ORIGIN_TOUCH_START;
 
         this._attachPlugin(angleMeasurementsPlugin, cfg);
@@ -348,39 +346,35 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
     }
 
     /**
-     * Sets whether snap-to-vertex is enabled for this AngleMeasurementsTouchControl.
+     * Sets whether snap-to-vertex and snap-to-edge are enabled for this AngleMeasurementsMouseControl.
+     *
      * This is `true` by default.
-     * @param snapToVertex
+     *
+     * Internally, this deactivates then activates the AngleMeasurementsMouseControl when changed, which means that
+     * it will destroy any AngleMeasurements currently under construction, and incurs some overhead, since it unbinds
+     * and rebinds various input handlers.
+     *
+     * @param {boolean} snapping Whether to enable snap-to-vertex and snap-edge for this AngleMeasurementsMouseControl.
      */
-    set snapToVertex(snapToVertex) {
-        this._snapToVertex = snapToVertex;
+    set snapping(snapping) {
+        if (snapping !== this._snapping) {
+            this._snapping = snapping;
+            this.deactivate();
+            this.activate();
+        } else {
+            this._snapping = snapping;
+        }
     }
 
     /**
-     * Gets whether snap-to-vertex is enabled for this AngleMeasurementsTouchControl.
+     * Gets whether snap-to-vertex and snap-to-edge are enabled for this AngleMeasurementsMouseControl.
+     *
      * This is `true` by default.
-     * @returns {*}
+     *
+     * @returns {boolean} Whether snap-to-vertex and snap-to-edge are enabled for this AngleMeasurementsMouseControl.
      */
-    get snapToVertex() {
-        return this._snapToVertex;
-    }
-
-    /**
-     * Sets whether snap-to-edge is enabled for this AngleMeasurementsTouchControl.
-     * This is `true` by default.
-     * @param snapToEdge
-     */
-    set snapToEdge(snapToEdge) {
-        this._snapToEdge = snapToEdge;
-    }
-
-    /**
-     * Gets whether snap-to-edge is enabled for this AngleMeasurementsTouchControl.
-     * This is `true` by default.
-     * @returns {*}
-     */
-    get snapToEdge() {
-        return this._snapToEdge;
+    get snapping() {
+        return this._snapping;
     }
 
     /**
@@ -410,11 +404,11 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
 
         let touchId = null;
 
-        const disableCameraMouseControl = () =&gt; {
+        const disableCameraNavigation = () =&gt; {
             this.plugin.viewer.cameraControl.active = false;
         }
 
-        const enableCameraMouseControl = () =&gt; {
+        const enableCameraNavigation = () =&gt; {
             this.plugin.viewer.cameraControl.active = true;
         }
 
@@ -427,7 +421,7 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                 this._currentAngleMeasurement.destroy();
                 this._currentAngleMeasurement = null;
             }
-            enableCameraMouseControl();
+            enableCameraNavigation();
             this._touchState = WAITING_FOR_ORIGIN_TOUCH_START;
         }
 
@@ -459,8 +453,8 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                     }
                     const snapPickResult = scene.pick({
                         canvasPos: touchMoveCanvasPos,
-                        snapToVertex: this._snapToVertex,
-                        snapToEdge: this._snapToEdge
+                        snapToVertex: this._snapping,
+                        snapToEdge: this._snapping
                     });
                     if (snapPickResult &amp;&amp; snapPickResult.snapped) {
                         pointerWorldPos.set(snapPickResult.worldPos);
@@ -534,7 +528,7 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                         // }
                         this._touchState = WAITING_FOR_ORIGIN_LONG_TOUCH_END;
                       //  console.log(&quot;touchstart: this._touchState= WAITING_FOR_ORIGIN_TOUCH_START -&gt; WAITING_FOR_ORIGIN_LONG_TOUCH_END&quot;)
-                        disableCameraMouseControl();
+                        disableCameraNavigation();
                     }, this._longTouchTimeoutMs);
                     this._touchState = WAITING_FOR_ORIGIN_QUICK_TOUCH_END;
                     //console.log(&quot;touchstart: this._touchState= WAITING_FOR_ORIGIN_TOUCH_START -&gt; WAITING_FOR_ORIGIN_QUICK_TOUCH_END&quot;)
@@ -571,8 +565,8 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
 
                             const snapPickResult = scene.pick({
                                 canvasPos: touchMoveCanvasPos,
-                                snapToVertex: this._snapToVertex,
-                                snapToEdge: this._snapToEdge
+                                snapToVertex: this._snapping,
+                                snapToEdge: this._snapping
                             });
                             if (snapPickResult &amp;&amp; snapPickResult.snapped) {
                                 if (this.pointerLens) {
@@ -624,7 +618,7 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                             this._touchState = WAITING_FOR_CORNER_LONG_TOUCH_END;
                            // console.log(&quot;touchstart: this._touchState= WAITING_FOR_CORNER_TOUCH_START -&gt; WAITING_FOR_CORNER_LONG_TOUCH_END&quot;)
 
-                            disableCameraMouseControl();
+                            disableCameraNavigation();
 
                         }, this._longTouchTimeoutMs);
 
@@ -664,8 +658,8 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
 
                             const snapPickResult = scene.pick({
                                 canvasPos: touchMoveCanvasPos,
-                                snapToVertex: this._snapToVertex,
-                                snapToEdge: this._snapToEdge
+                                snapToVertex: this._snapping,
+                                snapToEdge: this._snapping
                             });
                             if (snapPickResult &amp;&amp; snapPickResult.snapped) {
                                 if (this.pointerLens) {
@@ -717,7 +711,7 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                             this._touchState = WAITING_FOR_TARGET_LONG_TOUCH_END;
                            // console.log(&quot;touchstart: this._touchState= WAITING_FOR_TARGET_TOUCH_START -&gt; WAITING_FOR_TARGET_LONG_TOUCH_END&quot;)
 
-                            disableCameraMouseControl();
+                            disableCameraNavigation();
 
                         }, this._longTouchTimeoutMs);
 
@@ -778,8 +772,8 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                     }
                     snapPickResult = scene.pick({
                         canvasPos: touchMoveCanvasPos,
-                        snapToVertex: this._snapToVertex,
-                        snapToEdge: this._snapToEdge
+                        snapToVertex: this._snapping,
+                        snapToEdge: this._snapping
                     });
                     if (snapPickResult &amp;&amp; (snapPickResult.snapped)) {
                         if (this.pointerLens) {
@@ -827,8 +821,8 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                     }
                     snapPickResult = scene.pick({
                         canvasPos: touchMoveCanvasPos,
-                        snapToVertex: this._snapToVertex,
-                        snapToEdge: this._snapToEdge
+                        snapToVertex: this._snapping,
+                        snapToEdge: this._snapping
                     });
                     if (snapPickResult &amp;&amp; snapPickResult.worldPos) {
                         if (this.pointerLens) {
@@ -883,8 +877,8 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                     }
                     snapPickResult = scene.pick({
                         canvasPos: touchMoveCanvasPos,
-                        snapToVertex: this._snapToVertex,
-                        snapToEdge: this._snapToEdge
+                        snapToVertex: this._snapping,
+                        snapToEdge: this._snapping
                     });
                     if (snapPickResult &amp;&amp; snapPickResult.worldPos) {
                         if (this.pointerLens) {
@@ -999,7 +993,7 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                       //  console.log(&quot;touchend: this._touchState= WAITING_FOR_ORIGIN_QUICK_TOUCH_END -&gt; WAITING_FOR_ORIGIN_TOUCH_START&quot;)
                     }
                 }
-                    enableCameraMouseControl();
+                    enableCameraNavigation();
                     break;
 
                 case WAITING_FOR_ORIGIN_LONG_TOUCH_END:
@@ -1017,7 +1011,7 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                         this._touchState = WAITING_FOR_CORNER_TOUCH_START;
                        // console.log(&quot;touchend: this._touchState= WAITING_FOR_ORIGIN_LONG_TOUCH_END (picked, begin measurement) -&gt; WAITING_FOR_CORNER_TOUCH_START&quot;)
                     }
-                    enableCameraMouseControl();
+                    enableCameraNavigation();
                     break;
 
                 case WAITING_FOR_CORNER_QUICK_TOUCH_END: {
@@ -1054,7 +1048,7 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                     }
 
                 }
-                    enableCameraMouseControl();
+                    enableCameraNavigation();
                     break;
 
                 case WAITING_FOR_CORNER_LONG_TOUCH_END:
@@ -1063,7 +1057,7 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                     }
                     this._touchState = WAITING_FOR_TARGET_TOUCH_START;
                   //  console.log(&quot;touchend: this._touchState= WAITING_FOR_CORNER_LONG_TOUCH_END  -&gt; WAITING_FOR_ORIGIN_TOUCH_START&quot;)
-                    enableCameraMouseControl();
+                    enableCameraNavigation();
                     break;
 
                 case WAITING_FOR_TARGET_QUICK_TOUCH_END: {
@@ -1099,7 +1093,7 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                     this._touchState = WAITING_FOR_ORIGIN_TOUCH_START;
                    // console.log(&quot;touchend: this._touchState= WAITING_FOR_TARGET_TOUCH_START -&gt; WAITING_FOR_ORIGIN_TOUCH_START&quot;)
                 }
-                    enableCameraMouseControl();
+                    enableCameraNavigation();
                     break;
 
                 case WAITING_FOR_TARGET_LONG_TOUCH_END:
@@ -1120,7 +1114,7 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
                         this._touchState = WAITING_FOR_ORIGIN_TOUCH_START;
                        // console.log(&quot;touchend: this._touchState= WAITING_FOR_TARGET_LONG_TOUCH_END  -&gt; WAITING_FOR_ORIGIN_TOUCH_START&quot;)
                     }
-                    enableCameraMouseControl();
+                    enableCameraNavigation();
                     break;
             }
 

@@ -168,6 +168,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/postfx/crosssections.js~crosssections",
+    "class/src/viewer/scene/postfx/CrossSections.js~CrossSections.html",
+    "<span>CrossSections</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/postfx/CrossSections.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/lights/cubetexture.js~cubetexture",
     "class/src/viewer/scene/lights/CubeTexture.js~CubeTexture.html",
     "<span>CubeTexture</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/lights/CubeTexture.js</span>",
@@ -621,18 +627,6 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/mementos/objectsmemento.js~objectsmemento",
     "class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html",
     "<span>ObjectsMemento</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/mementos/ObjectsMemento.js</span>",
-    "class"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html",
-    "<span>OcclusionLayer</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/webgl/occlusion/OcclusionLayer.js</span>",
-    "class"
-  ],
-  [
-    "@xeokit/xeokit-sdk/src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html",
-    "<span>OcclusionTester</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/webgl/occlusion/OcclusionTester.js</span>",
     "class"
   ],
   [
@@ -2472,27 +2466,15 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#snaptoedge",
-    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-set-snapToEdge",
-    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#snapToEdge",
+    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#snapping",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-set-snapping",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#snapping",
     "member"
   ],
   [
-    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#snaptoedge",
-    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-get-snapToEdge",
-    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#snapToEdge",
-    "member"
-  ],
-  [
-    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#snaptovertex",
-    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-set-snapToVertex",
-    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#snapToVertex",
-    "member"
-  ],
-  [
-    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#snaptovertex",
-    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-get-snapToVertex",
-    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#snapToVertex",
+    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#snapping",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-get-snapping",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#snapping",
     "member"
   ],
   [
@@ -3348,27 +3330,15 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#snaptoedge",
-    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-set-snapToEdge",
-    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#snapToEdge",
+    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#snapping",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-set-snapping",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#snapping",
     "member"
   ],
   [
-    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#snaptoedge",
-    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-get-snapToEdge",
-    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#snapToEdge",
-    "member"
-  ],
-  [
-    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#snaptovertex",
-    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-set-snapToVertex",
-    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#snapToVertex",
-    "member"
-  ],
-  [
-    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#snaptovertex",
-    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-get-snapToVertex",
-    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#snapToVertex",
+    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#snapping",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-get-snapping",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#snapping",
     "member"
   ],
   [
@@ -14232,6 +14202,42 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/viewer/scene/postfx/crosssections.js",
+    "file/src/viewer/scene/postfx/CrossSections.js.html",
+    "src/viewer/scene/postfx/CrossSections.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/postfx/crosssections.js~crosssections#destroy",
+    "class/src/viewer/scene/postfx/CrossSections.js~CrossSections.html#instance-method-destroy",
+    "src/viewer/scene/postfx/CrossSections.js~CrossSections#destroy",
+    "method"
+  ],
+  [
+    "src/viewer/scene/postfx/crosssections.js~crosssections#slicecolor",
+    "class/src/viewer/scene/postfx/CrossSections.js~CrossSections.html#instance-set-sliceColor",
+    "src/viewer/scene/postfx/CrossSections.js~CrossSections#sliceColor",
+    "member"
+  ],
+  [
+    "src/viewer/scene/postfx/crosssections.js~crosssections#slicecolor",
+    "class/src/viewer/scene/postfx/CrossSections.js~CrossSections.html#instance-get-sliceColor",
+    "src/viewer/scene/postfx/CrossSections.js~CrossSections#sliceColor",
+    "member"
+  ],
+  [
+    "src/viewer/scene/postfx/crosssections.js~crosssections#slicethickness",
+    "class/src/viewer/scene/postfx/CrossSections.js~CrossSections.html#instance-set-sliceThickness",
+    "src/viewer/scene/postfx/CrossSections.js~CrossSections#sliceThickness",
+    "member"
+  ],
+  [
+    "src/viewer/scene/postfx/crosssections.js~crosssections#slicethickness",
+    "class/src/viewer/scene/postfx/CrossSections.js~CrossSections.html#instance-get-sliceThickness",
+    "src/viewer/scene/postfx/CrossSections.js~CrossSections#sliceThickness",
+    "member"
+  ],
+  [
     "src/viewer/scene/postfx/sao.js",
     "file/src/viewer/scene/postfx/SAO.js.html",
     "src/viewer/scene/postfx/SAO.js",
@@ -14481,6 +14487,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/scene/scene.js~scene#components",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-components",
     "src/viewer/scene/scene/Scene.js~Scene#components",
+    "member"
+  ],
+  [
+    "src/viewer/scene/scene/scene.js~scene#crosssections",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-member-crossSections",
+    "src/viewer/scene/scene/Scene.js~Scene#crossSections",
     "member"
   ],
   [
@@ -15810,256 +15822,10 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#aabb",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-aabb",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#aabb",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#aabbdirty",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-aabbDirty",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#aabbDirty",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#addmarker",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-method-addMarker",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#addMarker",
-    "method"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#constructor",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-constructor-constructor",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#constructor",
-    "method"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#culledbysectionplanes",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-culledBySectionPlanes",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#culledBySectionPlanes",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#destroy",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-method-destroy",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#destroy",
-    "method"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#indices",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-indices",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#indices",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#indicesbuf",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-indicesBuf",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#indicesBuf",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#lenocclusiontestlist",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-lenOcclusionTestList",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#lenOcclusionTestList",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#lenpositionsbuf",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-lenPositionsBuf",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#lenPositionsBuf",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#markerindices",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-markerIndices",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#markerIndices",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#markerlist",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-markerList",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#markerList",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#markerlistdirty",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-markerListDirty",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#markerListDirty",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#markerworldposupdated",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-method-markerWorldPosUpdated",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#markerWorldPosUpdated",
-    "method"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#markers",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-markers",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#markers",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#nummarkers",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-numMarkers",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#numMarkers",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#occlusiontestlist",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-occlusionTestList",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#occlusionTestList",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#occlusiontestlistdirty",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-occlusionTestListDirty",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#occlusionTestListDirty",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#origin",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-origin",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#origin",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#originhash",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-originHash",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#originHash",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#pixels",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-pixels",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#pixels",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#positions",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-positions",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#positions",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#positionsbuf",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-positionsBuf",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#positionsBuf",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#positionsdirty",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-positionsDirty",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#positionsDirty",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#removemarker",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-method-removeMarker",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#removeMarker",
-    "method"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#scene",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-scene",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#scene",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#sectionplanesactive",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-sectionPlanesActive",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#sectionPlanesActive",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#update",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-method-update",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#update",
-    "method"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusionlayer.js~occlusionlayer#vbosdirty",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer.html#instance-member-vbosDirty",
-    "src/viewer/scene/webgl/occlusion/OcclusionLayer.js~OcclusionLayer#vbosDirty",
-    "member"
-  ],
-  [
     "src/viewer/scene/webgl/occlusion/occlusiontester.js",
     "file/src/viewer/scene/webgl/occlusion/OcclusionTester.js.html",
     "src/viewer/scene/webgl/occlusion/OcclusionTester.js",
     "file"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#addmarker",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-method-addMarker",
-    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#addMarker",
-    "method"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#bindrenderbuf",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-method-bindRenderBuf",
-    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#bindRenderBuf",
-    "method"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#constructor",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-constructor-constructor",
-    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#constructor",
-    "method"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#destroy",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-method-destroy",
-    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#destroy",
-    "method"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#destroyed",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-member-destroyed",
-    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#destroyed",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#doocclusiontest",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-method-doOcclusionTest",
-    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#doOcclusionTest",
-    "method"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#drawmarkers",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-method-drawMarkers",
-    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#drawMarkers",
-    "method"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#errors",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-member-errors",
-    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#errors",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#markerworldposupdated",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-method-markerWorldPosUpdated",
-    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#markerWorldPosUpdated",
-    "method"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#needocclusiontest",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-get-needOcclusionTest",
-    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#needOcclusionTest",
-    "member"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#removemarker",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-method-removeMarker",
-    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#removeMarker",
-    "method"
-  ],
-  [
-    "src/viewer/scene/webgl/occlusion/occlusiontester.js~occlusiontester#unbindrenderbuf",
-    "class/src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester.html#instance-method-unbindRenderBuf",
-    "src/viewer/scene/webgl/occlusion/OcclusionTester.js~OcclusionTester#unbindRenderBuf",
-    "method"
   ],
   [
     "src/viewer/scene/webgl/sao/saodepthlimitedblurrenderer.js",
