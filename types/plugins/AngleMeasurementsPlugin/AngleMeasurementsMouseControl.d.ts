@@ -1,4 +1,4 @@
-import { AngleMeasurementsControl } from "./AngleMeasurementsControl.js";
+import {AngleMeasurementsControl} from "./AngleMeasurementsControl.js";
 import {AngleMeasurementsPlugin} from "./AngleMeasurementsPlugin";
 import {PointerLens} from "../../extras/";
 
@@ -42,11 +42,13 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
      * @param {AngleMeasurementsPlugin} angleMeasurementsPlugin The AngleMeasurementsPlugin to control.
      * @param {Object} [cfg] Configuration options.
      * @param {PointerLens} [cfg.pointerLens] A PointerLens to use for providing a magnified view of the cursor when snapping is enabled.
+     * @param {function} [cfg.canvasToPagePos] Optional function to map canvas-space coordinates to page coordinates.
      * @param {boolean} [cfg.snapping=true] Whether to initially enable snap-to-vertex and snap-to-edge for this AngleMeasurementsMouseControl.
      */
     constructor(angleMeasurementsPlugin: AngleMeasurementsPlugin, cfg?: {
         pointerLens?: PointerLens;
         snapping?: boolean;
+        canvasToPagePos? : Function;
     });
 
     /**

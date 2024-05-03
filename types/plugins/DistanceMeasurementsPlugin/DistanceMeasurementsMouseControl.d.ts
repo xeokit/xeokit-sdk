@@ -21,11 +21,13 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
      * @param {DistanceMeasurementsPlugin} distanceMeasurementsPlugin The DistanceMeasurementsPlugin to control.
      * @param {Object} cfg Configuration options.
      * @param {PointerLens} [cfg.pointerLens] A PointerLens to provide a magnified view of the cursor when snapping is enabled.
+     * @param {function} [cfg.canvasToPagePos] Optional function to map canvas-space coordinates to page coordinates.
      * @param {boolean} [cfg.snapping=true] Whether to enable snap-to-vertex and snap-to-edge for this DistanceMeasurementsMouseControl.
      */
     constructor(distanceMeasurementsPlugin: DistanceMeasurementsPlugin, cfg?: {
         pointerLens?: PointerLens;
         snapping?: boolean;
+        canvasToPagePos? : Function;
     });
 
     /**
