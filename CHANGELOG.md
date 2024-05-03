@@ -1,5 +1,11 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.8](https://github.com/xeokit/xeokit-sdk/compare/v2.6.7...v2.6.8)
+
+### 3 May 2024
+
+-  [FIX] Add canvasToPagePos typedef for measurement plugins #1481 - [#1482](https://github.com/xeokit/xeokit-sdk/pull/1482)
+
 # [v2.6.7](https://github.com/xeokit/xeokit-sdk/compare/v2.6.6...v2.6.7)
 
 ### 2 May 2024
