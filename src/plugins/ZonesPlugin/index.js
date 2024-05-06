@@ -1,4 +1,3 @@
-import {Label} from "../lib/html/Label.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {Component} from "../../viewer/scene/Component.js";
 import {buildBoxGeometry} from "../../viewer/scene/geometry/builders/buildBoxGeometry.js";
@@ -80,54 +79,9 @@ class Zone extends Component {
             this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new WheelEvent('wheel', event));
         };
 
-        this._label = new Label(this._container, {
-            prefix: "",
-            text: "",
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 4 : undefined,
-            onMouseOver,
-            onMouseLeave,
-            onMouseWheel,
-            onMouseDown,
-            onMouseUp,
-            onMouseMove,
-            onContextMenu
-        });
-
         this.color = cfg.color;
 
-        this._vpDirty = false;
-        this._cpDirty = false;
-        this._sectionPlanesDirty = true;
-
-
-        this._onViewMatrix = scene.camera.on("viewMatrix", () => {
-            this._vpDirty = true;
-            this._needUpdate(0); // No lag
-        });
-
-        this._onProjMatrix = scene.camera.on("projMatrix", () => {
-            this._cpDirty = true;
-            this._needUpdate();
-        });
-
-        this._onCanvasBoundary = scene.canvas.on("boundary", () => {
-            this._cpDirty = true;
-            this._needUpdate(0); // No lag
-        });
-
-        this._onMetricsOrigin = scene.metrics.on("origin", () => {
-            this._cpDirty = true;
-            this._needUpdate();
-        });
-
-        this._onSectionPlaneUpdated = scene.on("sectionPlaneUpdated", () =>{
-            this._sectionPlanesDirty = true;
-            this._needUpdate();
-        });
-
         this._visible = true;
-        this._labelsVisible = true;
-        this.labelText = cfg.labelText;
 
         this._rebuildMesh();
     }
@@ -221,91 +175,14 @@ class Zone extends Component {
         ]);
 
         this._center = math.vec3([ (xmin + xmax) / 2, (ymin + ymax) / 2, (zmin + zmax) / 2 ]);
-
-        this._vpDirty = true;
-    }
-
-    _update() {
-
-        if (!this._visible) {
-            return;
-        }
-
-        const scene = this.plugin.viewer.scene;
-
-        if (this._vpDirty) {
-
-            math.transformPositions4(scene.camera.viewMatrix, this._wp, this._vp);
-
-            this._vp[3] = 1.0;
-            this._vp[7] = 1.0;
-            this._vp[11] = 1.0;
-            this._vp[15] = 1.0;
-
-            this._vpDirty = false;
-            this._cpDirty = true;
-        }
-
-        if (this._sectionPlanesDirty) {
-            const isSliced = scene._sectionPlanesState.sectionPlanes.some(
-                sectionPlane => math.planeClipsPositions3(sectionPlane.pos, sectionPlane.dir, this._wp, 4));
-
-            this._label.setCulled(isSliced);
-
-            if (isSliced) {
-                return;
-            }
-
-            this._sectionPlanesDirty = false;
-        }
-
-        if (this._cpDirty) {
-
-            this._label.setCulled(!this._labelsVisible);
-
-            if (this._labelsVisible) {
-                math.transformPositions4(scene.camera.project.matrix, this._vp, this._pp);
-
-                const offsets = scene.canvas.canvas.getBoundingClientRect();
-                const containerOffsets = this._container.getBoundingClientRect();
-                const top  = offsets.top  - containerOffsets.top;
-                const left = offsets.left - containerOffsets.left;
-                const aabb = scene.canvas.boundary;
-                const canvasWidth  = aabb[2];
-                const canvasHeight = aabb[3];
-
-                const pp = this._pp;
-                const cp = this._cp;
-                for (let i = 0, j = 0, len = pp.length; i < len; i += 4) {
-                    cp[j  ] = left + Math.floor((1 + pp[i + 0] / pp[i + 3]) * canvasWidth / 2);
-                    cp[j+1] = top  + Math.floor((1 - pp[i + 1] / pp[i + 3]) * canvasHeight / 2);
-                    j += 2;
-                }
-
-                this._label.setPosOnWire(cp[0], cp[1], cp[6], cp[7]);
-            }
-
-            this._cpDirty = false;
-        }
     }
 
     get center() {
         return this._center;
     }
 
-    set labelText(text) {
-        this._labelText = text;
-        this._label.setText(this._labelText);
-        this._label.setVisible(this._visible && (this._labelText !== undefined));
-    }
-
-    get labelText() {
-        return this._labelText;
-    }
-
     set color(value) {
         this._color = value;
-        this._label.setFillColor(this._color);
         if (this._zoneMesh) {
             this._zoneMesh.material.diffuse = hex2rgb(this._color);
         }
@@ -322,9 +199,7 @@ class Zone extends Component {
      */
     set visible(value) {
         this._visible = !!value;
-        this._label.setVisible(this._visible && (this._labelText !== undefined));
         this._zoneMesh.visible = this._visible;
-        this._cpDirty = true;
         this._needUpdate();
     }
 
@@ -347,7 +222,6 @@ class Zone extends Component {
         return {
             id: this.id,
             geometry: this._geometry,
-            labelText: this._labelText,
             color: this._color
         };
     }
@@ -356,18 +230,7 @@ class Zone extends Component {
      * @private
      */
     destroy() {
-
-        const scene = this.plugin.viewer.scene;
-
-        scene.camera.off(this._onViewMatrix);
-        scene.camera.off(this._onProjMatrix);
-        scene.canvas.off(this._onCanvasBoundary);
-        scene.metrics.off(this._onMetricsOrigin);
-        scene.off(this._onSectionPlaneUpdated);
-
-        this._label.destroy();
         this._zoneMesh.destroy();
-
         super.destroy();
     }
 }
@@ -475,7 +338,7 @@ class ZonesMouseControl extends Component {
     /**
      * Activates this ZonesMouseControl, ready to respond to input.
      */
-    activate(zoneAltitude, zoneHeight, zoneColor, zoneLabelText) {
+    activate(zoneAltitude, zoneHeight, zoneColor) {
 
         if (this._active) {
             return;
@@ -735,8 +598,7 @@ class ZonesMouseControl extends Component {
                                 altitude: zoneAltitude,
                                 height: zoneHeight
                             },
-                            color: zoneColor,
-                            labelText: zoneLabelText
+                            color: zoneColor
                         });
 
                     basePolygon.destroy();
@@ -910,7 +772,6 @@ class ZonesPlugin extends Plugin {
             container: this._container,
             geometry: params.geometry,
             color: params.color,
-            labelText: params.labelText,
             onMouseOver: this._onMouseOver,
             onMouseLeave: this._onMouseLeave,
             onContextMenu: this._onContextMenu
@@ -963,7 +824,7 @@ export class ZonesTouchControl extends Component {
         return !! this._deactivate;
     }
 
-    activate(zoneAltitude, zoneHeight, zoneColor, zoneLabelText) {
+    activate(zoneAltitude, zoneHeight, zoneColor) {
 
         if (this._deactivate) {
             return;
@@ -1241,8 +1102,7 @@ export class ZonesTouchControl extends Component {
                                         altitude: zoneAltitude,
                                         height: zoneHeight
                                     },
-                                    color: zoneColor,
-                                    labelText: zoneLabelText
+                                    color: zoneColor
                                 });
 
                             self.fire("zoneEnd", zone);
