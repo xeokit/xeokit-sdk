@@ -271,6 +271,7 @@ class DistanceMeasurementsPlugin extends Plugin {
      * @param {String} [cfg.id="DistanceMeasurements"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
      * @param {Number} [cfg.labelMinAxisLength=25] The minimum length, in pixels, of an axis wire beyond which its label is shown.
      * @param {HTMLElement} [cfg.container] Container DOM element for markers and labels. Defaults to ````document.body````.
+     * @param {boolean} [cfg.useRotationAdjustment=false] The default value of the DistanceMeasurements `useRotationAdjustment` property.
      * @param {boolean} [cfg.defaultVisible=true] The default value of the DistanceMeasurements `visible` property.
      * @param {boolean} [cfg.defaultOriginVisible=true] The default value of the DistanceMeasurements `originVisible` property.
      * @param {boolean} [cfg.defaultTargetVisible=true] The default value of the DistanceMeasurements `targetVisible` property.
@@ -298,7 +299,7 @@ class DistanceMeasurementsPlugin extends Plugin {
         this._measurements = {};
 
         this.labelMinAxisLength = cfg.labelMinAxisLength;
-
+        this.useRotationAdjustment = cfg.useRotationAdjustment !== false;
         this.defaultVisible = cfg.defaultVisible !== false;
         this.defaultOriginVisible = cfg.defaultOriginVisible !== false;
         this.defaultTargetVisible = cfg.defaultTargetVisible !== false;
@@ -455,6 +456,7 @@ class DistanceMeasurementsPlugin extends Plugin {
                 entity: target.entity,
                 worldPos: target.worldPos
             },
+            useRotationAdjustment: this.useRotationAdjustment,
             visible: params.visible,
             wireVisible: params.wireVisible,
             axisVisible: params.axisVisible !== false && this.defaultAxisVisible !== false,

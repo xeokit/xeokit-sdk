@@ -164,7 +164,14 @@ class Label {
     }
 
     setClickable(clickable) {
-        this._label.style["pointer-events"] = (!!clickable) ? "all" : "none";
+        this._label.style["pointer-events"] = (clickable) ? "all" : "none";
+    }
+
+    setPrefix(prefix) {
+        if(this._prefix === prefix){
+            return;
+        }
+        this._prefix = prefix;
     }
 
     destroy() {
@@ -172,6 +179,8 @@ class Label {
             this._label.parentElement.removeChild(this._label);
         }
     }
+
+    
 }
 
 export {Label};

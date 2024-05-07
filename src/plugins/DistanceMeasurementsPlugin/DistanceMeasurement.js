@@ -42,7 +42,6 @@ class DistanceMeasurement extends Component {
         this._eventSubs = {};
 
         var scene = this.plugin.viewer.scene;
-
         this._originMarker = new Marker(scene, cfg.origin);
         this._targetMarker = new Marker(scene, cfg.target);
 
@@ -54,6 +53,7 @@ class DistanceMeasurement extends Component {
         this._pp = new Float64Array(24);
         this._cp = new Float64Array(8);
 
+        this._useRotationAdjustment = false;
         this._xAxisLabelCulled = false;
         this._yAxisLabelCulled = false;
         this._zAxisLabelCulled = false;
@@ -291,6 +291,7 @@ class DistanceMeasurement extends Component {
             this._needUpdate();
         });
 
+        this._useRotationAdjustment = cfg.useRotationAdjustment;
         this.approximate = cfg.approximate;
         this.visible = cfg.visible;
         this.originVisible = cfg.originVisible;
@@ -314,25 +315,48 @@ class DistanceMeasurement extends Component {
 
         if (this._wpDirty) {
 
-            this._wp[0] = this._originWorld[0];
-            this._wp[1] = this._originWorld[1];
-            this._wp[2] = this._originWorld[2];
-            this._wp[3] = 1.0;
+            if(this._useRotationAdjustment) {
+                this._wp[0] = this._originWorld[0];
+                this._wp[1] = this._originWorld[1];
+                this._wp[2] = this._originWorld[2];
+                this._wp[3] = 1.0;
+    
+                this._wp[4] = this._originWorld[0];
+                this._wp[5] = this._targetWorld[1];
+                this._wp[6] = this._originWorld[2];
+                this._wp[7] = 1.0;
+    
+                this._wp[8] = this._targetWorld[0];
+                this._wp[9] = this._targetWorld[1];
+                this._wp[10] = this._targetWorld[2];
+                this._wp[11] = 1.0;
+    
+                this._wp[12] = this._targetWorld[0];
+                this._wp[13] = this._targetWorld[1];
+                this._wp[14] = this._targetWorld[2];
+                this._wp[15] = 1.0;
+            }
+            else {
+                this._wp[0] = this._originWorld[0];
+                this._wp[1] = this._originWorld[1];
+                this._wp[2] = this._originWorld[2];
+                this._wp[3] = 1.0;
 
-            this._wp[4] = this._targetWorld[0];
-            this._wp[5] = this._originWorld[1];
-            this._wp[6] = this._originWorld[2];
-            this._wp[7] = 1.0;
+                this._wp[4] = this._targetWorld[0];
+                this._wp[5] = this._originWorld[1];
+                this._wp[6] = this._originWorld[2];
+                this._wp[7] = 1.0;
 
-            this._wp[8] = this._targetWorld[0];
-            this._wp[9] = this._targetWorld[1];
-            this._wp[10] = this._originWorld[2];
-            this._wp[11] = 1.0;
+                this._wp[8] = this._targetWorld[0];
+                this._wp[9] = this._targetWorld[1];
+                this._wp[10] = this._originWorld[2];
+                this._wp[11] = 1.0;
 
-            this._wp[12] = this._targetWorld[0];
-            this._wp[13] = this._targetWorld[1];
-            this._wp[14] = this._targetWorld[2];
-            this._wp[15] = 1.0;
+                this._wp[12] = this._targetWorld[0];
+                this._wp[13] = this._targetWorld[1];
+                this._wp[14] = this._targetWorld[2];
+                this._wp[15] = 1.0;
+            }
 
             this._wpDirty = false;
             this._vpDirty = true;
@@ -489,6 +513,7 @@ class DistanceMeasurement extends Component {
                 }
 
                 if (!this._xAxisLabelCulled) {
+                    this._xAxisLabel.setPrefix(this._useRotationAdjustment ? "" : "X");
                     this._xAxisLabel.setText(tilde + Math.abs((this._targetWorld[0] - this._originWorld[0]) * scale).toFixed(2) + unitAbbrev);
                     this._xAxisLabel.setCulled(!this.axisVisible);
                 } else {
@@ -496,6 +521,7 @@ class DistanceMeasurement extends Component {
                 }
 
                 if (!this._yAxisLabelCulled) {
+                    this._yAxisLabel.setPrefix(this._useRotationAdjustment ? "" : "Y");
                     this._yAxisLabel.setText(tilde + Math.abs((this._targetWorld[1] - this._originWorld[1]) * scale).toFixed(2) + unitAbbrev);
                     this._yAxisLabel.setCulled(!this.axisVisible);
                 } else {
@@ -503,6 +529,7 @@ class DistanceMeasurement extends Component {
                 }
 
                 if (!this._zAxisLabelCulled) {
+                    this._zAxisLabel.setPrefix(this._useRotationAdjustment ? "" : "Z");
                     this._zAxisLabel.setText(tilde + Math.abs((this._targetWorld[2] - this._originWorld[2]) * scale).toFixed(2) + unitAbbrev);
                     this._zAxisLabel.setCulled(!this.axisVisible);
                 } else {
@@ -520,7 +547,7 @@ class DistanceMeasurement extends Component {
 
             this._xAxisWire.setVisible(this.axisVisible && this.xAxisVisible);
             this._yAxisWire.setVisible(this.axisVisible && this.yAxisVisible);
-            this._zAxisWire.setVisible(this.axisVisible && this.zAxisVisible);
+            this._zAxisWire.setVisible(this.axisVisible && this.zAxisVisible && !this._useRotationAdjustment);
 
             this._lengthWire.setVisible(this.wireVisible);
             this._lengthLabel.setCulled(!this.wireVisible);
@@ -538,6 +565,34 @@ class DistanceMeasurement extends Component {
             }
         }
         return false;
+    }
+
+    /**
+     * Sets whether this DistanceMeasurement indicates that its measurement adjusts for rotation.
+     *
+     * This is ````false```` by default.
+     *
+     * @type {Boolean}
+     */
+    set useRotationAdjustment(adjustment) {
+        adjustment = adjustment !== false;
+        if(this._useRotationAdjustment === adjustment){
+            return;
+        }
+        this._useRotationAdjustment = adjustment;
+        this._wpDirty = true;
+        this._needUpdate(0);
+    }
+
+    /**
+     * Gets whether this DistanceMeasurement indicates that its measurement adjusts for rotation.
+     *
+     * This is ````false```` by default.
+     *
+     * @type {Boolean}
+     */
+    get useRotationAdjustment(){
+        return this._useRotationAdjustment;
     }
 
     /**

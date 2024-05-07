@@ -13,6 +13,24 @@ export declare class DistanceMeasurement extends Component {
   plugin: DistanceMeasurementsPlugin;
 
   /**
+   * Sets whether this DistanceMeasurement indicates that its measurement adjusts for rotation.
+   * 
+   * This is ````false```` by default.
+   *
+   * @type {Boolean}
+   */
+  set useRotationAdjustment(arg: boolean);
+
+  /**
+   * Gets whether this DistanceMeasurement indicates that its measurement adjusts for rotation.
+   *
+   * This is ````false```` by default.
+   *
+   * @type {Boolean}
+   */
+  get useRotationAdjustment(): boolean;
+
+  /**
    * Sets whether this DistanceMeasurement indicates that its measurement is approximate.
    *
    * This is ````true```` by default.
