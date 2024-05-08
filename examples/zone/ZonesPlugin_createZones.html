@@ -253,6 +253,13 @@ for (const zoneJSON of zonesJSON) {
     zonesPlugin.createZone(zonesJSON);
 }
 
+// Remove a zone
+// This will
+// 1. Remove the zone from the scene
+// 2. Remove the zone from zonesPlugin.zones collection
+// 3. Notify all zone.on("destroyed") callbacks - to e.g. remove a linked annotation as above
+zone.destroy();
+
 */
 
     </script>
