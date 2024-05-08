@@ -135,8 +135,9 @@ class Zone extends Component {
     _rebuildMesh() {
         const scene       = this.plugin.viewer.scene;
         const planeCoords = this._geometry.planeCoordinates.slice();
-        const altitude    = this._geometry.altitude;
-        const height      = this._geometry.height;
+        const downward    = this._geometry.height < 0;
+        const altitude    = this._geometry.altitude + (downward ? this._geometry.height : 0);
+        const height      = this._geometry.height * (downward ? -1 : 1);
 
         const baseTriangles = [ [ 0, 1, 3 ], [ 1, 2, 3 ] ];
 
@@ -717,10 +718,8 @@ class ZonesMouseControl extends Component {
                     const max = (idx) => Math.max(origin[idx], target[idx]);
 
                     const xmin = min(0);
-                    const ymin = min(1);
                     const zmin = min(2);
                     const xmax = max(0);
-                    const ymax = max(1);
                     const zmax = max(2);
 
                     const zone = zonesPlugin.createZone(
@@ -733,8 +732,8 @@ class ZonesMouseControl extends Component {
                                     [ xmax, zmin ],
                                     [ xmin, zmin ]
                                 ],
-                                altitude: ymin,
-                                height: ymax - ymin
+                                altitude: zoneAltitude,
+                                height: zoneHeight
                             },
                             color: zoneColor,
                             labelText: zoneLabelText
@@ -1225,7 +1224,6 @@ export class ZonesTouchControl extends Component {
                             const max = (idx) => Math.max(point1WorldPos[idx], point2WorldPos[idx]);
 
                             const xmin = min(0);
-                            const ymin = min(1);
                             const zmin = min(2);
                             const xmax = max(0);
                             const zmax = max(2);
@@ -1240,7 +1238,7 @@ export class ZonesTouchControl extends Component {
                                             [ xmax, zmin ],
                                             [ xmin, zmin ]
                                         ],
-                                        altitude: ymin,
+                                        altitude: zoneAltitude,
                                         height: zoneHeight
                                     },
                                     color: zoneColor,
