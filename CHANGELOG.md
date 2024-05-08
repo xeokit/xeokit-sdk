@@ -1,5 +1,11 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.9](https://github.com/xeokit/xeokit-sdk/compare/v2.6.8...v2.6.9)
+
+### 8 May 2024
+
+-  Fix measurement dot position - [#1484](https://github.com/xeokit/xeokit-sdk/pull/1484)
+
 # [v2.6.8](https://github.com/xeokit/xeokit-sdk/compare/v2.6.7...v2.6.8)
 
 ### 3 May 2024
