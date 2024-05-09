@@ -225,7 +225,8 @@
     const altitude = 0.01;
     const height = 1.9;
     const color = "#008000";
-    zonesMouseControl.activate(altitude, height, color);
+    const alpha = 0.5;
+    zonesMouseControl.activate(altitude, height, color, alpha);
 
 /*
 
@@ -240,6 +241,7 @@ for (const zone of zones) {
 // Modify a zone
 const zone = zones[0];
 zone.color = "#800000";
+zone.alpha = 0.8;
 
 // Serialize all zones
 const zonesJSON = zones.map(zone => zone.getJSON());
