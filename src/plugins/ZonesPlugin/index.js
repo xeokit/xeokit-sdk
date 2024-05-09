@@ -79,6 +79,7 @@ class Zone extends Component {
             this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new WheelEvent('wheel', event));
         };
 
+        this._alpha = (("alpha" in cfg) && (cfg.alpha !== undefined)) ? cfg.alpha : 0.5;
         this.color = cfg.color;
 
         this._visible = true;
@@ -149,7 +150,7 @@ class Zone extends Component {
                     normals:   math.buildNormals(positions, ind)
                 }),
             material: new PhongMaterial(scene, {
-                alpha: 0.5,
+                alpha: this._alpha,
                 backfaces: true,
                 diffuse: hex2rgb(this._color)
             }),
@@ -190,6 +191,17 @@ class Zone extends Component {
 
     get color() {
         return this._color;
+    }
+
+    set alpha(value) {
+        this._alpha = value;
+        if (this._zoneMesh) {
+            this._zoneMesh.material.alpha = this._alpha;
+        }
+    }
+
+    get alpha() {
+        return this._alpha;
     }
 
     /**
@@ -338,7 +350,7 @@ class ZonesMouseControl extends Component {
     /**
      * Activates this ZonesMouseControl, ready to respond to input.
      */
-    activate(zoneAltitude, zoneHeight, zoneColor) {
+    activate(zoneAltitude, zoneHeight, zoneColor, zoneAlpha) {
 
         if (this._active) {
             return;
@@ -426,8 +438,8 @@ class ZonesMouseControl extends Component {
                                 material: new PhongMaterial(
                                     scene,
                                     {
+                                        alpha: (zoneAlpha !== undefined) ? zoneAlpha : 0.5,
                                         diffuse: hex2rgb(zoneColor),
-                                        alpha: 0.5,
                                         backfaces: true
                                     })
                             });
@@ -598,7 +610,8 @@ class ZonesMouseControl extends Component {
                                 altitude: zoneAltitude,
                                 height: zoneHeight
                             },
-                            color: zoneColor
+                            color: zoneColor,
+                            alpha: zoneAlpha
                         });
 
                     basePolygon.destroy();
@@ -766,11 +779,13 @@ class ZonesPlugin extends Plugin {
             this.error("Viewer scene component with this ID already exists: " + params.id);
             delete params.id;
         }
+
         const zone = new Zone(this, {
             id: params.id,
             plugin: this,
             container: this._container,
             geometry: params.geometry,
+            alpha: params.alpha,
             color: params.color,
             onMouseOver: this._onMouseOver,
             onMouseLeave: this._onMouseLeave,
@@ -824,7 +839,7 @@ export class ZonesTouchControl extends Component {
         return !! this._deactivate;
     }
 
-    activate(zoneAltitude, zoneHeight, zoneColor) {
+    activate(zoneAltitude, zoneHeight, zoneColor, zoneAlpha) {
 
         if (this._deactivate) {
             return;
@@ -1031,8 +1046,8 @@ export class ZonesTouchControl extends Component {
                     material: new PhongMaterial(
                         scene,
                         {
+                            alpha: (zoneAlpha !== undefined) ? zoneAlpha : 0.5,
                             diffuse: hex2rgb(zoneColor),
-                            alpha: 0.5,
                             backfaces: true
                         })
                 });
@@ -1102,6 +1117,7 @@ export class ZonesTouchControl extends Component {
                                         altitude: zoneAltitude,
                                         height: zoneHeight
                                     },
+                                    alpha: zoneAlpha,
                                     color: zoneColor
                                 });
 
