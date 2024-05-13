@@ -182,6 +182,15 @@ class Zone extends Component {
         return this._center;
     }
 
+    get altitude() {
+        return this._geometry.altitude;
+    }
+
+    set altitude(value) {
+        this._geometry.altitude = value;
+        this._rebuildMesh();
+    }
+
     set color(value) {
         this._color = value;
         if (this._zoneMesh) {
