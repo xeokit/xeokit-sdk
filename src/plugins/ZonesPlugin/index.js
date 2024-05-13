@@ -191,6 +191,15 @@ class Zone extends Component {
         this._rebuildMesh();
     }
 
+    get height() {
+        return this._geometry.height;
+    }
+
+    set height(value) {
+        this._geometry.height = value;
+        this._rebuildMesh();
+    }
+
     set color(value) {
         this._color = value;
         if (this._zoneMesh) {
