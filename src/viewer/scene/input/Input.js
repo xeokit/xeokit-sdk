@@ -1190,6 +1190,14 @@ class Input extends Component {
             }
         });
 
+        this.element.addEventListener("contextmenu", this._contextmenuListener = (e) => {
+            if (!this.enabled) {
+                return;
+            }
+            this._getMouseCanvasPos(e);
+            this.fire("contextmenu", this.mouseCanvasPos, true);
+        });
+
         const tickifiedMouseWheelFn = this.scene.tickify(
             (delta) => { this.fire("mousewheel", delta, true); }
         );
@@ -1239,6 +1247,7 @@ class Input extends Component {
         document.removeEventListener("click", this._clickListener);
         document.removeEventListener("dblclick", this._dblClickListener);
         this.element.removeEventListener("mousemove", this._mouseMoveListener);
+        this.element.removeEventListener("contextmenu", this._contextmenuListener);
         this.element.removeEventListener("wheel", this._mouseWheelListener);
         if (window.OrientationChangeEvent) {
             window.removeEventListener('orientationchange', this._orientationchangedListener);
