@@ -156,6 +156,7 @@ class Zone extends Component {
             }),
             visible: this._visible
         });
+        this._zoneMesh.highlighted = this._highlighted;
 
 
         const min = idx => Math.min(...pos.map(p => p[idx]));
@@ -198,6 +199,18 @@ class Zone extends Component {
     set height(value) {
         this._geometry.height = value;
         this._rebuildMesh();
+    }
+
+    get highlighted() {
+        return this._highlighted;
+    }
+
+    set highlighted(value)
+    {
+        this._highlighted = value;
+        if (this._zoneMesh) {
+            this._zoneMesh.highlighted = value;
+        }
     }
 
     set color(value) {
