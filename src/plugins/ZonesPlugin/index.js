@@ -158,6 +158,8 @@ class Zone extends Component {
         });
         this._zoneMesh.highlighted = this._highlighted;
 
+        this._zoneMesh.zone = this;
+
 
         const min = idx => Math.min(...pos.map(p => p[idx]));
         const max = idx => Math.max(...pos.map(p => p[idx]));
