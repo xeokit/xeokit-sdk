@@ -1231,6 +1231,24 @@ class Input extends Component {
             });
         }
 
+        this.element.addEventListener("touchstart", this._touchstartListener = (e) => {
+            if (!this.enabled) {
+                return;
+            }
+            [...e.changedTouches].forEach(e => {
+                this.fire("touchstart", [ e.identifier, this._getTouchCanvasPos(e) ], true);
+            });
+        });
+
+        this.element.addEventListener("touchend", this._touchendListener = (e) => {
+            if (!this.enabled) {
+                return;
+            }
+            [...e.changedTouches].forEach(e => {
+                this.fire("touchend", [ e.identifier, this._getTouchCanvasPos(e) ], true);
+            });
+        });
+
         this._eventsBound = true;
     }
 
@@ -1249,6 +1267,8 @@ class Input extends Component {
         this.element.removeEventListener("mousemove", this._mouseMoveListener);
         this.element.removeEventListener("contextmenu", this._contextmenuListener);
         this.element.removeEventListener("wheel", this._mouseWheelListener);
+        this.element.removeEventListener("touchstart", this._touchstartListener);
+        this.element.removeEventListener("touchend", this._touchendListener);
         if (window.OrientationChangeEvent) {
             window.removeEventListener('orientationchange', this._orientationchangedListener);
         }
@@ -1259,6 +1279,18 @@ class Input extends Component {
             window.removeEventListener("deviceorientation", this._deviceOrientListener);
         }
         this._eventsBound = false;
+    }
+
+    _getTouchCanvasPos(event) {
+        let element = event.target;
+        let totalOffsetLeft = 0;
+        let totalOffsetTop = 0;
+        while (element.offsetParent) {
+            totalOffsetLeft += element.offsetLeft;
+            totalOffsetTop += element.offsetTop;
+            element = element.offsetParent;
+        }
+        return [ event.pageX - totalOffsetLeft, event.pageY - totalOffsetTop ];
     }
 
     _getMouseCanvasPos(event) {
