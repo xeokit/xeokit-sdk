@@ -850,7 +850,6 @@ class ZonesPlugin extends Plugin {
      * Destroys all {@link Zone}s first.
      */
     destroy() {
-        this.clear();
         super.destroy();
     }
 }
