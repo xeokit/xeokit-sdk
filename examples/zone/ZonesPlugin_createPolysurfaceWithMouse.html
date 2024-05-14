@@ -1,0 +1,259 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <script src="../libs/dat.gui.min.js" type="text/javascript"></script>
+    <link href="../css/dat-gui-light-style.css" rel="stylesheet"/>
+    <style>
+        .annotation-marker {
+            color: #ffffff;
+            line-height: 1.8;
+            text-align: center;
+            font-family: "monospace";
+            font-weight: bold;
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border-radius: 15px;
+            border: 2px solid #ffffff;
+            background: black;
+            visibility: hidden;
+            box-shadow: 5px 5px 15px 1px #000000;
+            z-index: 0;
+        }
+
+        .annotation-label {
+            position: absolute;
+            max-width: 250px;
+            min-height: 50px;
+            padding: 8px;
+            padding-left: 12px;
+            padding-right: 12px;
+            background: #ffffff;
+            color: #000000;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 8px;
+            border: #ffffff solid 2px;
+            box-shadow: 5px 5px 15px 1px #000000;
+            z-index: 90000;
+        }
+
+        .annotation-label:after {
+            content: '';
+            position: absolute;
+            border-style: solid;
+            border-width: 8px 12px 8px 0;
+            border-color: transparent white;
+            display: block;
+            width: 0;
+            z-index: 1;
+            margin-top: -11px;
+            left: -12px;
+            top: 20px;
+        }
+
+        .annotation-label:before {
+            content: '';
+            position: absolute;
+            border-style: solid;
+            border-width: 9px 13px 9px 0;
+            border-color: transparent #ffffff;
+            display: block;
+            width: 0;
+            z-index: 0;
+            margin-top: -12px;
+            left: -15px;
+            top: 20px;
+        }
+
+        .annotation-title {
+            font: normal 20px arial, serif;
+            margin-bottom: 8px;
+        }
+
+        .annotation-desc {
+            font: normal 14px arial, serif;
+        }
+
+    </style>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <h1>ZonesPlugin</h1>
+    <h2>Creating 3D zones inside a model</h2>
+    <p>In this example, we're loading a BIM model and create zones inside it</p>
+
+    <h3>Customize</h3>
+    <div id="myDatGuiContainer"></div>
+
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html"
+               target="_other">SectionPlanesPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="https://github.com/buildingSMART/Sample-Test-Files/tree/master/IFC%202x3/Schependomlaan"
+               target="_other">Model source</a>
+        </li>
+    </ul>
+</div>
+</body>
+    <script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, ZonesPlugin, ZonesPolysurfaceMouseControl, AnnotationsPlugin} from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-9.11, 20.01, 5.13];
+    viewer.camera.look = [9.07, 0.77, -9.78];
+    viewer.camera.up = [0.47, 0.76, -0.38];
+    viewer.camera.perspective.near = 0.1;
+    viewer.camera.perspective.far = 5000.0;
+
+    viewer.cameraControl.followPointer = true;
+
+    const sao = viewer.scene.sao;
+    sao.enabled = true;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Add a XKTModelsPlugin - we'll use this to load the model geometry
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Add a SectionPlanesPlugin - we'll use this to create cross-section planes
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sectionPlanes = new SectionPlanesPlugin(viewer, {
+        overviewVisible: false
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load the .xkt model and IFC metadata
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sceneModel = xktLoader.load({
+        id: "myModel",
+        src: "../../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
+        edges: true,
+        saoEnabled: true
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a cross-section plane
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sectionPlane = sectionPlanes.createSectionPlane({
+        id: "mySectionPlane",
+        pos: [10.95, 1.95, -10.35],
+        dir: [0.0, -1.0, 0.0]
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Setup the AnnotationsPlugin
+    //------------------------------------------------------------------------------------------------------------------
+
+    // based on /examples/annotations/annotations_createWithMouse.html
+
+    const annotations = new AnnotationsPlugin(viewer, {
+
+        markerHTML: "<div class='annotation-marker' style='background-color: {{markerBGColor}};'>{{glyph}}</div>",
+        labelHTML: "<div class='annotation-label' style='background-color: {{labelBGColor}};'><div class='annotation-title'>{{title}}</div><div class='annotation-desc'>{{description}}</div></div>",
+
+        values: {
+            markerBGColor: "red",
+            glyph: "X",
+            title: "Untitled",
+            description: "No description"
+        },
+        surfaceOffset: 0.1
+    });
+
+    const zonesPlugin = new ZonesPlugin(viewer);
+
+    const zonesMouseControl = new ZonesPolysurfaceMouseControl(zonesPlugin);
+    zonesMouseControl.on("zoneEnd", zone => {
+        console.log("Zone added:", zone);
+
+        const annotation = annotations.createAnnotation({
+            id: "myAnnotation_" + zone.id,
+            worldPos: zone.center,
+            occludable: true,       // Optional, default is true
+            labelShown: true,       // Optional, default is true
+            values: {               // HTML template values
+                glyph: "G1",
+                title: "Title...",
+                description: "Description..."
+            },
+        });
+
+        zone.on("destroyed", () => annotation.destroy());
+    });
+
+    const altitude = 0.01;
+    const height = 1.9;
+    const color = "#008000";
+    const alpha = 0.5;
+    zonesMouseControl.activate(altitude, height, color, alpha);
+
+/*
+
+// Get a list of zones:
+const zones = zonesPlugin.zones;
+
+// Change visibility of all zones
+for (const zone of zones) {
+    zone.visible = true;
+}
+
+// Modify a zone
+const zone = zones[0];
+zone.color = "#800000";
+
+// Serialize all zones
+const zonesJSON = zones.map(zone => zone.getJSON());
+
+// persist zonesJSON
+// reload page
+// read back zonesJSON
+
+for (const zoneJSON of zonesJSON) {
+    zonesPlugin.createZone(zonesJSON);
+}
+
+*/
+
+    </script>
+</html>
