@@ -1117,6 +1117,276 @@ export class ZonesTouchControl extends Component {
     }
 }
 
+const startPolysurfaceZoneCreateUI = function(scene, zoneAltitude, zoneHeight, zoneColor, zoneAlpha, pointerLens, zonesPlugin, select3dPoint, onZoneCreated) {
+    const updatePointerLens = (pointerLens
+                               ? function(canvasPos) {
+                                   pointerLens.visible = !! canvasPos;
+                                   if (canvasPos)
+                                   {
+                                       pointerLens.canvasPos = canvasPos;
+                                   }
+                               }
+                               : () => { });
+
+    let deactivatePointSelection;
+    const cleanups = [ () => updatePointerLens(null) ];
+
+    const basePolygon = basePolygon3D(scene, zoneColor, zoneAlpha);
+    cleanups.push(() => basePolygon.destroy());
+
+    (function selectNextPoint(markers) {
+        const marker = marker3D(scene, zoneColor);
+        const wire = (markers.length > 0) && wire3D(scene, zoneColor, markers[markers.length - 1].getWorldPos());
+
+        cleanups.push(() => {
+            marker.destroy();
+            wire && wire.destroy();
+        });
+
+        const firstMarker = (markers.length > 0) && markers[0];
+        const getSnappedFirst = function(canvasPos) {
+            const firstCanvasPos = firstMarker && firstMarker.getCanvasPos();
+            const snapToFirst = firstCanvasPos && (math.distVec2(firstCanvasPos, canvasPos) < 10);
+            return snapToFirst && { canvasPos: firstCanvasPos, worldPos: firstMarker.getWorldPos() };
+        };
+
+        const lastSegmentIntersects = (function() {
+            const onSegment = (p, q, r) => ((q[0] <= Math.max(p[0], r[0])) &&
+                                            (q[0] >= Math.min(p[0], r[0])) &&
+                                            (q[1] <= Math.max(p[1], r[1])) &&
+                                            (q[1] >= Math.min(p[1], r[1])));
+
+            const orient = (p, q, r) => {
+                const val = (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1]);
+                // collinear
+                // clockwise
+                // counterclockwise
+                return ((val === 0) ? 0 : ((val > 0) ? 1 : 2));
+            };
+
+            return function(pos2D, excludeFirstSegment) {
+                const a = pos2D[pos2D.length - 2];
+                const b = pos2D[pos2D.length - 1];
+
+                for (let i = excludeFirstSegment ? 1 : 0; i < pos2D.length - 2 - 1; ++i)
+                {
+                    const c = pos2D[i];
+                    const d = pos2D[i + 1];
+
+                    const o1 = orient(a, b, c);
+                    const o2 = orient(a, b, d);
+                    const o3 = orient(c, d, a);
+                    const o4 = orient(c, d, b);
+
+                    if (((o1 !== o2) && (o3 !== o4))       || // General case
+                        ((o1 === 0) && onSegment(a, c, b)) || // a, b and c are collinear and c lies on segment ab
+                        ((o2 === 0) && onSegment(a, d, b)) || // a, b and d are collinear and d lies on segment ab
+                        ((o3 === 0) && onSegment(c, a, d)) || // c, d and a are collinear and a lies on segment cd
+                        ((o4 === 0) && onSegment(c, b, d)))   // c, d and b are collinear and b lies on segment cd
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            };
+        })();
+
+        deactivatePointSelection = select3dPoint(
+            () => {
+                updatePointerLens(null);
+                marker.update(null);
+                wire && wire.update(null);
+                basePolygon.updateBase((markers.length > 2) ? markers.map(m => m.getWorldPos()) : null);
+            },
+            (canvasPos, worldPos) => {
+                const snappedFirst = (markers.length > 2) && getSnappedFirst(canvasPos);
+                firstMarker && firstMarker.setHighlighted(!! snappedFirst);
+                updatePointerLens(snappedFirst ? snappedFirst.canvasPos : canvasPos);
+                marker.update((! snappedFirst) && worldPos);
+                wire && wire.update(snappedFirst ? snappedFirst.worldPos : worldPos);
+                if ((markers.length >= 2))
+                {
+                    const pos = markers.map(m => m.getWorldPos()).concat(snappedFirst ? [] : [worldPos]);
+                    const inter = lastSegmentIntersects(pos.map(p => [ p[0], p[2] ]), snappedFirst);
+                    basePolygon.updateBase(inter ? null : pos);
+                }
+                else
+                    basePolygon.updateBase(null);
+            },
+            function(canvasPos, worldPos) {
+                const snappedFirst = (markers.length > 2) && getSnappedFirst(canvasPos);
+                const pos = markers.map(m => m.getWorldPos()).concat(snappedFirst ? [] : [worldPos]);
+                basePolygon.updateBase(pos);
+                const pos2D = pos.map(p => [ p[0], p[2] ]);
+                if ((markers.length > 2) && lastSegmentIntersects(pos2D, snappedFirst))
+                {
+                    cleanups.pop()();
+                    selectNextPoint(markers);
+                }
+                else if (snappedFirst)
+                {
+                    // `marker2.update' makes sure marker's position has been updated from its default [0,0,0]
+                    // This works around an unidentified bug somewhere around OcclusionLayer, that causes error
+                    // [.WebGL-0x13400c47e00] GL_INVALID_OPERATION: Vertex buffer is not big enough for the draw call
+                    marker.update(worldPos);
+
+                    cleanups.forEach(c => c());
+                    onZoneCreated(
+                        zonesPlugin.createZone(
+                            {
+                                id: math.createUUID(),
+                                geometry: {
+                                    planeCoordinates: pos2D,
+                                    altitude: zoneAltitude,
+                                    height: zoneHeight
+                                },
+                                alpha: zoneAlpha,
+                                color: zoneColor
+                            }));
+                }
+                else
+                {
+                    marker.update(worldPos);
+                    wire && wire.update(worldPos);
+                    selectNextPoint(markers.concat(marker));
+                }
+            });
+    })([ ], null);
+
+    return {
+        closeSurface: function() {
+            throw "TODO";
+        },
+        deactivate: function() {
+            deactivatePointSelection();
+            cleanups.forEach(c => c());
+        }
+    };
+};
+
+export class ZonesPolysurfaceMouseControl extends Component {
+
+    constructor(zonesPlugin, cfg = {}) {
+        super(zonesPlugin.viewer.scene);
+
+        this.zonesPlugin = zonesPlugin;
+        this.pointerLens = cfg.pointerLens;
+        this._action = null;
+    }
+
+    get active() {
+        return !! this._action;
+    }
+
+    activate(zoneAltitude, zoneHeight, zoneColor, zoneAlpha) {
+
+        if (this._action) {
+            return;
+        }
+
+        const zonesPlugin = this.zonesPlugin;
+        const viewer = zonesPlugin.viewer;
+        const scene = viewer.scene;
+        const self = this;
+
+        const select3dPoint = mousePointSelector(
+            viewer,
+            function(origin, direction) {
+                return planeIntersect(zoneAltitude, math.vec3([ 0, 1, 0 ]), origin, direction);
+            });
+
+        (function rec() {
+            self._action = startPolysurfaceZoneCreateUI(
+                scene, zoneAltitude, zoneHeight, zoneColor, zoneAlpha, self.pointerLens, zonesPlugin, select3dPoint,
+                zone => {
+                    let reactivate = true;
+                    self._action = { deactivate: () => { reactivate = false; } };
+                    self.fire("zoneEnd", zone);
+                    if (reactivate)
+                    {
+                        rec();
+                    }
+                });
+        })();
+    }
+
+    deactivate() {
+        if (this._action)
+        {
+            this._action.deactivate();
+            this._action = null;
+        }
+    }
+
+    destroy() {
+        this.deactivate();
+        super.destroy();
+    }
+}
+
+export class ZonesPolysurfaceTouchControl extends Component {
+
+    constructor(zonesPlugin, cfg = {}) {
+        super(zonesPlugin.viewer.scene);
+
+        this.zonesPlugin = zonesPlugin;
+        this.pointerLens = cfg.pointerLens;
+        this.pointerCircle = new PointerCircle(zonesPlugin.viewer);
+        this._action = null;
+    }
+
+    get active() {
+        return !! this._action;
+    }
+
+    activate(zoneAltitude, zoneHeight, zoneColor, zoneAlpha) {
+
+        if (this._action) {
+            return;
+        }
+
+        const zonesPlugin = this.zonesPlugin;
+        const viewer = zonesPlugin.viewer;
+        const scene = viewer.scene;
+        const self = this;
+
+        const select3dPoint = touchPointSelector(
+            viewer,
+            this.pointerCircle,
+            function(origin, direction) {
+                return planeIntersect(zoneAltitude, math.vec3([ 0, 1, 0 ]), origin, direction);
+            });
+
+        (function rec() {
+            self._action = startPolysurfaceZoneCreateUI(
+                scene, zoneAltitude, zoneHeight, zoneColor, zoneAlpha, self.pointerLens, zonesPlugin, select3dPoint,
+                zone => {
+                    let reactivate = true;
+                    self._action = { deactivate: () => { reactivate = false; } };
+                    self.fire("zoneEnd", zone);
+                    if (reactivate)
+                    {
+                        rec();
+                    }
+                });
+        })();
+    }
+
+    deactivate() {
+        if (this._action)
+        {
+            this._action.deactivate();
+            this._action = null;
+        }
+    }
+
+    destroy() {
+        this.deactivate();
+        super.destroy();
+    }
+}
+
 
 export {ZonesMouseControl}
 export {ZonesPlugin}
