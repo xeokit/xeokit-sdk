@@ -196,7 +196,7 @@ class Marker extends Component {
                 return;
             }
             if (this._onEntityDestroyed !== null) {
-                this._entity.off(this._onEntityDestroyed);
+                this._entity.model.off(this._onEntityDestroyed);
                 this._onEntityDestroyed = null;
             }
             if (this._onEntityModelDestroyed !== null) {
@@ -212,7 +212,7 @@ class Marker extends Component {
                     this._onEntityModelDestroyed = null;
                 });
             } else {
-                this._onEntityDestroyed = this._entity.on("destroyed", () => {
+                this._onEntityDestroyed = this._entity.model.on("destroyed", () => {
                     this._entity = null;
                     this._onEntityDestroyed = null;
                 });
