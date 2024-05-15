@@ -1,5 +1,12 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.10](https://github.com/xeokit/xeokit-sdk/compare/v2.6.9...v2.6.10)
+
+### 15 May 2024
+
+-  [FIX] Fix CameraControl mouse picking alignment for oversized scrolling canvas - [#1489](https://github.com/xeokit/xeokit-sdk/pull/1489)
+-  fix Marker docs - [#1437](https://github.com/xeokit/xeokit-sdk/pull/1437)
+
 # [v2.6.9](https://github.com/xeokit/xeokit-sdk/compare/v2.6.8...v2.6.9)
 
 ### 8 May 2024
