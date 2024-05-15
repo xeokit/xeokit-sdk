@@ -1,6 +1,7 @@
 import { AngleMeasurementsControl } from "./AngleMeasurementsControl";
 import {AngleMeasurementsPlugin} from "./AngleMeasurementsPlugin";
 import {PointerLens} from "../../extras/";
+import {AngleMeasurement} from "./AngleMeasurement";
 
 /**
  * Creates {@link AngleMeasurement}s in an {@link AngleMeasurementsPlugin} from touch input.
@@ -86,6 +87,13 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
      * Resets this AngleMeasurementsTouchControl, destroying any AngleMeasurement under construction.
      */
     reset(): void;
+
+    /**
+     * Gets the {@link AngleMeasurement} under construction by this AngleMeasurementsTouchControl, if any.
+     *
+     * @returns {null|AngleMeasurement}
+     */
+    get currentMeasurement() : AngleMeasurement
 
     /**
      * Destroys this AngleMeasurementsTouchControl.

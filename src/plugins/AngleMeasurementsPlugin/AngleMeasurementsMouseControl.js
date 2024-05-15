@@ -441,6 +441,15 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
     }
 
     /**
+     * Gets the {@link AngleMeasurement} under construction by this AngleMeasurementsMouseControl, if any.
+     *
+     * @returns {null|AngleMeasurement}
+     */
+    get currentMeasurement() {
+        return this._currentAngleMeasurement;
+    }
+
+    /**
      * Destroys this AngleMeasurementsMouseControl.
      */
     destroy() {

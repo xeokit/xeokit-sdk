@@ -402,6 +402,15 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
     }
 
     /**
+     * Gets the {@link DistanceMeasurement} under construction by this DistanceMeasurementsMouseControl, if any.
+     *
+     * @returns {null|DistanceMeasurement}
+     */
+    get currentMeasurement() {
+        return this._currentDistanceMeasurement;
+    }
+
+    /**
      * Destroys this DistanceMeasurementsMouseControl.
      *
      * Destroys any {@link DistanceMeasurement} under construction by this DistanceMeasurementsMouseControl.

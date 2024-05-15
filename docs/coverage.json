@@ -1,7 +1,7 @@
 {
-  "coverage": "40.12%",
-  "expectCount": 7056,
-  "actualCount": 2831,
+  "coverage": "40.16%",
+  "expectCount": 7063,
+  "actualCount": 2837,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 61,
@@ -183,13 +183,13 @@
       ]
     },
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js": {
-      "expectCount": 8,
-      "actualCount": 8,
+      "expectCount": 9,
+      "actualCount": 9,
       "undocumentLines": []
     },
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js": {
-      "expectCount": 32,
-      "actualCount": 11,
+      "expectCount": 33,
+      "actualCount": 12,
       "undocumentLines": [
         4,
         5,
@@ -230,8 +230,8 @@
       ]
     },
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js": {
-      "expectCount": 32,
-      "actualCount": 11,
+      "expectCount": 33,
+      "actualCount": 12,
       "undocumentLines": [
         6,
         7,
@@ -408,13 +408,13 @@
       ]
     },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js": {
-      "expectCount": 8,
-      "actualCount": 8,
+      "expectCount": 9,
+      "actualCount": 9,
       "undocumentLines": []
     },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js": {
-      "expectCount": 30,
-      "actualCount": 11,
+      "expectCount": 31,
+      "actualCount": 12,
       "undocumentLines": [
         4,
         5,
@@ -464,8 +464,8 @@
       ]
     },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js": {
-      "expectCount": 30,
-      "actualCount": 11,
+      "expectCount": 32,
+      "actualCount": 12,
       "undocumentLines": [
         6,
         7,
@@ -485,7 +485,8 @@
         65,
         66,
         67,
-        72
+        72,
+        751
       ]
     },
     "src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js": {

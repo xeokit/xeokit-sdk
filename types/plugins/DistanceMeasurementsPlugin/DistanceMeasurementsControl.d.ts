@@ -55,6 +55,13 @@ export declare class DistanceMeasurementsControl extends Component {
     deactivate(): void;
 
     /**
+     * Gets the {@link DistanceMeasurement} under construction by this DistanceMeasurementsControl, if any.
+     *
+     * @returns {null|DistanceMeasurement}
+     */
+    get currentMeasurement() : DistanceMeasurement
+
+    /**
      * Resets this DistanceMeasurementsControl.
      *
      * Destroys any {@link DistanceMeasurement} under construction.
