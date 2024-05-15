@@ -276,6 +276,10 @@ class DistanceMeasurementsPlugin extends Plugin {
      * @param {boolean} [cfg.defaultTargetVisible=true] The default value of the DistanceMeasurements `targetVisible` property.
      * @param {boolean} [cfg.defaultWireVisible=true] The default value of the DistanceMeasurements `wireVisible` property.
      * @param {boolean} [cfg.defaultLabelsVisible=true] The default value of the DistanceMeasurements `labelsVisible` property.
+     * @param {boolean} [cfg.defaultXLabelVisible=true] The default value of the DistanceMeasurements `xLabelVisible` property.
+     * @param {boolean} [cfg.defaultYLabelVisible=true] The default value of the DistanceMeasurements `yLabelVisible` property.
+     * @param {boolean} [cfg.defaultZLabelVisible=true] The default value of the DistanceMeasurements `zLabelVisible` property.
+     * @param {boolean} [cfg.defaultLengthLabelVisible=true] The default value of the DistanceMeasurements `lengthLabelVisible` property.
      * @param {boolean} [cfg.defaultAxisVisible=true] The default value of the DistanceMeasurements `axisVisible` property.
      * @param {boolean} [cfg.defaultXAxisVisible=true] The default value of the DistanceMeasurements `xAxisVisible` property.
      * @param {boolean} [cfg.defaultYAxisVisible=true] The default value of the DistanceMeasurements `yAxisVisible` property.
@@ -303,6 +307,10 @@ class DistanceMeasurementsPlugin extends Plugin {
         this.defaultOriginVisible = cfg.defaultOriginVisible !== false;
         this.defaultTargetVisible = cfg.defaultTargetVisible !== false;
         this.defaultWireVisible = cfg.defaultWireVisible !== false;
+        this.defaultXLabelVisible = cfg.defaultXLabelVisible !== false;
+        this.defaultYLabelVisible = cfg.defaultYLabelVisible !== false;
+        this.defaultZLabelVisible = cfg.defaultZLabelVisible !== false;
+        this.defaultLengthLabelVisible = cfg.defaultLengthLabelVisible !== false;
         this.defaultLabelsVisible = cfg.defaultLabelsVisible !== false;
         this.defaultAxisVisible = cfg.defaultAxisVisible !== false;
         this.defaultXAxisVisible = cfg.defaultXAxisVisible !== false;
@@ -431,7 +439,12 @@ class DistanceMeasurementsPlugin extends Plugin {
      * @param {Boolean} [params.xAxisVisible=true] Whether to initially show the X-axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
      * @param {Boolean} [params.yAxisVisible=true] Whether to initially show the Y-axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
      * @param {Boolean} [params.zAxisVisible=true] Whether to initially show the Z-axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
+     * @param {Boolean} [params.xLabelVisible=true] Whether to initially show the x label.
+     * @param {Boolean} [params.yLabelVisible=true] Whether to initially show the y label.
+     * @param {Boolean} [params.zLabelVisible=true] Whether to initially show the z label.
+     * @param {Boolean} [params.lengthLabelVisible=true] Whether to initially show the length label.
      * @param {Boolean} [params.labelsVisible=true] Whether to initially show the labels.
+     * @param {Boolean} [params.lengthLabelVisible=true] Whether to initially show the labels.
      * @param {string} [params.color] The color of the length dot, wire and label.
      * @param {Boolean} [params.labelsOnWires=true] Determines if labels will be set on wires or one below the other.
      * @returns {DistanceMeasurement} The new {@link DistanceMeasurement}.
@@ -461,6 +474,10 @@ class DistanceMeasurementsPlugin extends Plugin {
             xAxisVisible: params.xAxisVisible !== false && this.defaultXAxisVisible !== false,
             yAxisVisible: params.yAxisVisible !== false && this.defaultYAxisVisible !== false,
             zAxisVisible: params.zAxisVisible !== false && this.defaultZAxisVisible !== false,
+            xLabelVisible: params.xLabelVisible !== false && this.defaultXLabelVisible !== false,
+            yLabelVisible: params.yLabelVisible !== false && this.defaultYLabelVisible !== false,
+            zLabelVisible: params.zLabelVisible !== false && this.defaultZLabelVisible !== false,
+            lengthLabelVisible: params.lengthLabelVisible !== false && this.defaultLengthLabelVisible !== false,
             labelsVisible: params.labelsVisible !== false && this.defaultLabelsVisible !== false,
             originVisible: params.originVisible,
             targetVisible: params.targetVisible,

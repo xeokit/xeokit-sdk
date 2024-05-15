@@ -234,7 +234,39 @@
                 },
                 {
                     getTitle: (context) => {
-                        return context.distanceMeasurement.labelsVisible ? "Hide Labels" : "Show Labels";
+                        return context.distanceMeasurement.xLabelVisible && context.distanceMeasurement.labelsVisible ? "Hide X Label" : "Show X Label";
+                    },
+                    doAction: function (context) {
+                        context.distanceMeasurement.xLabelVisible = !context.distanceMeasurement.xLabelVisible;
+                    }
+                },
+                {
+                    getTitle: (context) => {
+                        return context.distanceMeasurement.yLabelVisible && context.distanceMeasurement.labelsVisible ? "Hide Y Label" : "Show Y Label";
+                    },
+                    doAction: function (context) {
+                        context.distanceMeasurement.yLabelVisible = !context.distanceMeasurement.yLabelVisible;
+                    }
+                },
+                {
+                    getTitle: (context) => {
+                        return context.distanceMeasurement.zLabelVisible && context.distanceMeasurement.labelsVisible ? "Hide Z Label" : "Show Z Label";
+                    },
+                    doAction: function (context) {
+                        context.distanceMeasurement.zLabelVisible = !context.distanceMeasurement.zLabelVisible;
+                    }
+                },
+                {
+                    getTitle: (context) => {
+                        return context.distanceMeasurement.lengthLabelVisible && context.distanceMeasurement.labelsVisible ? "Hide Length Label" : "Show Length Label";
+                    },
+                    doAction: function (context) {
+                        context.distanceMeasurement.lengthLabelVisible = !context.distanceMeasurement.lengthLabelVisible;
+                    }
+                },
+                {
+                    getTitle: (context) => {
+                        return context.distanceMeasurement.labelsVisible ? "Hide All Labels" : "Show All Labels";
                     },
                     doAction: function (context) {
                         context.distanceMeasurement.labelsVisible = !context.distanceMeasurement.labelsVisible;
