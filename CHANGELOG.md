@@ -1,5 +1,11 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.11](https://github.com/xeokit/xeokit-sdk/compare/v2.6.10...v2.6.11)
+
+### 15 May 2024
+
+-  Cancellable measurements - [#1490](https://github.com/xeokit/xeokit-sdk/pull/1490)
+
 # [v2.6.10](https://github.com/xeokit/xeokit-sdk/compare/v2.6.9...v2.6.10)
 
 ### 15 May 2024
