@@ -397,6 +397,8 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
             this._currentDistanceMeasurement.destroy();
             this._currentDistanceMeasurement = null;
         }
+
+        this._mouseState = MOUSE_FIRST_CLICK_EXPECTED;
     }
 
     /**

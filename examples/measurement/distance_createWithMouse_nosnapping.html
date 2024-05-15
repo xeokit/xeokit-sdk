@@ -220,6 +220,14 @@
                     doAction: function (context) {
                         context.distanceMeasurementsPlugin.clear();
                     }
+                },
+                {
+                    getTitle: () => {
+                        return "Reset Control";
+                    },
+                    doAction: function () {
+                        distanceMeasurementsMouseControl.reset();
+                    }
                 }
             ]
         ]
@@ -244,12 +252,20 @@
             [
                 {
                     getTitle: (context) => {
-                        return distanceMeasurements.control.active ? "Deactivate Control" : "Activate Control";
+                        return distanceMeasurementsMouseControl.active ? "Deactivate Control" : "Activate Control";
                     },
                     doAction: function (context) {
-                        distanceMeasurements.control.active
-                            ? distanceMeasurements.control.deactivate()
-                            : distanceMeasurements.control.activate();
+                        distanceMeasurementsMouseControl.active
+                            ? distanceMeasurementsMouseControl.deactivate()
+                            : distanceMeasurementsMouseControl.activate();
+                    }
+                },
+                {
+                    getTitle: () => {
+                        return "Reset Control";
+                    },
+                    doAction: function () {
+                        distanceMeasurementsMouseControl.reset();
                     }
                 }
             ]
