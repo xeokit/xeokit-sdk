@@ -1,6 +1,7 @@
 import {AngleMeasurementsControl} from "./AngleMeasurementsControl.js";
 import {AngleMeasurementsPlugin} from "./AngleMeasurementsPlugin";
 import {PointerLens} from "../../extras/";
+import {AngleMeasurement} from "./AngleMeasurement";
 
 /**
  * Creates {@link AngleMeasurement}s in an {@link AngleMeasurementsPlugin} from mouse input.
@@ -86,6 +87,13 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
      * Resets this AngleMeasurementsMouseControl, destroying any AngleMeasurement under construction.
      */
     reset(): void;
+
+    /**
+     * Gets the {@link AngleMeasurement} under construction by this AngleMeasurementsMouseControl, if any.
+     *
+     * @returns {null|AngleMeasurement}
+     */
+    get currentMeasurement() : AngleMeasurement
 
     /**
      * Destroys this AngleMeasurementsMouseControl.

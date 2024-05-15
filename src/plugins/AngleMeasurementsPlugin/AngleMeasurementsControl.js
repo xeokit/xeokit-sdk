@@ -73,6 +73,16 @@ export class AngleMeasurementsControl extends Component {
     }
 
     /**
+     * Gets the {@link AngleMeasurement} under construction by this AngleMeasurementsControl, if any.
+     *
+     * @returns {null|AngleMeasurement}
+     * @abstract
+     */
+    get currentMeasurement() {
+        return null;
+    }
+
+    /**
      * Destroys this AngleMeasurementsMouseControl.
      *
      * Destroys any {@link AngleMeasurement} under construction by this AngleMeasurementsControl.

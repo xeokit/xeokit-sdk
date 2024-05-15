@@ -2933,6 +2933,10 @@ this._originDot.setVisible(this._visible&&this._originVisible);this._cornerDot.s
      *
      * @abstract
      */},{key:"reset",value:function reset(){}/**
+     * Gets the {@link AngleMeasurement} under construction by this AngleMeasurementsControl, if any.
+     *
+     * @returns {null|AngleMeasurement}
+     */},{key:"currentMeasurement",get:function get(){return null;}/**
      * Destroys this AngleMeasurementsMouseControl.
      *
      * Destroys any {@link AngleMeasurement} under construction by this AngleMeasurementsControl.
@@ -3024,6 +3028,10 @@ _this19._initMarkerDiv();_this19._onMouseHoverSurface=null;_this19._onHoverNothi
      *
      * Does nothing if the AngleMeasurementsMouseControl is not active.
      */},{key:"reset",value:function reset(){if(!this._active){return;}this._destroyMarkerDiv();this._initMarkerDiv();if(this._currentAngleMeasurement){this._currentAngleMeasurement.destroy();this._currentAngleMeasurement=null;}this._mouseState=MOUSE_FINDING_ORIGIN;}/**
+     * Gets the {@link AngleMeasurement} under construction by this AngleMeasurementsMouseControl, if any.
+     *
+     * @returns {null|AngleMeasurement}
+     */},{key:"currentMeasurement",get:function get(){return this._currentAngleMeasurement;}/**
      * Destroys this AngleMeasurementsMouseControl.
      */},{key:"destroy",value:function destroy(){this.deactivate();_get(_getPrototypeOf(AngleMeasurementsMouseControl.prototype),"destroy",this).call(this);}}]);return AngleMeasurementsMouseControl;}(AngleMeasurementsControl);/**
  * {@link Viewer} plugin for measuring angles.
@@ -3402,6 +3410,10 @@ enableCameraNavigation();break;case WAITING_FOR_TARGET_QUICK_TOUCH_END$1:{if(num
      *
      * Does nothing if the AngleMeasurementsTouchControl is not active.
      */},{key:"reset",value:function reset(){if(!this._active){return;}if(this._currentAngleMeasurement){this.angleMeasurementsPlugin.fire("measurementCancel",this._currentAngleMeasurement);this._currentAngleMeasurement.destroy();this._currentAngleMeasurement=null;}}/**
+     * Gets the {@link AngleMeasurement} under construction by this AngleMeasurementsTouchControl, if any.
+     *
+     * @returns {null|AngleMeasurement}
+     */},{key:"currentMeasurement",get:function get(){return this._currentAngleMeasurement;}/**
      * Destroys this AngleMeasurementsTouchControl.
      */},{key:"destroy",value:function destroy(){this.deactivate();_get(_getPrototypeOf(AngleMeasurementsTouchControl.prototype),"destroy",this).call(this);}}]);return AngleMeasurementsTouchControl;}(AngleMeasurementsControl);/**
  * A {@link Marker} with an HTML label attached to it, managed by an {@link AnnotationsPlugin}.
@@ -19476,6 +19488,10 @@ this._originDot.setVisible(this._visible&&this._originVisible);this._targetDot.s
      *
      * @abstract
      */},{key:"reset",value:function reset(){}/**
+     * Gets the {@link DistanceMeasurement} under construction by this DistanceMeasurementsControl, if any.
+     *
+     * @returns {null|DistanceMeasurement}
+     */},{key:"currentMeasurement",get:function get(){return null;}/**
      * Destroys this DistanceMeasurementsControl.
      *
      * Destroys any {@link DistanceMeasurement} under construction by this DistanceMeasurementsControl.
@@ -19561,7 +19577,11 @@ this._originDot.setVisible(this._visible&&this._originVisible);this._targetDot.s
      * Destroys any {@link DistanceMeasurement} under construction by this DistanceMeasurementsMouseControl.
      *
      * Does nothing if the DistanceMeasurementsMouseControl is not active.
-     */},{key:"reset",value:function reset(){if(!this._active){return;}this._destroyMarkerDiv();this._initMarkerDiv();if(this._currentDistanceMeasurement){this.distanceMeasurementsPlugin.fire("measurementCancel",this._currentDistanceMeasurement);this._currentDistanceMeasurement.destroy();this._currentDistanceMeasurement=null;}}/**
+     */},{key:"reset",value:function reset(){if(!this._active){return;}this._destroyMarkerDiv();this._initMarkerDiv();if(this._currentDistanceMeasurement){this.distanceMeasurementsPlugin.fire("measurementCancel",this._currentDistanceMeasurement);this._currentDistanceMeasurement.destroy();this._currentDistanceMeasurement=null;}this._mouseState=MOUSE_FIRST_CLICK_EXPECTED;}/**
+     * Gets the {@link DistanceMeasurement} under construction by this DistanceMeasurementsMouseControl, if any.
+     *
+     * @returns {null|DistanceMeasurement}
+     */},{key:"currentMeasurement",get:function get(){return this._currentDistanceMeasurement;}/**
      * Destroys this DistanceMeasurementsMouseControl.
      *
      * Destroys any {@link DistanceMeasurement} under construction by this DistanceMeasurementsMouseControl.
@@ -19994,7 +20014,11 @@ return;}if(_this90.pointerLens){_this90.pointerLens.canvasPos=touchMoveCanvasPos
      * Destroys any {@link DistanceMeasurement} under construction.
      *
      * Does nothing if the DistanceMeasurementsTouchControl is not active.
-     */},{key:"reset",value:function reset(){if(!this._active){return;}if(this._currentDistanceMeasurement){this.distanceMeasurementsPlugin.fire("measurementCancel",this._currentDistanceMeasurement);this._currentDistanceMeasurement.destroy();this._currentDistanceMeasurement=null;}}/**
+     */},{key:"reset",value:function reset(){if(!this._active){return;}if(this._currentDistanceMeasurement){this.distanceMeasurementsPlugin.fire("measurementCancel",this._currentDistanceMeasurement);this._currentDistanceMeasurement.destroy();this._currentDistanceMeasurement=null;}this._mouseState=WAITING_FOR_ORIGIN_TOUCH_START;}/**
+     * Gets the {@link DistanceMeasurement} under construction by this DistanceMeasurementsTouchControl, if any.
+     *
+     * @returns {null|DistanceMeasurement}
+     */},{key:"currentMeasurement",get:function get(){return this._currentDistanceMeasurement;}/**
      * Destroys this DistanceMeasurementsTouchControl.
      */},{key:"destroy",value:function destroy(){this.deactivate();_get(_getPrototypeOf(DistanceMeasurementsTouchControl.prototype),"destroy",this).call(this);}}]);return DistanceMeasurementsTouchControl;}(DistanceMeasurementsControl);/**
  * {@link Viewer} plugin that makes interaction smoother with large models, by temporarily switching

@@ -397,6 +397,17 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
             this._currentDistanceMeasurement.destroy();
             this._currentDistanceMeasurement = null;
         }
+
+        this._mouseState = MOUSE_FIRST_CLICK_EXPECTED;
+    }
+
+    /**
+     * Gets the {@link DistanceMeasurement} under construction by this DistanceMeasurementsMouseControl, if any.
+     *
+     * @returns {null|DistanceMeasurement}
+     */
+    get currentMeasurement() {
+        return this._currentDistanceMeasurement;
     }
 
     /**

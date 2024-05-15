@@ -256,22 +256,60 @@
             [
                 {
                     getTitle: (context) => {
-                        return distanceMeasurementsPlugin.control.active ? "Deactivate Control" : "Activate Control";
+                        return distanceMeasurementsMouseControl.active ? "Deactivate Control" : "Activate Control";
                     },
                     doAction: function (context) {
-                        distanceMeasurementsPlugin.control.active
-                            ? distanceMeasurementsPlugin.control.deactivate()
-                            : distanceMeasurementsPlugin.control.activate();
+                        distanceMeasurementsMouseControl.active
+                            ? distanceMeasurementsMouseControl.deactivate()
+                            : distanceMeasurementsMouseControl.activate();
+                    }
+                },
+                {
+                    getTitle: () => {
+                        return "Cancel Measurement";
+                    },
+                    getEnabled: function () {
+                        return (!!distanceMeasurementsMouseControl.currentMeasurement);
+                    },
+                    doAction: function () {
+                        distanceMeasurementsMouseControl.reset();
                     }
                 }
             ]
         ]
     });
 
-    // viewer.cameraControl.on("rightClick", function (e) {
-    //     canvasContextMenu.show(e.pagePos[0], e.pagePos[1]);
-    //     e.event.preventDefault();
-    // });
+    const getCanvasPosFromEvent = function (event) {
+        const canvasPos = [];
+        if (!event) {
+            event = window.event;
+            canvasPos[0] = event.x;
+            canvasPos[1] = event.y;
+        } else {
+            let element = event.target;
+            let totalOffsetLeft = 0;
+            let totalOffsetTop = 0;
+            let totalScrollX = 0;
+            let totalScrollY = 0;
+            while (element.offsetParent) {
+                totalOffsetLeft += element.offsetLeft;
+                totalOffsetTop += element.offsetTop;
+                totalScrollX += element.scrollLeft;
+                totalScrollY += element.scrollTop;
+                element = element.offsetParent;
+            }
+            canvasPos[0] = event.pageX + totalScrollX - totalOffsetLeft;
+            canvasPos[1] = event.pageY + totalScrollY - totalOffsetTop;
+        }
+        return canvasPos;
+    };
+
+    viewer.scene.canvas.canvas.addEventListener('contextmenu', (event) => {
+        const canvasPos = getCanvasPosFromEvent(event);
+        canvasContextMenu.show(canvasPos[0], canvasPos[1]);
+        event.preventDefault();
+        event.preventDefault();
+    });
 
     //------------------------------------------------------------------------------------------------------------------
     // Create an DistanceMeasurementsPlugin, activate its DistanceMeasuremntsControl

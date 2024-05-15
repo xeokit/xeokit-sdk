@@ -56,6 +56,13 @@ export declare class AngleMeasurementsControl extends Component {
     deactivate(): void;
 
     /**
+     * Gets the {@link AngleMeasurement} under construction by this AngleMeasurementsControl, if any.
+     *
+     * @returns {null|AngleMeasurement}
+     */
+    get currentMeasurement() : AngleMeasurement
+    
+    /**
      * Resets this AngleMeasurementsControl.
      *
      * Destroys any {@link AngleMeasurement} under construction.

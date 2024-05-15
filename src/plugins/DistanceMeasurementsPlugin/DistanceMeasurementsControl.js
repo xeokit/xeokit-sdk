@@ -73,6 +73,17 @@ export class DistanceMeasurementsControl extends Component {
     }
 
     /**
+     * Gets the {@link DistanceMeasurement} under construction by this DistanceMeasurementsControl, if any.
+     *
+     * @returns {null|DistanceMeasurement}
+     *
+     * @abstract
+     */
+    get currentMeasurement() {
+        return null;
+    }
+
+    /**
      * Destroys this DistanceMeasurementsControl.
      *
      * Destroys any {@link DistanceMeasurement} under construction by this DistanceMeasurementsControl.

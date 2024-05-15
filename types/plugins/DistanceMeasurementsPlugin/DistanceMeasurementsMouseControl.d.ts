@@ -2,6 +2,7 @@ import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
 
 import {DistanceMeasurementsPlugin} from "./DistanceMeasurementsPlugin";
 import {PointerLens} from "../../extras/PointerLens/PointerLens";
+import {DistanceMeasurement} from "./DistanceMeasurement";
 
 /**
  * Creates {@link DistanceMeasurement}s in a {@link DistanceMeasurementsPlugin} from mouse input.
@@ -65,6 +66,13 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
      * Resets this DistanceMeasurementsMouseControl.
      */
     reset(): void;
+
+    /**
+     * Gets the {@link DistanceMeasurement} under construction by this DistanceMeasurementsMouseControl, if any.
+     *
+     * @returns {null|DistanceMeasurement}
+     */
+    get currentMeasurement() : DistanceMeasurement
 
     /**
      * Destroys this DistanceMeasurementsMouseControl.
