@@ -717,6 +717,9 @@
                                 getTitle: () => {
                                     return "Cancel Measurement";
                                 },
+                                getEnabled: function () {
+                                    return (!!angleMeasurementsPlugin.currentMeasurement);
+                                },
                                 doAction: function () {
                                     angleMeasurementsMouseControl.reset();
                                 }

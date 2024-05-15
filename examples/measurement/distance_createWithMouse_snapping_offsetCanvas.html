@@ -235,6 +235,9 @@
                     getTitle: () => {
                         return "Cancel Measurement";
                     },
+                    getEnabled: function () {
+                        return (!!distanceMeasurementsMouseControl.currentMeasurement);
+                    },
                     doAction: function () {
                         distanceMeasurementsMouseControl.reset();
                     }
@@ -273,6 +276,9 @@
                 {
                     getTitle: () => {
                         return "Cancel Measurement";
+                    },
+                    getEnabled: function () {
+                        return (!!distanceMeasurementsMouseControl.currentMeasurement);
                     },
                     doAction: function () {
                         distanceMeasurementsMouseControl.reset();
