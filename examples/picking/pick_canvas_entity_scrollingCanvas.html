@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <style>
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #212529;
+            text-decoration: none;
+            word-spacing: normal;
+            text-align: left;
+            letter-spacing: 0;
+            -webkit-font-smoothing: antialiased;
+            overflow-y: scroll;
+            overflow-x: scroll;
+
+            margin: 0;
+            width: 100%;
+            height: 518px;
+            user-select: none;
+            background: black;
+        }
+
+        #myCanvas2 {
+            left: 200px;
+            top:200px;
+            width: 2000px;
+            height: 2000px;
+            position: absolute;
+            background: lightblue;
+            background-image: linear-gradient(lightblue, white);
+        }
+    </style>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas2"></canvas>
+<div class="slideout-sidebar">
+    <h1>Picking Objects on an Oversized Scrolling Canvas</h1>
+    <h2>Click objects to pick them</h2>
+    <h3>Components Used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    import {
+        Viewer,
+        XKTLoaderPlugin
+    } from "../../dist/xeokit-sdk.es.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas2"
+    });
+
+    viewer.camera.eye = [-3.93, 2.85, 27.01];
+    viewer.camera.look = [4.40, 3.72, 8.89];
+    viewer.camera.up = [-0.01, 0.99, 0.039];
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    const sceneModel = xktLoader.load({
+        id: "myModel",
+        src: "../../assets/models/xkt/v10/glTF-Embedded/Duplex_A_20110505.glTFEmbedded.xkt", // Creates a MetaObject instances in scene.metaScene.metaObjects
+        edges: true
+    });
+
+
+    var lastEntity = null;
+    var lastColorize = null;
+
+    viewer.cameraControl.on("hover", (pickResult) => {
+
+        console.log(pickResult.entity.id);
+
+        if (!lastEntity || pickResult.entity.id !== lastEntity.id) {
+
+            if (lastEntity) {
+                lastEntity.colorize = lastColorize;
+            }
+
+            lastEntity = pickResult.entity;
+            lastColorize = pickResult.entity.colorize.slice();
+
+            pickResult.entity.colorize = [0.0, 1.0, 0.0];
+        }
+    });
+
+    viewer.cameraControl.on("hoverOff", (e) => {
+
+        if (lastEntity) {
+            lastEntity.colorize = lastColorize;
+        }
+
+        lastEntity = null;
+        lastColorize = null;
+    });
+
+</script>
+</html>
