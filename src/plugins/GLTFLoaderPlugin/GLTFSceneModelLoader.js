@@ -586,29 +586,9 @@ function loadNode(ctx, node, depth, matrix) {
                     meshCfg.origin = origin;
                 }
 
-                // if (createEntity) {
-                //     if (createEntity.colorize) {
-                //         meshCfg.color = createEntity.colorize;
-                //     }
-                //     if (createEntity.opacity !== undefined && createEntity.opacity !== null) {
-                //         meshCfg.opacity = createEntity.opacity;
-                //     }
-                // }
-
                 sceneModel.createMesh(meshCfg);
                 deferredMeshIds.push(meshCfg.id);
             }
-            // if (createEntity) {
-            //     sceneModel.createEntity(utils.apply(createEntity, {
-            //         meshIds: deferredMeshIds,
-            //         isObject: true
-            //     }));
-            // } else {
-            //     sceneModel.createEntity({
-            //         meshIds: deferredMeshIds,
-            //         isObject: true
-            //     });
-            // }
         }
     }
 
