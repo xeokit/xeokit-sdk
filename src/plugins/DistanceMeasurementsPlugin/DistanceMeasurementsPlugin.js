@@ -488,6 +488,7 @@ class DistanceMeasurementsPlugin extends Plugin {
             onContextMenu: this._onContextMenu
         });
         this._measurements[measurement.id] = measurement;
+        measurement.clickable = true;
         measurement.on("destroyed", () => {
             delete this._measurements[measurement.id];
         });
