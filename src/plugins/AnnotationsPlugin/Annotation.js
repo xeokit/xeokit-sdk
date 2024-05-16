@@ -347,6 +347,7 @@ class Annotation extends Marker {
         if (this._marker) {
             if (!this._markerExternal) {
                 this._marker.parentNode.removeChild(this._marker);
+                this._marker = null;
             } else {
                 this._marker.removeEventListener("click", this._onMouseClickedExternalMarker);
                 this._marker.removeEventListener("mouseenter", this._onMouseEnterExternalMarker);
