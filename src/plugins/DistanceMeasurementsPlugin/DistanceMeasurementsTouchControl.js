@@ -666,6 +666,10 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                         this._currentDistanceMeasurement.targetVisible = true;
                         this._currentDistanceMeasurement.wireVisible = true;
                         this._currentDistanceMeasurement.labelsVisible = true;
+                        this._currentDistanceMeasurement.xAxisVisible = true;
+                        this._currentDistanceMeasurement.yAxisVisible = true;
+                        this._currentDistanceMeasurement.zAxisVisible = true;
+                        this._currentDistanceMeasurement.clickable = true;
                         this.distanceMeasurementsPlugin.fire("measurementEnd", this._currentDistanceMeasurement);
                         this._currentDistanceMeasurement = null;
                     } else {
