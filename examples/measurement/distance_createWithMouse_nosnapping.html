@@ -206,34 +206,34 @@
                 },
                 {
                     getTitle: (context) => {
-                        return context.distanceMeasurement.xLabelVisible && context.distanceMeasurement.labelsVisible ? "Hide X Label" : "Show X Label";
+                        return context.distanceMeasurement.xLabelEnabled && context.distanceMeasurement.labelsVisible ? "Disable X Label" : "Enable X Label";
                     },
                     doAction: function (context) {
-                        context.distanceMeasurement.xLabelVisible = !context.distanceMeasurement.xLabelVisible;
+                        context.distanceMeasurement.xLabelEnabled = !context.distanceMeasurement.xLabelEnabled;
                     }
                 },
                 {
                     getTitle: (context) => {
-                        return context.distanceMeasurement.yLabelVisible && context.distanceMeasurement.labelsVisible ? "Hide Y Label" : "Show Y Label";
+                        return context.distanceMeasurement.yLabelEnabled && context.distanceMeasurement.labelsVisible ? "Disable Y Label" : "Enable Y Label";
                     },
                     doAction: function (context) {
-                        context.distanceMeasurement.yLabelVisible = !context.distanceMeasurement.yLabelVisible;
+                        context.distanceMeasurement.yLabelEnabled = !context.distanceMeasurement.yLabelEnabled;
                     }
                 },
                 {
                     getTitle: (context) => {
-                        return context.distanceMeasurement.zLabelVisible && context.distanceMeasurement.labelsVisible ? "Hide Z Label" : "Show Z Label";
+                        return context.distanceMeasurement.zLabelEnabled && context.distanceMeasurement.labelsVisible ? "Disable Z Label" : "Enable Z Label";
                     },
                     doAction: function (context) {
-                        context.distanceMeasurement.zLabelVisible = !context.distanceMeasurement.zLabelVisible;
+                        context.distanceMeasurement.zLabelEnabled = !context.distanceMeasurement.zLabelEnabled;
                     }
                 },
                 {
                     getTitle: (context) => {
-                        return context.distanceMeasurement.lengthLabelVisible && context.distanceMeasurement.labelsVisible ? "Hide Length Label" : "Show Length Label";
+                        return context.distanceMeasurement.lengthLabelEnabled && context.distanceMeasurement.labelsVisible ? "Disable Length Label" : "Enable Length Label";
                     },
                     doAction: function (context) {
-                        context.distanceMeasurement.lengthLabelVisible = !context.distanceMeasurement.lengthLabelVisible;
+                        context.distanceMeasurement.lengthLabelEnabled = !context.distanceMeasurement.lengthLabelEnabled;
                     }
                 },
                 {
