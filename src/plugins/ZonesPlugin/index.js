@@ -384,6 +384,15 @@ const mousePointSelector = function(viewer, ray2WorldPos) {
         const canvas = scene.canvas.canvas;
         const moveTolerance = 20;
 
+        const getTop  = el => el.offsetTop  + ((el.offsetParent && (el.offsetParent !== canvas.parentNode)) ? getTop(el.offsetParent)  : 0);
+        const getLeft = el => el.offsetLeft + ((el.offsetParent && (el.offsetParent !== canvas.parentNode)) ? getLeft(el.offsetParent) : 0);
+
+        const copyCanvasPos = (event, vec2) => {
+            vec2[0] = event.clientX - getLeft(canvas);
+            vec2[1] = event.clientY - getTop(canvas);
+            return vec2;
+        };
+
         const pickWorldPos = canvasPos => {
             const origin = math.vec3();
             const direction = math.vec3();
@@ -408,15 +417,14 @@ const mousePointSelector = function(viewer, ray2WorldPos) {
         const onMouseDown = function(event) {
             if (event.which === 1)
             {
-                startCanvasPos[0] = event.clientX;
-                startCanvasPos[1] = event.clientY;
+                copyCanvasPos(event, startCanvasPos);
                 buttonDown = true;
             }
         };
         canvas.addEventListener("mousedown", onMouseDown);
 
         const onMouseMove = function(event) {
-            const canvasPos = math.vec2([ event.clientX, event.clientY ]);
+            const canvasPos = copyCanvasPos(event, math.vec2());
             if (buttonDown && math.distVec2(startCanvasPos, canvasPos) > moveTolerance)
             {
                 resetAction();
@@ -436,7 +444,7 @@ const mousePointSelector = function(viewer, ray2WorldPos) {
             if ((event.which === 1) && buttonDown)
             {
                 cleanup();
-                const canvasPos = math.vec2([ event.clientX, event.clientY ]);
+                const canvasPos = copyCanvasPos(event, math.vec2());
                 onCommit(canvasPos, pickWorldPos(canvasPos));
             }
         };
@@ -452,6 +460,15 @@ const touchPointSelector = function(viewer, pointerCircle, ray2WorldPos) {
         const canvas = scene.canvas.canvas;
         const longTouchTimeoutMs = 300;
         const moveTolerance = 20;
+
+        const getTop  = el => el.offsetTop  + ((el.offsetParent && (el.offsetParent !== canvas.parentNode)) ? getTop(el.offsetParent)  : 0);
+        const getLeft = el => el.offsetLeft + ((el.offsetParent && (el.offsetParent !== canvas.parentNode)) ? getLeft(el.offsetParent) : 0);
+
+        const copyCanvasPos = (event, vec2) => {
+            vec2[0] = event.clientX - getLeft(canvas);
+            vec2[1] = event.clientY - getTop(canvas);
+            return vec2;
+        };
 
         const pickWorldPos = canvasPos => {
             const origin = math.vec3();
@@ -491,7 +508,7 @@ const touchPointSelector = function(viewer, pointerCircle, ray2WorldPos) {
             else
             {
                 const startTouch = touches[0];
-                const startCanvasPos = math.vec2([ startTouch.clientX, startTouch.clientY ]);
+                const startCanvasPos = copyCanvasPos(startTouch, math.vec2());
 
                 const startWorldPos = pickWorldPos(startCanvasPos);
                 if (startWorldPos)
@@ -507,7 +524,11 @@ const touchPointSelector = function(viewer, pointerCircle, ray2WorldPos) {
 
                     longTouchTimeout = setTimeout(
                         function() {
-                            pointerCircle.start(startCanvasPos);
+                            pointerCircle.start(
+                                math.vec2([
+                                    startCanvasPos[0] + getLeft(canvas),
+                                    startCanvasPos[1] + getTop(canvas)
+                                ]));
 
                             longTouchTimeout = setTimeout(
                                 function() {
@@ -535,7 +556,7 @@ const touchPointSelector = function(viewer, pointerCircle, ray2WorldPos) {
             const touch = [...event.changedTouches].find(e => e.identifier === startTouchIdentifier);
             if (touch)
             {
-                onSingleTouchMove(math.vec2([ touch.clientX, touch.clientY ]));
+                onSingleTouchMove(copyCanvasPos(touch, math.vec2()));
             }
         };
         canvas.addEventListener("touchmove", onCanvasTouchMove, {passive: true});
@@ -545,7 +566,7 @@ const touchPointSelector = function(viewer, pointerCircle, ray2WorldPos) {
             if (touch)
             {
                 cleanup();
-                const canvasPos = math.vec2([ touch.clientX, touch.clientY ]);
+                const canvasPos = copyCanvasPos(touch, math.vec2());
                 onCommit(canvasPos, pickWorldPos(canvasPos));
             }
         };
