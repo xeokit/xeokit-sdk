@@ -909,6 +909,15 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
     }
 
     /**
+     * Gets the {@link AngleMeasurement} under construction by this AngleMeasurementsTouchControl, if any.
+     *
+     * @returns {null|AngleMeasurement}
+     */
+    get currentMeasurement() {
+        return this._currentAngleMeasurement;
+    }
+
+    /**
      * Destroys this AngleMeasurementsTouchControl.
      */
     destroy() {

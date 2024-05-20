@@ -2208,6 +2208,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementscontrol.js~anglemeasurementscontrol#currentmeasurement",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html#instance-get-currentMeasurement",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl#currentMeasurement",
+    "member"
+  ],
+  [
     "src/plugins/anglemeasurementsplugin/anglemeasurementscontrol.js~anglemeasurementscontrol#deactivate",
     "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html#instance-method-deactivate",
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl#deactivate",
@@ -2266,6 +2272,12 @@ window.esdocSearchIndex = [
     "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl.html#instance-constructor-constructor",
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl#constructor",
     "method"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementsmousecontrol.js~anglemeasurementsmousecontrol#currentmeasurement",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl.html#instance-get-currentMeasurement",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl#currentMeasurement",
+    "member"
   ],
   [
     "src/plugins/anglemeasurementsplugin/anglemeasurementsmousecontrol.js~anglemeasurementsmousecontrol#deactivate",
@@ -2422,6 +2434,12 @@ window.esdocSearchIndex = [
     "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-constructor-constructor",
     "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#constructor",
     "method"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#currentmeasurement",
+    "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html#instance-get-currentMeasurement",
+    "src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl#currentMeasurement",
+    "member"
   ],
   [
     "src/plugins/anglemeasurementsplugin/anglemeasurementstouchcontrol.js~anglemeasurementstouchcontrol#deactivate",
@@ -2994,6 +3012,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementscontrol.js~distancemeasurementscontrol#currentmeasurement",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html#instance-get-currentMeasurement",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl#currentMeasurement",
+    "member"
+  ],
+  [
     "src/plugins/distancemeasurementsplugin/distancemeasurementscontrol.js~distancemeasurementscontrol#deactivate",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html#instance-method-deactivate",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl#deactivate",
@@ -3046,6 +3070,12 @@ window.esdocSearchIndex = [
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl.html#instance-constructor-constructor",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl#constructor",
     "method"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsmousecontrol.js~distancemeasurementsmousecontrol#currentmeasurement",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl.html#instance-get-currentMeasurement",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl#currentMeasurement",
+    "member"
   ],
   [
     "src/plugins/distancemeasurementsplugin/distancemeasurementsmousecontrol.js~distancemeasurementsmousecontrol#deactivate",
@@ -3280,6 +3310,12 @@ window.esdocSearchIndex = [
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-constructor-constructor",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#constructor",
     "method"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#currentmeasurement",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html#instance-get-currentMeasurement",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl#currentMeasurement",
+    "member"
   ],
   [
     "src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol#deactivate",

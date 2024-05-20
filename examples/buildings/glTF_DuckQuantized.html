@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<canvas id="myCanvas"></canvas>
+<div class="slideout-sidebar">
+    <img class="info-icon" src="../../assets/images/gltf_logo.png"/>
+    <h1>GLTFLoaderPlugin</h1>
+    <h2>KHR_mesh_quantization Support</h2>
+    <p>In this example, we're using a <a
+            href="../../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
+            target="_other">GLTFLoaderPlugin</a> to load a sample glTF model with attributes compressed per the glTF KHR_mesh_quantization extension.</p>
+    <h3>Components used</h3>
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html"
+               target="_other">GLTFLoaderPlugin</a>
+        </li>
+    </ul>
+    <h3>Assets</h3>
+    <ul>
+        <li>
+            <a href="https://github.com/KhronosGroup/glTF-Sample-Models/"
+               target="_other">Model source</a>
+        </li>
+    </ul>
+</div>
+</body>
+<script type="module">
+
+    import {Viewer, GLTFLoaderPlugin} from "../../dist/xeokit-sdk.min.es.js";
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true,
+       // pbrEnabled: true,
+
+        colorTextureSupported: true,
+    });
+
+    viewer.camera.eye = [1394.38, 3.78, -247.05];
+    viewer.camera.look = [1391.46, 0.89, -244.24];
+    viewer.camera.up = [-0.41, 0.81, 0.40];
+
+    const gltfLoader = new GLTFLoaderPlugin(viewer);
+
+    const sceneModel = gltfLoader.load({
+        id: "boxTextured",
+        src: "../../assets/models/gltf/Duck-Quantized/Duck.gltf",
+        edges: true
+    });
+
+    sceneModel.on("loaded", () => {
+        viewer.cameraFlight.jumpTo(sceneModel);
+    });
+
+    window.viewer = viewer;
+
+
+</script>
+</html>

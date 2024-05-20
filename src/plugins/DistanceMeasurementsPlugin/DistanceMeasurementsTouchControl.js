@@ -752,6 +752,16 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
             this._currentDistanceMeasurement.destroy();
             this._currentDistanceMeasurement = null;
         }
+        this._mouseState = WAITING_FOR_ORIGIN_TOUCH_START;
+    }
+
+    /**
+     * Gets the {@link DistanceMeasurement} under construction by this DistanceMeasurementsTouchControl, if any.
+     *
+     * @returns {null|DistanceMeasurement}
+     */
+    get currentMeasurement() {
+        return this._currentDistanceMeasurement;
     }
 
     /**

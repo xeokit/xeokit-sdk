@@ -172,7 +172,16 @@
                         context.angleMeasurement.destroy();
                     }
                 }
-            ]
+            ],
+            [
+                {
+                    getTitle: () => {
+                        return "Cancel Measurement";
+                    },
+                    doAction: function () {
+                        angleMeasurementsMouseControl.reset();
+                    }
+                }]
 
         ]
     });
@@ -500,6 +509,14 @@
                                 doAction: function (context) {
                                     angleMeasurementsPlugin.clear();
                                 }
+                            },
+                            {
+                                getTitle: () => {
+                                    return "Cancel Measurement";
+                                },
+                                doAction: function () {
+                                    angleMeasurementsMouseControl.reset();
+                                }
                             }
                         ]
                     ]
@@ -694,6 +711,17 @@
                                 },
                                 doAction: function (context) {
                                     angleMeasurementsPlugin.clear();
+                                }
+                            },
+                            {
+                                getTitle: () => {
+                                    return "Cancel Measurement";
+                                },
+                                getEnabled: function () {
+                                    return (!!angleMeasurementsPlugin.currentMeasurement);
+                                },
+                                doAction: function () {
+                                    angleMeasurementsMouseControl.reset();
                                 }
                             }
                         ]

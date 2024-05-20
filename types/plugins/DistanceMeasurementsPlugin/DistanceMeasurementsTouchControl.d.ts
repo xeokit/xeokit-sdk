@@ -1,6 +1,7 @@
 import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl";
 import {DistanceMeasurementsPlugin} from "./DistanceMeasurementsPlugin";
 import {PointerLens} from "../../extras/";
+import {DistanceMeasurement} from "./DistanceMeasurement";
 
 /**
  * Creates {@link DistanceMeasurement}s in a {@link DistanceMeasurementsPlugin} from touch input.
@@ -64,6 +65,13 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
      * Resets this DistanceMeasurementsTouchControl.
      */
     reset(): void;
+
+    /**
+     * Gets the {@link DistanceMeasurement} under construction by this DistanceMeasurementsTouchControl, if any.
+     *
+     * @returns {null|DistanceMeasurement}
+     */
+    get currentMeasurement() : DistanceMeasurement
 
     /**
      * Destroys this DistanceMeasurementsTouchControl.

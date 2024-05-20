@@ -457,8 +457,8 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
 
         this._mouseState = MOUSE_FIRST_CLICK_EXPECTED;
 
-        const getTop = el =&gt; el.offsetTop + (el.offsetParent &amp;&amp; getTop(el.offsetParent));
-        const getLeft = el =&gt; el.offsetLeft + (el.offsetParent &amp;&amp; getLeft(el.offsetParent));
+        const getTop = el =&gt; el.offsetTop + (el.offsetParent &amp;&amp; (el.offsetParent !== canvas.parentNode) &amp;&amp; getTop(el.offsetParent));
+        const getLeft = el =&gt; el.offsetLeft + (el.offsetParent &amp;&amp; (el.offsetParent !== canvas.parentNode) &amp;&amp; getLeft(el.offsetParent));
 
         const pagePos = math.vec2();
         
@@ -655,6 +655,17 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
             this._currentDistanceMeasurement.destroy();
             this._currentDistanceMeasurement = null;
         }
+
+        this._mouseState = MOUSE_FIRST_CLICK_EXPECTED;
+    }
+
+    /**
+     * Gets the {@link DistanceMeasurement} under construction by this DistanceMeasurementsMouseControl, if any.
+     *
+     * @returns {null|DistanceMeasurement}
+     */
+    get currentMeasurement() {
+        return this._currentDistanceMeasurement;
     }
 
     /**

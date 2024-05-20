@@ -317,8 +317,8 @@ function getCanvasPosFromEvent(event, canvas, canvasPos) {
         canvasPos[1] = event.y;
     } else {
         const { left, top } = canvas.getBoundingClientRect();
-        canvasPos[0] = event.clientX - left - window.scrollX;
-        canvasPos[1] = event.clientY - top - window.scrollY;
+        canvasPos[0] = event.clientX - left;
+        canvasPos[1] = event.clientY - top;
     }
     return canvasPos;
 }

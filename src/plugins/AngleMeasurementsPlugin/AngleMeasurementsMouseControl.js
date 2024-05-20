@@ -193,8 +193,8 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
         const mouseHoverCanvasPos = math.vec2();
         this._currentAngleMeasurement = null;
 
-        const getTop = el => el.offsetTop + (el.offsetParent && getTop(el.offsetParent));
-        const getLeft = el => el.offsetLeft + (el.offsetParent && getLeft(el.offsetParent));
+        const getTop = el => el.offsetTop + (el.offsetParent && (el.offsetParent !== canvas.parentNode) && getTop(el.offsetParent));
+        const getLeft = el => el.offsetLeft + (el.offsetParent && (el.offsetParent !== canvas.parentNode) && getLeft(el.offsetParent));
 
         const pagePos = math.vec2();
 
@@ -438,6 +438,15 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
             this._currentAngleMeasurement = null;
         }
         this._mouseState = MOUSE_FINDING_ORIGIN;
+    }
+
+    /**
+     * Gets the {@link AngleMeasurement} under construction by this AngleMeasurementsMouseControl, if any.
+     *
+     * @returns {null|AngleMeasurement}
+     */
+    get currentMeasurement() {
+        return this._currentAngleMeasurement;
     }
 
     /**

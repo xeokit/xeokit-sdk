@@ -1,5 +1,24 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.11](https://github.com/xeokit/xeokit-sdk/compare/v2.6.10...v2.6.11)
+
+### 15 May 2024
+
+-  Cancellable measurements - [#1490](https://github.com/xeokit/xeokit-sdk/pull/1490)
+
+# [v2.6.10](https://github.com/xeokit/xeokit-sdk/compare/v2.6.9...v2.6.10)
+
+### 15 May 2024
+
+-  [FIX] Fix CameraControl mouse picking alignment for oversized scrolling canvas - [#1489](https://github.com/xeokit/xeokit-sdk/pull/1489)
+-  fix Marker docs - [#1437](https://github.com/xeokit/xeokit-sdk/pull/1437)
+
+# [v2.6.9](https://github.com/xeokit/xeokit-sdk/compare/v2.6.8...v2.6.9)
+
+### 8 May 2024
+
+-  Fix measurement dot position - [#1484](https://github.com/xeokit/xeokit-sdk/pull/1484)
+
 # [v2.6.8](https://github.com/xeokit/xeokit-sdk/compare/v2.6.7...v2.6.8)
 
 ### 3 May 2024
