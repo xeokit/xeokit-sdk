@@ -240,10 +240,10 @@ class DistanceMeasurement extends Component {
         this._yAxisVisible = false;
         this._zAxisVisible = false;
         this._axisEnabled = true;
-        this._xLabelVisible = false;
-        this._yLabelVisible = false;
-        this._zLabelVisible = false;
-        this._lengthLabelVisible = false;
+        this._xLabelEnabled = false;
+        this._yLabelEnabled = false;
+        this._zLabelEnabled = false;
+        this._lengthLabelEnabled = false;
         this._labelsVisible = false;
         this._labelsOnWires = false;
         this._clickable = false;
@@ -304,10 +304,10 @@ class DistanceMeasurement extends Component {
         this.xAxisVisible = cfg.xAxisVisible;
         this.yAxisVisible = cfg.yAxisVisible;
         this.zAxisVisible = cfg.zAxisVisible;
-        this.xLabelVisible = cfg.xLabelVisible;
-        this.yLabelVisible = cfg.yLabelVisible;
-        this.zLabelVisible = cfg.zLabelVisible;
-        this.lengthLabelVisible = cfg.lengthLabelVisible;
+        this.xLabelEnabled = cfg.xLabelEnabled;
+        this.yLabelEnabled = cfg.yLabelEnabled;
+        this.zLabelEnabled = cfg.zLabelEnabled;
+        this.lengthLabelEnabled = cfg.lengthLabelEnabled;
         this.labelsVisible = cfg.labelsVisible;
         this.labelsOnWires = cfg.labelsOnWires;
     }
@@ -631,7 +631,7 @@ class DistanceMeasurement extends Component {
         this._originDot.setVisible(this._visible && this._originVisible);
         this._targetDot.setVisible(this._visible && this._targetVisible);
         this._lengthWire.setVisible(this._visible && this._wireVisible);
-        this._lengthLabel.setVisible(this._visible && this._wireVisible && this._lengthLabelVisible);
+        this._lengthLabel.setVisible(this._visible && this._wireVisible && this._lengthLabelEnabled);
 
         const xAxisVisible = this._visible && this._axisVisible && this._xAxisVisible;
         const yAxisVisible = this._visible && this._axisVisible && this._yAxisVisible;
@@ -641,9 +641,9 @@ class DistanceMeasurement extends Component {
         this._yAxisWire.setVisible(yAxisVisible);
         this._zAxisWire.setVisible(zAxisVisible);
 
-        this._xAxisLabel.setVisible(xAxisVisible && !this._xAxisLabelCulled && this._xLabelVisible);
-        this._yAxisLabel.setVisible(yAxisVisible && !this._yAxisLabelCulled && this._yLabelVisible);
-        this._zAxisLabel.setVisible(zAxisVisible && !this._zAxisLabelCulled && this._zLabelVisible);
+        this._xAxisLabel.setVisible(xAxisVisible && !this._xAxisLabelCulled && this._EnabledVisible);
+        this._yAxisLabel.setVisible(yAxisVisible && !this._yAxisLabelCulled && this._yLabelEnabled);
+        this._zAxisLabel.setVisible(zAxisVisible && !this._zAxisLabelCulled && this._zLabelEnabled);
 
         this._cpDirty = true;
 
@@ -713,9 +713,9 @@ class DistanceMeasurement extends Component {
         this._xAxisWire.setVisible(axisVisible && this._xAxisVisible);
         this._yAxisWire.setVisible(axisVisible && this._yAxisVisible);
         this._zAxisWire.setVisible(axisVisible && this._zAxisVisible);
-        this._xAxisLabel.setVisible(axisVisible && !this._xAxisLabelCulled&& this._xAxisVisible && this._xLabelVisible);
-        this._yAxisLabel.setVisible(axisVisible && !this._yAxisLabelCulled&& this._xAxisVisible && this._yLabelVisible);
-        this._zAxisLabel.setVisible(axisVisible && !this._zAxisLabelCulled&& this._xAxisVisible && this._zLabelVisible);
+        this._xAxisLabel.setVisible(axisVisible && !this._xAxisLabelCulled&& this._xAxisVisible && this._xLabelEnabled);
+        this._yAxisLabel.setVisible(axisVisible && !this._yAxisLabelCulled&& this._xAxisVisible && this._yLabelEnabled);
+        this._zAxisLabel.setVisible(axisVisible && !this._zAxisLabelCulled&& this._xAxisVisible && this._zLabelEnabled);
         this._cpDirty = true;
         this._needUpdate();
     }
@@ -775,7 +775,7 @@ class DistanceMeasurement extends Component {
         this._xAxisVisible = value;
         const axisVisible = this._visible && this._axisVisible && this._xAxisVisible && this._axisEnabled;
         this._xAxisWire.setVisible(axisVisible);
-        this._xAxisLabel.setVisible(axisVisible && !this._xAxisLabelCulled && this._xLabelVisible);
+        this._xAxisLabel.setVisible(axisVisible && !this._xAxisLabelCulled && this._xLabelEnabled);
         this._cpDirty = true;
         this._needUpdate();
     }
@@ -803,7 +803,7 @@ class DistanceMeasurement extends Component {
         this._yAxisVisible = value;
         const axisVisible = this._visible && this._axisVisible && this._yAxisVisible && this._axisEnabled;
         this._yAxisWire.setVisible(axisVisible);
-        this._yAxisLabel.setVisible(axisVisible && !this._yAxisLabelCulled && this._yLabelVisible);
+        this._yAxisLabel.setVisible(axisVisible && !this._yAxisLabelCulled && this._yLabelEnabled);
         this._cpDirty = true;
         this._needUpdate();
     }
@@ -831,7 +831,7 @@ class DistanceMeasurement extends Component {
         this._zAxisVisible = value;
         const axisVisible = this._visible && this._axisVisible && this._zAxisVisible && this._axisEnabled;
         this._zAxisWire.setVisible(axisVisible);
-        this._zAxisLabel.setVisible(axisVisible && !this._zAxisLabelCulled && this._zLabelVisible);
+        this._zAxisLabel.setVisible(axisVisible && !this._zAxisLabelCulled && this._zLabelEnabled);
         this._cpDirty = true;
         this._needUpdate();
     }
@@ -856,7 +856,7 @@ class DistanceMeasurement extends Component {
         value = value !== undefined ? Boolean(value) : this.plugin.defaultWireVisible;
         this._wireVisible = value;
         var wireVisible = this._visible && this._wireVisible;
-        this._lengthLabel.setVisible(wireVisible);
+        this._lengthLabel.setVisible(wireVisible && this._lengthLabelEnabled);
         this._lengthWire.setVisible(wireVisible);
     }
 
@@ -878,10 +878,10 @@ class DistanceMeasurement extends Component {
         value = value !== undefined ? Boolean(value) : this.plugin.defaultLabelsVisible;
         this._labelsVisible = value;
         var labelsVisible = this._visible && this._labelsVisible;
-        this._xAxisLabel.setVisible(labelsVisible && !this._xAxisLabelCulled && this._clickable && this._axisEnabled && this._xLabelVisible);
-        this._yAxisLabel.setVisible(labelsVisible && !this._yAxisLabelCulled && this._clickable && this._axisEnabled && this._yLabelVisible);
-        this._zAxisLabel.setVisible(labelsVisible && !this._zAxisLabelCulled && this._clickable && this._axisEnabled && this._zLabelVisible);
-        this._lengthLabel.setVisible(labelsVisible && this._lengthLabelVisible);
+        this._xAxisLabel.setVisible(labelsVisible && !this._xAxisLabelCulled && this._clickable && this._axisEnabled && this._xLabelEnabled);
+        this._yAxisLabel.setVisible(labelsVisible && !this._yAxisLabelCulled && this._clickable && this._axisEnabled && this._yLabelEnabled);
+        this._zAxisLabel.setVisible(labelsVisible && !this._zAxisLabelCulled && this._clickable && this._axisEnabled && this._zLabelEnabled);
+        this._lengthLabel.setVisible(labelsVisible && this._lengthLabelEnabled);
         this._cpDirty = true;
         this._needUpdate();
     }
@@ -896,110 +896,96 @@ class DistanceMeasurement extends Component {
     }
 
     /**
-     * Sets if the x label is visible.
+     * Sets if the x label is enabled.
      *
      * @type {Boolean}
      */
-    set xLabelVisible(value) {
-        value = value !== undefined ? Boolean(value) : this.plugin.defaultXLabelVisible;
-        this._xLabelVisible = value;
+    set xLabelEnabled(value) {
+        value = value !== undefined ? Boolean(value) : this.plugin.defaultXLabelEnabled;
+        this._xLabelEnabled = value;
         var labelsVisible = this._visible && this._labelsVisible;
-        this._xAxisLabel.setVisible(labelsVisible && !this._xAxisLabelCulled && this._clickable && this._axisEnabled && this._xLabelVisible);
+        this._xAxisLabel.setVisible(labelsVisible && !this._xAxisLabelCulled && this._clickable && this._axisEnabled && this._xLabelEnabled);
         this._cpDirty = true;
         this._needUpdate();
     }
 
     /**
-     * Gets if the x label is visible.
+     * Gets if the x label is enabled.
      *
      * @type {Boolean}
      */
-    get xLabelVisible(){
-        return this._xLabelVisible;
+    get xLabelEnabled(){
+        return this._xLabelEnabled;
     }
 
     /**
-     * Sets if the y label is visible.
+     * Sets if the y label is enabled.
      *
      * @type {Boolean}
      */
-    set yLabelVisible(value) {
-        value = value !== undefined ? Boolean(value) : this.plugin.defaultYLabelVisible;
-        this._yLabelVisible = value;
+    set yLabelEnabled(value) {
+        value = value !== undefined ? Boolean(value) : this.plugin.defaultYLabelEnabled;
+        this._yLabelEnabled = value;
         var labelsVisible = this._visible && this._labelsVisible;
-        this._yAxisLabel.setVisible(labelsVisible && !this._yAxisLabelCulled && this._clickable && this._axisEnabled && this._yLabelVisible);
+        this._yAxisLabel.setVisible(labelsVisible && !this._yAxisLabelCulled && this._clickable && this._axisEnabled && this._yLabelEnabled);
         this._cpDirty = true;
         this._needUpdate();
     }
 
     /**
-     * Gets if the y label is visible.
+     * Gets if the y label is enabled.
      *
      * @type {Boolean}
      */
-    get yLabelVisible(){
-        return this._yLabelVisible;
+    get yLabelEnabled(){
+        return this._yLabelEnabled;
     }
 
     /**
-     * Sets if the z label is visible.
+     * Sets if the z label is enabled.
      *
      * @type {Boolean}
      */
-    set zLabelVisible(value) {
-        value = value !== undefined ? Boolean(value) : this.plugin.defaultZLabelVisible;
-        this._zLabelVisible = value;
+    set zLabelEnabled(value) {
+        value = value !== undefined ? Boolean(value) : this.plugin.defaultZLabelEnabled;
+        this._zLabelEnabled = value;
         var labelsVisible = this._visible && this._labelsVisible;
-        this._zAxisLabel.setVisible(labelsVisible && !this._zAxisLabelCulled && this._clickable && this._axisEnabled && this._zLabelVisible);
+        this._zAxisLabel.setVisible(labelsVisible && !this._zAxisLabelCulled && this._clickable && this._axisEnabled && this._zLabelEnabled);
         this._cpDirty = true;
         this._needUpdate();
     }
 
     /**
-     * Gets if the z label is visible.
+     * Gets if the z label is enabled.
      *
      * @type {Boolean}
      */
-    get zLabelVisible(){
-        return this._zLabelVisible;
+    get zLabelEnabled(){
+        return this._zLabelEnabled;
     }
 
     /**
-     * Sets if the length label is visible.
+     * Sets if the length label is enabled.
      *
      * @type {Boolean}
      */
-    set lengthLabelVisible(value) {
-        value = value !== undefined ? Boolean(value) : this.plugin.defaultLengthLabelVisible;
-        this._lengthLabelVisible = value;
+    set lengthLabelEnabled(value) {
+        value = value !== undefined ? Boolean(value) : this.plugin.defaultLengthLabelEnabled;
+        this._lengthLabelEnabled = value;
         var labelsVisible = this._visible && this._labelsVisible;
-        this._lengthLabel.setVisible(labelsVisible && !this._lengthAxisLabelCulled && this._clickable && this._axisEnabled && this._lengthLabelVisible);
+        this._lengthLabel.setVisible(labelsVisible && !this._lengthAxisLabelCulled && this._clickable && this._axisEnabled && this._lengthLabelEnabled);
         this._cpDirty = true;
         this._needUpdate();
     }
 
     /**
-     * Gets if the length label is visible.
+     * Gets if the length label is enabled.
      *
      * @type {Boolean}
      */
-    get lengthLabelVisible(){
-        return this._lengthLabelVisible;
+    get lengthLabelEnabled(){
+        return this._lengthLabelEnabled;
     }
-
-    /**
-     * Sets if the length label is visible.
-     *
-     * @type {Boolean}
-     */
-    // set lengthLabelVisible(value) {
-    //     value = value !== undefined ? Boolean(value) : this.plugin.defaultLengthLabelVisible;
-    //     this._labelsVisible = value;
-    //     var labelsVisible = this._visible && this._labelsVisible;
-    //     this._lengthLabel.setVisible(labelsVisible);
-    //     this._cpDirty = true;
-    //     this._needUpdate();
-    // }
 
     /**
      * Sets if labels should be positioned on the wires.
