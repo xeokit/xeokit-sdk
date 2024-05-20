@@ -390,8 +390,9 @@ const mousePointSelector = function(viewer, ray2WorldPos) {
         const getLeft = el => el.offsetLeft + ((el.offsetParent && (el.offsetParent !== canvas.parentNode)) ? getLeft(el.offsetParent) : 0);
 
         const copyCanvasPos = (event, vec2) => {
-            vec2[0] = event.clientX - getLeft(canvas);
-            vec2[1] = event.clientY - getTop(canvas);
+            const rect = event.target.getBoundingClientRect();
+            vec2[0] = event.clientX - rect.left;
+            vec2[1] = event.clientY - rect.top;
             return vec2;
         };
 
@@ -467,8 +468,9 @@ const touchPointSelector = function(viewer, pointerCircle, ray2WorldPos) {
         const getLeft = el => el.offsetLeft + ((el.offsetParent && (el.offsetParent !== canvas.parentNode)) ? getLeft(el.offsetParent) : 0);
 
         const copyCanvasPos = (event, vec2) => {
-            vec2[0] = event.clientX - getLeft(canvas);
-            vec2[1] = event.clientY - getTop(canvas);
+            const rect = event.target.getBoundingClientRect();
+            vec2[0] = event.clientX - rect.left;
+            vec2[1] = event.clientY - rect.top;
             return vec2;
         };
 
