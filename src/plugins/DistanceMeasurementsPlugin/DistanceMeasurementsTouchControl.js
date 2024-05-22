@@ -685,6 +685,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                     break;
 
                 case WAITING_FOR_TARGET_LONG_TOUCH_END:
+                    console.log('long touch');
                     if (this.pointerLens) {
                         this.pointerLens.visible = false;
                     }

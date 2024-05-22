@@ -1,3 +1,4 @@
+import { os } from "../../../viewer/utils/os.js";
 /** @private */
 class Label {
 
@@ -13,6 +14,7 @@ class Label {
 
         this._label = document.createElement('div');
         this._label.className += this._label.className ? ' viewer-ruler-label' : 'viewer-ruler-label';
+        this._timeout = null;
 
         var label = this._label;
         var style = label.style;
@@ -84,12 +86,42 @@ class Label {
         }
 
         if (cfg.onContextMenu) {
-            label.addEventListener('contextmenu', (event) => {
-                cfg.onContextMenu(event, this);
-                event.preventDefault();
-                event.stopPropagation();
-                console.log("Label context menu")
-            });
+            if(os.isIphoneSafari()){
+                label.addEventListener('touchstart', (event) => {
+                    event.preventDefault();
+                    if(this._timeout){
+                        clearTimeout(this._timeout);
+                        this._timeout = null;
+                    }
+                    this._timeout = setTimeout(() => {
+                        event.clientX = event.touches[0].clientX;
+                        event.clientY = event.touches[0].clientY;
+                        cfg.onContextMenu(event, this);
+                        clearTimeout(this._timeout);
+                        this._timeout = null;
+                    }, 500);
+                })
+
+                label.addEventListener('touchend', (event) => {
+                    event.preventDefault();
+                    //stops short touches from calling the timeout
+                    if(this._timeout) {
+                        clearTimeout(this._timeout);
+                        this._timeout = null;
+                    }
+                } )
+
+            }
+            else {
+                label.addEventListener('contextmenu', (event) => {
+                    console.log(event);
+                    cfg.onContextMenu(event, this);
+                    event.preventDefault();
+                    event.stopPropagation();
+                    console.log("Label context menu")
+                });
+            }
+            
         }
     }
 
