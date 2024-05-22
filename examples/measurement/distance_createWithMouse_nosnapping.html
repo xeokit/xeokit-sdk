@@ -173,7 +173,7 @@
     // DistanceMeasurementsPlugin, DistanceMeasurementsMouseControl and PointerLens
     //------------------------------------------------------------------------------------------------------------------
 
-    const distanceMeasurements = new DistanceMeasurementsPlugin(viewer, {});
+    const distanceMeasurements = new DistanceMeasurementsPlugin(viewer, {useRotationAdjustment: true});
 
     const distanceMeasurementsMouseControl  = new DistanceMeasurementsMouseControl(distanceMeasurements, {
         pointerLens : new PointerLens(viewer)

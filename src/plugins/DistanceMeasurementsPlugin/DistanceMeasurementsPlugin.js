@@ -302,7 +302,6 @@ class DistanceMeasurementsPlugin extends Plugin {
         this._measurements = {};
 
         this.labelMinAxisLength = cfg.labelMinAxisLength;
-
         this.defaultVisible = cfg.defaultVisible !== false;
         this.defaultOriginVisible = cfg.defaultOriginVisible !== false;
         this.defaultTargetVisible = cfg.defaultTargetVisible !== false;

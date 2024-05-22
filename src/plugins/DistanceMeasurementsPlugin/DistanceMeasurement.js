@@ -14,6 +14,14 @@ const lengthWire = (x1, y1, x2, y2) => {
     return Math.sqrt(a * a + b * b);
 };
 
+function determineMeasurementOrientation(A, B, distance) {
+    const yDiff = Math.abs(B[1] - A[1]);
+
+    return yDiff > distance ? 'Vertical' : 'Horizontal';
+}
+
+// function findDistance
+
 /**
  * @desc Measures the distance between two 3D points.
  *
@@ -42,17 +50,16 @@ class DistanceMeasurement extends Component {
         this._eventSubs = {};
 
         var scene = this.plugin.viewer.scene;
-
         this._originMarker = new Marker(scene, cfg.origin);
         this._targetMarker = new Marker(scene, cfg.target);
 
         this._originWorld = math.vec3();
         this._targetWorld = math.vec3();
 
-        this._wp = new Float64Array(24);
-        this._vp = new Float64Array(24);
+        this._wp = new Float64Array(24); //world position
+        this._vp = new Float64Array(24); //view position
         this._pp = new Float64Array(24);
-        this._cp = new Float64Array(8);
+        this._cp = new Float64Array(8); //canvas position
 
         this._xAxisLabelCulled = false;
         this._yAxisLabelCulled = false;
@@ -226,6 +233,7 @@ class DistanceMeasurement extends Component {
             onContextMenu
         });
 
+        this._measurementOrientation = 'Horizontal';
         this._wpDirty = false;
         this._vpDirty = false;
         this._cpDirty = false;
@@ -249,13 +257,13 @@ class DistanceMeasurement extends Component {
         this._clickable = false;
 
         this._originMarker.on("worldPos", (value) => {
-            this._originWorld.set(value || [0, 0, 0]);
+            this._originWorld.set(value || [0,0,0]); 
             this._wpDirty = true;
             this._needUpdate(0); // No lag
         });
 
         this._targetMarker.on("worldPos", (value) => {
-            this._targetWorld.set(value || [0, 0, 0]);
+            this._targetWorld.set(value || [0,0,0]); 
             this._wpDirty = true;
             this._needUpdate(0); // No lag
         });
@@ -322,25 +330,50 @@ class DistanceMeasurement extends Component {
 
         if (this._wpDirty) {
 
-            this._wp[0] = this._originWorld[0];
-            this._wp[1] = this._originWorld[1];
-            this._wp[2] = this._originWorld[2];
-            this._wp[3] = 1.0;
+            this._measurementOrientation = determineMeasurementOrientation(this._originWorld, this._targetWorld, 1);
+            if(this._measurementOrientation === 'Vertical'){
+                this._wp[0] = this._originWorld[0];
+                this._wp[1] = this._originWorld[1];
+                this._wp[2] = this._originWorld[2];
+                this._wp[3] = 1.0;
 
-            this._wp[4] = this._targetWorld[0];
-            this._wp[5] = this._originWorld[1];
-            this._wp[6] = this._originWorld[2];
-            this._wp[7] = 1.0;
+                this._wp[4] = this._originWorld[0]; //x-axis
+                this._wp[5] = this._originWorld[1];
+                this._wp[6] = this._originWorld[2];
+                this._wp[7] = 1.0;
 
-            this._wp[8] = this._targetWorld[0];
-            this._wp[9] = this._targetWorld[1];
-            this._wp[10] = this._originWorld[2];
-            this._wp[11] = 1.0;
+                this._wp[8] = this._originWorld[0]; //x-axis
+                this._wp[9] = this._targetWorld[1]; //y-axis
+                this._wp[10] = this._originWorld[2];
+                this._wp[11] = 1.0;
 
-            this._wp[12] = this._targetWorld[0];
-            this._wp[13] = this._targetWorld[1];
-            this._wp[14] = this._targetWorld[2];
-            this._wp[15] = 1.0;
+                this._wp[12] = this._targetWorld[0];
+                this._wp[13] = this._targetWorld[1];
+                this._wp[14] = this._targetWorld[2];
+                this._wp[15] = 1.0;
+            }
+            else {
+                this._wp[0] = this._originWorld[0];
+                this._wp[1] = this._originWorld[1];
+                this._wp[2] = this._originWorld[2];
+                this._wp[3] = 1.0;
+
+                this._wp[4] = this._targetWorld[0];
+                this._wp[5] = this._originWorld[1];
+                this._wp[6] = this._originWorld[2];
+                this._wp[7] = 1.0;
+
+                this._wp[8] = this._targetWorld[0];
+                this._wp[9] = this._targetWorld[1];
+                this._wp[10] = this._originWorld[2];
+                this._wp[11] = 1.0;
+
+                this._wp[12] = this._targetWorld[0];
+                this._wp[13] = this._targetWorld[1];
+                this._wp[14] = this._targetWorld[2];
+                this._wp[15] = 1.0;
+            }
+            
 
             this._wpDirty = false;
             this._vpDirty = true;
@@ -511,7 +544,14 @@ class DistanceMeasurement extends Component {
                 }
 
                 if (!this._zAxisLabelCulled) {
-                    this._zAxisLabel.setText(tilde + Math.abs((this._targetWorld[2] - this._originWorld[2]) * scale).toFixed(2) + unitAbbrev);
+                    if(this._measurementOrientation === 'Vertical') {
+                        this._zAxisLabel.setPrefix("");
+                        this._zAxisLabel.setText(tilde + Math.abs(math.lenVec3(math.subVec3(this._targetWorld, [this._originWorld[0], this._targetWorld[1], this._originWorld[2]], distVec3)) * scale).toFixed(2) + unitAbbrev);
+                    }
+                    else {
+                        this._zAxisLabel.setPrefix("Z");
+                        this._zAxisLabel.setText(tilde + Math.abs((this._targetWorld[2] - this._originWorld[2]) * scale).toFixed(2) + unitAbbrev);
+                    }
                     this._zAxisLabel.setCulled(!this.axisVisible);
                 } else {
                     this._zAxisLabel.setCulled(true);
