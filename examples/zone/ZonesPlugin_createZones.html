@@ -124,7 +124,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, ZonesMouseControl, ZonesPlugin, AnnotationsPlugin} from "../../dist/xeokit-sdk.min.es.js";
+    import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, ZonesMouseControl, ZoneEditMouseControl, ZonesPlugin, AnnotationsPlugin} from "../../dist/xeokit-sdk.min.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer
@@ -242,6 +242,18 @@ for (const zone of zones) {
 const zone = zones[0];
 zone.color = "#800000";
 zone.alpha = 0.8;
+
+
+// Edit zone vertices
+const zoneEdit = new ZoneEditMouseControl(zone);
+// with an optional pointerLens
+const zoneEdit = new ZoneEditMouseControl(zone, { pointerLens: pointerLens });
+
+// ... edit
+
+// Conclude editing
+zoneEdit.deactivate();
+
 
 // Serialize all zones
 const zonesJSON = zones.map(zone => zone.getJSON());

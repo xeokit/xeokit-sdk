@@ -6,6 +6,7 @@ import {Marker} from "../../viewer/scene/marker/Marker.js";
 import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
 import {math} from "../../viewer/scene/math/math.js";
 import {Mesh} from "../../viewer/scene/mesh/Mesh.js";
+import {Dot} from "../lib/html/Dot.js";
 
 const hex2rgb = function(color) {
     const rgb = idx => parseInt(color.substr(idx + 1, 2), 16) / 255;
@@ -113,6 +114,156 @@ const triangulateEarClipping = function(planeCoords) {
     }
 
     return [ planeCoords, baseTriangles ];
+};
+
+const draggableDot3D = function(handleMouseEvents, handleTouchEvents, viewer, worldPos, color, ray2WorldPos, onStart, onMove, onEnd) {
+    const scene = viewer.scene;
+    const canvas = scene.canvas.canvas;
+
+    const marker = new Marker(scene, {});
+
+    const pickWorldPos = canvasPos => {
+        const origin = math.vec3();
+        const direction = math.vec3();
+        math.canvasPosToWorldRay(canvas, scene.camera.viewMatrix, scene.camera.projMatrix, canvasPos, origin, direction);
+        return ray2WorldPos(origin, direction);
+    };
+
+    const onChange = event => {
+        const canvasPos = math.vec2();
+        const rect = canvas.getBoundingClientRect();
+        canvasPos[0] = event.clientX - rect.left;
+        canvasPos[1] = event.clientY - rect.top;
+
+        const worldPos = pickWorldPos(canvasPos);
+        marker.worldPos = worldPos;
+        updateDotPos();
+        onMove(canvasPos, worldPos);
+    };
+
+    let currentDrag = null;
+
+    const onDragMove = function(event) {
+        const e = currentDrag.matchesEvent(event);
+        if (e)
+        {
+            onChange(e);
+        }
+    };
+
+    const onDragEnd = function(event) {
+        const e = currentDrag.matchesEvent(event);
+        if (e)
+        {
+            dot.setOpacity(idleOpacity);
+            currentDrag.cleanup();
+            onChange(e);
+            onEnd();
+        }
+    };
+
+    const startDrag = function(matchesEvent, cleanupHandlers) {
+        if (currentDrag) {
+            currentDrag.cleanup();
+        }
+
+        dot.setOpacity(1.0);
+        dot.setClickable(false);
+        viewer.cameraControl.active = false;
+
+        currentDrag = {
+            matchesEvent: matchesEvent,
+            cleanup: function() {
+                currentDrag = null;
+                dot.setClickable(true);
+                viewer.cameraControl.active = true;
+                cleanupHandlers();
+            }
+        };
+
+        onStart();
+    };
+
+    const dotCfg = { fillColor: color };
+
+    if (handleMouseEvents)
+    {
+        dotCfg.onMouseOver  = () => (! currentDrag) && dot.setOpacity(1.0);
+        dotCfg.onMouseLeave = () => (! currentDrag) && dot.setOpacity(idleOpacity);
+        dotCfg.onMouseDown  = event => {
+            if (event.which === 1)
+            {
+                canvas.addEventListener("mousemove", onDragMove);
+                canvas.addEventListener("mouseup",   onDragEnd);
+                startDrag(
+                    event => (event.which === 1) && event,
+                    () => {
+                        canvas.removeEventListener("mousemove", onDragMove);
+                        canvas.removeEventListener("mouseup",   onDragEnd);
+                    });
+            }
+        };
+    }
+
+    if (handleTouchEvents)
+    {
+        let touchStartId;
+        dotCfg.onTouchstart  = event => {
+            event.preventDefault();
+            if (event.touches.length === 1)
+            {
+                touchStartId = event.touches[0].identifier;
+                startDrag(
+                    event => [...event.changedTouches].find(e => e.identifier === touchStartId),
+                    () => { touchStartId = null; });
+            }
+        };
+        dotCfg.onTouchmove = event => {
+            event.preventDefault();
+            onDragMove(event);
+        };
+        dotCfg.onTouchend  = event => {
+            event.preventDefault();
+            onDragEnd(event);
+        };
+    }
+
+    const dot = new Dot(canvas.ownerDocument.body, dotCfg);
+
+    const idleOpacity = 0.5;
+    dot.setOpacity(idleOpacity);
+
+    const curPos = math.vec2();
+    const updateDotPos = function() {
+        const rect = canvas.getBoundingClientRect();
+        const canvasPos = marker.canvasPos;
+        curPos[0] = rect.left + canvasPos[0];
+        curPos[1] = rect.top  + canvasPos[1];
+        dot.setPos(curPos[0], curPos[1]);
+    };
+
+    marker.worldPos = worldPos;
+    updateDotPos();
+
+    const onViewMatrix = scene.camera.on("viewMatrix", updateDotPos);
+    const onProjMatrix = scene.camera.on("projMatrix", updateDotPos);
+
+    return {
+        setActive: value => dot.setClickable(value),
+        getCanvasPos: () => curPos,
+        setCanvasPos: pos => {
+            curPos[0] = pos[0];
+            curPos[1] = pos[1];
+            dot.setPos(curPos[0], curPos[1]);
+        },
+        destroy: function() {
+            currentDrag && currentDrag.cleanup();
+            scene.camera.off(onViewMatrix);
+            scene.camera.off(onProjMatrix);
+            marker.destroy();
+            dot.destroy();
+        }
+    };
 };
 
 const marker3D = function(scene, color) {
@@ -1409,6 +1560,94 @@ export class ZonesPolysurfaceTouchControl extends Component {
     destroy() {
         this.deactivate();
         super.destroy();
+    }
+}
+
+export class ZoneEditControl {
+    constructor(zone, cfg, handleMouseEvents, handleTouchEvents) {
+        const altitude = zone._geometry.altitude;
+        const pointerLens = cfg && cfg.pointerLens;
+        const updatePointerLens = (pointerLens
+                                   ? function(canvasPos) {
+                                       pointerLens.visible = !! canvasPos;
+                                       if (canvasPos)
+                                       {
+                                           pointerLens.canvasPos = canvasPos;
+                                       }
+                                   }
+                                   : () => { });
+
+        const dots = zone._geometry.planeCoordinates.map(planeCoord => {
+            let initCanvasPos, initPlaneCoord;
+            const setPlaneCoord = function(coord) {
+                planeCoord[0] = coord[0];
+                planeCoord[1] = coord[1];
+                try {
+                    zone._rebuildMesh();
+                } catch (e) {
+                    if (zone._zoneMesh) {
+                        zone._zoneMesh.destroy();
+                        zone._zoneMesh = null;
+                    }
+                }
+            };
+
+            const dot = draggableDot3D(
+                handleMouseEvents,
+                handleTouchEvents,
+                zone.plugin.viewer,
+                math.vec3([ planeCoord[0], altitude, planeCoord[1] ]),
+                zone._color,
+                (orig, dir) => planeIntersect(altitude, math.vec3([ 0, 1, 0 ]), orig, dir),
+                () => {
+                    initCanvasPos = dot.getCanvasPos().slice();
+                    initPlaneCoord = planeCoord.slice();
+                    set_other_dots_active(false, dot);
+                },
+                (canvasPos, worldPos) => {
+                    updatePointerLens(canvasPos);
+                    setPlaneCoord([ worldPos[0], worldPos[2] ]);
+                },
+                () => {
+                    if (! zone._zoneMesh) {
+                        dot.setCanvasPos(initCanvasPos);
+                        setPlaneCoord(initPlaneCoord);
+                    }
+                    updatePointerLens(null);
+                    set_other_dots_active(true, dot);
+                });
+            return dot;
+        });
+        const set_other_dots_active = (active, dot) => dots.forEach(d => (d !== dot) && d.setActive(active));
+        set_other_dots_active(true);
+
+        const cleanup = function() {
+            dots.forEach(m => m.destroy());
+            updatePointerLens(null);
+        };
+
+        const destroyCb = zone.on("destroyed", cleanup);
+
+        this._deactivate = function() {
+            zone.off("destroyed", destroyCb);
+            cleanup();
+        };
+    }
+
+    deactivate() {
+        this._deactivate();
+    }
+}
+
+export class ZoneEditMouseControl extends ZoneEditControl {
+    constructor(zone, cfg) {
+        super(zone, cfg, true, false);
+    }
+}
+
+export class ZoneEditTouchControl extends ZoneEditControl {
+    constructor(zone, cfg) {
+        super(zone, cfg, false, true);
     }
 }
 
