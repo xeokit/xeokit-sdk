@@ -135,7 +135,25 @@ class Dot {
             }
             
         }
-        
+
+        if (cfg.onTouchstart) {
+            dotClickable.addEventListener('touchstart', (event) => {
+                cfg.onTouchstart(event, this);
+            });
+        }
+
+        if (cfg.onTouchmove) {
+            dotClickable.addEventListener('touchmove', (event) => {
+                cfg.onTouchmove(event, this);
+            });
+        }
+
+        if (cfg.onTouchend) {
+            dotClickable.addEventListener('touchend', (event) => {
+                cfg.onTouchend(event, this);
+            });
+        }
+
         this.setPos(cfg.x || 0, cfg.y || 0);
         this.setFillColor(cfg.fillColor);
         this.setBorderColor(cfg.borderColor);
