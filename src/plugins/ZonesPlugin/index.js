@@ -875,6 +875,7 @@ class Zone extends Component {
 
         const positions = [].concat(...pos);
         this._zoneMesh = new Mesh(scene, {
+            edges: this._edges,
             geometry: new ReadableGeometry(
                 scene,
                 {
@@ -968,6 +969,17 @@ class Zone extends Component {
 
     get alpha() {
         return this._alpha;
+    }
+
+    get edges() {
+        return this._edges;
+    }
+
+    set edges(edges) {
+        this._edges = edges;
+        if (this._zoneMesh) {
+            this._zoneMesh.edges = this._edges;
+        }
     }
 
     /**
