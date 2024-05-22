@@ -1652,5 +1652,186 @@ export class ZoneEditTouchControl extends ZoneEditControl {
 }
 
 
+export class ZoneTranslateControl {
+    constructor(zone, cfg, handleMouseEvents, handleTouchEvents) {
+        const viewer = zone.plugin.viewer;
+        const scene = viewer.scene;
+        const canvas = scene.canvas.canvas;
+
+        const altitude = zone._geometry.altitude;
+        const pointerLens = cfg && cfg.pointerLens;
+        const updatePointerLens = (pointerLens
+                                   ? function(canvasPos) {
+                                       pointerLens.visible = !! canvasPos;
+                                       if (canvasPos)
+                                       {
+                                           pointerLens.canvasPos = canvasPos;
+                                       }
+                                   }
+                                   : () => { });
+
+        const ray2WorldPos = (orig, dir) => planeIntersect(altitude, math.vec3([ 0, 1, 0 ]), orig, dir);
+
+        const pickWorldPos = canvasPos => {
+            const origin = math.vec3();
+            const direction = math.vec3();
+            math.canvasPosToWorldRay(canvas, scene.camera.viewMatrix, scene.camera.projMatrix, canvasPos, origin, direction);
+            return ray2WorldPos(origin, direction);
+        };
+
+        const copyCanvasPos = (event, vec2) => {
+            const rect = canvas.getBoundingClientRect();
+            vec2[0] = event.clientX - rect.left;
+            vec2[1] = event.clientY - rect.top;
+            return vec2;
+        };
+
+        const canvasHandle = function(type, cb) {
+            const callback = event => {
+                event.preventDefault();
+                cb(event);
+            };
+            canvas.addEventListener(type, callback);
+            return () => canvas.removeEventListener(type, callback);
+        };
+
+        let cleanupCurrentDrag = () => { };
+
+        const startDrag = function(event, onMoveType, onEndType, matchesEvent) {
+            const e = matchesEvent(event);
+            const canvasPos = copyCanvasPos(e, math.vec2());
+            const pickRecord = viewer.scene.pick({ canvasPos: canvasPos, includeEntities: [ zone._zoneMesh.id ] });
+            const pickZone = pickRecord && pickRecord.entity && pickRecord.entity.zone;
+
+            if (pickZone === zone)
+            {
+                cleanupCurrentDrag();
+
+                canvas.style.cursor = "move";
+                viewer.cameraControl.active = false;
+
+                const onChange = (function() {
+                    const initCoords = zone._geometry.planeCoordinates.map(c => c.slice());
+                    const initWorldPos = pickWorldPos(canvasPos);
+                    const initDragCoord = math.vec2([ initWorldPos[0], initWorldPos[2] ]);
+                    const dPos = math.vec2();
+
+                    return function(canvasPos) {
+                        const worldPos = pickWorldPos(canvasPos);
+                        dPos[0] = worldPos[0];
+                        dPos[1] = worldPos[2];
+                        math.subVec2(initDragCoord, dPos, dPos);
+
+                        zone._geometry.planeCoordinates.forEach((planeCoord, idx) => {
+                            math.subVec2(initCoords[idx], dPos, planeCoord);
+                        });
+
+                        try {
+                            zone._rebuildMesh();
+                        } catch (e) {
+                            if (zone._zoneMesh) {
+                                zone._zoneMesh.destroy();
+                                zone._zoneMesh = null;
+                            }
+                        }
+                    };
+                })();
+
+                const cleanupMove = canvasHandle(
+                    onMoveType,
+                    function(event) {
+                        const e = matchesEvent(event);
+                        if (e)
+                        {
+                            const canvasPos = copyCanvasPos(e, math.vec2());
+                            onChange(canvasPos);
+                            updatePointerLens(canvasPos);
+                        }
+                    });
+
+                const cleanupEnd  = canvasHandle(
+                    onEndType,
+                    function(event) {
+                        const e = matchesEvent(event);
+                        if (e)
+                        {
+                            const canvasPos = copyCanvasPos(e, math.vec2());
+                            onChange(canvasPos);
+                            updatePointerLens(null);
+                            cleanupCurrentDrag();
+                        }
+                    });
+
+                cleanupCurrentDrag = function() {
+                    cleanupCurrentDrag = () => { };
+                    canvas.style.cursor = "default";
+                    viewer.cameraControl.active = true;
+                    cleanupMove();
+                    cleanupEnd();
+                };
+            }
+        };
+
+        const startDragCbs = [ ];
+
+        if (handleMouseEvents) {
+            startDragCbs.push(
+                canvasHandle("mousedown", event => {
+                    if (event.which === 1) {
+                        startDrag(
+                            event,
+                            "mousemove",
+                            "mouseup",
+                            event => (event.which === 1) && event);
+                    }
+                }));
+        }
+
+        if (handleTouchEvents) {
+            startDragCbs.push(
+                canvasHandle("touchstart", event => {
+                    if (event.touches.length === 1) {
+                        const touchStartId = event.touches[0].identifier;
+                        startDrag(
+                            event,
+                            "touchmove",
+                            "touchend",
+                            event => [...event.changedTouches].find(e => e.identifier === touchStartId));
+                    }
+                }));
+        }
+
+        const cleanup = function() {
+            cleanupCurrentDrag();
+            startDragCbs.forEach(cb => cb());
+            updatePointerLens(null);
+        };
+
+        const destroyCb = zone.on("destroyed", cleanup);
+
+        this._deactivate = function() {
+            zone.off("destroyed", destroyCb);
+            cleanup();
+        };
+    }
+
+    deactivate() {
+        this._deactivate();
+    }
+}
+
+export class ZoneTranslateMouseControl extends ZoneTranslateControl {
+    constructor(zone, cfg) {
+        super(zone, cfg, true, false);
+    }
+}
+
+export class ZoneTranslateTouchControl extends ZoneTranslateControl {
+    constructor(zone, cfg) {
+        super(zone, cfg, false, true);
+    }
+}
+
+
 export {ZonesMouseControl}
 export {ZonesPlugin}

@@ -124,7 +124,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, ZonesTouchControl, ZoneEditTouchControl, ZonesPlugin, AnnotationsPlugin, PointerLens} from "../../dist/xeokit-sdk.min.es.js";
+    import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, ZonesTouchControl, ZoneEditTouchControl, ZoneTranslateTouchControl, ZonesPlugin, AnnotationsPlugin, PointerLens} from "../../dist/xeokit-sdk.min.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer
@@ -255,6 +255,15 @@ const zoneEdit = new ZoneEditTouchControl(zone, { pointerLens: pointerLens });
 
 // Conclude editing
 zoneEdit.deactivate();
+
+
+// Translate zone with optional pointerLens
+const zoneTranslate = new ZoneTranslateTouchControl(contextZone, { pointerLens: pointerLens })
+
+// ... drag around
+
+// Conclude translating
+zoneTranslate.deactivate();
 
 
 // Serialize all zones
