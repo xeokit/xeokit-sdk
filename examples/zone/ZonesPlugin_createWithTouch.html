@@ -86,7 +86,14 @@
 <body>
 <input type="checkbox" id="info-button"/>
 <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
-<canvas id="myCanvas"></canvas>
+<div>
+  <div style="position: absolute; width: 100%; height: 100%;">
+    <div style="top: 30px;">Artificial offset 50x30 px</div>
+    <div style="position: relative; height: 100%;">
+      <canvas id="myCanvas" style="left: 50px;"></canvas>
+    </div>
+  </div>
+</div>
 <div class="slideout-sidebar">
     <h1>ZonesPlugin</h1>
     <h2>Creating 3D zones inside a model</h2>
@@ -189,6 +196,8 @@
 
     const annotations = new AnnotationsPlugin(viewer, {
 
+        container: viewer.scene.canvas.canvas.parentNode,
+
         markerHTML: "<div class='annotation-marker' style='background-color: {{markerBGColor}};'>{{glyph}}</div>",
         labelHTML: "<div class='annotation-label' style='background-color: {{labelBGColor}};'><div class='annotation-title'>{{title}}</div><div class='annotation-desc'>{{description}}</div></div>",
 
@@ -277,6 +286,13 @@ const zonesJSON = zones.map(zone => zone.getJSON());
 for (const zoneJSON of zonesJSON) {
     zonesPlugin.createZone(zonesJSON);
 }
+
+// Remove a zone
+// This will
+// 1. Remove the zone from the scene
+// 2. Remove the zone from zonesPlugin.zones collection
+// 3. Notify all zone.on("destroyed") callbacks - to e.g. remove a linked annotation as above
+zone.destroy();
 
 */
 
