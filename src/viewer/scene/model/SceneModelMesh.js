@@ -1,8 +1,10 @@
 import {math} from "../math/math.js";
+import {meshSurfaceArea, meshVolume} from "../math";
 
 const tempOBB3 = math.OBB3();
 const tempOBB3b = math.OBB3();
 const tempOBB3c = math.OBB3();
+
 
 /**
  * A mesh within a {@link SceneModel}.
@@ -116,6 +118,9 @@ export class SceneModelMesh {
         if (transform) {
             transform._addMesh(this);
         }
+
+        this._volume = null;
+        this._surfaceArea = null;
     }
 
     _sceneModelDirty() {
@@ -294,7 +299,75 @@ export class SceneModelMesh {
      * @private
      */
     getEachVertex(callback) {
-        this.layer.getEachVertex(this.portionId, callback);
+        if (this.layer.getEachVertex) {
+            this.layer.getEachVertex(this.portionId, callback);
+        }
+    }
+
+    /**
+     * @private
+     */
+    getEachIndex(callback) {
+        if (this.layer.getEachIndex ) {
+            this.layer.getEachIndex(this.portionId, callback);
+        }
+    }
+
+    /**
+     * Returns the volume of this SceneModelMesh.
+     * @returns {number}
+     */
+    get volume() {
+        if (this._volume !== null) {
+            return this._volume;
+        }
+        switch (this.layer.primitive) {
+            case "solid":
+            case "surface":
+            case "triangles":
+                meshVolume.reset();
+                meshVolume.setPrimitive(this.layer.primitive);
+                this.getEachVertex((vertex) =>{
+                    meshVolume.addVertex(vertex);
+                });
+                this.getEachIndex((index)=>{
+                   meshVolume.addIndex(index);
+                });
+                this._volume = meshVolume.volume;
+                break;
+            default:
+                this._volume = 0;
+                break;
+        }
+        return this._volume;
+    }
+
+    /**
+     * Returns the surface area of this SceneModelMesh.
+     * @returns {number}
+     */
+    get surfaceArea() {
+        if (this._surfaceArea !== null) {
+            return this._surfaceArea;
+        }
+        switch (this.layer.primitive) {
+            case "solid":
+            case "surface":
+            case "triangles":
+                meshSurfaceArea.reset();
+                this.getEachVertex((vertex) =>{
+                    meshSurfaceArea.addVertex(vertex);
+                });
+                this.getEachIndex((index)=>{
+                    meshSurfaceArea.addIndex(index);
+                });
+                this._surfaceArea = meshSurfaceArea.surfaceArea;
+                break;
+            default:
+                this._surfaceArea = 0;
+                break;
+        }
+        return this._surfaceArea;
     }
 
     /**

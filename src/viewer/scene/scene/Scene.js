@@ -368,6 +368,8 @@ class Scene extends Component {
 
         this._aabbDirty = true;
 
+        this._readableGeometry = !!cfg.readableGeometryEnabled;
+
         /**
          * The {@link Viewer} this Scene belongs to.
          * @type {Viewer}
@@ -1291,18 +1293,27 @@ class Scene extends Component {
     }
 
     /**
-     * Whether precision surface picking is enabled.
+     * Whether geometry is readable.
      *
      * This is set via the {@link Viewer} constructor and is ````false```` by default.
      *
-     * The ````pickSurfacePrecision```` option for ````Scene#pick```` only works if this is set ````true````.
+     * The ````readableGeometryEnabled```` option for ````Scene#pick```` only works if this is set ````true````.
      *
      * Note that when ````true````, this configuration will increase the amount of browser memory used by the Viewer.
      *
-     * @returns {Boolean} True if precision picking is enabled.
+     * @returns {Boolean} True if geometry is readable.
+     */
+    get readableGeometryEnabled() {
+        return this._readableGeometry;
+    }
+
+    /**
+     * Whether precision surface picking is enabled.
+     * @deprecated
+     * @returns {*|boolean}
      */
     get pickSurfacePrecisionEnabled() {
-        return false; // Removed
+        return this._readableGeometry;
     }
 
     /**
@@ -2266,7 +2277,7 @@ class Scene extends Component {
      *
      * @param {*} params Picking parameters.
      * @param {Boolean} [params.pickSurface=false] Whether to find the picked position on the surface of the Entity.
-     * @param {Boolean} [params.pickSurfacePrecision=false] When picking an Entity surface position, indicates whether or not we want full-precision {@link PickResult#worldPos}. Only works when {@link Scene#pickSurfacePrecisionEnabled} is ````true````. If pick succeeds, the returned {@link PickResult} will have {@link PickResult#precision} set ````true````, to indicate that it contains full-precision surface pick results.
+     * @param {Boolean} [params.pickSurfacePrecision=false] When picking an Entity surface position, indicates whether or not we want full-precision {@link PickResult#worldPos}. Only works when {@link Scene#readableGeometryEnabled} is ````true````. If pick succeeds, the returned {@link PickResult} will have {@link PickResult#precision} set ````true````, to indicate that it contains full-precision surface pick results.
      * @param {Boolean} [params.pickSurfaceNormal=false] Whether to find the picked normal on the surface of the Entity. Only works if ````pickSurface```` is given.
      * @param {Number[]} [params.canvasPos] Canvas-space coordinates. When ray-picking, this will override the **origin** and ** direction** parameters and will cause the ray to be fired through the canvas at this position, directly along the negative View-space Z-axis.
      * @param {Number[]} [params.origin] World-space ray origin when ray-picking. Ignored when canvasPos given.

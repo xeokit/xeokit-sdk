@@ -131,6 +131,11 @@ export class VBOBatchingTrianglesLayer {
          * @type {boolean}
          */
         this.solid = !!cfg.solid;
+
+        /**
+         * The type of primitives in this layer.
+         */
+        this.primitive = cfg.primitive;
     }
 
     get aabb() {
@@ -327,7 +332,7 @@ export class VBOBatchingTrianglesLayer {
             numIndices: indices.length,
         };
 
-        if (scene.pickSurfacePrecisionEnabled) {
+        if (scene.readableGeometryEnabled) {
             // Quantized in-memory positions are initialized in finalize()
 
             portion.indices = indices;
@@ -364,7 +369,7 @@ export class VBOBatchingTrianglesLayer {
                 ? new Uint16Array(buffer.positions)
                 : quantizePositions(buffer.positions, this._modelAABB, this._state.positionsDecodeMatrix = math.mat4()); // BOTTLENECK
             state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, quantizedPositions.length, 3, gl.STATIC_DRAW);
-            if (this.model.scene.pickSurfacePrecisionEnabled) {
+            if (this.model.scene.readableGeometryEnabled) {
                 for (let i = 0, numPortions = this._portions.length; i < numPortions; i++) {
                     const portion = this._portions[i];
                     const start = portion.vertsBaseIndex * 3;
@@ -793,7 +798,7 @@ export class VBOBatchingTrianglesLayer {
         if (this._state.offsetsBuf) {
             this._state.offsetsBuf.setData(tempArray, firstOffset, lenOffsets);
         }
-        if (this.model.scene.pickSurfacePrecisionEnabled) {
+        if (this.model.scene.readableGeometryEnabled) {
             portion.offset[0] = offset[0];
             portion.offset[1] = offset[1];
             portion.offset[2] = offset[2];
@@ -801,7 +806,7 @@ export class VBOBatchingTrianglesLayer {
     }
 
     getEachVertex(portionId, callback) {
-        if (!this.model.scene.pickSurfacePrecisionEnabled) {
+        if (!this.model.scene.readableGeometryEnabled) {
             return;
         }
         const state = this._state;
@@ -812,10 +817,9 @@ export class VBOBatchingTrianglesLayer {
         }
         const positions = portion.quantizedPositions;
         const origin = state.origin;
-        const offset = portion.offset;
-        const offsetX = origin[0] + offset[0];
-        const offsetY = origin[1] + offset[1];
-        const offsetZ = origin[2] + offset[2];
+        const offsetX = origin[0] ;
+        const offsetY = origin[1] ;
+        const offsetZ = origin[2] ;
         const worldPos = tempVec4a;
         for (let i = 0, len = positions.length; i < len; i += 3) {
             worldPos[0] = positions[i];
@@ -828,6 +832,21 @@ export class VBOBatchingTrianglesLayer {
             worldPos[1] += offsetY;
             worldPos[2] += offsetZ;
             callback(worldPos);
+        }
+    }
+
+    getEachIndex(portionId, callback) {
+        if (!this.model.scene.readableGeometryEnabled) {
+            return;
+        }
+        const portion = this._portions[portionId];
+        if (!portion) {
+            this.model.error("portion not found: " + portionId);
+            return;
+        }
+        const indices = portion.indices;
+        for (let i = 0, len = indices.length; i < len; i++) {
+            callback(indices[i]);
         }
     }
 
@@ -1118,7 +1137,7 @@ export class VBOBatchingTrianglesLayer {
 
     precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) {
 
-        if (!this.model.scene.pickSurfacePrecisionEnabled) {
+        if (!this.model.scene.readableGeometryEnabled) {
             return false;
         }
 

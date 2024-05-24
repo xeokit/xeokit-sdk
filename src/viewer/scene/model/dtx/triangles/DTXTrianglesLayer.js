@@ -38,6 +38,7 @@ const INDICES_EDGE_INDICES_ALIGNEMENT_SIZE = 8;
  */
 const MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE = 10;
 
+const tempVec4a = math.vec4();
 const tempMat4a = new Float32Array(16);
 const tempUint8Array4 = new Uint8Array(4);
 const tempFloat32Array3 = new Float32Array(3);
@@ -93,6 +94,10 @@ export class DTXTrianglesLayer {
 
         this._subPortions = [];
 
+        if (this.model.scene.readableGeometryEnabled) {
+            this._subPortionReadableGeometries = {};
+        }
+
         /**
          * Due to `index rebucketting` process in ```prepareMeshGeometry``` function, it's possible that a single
          * portion is expanded to more than 1 real sub-portion.
@@ -121,6 +126,11 @@ export class DTXTrianglesLayer {
          * The number of updates in the current frame;
          */
         this._numUpdatesInFrame = 0;
+
+        /**
+         * The type of primitives in this layer.
+         */
+        this.primitive = cfg.primitive;
 
         this._finalized = false;
     }
@@ -425,6 +435,15 @@ export class DTXTrianglesLayer {
             // vertsBase: vertsIndex,
             numVertices: bucketGeometry.numTriangles
         });
+
+        if (this.model.scene.readableGeometryEnabled) {
+            this._subPortionReadableGeometries[subPortionId] = {
+                indices: bucket.indices,
+                positionsCompressed: bucket.positionsCompressed,
+                positionsDecodeMatrix: portionCfg.positionsDecodeMatrix,
+                meshMatrix: portionCfg.meshMatrix
+            };
+        }
 
         this._numPortions++;
 
@@ -1075,6 +1094,63 @@ export class DTXTrianglesLayer {
         );
         // gl.bindTexture (gl.TEXTURE_2D, null);
     }
+
+    getEachVertex(portionId, callback) {
+        if (!this.model.scene.readableGeometryEnabled) {
+            return;
+        }
+        const state = this._state;
+        const subPortionIds = this._portionToSubPortionsMap[portionId];
+        if (!subPortionIds) {
+            this.model.error("portion not found: " + portionId);
+            return;
+        }
+        for (let i = 0, len = subPortionIds.length; i < len; i++) {
+            const subPortionId = subPortionIds[i];
+            const subPortionReadableGeometry = this._subPortionReadableGeometries[subPortionId];
+            const positions = subPortionReadableGeometry.positionsCompressed;
+            const positionsDecodeMatrix = subPortionReadableGeometry.positionsDecodeMatrix;
+            const meshMatrix = subPortionReadableGeometry.meshMatrix;
+            const origin = state.origin;
+            const offsetX = origin[0] ;
+            const offsetY = origin[1] ;
+            const offsetZ = origin[2] ;
+            const worldPos = tempVec4a;
+            for (let i = 0, len = positions.length; i < len; i += 3) {
+                worldPos[0] = positions[i];
+                worldPos[1] = positions[i + 1];
+                worldPos[2] = positions[i + 2];
+                worldPos[3] = 1.0;
+                math.decompressPosition(worldPos, positionsDecodeMatrix);
+                math.transformPoint4(this.model.worldMatrix, worldPos);
+                math.transformPoint4(this.model.worldMatrix, worldPos);
+                worldPos[0] += offsetX;
+                worldPos[1] += offsetY;
+                worldPos[2] += offsetZ;
+                callback(worldPos);
+            }
+        }
+    }
+
+    getEachIndex(portionId, callback) {
+        if (!this.model.scene.readableGeometryEnabled) {
+            return;
+        }
+        const subPortionIds = this._portionToSubPortionsMap[portionId];
+        if (!subPortionIds) {
+            this.model.error("portion not found: " + portionId);
+            return;
+        }
+        for (let i = 0, len = subPortionIds.length; i < len; i++) {
+            const subPortionId = subPortionIds[i];
+            const subPortionReadableGeometry = this._subPortionReadableGeometries[subPortionId];
+            const indices = subPortionReadableGeometry.indices;
+            for (let i = 0, len = indices.length; i < len; i++) {
+                callback(indices[i]);
+            }
+        }
+    }
+
 
     // ---------------------- COLOR RENDERING -----------------------------------
 
