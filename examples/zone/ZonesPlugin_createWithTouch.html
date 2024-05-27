@@ -132,7 +132,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, ZonesTouchControl, ZoneEditTouchControl, ZoneTranslateTouchControl, ZonesPlugin, AnnotationsPlugin, PointerLens} from "../../dist/xeokit-sdk.min.es.js";
+    import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, ZonesTouchControl, ZoneEditTouchControl, ZoneTranslateTouchControl, ZonesPlugin, AnnotationsPlugin, PointerLens, ContextMenu} from "../../dist/xeokit-sdk.min.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer
@@ -211,27 +211,203 @@
         surfaceOffset: 0.1
     });
 
+    const attachZoneAnnotation = function(zone, glyph, title, description) {
+        const annotation = annotations.createAnnotation({
+            id: "myAnnotation_" + zone.id,
+            worldPos: zone.center,
+            occludable: true,
+            labelShown: true,
+            values: {
+                glyph: glyph,
+                title: title,
+                description: description
+            },
+        });
+
+        zone.on("destroyed", () => annotation.destroy());
+    };
+
+    const getAnnotationsZone = function(annotation) {
+        // Get the zone related to the annotation
+        const zoneId = annotation.id.substr("myAnnotation_".length);
+        return zonesPlugin.zones.find(z => z.id === zoneId);
+    };
+
+    const getZoneAnnotation = function(zone) {
+        // Get annotaion related to zone
+        return annotations.annotations["myAnnotation_" + zone.id];
+    };
+
+    let curZoneEdit = null;
+
+    const zoneEditContextMenu = new ContextMenu({
+        enabled: true,
+        items: [
+            [
+                {
+                    title: "End Edit",
+                    doAction: function(contextZone) {
+                        curZoneEdit.deactivate();
+                        curZoneEdit = null;
+                        curZoneContextMenu = zoneContextMenu;
+                        const zoneAnnotation = getZoneAnnotation(contextZone);
+                        if (zoneAnnotation)
+                        {
+                            zoneAnnotation.worldPos = contextZone.center;
+                        }
+                    }
+                }
+            ]
+        ]
+    });
+
+    const zoneTranslateContextMenu = new ContextMenu({
+        enabled: true,
+        items: [
+            [
+                {
+                    title: "End Translate",
+                    doAction: function(contextZone) {
+                        curZoneEdit.deactivate();
+                        curZoneEdit = null;
+                        curZoneContextMenu = zoneContextMenu;
+                        const zoneAnnotation = getZoneAnnotation(contextZone);
+                        if (zoneAnnotation)
+                        {
+                            zoneAnnotation.worldPos = contextZone.center;
+                        }
+                    }
+                }
+            ]
+        ]
+    });
+
+    const startZoneTranslate = function(zone) {
+        curZoneEdit = new ZoneTranslateTouchControl(zone, { pointerLens: new PointerLens(viewer) });
+        curZoneContextMenu = zoneTranslateContextMenu;
+    };
+
+    const zoneContextMenu = new ContextMenu({
+        enabled: true,
+        items: [
+            [
+                {
+                    title: "Change Color ...",
+                    doAction: function(contextZone) {
+                        const value = window.prompt("Color", contextZone.color);
+                        if (value !== null)
+                        {
+                            contextZone.color = value;
+                        }
+                    }
+                },
+                {
+                    title: "Change Color from a list",
+                    items: [
+                        [ [ "Red", "#800000" ], [ "Green", "#008000" ], [ "Blue", "#000080" ] ].map(color => (
+                            {
+                                 title: color[0],
+                                 doAction: contextZone => { contextZone.color = color[1] }
+                            }))
+                    ]
+                },
+                {
+                    title: "Change Alpha ...",
+                    doAction: function(contextZone) {
+                        const value = window.prompt("Alpha", contextZone.alpha);
+                        if (value !== null)
+                        {
+                            contextZone.alpha = window.parseFloat(value);
+                        }
+                    }
+                },
+                {
+                    title: "Change Altitude ...",
+                    doAction: function(contextZone) {
+                        const value = window.prompt("Altitude", contextZone.altitude);
+                        if (value !== null)
+                        {
+                            contextZone.altitude = window.parseFloat(value);
+                            const zoneAnnotation = getZoneAnnotation(contextZone);
+                            if (zoneAnnotation)
+                            {
+                                zoneAnnotation.worldPos = contextZone.center;
+                            }
+                        }
+                    }
+                },
+                {
+                    title: "Change Height ... ",
+                    doAction: function(contextZone) {
+                        const value = window.prompt("Height", contextZone.height);
+                        if (value !== null)
+                        {
+                            contextZone.height = window.parseFloat(value);
+                            const zoneAnnotation = getZoneAnnotation(contextZone);
+                            if (zoneAnnotation)
+                            {
+                                zoneAnnotation.worldPos = contextZone.center;
+                            }
+                        }
+                    }
+                },
+                {
+                    title: "Edit Zone",
+                    doAction: contextZone => {
+                        curZoneEdit = new ZoneEditTouchControl(contextZone, { pointerLens: new PointerLens(viewer) });
+                        curZoneContextMenu = zoneEditContextMenu;
+                    }
+                },
+                {
+                    title: "Translate Zone",
+                    doAction: contextZone => {
+                        startZoneTranslate(contextZone);
+                    }
+                },
+                {
+                    title: "Duplicate Zone",
+                    doAction: contextZone => {
+                        const newZone = contextZone.duplicate();
+                        attachZoneAnnotation(newZone, "G2", "Title2...", "Description2...");
+                        startZoneTranslate(newZone);
+                    }
+                },
+                {
+                    title: "Delete Zone",
+                    doAction: function(contextZone) {
+                        if (window.confirm("Delete the zone?"))
+                        {
+                            contextZone.destroy();
+                        }
+                    }
+                }
+            ]
+        ]
+    });
+
+    let curZoneContextMenu = zoneContextMenu;
+
+    viewer.cameraControl.on("rightClick", function (e) {
+        const canvasPos = e.canvasPos;
+        const pickRecord = viewer.scene.pick({ canvasPos: canvasPos });
+        const pickZone = pickRecord && pickRecord.entity && pickRecord.entity.zone;
+        if (pickZone)
+        {
+            curZoneContextMenu.context = pickZone;
+            curZoneContextMenu.show(canvasPos[0], canvasPos[1] + 50);
+        }
+    });
+
     const zonesPlugin = new ZonesPlugin(viewer);
 
     const zonesControl  = new ZonesTouchControl(zonesPlugin, {
         pointerLens : new PointerLens(viewer)
     });
+
     zonesControl.on("zoneEnd", zone => {
         console.log("Zone added:", zone);
-
-        const annotation = annotations.createAnnotation({
-            id: "myAnnotation_" + zone.id,
-            worldPos: zone.center,
-            occludable: true,       // Optional, default is true
-            labelShown: true,       // Optional, default is true
-            values: {               // HTML template values
-                glyph: "G1",
-                title: "Title...",
-                description: "Description..."
-            },
-        });
-
-        zone.on("destroyed", () => annotation.destroy());
+        zonesControl.deactivate();
+        attachZoneAnnotation(zone, "G1", "Title...", "Description...");
     });
 
     const altitude = 0.01;
