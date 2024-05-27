@@ -89,8 +89,9 @@
 <div>
   <div style="position: absolute; width: 100%; height: 100%;">
     <div style="top: 30px;">Artificial offset 50x30 px</div>
-    <div style="position: relative; height: 100%;">
-      <canvas id="myCanvas" style="left: 50px;"></canvas>
+    <div style="position: relative; height: 100%; left: 50px;">
+      <canvas id="myCanvas"></canvas>
+      <div id="annotationsContainer"><div>
     </div>
   </div>
 </div>
@@ -196,7 +197,7 @@
 
     const annotations = new AnnotationsPlugin(viewer, {
 
-        container: viewer.scene.canvas.canvas.parentNode,
+        container: document.getElementById("annotationsContainer"),
 
         markerHTML: "<div class='annotation-marker' style='background-color: {{markerBGColor}};'>{{glyph}}</div>",
         labelHTML: "<div class='annotation-label' style='background-color: {{labelBGColor}};'><div class='annotation-title'>{{title}}</div><div class='annotation-desc'>{{description}}</div></div>",
