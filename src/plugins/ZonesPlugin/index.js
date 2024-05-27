@@ -1008,6 +1008,20 @@ class Zone extends Component {
         };
     }
 
+    duplicate() {
+        return this.plugin.createZone(
+            {
+                id: math.createUUID(),
+                geometry: {
+                    planeCoordinates: this._geometry.planeCoordinates.map(c => c.slice()),
+                    altitude: this._geometry.altitude,
+                    height: this._geometry.height
+                },
+                alpha: this._alpha,
+                color: this._color
+            });
+    }
+
     /**
      * @private
      */
