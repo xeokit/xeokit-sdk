@@ -1003,6 +1003,7 @@ class Zone extends Component {
         return {
             id: this.id,
             geometry: this._geometry,
+            alpha: this._alpha,
             color: this._color
         };
     }
