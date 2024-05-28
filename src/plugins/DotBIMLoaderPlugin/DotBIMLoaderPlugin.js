@@ -1,41 +1,24 @@
 import {Plugin, SceneModel, utils} from "../../viewer/index.js"
-
+import {math} from "../../viewer/scene/math/math.js";
 import {DotBIMDefaultDataSource} from "./DotBIMDefaultDataSource.js";
 import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
 
 /**
- * {@link Viewer} plugin that loads models from [glTF](https://www.khronos.org/gltf/).
+ * {@link Viewer} plugin that loads models from [.bim](https://dotbim.net/) format.
  *
- * * Loads all glTF formats, including embedded and binary formats.
- * * Loads physically-based materials and textures.
- * * Creates an {@link Entity} representing each model it loads, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
- * * Creates an {@link Entity} for each object within the model, which is indicated by each glTF ````node```` that has a ````name```` attribute. Those Entities will have {@link Entity#isObject} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#objects}.
- * * When loading, can set the World-space position, scale and rotation of each model within World space, along with initial properties for all the model's {@link Entity}s.
- * * Not recommended for large models. For best performance with large glTF datasets, we recommend first converting them
- * to ````.xkt```` format (eg. using [convert2xkt](https://github.com/xeokit/xeokit-convert)), then loading
- * the ````.xkt```` using {@link XKTLoaderPlugin}.
- *
- * ## Metadata
- *
- * DotBIMLoaderPlugin can also load an accompanying JSON metadata file with each model, which creates a {@link MetaModel} corresponding
- * to the model {@link Entity} and a {@link MetaObject} corresponding to each object {@link Entity}.
- *
- * Each {@link MetaObject} has a {@link MetaObject#type}, which indicates the classification of its corresponding {@link Entity}. When loading
- * metadata, we can also provide DotBIMLoaderPlugin with a custom lookup table of initial values to set on the properties of each type of {@link Entity}. By default, DotBIMLoaderPlugin
- * uses its own map of default colors and visibilities for IFC element types.
+ * * Creates an {@link Entity} representing each model it loads, which will have {@link Entity#isModel} set ````true````
+ * and will be registered by {@link Entity#id} in {@link Scene#models}.
+ * * Creates an {@link Entity} for each object within the model. Those Entities will have {@link Entity#isObject}
+ * set ````true```` and will be registered by {@link Entity#id} in {@link Scene#objects}.
+ * * When loading, can set the World-space position, scale and rotation of each model within World space,
+ * along with initial properties for all the model's {@link Entity}s.
  *
  * ## Usage
  *
- * In the example below we'll load a house plan model from a [binary glTF file](/examples/models/gltf/schependomlaan/), along
- * with an accompanying JSON [IFC metadata file](/examples/metaModels/schependomlaan/).
+ * In the example below we'll load a house model from a [.BIM file](/assets/models/dotbim/House.bim).
  *
- * This will create a bunch of {@link Entity}s that represents the model and its objects, along with a {@link MetaModel} and {@link MetaObject}s
- * that hold their metadata.
- *
- * Since this model contains IFC types, the DotBIMLoaderPlugin will set the initial colors of object {@link Entity}s according
- * to the standard IFC element colors in the DotBIMModel's current map. Override that with your own map via property {@link DotBIMLoaderPlugin#objectDefaults}.
- *
- * Read more about this example in the user guide on [Viewing BIM Models Offline](https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-xeokit-c373e48bc4094ff5b6e5c5700ff580ee).
+ * This will create a bunch of {@link Entity}s that represents the model and its objects, along with
+ * a {@link MetaModel} and {@link MetaObject}s that hold their metadata.
  *
  * ````javascript
  * import {Viewer, DotBIMLoaderPlugin} from "xeokit-sdk.es.js";
@@ -60,8 +43,8 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  * viewer.scene.selectedMaterial.fillAlpha = 0.1;
  *
  * //------------------------------------------------------------------------------------------------------------------
- * // 1. Create a glTF loader plugin,
- * // 2. Load a glTF building model and JSON IFC metadata
+ * // 1. Create a .bim loader plugin,
+ * // 2. Load a .bim building model
  * // 3. Emphasis the edges to make it look nice
  * //------------------------------------------------------------------------------------------------------------------
  *
@@ -71,37 +54,8 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  * // 2
  * var model = dotBIMLoader.load({                                    // Returns an Entity that represents the model
  *      id: "myModel",
- *      src: "./models/gltf/OTCConferenceCenter/scene.bim",
- *      dotBIMSrc: "./models/bim/OTCConferenceCenter/metaModel.json",     // Creates a MetaModel (see below)
+ *      src: "../../assets/models/dotbim/House.bim",
  *      edges: true
- * });
- *
- * model.on("loaded", () => {
- *
- *      //--------------------------------------------------------------------------------------------------------------
- *      // 1. Find metadata on the third storey
- *      // 2. Select all the objects in the building's third storey
- *      // 3. Fit the camera to all the objects on the third storey
- *      //--------------------------------------------------------------------------------------------------------------
- *
- *      // 1
- *      const metaModel = viewer.metaScene.metaModels["myModel"];       // MetaModel with ID "myModel"
- *      const metaObject
- *          = viewer.metaScene.metaObjects["0u4wgLe6n0ABVaiXyikbkA"];   // MetaObject with ID "0u4wgLe6n0ABVaiXyikbkA"
- *
- *      const name = metaObject.name;                                   // "01 eerste verdieping"
- *      const type = metaObject.type;                                   // "IfcBuildingStorey"
- *      const parent = metaObject.parent;                               // MetaObject with type "IfcBuilding"
- *      const children = metaObject.children;                           // Array of child MetaObjects
- *      const objectId = metaObject.id;                                 // "0u4wgLe6n0ABVaiXyikbkA"
- *      const objectIds = viewer.metaScene.getObjectIDsInSubtree(objectId);   // IDs of leaf sub-objects
- *      const aabb = viewer.scene.getAABB(objectIds);                   // Axis-aligned boundary of the leaf sub-objects
- *
- *      // 2
- *      viewer.scene.setObjectsSelected(objectIds, true);
- *
- *      // 3
- *      viewer.cameraFlight.flyTo(aabb);
  * });
  *
  * // Find the model Entity by ID
@@ -113,19 +67,17 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  *
  * ## Transforming
  *
- * We have the option to rotate, scale and translate each  *````.glTF````* model as we load it.
+ * We have the option to rotate, scale and translate each  *````.bim````* model as we load it.
  *
  * This lets us load multiple models, or even multiple copies of the same model, and position them apart from each other.
  *
- * In the example below, we'll scale our model to half its size, rotate it 90 degrees about its local X-axis, then
+ * In the example below, we'll rotate our model 90 degrees about its local X-axis, then
  * translate it 100 units along its X axis.
  *
  * ````javascript
  * const model = dotBIMLoader.load({
- *      src: "./models/bim/Duplex/scene.bim",
- *      dotBIMSrc: "./models/bim/Duplex/Duplex.json",
+ *      src: "../../assets/models/dotbim/House.bim",
  *      rotation: [90,0,0],
- *      scale: [0.5, 0.5, 0.5],
  *      position: [100, 0, 0]
  * });
  * ````
@@ -138,8 +90,7 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  * ````javascript
  * const model = dotBIMLoader.load({
  *     id: "myModel",
- *      src: "./models/bim/OTCConferenceCenter/scene.bim",
- *      dotBIMSrc: "./models/bim/OTCConferenceCenter/metaModel.json",
+ *      src: "../../assets/models/dotbim/House.bim",
  *      includeTypes: ["IfcWallStandardCase"]
  * });
  * ````
@@ -150,14 +101,13 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  * ````javascript
  * const model = dotBIMLoader.load({
  *     id: "myModel",
- *      src: "./models/bim/OTCConferenceCenter/scene.bim",
- *      dotBIMSrc: "./models/bim/OTCConferenceCenter/metaModel.json",
+ *      src: "../../assets/models/dotbim/House.bim",
  *      excludeTypes: ["IfcSpace"]
  * });
  * ````
  * @class DotBIMLoaderPlugin
  */
-class DotBIMLoaderPlugin extends Plugin {
+export class DotBIMLoaderPlugin extends Plugin {
 
     /**
      * @constructor
@@ -227,22 +177,14 @@ class DotBIMLoaderPlugin extends Plugin {
      * @param {String} [params.id] ID to assign to the root {@link Entity#id}, unique among all components in the Viewer's {@link Scene}, generated automatically by default.
      * @param {String} [params.src] Path to a .BIM file, as an alternative to the ````bim```` parameter.
      * @param {*} [params.bim] .BIM JSON, as an alternative to the ````src```` parameter.
-     * @param {String} [params.dotBIMSrc] Path to an optional metadata file, as an alternative to the ````dotBIM```` parameter.
-     * @param {*} [params.dotBIM] JSON model metadata, as an alternative to the ````dotBIMSrc```` parameter.
      * @param {{String:Object}} [params.objectDefaults] Map of initial default states for each loaded {@link Entity} that represents an object. Default value is {@link IFCObjectDefaults}.
      * @param {String[]} [params.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {String[]} [params.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
-     * @param {Boolean} [params.edges=false] Whether or not xeokit renders the model with edges emphasized.
      * @param {Number[]} [params.origin=[0,0,0]] The double-precision World-space origin of the model's coordinates.
      * @param {Number[]} [params.position=[0,0,0]] The single-precision position, relative to ````origin````.
      * @param {Number[]} [params.scale=[1,1,1]] The model's scale.
      * @param {Number[]} [params.rotation=[0,0,0]] The model's orientation, as Euler angles given in degrees, for each of the X, Y and Z axis.
-     * @param {Number[]} [params.matrix=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]] The model's world transform matrix. Overrides the position, scale and rotation parameters. Relative to ````origin````.
-     * @param {Boolean} [params.saoEnabled=true] Indicates if Scalable Ambient Obscurance (SAO) is enabled for the model. SAO is configured by the Scene's {@link SAO} component. Only works when {@link SAO#enabled} is also ````true````
-     * @param {Boolean} [params.pbrEnabled=true] Indicates if physically-based rendering (PBR) is enabled for the model. Overrides ````colorTextureEnabled````. Only works when {@link Scene#pbrEnabled} is also ````true````.
-     * @param {Boolean} [params.colorTextureEnabled=true] Indicates if base color texture rendering is enabled for the model. Overridden by ````pbrEnabled````.  Only works when {@link Scene#colorTextureEnabled} is also ````true````.
      * @param {Boolean} [params.backfaces=true] When true, always show backfaces, even on objects for which the .BIM material is single-sided. When false, only show backfaces on geometries whenever the .BIM material is double-sided.
-     * @param {Number} [params.edgeThreshold=10] When xraying, highlighting, selecting or edging, this is the threshold angle between normals of adjacent triangles, below which their shared wireframe edge is not drawn.
      * @param {Boolean} [params.dtxEnabled=true] When ````true```` (default) use data textures (DTX), where appropriate, to
      * represent the returned model. Set false to always use vertex buffer objects (VBOs). Note that DTX is only applicable
      * to non-textured triangle meshes, and that VBOs are always used for meshes that have textures, line segments, or point
@@ -258,7 +200,10 @@ class DotBIMLoaderPlugin extends Plugin {
 
         const sceneModel = new SceneModel(this.viewer.scene, utils.apply(params, {
             isModel: true,
-            dtxEnabled: params.dtxEnabled
+            backfaces: params.backfaces,
+            dtxEnabled: params.dtxEnabled,
+            rotation: params.rotation,
+            origin: params.origin
         }));
 
         const modelId = sceneModel.id;  // In case ID was auto-generated
@@ -289,28 +234,80 @@ class DotBIMLoaderPlugin extends Plugin {
             }
         }
 
-        let fileData;
-
         const parseDotBIM = (ctx) => {
+
             const fileData = ctx.fileData;
             const sceneModel = ctx.sceneModel;
-            const meshes = fileData.meshes;
-            const error = ctx.error;
-            for (let i = 0, len = meshes.length; i < len; i++) {
-                const mesh = meshes[i];
-                const geometry = sceneModel.createGeometry({
-                    id: mesh.mesh_id,
-                    primitive: "triangles",
-                    positions: mesh.coordinates,
-                    indices: mesh.indices
-                });
-                // if (geometry instanceof SDKError) {
-                //     ctx.error(`[SceneModel.createGeometry]: ${geometry.message}`);
-                // }
+
+            const dbMeshIndices = {};
+            const dbMeshLoaded = {};
+
+            const ifcProjectId = math.createUUID();
+            const ifcSiteId = math.createUUID();
+            const ifcBuildingId = math.createUUID();
+            const ifcBuildingStoryId = math.createUUID();
+
+            const metaModelData = {
+                metaObjects: [{
+                    id: ifcProjectId,
+                    name: "Project Number",
+                    type: "IfcProject",
+                    parent: null
+                },
+                    {
+                        id: ifcSiteId,
+                        name: "Default",
+                        type: "IfcSite",
+                        parent: ifcProjectId
+                    },
+                    {
+                        id: ifcBuildingId,
+                        name: "",
+                        type: "IfcBuilding",
+                        parent: ifcSiteId
+                    },
+                    {
+                        id: ifcBuildingStoryId,
+                        name: "Level 1",
+                        type: "IfcBuildingStorey",
+                        parent: ifcBuildingId
+                    }
+                ],
+                propertySets: []
+            };
+
+
+            for (let i = 0, len = fileData.meshes.length; i < len; i++) {
+                const dbMesh = fileData.meshes[i];
+                dbMeshIndices[dbMesh.mesh_id] = i;
             }
-            const elements = fileData.elements;
-            for (let i = 0, len = elements.length; i < len; i++) {
-                const element = elements[i];
+
+            const parseDBMesh = (dbMeshId) => {
+                if (dbMeshLoaded[dbMeshId]) {
+                    return;
+                }
+                const dbMeshIndex = dbMeshIndices[dbMeshId];
+                const dbMesh = fileData.meshes[dbMeshIndex];
+                sceneModel.createGeometry({
+                    id: dbMeshId,
+                    primitive: "triangles",
+                    positions: dbMesh.coordinates,
+                    indices: dbMesh.indices
+                });
+                dbMeshLoaded[dbMeshId] = true;
+            }
+
+            const dbElements = fileData.elements;
+            for (let i = 0, len = dbElements.length; i < len; i++) {
+                const element = dbElements[i];
+                const elementType = element.type;
+                if (excludeTypes && excludeTypes[elementType]) {
+                    continue;
+
+                }
+                if (includeTypes && (!includeTypes[elementType])) {
+                    continue;
+                }
                 const info = element.info;
                 const objectId =
                     element.guid !== undefined
@@ -319,51 +316,71 @@ class DotBIMLoaderPlugin extends Plugin {
                             ? info.id
                             : i);
 
-                const geometryId = element.mesh_id;
+                const dbMeshId = element.mesh_id;
+
+                parseDBMesh(dbMeshId);
+
                 const meshId = `${objectId}-mesh`;
                 const vector = element.vector;
                 const rotation = element.rotation;
-                const color = element.color;
-                const mesh = sceneModel.createMesh({
+                const props = objectDefaults ? objectDefaults[elementType] || objectDefaults["DEFAULT"] : null;
+
+                let visible = true;
+                let pickable = true;
+                let color = element.color ? [element.color.r / 255, element.color.g / 255, element.color.b / 255] : [1, 1, 1];
+                let opacity = element.color ? element.color.a / 255 : 1.0;
+
+                if (props) {
+                    if (props.visible === false) {
+                        visible = false;
+                    }
+                    if (props.pickable === false) {
+                        pickable = false;
+                    }
+                    if (props.colorize) {
+                        color = props.colorize;
+                    }
+                    if (props.opacity !== undefined && props.opacity !== null) {
+                        opacity = props.opacity;
+                    }
+                }
+
+                sceneModel.createMesh({
                     id: meshId,
-                    geometryId,
-                    color: color ? [color.r  /255, color.g /255, color.b /255] : undefined,
-                    opacity: color ? color.a  /255 : 1.0,
+                    geometryId: dbMeshId,
+                    color,
+                    opacity,
                     quaternion: rotation && (rotation.qz !== 0 || rotation.qy !== 0 || rotation.qx !== 0 || rotation.qw !== 1.0) ? [rotation.qx, rotation.qy, rotation.qz, rotation.qw] : undefined,
                     position: vector ? [vector.x, vector.y, vector.z] : undefined
                 });
-                // if (mesh instanceof SDKError) {
-                //     ctx.error(`[SceneModel.createMesh]: ${mesh.message}`);
-                //     continue;
-                // }
-                const entity = sceneModel.createEntity({
+
+                sceneModel.createEntity({
                     id: objectId,
                     meshIds: [meshId],
+                    visible,
+                    pickable,
                     isObject: true
                 });
-                // if (entity instanceof SDKError) {
-                //     ctx.error(`[SceneModel.createObject]: ${entity.message}`);
-                //     continue;
-                // }
 
-                // if (ctx.dataModel) {
-                //     if (!ctx.dataModel.objects[element.guid]) {
-                //         const dataObject = ctx.dataModel.createObject({
-                //             id: objectId,
-                //             type: typeCodes[element.type],
-                //             name: info.Name,
-                //             description: info.Description
-                //         });
-                //         if (dataObject instanceof SDKError) {
-                //             ctx.error(`[SceneModel.createObject]: ${dataObject.message}`);
-                //         }
-                //     }
-                // }
+                metaModelData.metaObjects.push({
+                    id: objectId,
+                    name: info && info.Name && info.Name !== "None" ? info.Name : `${element.type} ${objectId}`,
+                    type: element.type,
+                    parent: ifcBuildingStoryId
+                });
             }
-            // this.viewer.metaScene.createMetaModel(modelId, {
-            //     propertySets: [],
-            //     metaObjects: []
-            // });
+
+            sceneModel.finalize();
+
+            this.viewer.metaScene.createMetaModel(modelId, metaModelData);
+
+            sceneModel.scene.once("tick", () => {
+                if (sceneModel.destroyed) {
+                    return;
+                }
+                sceneModel.scene.fire("modelLoaded", sceneModel.id); // FIXME: Assumes listeners know order of these two events
+                sceneModel.fire("loaded", true, false); // Don't forget the event, for late subscribers
+            });
         }
 
         if (params.src) {
@@ -378,7 +395,6 @@ class DotBIMLoaderPlugin extends Plugin {
                         }
                     };
                     parseDotBIM(ctx);
-                    sceneModel.finalize();
                     this.viewer.scene.canvas.spinner.processes--;
                 },
                 (err) => {
@@ -394,10 +410,7 @@ class DotBIMLoaderPlugin extends Plugin {
                 }
             };
             parseDotBIM(ctx);
-            sceneModel.finalize();
         }
-
-
 
         sceneModel.once("destroyed", () => {
             this.viewer.metaScene.destroyMetaModel(modelId);
@@ -413,5 +426,3 @@ class DotBIMLoaderPlugin extends Plugin {
         super.destroy();
     }
 }
-
-export {DotBIMLoaderPlugin}
