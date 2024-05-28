@@ -16,7 +16,8 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  * set ````true```` and will be registered by {@link Entity#id} in {@link Scene#objects}.
  * * When loading, can set the World-space position, scale and rotation of each model within World space,
  * along with initial properties for all the model's {@link Entity}s.
- * * Supports the ability to mask which IFC types we want to load.
+ * * Allows to mask which IFC types we want to load.
+ * * Allows to configure initial viewer state for specified IFC types (color, visibility, selection, highlighted, X-rayed, pickable, etc).
  *
  * ## Usage
  *
@@ -58,7 +59,7 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  * // 2
  * var model = dotBIMLoader.load({                                    // Returns an Entity that represents the model
  *      id: "myModel",
- *      src: "../../assets/models/dotbim/House.bim",
+ *      src: "House.bim",
  *      edges: true
  * });
  *
@@ -80,7 +81,7 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  *
  * ````javascript
  * const model = dotBIMLoader.load({
- *      src: "../../assets/models/dotbim/House.bim",
+ *      src: "House.bim",
  *      rotation: [90,0,0],
  *      position: [100, 0, 0]
  * });
@@ -94,7 +95,7 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  * ````javascript
  * const model = dotBIMLoader.load({
  *     id: "myModel",
- *      src: "../../assets/models/dotbim/House.bim",
+ *      src: "House.bim",
  *      includeTypes: ["IfcWallStandardCase"]
  * });
  * ````
@@ -105,8 +106,111 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  * ````javascript
  * const model = dotBIMLoader.load({
  *     id: "myModel",
- *      src: "../../assets/models/dotbim/House.bim",
+ *      src: "House.bim",
  *      excludeTypes: ["IfcSpace"]
+ * });
+ * ````
+ * 
+ * # Configuring initial IFC object appearances
+ *
+ * We can specify the custom initial appearance of loaded objects according to their IFC types.
+ *
+ * This is useful for things like:
+ *
+ * * setting the colors to our objects according to their IFC types,
+ * * automatically hiding ````IfcSpace```` objects, and
+ * * ensuring that ````IfcWindow```` objects are always transparent.
+ * <br>
+ * In the example below, we'll load a model, while configuring ````IfcSpace```` elements to be always initially invisible,
+ * and ````IfcWindow```` types to be always translucent blue.
+ *
+ * ````javascript
+ * const myObjectDefaults = {
+ * 
+ *      IfcSpace: {
+ *          visible: false
+ *      },
+ *      IfcWindow: {
+ *          colorize: [0.337255, 0.303922, 0.870588], // Blue
+ *          opacity: 0.3
+ *      },
+ * 
+ *      //...
+ * 
+ *      DEFAULT: {
+ *          colorize: [0.5, 0.5, 0.5]
+ *      }
+ * };
+ *
+ * const model4 = dotBIMLoader.load({
+ *      id: "myModel4",
+ *      src: "House.bim",
+ *      objectDefaults: myObjectDefaults // Use our custom initial default states for object Entities
+ * });
+ * ````
+ *
+ * When we don't customize the appearance of IFC types, as just above, then IfcSpace elements tend to obscure other
+ * elements, which can be confusing.
+ *
+ * It's often helpful to make IfcSpaces transparent and unpickable, like this:
+ *
+ * ````javascript
+ * const dotBIMLoader = new DotBIMLoaderPlugin(viewer, {
+ *    objectDefaults: {
+ *        IfcSpace: {
+ *            pickable: false,
+ *            opacity: 0.2
+ *        }
+ *    }
+ * });
+ * ````
+ *
+ * Alternatively, we could just make IfcSpaces invisible, which also makes them unpickable:
+ *
+ * ````javascript
+ * const dotBIMLoader = new DotBIMLoaderPlugin(viewer, {
+ *    objectDefaults: {
+ *        IfcSpace: {
+ *            visible: false
+ *        }
+ *    }
+ * });
+ * ````
+ *
+ * # Configuring a custom data source
+ *
+ * By default, DotBIMLoaderPlugin will load *````.bim````* files and metadata JSON over HTTP.
+ *
+ * In the example below, we'll customize the way DotBIMLoaderPlugin loads the files by configuring it with our own data source
+ * object. For simplicity, our custom data source example also uses HTTP, using a couple of xeokit utility functions.
+ *
+ * ````javascript
+ * import {utils} from "xeokit-sdk.es.js";
+ *
+ * class MyDataSource {
+ * 
+ *      constructor() {
+ *      }
+ * 
+ *      // Gets the contents of the given .bim file in a JSON object
+ *      getDotBIM(src, ok, error) {
+ *          utils.loadJSON(dotBIMSrc,
+ *             (json) => {
+ *                 ok(json);
+ *             },
+ *             function (errMsg) {
+ *                 error(errMsg);
+ *             });
+ *      }
+ * }
+ *
+ * const dotBIMLoader2 = new DotBIMLoaderPlugin(viewer, {
+ *       dataSource: new MyDataSource()
+ * });
+ *
+ * const model5 = dotBIMLoader2.load({
+ *      id: "myModel5",
+ *      src: "House.bim"
  * });
  * ````
  * @class DotBIMLoaderPlugin
