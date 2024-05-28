@@ -186,9 +186,9 @@
 <canvas id="myNavCubeCanvas"></canvas>
 <div id="treeViewContainer"></div>
 <div class="slideout-sidebar">
-    <img class="info-icon" src="../../assets/images/bim_icon.png" style="width:280px; padding-bottom:10px;"/>
+    <img class="info-icon" src="../../assets/images/dotbim-logo.png" style="width:150px; padding-bottom:10px;"/>
     <h1>DotBIMLoaderPlugin</h1>
-    <h2>Loading an XKT model</h2>
+    <h2>Loading a .bim model</h2>
     <h3>Stats</h3>
     <ul>
         <li>
@@ -201,7 +201,8 @@
             <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html" target="_other">Viewer</a>
         </li>
         <li>
-            <a href="../../docs/class/src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin.html" target="_other">DotBIMLoaderPlugin</a>
+            <a href="../../docs/class/src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin.html"
+               target="_other">DotBIMLoaderPlugin</a>
         </li>
         <li>
             <a href="../../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html" target="_other">TreeViewPlugin</a>
@@ -222,7 +223,14 @@
 
 <script type="module">
 
-    import {Viewer, FastNavPlugin, DotBIMLoaderPlugin, NavCubePlugin, ContextMenu, TreeViewPlugin} from "../../dist/xeokit-sdk.es.js";
+    import {
+        Viewer,
+        FastNavPlugin,
+        DotBIMLoaderPlugin,
+        NavCubePlugin,
+        ContextMenu,
+        TreeViewPlugin
+    } from "../../dist/xeokit-sdk.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -272,8 +280,7 @@
                 opacity: 0.4
             }
         },
-        // includeTypes: ["IfcDoor"],
-        rotation: [-90,0,0]
+        rotation: [-90, 0, 0]
     });
 
 

@@ -6,16 +6,21 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
 /**
  * {@link Viewer} plugin that loads models from [.bim](https://dotbim.net/) format.
  *
- * * Creates an {@link Entity} representing each model it loads, which will have {@link Entity#isModel} set ````true````
+ * [<img src="https://xeokit.github.io/xeokit-sdk/assets/images/DotBIMLoaderPlugin-house.png">](https://xeokit.github.io/xeokit-sdk/examples/buildings/#dotbim_House)
+ *
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/buildings/#dotbim_House)]
+ *
+ * * Creates an {@link Entity} representing each .bim model it loads, which will have {@link Entity#isModel} set ````true````
  * and will be registered by {@link Entity#id} in {@link Scene#models}.
- * * Creates an {@link Entity} for each object within the model. Those Entities will have {@link Entity#isObject}
+ * * Creates an {@link Entity} for each object within the .bim model. Those Entities will have {@link Entity#isObject}
  * set ````true```` and will be registered by {@link Entity#id} in {@link Scene#objects}.
  * * When loading, can set the World-space position, scale and rotation of each model within World space,
  * along with initial properties for all the model's {@link Entity}s.
+ * * Supports the ability to mask which IFC types we want to load.
  *
  * ## Usage
  *
- * In the example below we'll load a house model from a [.BIM file](/assets/models/dotbim/House.bim).
+ * In the example below we'll load a house model from a [.bim file](/assets/models/dotbim/House.bim).
  *
  * This will create a bunch of {@link Entity}s that represents the model and its objects, along with
  * a {@link MetaModel} and {@link MetaObject}s that hold their metadata.
@@ -44,8 +49,7 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  *
  * //------------------------------------------------------------------------------------------------------------------
  * // 1. Create a .bim loader plugin,
- * // 2. Load a .bim building model
- * // 3. Emphasis the edges to make it look nice
+ * // 2. Load a .bim building model, emphasizing the edges to make it look nicer
  * //------------------------------------------------------------------------------------------------------------------
  *
  * // 1
@@ -248,34 +252,34 @@ export class DotBIMLoaderPlugin extends Plugin {
             const ifcBuildingStoryId = math.createUUID();
 
             const metaModelData = {
-                metaObjects: [{
-                    id: ifcProjectId,
-                    name: "Project Number",
-                    type: "IfcProject",
-                    parent: null
-                },
+                metaObjects: [
+                    {
+                        id: ifcProjectId,
+                        name: "IfcProject",
+                        type: "IfcProject",
+                        parent: null
+                    },
                     {
                         id: ifcSiteId,
-                        name: "Default",
+                        name: "IfcSite",
                         type: "IfcSite",
                         parent: ifcProjectId
                     },
                     {
                         id: ifcBuildingId,
-                        name: "",
+                        name: "IfcBuilding",
                         type: "IfcBuilding",
                         parent: ifcSiteId
                     },
                     {
                         id: ifcBuildingStoryId,
-                        name: "Level 1",
+                        name: "IfcBuildingStorey",
                         type: "IfcBuildingStorey",
                         parent: ifcBuildingId
                     }
                 ],
                 propertySets: []
             };
-
 
             for (let i = 0, len = fileData.meshes.length; i < len; i++) {
                 const dbMesh = fileData.meshes[i];
