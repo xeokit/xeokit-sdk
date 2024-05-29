@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 2598,
+  "end": 2622,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 93,
+      "line": 95,
       "column": 1
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 2598,
+    "end": 2622,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 93,
+        "line": 95,
         "column": 1
       }
     },
@@ -135,14 +135,14 @@
       {
         "type": "ExportNamedDeclaration",
         "start": 195,
-        "end": 2598,
+        "end": 2622,
         "loc": {
           "start": {
             "line": 9,
             "column": 0
           },
           "end": {
-            "line": 93,
+            "line": 95,
             "column": 1
           }
         },
@@ -151,14 +151,14 @@
         "declaration": {
           "type": "ClassDeclaration",
           "start": 202,
-          "end": 2598,
+          "end": 2622,
           "loc": {
             "start": {
               "line": 9,
               "column": 7
             },
             "end": {
-              "line": 93,
+              "line": 95,
               "column": 1
             }
           },
@@ -200,14 +200,14 @@
           "body": {
             "type": "ClassBody",
             "start": 254,
-            "end": 2598,
+            "end": 2622,
             "loc": {
               "start": {
                 "line": 9,
                 "column": 59
               },
               "end": {
-                "line": 93,
+                "line": 95,
                 "column": 1
               }
             },
@@ -818,16 +818,16 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Gets the {@link DistanceMeasurement} under construction by this DistanceMeasurementsControl, if any.\n     *\n     * @returns {null|DistanceMeasurement}\n     ",
+                    "value": "*\n     * Gets the {@link DistanceMeasurement} under construction by this DistanceMeasurementsControl, if any.\n     *\n     * @returns {null|DistanceMeasurement}\n     *\n     * @abstract\n     ",
                     "start": 2145,
-                    "end": 2314,
+                    "end": 2338,
                     "loc": {
                       "start": {
                         "line": 75,
                         "column": 4
                       },
                       "end": {
-                        "line": 79,
+                        "line": 81,
                         "column": 7
                       }
                     }
@@ -836,15 +836,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 2319,
-                "end": 2372,
+                "start": 2343,
+                "end": 2396,
                 "loc": {
                   "start": {
-                    "line": 80,
+                    "line": 82,
                     "column": 4
                   },
                   "end": {
-                    "line": 82,
+                    "line": 84,
                     "column": 5
                   }
                 },
@@ -852,15 +852,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 2323,
-                  "end": 2341,
+                  "start": 2347,
+                  "end": 2365,
                   "loc": {
                     "start": {
-                      "line": 80,
+                      "line": 82,
                       "column": 8
                     },
                     "end": {
-                      "line": 80,
+                      "line": 82,
                       "column": 26
                     },
                     "identifierName": "currentMeasurement"
@@ -875,44 +875,44 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 2344,
-                  "end": 2372,
+                  "start": 2368,
+                  "end": 2396,
                   "loc": {
                     "start": {
-                      "line": 80,
+                      "line": 82,
                       "column": 29
                     },
                     "end": {
-                      "line": 82,
+                      "line": 84,
                       "column": 5
                     }
                   },
                   "body": [
                     {
                       "type": "ReturnStatement",
-                      "start": 2354,
-                      "end": 2366,
+                      "start": 2378,
+                      "end": 2390,
                       "loc": {
                         "start": {
-                          "line": 81,
+                          "line": 83,
                           "column": 8
                         },
                         "end": {
-                          "line": 81,
+                          "line": 83,
                           "column": 20
                         }
                       },
                       "argument": {
                         "type": "NullLiteral",
-                        "start": 2361,
-                        "end": 2365,
+                        "start": 2385,
+                        "end": 2389,
                         "loc": {
                           "start": {
-                            "line": 81,
+                            "line": 83,
                             "column": 15
                           },
                           "end": {
-                            "line": 81,
+                            "line": 83,
                             "column": 19
                           }
                         }
@@ -925,16 +925,16 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n     * Gets the {@link DistanceMeasurement} under construction by this DistanceMeasurementsControl, if any.\n     *\n     * @returns {null|DistanceMeasurement}\n     ",
+                    "value": "*\n     * Gets the {@link DistanceMeasurement} under construction by this DistanceMeasurementsControl, if any.\n     *\n     * @returns {null|DistanceMeasurement}\n     *\n     * @abstract\n     ",
                     "start": 2145,
-                    "end": 2314,
+                    "end": 2338,
                     "loc": {
                       "start": {
                         "line": 75,
                         "column": 4
                       },
                       "end": {
-                        "line": 79,
+                        "line": 81,
                         "column": 7
                       }
                     }
@@ -944,15 +944,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Destroys this DistanceMeasurementsControl.\n     *\n     * Destroys any {@link DistanceMeasurement} under construction by this DistanceMeasurementsControl.\n     *\n     * @abstract\n     ",
-                    "start": 2378,
-                    "end": 2574,
+                    "start": 2402,
+                    "end": 2598,
                     "loc": {
                       "start": {
-                        "line": 84,
+                        "line": 86,
                         "column": 4
                       },
                       "end": {
-                        "line": 90,
+                        "line": 92,
                         "column": 7
                       }
                     }
@@ -961,15 +961,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 2579,
-                "end": 2596,
+                "start": 2603,
+                "end": 2620,
                 "loc": {
                   "start": {
-                    "line": 91,
+                    "line": 93,
                     "column": 4
                   },
                   "end": {
-                    "line": 92,
+                    "line": 94,
                     "column": 5
                   }
                 },
@@ -977,15 +977,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 2579,
-                  "end": 2586,
+                  "start": 2603,
+                  "end": 2610,
                   "loc": {
                     "start": {
-                      "line": 91,
+                      "line": 93,
                       "column": 4
                     },
                     "end": {
-                      "line": 91,
+                      "line": 93,
                       "column": 11
                     },
                     "identifierName": "destroy"
@@ -1001,15 +1001,15 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 2589,
-                  "end": 2596,
+                  "start": 2613,
+                  "end": 2620,
                   "loc": {
                     "start": {
-                      "line": 91,
+                      "line": 93,
                       "column": 14
                     },
                     "end": {
-                      "line": 92,
+                      "line": 94,
                       "column": 5
                     }
                   },
@@ -1020,15 +1020,15 @@
                   {
                     "type": "CommentBlock",
                     "value": "*\n     * Destroys this DistanceMeasurementsControl.\n     *\n     * Destroys any {@link DistanceMeasurement} under construction by this DistanceMeasurementsControl.\n     *\n     * @abstract\n     ",
-                    "start": 2378,
-                    "end": 2574,
+                    "start": 2402,
+                    "end": 2598,
                     "loc": {
                       "start": {
-                        "line": 84,
+                        "line": 86,
                         "column": 4
                       },
                       "end": {
-                        "line": 90,
+                        "line": 92,
                         "column": 7
                       }
                     }
@@ -1194,16 +1194,16 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Gets the {@link DistanceMeasurement} under construction by this DistanceMeasurementsControl, if any.\n     *\n     * @returns {null|DistanceMeasurement}\n     ",
+      "value": "*\n     * Gets the {@link DistanceMeasurement} under construction by this DistanceMeasurementsControl, if any.\n     *\n     * @returns {null|DistanceMeasurement}\n     *\n     * @abstract\n     ",
       "start": 2145,
-      "end": 2314,
+      "end": 2338,
       "loc": {
         "start": {
           "line": 75,
           "column": 4
         },
         "end": {
-          "line": 79,
+          "line": 81,
           "column": 7
         }
       }
@@ -1211,15 +1211,15 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Destroys this DistanceMeasurementsControl.\n     *\n     * Destroys any {@link DistanceMeasurement} under construction by this DistanceMeasurementsControl.\n     *\n     * @abstract\n     ",
-      "start": 2378,
-      "end": 2574,
+      "start": 2402,
+      "end": 2598,
       "loc": {
         "start": {
-          "line": 84,
+          "line": 86,
           "column": 4
         },
         "end": {
-          "line": 90,
+          "line": 92,
           "column": 7
         }
       }
@@ -2626,16 +2626,16 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n     * Gets the {@link DistanceMeasurement} under construction by this DistanceMeasurementsControl, if any.\n     *\n     * @returns {null|DistanceMeasurement}\n     ",
+      "value": "*\n     * Gets the {@link DistanceMeasurement} under construction by this DistanceMeasurementsControl, if any.\n     *\n     * @returns {null|DistanceMeasurement}\n     *\n     * @abstract\n     ",
       "start": 2145,
-      "end": 2314,
+      "end": 2338,
       "loc": {
         "start": {
           "line": 75,
           "column": 4
         },
         "end": {
-          "line": 79,
+          "line": 81,
           "column": 7
         }
       }
@@ -2653,15 +2653,15 @@
         "binop": null
       },
       "value": "get",
-      "start": 2319,
-      "end": 2322,
+      "start": 2343,
+      "end": 2346,
       "loc": {
         "start": {
-          "line": 80,
+          "line": 82,
           "column": 4
         },
         "end": {
-          "line": 80,
+          "line": 82,
           "column": 7
         }
       }
@@ -2679,15 +2679,15 @@
         "binop": null
       },
       "value": "currentMeasurement",
-      "start": 2323,
-      "end": 2341,
+      "start": 2347,
+      "end": 2365,
       "loc": {
         "start": {
-          "line": 80,
+          "line": 82,
           "column": 8
         },
         "end": {
-          "line": 80,
+          "line": 82,
           "column": 26
         }
       }
@@ -2704,15 +2704,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2341,
-      "end": 2342,
+      "start": 2365,
+      "end": 2366,
       "loc": {
         "start": {
-          "line": 80,
+          "line": 82,
           "column": 26
         },
         "end": {
-          "line": 80,
+          "line": 82,
           "column": 27
         }
       }
@@ -2729,15 +2729,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2342,
-      "end": 2343,
+      "start": 2366,
+      "end": 2367,
       "loc": {
         "start": {
-          "line": 80,
+          "line": 82,
           "column": 27
         },
         "end": {
-          "line": 80,
+          "line": 82,
           "column": 28
         }
       }
@@ -2754,15 +2754,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2344,
-      "end": 2345,
+      "start": 2368,
+      "end": 2369,
       "loc": {
         "start": {
-          "line": 80,
+          "line": 82,
           "column": 29
         },
         "end": {
-          "line": 80,
+          "line": 82,
           "column": 30
         }
       }
@@ -2782,15 +2782,15 @@
         "updateContext": null
       },
       "value": "return",
-      "start": 2354,
-      "end": 2360,
+      "start": 2378,
+      "end": 2384,
       "loc": {
         "start": {
-          "line": 81,
+          "line": 83,
           "column": 8
         },
         "end": {
-          "line": 81,
+          "line": 83,
           "column": 14
         }
       }
@@ -2810,15 +2810,15 @@
         "updateContext": null
       },
       "value": "null",
-      "start": 2361,
-      "end": 2365,
+      "start": 2385,
+      "end": 2389,
       "loc": {
         "start": {
-          "line": 81,
+          "line": 83,
           "column": 15
         },
         "end": {
-          "line": 81,
+          "line": 83,
           "column": 19
         }
       }
@@ -2836,15 +2836,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2365,
-      "end": 2366,
+      "start": 2389,
+      "end": 2390,
       "loc": {
         "start": {
-          "line": 81,
+          "line": 83,
           "column": 19
         },
         "end": {
-          "line": 81,
+          "line": 83,
           "column": 20
         }
       }
@@ -2861,15 +2861,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2371,
-      "end": 2372,
+      "start": 2395,
+      "end": 2396,
       "loc": {
         "start": {
-          "line": 82,
+          "line": 84,
           "column": 4
         },
         "end": {
-          "line": 82,
+          "line": 84,
           "column": 5
         }
       }
@@ -2877,15 +2877,15 @@
     {
       "type": "CommentBlock",
       "value": "*\n     * Destroys this DistanceMeasurementsControl.\n     *\n     * Destroys any {@link DistanceMeasurement} under construction by this DistanceMeasurementsControl.\n     *\n     * @abstract\n     ",
-      "start": 2378,
-      "end": 2574,
+      "start": 2402,
+      "end": 2598,
       "loc": {
         "start": {
-          "line": 84,
+          "line": 86,
           "column": 4
         },
         "end": {
-          "line": 90,
+          "line": 92,
           "column": 7
         }
       }
@@ -2903,15 +2903,15 @@
         "binop": null
       },
       "value": "destroy",
-      "start": 2579,
-      "end": 2586,
+      "start": 2603,
+      "end": 2610,
       "loc": {
         "start": {
-          "line": 91,
+          "line": 93,
           "column": 4
         },
         "end": {
-          "line": 91,
+          "line": 93,
           "column": 11
         }
       }
@@ -2928,15 +2928,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2586,
-      "end": 2587,
+      "start": 2610,
+      "end": 2611,
       "loc": {
         "start": {
-          "line": 91,
+          "line": 93,
           "column": 11
         },
         "end": {
-          "line": 91,
+          "line": 93,
           "column": 12
         }
       }
@@ -2953,15 +2953,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2587,
-      "end": 2588,
+      "start": 2611,
+      "end": 2612,
       "loc": {
         "start": {
-          "line": 91,
+          "line": 93,
           "column": 12
         },
         "end": {
-          "line": 91,
+          "line": 93,
           "column": 13
         }
       }
@@ -2978,15 +2978,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2589,
-      "end": 2590,
+      "start": 2613,
+      "end": 2614,
       "loc": {
         "start": {
-          "line": 91,
+          "line": 93,
           "column": 14
         },
         "end": {
-          "line": 91,
+          "line": 93,
           "column": 15
         }
       }
@@ -3003,15 +3003,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2595,
-      "end": 2596,
+      "start": 2619,
+      "end": 2620,
       "loc": {
         "start": {
-          "line": 92,
+          "line": 94,
           "column": 4
         },
         "end": {
-          "line": 92,
+          "line": 94,
           "column": 5
         }
       }
@@ -3028,15 +3028,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 2597,
-      "end": 2598,
+      "start": 2621,
+      "end": 2622,
       "loc": {
         "start": {
-          "line": 93,
+          "line": 95,
           "column": 0
         },
         "end": {
-          "line": 93,
+          "line": 95,
           "column": 1
         }
       }
@@ -3054,15 +3054,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 2598,
-      "end": 2598,
+      "start": 2622,
+      "end": 2622,
       "loc": {
         "start": {
-          "line": 93,
+          "line": 95,
           "column": 1
         },
         "end": {
-          "line": 93,
+          "line": 95,
           "column": 1
         }
       }

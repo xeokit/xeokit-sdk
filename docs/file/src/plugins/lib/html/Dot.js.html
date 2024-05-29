@@ -251,12 +251,14 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils-texturetranscoders-ktx2texturetranscoder">viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html">KTX2TextureTranscoder</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-utils">viewer/utils</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-os">os</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/plugins/lib/html/Dot.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/** @private */
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { os } from &quot;../../../viewer/utils/os.js&quot;;
+/** @private */
 class Dot {
 
     constructor(parentElement, cfg = {}) {
@@ -355,11 +357,42 @@ class Dot {
         }
 
         if (cfg.onContextMenu) {
-            dotClickable.addEventListener(&apos;contextmenu&apos;, (event) =&gt; {
-                cfg.onContextMenu(event, this);
-                event.preventDefault();
-                event.stopPropagation();
-            });
+            if(os.isIphoneSafari()){
+                dotClickable.addEventListener(&apos;touchstart&apos;, (event) =&gt; {
+                    event.preventDefault();
+                    if(this._timeout){
+                        clearTimeout(this._timeout);
+                        this._timeout = null;
+                    }
+                    this._timeout = setTimeout(() =&gt; {
+                        event.clientX = event.touches[0].clientX;
+                        event.clientY = event.touches[0].clientY;
+                        cfg.onContextMenu(event, this);
+                        clearTimeout(this._timeout);
+                        this._timeout = null;
+                    }, 500);
+                })
+
+                dotClickable.addEventListener(&apos;touchend&apos;, (event) =&gt; {
+                    event.preventDefault();
+                    //stops short touches from calling the timeout
+                    if(this._timeout) {
+                        clearTimeout(this._timeout);
+                        this._timeout = null;
+                    }
+                } )
+
+            }
+            else {
+                dotClickable.addEventListener(&apos;contextmenu&apos;, (event) =&gt; {
+                    console.log(event);
+                    cfg.onContextMenu(event, this);
+                    event.preventDefault();
+                    event.stopPropagation();
+                    console.log(&quot;Label context menu&quot;)
+                });
+            }
+            
         }
         
         this.setPos(cfg.x || 0, cfg.y || 0);
@@ -408,7 +441,7 @@ class Dot {
     }
 
     setClickable(clickable) {
-        this._dotClickable.style[&quot;pointer-events&quot;] = (!!clickable) ? &quot;all&quot; : &quot;none&quot;;
+        this._dotClickable.style[&quot;pointer-events&quot;] = (clickable) ? &quot;all&quot; : &quot;none&quot;;
     }
 
     setHighlighted(highlighted) {

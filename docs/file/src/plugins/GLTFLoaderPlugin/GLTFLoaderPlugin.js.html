@@ -251,6 +251,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils-texturetranscoders-ktx2texturetranscoder">viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html">KTX2TextureTranscoder</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-utils">viewer/utils</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-os">os</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -508,6 +509,7 @@ class GLTFLoaderPlugin extends Plugin {
      * represent the returned model. Set false to always use vertex buffer objects (VBOs). Note that DTX is only applicable
      * to non-textured triangle meshes, and that VBOs are always used for meshes that have textures, line segments, or point
      * primitives. Only works while {@link DTX#enabled} is also ````true````.
+     * @param {String} [params.entityId] When supplied, causes the entire model to be loaded into a single {@link Entity} that gets this ID.
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
      */
     load(params = {}) {

@@ -251,6 +251,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils-texturetranscoders-ktx2texturetranscoder">viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html">KTX2TextureTranscoder</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-utils">viewer/utils</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-os">os</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -399,6 +400,7 @@ function parseGLTF(plugin, src, gltf, metaModelJSON, options, sceneModel, ok) {
     }).then((gltfData) =&gt; {
         const ctx = {
             src: src,
+            entityId: options.entityId,
             metaModelCorrections: metaModelJSON ? getMetaModelCorrections(metaModelJSON) : null,
             loadBuffer: options.loadBuffer,
             basePath: options.basePath,
@@ -844,29 +846,9 @@ function loadNode(ctx, node, depth, matrix) {
                     meshCfg.origin = origin;
                 }
 
-                // if (createEntity) {
-                //     if (createEntity.colorize) {
-                //         meshCfg.color = createEntity.colorize;
-                //     }
-                //     if (createEntity.opacity !== undefined &amp;&amp; createEntity.opacity !== null) {
-                //         meshCfg.opacity = createEntity.opacity;
-                //     }
-                // }
-
                 sceneModel.createMesh(meshCfg);
                 deferredMeshIds.push(meshCfg.id);
             }
-            // if (createEntity) {
-            //     sceneModel.createEntity(utils.apply(createEntity, {
-            //         meshIds: deferredMeshIds,
-            //         isObject: true
-            //     }));
-            // } else {
-            //     sceneModel.createEntity({
-            //         meshIds: deferredMeshIds,
-            //         isObject: true
-            //     });
-            // }
         }
     }
 
@@ -880,48 +862,62 @@ function loadNode(ctx, node, depth, matrix) {
 
     // Post-order visit scene node
 
-    const nodeName = node.name;
-    if (((nodeName !== undefined &amp;&amp; nodeName !== null) || depth === 0) &amp;&amp; deferredMeshIds.length &gt; 0) {
-        if (nodeName === undefined || nodeName === null) {
-            ctx.log(`Warning: &apos;name&apos; properties not found on glTF scene nodes - will randomly-generate object IDs in XKT`);
-        }
-        let entityId = nodeName; // Fall back on generated ID when `name` not found on glTF scene node(s)
-        // if (!!entityId &amp;&amp; sceneModel.entities[entityId]) {
-        //     ctx.log(`Warning: Two or more glTF nodes found with same &apos;name&apos; attribute: &apos;${nodeName} - will randomly-generating an object ID in XKT`);
-        // }
-        // while (!entityId || sceneModel.entities[entityId]) {
-        //     entityId = &quot;entity-&quot; + ctx.nextId++;
-        // }
-        if (ctx.metaModelCorrections) {
-            // Merging meshes into XKTObjects that map to metaobjects
-            const rootMetaObject = ctx.metaModelCorrections.eachChildRoot[entityId];
-            if (rootMetaObject) {
-                const rootMetaObjectStats = ctx.metaModelCorrections.eachRootStats[rootMetaObject.id];
-                rootMetaObjectStats.countChildren++;
-                if (rootMetaObjectStats.countChildren &gt;= rootMetaObjectStats.numChildren) {
-                    sceneModel.createEntity({
-                        id: rootMetaObject.id,
-                        meshIds: deferredMeshIds
-                    });
-                    deferredMeshIds.length = 0;
-                }
-            } else {
-                const metaObject = ctx.metaModelCorrections.metaObjectsMap[entityId];
-                if (metaObject) {
-                    sceneModel.createEntity({
-                        id: entityId,
-                        meshIds: deferredMeshIds
-                    });
-                    deferredMeshIds.length = 0;
-                }
-            }
-        } else {
-            // Create an XKTObject from the meshes at each named glTF node, don&apos;t care about metaobjects
+    if (ctx.entityId) {
+        if (depth ===0) {
             sceneModel.createEntity({
-                id: entityId,
-                meshIds: deferredMeshIds
+                id: ctx.entityId,
+                meshIds: deferredMeshIds,
+                isObject: true
             });
             deferredMeshIds.length = 0;
+        }
+    } else {
+        const nodeName = node.name;
+        if (((nodeName !== undefined &amp;&amp; nodeName !== null) || depth === 0) &amp;&amp; deferredMeshIds.length &gt; 0) {
+            if (nodeName === undefined || nodeName === null) {
+                ctx.log(`Warning: &apos;name&apos; properties not found on glTF scene nodes - will randomly-generate object IDs in XKT`);
+            }
+            let entityId = nodeName; // Fall back on generated ID when `name` not found on glTF scene node(s)
+            // if (!!entityId &amp;&amp; sceneModel.entities[entityId]) {
+            //     ctx.log(`Warning: Two or more glTF nodes found with same &apos;name&apos; attribute: &apos;${nodeName} - will randomly-generating an object ID in XKT`);
+            // }
+            // while (!entityId || sceneModel.entities[entityId]) {
+            //     entityId = &quot;entity-&quot; + ctx.nextId++;
+            // }
+            if (ctx.metaModelCorrections) {
+                // Merging meshes into XKTObjects that map to metaobjects
+                const rootMetaObject = ctx.metaModelCorrections.eachChildRoot[entityId];
+                if (rootMetaObject) {
+                    const rootMetaObjectStats = ctx.metaModelCorrections.eachRootStats[rootMetaObject.id];
+                    rootMetaObjectStats.countChildren++;
+                    if (rootMetaObjectStats.countChildren &gt;= rootMetaObjectStats.numChildren) {
+                        sceneModel.createEntity({
+                            id: rootMetaObject.id,
+                            meshIds: deferredMeshIds,
+                            isObject: true
+                        });
+                        deferredMeshIds.length = 0;
+                    }
+                } else {
+                    const metaObject = ctx.metaModelCorrections.metaObjectsMap[entityId];
+                    if (metaObject) {
+                        sceneModel.createEntity({
+                            id: entityId,
+                            meshIds: deferredMeshIds,
+                            isObject: true
+                        });
+                        deferredMeshIds.length = 0;
+                    }
+                }
+            } else {
+                // Create an XKTObject from the meshes at each named glTF node, don&apos;t care about metaobjects
+                sceneModel.createEntity({
+                    id: entityId,
+                    meshIds: deferredMeshIds,
+                    isObject: true
+                });
+                deferredMeshIds.length = 0;
+            }
         }
     }
 }

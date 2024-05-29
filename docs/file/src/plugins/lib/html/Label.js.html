@@ -251,12 +251,14 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils-texturetranscoders-ktx2texturetranscoder">viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html">KTX2TextureTranscoder</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-utils">viewer/utils</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-os">os</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/plugins/lib/html/Label.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/** @private */
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { os } from &quot;../../../viewer/utils/os.js&quot;;
+/** @private */
 class Label {
 
     constructor(parentElement, cfg = {}) {
@@ -271,6 +273,7 @@ class Label {
 
         this._label = document.createElement(&apos;div&apos;);
         this._label.className += this._label.className ? &apos; viewer-ruler-label&apos; : &apos;viewer-ruler-label&apos;;
+        this._timeout = null;
 
         var label = this._label;
         var style = label.style;
@@ -342,12 +345,42 @@ class Label {
         }
 
         if (cfg.onContextMenu) {
-            label.addEventListener(&apos;contextmenu&apos;, (event) =&gt; {
-                cfg.onContextMenu(event, this);
-                event.preventDefault();
-                event.stopPropagation();
-                console.log(&quot;Label context menu&quot;)
-            });
+            if(os.isIphoneSafari()){
+                label.addEventListener(&apos;touchstart&apos;, (event) =&gt; {
+                    event.preventDefault();
+                    if(this._timeout){
+                        clearTimeout(this._timeout);
+                        this._timeout = null;
+                    }
+                    this._timeout = setTimeout(() =&gt; {
+                        event.clientX = event.touches[0].clientX;
+                        event.clientY = event.touches[0].clientY;
+                        cfg.onContextMenu(event, this);
+                        clearTimeout(this._timeout);
+                        this._timeout = null;
+                    }, 500);
+                })
+
+                label.addEventListener(&apos;touchend&apos;, (event) =&gt; {
+                    event.preventDefault();
+                    //stops short touches from calling the timeout
+                    if(this._timeout) {
+                        clearTimeout(this._timeout);
+                        this._timeout = null;
+                    }
+                } )
+
+            }
+            else {
+                label.addEventListener(&apos;contextmenu&apos;, (event) =&gt; {
+                    console.log(event);
+                    cfg.onContextMenu(event, this);
+                    event.preventDefault();
+                    event.stopPropagation();
+                    console.log(&quot;Label context menu&quot;)
+                });
+            }
+            
         }
     }
 
@@ -422,7 +455,14 @@ class Label {
     }
 
     setClickable(clickable) {
-        this._label.style[&quot;pointer-events&quot;] = (!!clickable) ? &quot;all&quot; : &quot;none&quot;;
+        this._label.style[&quot;pointer-events&quot;] = (clickable) ? &quot;all&quot; : &quot;none&quot;;
+    }
+
+    setPrefix(prefix) {
+        if(this._prefix === prefix){
+            return;
+        }
+        this._prefix = prefix;
     }
 
     destroy() {
@@ -430,6 +470,8 @@ class Label {
             this._label.parentElement.removeChild(this._label);
         }
     }
+
+    
 }
 
 export {Label};

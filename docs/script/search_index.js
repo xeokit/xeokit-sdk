@@ -1302,6 +1302,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/utils/os.js~os",
+    "variable/index.html#static-variable-os",
+    "<span>os</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/utils/os.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/lines/rebucketpositions.js~rebucketpositions",
     "function/index.html#static-function-rebucketPositions",
     "<span>rebucketPositions</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/model/dtx/lines/rebucketPositions.js</span>",
@@ -2886,6 +2892,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#lengthlabelenabled",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-set-lengthLabelEnabled",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#lengthLabelEnabled",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#lengthlabelenabled",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-get-lengthLabelEnabled",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#lengthLabelEnabled",
+    "member"
+  ],
+  [
     "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#origin",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-get-origin",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#origin",
@@ -2970,6 +2988,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#xlabelenabled",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-set-xLabelEnabled",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#xLabelEnabled",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#xlabelenabled",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-get-xLabelEnabled",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#xLabelEnabled",
+    "member"
+  ],
+  [
     "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#yaxisvisible",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-set-yAxisVisible",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#yAxisVisible",
@@ -2982,6 +3012,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#ylabelenabled",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-set-yLabelEnabled",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#yLabelEnabled",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#ylabelenabled",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-get-yLabelEnabled",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#yLabelEnabled",
+    "member"
+  ],
+  [
     "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#zaxisvisible",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-set-zAxisVisible",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#zAxisVisible",
@@ -2991,6 +3033,18 @@ window.esdocSearchIndex = [
     "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#zaxisvisible",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-get-zAxisVisible",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#zAxisVisible",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#zlabelenabled",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-set-zLabelEnabled",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#zLabelEnabled",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#zlabelenabled",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-get-zLabelEnabled",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#zLabelEnabled",
     "member"
   ],
   [
@@ -3180,6 +3234,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#defaultlengthlabelenabled",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-member-defaultLengthLabelEnabled",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#defaultLengthLabelEnabled",
+    "member"
+  ],
+  [
     "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#defaultoriginvisible",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-member-defaultOriginVisible",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#defaultOriginVisible",
@@ -3210,15 +3270,33 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#defaultxlabelenabled",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-member-defaultXLabelEnabled",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#defaultXLabelEnabled",
+    "member"
+  ],
+  [
     "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#defaultyaxisvisible",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-member-defaultYAxisVisible",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#defaultYAxisVisible",
     "member"
   ],
   [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#defaultylabelenabled",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-member-defaultYLabelEnabled",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#defaultYLabelEnabled",
+    "member"
+  ],
+  [
     "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#defaultzaxisvisible",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-member-defaultZAxisVisible",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#defaultZAxisVisible",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurementsplugin.js~distancemeasurementsplugin#defaultzlabelenabled",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-member-defaultZLabelEnabled",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin#defaultZLabelEnabled",
     "member"
   ],
   [
@@ -15885,6 +15963,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/webglinfo.js",
     "file/src/viewer/scene/webglInfo.js.html",
     "src/viewer/scene/webglInfo.js",
+    "file"
+  ],
+  [
+    "src/viewer/utils/os.js",
+    "file/src/viewer/utils/os.js.html",
+    "src/viewer/utils/os.js",
     "file"
   ]
 ]

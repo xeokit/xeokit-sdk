@@ -251,6 +251,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils-texturetranscoders-ktx2texturetranscoder">viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html">KTX2TextureTranscoder</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-utils">viewer/utils</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-os">os</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -454,7 +455,7 @@ class Marker extends Component {
                 return;
             }
             if (this._onEntityDestroyed !== null) {
-                this._entity.off(this._onEntityDestroyed);
+                this._entity.model.off(this._onEntityDestroyed);
                 this._onEntityDestroyed = null;
             }
             if (this._onEntityModelDestroyed !== null) {
@@ -470,7 +471,7 @@ class Marker extends Component {
                     this._onEntityModelDestroyed = null;
                 });
             } else {
-                this._onEntityDestroyed = this._entity.on(&quot;destroyed&quot;, () =&gt; {
+                this._onEntityDestroyed = this._entity.model.on(&quot;destroyed&quot;, () =&gt; {
                     this._entity = null;
                     this._onEntityDestroyed = null;
                 });

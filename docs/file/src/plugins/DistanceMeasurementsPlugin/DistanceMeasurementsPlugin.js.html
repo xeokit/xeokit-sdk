@@ -251,6 +251,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils-texturetranscoders-ktx2texturetranscoder">viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html">KTX2TextureTranscoder</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-utils">viewer/utils</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-os">os</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -534,6 +535,10 @@ class DistanceMeasurementsPlugin extends Plugin {
      * @param {boolean} [cfg.defaultTargetVisible=true] The default value of the DistanceMeasurements `targetVisible` property.
      * @param {boolean} [cfg.defaultWireVisible=true] The default value of the DistanceMeasurements `wireVisible` property.
      * @param {boolean} [cfg.defaultLabelsVisible=true] The default value of the DistanceMeasurements `labelsVisible` property.
+     * @param {boolean} [cfg.defaultXLabelEnabled=true] The default value of the DistanceMeasurements `xLabelEnabled` property.
+     * @param {boolean} [cfg.defaultYLabelEnabled=true] The default value of the DistanceMeasurements `yLabelEnabled` property.
+     * @param {boolean} [cfg.defaultZLabelEnabled=true] The default value of the DistanceMeasurements `zLabelEnabled` property.
+     * @param {boolean} [cfg.defaultLengthLabelEnabled=true] The default value of the DistanceMeasurements `lengthLabelEnabled` property.
      * @param {boolean} [cfg.defaultAxisVisible=true] The default value of the DistanceMeasurements `axisVisible` property.
      * @param {boolean} [cfg.defaultXAxisVisible=true] The default value of the DistanceMeasurements `xAxisVisible` property.
      * @param {boolean} [cfg.defaultYAxisVisible=true] The default value of the DistanceMeasurements `yAxisVisible` property.
@@ -556,11 +561,14 @@ class DistanceMeasurementsPlugin extends Plugin {
         this._measurements = {};
 
         this.labelMinAxisLength = cfg.labelMinAxisLength;
-
         this.defaultVisible = cfg.defaultVisible !== false;
         this.defaultOriginVisible = cfg.defaultOriginVisible !== false;
         this.defaultTargetVisible = cfg.defaultTargetVisible !== false;
         this.defaultWireVisible = cfg.defaultWireVisible !== false;
+        this.defaultXLabelEnabled = cfg.defaultXLabelEnabled !== false;
+        this.defaultYLabelEnabled = cfg.defaultYLabelEnabled !== false;
+        this.defaultZLabelEnabled = cfg.defaultZLabelEnabled !== false;
+        this.defaultLengthLabelEnabled = cfg.defaultLengthLabelEnabled !== false;
         this.defaultLabelsVisible = cfg.defaultLabelsVisible !== false;
         this.defaultAxisVisible = cfg.defaultAxisVisible !== false;
         this.defaultXAxisVisible = cfg.defaultXAxisVisible !== false;
@@ -689,7 +697,12 @@ class DistanceMeasurementsPlugin extends Plugin {
      * @param {Boolean} [params.xAxisVisible=true] Whether to initially show the X-axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
      * @param {Boolean} [params.yAxisVisible=true] Whether to initially show the Y-axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
      * @param {Boolean} [params.zAxisVisible=true] Whether to initially show the Z-axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
+     * @param {Boolean} [params.xLabelEnabled=true] Whether to initially show the x label.
+     * @param {Boolean} [params.yLabelEnabled=true] Whether to initially show the y label.
+     * @param {Boolean} [params.zLabelEnabled=true] Whether to initially show the z label.
+     * @param {Boolean} [params.lengthLabelEnabled=true] Whether to initially show the length label.
      * @param {Boolean} [params.labelsVisible=true] Whether to initially show the labels.
+     * @param {Boolean} [params.lengthLabelVisible=true] Whether to initially show the labels.
      * @param {string} [params.color] The color of the length dot, wire and label.
      * @param {Boolean} [params.labelsOnWires=true] Determines if labels will be set on wires or one below the other.
      * @returns {DistanceMeasurement} The new {@link DistanceMeasurement}.
@@ -719,6 +732,10 @@ class DistanceMeasurementsPlugin extends Plugin {
             xAxisVisible: params.xAxisVisible !== false &amp;&amp; this.defaultXAxisVisible !== false,
             yAxisVisible: params.yAxisVisible !== false &amp;&amp; this.defaultYAxisVisible !== false,
             zAxisVisible: params.zAxisVisible !== false &amp;&amp; this.defaultZAxisVisible !== false,
+            xLabelEnabled: params.xLabelEnabled !== false &amp;&amp; this.defaultXLabelEnabled !== false,
+            yLabelEnabled: params.yLabelEnabled !== false &amp;&amp; this.defaultYLabelEnabled !== false,
+            zLabelEnabled: params.zLabelEnabled !== false &amp;&amp; this.defaultZLabelEnabled !== false,
+            lengthLabelEnabled: params.lengthLabelEnabled !== false &amp;&amp; this.defaultLengthLabelEnabled !== false,
             labelsVisible: params.labelsVisible !== false &amp;&amp; this.defaultLabelsVisible !== false,
             originVisible: params.originVisible,
             targetVisible: params.targetVisible,
@@ -729,6 +746,7 @@ class DistanceMeasurementsPlugin extends Plugin {
             onContextMenu: this._onContextMenu
         });
         this._measurements[measurement.id] = measurement;
+        measurement.clickable = true;
         measurement.on(&quot;destroyed&quot;, () =&gt; {
             delete this._measurements[measurement.id];
         });

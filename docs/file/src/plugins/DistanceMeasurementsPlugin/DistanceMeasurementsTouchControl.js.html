@@ -251,6 +251,7 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils-texturetranscoders-ktx2texturetranscoder">viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html">KTX2TextureTranscoder</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-utils">viewer/utils</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-os">os</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -924,6 +925,10 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                         this._currentDistanceMeasurement.targetVisible = true;
                         this._currentDistanceMeasurement.wireVisible = true;
                         this._currentDistanceMeasurement.labelsVisible = true;
+                        this._currentDistanceMeasurement.xAxisVisible = true;
+                        this._currentDistanceMeasurement.yAxisVisible = true;
+                        this._currentDistanceMeasurement.zAxisVisible = true;
+                        this._currentDistanceMeasurement.clickable = true;
                         this.distanceMeasurementsPlugin.fire(&quot;measurementEnd&quot;, this._currentDistanceMeasurement);
                         this._currentDistanceMeasurement = null;
                     } else {
@@ -939,6 +944,7 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
                     break;
 
                 case WAITING_FOR_TARGET_LONG_TOUCH_END:
+                    console.log(&apos;long touch&apos;);
                     if (this.pointerLens) {
                         this.pointerLens.visible = false;
                     }
