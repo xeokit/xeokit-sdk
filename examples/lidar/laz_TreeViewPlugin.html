@@ -230,29 +230,23 @@
 
     const lasLoader = new LASLoaderPlugin(viewer);
 
-    const sceneModel = lasLoader.load({
+    const sceneModel = lasLoader.load({ // Creates a SceneModel with ID "myScanModel"
         id: "myScanModel",
         src: "../../assets/models/las/Nalls_Pumpkin_Hill.laz",
         rotation: [-90, 0, 0],
 
-        entityId: "3toKckUfH2jBmd$7uhJHa4",
+        entityId: "3toKckUfH2jBmd$7uhJHa4", // Creates an Entity with this ID
 
-        metaModelJSON: {
-            "id": "3gh3gjh4jhgj4g3hgg32j",
-            "projectId": "3toKckUfH2jBmd$7uhJHa6",
-            "author": "NA",
-            "createdAt": "2023-01-19T01:36:20",
-            "schema": "NA",
-            "creatingApplication": "NA",
+        metaModelJSON: { // Creates a MetaModel with ID "myScanModel"
             "metaObjects": [
                 {
-                    "id": "3toKckUfH2jBmd$7uhJHa6",
+                    "id": "3toKckUfH2jBmd$7uhJHa6", // Creates a MetaObject with this ID
                     "name": "My Project",
                     "type": "Default",
                     "parent": null
                 },
                 {
-                    "id": "3toKckUfH2jBmd$7uhJHa4",
+                    "id": "3toKckUfH2jBmd$7uhJHa4", // Creates a MetaObject with this ID (same ID as our Entity)
                     "name": "My Scan",
                     "type": "Default",
                     "parent": "3toKckUfH2jBmd$7uhJHa6"
