@@ -13,6 +13,13 @@ const hex2rgb = function(color) {
     return [ rgb(0), rgb(2), rgb(4) ];
 };
 
+const transformToNode = function(from, to, vec) {
+    const fromRec = from.getBoundingClientRect();
+    const toRec = to.getBoundingClientRect();
+    vec[0] += fromRec.left - toRec.left;
+    vec[1] += fromRec.top  - toRec.top;
+};
+
 const triangulateEarClipping = function(planeCoords) {
 
     const polygonVertices = [ ];
@@ -130,10 +137,8 @@ const draggableDot3D = function(handleMouseEvents, handleTouchEvents, viewer, wo
     };
 
     const onChange = event => {
-        const canvasPos = math.vec2();
-        const rect = canvas.getBoundingClientRect();
-        canvasPos[0] = event.clientX - rect.left;
-        canvasPos[1] = event.clientY - rect.top;
+        const canvasPos = math.vec2([ event.clientX, event.clientY ]);
+        transformToNode(canvas.ownerDocument.body, canvas, canvasPos);
 
         const worldPos = pickWorldPos(canvasPos);
         marker.worldPos = worldPos;
@@ -228,15 +233,16 @@ const draggableDot3D = function(handleMouseEvents, handleTouchEvents, viewer, wo
         };
     }
 
-    const dot = new Dot(canvas.ownerDocument.body, dotCfg);
+    const dotParent = canvas.ownerDocument.body;
+    const dot = new Dot(dotParent, dotCfg);
 
     const idleOpacity = 0.5;
     dot.setOpacity(idleOpacity);
 
     const updateDotPos = function() {
-        const rect = canvas.getBoundingClientRect();
-        const canvasPos = marker.canvasPos;
-        dot.setPos(rect.left + canvasPos[0], rect.top  + canvasPos[1]);
+        const pos = marker.canvasPos.slice();
+        transformToNode(canvas, dotParent, pos);
+        dot.setPos(pos[0], pos[1]);
     };
 
     marker.worldPos = worldPos;
@@ -261,11 +267,10 @@ const draggableDot3D = function(handleMouseEvents, handleTouchEvents, viewer, wo
 
 const marker3D = function(scene, color) {
     const canvas = scene.canvas.canvas;
-    const getTop  = el => el.offsetTop  + ((el.offsetParent && (el.offsetParent !== canvas.parentNode)) ? getTop(el.offsetParent)  : 0);
-    const getLeft = el => el.offsetLeft + ((el.offsetParent && (el.offsetParent !== canvas.parentNode)) ? getLeft(el.offsetParent) : 0);
 
+    const markerParent = canvas.parentNode;
     const markerDiv = document.createElement("div");
-    canvas.parentNode.insertBefore(markerDiv, canvas);
+    markerParent.insertBefore(markerDiv, canvas);
 
     let size = 5;
     markerDiv.style.background = color;
@@ -280,9 +285,10 @@ const marker3D = function(scene, color) {
 
     const px = x => x + "px";
     const update = function() {
-        const canvasPos = marker.canvasPos;
-        markerDiv.style.left = px(getLeft(canvas) + canvasPos[0] - 3 - size / 2);
-        markerDiv.style.top  = px(getTop(canvas)  + canvasPos[1] - 3 - size / 2);
+        const pos = marker.canvasPos.slice();
+        transformToNode(canvas, markerParent, pos);
+        markerDiv.style.left = px(pos[0] - 3 - size / 2);
+        markerDiv.style.top  = px(pos[1] - 3 - size / 2);
         markerDiv.style.borderRadius = px(size * 2);
         markerDiv.style.width  = px(size);
         markerDiv.style.height = px(size);
@@ -305,10 +311,7 @@ const marker3D = function(scene, color) {
             update();
         },
 
-        getCanvasPos: () => {
-            const canvasPos = marker.canvasPos;
-            return math.vec2([ getLeft(canvas) + canvasPos[0], getTop(canvas) + canvasPos[1] ]);
-        },
+        getCanvasPos: () => marker.canvasPos,
 
         getWorldPos: () => marker.worldPos,
 
@@ -329,7 +332,8 @@ const wire3D = function(scene, color, startWorldPos) {
     const startMarker = new Marker(scene, {});
     startMarker.worldPos = startWorldPos;
     const endMarker = new Marker(scene, {});
-    const wire = new Wire(canvas.ownerDocument.body, {
+    const wireParent = canvas.ownerDocument.body;
+    const wire = new Wire(wireParent, {
         color: color,
         thickness: 1,
         thicknessClickable: 6
@@ -337,12 +341,11 @@ const wire3D = function(scene, color, startWorldPos) {
     wire.setVisible(false);
 
     const updatePos = function() {
-        const rect = canvas.getBoundingClientRect();
-        const l = rect.left;
-        const t = rect.top;
-        const p0 = startMarker.canvasPos;
-        const p1 = endMarker.canvasPos;
-        wire.setStartAndEnd(l + p0[0], t + p0[1], l + p1[0], t + p1[1]);
+        const p0 = startMarker.canvasPos.slice();
+        const p1 = endMarker.canvasPos.slice();
+        transformToNode(canvas, wireParent, p0);
+        transformToNode(canvas, wireParent, p1);
+        wire.setStartAndEnd(p0[0], p0[1], p1[0], p1[1]);
     };
     const onViewMatrix = scene.camera.on("viewMatrix", updatePos);
     const onProjMatrix = scene.camera.on("projMatrix", updatePos);
@@ -528,13 +531,10 @@ const mousePointSelector = function(viewer, ray2WorldPos) {
         const canvas = scene.canvas.canvas;
         const moveTolerance = 20;
 
-        const getTop  = el => el.offsetTop  + ((el.offsetParent && (el.offsetParent !== canvas.parentNode)) ? getTop(el.offsetParent)  : 0);
-        const getLeft = el => el.offsetLeft + ((el.offsetParent && (el.offsetParent !== canvas.parentNode)) ? getLeft(el.offsetParent) : 0);
-
         const copyCanvasPos = (event, vec2) => {
-            const rect = event.target.getBoundingClientRect();
-            vec2[0] = event.clientX - rect.left;
-            vec2[1] = event.clientY - rect.top;
+            vec2[0] = event.clientX;
+            vec2[1] = event.clientY;
+            transformToNode(canvas.ownerDocument.body, canvas, vec2);
             return vec2;
         };
 
@@ -606,13 +606,10 @@ const touchPointSelector = function(viewer, pointerCircle, ray2WorldPos) {
         const longTouchTimeoutMs = 300;
         const moveTolerance = 20;
 
-        const getTop  = el => el.offsetTop  + ((el.offsetParent && (el.offsetParent !== canvas.parentNode)) ? getTop(el.offsetParent)  : 0);
-        const getLeft = el => el.offsetLeft + ((el.offsetParent && (el.offsetParent !== canvas.parentNode)) ? getLeft(el.offsetParent) : 0);
-
         const copyCanvasPos = (event, vec2) => {
-            const rect = event.target.getBoundingClientRect();
-            vec2[0] = event.clientX - rect.left;
-            vec2[1] = event.clientY - rect.top;
+            vec2[0] = event.clientX;
+            vec2[1] = event.clientY;
+            transformToNode(canvas.ownerDocument.body, canvas, vec2);
             return vec2;
         };
 
@@ -670,11 +667,7 @@ const touchPointSelector = function(viewer, pointerCircle, ray2WorldPos) {
 
                     longTouchTimeout = setTimeout(
                         function() {
-                            pointerCircle.start(
-                                math.vec2([
-                                    startCanvasPos[0] + getLeft(canvas),
-                                    startCanvasPos[1] + getTop(canvas)
-                                ]));
+                            pointerCircle.start(startCanvasPos);
 
                             longTouchTimeout = setTimeout(
                                 function() {
@@ -1698,9 +1691,9 @@ export class ZoneTranslateControl {
         };
 
         const copyCanvasPos = (event, vec2) => {
-            const rect = canvas.getBoundingClientRect();
-            vec2[0] = event.clientX - rect.left;
-            vec2[1] = event.clientY - rect.top;
+            vec2[0] = event.clientX;
+            vec2[1] = event.clientY;
+            transformToNode(canvas.ownerDocument.body, canvas, vec2);
             return vec2;
         };
 
