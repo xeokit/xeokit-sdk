@@ -51,6 +51,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html">DistanceMeasurementsTouchControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-dotbimloaderplugin">plugins/DotBIMLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DotBIMLoaderPlugin/DotBIMDefaultDataSource.js~DotBIMDefaultDataSource.html">DotBIMDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin.html">DotBIMLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-facealignedsectionplanesplugin">plugins/FaceAlignedSectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js~FaceAlignedSectionPlanesControl.html">FaceAlignedSectionPlanesControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html">FaceAlignedSectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-fastnavplugin">plugins/FastNavPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html">FastNavPlugin</a></span></span></li>
@@ -257,13 +259,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {LASLoaderPlugin} from &apos;<span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber149">@xeokit/xeokit-sdk/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {LASLoaderPlugin} from &apos;<span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber203">@xeokit/xeokit-sdk/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   <span data-ice="since">| since 2.0.17</span>
-  <span data-ice="source">| <span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber149">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber203">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -384,6 +386,52 @@ const lasLoader = new LASLoaderPlugin(viewer, {
 const modelEntity = lasLoader.load({
      id: &quot;myModel&quot;,
      src: &quot;../assets/models/las/autzen.laz&quot;
+});</code>
+</code></pre>
+<h2 id="showing-a-las-laz-model-in-treeviewplugin">Showing a LAS/LAZ model in TreeViewPlugin</h2><p>We can use the <code>load()</code> method&apos;s <code>elementId</code> parameter
+to make LASLoaderPlugin load the entire model into a single Entity that gets this ID.</p>
+<p>In conjunction with that parameter, we can then use the <code>load()</code> method&apos;s <code>metaModelJSON</code> parameter to create a MetaModel that
+contains a MetaObject that corresponds to that Entity.</p>
+<p>When we&apos;ve done that, then xeokit&apos;s <span><a href="class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a></span> is able to have a node that represents the model and controls
+the visibility of that Entity (ie. to control the visibility of the entire model).</p>
+<p>The snippet below shows how this is done.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, LASLoaderPlugin, NavCubePlugin, TreeViewPlugin} from &quot;../../dist/xeokit-sdk.es.js&quot;;
+
+const viewer = new Viewer({
+    canvasId: &quot;myCanvas&quot;,
+    transparent: true
+});
+
+new TreeViewPlugin(viewer, {
+    containerElement: document.getElementById(&quot;treeViewContainer&quot;),
+    hierarchy: &quot;containment&quot;
+});
+
+const lasLoader = new LASLoaderPlugin(viewer);
+
+const sceneModel = lasLoader.load({  // Creates a SceneModel with ID &quot;myScanModel&quot;
+    id: &quot;myScanModel&quot;,
+    src: &quot;../../assets/models/las/Nalls_Pumpkin_Hill.laz&quot;,
+    rotation: [-90, 0, 0],
+
+    entityId: &quot;3toKckUfH2jBmd$7uhJHa4&quot;, // Creates an Entity with this ID
+
+    metaModelJSON: { // Creates a MetaModel with ID &quot;myScanModel&quot;
+        &quot;metaObjects&quot;: [
+            {
+                &quot;id&quot;: &quot;3toKckUfH2jBmd$7uhJHa6&quot;, // Creates this MetaObject with this ID
+                &quot;name&quot;: &quot;My Project&quot;,
+                &quot;type&quot;: &quot;Default&quot;,
+                &quot;parent&quot;: null
+            },
+            {
+                &quot;id&quot;: &quot;3toKckUfH2jBmd$7uhJHa4&quot;, // Creates this MetaObject with this ID
+                &quot;name&quot;: &quot;My Scan&quot;,
+                &quot;type&quot;: &quot;Default&quot;,
+                &quot;parent&quot;: &quot;3toKckUfH2jBmd$7uhJHa6&quot;
+            }
+        ]
+    }
 });</code>
 </code></pre>
 </div>
@@ -1083,7 +1131,7 @@ const modelEntity = lasLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber162">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber216">source</a></span></span>
     </span>
   </h3>
 
@@ -1193,7 +1241,7 @@ const modelEntity = lasLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber247">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber301">source</a></span></span>
     </span>
   </h3>
 
@@ -1252,7 +1300,7 @@ const modelEntity = lasLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber260">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber314">source</a></span></span>
     </span>
   </h3>
 
@@ -1298,7 +1346,7 @@ const modelEntity = lasLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber179">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber233">source</a></span></span>
     </span>
   </h3>
 
@@ -1343,7 +1391,7 @@ const modelEntity = lasLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber190">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber244">source</a></span></span>
     </span>
   </h3>
 
@@ -1388,7 +1436,7 @@ const modelEntity = lasLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber223">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber277">source</a></span></span>
     </span>
   </h3>
 
@@ -1446,7 +1494,7 @@ const modelEntity = lasLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber234">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber288">source</a></span></span>
     </span>
   </h3>
 
@@ -1491,7 +1539,7 @@ const modelEntity = lasLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber201">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber255">source</a></span></span>
     </span>
   </h3>
 
@@ -1549,7 +1597,7 @@ const modelEntity = lasLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber212">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber266">source</a></span></span>
     </span>
   </h3>
 
@@ -1597,7 +1645,7 @@ const modelEntity = lasLoader.load({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber280">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html#lineNumber334">source</a></span></span>
     </span>
   </h3>
 

@@ -252,6 +252,18 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/plugins/dotbimloaderplugin/dotbimdefaultdatasource.js~dotbimdefaultdatasource",
+    "class/src/plugins/DotBIMLoaderPlugin/DotBIMDefaultDataSource.js~DotBIMDefaultDataSource.html",
+    "<span>DotBIMDefaultDataSource</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/DotBIMLoaderPlugin/DotBIMDefaultDataSource.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/dotbimloaderplugin/dotbimloaderplugin.js~dotbimloaderplugin",
+    "class/src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin.html",
+    "<span>DotBIMLoaderPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/scene/mesh/draw/drawshadersource.js~drawshadersource",
     "function/index.html#static-function-DrawShaderSource",
     "<span>DrawShaderSource</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/mesh/draw/DrawShaderSource.js</span>",
@@ -3459,6 +3471,78 @@ window.esdocSearchIndex = [
     "src/plugins/distancemeasurementsplugin/index.js",
     "file/src/plugins/DistanceMeasurementsPlugin/index.js.html",
     "src/plugins/DistanceMeasurementsPlugin/index.js",
+    "file"
+  ],
+  [
+    "src/plugins/dotbimloaderplugin/dotbimdefaultdatasource.js",
+    "file/src/plugins/DotBIMLoaderPlugin/DotBIMDefaultDataSource.js.html",
+    "src/plugins/DotBIMLoaderPlugin/DotBIMDefaultDataSource.js",
+    "file"
+  ],
+  [
+    "src/plugins/dotbimloaderplugin/dotbimdefaultdatasource.js~dotbimdefaultdatasource#constructor",
+    "class/src/plugins/DotBIMLoaderPlugin/DotBIMDefaultDataSource.js~DotBIMDefaultDataSource.html#instance-constructor-constructor",
+    "src/plugins/DotBIMLoaderPlugin/DotBIMDefaultDataSource.js~DotBIMDefaultDataSource#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/dotbimloaderplugin/dotbimdefaultdatasource.js~dotbimdefaultdatasource#getdotbim",
+    "class/src/plugins/DotBIMLoaderPlugin/DotBIMDefaultDataSource.js~DotBIMDefaultDataSource.html#instance-method-getDotBIM",
+    "src/plugins/DotBIMLoaderPlugin/DotBIMDefaultDataSource.js~DotBIMDefaultDataSource#getDotBIM",
+    "method"
+  ],
+  [
+    "src/plugins/dotbimloaderplugin/dotbimloaderplugin.js",
+    "file/src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js.html",
+    "src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js",
+    "file"
+  ],
+  [
+    "src/plugins/dotbimloaderplugin/dotbimloaderplugin.js~dotbimloaderplugin#constructor",
+    "class/src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin.html#instance-constructor-constructor",
+    "src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/dotbimloaderplugin/dotbimloaderplugin.js~dotbimloaderplugin#datasource",
+    "class/src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin.html#instance-set-dataSource",
+    "src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin#dataSource",
+    "member"
+  ],
+  [
+    "src/plugins/dotbimloaderplugin/dotbimloaderplugin.js~dotbimloaderplugin#datasource",
+    "class/src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin.html#instance-get-dataSource",
+    "src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin#dataSource",
+    "member"
+  ],
+  [
+    "src/plugins/dotbimloaderplugin/dotbimloaderplugin.js~dotbimloaderplugin#destroy",
+    "class/src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin.html#instance-method-destroy",
+    "src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin#destroy",
+    "method"
+  ],
+  [
+    "src/plugins/dotbimloaderplugin/dotbimloaderplugin.js~dotbimloaderplugin#load",
+    "class/src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin.html#instance-method-load",
+    "src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin#load",
+    "method"
+  ],
+  [
+    "src/plugins/dotbimloaderplugin/dotbimloaderplugin.js~dotbimloaderplugin#objectdefaults",
+    "class/src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin.html#instance-set-objectDefaults",
+    "src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin#objectDefaults",
+    "member"
+  ],
+  [
+    "src/plugins/dotbimloaderplugin/dotbimloaderplugin.js~dotbimloaderplugin#objectdefaults",
+    "class/src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin.html#instance-get-objectDefaults",
+    "src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin#objectDefaults",
+    "member"
+  ],
+  [
+    "src/plugins/dotbimloaderplugin/index.js",
+    "file/src/plugins/DotBIMLoaderPlugin/index.js.html",
+    "src/plugins/DotBIMLoaderPlugin/index.js",
     "file"
   ],
   [

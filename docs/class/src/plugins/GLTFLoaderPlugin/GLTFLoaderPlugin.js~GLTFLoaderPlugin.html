@@ -51,6 +51,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html">DistanceMeasurementsTouchControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-dotbimloaderplugin">plugins/DotBIMLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DotBIMLoaderPlugin/DotBIMDefaultDataSource.js~DotBIMDefaultDataSource.html">DotBIMDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin.html">DotBIMLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-facealignedsectionplanesplugin">plugins/FaceAlignedSectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js~FaceAlignedSectionPlanesControl.html">FaceAlignedSectionPlanesControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html">FaceAlignedSectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-fastnavplugin">plugins/FastNavPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html">FastNavPlugin</a></span></span></li>
@@ -257,13 +259,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {GLTFLoaderPlugin} from &apos;<span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber161">@xeokit/xeokit-sdk/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {GLTFLoaderPlugin} from &apos;<span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber234">@xeokit/xeokit-sdk/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber161">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber234">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -406,6 +408,69 @@ objects that do not represent empty space.</p>
      src: &quot;./models/gltf/OTCConferenceCenter/scene.gltf&quot;,
      metaModelSrc: &quot;./models/gltf/OTCConferenceCenter/metaModel.json&quot;,
      excludeTypes: [&quot;IfcSpace&quot;]
+});</code>
+</code></pre>
+<h2 id="showing-a-gltf-model-in-treeviewplugin-when-metadata-is-not-available">Showing a glTF model in TreeViewPlugin when metadata is not available</h2><p>When GLTFLoaderPlugin loads a glTF model, it creates an object Entity for each <code>node</code> in the glTF <code>scene</code> hierarchy that has a
+<code>name</code> attribute, giving the Entity an ID that has the value of the <code>name</code> attribute.</p>
+<p>Those name attributes are created by converter tools, such as by <a href="https://github.com/Creoox/creoox-ifc2gltfcxconverter">IFC2GLTFCxConverter</a> when it generates glTF from IFC files. However, those name attributes are not
+ordinarily present in glTF that comes from other sources, such as LiDAR scanners. For such glTF models, GLTFLoaderPlugin
+will create Entities, but they will have randomly-generated IDs, and therefore cannot be associated with MetaObjects in any
+MetaModels that we create alongside the model.</p>
+<p>For glTF models containing <code>nodes</code> that don&apos;t have <code>name</code> attributes, we can use the <code>load()</code> method&apos;s <code>elementId</code> parameter
+to make GLTFLoaderPlugin load the entire model into a single Entity that gets this ID.</p>
+<p>In conjunction with that parameter, we can then use the <code>load()</code> method&apos;s <code>metaModelJSON</code> parameter to create a MetaModel that
+contains a MetaObject that corresponds to that Entity.</p>
+<p>When we&apos;ve done that, then xeokit&apos;s <span><a href="class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a></span> is able to have a node that represents the glTF model and controls
+the visibility of that Entity (ie. to control the visibility of the entire model).</p>
+<p>The snippet below shows how this is done.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import {Viewer, GLTFLoaderPlugin, NavCubePlugin, TreeViewPlugin} from &quot;../../dist/xeokit-sdk.es.js&quot;;
+
+const viewer = new Viewer({
+    canvasId: &quot;myCanvas&quot;,
+    transparent: true
+});
+
+new TreeViewPlugin(viewer, {
+    containerElement: document.getElementById(&quot;treeViewContainer&quot;),
+    hierarchy: &quot;containment&quot;
+});
+
+const gltfLoader = new GLTFLoaderPlugin(viewer);
+
+const sceneModel = gltfLoader.load({ // Creates a SceneModel with ID &quot;myScanModel&quot;
+    id: &quot;myScanModel&quot;,
+    src: &quot;public-use-sample-apartment.glb&quot;,
+
+    //-------------------------------------------------------------------------
+    // Specify an `elementId` parameter, which causes the
+    // entire model to be loaded into a single Entity that gets this ID.
+    //-------------------------------------------------------------------------
+
+    entityId: &quot;3toKckUfH2jBmd$7uhJHa4&quot;, // Creates an Entity with this ID
+
+    //-------------------------------------------------------------------------
+    // Specify a `metaModelJSON` parameter, which creates a
+    // MetaModel with two MetaObjects, one of which corresponds
+    // to our Entity. Then the TreeViewPlugin is able to have a node
+    // that can represent the model and control the visibility of the Entity.
+    //--------------------------------------------------------------------------
+
+   metaModelJSON: { // Creates a MetaModel with ID &quot;myScanModel&quot;
+        &quot;metaObjects&quot;: [
+            {
+                &quot;id&quot;: &quot;3toKckUfH2jBmd$7uhJHa6&quot;, // Creates a MetaObject with this ID
+                &quot;name&quot;: &quot;My Project&quot;,
+                &quot;type&quot;: &quot;Default&quot;,
+                &quot;parent&quot;: null
+            },
+            {
+                &quot;id&quot;: &quot;3toKckUfH2jBmd$7uhJHa4&quot;, // Creates a MetaObject with this ID (same ID as our Entity)
+                &quot;name&quot;: &quot;My Scan&quot;,
+                &quot;type&quot;: &quot;Default&quot;,
+                &quot;parent&quot;: &quot;3toKckUfH2jBmd$7uhJHa6&quot;
+            }
+        ]
+    }
 });</code>
 </code></pre>
 </div>
@@ -664,7 +729,7 @@ objects that do not represent empty space.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber172">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber245">source</a></span></span>
     </span>
   </h3>
 
@@ -756,7 +821,7 @@ objects that do not represent empty space.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber189">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber262">source</a></span></span>
     </span>
   </h3>
 
@@ -801,7 +866,7 @@ objects that do not represent empty space.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber200">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber273">source</a></span></span>
     </span>
   </h3>
 
@@ -846,7 +911,7 @@ objects that do not represent empty space.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber211">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber284">source</a></span></span>
     </span>
   </h3>
 
@@ -891,7 +956,7 @@ objects that do not represent empty space.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber222">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber295">source</a></span></span>
     </span>
   </h3>
 
@@ -939,7 +1004,7 @@ objects that do not represent empty space.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber417">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber490">source</a></span></span>
     </span>
   </h3>
 
@@ -983,7 +1048,7 @@ objects that do not represent empty space.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber256">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js.html#lineNumber329">source</a></span></span>
     </span>
   </h3>
 

@@ -51,6 +51,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html">DistanceMeasurementsTouchControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-dotbimloaderplugin">plugins/DotBIMLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DotBIMLoaderPlugin/DotBIMDefaultDataSource.js~DotBIMDefaultDataSource.html">DotBIMDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin.html">DotBIMLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-facealignedsectionplanesplugin">plugins/FaceAlignedSectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js~FaceAlignedSectionPlanesControl.html">FaceAlignedSectionPlanesControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html">FaceAlignedSectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-fastnavplugin">plugins/FastNavPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html">FastNavPlugin</a></span></span></li>
@@ -399,6 +401,60 @@ const MAX_VERTICES = 500000; // TODO: Rough estimate
  * const modelEntity = lasLoader.load({
  *      id: &quot;myModel&quot;,
  *      src: &quot;../assets/models/las/autzen.laz&quot;
+ * });
+ * ````
+ *
+ * ## Showing a LAS/LAZ model in TreeViewPlugin
+ *
+ * We can use the `load()` method&apos;s `elementId` parameter
+ * to make LASLoaderPlugin load the entire model into a single Entity that gets this ID.
+ *
+ * In conjunction with that parameter, we can then use the `load()` method&apos;s `metaModelJSON` parameter to create a MetaModel that
+ * contains a MetaObject that corresponds to that Entity.
+ *
+ * When we&apos;ve done that, then xeokit&apos;s {@link TreeViewPlugin} is able to have a node that represents the model and controls
+ * the visibility of that Entity (ie. to control the visibility of the entire model).
+ *
+ * The snippet below shows how this is done.
+ *
+ * ````javascript
+ * import {Viewer, LASLoaderPlugin, NavCubePlugin, TreeViewPlugin} from &quot;../../dist/xeokit-sdk.es.js&quot;;
+ *
+ * const viewer = new Viewer({
+ *     canvasId: &quot;myCanvas&quot;,
+ *     transparent: true
+ * });
+ *
+ * new TreeViewPlugin(viewer, {
+ *     containerElement: document.getElementById(&quot;treeViewContainer&quot;),
+ *     hierarchy: &quot;containment&quot;
+ * });
+ *
+ * const lasLoader = new LASLoaderPlugin(viewer);
+ *
+ * const sceneModel = lasLoader.load({  // Creates a SceneModel with ID &quot;myScanModel&quot;
+ *     id: &quot;myScanModel&quot;,
+ *     src: &quot;../../assets/models/las/Nalls_Pumpkin_Hill.laz&quot;,
+ *     rotation: [-90, 0, 0],
+ *
+ *     entityId: &quot;3toKckUfH2jBmd$7uhJHa4&quot;, // Creates an Entity with this ID
+ *
+ *     metaModelJSON: { // Creates a MetaModel with ID &quot;myScanModel&quot;
+ *         &quot;metaObjects&quot;: [
+ *             {
+ *                 &quot;id&quot;: &quot;3toKckUfH2jBmd$7uhJHa6&quot;, // Creates this MetaObject with this ID
+ *                 &quot;name&quot;: &quot;My Project&quot;,
+ *                 &quot;type&quot;: &quot;Default&quot;,
+ *                 &quot;parent&quot;: null
+ *             },
+ *             {
+ *                 &quot;id&quot;: &quot;3toKckUfH2jBmd$7uhJHa4&quot;, // Creates this MetaObject with this ID
+ *                 &quot;name&quot;: &quot;My Scan&quot;,
+ *                 &quot;type&quot;: &quot;Default&quot;,
+ *                 &quot;parent&quot;: &quot;3toKckUfH2jBmd$7uhJHa6&quot;
+ *             }
+ *         ]
+ *     }
  * });
  * ````
  *

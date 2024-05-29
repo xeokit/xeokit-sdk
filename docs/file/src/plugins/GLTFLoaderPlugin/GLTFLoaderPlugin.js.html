@@ -51,6 +51,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html">DistanceMeasurementsTouchControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-dotbimloaderplugin">plugins/DotBIMLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DotBIMLoaderPlugin/DotBIMDefaultDataSource.js~DotBIMDefaultDataSource.html">DotBIMDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin.html">DotBIMLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-facealignedsectionplanesplugin">plugins/FaceAlignedSectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js~FaceAlignedSectionPlanesControl.html">FaceAlignedSectionPlanesControl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html">FaceAlignedSectionPlanesPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-fastnavplugin">plugins/FastNavPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html">FastNavPlugin</a></span></span></li>
@@ -413,6 +415,79 @@ import {IFCObjectDefaults} from &quot;../../viewer/metadata/IFCObjectDefaults.js
  *      src: &quot;./models/gltf/OTCConferenceCenter/scene.gltf&quot;,
  *      metaModelSrc: &quot;./models/gltf/OTCConferenceCenter/metaModel.json&quot;,
  *      excludeTypes: [&quot;IfcSpace&quot;]
+ * });
+ * ````
+ *
+ * ## Showing a glTF model in TreeViewPlugin when metadata is not available
+ *
+ * When GLTFLoaderPlugin loads a glTF model, it creates an object Entity for each `node` in the glTF `scene` hierarchy that has a
+ * `name` attribute, giving the Entity an ID that has the value of the `name` attribute.
+ *
+ * Those name attributes are created by converter tools, such as by [IFC2GLTFCxConverter](https://github.com/Creoox/creoox-ifc2gltfcxconverter) when it generates glTF from IFC files. However, those name attributes are not
+ * ordinarily present in glTF that comes from other sources, such as LiDAR scanners. For such glTF models, GLTFLoaderPlugin
+ * will create Entities, but they will have randomly-generated IDs, and therefore cannot be associated with MetaObjects in any
+ * MetaModels that we create alongside the model.
+ *
+ * For glTF models containing `nodes` that don&apos;t have `name` attributes, we can use the `load()` method&apos;s `elementId` parameter
+ * to make GLTFLoaderPlugin load the entire model into a single Entity that gets this ID.
+ *
+ * In conjunction with that parameter, we can then use the `load()` method&apos;s `metaModelJSON` parameter to create a MetaModel that
+ * contains a MetaObject that corresponds to that Entity.
+ *
+ * When we&apos;ve done that, then xeokit&apos;s {@link TreeViewPlugin} is able to have a node that represents the glTF model and controls
+ * the visibility of that Entity (ie. to control the visibility of the entire model).
+ *
+ * The snippet below shows how this is done.
+ *
+ * ````javascript
+ * import {Viewer, GLTFLoaderPlugin, NavCubePlugin, TreeViewPlugin} from &quot;../../dist/xeokit-sdk.es.js&quot;;
+ *
+ * const viewer = new Viewer({
+ *     canvasId: &quot;myCanvas&quot;,
+ *     transparent: true
+ * });
+ *
+ * new TreeViewPlugin(viewer, {
+ *     containerElement: document.getElementById(&quot;treeViewContainer&quot;),
+ *     hierarchy: &quot;containment&quot;
+ * });
+ *
+ * const gltfLoader = new GLTFLoaderPlugin(viewer);
+ *
+ * const sceneModel = gltfLoader.load({ // Creates a SceneModel with ID &quot;myScanModel&quot;
+ *     id: &quot;myScanModel&quot;,
+ *     src: &quot;public-use-sample-apartment.glb&quot;,
+ *
+ *     //-------------------------------------------------------------------------
+ *     // Specify an `elementId` parameter, which causes the
+ *     // entire model to be loaded into a single Entity that gets this ID.
+ *     //-------------------------------------------------------------------------
+ *
+ *     entityId: &quot;3toKckUfH2jBmd$7uhJHa4&quot;, // Creates an Entity with this ID
+ *
+ *     //-------------------------------------------------------------------------
+ *     // Specify a `metaModelJSON` parameter, which creates a
+ *     // MetaModel with two MetaObjects, one of which corresponds
+ *     // to our Entity. Then the TreeViewPlugin is able to have a node
+ *     // that can represent the model and control the visibility of the Entity.
+ *     //--------------------------------------------------------------------------
+ *
+ *    metaModelJSON: { // Creates a MetaModel with ID &quot;myScanModel&quot;
+ *         &quot;metaObjects&quot;: [
+ *             {
+ *                 &quot;id&quot;: &quot;3toKckUfH2jBmd$7uhJHa6&quot;, // Creates a MetaObject with this ID
+ *                 &quot;name&quot;: &quot;My Project&quot;,
+ *                 &quot;type&quot;: &quot;Default&quot;,
+ *                 &quot;parent&quot;: null
+ *             },
+ *             {
+ *                 &quot;id&quot;: &quot;3toKckUfH2jBmd$7uhJHa4&quot;, // Creates a MetaObject with this ID (same ID as our Entity)
+ *                 &quot;name&quot;: &quot;My Scan&quot;,
+ *                 &quot;type&quot;: &quot;Default&quot;,
+ *                 &quot;parent&quot;: &quot;3toKckUfH2jBmd$7uhJHa6&quot;
+ *             }
+ *         ]
+ *     }
  * });
  * ````
  * @class GLTFLoaderPlugin
