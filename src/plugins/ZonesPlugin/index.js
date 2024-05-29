@@ -760,10 +760,6 @@ class Zone extends Component {
 
         const scene = this.plugin.viewer.scene;
 
-        this._vp = new Float64Array(24);
-        this._pp = new Float64Array(24);
-        this._cp = new Float64Array(8);
-
         this._geometry = cfg.geometry;
 
         const onMouseOver = cfg.onMouseOver ? (event) => {
@@ -888,13 +884,6 @@ class Zone extends Component {
         const xmax = max(0);
         const ymax = max(1);
         const zmax = max(2);
-
-        this._wp = new Float64Array([
-            xmin, ymin, zmin, 1.0,
-            xmax, ymin, zmin, 1.0,
-            xmax, ymax, zmin, 1.0,
-            xmax, ymax, zmax, 1.0
-        ]);
 
         this._center = math.vec3([ (xmin + xmax) / 2, (ymin + ymax) / 2, (zmin + zmax) / 2 ]);
     }
