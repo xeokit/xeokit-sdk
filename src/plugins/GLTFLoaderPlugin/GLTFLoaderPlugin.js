@@ -156,6 +156,79 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  *      excludeTypes: ["IfcSpace"]
  * });
  * ````
+ *
+ * ## Showing a glTF model in TreeViewPlugin when metadata is not available
+ *
+ * When GLTFLoaderPlugin loads a glTF model, it creates an object Entity for each `node` in the glTF `scene` hierarchy that has a
+ * `name` attribute, giving the Entity an ID that has the value of the `name` attribute.
+ *
+ * Those name attributes are created by converter tools, such as by [IFC2GLTFCxConverter](https://github.com/Creoox/creoox-ifc2gltfcxconverter) when it generates glTF from IFC files. However, those name attributes are not
+ * ordinarily present in glTF that comes from other sources, such as LiDAR scanners. For such glTF models, GLTFLoaderPlugin
+ * will create Entities, but they will have randomly-generated IDs, and therefore cannot be associated with MetaObjects in any
+ * MetaModels that we create alongside the model.
+ *
+ * For glTF models containing `nodes` that don't have `name` attributes, we can use the `load()` method's `elementId` parameter
+ * to make GLTFLoaderPlugin load the entire model into a single Entity that gets this ID.
+ *
+ * In conjunction with that parameter, we can then use the `load()` method's `metaModelJSON` parameter to create a MetaModel that
+ * contains a MetaObject that corresponds to that Entity.
+ *
+ * When we've done that, then xeokit's {@link TreeViewPlugin} is able to have a node that represents the glTF model and controls
+ * the visibility of that Entity (ie. to control the visibility of the entire model).
+ *
+ * The snippet below shows how this is done.
+ *
+ * ````javascript
+ * import {Viewer, GLTFLoaderPlugin, NavCubePlugin, TreeViewPlugin} from "../../dist/xeokit-sdk.es.js";
+ *
+ * const viewer = new Viewer({
+ *     canvasId: "myCanvas",
+ *     transparent: true
+ * });
+ *
+ * new TreeViewPlugin(viewer, {
+ *     containerElement: document.getElementById("treeViewContainer"),
+ *     hierarchy: "containment"
+ * });
+ *
+ * const gltfLoader = new GLTFLoaderPlugin(viewer);
+ *
+ * const sceneModel = gltfLoader.load({ // Creates a SceneModel with ID "myScanModel"
+ *     id: "myScanModel",
+ *     src: "public-use-sample-apartment.glb",
+ *
+ *     //-------------------------------------------------------------------------
+ *     // Specify an `elementId` parameter, which causes the
+ *     // entire model to be loaded into a single Entity that gets this ID.
+ *     //-------------------------------------------------------------------------
+ *
+ *     entityId: "3toKckUfH2jBmd$7uhJHa4", // Creates an Entity with this ID
+ *
+ *     //-------------------------------------------------------------------------
+ *     // Specify a `metaModelJSON` parameter, which creates a
+ *     // MetaModel with two MetaObjects, one of which corresponds
+ *     // to our Entity. Then the TreeViewPlugin is able to have a node
+ *     // that can represent the model and control the visibility of the Entity.
+ *     //--------------------------------------------------------------------------
+ *
+ *    metaModelJSON: { // Creates a MetaModel with ID "myScanModel"
+ *         "metaObjects": [
+ *             {
+ *                 "id": "3toKckUfH2jBmd$7uhJHa6", // Creates a MetaObject with this ID
+ *                 "name": "My Project",
+ *                 "type": "Default",
+ *                 "parent": null
+ *             },
+ *             {
+ *                 "id": "3toKckUfH2jBmd$7uhJHa4", // Creates a MetaObject with this ID (same ID as our Entity)
+ *                 "name": "My Scan",
+ *                 "type": "Default",
+ *                 "parent": "3toKckUfH2jBmd$7uhJHa6"
+ *             }
+ *         ]
+ *     }
+ * });
+ * ````
  * @class GLTFLoaderPlugin
  */
 class GLTFLoaderPlugin extends Plugin {

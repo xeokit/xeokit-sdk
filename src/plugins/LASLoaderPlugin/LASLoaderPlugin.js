@@ -143,6 +143,60 @@ const MAX_VERTICES = 500000; // TODO: Rough estimate
  * });
  * ````
  *
+ * ## Showing a LAS/LAZ model in TreeViewPlugin
+ *
+ * We can use the `load()` method's `elementId` parameter
+ * to make LASLoaderPlugin load the entire model into a single Entity that gets this ID.
+ *
+ * In conjunction with that parameter, we can then use the `load()` method's `metaModelJSON` parameter to create a MetaModel that
+ * contains a MetaObject that corresponds to that Entity.
+ *
+ * When we've done that, then xeokit's {@link TreeViewPlugin} is able to have a node that represents the model and controls
+ * the visibility of that Entity (ie. to control the visibility of the entire model).
+ *
+ * The snippet below shows how this is done.
+ *
+ * ````javascript
+ * import {Viewer, LASLoaderPlugin, NavCubePlugin, TreeViewPlugin} from "../../dist/xeokit-sdk.es.js";
+ *
+ * const viewer = new Viewer({
+ *     canvasId: "myCanvas",
+ *     transparent: true
+ * });
+ *
+ * new TreeViewPlugin(viewer, {
+ *     containerElement: document.getElementById("treeViewContainer"),
+ *     hierarchy: "containment"
+ * });
+ *
+ * const lasLoader = new LASLoaderPlugin(viewer);
+ *
+ * const sceneModel = lasLoader.load({  // Creates a SceneModel with ID "myScanModel"
+ *     id: "myScanModel",
+ *     src: "../../assets/models/las/Nalls_Pumpkin_Hill.laz",
+ *     rotation: [-90, 0, 0],
+ *
+ *     entityId: "3toKckUfH2jBmd$7uhJHa4", // Creates an Entity with this ID
+ *
+ *     metaModelJSON: { // Creates a MetaModel with ID "myScanModel"
+ *         "metaObjects": [
+ *             {
+ *                 "id": "3toKckUfH2jBmd$7uhJHa6", // Creates this MetaObject with this ID
+ *                 "name": "My Project",
+ *                 "type": "Default",
+ *                 "parent": null
+ *             },
+ *             {
+ *                 "id": "3toKckUfH2jBmd$7uhJHa4", // Creates this MetaObject with this ID
+ *                 "name": "My Scan",
+ *                 "type": "Default",
+ *                 "parent": "3toKckUfH2jBmd$7uhJHa6"
+ *             }
+ *         ]
+ *     }
+ * });
+ * ````
+ *
  * @class LASLoaderPlugin
  * @since 2.0.17
  */
