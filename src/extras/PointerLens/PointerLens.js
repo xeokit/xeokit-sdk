@@ -149,8 +149,8 @@ export class PointerLens {
         );
 
         const centerLensCanvas = [
-            (lensRect.left + lensRect.right) / 2,
-            (lensRect.top + lensRect.bottom) / 2
+            (lensRect.left + lensRect.right) / 2 - canvasRect.left,
+            (lensRect.top + lensRect.bottom) / 2 - canvasRect.top
         ];
 
         if (this._snappedCanvasPos) {
