@@ -493,7 +493,7 @@ class LASLoaderPlugin extends Plugin {
                     }
                      */
 
-                    const pointsObjectId = math.createUUID();
+                    const pointsObjectId = params.entityId || math.createUUID();
 
                     sceneModel.createEntity({
                         id: pointsObjectId,
@@ -503,7 +503,10 @@ class LASLoaderPlugin extends Plugin {
 
                     sceneModel.finalize();
 
-                    if (params.loadMetadata !== false) {
+                    if (params.metaModelJSON) {
+                        const metaModelId = sceneModel.id;
+                        this.viewer.metaScene.createMetaModel(metaModelId, params.metaModelJSON, options);
+                    } else if (params.loadMetadata !== false) {
                         const rootMetaObjectId = math.createUUID();
                         const metadata = {
                             projectId: "",
