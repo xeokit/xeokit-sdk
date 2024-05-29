@@ -1,5 +1,23 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.13](https://github.com/xeokit/xeokit-sdk/compare/v2.6.12...v2.6.13)
+
+### 29 May 2024
+
+-  [FEATURE] DotBIMLoaderPlugin - [#1510](https://github.com/xeokit/xeokit-sdk/pull/1510)
+-  Added LASLoaderPlugin entityId param - [#1512](https://github.com/xeokit/xeokit-sdk/pull/1512)
+-  [FEATURE] Added GLTFLoaderPlugin.load() entityId parameter - [#1511](https://github.com/xeokit/xeokit-sdk/pull/1511)
+-  Feature/rotation adjusted distance - [#1497](https://github.com/xeokit/xeokit-sdk/pull/1497)
+-  Changed variable names used for toggling x,y,z and length labels - [#1496](https://github.com/xeokit/xeokit-sdk/pull/1496)
+-  Added test for loading glTF with KHR_mesh_quantization - [#1493](https://github.com/xeokit/xeokit-sdk/pull/1493)
+
+# [v2.6.12](https://github.com/xeokit/xeokit-sdk/compare/v2.6.11...v2.6.12)
+
+### 16 May 2024
+
+-  [FIX] Make programmatically-created distance measurements initially clickable - [#1492](https://github.com/xeokit/xeokit-sdk/pull/1492)
+-  Feature/toggle length labels - [#1491](https://github.com/xeokit/xeokit-sdk/pull/1491)
+
 # [v2.6.11](https://github.com/xeokit/xeokit-sdk/compare/v2.6.10...v2.6.11)
 
 ### 15 May 2024
