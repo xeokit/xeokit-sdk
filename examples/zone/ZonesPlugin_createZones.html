@@ -284,6 +284,7 @@
 
     const startZoneTranslate = function(zone) {
         curZoneEdit = new ZoneTranslateMouseControl(zone, { pointerLens: new PointerLens(viewer) });
+        curZoneEdit.on("translated", () => adjustZoneAnnotation(zone));
         curZoneContextMenu = zoneTranslateContextMenu;
     };
 
