@@ -1652,11 +1652,14 @@ export class ZoneEditTouchControl extends ZoneEditControl {
 }
 
 
-export class ZoneTranslateControl {
+export class ZoneTranslateControl extends Component {
     constructor(zone, cfg, handleMouseEvents, handleTouchEvents) {
         const viewer = zone.plugin.viewer;
         const scene = viewer.scene;
         const canvas = scene.canvas.canvas;
+
+        super(scene);
+        const self = this;
 
         const altitude = zone._geometry.altitude;
         const pointerLens = cfg && cfg.pointerLens;
@@ -1759,6 +1762,7 @@ export class ZoneTranslateControl {
                             onChange(canvasPos);
                             updatePointerLens(null);
                             cleanupCurrentDrag();
+                            self.fire("translated");
                         }
                     });
 
@@ -1817,6 +1821,7 @@ export class ZoneTranslateControl {
 
     deactivate() {
         this._deactivate();
+        super.destroy();
     }
 }
 
