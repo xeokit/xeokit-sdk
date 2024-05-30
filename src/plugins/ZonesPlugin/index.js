@@ -1563,8 +1563,11 @@ export class ZonesPolysurfaceTouchControl extends Component {
     }
 }
 
-export class ZoneEditControl {
+export class ZoneEditControl extends Component {
     constructor(zone, cfg, handleMouseEvents, handleTouchEvents) {
+        super(zone.plugin.viewer.scene);
+        const self = this;
+
         const altitude = zone._geometry.altitude;
         const pointerLens = cfg && cfg.pointerLens;
         const updatePointerLens = (pointerLens
@@ -1609,7 +1612,12 @@ export class ZoneEditControl {
                     setPlaneCoord([ worldPos[0], worldPos[2] ]);
                 },
                 () => {
-                    if (! zone._zoneMesh) {
+                    if (zone._zoneMesh)
+                    {
+                        self.fire("edited");
+                    }
+                    else
+                    {
                         dot.setWorldPos(initWorldPos);
                         setPlaneCoord(initPlaneCoord);
                     }
@@ -1636,6 +1644,7 @@ export class ZoneEditControl {
 
     deactivate() {
         this._deactivate();
+        super.destroy();
     }
 }
 
