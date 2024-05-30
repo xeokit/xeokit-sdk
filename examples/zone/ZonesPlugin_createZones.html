@@ -348,6 +348,7 @@
                     title: "Edit Zone",
                     doAction: contextZone => {
                         curZoneEdit = new ZoneEditMouseControl(contextZone, { pointerLens: new PointerLens(viewer) });
+                        curZoneEdit.on("edited", () => adjustZoneAnnotation(contextZone));
                         curZoneContextMenu = zoneEditContextMenu;
                     }
                 },
