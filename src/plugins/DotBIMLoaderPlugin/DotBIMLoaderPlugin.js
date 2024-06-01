@@ -110,7 +110,7 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  *      excludeTypes: ["IfcSpace"]
  * });
  * ````
- * 
+ *
  * # Configuring initial IFC object appearances
  *
  * We can specify the custom initial appearance of loaded objects according to their IFC types.
@@ -470,11 +470,31 @@ export class DotBIMLoaderPlugin extends Plugin {
                     isObject: true
                 });
 
+                for (let infoKey in info) {
+                    let properties;
+                    if (infoKey.startsWith("IFC_Pset_")) {
+                        if (!properties) {
+                            properties = [];
+                        }
+                        properties.push({
+                            name: infoKey,
+                            value: info[infoKey]
+                        });
+                    }
+                    if (properties) {
+                        metaModelData.propertySets.push({
+                            id: objectId,
+                            properties
+                        });
+                    }
+                }
+
                 metaModelData.metaObjects.push({
                     id: objectId,
                     name: info && info.Name && info.Name !== "None" ? info.Name : `${element.type} ${objectId}`,
                     type: element.type,
-                    parent: ifcBuildingStoryId
+                    parent: ifcBuildingStoryId,
+                    propertySetIds: [objectId]
                 });
             }
 
