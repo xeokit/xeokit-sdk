@@ -1,5 +1,21 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.15](https://github.com/xeokit/xeokit-sdk/compare/v2.6.14...v2.6.15)
+
+### 3 June 2024
+
+-  [FIX] Fix LASLoaderPlugin intensity and chunking for v1.2 - [#1521](https://github.com/xeokit/xeokit-sdk/pull/1521)
+-  Fix/measurement controls - [#1520](https://github.com/xeokit/xeokit-sdk/pull/1520)
+-  Add annotations snapshots example - [#1518](https://github.com/xeokit/xeokit-sdk/pull/1518)
+-  [EXAMPLE] Change teapot example to test also double-precision precision - [#1517](https://github.com/xeokit/xeokit-sdk/pull/1517)
+
+# [v2.6.14](https://github.com/xeokit/xeokit-sdk/compare/v2.6.13...v2.6.14)
+
+### 1 June 2024
+
+-  Dotbim psets - [#1516](https://github.com/xeokit/xeokit-sdk/pull/1516)
+-  [EXAMPLE] Add non-ifc-&gt;.bim examples - [#1514](https://github.com/xeokit/xeokit-sdk/pull/1514)
+
 # [v2.6.13](https://github.com/xeokit/xeokit-sdk/compare/v2.6.12...v2.6.13)
 
 ### 29 May 2024
