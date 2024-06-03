@@ -283,7 +283,7 @@ class DistanceMeasurementsPlugin extends Plugin {
    * @param {boolean} [cfg.defaultXAxisVisible=true] The default value of the DistanceMeasurements `xAxisVisible` property.
    * @param {boolean} [cfg.defaultYAxisVisible=true] The default value of the DistanceMeasurements `yAxisVisible` property.
    * @param {boolean} [cfg.defaultZAxisVisible=true] The default value of the DistanceMeasurements `zAxisVisible` property.
-   * @param {boolean} [cfg.defaultUseRotationAdjustment=true] The default value of DistanceMeasurements `useRotationAdjustment` property.
+   * @param {boolean} [cfg.useRotationAdjustment=false] The default value of DistanceMeasurements `useRotationAdjustment` property.
    * @param {string} [cfg.defaultColor=#00BBFF] The default color of the length dots, wire and label.
    * @param {number} [cfg.zIndex] If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
    * @param {boolean} [cfg.defaultLabelsOnWires=true] The default value of the DistanceMeasurements `labelsOnWires` property.
@@ -317,8 +317,7 @@ class DistanceMeasurementsPlugin extends Plugin {
     this.defaultColor =cfg.defaultColor !== undefined ? cfg.defaultColor : "#00BBFF";
     this.zIndex = cfg.zIndex || 10000;
     this.defaultLabelsOnWires = cfg.defaultLabelsOnWires !== false;
-    this.defaultUseRotationAdjustment = cfg.defaultUseRotationAdjustment !== false;
-    this.useRotationAdjustment = cfg.defaultUseRotationAdjustment !== false;
+    this.useRotationAdjustment = cfg.useRotationAdjustment !== undefined ? cfg.useRotationAdjustment !== false : false;
 
     this._onMouseOver = (event, measurement) => {
       this.fire("mouseOver", {
@@ -424,7 +423,7 @@ class DistanceMeasurementsPlugin extends Plugin {
    * @type {boolean}
    */
   set useRotationAdjustment(_useRotationAdjustment) {
-    _useRotationAdjustment = _useRotationAdjustment !== undefined ? Boolean(_useRotationAdjustment) : this.defaultUseRotationAdjustment;
+    _useRotationAdjustment = _useRotationAdjustment !== undefined ? Boolean(_useRotationAdjustment) : false;
     this._useRotationAdjustment = _useRotationAdjustment;
   }
 
