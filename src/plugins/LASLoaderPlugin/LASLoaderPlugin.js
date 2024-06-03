@@ -423,7 +423,7 @@ class LASLoaderPlugin extends Plugin {
         }
 
         function readIntensities(attributesIntensity) {
-            const intensities = attributesIntensity.intensity;
+            const intensities = attributesIntensity.value;
             const colorsCompressedSize = intensities.length * 4;
             const colorsCompressed = new Uint8Array(colorsCompressedSize);
             for (let i = 0, j = 0, k = 0, len = intensities.length; i < len; i++, k += 3, j += 4) {
@@ -608,7 +608,7 @@ class LASLoaderPlugin extends Plugin {
 
 function chunkArray(array, chunkSize) {
     if (chunkSize >= array.length) {
-        return array;
+        return [array];
     }
     let result = [];
     for (let i = 0; i < array.length; i += chunkSize) {
