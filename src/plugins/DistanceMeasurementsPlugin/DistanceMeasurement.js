@@ -318,6 +318,7 @@ class DistanceMeasurement extends Component {
         this.lengthLabelEnabled = cfg.lengthLabelEnabled;
         this.labelsVisible = cfg.labelsVisible;
         this.labelsOnWires = cfg.labelsOnWires;
+        this.useRotationAdjustment = cfg.useRotationAdjustment;
     }
 
     _update() {
@@ -331,7 +332,7 @@ class DistanceMeasurement extends Component {
         if (this._wpDirty) {
 
             this._measurementOrientation = determineMeasurementOrientation(this._originWorld, this._targetWorld, 1);
-            if(this._measurementOrientation === 'Vertical'){
+            if(this._measurementOrientation === 'Vertical' && this.useRotationAdjustment){
                 this._wp[0] = this._originWorld[0];
                 this._wp[1] = this._originWorld[1];
                 this._wp[2] = this._originWorld[2];

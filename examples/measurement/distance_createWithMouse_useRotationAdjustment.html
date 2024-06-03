@@ -112,7 +112,13 @@
                     target="_other">XKTLoaderPlugin</a>
             </li>
         </ul>
-
+        <h3>Tutorials</h3>
+        <ul>
+            <li>
+                <a href="https://www.notion.so/xeokit/Accurate-Measurements-with-Snapping-5e6606afef20428f9b319ea0e82270f9"
+                    target="_other">Accurate Measurements with Snapping</a>
+            </li>
+        </ul>
         <h3>Assets</h3>
         <ul>
             <li>
@@ -145,13 +151,6 @@
     viewer.cameraControl.panRightClick = false; // Prevents right-click-drag panning interfering with ContextMenus
 
     //------------------------------------------------------------------------------------------------------------------
-    // Vertex-snapping mode
-    //------------------------------------------------------------------------------------------------------------------
-
-    viewer.cameraControl.snapMode = "vertex"; // Snap to nearest vertex
-    viewer.cameraControl.snapRadius = 30; // 30 pixels snapping radius
-
-    //------------------------------------------------------------------------------------------------------------------
     // Load a model
     //------------------------------------------------------------------------------------------------------------------
 
@@ -172,13 +171,43 @@
     // DistanceMeasurementsPlugin, DistanceMeasurementsMouseControl and PointerLens
     //------------------------------------------------------------------------------------------------------------------
 
-    const distanceMeasurements = new DistanceMeasurementsPlugin(viewer, {});
+    const distanceMeasurementsPlugin = new DistanceMeasurementsPlugin(viewer, { useRotationAdjustment: true });
 
-    const distanceMeasurementsMouseControl = new DistanceMeasurementsMouseControl(distanceMeasurements, {
-        pointerLens: new PointerLens(viewer)
+    distanceMeasurementsPlugin.on("measurementStart", (distanceMeasurement) => {
+        console.log("measurementStart");
+        console.log("origin", distanceMeasurement.origin.entity);
+        console.log("target", distanceMeasurement.target.entity);
+    });
+
+    distanceMeasurementsPlugin.on("measurementEnd", (distanceMeasurement) => {
+        console.log("measurementEnd");
+        console.log("origin", distanceMeasurement.origin.entity);
+        console.log("target", distanceMeasurement.target.entity);
+    });
+
+    distanceMeasurementsPlugin.on("measurementCancel", (distanceMeasurement) => {
+        console.log("measurementCancel");
+        console.log("origin", distanceMeasurement.origin.entity);
+        console.log("target", distanceMeasurement.target.entity);
+    });
+
+    distanceMeasurementsPlugin.on("mouseOver", (e) => {
+        e.distanceMeasurement.setHighlighted(true);
+    });
+
+    distanceMeasurementsPlugin.on("mouseLeave", (e) => {
+        if (distanceMeasurementsContextMenu.shown && distanceMeasurementsContextMenu.context.distanceMeasurement.id === e.distanceMeasurement.id) {
+            return;
+        }
+        e.distanceMeasurement.setHighlighted(false);
+    });
+
+    const distanceMeasurementsMouseControl = new DistanceMeasurementsMouseControl(distanceMeasurementsPlugin, {
+        pointerLens: new PointerLens(viewer),
+        snapping: true // Default
     })
 
-    distanceMeasurementsMouseControl.snapping = false;
+    distanceMeasurementsMouseControl.snapping = true;
 
     distanceMeasurementsMouseControl.activate();
 
@@ -293,14 +322,6 @@
                     }
                 },
                 {
-                    getTitle: (context) => {
-                        return distanceMeasurements.useRotationAdjustment ? "Disable Rotation Adjustment" : "Enable Rotation Adjustment";
-                    },
-                    doAction: function (context) {
-                        distanceMeasurements.useRotationAdjustment = !distanceMeasurements.useRotationAdjustment;
-                    }
-                },
-                {
                     getTitle: () => {
                         return "Cancel Measurement";
                     },
@@ -315,24 +336,37 @@
         ]
     });
 
-    // viewer.cameraControl.on("rightClick", function (e) {
-    //     canvasContextMenu.show(e.pagePos[0], e.pagePos[1]);
-    //     e.event.preventDefault();
-    // });
-
     viewer.scene.canvas.canvas.addEventListener('contextmenu', (event) => {
         const canvasPos = getCanvasPosFromEvent(event);
-        //show the context menu if users clicks on empty screen
-        const hit = viewer.scene.pick({
-            canvasPos
-        });
-        if (!hit) {
-            canvasContextMenu.context = { // Must set context before showing menu
-                viewer
-            };
-            canvasContextMenu.show(event.pageX, event.pageY);
-        }
+        console.log("canvas context menu")
+        canvasContextMenu.show(canvasPos[0], canvasPos[1]);
         event.preventDefault();
+        event.stopPropagation();
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create an DistanceMeasurementsPlugin, activate its DistanceMeasuremntsControl
+    //------------------------------------------------------------------------------------------------------------------
+
+    distanceMeasurementsPlugin.on("mouseOver", (e) => {
+        e.distanceMeasurement.setHighlighted(true);
+    });
+
+    distanceMeasurementsPlugin.on("mouseLeave", (e) => {
+        if (distanceMeasurementsContextMenu.shown && distanceMeasurementsContextMenu.context.distanceMeasurement.id === e.distanceMeasurement.id) {
+            return;
+        }
+        e.distanceMeasurement.setHighlighted(false);
+    });
+
+    distanceMeasurementsPlugin.on("contextMenu", (e) => {
+        distanceMeasurementsContextMenu.context = { // Must set context before showing menu
+            viewer: viewer,
+            distanceMeasurementsPlugin: distanceMeasurementsPlugin,
+            distanceMeasurement: e.distanceMeasurement
+        };
+        distanceMeasurementsContextMenu.show(e.event.clientX, e.event.clientY);
+        e.event.preventDefault();
     });
 
     const getCanvasPosFromEvent = function (event) {
@@ -359,31 +393,6 @@
         }
         return canvasPos;
     };
-
-    //------------------------------------------------------------------------------------------------------------------
-    // Create an DistanceMeasurementsPlugin, activate its DistanceMeasuremntsControl
-    //------------------------------------------------------------------------------------------------------------------
-
-    distanceMeasurements.on("mouseOver", (e) => {
-        e.distanceMeasurement.setHighlighted(true);
-    });
-
-    distanceMeasurements.on("mouseLeave", (e) => {
-        if (distanceMeasurementsContextMenu.shown && distanceMeasurementsContextMenu.context.distanceMeasurement.id === e.distanceMeasurement.id) {
-            return;
-        }
-        e.distanceMeasurement.setHighlighted(false);
-    });
-
-    distanceMeasurements.on("contextMenu", (e) => {
-        distanceMeasurementsContextMenu.context = { // Must set context before showing menu
-            viewer: viewer,
-            distanceMeasurementsPlugin: distanceMeasurements,
-            distanceMeasurement: e.distanceMeasurement
-        };
-        distanceMeasurementsContextMenu.show(e.event.clientX, e.event.clientY);
-        e.event.preventDefault();
-    });
 
     window.viewer = viewer;
 

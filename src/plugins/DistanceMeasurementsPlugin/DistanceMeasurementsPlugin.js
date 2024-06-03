@@ -1,6 +1,6 @@
-import {Plugin} from "../../viewer/Plugin.js";
-import {DistanceMeasurement} from "./DistanceMeasurement.js";
-import {DistanceMeasurementsMouseControl} from "./DistanceMeasurementsMouseControl.js";
+import { Plugin } from "../../viewer/Plugin.js";
+import { DistanceMeasurement } from "./DistanceMeasurement.js";
+import { DistanceMeasurementsMouseControl } from "./DistanceMeasurementsMouseControl.js";
 
 /**
  * {@link Viewer} plugin for measuring point-to-point distances.
@@ -263,304 +263,322 @@ import {DistanceMeasurementsMouseControl} from "./DistanceMeasurementsMouseContr
  * ````
  */
 class DistanceMeasurementsPlugin extends Plugin {
+  /**
+   * @constructor
+   * @param {Viewer} viewer The Viewer.
+   * @param {Object} [cfg]  Plugin configuration.
+   * @param {String} [cfg.id="DistanceMeasurements"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+   * @param {Number} [cfg.labelMinAxisLength=25] The minimum length, in pixels, of an axis wire beyond which its label is shown.
+   * @param {HTMLElement} [cfg.container] Container DOM element for markers and labels. Defaults to ````document.body````.
+   * @param {boolean} [cfg.defaultVisible=true] The default value of the DistanceMeasurements `visible` property.
+   * @param {boolean} [cfg.defaultOriginVisible=true] The default value of the DistanceMeasurements `originVisible` property.
+   * @param {boolean} [cfg.defaultTargetVisible=true] The default value of the DistanceMeasurements `targetVisible` property.
+   * @param {boolean} [cfg.defaultWireVisible=true] The default value of the DistanceMeasurements `wireVisible` property.
+   * @param {boolean} [cfg.defaultLabelsVisible=true] The default value of the DistanceMeasurements `labelsVisible` property.
+   * @param {boolean} [cfg.defaultXLabelEnabled=true] The default value of the DistanceMeasurements `xLabelEnabled` property.
+   * @param {boolean} [cfg.defaultYLabelEnabled=true] The default value of the DistanceMeasurements `yLabelEnabled` property.
+   * @param {boolean} [cfg.defaultZLabelEnabled=true] The default value of the DistanceMeasurements `zLabelEnabled` property.
+   * @param {boolean} [cfg.defaultLengthLabelEnabled=true] The default value of the DistanceMeasurements `lengthLabelEnabled` property.
+   * @param {boolean} [cfg.defaultAxisVisible=true] The default value of the DistanceMeasurements `axisVisible` property.
+   * @param {boolean} [cfg.defaultXAxisVisible=true] The default value of the DistanceMeasurements `xAxisVisible` property.
+   * @param {boolean} [cfg.defaultYAxisVisible=true] The default value of the DistanceMeasurements `yAxisVisible` property.
+   * @param {boolean} [cfg.defaultZAxisVisible=true] The default value of the DistanceMeasurements `zAxisVisible` property.
+   * @param {boolean} [cfg.useRotationAdjustment=false] The default value of DistanceMeasurements `useRotationAdjustment` property.
+   * @param {string} [cfg.defaultColor=#00BBFF] The default color of the length dots, wire and label.
+   * @param {number} [cfg.zIndex] If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
+   * @param {boolean} [cfg.defaultLabelsOnWires=true] The default value of the DistanceMeasurements `labelsOnWires` property.
+   * @param {PointerCircle} [cfg.pointerLens] A PointerLens to help the user position the pointer. This can be shared with other plugins.
+   */
+  constructor(viewer, cfg = {}) {
+    super("DistanceMeasurements", viewer);
 
-    /**
-     * @constructor
-     * @param {Viewer} viewer The Viewer.
-     * @param {Object} [cfg]  Plugin configuration.
-     * @param {String} [cfg.id="DistanceMeasurements"] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
-     * @param {Number} [cfg.labelMinAxisLength=25] The minimum length, in pixels, of an axis wire beyond which its label is shown.
-     * @param {HTMLElement} [cfg.container] Container DOM element for markers and labels. Defaults to ````document.body````.
-     * @param {boolean} [cfg.defaultVisible=true] The default value of the DistanceMeasurements `visible` property.
-     * @param {boolean} [cfg.defaultOriginVisible=true] The default value of the DistanceMeasurements `originVisible` property.
-     * @param {boolean} [cfg.defaultTargetVisible=true] The default value of the DistanceMeasurements `targetVisible` property.
-     * @param {boolean} [cfg.defaultWireVisible=true] The default value of the DistanceMeasurements `wireVisible` property.
-     * @param {boolean} [cfg.defaultLabelsVisible=true] The default value of the DistanceMeasurements `labelsVisible` property.
-     * @param {boolean} [cfg.defaultXLabelEnabled=true] The default value of the DistanceMeasurements `xLabelEnabled` property.
-     * @param {boolean} [cfg.defaultYLabelEnabled=true] The default value of the DistanceMeasurements `yLabelEnabled` property.
-     * @param {boolean} [cfg.defaultZLabelEnabled=true] The default value of the DistanceMeasurements `zLabelEnabled` property.
-     * @param {boolean} [cfg.defaultLengthLabelEnabled=true] The default value of the DistanceMeasurements `lengthLabelEnabled` property.
-     * @param {boolean} [cfg.defaultAxisVisible=true] The default value of the DistanceMeasurements `axisVisible` property.
-     * @param {boolean} [cfg.defaultXAxisVisible=true] The default value of the DistanceMeasurements `xAxisVisible` property.
-     * @param {boolean} [cfg.defaultYAxisVisible=true] The default value of the DistanceMeasurements `yAxisVisible` property.
-     * @param {boolean} [cfg.defaultZAxisVisible=true] The default value of the DistanceMeasurements `zAxisVisible` property.
-     * @param {string} [cfg.defaultColor=#00BBFF] The default color of the length dots, wire and label.
-     * @param {number} [cfg.zIndex] If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
-     * @param {boolean} [cfg.defaultLabelsOnWires=true] The default value of the DistanceMeasurements `labelsOnWires` property.
-     * @param {PointerCircle} [cfg.pointerLens] A PointerLens to help the user position the pointer. This can be shared with other plugins.
-     */
-    constructor(viewer, cfg = {}) {
+    this._pointerLens = cfg.pointerLens;
 
-        super("DistanceMeasurements", viewer);
+    this._container = cfg.container || document.body;
 
-        this._pointerLens = cfg.pointerLens;
+    this._defaultControl = null;
 
-        this._container = cfg.container || document.body;
+    this._measurements = {};
 
-        this._defaultControl = null;
+    this.labelMinAxisLength = cfg.labelMinAxisLength;
+    this.defaultVisible = cfg.defaultVisible !== false;
+    this.defaultOriginVisible = cfg.defaultOriginVisible !== false;
+    this.defaultTargetVisible = cfg.defaultTargetVisible !== false;
+    this.defaultWireVisible = cfg.defaultWireVisible !== false;
+    this.defaultXLabelEnabled = cfg.defaultXLabelEnabled !== false;
+    this.defaultYLabelEnabled = cfg.defaultYLabelEnabled !== false;
+    this.defaultZLabelEnabled = cfg.defaultZLabelEnabled !== false;
+    this.defaultLengthLabelEnabled = cfg.defaultLengthLabelEnabled !== false;
+    this.defaultLabelsVisible = cfg.defaultLabelsVisible !== false;
+    this.defaultAxisVisible = cfg.defaultAxisVisible !== false;
+    this.defaultXAxisVisible = cfg.defaultXAxisVisible !== false;
+    this.defaultYAxisVisible = cfg.defaultYAxisVisible !== false;
+    this.defaultZAxisVisible = cfg.defaultZAxisVisible !== false;
+    this.defaultColor =cfg.defaultColor !== undefined ? cfg.defaultColor : "#00BBFF";
+    this.zIndex = cfg.zIndex || 10000;
+    this.defaultLabelsOnWires = cfg.defaultLabelsOnWires !== false;
+    this.useRotationAdjustment = cfg.useRotationAdjustment !== undefined ? cfg.useRotationAdjustment !== false : false;
 
-        this._measurements = {};
+    this._onMouseOver = (event, measurement) => {
+      this.fire("mouseOver", {
+        plugin: this,
+        distanceMeasurement: measurement,
+        measurement,
+        event,
+      });
+    };
 
-        this.labelMinAxisLength = cfg.labelMinAxisLength;
-        this.defaultVisible = cfg.defaultVisible !== false;
-        this.defaultOriginVisible = cfg.defaultOriginVisible !== false;
-        this.defaultTargetVisible = cfg.defaultTargetVisible !== false;
-        this.defaultWireVisible = cfg.defaultWireVisible !== false;
-        this.defaultXLabelEnabled = cfg.defaultXLabelEnabled !== false;
-        this.defaultYLabelEnabled = cfg.defaultYLabelEnabled !== false;
-        this.defaultZLabelEnabled = cfg.defaultZLabelEnabled !== false;
-        this.defaultLengthLabelEnabled = cfg.defaultLengthLabelEnabled !== false;
-        this.defaultLabelsVisible = cfg.defaultLabelsVisible !== false;
-        this.defaultAxisVisible = cfg.defaultAxisVisible !== false;
-        this.defaultXAxisVisible = cfg.defaultXAxisVisible !== false;
-        this.defaultYAxisVisible = cfg.defaultYAxisVisible !== false;
-        this.defaultZAxisVisible = cfg.defaultZAxisVisible !== false;
-        this.defaultColor = cfg.defaultColor !== undefined ? cfg.defaultColor : "#00BBFF";
-        this.zIndex = cfg.zIndex || 10000;
-        this.defaultLabelsOnWires = cfg.defaultLabelsOnWires !== false;
+    this._onMouseLeave = (event, measurement) => {
+      this.fire("mouseLeave", {
+        plugin: this,
+        distanceMeasurement: measurement,
+        measurement,
+        event,
+      });
+    };
 
-        this._onMouseOver = (event, measurement) => {
-            this.fire("mouseOver", {
-                plugin: this,
-                distanceMeasurement: measurement,
-                measurement,
-                event
-            });
-        }
+    this._onContextMenu = (event, measurement) => {
+      this.fire("contextMenu", {
+        plugin: this,
+        distanceMeasurement: measurement,
+        measurement,
+        event,
+      });
+    };
+  }
 
-        this._onMouseLeave = (event, measurement) => {
-            this.fire("mouseLeave", {
-                plugin: this,
-                distanceMeasurement: measurement,
-                measurement,
-                event
-            });
-        };
+  /**
+   * Gets the plugin's HTML container element, if any.
+   * @returns {*|HTMLElement|HTMLElement}
+   */
+  getContainerElement() {
+    return this._container;
+  }
 
-        this._onContextMenu = (event, measurement) => {
-            this.fire("contextMenu", {
-                plugin: this,
-                distanceMeasurement: measurement,
-                measurement,
-                event
-            });
-        };
+  /**
+   * @private
+   */
+  send(name, value) {}
+
+  /**
+   * Gets the PointerLens attached to this DistanceMeasurementsPlugin.
+   * @returns {PointerCircle}
+   */
+  get pointerLens() {
+    return this._pointerLens;
+  }
+
+  /**
+   * Gets the default {@link DistanceMeasurementsControl}.
+   *
+   * @type {DistanceMeasurementsControl}
+   * @deprecated
+   */
+  get control() {
+    if (!this._defaultControl) {
+      this._defaultControl = new DistanceMeasurementsMouseControl(this, {});
     }
+    return this._defaultControl;
+  }
 
-    /**
-     * Gets the plugin's HTML container element, if any.
-     * @returns {*|HTMLElement|HTMLElement}
-     */
-    getContainerElement() {
-        return this._container;
+  /**
+   * Gets the existing {@link DistanceMeasurement}s, each mapped to its {@link DistanceMeasurement#id}.
+   *
+   * @type {{String:DistanceMeasurement}}
+   */
+  get measurements() {
+    return this._measurements;
+  }
+
+  /**
+   * Sets the minimum length, in pixels, of an axis wire beyond which its label is shown.
+   *
+   * The axis wire's label is not shown when its length is less than this value.
+   *
+   * This is ````25```` pixels by default.
+   *
+   * Must not be less than ````1````.
+   *
+   * @type {number}
+   */
+  set labelMinAxisLength(labelMinAxisLength) {
+    if (labelMinAxisLength < 1) {
+      this.error("labelMinAxisLength must be >= 1; defaulting to 25");
+      labelMinAxisLength = 25;
     }
+    this._labelMinAxisLength = labelMinAxisLength || 25;
+  }
 
-    /**
-     * @private
-     */
-    send(name, value) {
+  /**
+   * Gets the minimum length, in pixels, of an axis wire beyond which its label is shown.
+   * @returns {number}
+   */
+  get labelMinAxisLength() {
+    return this._labelMinAxisLength;
+  }
 
+  /**
+   * Sets whether the measurement added is rotation adjusted or not.
+   *
+   * @type {boolean}
+   */
+  set useRotationAdjustment(_useRotationAdjustment) {
+    _useRotationAdjustment = _useRotationAdjustment !== undefined ? Boolean(_useRotationAdjustment) : false;
+    this._useRotationAdjustment = _useRotationAdjustment;
+  }
+
+  /**
+   * Gets whether the measurement added is rotation adjusted or not.
+   * @returns {number}
+   */
+  get useRotationAdjustment(){
+    return this._useRotationAdjustment;
+  }
+  /**
+   * Creates a {@link DistanceMeasurement}.
+   *
+   * The DistanceMeasurement is then registered by {@link DistanceMeasurement#id} in {@link DistanceMeasurementsPlugin#measurements}.
+   *
+   * @param {Object} params {@link DistanceMeasurement} configuration.
+   * @param {String} params.id Unique ID to assign to {@link DistanceMeasurement#id}. The DistanceMeasurement will be registered by this in {@link DistanceMeasurementsPlugin#measurements} and {@link Scene.components}. Must be unique among all components in the {@link Viewer}.
+   * @param {Number[]} params.origin.worldPos Origin World-space 3D position.
+   * @param {Entity} params.origin.entity Origin Entity.
+   * @param {Number[]} params.target.worldPos Target World-space 3D position.
+   * @param {Entity} params.target.entity Target Entity.
+   * @param {Boolean} [params.visible=true] Whether to initially show the {@link DistanceMeasurement}.
+   * @param {Boolean} [params.originVisible=true] Whether to initially show the {@link DistanceMeasurement} origin.
+   * @param {Boolean} [params.targetVisible=true] Whether to initially show the {@link DistanceMeasurement} target.
+   * @param {Boolean} [params.wireVisible=true] Whether to initially show the direct point-to-point wire between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
+   * @param {Boolean} [params.axisVisible=true] Whether to initially show the axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
+   * @param {Boolean} [params.xAxisVisible=true] Whether to initially show the X-axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
+   * @param {Boolean} [params.yAxisVisible=true] Whether to initially show the Y-axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
+   * @param {Boolean} [params.zAxisVisible=true] Whether to initially show the Z-axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
+   * @param {Boolean} [params.xLabelEnabled=true] Whether to initially show the x label.
+   * @param {Boolean} [params.yLabelEnabled=true] Whether to initially show the y label.
+   * @param {Boolean} [params.zLabelEnabled=true] Whether to initially show the z label.
+   * @param {Boolean} [params.lengthLabelEnabled=true] Whether to initially show the length label.
+   * @param {Boolean} [params.labelsVisible=true] Whether to initially show the labels.
+   * @param {Boolean} [params.lengthLabelVisible=true] Whether to initially show the labels.
+   * @param {string} [params.color] The color of the length dot, wire and label.
+   * @param {Boolean} [params.labelsOnWires=true] Determines if labels will be set on wires or one below the other.
+   * @returns {DistanceMeasurement} The new {@link DistanceMeasurement}.
+   */
+  createMeasurement(params = {}) {
+    if (this.viewer.scene.components[params.id]) {
+      this.error(
+        "Viewer scene component with this ID already exists: " + params.id
+      );
+      delete params.id;
     }
+    const origin = params.origin;
+    const target = params.target;
+    const measurement = new DistanceMeasurement(this, {
+      id: params.id,
+      plugin: this,
+      container: this._container,
+      origin: {
+        entity: origin.entity,
+        worldPos: origin.worldPos,
+      },
+      target: {
+        entity: target.entity,
+        worldPos: target.worldPos,
+      },
+      visible: params.visible,
+      wireVisible: params.wireVisible,
+      axisVisible: params.axisVisible !== false && this.defaultAxisVisible !== false,
+      xAxisVisible: params.xAxisVisible !== false && this.defaultXAxisVisible !== false,
+      yAxisVisible: params.yAxisVisible !== false && this.defaultYAxisVisible !== false,
+      zAxisVisibld: params.zAxisVisible !== false && this.defaultZAxisVisible !== false,
+      xLabelEnabled: params.xLabelEnabled !== false && this.defaultXLabelEnabled !== false,
+      yLabelEnabled: params.yLabelEnabled !== false && this.defaultYLabelEnabled !== false,
+      zLabelEnabled: params.zLabelEnabled !== false && this.defaultZLabelEnabled !== false,
+      lengthLabelEnabled: params.lengthLabelEnabled !== false && this.defaultLengthLabelEnabled !== false,
+      labelsVisible: params.labelsVisible !== false && this.defaultLabelsVisible !== false,
+      useRotationAdjustment: this.useRotationAdjustment,
+      originVisible: params.originVisible,
+      targetVisible: params.targetVisible,
+      color: params.color,
+      labelsOnWires:params.labelsOnWires !== false && this.defaultLabelsOnWires !== false,
+      onMouseOver: this._onMouseOver,
+      onMouseLeave: this._onMouseLeave,
+      onContextMenu: this._onContextMenu,
+    });
+    this._measurements[measurement.id] = measurement;
+    measurement.clickable = true;
+    measurement.on("destroyed", () => {
+      delete this._measurements[measurement.id];
+    });
+    this.fire("measurementCreated", measurement);
+    return measurement;
+  }
 
-    /**
-     * Gets the PointerLens attached to this DistanceMeasurementsPlugin.
-     * @returns {PointerCircle}
-     */
-    get pointerLens() {
-        return this._pointerLens;
+  /**
+   * Destroys a {@link DistanceMeasurement}.
+   *
+   * @param {String} id ID of DistanceMeasurement to destroy.
+   */
+  destroyMeasurement(id) {
+    const measurement = this._measurements[id];
+    if (!measurement) {
+      this.log("DistanceMeasurement not found: " + id);
+      return;
     }
+    measurement.destroy();
+    this.fire("measurementDestroyed", measurement);
+  }
 
-    /**
-     * Gets the default {@link DistanceMeasurementsControl}.
-     *
-     * @type {DistanceMeasurementsControl}
-     * @deprecated
-     */
-    get control() {
-        if (!this._defaultControl) {
-            this._defaultControl = new DistanceMeasurementsMouseControl(this, {});
-        }
-        return this._defaultControl;
+  /**
+   * Shows all or hides the distance label of each {@link DistanceMeasurement}.
+   *
+   * @param {Boolean} labelsShown Whether or not to show the labels.
+   */
+  setLabelsShown(labelsShown) {
+    for (const [key, measurement] of Object.entries(this.measurements)) {
+      measurement.labelShown = labelsShown;
     }
+  }
 
-    /**
-     * Gets the existing {@link DistanceMeasurement}s, each mapped to its {@link DistanceMeasurement#id}.
-     *
-     * @type {{String:DistanceMeasurement}}
-     */
-    get measurements() {
-        return this._measurements;
+  /**
+   * Shows all or hides the axis wires of each {@link DistanceMeasurement}.
+   *
+   * @param {Boolean} labelsShown Whether or not to show the axis wires.
+   */
+  setAxisVisible(axisVisible) {
+    for (const [key, measurement] of Object.entries(this.measurements)) {
+      measurement.axisVisible = axisVisible;
     }
+    this.defaultAxisVisible = axisVisible;
+  }
 
-    /**
-     * Sets the minimum length, in pixels, of an axis wire beyond which its label is shown.
-     *
-     * The axis wire's label is not shown when its length is less than this value.
-     *
-     * This is ````25```` pixels by default.
-     *
-     * Must not be less than ````1````.
-     *
-     * @type {number}
-     */
-    set labelMinAxisLength(labelMinAxisLength) {
-        if (labelMinAxisLength < 1) {
-            this.error("labelMinAxisLength must be >= 1; defaulting to 25");
-            labelMinAxisLength = 25;
-        }
-        this._labelMinAxisLength = labelMinAxisLength || 25;
-    }
+  /**
+   * Gets if the axis wires of each {@link DistanceMeasurement} are visible.
+   *
+   * @returns {Boolean} Whether or not the axis wires are visible.
+   */
+  getAxisVisible() {
+    return this.defaultAxisVisible;
+  }
 
-    /**
-     * Gets the minimum length, in pixels, of an axis wire beyond which its label is shown.
-     * @returns {number}
-     */
-    get labelMinAxisLength() {
-        return this._labelMinAxisLength;
+  /**
+   * Destroys all {@link DistanceMeasurement}s.
+   */
+  clear() {
+    const ids = Object.keys(this._measurements);
+    for (var i = 0, len = ids.length; i < len; i++) {
+      this.destroyMeasurement(ids[i]);
     }
+  }
 
-    /**
-     * Creates a {@link DistanceMeasurement}.
-     *
-     * The DistanceMeasurement is then registered by {@link DistanceMeasurement#id} in {@link DistanceMeasurementsPlugin#measurements}.
-     *
-     * @param {Object} params {@link DistanceMeasurement} configuration.
-     * @param {String} params.id Unique ID to assign to {@link DistanceMeasurement#id}. The DistanceMeasurement will be registered by this in {@link DistanceMeasurementsPlugin#measurements} and {@link Scene.components}. Must be unique among all components in the {@link Viewer}.
-     * @param {Number[]} params.origin.worldPos Origin World-space 3D position.
-     * @param {Entity} params.origin.entity Origin Entity.
-     * @param {Number[]} params.target.worldPos Target World-space 3D position.
-     * @param {Entity} params.target.entity Target Entity.
-     * @param {Boolean} [params.visible=true] Whether to initially show the {@link DistanceMeasurement}.
-     * @param {Boolean} [params.originVisible=true] Whether to initially show the {@link DistanceMeasurement} origin.
-     * @param {Boolean} [params.targetVisible=true] Whether to initially show the {@link DistanceMeasurement} target.
-     * @param {Boolean} [params.wireVisible=true] Whether to initially show the direct point-to-point wire between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
-     * @param {Boolean} [params.axisVisible=true] Whether to initially show the axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
-     * @param {Boolean} [params.xAxisVisible=true] Whether to initially show the X-axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
-     * @param {Boolean} [params.yAxisVisible=true] Whether to initially show the Y-axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
-     * @param {Boolean} [params.zAxisVisible=true] Whether to initially show the Z-axis-aligned wires between {@link DistanceMeasurement#origin} and {@link DistanceMeasurement#target}.
-     * @param {Boolean} [params.xLabelEnabled=true] Whether to initially show the x label.
-     * @param {Boolean} [params.yLabelEnabled=true] Whether to initially show the y label.
-     * @param {Boolean} [params.zLabelEnabled=true] Whether to initially show the z label.
-     * @param {Boolean} [params.lengthLabelEnabled=true] Whether to initially show the length label.
-     * @param {Boolean} [params.labelsVisible=true] Whether to initially show the labels.
-     * @param {Boolean} [params.lengthLabelVisible=true] Whether to initially show the labels.
-     * @param {string} [params.color] The color of the length dot, wire and label.
-     * @param {Boolean} [params.labelsOnWires=true] Determines if labels will be set on wires or one below the other.
-     * @returns {DistanceMeasurement} The new {@link DistanceMeasurement}.
-     */
-    createMeasurement(params = {}) {
-        if (this.viewer.scene.components[params.id]) {
-            this.error("Viewer scene component with this ID already exists: " + params.id);
-            delete params.id;
-        }
-        const origin = params.origin;
-        const target = params.target;
-        const measurement = new DistanceMeasurement(this, {
-            id: params.id,
-            plugin: this,
-            container: this._container,
-            origin: {
-                entity: origin.entity,
-                worldPos: origin.worldPos
-            },
-            target: {
-                entity: target.entity,
-                worldPos: target.worldPos
-            },
-            visible: params.visible,
-            wireVisible: params.wireVisible,
-            axisVisible: params.axisVisible !== false && this.defaultAxisVisible !== false,
-            xAxisVisible: params.xAxisVisible !== false && this.defaultXAxisVisible !== false,
-            yAxisVisible: params.yAxisVisible !== false && this.defaultYAxisVisible !== false,
-            zAxisVisible: params.zAxisVisible !== false && this.defaultZAxisVisible !== false,
-            xLabelEnabled: params.xLabelEnabled !== false && this.defaultXLabelEnabled !== false,
-            yLabelEnabled: params.yLabelEnabled !== false && this.defaultYLabelEnabled !== false,
-            zLabelEnabled: params.zLabelEnabled !== false && this.defaultZLabelEnabled !== false,
-            lengthLabelEnabled: params.lengthLabelEnabled !== false && this.defaultLengthLabelEnabled !== false,
-            labelsVisible: params.labelsVisible !== false && this.defaultLabelsVisible !== false,
-            originVisible: params.originVisible,
-            targetVisible: params.targetVisible,
-            color: params.color,
-            labelsOnWires: params.labelsOnWires !== false && this.defaultLabelsOnWires !== false,
-            onMouseOver: this._onMouseOver,
-            onMouseLeave: this._onMouseLeave,
-            onContextMenu: this._onContextMenu
-        });
-        this._measurements[measurement.id] = measurement;
-        measurement.clickable = true;
-        measurement.on("destroyed", () => {
-            delete this._measurements[measurement.id];
-        });
-        this.fire("measurementCreated", measurement);
-        return measurement;
-    }
-
-    /**
-     * Destroys a {@link DistanceMeasurement}.
-     *
-     * @param {String} id ID of DistanceMeasurement to destroy.
-     */
-    destroyMeasurement(id) {
-        const measurement = this._measurements[id];
-        if (!measurement) {
-            this.log("DistanceMeasurement not found: " + id);
-            return;
-        }
-        measurement.destroy();
-        this.fire("measurementDestroyed", measurement);
-    }
-
-    /**
-     * Shows all or hides the distance label of each {@link DistanceMeasurement}.
-     *
-     * @param {Boolean} labelsShown Whether or not to show the labels.
-     */
-    setLabelsShown(labelsShown) {
-        for (const [key, measurement] of Object.entries(this.measurements)) {
-            measurement.labelShown = labelsShown;
-        }
-    }
-
-    /**
-     * Shows all or hides the axis wires of each {@link DistanceMeasurement}.
-     *
-     * @param {Boolean} labelsShown Whether or not to show the axis wires.
-     */
-    setAxisVisible(axisVisible) {
-        for (const [key, measurement] of Object.entries(this.measurements)) {
-            measurement.axisVisible = axisVisible;
-        }
-        this.defaultAxisVisible = axisVisible;
-    }
-
-    /**
-     * Gets if the axis wires of each {@link DistanceMeasurement} are visible.
-     *
-     * @returns {Boolean} Whether or not the axis wires are visible.
-     */
-    getAxisVisible() {
-        return this.defaultAxisVisible;
-    }
-
-    /**
-     * Destroys all {@link DistanceMeasurement}s.
-     */
-    clear() {
-        const ids = Object.keys(this._measurements);
-        for (var i = 0, len = ids.length; i < len; i++) {
-            this.destroyMeasurement(ids[i]);
-        }
-    }
-
-    /**
-     * Destroys this DistanceMeasurementsPlugin.
-     *
-     * Destroys all {@link DistanceMeasurement}s first.
-     */
-    destroy() {
-        this.clear();
-        super.destroy();
-    }
+  /**
+   * Destroys this DistanceMeasurementsPlugin.
+   *
+   * Destroys all {@link DistanceMeasurement}s first.
+   */
+  destroy() {
+    this.clear();
+    super.destroy();
+  }
 }
 
-export {DistanceMeasurementsPlugin}
+export { DistanceMeasurementsPlugin };
