@@ -246,6 +246,9 @@ class Marker extends Component {
             return;
         }
         this._occludable = occludable;
+        if (this._occludable) {
+            this._renderer.markerWorldPosUpdated(this);
+        }
     }
 
     /**

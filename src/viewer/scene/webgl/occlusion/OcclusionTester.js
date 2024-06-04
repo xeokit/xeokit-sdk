@@ -74,7 +74,6 @@ class OcclusionTester {
     markerWorldPosUpdated(marker) {
         const occlusionLayer = this._markersToOcclusionLayersMap[marker.id];
         if (!occlusionLayer) {
-            marker.error("Marker has not been added to OcclusionTester");
             return;
         }
         const originHash = marker.origin.join();
