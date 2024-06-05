@@ -888,6 +888,129 @@ class Zone extends Component {
         this._center = math.vec3([ (xmin + xmax) / 2, (ymin + ymax) / 2, (zmin + zmax) / 2 ]);
     }
 
+    sectionedAverage(sectionPlanes) {
+        const planeCoords = this._geometry.planeCoordinates.slice();
+
+        let faces = [ ];
+        {
+            const h = this._geometry.height;
+            const a = this._geometry.altitude;
+            const c = a + Math.max(0, h);
+            const f = a + Math.min(0, h);
+
+            const addPlane = (isCeiling) => {
+                const face = planeCoords.map(p => [ p[0], isCeiling ? c : f, p[1] ]);
+                faces.push(isCeiling ? face : face.slice(0).reverse());
+            };
+            addPlane(true);     // ceiling
+            addPlane(false);    // floor
+
+            // sides
+            const p = (idx, y) => [ planeCoords[idx][0], y, planeCoords[idx][1] ];
+            for (let i = 0; i < planeCoords.length; ++i)
+            {
+                const j = (i + 1) % planeCoords.length;
+                faces.push([ p(i, f), p(j, f), p(j, c), p(i, c) ]);
+            }
+        }
+
+        for (const s of sectionPlanes)
+        {
+            const dir = s.dir;
+            const dist = s.dist;
+            const newFaces = [ ];
+
+            for (const face of faces)
+            {
+                const EPSILON = 1e-5;
+                const COPLANAR = 0;
+                const FRONT = 1;
+                const BACK = 2;
+                const SPANNING = 3;
+
+                // Classify each point as well as the entire polygon into one of the above four classes.
+                let polygonType = 0;
+                const types = [ ];
+                for (let i = 0; i < face.length; i++) {
+                    const t = math.dotVec3(dir, face[i]) + dist;
+                    const type = (t < -EPSILON) ? BACK : (t > EPSILON) ? FRONT : COPLANAR;
+                    polygonType |= type;
+                    types.push(type);
+                }
+
+                // Put the polygon in the correct list, splitting it when necessary.
+                switch (polygonType) {
+                case COPLANAR:
+                    newFaces.push(face);
+                    break;
+                case FRONT:
+                    newFaces.push(face);
+                    break;
+                case BACK:
+                    break;
+                case SPANNING:
+                    const f = [ ];
+                    for (let i = 0; i < face.length; i++)
+                    {
+                        var j = (i + 1) % face.length;
+                        const ti = types[i];
+                        const tj = types[j];
+                        const vi = face[i];
+                        const vj = face[j];
+                        if (ti !== BACK)
+                        {
+                            f.push(vi);
+                        }
+
+                        if ((ti | tj) === SPANNING)
+                        {
+                            const diff = math.vec3();
+                            math.subVec3(vj, vi, diff);
+                            const t = - (dist + math.dotVec3(dir, vi)) / math.dotVec3(dir, diff);
+                            const v = [0,0,0];
+                            math.lerpVec3(t, 0, 1, vi, vj, v);
+                            f.push(v);
+                        }
+                    }
+                    if (f.length >= 3)
+                    {
+                        newFaces.push(f);
+                    }
+                    break;
+                }
+            }
+
+            faces = newFaces;
+        }
+
+        if (faces.length === 0)
+        {
+            return null;
+        }
+        else
+        {
+            const avg = math.vec3([ 0, 0, 0 ]);
+            const unique = new Set();
+
+            for (const f of faces)
+            {
+                for (const p of f)
+                {
+                    const id = p.map(x => x.toFixed(3)).join(":");
+                    if (! (unique.has(id)))
+                    {
+                        unique.add(id);
+                        math.addVec3(avg, p, avg);
+                    }
+                }
+            }
+
+            math.mulVec3Scalar(avg, 1 / unique.size, avg);
+
+            return avg;
+        }
+    }
+
     get center() {
         return this._center;
     }
