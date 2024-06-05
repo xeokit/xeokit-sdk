@@ -231,7 +231,16 @@
         const zoneAnnotation = getZoneAnnotation(zone);
         if (zoneAnnotation)
         {
-            zoneAnnotation.worldPos = zone.center;
+            // Find zone's `average` position after being sliced by all active section planes
+            const pos = zone.sectionedAverage(Object.values(sectionPlanes.sectionPlanes).filter(s => s.active));
+            // If the SectionPlanes were to not affect the position of the Annotation, the `pos` could be instead:
+            // const pos = zone.center;
+
+            zoneAnnotation.setMarkerShown(!!pos);
+            if (pos)
+            {
+                zoneAnnotation.worldPos = pos;
+            }
         }
     };
 
@@ -410,6 +419,12 @@
     });
 
     const zonesPlugin = new ZonesPlugin(viewer);
+
+    // Whenever the state of section planes changes, readjust all zones' annotations
+    const adjustAllZoneAnnotations = () => zonesPlugin.zones.forEach(adjustZoneAnnotation)
+    viewer.scene.on("sectionPlaneCreated",   adjustAllZoneAnnotations);
+    viewer.scene.on("sectionPlaneUpdated",   adjustAllZoneAnnotations);
+    viewer.scene.on("sectionPlaneDestroyed", adjustAllZoneAnnotations);
 
     const zonesControl = new ZonesMouseControl(zonesPlugin);
 
