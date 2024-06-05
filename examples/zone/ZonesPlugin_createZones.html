@@ -214,7 +214,6 @@
     const attachZoneAnnotation = function(zone, glyph, title, description) {
         const annotation = annotations.createAnnotation({
             id: "myAnnotation_" + zone.id,
-            worldPos: zone.center,
             occludable: true,
             labelShown: true,
             values: {
@@ -223,6 +222,7 @@
                 description: description
             },
         });
+        adjustZoneAnnotation(zone);
 
         zone.on("destroyed", () => annotation.destroy());
     };
