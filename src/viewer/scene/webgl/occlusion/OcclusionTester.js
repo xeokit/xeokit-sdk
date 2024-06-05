@@ -88,7 +88,7 @@ class OcclusionTester {
             let newOcclusionLayer = this._occlusionLayers[originHash];
             if (!newOcclusionLayer) {
                 newOcclusionLayer = new OcclusionLayer(this._scene, marker.origin);
-                this._occlusionLayers[originHash] = occlusionLayer;
+                this._occlusionLayers[originHash] = newOcclusionLayer;
                 this._occlusionLayersListDirty = true;
             }
             newOcclusionLayer.addMarker(marker);
@@ -332,7 +332,10 @@ class OcclusionTester {
                 continue;
             }
 
-            const origin = occlusionLayer.origin;
+            // The `origin` has been changed from `occlusionLayer.origin` to `[ 0, 0, 0 ]`
+            // because OcclusionLayer markers' transformation is being applied through the
+            // OcclusionLayer::positions array. See XEOK-33
+            const origin = [ 0, 0, 0 ];
 
             gl.uniformMatrix4fv(this._uViewMatrix, false, createRTCViewMat(camera.viewMatrix, origin));
 
