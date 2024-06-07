@@ -1193,6 +1193,24 @@ class ZonesMouseControl extends Component {
             return;
         }
 
+        if (typeof(zoneAltitude) === "object" && (zoneAltitude !== null)) {
+            const params = zoneAltitude;
+            const param = (name, defaultValue) => {
+                if (name in params) {
+                    return params[name];
+                } else if (defaultValue !== undefined) {
+                    return defaultValue;
+                } else {
+                    throw "config missing: " + name;
+                }
+            };
+
+            zoneAltitude = param("altitude");
+            zoneHeight   = param("height");
+            zoneColor    = param("color", "#008000");
+            zoneAlpha    = param("alpha", 0.5);
+        }
+
         const zonesPlugin = this.zonesPlugin;
         const viewer = zonesPlugin.viewer;
         const scene = viewer.scene;
@@ -1370,6 +1388,24 @@ export class ZonesTouchControl extends Component {
     }
 
     activate(zoneAltitude, zoneHeight, zoneColor, zoneAlpha) {
+
+        if (typeof(zoneAltitude) === "object" && (zoneAltitude !== null)) {
+            const params = zoneAltitude;
+            const param = (name, defaultValue) => {
+                if (name in params) {
+                    return params[name];
+                } else if (defaultValue !== undefined) {
+                    return defaultValue;
+                } else {
+                    throw "config missing: " + name;
+                }
+            };
+
+            zoneAltitude = param("altitude");
+            zoneHeight   = param("height");
+            zoneColor    = param("color", "#008000");
+            zoneAlpha    = param("alpha", 0.5);
+        }
 
         if (this._deactivate) {
             return;
@@ -1580,6 +1616,24 @@ export class ZonesPolysurfaceMouseControl extends Component {
 
     activate(zoneAltitude, zoneHeight, zoneColor, zoneAlpha) {
 
+        if (typeof(zoneAltitude) === "object" && (zoneAltitude !== null)) {
+            const params = zoneAltitude;
+            const param = (name, defaultValue) => {
+                if (name in params) {
+                    return params[name];
+                } else if (defaultValue !== undefined) {
+                    return defaultValue;
+                } else {
+                    throw "config missing: " + name;
+                }
+            };
+
+            zoneAltitude = param("altitude");
+            zoneHeight   = param("height");
+            zoneColor    = param("color", "#008000");
+            zoneAlpha    = param("alpha", 0.5);
+        }
+
         if (this._action) {
             return;
         }
@@ -1640,6 +1694,24 @@ export class ZonesPolysurfaceTouchControl extends Component {
     }
 
     activate(zoneAltitude, zoneHeight, zoneColor, zoneAlpha) {
+
+        if (typeof(zoneAltitude) === "object" && (zoneAltitude !== null)) {
+            const params = zoneAltitude;
+            const param = (name, defaultValue) => {
+                if (name in params) {
+                    return params[name];
+                } else if (defaultValue !== undefined) {
+                    return defaultValue;
+                } else {
+                    throw "config missing: " + name;
+                }
+            };
+
+            zoneAltitude = param("altitude");
+            zoneHeight   = param("height");
+            zoneColor    = param("color", "#008000");
+            zoneAlpha    = param("alpha", 0.5);
+        }
 
         if (this._action) {
             return;
