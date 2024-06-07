@@ -10,15 +10,32 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
     <style>
         #storeys {
+            overflow: hidden;
+            background-color: white;
             position: absolute;
             left: 10px;
-            top: 60px;
-            margin-top: 20px;
+            bottom: 10px;
+            width: 400px;
+            height: 409px;
+            /* margin-top: 20px; */
+            opacity: 0.8 !important;
+            border-radius: 15px;
 
-
-            margin-bottom: 10px;
+            /* margin-bottom: 10px; */
             pointer-events: all;
             opacity: 1.0;
+        }
+
+        .marker {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: red;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
         }
     </style>
 </head>
@@ -27,11 +44,13 @@
     <input type="checkbox" id="info-button" />
     <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
     <canvas id="myCanvas"></canvas>
-    <div id="storeys"></div>
+    <div id="storeys">
+        <div class="marker"></div>
+    </div>
     <div class="slideout-sidebar">
         <img class="info-icon" src="../../assets/images/storey_views_icon.png" />
         <h1>StoreyViewsPlugin</h1>
-        <h2>UX Recipe #3</h2>
+        <h2>Minimap</h2>
         <p>Click a room in the plan images to go there in <b>first-person mode</b>. </p>
         <h3>Components Used</h3>
         <ul>
@@ -61,12 +80,19 @@
 </body>
 
 <script type="module">
-
     //------------------------------------------------------------------------------------------------------------------
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import { Viewer, StoreyViewsPlugin, math, XKTLoaderPlugin, CameraMemento, Skybox } from "../../dist/xeokit-sdk.min.es.js";
+    import { Viewer, /*StoreyViewsPlugin, math,*/ XKTLoaderPlugin, CameraMemento, Skybox } from "../../dist/xeokit-sdk.min.es.js";
+    import { StoreyViewsPlugin } from '../../src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js';
+    import { math } from '../../src/viewer/scene/math/math.js';
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Helping Variables
+    //------------------------------------------------------------------------------------------------------------------
+
+    let animationInProgress = false;
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera
@@ -97,12 +123,7 @@
 
     const sceneModel = xktLoader.load({
         id: "myModel",
-        //src: "../../assets/models/xkt/v10/ifc/ar-demo-sample-single-building-01.xkt",
-        //      src: "../../assets/models/xkt/v10/ifc/rac.xkt",
-
         src: "../../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
-        //src: "../../assets/models/xkt/v8/ifc/OTCConferenceCenter.ifc.xkt",
-        //  src: "../../assets/models/xkt/v10/glb/archicad-demoprojekt.xkt",
         edges: true,
         objectDefaults: { // This model has opaque windows / spaces; make them transparent
             "IfcPlate": {
@@ -121,7 +142,8 @@
     // Add a StoreyViewsPlugin
     //------------------------------------------------------------------------------------------------------------------
 
-    const storeyViewsPlugin = new StoreyViewsPlugin(viewer, {});
+    const storeyViewsPlugin = new StoreyViewsPlugin(viewer);
+    const allStoreyMaps = [];
 
     //------------------------------------------------------------------------------------------------------------------
     // When model loaded, build a clickable set of storey plan images from the StoreyViewsPlugin, bind mouse
@@ -136,7 +158,6 @@
         viewer.scene.setObjectsOpacity(viewer.metaScene.getObjectIDsByType("IfcDoor"), 0.3);
 
         buildStoreyMapsMenu();
-
     });
 
     function buildStoreyMapsMenu() {
@@ -147,13 +168,8 @@
         const storeyDiv = document.getElementById("storeys");
         const storeyIds = Object.keys(storeyViewsPlugin.storeys);
 
-        let i = storeyIds.length - 1;
+        for (var i = 0, len = storeyIds.length; i < len; i++) {
 
-        function next() {
-
-            if (i < 0) {
-                return;
-            }
             const storeyId = storeyIds[i];
 
             const storeyMap = storeyViewsPlugin.createStoreyMap(storeyId, {
@@ -161,31 +177,60 @@
                 width: 400
             });
 
+            console.log('storeyMap: ', storeyMap);
+
+            allStoreyMaps.push(storeyMap);
+
             const img = document.createElement("img");
+            img.className = 'storeyMap';
             img.src = storeyMap.imageData;
-            img.style.border = "1px solid #000000";
-            img.style.background = "lightblue";
-            img.style.width = storeyMap.width + "px";
-            img.style.height = storeyMap.height + "px";
+            img.id = `${storeyId}`;
+            // img.style.border = "1px solid #000000";
+            img.style.borderRadius = "15px";
+            // img.style.background = "lightblue";
+            // img.style.width = storeyMap.width + "px";
+            // img.style.height = storeyMap.height + "px";
+            img.style.width = "100%";
+            img.style.height = "100%";
             img.style.opacity = 0.8;
+            img.style.display = 'none';
 
             storeyDiv.appendChild(img);
 
             img.onmouseenter = () => {
-                img.style.cursor = "pointer";
+                img.style.cursor = "default";
+            };
+
+            img.onmousemove = (e) => {
+                img.style.cursor = "default";
+                const imagePos = [e.offsetX, e.offsetY];
+                const pickResult = storeyViewsPlugin.pickStoreyMap(storeyMap, imagePos, {});
+                if (pickResult) {
+                    const entity = pickResult.entity;
+                    const metaObject = viewer.metaScene.metaObjects[entity.id];
+                    if (metaObject) {
+                        img.style.cursor = "pointer";
+                    }
+                }
             };
 
             img.onmouseleave = (e) => {
                 img.style.cursor = "default";
             };
 
+            const worldPos = math.vec3();
+
             img.onclick = (e) => {
 
                 const imagePos = [e.offsetX, e.offsetY];
 
-                const worldPos = storeyViewsPlugin.storeyMapToWorldPos(storeyMap, imagePos);
+                const pickResult = storeyViewsPlugin.pickStoreyMap(storeyMap, imagePos, {
+                    pickSurface: true
+                });
 
-                if (worldPos) {
+                if (pickResult) {
+
+                    worldPos.set(pickResult.worldPos);
 
                     // Set camera vertical position at the mid point of the storey's vertical
                     // extents - note how this is adapts to whichever of the X, Y or Z axis is
@@ -194,8 +239,8 @@
                     const camera = viewer.scene.camera;
                     const idx = camera.xUp ? 0 : (camera.yUp ? 1 : 2); // Find the right axis for "up"
                     const storey = storeyViewsPlugin.storeys[storeyMap.storeyId];
-                    worldPos[idx] = (storey.storeyAABB[idx] + storey.storeyAABB[3 + idx]) / 2;
-
+                    worldPos[idx] = (storey.aabb[idx] + storey.aabb[3 + idx]) / 2;
+                    animationInProgress = true;
                     viewer.cameraFlight.flyTo({
                         eye: worldPos,
                         up: viewer.camera.worldUp,
@@ -203,19 +248,90 @@
                         projection: "perspective",
                         duration: 1.5
                     }, () => {
+                        animationInProgress = false;
+                        getStorey(viewer.camera.viewMatrix)
                         viewer.cameraControl.navMode = "firstPerson";
                     });
                 }
             };
-
-            viewer.scene.once("tick", next);
-
-            i--;
         }
 
-        next();
+        viewer.camera.on('viewMatrix', function (matrix) {
+            if (!animationInProgress) getStorey(matrix);
+        })
+
+        // console.log('viewer.camera.position:', viewer.camera);
+        // const cameraPos = math.vec3();
+        // math.decomposeMat4(math.inverseMat4(viewer.camera.viewMatrix, math.mat4()), cameraPos, math.vec4(), math.vec3());
+        // console.log('cameraPos: ', cameraPos)
+        // const storey = storeyViewsPlugin.getStoreyContainingWorldPos(cameraPos);
+        // console.log('storey: ', storey);
+        // document.getElementById(`${storey}`).style.display = "block";
+    }
+
+
+
+    function getStorey(matrix) {
+        // console.log('getStoreyCalled');
+        const invert = math.mat4();
+        math.inverseMat4(matrix, invert);
+        const cameraPos = [invert[12], invert[13], invert[14]];
+        let storeyId = getStoreyId(cameraPos);
+        hideStoreyMaps();
+        const el = document.getElementById(`${storeyId}`)
+        el.style.display = "block";
+        const cameraDir = viewer.camera.worldForward;
+        const storeyMap = allStoreyMaps.filter(storey => storey.storeyId === storeyId)[0];
+        const imageDir = math.vec2(), imagePos = math.vec2();
+        storeyViewsPlugin.worldDirToStoreyMap(storeyMap, cameraDir, imageDir);
+        storeyViewsPlugin.worldPosToStoreyMap(storeyMap, [6.730193391766312, 0.7466786957215943, 7.087141290139923], imagePos);
+        // storeyViewsPlugin.worldPosToStoreyMap(storeyMap, cameraPos, imagePos);
+        console.log('imagePos: ', imagePos);
+        const centerX = 400 / 2;
+        const centerY = -400 / 2;
+        // const translateX = centerX - (imagePos[0]);
+        const translateY = centerY - (imagePos[1]);
+        const translateX = (imagePos[0]) - centerX;
+        // const translateY = (imagePos[1]) - centerY;
+        console.log('translateX: ', translateX)
+        console.log('translateY: ', translateY)
+        // console.log('imagePos: ', imagePos);
+        const angle = calculateAngleFromDirection(imageDir);
+        // el.style.transform = `translate(0px, 0px) rotate(0deg)`;
+        // el.style.transform = `rotate(${angle}deg)`;
+    }
+
+    function hideStoreyMaps() {
+        const elements = document.querySelectorAll('.storeyMap');
+        elements.forEach(element => {
+            element.style.display = 'none';
+        });
+    }
+
+    function getStoreyId(cameraPos) {
+        let storey = null;
+        storey = storeyViewsPlugin.getStoreyContainingWorldPos(cameraPos);
+        if (storey === null) {
+            storey = storeyViewsPlugin.getStoreyInVerticalRange(cameraPos);
+            if (storey === null) {
+                storey = storeyViewsPlugin.isPositionAboveOrBelowBuilding(cameraPos);
+            }
+        }
+        return storey;
+    }
+
+    function calculateAngleFromDirection(direction) {
+        const angleInRad = Math.atan2(direction[0], direction[1]);
+        const angleInDeg = angleInRad * (180 / Math.PI);
+        return angleInDeg;
+    }
+
+    function radToDeg(rad) {
+        return rad * (180 / Math.PI);
+    }
+
+    function calculateTranslation(cameraPos) {
+
     }
 
 </script>
-
-</html>

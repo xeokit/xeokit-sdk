@@ -675,10 +675,41 @@ class StoreyViewsPlugin extends Plugin {
     getStoreyContainingWorldPos(worldPos) {
         for (var storeyId in this.storeys) {
             const storey = this.storeys[storeyId];
-            if (math.point3AABB3Intersect(storey.storeyAABB, worldPos)) {
+            console.log('storeyAABB: ', (storey.storeyAABB[3] - storey.storeyAABB[0])/2, (storey.storeyAABB[4] - storey.storeyAABB[1])/2, (storey.storeyAABB[5] - storey.storeyAABB[2])/2, worldPos);
+            if (math.point3AABB3AbsoluteIntersect(storey.storeyAABB, worldPos)) {
                 return storeyId;
             }
         }
+        return null;
+    }
+
+    /**
+     * Gets the ID of the storey which's bounding box contains the y point of the world position
+     * 
+     * @param {Number[]} worldPos 3D World-space position.
+     * @returns {String} ID of the storey containing the position, or null if the position falls outside all the storeys.
+     */
+    getStoreyInVerticalRange(worldPos) {
+        for(let storeyId in this.storeys) {
+            const storey = this.storeys[storeyId];
+            const aabb = [0,0,0,0,0,0], pos = [0,0,0];
+            aabb[1] = storey.storeyAABB[1];
+            aabb[4] = storey.storeyAABB[4];
+            pos[1] = worldPos[1];
+            if (math.point3AABB3AbsoluteIntersect(aabb, pos)) {
+                return storeyId;
+            }
+        }
+        return null;
+    }
+
+    isPositionAboveOrBelowBuilding(worldPos){
+        const keys = Object.keys(this.storeys);
+        const ids = [keys[0], keys[keys.length-1]];
+        if(worldPos[1] < this.storeys[ids[0]].storeyAABB[1])
+            return ids[0];
+        else if (worldPos[1] > this.storeys[ids[1]].storeyAABB[4])
+            return ids[1];
         return null;
     }
 
