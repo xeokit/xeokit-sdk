@@ -126,7 +126,7 @@ class OcclusionLayer {
     _buildVBOs() {
         if (this.positionsBuf) {
             if (this.lenPositionsBuf === this.positions.length) { // Just updating buffer elements, don't need to reallocate
-                this.positionsBuf.setData(this.positions); // Indices don't need updating
+                this.positionsBuf.setData(new Float32Array(this.positions)); // Indices don't need updating
                 return;
             }
             this.positionsBuf.destroy();

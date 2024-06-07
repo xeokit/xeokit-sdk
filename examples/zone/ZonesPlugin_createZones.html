@@ -1,0 +1,501 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xeokit Example</title>
+    <link href="../css/pageStyle.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <script src="../libs/dat.gui.min.js" type="text/javascript"></script>
+    <link href="../css/dat-gui-light-style.css" rel="stylesheet"/>
+    <style>
+        .annotation-marker {
+            color: #ffffff;
+            line-height: 1.8;
+            text-align: center;
+            font-family: "monospace";
+            font-weight: bold;
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border-radius: 15px;
+            border: 2px solid #ffffff;
+            background: black;
+            visibility: hidden;
+            box-shadow: 5px 5px 15px 1px #000000;
+            z-index: 0;
+        }
+
+        .annotation-label {
+            position: absolute;
+            max-width: 250px;
+            min-height: 50px;
+            padding: 8px;
+            padding-left: 12px;
+            padding-right: 12px;
+            background: #ffffff;
+            color: #000000;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 8px;
+            border: #ffffff solid 2px;
+            box-shadow: 5px 5px 15px 1px #000000;
+            z-index: 90000;
+        }
+
+        .annotation-label:after {
+            content: '';
+            position: absolute;
+            border-style: solid;
+            border-width: 8px 12px 8px 0;
+            border-color: transparent white;
+            display: block;
+            width: 0;
+            z-index: 1;
+            margin-top: -11px;
+            left: -12px;
+            top: 20px;
+        }
+
+        .annotation-label:before {
+            content: '';
+            position: absolute;
+            border-style: solid;
+            border-width: 9px 13px 9px 0;
+            border-color: transparent #ffffff;
+            display: block;
+            width: 0;
+            z-index: 0;
+            margin-top: -12px;
+            left: -15px;
+            top: 20px;
+        }
+
+        .annotation-title {
+            font: normal 20px arial, serif;
+            margin-bottom: 8px;
+        }
+
+        .annotation-desc {
+            font: normal 14px arial, serif;
+        }
+
+    </style>
+</head>
+<body>
+<input type="checkbox" id="info-button"/>
+<label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
+<div>
+  <div style="position: absolute; width: 100%; height: 100%;">
+    <div style="top: 30px;">Artificial offset 50x30 px</div>
+    <div style="position: relative; height: 100%; left: 50px;">
+      <canvas id="myCanvas"></canvas>
+      <div id="annotationsContainer"><div>
+    </div>
+  </div>
+</div>
+<div class="slideout-sidebar">
+    <h1>ZonesPlugin</h1>
+    <h2>Creating 3D zones inside a model</h2>
+    <p>In this example, we're loading a BIM model and create zones inside it</p>
+
+    <h3>Customize</h3>
+    <div id="myDatGuiContainer"></div>
+
+    <ul>
+        <li>
+            <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html"
+               target="_other">Viewer</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html"
+               target="_other">XKTLoaderPlugin</a>
+        </li>
+        <li>
+            <a href="../../docs/class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html"
+               target="_other">SectionPlanesPlugin</a>
+        </li>
+    </ul>
+    <h3>Resources</h3>
+    <ul>
+        <li>
+            <a href="https://github.com/buildingSMART/Sample-Test-Files/tree/master/IFC%202x3/Schependomlaan"
+               target="_other">Model source</a>
+        </li>
+    </ul>
+</div>
+</body>
+    <script type="module">
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Import the modules we need for this example
+    //------------------------------------------------------------------------------------------------------------------
+
+    import {Viewer, XKTLoaderPlugin, SectionPlanesPlugin, ZonesMouseControl, ZoneEditMouseControl, ZoneTranslateMouseControl, ZonesPlugin, AnnotationsPlugin, PointerLens, ContextMenu} from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a Viewer
+    //------------------------------------------------------------------------------------------------------------------
+
+    const viewer = new Viewer({
+        canvasId: "myCanvas",
+        transparent: true
+    });
+
+    viewer.camera.eye = [-9.11, 20.01, 5.13];
+    viewer.camera.look = [9.07, 0.77, -9.78];
+    viewer.camera.up = [0.47, 0.76, -0.38];
+    viewer.camera.perspective.near = 0.1;
+    viewer.camera.perspective.far = 5000.0;
+
+    viewer.cameraControl.followPointer = true;
+
+    const sao = viewer.scene.sao;
+    sao.enabled = true;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Add a XKTModelsPlugin - we'll use this to load the model geometry
+    //------------------------------------------------------------------------------------------------------------------
+
+    const xktLoader = new XKTLoaderPlugin(viewer);
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Add a SectionPlanesPlugin - we'll use this to create cross-section planes
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sectionPlanes = new SectionPlanesPlugin(viewer, {
+        overviewVisible: false
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Load the .xkt model and IFC metadata
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sceneModel = xktLoader.load({
+        id: "myModel",
+        src: "../../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
+        edges: true,
+        saoEnabled: true
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a cross-section plane
+    //------------------------------------------------------------------------------------------------------------------
+
+    const sectionPlane = sectionPlanes.createSectionPlane({
+        id: "mySectionPlane",
+        pos: [10.95, 1.95, -10.35],
+        dir: [0.0, -1.0, 0.0]
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Setup the AnnotationsPlugin
+    //------------------------------------------------------------------------------------------------------------------
+
+    // based on /examples/annotations/annotations_createWithMouse.html
+
+    const annotations = new AnnotationsPlugin(viewer, {
+
+        container: document.getElementById("annotationsContainer"),
+
+        markerHTML: "<div class='annotation-marker' style='background-color: {{markerBGColor}};'>{{glyph}}</div>",
+        labelHTML: "<div class='annotation-label' style='background-color: {{labelBGColor}};'><div class='annotation-title'>{{title}}</div><div class='annotation-desc'>{{description}}</div></div>",
+
+        values: {
+            markerBGColor: "red",
+            glyph: "X",
+            title: "Untitled",
+            description: "No description"
+        },
+        surfaceOffset: 0.1
+    });
+
+    const attachZoneAnnotation = function(zone, glyph, title, description) {
+        const annotation = annotations.createAnnotation({
+            id: "myAnnotation_" + zone.id,
+            occludable: true,
+            labelShown: true,
+            values: {
+                glyph: glyph,
+                title: title,
+                description: description
+            },
+        });
+        adjustZoneAnnotation(zone);
+
+        zone.on("destroyed", () => annotation.destroy());
+    };
+
+    const adjustZoneAnnotation = function(zone) {
+        const zoneAnnotation = getZoneAnnotation(zone);
+        if (zoneAnnotation)
+        {
+            // Find zone's `average` position after being sliced by all active section planes
+            const pos = zone.sectionedAverage(Object.values(sectionPlanes.sectionPlanes).filter(s => s.active));
+            // If the SectionPlanes were to not affect the position of the Annotation, the `pos` could be instead:
+            // const pos = zone.center;
+
+            zoneAnnotation.setMarkerShown(!!pos);
+            if (pos)
+            {
+                zoneAnnotation.worldPos = pos;
+            }
+        }
+    };
+
+    const getAnnotationsZone = function(annotation) {
+        // Get the zone related to the annotation
+        const zoneId = annotation.id.substr("myAnnotation_".length);
+        return zonesPlugin.zones.find(z => z.id === zoneId);
+    };
+
+    const getZoneAnnotation = function(zone) {
+        // Get annotaion related to zone
+        return annotations.annotations["myAnnotation_" + zone.id];
+    };
+
+    let curZoneEdit = null;
+
+    const zoneEditContextMenu = new ContextMenu({
+        enabled: true,
+        items: [
+            [
+                {
+                    title: "End Edit",
+                    doAction: function(contextZone) {
+                        curZoneEdit.deactivate();
+                        curZoneEdit = null;
+                        curZoneContextMenu = zoneContextMenu;
+                        adjustZoneAnnotation(contextZone);
+                    }
+                }
+            ]
+        ]
+    });
+
+    const zoneTranslateContextMenu = new ContextMenu({
+        enabled: true,
+        items: [
+            [
+                {
+                    title: "End Translate",
+                    doAction: function(contextZone) {
+                        curZoneEdit.deactivate();
+                        curZoneEdit = null;
+                        curZoneContextMenu = zoneContextMenu;
+                        adjustZoneAnnotation(contextZone);
+                    }
+                }
+            ]
+        ]
+    });
+
+    const startZoneTranslate = function(zone) {
+        curZoneEdit = new ZoneTranslateMouseControl(zone, { pointerLens: new PointerLens(viewer) });
+        curZoneEdit.on("translated", () => adjustZoneAnnotation(zone));
+        curZoneContextMenu = zoneTranslateContextMenu;
+    };
+
+    const zoneContextMenu = new ContextMenu({
+        enabled: true,
+        items: [
+            [
+                {
+                    title: "Change Color ...",
+                    doAction: function(contextZone) {
+                        const value = window.prompt("Color", contextZone.color);
+                        if (value !== null)
+                        {
+                            contextZone.color = value;
+                        }
+                    }
+                },
+                {
+                    title: "Change Color from a list",
+                    items: [
+                        [ [ "Red", "#800000" ], [ "Green", "#008000" ], [ "Blue", "#000080" ] ].map(color => (
+                            {
+                                 title: color[0],
+                                 doAction: contextZone => { contextZone.color = color[1] }
+                            }))
+                    ]
+                },
+                {
+                    title: "Change Alpha ...",
+                    doAction: function(contextZone) {
+                        const value = window.prompt("Alpha", contextZone.alpha);
+                        if (value !== null)
+                        {
+                            contextZone.alpha = window.parseFloat(value);
+                        }
+                    }
+                },
+                {
+                    title: "Change Altitude ...",
+                    doAction: function(contextZone) {
+                        const value = window.prompt("Altitude", contextZone.altitude);
+                        if (value !== null)
+                        {
+                            contextZone.altitude = window.parseFloat(value);
+                            adjustZoneAnnotation(contextZone);
+                        }
+                    }
+                },
+                {
+                    title: "Change Height ... ",
+                    doAction: function(contextZone) {
+                        const value = window.prompt("Height", contextZone.height);
+                        if (value !== null)
+                        {
+                            contextZone.height = window.parseFloat(value);
+                            adjustZoneAnnotation(contextZone);
+                        }
+                    }
+                },
+                {
+                    title: "Edit Zone",
+                    doAction: contextZone => {
+                        curZoneEdit = new ZoneEditMouseControl(contextZone, { pointerLens: new PointerLens(viewer) });
+                        curZoneEdit.on("edited", () => adjustZoneAnnotation(contextZone));
+                        curZoneContextMenu = zoneEditContextMenu;
+                    }
+                },
+                {
+                    title: "Translate Zone",
+                    doAction: contextZone => {
+                        startZoneTranslate(contextZone);
+                    }
+                },
+                {
+                    title: "Duplicate Zone",
+                    doAction: contextZone => {
+                        const newZone = contextZone.duplicate();
+                        attachZoneAnnotation(newZone, "G2", "Title2...", "Description2...");
+                        startZoneTranslate(newZone);
+                    }
+                },
+                {
+                    title: "Delete Zone",
+                    doAction: function(contextZone) {
+                        if (window.confirm("Delete the zone?"))
+                        {
+                            contextZone.destroy();
+                        }
+                    }
+                }
+            ]
+        ]
+    });
+
+    let curZoneContextMenu = zoneContextMenu;
+
+    viewer.scene.input.on("mousemove", (function() {
+        let highlighted = null;
+        return function(canvasPos) {
+            const pickRecord = (! curZoneEdit) && viewer.scene.pick({ canvasPos: canvasPos });
+            const pickZone = pickRecord && pickRecord.entity && pickRecord.entity.zone;
+            if (highlighted && (highlighted !== pickZone))
+            {
+                highlighted.highlighted = false;
+                highlighted = null;
+            }
+            if (pickZone && (! highlighted))
+            {
+                highlighted = pickZone;
+                highlighted.highlighted = true;
+            }
+        }
+    })());
+
+    viewer.scene.input.on("contextmenu", canvasPos => {
+        const pickRecord = viewer.scene.pick({ canvasPos: canvasPos });
+        const pickZone = pickRecord && pickRecord.entity && pickRecord.entity.zone;
+        if (pickZone)
+        {
+            curZoneContextMenu.context = pickZone;
+            curZoneContextMenu.show(canvasPos[0], canvasPos[1] + 50);
+        }
+    });
+
+    const zonesPlugin = new ZonesPlugin(viewer);
+
+    // Whenever the state of section planes changes, readjust all zones' annotations
+    const adjustAllZoneAnnotations = () => zonesPlugin.zones.forEach(adjustZoneAnnotation)
+    viewer.scene.on("sectionPlaneCreated",   adjustAllZoneAnnotations);
+    viewer.scene.on("sectionPlaneUpdated",   adjustAllZoneAnnotations);
+    viewer.scene.on("sectionPlaneDestroyed", adjustAllZoneAnnotations);
+
+    const zonesControl = new ZonesMouseControl(zonesPlugin);
+
+    zonesControl.on("zoneEnd", zone => {
+        console.log("Zone added:", zone);
+        zonesControl.deactivate();
+        attachZoneAnnotation(zone, "G1", "Title...", "Description...");
+    });
+
+    const altitude = 0.01;
+    const height = 1.9;
+    const color = "#008000";
+    const alpha = 0.5;
+    zonesControl.activate({ altitude, height, color, alpha });
+
+/*
+
+// Get a list of zones:
+const zones = zonesPlugin.zones;
+
+// Change visibility of all zones
+for (const zone of zones) {
+    zone.visible = true;
+}
+
+// Modify a zone
+const zone = zones[0];
+zone.color = "#800000";
+zone.alpha = 0.8;
+zone.edges = true;
+
+
+// Edit zone vertices
+const zoneEdit = new ZoneEditMouseControl(zone);
+// with an optional pointerLens
+const zoneEdit = new ZoneEditMouseControl(zone, { pointerLens: pointerLens });
+
+// ... edit
+
+// Conclude editing
+zoneEdit.deactivate();
+
+
+// Translate zone with optional pointerLens
+const zoneTranslate = new ZoneTranslateMouseControl(contextZone, { pointerLens: pointerLens })
+
+// ... drag around
+
+// Conclude translating
+zoneTranslate.deactivate();
+
+
+// Serialize all zones
+const zonesJSON = zones.map(zone => zone.getJSON());
+
+// persist zonesJSON
+// reload page
+// read back zonesJSON
+
+for (const zoneJSON of zonesJSON) {
+    zonesPlugin.createZone(zonesJSON);
+}
+
+// Remove a zone
+// This will
+// 1. Remove the zone from the scene
+// 2. Remove the zone from zonesPlugin.zones collection
+// 3. Notify all zone.on("destroyed") callbacks - to e.g. remove a linked annotation as above
+zone.destroy();
+
+*/
+
+    </script>
+</html>

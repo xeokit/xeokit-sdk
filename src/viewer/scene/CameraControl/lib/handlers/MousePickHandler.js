@@ -55,6 +55,15 @@ class MousePickHandler {
                     return;
                 }
 
+                if (cameraControl.hasSubs("rayMove"))
+                {
+                    const origin = math.vec3();
+                    const direction = math.vec3();
+                    // The origin from math.canvasPosToWorldRay is incorrect for a perspective camera, should be the same as scene.camera.eye
+                    math.canvasPosToWorldRay(scene.canvas.canvas, scene.camera.viewMatrix, scene.camera.projMatrix, states.pointerCanvasPos, origin, direction);
+                    cameraControl.fire("rayMove", { canvasPos: states.pointerCanvasPos, ray: { origin: origin, direction: direction, canvasPos: states.pointerCanvasPos } }, true);
+                }
+
                 const hoverSubs = cameraControl.hasSubs("hover");
                 const hoverEnterSubs = cameraControl.hasSubs("hoverEnter");
                 const hoverOutSubs = cameraControl.hasSubs("hoverOut");

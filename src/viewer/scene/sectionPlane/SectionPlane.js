@@ -96,6 +96,7 @@ class SectionPlane extends Component {
         this._state.active = value !== false;
         this.glRedraw();
         this.fire("active", this._state.active);
+        this.scene.fire("sectionPlaneUpdated", this);
     }
 
     /**
@@ -176,13 +177,8 @@ class SectionPlane extends Component {
      * Inverts the direction of {@link SectionPlane#dir}.
      */
     flipDir() {
-        const dir = this._state.dir;
-        dir[0] *= -1.0;
-        dir[1] *= -1.0;
-        dir[2] *= -1.0;
-        this._state.dist = (-math.dotVec3(this._state.pos, this._state.dir));
-        this.fire("dir", this._state.dir);
-        this.glRedraw();
+        math.mulVec3Scalar(this._state.dir, -1.0, this._state.dir);
+        this.dir = this._state.dir;
     }
 
     /**
