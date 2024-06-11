@@ -138,7 +138,6 @@ import {utils} from '../../utils.js';
  * @param {Number[]} [cfg.startPoint]  3D start point (x0, y0, z0).
  * @param {Number[]} [cfg.endPoint]  3D end point (x1, y1, z1).
  * @param {Number[]} [cfg.pattern] Lengths of segments that describe a pattern.
- * There should be at least 2 to start a pattern.
  * @returns {Object} Configuration for a {@link Geometry} subtype.
  */
 function buildLineGeometry(cfg = {}) {
