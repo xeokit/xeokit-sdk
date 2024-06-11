@@ -5,16 +5,16 @@ import {utils} from '../../utils.js';
  *
  * ## Usage
  *
- * In the example below we'll create a {@link Mesh} with a polyline {@link ReadableGeometry} that has lines primitives.
+ * In the example below we'll create a {@link Mesh} with a line {@link ReadableGeometry}.
  *
- * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/scenegraph/#buildPolylineGeometry)]
+ * [[Run this example](https://xeokit.github.io/xeokit-sdk/examples/scenegraph/#buildLineGeometry)]
  *
  * ````javascript
  * //------------------------------------------------------------------------------------------------------------------
  * // Import the modules we need for this example
  * //------------------------------------------------------------------------------------------------------------------
  *
- * import {buildPolylineGeometry, Viewer, Mesh, ReadableGeometry, PhongMaterial} from "../../dist/xeokit-sdk.min.es.js";
+ * import {buildLineGeometry, Viewer, Mesh, ReadableGeometry, PhongMaterial} from "../../dist/xeokit-sdk.min.es.js";
  *
  * //------------------------------------------------------------------------------------------------------------------
  * // Create a Viewer and arrange the camera
@@ -29,29 +29,105 @@ import {utils} from '../../utils.js';
  * viewer.camera.up = [0, 1, 0];
  *
  * //------------------------------------------------------------------------------------------------------------------
- * // Create a mesh with polyline shape
+ * // Create a mesh with simple 2d line shape
  * //------------------------------------------------------------------------------------------------------------------
  *
  * new Mesh(viewer.scene, {
- *     geometry: new ReadableGeometry(viewer.scene, buildPolylineGeometry({
- *         points: [
- *             0, 2.83654, 0,
- *             -0.665144, 1.152063, 0,
- *             -2.456516, 1.41827, 0,
- *             -1.330288, 0, 0,
- *             -2.456516, -1.41827, 0,
- *             -0.665144, -1.152063, 0,
- *             0, -2.83654, 0,
- *             0.665144, -1.152063, 0,
- *             2.456516, -1.41827, 0,
- *             1.330288, 0, 0,
- *             2.456516, 1.41827, 0,
- *             0.665144, 1.152063, 0,
- *             0, 2.83654, 0,
- *         ]
+ *     geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
+ *         startPoint: [-5,-2,0],
+ *         endPoint: [-5,2,0],
  *     })),
  *     material: new PhongMaterial(viewer.scene, {
  *         emissive: [0, 1,]
+ *     })
+ * });
+ *
+ * //------------------------------------------------------------------------------------------------------------------
+ * // Create a mesh with simple 2d line shape with black color
+ * //------------------------------------------------------------------------------------------------------------------
+ *
+ * new Mesh(viewer.scene, {
+ *     geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
+ *         startPoint: [-4,-2,0],
+ *         endPoint: [-4,2,0],
+ *     })),
+ *     material: new PhongMaterial(viewer.scene, {
+ *         emissive: [0, 0, 0]
+ *     })
+ * });
+ *
+ * //------------------------------------------------------------------------------------------------------------------
+ * // Create a mesh with simple 2d line shape with black color and simple pattern
+ * //------------------------------------------------------------------------------------------------------------------
+ *
+ * new Mesh(viewer.scene, {
+ *     geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
+ *         startPoint: [-3,-2,0],
+ *         endPoint: [-3,2,0],
+ *         pattern: [0.10],
+ *     })),
+ *     material: new PhongMaterial(viewer.scene, {
+ *         emissive: [0, 0, 0]
+ *     })
+ * });
+ *
+ * //------------------------------------------------------------------------------------------------------------------
+ * // Create a mesh with simple 2d line shape with black color and more complex pattern
+ * //------------------------------------------------------------------------------------------------------------------
+ *
+ * new Mesh(viewer.scene, {
+ *     geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
+ *         startPoint: [-2,-2,0],
+ *         endPoint: [-2,2,0],
+ *         pattern: [0.15, 0.05],
+ *     })),
+ *     material: new PhongMaterial(viewer.scene, {
+ *         emissive: [0, 0, 0]
+ *     })
+ * });
+ *
+ * //------------------------------------------------------------------------------------------------------------------
+ * // Create a mesh with simple 2d line shape with black color and complex pattern
+ * //------------------------------------------------------------------------------------------------------------------
+ *
+ * new Mesh(viewer.scene, {
+ *     geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
+ *         startPoint: [-1,-2,0],
+ *         endPoint: [-1,2,0],
+ *         pattern: [0.15, 0.05, 0.50],
+ *     })),
+ *     material: new PhongMaterial(viewer.scene, {
+ *         emissive: [0, 0, 0]
+ *     })
+ * });
+ *
+ * //------------------------------------------------------------------------------------------------------------------
+ * // Create a mesh with simple 3d line shape with white color and simple pattern
+ * //------------------------------------------------------------------------------------------------------------------
+ *
+ * new Mesh(viewer.scene, {
+ *     geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
+ *         startPoint: [0,-2,-1],
+ *         endPoint: [2,2,1],
+ *         pattern: [0.10],
+ *     })),
+ *     material: new PhongMaterial(viewer.scene, {
+ *         emissive: [1, 1, 1]
+ *     })
+ * });
+ *
+ * //------------------------------------------------------------------------------------------------------------------
+ * // Create a mesh with simple 3d line shape with black color and simple dot pattern
+ * //------------------------------------------------------------------------------------------------------------------
+ *
+ * new Mesh(viewer.scene, {
+ *     geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
+ *         startPoint: [2,-2,-1],
+ *         endPoint: [4,2,1],
+ *         pattern: [0.03],
+ *     })),
+ *     material: new PhongMaterial(viewer.scene, {
+ *         emissive: [0, 0, 0]
  *     })
  * });
  * ````
@@ -125,9 +201,6 @@ function buildLineGeometry(cfg = {}) {
             currentPatternLength = cfg.pattern[idOfCurrentPatternLength];
         }
     }
-
-    console.log(points);
-    console.log(indices);
 
     return utils.apply(cfg, {
         primitive: "lines",
