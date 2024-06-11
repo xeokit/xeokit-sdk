@@ -70,7 +70,7 @@
     viewer.camera.up = [0, 1, 0];
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a mesh with simple line shape
+    // Create a mesh with simple 2d line shape
     //------------------------------------------------------------------------------------------------------------------
 
     new Mesh(viewer.scene, {
@@ -84,7 +84,7 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a mesh with simple line shape with black color
+    // Create a mesh with simple 2d line shape with black color
     //------------------------------------------------------------------------------------------------------------------
 
     new Mesh(viewer.scene, {
@@ -98,14 +98,74 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a mesh with simple line shape with black color and no pattern
+    // Create a mesh with simple 2d line shape with black color and simple pattern
     //------------------------------------------------------------------------------------------------------------------
 
     new Mesh(viewer.scene, {
         geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
             startPoint: [-3,-2,0],
             endPoint: [-3,2,0],
+            pattern: [0.10],
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            emissive: [0, 0, 0]
+        })
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a mesh with simple 2d line shape with black color and more complex pattern
+    //------------------------------------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
+            startPoint: [-2,-2,0],
+            endPoint: [-2,2,0],
             pattern: [0.15, 0.05],
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            emissive: [0, 0, 0]
+        })
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a mesh with simple 2d line shape with black color and complex pattern
+    //------------------------------------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
+            startPoint: [-1,-2,0],
+            endPoint: [-1,2,0],
+            pattern: [0.15, 0.05, 0.50],
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            emissive: [0, 0, 0]
+        })
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a mesh with simple 3d line shape with white color and simple pattern
+    //------------------------------------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
+            startPoint: [0,-2,-1],
+            endPoint: [2,2,1],
+            pattern: [0.10],
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            emissive: [1, 1, 1]
+        })
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a mesh with simple 3d line shape with black color and simple dot pattern
+    //------------------------------------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
+            startPoint: [2,-2,-1],
+            endPoint: [4,2,1],
+            pattern: [0.03],
         })),
         material: new PhongMaterial(viewer.scene, {
             emissive: [0, 0, 0]

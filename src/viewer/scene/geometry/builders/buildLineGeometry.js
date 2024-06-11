@@ -99,7 +99,7 @@ function buildLineGeometry(cfg = {}) {
             let vectorFromCurrentStartPointToCurrentEndPoint = [
                 normalizedDirectionVectorOfLine[0] * currentPatternLength,
                 normalizedDirectionVectorOfLine[1] * currentPatternLength,
-                normalizedDirectionVectorOfLine[2] * currentPatternLength
+                normalizedDirectionVectorOfLine[2] * currentPatternLength,
             ];
             let currentEndPoint = [
                 currentStartPoint[0] + vectorFromCurrentStartPointToCurrentEndPoint[0],
@@ -107,8 +107,9 @@ function buildLineGeometry(cfg = {}) {
                 currentStartPoint[2] + vectorFromCurrentStartPointToCurrentEndPoint[2],
             ];
 
+            points.push(currentEndPoint[0], currentEndPoint[1], currentEndPoint[2]);
+
             if (!gap) {
-                points.push(currentEndPoint[0], currentEndPoint[1], currentEndPoint[2]);
                 indices.push(pointIndicesCounter);
                 indices.push(pointIndicesCounter + 1);
             }
@@ -124,6 +125,9 @@ function buildLineGeometry(cfg = {}) {
             currentPatternLength = cfg.pattern[idOfCurrentPatternLength];
         }
     }
+
+    console.log(points);
+    console.log(indices);
 
     return utils.apply(cfg, {
         primitive: "lines",
