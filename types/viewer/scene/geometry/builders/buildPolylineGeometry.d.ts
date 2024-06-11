@@ -19,7 +19,7 @@ export declare type buildPolylineGeometryFromCurveConfiguration = {
 /**
  * @desc Creates a 3D polyline {@link Geometry}.
  *
- * @param {buildBoxLinesGeometryConfiguration} [cfg] Configs
+ * @param {buildPolylineGeometryConfiguration} [cfg] Configs
  * @returns {Object} Configuration for a {@link Geometry} subtype.
  */
 export function buildPolylineGeometry(cfg: buildPolylineGeometryConfiguration): Geometry;
@@ -27,7 +27,7 @@ export function buildPolylineGeometry(cfg: buildPolylineGeometryConfiguration): 
 /**
  * @desc Creates a 3D polyline from curve {@link Geometry}.
  *
- * @param {buildBoxLinesGeometryConfiguration} [cfg] Configs
+ * @param {buildPolylineGeometryFromCurveConfiguration} [cfg] Configs
  * @returns {Object} Configuration for a {@link Geometry} subtype.
  */
 export function buildPolylineGeometryFromCurve(cfg: buildPolylineGeometryFromCurveConfiguration): Geometry;
