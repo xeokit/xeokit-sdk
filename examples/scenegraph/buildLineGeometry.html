@@ -112,17 +112,49 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Create a mesh with simple 2d line shape with black color and more complex pattern
+    // Create a mesh with simple 2d line shape with blue color and simple pattern extended to end
     //------------------------------------------------------------------------------------------------------------------
 
     new Mesh(viewer.scene, {
         geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
             startPoint: [-2,-2,0],
             endPoint: [-2,2,0],
+            pattern: [0.10],
+            extendToEnd: true,
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            emissive: [0, 0, 1]
+        })
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a mesh with simple 2d line shape with black color and more complex pattern
+    //------------------------------------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
+            startPoint: [-1,-2,0],
+            endPoint: [-1,2,0],
             pattern: [0.15, 0.05],
         })),
         material: new PhongMaterial(viewer.scene, {
             emissive: [0, 0, 0]
+        })
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a mesh with simple 2d line shape with blue color and more complex pattern extended to end
+    //------------------------------------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
+            startPoint: [0,-2,0],
+            endPoint: [0,2,0],
+            pattern: [0.15, 0.05],
+            extendToEnd: true,
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            emissive: [0, 0, 1]
         })
     });
 
@@ -132,12 +164,28 @@
 
     new Mesh(viewer.scene, {
         geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
-            startPoint: [-1,-2,0],
-            endPoint: [-1,2,0],
+            startPoint: [1,-2,0],
+            endPoint: [1,2,0],
             pattern: [0.15, 0.05, 0.50],
         })),
         material: new PhongMaterial(viewer.scene, {
             emissive: [0, 0, 0]
+        })
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Create a mesh with simple 2d line shape with blue color and complex pattern extended to end
+    //------------------------------------------------------------------------------------------------------------------
+
+    new Mesh(viewer.scene, {
+        geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
+            startPoint: [2,-2,0],
+            endPoint: [2,2,0],
+            pattern: [0.15, 0.05, 0.50],
+            extendToEnd: true,
+        })),
+        material: new PhongMaterial(viewer.scene, {
+            emissive: [0, 0, 1]
         })
     });
 
@@ -147,8 +195,8 @@
 
     new Mesh(viewer.scene, {
         geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
-            startPoint: [0,-2,-1],
-            endPoint: [2,2,1],
+            startPoint: [3,-2,-1],
+            endPoint: [5,2,1],
             pattern: [0.10],
         })),
         material: new PhongMaterial(viewer.scene, {
@@ -162,8 +210,8 @@
 
     new Mesh(viewer.scene, {
         geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
-            startPoint: [2,-2,-1],
-            endPoint: [4,2,1],
+            startPoint: [5,-2,-1],
+            endPoint: [7,2,1],
             pattern: [0.03],
         })),
         material: new PhongMaterial(viewer.scene, {

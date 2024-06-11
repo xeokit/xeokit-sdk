@@ -72,17 +72,49 @@ import {utils} from '../../utils.js';
  * });
  *
  * //------------------------------------------------------------------------------------------------------------------
- * // Create a mesh with simple 2d line shape with black color and more complex pattern
+ * // Create a mesh with simple 2d line shape with blue color and simple pattern extended to end
  * //------------------------------------------------------------------------------------------------------------------
  *
  * new Mesh(viewer.scene, {
  *     geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
  *         startPoint: [-2,-2,0],
  *         endPoint: [-2,2,0],
+ *         pattern: [0.10],
+ *         extendToEnd: true,
+ *     })),
+ *     material: new PhongMaterial(viewer.scene, {
+ *         emissive: [0, 0, 1]
+ *     })
+ * });
+ *
+ * //------------------------------------------------------------------------------------------------------------------
+ * // Create a mesh with simple 2d line shape with black color and more complex pattern
+ * //------------------------------------------------------------------------------------------------------------------
+ *
+ * new Mesh(viewer.scene, {
+ *     geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
+ *         startPoint: [-1,-2,0],
+ *         endPoint: [-1,2,0],
  *         pattern: [0.15, 0.05],
  *     })),
  *     material: new PhongMaterial(viewer.scene, {
  *         emissive: [0, 0, 0]
+ *     })
+ * });
+ *
+ * //------------------------------------------------------------------------------------------------------------------
+ * // Create a mesh with simple 2d line shape with blue color and more complex pattern extended to end
+ * //------------------------------------------------------------------------------------------------------------------
+ *
+ * new Mesh(viewer.scene, {
+ *     geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
+ *         startPoint: [0,-2,0],
+ *         endPoint: [0,2,0],
+ *         pattern: [0.15, 0.05],
+ *         extendToEnd: true,
+ *     })),
+ *     material: new PhongMaterial(viewer.scene, {
+ *         emissive: [0, 0, 1]
  *     })
  * });
  *
@@ -92,12 +124,28 @@ import {utils} from '../../utils.js';
  *
  * new Mesh(viewer.scene, {
  *     geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
- *         startPoint: [-1,-2,0],
- *         endPoint: [-1,2,0],
+ *         startPoint: [1,-2,0],
+ *         endPoint: [1,2,0],
  *         pattern: [0.15, 0.05, 0.50],
  *     })),
  *     material: new PhongMaterial(viewer.scene, {
  *         emissive: [0, 0, 0]
+ *     })
+ * });
+ *
+ * //------------------------------------------------------------------------------------------------------------------
+ * // Create a mesh with simple 2d line shape with blue color and complex pattern extended to end
+ * //------------------------------------------------------------------------------------------------------------------
+ *
+ * new Mesh(viewer.scene, {
+ *     geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
+ *         startPoint: [2,-2,0],
+ *         endPoint: [2,2,0],
+ *         pattern: [0.15, 0.05, 0.50],
+ *         extendToEnd: true,
+ *     })),
+ *     material: new PhongMaterial(viewer.scene, {
+ *         emissive: [0, 0, 1]
  *     })
  * });
  *
@@ -107,8 +155,8 @@ import {utils} from '../../utils.js';
  *
  * new Mesh(viewer.scene, {
  *     geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
- *         startPoint: [0,-2,-1],
- *         endPoint: [2,2,1],
+ *         startPoint: [3,-2,-1],
+ *         endPoint: [5,2,1],
  *         pattern: [0.10],
  *     })),
  *     material: new PhongMaterial(viewer.scene, {
@@ -122,8 +170,8 @@ import {utils} from '../../utils.js';
  *
  * new Mesh(viewer.scene, {
  *     geometry: new ReadableGeometry(viewer.scene, buildLineGeometry({
- *         startPoint: [2,-2,-1],
- *         endPoint: [4,2,1],
+ *         startPoint: [5,-2,-1],
+ *         endPoint: [7,2,1],
  *         pattern: [0.03],
  *     })),
  *     material: new PhongMaterial(viewer.scene, {
@@ -138,7 +186,8 @@ import {utils} from '../../utils.js';
  * @param {Number[]} [cfg.startPoint]  3D start point (x0, y0, z0).
  * @param {Number[]} [cfg.endPoint]  3D end point (x1, y1, z1).
  * @param {Number[]} [cfg.pattern] Lengths of segments that describe a pattern.
- * There should be at least 2 to start a pattern.
+ * @param {Bool} [cfg.extendToEnd] If true: it will try to make sure the line doesn't end up with a gap, as it will
+ * extend the last segment.
  * @returns {Object} Configuration for a {@link Geometry} subtype.
  */
 function buildLineGeometry(cfg = {}) {
@@ -199,6 +248,12 @@ function buildLineGeometry(cfg = {}) {
             }
             segmentFilled += currentPatternLength;
             currentPatternLength = cfg.pattern[idOfCurrentPatternLength];
+        }
+
+        if (cfg.extendToEnd) {
+            points.push(x1, y1, z1);
+            indices.push(indices.length - 2);
+            indices.push(indices.length - 1);
         }
     }
 

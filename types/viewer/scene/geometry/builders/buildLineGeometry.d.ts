@@ -9,6 +9,8 @@ export declare type buildLineGeometryConfiguration = {
     endPoint?: number[];
     /* Lengths of segments that describe a pattern. */
     pattern?: number[];
+    /* If true: it will try to make sure the line doesn't end up with a gap, as it will extend the last segment. */
+    extendToEnd?: boolean;
 };
 
 /**
