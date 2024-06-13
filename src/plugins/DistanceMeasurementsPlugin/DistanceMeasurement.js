@@ -331,7 +331,7 @@ class DistanceMeasurement extends Component {
 
         if (this._wpDirty) {
 
-            this._measurementOrientation = determineMeasurementOrientation(this._originWorld, this._targetWorld, 1);
+            this._measurementOrientation = determineMeasurementOrientation(this._originWorld, this._targetWorld, 0);
             if(this._measurementOrientation === 'Vertical' && this.useRotationAdjustment){
                 this._wp[0] = this._originWorld[0];
                 this._wp[1] = this._originWorld[1];
