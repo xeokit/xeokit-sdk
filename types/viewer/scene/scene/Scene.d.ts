@@ -219,6 +219,17 @@ export declare class Scene extends Component {
   get pbrEnabled(): boolean
 
   /**
+   * Gets the Z value of offset for Marker's OcclusionTester.
+   * The closest the value is to 0.000 the more precise OcclusionTester will be, but at the same time the less
+   * precise it will behave for Markers that are located exactly on the Surface.
+   *
+   * Default is ````-0.001````.
+   *
+   * @returns {Number} Z offset for Marker
+   */
+  get markerZOffset(): number
+
+  /**
    * Gets the IDs of the {@link Entity}s in {@link Scene.models}.
    *
    * @type {String[]}

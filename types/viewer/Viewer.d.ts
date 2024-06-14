@@ -63,6 +63,8 @@ export declare type ViewerConfiguration = {
   localeService?: LocaleService;
   /** Whether to enable data texture-based (DTX) scene representation within the Viewer. */
   dtxEnabled?: boolean;
+  /** The Z value of offset for Marker's OcclusionTester. The closest the value is to 0.000 the more precise OcclusionTester will be, but at the same time the less precise it will behave for Markers that are located exactly on the Surface. */
+  markerZOffset?: number;
   /** Enhances the efficiency of SectionPlane creation by proactively allocating Viewer resources for a specified quantity of SectionPlanes.*/
   numCachedSectionPlanes?: number;
 };
