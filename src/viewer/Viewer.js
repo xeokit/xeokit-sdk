@@ -57,6 +57,7 @@ class Viewer {
      * store geometry on the GPU for triangle meshes that don't have textures. This gives a much lower memory footprint for these types of model element. This mode may not perform well on low-end GPUs that are optimized
      * to use textures to hold geometry data. Works great on most medium/high-end GPUs found in desktop computers, including the nVIDIA and Intel HD chipsets. Set this false to use the default vertex buffer object (VBO)
      * mode for storing geometry, which is the standard technique used in most graphics engines, and will work adequately on most low-end GPUs.
+     * @param {Number} [cfg.markerZOffset=-0.001] The Z value of offset for Marker's OcclusionTester. The closest the value is to 0.000 the more precise OcclusionTester will be, but at the same time the less precise it will behave for Markers that are located exactly on the Surface.
      * @param {number} [cfg.numCachedSectionPlanes=0] Enhances the efficiency of SectionPlane creation by proactively allocating Viewer resources for a specified quantity
      * of SectionPlanes. Introducing this parameter streamlines the initial creation speed of SectionPlanes, particularly up to the designated quantity. This parameter internally
      * configures renderer logic for the specified number of SectionPlanes, eliminating the need for setting up logic with each SectionPlane creation and thereby enhancing
@@ -120,6 +121,7 @@ class Viewer {
             pbrEnabled: (!!cfg.pbrEnabled),
             colorTextureEnabled: (cfg.colorTextureEnabled !== false),
             dtxEnabled: (!!cfg.dtxEnabled),
+            markerZOffset: cfg.markerZOffset,
             numCachedSectionPlanes: cfg.numCachedSectionPlanes
         });
 
