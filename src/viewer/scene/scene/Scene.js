@@ -864,6 +864,7 @@ class Scene extends Component {
         this._pbrEnabled = !!cfg.pbrEnabled;
         this._colorTextureEnabled = (cfg.colorTextureEnabled !== false);
         this._dtxEnabled = !!cfg.dtxEnabled;
+        this._markerZOffset = cfg.markerZOffset;
 
         // Register Scene on xeokit
         // Do this BEFORE we add components below
@@ -1425,6 +1426,22 @@ class Scene extends Component {
      */
     get colorTextureEnabled() {
         return this._colorTextureEnabled;
+    }
+
+    /**
+     * Gets the Z value of offset for Marker's OcclusionTester.
+     * The closest the value is to 0.000 the more precise OcclusionTester will be, but at the same time the less
+     * precise it will behave for Markers that are located exactly on the Surface.
+     *
+     * Default is ````-0.001````.
+     *
+     * @returns {Number} Z offset for Marker
+     */
+    get markerZOffset() {
+        if (this._markerZOffset == null) {
+            return -0.001;
+        }
+        return this._markerZOffset;
     }
 
     /**

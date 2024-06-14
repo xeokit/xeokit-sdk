@@ -216,6 +216,10 @@ class OcclusionTester {
         src.push("   gl_PointSize = " + POINT_SIZE + ".0;");
         if (scene.logarithmicDepthBufferEnabled) {
            src.push("vFragDepth = 1.0 + clipPos.w;");
+        } else {
+            if (scene.markerZOffset < 0.000) {
+                src.push("clipPos.z += " + scene.markerZOffset + ";");
+            }
         }
         src.push("   gl_Position = clipPos;");
         src.push("}");
