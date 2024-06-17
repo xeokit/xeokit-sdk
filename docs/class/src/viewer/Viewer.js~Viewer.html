@@ -78,6 +78,17 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-zonesplugin">plugins/ZonesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneEditControl.html">ZoneEditControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneEditMouseControl.html">ZoneEditMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneEditTouchControl.html">ZoneEditTouchControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneTranslateControl.html">ZoneTranslateControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneTranslateMouseControl.html">ZoneTranslateMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneTranslateTouchControl.html">ZoneTranslateTouchControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesMouseControl.html">ZonesMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesPlugin.html">ZonesPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceMouseControl.html">ZonesPolysurfaceMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl.html">ZonesPolysurfaceTouchControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesTouchControl.html">ZonesTouchControl</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Configs.js~Configs.html">Configs</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -182,6 +193,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxLinesGeometryFromAABB">buildBoxLinesGeometryFromAABB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildCylinderGeometry">buildCylinderGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildGridGeometry">buildGridGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildLineGeometry">buildLineGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometry">buildPolylineGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometryFromCurve">buildPolylineGeometryFromCurve</a></span></span></li>
@@ -940,7 +952,7 @@ element is only rendered once, so it&apos;s OK for plugins to share the same con
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber66">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber67">source</a></span></span>
     </span>
   </h3>
 
@@ -1192,6 +1204,14 @@ mode for storing geometry, which is the standard technique used in most graphics
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.markerZOffset</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: -0.001</li></ul></td>
+      <td data-ice="description"><p>The Z value of offset for Marker&apos;s OcclusionTester. The closest the value is to 0.000 the more precise OcclusionTester will be, but at the same time the less precise it will behave for Markers that are located exactly on the Surface.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.numCachedSectionPlanes</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
@@ -1252,7 +1272,7 @@ your expected usage.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber147">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber149">source</a></span></span>
     </span>
   </h3>
 
@@ -1312,7 +1332,7 @@ your expected usage.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber165">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber167">source</a></span></span>
     </span>
   </h3>
 
@@ -1373,7 +1393,7 @@ controls the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Sc
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber155">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber157">source</a></span></span>
     </span>
   </h3>
 
@@ -1434,7 +1454,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber184">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber186">source</a></span></span>
     </span>
   </h3>
 
@@ -1490,7 +1510,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber140">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber142">source</a></span></span>
     </span>
   </h3>
 
@@ -1550,7 +1570,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber74">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber75">source</a></span></span>
     </span>
   </h3>
 
@@ -1610,7 +1630,7 @@ is used to fly the <span><a href="class/src/viewer/scene/scene/Scene.js~Scene.ht
     <span class="right-info">
       
       <span class="since" data-ice="since">since 2.0</span>
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber88">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber89">source</a></span></span>
     </span>
   </h3>
 
@@ -1673,7 +1693,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber132">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber134">source</a></span></span>
     </span>
   </h3>
 
@@ -1733,7 +1753,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber95">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber96">source</a></span></span>
     </span>
   </h3>
 
@@ -1796,7 +1816,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber309">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber311">source</a></span></span>
     </span>
   </h3>
 
@@ -1842,7 +1862,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber532">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber534">source</a></span></span>
     </span>
   </h3>
 
@@ -1886,7 +1906,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber521">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber523">source</a></span></span>
     </span>
   </h3>
 
@@ -1931,7 +1951,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber240">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber242">source</a></span></span>
     </span>
   </h3>
 
@@ -1992,7 +2012,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber209">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber211">source</a></span></span>
     </span>
   </h3>
 
@@ -2060,7 +2080,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber336">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber338">source</a></span></span>
     </span>
   </h3>
 
@@ -2170,7 +2190,7 @@ null translations for all given strings and phrases.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber426">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber428">source</a></span></span>
     </span>
   </h3>
 
@@ -2286,7 +2306,7 @@ element is only rendered once, so it&apos;s OK for plugins to share the same con
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber231">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber233">source</a></span></span>
     </span>
   </h3>
 
@@ -2347,7 +2367,7 @@ element is only rendered once, so it&apos;s OK for plugins to share the same con
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber222">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber224">source</a></span></span>
     </span>
   </h3>
 
@@ -2407,7 +2427,7 @@ element is only rendered once, so it&apos;s OK for plugins to share the same con
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber194">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/Viewer.js.html#lineNumber196">source</a></span></span>
     </span>
   </h3>
 

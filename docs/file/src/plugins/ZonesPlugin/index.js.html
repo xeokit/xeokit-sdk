@@ -1,0 +1,2336 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">src/plugins/ZonesPlugin/index.js | xeokit-sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="3D engineering graphics in the browser"><meta property="og:type" content="website"><meta property="og:url" content="http://xeokit.io"><meta property="og:site_name" content="xeokit-sdk"><meta property="og:title" content="xeokit-sdk"><meta property="og:image" content="./images/logo.jpg"><meta property="og:description" content="3D engineering graphics in the browser"><meta property="og:author" content="http://xeolabs.com"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="xeokit-sdk"><meta property="twitter:description" content="3D engineering graphics in the browser"><meta property="twitter:image" content="./images/logo.jpg"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.jpg" style="width:34px;"></a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/xeokit/xeokit-sdk"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#extras-contextmenu">extras/ContextMenu</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extras/ContextMenu/ContextMenu.js~ContextMenu.html">ContextMenu</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#extras-marqueepicker">extras/MarqueePicker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extras/MarqueePicker/MarqueePicker.js~MarqueePicker.html">MarqueePicker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extras/MarqueePicker/MarqueePickerMouseControl.js~MarqueePickerMouseControl.html">MarqueePickerMouseControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#extras-pointercircle">extras/PointerCircle</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extras/PointerCircle/PointerCircle.js~PointerCircle.html">PointerCircle</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#extras-pointerlens">extras/PointerLens</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extras/PointerLens/PointerLens.js~PointerLens.html">PointerLens</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#extras-collision">extras/collision</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/extras/collision/ObjectsKdTree3.js~ObjectsKdTree3.html">ObjectsKdTree3</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-anglemeasurementsplugin">plugins/AngleMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurement.js~AngleMeasurement.html">AngleMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsMouseControl.js~AngleMeasurementsMouseControl.html">AngleMeasurementsMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsPlugin.js~AngleMeasurementsPlugin.html">AngleMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsTouchControl.js~AngleMeasurementsTouchControl.html">AngleMeasurementsTouchControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html">AngleMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-annotationsplugin">plugins/AnnotationsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html">Annotation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AnnotationsPlugin/AnnotationsPlugin.js~AnnotationsPlugin.html">AnnotationsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-axisgizmoplugin">plugins/AxisGizmoPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/AxisGizmoPlugin/AxisGizmoPlugin.js~AxisGizmoPlugin.html">AxisGizmoPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-bcfviewpointsplugin">plugins/BCFViewpointsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/BCFViewpointsPlugin/BCFViewpointsPlugin.js~BCFViewpointsPlugin.html">BCFViewpointsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-cityjsonloaderplugin">plugins/CityJSONLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/CityJSONLoaderPlugin/CityJSONDefaultDataSource.js~CityJSONDefaultDataSource.html">CityJSONDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js~CityJSONLoaderPlugin.html">CityJSONLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-distancemeasurementsplugin">plugins/DistanceMeasurementsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html">DistanceMeasurement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsMouseControl.js~DistanceMeasurementsMouseControl.html">DistanceMeasurementsMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html">DistanceMeasurementsPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html">DistanceMeasurementsTouchControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html">DistanceMeasurementsControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-dotbimloaderplugin">plugins/DotBIMLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DotBIMLoaderPlugin/DotBIMDefaultDataSource.js~DotBIMDefaultDataSource.html">DotBIMDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin.html">DotBIMLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-facealignedsectionplanesplugin">plugins/FaceAlignedSectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesControl.js~FaceAlignedSectionPlanesControl.html">FaceAlignedSectionPlanesControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FaceAlignedSectionPlanesPlugin/FaceAlignedSectionPlanesPlugin.js~FaceAlignedSectionPlanesPlugin.html">FaceAlignedSectionPlanesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-fastnavplugin">plugins/FastNavPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/FastNavPlugin/FastNavPlugin.js~FastNavPlugin.html">FastNavPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-gltfloaderplugin">plugins/GLTFLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js~GLTFDefaultDataSource.html">GLTFDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html">GLTFLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-lasloaderplugin">plugins/LASLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LASLoaderPlugin/LASDefaultDataSource.js~LASDefaultDataSource.html">LASDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html">LASLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-navcubeplugin">plugins/NavCubePlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/NavCubePlugin/NavCubePlugin.js~NavCubePlugin.html">NavCubePlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-objloaderplugin">plugins/OBJLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html">OBJLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-stlloaderplugin">plugins/STLLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLDefaultDataSource.js~STLDefaultDataSource.html">STLDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/STLLoaderPlugin/STLLoaderPlugin.js~STLLoaderPlugin.html">STLLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-sectionplanesplugin">plugins/SectionPlanesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SectionPlanesPlugin/SectionPlanesPlugin.js~SectionPlanesPlugin.html">SectionPlanesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-skyboxesplugin">plugins/SkyboxesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/SkyboxesPlugin/SkyboxesPlugin.js~SkyboxesPlugin.html">SkyboxesPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-storeyviewsplugin">plugins/StoreyViewsPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/Storey.js~Storey.html">Storey</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyMap.js~StoreyMap.html">StoreyMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html">StoreyViewsPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-treeviewplugin">plugins/TreeViewPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/RenderService.js~RenderService.html">RenderService</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html">TreeViewPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/plugins/TreeViewPlugin/TreeViewNode.js~TreeViewNode.html">TreeViewNode</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-viewcullplugin">plugins/ViewCullPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ViewCullPlugin/ViewCullPlugin.js~ViewCullPlugin.html">ViewCullPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-webifcloaderplugin">plugins/WebIFCLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/WebIFCLoaderPlugin/WebIFCDefaultDataSource.js~WebIFCDefaultDataSource.html">WebIFCDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html">WebIFCLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-zonesplugin">plugins/ZonesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneEditControl.html">ZoneEditControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneEditMouseControl.html">ZoneEditMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneEditTouchControl.html">ZoneEditTouchControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneTranslateControl.html">ZoneTranslateControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneTranslateMouseControl.html">ZoneTranslateMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneTranslateTouchControl.html">ZoneTranslateTouchControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesMouseControl.html">ZonesMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesPlugin.html">ZonesPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceMouseControl.html">ZonesPolysurfaceMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl.html">ZonesPolysurfaceTouchControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesTouchControl.html">ZonesTouchControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Configs.js~Configs.html">Configs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-localization">viewer/localization</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/localization/LocaleService.js~LocaleService.html">LocaleService</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-metadata">viewer/metadata</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaModel.js~MetaModel.html">MetaModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaObject.js~MetaObject.html">MetaObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/MetaScene.js~MetaScene.html">MetaScene</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/Property.js~Property.html">Property</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/metadata/PropertySet.js~PropertySet.html">PropertySet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaultColors">IFCObjectDefaultColors</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IFCObjectDefaults">IFCObjectDefaults</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene">viewer/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Component.js~Component.html">Component</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/Entity.js~Entity.html">Entity</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-stats">stats</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-bitmap">viewer/scene/Bitmap</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/Bitmap/Bitmap.js~Bitmap.html">Bitmap</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-cameracontrol">viewer/scene/CameraControl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html">CameraControl</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-imageplane">viewer/scene/ImagePlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/ImagePlane/ImagePlane.js~ImagePlane.html">ImagePlane</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-lineset">viewer/scene/LineSet</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/LineSet/LineSet.js~LineSet.html">LineSet</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-camera">viewer/scene/camera</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Camera.js~Camera.html">Camera</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraFlightAnimation.js~CameraFlightAnimation.html">CameraFlightAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPath.js~CameraPath.html">CameraPath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CameraPathAnimation.js~CameraPathAnimation.html">CameraPathAnimation</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/CustomProjection.js~CustomProjection.html">CustomProjection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Frustum.js~Frustum.html">Frustum</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Ortho.js~Ortho.html">Ortho</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/camera/Perspective.js~Perspective.html">Perspective</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-canvas">viewer/scene/canvas</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/canvas/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/canvas/Spinner.js~Spinner.html">Spinner</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-constants">viewer/scene/constants</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AlphaFormat">AlphaFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ByteType">ByteType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ClampToEdgeWrapping">ClampToEdgeWrapping</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-CompressedMediaType">CompressedMediaType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DepthFormat">DepthFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DepthStencilFormat">DepthStencilFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-FloatType">FloatType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GIFMediaType">GIFMediaType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-HalfFloatType">HalfFloatType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-IntType">IntType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-JPEGMediaType">JPEGMediaType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LinearEncoding">LinearEncoding</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LinearFilter">LinearFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LinearMipMapLinearFilter">LinearMipMapLinearFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LinearMipMapNearestFilter">LinearMipMapNearestFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LinearMipmapLinearFilter">LinearMipmapLinearFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LinearMipmapNearestFilter">LinearMipmapNearestFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LuminanceAlphaFormat">LuminanceAlphaFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LuminanceFormat">LuminanceFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MirroredRepeatWrapping">MirroredRepeatWrapping</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestFilter">NearestFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipMapLinearFilter">NearestMipMapLinearFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipMapNearestFilter">NearestMipMapNearestFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipmapLinearFilter">NearestMipmapLinearFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NearestMipmapNearestFilter">NearestMipmapNearestFilter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-PNGMediaType">PNGMediaType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBAFormat">RGBAFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBAIntegerFormat">RGBAIntegerFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_10x10_Format">RGBA_ASTC_10x10_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_10x5_Format">RGBA_ASTC_10x5_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_10x6_Format">RGBA_ASTC_10x6_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_10x8_Format">RGBA_ASTC_10x8_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_12x10_Format">RGBA_ASTC_12x10_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_12x12_Format">RGBA_ASTC_12x12_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_4x4_Format">RGBA_ASTC_4x4_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_5x4_Format">RGBA_ASTC_5x4_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_5x5_Format">RGBA_ASTC_5x5_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_6x5_Format">RGBA_ASTC_6x5_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_6x6_Format">RGBA_ASTC_6x6_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_8x5_Format">RGBA_ASTC_8x5_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_8x6_Format">RGBA_ASTC_8x6_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ASTC_8x8_Format">RGBA_ASTC_8x8_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_BPTC_Format">RGBA_BPTC_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_ETC2_EAC_Format">RGBA_ETC2_EAC_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_PVRTC_2BPPV1_Format">RGBA_PVRTC_2BPPV1_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_PVRTC_4BPPV1_Format">RGBA_PVRTC_4BPPV1_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_S3TC_DXT1_Format">RGBA_S3TC_DXT1_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_S3TC_DXT3_Format">RGBA_S3TC_DXT3_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBA_S3TC_DXT5_Format">RGBA_S3TC_DXT5_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGBFormat">RGBFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGB_ETC1_Format">RGB_ETC1_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGB_ETC2_Format">RGB_ETC2_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGB_PVRTC_2BPPV1_Format">RGB_PVRTC_2BPPV1_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGB_PVRTC_4BPPV1_Format">RGB_PVRTC_4BPPV1_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGB_S3TC_DXT1_Format">RGB_S3TC_DXT1_Format</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGFormat">RGFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RGIntegerFormat">RGIntegerFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RedFormat">RedFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RedIntegerFormat">RedIntegerFormat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-RepeatWrapping">RepeatWrapping</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ShortType">ShortType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UnsignedByteType">UnsignedByteType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UnsignedInt248Type">UnsignedInt248Type</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UnsignedIntType">UnsignedIntType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UnsignedShort4444Type">UnsignedShort4444Type</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UnsignedShort5551Type">UnsignedShort5551Type</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-UnsignedShortType">UnsignedShortType</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-sRGBEncoding">sRGBEncoding</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry">viewer/scene/geometry</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/Geometry.js~Geometry.html">Geometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/ReadableGeometry.js~ReadableGeometry.html">ReadableGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/geometry/VBOGeometry.js~VBOGeometry.html">VBOGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry-builders">viewer/scene/geometry/builders</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxGeometry">buildBoxGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxLinesGeometry">buildBoxLinesGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxLinesGeometryFromAABB">buildBoxLinesGeometryFromAABB</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildCylinderGeometry">buildCylinderGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildGridGeometry">buildGridGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildLineGeometry">buildLineGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometry">buildPolylineGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometryFromCurve">buildPolylineGeometryFromCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildSphereGeometry">buildSphereGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildTorusGeometry">buildTorusGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildVectorTextGeometry">buildVectorTextGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-geometry-loaders">viewer/scene/geometry/loaders</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-load3DSGeometry">load3DSGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-loadOBJGeometry">loadOBJGeometry</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-input">viewer/scene/input</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/input/Input.js~Input.html">Input</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-lights">viewer/scene/lights</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/AmbientLight.js~AmbientLight.html">AmbientLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/CubeTexture.js~CubeTexture.html">CubeTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/DirLight.js~DirLight.html">DirLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Light.js~Light.html">Light</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/LightMap.js~LightMap.html">LightMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/PointLight.js~PointLight.html">PointLight</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/ReflectionMap.js~ReflectionMap.html">ReflectionMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/lights/Shadow.js~Shadow.html">Shadow</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-marker">viewer/scene/marker</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/marker/SpriteMarker.js~SpriteMarker.html">SpriteMarker</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-materials">viewer/scene/materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EdgeMaterial.js~EdgeMaterial.html">EdgeMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/EmphasisMaterial.js~EmphasisMaterial.html">EmphasisMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Fresnel.js~Fresnel.html">Fresnel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/LambertMaterial.js~LambertMaterial.html">LambertMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/LinesMaterial.js~LinesMaterial.html">LinesMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Material.js~Material.html">Material</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/MetallicMaterial.js~MetallicMaterial.html">MetallicMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PhongMaterial.js~PhongMaterial.html">PhongMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/PointsMaterial.js~PointsMaterial.html">PointsMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/SpecularMaterial.js~SpecularMaterial.html">SpecularMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/materials/Texture.js~Texture.html">Texture</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mementos">viewer/scene/mementos</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/CameraMemento.js~CameraMemento.html">CameraMemento</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ModelMemento.js~ModelMemento.html">ModelMemento</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mementos/ObjectsMemento.js~ObjectsMemento.html">ObjectsMemento</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh">viewer/scene/mesh</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/mesh/Mesh.js~Mesh.html">Mesh</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-mesh-draw">viewer/scene/mesh/draw</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-DrawShaderSource">DrawShaderSource</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-metriqs">viewer/scene/metriqs</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/metriqs/Metriqs.js~Metrics.html">Metrics</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-model">viewer/scene/model</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/PerformanceModel.js~PerformanceModel.html">PerformanceModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/SceneModel.js~SceneModel.html">SceneModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity.html">SceneModelEntity</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/SceneModelMesh.js~SceneModelMesh.html">SceneModelMesh</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/SceneModelTexture.js~SceneModelTexture.html">SceneModelTexture</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/SceneModelTextureSet.js~SceneModelTextureSet.html">SceneModelTextureSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/SceneModelTransform.js~SceneModelTransform.html">SceneModelTransform</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/model/VBOSceneModel.js~VBOSceneModel.html">VBOSceneModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-uniquifyPositions">uniquifyPositions</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rebucketPositions">rebucketPositions</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-model-dtx-lines">viewer/scene/model/dtx/lines</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-rebucketPositions">rebucketPositions</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-dataTextureRamStats">dataTextureRamStats</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-model-dtx-triangles-lib">viewer/scene/model/dtx/triangles/lib</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-dataTextureRamStats">dataTextureRamStats</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-nodes">viewer/scene/nodes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/nodes/Node.js~Node.html">Node</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-paths">viewer/scene/paths</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/CubicBezierCurve.js~CubicBezierCurve.html">CubicBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Curve.js~Curve.html">Curve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/Path.js~Path.html">Path</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/QuadraticBezierCurve.js~QuadraticBezierCurve.html">QuadraticBezierCurve</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/paths/SplineCurve.js~SplineCurve.html">SplineCurve</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-postfx">viewer/scene/postfx</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/CrossSections.js~CrossSections.html">CrossSections</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/postfx/SAO.js~SAO.html">SAO</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-scene">viewer/scene/scene</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/scene/Scene.js~Scene.html">Scene</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-sectionplane">viewer/scene/sectionPlane</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlane.js~SectionPlane.html">SectionPlane</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/sectionPlane/SectionPlaneCache.js~SectionPlaneCache.html">SectionPlaneCache</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-skybox">viewer/scene/skybox</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/skybox/Skybox.js~Skybox.html">Skybox</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils">viewer/scene/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/FileLoader.js~FileLoader.html">FileLoader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/Loader.js~Loader.html">Loader</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/LoadingManager.js~LoadingManager.html">LoadingManager</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/WorkerPool.js~WorkerPool.html">WorkerPool</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Cache">Cache</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DefaultLoadingManager">DefaultLoadingManager</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils-texturetranscoders">viewer/scene/utils/textureTranscoders</a><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/textureTranscoders/TextureTranscoder.js~TextureTranscoder.html">TextureTranscoder</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-utils-texturetranscoders-ktx2texturetranscoder">viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/utils/textureTranscoders/KTX2TextureTranscoder/KTX2TextureTranscoder.js~KTX2TextureTranscoder.html">KTX2TextureTranscoder</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-viewport">viewer/scene/viewport</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/viewport/Viewport.js~Viewport.html">Viewport</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-scene-webgl">viewer/scene/webgl</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/scene/webgl/PickResult.js~PickResult.html">PickResult</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer-utils">viewer/utils</a><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-os">os</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/plugins/ZonesPlugin/index.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Plugin} from &quot;../../viewer/Plugin.js&quot;;
+import {Component} from &quot;../../viewer/scene/Component.js&quot;;
+import {buildBoxGeometry} from &quot;../../viewer/scene/geometry/builders/buildBoxGeometry.js&quot;;
+import {ReadableGeometry} from &quot;../../viewer/scene/geometry/ReadableGeometry.js&quot;;
+import {Marker} from &quot;../../viewer/scene/marker/Marker.js&quot;;
+import {PhongMaterial} from &quot;../../viewer/scene/materials/PhongMaterial.js&quot;;
+import {math} from &quot;../../viewer/scene/math/math.js&quot;;
+import {Mesh} from &quot;../../viewer/scene/mesh/Mesh.js&quot;;
+import {Dot} from &quot;../lib/html/Dot.js&quot;;
+
+const hex2rgb = function(color) {
+    const rgb = idx =&gt; parseInt(color.substr(idx + 1, 2), 16) / 255;
+    return [ rgb(0), rgb(2), rgb(4) ];
+};
+
+const transformToNode = function(from, to, vec) {
+    const fromRec = from.getBoundingClientRect();
+    const toRec = to.getBoundingClientRect();
+    vec[0] += fromRec.left - toRec.left;
+    vec[1] += fromRec.top  - toRec.top;
+};
+
+const triangulateEarClipping = function(planeCoords) {
+
+    const polygonVertices = [ ];
+    for (let i = 0; i &lt; planeCoords.length; ++i)
+        polygonVertices.push(i);
+
+    const isCCW = (function() {
+        const ba = math.vec2();
+        const bc = math.vec2();
+
+        let anglesSum = 0;
+        const angles = [ ];
+
+        for (let i = 0; i &lt; polygonVertices.length; ++i)
+        {
+            const a = planeCoords[polygonVertices[i]];
+            const b = planeCoords[polygonVertices[(i + 1) % polygonVertices.length]];
+            const c = planeCoords[polygonVertices[(i + 2) % polygonVertices.length]];
+
+            math.subVec2(a, b, ba);
+            math.subVec2(c, b, bc);
+
+            const theta = math.dotVec2(ba, bc) / Math.sqrt(math.sqLenVec2(ba) * math.sqLenVec2(bc));
+            const angle = Math.acos(Math.max(-1, Math.min(theta, 1)));
+            const convex = (ba[0] * bc[1] - ba[1] * bc[0]) &gt;= 0;
+            anglesSum += convex ? angle : (2 * Math.PI - angle);
+        }
+
+        return anglesSum &lt; (polygonVertices.length * Math.PI);
+    })();
+
+    const pointInTriangle = (function() {
+        const sign = (p1, p2, p3) =&gt; {
+            return (p1[0] - p3[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p3[1]);
+        };
+
+        return (pt, v1, v2, v3) =&gt; {
+            const d1 = sign(pt, v1, v2);
+            const d2 = sign(pt, v2, v3);
+            const d3 = sign(pt, v3, v1);
+
+            const has_neg = (d1 &lt; 0) || (d2 &lt; 0) || (d3 &lt; 0);
+            const has_pos = (d1 &gt; 0) || (d2 &gt; 0) || (d3 &gt; 0);
+
+            return !(has_neg &amp;&amp; has_pos);
+        };
+    })();
+
+    const baseTriangles = [ ];
+
+    const vertices = (isCCW ? polygonVertices : polygonVertices.slice(0).reverse()).map(i =&gt; ({ idx: i }));
+    vertices.forEach((v, i) =&gt; {
+        v.prev = vertices[(i - 1 + vertices.length) % vertices.length];
+        v.next = vertices[(i + 1)                   % vertices.length];
+    });
+
+    const ba = math.vec2();
+    const bc = math.vec2();
+
+    while (vertices.length &gt; 2) {
+        let earIdx = 0;
+        while (true) {
+            if (earIdx &gt;= vertices.length)
+            {
+                throw `isCCW = ${isCCW}; earIdx = ${earIdx}; len = ${vertices.length}`;
+            }
+            const v = vertices[earIdx];
+
+            const a = planeCoords[v.prev.idx];
+            const b = planeCoords[v.idx];
+            const c = planeCoords[v.next.idx];
+
+            math.subVec2(a, b, ba);
+            math.subVec2(c, b, bc);
+
+            if (((ba[0] * bc[1] - ba[1] * bc[0]) &gt;= 0) // a convex vertex
+                &amp;&amp;
+                vertices.every( // no other vertices inside
+                    vv =&gt; ((vv === v)
+                           ||
+                           (vv === v.prev)
+                           ||
+                           (vv === v.next)
+                           ||
+                           !pointInTriangle(planeCoords[vv.idx], a, b, c))))
+                break;
+            ++earIdx;
+        }
+
+        const ear = vertices[earIdx];
+        vertices.splice(earIdx, 1);
+
+        baseTriangles.push([ ear.idx, ear.next.idx, ear.prev.idx ]);
+
+        const prev = ear.prev;
+        prev.next = ear.next;
+        const next = ear.next;
+        next.prev = ear.prev;
+    }
+
+    return [ planeCoords, baseTriangles ];
+};
+
+const draggableDot3D = function(handleMouseEvents, handleTouchEvents, viewer, worldPos, color, ray2WorldPos, onStart, onMove, onEnd) {
+    const scene = viewer.scene;
+    const canvas = scene.canvas.canvas;
+
+    const marker = new Marker(scene, {});
+
+    const pickWorldPos = canvasPos =&gt; {
+        const origin = math.vec3();
+        const direction = math.vec3();
+        math.canvasPosToWorldRay(canvas, scene.camera.viewMatrix, scene.camera.projMatrix, canvasPos, origin, direction);
+        return ray2WorldPos(origin, direction);
+    };
+
+    const onChange = event =&gt; {
+        const canvasPos = math.vec2([ event.clientX, event.clientY ]);
+        transformToNode(canvas.ownerDocument.body, canvas, canvasPos);
+
+        const worldPos = pickWorldPos(canvasPos);
+        marker.worldPos = worldPos;
+        updateDotPos();
+        onMove(canvasPos, worldPos);
+    };
+
+    let currentDrag = null;
+
+    const onDragMove = function(event) {
+        const e = currentDrag.matchesEvent(event);
+        if (e)
+        {
+            onChange(e);
+        }
+    };
+
+    const onDragEnd = function(event) {
+        const e = currentDrag.matchesEvent(event);
+        if (e)
+        {
+            dot.setOpacity(idleOpacity);
+            currentDrag.cleanup();
+            onChange(e);
+            onEnd();
+        }
+    };
+
+    const startDrag = function(matchesEvent, cleanupHandlers) {
+        if (currentDrag) {
+            currentDrag.cleanup();
+        }
+
+        dot.setOpacity(1.0);
+        dot.setClickable(false);
+        viewer.cameraControl.active = false;
+
+        currentDrag = {
+            matchesEvent: matchesEvent,
+            cleanup: function() {
+                currentDrag = null;
+                dot.setClickable(true);
+                viewer.cameraControl.active = true;
+                cleanupHandlers();
+            }
+        };
+
+        onStart();
+    };
+
+    const dotCfg = { fillColor: color };
+
+    if (handleMouseEvents)
+    {
+        dotCfg.onMouseOver  = () =&gt; (! currentDrag) &amp;&amp; dot.setOpacity(1.0);
+        dotCfg.onMouseLeave = () =&gt; (! currentDrag) &amp;&amp; dot.setOpacity(idleOpacity);
+        dotCfg.onMouseDown  = event =&gt; {
+            if (event.which === 1)
+            {
+                canvas.addEventListener(&quot;mousemove&quot;, onDragMove);
+                canvas.addEventListener(&quot;mouseup&quot;,   onDragEnd);
+                startDrag(
+                    event =&gt; (event.which === 1) &amp;&amp; event,
+                    () =&gt; {
+                        canvas.removeEventListener(&quot;mousemove&quot;, onDragMove);
+                        canvas.removeEventListener(&quot;mouseup&quot;,   onDragEnd);
+                    });
+            }
+        };
+    }
+
+    if (handleTouchEvents)
+    {
+        let touchStartId;
+        dotCfg.onTouchstart  = event =&gt; {
+            event.preventDefault();
+            if (event.touches.length === 1)
+            {
+                touchStartId = event.touches[0].identifier;
+                startDrag(
+                    event =&gt; [...event.changedTouches].find(e =&gt; e.identifier === touchStartId),
+                    () =&gt; { touchStartId = null; });
+            }
+        };
+        dotCfg.onTouchmove = event =&gt; {
+            event.preventDefault();
+            onDragMove(event);
+        };
+        dotCfg.onTouchend  = event =&gt; {
+            event.preventDefault();
+            onDragEnd(event);
+        };
+    }
+
+    const dotParent = canvas.ownerDocument.body;
+    const dot = new Dot(dotParent, dotCfg);
+
+    const idleOpacity = 0.5;
+    dot.setOpacity(idleOpacity);
+
+    const updateDotPos = function() {
+        const pos = marker.canvasPos.slice();
+        transformToNode(canvas, dotParent, pos);
+        dot.setPos(pos[0], pos[1]);
+    };
+
+    marker.worldPos = worldPos;
+    updateDotPos();
+
+    const onViewMatrix = scene.camera.on(&quot;viewMatrix&quot;, updateDotPos);
+    const onProjMatrix = scene.camera.on(&quot;projMatrix&quot;, updateDotPos);
+
+    return {
+        setActive: value =&gt; dot.setClickable(value),
+        getWorldPos: () =&gt; marker.worldPos,
+        setWorldPos: pos =&gt; { marker.worldPos = pos; updateDotPos(); },
+        destroy: function() {
+            currentDrag &amp;&amp; currentDrag.cleanup();
+            scene.camera.off(onViewMatrix);
+            scene.camera.off(onProjMatrix);
+            marker.destroy();
+            dot.destroy();
+        }
+    };
+};
+
+const marker3D = function(scene, color) {
+    const canvas = scene.canvas.canvas;
+
+    const markerParent = canvas.parentNode;
+    const markerDiv = document.createElement(&quot;div&quot;);
+    markerParent.insertBefore(markerDiv, canvas);
+
+    let size = 5;
+    markerDiv.style.background = color;
+    markerDiv.style.border = &quot;2px solid white&quot;;
+    markerDiv.style.margin = &quot;0 0&quot;;
+    markerDiv.style.zIndex = &quot;100&quot;;
+    markerDiv.style.position = &quot;absolute&quot;;
+    markerDiv.style.pointerEvents = &quot;none&quot;;
+    markerDiv.style.display = &quot;none&quot;;
+
+    const marker = new Marker(scene, {});
+
+    const px = x =&gt; x + &quot;px&quot;;
+    const update = function() {
+        const pos = marker.canvasPos.slice();
+        transformToNode(canvas, markerParent, pos);
+        markerDiv.style.left = px(pos[0] - 3 - size / 2);
+        markerDiv.style.top  = px(pos[1] - 3 - size / 2);
+        markerDiv.style.borderRadius = px(size * 2);
+        markerDiv.style.width  = px(size);
+        markerDiv.style.height = px(size);
+    };
+    const onViewMatrix = scene.camera.on(&quot;viewMatrix&quot;, update);
+    const onProjMatrix = scene.camera.on(&quot;projMatrix&quot;, update);
+
+    return {
+        update: function(worldPos) {
+            if (worldPos)
+            {
+                marker.worldPos = worldPos;
+                update();
+            }
+            markerDiv.style.display = worldPos ? &quot;&quot; : &quot;none&quot;;
+        },
+
+        setHighlighted: function(h) {
+            size = h ? 10 : 5;
+            update();
+        },
+
+        getCanvasPos: () =&gt; marker.canvasPos,
+
+        getWorldPos: () =&gt; marker.worldPos,
+
+        destroy: function() {
+            markerDiv.parentNode.removeChild(markerDiv);
+            scene.camera.off(onViewMatrix);
+            scene.camera.off(onProjMatrix);
+            marker.destroy();
+        }
+    };
+};
+
+import {Wire} from &quot;../lib/html/Wire.js&quot;;
+
+const wire3D = function(scene, color, startWorldPos) {
+    const canvas = scene.canvas.canvas;
+
+    const startMarker = new Marker(scene, {});
+    startMarker.worldPos = startWorldPos;
+    const endMarker = new Marker(scene, {});
+    const wireParent = canvas.ownerDocument.body;
+    const wire = new Wire(wireParent, {
+        color: color,
+        thickness: 1,
+        thicknessClickable: 6
+    });
+    wire.setVisible(false);
+
+    const updatePos = function() {
+        const p0 = startMarker.canvasPos.slice();
+        const p1 = endMarker.canvasPos.slice();
+        transformToNode(canvas, wireParent, p0);
+        transformToNode(canvas, wireParent, p1);
+        wire.setStartAndEnd(p0[0], p0[1], p1[0], p1[1]);
+    };
+    const onViewMatrix = scene.camera.on(&quot;viewMatrix&quot;, updatePos);
+    const onProjMatrix = scene.camera.on(&quot;projMatrix&quot;, updatePos);
+
+    return {
+        update: function(endWorldPos) {
+            if (endWorldPos)
+            {
+                endMarker.worldPos = endWorldPos;
+                updatePos();
+            }
+            wire.setVisible(!!endWorldPos);
+        },
+
+        destroy: function() {
+            scene.camera.off(onViewMatrix);
+            scene.camera.off(onProjMatrix);
+            startMarker.destroy();
+            endMarker.destroy();
+            wire.destroy();
+        }
+    };
+};
+
+const basePolygon3D = function(scene, color, alpha) {
+    let mesh = null;
+
+    const updateBase = points =&gt; {
+        if (points)
+        {
+            if (mesh)
+            {
+                mesh.destroy();
+            }
+
+            try {
+                const [ baseVertices, baseTriangles ] = triangulateEarClipping(points.map(p =&gt; [ p[0], p[2] ]));
+
+                const positions = [ ].concat(...baseVertices.map(p =&gt; [p[0], points[0][1], p[1]])); // To convert from Float64Array into an Array
+                const ind = [ ].concat(...baseTriangles);
+                mesh = new Mesh(scene, {
+                    pickable: false, // otherwise there&apos;s a WebGL error inside PickMeshRenderer.prototype.drawMesh
+                    geometry: new ReadableGeometry(
+                        scene,
+                        {
+                            positions: positions,
+                            indices:   ind,
+                            normals:   math.buildNormals(positions, ind)
+                        }),
+                    material: new PhongMaterial(scene, {
+                        alpha: (alpha !== undefined) ? alpha : 0.5,
+                        backfaces: true,
+                        diffuse: hex2rgb(color)
+                    })
+                });
+            } catch (e) {
+                mesh = null;
+            }
+        }
+
+        if (mesh)
+        {
+            mesh.visible = !!points;
+        }
+    };
+    updateBase(null);
+
+    return {
+        updateBase: updateBase,
+        destroy: () =&gt; mesh &amp;&amp; mesh.destroy()
+    };
+};
+
+const startAAZoneCreateUI = function(scene, zoneAltitude, zoneHeight, zoneColor, zoneAlpha, pointerLens, zonesPlugin, select3dPoint, onZoneCreated) {
+    const marker1 = marker3D(scene, zoneColor);
+    const marker2 = marker3D(scene, zoneColor);
+    const basePolygon = basePolygon3D(scene, zoneColor, zoneAlpha);
+
+    const updatePointerLens = (pointerLens
+                               ? function(canvasPos) {
+                                   pointerLens.visible = !! canvasPos;
+                                   if (canvasPos)
+                                   {
+                                       pointerLens.canvasPos = canvasPos;
+                                   }
+                               }
+                               : () =&gt; { });
+
+    let deactivatePointSelection = select3dPoint(
+        () =&gt; {
+            updatePointerLens(null);
+            marker1.update(null);
+        },
+        (canvasPos, worldPos) =&gt; {
+            updatePointerLens(canvasPos);
+            marker1.update(worldPos);
+        },
+        function(point1CanvasPos, point1WorldPos) {
+            marker1.update(point1WorldPos);
+
+            deactivatePointSelection = select3dPoint(
+                function() {
+                    updatePointerLens(null);
+                    marker2.update(null);
+                    basePolygon.updateBase(null);
+                },
+                function(canvasPos, point2WorldPos) {
+                    updatePointerLens(canvasPos);
+                    marker2.update(point2WorldPos);
+
+                    if (math.distVec3(point1WorldPos, point2WorldPos) &gt; 0.01)
+                    {
+                        const min = (idx) =&gt; Math.min(point1WorldPos[idx], point2WorldPos[idx]);
+                        const max = (idx) =&gt; Math.max(point1WorldPos[idx], point2WorldPos[idx]);
+
+                        const xmin = min(0);
+                        const ymin = min(1);
+                        const zmin = min(2);
+                        const xmax = max(0);
+                        const ymax = max(1);
+                        const zmax = max(2);
+
+                        basePolygon.updateBase([ [ xmin, ymin, zmax ], [ xmax, ymin, zmax ],
+                                                 [ xmax, ymin, zmin ], [ xmin, ymin, zmin ] ]);
+                    }
+                    else
+                        basePolygon.updateBase(null);
+                },
+                function(point2CanvasPos, point2WorldPos) {
+                    // `marker2.update&apos; makes sure marker&apos;s position has been updated from its default [0,0,0]
+                    // This works around an unidentified bug somewhere around OcclusionLayer, that causes error
+                    // [.WebGL-0x13400c47e00] GL_INVALID_OPERATION: Vertex buffer is not big enough for the draw call
+                    marker2.update(point2WorldPos);
+
+                    marker1.destroy();
+                    marker2.destroy();
+                    basePolygon.destroy();
+                    updatePointerLens(null);
+
+                    const min = (idx) =&gt; Math.min(point1WorldPos[idx], point2WorldPos[idx]);
+                    const max = (idx) =&gt; Math.max(point1WorldPos[idx], point2WorldPos[idx]);
+
+                    const xmin = min(0);
+                    const zmin = min(2);
+                    const xmax = max(0);
+                    const zmax = max(2);
+
+                    const zone = zonesPlugin.createZone(
+                        {
+                            id: math.createUUID(),
+                            geometry: {
+                                planeCoordinates: [
+                                    [ xmin, zmax ],
+                                    [ xmax, zmax ],
+                                    [ xmax, zmin ],
+                                    [ xmin, zmin ]
+                                ],
+                                altitude: zoneAltitude,
+                                height: zoneHeight
+                            },
+                            alpha: zoneAlpha,
+                            color: zoneColor
+                        });
+
+                    onZoneCreated(zone);
+                });
+        });
+
+    return {
+        deactivate: function() {
+            deactivatePointSelection();
+            marker1.destroy();
+            marker2.destroy();
+            basePolygon.destroy();
+            updatePointerLens(null);
+        }
+    };
+};
+
+const mousePointSelector = function(viewer, ray2WorldPos) {
+    return function(onCancel, onChange, onCommit) {
+        const scene = viewer.scene;
+        const canvas = scene.canvas.canvas;
+        const moveTolerance = 20;
+
+        const copyCanvasPos = (event, vec2) =&gt; {
+            vec2[0] = event.clientX;
+            vec2[1] = event.clientY;
+            transformToNode(canvas.ownerDocument.body, canvas, vec2);
+            return vec2;
+        };
+
+        const pickWorldPos = canvasPos =&gt; {
+            const origin = math.vec3();
+            const direction = math.vec3();
+            math.canvasPosToWorldRay(canvas, scene.camera.viewMatrix, scene.camera.projMatrix, canvasPos, origin, direction);
+            return ray2WorldPos(origin, direction);
+        };
+
+        let buttonDown = false;
+        const resetAction = function() {
+            buttonDown = false;
+        };
+
+        const cleanup = function() {
+            resetAction();
+            canvas.removeEventListener(&quot;mousedown&quot;, onMouseDown);
+            canvas.removeEventListener(&quot;mousemove&quot;, onMouseMove);
+            viewer.cameraControl.off(onCameraControlRayMove);
+            canvas.removeEventListener(&quot;mouseup&quot;, onMouseUp);
+        };
+
+        const startCanvasPos = math.vec2();
+        const onMouseDown = function(event) {
+            if (event.which === 1)
+            {
+                copyCanvasPos(event, startCanvasPos);
+                buttonDown = true;
+            }
+        };
+        canvas.addEventListener(&quot;mousedown&quot;, onMouseDown);
+
+        const onMouseMove = function(event) {
+            const canvasPos = copyCanvasPos(event, math.vec2());
+            if (buttonDown &amp;&amp; math.distVec2(startCanvasPos, canvasPos) &gt; moveTolerance)
+            {
+                resetAction();
+                onCancel();
+            }
+        };
+        canvas.addEventListener(&quot;mousemove&quot;, onMouseMove);
+
+        const onCameraControlRayMove = viewer.cameraControl.on(
+            &quot;rayMove&quot;,
+            event =&gt; {
+                const canvasPos = event.canvasPos;
+                onChange(canvasPos, pickWorldPos(canvasPos));
+            });
+
+        const onMouseUp = function(event) {
+            if ((event.which === 1) &amp;&amp; buttonDown)
+            {
+                cleanup();
+                const canvasPos = copyCanvasPos(event, math.vec2());
+                onCommit(canvasPos, pickWorldPos(canvasPos));
+            }
+        };
+        canvas.addEventListener(&quot;mouseup&quot;, onMouseUp);
+
+        return cleanup;
+    };
+};
+
+const touchPointSelector = function(viewer, pointerCircle, ray2WorldPos) {
+    return function(onCancel, onChange, onCommit) {
+        const scene = viewer.scene;
+        const canvas = scene.canvas.canvas;
+        const longTouchTimeoutMs = 300;
+        const moveTolerance = 20;
+
+        const copyCanvasPos = (event, vec2) =&gt; {
+            vec2[0] = event.clientX;
+            vec2[1] = event.clientY;
+            transformToNode(canvas.ownerDocument.body, canvas, vec2);
+            return vec2;
+        };
+
+        const pickWorldPos = canvasPos =&gt; {
+            const origin = math.vec3();
+            const direction = math.vec3();
+            math.canvasPosToWorldRay(canvas, scene.camera.viewMatrix, scene.camera.projMatrix, canvasPos, origin, direction);
+            return ray2WorldPos(origin, direction);
+        };
+
+        let longTouchTimeout = null;
+        const nop = () =&gt; { };
+        let onSingleTouchMove = nop;
+        let startTouchIdentifier;
+
+        const resetAction = function() {
+            pointerCircle.stop();
+            clearTimeout(longTouchTimeout);
+            viewer.cameraControl.active = true;
+            onSingleTouchMove = nop;
+            startTouchIdentifier = null;
+        };
+
+        const cleanup = function() {
+            resetAction();
+            canvas.removeEventListener(&quot;touchstart&quot;, onCanvasTouchStart);
+            canvas.removeEventListener(&quot;touchmove&quot;,  onCanvasTouchMove);
+            canvas.removeEventListener(&quot;touchend&quot;,   onCanvasTouchEnd);
+        };
+
+        const onCanvasTouchStart = function(event) {
+            const touches = event.touches;
+
+            if (touches.length !== 1)
+            {
+                resetAction();
+                onCancel();
+            }
+            else
+            {
+                const startTouch = touches[0];
+                const startCanvasPos = copyCanvasPos(startTouch, math.vec2());
+
+                const startWorldPos = pickWorldPos(startCanvasPos);
+                if (startWorldPos)
+                {
+                    startTouchIdentifier = startTouch.identifier;
+
+                    onSingleTouchMove = canvasPos =&gt; {
+                        if (math.distVec2(startCanvasPos, canvasPos) &gt; moveTolerance)
+                        {
+                            resetAction();
+                        }
+                    };
+
+                    longTouchTimeout = setTimeout(
+                        function() {
+                            pointerCircle.start(startCanvasPos);
+
+                            longTouchTimeout = setTimeout(
+                                function() {
+                                    pointerCircle.stop();
+
+                                    viewer.cameraControl.active = false;
+
+                                    onSingleTouchMove = canvasPos =&gt; {
+                                        onChange(canvasPos, pickWorldPos(canvasPos));
+                                    };
+
+                                    onSingleTouchMove(startCanvasPos);
+                                },
+                                longTouchTimeoutMs);
+                        },
+                        250);
+                }
+            }
+        };
+        canvas.addEventListener(&quot;touchstart&quot;, onCanvasTouchStart, {passive: true});
+
+        // canvas.addEventListener(&quot;touchcancel&quot;, e =&gt; console.log(&quot;touchcancel&quot;, e), {passive: true});
+
+        const onCanvasTouchMove = function(event) {
+            const touch = [...event.changedTouches].find(e =&gt; e.identifier === startTouchIdentifier);
+            if (touch)
+            {
+                onSingleTouchMove(copyCanvasPos(touch, math.vec2()));
+            }
+        };
+        canvas.addEventListener(&quot;touchmove&quot;, onCanvasTouchMove, {passive: true});
+
+        const onCanvasTouchEnd = function(event) {
+            const touch = [...event.changedTouches].find(e =&gt; e.identifier === startTouchIdentifier);
+            if (touch)
+            {
+                cleanup();
+                const canvasPos = copyCanvasPos(touch, math.vec2());
+                onCommit(canvasPos, pickWorldPos(canvasPos));
+            }
+        };
+        canvas.addEventListener(&quot;touchend&quot;, onCanvasTouchEnd, {passive: true});
+
+        return cleanup;
+    };
+};
+
+const planeIntersect = function(p0, n, origin, direction) {
+    const t = - (math.dotVec3(origin, n) - p0) / math.dotVec3(direction, n);
+    if (false) // (t &lt; 0)
+    {
+        return false;
+    }
+    else
+    {
+        const worldPos = math.vec3();
+        math.mulVec3Scalar(direction, t, worldPos);
+        math.addVec3(origin, worldPos, worldPos);
+        return worldPos;
+    }
+};
+
+/**
+ * @desc Renders a transparent box between two 3D points.
+ *
+ * See {@link ZonesPlugin} for more info.
+ */
+
+class Zone extends Component {
+
+    /**
+     * @private
+     */
+    constructor(plugin, cfg = {}) {
+
+        super(plugin.viewer.scene, cfg);
+
+        /**
+         * The {@link ZonesPlugin} that owns this Zone.
+         * @type {ZonesPlugin}
+         */
+        this.plugin = plugin;
+
+        this._container = cfg.container;
+        if (!this._container) {
+            throw &quot;config missing: container&quot;;
+        }
+
+        this._eventSubs = {};
+
+        const scene = this.plugin.viewer.scene;
+
+        this._geometry = cfg.geometry;
+
+        const onMouseOver = cfg.onMouseOver ? (event) =&gt; {
+            cfg.onMouseOver(event, this);
+            this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new MouseEvent(&apos;mouseover&apos;, event));
+        } : null;
+
+        const onMouseLeave = cfg.onMouseLeave ? (event) =&gt; {
+            cfg.onMouseLeave(event, this);
+            this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new MouseEvent(&apos;mouseleave&apos;, event));
+        } : null;
+
+        const onMouseDown = (event) =&gt; {
+            this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new MouseEvent(&apos;mousedown&apos;, event));
+        } ;
+
+        const onMouseUp =  (event) =&gt; {
+            this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new MouseEvent(&apos;mouseup&apos;, event));
+        };
+
+        const onMouseMove =  (event) =&gt; {
+            this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new MouseEvent(&apos;mousemove&apos;, event));
+        };
+
+        const onContextMenu = cfg.onContextMenu ? (event) =&gt; {
+            cfg.onContextMenu(event, this);
+        } : null;
+
+        const onMouseWheel = (event) =&gt; {
+            this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new WheelEvent(&apos;wheel&apos;, event));
+        };
+
+        this._alpha = ((&quot;alpha&quot; in cfg) &amp;&amp; (cfg.alpha !== undefined)) ? cfg.alpha : 0.5;
+        this.color = cfg.color;
+
+        this._visible = true;
+
+        this._rebuildMesh();
+    }
+
+    _rebuildMesh() {
+        const scene       = this.plugin.viewer.scene;
+        const planeCoords = this._geometry.planeCoordinates.slice();
+        const downward    = this._geometry.height &lt; 0;
+        const altitude    = this._geometry.altitude + (downward ? this._geometry.height : 0);
+        const height      = this._geometry.height * (downward ? -1 : 1);
+
+        const [ baseVertices, baseTriangles ] = triangulateEarClipping(planeCoords); // TODO: prevent crossing edges
+
+        const pos = [ ];
+        const ind = [ ];
+
+
+        const addPlane = (isCeiling) =&gt; {
+            const baseIdx = pos.length;
+
+            for (let c of baseVertices) {
+                pos.push([ c[0], altitude + (isCeiling ? height : 0), c[1] ]);
+            }
+
+            for (let t of baseTriangles) {
+                ind.push(...(isCeiling ? t : t.slice(0).reverse()).map(i =&gt; i + baseIdx));
+            }
+        };
+        addPlane(false);        // floor
+        addPlane(true);         // ceiling
+
+
+        // sides
+        for (let i = 0; i &lt; baseVertices.length; ++i) {
+            const a = baseVertices[i];
+            const b = baseVertices[(i+1) % baseVertices.length];
+            const f = altitude;
+            const c = altitude + height;
+
+            const baseIdx = pos.length;
+
+            pos.push(
+                [ a[0], f, a[1] ],
+                [ b[0], f, b[1] ],
+                [ b[0], c, b[1] ],
+                [ a[0], c, a[1] ]
+            );
+
+            ind.push(...[ 0, 1, 2, 0, 2, 3 ].map(i =&gt; i + baseIdx));
+        }
+
+
+        if (this._zoneMesh) {
+            this._zoneMesh.destroy();
+        }
+
+
+        const positions = [].concat(...pos);
+        this._zoneMesh = new Mesh(scene, {
+            edges: this._edges,
+            geometry: new ReadableGeometry(
+                scene,
+                {
+                    positions: positions,
+                    indices:   ind,
+                    normals:   math.buildNormals(positions, ind)
+                }),
+            material: new PhongMaterial(scene, {
+                alpha: this._alpha,
+                backfaces: true,
+                diffuse: hex2rgb(this._color)
+            }),
+            visible: this._visible
+        });
+        this._zoneMesh.highlighted = this._highlighted;
+
+        this._zoneMesh.zone = this;
+
+
+        const min = idx =&gt; Math.min(...pos.map(p =&gt; p[idx]));
+        const max = idx =&gt; Math.max(...pos.map(p =&gt; p[idx]));
+
+        const xmin = min(0);
+        const ymin = min(1);
+        const zmin = min(2);
+        const xmax = max(0);
+        const ymax = max(1);
+        const zmax = max(2);
+
+        this._center = math.vec3([ (xmin + xmax) / 2, (ymin + ymax) / 2, (zmin + zmax) / 2 ]);
+    }
+
+    sectionedAverage(sectionPlanes) {
+        const planeCoords = this._geometry.planeCoordinates.slice();
+
+        let faces = [ ];
+        {
+            const h = this._geometry.height;
+            const a = this._geometry.altitude;
+            const c = a + Math.max(0, h);
+            const f = a + Math.min(0, h);
+
+            const addPlane = (isCeiling) =&gt; {
+                const face = planeCoords.map(p =&gt; [ p[0], isCeiling ? c : f, p[1] ]);
+                faces.push(isCeiling ? face : face.slice(0).reverse());
+            };
+            addPlane(true);     // ceiling
+            addPlane(false);    // floor
+
+            // sides
+            const p = (idx, y) =&gt; [ planeCoords[idx][0], y, planeCoords[idx][1] ];
+            for (let i = 0; i &lt; planeCoords.length; ++i)
+            {
+                const j = (i + 1) % planeCoords.length;
+                faces.push([ p(i, f), p(j, f), p(j, c), p(i, c) ]);
+            }
+        }
+
+        for (const s of sectionPlanes)
+        {
+            const dir = s.dir;
+            const dist = s.dist;
+            const newFaces = [ ];
+
+            for (const face of faces)
+            {
+                const EPSILON = 1e-5;
+                const COPLANAR = 0;
+                const FRONT = 1;
+                const BACK = 2;
+                const SPANNING = 3;
+
+                // Classify each point as well as the entire polygon into one of the above four classes.
+                let polygonType = 0;
+                const types = [ ];
+                for (let i = 0; i &lt; face.length; i++) {
+                    const t = math.dotVec3(dir, face[i]) + dist;
+                    const type = (t &lt; -EPSILON) ? BACK : (t &gt; EPSILON) ? FRONT : COPLANAR;
+                    polygonType |= type;
+                    types.push(type);
+                }
+
+                // Put the polygon in the correct list, splitting it when necessary.
+                switch (polygonType) {
+                case COPLANAR:
+                    newFaces.push(face);
+                    break;
+                case FRONT:
+                    newFaces.push(face);
+                    break;
+                case BACK:
+                    break;
+                case SPANNING:
+                    const f = [ ];
+                    for (let i = 0; i &lt; face.length; i++)
+                    {
+                        var j = (i + 1) % face.length;
+                        const ti = types[i];
+                        const tj = types[j];
+                        const vi = face[i];
+                        const vj = face[j];
+                        if (ti !== BACK)
+                        {
+                            f.push(vi);
+                        }
+
+                        if ((ti | tj) === SPANNING)
+                        {
+                            const diff = math.vec3();
+                            math.subVec3(vj, vi, diff);
+                            const t = - (dist + math.dotVec3(dir, vi)) / math.dotVec3(dir, diff);
+                            const v = [0,0,0];
+                            math.lerpVec3(t, 0, 1, vi, vj, v);
+                            f.push(v);
+                        }
+                    }
+                    if (f.length &gt;= 3)
+                    {
+                        newFaces.push(f);
+                    }
+                    break;
+                }
+            }
+
+            faces = newFaces;
+        }
+
+        if (faces.length === 0)
+        {
+            return null;
+        }
+        else
+        {
+            const avg = math.vec3([ 0, 0, 0 ]);
+            const unique = new Set();
+
+            for (const f of faces)
+            {
+                for (const p of f)
+                {
+                    const id = p.map(x =&gt; x.toFixed(3)).join(&quot;:&quot;);
+                    if (! (unique.has(id)))
+                    {
+                        unique.add(id);
+                        math.addVec3(avg, p, avg);
+                    }
+                }
+            }
+
+            math.mulVec3Scalar(avg, 1 / unique.size, avg);
+
+            return avg;
+        }
+    }
+
+    get center() {
+        return this._center;
+    }
+
+    get altitude() {
+        return this._geometry.altitude;
+    }
+
+    set altitude(value) {
+        this._geometry.altitude = value;
+        this._rebuildMesh();
+    }
+
+    get height() {
+        return this._geometry.height;
+    }
+
+    set height(value) {
+        this._geometry.height = value;
+        this._rebuildMesh();
+    }
+
+    get highlighted() {
+        return this._highlighted;
+    }
+
+    set highlighted(value)
+    {
+        this._highlighted = value;
+        if (this._zoneMesh) {
+            this._zoneMesh.highlighted = value;
+        }
+    }
+
+    set color(value) {
+        this._color = value;
+        if (this._zoneMesh) {
+            this._zoneMesh.material.diffuse = hex2rgb(this._color);
+        }
+    }
+
+    get color() {
+        return this._color;
+    }
+
+    set alpha(value) {
+        this._alpha = value;
+        if (this._zoneMesh) {
+            this._zoneMesh.material.alpha = this._alpha;
+        }
+    }
+
+    get alpha() {
+        return this._alpha;
+    }
+
+    get edges() {
+        return this._edges;
+    }
+
+    set edges(edges) {
+        this._edges = edges;
+        if (this._zoneMesh) {
+            this._zoneMesh.edges = this._edges;
+        }
+    }
+
+    /**
+     * Sets whether this Zone is visible or not.
+     *
+     * @type {Boolean}
+     */
+    set visible(value) {
+        this._visible = !!value;
+        this._zoneMesh.visible = this._visible;
+        this._needUpdate();
+    }
+
+    /**
+     * Gets whether this Zone is visible or not.
+     *
+     * @type {Boolean}
+     */
+    get visible() {
+        return this._visible;
+    }
+
+    /**
+     * Gets this Zone as JSON.
+     *
+     * @returns {JSON}
+     */
+
+    getJSON() {
+        return {
+            id: this.id,
+            geometry: this._geometry,
+            alpha: this._alpha,
+            color: this._color
+        };
+    }
+
+    duplicate() {
+        return this.plugin.createZone(
+            {
+                id: math.createUUID(),
+                geometry: {
+                    planeCoordinates: this._geometry.planeCoordinates.map(c =&gt; c.slice()),
+                    altitude: this._geometry.altitude,
+                    height: this._geometry.height
+                },
+                alpha: this._alpha,
+                color: this._color
+            });
+    }
+
+    /**
+     * @private
+     */
+    destroy() {
+        this._zoneMesh.destroy();
+        super.destroy();
+    }
+}
+
+/**
+ * Creates {@link Zone}s in a {@link ZonesPlugin} from mouse input.
+ *
+ * ## Usage
+ *
+ * [[Run example](/examples/measurement/#distance_createWithMouse_snapping)]
+ *
+ * ````javascript
+ * import {Viewer, XKTLoaderPlugin, ZonesPlugin, ZonesMouseControl} from &quot;xeokit-sdk.es.js&quot;;
+ *
+ * const viewer = new Viewer({
+ *     canvasId: &quot;myCanvas&quot;,
+ * });
+ *
+ * viewer.camera.eye = [-3.93, 2.85, 27.01];
+ * viewer.camera.look = [4.40, 3.72, 8.89];
+ * viewer.camera.up = [-0.01, 0.99, 0.039];
+ *
+ * const xktLoader = new XKTLoaderPlugin(viewer);
+ *
+ * const sceneModel = xktLoader.load({
+ *     id: &quot;myModel&quot;,
+ *     src: &quot;Duplex.xkt&quot;
+ * });
+ *
+ * const zones = new ZonesPlugin(viewer);
+ *
+ * const zonesControl  = new ZonesMouseControl(Zones)
+ * ````
+ */
+class ZonesMouseControl extends Component {
+
+    /**
+     * Creates a ZonesMouseControl bound to the given ZonesPlugin.
+     *
+     * @param {ZonesPlugin} zonesPlugin The ZonesPlugin to control.
+     * @param [cfg] Configuration
+     * @param {PointerLens} [cfg.pointerLens] A PointerLens to use to provide a magnified view of the cursor when snapping is enabled.
+     */
+    constructor(zonesPlugin, cfg = {}) {
+        super(zonesPlugin.viewer.scene);
+
+        this.zonesPlugin = zonesPlugin;
+        this.pointerLens = cfg.pointerLens;
+        this._deactivate = null;
+    }
+
+    get active() {
+        return !! this._deactivate;
+    }
+
+    activate(zoneAltitude, zoneHeight, zoneColor, zoneAlpha) {
+
+        if (this._deactivate) {
+            return;
+        }
+
+        if (typeof(zoneAltitude) === &quot;object&quot; &amp;&amp; (zoneAltitude !== null)) {
+            const params = zoneAltitude;
+            const param = (name, defaultValue) =&gt; {
+                if (name in params) {
+                    return params[name];
+                } else if (defaultValue !== undefined) {
+                    return defaultValue;
+                } else {
+                    throw &quot;config missing: &quot; + name;
+                }
+            };
+
+            zoneAltitude = param(&quot;altitude&quot;);
+            zoneHeight   = param(&quot;height&quot;);
+            zoneColor    = param(&quot;color&quot;, &quot;#008000&quot;);
+            zoneAlpha    = param(&quot;alpha&quot;, 0.5);
+        }
+
+        const zonesPlugin = this.zonesPlugin;
+        const viewer = zonesPlugin.viewer;
+        const scene = viewer.scene;
+        const self = this;
+
+        const select3dPoint = mousePointSelector(
+            viewer,
+            function(origin, direction) {
+                return planeIntersect(zoneAltitude, math.vec3([ 0, 1, 0 ]), origin, direction);
+            });
+
+        (function rec() {
+            self._deactivate = startAAZoneCreateUI(
+                scene, zoneAltitude, zoneHeight, zoneColor, zoneAlpha, self.pointerLens, zonesPlugin, select3dPoint,
+                zone =&gt; {
+                    let reactivate = true;
+                    self._deactivate = () =&gt; { reactivate = false; };
+                    self.fire(&quot;zoneEnd&quot;, zone);
+                    if (reactivate)
+                    {
+                        rec();
+                    }
+                }).deactivate;
+        })();
+    }
+
+    deactivate() {
+        if (this._deactivate)
+        {
+            this._deactivate();
+            this._deactivate = null;
+        }
+    }
+
+    /**
+     * Destroys this ZonesMouseControl.
+     *
+     * Destroys any {@link Zone} under construction by this ZonesMouseControl.
+     */
+    destroy() {
+        this.deactivate();
+        super.destroy();
+    }
+}
+
+/**
+ * ZonesPlugin documentation to be added, mostly compatible with DistanceMeasurementsPlugin.
+ */
+class ZonesPlugin extends Plugin {
+
+    /**
+     * @constructor
+     * @param {Viewer} viewer The Viewer.
+     * @param {Object} [cfg]  Plugin configuration.
+     * @param {String} [cfg.id=&quot;Zones&quot;] Optional ID for this plugin, so that we can find it within {@link Viewer#plugins}.
+     * @param {HTMLElement} [cfg.container] Container DOM element for markers and labels. Defaults to ````document.body````.
+     * @param {string} [cfg.defaultColor=#00BBFF] The default color of the length dots, wire and label.
+     * @param {number} [cfg.zIndex] If set, the wires, dots and labels will have this zIndex (+1 for dots and +2 for labels).
+     * @param {PointerCircle} [cfg.pointerLens] A PointerLens to help the user position the pointer. This can be shared with other plugins.
+     */
+    constructor(viewer, cfg = {}) {
+
+        super(&quot;Zones&quot;, viewer);
+
+        this._pointerLens = cfg.pointerLens;
+
+        this._container = cfg.container || document.body;
+
+        this._zones = [ ];
+
+        this.defaultColor = cfg.defaultColor !== undefined ? cfg.defaultColor : &quot;#00BBFF&quot;;
+        this.zIndex = cfg.zIndex || 10000;
+
+        this._onMouseOver = (event, zone) =&gt; {
+            this.fire(&quot;mouseOver&quot;, {
+                plugin: this,
+                zone,
+                event
+            });
+        };
+
+        this._onMouseLeave = (event, zone) =&gt; {
+            this.fire(&quot;mouseLeave&quot;, {
+                plugin: this,
+                zone,
+                event
+            });
+        };
+
+        this._onContextMenu = (event, zone) =&gt; {
+            this.fire(&quot;contextMenu&quot;, {
+                plugin: this,
+                zone,
+                event
+            });
+        };
+    }
+
+    /**
+     * Creates a {@link Zone}.
+     *
+     * The Zone is then registered by {@link Zone#id} in {@link ZonesPlugin#zones}.
+     *
+     * @param {Object} params {@link Zone} configuration.
+     * @param {String} params.id Unique ID to assign to {@link Zone#id}. The Zone will be registered by this in {@link ZonesPlugin#zones} and {@link Scene.components}. Must be unique among all components in the {@link Viewer}.
+     * @param {Number[]} params.origin.worldPos Origin World-space 3D position.
+     * @param {Entity} params.origin.entity Origin Entity.
+     * @param {Number[]} params.target.worldPos Target World-space 3D position.
+     * @param {Entity} params.target.entity Target Entity.
+     * @param {string} [params.color] The color of the length dot, wire and label.
+     * @returns {Zone} The new {@link Zone}.
+     */
+    createZone(params = {}) {
+        if (this.viewer.scene.components[params.id]) {
+            this.error(&quot;Viewer scene component with this ID already exists: &quot; + params.id);
+            delete params.id;
+        }
+
+        const zone = new Zone(this, {
+            id: params.id,
+            plugin: this,
+            container: this._container,
+            geometry: params.geometry,
+            alpha: params.alpha,
+            color: params.color,
+            onMouseOver: this._onMouseOver,
+            onMouseLeave: this._onMouseLeave,
+            onContextMenu: this._onContextMenu
+        });
+        this._zones.push(zone);
+        zone.on(&quot;destroyed&quot;, () =&gt; {
+            const idx = this._zones.indexOf(zone);
+            if (idx &gt;= 0) {
+                this._zones.splice(idx, 1);
+            }
+        });
+        this.fire(&quot;zoneCreated&quot;, zone);
+        return zone;
+    }
+
+    /**
+     * Gets the existing {@link Zone}s, each mapped to its {@link Zone#id}.
+     *
+     * @type {{String:Zone}}
+     */
+    get zones() {
+        return this._zones;
+    }
+
+    /**
+     * Destroys this ZonesPlugin.
+     *
+     * Destroys all {@link Zone}s first.
+     */
+    destroy() {
+        super.destroy();
+    }
+}
+
+import {PointerCircle} from &quot;../../extras/PointerCircle/PointerCircle.js&quot;;
+
+export class ZonesTouchControl extends Component {
+
+    constructor(zonesPlugin, cfg = {}) {
+        super(zonesPlugin.viewer.scene);
+
+        this.zonesPlugin = zonesPlugin;
+        this.pointerLens = cfg.pointerLens;
+        this.pointerCircle = new PointerCircle(zonesPlugin.viewer);
+        this._deactivate = null;
+    }
+
+    get active() {
+        return !! this._deactivate;
+    }
+
+    activate(zoneAltitude, zoneHeight, zoneColor, zoneAlpha) {
+
+        if (typeof(zoneAltitude) === &quot;object&quot; &amp;&amp; (zoneAltitude !== null)) {
+            const params = zoneAltitude;
+            const param = (name, defaultValue) =&gt; {
+                if (name in params) {
+                    return params[name];
+                } else if (defaultValue !== undefined) {
+                    return defaultValue;
+                } else {
+                    throw &quot;config missing: &quot; + name;
+                }
+            };
+
+            zoneAltitude = param(&quot;altitude&quot;);
+            zoneHeight   = param(&quot;height&quot;);
+            zoneColor    = param(&quot;color&quot;, &quot;#008000&quot;);
+            zoneAlpha    = param(&quot;alpha&quot;, 0.5);
+        }
+
+        if (this._deactivate) {
+            return;
+        }
+
+        const zonesPlugin = this.zonesPlugin;
+        const viewer = zonesPlugin.viewer;
+        const scene = viewer.scene;
+        const self = this;
+
+        const select3dPoint = touchPointSelector(
+            viewer,
+            this.pointerCircle,
+            function(origin, direction) {
+                return planeIntersect(zoneAltitude, math.vec3([ 0, 1, 0 ]), origin, direction);
+            });
+
+        (function rec() {
+            self._deactivate = startAAZoneCreateUI(
+                scene, zoneAltitude, zoneHeight, zoneColor, zoneAlpha, self.pointerLens, zonesPlugin, select3dPoint,
+                zone =&gt; {
+                    let reactivate = true;
+                    self._deactivate = () =&gt; { reactivate = false; };
+                    self.fire(&quot;zoneEnd&quot;, zone);
+                    if (reactivate)
+                    {
+                        rec();
+                    }
+                }).deactivate;
+        })();
+    }
+
+    deactivate() {
+        if (this._deactivate)
+        {
+            this._deactivate();
+            this._deactivate = null;
+        }
+    }
+
+    destroy() {
+        this.deactivate();
+        super.destroy();
+    }
+}
+
+const startPolysurfaceZoneCreateUI = function(scene, zoneAltitude, zoneHeight, zoneColor, zoneAlpha, pointerLens, zonesPlugin, select3dPoint, onZoneCreated) {
+    const updatePointerLens = (pointerLens
+                               ? function(canvasPos) {
+                                   pointerLens.visible = !! canvasPos;
+                                   if (canvasPos)
+                                   {
+                                       pointerLens.canvasPos = canvasPos;
+                                   }
+                               }
+                               : () =&gt; { });
+
+    let deactivatePointSelection;
+    const cleanups = [ () =&gt; updatePointerLens(null) ];
+
+    const basePolygon = basePolygon3D(scene, zoneColor, zoneAlpha);
+    cleanups.push(() =&gt; basePolygon.destroy());
+
+    (function selectNextPoint(markers) {
+        const marker = marker3D(scene, zoneColor);
+        const wire = (markers.length &gt; 0) &amp;&amp; wire3D(scene, zoneColor, markers[markers.length - 1].getWorldPos());
+
+        cleanups.push(() =&gt; {
+            marker.destroy();
+            wire &amp;&amp; wire.destroy();
+        });
+
+        const firstMarker = (markers.length &gt; 0) &amp;&amp; markers[0];
+        const getSnappedFirst = function(canvasPos) {
+            const firstCanvasPos = firstMarker &amp;&amp; firstMarker.getCanvasPos();
+            const snapToFirst = firstCanvasPos &amp;&amp; (math.distVec2(firstCanvasPos, canvasPos) &lt; 10);
+            return snapToFirst &amp;&amp; { canvasPos: firstCanvasPos, worldPos: firstMarker.getWorldPos() };
+        };
+
+        const lastSegmentIntersects = (function() {
+            const onSegment = (p, q, r) =&gt; ((q[0] &lt;= Math.max(p[0], r[0])) &amp;&amp;
+                                            (q[0] &gt;= Math.min(p[0], r[0])) &amp;&amp;
+                                            (q[1] &lt;= Math.max(p[1], r[1])) &amp;&amp;
+                                            (q[1] &gt;= Math.min(p[1], r[1])));
+
+            const orient = (p, q, r) =&gt; {
+                const val = (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1]);
+                // collinear
+                // clockwise
+                // counterclockwise
+                return ((val === 0) ? 0 : ((val &gt; 0) ? 1 : 2));
+            };
+
+            return function(pos2D, excludeFirstSegment) {
+                const a = pos2D[pos2D.length - 2];
+                const b = pos2D[pos2D.length - 1];
+
+                for (let i = excludeFirstSegment ? 1 : 0; i &lt; pos2D.length - 2 - 1; ++i)
+                {
+                    const c = pos2D[i];
+                    const d = pos2D[i + 1];
+
+                    const o1 = orient(a, b, c);
+                    const o2 = orient(a, b, d);
+                    const o3 = orient(c, d, a);
+                    const o4 = orient(c, d, b);
+
+                    if (((o1 !== o2) &amp;&amp; (o3 !== o4))       || // General case
+                        ((o1 === 0) &amp;&amp; onSegment(a, c, b)) || // a, b and c are collinear and c lies on segment ab
+                        ((o2 === 0) &amp;&amp; onSegment(a, d, b)) || // a, b and d are collinear and d lies on segment ab
+                        ((o3 === 0) &amp;&amp; onSegment(c, a, d)) || // c, d and a are collinear and a lies on segment cd
+                        ((o4 === 0) &amp;&amp; onSegment(c, b, d)))   // c, d and b are collinear and b lies on segment cd
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            };
+        })();
+
+        deactivatePointSelection = select3dPoint(
+            () =&gt; {
+                updatePointerLens(null);
+                marker.update(null);
+                wire &amp;&amp; wire.update(null);
+                basePolygon.updateBase((markers.length &gt; 2) ? markers.map(m =&gt; m.getWorldPos()) : null);
+            },
+            (canvasPos, worldPos) =&gt; {
+                const snappedFirst = (markers.length &gt; 2) &amp;&amp; getSnappedFirst(canvasPos);
+                firstMarker &amp;&amp; firstMarker.setHighlighted(!! snappedFirst);
+                updatePointerLens(snappedFirst ? snappedFirst.canvasPos : canvasPos);
+                marker.update((! snappedFirst) &amp;&amp; worldPos);
+                wire &amp;&amp; wire.update(snappedFirst ? snappedFirst.worldPos : worldPos);
+                if ((markers.length &gt;= 2))
+                {
+                    const pos = markers.map(m =&gt; m.getWorldPos()).concat(snappedFirst ? [] : [worldPos]);
+                    const inter = lastSegmentIntersects(pos.map(p =&gt; [ p[0], p[2] ]), snappedFirst);
+                    basePolygon.updateBase(inter ? null : pos);
+                }
+                else
+                    basePolygon.updateBase(null);
+            },
+            function(canvasPos, worldPos) {
+                const snappedFirst = (markers.length &gt; 2) &amp;&amp; getSnappedFirst(canvasPos);
+                const pos = markers.map(m =&gt; m.getWorldPos()).concat(snappedFirst ? [] : [worldPos]);
+                basePolygon.updateBase(pos);
+                const pos2D = pos.map(p =&gt; [ p[0], p[2] ]);
+                if ((markers.length &gt; 2) &amp;&amp; lastSegmentIntersects(pos2D, snappedFirst))
+                {
+                    cleanups.pop()();
+                    selectNextPoint(markers);
+                }
+                else if (snappedFirst)
+                {
+                    // `marker2.update&apos; makes sure marker&apos;s position has been updated from its default [0,0,0]
+                    // This works around an unidentified bug somewhere around OcclusionLayer, that causes error
+                    // [.WebGL-0x13400c47e00] GL_INVALID_OPERATION: Vertex buffer is not big enough for the draw call
+                    marker.update(worldPos);
+
+                    cleanups.forEach(c =&gt; c());
+                    onZoneCreated(
+                        zonesPlugin.createZone(
+                            {
+                                id: math.createUUID(),
+                                geometry: {
+                                    planeCoordinates: pos2D,
+                                    altitude: zoneAltitude,
+                                    height: zoneHeight
+                                },
+                                alpha: zoneAlpha,
+                                color: zoneColor
+                            }));
+                }
+                else
+                {
+                    marker.update(worldPos);
+                    wire &amp;&amp; wire.update(worldPos);
+                    selectNextPoint(markers.concat(marker));
+                }
+            });
+    })([ ], null);
+
+    return {
+        closeSurface: function() {
+            throw &quot;TODO&quot;;
+        },
+        deactivate: function() {
+            deactivatePointSelection();
+            cleanups.forEach(c =&gt; c());
+        }
+    };
+};
+
+export class ZonesPolysurfaceMouseControl extends Component {
+
+    constructor(zonesPlugin, cfg = {}) {
+        super(zonesPlugin.viewer.scene);
+
+        this.zonesPlugin = zonesPlugin;
+        this.pointerLens = cfg.pointerLens;
+        this._action = null;
+    }
+
+    get active() {
+        return !! this._action;
+    }
+
+    activate(zoneAltitude, zoneHeight, zoneColor, zoneAlpha) {
+
+        if (typeof(zoneAltitude) === &quot;object&quot; &amp;&amp; (zoneAltitude !== null)) {
+            const params = zoneAltitude;
+            const param = (name, defaultValue) =&gt; {
+                if (name in params) {
+                    return params[name];
+                } else if (defaultValue !== undefined) {
+                    return defaultValue;
+                } else {
+                    throw &quot;config missing: &quot; + name;
+                }
+            };
+
+            zoneAltitude = param(&quot;altitude&quot;);
+            zoneHeight   = param(&quot;height&quot;);
+            zoneColor    = param(&quot;color&quot;, &quot;#008000&quot;);
+            zoneAlpha    = param(&quot;alpha&quot;, 0.5);
+        }
+
+        if (this._action) {
+            return;
+        }
+
+        const zonesPlugin = this.zonesPlugin;
+        const viewer = zonesPlugin.viewer;
+        const scene = viewer.scene;
+        const self = this;
+
+        const select3dPoint = mousePointSelector(
+            viewer,
+            function(origin, direction) {
+                return planeIntersect(zoneAltitude, math.vec3([ 0, 1, 0 ]), origin, direction);
+            });
+
+        (function rec() {
+            self._action = startPolysurfaceZoneCreateUI(
+                scene, zoneAltitude, zoneHeight, zoneColor, zoneAlpha, self.pointerLens, zonesPlugin, select3dPoint,
+                zone =&gt; {
+                    let reactivate = true;
+                    self._action = { deactivate: () =&gt; { reactivate = false; } };
+                    self.fire(&quot;zoneEnd&quot;, zone);
+                    if (reactivate)
+                    {
+                        rec();
+                    }
+                });
+        })();
+    }
+
+    deactivate() {
+        if (this._action)
+        {
+            this._action.deactivate();
+            this._action = null;
+        }
+    }
+
+    destroy() {
+        this.deactivate();
+        super.destroy();
+    }
+}
+
+export class ZonesPolysurfaceTouchControl extends Component {
+
+    constructor(zonesPlugin, cfg = {}) {
+        super(zonesPlugin.viewer.scene);
+
+        this.zonesPlugin = zonesPlugin;
+        this.pointerLens = cfg.pointerLens;
+        this.pointerCircle = new PointerCircle(zonesPlugin.viewer);
+        this._action = null;
+    }
+
+    get active() {
+        return !! this._action;
+    }
+
+    activate(zoneAltitude, zoneHeight, zoneColor, zoneAlpha) {
+
+        if (typeof(zoneAltitude) === &quot;object&quot; &amp;&amp; (zoneAltitude !== null)) {
+            const params = zoneAltitude;
+            const param = (name, defaultValue) =&gt; {
+                if (name in params) {
+                    return params[name];
+                } else if (defaultValue !== undefined) {
+                    return defaultValue;
+                } else {
+                    throw &quot;config missing: &quot; + name;
+                }
+            };
+
+            zoneAltitude = param(&quot;altitude&quot;);
+            zoneHeight   = param(&quot;height&quot;);
+            zoneColor    = param(&quot;color&quot;, &quot;#008000&quot;);
+            zoneAlpha    = param(&quot;alpha&quot;, 0.5);
+        }
+
+        if (this._action) {
+            return;
+        }
+
+        const zonesPlugin = this.zonesPlugin;
+        const viewer = zonesPlugin.viewer;
+        const scene = viewer.scene;
+        const self = this;
+
+        const select3dPoint = touchPointSelector(
+            viewer,
+            this.pointerCircle,
+            function(origin, direction) {
+                return planeIntersect(zoneAltitude, math.vec3([ 0, 1, 0 ]), origin, direction);
+            });
+
+        (function rec() {
+            self._action = startPolysurfaceZoneCreateUI(
+                scene, zoneAltitude, zoneHeight, zoneColor, zoneAlpha, self.pointerLens, zonesPlugin, select3dPoint,
+                zone =&gt; {
+                    let reactivate = true;
+                    self._action = { deactivate: () =&gt; { reactivate = false; } };
+                    self.fire(&quot;zoneEnd&quot;, zone);
+                    if (reactivate)
+                    {
+                        rec();
+                    }
+                });
+        })();
+    }
+
+    deactivate() {
+        if (this._action)
+        {
+            this._action.deactivate();
+            this._action = null;
+        }
+    }
+
+    destroy() {
+        this.deactivate();
+        super.destroy();
+    }
+}
+
+export class ZoneEditControl extends Component {
+    constructor(zone, cfg, handleMouseEvents, handleTouchEvents) {
+        super(zone.plugin.viewer.scene);
+        const self = this;
+
+        const altitude = zone._geometry.altitude;
+        const pointerLens = cfg &amp;&amp; cfg.pointerLens;
+        const updatePointerLens = (pointerLens
+                                   ? function(canvasPos) {
+                                       pointerLens.visible = !! canvasPos;
+                                       if (canvasPos)
+                                       {
+                                           pointerLens.canvasPos = canvasPos;
+                                       }
+                                   }
+                                   : () =&gt; { });
+
+        const dots = zone._geometry.planeCoordinates.map(planeCoord =&gt; {
+            let initWorldPos, initPlaneCoord;
+            const setPlaneCoord = function(coord) {
+                planeCoord[0] = coord[0];
+                planeCoord[1] = coord[1];
+                try {
+                    zone._rebuildMesh();
+                } catch (e) {
+                    if (zone._zoneMesh) {
+                        zone._zoneMesh.destroy();
+                        zone._zoneMesh = null;
+                    }
+                }
+            };
+
+            const dot = draggableDot3D(
+                handleMouseEvents,
+                handleTouchEvents,
+                zone.plugin.viewer,
+                math.vec3([ planeCoord[0], altitude, planeCoord[1] ]),
+                zone._color,
+                (orig, dir) =&gt; planeIntersect(altitude, math.vec3([ 0, 1, 0 ]), orig, dir),
+                () =&gt; {
+                    initWorldPos = dot.getWorldPos().slice();
+                    initPlaneCoord = planeCoord.slice();
+                    set_other_dots_active(false, dot);
+                },
+                (canvasPos, worldPos) =&gt; {
+                    updatePointerLens(canvasPos);
+                    setPlaneCoord([ worldPos[0], worldPos[2] ]);
+                },
+                () =&gt; {
+                    if (zone._zoneMesh)
+                    {
+                        self.fire(&quot;edited&quot;);
+                    }
+                    else
+                    {
+                        dot.setWorldPos(initWorldPos);
+                        setPlaneCoord(initPlaneCoord);
+                    }
+                    updatePointerLens(null);
+                    set_other_dots_active(true, dot);
+                });
+            return dot;
+        });
+        const set_other_dots_active = (active, dot) =&gt; dots.forEach(d =&gt; (d !== dot) &amp;&amp; d.setActive(active));
+        set_other_dots_active(true);
+
+        const cleanup = function() {
+            dots.forEach(m =&gt; m.destroy());
+            updatePointerLens(null);
+        };
+
+        const destroyCb = zone.on(&quot;destroyed&quot;, cleanup);
+
+        this._deactivate = function() {
+            zone.off(&quot;destroyed&quot;, destroyCb);
+            cleanup();
+        };
+    }
+
+    deactivate() {
+        this._deactivate();
+        super.destroy();
+    }
+}
+
+export class ZoneEditMouseControl extends ZoneEditControl {
+    constructor(zone, cfg) {
+        super(zone, cfg, true, false);
+    }
+}
+
+export class ZoneEditTouchControl extends ZoneEditControl {
+    constructor(zone, cfg) {
+        super(zone, cfg, false, true);
+    }
+}
+
+
+export class ZoneTranslateControl extends Component {
+    constructor(zone, cfg, handleMouseEvents, handleTouchEvents) {
+        const viewer = zone.plugin.viewer;
+        const scene = viewer.scene;
+        const canvas = scene.canvas.canvas;
+
+        super(scene);
+        const self = this;
+
+        const altitude = zone._geometry.altitude;
+        const pointerLens = cfg &amp;&amp; cfg.pointerLens;
+        const updatePointerLens = (pointerLens
+                                   ? function(canvasPos) {
+                                       pointerLens.visible = !! canvasPos;
+                                       if (canvasPos)
+                                       {
+                                           pointerLens.canvasPos = canvasPos;
+                                       }
+                                   }
+                                   : () =&gt; { });
+
+        const ray2WorldPos = (orig, dir) =&gt; planeIntersect(altitude, math.vec3([ 0, 1, 0 ]), orig, dir);
+
+        const pickWorldPos = canvasPos =&gt; {
+            const origin = math.vec3();
+            const direction = math.vec3();
+            math.canvasPosToWorldRay(canvas, scene.camera.viewMatrix, scene.camera.projMatrix, canvasPos, origin, direction);
+            return ray2WorldPos(origin, direction);
+        };
+
+        const copyCanvasPos = (event, vec2) =&gt; {
+            vec2[0] = event.clientX;
+            vec2[1] = event.clientY;
+            transformToNode(canvas.ownerDocument.body, canvas, vec2);
+            return vec2;
+        };
+
+        const canvasHandle = function(type, cb) {
+            const callback = event =&gt; {
+                event.preventDefault();
+                cb(event);
+            };
+            canvas.addEventListener(type, callback);
+            return () =&gt; canvas.removeEventListener(type, callback);
+        };
+
+        let cleanupCurrentDrag = () =&gt; { };
+
+        const startDrag = function(event, onMoveType, onEndType, matchesEvent) {
+            const e = matchesEvent(event);
+            const canvasPos = copyCanvasPos(e, math.vec2());
+            const pickRecord = viewer.scene.pick({ canvasPos: canvasPos, includeEntities: [ zone._zoneMesh.id ] });
+            const pickZone = pickRecord &amp;&amp; pickRecord.entity &amp;&amp; pickRecord.entity.zone;
+
+            if (pickZone === zone)
+            {
+                cleanupCurrentDrag();
+
+                canvas.style.cursor = &quot;move&quot;;
+                viewer.cameraControl.active = false;
+
+                const onChange = (function() {
+                    const initCoords = zone._geometry.planeCoordinates.map(c =&gt; c.slice());
+                    const initWorldPos = pickWorldPos(canvasPos);
+                    const initDragCoord = math.vec2([ initWorldPos[0], initWorldPos[2] ]);
+                    const dPos = math.vec2();
+
+                    return function(canvasPos) {
+                        const worldPos = pickWorldPos(canvasPos);
+                        dPos[0] = worldPos[0];
+                        dPos[1] = worldPos[2];
+                        math.subVec2(initDragCoord, dPos, dPos);
+
+                        zone._geometry.planeCoordinates.forEach((planeCoord, idx) =&gt; {
+                            math.subVec2(initCoords[idx], dPos, planeCoord);
+                        });
+
+                        try {
+                            zone._rebuildMesh();
+                        } catch (e) {
+                            if (zone._zoneMesh) {
+                                zone._zoneMesh.destroy();
+                                zone._zoneMesh = null;
+                            }
+                        }
+                    };
+                })();
+
+                const cleanupMove = canvasHandle(
+                    onMoveType,
+                    function(event) {
+                        const e = matchesEvent(event);
+                        if (e)
+                        {
+                            const canvasPos = copyCanvasPos(e, math.vec2());
+                            onChange(canvasPos);
+                            updatePointerLens(canvasPos);
+                        }
+                    });
+
+                const cleanupEnd  = canvasHandle(
+                    onEndType,
+                    function(event) {
+                        const e = matchesEvent(event);
+                        if (e)
+                        {
+                            const canvasPos = copyCanvasPos(e, math.vec2());
+                            onChange(canvasPos);
+                            updatePointerLens(null);
+                            cleanupCurrentDrag();
+                            self.fire(&quot;translated&quot;);
+                        }
+                    });
+
+                cleanupCurrentDrag = function() {
+                    cleanupCurrentDrag = () =&gt; { };
+                    canvas.style.cursor = &quot;default&quot;;
+                    viewer.cameraControl.active = true;
+                    cleanupMove();
+                    cleanupEnd();
+                };
+            }
+        };
+
+        const startDragCbs = [ ];
+
+        if (handleMouseEvents) {
+            startDragCbs.push(
+                canvasHandle(&quot;mousedown&quot;, event =&gt; {
+                    if (event.which === 1) {
+                        startDrag(
+                            event,
+                            &quot;mousemove&quot;,
+                            &quot;mouseup&quot;,
+                            event =&gt; (event.which === 1) &amp;&amp; event);
+                    }
+                }));
+        }
+
+        if (handleTouchEvents) {
+            startDragCbs.push(
+                canvasHandle(&quot;touchstart&quot;, event =&gt; {
+                    if (event.touches.length === 1) {
+                        const touchStartId = event.touches[0].identifier;
+                        startDrag(
+                            event,
+                            &quot;touchmove&quot;,
+                            &quot;touchend&quot;,
+                            event =&gt; [...event.changedTouches].find(e =&gt; e.identifier === touchStartId));
+                    }
+                }));
+        }
+
+        const cleanup = function() {
+            cleanupCurrentDrag();
+            startDragCbs.forEach(cb =&gt; cb());
+            updatePointerLens(null);
+        };
+
+        const destroyCb = zone.on(&quot;destroyed&quot;, cleanup);
+
+        this._deactivate = function() {
+            zone.off(&quot;destroyed&quot;, destroyCb);
+            cleanup();
+        };
+    }
+
+    deactivate() {
+        this._deactivate();
+        super.destroy();
+    }
+}
+
+export class ZoneTranslateMouseControl extends ZoneTranslateControl {
+    constructor(zone, cfg) {
+        super(zone, cfg, true, false);
+    }
+}
+
+export class ZoneTranslateTouchControl extends ZoneTranslateControl {
+    constructor(zone, cfg) {
+        super(zone, cfg, false, true);
+    }
+}
+
+
+export {ZonesMouseControl}
+export {ZonesPlugin}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

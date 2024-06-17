@@ -78,6 +78,17 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-zonesplugin">plugins/ZonesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneEditControl.html">ZoneEditControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneEditMouseControl.html">ZoneEditMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneEditTouchControl.html">ZoneEditTouchControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneTranslateControl.html">ZoneTranslateControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneTranslateMouseControl.html">ZoneTranslateMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneTranslateTouchControl.html">ZoneTranslateTouchControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesMouseControl.html">ZonesMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesPlugin.html">ZonesPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceMouseControl.html">ZonesPolysurfaceMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl.html">ZonesPolysurfaceTouchControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesTouchControl.html">ZonesTouchControl</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Configs.js~Configs.html">Configs</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -182,6 +193,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxLinesGeometryFromAABB">buildBoxLinesGeometryFromAABB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildCylinderGeometry">buildCylinderGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildGridGeometry">buildGridGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildLineGeometry">buildLineGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometry">buildPolylineGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometryFromCurve">buildPolylineGeometryFromCurve</a></span></span></li>
@@ -1125,6 +1137,7 @@ class Scene extends Component {
         this._pbrEnabled = !!cfg.pbrEnabled;
         this._colorTextureEnabled = (cfg.colorTextureEnabled !== false);
         this._dtxEnabled = !!cfg.dtxEnabled;
+        this._markerZOffset = cfg.markerZOffset;
 
         // Register Scene on xeokit
         // Do this BEFORE we add components below
@@ -1686,6 +1699,22 @@ class Scene extends Component {
      */
     get colorTextureEnabled() {
         return this._colorTextureEnabled;
+    }
+
+    /**
+     * Gets the Z value of offset for Marker&apos;s OcclusionTester.
+     * The closest the value is to 0.000 the more precise OcclusionTester will be, but at the same time the less
+     * precise it will behave for Markers that are located exactly on the Surface.
+     *
+     * Default is ````-0.001````.
+     *
+     * @returns {Number} Z offset for Marker
+     */
+    get markerZOffset() {
+        if (this._markerZOffset == null) {
+            return -0.001;
+        }
+        return this._markerZOffset;
     }
 
     /**
@@ -2535,9 +2564,9 @@ class Scene extends Component {
      * @param {Number[]} [params.matrix] 4x4 transformation matrix to define the World-space ray origin and direction, as an alternative to ````origin```` and ````direction````.
      * @param {String[]} [params.includeEntities] IDs of {@link Entity}s to restrict picking to. When given, ignores {@link Entity}s whose IDs are not in this list.
      * @param {String[]} [params.excludeEntities] IDs of {@link Entity}s to ignore. When given, will pick *through* these {@link Entity}s, as if they were not there.
-     * @param {Number} [params.snapRadius=30] The snap radius, in canvas pixels
-     * @param {boolean} [params.snapToVertex=true] Whether to snap to vertex.
-     * @param {boolean} [params.snapToEdge=true] Whether to snap to edge.
+     * @param {Number} [params.snapRadius=30] The snap radius, in canvas pixels.
+     * @param {boolean} [params.snapToVertex=true] Whether to snap to vertex. Only works when `canvasPos` given.
+     * @param {boolean} [params.snapToEdge=true] Whether to snap to edge. Only works when `canvasPos` given.
      * @param {PickResult} [pickResult] Holds the results of the pick attempt. Will use the Scene&apos;s singleton PickResult if you don&apos;t supply your own.
      * @returns {PickResult} Holds results of the pick attempt, returned when an {@link Entity} is picked, else null. See method comments for description.
      */
@@ -2546,6 +2575,11 @@ class Scene extends Component {
         if (this.canvas.boundary[2] === 0 || this.canvas.boundary[3] === 0) {
             this.error(&quot;Picking not allowed while canvas has zero width or height&quot;);
             return null;
+        }
+
+        if ((params.snapToVertex || params.snapToEdge) &amp;&amp; !params.canvasPos) {
+            this.error(&quot;Scene.snapPick() `canvasPos` parameter expected for `snapToVertex:true` or `snapToEdge:true`&quot;);
+            return;
         }
 
         params = params || {};
@@ -2595,7 +2629,7 @@ class Scene extends Component {
 
     /**
      * @param {Object} params Picking parameters.
-     * @param {Number[]} [params.canvasPos] Canvas-space coordinates. When ray-picking, this will override the **origin** and ** direction** parameters and will cause the ray to be fired through the canvas at this position, directly along the negative View-space Z-axis.
+     * @param {Number[]} params.canvasPos Canvas-space coordinates.
      * @param {Number} [params.snapRadius=30] The snap radius, in canvas pixels
      * @param {boolean} [params.snapToVertex=true] Whether to snap to vertex.
      * @param {boolean} [params.snapToEdge=true] Whether to snap to edge.
@@ -2605,6 +2639,10 @@ class Scene extends Component {
         if (undefined === this._warnSnapPickDeprecated) {
             this._warnSnapPickDeprecated = true;
             this.warn(&quot;Scene.snapPick() is deprecated since v2.4.2 - use Scene.pick() instead&quot;)
+        }
+        if (!params.canvasPos) {
+            this.error(&quot;Scene.snapPick() canvasPos parameter expected&quot;);
+            return;
         }
         return this._renderer.snapPick(
             params.canvasPos,

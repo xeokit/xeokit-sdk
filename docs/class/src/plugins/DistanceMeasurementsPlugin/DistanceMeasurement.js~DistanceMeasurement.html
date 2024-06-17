@@ -78,6 +78,17 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-zonesplugin">plugins/ZonesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneEditControl.html">ZoneEditControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneEditMouseControl.html">ZoneEditMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneEditTouchControl.html">ZoneEditTouchControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneTranslateControl.html">ZoneTranslateControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneTranslateMouseControl.html">ZoneTranslateMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneTranslateTouchControl.html">ZoneTranslateTouchControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesMouseControl.html">ZonesMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesPlugin.html">ZonesPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceMouseControl.html">ZonesPolysurfaceMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl.html">ZonesPolysurfaceTouchControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesTouchControl.html">ZonesTouchControl</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Configs.js~Configs.html">Configs</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -182,6 +193,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxLinesGeometryFromAABB">buildBoxLinesGeometryFromAABB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildCylinderGeometry">buildCylinderGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildGridGeometry">buildGridGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildLineGeometry">buildLineGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometry">buildPolylineGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometryFromCurve">buildPolylineGeometryFromCurve</a></span></span></li>
@@ -993,6 +1005,34 @@
         
         <div data-ice="description"><p>Gets if the target <span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span> is visible.</p>
 </div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-member-useRotationAdjustment">useRotationAdjustment</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
       </div>
     </td>
     <td>
@@ -2051,7 +2091,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber598">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber599">source</a></span></span>
     </span>
   </h3>
 
@@ -2096,7 +2136,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber615">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber616">source</a></span></span>
     </span>
   </h3>
 
@@ -2141,7 +2181,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber749">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber750">source</a></span></span>
     </span>
   </h3>
 
@@ -2186,7 +2226,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber770">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber771">source</a></span></span>
     </span>
   </h3>
 
@@ -2231,7 +2271,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber781">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber782">source</a></span></span>
     </span>
   </h3>
 
@@ -2276,7 +2316,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber802">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber803">source</a></span></span>
     </span>
   </h3>
 
@@ -2321,7 +2361,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber1071">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber1072">source</a></span></span>
     </span>
   </h3>
 
@@ -2365,7 +2405,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber1091">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber1092">source</a></span></span>
     </span>
   </h3>
 
@@ -2409,7 +2449,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber648">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber649">source</a></span></span>
     </span>
   </h3>
 
@@ -2452,7 +2492,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber652">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber653">source</a></span></span>
     </span>
   </h3>
 
@@ -2495,7 +2535,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber1035">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber1036">source</a></span></span>
     </span>
   </h3>
 
@@ -2539,7 +2579,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber1045">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber1046">source</a></span></span>
     </span>
   </h3>
 
@@ -2583,7 +2623,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber917">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber918">source</a></span></span>
     </span>
   </h3>
 
@@ -2627,7 +2667,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber934">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber935">source</a></span></span>
     </span>
   </h3>
 
@@ -2671,7 +2711,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber642">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber643">source</a></span></span>
     </span>
   </h3>
 
@@ -2715,7 +2755,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber1012">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber1013">source</a></span></span>
     </span>
   </h3>
 
@@ -2759,7 +2799,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber1026">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber1027">source</a></span></span>
     </span>
   </h3>
 
@@ -2803,7 +2843,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber624">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber625">source</a></span></span>
     </span>
   </h3>
 
@@ -2847,7 +2887,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber707">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber708">source</a></span></span>
     </span>
   </h3>
 
@@ -2891,7 +2931,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber718">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber719">source</a></span></span>
     </span>
   </h3>
 
@@ -2979,7 +3019,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber633">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber634">source</a></span></span>
     </span>
   </h3>
 
@@ -3023,7 +3063,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber727">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber728">source</a></span></span>
     </span>
   </h3>
 
@@ -3067,7 +3107,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber738">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber739">source</a></span></span>
     </span>
   </h3>
 
@@ -3076,6 +3116,49 @@
   
   <div data-ice="description"><p>Gets if the target <span><a href="class/src/viewer/scene/marker/Marker.js~Marker.html">Marker</a></span> is visible.</p>
 </div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-useRotationAdjustment">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">useRotationAdjustment</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber321">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
 
   
 
@@ -3111,7 +3194,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber665">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber666">source</a></span></span>
     </span>
   </h3>
 
@@ -3155,7 +3238,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber698">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber699">source</a></span></span>
     </span>
   </h3>
 
@@ -3199,7 +3282,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber895">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber896">source</a></span></span>
     </span>
   </h3>
 
@@ -3243,7 +3326,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber908">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber909">source</a></span></span>
     </span>
   </h3>
 
@@ -3287,7 +3370,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber813">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber814">source</a></span></span>
     </span>
   </h3>
 
@@ -3332,7 +3415,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber830">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber831">source</a></span></span>
     </span>
   </h3>
 
@@ -3377,7 +3460,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber943">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber944">source</a></span></span>
     </span>
   </h3>
 
@@ -3421,7 +3504,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber957">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber958">source</a></span></span>
     </span>
   </h3>
 
@@ -3465,7 +3548,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber841">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber842">source</a></span></span>
     </span>
   </h3>
 
@@ -3510,7 +3593,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber858">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber859">source</a></span></span>
     </span>
   </h3>
 
@@ -3555,7 +3638,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber966">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber967">source</a></span></span>
     </span>
   </h3>
 
@@ -3599,7 +3682,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber980">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber981">source</a></span></span>
     </span>
   </h3>
 
@@ -3643,7 +3726,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber869">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber870">source</a></span></span>
     </span>
   </h3>
 
@@ -3688,7 +3771,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber886">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber887">source</a></span></span>
     </span>
   </h3>
 
@@ -3733,7 +3816,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber989">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber990">source</a></span></span>
     </span>
   </h3>
 
@@ -3777,7 +3860,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber1003">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber1004">source</a></span></span>
     </span>
   </h3>
 
@@ -3824,7 +3907,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber1053">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js.html#lineNumber1054">source</a></span></span>
     </span>
   </h3>
 

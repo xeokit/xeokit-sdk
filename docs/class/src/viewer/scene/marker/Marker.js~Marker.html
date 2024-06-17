@@ -78,6 +78,17 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-zonesplugin">plugins/ZonesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneEditControl.html">ZoneEditControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneEditMouseControl.html">ZoneEditMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneEditTouchControl.html">ZoneEditTouchControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneTranslateControl.html">ZoneTranslateControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneTranslateMouseControl.html">ZoneTranslateMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneTranslateTouchControl.html">ZoneTranslateTouchControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesMouseControl.html">ZonesMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesPlugin.html">ZonesPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceMouseControl.html">ZonesPolysurfaceMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl.html">ZonesPolysurfaceTouchControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesTouchControl.html">ZonesTouchControl</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Configs.js~Configs.html">Configs</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -182,6 +193,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxLinesGeometryFromAABB">buildBoxLinesGeometryFromAABB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildCylinderGeometry">buildCylinderGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildGridGeometry">buildGridGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildLineGeometry">buildLineGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometry">buildPolylineGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometryFromCurve">buildPolylineGeometryFromCurve</a></span></span></li>
@@ -1433,7 +1445,7 @@ myMarker.on(&quot;destroyed&quot;, () =&gt; {
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber336">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber339">source</a></span></span>
     </span>
   </h3>
 
@@ -1616,7 +1628,7 @@ can adjust that frequency via property <span><a href="class/src/viewer/scene/sce
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber258">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber261">source</a></span></span>
     </span>
   </h3>
 
@@ -1661,7 +1673,7 @@ can adjust that frequency via property <span><a href="class/src/viewer/scene/sce
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber296">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber299">source</a></span></span>
     </span>
   </h3>
 
@@ -1706,7 +1718,7 @@ can adjust that frequency via property <span><a href="class/src/viewer/scene/sce
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber307">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber310">source</a></span></span>
     </span>
   </h3>
 
@@ -1751,7 +1763,7 @@ can adjust that frequency via property <span><a href="class/src/viewer/scene/sce
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber321">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber324">source</a></span></span>
     </span>
   </h3>
 
@@ -1797,7 +1809,7 @@ can adjust that frequency via property <span><a href="class/src/viewer/scene/sce
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber357">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber360">source</a></span></span>
     </span>
   </h3>
 
@@ -1849,7 +1861,7 @@ can adjust that frequency via property <span><a href="class/src/viewer/scene/sce
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber269">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber272">source</a></span></span>
     </span>
   </h3>
 
@@ -1894,7 +1906,7 @@ can adjust that frequency via property <span><a href="class/src/viewer/scene/sce
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber285">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber288">source</a></span></span>
     </span>
   </h3>
 
@@ -1941,7 +1953,7 @@ can adjust that frequency via property <span><a href="class/src/viewer/scene/sce
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber364">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/viewer/scene/marker/Marker.js.html#lineNumber367">source</a></span></span>
     </span>
   </h3>
 

@@ -78,6 +78,17 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xktloaderplugin">plugins/XKTLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js~XKTDefaultDataSource.html">XKTDefaultDataSource</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html">XKTLoaderPlugin</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-xml3dloaderplugin">plugins/XML3DLoaderPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/XML3DLoaderPlugin/XML3DLoaderPlugin.js~XML3DLoaderPlugin.html">XML3DLoaderPlugin</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#plugins-zonesplugin">plugins/ZonesPlugin</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneEditControl.html">ZoneEditControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneEditMouseControl.html">ZoneEditMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneEditTouchControl.html">ZoneEditTouchControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneTranslateControl.html">ZoneTranslateControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneTranslateMouseControl.html">ZoneTranslateMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZoneTranslateTouchControl.html">ZoneTranslateTouchControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesMouseControl.html">ZonesMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesPlugin.html">ZonesPlugin</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceMouseControl.html">ZonesPolysurfaceMouseControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl.html">ZonesPolysurfaceTouchControl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/plugins/ZonesPlugin/index.js~ZonesTouchControl.html">ZonesTouchControl</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#viewer">viewer</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Configs.js~Configs.html">Configs</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Plugin.js~Plugin.html">Plugin</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/viewer/Viewer.js~Viewer.html">Viewer</a></span></span></li>
@@ -182,6 +193,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildBoxLinesGeometryFromAABB">buildBoxLinesGeometryFromAABB</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildCylinderGeometry">buildCylinderGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildGridGeometry">buildGridGeometry</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildLineGeometry">buildLineGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPlaneGeometry">buildPlaneGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometry">buildPolylineGeometry</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-buildPolylineGeometryFromCurve">buildPolylineGeometryFromCurve</a></span></span></li>
@@ -1132,6 +1144,64 @@ distanceMeasurementsTouchControl.activate();</code>
     <td>
       <span class="access" data-ice="access">public</span>
       
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-set-useRotationAdjustment">useRotationAdjustment</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets whether the measurement added is rotation adjusted or not.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js~DistanceMeasurementsPlugin.html#instance-get-useRotationAdjustment">useRotationAdjustment</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets whether the measurement added is rotation adjusted or not.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
       
       
       <span class="override" data-ice="override"></span>
@@ -1933,6 +2003,14 @@ distanceMeasurementsTouchControl.activate();</code>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">cfg.useRotationAdjustment</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>The default value of DistanceMeasurements <code>useRotationAdjustment</code> property.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">cfg.defaultColor</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
@@ -1999,7 +2077,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber379">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber377">source</a></span></span>
     </span>
   </h3>
 
@@ -2043,7 +2121,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber314">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber313">source</a></span></span>
     </span>
   </h3>
 
@@ -2086,7 +2164,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber318">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber317">source</a></span></span>
     </span>
   </h3>
 
@@ -2129,7 +2207,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber320">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber319">source</a></span></span>
     </span>
   </h3>
 
@@ -2172,7 +2250,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber313">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber312">source</a></span></span>
     </span>
   </h3>
 
@@ -2215,7 +2293,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber312">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber311">source</a></span></span>
     </span>
   </h3>
 
@@ -2258,7 +2336,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber306">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber305">source</a></span></span>
     </span>
   </h3>
 
@@ -2301,7 +2379,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber307">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber306">source</a></span></span>
     </span>
   </h3>
 
@@ -2344,7 +2422,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber305">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber304">source</a></span></span>
     </span>
   </h3>
 
@@ -2387,7 +2465,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber308">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber307">source</a></span></span>
     </span>
   </h3>
 
@@ -2430,7 +2508,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber315">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber314">source</a></span></span>
     </span>
   </h3>
 
@@ -2473,7 +2551,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber309">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber308">source</a></span></span>
     </span>
   </h3>
 
@@ -2516,7 +2594,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber316">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber315">source</a></span></span>
     </span>
   </h3>
 
@@ -2559,7 +2637,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber310">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber309">source</a></span></span>
     </span>
   </h3>
 
@@ -2602,7 +2680,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber317">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber316">source</a></span></span>
     </span>
   </h3>
 
@@ -2645,7 +2723,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber311">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber310">source</a></span></span>
     </span>
   </h3>
 
@@ -2688,7 +2766,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber406">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber404">source</a></span></span>
     </span>
   </h3>
 
@@ -2735,7 +2813,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber418">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber416">source</a></span></span>
     </span>
   </h3>
 
@@ -2791,7 +2869,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber391">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber389">source</a></span></span>
     </span>
   </h3>
 
@@ -2835,7 +2913,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber369">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber367">source</a></span></span>
     </span>
   </h3>
 
@@ -2880,6 +2958,106 @@ distanceMeasurementsTouchControl.activate();</code>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-useRotationAdjustment">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">useRotationAdjustment</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber425">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets whether the measurement added is rotation adjusted or not.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-useRotationAdjustment">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">useRotationAdjustment</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber434">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets whether the measurement added is rotation adjusted or not.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-member-zIndex">
     <span class="access" data-ice="access">public</span>
     
@@ -2891,7 +3069,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber319">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber318">source</a></span></span>
     </span>
   </h3>
 
@@ -2937,7 +3115,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber548">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber566">source</a></span></span>
     </span>
   </h3>
 
@@ -2981,7 +3159,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber451">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber466">source</a></span></span>
     </span>
   </h3>
 
@@ -3218,7 +3396,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber560">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber578">source</a></span></span>
     </span>
   </h3>
 
@@ -3263,7 +3441,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber503">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber521">source</a></span></span>
     </span>
   </h3>
 
@@ -3324,7 +3502,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber541">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber559">source</a></span></span>
     </span>
   </h3>
 
@@ -3437,7 +3615,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber529">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber547">source</a></span></span>
     </span>
   </h3>
 
@@ -3498,7 +3676,7 @@ distanceMeasurementsTouchControl.activate();</code>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber518">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js.html#lineNumber536">source</a></span></span>
     </span>
   </h3>
 

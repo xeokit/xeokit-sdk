@@ -1,7 +1,7 @@
 {
-  "coverage": "40.21%",
-  "expectCount": 7100,
-  "actualCount": 2855,
+  "coverage": "39.74%",
+  "expectCount": 7232,
+  "actualCount": 2874,
   "files": {
     "src/extras/ContextMenu/ContextMenu.js": {
       "expectCount": 61,
@@ -317,10 +317,12 @@
       ]
     },
     "src/plugins/CityJSONLoaderPlugin/CityJSONDefaultDataSource.js": {
-      "expectCount": 3,
+      "expectCount": 5,
       "actualCount": 2,
       "undocumentLines": [
-        8
+        8,
+        9,
+        12
       ]
     },
     "src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js": {
@@ -347,7 +349,7 @@
       ]
     },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js": {
-      "expectCount": 103,
+      "expectCount": 104,
       "actualCount": 42,
       "undocumentLines": [
         9,
@@ -405,12 +407,13 @@
         291,
         296,
         301,
-        323,
-        513,
-        580,
-        603,
-        648,
-        652
+        321,
+        324,
+        514,
+        581,
+        604,
+        649,
+        653
       ]
     },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js": {
@@ -444,13 +447,14 @@
       ]
     },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsPlugin.js": {
-      "expectCount": 40,
-      "actualCount": 16,
+      "expectCount": 43,
+      "actualCount": 18,
       "undocumentLines": [
-        296,
-        298,
-        300,
-        302,
+        295,
+        297,
+        299,
+        301,
+        304,
         305,
         306,
         307,
@@ -466,11 +470,11 @@
         317,
         318,
         319,
-        320,
         322,
         331,
         340,
-        411
+        409,
+        427
       ]
     },
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js": {
@@ -500,10 +504,12 @@
       ]
     },
     "src/plugins/DotBIMLoaderPlugin/DotBIMDefaultDataSource.js": {
-      "expectCount": 3,
+      "expectCount": 5,
       "actualCount": 2,
       "undocumentLines": [
-        10
+        10,
+        11,
+        14
       ]
     },
     "src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js": {
@@ -618,12 +624,14 @@
       ]
     },
     "src/plugins/GLTFLoaderPlugin/GLTFDefaultDataSource.js": {
-      "expectCount": 8,
+      "expectCount": 10,
       "actualCount": 5,
       "undocumentLines": [
-        87,
-        135,
-        11
+        100,
+        148,
+        11,
+        12,
+        15
       ]
     },
     "src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js": {
@@ -660,10 +668,12 @@
       ]
     },
     "src/plugins/LASLoaderPlugin/LASDefaultDataSource.js": {
-      "expectCount": 3,
+      "expectCount": 5,
       "actualCount": 2,
       "undocumentLines": [
-        6
+        6,
+        7,
+        10
       ]
     },
     "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js": {
@@ -742,9 +752,13 @@
       ]
     },
     "src/plugins/STLLoaderPlugin/STLDefaultDataSource.js": {
-      "expectCount": 2,
+      "expectCount": 5,
       "actualCount": 2,
-      "undocumentLines": []
+      "undocumentLines": [
+        8,
+        9,
+        12
+      ]
     },
     "src/plugins/STLLoaderPlugin/STLLoaderPlugin.js": {
       "expectCount": 7,
@@ -995,10 +1009,12 @@
       ]
     },
     "src/plugins/WebIFCLoaderPlugin/WebIFCDefaultDataSource.js": {
-      "expectCount": 3,
+      "expectCount": 5,
       "actualCount": 2,
       "undocumentLines": [
-        6
+        6,
+        7,
+        10
       ]
     },
     "src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js": {
@@ -1024,10 +1040,12 @@
       ]
     },
     "src/plugins/XKTLoaderPlugin/XKTDefaultDataSource.js": {
-      "expectCount": 5,
+      "expectCount": 7,
       "actualCount": 4,
       "undocumentLines": [
-        8
+        9,
+        10,
+        13
       ]
     },
     "src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js": {
@@ -1207,6 +1225,107 @@
         56
       ]
     },
+    "src/plugins/ZonesPlugin/index.js": {
+      "expectCount": 110,
+      "actualCount": 15,
+      "undocumentLines": [
+        11,
+        16,
+        23,
+        126,
+        268,
+        329,
+        373,
+        422,
+        528,
+        602,
+        718,
+        754,
+        759,
+        763,
+        795,
+        798,
+        803,
+        857,
+        888,
+        891,
+        1014,
+        1018,
+        1022,
+        1027,
+        1031,
+        1036,
+        1040,
+        1042,
+        1048,
+        1049,
+        1055,
+        1059,
+        1066,
+        1070,
+        1074,
+        1075,
+        1116,
+        1375,
+        1377,
+        1380,
+        1381,
+        1382,
+        1383,
+        1386,
+        1390,
+        1441,
+        1449,
+        1455,
+        1603,
+        1605,
+        1608,
+        1609,
+        1610,
+        1613,
+        1617,
+        1667,
+        1675,
+        1681,
+        1683,
+        1686,
+        1687,
+        1688,
+        1689,
+        1692,
+        1696,
+        1747,
+        1755,
+        1761,
+        1762,
+        1840,
+        1846,
+        1847,
+        1852,
+        1853,
+        1859,
+        1860,
+        2026,
+        2032,
+        2033,
+        2038,
+        2039,
+        1181,
+        1182,
+        1183,
+        1186,
+        1190,
+        1240,
+        1278,
+        1280,
+        1282,
+        1284,
+        1285,
+        1287,
+        1295,
+        1303
+      ]
+    },
     "src/plugins/lib/culling/ObjectCullStates.js": {
       "expectCount": 26,
       "actualCount": 8,
@@ -1283,16 +1402,16 @@
         18,
         19,
         106,
-        144,
-        156,
-        160,
-        164,
-        168,
-        176,
-        184,
-        188,
-        192,
-        200
+        162,
+        174,
+        178,
+        182,
+        186,
+        194,
+        202,
+        206,
+        210,
+        218
       ]
     },
     "src/plugins/lib/html/Label.js": {
@@ -1381,8 +1500,8 @@
       "expectCount": 29,
       "actualCount": 27,
       "undocumentLines": [
-        170,
-        314
+        172,
+        316
       ]
     },
     "src/viewer/localization/LocaleService.js": {
@@ -1633,8 +1752,8 @@
         16,
         17,
         18,
-        352,
-        361
+        361,
+        370
       ]
     },
     "src/viewer/scene/CameraControl/lib/handlers/TouchPanRotateAndDollyHandler.js": {
@@ -2019,6 +2138,11 @@
       "actualCount": 1,
       "undocumentLines": []
     },
+    "src/viewer/scene/geometry/builders/buildLineGeometry.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
     "src/viewer/scene/geometry/builders/buildPlaneGeometry.js": {
       "expectCount": 1,
       "actualCount": 1,
@@ -2057,15 +2181,16 @@
       "undocumentLines": []
     },
     "src/viewer/scene/input/Input.js": {
-      "expectCount": 123,
+      "expectCount": 124,
       "actualCount": 117,
       "undocumentLines": [
         1015,
         1020,
         1036,
-        1226,
-        1229,
-        1255
+        1252,
+        1255,
+        1284,
+        1296
       ]
     },
     "src/viewer/scene/libs/k3d.js": {
@@ -5613,8 +5738,8 @@
       ]
     },
     "src/viewer/scene/scene/Scene.js": {
-      "expectCount": 190,
-      "actualCount": 110,
+      "expectCount": 192,
+      "actualCount": 111,
       "undocumentLines": [
         24,
         28,
@@ -5648,54 +5773,55 @@
         863,
         864,
         865,
-        876,
-        882,
-        913,
-        927,
-        963,
-        988,
-        995,
-        1000,
-        1005,
-        1011,
-        1017,
-        1023,
-        1030,
-        1035,
-        1040,
-        1046,
-        1052,
-        1058,
-        1063,
-        1070,
-        1076,
-        1082,
-        1104,
-        1110,
-        1132,
-        1138,
-        1157,
-        1163,
-        1185,
-        1192,
-        1203,
-        1209,
-        1220,
-        1226,
-        1237,
-        1243,
-        1257,
-        1523,
-        1533,
-        1544,
-        1733,
-        1765,
-        1797,
-        1824,
-        2086,
-        2108,
-        2167,
-        2345
+        867,
+        877,
+        883,
+        914,
+        928,
+        964,
+        989,
+        996,
+        1001,
+        1006,
+        1012,
+        1018,
+        1024,
+        1031,
+        1036,
+        1041,
+        1047,
+        1053,
+        1059,
+        1064,
+        1071,
+        1077,
+        1083,
+        1105,
+        1111,
+        1133,
+        1139,
+        1158,
+        1164,
+        1186,
+        1193,
+        1204,
+        1210,
+        1221,
+        1227,
+        1238,
+        1244,
+        1258,
+        1540,
+        1550,
+        1561,
+        1750,
+        1782,
+        1814,
+        1841,
+        2103,
+        2125,
+        2184,
+        2367
       ]
     },
     "src/viewer/scene/sectionPlane/SectionPlane.js": {
@@ -6173,34 +6299,33 @@
       ]
     },
     "src/viewer/scene/webgl/occlusion/OcclusionTester.js": {
-      "expectCount": 44,
+      "expectCount": 43,
       "actualCount": 10,
       "undocumentLines": [
         7,
         8,
         9,
-        10,
-        12,
-        20,
-        22,
-        24,
+        11,
+        19,
+        21,
+        23,
+        25,
         26,
         27,
-        28,
+        29,
         30,
-        31,
-        33,
+        32,
+        34,
         35,
-        36,
-        38,
+        37,
+        39,
         40,
-        41,
-        44,
-        48,
-        170,
-        176,
-        186,
-        193,
+        43,
+        47,
+        168,
+        174,
+        184,
+        191,
         229,
         275,
         284,
@@ -6209,7 +6334,7 @@
         290,
         299,
         301,
-        423
+        426
       ]
     },
     "src/viewer/scene/webgl/sao/SAODepthLimitedBlurRenderer.js": {
