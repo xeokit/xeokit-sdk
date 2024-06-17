@@ -370,7 +370,7 @@ class Marker extends Component {
         this.scene.camera.off(this._onCameraProjMatrix);
         if (this._entity) {
             if (this._onEntityDestroyed !== null) {
-                this._entity.off(this._onEntityDestroyed);
+                this._entity.model.off(this._onEntityDestroyed);
             }
             if (this._onEntityModelDestroyed !== null) {
                 this._entity.model.off(this._onEntityModelDestroyed);
