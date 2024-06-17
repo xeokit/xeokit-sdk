@@ -5,7 +5,20 @@ import {utils} from "../../viewer/index.js";
  */
 class CityJSONDefaultDataSource {
 
-    constructor() {
+    constructor(cfg = {}) {
+        this.cacheBuster = (cfg.cacheBuster !== false);
+    }
+
+    _cacheBusterURL(url) {
+        if (!this.cacheBuster) {
+            return url;
+        }
+        const timestamp = new Date().getTime();
+        if (url.indexOf('?') > -1) {
+            return url + '&_=' + timestamp;
+        } else {
+            return url + '?_=' + timestamp;
+        }
     }
 
     /**
@@ -16,7 +29,7 @@ class CityJSONDefaultDataSource {
      * @param {Function} error Callback fired on error.
      */
     getCityJSON(src, ok, error) {
-        utils.loadJSON(src,
+        utils.loadJSON(this._cacheBusterURL(src),
             (json) => {
                 ok(json);
             },

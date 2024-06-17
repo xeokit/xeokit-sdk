@@ -1,11 +1,25 @@
 import {utils} from "../../viewer/scene/utils.js";
+import {math} from "../../viewer";
 
 /**
  * Default data access strategy for {@link XKTLoaderPlugin}.
  */
 class XKTDefaultDataSource {
 
-    constructor() {
+    constructor(cfg = {}) {
+        this.cacheBuster = (cfg.cacheBuster !== false);
+    }
+
+    _cacheBusterURL(url) {
+        if (!this.cacheBuster) {
+            return url;
+        }
+        const timestamp = new Date().getTime();
+        if (url.indexOf('?') > -1) {
+            return url + '&_=' + timestamp;
+        } else {
+            return url + '?_=' + timestamp;
+        }
     }
 
     /**
@@ -16,7 +30,7 @@ class XKTDefaultDataSource {
      * @param {Function} error Fired on error while loading the manifest JSON asset.
      */
     getManifest(manifestSrc, ok, error) {
-        utils.loadJSON(manifestSrc,
+        utils.loadJSON(this._cacheBusterURL(manifestSrc),
             (json) => {
                 ok(json);
             },
@@ -33,7 +47,7 @@ class XKTDefaultDataSource {
      * @param {Function} error Fired on error while loading the metamodel JSON asset.
      */
     getMetaModel(metaModelSrc, ok, error) {
-        utils.loadJSON(metaModelSrc,
+        utils.loadJSON(this._cacheBusterURL(metaModelSrc),
             (json) => {
                 ok(json);
             },
@@ -75,7 +89,7 @@ class XKTDefaultDataSource {
             }
         } else {
             const request = new XMLHttpRequest();
-            request.open('GET', src, true);
+            request.open('GET', this._cacheBusterURL(src), true);
             request.responseType = 'arraybuffer';
             request.onreadystatechange = function () {
                 if (request.readyState === 4) {

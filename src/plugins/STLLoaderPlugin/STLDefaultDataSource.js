@@ -5,6 +5,22 @@
  */
 class STLDefaultDataSource {
 
+    constructor(cfg = {}) {
+        this.cacheBuster = (cfg.cacheBuster !== false);
+    }
+
+    _cacheBusterURL(url) {
+        if (!this.cacheBuster) {
+            return url;
+        }
+        const timestamp = new Date().getTime();
+        if (url.indexOf('?') > -1) {
+            return url + '&_=' + timestamp;
+        } else {
+            return url + '?_=' + timestamp;
+        }
+    }
+
     /**
      * Gets STL data.
      *
@@ -13,6 +29,7 @@ class STLDefaultDataSource {
      * @param {Function} error Fired on error while loading the STL file.
      */
     getSTL(src, ok, error) {
+        src = this._cacheBusterURL(src);
         const request = new XMLHttpRequest();
         request.overrideMimeType("application/json");
         request.open('GET', src, true);
