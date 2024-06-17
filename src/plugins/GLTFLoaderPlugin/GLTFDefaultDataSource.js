@@ -8,7 +8,20 @@ import {core} from "../../viewer/scene/core.js";
  */
 class GLTFDefaultDataSource {
 
-    constructor() {
+    constructor(cfg = {}) {
+        this.cacheBuster = (cfg.cacheBuster !== false);
+    }
+
+    _cacheBusterURL(url) {
+        if (!this.cacheBuster) {
+            return url;
+        }
+        const timestamp = new Date().getTime();
+        if (url.indexOf('?') > -1) {
+            return url + '&_=' + timestamp;
+        } else {
+            return url + '?_=' + timestamp;
+        }
     }
 
     /**
@@ -19,7 +32,7 @@ class GLTFDefaultDataSource {
      * @param {Function} error Fired on error while loading the metamodel JSON asset.
      */
     getMetaModel(metaModelSrc, ok, error) {
-        utils.loadJSON(metaModelSrc,
+        utils.loadJSON(this._cacheBusterURL(metaModelSrc),
             (json) => {
                 ok(json);
             },
@@ -36,7 +49,7 @@ class GLTFDefaultDataSource {
      * @param {Function} error Fired on error while loading the glTF JSON asset.
      */
     getGLTF(glTFSrc, ok, error) {
-        utils.loadArraybuffer(glTFSrc,
+        utils.loadArraybuffer(this._cacheBusterURL(glTFSrc),
             (gltf) => {
                 ok(gltf);
             },
@@ -53,7 +66,7 @@ class GLTFDefaultDataSource {
      * @param {Function} error Fired on error while loading the .glb asset.
      */
     getGLB(glbSrc, ok, error) {
-        utils.loadArraybuffer(glbSrc,
+        utils.loadArraybuffer(this._cacheBusterURL(glbSrc),
             (arraybuffer) => {
                 ok(arraybuffer);
             },
@@ -74,7 +87,7 @@ class GLTFDefaultDataSource {
      * @param {Function} error Fired on error while loading the glTF binary asset.
      */
     getArrayBuffer(glTFSrc, binarySrc, ok, error) {
-        loadArraybuffer(glTFSrc, binarySrc,
+        loadArraybuffer(this._cacheBusterURL(glTFSrc), binarySrc,
             (arrayBuffer) => {
                 ok(arrayBuffer);
             },

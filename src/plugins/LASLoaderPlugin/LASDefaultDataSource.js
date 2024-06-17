@@ -3,7 +3,20 @@
  */
 class LASDefaultDataSource {
 
-    constructor() {
+    constructor(cfg = {}) {
+        this.cacheBuster = (cfg.cacheBuster !== false);
+    }
+
+    _cacheBusterURL(url) {
+        if (!this.cacheBuster) {
+            return url;
+        }
+        const timestamp = new Date().getTime();
+        if (url.indexOf('?') > -1) {
+            return url + '&_=' + timestamp;
+        } else {
+            return url + '?_=' + timestamp;
+        }
     }
 
     /**
@@ -14,6 +27,7 @@ class LASDefaultDataSource {
      * @param {Function} error Callback fired on error.
      */
     getLAS(src, ok, error) {
+        src = this._cacheBusterURL(src);
         var defaultCallback = () => {
         };
         ok = ok || defaultCallback;

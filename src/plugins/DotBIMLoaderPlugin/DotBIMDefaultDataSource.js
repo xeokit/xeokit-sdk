@@ -7,7 +7,20 @@ import {utils} from "../../viewer/scene/utils.js";
  */
 export class DotBIMDefaultDataSource {
 
-    constructor() {
+    constructor(cfg = {}) {
+        this.cacheBuster = (cfg.cacheBuster !== false);
+    }
+
+    _cacheBusterURL(url) {
+        if (!this.cacheBuster) {
+            return url;
+        }
+        const timestamp = new Date().getTime();
+        if (url.indexOf('?') > -1) {
+            return url + '&_=' + timestamp;
+        } else {
+            return url + '?_=' + timestamp;
+        }
     }
 
     /**
@@ -18,7 +31,7 @@ export class DotBIMDefaultDataSource {
      * @param {Function} error Fired on error while loading the .BIM JSON asset.
      */
     getDotBIM(dotBIMSrc, ok, error) {
-        utils.loadJSON(dotBIMSrc,
+        utils.loadJSON(this._cacheBusterURL(dotBIMSrc),
             (json) => {
                 ok(json);
             },
