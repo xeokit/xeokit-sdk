@@ -1,5 +1,24 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.18](https://github.com/xeokit/xeokit-sdk/compare/v2.6.17...v2.6.18)
+
+### 17 June 2024
+
+-  [FEATURE] Cache busting for loader plugin data sources - [#1538](https://github.com/xeokit/xeokit-sdk/pull/1538)
+-  [FIX] Making optional control of precision of annotation occluding - [#1536](https://github.com/xeokit/xeokit-sdk/pull/1536)
+-  Fix(measurements) Fixed the distance difference in useRotationAdjustment - [#1533](https://github.com/xeokit/xeokit-sdk/pull/1533)
+-  [FIX] Remove shader offset for OcclusionTester.js to increase OcclusionTester.js precision - [#1534](https://github.com/xeokit/xeokit-sdk/pull/1534)
+-  [FEATURE] Extend pattern to end point - [#1532](https://github.com/xeokit/xeokit-sdk/pull/1532)
+-  [FEATURE] Additional method for styled lines geometry - [#1529](https://github.com/xeokit/xeokit-sdk/pull/1529)
+-  Fix Viewer.js html2canvas import - [#1528](https://github.com/xeokit/xeokit-sdk/pull/1528)
+-  [FEATURE] 3d zoning feature - [#1523](https://github.com/xeokit/xeokit-sdk/pull/1523)
+
+# [v2.6.17](https://github.com/xeokit/xeokit-sdk/compare/v2.6.15...v2.6.17)
+
+### 5 June 2024
+
+-  [FIX] Fix occlusion for Marker worldPos update case - [#1522](https://github.com/xeokit/xeokit-sdk/pull/1522)
+
 # [v2.6.15](https://github.com/xeokit/xeokit-sdk/compare/v2.6.14...v2.6.15)
 
 ### 3 June 2024

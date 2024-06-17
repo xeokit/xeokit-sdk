@@ -11,7 +11,7 @@
     "docs": "rm -Rf ./docs/*; ./node_modules/.bin/esdoc",
     "typedocs": "rm -Rf ./docs/*; typedoc --tsconfig tsconfig.json",
     "publish": "npm publish --access public",
-    "changelog": "git fetch all; auto-changelog --commit-limit false --package --template changelog-template.hbs"
+    "changelog": "git fetch; auto-changelog --commit-limit false --package --template changelog-template.hbs"
   },
   "repository": {
     "type": "git",
