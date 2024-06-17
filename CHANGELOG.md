@@ -1,5 +1,13 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.19](https://github.com/xeokit/xeokit-sdk/compare/v2.6.18...v2.6.19)
+
+### 17 June 2024
+
+-  [FEATURE] Added SceneModel.renderOrder and Mesh.renderOrder - [#1541](https://github.com/xeokit/xeokit-sdk/pull/1541)
+-  Fix XEOK-39 - [#1540](https://github.com/xeokit/xeokit-sdk/pull/1540)
+-  [FIX] Expect canvasPos for Scene.snapPick, fix docs - [#1539](https://github.com/xeokit/xeokit-sdk/pull/1539)
+
 # [v2.6.18](https://github.com/xeokit/xeokit-sdk/compare/v2.6.17...v2.6.18)
 
 ### 17 June 2024
