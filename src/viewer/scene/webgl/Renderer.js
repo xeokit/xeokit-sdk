@@ -32,9 +32,6 @@ const Renderer = function (scene, options) {
     let drawableTypeInfo = {};
     let drawables = {};
 
-    let postSortDrawableList = [];
-    let postCullDrawableList = [];
-
     let drawableListDirty = true;
     let stateSortDirty = true;
     let imageDirty = true;
@@ -272,38 +269,28 @@ const Renderer = function (scene, options) {
                 const drawableInfo = drawableTypeInfo[type];
                 if (drawableInfo.isStateSortable) {
                     drawableInfo.drawableListPreCull.sort(drawableInfo.stateSortCompare);
-
-                    drawableInfo.drawableList = drawableInfo.drawableListPreCull;
                 }
             }
         }
-        let lenDrawableList = 0;
+    }
+
+    function cullDrawableList() {
         for (let type in drawableTypeInfo) {
             if (drawableTypeInfo.hasOwnProperty(type)) {
                 const drawableInfo = drawableTypeInfo[type];
                 const drawableListPreCull = drawableInfo.drawableListPreCull;
+                const drawableList = drawableInfo.drawableList;
+                let lenDrawableList = 0;
                 for (let i = 0, len = drawableListPreCull.length; i < len; i++) {
                     const drawable = drawableListPreCull[i];
-                    postSortDrawableList[lenDrawableList++] = drawable;
+                    drawable.rebuildRenderFlags();
+                    if (!drawable.renderFlags.culled) {
+                        drawableList[lenDrawableList++] = drawable;
+                    }
                 }
+                drawableList.length = lenDrawableList;
             }
         }
-        postSortDrawableList.length = lenDrawableList;
-        postSortDrawableList.sort((a, b) => {
-            return a.renderOrder - b.renderOrder;
-        });
-    }
-
-    function cullDrawableList() {
-        let lenDrawableList = 0;
-        for (let i = 0, len = postSortDrawableList.length; i < len; i++) {
-            const drawable = postSortDrawableList[i];
-            drawable.rebuildRenderFlags();
-            if (!drawable.renderFlags.culled) {
-                postCullDrawableList[lenDrawableList++] = drawable;
-            }
-        }
-        postCullDrawableList.length = lenDrawableList;
     }
 
     function draw(params) {
@@ -580,85 +567,93 @@ const Renderer = function (scene, options) {
         // Render normal opaque solids, defer others to bins to render after
         //------------------------------------------------------------------------------------------------------
 
-        for (let i = 0, len = postCullDrawableList.length; i < len; i++) {
+        for (let type in drawableTypeInfo) {
+            if (drawableTypeInfo.hasOwnProperty(type)) {
 
-            drawable = postCullDrawableList[i];
+                const drawableInfo = drawableTypeInfo[type];
+                const drawableList = drawableInfo.drawableList;
 
-            if (drawable.culled === true || drawable.visible === false) {
-                continue;
-            }
+                for (i = 0, len = drawableList.length; i < len; i++) {
 
-            const renderFlags = drawable.renderFlags;
+                    drawable = drawableList[i];
 
-            if (renderFlags.colorOpaque) {
-                if (saoEnabled && saoPossible && drawable.saoEnabled) {
-                    normalDrawSAOBin[normalDrawSAOBinLen++] = drawable;
-                } else {
-                    drawable.drawColorOpaque(frameCtx);
-                }
-            }
+                    if (drawable.culled === true || drawable.visible === false) {
+                        continue;
+                    }
 
-            if (transparentEnabled) {
-                if (renderFlags.colorTransparent) {
-                    normalFillTransparentBin[normalFillTransparentBinLen++] = drawable;
-                }
-            }
+                    const renderFlags = drawable.renderFlags;
 
-            if (renderFlags.xrayedSilhouetteTransparent) {
-                xrayedFillTransparentBin[xrayedFillTransparentBinLen++] = drawable;
-            }
+                    if (renderFlags.colorOpaque) {
+                        if (saoEnabled && saoPossible && drawable.saoEnabled) {
+                            normalDrawSAOBin[normalDrawSAOBinLen++] = drawable;
+                        } else {
+                            drawable.drawColorOpaque(frameCtx);
+                        }
+                    }
 
-            if (renderFlags.xrayedSilhouetteOpaque) {
-                xrayedFillOpaqueBin[xrayedFillOpaqueBinLen++] = drawable;
-            }
+                    if (transparentEnabled) {
+                        if (renderFlags.colorTransparent) {
+                            normalFillTransparentBin[normalFillTransparentBinLen++] = drawable;
+                        }
+                    }
 
-            if (renderFlags.highlightedSilhouetteTransparent) {
-                highlightedFillTransparentBin[highlightedFillTransparentBinLen++] = drawable;
-            }
+                    if (renderFlags.xrayedSilhouetteTransparent) {
+                        xrayedFillTransparentBin[xrayedFillTransparentBinLen++] = drawable;
+                    }
 
-            if (renderFlags.highlightedSilhouetteOpaque) {
-                highlightedFillOpaqueBin[highlightedFillOpaqueBinLen++] = drawable;
-            }
+                    if (renderFlags.xrayedSilhouetteOpaque) {
+                        xrayedFillOpaqueBin[xrayedFillOpaqueBinLen++] = drawable;
+                    }
 
-            if (renderFlags.selectedSilhouetteTransparent) {
-                selectedFillTransparentBin[selectedFillTransparentBinLen++] = drawable;
-            }
+                    if (renderFlags.highlightedSilhouetteTransparent) {
+                        highlightedFillTransparentBin[highlightedFillTransparentBinLen++] = drawable;
+                    }
 
-            if (renderFlags.selectedSilhouetteOpaque) {
-                selectedFillOpaqueBin[selectedFillOpaqueBinLen++] = drawable;
-            }
+                    if (renderFlags.highlightedSilhouetteOpaque) {
+                        highlightedFillOpaqueBin[highlightedFillOpaqueBinLen++] = drawable;
+                    }
 
-            if (drawable.edges && edgesEnabled) {
-                if (renderFlags.edgesOpaque) {
-                    normalEdgesOpaqueBin[normalEdgesOpaqueBinLen++] = drawable;
-                }
+                    if (renderFlags.selectedSilhouetteTransparent) {
+                        selectedFillTransparentBin[selectedFillTransparentBinLen++] = drawable;
+                    }
 
-                if (renderFlags.edgesTransparent) {
-                    normalEdgesTransparentBin[normalEdgesTransparentBinLen++] = drawable;
-                }
+                    if (renderFlags.selectedSilhouetteOpaque) {
+                        selectedFillOpaqueBin[selectedFillOpaqueBinLen++] = drawable;
+                    }
 
-                if (renderFlags.selectedEdgesTransparent) {
-                    selectedEdgesTransparentBin[selectedEdgesTransparentBinLen++] = drawable;
-                }
+                    if (drawable.edges && edgesEnabled) {
+                        if (renderFlags.edgesOpaque) {
+                            normalEdgesOpaqueBin[normalEdgesOpaqueBinLen++] = drawable;
+                        }
 
-                if (renderFlags.selectedEdgesOpaque) {
-                    selectedEdgesOpaqueBin[selectedEdgesOpaqueBinLen++] = drawable;
-                }
+                        if (renderFlags.edgesTransparent) {
+                            normalEdgesTransparentBin[normalEdgesTransparentBinLen++] = drawable;
+                        }
 
-                if (renderFlags.xrayedEdgesTransparent) {
-                    xrayEdgesTransparentBin[xrayEdgesTransparentBinLen++] = drawable;
-                }
+                        if (renderFlags.selectedEdgesTransparent) {
+                            selectedEdgesTransparentBin[selectedEdgesTransparentBinLen++] = drawable;
+                        }
 
-                if (renderFlags.xrayedEdgesOpaque) {
-                    xrayEdgesOpaqueBin[xrayEdgesOpaqueBinLen++] = drawable;
-                }
+                        if (renderFlags.selectedEdgesOpaque) {
+                            selectedEdgesOpaqueBin[selectedEdgesOpaqueBinLen++] = drawable;
+                        }
 
-                if (renderFlags.highlightedEdgesTransparent) {
-                    highlightedEdgesTransparentBin[highlightedEdgesTransparentBinLen++] = drawable;
-                }
+                        if (renderFlags.xrayedEdgesTransparent) {
+                            xrayEdgesTransparentBin[xrayEdgesTransparentBinLen++] = drawable;
+                        }
 
-                if (renderFlags.highlightedEdgesOpaque) {
-                    highlightedEdgesOpaqueBin[highlightedEdgesOpaqueBinLen++] = drawable;
+                        if (renderFlags.xrayedEdgesOpaque) {
+                            xrayEdgesOpaqueBin[xrayEdgesOpaqueBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.highlightedEdgesTransparent) {
+                            highlightedEdgesTransparentBin[highlightedEdgesTransparentBinLen++] = drawable;
+                        }
+
+                        if (renderFlags.highlightedEdgesOpaque) {
+                            highlightedEdgesOpaqueBin[highlightedEdgesOpaqueBinLen++] = drawable;
+                        }
+                    }
                 }
             }
         }
