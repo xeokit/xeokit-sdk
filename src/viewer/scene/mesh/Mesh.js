@@ -216,10 +216,15 @@ class Mesh extends Component {
      * @param {EmphasisMaterial} [cfg.highlightMaterial] {@link EmphasisMaterial} to define the xrayed appearance for this Mesh. Inherits {@link Scene#highlightMaterial} by default.
      * @param {EmphasisMaterial} [cfg.selectedMaterial] {@link EmphasisMaterial} to define the selected appearance for this Mesh. Inherits {@link Scene#selectedMaterial} by default.
      * @param {EmphasisMaterial} [cfg.edgeMaterial] {@link EdgeMaterial} to define the appearance of enhanced edges for this Mesh. Inherits {@link Scene#edgeMaterial} by default.
+     * @param {Number} [cfg.renderOrder=0] Specifies the rendering order for this mESH. This is used to control the order in which
+     * mESHES are drawn when they have transparent objects, to give control over the order in which those objects are blended within the transparent
+     * render pass.
      */
     constructor(owner, cfg = {}) {
 
         super(owner, cfg);
+
+        this.renderOrder = cfg.renderOrder || 0;
 
         /**
          * ID of the corresponding object within the originating system, if any.

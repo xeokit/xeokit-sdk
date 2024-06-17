@@ -1123,10 +1123,15 @@ export class SceneModel extends Component {
      * represent the returned model. Set false to always use vertex buffer objects (VBOs). Note that DTX is only applicable
      * to non-textured triangle meshes, and that VBOs are always used for meshes that have textures, line segments, or point
      * primitives. Only works while {@link DTX#enabled} is also ````true````.
+     * @param {Number} [cfg.renderOrder=0] Specifies the rendering order for this SceneModel. This is used to control the order in which
+     * SceneModels are drawn when they have transparent objects, to give control over the order in which those objects are blended within the transparent
+     * render pass.
      */
     constructor(owner, cfg = {}) {
 
         super(owner, cfg);
+
+        this.renderOrder = cfg.renderOrder || 0;
 
         this._dtxEnabled = this.scene.dtxEnabled && (cfg.dtxEnabled !== false);
 
@@ -3194,6 +3199,7 @@ export class SceneModel extends Component {
     _getVBOBatchingLayer(cfg) {
         const model = this;
         const origin = cfg.origin;
+        const renderLayer = cfg.renderLayer || 0;
         const positionsDecodeHash = cfg.positionsDecodeMatrix || cfg.positionsDecodeBoundary ?
             this._createHashStringFromMatrix(cfg.positionsDecodeMatrix || cfg.positionsDecodeBoundary)
             : "-";
@@ -3680,7 +3686,7 @@ export class SceneModel extends Component {
     // -------------- RENDERING ---------------------------------------------------------------------------------------
 
     /** @private */
-    drawColorOpaque(frameCtx) {
+    drawColorOpaque(frameCtx, layerList) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];

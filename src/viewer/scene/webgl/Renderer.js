@@ -32,6 +32,9 @@ const Renderer = function (scene, options) {
     let drawableTypeInfo = {};
     let drawables = {};
 
+    let postSortDrawableList = [];
+    let postCullDrawableList = [];
+
     let drawableListDirty = true;
     let stateSortDirty = true;
     let imageDirty = true;
@@ -269,28 +272,38 @@ const Renderer = function (scene, options) {
                 const drawableInfo = drawableTypeInfo[type];
                 if (drawableInfo.isStateSortable) {
                     drawableInfo.drawableListPreCull.sort(drawableInfo.stateSortCompare);
+
+                    drawableInfo.drawableList = drawableInfo.drawableListPreCull;
                 }
             }
         }
-    }
-
-    function cullDrawableList() {
+        let lenDrawableList = 0;
         for (let type in drawableTypeInfo) {
             if (drawableTypeInfo.hasOwnProperty(type)) {
                 const drawableInfo = drawableTypeInfo[type];
                 const drawableListPreCull = drawableInfo.drawableListPreCull;
-                const drawableList = drawableInfo.drawableList;
-                let lenDrawableList = 0;
                 for (let i = 0, len = drawableListPreCull.length; i < len; i++) {
                     const drawable = drawableListPreCull[i];
-                    drawable.rebuildRenderFlags();
-                    if (!drawable.renderFlags.culled) {
-                        drawableList[lenDrawableList++] = drawable;
-                    }
+                    postSortDrawableList[lenDrawableList++] = drawable;
                 }
-                drawableList.length = lenDrawableList;
             }
         }
+        postSortDrawableList.length = lenDrawableList;
+        postSortDrawableList.sort((a, b) => {
+            return a.renderOrder - b.renderOrder;
+        });
+    }
+
+    function cullDrawableList() {
+        let lenDrawableList = 0;
+        for (let i = 0, len = postSortDrawableList.length; i < len; i++) {
+            const drawable = postSortDrawableList[i];
+            drawable.rebuildRenderFlags();
+            if (!drawable.renderFlags.culled) {
+                postCullDrawableList[lenDrawableList++] = drawable;
+            }
+        }
+        postCullDrawableList.length = lenDrawableList;
     }
 
     function draw(params) {
@@ -567,93 +580,85 @@ const Renderer = function (scene, options) {
         // Render normal opaque solids, defer others to bins to render after
         //------------------------------------------------------------------------------------------------------
 
-        for (let type in drawableTypeInfo) {
-            if (drawableTypeInfo.hasOwnProperty(type)) {
+        for (let i = 0, len = postCullDrawableList.length; i < len; i++) {
 
-                const drawableInfo = drawableTypeInfo[type];
-                const drawableList = drawableInfo.drawableList;
+            drawable = postCullDrawableList[i];
 
-                for (i = 0, len = drawableList.length; i < len; i++) {
+            if (drawable.culled === true || drawable.visible === false) {
+                continue;
+            }
 
-                    drawable = drawableList[i];
+            const renderFlags = drawable.renderFlags;
 
-                    if (drawable.culled === true || drawable.visible === false) {
-                        continue;
-                    }
+            if (renderFlags.colorOpaque) {
+                if (saoEnabled && saoPossible && drawable.saoEnabled) {
+                    normalDrawSAOBin[normalDrawSAOBinLen++] = drawable;
+                } else {
+                    drawable.drawColorOpaque(frameCtx);
+                }
+            }
 
-                    const renderFlags = drawable.renderFlags;
+            if (transparentEnabled) {
+                if (renderFlags.colorTransparent) {
+                    normalFillTransparentBin[normalFillTransparentBinLen++] = drawable;
+                }
+            }
 
-                    if (renderFlags.colorOpaque) {
-                        if (saoEnabled && saoPossible && drawable.saoEnabled) {
-                            normalDrawSAOBin[normalDrawSAOBinLen++] = drawable;
-                        } else {
-                            drawable.drawColorOpaque(frameCtx);
-                        }
-                    }
+            if (renderFlags.xrayedSilhouetteTransparent) {
+                xrayedFillTransparentBin[xrayedFillTransparentBinLen++] = drawable;
+            }
 
-                    if (transparentEnabled) {
-                        if (renderFlags.colorTransparent) {
-                            normalFillTransparentBin[normalFillTransparentBinLen++] = drawable;
-                        }
-                    }
+            if (renderFlags.xrayedSilhouetteOpaque) {
+                xrayedFillOpaqueBin[xrayedFillOpaqueBinLen++] = drawable;
+            }
 
-                    if (renderFlags.xrayedSilhouetteTransparent) {
-                        xrayedFillTransparentBin[xrayedFillTransparentBinLen++] = drawable;
-                    }
+            if (renderFlags.highlightedSilhouetteTransparent) {
+                highlightedFillTransparentBin[highlightedFillTransparentBinLen++] = drawable;
+            }
 
-                    if (renderFlags.xrayedSilhouetteOpaque) {
-                        xrayedFillOpaqueBin[xrayedFillOpaqueBinLen++] = drawable;
-                    }
+            if (renderFlags.highlightedSilhouetteOpaque) {
+                highlightedFillOpaqueBin[highlightedFillOpaqueBinLen++] = drawable;
+            }
 
-                    if (renderFlags.highlightedSilhouetteTransparent) {
-                        highlightedFillTransparentBin[highlightedFillTransparentBinLen++] = drawable;
-                    }
+            if (renderFlags.selectedSilhouetteTransparent) {
+                selectedFillTransparentBin[selectedFillTransparentBinLen++] = drawable;
+            }
 
-                    if (renderFlags.highlightedSilhouetteOpaque) {
-                        highlightedFillOpaqueBin[highlightedFillOpaqueBinLen++] = drawable;
-                    }
+            if (renderFlags.selectedSilhouetteOpaque) {
+                selectedFillOpaqueBin[selectedFillOpaqueBinLen++] = drawable;
+            }
 
-                    if (renderFlags.selectedSilhouetteTransparent) {
-                        selectedFillTransparentBin[selectedFillTransparentBinLen++] = drawable;
-                    }
+            if (drawable.edges && edgesEnabled) {
+                if (renderFlags.edgesOpaque) {
+                    normalEdgesOpaqueBin[normalEdgesOpaqueBinLen++] = drawable;
+                }
 
-                    if (renderFlags.selectedSilhouetteOpaque) {
-                        selectedFillOpaqueBin[selectedFillOpaqueBinLen++] = drawable;
-                    }
+                if (renderFlags.edgesTransparent) {
+                    normalEdgesTransparentBin[normalEdgesTransparentBinLen++] = drawable;
+                }
 
-                    if (drawable.edges && edgesEnabled) {
-                        if (renderFlags.edgesOpaque) {
-                            normalEdgesOpaqueBin[normalEdgesOpaqueBinLen++] = drawable;
-                        }
+                if (renderFlags.selectedEdgesTransparent) {
+                    selectedEdgesTransparentBin[selectedEdgesTransparentBinLen++] = drawable;
+                }
 
-                        if (renderFlags.edgesTransparent) {
-                            normalEdgesTransparentBin[normalEdgesTransparentBinLen++] = drawable;
-                        }
+                if (renderFlags.selectedEdgesOpaque) {
+                    selectedEdgesOpaqueBin[selectedEdgesOpaqueBinLen++] = drawable;
+                }
 
-                        if (renderFlags.selectedEdgesTransparent) {
-                            selectedEdgesTransparentBin[selectedEdgesTransparentBinLen++] = drawable;
-                        }
+                if (renderFlags.xrayedEdgesTransparent) {
+                    xrayEdgesTransparentBin[xrayEdgesTransparentBinLen++] = drawable;
+                }
 
-                        if (renderFlags.selectedEdgesOpaque) {
-                            selectedEdgesOpaqueBin[selectedEdgesOpaqueBinLen++] = drawable;
-                        }
+                if (renderFlags.xrayedEdgesOpaque) {
+                    xrayEdgesOpaqueBin[xrayEdgesOpaqueBinLen++] = drawable;
+                }
 
-                        if (renderFlags.xrayedEdgesTransparent) {
-                            xrayEdgesTransparentBin[xrayEdgesTransparentBinLen++] = drawable;
-                        }
+                if (renderFlags.highlightedEdgesTransparent) {
+                    highlightedEdgesTransparentBin[highlightedEdgesTransparentBinLen++] = drawable;
+                }
 
-                        if (renderFlags.xrayedEdgesOpaque) {
-                            xrayEdgesOpaqueBin[xrayEdgesOpaqueBinLen++] = drawable;
-                        }
-
-                        if (renderFlags.highlightedEdgesTransparent) {
-                            highlightedEdgesTransparentBin[highlightedEdgesTransparentBinLen++] = drawable;
-                        }
-
-                        if (renderFlags.highlightedEdgesOpaque) {
-                            highlightedEdgesOpaqueBin[highlightedEdgesOpaqueBinLen++] = drawable;
-                        }
-                    }
+                if (renderFlags.highlightedEdgesOpaque) {
+                    highlightedEdgesOpaqueBin[highlightedEdgesOpaqueBinLen++] = drawable;
                 }
             }
         }
@@ -970,7 +975,7 @@ const Renderer = function (scene, options) {
                     math.cross3Vec3(worldRayDir, randomVec3, up);
 
                     pickViewMatrix = math.lookAtMat4v(worldRayOrigin, look, up, tempMat4b);
-                //    pickProjMatrix = scene.camera.projMatrix;
+                    //    pickProjMatrix = scene.camera.projMatrix;
                     pickProjMatrix = scene.camera.ortho.matrix;
 
                     pickResult.origin = worldRayOrigin;
