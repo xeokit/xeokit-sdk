@@ -120,7 +120,7 @@
 </body>
 <script type="module">
 
-    import {Viewer, XKTLoaderPlugin, AngleMeasurementsPlugin, ContextMenu, AngleMeasurementsMouseControl, PointerLens} from "../../dist/xeokit-sdk.min.es.js";
+    import {Viewer, XKTLoaderPlugin, ContextMenu, PointerLens, AngleMeasurementsPlugin, AngleMeasurementsMouseControl, AngleMeasurementEditMouseControl} from "../../dist/xeokit-sdk.min.es.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
@@ -153,6 +153,8 @@
     // Create a context menu to delete and configure measurements
     //------------------------------------------------------------------------------------------------------------------
 
+    let endMeasurementEdit = null;
+
     const angleMeasurementsContextMenu = new ContextMenu({
         items: [
 
@@ -164,7 +166,23 @@
                     doAction: function (context) {
                         context.angleMeasurement.labelsVisible = !context.angleMeasurement.labelsVisible;
                     }
-                }
+                },
+                {
+                    title: "Edit",
+                    doAction: function (context) {
+                        angleMeasurementsMouseControl.deactivate();
+                        const measurement = context.angleMeasurement;
+                        const edit = new AngleMeasurementEditMouseControl(measurement, {
+                            pointerLens: new PointerLens(viewer),
+                            snapping: true
+                        });
+                        edit.on("edited", () => console.log("edited", measurement.id));
+                        endMeasurementEdit = () => {
+                            edit.deactivate();
+                            endMeasurementEdit = null;
+                        };
+                    }
+                 }
             ], [
                 {
                     title: "Delete Measurement",
@@ -180,6 +198,17 @@
                     },
                     doAction: function () {
                         angleMeasurementsMouseControl.reset();
+                    }
+                },
+                {
+                    getTitle: () => {
+                        return "End Editing";
+                    },
+                    getEnabled: function () {
+                        return !!endMeasurementEdit;
+                    },
+                    doAction: function () {
+                        endMeasurementEdit();
                     }
                 }
             ]
@@ -231,10 +260,16 @@
     angleMeasurementsMouseControl.activate();
 
     angleMeasurementsPlugin.on("mouseOver", (e) => {
+        if (endMeasurementEdit) {
+            return;
+        }
         e.angleMeasurement.setHighlighted(true);
     });
 
     angleMeasurementsPlugin.on("mouseLeave", (e) => {
+        if (endMeasurementEdit) {
+            return;
+        }
         if (angleMeasurementsContextMenu.shown && angleMeasurementsContextMenu.context.angleMeasurement.id === e.angleMeasurement.id) {
             return;
         }
@@ -242,6 +277,9 @@
     });
 
     angleMeasurementsPlugin.on("contextMenu", (e) => {
+        if (endMeasurementEdit) {
+            return;
+        }
         angleMeasurementsContextMenu.context = { // Must set context before showing menu
             viewer: viewer,
             angleMeasurementsPlugin: angleMeasurementsPlugin,
@@ -532,6 +570,17 @@
                                 doAction: function () {
                                     angleMeasurementsMouseControl.reset();
                                 }
+                            },
+                            {
+                                getTitle: () => {
+                                    return "End Editing";
+                                },
+                                getEnabled: function () {
+                                    return !!endMeasurementEdit;
+                                },
+                                doAction: function () {
+                                    endMeasurementEdit();
+                                }
                             }
                         ]
                     ]
@@ -737,6 +786,17 @@
                                 },
                                 doAction: function () {
                                     angleMeasurementsMouseControl.reset();
+                                }
+                            },
+                            {
+                                getTitle: () => {
+                                    return "End Editing";
+                                },
+                                getEnabled: function () {
+                                    return !!endMeasurementEdit;
+                                },
+                                doAction: function () {
+                                    endMeasurementEdit();
                                 }
                             }
                         ]

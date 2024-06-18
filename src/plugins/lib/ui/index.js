@@ -19,7 +19,7 @@ export function draggableDot3D(handleMouseEvents, handleTouchEvents, viewer, wor
         const origin = math.vec3();
         const direction = math.vec3();
         math.canvasPosToWorldRay(canvas, scene.camera.viewMatrix, scene.camera.projMatrix, canvasPos, origin, direction);
-        return ray2WorldPos(origin, direction);
+        return ray2WorldPos(origin, direction, canvasPos);
     };
 
     const onChange = event => {
@@ -150,3 +150,73 @@ export function draggableDot3D(handleMouseEvents, handleTouchEvents, viewer, wor
         }
     };
 };
+
+export function activateDraggableDots(viewer, handleMouseEvents, handleTouchEvents, snapping, pointerLens, color, markers, onEdit) {
+    const updatePointerLens = (pointerLens
+                               ? function(canvasPos) {
+                                   pointerLens.visible = !! canvasPos;
+                                   if (canvasPos)
+                                   {
+                                       pointerLens.canvasPos = canvasPos;
+                                   }
+                               }
+                               : () => { });
+
+    const dots = markers.map(marker => {
+        let initDotPos, initMarkerPos;
+        const setCoord = coord => marker.worldPos = coord;
+
+        const dot = draggableDot3D(
+            handleMouseEvents,
+            handleTouchEvents,
+            viewer,
+            marker.worldPos,
+            color,
+            (orig, dir, canvasPos) => {
+                const tryPickWorldPos = snap => {
+                    const pickResult = viewer.scene.pick({
+                        canvasPos: canvasPos,
+                        snapToEdge: snap,
+                        snapToVertex: snap,
+                        pickSurface: true  // <<------ This causes picking to find the intersection point on the entity
+                    });
+
+                    // If - when snapping - no pick found, then try w/o snapping
+                    return (pickResult && pickResult.worldPos) ? pickResult.worldPos : (snap && tryPickWorldPos(false));
+                };
+
+                return tryPickWorldPos(!!snapping) || initDotPos;
+            },
+            () => {
+                initDotPos = dot.getWorldPos().slice();
+                initMarkerPos = marker.worldPos.slice();
+                setOtherDotsActive(false, dot);
+            },
+            (canvasPos, worldPos) => {
+                updatePointerLens(canvasPos);
+                setCoord(worldPos);
+            },
+            () => {
+                if (! math.compareVec3(initMarkerPos, marker.worldPos))
+                {
+                    onEdit();
+                }
+                else
+                {
+                    dot.setWorldPos(initDotPos);
+                    setCoord(initMarkerPos);
+                }
+                updatePointerLens(null);
+                setOtherDotsActive(true, dot);
+            });
+        return dot;
+    });
+
+    const setOtherDotsActive = (active, dot) => dots.forEach(d => (d !== dot) && d.setActive(active));
+    setOtherDotsActive(true);
+
+    return function() {
+        dots.forEach(m => m.destroy());
+        updatePointerLens(null);
+    };
+}
