@@ -1,5 +1,23 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.22](https://github.com/xeokit/xeokit-sdk/compare/v2.6.21...v2.6.22)
+
+### 18 June 2024
+
+-  Fix split properties decompress - [#1544](https://github.com/xeokit/xeokit-sdk/pull/1544)
+
+# [v2.6.21](https://github.com/xeokit/xeokit-sdk/compare/v2.6.20...v2.6.21)
+
+### 18 June 2024
+
+-  [FIX] Fix decompression of properties in split metadata files - [#1543](https://github.com/xeokit/xeokit-sdk/pull/1543)
+
+# [v2.6.20](https://github.com/xeokit/xeokit-sdk/compare/v2.6.19...v2.6.20)
+
+### 17 June 2024
+
+-  [FIX] Rollback drawable ordering - [#1542](https://github.com/xeokit/xeokit-sdk/pull/1542)
+
 # [v2.6.19](https://github.com/xeokit/xeokit-sdk/compare/v2.6.18...v2.6.19)
 
 ### 17 June 2024
