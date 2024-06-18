@@ -191,17 +191,6 @@
         console.log("target", distanceMeasurement.target.entity);
     });
 
-    distanceMeasurementsPlugin.on("mouseOver", (e) => {
-        e.distanceMeasurement.setHighlighted(true);
-    });
-
-    distanceMeasurementsPlugin.on("mouseLeave", (e) => {
-        if (distanceMeasurementsContextMenu.shown && distanceMeasurementsContextMenu.context.distanceMeasurement.id === e.distanceMeasurement.id) {
-            return;
-        }
-        e.distanceMeasurement.setHighlighted(false);
-    });
-
     const distanceMeasurementsMouseControl = new DistanceMeasurementsMouseControl(distanceMeasurementsPlugin, {
         pointerLens: new PointerLens(viewer),
         snapping: true // Default
