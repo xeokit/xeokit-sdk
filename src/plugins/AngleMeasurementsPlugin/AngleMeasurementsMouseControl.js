@@ -103,10 +103,10 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
     }
 
     _destroyMarkerDiv() {
-        if (this._markerDiv) {
+        if (this.markerDiv) {
             const element = document.getElementById('myMarkerDiv')
             element.parentNode.removeChild(element)
-            this._markerDiv = null
+            this.markerDiv = null
         }
     }
 
