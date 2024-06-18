@@ -138,6 +138,8 @@ class MetaModel {
 
         this.metaScene.metaModels[this.id] = this;
 
+        this._propertyLookup = [];
+
         /**
          * True when this MetaModel has been finalized.
          * @type {boolean}
@@ -152,7 +154,7 @@ class MetaModel {
      * @type {MetaObject|null}
      */
     get rootMetaObject() {
-        if (this.rootMetaObjects.length == 1) {
+        if (this.rootMetaObjects.length === 1) {
             return this.rootMetaObjects[0];
         }
         return null;
@@ -173,6 +175,12 @@ class MetaModel {
         const metaScene = this.metaScene;
         const propertyLookup = metaModelData.properties;
 
+        if (propertyLookup) {
+            for (let i = 0, len = propertyLookup.length; i < len; i++) {
+                this._propertyLookup.push(propertyLookup[i]);
+            }
+        }
+
         // Create global Property Sets
 
         if (metaModelData.propertySets) {
@@ -183,9 +191,6 @@ class MetaModel {
                 }
                 let propertySet = metaScene.propertySets[propertySetData.id];
                 if (!propertySet) {
-                    if (propertyLookup) {
-                        this._decompressProperties(propertyLookup, propertySetData.properties);
-                    }
                     propertySet = new PropertySet({
                         id: propertySetData.id,
                         originalSystemId: propertySetData.originalSystemId || propertySetData.id,
@@ -232,14 +237,20 @@ class MetaModel {
     }
 
     _decompressProperties(propertyLookup, properties) {
+        const propsNotFound = [];
         for (let i = 0, len = properties.length; i < len; i++) {
             const property = properties[i];
             if (Number.isInteger(property)) {
                 const lookupProperty = propertyLookup[property];
                 if (lookupProperty) {
                     properties[i] = lookupProperty;
+                } else {
+                    propsNotFound.push(property);
                 }
             }
+        }
+        if (propsNotFound.length > 0) {
+            console.error(`[MetaModel._decompressProperties] Properties not found: ${propsNotFound}`);
         }
     }
 
@@ -307,6 +318,18 @@ class MetaModel {
             const type = metaObject.type;
             (metaScene.metaObjectsByType[type] || (metaScene.metaObjectsByType[type] = {}))[objectId] = metaObject;
         }
+
+        // Decompress properties
+
+        if (this.propertySets) {
+            for (let i = 0, len = this.propertySets.length; i < len; i++) {
+                const propertySet = this.propertySets[i];
+                this._decompressProperties(this._propertyLookup, propertySet.properties);
+            }
+        }
+
+
+        this._propertyLookup = [];
 
         this.finalized = true;
 

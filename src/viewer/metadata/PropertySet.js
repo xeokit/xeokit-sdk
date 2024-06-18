@@ -68,7 +68,11 @@ class PropertySet {
             const properties = params.properties;
             for (let i = 0, len = properties.length; i < len; i++) {
                 const property = properties[i];
-                this.properties.push(new Property(property.name,  property.value, property.type, property.valueType, property.description));
+                if (Number.isInteger(property)) { // Will decompress in MetaModel.finalize();
+                    this.properties.push(property);
+                } else {
+                    this.properties.push(new Property(property.name, property.value, property.type, property.valueType, property.description));
+                }
             }
         }
     }
