@@ -1,5 +1,11 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.23](https://github.com/xeokit/xeokit-sdk/compare/v2.6.22...v2.6.23)
+
+### 19 June 2024
+
+-  XEOK-36 Edit Measurement - [#1545](https://github.com/xeokit/xeokit-sdk/pull/1545)
+
 # [v2.6.22](https://github.com/xeokit/xeokit-sdk/compare/v2.6.21...v2.6.22)
 
 ### 18 June 2024
