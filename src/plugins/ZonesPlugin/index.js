@@ -7,7 +7,7 @@ import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
 import {math} from "../../viewer/scene/math/math.js";
 import {Mesh} from "../../viewer/scene/mesh/Mesh.js";
 import {Dot} from "../lib/html/Dot.js";
-import {draggableDot3D, transformToNode} from "../../../src/plugins/lib/ui/index.js";
+import {createDraggableDot3D, transformToNode} from "../../../src/plugins/lib/ui/index.js";
 
 const hex2rgb = function(color) {
     const rgb = idx => parseInt(color.substr(idx + 1, 2), 16) / 255;
@@ -1642,23 +1642,23 @@ export class ZoneEditControl extends Component {
                 }
             };
 
-            const dot = draggableDot3D(
-                handleMouseEvents,
-                handleTouchEvents,
-                zone.plugin.viewer,
-                math.vec3([ planeCoord[0], altitude, planeCoord[1] ]),
-                zone._color,
-                (orig, dir) => planeIntersect(altitude, math.vec3([ 0, 1, 0 ]), orig, dir),
-                () => {
+            const dot = createDraggableDot3D({
+                handleMouseEvents: handleMouseEvents,
+                handleTouchEvents: handleTouchEvents,
+                viewer: zone.plugin.viewer,
+                worldPos: math.vec3([ planeCoord[0], altitude, planeCoord[1] ]),
+                color: zone._color,
+                ray2WorldPos: (orig, dir) => planeIntersect(altitude, math.vec3([ 0, 1, 0 ]), orig, dir),
+                onStart: () => {
                     initWorldPos = dot.getWorldPos().slice();
                     initPlaneCoord = planeCoord.slice();
                     set_other_dots_active(false, dot);
                 },
-                (canvasPos, worldPos) => {
+                onMove: (canvasPos, worldPos) => {
                     updatePointerLens(canvasPos);
                     setPlaneCoord([ worldPos[0], worldPos[2] ]);
                 },
-                () => {
+                onEnd: () => {
                     if (zone._zoneMesh)
                     {
                         self.fire("edited");
@@ -1670,7 +1670,8 @@ export class ZoneEditControl extends Component {
                     }
                     updatePointerLens(null);
                     set_other_dots_active(true, dot);
-                });
+                }
+            });
             return dot;
         });
         const set_other_dots_active = (active, dot) => dots.forEach(d => (d !== dot) && d.setActive(active));

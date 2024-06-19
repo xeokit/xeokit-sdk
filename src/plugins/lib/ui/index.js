@@ -2,6 +2,8 @@ import {Dot} from "../html/Dot.js";
 import {math} from "../../../viewer/scene/math/math.js";
 import {Marker} from "../../../viewer/scene/marker/Marker.js";
 
+const nop = () => { };
+
 export function transformToNode(from, to, vec) {
     const fromRec = from.getBoundingClientRect();
     const toRec = to.getBoundingClientRect();
@@ -9,7 +11,27 @@ export function transformToNode(from, to, vec) {
     vec[1] += fromRec.top  - toRec.top;
 };
 
-export function draggableDot3D(handleMouseEvents, handleTouchEvents, viewer, worldPos, color, ray2WorldPos, onStart, onMove, onEnd) {
+export function createDraggableDot3D(cfg) {
+    const extractCFG = function(propName, defaultValue) {
+        if (propName in cfg) {
+            return cfg[propName];
+        } else if (defaultValue !== undefined) {
+            return defaultValue;
+        } else {
+            throw "config missing: " + propName;
+        }
+    };
+
+    const viewer = extractCFG("viewer");
+    const worldPos = extractCFG("worldPos");
+    const color = extractCFG("color");
+    const ray2WorldPos = extractCFG("ray2WorldPos");
+    const handleMouseEvents = extractCFG("handleMouseEvents", false);
+    const handleTouchEvents = extractCFG("handleTouchEvents", false);
+    const onStart = extractCFG("onStart", nop);
+    const onMove  = extractCFG("onMove",  nop);
+    const onEnd   = extractCFG("onEnd",   nop);
+
     const scene = viewer.scene;
     const canvas = scene.canvas.canvas;
 
@@ -166,13 +188,13 @@ export function activateDraggableDots(viewer, handleMouseEvents, handleTouchEven
         let initDotPos, initMarkerPos;
         const setCoord = coord => marker.worldPos = coord;
 
-        const dot = draggableDot3D(
-            handleMouseEvents,
-            handleTouchEvents,
-            viewer,
-            marker.worldPos,
-            color,
-            (orig, dir, canvasPos) => {
+        const dot = createDraggableDot3D({
+            handleMouseEvents: handleMouseEvents,
+            handleTouchEvents: handleTouchEvents,
+            viewer: viewer,
+            worldPos: marker.worldPos,
+            color: color,
+            ray2WorldPos: (orig, dir, canvasPos) => {
                 const tryPickWorldPos = snap => {
                     const pickResult = viewer.scene.pick({
                         canvasPos: canvasPos,
@@ -187,16 +209,16 @@ export function activateDraggableDots(viewer, handleMouseEvents, handleTouchEven
 
                 return tryPickWorldPos(!!snapping) || initDotPos;
             },
-            () => {
+            onStart: () => {
                 initDotPos = dot.getWorldPos().slice();
                 initMarkerPos = marker.worldPos.slice();
                 setOtherDotsActive(false, dot);
             },
-            (canvasPos, worldPos) => {
+            onMove: (canvasPos, worldPos) => {
                 updatePointerLens(canvasPos);
                 setCoord(worldPos);
             },
-            () => {
+            onEnd: () => {
                 if (! math.compareVec3(initMarkerPos, marker.worldPos))
                 {
                     onEdit();
@@ -208,7 +230,8 @@ export function activateDraggableDots(viewer, handleMouseEvents, handleTouchEven
                 }
                 updatePointerLens(null);
                 setOtherDotsActive(true, dot);
-            });
+            }
+        });
         return dot;
     });
 
