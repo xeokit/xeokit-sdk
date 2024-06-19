@@ -173,7 +173,26 @@ export function createDraggableDot3D(cfg) {
     };
 };
 
-export function activateDraggableDots(viewer, handleMouseEvents, handleTouchEvents, snapping, pointerLens, color, markers, onEdit) {
+export function activateDraggableDots(cfg) {
+    const extractCFG = function(propName, defaultValue) {
+        if (propName in cfg) {
+            return cfg[propName];
+        } else if (defaultValue !== undefined) {
+            return defaultValue;
+        } else {
+            throw "config missing: " + propName;
+        }
+    };
+
+    const viewer = extractCFG("viewer");
+    const handleMouseEvents = extractCFG("handleMouseEvents", false);
+    const handleTouchEvents = extractCFG("handleTouchEvents", false);
+    const snapping = extractCFG("snapping");
+    const pointerLens = extractCFG("pointerLens", null);
+    const color = extractCFG("color");
+    const markers = extractCFG("markers");
+    const onEdit = extractCFG("onEdit", nop);
+
     const updatePointerLens = (pointerLens
                                ? function(canvasPos) {
                                    pointerLens.visible = !! canvasPos;

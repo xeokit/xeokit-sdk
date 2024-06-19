@@ -24,15 +24,16 @@ class DistanceMeasurementEditControl extends Component {
 
         super(viewer.scene);
 
-        const cleanup = activateDraggableDots(
-            viewer,
-            handleMouseEvents,
-            handleTouchEvents,
-            cfg.snapping,
-            cfg.pointerLens,
-            measurement.color,
-            [ measurement.origin, measurement.target ],
-            () => this.fire("edited"));
+        const cleanup = activateDraggableDots({
+            viewer: viewer,
+            handleMouseEvents: handleMouseEvents,
+            handleTouchEvents: handleTouchEvents,
+            snapping: cfg.snapping,
+            pointerLens: cfg.pointerLens,
+            color: measurement.color,
+            markers: [ measurement.origin, measurement.target ],
+            onEdit: () => this.fire("edited")
+        });
 
         const destroyCb = measurement.on("destroyed", cleanup);
 
