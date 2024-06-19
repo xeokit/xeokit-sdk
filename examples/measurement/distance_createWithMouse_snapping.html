@@ -134,7 +134,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, ContextMenu, DistanceMeasurementsPlugin, DistanceMeasurementsMouseControl, PointerLens} from "../../dist/xeokit-sdk.es.js";
+    import {Viewer, XKTLoaderPlugin, ContextMenu, PointerLens, DistanceMeasurementsPlugin, DistanceMeasurementsMouseControl, DistanceMeasurementEditMouseControl} from "../../dist/xeokit-sdk.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -191,17 +191,6 @@
         console.log("target", distanceMeasurement.target.entity);
     });
 
-    distanceMeasurementsPlugin.on("mouseOver", (e) => {
-        e.distanceMeasurement.setHighlighted(true);
-    });
-
-    distanceMeasurementsPlugin.on("mouseLeave", (e) => {
-        if (distanceMeasurementsContextMenu.shown && distanceMeasurementsContextMenu.context.distanceMeasurement.id === e.distanceMeasurement.id) {
-            return;
-        }
-        e.distanceMeasurement.setHighlighted(false);
-    });
-
     const distanceMeasurementsMouseControl = new DistanceMeasurementsMouseControl(distanceMeasurementsPlugin, {
         pointerLens: new PointerLens(viewer),
         snapping: true // Default
@@ -214,6 +203,8 @@
     //------------------------------------------------------------------------------------------------------------------
     // Create a context menu to delete and configure measurements
     //------------------------------------------------------------------------------------------------------------------
+
+    let endMeasurementEdit = null;
 
     const distanceMeasurementsContextMenu = new ContextMenu({
         items: [
@@ -270,6 +261,22 @@
                     },
                     doAction: function (context) {
                         context.distanceMeasurement.labelsVisible = !context.distanceMeasurement.labelsVisible;
+                    }
+                },
+                {
+                    title: "Edit",
+                    doAction: function (context) {
+                        distanceMeasurementsMouseControl.deactivate();
+                        const measurement = context.distanceMeasurement;
+                        const edit = new DistanceMeasurementEditMouseControl(measurement, {
+                            pointerLens: new PointerLens(viewer),
+                            snapping: true
+                        });
+                        edit.on("edited", () => console.log("edited", measurement.id));
+                        endMeasurementEdit = () => {
+                            edit.deactivate();
+                            endMeasurementEdit = null;
+                        };
                     }
                 }
             ], [
@@ -331,6 +338,17 @@
                     doAction: function () {
                         distanceMeasurementsMouseControl.reset();
                     }
+                },
+                {
+                    getTitle: () => {
+                        return "End Editing";
+                    },
+                    getEnabled: function () {
+                        return !!endMeasurementEdit;
+                    },
+                    doAction: function () {
+                        endMeasurementEdit();
+                    }
                 }
             ]
         ]
@@ -349,10 +367,16 @@
     //------------------------------------------------------------------------------------------------------------------
 
     distanceMeasurementsPlugin.on("mouseOver", (e) => {
+        if (endMeasurementEdit) {
+            return;
+        }
         e.distanceMeasurement.setHighlighted(true);
     });
 
     distanceMeasurementsPlugin.on("mouseLeave", (e) => {
+        if (endMeasurementEdit) {
+            return;
+        }
         if (distanceMeasurementsContextMenu.shown && distanceMeasurementsContextMenu.context.distanceMeasurement.id === e.distanceMeasurement.id) {
             return;
         }
@@ -360,6 +384,9 @@
     });
 
     distanceMeasurementsPlugin.on("contextMenu", (e) => {
+        if (endMeasurementEdit) {
+            return;
+        }
         distanceMeasurementsContextMenu.context = { // Must set context before showing menu
             viewer: viewer,
             distanceMeasurementsPlugin: distanceMeasurementsPlugin,
