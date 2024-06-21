@@ -239,7 +239,7 @@ export function activateDraggableDots(cfg) {
     const pointerLens = extractCFG("pointerLens", null);
     const dots = extractCFG("dots");
     const ray2WorldPos = extractCFG("ray2WorldPos");
-    const onEdit = extractCFG("onEdit", nop);
+    const onEnd = extractCFG("onEnd", nop);
 
     const updatePointerLens = (pointerLens
                                ? function(canvasPos) {
@@ -267,12 +267,7 @@ export function activateDraggableDots(cfg) {
                 dot.worldPos = worldPos;
             },
             onEnd: () => {
-                if (! math.compareVec3(initPos, dot.worldPos))
-                {
-                    onEdit();
-                }
-                else
-                {
+                if (! onEnd(initPos, dot)) {
                     dot.worldPos = initPos;
                 }
                 updatePointerLens(null);

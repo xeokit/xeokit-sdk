@@ -4,6 +4,7 @@ export * from "./DistanceMeasurementsMouseControl.js";
 export * from "./DistanceMeasurementsTouchControl.js";
 
 import {Component} from "../../viewer/scene/Component.js";
+import {math} from "../../viewer/scene/math/math.js";
 import {activateDraggableDots} from "../../../src/plugins/lib/ui/index.js";
 
 class DistanceMeasurementEditControl extends Component {
@@ -45,7 +46,13 @@ class DistanceMeasurementEditControl extends Component {
 
                 return tryPickWorldPos(!!cfg.snapping);
             },
-            onEdit: () => this.fire("edited")
+            onEnd: (initPos, dot) => {
+                const changed = ! math.compareVec3(initPos, dot.worldPos);
+                if (changed) {
+                    this.fire("edited");
+                }
+                return changed;
+            }
         });
 
         const destroyCb = measurement.on("destroyed", cleanup);
