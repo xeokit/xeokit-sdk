@@ -1629,8 +1629,10 @@ export class ZoneEditControl extends Component {
                                    : () => { });
 
         const dots = zone._geometry.planeCoordinates.map(planeCoord => {
-            let initWorldPos;
-            const updatePlaneCoord = function() {
+            const dotParent = scene.canvas.canvas.ownerDocument.body;
+            const dot = new Dot3D(scene, {}, dotParent, { fillColor: zone._color });
+            dot.worldPos = math.vec3([ planeCoord[0], altitude, planeCoord[1] ]);
+            dot.on("worldPos", function() {
                 planeCoord[0] = dot.worldPos[0];
                 planeCoord[1] = dot.worldPos[2];
                 try {
@@ -1641,13 +1643,13 @@ export class ZoneEditControl extends Component {
                         zone._zoneMesh = null;
                     }
                 }
-            };
+            });
+            return dot;
+        });
 
-            const dotParent = scene.canvas.canvas.ownerDocument.body;
-            const dot = new Dot3D(scene, {}, dotParent, { fillColor: zone._color });
-            dot.worldPos = math.vec3([ planeCoord[0], altitude, planeCoord[1] ]);
-
-            activateDraggableDot(dot, {
+        const cleanups = dots.map(dot => {
+            let initWorldPos;
+            return activateDraggableDot(dot, {
                 handleMouseEvents: handleMouseEvents,
                 handleTouchEvents: handleTouchEvents,
                 viewer: zone.plugin.viewer,
@@ -1659,7 +1661,6 @@ export class ZoneEditControl extends Component {
                 onMove: (canvasPos, worldPos) => {
                     updatePointerLens(canvasPos);
                     dot.worldPos = worldPos;
-                    updatePlaneCoord();
                 },
                 onEnd: () => {
                     if (zone._zoneMesh)
@@ -1669,21 +1670,19 @@ export class ZoneEditControl extends Component {
                     else
                     {
                         dot.worldPos = initWorldPos;
-                        updatePlaneCoord();
                     }
                     updatePointerLens(null);
                     set_other_dots_active(true, dot);
                 }
             });
-
-            return dot;
         });
         const set_other_dots_active = (active, dot) => dots.forEach(d => (d !== dot) && d.setClickable(active));
         set_other_dots_active(true);
 
         const cleanup = function() {
-            dots.forEach(m => m.destroy());
+            cleanups.forEach(c => c());
             updatePointerLens(null);
+            dots.forEach(d => d.destroy());
         };
 
         const destroyCb = zone.on("destroyed", cleanup);
