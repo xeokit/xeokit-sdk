@@ -161,7 +161,6 @@ export function createDraggableDot3D(cfg) {
 
     return {
         setActive: value => dot.setClickable(value),
-        getWorldPos: () => marker.worldPos,
         setWorldPos: pos => { marker.worldPos = pos; updateDotPos(); },
         destroy: function() {
             currentDrag && currentDrag.cleanup();
@@ -204,7 +203,7 @@ export function activateDraggableDots(cfg) {
                                : () => { });
 
     const dots = markers.map(marker => {
-        let initDotPos, initMarkerPos;
+        let initPos;
         const setCoord = coord => marker.worldPos = coord;
 
         const dot = createDraggableDot3D({
@@ -226,11 +225,10 @@ export function activateDraggableDots(cfg) {
                     return (pickResult && pickResult.worldPos) ? pickResult.worldPos : (snap && tryPickWorldPos(false));
                 };
 
-                return tryPickWorldPos(!!snapping) || initDotPos;
+                return tryPickWorldPos(!!snapping) || initPos;
             },
             onStart: () => {
-                initDotPos = dot.getWorldPos().slice();
-                initMarkerPos = marker.worldPos.slice();
+                initPos = marker.worldPos.slice();
                 setOtherDotsActive(false, dot);
             },
             onMove: (canvasPos, worldPos) => {
@@ -238,14 +236,14 @@ export function activateDraggableDots(cfg) {
                 setCoord(worldPos);
             },
             onEnd: () => {
-                if (! math.compareVec3(initMarkerPos, marker.worldPos))
+                if (! math.compareVec3(initPos, marker.worldPos))
                 {
                     onEdit();
                 }
                 else
                 {
-                    dot.setWorldPos(initDotPos);
-                    setCoord(initMarkerPos);
+                    dot.setWorldPos(initPos);
+                    setCoord(initPos);
                 }
                 updatePointerLens(null);
                 setOtherDotsActive(true, dot);
