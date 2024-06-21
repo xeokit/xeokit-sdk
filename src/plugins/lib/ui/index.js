@@ -373,7 +373,7 @@ export function activateDraggableDot(dot, cfg) {
         });
     }
 
-    const idleOpacity = 0.5;
+    const idleOpacity = 0.8;
     dot.setOpacity(idleOpacity);
 
     return function() {
