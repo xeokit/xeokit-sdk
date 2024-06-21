@@ -1629,10 +1629,10 @@ export class ZoneEditControl extends Component {
                                    : () => { });
 
         const dots = zone._geometry.planeCoordinates.map(planeCoord => {
-            let initWorldPos, initPlaneCoord;
-            const setPlaneCoord = function(coord) {
-                planeCoord[0] = coord[0];
-                planeCoord[1] = coord[1];
+            let initWorldPos;
+            const updatePlaneCoord = function() {
+                planeCoord[0] = dot.worldPos[0];
+                planeCoord[1] = dot.worldPos[2];
                 try {
                     zone._rebuildMesh();
                 } catch (e) {
@@ -1654,13 +1654,12 @@ export class ZoneEditControl extends Component {
                 ray2WorldPos: (orig, dir) => planeIntersect(altitude, math.vec3([ 0, 1, 0 ]), orig, dir),
                 onStart: () => {
                     initWorldPos = dot.worldPos.slice();
-                    initPlaneCoord = planeCoord.slice();
                     set_other_dots_active(false, dot);
                 },
                 onMove: (canvasPos, worldPos) => {
                     updatePointerLens(canvasPos);
-                    setPlaneCoord([ worldPos[0], worldPos[2] ]);
                     dot.worldPos = worldPos;
+                    updatePlaneCoord();
                 },
                 onEnd: () => {
                     if (zone._zoneMesh)
@@ -1670,7 +1669,7 @@ export class ZoneEditControl extends Component {
                     else
                     {
                         dot.worldPos = initWorldPos;
-                        setPlaneCoord(initPlaneCoord);
+                        updatePlaneCoord();
                     }
                     updatePointerLens(null);
                     set_other_dots_active(true, dot);
