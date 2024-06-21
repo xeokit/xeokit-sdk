@@ -160,7 +160,7 @@ export function createDraggableDot3D(cfg) {
     const onProjMatrix = scene.camera.on("projMatrix", updateDotPos);
 
     return {
-        setActive: value => dot.setClickable(value),
+        setClickable: value => dot.setClickable(value),
         setWorldPos: pos => { marker.worldPos = pos; updateDotPos(); },
         destroy: function() {
             currentDrag && currentDrag.cleanup();
@@ -252,7 +252,7 @@ export function activateDraggableDots(cfg) {
         return dot;
     });
 
-    const setOtherDotsActive = (active, dot) => dots.forEach(d => (d !== dot) && d.setActive(active));
+    const setOtherDotsActive = (active, dot) => dots.forEach(d => (d !== dot) && d.setClickable(active));
     setOtherDotsActive(true);
 
     return function() {

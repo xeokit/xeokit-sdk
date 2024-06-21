@@ -1674,7 +1674,7 @@ export class ZoneEditControl extends Component {
             });
             return dot;
         });
-        const set_other_dots_active = (active, dot) => dots.forEach(d => (d !== dot) && d.setActive(active));
+        const set_other_dots_active = (active, dot) => dots.forEach(d => (d !== dot) && d.setClickable(active));
         set_other_dots_active(true);
 
         const cleanup = function() {
