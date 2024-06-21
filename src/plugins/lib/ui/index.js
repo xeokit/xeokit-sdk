@@ -236,9 +236,9 @@ export function activateDraggableDots(cfg) {
     const viewer = extractCFG("viewer");
     const handleMouseEvents = extractCFG("handleMouseEvents", false);
     const handleTouchEvents = extractCFG("handleTouchEvents", false);
-    const snapping = extractCFG("snapping");
     const pointerLens = extractCFG("pointerLens", null);
     const dots = extractCFG("dots");
+    const ray2WorldPos = extractCFG("ray2WorldPos");
     const onEdit = extractCFG("onEdit", nop);
 
     const updatePointerLens = (pointerLens
@@ -257,21 +257,7 @@ export function activateDraggableDots(cfg) {
             handleMouseEvents: handleMouseEvents,
             handleTouchEvents: handleTouchEvents,
             viewer: viewer,
-            ray2WorldPos: (orig, dir, canvasPos) => {
-                const tryPickWorldPos = snap => {
-                    const pickResult = viewer.scene.pick({
-                        canvasPos: canvasPos,
-                        snapToEdge: snap,
-                        snapToVertex: snap,
-                        pickSurface: true  // <<------ This causes picking to find the intersection point on the entity
-                    });
-
-                    // If - when snapping - no pick found, then try w/o snapping
-                    return (pickResult && pickResult.worldPos) ? pickResult.worldPos : (snap && tryPickWorldPos(false));
-                };
-
-                return tryPickWorldPos(!!snapping) || initPos;
-            },
+            ray2WorldPos: (orig, dir, canvasPos) => (ray2WorldPos(orig, dir, canvasPos) || initPos),
             onStart: () => {
                 initPos = dot.worldPos.slice();
                 setOtherDotsActive(false, dot);

@@ -28,9 +28,23 @@ class AngleMeasurementEditControl extends Component {
             viewer: viewer,
             handleMouseEvents: handleMouseEvents,
             handleTouchEvents: handleTouchEvents,
-            snapping: cfg.snapping,
             pointerLens: cfg.pointerLens,
             dots: [ measurement.origin, measurement.corner, measurement.target ],
+            ray2WorldPos: (orig, dir, canvasPos) => {
+                const tryPickWorldPos = snap => {
+                    const pickResult = viewer.scene.pick({
+                        canvasPos: canvasPos,
+                        snapToEdge: snap,
+                        snapToVertex: snap,
+                        pickSurface: true  // <<------ This causes picking to find the intersection point on the entity
+                    });
+
+                    // If - when snapping - no pick found, then try w/o snapping
+                    return (pickResult && pickResult.worldPos) ? pickResult.worldPos : (snap && tryPickWorldPos(false));
+                };
+
+                return tryPickWorldPos(!!cfg.snapping);
+            },
             onEdit: () => this.fire("edited")
         });
 
