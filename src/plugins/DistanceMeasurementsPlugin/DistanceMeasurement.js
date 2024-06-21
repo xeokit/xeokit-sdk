@@ -1,6 +1,5 @@
-import {Marker} from "../../viewer/scene/marker/Marker.js";
+import {Dot3D} from "../lib/ui/index.js";
 import {Wire} from "../lib/html/Wire.js";
-import {Dot} from "../lib/html/Dot.js";
 import {Label} from "../lib/html/Label.js";
 import {math} from "../../viewer/scene/math/math.js";
 import {Component} from "../../viewer/scene/Component.js";
@@ -50,8 +49,6 @@ class DistanceMeasurement extends Component {
         this._eventSubs = {};
 
         var scene = this.plugin.viewer.scene;
-        this._originMarker = new Marker(scene, cfg.origin);
-        this._targetMarker = new Marker(scene, cfg.target);
 
         this._originWorld = math.vec3();
         this._targetWorld = math.vec3();
@@ -97,7 +94,7 @@ class DistanceMeasurement extends Component {
             this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new WheelEvent('wheel', event));
         };
 
-        this._originDot = new Dot(this._container, {
+        this._originDot = new Dot3D(scene, cfg.origin, this._container, {
             fillColor: this._color,
             zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2 : undefined,
             onMouseOver,
@@ -109,7 +106,7 @@ class DistanceMeasurement extends Component {
             onContextMenu
         });
 
-        this._targetDot = new Dot(this._container, {
+        this._targetDot = new Dot3D(scene, cfg.target, this._container, {
             fillColor: this._color,
             zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2 : undefined,
             onMouseOver,
@@ -256,13 +253,13 @@ class DistanceMeasurement extends Component {
         this._labelsOnWires = false;
         this._clickable = false;
 
-        this._originMarker.on("worldPos", (value) => {
+        this._originDot.on("worldPos", (value) => {
             this._originWorld.set(value || [0,0,0]); 
             this._wpDirty = true;
             this._needUpdate(0); // No lag
         });
 
-        this._targetMarker.on("worldPos", (value) => {
+        this._targetDot.on("worldPos", (value) => {
             this._targetWorld.set(value || [0,0,0]); 
             this._wpDirty = true;
             this._needUpdate(0); // No lag
@@ -424,8 +421,8 @@ class DistanceMeasurement extends Component {
         }
 
         const near = -0.3;
-        const vpz1 = this._originMarker.viewPos[2];
-        const vpz2 = this._targetMarker.viewPos[2];
+        const vpz1 = this._originDot.viewPos[2];
+        const vpz2 = this._targetDot.viewPos[2];
 
         if (vpz1 > near || vpz2 > near) {
 
@@ -473,9 +470,6 @@ class DistanceMeasurement extends Component {
                 cp[j + 1] = top + Math.floor((1 - pp[i + 1] / pp[i + 3]) * canvasHeight / 2);
                 j += 2;
             }
-
-            this._originDot.setPos(cp[0], cp[1]);
-            this._targetDot.setPos(cp[6], cp[7]);
 
             this._lengthWire.setStartAndEnd(cp[0], cp[1], cp[6], cp[7]);
 
@@ -618,21 +612,21 @@ class DistanceMeasurement extends Component {
     }
 
     /**
-     * Gets the origin {@link Marker}.
+     * Gets the origin {@link Dot3D}.
      *
-     * @type {Marker}
+     * @type {Dot3D}
      */
     get origin() {
-        return this._originMarker;
+        return this._originDot;
     }
 
     /**
-     * Gets the target {@link Marker}.
+     * Gets the target {@link Dot3D}.
      *
-     * @type {Marker}
+     * @type {Dot3D}
      */
     get target() {
-        return this._targetMarker;
+        return this._targetDot;
     }
 
     /**
@@ -701,7 +695,7 @@ class DistanceMeasurement extends Component {
     }
 
     /**
-     * Sets if the origin {@link Marker} is visible.
+     * Sets if the origin {@link Dot3D} is visible.
      *
      * @type {Boolean}
      */
@@ -712,7 +706,7 @@ class DistanceMeasurement extends Component {
     }
 
     /**
-     * Gets if the origin {@link Marker} is visible.
+     * Gets if the origin {@link Dot3D} is visible.
      *
      * @type {Boolean}
      */
@@ -721,7 +715,7 @@ class DistanceMeasurement extends Component {
     }
 
     /**
-     * Sets if the target {@link Marker} is visible.
+     * Sets if the target {@link Dot3D} is visible.
      *
      * @type {Boolean}
      */
@@ -732,7 +726,7 @@ class DistanceMeasurement extends Component {
     }
 
     /**
-     * Gets if the target {@link Marker} is visible.
+     * Gets if the target {@link Dot3D} is visible.
      *
      * @type {Boolean}
      */

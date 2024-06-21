@@ -30,8 +30,7 @@ class DistanceMeasurementEditControl extends Component {
             handleTouchEvents: handleTouchEvents,
             snapping: cfg.snapping,
             pointerLens: cfg.pointerLens,
-            color: measurement.color,
-            markers: [ measurement.origin, measurement.target ],
+            dots: [ measurement.origin, measurement.target ],
             onEdit: () => this.fire("edited")
         });
 

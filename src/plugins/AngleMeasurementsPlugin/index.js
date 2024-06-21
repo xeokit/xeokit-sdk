@@ -30,8 +30,7 @@ class AngleMeasurementEditControl extends Component {
             handleTouchEvents: handleTouchEvents,
             snapping: cfg.snapping,
             pointerLens: cfg.pointerLens,
-            color: measurement.color,
-            markers: [ measurement.origin, measurement.corner, measurement.target ],
+            dots: [ measurement.origin, measurement.corner, measurement.target ],
             onEdit: () => this.fire("edited")
         });
 
