@@ -7,7 +7,7 @@ import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
 import {math} from "../../viewer/scene/math/math.js";
 import {Mesh} from "../../viewer/scene/mesh/Mesh.js";
 import {Dot} from "../lib/html/Dot.js";
-import {createDraggableDot3D, transformToNode} from "../../../src/plugins/lib/ui/index.js";
+import {activateDraggableDot, Dot3D, transformToNode} from "../../../src/plugins/lib/ui/index.js";
 
 const hex2rgb = function(color) {
     const rgb = idx => parseInt(color.substr(idx + 1, 2), 16) / 255;
@@ -1612,7 +1612,8 @@ export class ZonesPolysurfaceTouchControl extends Component {
 
 export class ZoneEditControl extends Component {
     constructor(zone, cfg, handleMouseEvents, handleTouchEvents) {
-        super(zone.plugin.viewer.scene);
+        const scene = zone.plugin.viewer.scene;
+        super(scene);
         const self = this;
 
         const altitude = zone._geometry.altitude;
@@ -1642,21 +1643,24 @@ export class ZoneEditControl extends Component {
                 }
             };
 
-            const dot = createDraggableDot3D({
+            const dotParent = scene.canvas.canvas.ownerDocument.body;
+            const dot = new Dot3D(scene, {}, dotParent, { fillColor: zone._color });
+            dot.worldPos = math.vec3([ planeCoord[0], altitude, planeCoord[1] ]);
+
+            activateDraggableDot(dot, {
                 handleMouseEvents: handleMouseEvents,
                 handleTouchEvents: handleTouchEvents,
                 viewer: zone.plugin.viewer,
-                worldPos: math.vec3([ planeCoord[0], altitude, planeCoord[1] ]),
-                color: zone._color,
                 ray2WorldPos: (orig, dir) => planeIntersect(altitude, math.vec3([ 0, 1, 0 ]), orig, dir),
                 onStart: () => {
-                    initWorldPos = dot.getWorldPos().slice();
+                    initWorldPos = dot.worldPos.slice();
                     initPlaneCoord = planeCoord.slice();
                     set_other_dots_active(false, dot);
                 },
                 onMove: (canvasPos, worldPos) => {
                     updatePointerLens(canvasPos);
                     setPlaneCoord([ worldPos[0], worldPos[2] ]);
+                    dot.worldPos = worldPos;
                 },
                 onEnd: () => {
                     if (zone._zoneMesh)
@@ -1665,13 +1669,14 @@ export class ZoneEditControl extends Component {
                     }
                     else
                     {
-                        dot.setWorldPos(initWorldPos);
+                        dot.worldPos = initWorldPos;
                         setPlaneCoord(initPlaneCoord);
                     }
                     updatePointerLens(null);
                     set_other_dots_active(true, dot);
                 }
             });
+
             return dot;
         });
         const set_other_dots_active = (active, dot) => dots.forEach(d => (d !== dot) && d.setClickable(active));
