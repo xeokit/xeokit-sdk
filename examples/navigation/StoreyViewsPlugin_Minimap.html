@@ -24,6 +24,8 @@
             /* margin-bottom: 10px; */
             pointer-events: all;
             opacity: 1.0;
+
+            display: none;
         }
 
         .marker {
@@ -37,6 +39,96 @@
             transform: translate(-50%, -50%);
             z-index: 1000;
         }
+
+        .dropdown {
+            position: absolute;
+            top: 10px;
+            width: 95%;
+            height: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: black;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            align-content: center;
+            z-index: 1000;
+        }
+
+        .dropdown.opened {
+            border-bottom-left-radius: 0px;
+            border-bottom-right-radius: 0px;
+        }
+
+        .dropdown.closed {
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+
+        .dropdown:hover {
+            cursor: pointer;
+        }
+
+        .hamburger {
+            color: white;
+            font-size: 20px;
+            margin-left: 20px;
+        }
+
+        .floor {
+            color: white;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+
+        .dropdown-options {
+            position: absolute;
+            top: 45px;
+            width: 95%;
+            height: auto;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: black;
+            /* border-radius: 5px; */
+            display: none;
+            flex-direction: column;
+            justify-content: flex-start;
+            z-index: 1000;
+        }
+
+        .option {
+            border-top: 1px solid white;
+            width: 100%;
+            height: 35px;
+            color: white;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            align-content: center;
+        }
+
+        .option:hover {
+            cursor: pointer;
+        }
+
+        .option .check {
+            color: black;
+            font-size: 20px;
+            margin-left: 20px;
+        }
+
+        .option.selected .check {
+            color: lightgreen;
+        }
+
+        .option .floor-number {
+            color: white;
+            font-size: 16px;
+            margin-left: 10px;
+        }
     </style>
 </head>
 
@@ -45,7 +137,13 @@
     <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
     <canvas id="myCanvas"></canvas>
     <div id="storeys">
-        <div class="marker"></div>
+        <div class="dropdown closed" id="dropdown">
+            <label for="hamburger" class="hamburger"><i class="fas fa-bars"></i></label>
+            <span class="floor" id="selected-floor">3rd Floor</span>
+        </div>
+        <div class="dropdown-options" id="dropdown-options">
+        </div>
+        <div class="marker" id="marker"></div>
     </div>
     <div class="slideout-sidebar">
         <img class="info-icon" src="../../assets/images/storey_views_icon.png" />
@@ -84,15 +182,14 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import { Viewer, /*StoreyViewsPlugin, math,*/ XKTLoaderPlugin, CameraMemento, Skybox } from "../../dist/xeokit-sdk.min.es.js";
-    import { StoreyViewsPlugin } from '../../src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js';
-    import { math } from '../../src/viewer/scene/math/math.js';
+    import { Viewer, StoreyViewsPlugin, math, XKTLoaderPlugin, CameraMemento, Skybox } from "../../dist/xeokit-sdk.min.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Helping Variables
     //------------------------------------------------------------------------------------------------------------------
 
-    let animationInProgress = false;
+    // let animationInProgress = false;
+    let selectedStoreyId = '';
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera
@@ -166,6 +263,7 @@
         cameraMemento.saveCamera(viewer.scene);
 
         const storeyDiv = document.getElementById("storeys");
+        const optionsDiv = document.getElementById("dropdown-options");
         const storeyIds = Object.keys(storeyViewsPlugin.storeys);
 
         for (var i = 0, len = storeyIds.length; i < len; i++) {
@@ -187,7 +285,7 @@
             img.id = `${storeyId}`;
             // img.style.border = "1px solid #000000";
             img.style.borderRadius = "15px";
-            // img.style.background = "lightblue";
+            img.style.background = "lightblue";
             // img.style.width = storeyMap.width + "px";
             // img.style.height = storeyMap.height + "px";
             img.style.width = "100%";
@@ -196,6 +294,22 @@
             img.style.display = 'none';
 
             storeyDiv.appendChild(img);
+
+            // const option = `
+            //     <div class="option">
+            //         <label for="check" class="check"><i class="fas fa-check"></i></label>
+            //         <span class="floor-number">${getOrdinalSuffix(i + 1)} Floor</span>
+            //     </div>`;
+
+            const option = document.createElement('div');
+            option.className = 'option';
+            option.innerHTML = `
+                <label for="check" class="check"><i class="fas fa-check"></i></label>
+                <span class="floor-number">${getOrdinalSuffix(i + 1)} Floor</span>
+            `;
+            option.id = `option${i + 1}`;
+
+            optionsDiv.appendChild(option);
 
             img.onmouseenter = () => {
                 img.style.cursor = "default";
@@ -221,7 +335,8 @@
             const worldPos = math.vec3();
 
             img.onclick = (e) => {
-
+                //forcefully close the dropdown
+                toggleDropdown(true);
                 const imagePos = [e.offsetX, e.offsetY];
 
                 const pickResult = storeyViewsPlugin.pickStoreyMap(storeyMap, imagePos, {
@@ -240,7 +355,6 @@
                     const idx = camera.xUp ? 0 : (camera.yUp ? 1 : 2); // Find the right axis for "up"
                     const storey = storeyViewsPlugin.storeys[storeyMap.storeyId];
                     worldPos[idx] = (storey.aabb[idx] + storey.aabb[3 + idx]) / 2;
-                    animationInProgress = true;
                     viewer.cameraFlight.flyTo({
                         eye: worldPos,
                         up: viewer.camera.worldUp,
@@ -248,35 +362,32 @@
                         projection: "perspective",
                         duration: 1.5
                     }, () => {
-                        animationInProgress = false;
-                        getStorey(viewer.camera.viewMatrix)
+                        getStorey()
                         viewer.cameraControl.navMode = "firstPerson";
                     });
                 }
             };
         }
 
-        viewer.camera.on('viewMatrix', function (matrix) {
-            if (!animationInProgress) getStorey(matrix);
+        viewer.camera.on('viewMatrix', function () {
+            getStorey();
         })
 
-        // console.log('viewer.camera.position:', viewer.camera);
-        // const cameraPos = math.vec3();
-        // math.decomposeMat4(math.inverseMat4(viewer.camera.viewMatrix, math.mat4()), cameraPos, math.vec4(), math.vec3());
-        // console.log('cameraPos: ', cameraPos)
-        // const storey = storeyViewsPlugin.getStoreyContainingWorldPos(cameraPos);
-        // console.log('storey: ', storey);
-        // document.getElementById(`${storey}`).style.display = "block";
+        document.getElementById("storeys").style.display = "block";
+        document.getElementById("dropdown").addEventListener('click', onDropdownClicked);
+        document.querySelectorAll('.option').forEach((el, index) => {
+            el.addEventListener('click', (e) => {
+                onOptionSelected(e, index + 1);
+            })
+        })
     }
 
+    const marker = document.getElementById("marker");
 
-
-    function getStorey(matrix) {
-        // console.log('getStoreyCalled');
-        const invert = math.mat4();
-        math.inverseMat4(matrix, invert);
-        const cameraPos = [invert[12], invert[13], invert[14]];
+    function getStorey() {
+        const cameraPos = viewer.camera.eye;
         let storeyId = getStoreyId(cameraPos);
+        setFloorDropdown(storeyId);
         hideStoreyMaps();
         const el = document.getElementById(`${storeyId}`)
         el.style.display = "block";
@@ -284,28 +395,16 @@
         const storeyMap = allStoreyMaps.filter(storey => storey.storeyId === storeyId)[0];
         const imageDir = math.vec2(), imagePos = math.vec2();
         storeyViewsPlugin.worldDirToStoreyMap(storeyMap, cameraDir, imageDir);
-        storeyViewsPlugin.worldPosToStoreyMap(storeyMap, [6.730193391766312, 0.7466786957215943, 7.087141290139923], imagePos);
-        // storeyViewsPlugin.worldPosToStoreyMap(storeyMap, cameraPos, imagePos);
-        console.log('imagePos: ', imagePos);
-        const centerX = 400 / 2;
-        const centerY = -400 / 2;
-        // const translateX = centerX - (imagePos[0]);
-        const translateY = centerY - (imagePos[1]);
-        const translateX = (imagePos[0]) - centerX;
-        // const translateY = (imagePos[1]) - centerY;
-        console.log('translateX: ', translateX)
-        console.log('translateY: ', translateY)
+        // storeyViewsPlugin.worldPosToStoreyMap(storeyMap, [6.730193391766312, 0.7466786957215943, 7.087141290139923], imagePos);
+        storeyViewsPlugin.worldPosToStoreyMap(storeyMap, cameraPos, imagePos);
         // console.log('imagePos: ', imagePos);
+        const centerX = 400 / 2;
+        const centerY = 400 / 2;
         const angle = calculateAngleFromDirection(imageDir);
-        // el.style.transform = `translate(0px, 0px) rotate(0deg)`;
-        // el.style.transform = `rotate(${angle}deg)`;
-    }
-
-    function hideStoreyMaps() {
-        const elements = document.querySelectorAll('.storeyMap');
-        elements.forEach(element => {
-            element.style.display = 'none';
-        });
+        const transformedPosition = transformCoordinates(imagePos[0], imagePos[1], -angle, centerX, centerY);
+        const translateX = centerX - transformedPosition.x;
+        const translateY = centerY - transformedPosition.y;
+        el.style.transform = `translate(${translateX}px, ${translateY}px) rotate(${angle}deg)`;
     }
 
     function getStoreyId(cameraPos) {
@@ -320,18 +419,132 @@
         return storey;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    // Dropdown UI
+    //------------------------------------------------------------------------------------------------------------------
+
+    function setFloorDropdown(storeyId) {
+        if (storeyId === selectedStoreyId) return;
+        selectedStoreyId = storeyId;
+        let floor = 0;
+        for (let i = 0; i < allStoreyMaps.length; i++) {
+            if (storeyId === allStoreyMaps[i].storeyId) {
+                floor = i + 1;
+                break;
+            }
+        }
+
+        selectOption(floor);
+    }
+
+    function onDropdownClicked(e) {
+        const dropdown = document.getElementById("dropdown");
+
+        toggleDropdown(dropdown.classList.contains('opened'));
+    }
+
+
+    //takes a paramter describing whether the dropdown is currently visible or not
+    function toggleDropdown(visible) {
+        if (visible) {
+            dropdown.classList.remove('opened');
+            dropdown.classList.add('closed');
+            document.getElementById("dropdown-options").style.display = "none";
+        }
+        else {
+            dropdown.classList.remove('closed');
+            dropdown.classList.add('opened');
+            document.getElementById("dropdown-options").style.display = "flex";
+        }
+    }
+
+    function onOptionSelected(e, floor) {
+        selectOption(floor);
+        toggleDropdown(true);
+        const storeyId = allStoreyMaps[floor - 1].storeyId;
+        const storey = storeyViewsPlugin.storeys[storeyId];
+        const worldPos = [
+            (storey.aabb[0] + storey.aabb[3]) / 2,
+            (storey.aabb[1] + storey.aabb[4]) / 2,
+            (storey.aabb[2] + storey.aabb[5]) / 2
+        ]
+        viewer.cameraFlight.flyTo({
+            eye: worldPos,
+            up: viewer.camera.worldUp,
+            look: math.addVec3(worldPos, viewer.camera.worldForward, []),
+            projection: "perspective",
+            duration: 1.5
+        }, () => {
+            getStorey()
+            viewer.cameraControl.navMode = "firstPerson";
+        });
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Utility functions
+    //------------------------------------------------------------------------------------------------------------------
+
+    function radToDeg(rad) {
+        return rad * (180 / Math.PI);
+    }
+
+    function getOrdinalSuffix(number) {
+        const suffixes = ["th", "st", "nd", "rd"];
+        const v = number % 100;
+        return number + (suffixes[(v - 20) % 10] || suffixes[v] || suffixes[0]);
+    }
+
+    function hideStoreyMaps() {
+        const elements = document.querySelectorAll('.storeyMap');
+        elements.forEach(element => {
+            element.style.display = 'none';
+        });
+    }
+
+    function unSelectAllOptions() {
+        const optionElements = document.querySelectorAll(".option");
+        optionElements.forEach(el => {
+            el.classList.remove('selected');
+        })
+    }
+
+    function selectOption(floor) {
+        unSelectAllOptions();
+        document.getElementById("selected-floor").innerHTML = `${getOrdinalSuffix(floor)} Floor`;
+        document.getElementById(`option${floor}`).classList.add('selected');
+    }
+
     function calculateAngleFromDirection(direction) {
         const angleInRad = Math.atan2(direction[0], direction[1]);
         const angleInDeg = angleInRad * (180 / Math.PI);
         return angleInDeg;
     }
 
-    function radToDeg(rad) {
-        return rad * (180 / Math.PI);
+    // Function to rotate a point around the origin (0, 0)
+    function rotatePoint(x, y, angle) {
+        const radians = angle * Math.PI / 180;
+        const cos = Math.cos(radians);
+        const sin = Math.sin(radians);
+        return {
+            x: cos * x - sin * y,
+            y: sin * x + cos * y
+        };
     }
 
-    function calculateTranslation(cameraPos) {
+    // Function to transform coordinates based on image rotation
+    function transformCoordinates(x, y, angle, centerX, centerY) {
+        // Translate point to origin
+        const translatedX = x - centerX;
+        const translatedY = y - centerY;
 
+        // Rotate the point
+        const rotatedPoint = rotatePoint(translatedX, translatedY, -angle);
+
+        // Translate the point back
+        const finalX = rotatedPoint.x + centerX;
+        const finalY = rotatedPoint.y + centerY;
+
+        return { x: finalX, y: finalY };
     }
 
 </script>

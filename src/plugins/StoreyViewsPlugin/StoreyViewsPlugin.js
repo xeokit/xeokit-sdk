@@ -675,7 +675,6 @@ class StoreyViewsPlugin extends Plugin {
     getStoreyContainingWorldPos(worldPos) {
         for (var storeyId in this.storeys) {
             const storey = this.storeys[storeyId];
-            console.log('storeyAABB: ', (storey.storeyAABB[3] - storey.storeyAABB[0])/2, (storey.storeyAABB[4] - storey.storeyAABB[1])/2, (storey.storeyAABB[5] - storey.storeyAABB[2])/2, worldPos);
             if (math.point3AABB3AbsoluteIntersect(storey.storeyAABB, worldPos)) {
                 return storeyId;
             }
