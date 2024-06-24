@@ -3,10 +3,6 @@ import {Annotation} from "./Annotation.js";
 import {utils} from "../../viewer/scene/utils.js";
 import {math} from "../../viewer/scene/math/math.js";
 
-const tempVec3a = math.vec3();
-const tempVec3b = math.vec3();
-const tempVec3c = math.vec3();
-
 /**
  * {@link Viewer} plugin that creates {@link Annotation}s.
  *
@@ -481,24 +477,6 @@ class AnnotationsPlugin extends Plugin {
             this.error("Viewer component with this ID already exists: " + params.id);
             delete params.id;
         }
-        var worldPos;
-        var entity;
-        params.pickResult = params.pickResult || params.pickRecord;
-        if (params.pickResult) {
-            const pickResult = params.pickResult;
-            if (!pickResult.worldPos || !pickResult.worldNormal) {
-                this.error("Param 'pickResult' does not have both worldPos and worldNormal");
-            } else {
-                const normalizedWorldNormal = math.normalizeVec3(pickResult.worldNormal, tempVec3a);
-                const offsetVec = math.mulVec3Scalar(normalizedWorldNormal, this._surfaceOffset, tempVec3b);
-                const offsetWorldPos = math.addVec3(pickResult.worldPos, offsetVec, tempVec3c);
-                worldPos = offsetWorldPos;
-                entity = pickResult.entity;
-            }
-        } else {
-            worldPos = params.worldPos;
-            entity = params.entity;
-        }
 
         var markerElement = null;
         if (params.markerElementId) {
@@ -519,8 +497,6 @@ class AnnotationsPlugin extends Plugin {
         const annotation = new Annotation(this.viewer.scene, {
             id: params.id,
             plugin: this,
-            entity: entity,
-            worldPos: worldPos,
             container: this._container,
             markerElement: markerElement,
             labelElement: labelElement,
@@ -536,6 +512,15 @@ class AnnotationsPlugin extends Plugin {
             projection: params.projection,
             visible: (params.visible !== false)
         });
+
+        params.pickResult = params.pickResult || params.pickRecord;
+        if (params.pickResult) {
+            annotation.setFromPickResult(params.pickResult);
+        } else {
+            annotation.entity = params.entity;
+            annotation.worldPos = params.worldPos;
+        }
+
         this.annotations[annotation.id] = annotation;
         annotation.on("destroyed", () => {
             delete this.annotations[annotation.id];
