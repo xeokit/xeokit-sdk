@@ -1,5 +1,4 @@
 import {utils} from "../../viewer/scene/utils.js";
-import {math} from "../../viewer";
 
 /**
  * Default data access strategy for {@link XKTLoaderPlugin}.
