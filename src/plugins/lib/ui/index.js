@@ -11,7 +11,82 @@ export function transformToNode(from, to, vec) {
     vec[1] += fromRec.top  - toRec.top;
 };
 
-export function createDraggableDot3D(cfg) {
+export class Dot3D extends Marker {
+    constructor(scene, markerCfg, parentElement, cfg = {}) {
+        super(scene, markerCfg);
+
+        const handler = (cfgEvent, componentEvent) => {
+            return event => {
+                if (cfgEvent) {
+                    cfgEvent(event);
+                }
+                this.fire(componentEvent, event, true);
+            };
+        };
+        this._dot = new Dot(parentElement, {
+            fillColor: cfg.fillColor,
+            zIndex: cfg.zIndex,
+            onMouseOver:   handler(cfg.onMouseOver,   "mouseover"),
+            onMouseLeave:  handler(cfg.onMouseLeave,  "mouseleave"),
+            onMouseWheel:  handler(cfg.onMouseWheel,  "wheel"),
+            onMouseDown:   handler(cfg.onMouseDown,   "mousedown"),
+            onMouseUp:     handler(cfg.onMouseUp,     "mouseup"),
+            onMouseMove:   handler(cfg.onMouseMove,   "mousemove"),
+            onTouchstart:  handler(cfg.onTouchstart,  "touchstart"),
+            onTouchmove:   handler(cfg.onTouchmove,   "touchmove"),
+            onTouchend:    handler(cfg.onTouchend,    "touchend"),
+            onContextMenu: handler(cfg.onContextMenu, "contextmenu")
+        });
+
+        const updateDotPos = () => {
+            const pos = this.canvasPos.slice();
+            transformToNode(scene.canvas.canvas, parentElement, pos);
+            this._dot.setPos(pos[0], pos[1]);
+        };
+
+        this.on("worldPos", updateDotPos);
+
+        const onViewMatrix = scene.camera.on("viewMatrix", updateDotPos);
+        const onProjMatrix = scene.camera.on("projMatrix", updateDotPos);
+        this._cleanup = () => {
+            scene.camera.off(onViewMatrix);
+            scene.camera.off(onProjMatrix);
+            this._dot.destroy();
+        };
+    }
+
+    setClickable(value) {
+        this._dot.setClickable(value);
+    }
+
+    setCulled(value) {
+        this._dot.setCulled(value);
+    }
+
+    setFillColor(value) {
+        this._dot.setFillColor(value);
+    }
+
+    setHighlighted(value) {
+        this._dot.setHighlighted(value);
+    }
+
+    setOpacity(value) {
+        this._dot.setOpacity(value);
+    }
+
+    setVisible(value) {
+        this._dot.setVisible(value);
+    }
+
+    destroy() {
+        this._cleanup();
+        super.destroy();
+    }
+
+}
+
+export function activateDraggableDot(dot, cfg) {
     const extractCFG = function(propName, defaultValue) {
         if (propName in cfg) {
             return cfg[propName];
@@ -23,8 +98,6 @@ export function createDraggableDot3D(cfg) {
     };
 
     const viewer = extractCFG("viewer");
-    const worldPos = extractCFG("worldPos");
-    const color = extractCFG("color");
     const ray2WorldPos = extractCFG("ray2WorldPos");
     const handleMouseEvents = extractCFG("handleMouseEvents", false);
     const handleTouchEvents = extractCFG("handleTouchEvents", false);
@@ -34,8 +107,6 @@ export function createDraggableDot3D(cfg) {
 
     const scene = viewer.scene;
     const canvas = scene.canvas.canvas;
-
-    const marker = new Marker(scene, {});
 
     const pickWorldPos = canvasPos => {
         const origin = math.vec3();
@@ -47,11 +118,7 @@ export function createDraggableDot3D(cfg) {
     const onChange = event => {
         const canvasPos = math.vec2([ event.clientX, event.clientY ]);
         transformToNode(canvas.ownerDocument.body, canvas, canvasPos);
-
-        const worldPos = pickWorldPos(canvasPos);
-        marker.worldPos = worldPos;
-        updateDotPos();
-        onMove(canvasPos, worldPos);
+        onMove(canvasPos, pickWorldPos(canvasPos));
     };
 
     let currentDrag = null;
@@ -97,13 +164,17 @@ export function createDraggableDot3D(cfg) {
         onStart();
     };
 
-    const dotCfg = { fillColor: color };
+    const cleanupDotHandlers = [ ];
+    const dot_on = function(event, callback) {
+        const id = dot.on(event, callback);
+        cleanupDotHandlers.push(() => dot.off(id));
+    };
 
     if (handleMouseEvents)
     {
-        dotCfg.onMouseOver  = () => (! currentDrag) && dot.setOpacity(1.0);
-        dotCfg.onMouseLeave = () => (! currentDrag) && dot.setOpacity(idleOpacity);
-        dotCfg.onMouseDown  = event => {
+        dot_on("mouseover",  () => (! currentDrag) && dot.setOpacity(1.0));
+        dot_on("mouseleave", () => (! currentDrag) && dot.setOpacity(idleOpacity));
+        dot_on("mousedown",  event => {
             if (event.which === 1)
             {
                 canvas.addEventListener("mousemove", onDragMove);
@@ -115,13 +186,13 @@ export function createDraggableDot3D(cfg) {
                         canvas.removeEventListener("mouseup",   onDragEnd);
                     });
             }
-        };
+        });
     }
 
     if (handleTouchEvents)
     {
         let touchStartId;
-        dotCfg.onTouchstart  = event => {
+        dot_on("touchstart", event => {
             event.preventDefault();
             if (event.touches.length === 1)
             {
@@ -130,46 +201,24 @@ export function createDraggableDot3D(cfg) {
                     event => [...event.changedTouches].find(e => e.identifier === touchStartId),
                     () => { touchStartId = null; });
             }
-        };
-        dotCfg.onTouchmove = event => {
+        });
+        dot_on("touchmove", event => {
             event.preventDefault();
             onDragMove(event);
-        };
-        dotCfg.onTouchend  = event => {
+        });
+        dot_on("touchend",  event => {
             event.preventDefault();
             onDragEnd(event);
-        };
+        });
     }
 
-    const dotParent = canvas.ownerDocument.body;
-    const dot = new Dot(dotParent, dotCfg);
-
-    const idleOpacity = 0.5;
+    const idleOpacity = 0.8;
     dot.setOpacity(idleOpacity);
 
-    const updateDotPos = function() {
-        const pos = marker.canvasPos.slice();
-        transformToNode(canvas, dotParent, pos);
-        dot.setPos(pos[0], pos[1]);
-    };
-
-    marker.worldPos = worldPos;
-    updateDotPos();
-
-    const onViewMatrix = scene.camera.on("viewMatrix", updateDotPos);
-    const onProjMatrix = scene.camera.on("projMatrix", updateDotPos);
-
-    return {
-        setActive: value => dot.setClickable(value),
-        getWorldPos: () => marker.worldPos,
-        setWorldPos: pos => { marker.worldPos = pos; updateDotPos(); },
-        destroy: function() {
-            currentDrag && currentDrag.cleanup();
-            scene.camera.off(onViewMatrix);
-            scene.camera.off(onProjMatrix);
-            marker.destroy();
-            dot.destroy();
-        }
+    return function() {
+        currentDrag && currentDrag.cleanup();
+        cleanupDotHandlers.forEach(c => c());
+        dot.setOpacity(1.0);
     };
 };
 
@@ -187,11 +236,10 @@ export function activateDraggableDots(cfg) {
     const viewer = extractCFG("viewer");
     const handleMouseEvents = extractCFG("handleMouseEvents", false);
     const handleTouchEvents = extractCFG("handleTouchEvents", false);
-    const snapping = extractCFG("snapping");
     const pointerLens = extractCFG("pointerLens", null);
-    const color = extractCFG("color");
-    const markers = extractCFG("markers");
-    const onEdit = extractCFG("onEdit", nop);
+    const dots = extractCFG("dots");
+    const ray2WorldPos = extractCFG("ray2WorldPos");
+    const onEnd = extractCFG("onEnd", nop);
 
     const updatePointerLens = (pointerLens
                                ? function(canvasPos) {
@@ -203,62 +251,36 @@ export function activateDraggableDots(cfg) {
                                }
                                : () => { });
 
-    const dots = markers.map(marker => {
-        let initDotPos, initMarkerPos;
-        const setCoord = coord => marker.worldPos = coord;
-
-        const dot = createDraggableDot3D({
+    const cleanups = dots.map(dot => {
+        let initPos;
+        return activateDraggableDot(dot, {
             handleMouseEvents: handleMouseEvents,
             handleTouchEvents: handleTouchEvents,
             viewer: viewer,
-            worldPos: marker.worldPos,
-            color: color,
-            ray2WorldPos: (orig, dir, canvasPos) => {
-                const tryPickWorldPos = snap => {
-                    const pickResult = viewer.scene.pick({
-                        canvasPos: canvasPos,
-                        snapToEdge: snap,
-                        snapToVertex: snap,
-                        pickSurface: true  // <<------ This causes picking to find the intersection point on the entity
-                    });
-
-                    // If - when snapping - no pick found, then try w/o snapping
-                    return (pickResult && pickResult.worldPos) ? pickResult.worldPos : (snap && tryPickWorldPos(false));
-                };
-
-                return tryPickWorldPos(!!snapping) || initDotPos;
-            },
+            ray2WorldPos: (orig, dir, canvasPos) => (ray2WorldPos(orig, dir, canvasPos) || initPos),
             onStart: () => {
-                initDotPos = dot.getWorldPos().slice();
-                initMarkerPos = marker.worldPos.slice();
+                initPos = dot.worldPos.slice();
                 setOtherDotsActive(false, dot);
             },
             onMove: (canvasPos, worldPos) => {
                 updatePointerLens(canvasPos);
-                setCoord(worldPos);
+                dot.worldPos = worldPos;
             },
             onEnd: () => {
-                if (! math.compareVec3(initMarkerPos, marker.worldPos))
-                {
-                    onEdit();
-                }
-                else
-                {
-                    dot.setWorldPos(initDotPos);
-                    setCoord(initMarkerPos);
+                if (! onEnd(initPos, dot)) {
+                    dot.worldPos = initPos;
                 }
                 updatePointerLens(null);
                 setOtherDotsActive(true, dot);
             }
         });
-        return dot;
     });
 
-    const setOtherDotsActive = (active, dot) => dots.forEach(d => (d !== dot) && d.setActive(active));
+    const setOtherDotsActive = (active, dot) => dots.forEach(d => (d !== dot) && d.setClickable(active));
     setOtherDotsActive(true);
 
     return function() {
-        dots.forEach(m => m.destroy());
+        cleanups.forEach(c => c());
         updatePointerLens(null);
     };
 }

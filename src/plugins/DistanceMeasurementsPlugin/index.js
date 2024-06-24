@@ -4,6 +4,7 @@ export * from "./DistanceMeasurementsMouseControl.js";
 export * from "./DistanceMeasurementsTouchControl.js";
 
 import {Component} from "../../viewer/scene/Component.js";
+import {math} from "../../viewer/scene/math/math.js";
 import {activateDraggableDots} from "../../../src/plugins/lib/ui/index.js";
 
 class DistanceMeasurementEditControl extends Component {
@@ -28,11 +29,30 @@ class DistanceMeasurementEditControl extends Component {
             viewer: viewer,
             handleMouseEvents: handleMouseEvents,
             handleTouchEvents: handleTouchEvents,
-            snapping: cfg.snapping,
             pointerLens: cfg.pointerLens,
-            color: measurement.color,
-            markers: [ measurement.origin, measurement.target ],
-            onEdit: () => this.fire("edited")
+            dots: [ measurement.origin, measurement.target ],
+            ray2WorldPos: (orig, dir, canvasPos) => {
+                const tryPickWorldPos = snap => {
+                    const pickResult = viewer.scene.pick({
+                        canvasPos: canvasPos,
+                        snapToEdge: snap,
+                        snapToVertex: snap,
+                        pickSurface: true  // <<------ This causes picking to find the intersection point on the entity
+                    });
+
+                    // If - when snapping - no pick found, then try w/o snapping
+                    return (pickResult && pickResult.worldPos) ? pickResult.worldPos : (snap && tryPickWorldPos(false));
+                };
+
+                return tryPickWorldPos(!!cfg.snapping);
+            },
+            onEnd: (initPos, dot) => {
+                const changed = ! math.compareVec3(initPos, dot.worldPos);
+                if (changed) {
+                    this.fire("edited");
+                }
+                return changed;
+            }
         });
 
         const destroyCb = measurement.on("destroyed", cleanup);

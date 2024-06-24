@@ -7,7 +7,7 @@ import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
 import {math} from "../../viewer/scene/math/math.js";
 import {Mesh} from "../../viewer/scene/mesh/Mesh.js";
 import {Dot} from "../lib/html/Dot.js";
-import {createDraggableDot3D, transformToNode} from "../../../src/plugins/lib/ui/index.js";
+import {activateDraggableDots, Dot3D, transformToNode} from "../../../src/plugins/lib/ui/index.js";
 
 const hex2rgb = function(color) {
     const rgb = idx => parseInt(color.substr(idx + 1, 2), 16) / 255;
@@ -1612,26 +1612,19 @@ export class ZonesPolysurfaceTouchControl extends Component {
 
 export class ZoneEditControl extends Component {
     constructor(zone, cfg, handleMouseEvents, handleTouchEvents) {
-        super(zone.plugin.viewer.scene);
-        const self = this;
+        const viewer = zone.plugin.viewer;
+        const scene = viewer.scene;
+        super(scene);
 
         const altitude = zone._geometry.altitude;
-        const pointerLens = cfg && cfg.pointerLens;
-        const updatePointerLens = (pointerLens
-                                   ? function(canvasPos) {
-                                       pointerLens.visible = !! canvasPos;
-                                       if (canvasPos)
-                                       {
-                                           pointerLens.canvasPos = canvasPos;
-                                       }
-                                   }
-                                   : () => { });
 
         const dots = zone._geometry.planeCoordinates.map(planeCoord => {
-            let initWorldPos, initPlaneCoord;
-            const setPlaneCoord = function(coord) {
-                planeCoord[0] = coord[0];
-                planeCoord[1] = coord[1];
+            const dotParent = scene.canvas.canvas.ownerDocument.body;
+            const dot = new Dot3D(scene, {}, dotParent, { fillColor: zone._color });
+            dot.worldPos = math.vec3([ planeCoord[0], altitude, planeCoord[1] ]);
+            dot.on("worldPos", function() {
+                planeCoord[0] = dot.worldPos[0];
+                planeCoord[1] = dot.worldPos[2];
                 try {
                     zone._rebuildMesh();
                 } catch (e) {
@@ -1640,46 +1633,29 @@ export class ZoneEditControl extends Component {
                         zone._zoneMesh = null;
                     }
                 }
-            };
-
-            const dot = createDraggableDot3D({
-                handleMouseEvents: handleMouseEvents,
-                handleTouchEvents: handleTouchEvents,
-                viewer: zone.plugin.viewer,
-                worldPos: math.vec3([ planeCoord[0], altitude, planeCoord[1] ]),
-                color: zone._color,
-                ray2WorldPos: (orig, dir) => planeIntersect(altitude, math.vec3([ 0, 1, 0 ]), orig, dir),
-                onStart: () => {
-                    initWorldPos = dot.getWorldPos().slice();
-                    initPlaneCoord = planeCoord.slice();
-                    set_other_dots_active(false, dot);
-                },
-                onMove: (canvasPos, worldPos) => {
-                    updatePointerLens(canvasPos);
-                    setPlaneCoord([ worldPos[0], worldPos[2] ]);
-                },
-                onEnd: () => {
-                    if (zone._zoneMesh)
-                    {
-                        self.fire("edited");
-                    }
-                    else
-                    {
-                        dot.setWorldPos(initWorldPos);
-                        setPlaneCoord(initPlaneCoord);
-                    }
-                    updatePointerLens(null);
-                    set_other_dots_active(true, dot);
-                }
             });
             return dot;
         });
-        const set_other_dots_active = (active, dot) => dots.forEach(d => (d !== dot) && d.setActive(active));
-        set_other_dots_active(true);
+
+        const cleanupDrag = activateDraggableDots({
+            viewer: viewer,
+            handleMouseEvents: handleMouseEvents,
+            handleTouchEvents: handleTouchEvents,
+            pointerLens: cfg && cfg.pointerLens,
+            dots: dots,
+            ray2WorldPos: (orig, dir) => planeIntersect(altitude, math.vec3([ 0, 1, 0 ]), orig, dir),
+            onEnd: (initPos, dot) => {
+                if (zone._zoneMesh)
+                {
+                    this.fire("edited");
+                }
+                return !! zone._zoneMesh;
+            }
+        });
 
         const cleanup = function() {
-            dots.forEach(m => m.destroy());
-            updatePointerLens(null);
+            cleanupDrag();
+            dots.forEach(d => d.destroy());
         };
 
         const destroyCb = zone.on("destroyed", cleanup);
