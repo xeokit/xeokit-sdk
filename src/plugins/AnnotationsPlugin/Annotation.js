@@ -1,5 +1,10 @@
+import {math} from '../../viewer/scene/math/math.js';
 import {Marker} from "../../viewer/scene/marker/Marker.js";
 import {utils} from "../../viewer/scene/utils.js";
+
+const tempVec3a = math.vec3();
+const tempVec3b = math.vec3();
+const tempVec3c = math.vec3();
 
 /**
  * A {@link Marker} with an HTML label attached to it, managed by an {@link AnnotationsPlugin}.
@@ -39,6 +44,9 @@ class Annotation extends Marker {
             this._marker = cfg.markerElement;
             this._marker.addEventListener("click", this._onMouseClickedExternalMarker = () => {
                 this.plugin.fire("markerClicked", this);
+            });
+            this._marker.addEventListener("contextmenu", this._onContextMenuExtenalMarker = () => {
+                this.plugin.fire("contextmenu", this);
             });
             this._marker.addEventListener("mouseenter", this._onMouseEnterExternalMarker = () => {
                 this.plugin.fire("markerMouseEnter", this);
@@ -159,6 +167,10 @@ class Annotation extends Marker {
             this._marker.addEventListener("click", () => {
                 this.plugin.fire("markerClicked", this);
             });
+            this._marker.addEventListener("contextmenu", e => {
+                e.preventDefault();
+                this.plugin.fire("contextmenu", this);
+            });
             this._marker.addEventListener("mouseenter", () => {
                 this.plugin.fire("markerMouseEnter", this);
             });
@@ -218,6 +230,24 @@ class Annotation extends Marker {
             }
         }
         return template;
+    }
+
+    /**
+     * Sets the Marker's worldPos and entity properties based on passed {@link PickResult}
+     *
+     * @param {PickResult} pickResult A PickResult to position the Marker at.
+     */
+    setFromPickResult(pickResult) {
+        if (!pickResult.worldPos || !pickResult.worldNormal) {
+            this.error("Param 'pickResult' does not have both worldPos and worldNormal");
+        } else {
+            const normalizedWorldNormal = math.normalizeVec3(pickResult.worldNormal, tempVec3a);
+            const offset = (this.plugin && this.plugin.surfaceOffset) || 0;
+            const offsetVec = math.mulVec3Scalar(normalizedWorldNormal, offset, tempVec3b);
+            const offsetWorldPos = math.addVec3(pickResult.worldPos, offsetVec, tempVec3c);
+            this.entity = pickResult.entity;
+            this.worldPos = offsetWorldPos;
+        }
     }
 
     /**
@@ -350,6 +380,7 @@ class Annotation extends Marker {
                 this._marker = null;
             } else {
                 this._marker.removeEventListener("click", this._onMouseClickedExternalMarker);
+                this._marker.removeEventListener("contextmenu", this._onContextMenuExtenalMarker);
                 this._marker.removeEventListener("mouseenter", this._onMouseEnterExternalMarker);
                 this._marker.removeEventListener("mouseleave", this._onMouseLeaveExternalMarker);
                 this._marker = null;

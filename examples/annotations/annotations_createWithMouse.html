@@ -189,6 +189,8 @@
 
     var i = 1;
 
+    let editedAnnotation = null;
+
     viewer.scene.input.on("mouseclicked", (coords) => {
 
         const pickResult = viewer.scene.pick({
@@ -197,6 +199,13 @@
         });
 
         if (pickResult) {
+
+            if (editedAnnotation) {
+                editedAnnotation.setFromPickResult(pickResult);
+                editedAnnotation.setField("markerBGColor", "red");
+                editedAnnotation = null;
+                return;
+            }
 
             const annotation = annotations.createAnnotation({
                 id: "myAnnotation" + i,
@@ -213,6 +222,12 @@
 
             i++;
         }
+    });
+
+    annotations.on("contextmenu", annotation => {
+        // Initiate annotation's position change
+        editedAnnotation = annotation;
+        editedAnnotation.setField("markerBGColor", "pink");
     });
 
     window.viewer = viewer;
