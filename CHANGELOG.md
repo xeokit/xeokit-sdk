@@ -1,5 +1,20 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.25](https://github.com/xeokit/xeokit-sdk/compare/v2.6.24...v2.6.25)
+
+### 25 June 2024
+
+-  [FIX] Include buildLineGeometry in build] - [#1551](https://github.com/xeokit/xeokit-sdk/pull/1551)
+-  XEOK-37 Edit Annotation Example - [#1550](https://github.com/xeokit/xeokit-sdk/pull/1550)
+-  XEOK-36 Edit Measurement update - [#1548](https://github.com/xeokit/xeokit-sdk/pull/1548)
+-  Fix failing XKTDefaultDataSource load - [#1549](https://github.com/xeokit/xeokit-sdk/pull/1549)
+
+# [v2.6.24](https://github.com/xeokit/xeokit-sdk/compare/v2.6.23...v2.6.24)
+
+### 21 June 2024
+
+-  [FIX] Fix Mesh measurement - [#1546](https://github.com/xeokit/xeokit-sdk/pull/1546)
+
 # [v2.6.23](https://github.com/xeokit/xeokit-sdk/compare/v2.6.22...v2.6.23)
 
 ### 19 June 2024
