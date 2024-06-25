@@ -649,6 +649,8 @@ class CameraControl extends Component {
             snapToEdge: DEFAULT_SNAP_EDGE,
             snapRadius: DEFAULT_SNAP_PICK_RADIUS,
 
+            keyboardEnabledOnlyIfMouseover: true,
+
             // Rotation
 
             dragRotationRate: 360.0,
@@ -958,6 +960,24 @@ class CameraControl extends Component {
      */
     get snapRadius() {
         return this._configs.snapRadius;
+    }
+
+    /**
+     * If `true`, the keyboard shortcuts are enabled ONLY if the mouse is over the canvas.
+     * 
+     * @param {boolean} value
+     */
+    set keyboardEnabledOnlyIfMouseover(value) {
+        this._configs.keyboardEnabledOnlyIfMouseover = !!value;
+    }
+
+    /**
+     * Gets whether the keyboard shortcuts are enabled ONLY if the mouse is over the canvas or ALWAYS.
+     * 
+     * @returns {boolean}
+     */
+    get keyboardEnabledOnlyIfMouseover() {
+        return this._configs.keyboardEnabledOnlyIfMouseover;
     }
     
     /**

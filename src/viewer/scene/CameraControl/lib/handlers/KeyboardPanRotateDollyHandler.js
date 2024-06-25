@@ -22,7 +22,7 @@ class KeyboardPanRotateDollyHandler {
             if (!(configs.active && configs.pointerEnabled) || (!scene.input.keyboardEnabled)) {
                 return;
             }
-            if (!states.mouseover) {
+            if (configs.keyboardEnabledOnlyIfMouseover && !states.mouseover) {
                 return;
             }
             keyDownMap[keyCode] = true;
@@ -53,7 +53,7 @@ class KeyboardPanRotateDollyHandler {
                 return;
             }
 
-            if (!states.mouseover) {
+            if (configs.keyboardEnabledOnlyIfMouseover &&  !states.mouseover) {
                 return;
             }
 

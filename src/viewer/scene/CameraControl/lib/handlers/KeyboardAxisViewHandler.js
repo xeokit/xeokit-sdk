@@ -29,7 +29,7 @@ class KeyboardAxisViewHandler {
                 return;
             }
 
-            if (!states.mouseover) {
+            if (configs.keyboardEnabledOnlyIfMouseover && !states.mouseover) {
                 return;
             }
 
