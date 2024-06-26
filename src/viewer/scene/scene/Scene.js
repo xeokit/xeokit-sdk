@@ -2099,10 +2099,10 @@ class Scene extends Component {
      */
     get center() {
         if (this._aabbDirty || !this._center) {
-            if (!this._center || !this._center) {
+            const aabb = this.aabb;
+            if (!this._center) {
                 this._center = math.vec3();
             }
-            const aabb = this.aabb;
             this._center[0] = (aabb[0] + aabb[3]) / 2;
             this._center[1] = (aabb[1] + aabb[4]) / 2;
             this._center[2] = (aabb[2] + aabb[5]) / 2;
@@ -2177,6 +2177,7 @@ class Scene extends Component {
             this._aabb[4] = ymax;
             this._aabb[5] = zmax;
             this._aabbDirty = false;
+            this._center = null;
         }
         return this._aabb;
     }
