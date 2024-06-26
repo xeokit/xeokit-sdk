@@ -75,6 +75,7 @@ class Annotation extends Marker {
         this._values = cfg.values || {};
         this._layoutDirty = true;
         this._visibilityDirty = true;
+        this._labelPosition = 24;
 
         this._buildHTML();
 
@@ -205,17 +206,23 @@ class Annotation extends Marker {
      * @private
      */
     _updatePosition() {
+        const px = x => x + "px";
         const boundary = this.scene.canvas.boundary;
-        const left = boundary[0];
-        const top = boundary[1];
-        const canvasPos = this.canvasPos;
-        this._marker.style.left = (Math.floor(left + canvasPos[0]) - 12) + "px";
-        this._marker.style.top = (Math.floor(top + canvasPos[1]) - 12) + "px";
+        const left = boundary[0] + this.canvasPos[0];
+        const top  = boundary[1] + this.canvasPos[1];
+        const markerRect = this._marker.getBoundingClientRect();
+        const markerWidth = markerRect.width;
+        const markerDir = (this._markerAlign === "right") ? -1 : ((this._markerAlign === "center") ? 0 : 1);
+        const markerCenter = left + markerDir * (markerWidth / 2 - 12);
+        this._marker.style.left = px(markerCenter - markerWidth / 2);
+        this._marker.style.top  = px(top - 12);
         this._marker.style["z-index"] = 90005 + Math.floor(this._viewPos[2]) + 1;
-        const offsetX = 20;
-        const offsetY = -17;
-        this._label.style.left = 20 + Math.floor(left + canvasPos[0] + offsetX) + "px";
-        this._label.style.top = Math.floor(top + canvasPos[1] + offsetY) + "px";
+
+        const labelRect = this._label.getBoundingClientRect();
+        const labelWidth = labelRect.width;
+        const labelDir = Math.sign(this._labelPosition);
+        this._label.style.left = px(markerCenter + labelDir * (markerWidth / 2 + Math.abs(this._labelPosition) + labelWidth / 2) - labelWidth / 2);
+        this._label.style.top  = px(top - 17);
         this._label.style["z-index"] = 90005 + Math.floor(this._viewPos[2]) + 1;
     }
 
@@ -247,6 +254,37 @@ class Annotation extends Marker {
             const offsetWorldPos = math.addVec3(pickResult.worldPos, offsetVec, tempVec3c);
             this.entity = pickResult.entity;
             this.worldPos = offsetWorldPos;
+        }
+    }
+
+    /**
+     * Sets the horizontal alignment of the Annotation's marker HTML.
+     *
+     * @param {String} align Either "left", "center", "right" (default "left")
+     */
+    setMarkerAlign(align) {
+        const valid = [ "left", "center", "right" ];
+        if (! valid.includes(align)) {
+            this.error("Param 'align' should be one of: " + JSON.stringify(valid));
+        } else {
+            this._markerAlign = align;
+            this._updatePosition();
+        }
+    }
+
+    /**
+     * Sets the relative horizontal position of the Annotation's label HTML.
+     *
+     * @param {Number} position Negative - to the left, positive - to the right, otherwise ignore (default 24)
+     */
+    setLabelPosition(position) {
+        if (typeof position !== "number") {
+            this.error("Param 'position' is not a number");
+        } else if (position === 0) {
+            this.error("Param 'position' is zero");
+        } else {
+            this._labelPosition = position;
+            this._updatePosition();
         }
     }
 
