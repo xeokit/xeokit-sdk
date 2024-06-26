@@ -539,7 +539,7 @@ class DistanceMeasurement extends Component {
                 }
 
                 if (!this._zAxisLabelCulled) {
-                    if(this._measurementOrientation === 'Vertical') {
+                    if(this._measurementOrientation === 'Vertical' && this.useRotationAdjustment) {
                         this._zAxisLabel.setPrefix("");
                         this._zAxisLabel.setText(tilde + Math.abs(math.lenVec3(math.subVec3(this._targetWorld, [this._originWorld[0], this._targetWorld[1], this._originWorld[2]], distVec3)) * scale).toFixed(2) + unitAbbrev);
                     }
