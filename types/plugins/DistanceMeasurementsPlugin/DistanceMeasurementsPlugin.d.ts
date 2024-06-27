@@ -38,6 +38,59 @@ export declare type DistanceMeasurementsPluginConfiguration = {
   zIndex?: number;
 };
 
+
+/**
+ * Event fire by {@link DistanceMeasurementsPlugin} when mouse enters over a {@link DistanceMeasurement}.
+ */
+export declare type DistanceMeasurementMouseOverEvent = {
+
+    /**
+     * The plugin.
+     */
+    plugin: DistanceMeasurementsPlugin;
+
+    /**
+     * The measurement.
+     */
+    angleMeasurement: DistanceMeasurement;
+
+    /**
+     * The measurement.
+     */
+    measurement: DistanceMeasurement;
+
+    /**
+     * The original mouse event.
+     */
+    event: MouseEvent;
+}
+
+/**
+ * Event fire by {@link DistanceMeasurementsPlugin} when mouse leaves a {@link DistanceMeasurement}.
+ */
+export declare type DistanceMeasurementMouseLeaveEvent = {
+
+    /**
+     * The plugin.
+     */
+    plugin: DistanceMeasurementsPlugin;
+
+    /**
+     * The measurement.
+     */
+    angleMeasurement: DistanceMeasurement;
+
+    /**
+     * The measurement.
+     */
+    measurement: DistanceMeasurement;
+
+    /**
+     * The original mouse event.
+     */
+    event: MouseEvent;
+}
+
 /**
  * {@link Viewer} plugin for measuring point-to-point distances.
  */
@@ -134,12 +187,40 @@ export declare class DistanceMeasurementsPlugin extends Plugin {
    */
   clear(): void;
 
+    /**
+     * Fires when mouse is over a measurement.
+     * @param {String} event The mouseOver event
+     * @param {Function} callback Callback fired on the event
+     */
+    on(event: "mouseOver", callback: (event: DistanceMeasurementMouseOverEvent)=> void): string;
+
+    /**
+     * Fires when mouse leaves a measurement.
+     * @param {String} event The mouseLeave event
+     * @param {Function} callback Callback fired on the event
+     */
+    on(event: "mouseLeave", callback: (event: DistanceMeasurementMouseLeaveEvent)=> void): string;
+
+    /**
+     * Fires when a context menu is to be opened on a measurement.
+     * @param {String} event The contextMenu event
+     * @param {Function} callback Callback fired on the event
+     */
+    on(event: "contextMenu", callback: (measurement: DistanceMeasurement)=> void): string;
+
   /**
    * Fires when a measurement is created.
    * @param {String} event The measurementCreated event
    * @param {Function} callback Callback fired on the event
    */
   on(event: "measurementCreated", callback: (measurement: DistanceMeasurement)=> void): string;
+
+    /**
+     * Fires when a measurement is completed.
+     * @param {String} event The measurementEnd event
+     * @param {Function} callback Callback fired on the event
+     */
+    on(event: "measurementStart", callback: (measurement: DistanceMeasurement)=> void): string;
 
   /**
    * Fires when a measurement is completed.
