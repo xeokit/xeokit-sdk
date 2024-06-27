@@ -353,27 +353,27 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
         if (!this._active) {
             return;
         }
-
+        
         this.fire("activated", false);
 
         if (this.pointerLens) {
             this.pointerLens.visible = false;
         }
-        if (this._markerDiv) {
-            this._destroyMarkerDiv()
-        }
-        this.reset();
+        // if (this._markerDiv) {
+        //     this._destroyMarkerDiv()
+        // }
+        // this.reset();
         const canvas = this.scene.canvas.canvas;
         canvas.removeEventListener("mousedown", this._onMouseDown);
         canvas.removeEventListener("mouseup", this._onMouseUp);
         const cameraControl = this.distanceMeasurementsPlugin.viewer.cameraControl;
         cameraControl.off(this._onCameraControlHoverSnapOrSurface);
         cameraControl.off(this._onCameraControlHoverSnapOrSurfaceOff);
-        if (this._currentDistanceMeasurement) {
-            this.distanceMeasurementsPlugin.fire("measurementCancel", this._currentDistanceMeasurement);
-            this._currentDistanceMeasurement.destroy();
-            this._currentDistanceMeasurement = null;
-        }
+        // if (this._currentDistanceMeasurement) {
+        //     this.distanceMeasurementsPlugin.fire("measurementCancel", this._currentDistanceMeasurement);
+        //     this._currentDistanceMeasurement.destroy();
+        //     this._currentDistanceMeasurement = null;
+        // }
         this._active = false;
     }
 
