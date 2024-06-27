@@ -1,5 +1,14 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.26](https://github.com/xeokit/xeokit-sdk/compare/v2.6.25...v2.6.26)
+
+### 27 June 2024
+
+-  [FIX] Fix types for measurement plugin events] - [#1557](https://github.com/xeokit/xeokit-sdk/pull/1557)
+-  XEOK-44 Annotation text adjustment - [#1554](https://github.com/xeokit/xeokit-sdk/pull/1554)
+-  [FIX] Incorrect cached scene center - [#1553](https://github.com/xeokit/xeokit-sdk/pull/1553)
+-  [FEATURE] Add camera control keyboardEnabledOnlyIfMouseover - [#1552](https://github.com/xeokit/xeokit-sdk/pull/1552)
+
 # [v2.6.25](https://github.com/xeokit/xeokit-sdk/compare/v2.6.24...v2.6.25)
 
 ### 25 June 2024
