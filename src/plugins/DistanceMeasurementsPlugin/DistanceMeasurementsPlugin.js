@@ -489,7 +489,7 @@ class DistanceMeasurementsPlugin extends Plugin {
       axisVisible: params.axisVisible !== false && this.defaultAxisVisible !== false,
       xAxisVisible: params.xAxisVisible !== false && this.defaultXAxisVisible !== false,
       yAxisVisible: params.yAxisVisible !== false && this.defaultYAxisVisible !== false,
-      zAxisVisibld: params.zAxisVisible !== false && this.defaultZAxisVisible !== false,
+      zAxisVisible: params.zAxisVisible !== false && this.defaultZAxisVisible !== false,
       xLabelEnabled: params.xLabelEnabled !== false && this.defaultXLabelEnabled !== false,
       yLabelEnabled: params.yLabelEnabled !== false && this.defaultYLabelEnabled !== false,
       zLabelEnabled: params.zLabelEnabled !== false && this.defaultZLabelEnabled !== false,
