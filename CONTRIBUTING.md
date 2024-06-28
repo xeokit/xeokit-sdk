@@ -23,6 +23,13 @@ We welcome suggestions for new features or improvements. To suggest an enhanceme
 - Explain why the enhancement would be useful.
 - Provide any relevant code snippets or examples.
 
+### Check the Checklist
+1. create code
+2. update ESDoc comments
+3. update/create TypeScript types
+4. create an example to demo the feature
+5. complete description in PR request, with links to example/docs if relevant
+
 ### Pull Requests
 
 Before starting work on a new feature or bug fix, please check open issues and existing pull requests to avoid duplication. If you plan to work on something substantial, it's a good idea to open an issue first to discuss your ideas.
@@ -52,17 +59,6 @@ Please make sure you have signed our [Contributor License Agreement](Link!). We 
    ```sh
    npm install
    ```
-3. Run the development server:
-   ```sh
-   npm start
-   ```
-
-### Running Tests
-
-We use [Jest](https://jestjs.io/) for testing. To run the test suite:
-```sh
-npm test
-```
 
 ### Coding Standards
 
