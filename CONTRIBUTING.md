@@ -44,7 +44,7 @@ To submit a pull request:
 
 ### Sign the Contributor License Agreement
 
-Please make sure you have signed our [Contributor License Agreement](Link!). We are not asking you to assign copyright to us, but to give us the right to distribute your code without restriction. We ask this of all contributors in order to assure our users of the origin and continuing existence of the code. You only need to sign the CLA once.
+Please make sure you have signed our [Contributor License Agreement](CLA-Creoox.pdf). We are not asking you to assign copyright to us, but to give us the right to distribute your code without restriction. We ask this of all contributors in order to assure our users of the origin and continuing existence of the code. You only need to sign the CLA once. And if you represent a company, then please [contact us](https://creoox.com/en/contact/).
 
 ## Development Environment
 
