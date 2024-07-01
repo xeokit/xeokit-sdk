@@ -4919,6 +4919,16 @@ const math = {
         const vec4Near = new FloatArrayType(4);
         const vec4Far  = new FloatArrayType(4);
 
+        const clipToWorld = (clipX, clipY, clipZ, outVec4) => {
+            outVec4[0] = clipX;
+            outVec4[1] = clipY;
+            outVec4[2] = clipZ;
+            outVec4[3] = 1;
+
+            math.transformVec4(pvMatInv, outVec4, outVec4);
+            math.mulVec4Scalar(outVec4, 1 / outVec4[3]);
+        };
+
         return (canvas, viewMatrix, projMatrix, canvasPos, worldRayOrigin, worldRayDir) => {
 
             math.mulMat4(projMatrix, viewMatrix, pvMatInv);
@@ -4930,21 +4940,9 @@ const math = {
             const clipX =     2 * canvasPos[0] / canvas.width - 1;  // Calculate clip space coordinates
             const clipY = 1 - 2 * canvasPos[1] / canvas.height;
 
-            vec4Near[0] = clipX;
-            vec4Near[1] = clipY;
-            vec4Near[2] = -1;
-            vec4Near[3] = 1;
+            clipToWorld(clipX, clipY, -1, vec4Near);
 
-            math.transformVec4(pvMatInv, vec4Near, vec4Near);
-            math.mulVec4Scalar(vec4Near, 1 / vec4Near[3]);
-
-            vec4Far[0] = clipX;
-            vec4Far[1] = clipY;
-            vec4Far[2] = 1;
-            vec4Far[3] = 1;
-
-            math.transformVec4(pvMatInv, vec4Far, vec4Far);
-            math.mulVec4Scalar(vec4Far, 1 / vec4Far[3]);
+            clipToWorld(clipX, clipY,  1, vec4Far);
 
             worldRayOrigin[0] = vec4Far[0];
             worldRayOrigin[1] = vec4Far[1];
