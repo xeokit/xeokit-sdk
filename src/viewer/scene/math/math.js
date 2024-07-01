@@ -4947,9 +4947,9 @@ const math = {
 
             clipToWorld(clipX, clipY,  1, isOrtho, vec4Far);
 
-            worldRayOrigin[0] = vec4Far[0];
-            worldRayOrigin[1] = vec4Far[1];
-            worldRayOrigin[2] = vec4Far[2];
+            worldRayOrigin[0] = vec4Near[0];
+            worldRayOrigin[1] = vec4Near[1];
+            worldRayOrigin[2] = vec4Near[2];
 
             math.subVec3(vec4Far, vec4Near, worldRayDir);
 
