@@ -4915,17 +4915,14 @@ const math = {
      */
     canvasPosToWorldRay: ((() => {
 
-        const tempMat4b = new FloatArrayType(16);
-        const tempMat4c = new FloatArrayType(16);
-        const tempVec4a = new FloatArrayType(4);
-        const tempVec4b = new FloatArrayType(4);
-        const tempVec4c = new FloatArrayType(4);
-        const tempVec4d = new FloatArrayType(4);
+        const pvMatInv = new FloatArrayType(16);
+        const vec4Near = new FloatArrayType(4);
+        const vec4Far  = new FloatArrayType(4);
 
         return (canvas, viewMatrix, projMatrix, canvasPos, worldRayOrigin, worldRayDir) => {
 
-            const pvMat = math.mulMat4(projMatrix, viewMatrix, tempMat4b);
-            const pvMatInverse = math.inverseMat4(pvMat, tempMat4c);
+            math.mulMat4(projMatrix, viewMatrix, pvMatInv);
+            math.inverseMat4(pvMatInv, pvMatInv);
 
             // Calculate clip space coordinates, which will be in range
             // of x=[-1..1] and y=[-1..1], with y=(+1) at top
@@ -4936,27 +4933,27 @@ const math = {
             const clipX = (canvasPos[0] - canvasWidth / 2) / (canvasWidth / 2);  // Calculate clip space coordinates
             const clipY = -(canvasPos[1] - canvasHeight / 2) / (canvasHeight / 2);
 
-            tempVec4a[0] = clipX;
-            tempVec4a[1] = clipY;
-            tempVec4a[2] = -1;
-            tempVec4a[3] = 1;
+            vec4Near[0] = clipX;
+            vec4Near[1] = clipY;
+            vec4Near[2] = -1;
+            vec4Near[3] = 1;
 
-            math.transformVec4(pvMatInverse, tempVec4a, tempVec4b);
-            math.mulVec4Scalar(tempVec4b, 1 / tempVec4b[3]);
+            math.transformVec4(pvMatInv, vec4Near, vec4Near);
+            math.mulVec4Scalar(vec4Near, 1 / vec4Near[3]);
 
-            tempVec4c[0] = clipX;
-            tempVec4c[1] = clipY;
-            tempVec4c[2] = 1;
-            tempVec4c[3] = 1;
+            vec4Far[0] = clipX;
+            vec4Far[1] = clipY;
+            vec4Far[2] = 1;
+            vec4Far[3] = 1;
 
-            math.transformVec4(pvMatInverse, tempVec4c, tempVec4d);
-            math.mulVec4Scalar(tempVec4d, 1 / tempVec4d[3]);
+            math.transformVec4(pvMatInv, vec4Far, vec4Far);
+            math.mulVec4Scalar(vec4Far, 1 / vec4Far[3]);
 
-            worldRayOrigin[0] = tempVec4d[0];
-            worldRayOrigin[1] = tempVec4d[1];
-            worldRayOrigin[2] = tempVec4d[2];
+            worldRayOrigin[0] = vec4Far[0];
+            worldRayOrigin[1] = vec4Far[1];
+            worldRayOrigin[2] = vec4Far[2];
 
-            math.subVec3(tempVec4d, tempVec4b, worldRayDir);
+            math.subVec3(vec4Far, vec4Near, worldRayDir);
 
             math.normalizeVec3(worldRayDir);
         };
