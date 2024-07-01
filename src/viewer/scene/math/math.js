@@ -4927,11 +4927,8 @@ const math = {
             // Calculate clip space coordinates, which will be in range
             // of x=[-1..1] and y=[-1..1], with y=(+1) at top
 
-            const canvasWidth = canvas.width;
-            const canvasHeight = canvas.height;
-
-            const clipX = (canvasPos[0] - canvasWidth / 2) / (canvasWidth / 2);  // Calculate clip space coordinates
-            const clipY = -(canvasPos[1] - canvasHeight / 2) / (canvasHeight / 2);
+            const clipX =     2 * canvasPos[0] / canvas.width - 1;  // Calculate clip space coordinates
+            const clipY = 1 - 2 * canvasPos[1] / canvas.height;
 
             vec4Near[0] = clipX;
             vec4Near[1] = clipY;
