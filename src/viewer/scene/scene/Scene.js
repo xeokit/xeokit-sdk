@@ -2333,13 +2333,7 @@ class Scene extends Component {
         }
 
         if (params.snapToEdge || params.snapToVertex) {
-            pickResult = this._renderer.snapPick(
-                params.canvasPos,
-                params.snapRadius || 30,
-                params.snapToVertex,
-                params.snapToEdge,
-                pickResult
-            );
+            pickResult = this._renderer.snapPick(params, pickResult);
         } else {
             pickResult = this._renderer.pick(params, pickResult);
         }
@@ -2370,12 +2364,7 @@ class Scene extends Component {
             this.error("Scene.snapPick() canvasPos parameter expected");
             return;
         }
-        return this._renderer.snapPick(
-            params.canvasPos,
-            params.snapRadius || 30,
-            params.snapToVertex,
-            params.snapToEdge,
-        );
+        return this._renderer.snapPick(params);
     }
 
     /**

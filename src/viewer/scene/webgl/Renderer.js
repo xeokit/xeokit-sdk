@@ -1296,7 +1296,9 @@ const Renderer = function (scene, options) {
 
         const _pickResult = new PickResult();
 
-        return function (canvasPos, snapRadiusInPixels, snapToVertex, snapToEdge, pickResult = _pickResult) {
+        return function (params, pickResult = _pickResult) {
+
+            const {canvasPos, snapRadius, snapToVertex, snapToEdge} = params;
 
             if (!snapToVertex && !snapToEdge) {
                 return this.pick({canvasPos, pickSurface: true});
@@ -1310,7 +1312,7 @@ const Renderer = function (scene, options) {
             frameCtx.pickZNear = scene.camera.project.near;
             frameCtx.pickZFar = scene.camera.project.far;
 
-            snapRadiusInPixels = snapRadiusInPixels || 30;
+            const snapRadiusInPixels = snapRadius || 30;
 
             const vertexPickBuffer = renderBufferManager.getRenderBuffer("uniquePickColors-aabs", {
                 depthTexture: true,
