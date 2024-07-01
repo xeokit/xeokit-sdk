@@ -2303,11 +2303,6 @@ class Scene extends Component {
             return null;
         }
 
-        if ((params.snapToVertex || params.snapToEdge) && !params.canvasPos) {
-            this.error("Scene.snapPick() `canvasPos` parameter expected for `snapToVertex:true` or `snapToEdge:true`");
-            return;
-        }
-
         params = params || {};
 
         params.pickSurface = params.pickSurface || params.rayPick; // Backwards compatibility

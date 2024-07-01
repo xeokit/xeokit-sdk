@@ -1298,7 +1298,7 @@ const Renderer = function (scene, options) {
 
         return function (params, pickResult = _pickResult) {
 
-            const {canvasPos, snapRadius, snapToVertex, snapToEdge} = params;
+            const {canvasPos, origin, direction, snapRadius, snapToVertex, snapToEdge} = params;
 
             if (!snapToVertex && !snapToEdge) {
                 return this.pick({canvasPos, pickSurface: true});
@@ -1323,8 +1323,8 @@ const Renderer = function (scene, options) {
             });
 
             frameCtx.snapVectorA = [
-                getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
-                getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight),
+                canvasPos ? getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth) : 0,
+                canvasPos ? getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight) : 0,
             ];
 
             frameCtx.snapInvVectorAB = [
@@ -1351,7 +1351,14 @@ const Renderer = function (scene, options) {
             // Set view and proj mats for VBO renderers
             ///////////////////////////////////////
 
-            const pickViewMatrix = scene.camera.viewMatrix;
+            frameCtx.pickViewMatrix = (canvasPos
+                                       ? scene.camera.viewMatrix
+                                       : math.lookAtMat4v(
+                                           origin,
+                                           math.addVec3(origin, direction, math.vec3()),
+                                           math.vec3([0, 1, 0]),
+                                           math.mat4()));
+
             const pickProjMatrix = scene.camera.projMatrix;
 
             for (let type in drawableTypeInfo) {
@@ -1360,7 +1367,7 @@ const Renderer = function (scene, options) {
                     for (let i = 0, len = drawableList.length; i < len; i++) {
                         const drawable = drawableList[i];
                         if (drawable.setPickMatrices) { // Eg. SceneModel, which needs pre-loading into texture
-                            drawable.setPickMatrices(pickViewMatrix, pickProjMatrix);
+                            drawable.setPickMatrices(frameCtx.pickViewMatrix, pickProjMatrix);
                         }
                     }
                 }
@@ -1539,7 +1546,7 @@ const Renderer = function (scene, options) {
             pickResult.worldPos = snappedWorldPos;
             pickResult.worldNormal = snappedWorldNormal;
             pickResult.entity = snappedEntity;
-            pickResult.canvasPos = canvasPos;
+            pickResult.canvasPos = canvasPos || scene.camera.projectWorldPos(worldPos || snappedWorldPos);
             pickResult.snappedCanvasPos = snappedCanvasPos || canvasPos;
 
             return pickResult;
