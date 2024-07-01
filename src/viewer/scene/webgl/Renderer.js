@@ -932,6 +932,7 @@ const Renderer = function (scene, options) {
             let look;
             let pickViewMatrix = null;
             let pickProjMatrix = null;
+            let projection = null;
 
             pickResult.pickSurface = params.pickSurface;
 
@@ -942,6 +943,7 @@ const Renderer = function (scene, options) {
 
                 pickViewMatrix = scene.camera.viewMatrix;
                 pickProjMatrix = scene.camera.projMatrix;
+                projection     = scene.camera.projection;
 
                 pickResult.canvasPos = params.canvasPos;
 
@@ -954,6 +956,7 @@ const Renderer = function (scene, options) {
 
                     pickViewMatrix = params.matrix;
                     pickProjMatrix = scene.camera.projMatrix;
+                    projection     = scene.camera.projection;
 
                 } else {
 
@@ -972,6 +975,7 @@ const Renderer = function (scene, options) {
                     pickViewMatrix = math.lookAtMat4v(worldRayOrigin, look, up, tempMat4b);
                     //    pickProjMatrix = scene.camera.projMatrix;
                     pickProjMatrix = scene.camera.ortho.matrix;
+                    projection     = "ortho";
 
                     pickResult.origin = worldRayOrigin;
                     pickResult.direction = worldRayDir;
@@ -1019,7 +1023,7 @@ const Renderer = function (scene, options) {
 
                     gpuPickTriangle(pickBuffer, pickable, canvasPos, pickViewMatrix, pickProjMatrix, pickResult);
 
-                    pickable.pickTriangleSurface(pickViewMatrix, pickProjMatrix, pickResult);
+                    pickable.pickTriangleSurface(pickViewMatrix, pickProjMatrix, projection, pickResult);
 
                     pickResult.pickSurfacePrecision = false;
 
