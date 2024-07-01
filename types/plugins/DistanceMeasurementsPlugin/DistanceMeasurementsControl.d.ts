@@ -102,3 +102,18 @@ export declare class DistanceMeasurementsControl extends Component {
      */
     on(event: "activated", callback: (activated: boolean) => void, scope?: any): string
 }
+
+export declare class DistanceMeasurementEditControl extends Component {
+    /**
+     * Deactivates a {@link DistanceMeasurementEditControl}.
+     */
+    deactivate(): void;
+}
+
+export declare class DistanceMeasurementEditMouseControl extends DistanceMeasurementEditControl {
+
+}
+
+export declare class DistanceMeasurementEditTouchControl extends DistanceMeasurementEditControl {
+
+}
