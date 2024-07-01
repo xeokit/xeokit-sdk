@@ -111,7 +111,7 @@ export function activateDraggableDot(dot, cfg) {
     const pickWorldPos = canvasPos => {
         const origin = math.vec3();
         const direction = math.vec3();
-        math.canvasPosToWorldRay(canvas, scene.camera.viewMatrix, scene.camera.projMatrix, canvasPos, origin, direction);
+        math.canvasPosToWorldRay(canvas, scene.camera.viewMatrix, scene.camera.projMatrix, scene.camera.projection, canvasPos, origin, direction);
         return ray2WorldPos(origin, direction, canvasPos);
     };
 

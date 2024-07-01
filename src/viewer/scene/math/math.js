@@ -4909,54 +4909,49 @@ const math = {
      @static
      @param {Number[]} viewMatrix View matrix
      @param {Number[]} projMatrix Projection matrix
+     @param {String} projection Projection type (e.g. "ortho")
      @param {Number[]} canvasPos The Canvas-space position.
      @param {Number[]} worldRayOrigin The World-space ray origin.
      @param {Number[]} worldRayDir The World-space ray direction.
      */
     canvasPosToWorldRay: ((() => {
 
-        const tempMat4b = new FloatArrayType(16);
-        const tempMat4c = new FloatArrayType(16);
-        const tempVec4a = new FloatArrayType(4);
-        const tempVec4b = new FloatArrayType(4);
-        const tempVec4c = new FloatArrayType(4);
-        const tempVec4d = new FloatArrayType(4);
+        const pvMatInv = new FloatArrayType(16);
+        const vec4Near = new FloatArrayType(4);
+        const vec4Far  = new FloatArrayType(4);
 
-        return (canvas, viewMatrix, projMatrix, canvasPos, worldRayOrigin, worldRayDir) => {
+        const clipToWorld = (clipX, clipY, clipZ, isOrtho, outVec4) => {
+            outVec4[0] = clipX;
+            outVec4[1] = clipY;
+            outVec4[2] = clipZ;
+            outVec4[3] = 1;
 
-            const pvMat = math.mulMat4(projMatrix, viewMatrix, tempMat4b);
-            const pvMatInverse = math.inverseMat4(pvMat, tempMat4c);
+            math.transformVec4(pvMatInv, outVec4, outVec4);
+            if (! isOrtho)
+                math.mulVec4Scalar(outVec4, 1 / outVec4[3]);
+        };
+
+        return (canvas, viewMatrix, projMatrix, projection, canvasPos, worldRayOrigin, worldRayDir) => {
+            const isOrtho = projection === "ortho";
+
+            math.mulMat4(projMatrix, viewMatrix, pvMatInv);
+            math.inverseMat4(pvMatInv, pvMatInv);
 
             // Calculate clip space coordinates, which will be in range
             // of x=[-1..1] and y=[-1..1], with y=(+1) at top
 
-            const canvasWidth = canvas.width;
-            const canvasHeight = canvas.height;
+            const clipX =     2 * canvasPos[0] / canvas.width - 1;  // Calculate clip space coordinates
+            const clipY = 1 - 2 * canvasPos[1] / canvas.height;
 
-            const clipX = (canvasPos[0] - canvasWidth / 2) / (canvasWidth / 2);  // Calculate clip space coordinates
-            const clipY = -(canvasPos[1] - canvasHeight / 2) / (canvasHeight / 2);
+            clipToWorld(clipX, clipY, -1, isOrtho, vec4Near);
 
-            tempVec4a[0] = clipX;
-            tempVec4a[1] = clipY;
-            tempVec4a[2] = -1;
-            tempVec4a[3] = 1;
+            clipToWorld(clipX, clipY,  1, isOrtho, vec4Far);
 
-            math.transformVec4(pvMatInverse, tempVec4a, tempVec4b);
-            math.mulVec4Scalar(tempVec4b, 1 / tempVec4b[3]);
+            worldRayOrigin[0] = vec4Near[0];
+            worldRayOrigin[1] = vec4Near[1];
+            worldRayOrigin[2] = vec4Near[2];
 
-            tempVec4c[0] = clipX;
-            tempVec4c[1] = clipY;
-            tempVec4c[2] = 1;
-            tempVec4c[3] = 1;
-
-            math.transformVec4(pvMatInverse, tempVec4c, tempVec4d);
-            math.mulVec4Scalar(tempVec4d, 1 / tempVec4d[3]);
-
-            worldRayOrigin[0] = tempVec4d[0];
-            worldRayOrigin[1] = tempVec4d[1];
-            worldRayOrigin[2] = tempVec4d[2];
-
-            math.subVec3(tempVec4d, tempVec4b, worldRayDir);
+            math.subVec3(vec4Far, vec4Near, worldRayDir);
 
             math.normalizeVec3(worldRayDir);
         };
@@ -4980,8 +4975,8 @@ const math = {
         const worldRayOrigin = new FloatArrayType(3);
         const worldRayDir = new FloatArrayType(3);
 
-        return (canvas, viewMatrix, projMatrix, worldMatrix, canvasPos, localRayOrigin, localRayDir) => {
-            math.canvasPosToWorldRay(canvas, viewMatrix, projMatrix, canvasPos, worldRayOrigin, worldRayDir);
+        return (canvas, viewMatrix, projMatrix, projection, worldMatrix, canvasPos, localRayOrigin, localRayDir) => {
+            math.canvasPosToWorldRay(canvas, viewMatrix, projMatrix, projection, canvasPos, worldRayOrigin, worldRayDir);
             math.worldRayToLocalRay(worldMatrix, worldRayOrigin, worldRayDir, localRayOrigin, localRayDir);
         };
     }))(),
