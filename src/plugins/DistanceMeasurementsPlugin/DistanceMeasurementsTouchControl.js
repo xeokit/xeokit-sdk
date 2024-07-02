@@ -94,20 +94,10 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
      *
      * This is `true` by default.
      *
-     * Internally, this deactivates then activates the DistanceMeasurementsTouchControl when changed, which means that
-     * it will destroy any DistanceMeasurements currently under construction, and incurs some overhead, since it unbinds
-     * and rebinds various input handlers.
-     *
      * @param {boolean} snapping Whether to enable snap-to-vertex and snap-edge for this DistanceMeasurementsTouchControl.
      */
     set snapping(snapping) {
-        if (snapping !== this._snapping) {
-            this._snapping = snapping;
-            this.deactivate();
-            this.activate();
-        } else {
-            this._snapping = snapping;
-        }
+        this._snapping = snapping;
     }
 
     /**

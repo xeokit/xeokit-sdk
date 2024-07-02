@@ -90,20 +90,10 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
      *
      * This is `true` by default.
      *
-     * Internally, this deactivates then activates the AngleMeasurementsMouseControl when changed, which means that
-     * it will destroy any AngleMeasurements currently under construction, and incurs some overhead, since it unbinds
-     * and rebinds various input handlers.
-     *
      * @param {boolean} snapping Whether to enable snap-to-vertex and snap-edge for this AngleMeasurementsMouseControl.
      */
     set snapping(snapping) {
-        if (snapping !== this._snapping) {
-            this._snapping = snapping;
-            this.deactivate();
-            this.activate();
-        } else {
-            this._snapping = snapping;
-        }
+        this._snapping = snapping;
     }
 
     /**
