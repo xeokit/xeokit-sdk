@@ -60,11 +60,8 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
             targetVisible: null,
         }
 
-        this._onCanvasTouchStart = null;
-        this._onCanvasTouchEnd = null;
         this._longTouchTimeoutMs = 300;
         this._snapping = cfg.snapping !== false;
-        this._touchState = WAITING_FOR_ORIGIN_TOUCH_START;
 
         this._attachPlugin(distanceMeasurementsPlugin, cfg);
     }
@@ -725,14 +722,11 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
             this.plugin.pointerLens.visible = false;
         }
         this.reset();
+
         const canvas = this.plugin.viewer.scene.canvas.canvas;
         canvas.removeEventListener("touchstart", this._onCanvasTouchStart);
         canvas.removeEventListener("touchend", this._onCanvasTouchEnd);
-        if (this._currentDistanceMeasurement) {
-            this.distanceMeasurementsPlugin.fire("measurementCancel", this._currentDistanceMeasurement);
-            this._currentDistanceMeasurement.destroy();
-            this._currentDistanceMeasurement = null;
-        }
+
         this._active = false;
         this.plugin.viewer.cameraControl.active = true;
     }
@@ -748,12 +742,12 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
         if (!this._active) {
             return;
         }
+
         if (this._currentDistanceMeasurement) {
             this.distanceMeasurementsPlugin.fire("measurementCancel", this._currentDistanceMeasurement);
             this._currentDistanceMeasurement.destroy();
             this._currentDistanceMeasurement = null;
         }
-        this._mouseState = WAITING_FOR_ORIGIN_TOUCH_START;
     }
 
     /**
