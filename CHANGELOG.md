@@ -1,5 +1,17 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.27](https://github.com/xeokit/xeokit-sdk/compare/v2.6.26...v2.6.27)
+
+### 2 July 2024
+
+-  Add missing type defs - [#1564](https://github.com/xeokit/xeokit-sdk/pull/1564)
+-  [FIX] Spector example removal - [#1562](https://github.com/xeokit/xeokit-sdk/pull/1562)
+-  XEOK-40 snap pick from ray - [#1563](https://github.com/xeokit/xeokit-sdk/pull/1563)
+-  chore: missing type declarations - [#1560](https://github.com/xeokit/xeokit-sdk/pull/1560)
+-  Fix typo in DistanceMeasurementPlugin - [#1555](https://github.com/xeokit/xeokit-sdk/pull/1555)
+-  show correct distance for z axis when useRotationAdjustment is false - [#1556](https://github.com/xeokit/xeokit-sdk/pull/1556)
+-  Fix(measurements) Removed deletion of in progress measurement when us… - [#1558](https://github.com/xeokit/xeokit-sdk/pull/1558)
+
 # [v2.6.26](https://github.com/xeokit/xeokit-sdk/compare/v2.6.25...v2.6.26)
 
 ### 27 June 2024
