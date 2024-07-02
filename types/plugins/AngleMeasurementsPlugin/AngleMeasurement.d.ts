@@ -40,6 +40,20 @@ export declare class AngleMeasurement extends Component {
    * @type {Boolean}
    */
   get visible(): boolean;
+
+  /**
+   * Sets whether this AngleMeasurement is highlighted or not.
+   *
+   * @type {Boolean}
+   */
+  set highlighted(arg: boolean);
+  /**
+   * Gets whether this AngleMeasurement is highlighted or not.
+   *
+   * @type {Boolean}
+   */
+  get highlighted(): boolean;
+
   /**
    * Sets if the origin {@link Marker} is visible.
    *

@@ -45,6 +45,19 @@ export declare class DistanceMeasurement extends Component {
   get visible(): boolean;
 
   /**
+   * Sets whether this DistanceMeasurement is highlighted or not.
+   *
+   * @type {Boolean}
+   */
+  set highlighted(arg: boolean);
+  /**
+   * Gets whether this DistanceMeasurement is highlighted or not.
+   *
+   * @type {Boolean}
+   */
+  get highlighted(): boolean;
+
+  /**
    * Sets if the origin {@link Marker} is visible.
    *
    * @type {Boolean}
