@@ -61,22 +61,13 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
         this.pointerLens = cfg.pointerLens;
 
         this._active = false;
-        this._mouseState = MOUSE_FINDING_ORIGIN;
 
         this._currentAngleMeasurement = null;
 
-        // init markerDiv element (think about making its style configurable)
         this._initMarkerDiv()
 
-        this._onMouseHoverSurface = null;
-        this._onHoverNothing = null;
-        this._onPickedNothing = null;
-        this._onPickedSurface = null;
-
-        this._onInputMouseDown = null;
-        this._onInputMouseUp = null;
-
         this._snapping = cfg.snapping !== false;
+        this._mouseState = MOUSE_FINDING_ORIGIN;
 
         this._attachPlugin(angleMeasurementsPlugin, cfg);
     }
@@ -399,22 +390,20 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
         if (!this._active) {
             return;
         }
+
         if (this.pointerLens) {
             this.pointerLens.visible = false;
         }
-        if (this.markerDiv) {
-            this._destroyMarkerDiv()
-        }
+
         this.reset();
+
         const canvas = this.scene.canvas.canvas;
         canvas.removeEventListener("mousedown", this._onMouseDown);
         canvas.removeEventListener("mouseup", this._onMouseUp);
         const cameraControl = this.angleMeasurementsPlugin.viewer.cameraControl;
         cameraControl.off(this._onMouseHoverSurface);
-        cameraControl.off(this._onPickedSurface);
-        cameraControl.off(this._onHoverNothing);
-        cameraControl.off(this._onPickedNothing);
-        this._currentAngleMeasurement = null;
+        cameraControl.off(this._onMouseHoverOff);
+
         this._active = false;
     }
 
@@ -437,6 +426,7 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
             this._currentAngleMeasurement.destroy();
             this._currentAngleMeasurement = null;
         }
+
         this._mouseState = MOUSE_FINDING_ORIGIN;
     }
 
