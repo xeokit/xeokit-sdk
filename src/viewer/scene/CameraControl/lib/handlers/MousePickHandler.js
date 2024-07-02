@@ -266,7 +266,7 @@ class MousePickHandler {
 
                 this._timeout = setTimeout(() => {
 
-                    if (firstClickPickResult) {
+                    if (firstClickPickResult && firstClickPickResult.worldPos) {
 
                         cameraControl.fire("picked", firstClickPickResult, true);
 
