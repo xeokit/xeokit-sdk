@@ -92,6 +92,31 @@ export declare type DistanceMeasurementMouseLeaveEvent = {
 }
 
 /**
+ * Event fire by {@link DistanceMeasurementsPlugin} when context menu is shown on {@link DistanceMeasurement}.
+ */
+export declare type DistanceMeasurementMouseContextMenuEvent = {
+  /**
+   * The plugin.
+   */
+  plugin: DistanceMeasurementsPlugin;
+
+  /**
+   * The measurement.
+   */
+  distanceMeasurement: DistanceMeasurement;
+
+  /**
+   * The measurement.
+   */
+  measurement: DistanceMeasurement;
+
+  /**
+   * The original mouse event.
+   */
+  event: MouseEvent;
+}
+
+/**
  * {@link Viewer} plugin for measuring point-to-point distances.
  */
 export declare class DistanceMeasurementsPlugin extends Plugin {
@@ -206,7 +231,7 @@ export declare class DistanceMeasurementsPlugin extends Plugin {
      * @param {String} event The contextMenu event
      * @param {Function} callback Callback fired on the event
      */
-    on(event: "contextMenu", callback: (measurement: DistanceMeasurement)=> void): string;
+    on(event: "contextMenu", callback: (event: DistanceMeasurementMouseContextMenuEvent)=> void): string;
 
   /**
    * Fires when a measurement is created.

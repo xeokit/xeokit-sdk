@@ -7,7 +7,7 @@ import {Component} from "../../viewer/scene/Component.js";
 import {math} from "../../viewer/scene/math/math.js";
 import {activateDraggableDots} from "../../../src/plugins/lib/ui/index.js";
 
-class DistanceMeasurementEditControl extends Component {
+export class DistanceMeasurementEditControl extends Component {
 
     /**
      * Edits {@link DistanceMeasurement} with mouse and/or touch input.
