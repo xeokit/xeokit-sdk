@@ -218,4 +218,6 @@ export declare class DistanceMeasurement extends Component {
    * @type {Boolean}
    */
   get labelsOnWires() : boolean;
+
+  setHighlighted(highlighted: boolean): void;
 }
