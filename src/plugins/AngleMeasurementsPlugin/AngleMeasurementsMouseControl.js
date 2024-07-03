@@ -61,22 +61,13 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
         this.pointerLens = cfg.pointerLens;
 
         this._active = false;
-        this._mouseState = MOUSE_FINDING_ORIGIN;
 
         this._currentAngleMeasurement = null;
 
-        // init markerDiv element (think about making its style configurable)
         this._initMarkerDiv()
 
-        this._onMouseHoverSurface = null;
-        this._onHoverNothing = null;
-        this._onPickedNothing = null;
-        this._onPickedSurface = null;
-
-        this._onInputMouseDown = null;
-        this._onInputMouseUp = null;
-
         this._snapping = cfg.snapping !== false;
+        this._mouseState = MOUSE_FINDING_ORIGIN;
 
         this._attachPlugin(angleMeasurementsPlugin, cfg);
     }
@@ -141,20 +132,10 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
      *
      * This is `true` by default.
      *
-     * Internally, this deactivates then activates the AngleMeasurementsMouseControl when changed, which means that
-     * it will destroy any AngleMeasurements currently under construction, and incurs some overhead, since it unbinds
-     * and rebinds various input handlers.
-     *
      * @param {boolean} snapping Whether to enable snap-to-vertex and snap-edge for this AngleMeasurementsMouseControl.
      */
     set snapping(snapping) {
-        if (snapping !== this._snapping) {
-            this._snapping = snapping;
-            this.deactivate();
-            this.activate();
-        } else {
-            this._snapping = snapping;
-        }
+        this._snapping = snapping;
     }
 
     /**
@@ -198,11 +179,7 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
 
         const pagePos = math.vec2();
 
-        this._onMouseHoverSurface = cameraControl.on(
-            this._snapping
-                ? "hoverSnapOrSurface"
-                : "hoverSurface",
-            event => {
+        const hoverOn = event => {
                 if (event.snappedToVertex || event.snappedToEdge) {
                     if (pointerLens) {
                         pointerLens.visible = true;
@@ -264,7 +241,10 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                         canvas.style.cursor = "pointer";
                         break;
                 }
-            });
+        };
+        this._onHoverSnapOrSurface = cameraControl.on("hoverSnapOrSurface", e => { if (this._snapping)   hoverOn(e); });
+        this._onHoverSurface       = cameraControl.on("hoverSurface",       e => { if (! this._snapping) hoverOn(e); });
+
         canvas.addEventListener('mousedown', this._onMouseDown = (e) => {
             if (e.which !== 1) {
                 return;
@@ -352,11 +332,8 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                     break;
             }
         });
-        this._onMouseHoverOff = cameraControl.on(
-            this._snapping
-                ? "hoverSnapOrSurfaceOff"
-                : "hoverOff",
-            event => {
+
+        const hoverOff = event => {
                 mouseHovering = false;
                 if (pointerLens) {
                     pointerLens.visible = true;
@@ -386,7 +363,10 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                     }
                     canvas.style.cursor = "default";
                 }
-            });
+        };
+        this._onHoverSnapOrSurfaceOff = cameraControl.on("hoverSnapOrSurfaceOff", e => { if (this._snapping)   hoverOff(e); });
+        this._onHoverOff              = cameraControl.on("hoverOff",              e => { if (! this._snapping) hoverOff(e); });
+
         this._active = true;
     }
 
@@ -399,22 +379,22 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
         if (!this._active) {
             return;
         }
+
         if (this.pointerLens) {
             this.pointerLens.visible = false;
         }
-        if (this.markerDiv) {
-            this._destroyMarkerDiv()
-        }
+
         this.reset();
+
         const canvas = this.scene.canvas.canvas;
         canvas.removeEventListener("mousedown", this._onMouseDown);
         canvas.removeEventListener("mouseup", this._onMouseUp);
         const cameraControl = this.angleMeasurementsPlugin.viewer.cameraControl;
-        cameraControl.off(this._onMouseHoverSurface);
-        cameraControl.off(this._onPickedSurface);
-        cameraControl.off(this._onHoverNothing);
-        cameraControl.off(this._onPickedNothing);
-        this._currentAngleMeasurement = null;
+        cameraControl.off(this._onHoverSnapOrSurface);
+        cameraControl.off(this._onHoverSurface);
+        cameraControl.off(this._onHoverSnapOrSurfaceOff);
+        cameraControl.off(this._onHoverOff);
+
         this._active = false;
     }
 
@@ -437,6 +417,7 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
             this._currentAngleMeasurement.destroy();
             this._currentAngleMeasurement = null;
         }
+
         this._mouseState = MOUSE_FINDING_ORIGIN;
     }
 

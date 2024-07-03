@@ -55,8 +55,6 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
 
         this._currentAngleMeasurement = null;
 
-        this._onCanvasTouchStart = null;
-        this._onCanvasTouchEnd = null;
         this._longTouchTimeoutMs = 300;
         this._snapping = cfg.snapping !== false;
         this._touchState = WAITING_FOR_ORIGIN_TOUCH_START;
@@ -92,20 +90,10 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
      *
      * This is `true` by default.
      *
-     * Internally, this deactivates then activates the AngleMeasurementsMouseControl when changed, which means that
-     * it will destroy any AngleMeasurements currently under construction, and incurs some overhead, since it unbinds
-     * and rebinds various input handlers.
-     *
      * @param {boolean} snapping Whether to enable snap-to-vertex and snap-edge for this AngleMeasurementsMouseControl.
      */
     set snapping(snapping) {
-        if (snapping !== this._snapping) {
-            this._snapping = snapping;
-            this.deactivate();
-            this.activate();
-        } else {
-            this._snapping = snapping;
-        }
+        this._snapping = snapping;
     }
 
     /**
@@ -878,14 +866,11 @@ export class AngleMeasurementsTouchControl extends AngleMeasurementsControl {
             this.plugin.pointerLens.visible = false;
         }
         this.reset();
+
         const canvas = this.plugin.viewer.scene.canvas.canvas;
         canvas.removeEventListener("touchstart", this._onCanvasTouchStart);
         canvas.removeEventListener("touchend", this._onCanvasTouchEnd);
-        if (this._currentAngleMeasurement) {
-            this.angleMeasurementsPlugin.fire("measurementCancel", this._currentAngleMeasurement);
-            this._currentAngleMeasurement.destroy();
-            this._currentAngleMeasurement = null;
-        }
+
         this._active = false;
         this.plugin.viewer.cameraControl.active = true;
     }

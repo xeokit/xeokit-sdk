@@ -74,12 +74,6 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
 
         this._initMarkerDiv()
 
-        this._onCameraControlHoverSnapOrSurface = null;
-        this._onCameraControlHoverSnapOrSurfaceOff = null;
-        this._onMouseDown = null;
-        this._onMouseUp = null;
-        this._onCanvasTouchStart = null;
-        this._onCanvasTouchEnd = null;
         this._snapping = cfg.snapping !== false;
         this._mouseState = MOUSE_FIRST_CLICK_EXPECTED;
 
@@ -143,20 +137,10 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
      *
      * This is `true` by default.
      *
-     * Internally, this deactivates then activates the DistanceMeasurementsMouseControl when changed, which means that
-     * it will destroy any DistanceMeasurements currently under construction, and incurs some overhead, since it unbinds
-     * and rebinds various input handlers.
-     *
      * @param snapping
      */
     set snapping(snapping) {
-        if (snapping !== this._snapping) {
-            this._snapping = snapping;
-            this.deactivate();
-            this.activate();
-        } else {
-            this._snapping = snapping;
-        }
+        this._snapping = snapping;
     }
 
     /**
@@ -168,7 +152,7 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
     get snapping() {
         return this._snapping;
     }
-    
+
     /**
      * Activates this DistanceMeasurementsMouseControl, ready to respond to input.
      */
@@ -203,11 +187,8 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
         const getLeft = el => el.offsetLeft + (el.offsetParent && (el.offsetParent !== canvas.parentNode) && getLeft(el.offsetParent));
 
         const pagePos = math.vec2();
-        
-        this._onCameraControlHoverSnapOrSurface = cameraControl.on(
-            this._snapping
-                ? "hoverSnapOrSurface"
-                : "hoverSurface", event => {
+
+        const hoverOn = event => {
                 const canvasPos = event.snappedCanvasPos || event.canvasPos;
                 mouseHovering = true;
                 pointerWorldPos.set(event.worldPos);
@@ -260,7 +241,9 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
                     this._markerDiv.style.left = `-10000px`;
                     this._markerDiv.style.top = `-10000px`;
                 }
-            });
+        };
+        this._onHoverSnapOrSurface = cameraControl.on("hoverSnapOrSurface", e => { if (this._snapping)   hoverOn(e); });
+        this._onHoverSurface       = cameraControl.on("hoverSurface",       e => { if (! this._snapping) hoverOn(e); });
 
         canvas.addEventListener('mousedown', this._onMouseDown = (e) => {
             if (e.which !== 1) {
@@ -321,10 +304,7 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
             }
         });
 
-        this._onCameraControlHoverSnapOrSurfaceOff = cameraControl.on(
-            this._snapping
-                ? "hoverSnapOrSurfaceOff"
-                : "hoverOff", event => {
+        const hoverOff = event => {
                 if (this.pointerLens) {
                     this.pointerLens.visible = true;
                     this.pointerLens.canvasPos = event.canvasPos;
@@ -339,7 +319,9 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
                     this._currentDistanceMeasurement.axisVisible = false;
                 }
                 canvas.style.cursor = "default";
-            });
+        };
+        this._onHoverSnapOrSurfaceOff = cameraControl.on("hoverSnapOrSurfaceOff", e => { if (this._snapping)   hoverOff(e); });
+        this._onHoverOff              = cameraControl.on("hoverOff",              e => { if (! this._snapping) hoverOff(e); });
 
         this._active = true;
     }
@@ -353,27 +335,24 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
         if (!this._active) {
             return;
         }
-        
+
         this.fire("activated", false);
 
         if (this.pointerLens) {
             this.pointerLens.visible = false;
         }
-        // if (this._markerDiv) {
-        //     this._destroyMarkerDiv()
-        // }
-        // this.reset();
+
+        this.reset();
+
         const canvas = this.scene.canvas.canvas;
         canvas.removeEventListener("mousedown", this._onMouseDown);
         canvas.removeEventListener("mouseup", this._onMouseUp);
         const cameraControl = this.distanceMeasurementsPlugin.viewer.cameraControl;
-        cameraControl.off(this._onCameraControlHoverSnapOrSurface);
-        cameraControl.off(this._onCameraControlHoverSnapOrSurfaceOff);
-        // if (this._currentDistanceMeasurement) {
-        //     this.distanceMeasurementsPlugin.fire("measurementCancel", this._currentDistanceMeasurement);
-        //     this._currentDistanceMeasurement.destroy();
-        //     this._currentDistanceMeasurement = null;
-        // }
+        cameraControl.off(this._onHoverSnapOrSurface);
+        cameraControl.off(this._onHoverSurface);
+        cameraControl.off(this._onHoverSnapOrSurfaceOff);
+        cameraControl.off(this._onHoverOff);
+
         this._active = false;
     }
 
