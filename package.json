@@ -57,8 +57,7 @@
   "dependencies": {
     "@loaders.gl/core": "^3.2.6",
     "@loaders.gl/gltf": "^3.2.6",
-    "@loaders.gl/las": "^3.2.6",
-    "html2canvas": "^1.4.1"
+    "@loaders.gl/las": "^3.2.6"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",
