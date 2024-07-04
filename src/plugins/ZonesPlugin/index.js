@@ -725,6 +725,7 @@ class Zone extends Component {
         this._zoneMesh.highlighted = this._highlighted;
 
         this._zoneMesh.zone = this;
+        this._volume = null;
 
 
         const min = idx => Math.min(...pos.map(p => p[idx]));
@@ -738,6 +739,27 @@ class Zone extends Component {
         const zmax = max(2);
 
         this._center = math.vec3([ (xmin + xmax) / 2, (ymin + ymax) / 2, (zmin + zmax) / 2 ]);
+    }
+
+    get volume() {
+        if (this._volume === null) {
+            // Sum the volume of tetrahedrons formed by the origin and face triangles
+            let volume = 0;
+            const geo = this._zoneMesh.geometry;
+            const pts = [ math.vec3(), math.vec3(), math.vec3() ];
+            for (let i = 0; i < geo.indices.length; i += 3) {
+                for (let off = 0; off < 3; ++off) {
+                    const p = pts[off];
+                    const pIdx = 3 * geo.indices[i + off];
+                    for (let c = 0; c < 3; ++c) {
+                        p[c] = geo.positions[pIdx + c];
+                    }
+                }
+                volume += math.dotVec3(pts[0], math.cross3Vec3(pts[1], pts[2], pts[1]));
+            }
+            this._volume = volume / 6;
+        }
+        return this._volume;
     }
 
     sectionedAverage(sectionPlanes) {
