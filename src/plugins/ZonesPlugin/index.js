@@ -725,6 +725,27 @@ class Zone extends Component {
         this._zoneMesh.highlighted = this._highlighted;
 
         this._zoneMesh.zone = this;
+
+        {
+            const u = math.vec2();
+            const v = math.vec2();
+
+            let baseArea = 0;
+
+            for (let t of baseTriangles) {
+                const p0 = baseVertices[t[0]];
+                const p1 = baseVertices[t[1]];
+                const p2 = baseVertices[t[2]];
+
+                math.subVec2(p1, p0, u);
+                math.subVec2(p2, p0, v);
+
+                baseArea += Math.abs(u[0] * v[1] - u[1] * v[0]);
+            }
+
+            this._baseArea = baseArea / 2;
+        }
+
         this._metrics = null;
 
 
@@ -739,6 +760,10 @@ class Zone extends Component {
         const zmax = max(2);
 
         this._center = math.vec3([ (xmin + xmax) / 2, (ymin + ymax) / 2, (zmin + zmax) / 2 ]);
+    }
+
+    get baseArea() {
+        return this._baseArea;
     }
 
     get area() {
