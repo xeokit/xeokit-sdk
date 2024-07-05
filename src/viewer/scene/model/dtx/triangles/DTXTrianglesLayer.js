@@ -122,6 +122,12 @@ export class DTXTrianglesLayer {
          */
         this._numUpdatesInFrame = 0;
 
+        /**
+         * When true, this layer contains solid triangle meshes, otherwise this layer contains surface triangle meshes
+         * @type {boolean}
+         */
+        this.solid = !!cfg.solid;
+
         this._finalized = false;
     }
 
