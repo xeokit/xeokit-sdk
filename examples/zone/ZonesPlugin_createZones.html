@@ -199,7 +199,7 @@
 
         container: document.getElementById("annotationsContainer"),
 
-        markerHTML: "<div class='annotation-marker' style='background-color: {{markerBGColor}};'>&nbsp;{{glyph}}&nbsp;{{volume}}u²&nbsp;</div>",
+        markerHTML: "<div class='annotation-marker' style='background-color: {{markerBGColor}};'>&nbsp;{{glyph}}&nbsp;base:{{baseArea}}u²&nbsp;/&nbsp;surface{{area}}u²&nbsp;/&nbsp;vol:{{volume}}u³&nbsp;</div>",
         labelHTML: "<div class='annotation-label' style='background-color: {{labelBGColor}};'><div class='annotation-title'>{{title}}</div><div class='annotation-desc'>{{description}}</div></div>",
 
         values: {
@@ -241,6 +241,8 @@
             if (pos)
             {
                 zoneAnnotation.worldPos = pos;
+                zoneAnnotation.setField("baseArea", zone.baseArea.toFixed(2));
+                zoneAnnotation.setField("area", zone.area.toFixed(2));
                 zoneAnnotation.setField("volume", zone.volume.toFixed(2));
             }
         }

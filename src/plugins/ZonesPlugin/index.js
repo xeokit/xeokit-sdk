@@ -725,7 +725,28 @@ class Zone extends Component {
         this._zoneMesh.highlighted = this._highlighted;
 
         this._zoneMesh.zone = this;
-        this._volume = null;
+
+        {
+            const u = math.vec2();
+            const v = math.vec2();
+
+            let baseArea = 0;
+
+            for (let t of baseTriangles) {
+                const p0 = baseVertices[t[0]];
+                const p1 = baseVertices[t[1]];
+                const p2 = baseVertices[t[2]];
+
+                math.subVec2(p1, p0, u);
+                math.subVec2(p2, p0, v);
+
+                baseArea += Math.abs(u[0] * v[1] - u[1] * v[0]);
+            }
+
+            this._baseArea = baseArea / 2;
+        }
+
+        this._metrics = null;
 
 
         const min = idx => Math.min(...pos.map(p => p[idx]));
@@ -741,12 +762,26 @@ class Zone extends Component {
         this._center = math.vec3([ (xmin + xmax) / 2, (ymin + ymax) / 2, (zmin + zmax) / 2 ]);
     }
 
+    get baseArea() {
+        return this._baseArea;
+    }
+
+    get area() {
+        return this._getMetrics().area;
+    }
+
     get volume() {
-        if (this._volume === null) {
+        return this._getMetrics().volume;
+    }
+
+    _getMetrics() {
+        if (this._metrics === null) {
             // Sum the volume of tetrahedrons formed by the origin and face triangles
             let volume = 0;
+            let area = 0;
             const geo = this._zoneMesh.geometry;
             const pts = [ math.vec3(), math.vec3(), math.vec3() ];
+            const tmpVec3 = math.vec3();
             for (let i = 0; i < geo.indices.length; i += 3) {
                 for (let off = 0; off < 3; ++off) {
                     const p = pts[off];
@@ -755,11 +790,18 @@ class Zone extends Component {
                         p[c] = geo.positions[pIdx + c];
                     }
                 }
-                volume += math.dotVec3(pts[0], math.cross3Vec3(pts[1], pts[2], pts[1]));
+                volume += math.dotVec3(pts[0], math.cross3Vec3(pts[1], pts[2], tmpVec3));
+                math.subVec3(pts[1], pts[0], pts[1]);
+                math.subVec3(pts[2], pts[0], pts[2]);
+                area += math.lenVec3(math.cross3Vec3(pts[1], pts[2], tmpVec3));
             }
-            this._volume = volume / 6;
+
+            this._metrics = {
+                area: area / 2,
+                volume: volume / 6
+            };
         }
-        return this._volume;
+        return this._metrics;
     }
 
     sectionedAverage(sectionPlanes) {
