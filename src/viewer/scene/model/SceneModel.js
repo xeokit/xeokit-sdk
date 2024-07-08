@@ -3183,10 +3183,10 @@ export class SceneModel extends Component {
             case "triangles":
             case "solid":
             case "surface":
-                dtxLayer = new DTXTrianglesLayer(this, {layerIndex: 0, origin}); // layerIndex is set in #finalize()
+                dtxLayer = new DTXTrianglesLayer(this, {layerIndex: 0, origin, primitive}); // layerIndex is set in #finalize()
                 break;
             case "lines":
-                dtxLayer = new DTXLinesLayer(this, {layerIndex: 0, origin}); // layerIndex is set in #finalize()
+                dtxLayer = new DTXLinesLayer(this, {layerIndex: 0, origin, primitive}); // layerIndex is set in #finalize()
                 break;
             default:
                 return;
@@ -3224,7 +3224,8 @@ export class SceneModel extends Component {
                         origin,
                         maxGeometryBatchSize: this._maxGeometryBatchSize,
                         solid: (cfg.primitive === "solid"),
-                        autoNormals: true
+                        autoNormals: true,
+                        primitive: cfg.primitive
                     });
                     break;
                 case "solid":
@@ -3239,7 +3240,8 @@ export class SceneModel extends Component {
                         origin,
                         maxGeometryBatchSize: this._maxGeometryBatchSize,
                         solid: (cfg.primitive === "solid"),
-                        autoNormals: true
+                        autoNormals: true,
+                        primitive: cfg.primitive
                     });
                     break;
                 case "surface":
@@ -3254,7 +3256,8 @@ export class SceneModel extends Component {
                         origin,
                         maxGeometryBatchSize: this._maxGeometryBatchSize,
                         solid: (cfg.primitive === "solid"),
-                        autoNormals: true
+                        autoNormals: true,
+                        primitive: cfg.primitive
                     });
                     break;
                 case "lines":
@@ -3266,7 +3269,8 @@ export class SceneModel extends Component {
                         positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
                         uvDecodeMatrix: cfg.uvDecodeMatrix, // Can be undefined
                         origin,
-                        maxGeometryBatchSize: this._maxGeometryBatchSize
+                        maxGeometryBatchSize: this._maxGeometryBatchSize,
+                        primitive: cfg.primitive
                     });
                     break;
                 case "points":
@@ -3278,7 +3282,8 @@ export class SceneModel extends Component {
                         positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
                         uvDecodeMatrix: cfg.uvDecodeMatrix, // Can be undefined
                         origin,
-                        maxGeometryBatchSize: this._maxGeometryBatchSize
+                        maxGeometryBatchSize: this._maxGeometryBatchSize,
+                        primitive: cfg.primitive
                     });
                     break;
             }

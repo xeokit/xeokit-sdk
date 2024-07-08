@@ -108,6 +108,11 @@ class VBOInstancingLinesLayer {
         }
 
         this._finalized = false;
+
+        /**
+         * The type of primitives in this layer.
+         */
+        this.primitive = cfg.primitive;
     }
 
     get aabb() {

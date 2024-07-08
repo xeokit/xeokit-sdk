@@ -70,6 +70,12 @@ export class DTXLinesLayer {
         this._aabb = math.collapseAABB3();
         this.aabbDirty = true;
         this._numUpdatesInFrame = 0;
+
+        /**
+         * The type of primitives in this layer.
+         */
+        this.primitive = cfg.primitive;
+
         this._finalized = false;
     }
 

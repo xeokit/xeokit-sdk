@@ -101,6 +101,11 @@ export class VBOInstancingPointsLayer {
         this.aabbDirty = true;
 
         this._finalized = false;
+
+        /**
+         * The type of primitives in this layer.
+         */
+        this.primitive = cfg.geometry.primitive;
     }
 
     get aabb() {

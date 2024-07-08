@@ -139,6 +139,11 @@ export class VBOInstancingTrianglesLayer {
          * @type {number|*}
          */
         this.numIndices = cfg.geometry.numIndices;
+
+        /**
+         * The type of primitives in this layer.
+         */
+        this.primitive = cfg.geometry.primitive;
     }
 
     get aabb() {
@@ -252,7 +257,7 @@ export class VBOInstancingTrianglesLayer {
 
         const portion = {};
 
-        if (this.model.scene.pickSurfacePrecisionEnabled) {
+        if (this.model.scene.readableGeometryEnabled) {
             portion.matrix = meshMatrix.slice();
             portion.inverseMatrix = null; // Lazy-computed in precisionRayPickSurface
             portion.normalMatrix = null; // Lazy-computed in precisionRayPickSurface
@@ -690,7 +695,7 @@ export class VBOInstancingTrianglesLayer {
     }
 
     getEachVertex(portionId, callback) {
-        if (!this.model.scene.pickSurfacePrecisionEnabled) {
+        if (!this.model.scene.readableGeometryEnabled) {
             return false;
         }
         const state = this._state;
@@ -702,10 +707,9 @@ export class VBOInstancingTrianglesLayer {
         }
         const positions = geometry.quantizedPositions;
         const origin = state.origin;
-        const offset = portion.offset;
-        const offsetX = origin[0] + offset[0];
-        const offsetY = origin[1] + offset[1];
-        const offsetZ = origin[2] + offset[2];
+        const offsetX = origin[0] ;
+        const offsetY = origin[1] ;
+        const offsetZ = origin[2] ;
         const worldPos = tempVec4a;
         const portionMatrix = portion.matrix;
         const sceneModelPatrix = this.model.sceneModelMatrix;
@@ -721,6 +725,23 @@ export class VBOInstancingTrianglesLayer {
             worldPos[1] += offsetY;
             worldPos[2] += offsetZ;
             callback(worldPos);
+        }
+    }
+
+    getEachIndex(portionId, callback) {
+        if (!this.model.scene.readableGeometryEnabled) {
+            return false;
+        }
+        const state = this._state;
+        const geometry = state.geometry;
+        const portion = this._portions[portionId];
+        if (!portion) {
+            this.model.error("portion not found: " + portionId);
+            return;
+        }
+        const indices = geometry.indices;
+        for (let i = 0, len = indices.length; i < len; i++) {
+            callback(indices[i]);
         }
     }
 
@@ -1030,7 +1051,7 @@ export class VBOInstancingTrianglesLayer {
 
     precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) {
 
-        if (!this.model.scene.pickSurfacePrecisionEnabled) {
+        if (!this.model.scene.readableGeometryEnabled) {
             return false;
         }
 
