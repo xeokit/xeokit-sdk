@@ -114,7 +114,7 @@ const triangulateEarClipping = function(planeCoords) {
         next.prev = ear.prev;
     }
 
-    return [ planeCoords, baseTriangles ];
+    return [ planeCoords, baseTriangles, isCCW ];
 };
 
 const marker3D = function(scene, color) {
@@ -659,7 +659,7 @@ class Zone extends Component {
         const altitude    = this._geometry.altitude + (downward ? this._geometry.height : 0);
         const height      = this._geometry.height * (downward ? -1 : 1);
 
-        const [ baseVertices, baseTriangles ] = triangulateEarClipping(planeCoords); // TODO: prevent crossing edges
+        const [ baseVertices, baseTriangles, isCCW ] = triangulateEarClipping(planeCoords); // TODO: prevent crossing edges
 
         const pos = [ ];
         const ind = [ ];
@@ -683,7 +683,7 @@ class Zone extends Component {
         // sides
         for (let i = 0; i < baseVertices.length; ++i) {
             const a = baseVertices[i];
-            const b = baseVertices[(i+1) % baseVertices.length];
+            const b = baseVertices[(baseVertices.length + i + (isCCW ? 1 : -1)) % baseVertices.length];
             const f = altitude;
             const c = altitude + height;
 
