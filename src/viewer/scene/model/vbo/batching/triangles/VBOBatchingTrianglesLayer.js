@@ -372,6 +372,46 @@ export class VBOBatchingTrianglesLayer {
                     portion.quantizedPositions = quantizedPositions.slice(start, end);
                 }
             }
+
+            {
+                const indices = buffer.indices;
+                const worldMatrix = this.model.worldMatrix;
+                const positionsDecodeMatrix = state.positionsDecodeMatrix;
+                const pts = [ math.vec3(), math.vec3(), math.vec3() ];
+                const tmpVec3 = math.vec3();
+
+                this._portions.forEach((portion, i) => {
+                    let volume = 0;
+                    let area = 0;
+
+                    const indicesBaseIndex = portion.indicesBaseIndex;
+                    const indicesLastIndex = indicesBaseIndex + portion.numIndices;
+
+                    for (let faceIdx = indicesBaseIndex; faceIdx < indicesLastIndex; faceIdx += 3) {
+                        for (let faceOff = 0; faceOff < 3; ++faceOff) {
+                            const i = 3 * indices[faceIdx + faceOff];
+                            const worldPos = pts[faceOff];
+
+                            // based on getEachVertex
+                            worldPos[0] = quantizedPositions[i];
+                            worldPos[1] = quantizedPositions[i + 1];
+                            worldPos[2] = quantizedPositions[i + 2];
+                            math.decompressPosition(worldPos, positionsDecodeMatrix);
+                            math.transformPoint3(worldMatrix, worldPos, worldPos);
+                        }
+
+                        volume += math.dotVec3(pts[0], math.cross3Vec3(pts[1], pts[2], tmpVec3));
+                        math.subVec3(pts[1], pts[0], pts[1]);
+                        math.subVec3(pts[2], pts[0], pts[2]);
+                        area += math.lenVec3(math.cross3Vec3(pts[1], pts[2], tmpVec3));
+                    }
+
+                    portion._metrics = {
+                        area: area / 2,
+                        volume: volume / 6
+                    };
+                });
+            }
         }
 
         if (buffer.normals.length > 0) { // Normals are already oct-encoded

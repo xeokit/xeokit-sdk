@@ -252,6 +252,44 @@ export class VBOInstancingTrianglesLayer {
 
         const portion = {};
 
+        {
+            const indices = this._state.geometry.indices;
+            const quantizedPositions = this._state.geometry.positionsCompressed;
+            const positionsDecodeMatrix = this._state.geometry.positionsDecodeMatrix;
+            const pts = [ math.vec3(), math.vec3(), math.vec3() ];
+            const tmpVec3 = math.vec3();
+
+            let volume = 0;
+            let area = 0;
+
+            const indicesBaseIndex = 0;
+            const indicesLastIndex = indices.length;
+
+            for (let faceIdx = indicesBaseIndex; faceIdx < indicesLastIndex; faceIdx += 3) {
+                for (let faceOff = 0; faceOff < 3; ++faceOff) {
+                    const i = 3 * indices[faceIdx + faceOff];
+                    const worldPos = pts[faceOff];
+
+                    // based on getEachVertex
+                    worldPos[0] = quantizedPositions[i];
+                    worldPos[1] = quantizedPositions[i + 1];
+                    worldPos[2] = quantizedPositions[i + 2];
+                    math.decompressPosition(worldPos, positionsDecodeMatrix);
+                    math.transformPoint3(meshMatrix, worldPos, worldPos);
+                }
+
+                volume += math.dotVec3(pts[0], math.cross3Vec3(pts[1], pts[2], tmpVec3));
+                math.subVec3(pts[1], pts[0], pts[1]);
+                math.subVec3(pts[2], pts[0], pts[2]);
+                area += math.lenVec3(math.cross3Vec3(pts[1], pts[2], tmpVec3));
+            }
+
+            portion._metrics = {
+                area: area / 2,
+                volume: volume / 6
+            };
+        }
+
         if (this.model.scene.pickSurfacePrecisionEnabled) {
             portion.matrix = meshMatrix.slice();
             portion.inverseMatrix = null; // Lazy-computed in precisionRayPickSurface

@@ -332,6 +332,14 @@ export class SceneModelMesh {
         return this._aabbWorld;
     }
 
+    get area() {
+        return this.layer._portions[this.portionId]._metrics.area;
+    }
+
+    get volume() {
+        return this.layer._portions[this.portionId]._metrics.volume;
+    }
+
     /**
      * @private
      */

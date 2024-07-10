@@ -640,6 +640,18 @@ export class SceneModelEntity {
         this.model.glRedraw();
     }
 
+    get area() {
+        let acc = 0;
+        this.meshes.forEach(m => acc += m.area);
+        return acc;
+    }
+
+    get volume() {
+        let acc = 0;
+        this.meshes.forEach(m => acc += m.volume);
+        return acc;
+    }
+
     get saoEnabled() {
         return this.model.saoEnabled;
     }
