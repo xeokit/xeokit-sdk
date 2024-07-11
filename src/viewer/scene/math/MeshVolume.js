@@ -1,5 +1,5 @@
-import {math} from "./math";
-import {isTriangleMeshSolid} from "./isTriangleMeshSolid";
+import {math} from "./math.js";
+import {isTriangleMeshSolid} from "./isTriangleMeshSolid.js";
 
 const v1 = math.vec3();
 const v2 = math.vec3();
