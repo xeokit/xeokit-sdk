@@ -1,5 +1,5 @@
 import {math} from "../math/math.js";
-import {meshSurfaceArea, meshVolume} from "../math";
+import {meshSurfaceArea, meshVolume} from "../math/index.js";
 
 const tempOBB3 = math.OBB3();
 const tempOBB3b = math.OBB3();

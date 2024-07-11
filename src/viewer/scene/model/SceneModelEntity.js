@@ -1,6 +1,5 @@
 import {ENTITY_FLAGS} from './ENTITY_FLAGS.js';
 import {math} from "../math/math.js";
-import {meshSurfaceArea, meshVolume} from "../math";
 
 const tempFloatRGB = new Float32Array([0, 0, 0]);
 const tempIntRGB = new Uint16Array([0, 0, 0]);

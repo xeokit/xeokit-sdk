@@ -1,4 +1,4 @@
-import {math} from "./math";
+import {math} from "./math.js";
 
 const v1 = math.vec3();
 const v2 = math.vec3();
