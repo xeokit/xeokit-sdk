@@ -99,7 +99,7 @@ class OcclusionLayer {
         for (let i = 0; i < this.numMarkers; i++) {
             if (this.markerList[i]) {
                 const marker = this.markerList[i];
-                const worldPos = marker.worldPos;
+                const worldPos = marker.rtcPos;
                 this.positions[j++] = worldPos[0];
                 this.positions[j++] = worldPos[1];
                 this.positions[j++] = worldPos[2];

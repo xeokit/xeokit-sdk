@@ -333,10 +333,7 @@ class OcclusionTester {
                 continue;
             }
 
-            // The `origin` has been changed from `occlusionLayer.origin` to `[ 0, 0, 0 ]`
-            // because OcclusionLayer markers' transformation is being applied through the
-            // OcclusionLayer::positions array. See XEOK-33
-            const origin = [ 0, 0, 0 ];
+            const origin = occlusionLayer.origin;
 
             gl.uniformMatrix4fv(this._uViewMatrix, false, createRTCViewMat(camera.viewMatrix, origin));
 
