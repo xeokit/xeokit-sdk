@@ -1085,7 +1085,7 @@ const createAAZoneFromPoints = function(pos1, pos2, zoneAltitude, zoneHeight, zo
  * const zonesControl  = new ZonesMouseControl(Zones)
  * ````
  */
-class ZonesMouseControl extends Component {
+class ZonesAAZoneControl extends Component {
 
     /**
      * Creates a ZonesMouseControl bound to the given ZonesPlugin.
@@ -1094,11 +1094,12 @@ class ZonesMouseControl extends Component {
      * @param [cfg] Configuration
      * @param {PointerLens} [cfg.pointerLens] A PointerLens to use to provide a magnified view of the cursor when snapping is enabled.
      */
-    constructor(zonesPlugin, cfg = {}) {
+    constructor(zonesPlugin, cfg, createSelect3dPoint) {
         super(zonesPlugin.viewer.scene);
 
         this.zonesPlugin = zonesPlugin;
         this.pointerLens = cfg.pointerLens;
+        this.createSelect3dPoint = createSelect3dPoint;
         this._deactivate = null;
     }
 
@@ -1135,11 +1136,7 @@ class ZonesMouseControl extends Component {
         const scene = viewer.scene;
         const self = this;
 
-        const select3dPoint = mousePointSelector(
-            viewer,
-            function(origin, direction) {
-                return planeIntersect(zoneAltitude, math.vec3([ 0, 1, 0 ]), origin, direction);
-            });
+        const select3dPoint = this.createSelect3dPoint(viewer, (origin, direction) => planeIntersect(zoneAltitude, math.vec3([ 0, 1, 0 ]), origin, direction));
 
         (function rec() {
             self._deactivate = startAARectCreateUI(
@@ -1176,10 +1173,36 @@ class ZonesMouseControl extends Component {
     }
 }
 
+export class ZonesMouseControl extends ZonesAAZoneControl {
+    constructor(zonesPlugin, cfg = {}) {
+        super(
+            zonesPlugin,
+            cfg,
+            (viewer, ray2WorldPos) => mousePointSelector(viewer, ray2WorldPos));
+    }
+}
+
+import {PointerCircle} from "../../extras/PointerCircle/PointerCircle.js";
+export class ZonesTouchControl extends ZonesAAZoneControl {
+    constructor(zonesPlugin, cfg = {}) {
+        const pointerCircle = new PointerCircle(zonesPlugin.viewer);
+        super(
+            zonesPlugin,
+            cfg,
+            (viewer, ray2WorldPos) => touchPointSelector(viewer, pointerCircle, ray2WorldPos));
+        this.pointerCircle = pointerCircle;
+    }
+
+    destroy() {
+        this.pointerCircle.destroy();
+        super.destroy();
+    }
+}
+
 /**
  * ZonesPlugin documentation to be added, mostly compatible with DistanceMeasurementsPlugin.
  */
-class ZonesPlugin extends Plugin {
+export class ZonesPlugin extends Plugin {
 
     /**
      * @constructor
@@ -1286,89 +1309,6 @@ class ZonesPlugin extends Plugin {
      * Destroys all {@link Zone}s first.
      */
     destroy() {
-        super.destroy();
-    }
-}
-
-import {PointerCircle} from "../../extras/PointerCircle/PointerCircle.js";
-
-export class ZonesTouchControl extends Component {
-
-    constructor(zonesPlugin, cfg = {}) {
-        super(zonesPlugin.viewer.scene);
-
-        this.zonesPlugin = zonesPlugin;
-        this.pointerLens = cfg.pointerLens;
-        this.pointerCircle = new PointerCircle(zonesPlugin.viewer);
-        this._deactivate = null;
-    }
-
-    get active() {
-        return !! this._deactivate;
-    }
-
-    activate(zoneAltitude, zoneHeight, zoneColor, zoneAlpha) {
-
-        if (typeof(zoneAltitude) === "object" && (zoneAltitude !== null)) {
-            const params = zoneAltitude;
-            const param = (name, defaultValue) => {
-                if (name in params) {
-                    return params[name];
-                } else if (defaultValue !== undefined) {
-                    return defaultValue;
-                } else {
-                    throw "config missing: " + name;
-                }
-            };
-
-            zoneAltitude = param("altitude");
-            zoneHeight   = param("height");
-            zoneColor    = param("color", "#008000");
-            zoneAlpha    = param("alpha", 0.5);
-        }
-
-        if (this._deactivate) {
-            return;
-        }
-
-        const zonesPlugin = this.zonesPlugin;
-        const viewer = zonesPlugin.viewer;
-        const scene = viewer.scene;
-        const self = this;
-
-        const select3dPoint = touchPointSelector(
-            viewer,
-            this.pointerCircle,
-            function(origin, direction) {
-                return planeIntersect(zoneAltitude, math.vec3([ 0, 1, 0 ]), origin, direction);
-            });
-
-        (function rec() {
-            self._deactivate = startAARectCreateUI(
-                scene, zoneColor, zoneAlpha, self.pointerLens, select3dPoint,
-                (pos1, pos2) => {
-                    const zone = createAAZoneFromPoints(pos1, pos2, zoneAltitude, zoneHeight, zoneColor, zoneAlpha, zonesPlugin);
-                    let reactivate = true;
-                    self._deactivate = () => { reactivate = false; };
-                    self.fire("zoneEnd", zone);
-                    if (reactivate)
-                    {
-                        rec();
-                    }
-                }).deactivate;
-        })();
-    }
-
-    deactivate() {
-        if (this._deactivate)
-        {
-            this._deactivate();
-            this._deactivate = null;
-        }
-    }
-
-    destroy() {
-        this.deactivate();
         super.destroy();
     }
 }
@@ -1938,7 +1878,3 @@ export class ZoneTranslateTouchControl extends ZoneTranslateControl {
         super(zone, cfg, false, true);
     }
 }
-
-
-export {ZonesMouseControl}
-export {ZonesPlugin}
