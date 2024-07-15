@@ -271,7 +271,7 @@ const basePolygon3D = function(scene, color, alpha) {
     };
 };
 
-const startAAZoneCreateUI = function(scene, zoneAltitude, zoneHeight, zoneColor, zoneAlpha, pointerLens, zonesPlugin, select3dPoint, onZoneCreated) {
+const startAARectCreateUI = function(scene, zoneColor, zoneAlpha, pointerLens, select3dPoint, onPointsSelected) {
     const marker1 = marker3D(scene, zoneColor);
     const marker2 = marker3D(scene, zoneColor);
     const basePolygon = basePolygon3D(scene, zoneColor, zoneAlpha);
@@ -337,32 +337,7 @@ const startAAZoneCreateUI = function(scene, zoneAltitude, zoneHeight, zoneColor,
                     basePolygon.destroy();
                     updatePointerLens(null);
 
-                    const min = (idx) => Math.min(point1WorldPos[idx], point2WorldPos[idx]);
-                    const max = (idx) => Math.max(point1WorldPos[idx], point2WorldPos[idx]);
-
-                    const xmin = min(0);
-                    const zmin = min(2);
-                    const xmax = max(0);
-                    const zmax = max(2);
-
-                    const zone = zonesPlugin.createZone(
-                        {
-                            id: math.createUUID(),
-                            geometry: {
-                                planeCoordinates: [
-                                    [ xmin, zmax ],
-                                    [ xmax, zmax ],
-                                    [ xmax, zmin ],
-                                    [ xmin, zmin ]
-                                ],
-                                altitude: zoneAltitude,
-                                height: zoneHeight
-                            },
-                            alpha: zoneAlpha,
-                            color: zoneColor
-                        });
-
-                    onZoneCreated(zone);
+                    onPointsSelected(point1WorldPos, point2WorldPos);
                 });
         });
 
@@ -1052,6 +1027,34 @@ class Zone extends Component {
     }
 }
 
+const createAAZoneFromPoints = function(pos1, pos2, zoneAltitude, zoneHeight, zoneColor, zoneAlpha, zonesPlugin) {
+
+    const min = (idx) => Math.min(pos1[idx], pos2[idx]);
+    const max = (idx) => Math.max(pos1[idx], pos2[idx]);
+
+    const xmin = min(0);
+    const zmin = min(2);
+    const xmax = max(0);
+    const zmax = max(2);
+
+    return zonesPlugin.createZone(
+        {
+            id: math.createUUID(),
+            geometry: {
+                planeCoordinates: [
+                    [ xmin, zmax ],
+                    [ xmax, zmax ],
+                    [ xmax, zmin ],
+                    [ xmin, zmin ]
+                ],
+                altitude: zoneAltitude,
+                height: zoneHeight
+            },
+            alpha: zoneAlpha,
+            color: zoneColor
+        });
+};
+
 /**
  * Creates {@link Zone}s in a {@link ZonesPlugin} from mouse input.
  *
@@ -1139,9 +1142,10 @@ class ZonesMouseControl extends Component {
             });
 
         (function rec() {
-            self._deactivate = startAAZoneCreateUI(
-                scene, zoneAltitude, zoneHeight, zoneColor, zoneAlpha, self.pointerLens, zonesPlugin, select3dPoint,
-                zone => {
+            self._deactivate = startAARectCreateUI(
+                scene, zoneColor, zoneAlpha, self.pointerLens, select3dPoint,
+                (pos1, pos2) => {
+                    const zone = createAAZoneFromPoints(pos1, pos2, zoneAltitude, zoneHeight, zoneColor, zoneAlpha, zonesPlugin);
                     let reactivate = true;
                     self._deactivate = () => { reactivate = false; };
                     self.fire("zoneEnd", zone);
@@ -1340,9 +1344,10 @@ export class ZonesTouchControl extends Component {
             });
 
         (function rec() {
-            self._deactivate = startAAZoneCreateUI(
-                scene, zoneAltitude, zoneHeight, zoneColor, zoneAlpha, self.pointerLens, zonesPlugin, select3dPoint,
-                zone => {
+            self._deactivate = startAARectCreateUI(
+                scene, zoneColor, zoneAlpha, self.pointerLens, select3dPoint,
+                (pos1, pos2) => {
+                    const zone = createAAZoneFromPoints(pos1, pos2, zoneAltitude, zoneHeight, zoneColor, zoneAlpha, zonesPlugin);
                     let reactivate = true;
                     self._deactivate = () => { reactivate = false; };
                     self.fire("zoneEnd", zone);
