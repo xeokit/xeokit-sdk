@@ -128,7 +128,7 @@ export class PointerCircle {
     destroy() {
         if (!this._destroyed) {
             this.stop();
-            document.body.removeChild(this._circleDiv);
+            this._circleDiv.parentElement.removeChild(this._circleDiv);
             this._destroyed = true;
         }
     }
