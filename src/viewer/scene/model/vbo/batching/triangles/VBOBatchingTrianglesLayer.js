@@ -821,13 +821,15 @@ export class VBOBatchingTrianglesLayer {
         const offsetY = origin[1] ;
         const offsetZ = origin[2] ;
         const worldPos = tempVec4a;
+        const sceneModelMatrix = this.model.matrix;
+        const positionsDecodeMatrix = state.positionsDecodeMatrix;
         for (let i = 0, len = positions.length; i < len; i += 3) {
             worldPos[0] = positions[i];
             worldPos[1] = positions[i + 1];
             worldPos[2] = positions[i + 2];
             worldPos[3] = 1.0;
-            math.decompressPosition(worldPos, state.positionsDecodeMatrix);
-            math.transformPoint4(this.model.worldMatrix, worldPos);
+            math.decompressPosition(worldPos, positionsDecodeMatrix);
+            math.transformPoint4(sceneModelMatrix, worldPos);
             worldPos[0] += offsetX;
             worldPos[1] += offsetY;
             worldPos[2] += offsetZ;
