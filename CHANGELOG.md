@@ -1,5 +1,29 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.29](https://github.com/xeokit/xeokit-sdk/compare/v2.6.28...v2.6.29)
+
+### 16 July 2024
+
+-  [FIX] Fix SceneModel.getEachVertex - [#1587](https://github.com/xeokit/xeokit-sdk/pull/1587)
+-  [FEATURE] Progressive SceneModel loading - [#1586](https://github.com/xeokit/xeokit-sdk/pull/1586)
+-  XEOK-64 PointerCircle::destroy error - [#1583](https://github.com/xeokit/xeokit-sdk/pull/1583)
+-  [FIX] Incorrect imports - [#1578](https://github.com/xeokit/xeokit-sdk/pull/1578)
+-  XEOK-62 Fix Zone sides winding - [#1576](https://github.com/xeokit/xeokit-sdk/pull/1576)
+-  Mesh volume and area - [#1574](https://github.com/xeokit/xeokit-sdk/pull/1574)
+-  XEOK-59 Zone area - [#1573](https://github.com/xeokit/xeokit-sdk/pull/1573)
+-  Fix ZonesPlugin_createZones glyph CSS width - [#1571](https://github.com/xeokit/xeokit-sdk/pull/1571)
+-  Example/minimap - [#1570](https://github.com/xeokit/xeokit-sdk/pull/1570)
+-  XEOK-53 Zone volume - [#1569](https://github.com/xeokit/xeokit-sdk/pull/1569)
+-  Fix/measurement types - [#1568](https://github.com/xeokit/xeokit-sdk/pull/1568)
+-  XCD-109 Snapping change of a measurement in progress - [#1565](https://github.com/xeokit/xeokit-sdk/pull/1565)
+
+# [v2.6.28](https://github.com/xeokit/xeokit-sdk/compare/v2.6.27...v2.6.28)
+
+### 2 July 2024
+
+-  [FIX] Camera incorrectly zooms to end of measurement after completion - [#1566](https://github.com/xeokit/xeokit-sdk/pull/1566)
+-  Contributing.md - [#1559](https://github.com/xeokit/xeokit-sdk/pull/1559)
+
 # [v2.6.27](https://github.com/xeokit/xeokit-sdk/compare/v2.6.26...v2.6.27)
 
 ### 2 July 2024
