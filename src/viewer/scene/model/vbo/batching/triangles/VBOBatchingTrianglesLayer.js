@@ -41,7 +41,7 @@ export class VBOBatchingTrianglesLayer {
      */
     constructor(cfg) {
 
-        console.info("Creating VBOBatchingTrianglesLayer");
+     //   console.info("Creating VBOBatchingTrianglesLayer");
 
         /**
          * Owner model

@@ -28,7 +28,7 @@ class VBOInstancingLinesLayer {
      */
     constructor(cfg) {
 
-        console.info("VBOInstancingLinesLayer");
+     //   console.info("VBOInstancingLinesLayer");
 
         /**
          * Owner model

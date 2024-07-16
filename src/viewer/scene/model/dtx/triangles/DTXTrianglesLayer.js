@@ -54,7 +54,7 @@ export class DTXTrianglesLayer {
 
     constructor(model, cfg) {
 
-        console.info("Creating DTXTrianglesLayer");
+        //console.info("Creating DTXTrianglesLayer");
 
         dataTextureRamStats.numberOfLayers++;
 
