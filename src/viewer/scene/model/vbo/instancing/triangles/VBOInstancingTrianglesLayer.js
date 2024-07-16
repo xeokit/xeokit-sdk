@@ -712,7 +712,7 @@ export class VBOInstancingTrianglesLayer {
         const offsetZ = origin[2] ;
         const worldPos = tempVec4a;
         const portionMatrix = portion.matrix;
-        const sceneModelPatrix = this.model.sceneModelMatrix;
+        const sceneModelMatrix = this.model.matrix;
         const positionsDecodeMatrix = state.positionsDecodeMatrix;
         for (let i = 0, len = positions.length; i < len; i += 3) {
             worldPos[0] = positions[i];
@@ -720,7 +720,7 @@ export class VBOInstancingTrianglesLayer {
             worldPos[2] = positions[i + 2];
             math.decompressPosition(worldPos, positionsDecodeMatrix);
             math.transformPoint3(portionMatrix, worldPos);
-            math.transformPoint3(sceneModelPatrix, worldPos);
+            math.transformPoint3(sceneModelMatrix, worldPos);
             worldPos[0] += offsetX;
             worldPos[1] += offsetY;
             worldPos[2] += offsetZ;
