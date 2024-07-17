@@ -24,7 +24,7 @@ export class VBOBatchingPointsLayer {
      */
     constructor(cfg) {
 
-        console.info("Creating VBOBatchingPointsLayer");
+     //   console.info("Creating VBOBatchingPointsLayer");
 
         /**
          * Owner model

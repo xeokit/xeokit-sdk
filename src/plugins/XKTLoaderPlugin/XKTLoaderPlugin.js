@@ -942,6 +942,9 @@ class XKTLoaderPlugin extends Plugin {
         this.viewer.scene.canvas.spinner.processes++;
 
         const finish = () => {
+            if (sceneModel.destroyed) {
+                return;
+            }
             // this._createDefaultMetaModelIfNeeded(sceneModel, params, options);
             sceneModel.finalize();
             metaModel.finalize();
@@ -1023,7 +1026,9 @@ class XKTLoaderPlugin extends Plugin {
                 const loadJSONs = (metaDataFiles, done, error) => {
                     let i = 0;
                     const loadNext = () => {
-                        if (i >= metaDataFiles.length) {
+                        if (sceneModel.destroyed) {
+                            done();
+                        } else if (i >= metaDataFiles.length) {
                             done();
                         } else {
                             this._dataSource.getMetaModel(`${baseDir}${metaDataFiles[i]}`, (metaModelData) => {
@@ -1033,7 +1038,7 @@ class XKTLoaderPlugin extends Plugin {
                                     globalizeObjectIds: options.globalizeObjectIds
                                 });
                                 i++;
-                                this.scheduleTask(loadNext, 100);
+                                this.scheduleTask(loadNext, 200);
                             }, error);
                         }
                     }
@@ -1042,13 +1047,16 @@ class XKTLoaderPlugin extends Plugin {
                 const loadXKTs_excludeTheirMetaModels = (xktFiles, done, error) => { // Load XKTs, ignore metamodels in the XKT
                     let i = 0;
                     const loadNext = () => {
-                        if (i >= xktFiles.length) {
+                        if (sceneModel.destroyed) {
+                            done();
+                        } else if (i >= xktFiles.length) {
                             done();
                         } else {
                             this._dataSource.getXKT(`${baseDir}${xktFiles[i]}`, (arrayBuffer) => {
                                 this._parseModel(arrayBuffer, params, options, sceneModel, null /* Ignore metamodel in XKT */, manifestCtx);
+                                sceneModel.preFinalize();
                                 i++;
-                                this.scheduleTask(loadNext, 100);
+                                this.scheduleTask(loadNext, 200);
                             }, error);
                         }
                     }
@@ -1057,13 +1065,16 @@ class XKTLoaderPlugin extends Plugin {
                 const loadXKTs_includeTheirMetaModels = (xktFiles, done, error) => { // Load XKTs, parse metamodels from the XKT
                     let i = 0;
                     const loadNext = () => {
-                        if (i >= xktFiles.length) {
+                        if (sceneModel.destroyed) {
+                            done();
+                        } else if (i >= xktFiles.length) {
                             done();
                         } else {
                             this._dataSource.getXKT(`${baseDir}${xktFiles[i]}`, (arrayBuffer) => {
                                 this._parseModel(arrayBuffer, params, options, sceneModel, metaModel, manifestCtx);
+                                sceneModel.preFinalize();
                                 i++;
-                                this.scheduleTask(loadNext, 100);
+                                this.scheduleTask(loadNext, 200);
                             }, error);
                         }
                     }
@@ -1113,11 +1124,12 @@ class XKTLoaderPlugin extends Plugin {
     _loadModel(src, params, options, sceneModel, metaModel, manifestCtx, done, error) {
         this._dataSource.getXKT(params.src, (arrayBuffer) => {
             this._parseModel(arrayBuffer, params, options, sceneModel, metaModel, manifestCtx);
+            sceneModel.preFinalize();
             done();
         }, error);
     }
 
-    _parseModel(arrayBuffer, params, options, sceneModel, metaModel, manifestCtx) {
+    async _parseModel(arrayBuffer, params, options, sceneModel, metaModel, manifestCtx) {
         if (sceneModel.destroyed) {
             return;
         }
@@ -1129,7 +1141,7 @@ class XKTLoaderPlugin extends Plugin {
             this.error("Unsupported .XKT file version: " + xktVersion + " - this XKTLoaderPlugin supports versions " + Object.keys(parsers));
             return;
         }
-        this.log("Loading .xkt V" + xktVersion);
+        //   this.log("Loading .xkt V" + xktVersion);
         const numElements = dataView.getUint32(4, true);
         const elements = [];
         let byteOffset = (numElements + 2) * 4;
