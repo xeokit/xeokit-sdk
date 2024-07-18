@@ -271,10 +271,9 @@ const basePolygon3D = function(scene, color, alpha) {
     };
 };
 
-const startAARectCreateUI = function(scene, zoneColor, zoneAlpha, pointerLens, select3dPoint, onPointsSelected) {
-    const marker1 = marker3D(scene, zoneColor);
-    const marker2 = marker3D(scene, zoneColor);
-    const basePolygon = basePolygon3D(scene, zoneColor, zoneAlpha);
+const startAARectCreateUI = function(scene, markersColor, pointerLens, select3dPoint, withPoints, onPointsSelected) {
+    const marker1 = marker3D(scene, markersColor);
+    const marker2 = marker3D(scene, markersColor);
 
     const updatePointerLens = (pointerLens
                                ? function(canvasPos) {
@@ -302,29 +301,14 @@ const startAARectCreateUI = function(scene, zoneColor, zoneAlpha, pointerLens, s
                 function() {
                     updatePointerLens(null);
                     marker2.update(null);
-                    basePolygon.updateBase(null);
+                    withPoints(null);
                 },
                 function(canvasPos, point2WorldPos) {
                     updatePointerLens(canvasPos);
                     marker2.update(point2WorldPos);
-
-                    if (math.distVec3(point1WorldPos, point2WorldPos) > 0.01)
-                    {
-                        const min = (idx) => Math.min(point1WorldPos[idx], point2WorldPos[idx]);
-                        const max = (idx) => Math.max(point1WorldPos[idx], point2WorldPos[idx]);
-
-                        const xmin = min(0);
-                        const ymin = min(1);
-                        const zmin = min(2);
-                        const xmax = max(0);
-                        const ymax = max(1);
-                        const zmax = max(2);
-
-                        basePolygon.updateBase([ [ xmin, ymin, zmax ], [ xmax, ymin, zmax ],
-                                                 [ xmax, ymin, zmin ], [ xmin, ymin, zmin ] ]);
-                    }
-                    else
-                        basePolygon.updateBase(null);
+                    withPoints((math.distVec3(point1WorldPos, point2WorldPos) > 0.01)
+                               &&
+                               [ point1WorldPos, point2WorldPos ]);
                 },
                 function(point2CanvasPos, point2WorldPos) {
                     // `marker2.update' makes sure marker's position has been updated from its default [0,0,0]
@@ -334,10 +318,9 @@ const startAARectCreateUI = function(scene, zoneColor, zoneAlpha, pointerLens, s
 
                     marker1.destroy();
                     marker2.destroy();
-                    basePolygon.destroy();
                     updatePointerLens(null);
 
-                    onPointsSelected(point1WorldPos, point2WorldPos);
+                    onPointsSelected([ point1WorldPos, point2WorldPos ]);
                 });
         });
 
@@ -346,7 +329,6 @@ const startAARectCreateUI = function(scene, zoneColor, zoneAlpha, pointerLens, s
             deactivatePointSelection();
             marker1.destroy();
             marker2.destroy();
-            basePolygon.destroy();
             updatePointerLens(null);
         }
     };
@@ -1139,10 +1121,32 @@ class ZonesAAZoneControl extends Component {
         const select3dPoint = this.createSelect3dPoint(viewer, (origin, direction) => planeIntersect(zoneAltitude, math.vec3([ 0, 1, 0 ]), origin, direction));
 
         (function rec() {
-            self._deactivate = startAARectCreateUI(
-                scene, zoneColor, zoneAlpha, self.pointerLens, select3dPoint,
-                (pos1, pos2) => {
-                    const zone = createAAZoneFromPoints(pos1, pos2, zoneAltitude, zoneHeight, zoneColor, zoneAlpha, zonesPlugin);
+            const basePolygon = basePolygon3D(scene, zoneColor, zoneAlpha);
+            const deactivate = startAARectCreateUI(
+                scene, zoneColor, self.pointerLens, select3dPoint,
+                points => {
+                    if (points) {
+                        const p0 = points[0];
+                        const p1 = points[1];
+                        const min = (idx) => Math.min(p0[idx], p1[idx]);
+                        const max = (idx) => Math.max(p0[idx], p1[idx]);
+
+                        const xmin = min(0);
+                        const ymin = min(1);
+                        const zmin = min(2);
+                        const xmax = max(0);
+                        const ymax = max(1);
+                        const zmax = max(2);
+
+                        basePolygon.updateBase([ [ xmin, ymin, zmax ], [ xmax, ymin, zmax ],
+                                                 [ xmax, ymin, zmin ], [ xmin, ymin, zmin ] ]);
+                    } else {
+                        basePolygon.updateBase(null);
+                    }
+                },
+                points => {
+                    basePolygon.destroy();
+                    const zone = createAAZoneFromPoints(points[0], points[1], zoneAltitude, zoneHeight, zoneColor, zoneAlpha, zonesPlugin);
                     let reactivate = true;
                     self._deactivate = () => { reactivate = false; };
                     self.fire("zoneEnd", zone);
@@ -1151,6 +1155,10 @@ class ZonesAAZoneControl extends Component {
                         rec();
                     }
                 }).deactivate;
+            self._deactivate = () => {
+                deactivate();
+                basePolygon.destroy();
+            };
         })();
     }
 
