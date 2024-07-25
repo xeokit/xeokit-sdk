@@ -785,14 +785,21 @@ export class VBOInstancingTrianglesLayer {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
+        const useAlphaCutoff = this._state.textureSet && (typeof(this._state.textureSet.alphaCutoff) === "number");
         if (frameCtx.withSAO && this.model.saoEnabled) {
             if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported) {
                 if (this._renderers.pbrRendererWithSAO) {
                     this._renderers.pbrRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
             } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
-                if (this._renderers.colorTextureRendererWithSAO) {
-                    this._renderers.colorTextureRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                if (useAlphaCutoff) {
+                    if (this._renderers.colorTextureRendererWithSAOAlphaCutoff) {
+                        this._renderers.colorTextureRendererWithSAOAlphaCutoff.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
+                } else {
+                    if (this._renderers.colorTextureRendererWithSAO) {
+                        this._renderers.colorTextureRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
                 }
             } else if (this._state.normalsBuf) {
                 if (this._renderers.colorRendererWithSAO) {
@@ -808,8 +815,14 @@ export class VBOInstancingTrianglesLayer {
                 this._renderers.pbrRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
             }
         } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
-            if (this._renderers.colorTextureRenderer) {
-                this._renderers.colorTextureRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+            if (useAlphaCutoff) {
+                if (this._renderers.colorTextureRendererAlphaCutoff) {
+                    this._renderers.colorTextureRendererAlphaCutoff.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                }
+            } else {
+                if (this._renderers.colorTextureRenderer) {
+                    this._renderers.colorTextureRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                }
             }
         } else if (this._state.normalsBuf) {
             if (this._renderers.colorRenderer) {

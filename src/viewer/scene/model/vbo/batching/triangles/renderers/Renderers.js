@@ -50,6 +50,14 @@ class Renderers {
             this._colorTextureRendererWithSAO.destroy();
             this._colorTextureRendererWithSAO = null;
         }
+        if (this._colorTextureRendererAlphaCutoff && (!this._colorTextureRendererAlphaCutoff.getValid())) {
+            this._colorTextureRendererAlphaCutoff.destroy();
+            this._colorTextureRendererAlphaCutoff = null;
+        }
+        if (this._colorTextureRendererWithSAOAlphaCutoff && (!this._colorTextureRendererWithSAOAlphaCutoff.getValid())) {
+            this._colorTextureRendererWithSAOAlphaCutoff.destroy();
+            this._colorTextureRendererWithSAOAlphaCutoff = null;
+        }
         if (this._pbrRenderer && (!this._pbrRenderer.getValid())) {
             this._pbrRenderer.destroy();
             this._pbrRenderer = null;
@@ -177,6 +185,20 @@ class Renderers {
         return this._colorTextureRendererWithSAO;
     }
 
+    get colorTextureRendererAlphaCutoff() {
+        if (!this._colorTextureRendererAlphaCutoff) {
+            this._colorTextureRendererAlphaCutoff = new TrianglesColorTextureRenderer(this._scene, false, { useAlphaCutoff: true });
+        }
+        return this._colorTextureRendererAlphaCutoff;
+    }
+
+    get colorTextureRendererWithSAOAlphaCutoff() {
+        if (!this._colorTextureRendererWithSAOAlphaCutoff) {
+            this._colorTextureRendererWithSAOAlphaCutoff = new TrianglesColorTextureRenderer(this._scene, true, { useAlphaCutoff: true });
+        }
+        return this._colorTextureRendererWithSAOAlphaCutoff;
+    }
+
     get pbrRenderer() {
         if (!this._pbrRenderer) {
             this._pbrRenderer = new TrianglesPBRRenderer(this._scene, false);
@@ -300,6 +322,12 @@ class Renderers {
         }
         if (this._colorTextureRendererWithSAO) {
             this._colorTextureRendererWithSAO.destroy();
+        }
+        if (this._colorTextureRendererAlphaCutoff) {
+            this._colorTextureRendererAlphaCutoff.destroy();
+        }
+        if (this._colorTextureRendererWithSAOAlphaCutoff) {
+            this._colorTextureRendererWithSAOAlphaCutoff.destroy();
         }
         if (this._pbrRenderer) {
             this._pbrRenderer.destroy();

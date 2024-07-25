@@ -17,11 +17,12 @@ const tempMat4a = math.mat4();
  * @private
  */
 export class VBORenderer {
-    constructor(scene, withSAO = false, {instancing = false, edges = false} = {}) {
+    constructor(scene, withSAO = false, {instancing = false, edges = false, useAlphaCutoff = false} = {}) {
         this._scene = scene;
         this._withSAO = withSAO;
         this._instancing = instancing;
         this._edges = edges;
+        this._useAlphaCutoff = useAlphaCutoff;
         this._hash = this._getHash();
 
         /**
@@ -270,6 +271,10 @@ export class VBORenderer {
         if (this._withSAO) {
             this._uOcclusionTexture = "uOcclusionTexture";
             this._uSAOParams = program.getLocation("uSAOParams");
+        }
+
+        if (this._useAlphaCutoff) {
+            this._alphaCutoffLocation = program.getLocation("materialAlphaCutoff");
         }
 
         if (scene.logarithmicDepthBufferEnabled) {
@@ -607,6 +612,10 @@ export class VBORenderer {
                 frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
                 frameCtx.bindTexture++;
             }
+        }
+
+        if (this._useAlphaCutoff) {
+            gl.uniform1f(this._alphaCutoffLocation, textureSet.alphaCutoff);
         }
 
         if (colorUniform) {

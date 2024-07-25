@@ -98,6 +98,7 @@ export class TrianglesColorTextureRenderer extends TrianglesBatchingRenderer {
         const lightsState = scene._lightsState;
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
+        const useAlphaCutoff = this._useAlphaCutoff;
         const src = [];
         src.push("#version 300 es");
         src.push("// Triangles batching color texture fragment shader");
@@ -176,6 +177,10 @@ export class TrianglesColorTextureRenderer extends TrianglesBatchingRenderer {
             }
         }
 
+        if (useAlphaCutoff) {
+            src.push("uniform float materialAlphaCutoff;");
+        }
+
         src.push("in vec4 vViewPosition;");
         src.push("in vec4 vColor;");
         src.push("in vec2 vUV;");
@@ -243,11 +248,21 @@ export class TrianglesColorTextureRenderer extends TrianglesBatchingRenderer {
         }
 
         src.push("vec4 color =  vec4((lightAmbient.rgb * lightAmbient.a * newColor.rgb) + (reflectedColor * newColor.rgb), newColor.a);");
-        if (gammaOutput) {
-            src.push("vec4 colorTexel = color * sRGBToLinear(texture(uColorMap, vUV));");
-        } else {
-            src.push("vec4 colorTexel = color * texture(uColorMap, vUV);");
+
+        src.push("vec4 sampleColor = texture(uColorMap, vUV);");
+
+        if (useAlphaCutoff) {
+            src.push("if (sampleColor.a < materialAlphaCutoff) {");
+            src.push("   discard;");
+            src.push("}");
         }
+
+        if (gammaOutput) {
+            src.push("sampleColor = sRGBToLinear(sampleColor);");
+        }
+
+        src.push("vec4 colorTexel = color * sampleColor;");
+
         src.push("float opacity = color.a;");
 
         if (this._withSAO) {

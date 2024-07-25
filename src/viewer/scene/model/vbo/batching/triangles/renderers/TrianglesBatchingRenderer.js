@@ -5,8 +5,8 @@ import {VBORenderer} from "./../../../VBORenderer.js";
  */
 export class TrianglesBatchingRenderer extends VBORenderer {
 
-    constructor(scene, withSAO, {edges = false} = {}) {
-        super(scene, withSAO, {instancing: false, edges});
+    constructor(scene, withSAO, {edges = false, useAlphaCutoff = false} = {}) {
+        super(scene, withSAO, {instancing: false, edges, useAlphaCutoff});
     }
 
     _draw(drawCfg) {
