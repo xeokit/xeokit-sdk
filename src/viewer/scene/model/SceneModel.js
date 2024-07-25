@@ -3077,6 +3077,14 @@ export class SceneModel extends Component {
         return this._createMesh(cfg);
     }
 
+    _createDefaultIndices(numIndices) {
+        const indices = [];
+        for (let i = 0; i < numIndices; i++) {
+            indices.push(i);
+        }
+        return indices;
+    }
+
     _createMesh(cfg) {
         const mesh = new SceneModelMesh(this, cfg.id, cfg.color, cfg.opacity, cfg.transform, cfg.textureSet);
         mesh.pickId = this.scene._renderer.getPickID(mesh);
