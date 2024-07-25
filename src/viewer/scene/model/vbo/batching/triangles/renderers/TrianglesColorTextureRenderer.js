@@ -1,9 +1,9 @@
 import {TrianglesBatchingRenderer} from "./TrianglesBatchingRenderer.js";
 
-
 /**
  * @private
  */
+
 export class TrianglesColorTextureRenderer extends TrianglesBatchingRenderer {
     _getHash() {
         const scene = this._scene;
@@ -11,11 +11,10 @@ export class TrianglesColorTextureRenderer extends TrianglesBatchingRenderer {
     }
 
     drawLayer(frameCtx, layer, renderPass) {
-        super.drawLayer(frameCtx, layer, renderPass, {incrementDrawState: true});
+        super.drawLayer(frameCtx, layer, renderPass, { incrementDrawState: true });
     }
 
     _buildVertexShader() {
-
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
@@ -36,7 +35,7 @@ export class TrianglesColorTextureRenderer extends TrianglesBatchingRenderer {
 
         this._addMatricesUniformBlockLines(src);
 
-        src.push("uniform mat3 uvDecodeMatrix;")
+        src.push("uniform mat3 uvDecodeMatrix;");
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
@@ -70,6 +69,7 @@ export class TrianglesColorTextureRenderer extends TrianglesBatchingRenderer {
         if (scene.entityOffsetsEnabled) {
             src.push("worldPosition.xyz = worldPosition.xyz + offset;");
         }
+
         src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
         src.push("vViewPosition = viewPosition;");
         src.push("vColor = vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0, float(color.a) / 255.0);");
@@ -80,10 +80,12 @@ export class TrianglesColorTextureRenderer extends TrianglesBatchingRenderer {
             src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
+
         if (clipping) {
             src.push("vWorldPosition = worldPosition;");
             src.push("vFlags = flags;");
         }
+
         src.push("gl_Position = clipPos;");
         src.push("}");
         src.push("}");
@@ -154,6 +156,7 @@ export class TrianglesColorTextureRenderer extends TrianglesBatchingRenderer {
             src.push("uniform vec4 sliceColor;");
         }
         this._addMatricesUniformBlockLines(src);
+
         src.push("uniform vec4 lightAmbient;");
         for (let i = 0, len = lightsState.lights.length; i < len; i++) {
             const light = lightsState.lights[i];
