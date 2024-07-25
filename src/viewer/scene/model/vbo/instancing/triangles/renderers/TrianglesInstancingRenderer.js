@@ -14,13 +14,14 @@ export class TrianglesInstancingRenderer extends VBORenderer {
         const {
             state,
             frameCtx,
-            incrementDrawState,
+            incrementDrawState
         } = drawCfg;
 
         if (this._edges) {
             gl.drawElementsInstanced(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0, state.numInstances);
         } else {
             gl.drawElementsInstanced(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
+
             if (incrementDrawState) {
                 frameCtx.drawElements++;
             }
