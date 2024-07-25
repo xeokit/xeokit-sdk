@@ -349,27 +349,27 @@ class Renderers {
     }
 }
 
-const cachdRenderers = {};
+const cachedRenderers = {};
 
 /**
  * @private
  */
 export function getRenderers(scene) {
     const sceneId = scene.id;
-    let batchingRenderers = cachdRenderers[sceneId];
-    if (!batchingRenderers) {
-        batchingRenderers = new Renderers(scene);
-        cachdRenderers[sceneId] = batchingRenderers;
-        batchingRenderers._compile();
-        batchingRenderers.eagerCreateRenders();
+    let renderers = cachedRenderers[sceneId];
+    if (!renderers) {
+        renderers = new Renderers(scene);
+        cachedRenderers[sceneId] = renderers;
+        renderers._compile();
+        renderers.eagerCreateRenders();
         scene.on("compile", () => {
-            batchingRenderers._compile();
-            batchingRenderers.eagerCreateRenders();
+            renderers._compile();
+            renderers.eagerCreateRenders();
         });
         scene.on("destroyed", () => {
-            delete cachdRenderers[sceneId];
-            batchingRenderers._destroy();
+            delete cachedRenderers[sceneId];
+            renderers._destroy();
         });
     }
-    return batchingRenderers;
+    return renderers;
 }

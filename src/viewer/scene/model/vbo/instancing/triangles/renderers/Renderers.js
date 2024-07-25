@@ -42,14 +42,6 @@ class Renderers {
             this._flatColorRendererWithSAO.destroy();
             this._flatColorRendererWithSAO = null;
         }
-        if (this._pbrRenderer && (!this._pbrRenderer.getValid())) {
-            this._pbrRenderer.destroy();
-            this._pbrRenderer = null;
-        }
-        if (this._pbrRendererWithSAO && (!this._pbrRendererWithSAO.getValid())) {
-            this._pbrRendererWithSAO.destroy();
-            this._pbrRendererWithSAO = null;
-        }
         if (this._colorTextureRenderer && (!this._colorTextureRenderer.getValid())) {
             this._colorTextureRenderer.destroy();
             this._colorTextureRenderer = null;
@@ -57,6 +49,14 @@ class Renderers {
         if (this._colorTextureRendererWithSAO && (!this._colorTextureRendererWithSAO.getValid())) {
             this._colorTextureRendererWithSAO.destroy();
             this._colorTextureRendererWithSAO = null;
+        }
+        if (this._pbrRenderer && (!this._pbrRenderer.getValid())) {
+            this._pbrRenderer.destroy();
+            this._pbrRenderer = null;
+        }
+        if (this._pbrRendererWithSAO && (!this._pbrRendererWithSAO.getValid())) {
+            this._pbrRendererWithSAO.destroy();
+            this._pbrRendererWithSAO = null;
         }
         if (this._depthRenderer && (!this._depthRenderer.getValid())) {
             this._depthRenderer.destroy();
@@ -90,7 +90,7 @@ class Renderers {
             this._pickNormalsRenderer.destroy();
             this._pickNormalsRenderer = null;
         }
-        if (this._pickNormalsFlatRenderer && (!this._pickNormalsFlatRenderer.getValid())) {
+        if (this._pickNormalsFlatRenderer && this._pickNormalsFlatRenderer.getValid() === false) {
             this._pickNormalsFlatRenderer.destroy();
             this._pickNormalsFlatRenderer = null;
         }
@@ -163,20 +163,6 @@ class Renderers {
         return this._flatColorRendererWithSAO;
     }
 
-    get pbrRenderer() {
-        if (!this._pbrRenderer) {
-            this._pbrRenderer = new TrianglesPBRRenderer(this._scene, false);
-        }
-        return this._pbrRenderer;
-    }
-
-    get pbrRendererWithSAO() {
-        if (!this._pbrRendererWithSAO) {
-            this._pbrRendererWithSAO = new TrianglesPBRRenderer(this._scene, true);
-        }
-        return this._pbrRendererWithSAO;
-    }
-
     get colorTextureRenderer() {
         if (!this._colorTextureRenderer) {
             this._colorTextureRenderer = new TrianglesColorTextureRenderer(this._scene, false);
@@ -189,6 +175,20 @@ class Renderers {
             this._colorTextureRendererWithSAO = new TrianglesColorTextureRenderer(this._scene, true);
         }
         return this._colorTextureRendererWithSAO;
+    }
+
+    get pbrRenderer() {
+        if (!this._pbrRenderer) {
+            this._pbrRenderer = new TrianglesPBRRenderer(this._scene, false);
+        }
+        return this._pbrRenderer;
+    }
+
+    get pbrRendererWithSAO() {
+        if (!this._pbrRendererWithSAO) {
+            this._pbrRendererWithSAO = new TrianglesPBRRenderer(this._scene, true);
+        }
+        return this._pbrRendererWithSAO;
     }
 
     get silhouetteRenderer() {
@@ -268,18 +268,18 @@ class Renderers {
         return this._shadowRenderer;
     }
 
-    get snapInitRenderer() {
-        if (!this._snapInitRenderer) {
-            this._snapInitRenderer = new TrianglesSnapInitRenderer(this._scene, false);
-        }
-        return this._snapInitRenderer;
-    }
-
     get snapRenderer() {
         if (!this._snapRenderer) {
             this._snapRenderer = new TrianglesSnapRenderer(this._scene);
         }
         return this._snapRenderer;
+    }
+
+    get snapInitRenderer() {
+        if (!this._snapInitRenderer) {
+            this._snapInitRenderer = new TrianglesSnapInitRenderer(this._scene);
+        }
+        return this._snapInitRenderer;
     }
 
     _destroy() {
@@ -295,17 +295,17 @@ class Renderers {
         if (this._flatColorRendererWithSAO) {
             this._flatColorRendererWithSAO.destroy();
         }
-        if (this._pbrRenderer) {
-            this._pbrRenderer.destroy();
-        }
-        if (this._pbrRendererWithSAO) {
-            this._pbrRendererWithSAO.destroy();
-        }
         if (this._colorTextureRenderer) {
             this._colorTextureRenderer.destroy();
         }
         if (this._colorTextureRendererWithSAO) {
             this._colorTextureRendererWithSAO.destroy();
+        }
+        if (this._pbrRenderer) {
+            this._pbrRenderer.destroy();
+        }
+        if (this._pbrRendererWithSAO) {
+            this._pbrRendererWithSAO.destroy();
         }
         if (this._depthRenderer) {
             this._depthRenderer.destroy();
@@ -356,21 +356,20 @@ const cachedRenderers = {};
  */
 export function getRenderers(scene) {
     const sceneId = scene.id;
-    let instancingRenderers = cachedRenderers[sceneId];
-    if (!instancingRenderers) {
-        instancingRenderers = new Renderers(scene);
-        cachedRenderers[sceneId] = instancingRenderers;
-        instancingRenderers._compile();
-        instancingRenderers.eagerCreateRenders();
+    let renderers = cachedRenderers[sceneId];
+    if (!renderers) {
+        renderers = new Renderers(scene);
+        cachedRenderers[sceneId] = renderers;
+        renderers._compile();
+        renderers.eagerCreateRenders();
         scene.on("compile", () => {
-            instancingRenderers._compile();
-            instancingRenderers.eagerCreateRenders();
+            renderers._compile();
+            renderers.eagerCreateRenders();
         });
         scene.on("destroyed", () => {
             delete cachedRenderers[sceneId];
-            instancingRenderers._destroy();
+            renderers._destroy();
         });
     }
-    return instancingRenderers;
+    return renderers;
 }
-
