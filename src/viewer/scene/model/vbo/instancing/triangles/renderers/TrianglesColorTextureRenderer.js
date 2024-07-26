@@ -4,7 +4,6 @@ import {TrianglesInstancingRenderer} from "./TrianglesInstancingRenderer.js";
  * @private
  */
 
-
 export class TrianglesColorTextureRenderer extends TrianglesInstancingRenderer {
     _getHash() {
         const scene = this._scene;
@@ -40,7 +39,7 @@ export class TrianglesColorTextureRenderer extends TrianglesInstancingRenderer {
 
         this._addMatricesUniformBlockLines(src);
 
-        src.push("uniform mat3 uvDecodeMatrix;")
+        src.push("uniform mat3 uvDecodeMatrix;");
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
@@ -73,7 +72,7 @@ export class TrianglesColorTextureRenderer extends TrianglesInstancingRenderer {
         src.push("vec4 worldPosition =  positionsDecodeMatrix * vec4(position, 1.0); ");
         src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
         if (scene.entityOffsetsEnabled) {
-            src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
+            src.push("worldPosition.xyz = worldPosition.xyz + offset;");
         }
 
         src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
@@ -101,11 +100,10 @@ export class TrianglesColorTextureRenderer extends TrianglesInstancingRenderer {
     _buildFragmentShader() {
         const scene = this._scene;
         const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
-        const sectionPlanesState = scene._sectionPlanesState;
         const lightsState = scene._lightsState;
-        let i;
-        let len;
+        const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
+        const useAlphaCutoff = this._useAlphaCutoff;
         const src = [];
         src.push("#version 300 es");
         src.push("// Instancing geometry drawing fragment shader");
@@ -117,6 +115,7 @@ export class TrianglesColorTextureRenderer extends TrianglesInstancingRenderer {
         src.push("precision mediump float;");
         src.push("precision mediump int;");
         src.push("#endif");
+
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("in float isPerspective;");
             src.push("uniform float logDepthBufFC;");
@@ -165,7 +164,7 @@ export class TrianglesColorTextureRenderer extends TrianglesInstancingRenderer {
         this._addMatricesUniformBlockLines(src);
 
         src.push("uniform vec4 lightAmbient;");
-        for (i = 0, len = lightsState.lights.length; i < len; i++) {
+        for (let i = 0, len = lightsState.lights.length; i < len; i++) {
             const light = lightsState.lights[i];
             if (light.type === "ambient") {
                 continue;
@@ -181,6 +180,10 @@ export class TrianglesColorTextureRenderer extends TrianglesInstancingRenderer {
                 src.push("uniform vec3 lightPos" + i + ";");
                 src.push("uniform vec3 lightDir" + i + ";");
             }
+        }
+
+        if (useAlphaCutoff) {
+            src.push("uniform float materialAlphaCutoff;");
         }
 
         src.push("in vec4 vViewPosition;");
@@ -218,7 +221,7 @@ export class TrianglesColorTextureRenderer extends TrianglesInstancingRenderer {
         src.push("vec3 yTangent = dFdy( vViewPosition.xyz );");
         src.push("vec3 viewNormal = normalize( cross( xTangent, yTangent ) );");
 
-        for (i = 0, len = lightsState.lights.length; i < len; i++) {
+        for (let i = 0, len = lightsState.lights.length; i < len; i++) {
             const light = lightsState.lights[i];
             if (light.type === "ambient") {
                 continue;
@@ -244,16 +247,27 @@ export class TrianglesColorTextureRenderer extends TrianglesInstancingRenderer {
             } else {
                 continue;
             }
+
             src.push("lambertian = max(dot(-viewNormal, viewLightDir), 0.0);");
             src.push("reflectedColor += lambertian * (lightColor" + i + ".rgb * lightColor" + i + ".a);");
         }
 
         src.push("vec4 color =  vec4((lightAmbient.rgb * lightAmbient.a * newColor.rgb) + (reflectedColor * newColor.rgb), newColor.a);");
-        if (gammaOutput) {
-            src.push("vec4 colorTexel = color * sRGBToLinear(texture(uColorMap, vUV));");
-        } else {
-            src.push("vec4 colorTexel = color * texture(uColorMap, vUV);");
+
+        src.push("vec4 sampleColor = texture(uColorMap, vUV);");
+
+        if (useAlphaCutoff) {
+            src.push("if (sampleColor.a < materialAlphaCutoff) {");
+            src.push("   discard;");
+            src.push("}");
         }
+
+        if (gammaOutput) {
+            src.push("sampleColor = sRGBToLinear(sampleColor);");
+        }
+
+        src.push("vec4 colorTexel = color * sampleColor;");
+
         src.push("float opacity = color.a;");
 
         if (this._withSAO) {
@@ -275,7 +289,7 @@ export class TrianglesColorTextureRenderer extends TrianglesInstancingRenderer {
         }
 
         if (scene.logarithmicDepthBufferEnabled) {
-            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
+            src.push("gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
 
         src.push("}");

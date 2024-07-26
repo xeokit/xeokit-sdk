@@ -291,23 +291,21 @@ function loadTextureSet(ctx, material) {
     if (material.emissiveTexture) {
         textureSetCfg.emissiveTextureId = material.emissiveTexture.texture._textureId;
     }
-    // const alphaMode = material.alphaMode;
-    // switch (alphaMode) {
-    //     case "NORMAL_OPAQUE":
-    //         materialCfg.alphaMode = "opaque";
-    //         break;
-    //     case "MASK":
-    //         materialCfg.alphaMode = "mask";
-    //         break;
-    //     case "BLEND":
-    //         materialCfg.alphaMode = "blend";
-    //         break;
-    //     default:
-    // }
-    // const alphaCutoff = material.alphaCutoff;
-    // if (alphaCutoff !== undefined) {
-    //     materialCfg.alphaCutoff = alphaCutoff;
-    // }
+
+    switch (material.alphaMode) {
+        case "OPAQUE":
+            break;
+        case "MASK":
+            const alphaCutoff = material.alphaCutoff;
+            // Default from the spec https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#reference-material
+            textureSetCfg.alphaCutoff = (alphaCutoff !== undefined) ? alphaCutoff : 0.5;
+            break;
+        case "BLEND":
+            break;
+        default:
+            break;
+    }
+
     const metallicPBR = material.pbrMetallicRoughness;
     if (material.pbrMetallicRoughness) {
         const pbrMetallicRoughness = material.pbrMetallicRoughness;

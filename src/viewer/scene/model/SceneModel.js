@@ -2644,6 +2644,7 @@ export class SceneModel extends Component {
             id: textureSetId,
             model: this,
             colorTexture,
+            alphaCutoff: cfg.alphaCutoff,
             metallicRoughnessTexture,
             normalsTexture,
             emissiveTexture,

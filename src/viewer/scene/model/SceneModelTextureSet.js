@@ -27,6 +27,11 @@ export class SceneModelTextureSet {
         this.colorTexture = cfg.colorTexture;
 
         /**
+         * The alpha cutoff [float]
+         */
+        this.alphaCutoff = cfg.alphaCutoff;
+
+        /**
          * The metallic-roughness texture.
          * @type {SceneModelTexture|*}
          */
