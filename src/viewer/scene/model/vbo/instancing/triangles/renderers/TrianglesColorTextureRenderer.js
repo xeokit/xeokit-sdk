@@ -279,9 +279,10 @@ export class TrianglesColorTextureRenderer extends TrianglesInstancingRenderer {
             src.push("   float blendFactor       = uSAOParams[3];");
             src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
             src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBToFloat(texture(uOcclusionTexture, uv))) * blendFactor;");
-            src.push("   outColor                = vec4(newColor.rgb * colorTexel.rgb * ambient, opacity);");
+
+            src.push("   outColor                = vec4(colorTexel.rgb * ambient, opacity);");
         } else {
-            src.push("   outColor                = vec4(newColor.rgb * colorTexel.rgb, opacity);");
+            src.push("   outColor                = vec4(colorTexel.rgb, opacity);");
         }
 
         if (gammaOutput) {
