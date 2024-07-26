@@ -304,6 +304,14 @@ export class DTXTrianglesSnapInitRenderer {
         src.push("uvec4 flags = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);");
         src.push("uvec4 flags2 = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);");
 
+        // flags.w = NOT_RENDERED | PICK
+        // renderPass = PICK
+
+        src.push(`if (int(flags.w) != renderPass) {`);
+        src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
+        src.push("   return;"); // Cull vertex
+        src.push("}");
+
         src.push("{");
 
         // get color
