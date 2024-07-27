@@ -396,11 +396,24 @@ export class DotBIMLoaderPlugin extends Plugin {
                 }
                 const dbMeshIndex = dbMeshIndices[dbMeshId];
                 const dbMesh = fileData.meshes[dbMeshIndex];
+                let coordinatesDeconstructed = [];
+                let indicesDeconstructed = [];
+                let newIndicesCount = 0;
+                for (let i = 0; i < dbMesh.indices.length; i++) {
+                    let pointIndex = dbMesh.indices[i];
+                    let actualPositionInList = pointIndex * 3;
+                    let pointX = dbMesh.coordinates[actualPositionInList];
+                    let pointY = dbMesh.coordinates[actualPositionInList + 1];
+                    let pointZ = dbMesh.coordinates[actualPositionInList + 2];
+                    coordinatesDeconstructed.push(pointX, pointY, pointZ);
+                    indicesDeconstructed.push(newIndicesCount);
+                    newIndicesCount += 1;
+                }
                 sceneModel.createGeometry({
                     id: dbMeshId,
                     primitive: "triangles",
-                    positions: dbMesh.coordinates,
-                    indices: dbMesh.indices
+                    positions: coordinatesDeconstructed,
+                    indices: indicesDeconstructed
                 });
                 dbMeshLoaded[dbMeshId] = true;
             }
@@ -435,32 +448,38 @@ export class DotBIMLoaderPlugin extends Plugin {
 
                 let visible = true;
                 let pickable = true;
-                let color = element.color ? [element.color.r / 255, element.color.g / 255, element.color.b / 255] : [1, 1, 1];
-                let opacity = element.color ? element.color.a / 255 : 1.0;
 
-                if (props) {
-                    if (props.visible === false) {
-                        visible = false;
+                if (element.face_colors === undefined) {
+                    let color = element.color ? [element.color.r / 255, element.color.g / 255, element.color.b / 255] : [1, 1, 1];
+                    let opacity = element.color ? element.color.a / 255 : 1.0;
+
+                    sceneModel.createMesh({
+                        id: meshId,
+                        geometryId: dbMeshId,
+                        color,
+                        opacity,
+                        quaternion: rotation && (rotation.qz !== 0 || rotation.qy !== 0 || rotation.qx !== 0 || rotation.qw !== 1.0) ? [rotation.qx, rotation.qy, rotation.qz, rotation.qw] : undefined,
+                        position: vector ? [vector.x, vector.y, vector.z] : undefined
+                    });
+                }
+                else {
+                    let faceColors = element.face_colors;
+                    let vertexColorsCompressed = [];
+                    for (let i = 0; i < faceColors.length; i+=4) {
+                        vertexColorsCompressed.push(faceColors[i], faceColors[i+1], faceColors[i+2], faceColors[i+3]);
+                        vertexColorsCompressed.push(faceColors[i], faceColors[i+1], faceColors[i+2], faceColors[i+3]);
+                        vertexColorsCompressed.push(faceColors[i], faceColors[i+1], faceColors[i+2], faceColors[i+3]);
                     }
-                    if (props.pickable === false) {
-                        pickable = false;
-                    }
-                    if (props.colorize) {
-                        color = props.colorize;
-                    }
-                    if (props.opacity !== undefined && props.opacity !== null) {
-                        opacity = props.opacity;
-                    }
+
+                    sceneModel.createMesh({
+                        id: meshId,
+                        geometryId: dbMeshId,
+                        quaternion: rotation && (rotation.qz !== 0 || rotation.qy !== 0 || rotation.qx !== 0 || rotation.qw !== 1.0) ? [rotation.qx, rotation.qy, rotation.qz, rotation.qw] : undefined,
+                        position: vector ? [vector.x, vector.y, vector.z] : undefined,
+                        colorsCompressed: vertexColorsCompressed
+                    });
                 }
 
-                sceneModel.createMesh({
-                    id: meshId,
-                    geometryId: dbMeshId,
-                    color,
-                    opacity,
-                    quaternion: rotation && (rotation.qz !== 0 || rotation.qy !== 0 || rotation.qx !== 0 || rotation.qw !== 1.0) ? [rotation.qx, rotation.qy, rotation.qz, rotation.qw] : undefined,
-                    position: vector ? [vector.x, vector.y, vector.z] : undefined
-                });
 
                 sceneModel.createEntity({
                     id: objectId,

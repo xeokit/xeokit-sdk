@@ -3,7 +3,7 @@ import {CameraFlightAnimation} from "./scene/camera/CameraFlightAnimation.js";
 import {CameraControl} from "./scene/CameraControl/CameraControl.js";
 import {MetaScene} from "./metadata/MetaScene.js";
 import {LocaleService} from "./localization/LocaleService.js";
-import html2canvas from 'html2canvas/dist/html2canvas.esm.js';
+import html2canvas from '../../node_modules/html2canvas/dist/html2canvas.esm.js';
 
 /**
  * The 3D Viewer at the heart of the xeokit SDK.
