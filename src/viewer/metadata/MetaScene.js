@@ -126,8 +126,6 @@ class MetaScene {
      * @param {String} modelId ID for the new {@link MetaModel}, which will have {@link MetaModel#id} set to this value.
      * @param {Object} metaModelData Data for the {@link MetaModel}.
      * @param {Object} [options] Options for creating the {@link MetaModel}.
-     * @param {Object} [options.includeTypes] When provided, only create {@link MetaObject}s with types in this list.
-     * @param {Object} [options.excludeTypes] When provided, never create {@link MetaObject}s with types in this list.
      * @param {Boolean} [options.globalizeObjectIds=false] Whether to globalize each {@link MetaObject#id}. Set this ````true```` when you need to load multiple instances of the same meta model, to avoid ID clashes between the meta objects in the different instances.
      * @returns {MetaModel} The new MetaModel.
      */

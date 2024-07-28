@@ -306,8 +306,6 @@ class GLTFLoaderPlugin extends Plugin {
      * @param {String} [params.metaModelSrc] Path to an optional metadata file, as an alternative to the ````metaModelJSON```` parameter.
      * @param {*} [params.metaModelJSON] JSON model metadata, as an alternative to the ````metaModelSrc```` parameter.
      * @param {{String:Object}} [params.objectDefaults] Map of initial default states for each loaded {@link Entity} that represents an object. Default value is {@link IFCObjectDefaults}.
-     * @param {String[]} [params.includeTypes] When loading metadata, only loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
-     * @param {String[]} [params.excludeTypes] When loading metadata, never loads objects that have {@link MetaObject}s with {@link MetaObject#type} values in this list.
      * @param {Boolean} [params.edges=false] Whether or not xeokit renders the model with edges emphasized.
      * @param {Number[]} [params.origin=[0,0,0]] The double-precision World-space origin of the model's coordinates.
      * @param {Number[]} [params.position=[0,0,0]] The single-precision position, relative to ````origin````.
@@ -327,149 +325,43 @@ class GLTFLoaderPlugin extends Plugin {
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}
      */
     load(params = {}) {
-
         if (params.id && this.viewer.scene.components[params.id]) {
             this.error("Component with this ID already exists in viewer: " + params.id + " - will autogenerate this ID");
             delete params.id;
         }
-
         const sceneModel = new SceneModel(this.viewer.scene, utils.apply(params, {
             isModel: true,
             dtxEnabled: params.dtxEnabled
         }));
-
         const modelId = sceneModel.id;  // In case ID was auto-generated
-
         if (!params.src && !params.gltf) {
             this.error("load() param expected: src or gltf");
             return sceneModel; // Return new empty model
         }
-
         if (params.metaModelSrc || params.metaModelJSON) {
-
-            const objectDefaults = params.objectDefaults || this._objectDefaults || IFCObjectDefaults;
-
             const processMetaModelJSON = (metaModelJSON) => {
-
-                this.viewer.metaScene.createMetaModel(modelId, metaModelJSON, {
-                    includeTypes: params.includeTypes,
-                    excludeTypes: params.excludeTypes
-                });
-
+                this.viewer.metaScene.createMetaModel(modelId, metaModelJSON, {});
                 this.viewer.scene.canvas.spinner.processes--;
-
-                let includeTypes;
-                if (params.includeTypes) {
-                    includeTypes = {};
-                    for (let i = 0, len = params.includeTypes.length; i < len; i++) {
-                        includeTypes[params.includeTypes[i]] = true;
-                    }
-                }
-
-                let excludeTypes;
-                if (params.excludeTypes) {
-                    excludeTypes = {};
-                    if (!includeTypes) {
-                        includeTypes = {};
-                    }
-                    for (let i = 0, len = params.excludeTypes.length; i < len; i++) {
-                        includeTypes[params.excludeTypes[i]] = true;
-                    }
-                }
-
-                params.readableGeometry = false;
-
-                params.handleGLTFNode = (modelId, glTFNode, actions) => {
-
-                    const name = glTFNode.name;
-
-                    if (!name) {
-                        return true; // Continue descending this node subtree
-                    }
-
-                    const nodeId = name;
-                    const metaObject = this.viewer.metaScene.metaObjects[nodeId];
-                    const type = (metaObject ? metaObject.type : "DEFAULT") || "DEFAULT";
-
-                    actions.createEntity = {
-                        id: nodeId,
-                        isObject: true // Registers the Entity in Scene#objects
-                    };
-
-                    const props = objectDefaults[type];
-
-                    if (props) { // Set Entity's initial rendering state for recognized type
-
-                        if (props.visible === false) {
-                            actions.createEntity.visible = false;
-                        }
-
-                        if (props.colorize) {
-                            actions.createEntity.colorize = props.colorize;
-                        }
-
-                        if (props.pickable === false) {
-                            actions.createEntity.pickable = false;
-                        }
-
-                        if (props.opacity !== undefined && props.opacity !== null) {
-                            actions.createEntity.opacity = props.opacity;
-                        }
-                    }
-
-                    return true; // Continue descending this glTF node subtree
-                };
-
                 if (params.src) {
                     this._sceneModelLoader.load(this, params.src, metaModelJSON, params, sceneModel);
                 } else {
                     this._sceneModelLoader.parse(this, params.gltf, metaModelJSON, params, sceneModel);
                 }
             };
-
             if (params.metaModelSrc) {
-
                 const metaModelSrc = params.metaModelSrc;
-
                 this.viewer.scene.canvas.spinner.processes++;
-
                 this._dataSource.getMetaModel(metaModelSrc, (metaModelJSON) => {
-
                     this.viewer.scene.canvas.spinner.processes--;
-
                     processMetaModelJSON(metaModelJSON);
-
                 }, (errMsg) => {
                     this.error(`load(): Failed to load model metadata for model '${modelId} from  '${metaModelSrc}' - ${errMsg}`);
                     this.viewer.scene.canvas.spinner.processes--;
                 });
-
             } else if (params.metaModelJSON) {
-
                 processMetaModelJSON(params.metaModelJSON);
             }
-
         } else {
-
-            params.handleGLTFNode = (modelId, glTFNode, actions) => {
-
-                const name = glTFNode.name;
-
-                if (!name) {
-                    return true; // Continue descending this node subtree
-                }
-
-                const id = name;
-
-                actions.createEntity = { // Create an Entity for this glTF scene node
-                    id: id,
-                    isObject: true // Registers the Entity in Scene#objects
-                };
-
-                return true; // Continue descending this glTF node subtree
-            };
-
-
             if (params.src) {
                 this._sceneModelLoader.load(this, params.src, null, params, sceneModel);
             } else {
