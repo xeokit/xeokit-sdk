@@ -1539,13 +1539,16 @@ const Renderer = function (scene, options) {
             }
 
             const snappedEntity = (snappedPickable && snappedPickable.delegatePickedEntity) ? snappedPickable.delegatePickedEntity() : snappedPickable;
+            if (!snappedEntity && pickable) {
+                pickable = pickable.delegatePickedEntity ? pickable.delegatePickedEntity() : pickable;
+            }
 
             pickResult.reset();
             pickResult.snappedToEdge = (snapType === "edge");
             pickResult.snappedToVertex = (snapType === "vertex");
-            pickResult.worldPos = snappedWorldPos;
-            pickResult.worldNormal = snappedWorldNormal;
-            pickResult.entity = snappedEntity;
+            pickResult.worldPos = snappedWorldPos || worldPos;
+            pickResult.worldNormal = snappedWorldNormal || worldNormal;
+            pickResult.entity = snappedEntity || pickable;
             pickResult.canvasPos = canvasPos || scene.camera.projectWorldPos(worldPos || snappedWorldPos);
             pickResult.snappedCanvasPos = snappedCanvasPos || canvasPos;
 
