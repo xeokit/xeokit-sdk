@@ -5,8 +5,8 @@ import {VBORenderer} from "./../../../VBORenderer.js";
  */
 export class TrianglesBatchingRenderer extends VBORenderer {
 
-    constructor(scene, withSAO, {edges = false} = {}) {
-        super(scene, withSAO, {instancing: false, edges});
+    constructor(scene, withSAO, {edges = false, useAlphaCutoff = false} = {}) {
+        super(scene, withSAO, {instancing: false, edges, useAlphaCutoff});
     }
 
     _draw(drawCfg) {
@@ -23,7 +23,6 @@ export class TrianglesBatchingRenderer extends VBORenderer {
         } else {
             const count = frameCtx.pickElementsCount || state.indicesBuf.numItems;
             const offset = frameCtx.pickElementsOffset ? frameCtx.pickElementsOffset * state.indicesBuf.itemByteSize : 0;
-
             gl.drawElements(gl.TRIANGLES, count, state.indicesBuf.itemType, offset);
 
             if (incrementDrawState) {

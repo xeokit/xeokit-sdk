@@ -24,7 +24,7 @@ export class VBOBatchingPointsLayer {
      */
     constructor(cfg) {
 
-        console.info("Creating VBOBatchingPointsLayer");
+     //   console.info("Creating VBOBatchingPointsLayer");
 
         /**
          * Owner model
@@ -99,6 +99,11 @@ export class VBOBatchingPointsLayer {
             this.aabbDirty = false;
         }
         return this._aabb;
+
+        /**
+         * The type of primitives in this layer.
+         */
+        this.primitive = cfg.primitive;
     }
 
     /**

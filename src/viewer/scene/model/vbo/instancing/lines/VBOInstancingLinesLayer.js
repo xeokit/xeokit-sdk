@@ -28,7 +28,7 @@ class VBOInstancingLinesLayer {
      */
     constructor(cfg) {
 
-        console.info("VBOInstancingLinesLayer");
+     //   console.info("VBOInstancingLinesLayer");
 
         /**
          * Owner model
@@ -108,6 +108,11 @@ class VBOInstancingLinesLayer {
         }
 
         this._finalized = false;
+
+        /**
+         * The type of primitives in this layer.
+         */
+        this.primitive = cfg.primitive;
     }
 
     get aabb() {

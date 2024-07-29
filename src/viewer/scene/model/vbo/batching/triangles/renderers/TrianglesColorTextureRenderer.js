@@ -1,9 +1,9 @@
 import {TrianglesBatchingRenderer} from "./TrianglesBatchingRenderer.js";
 
-
 /**
  * @private
  */
+
 export class TrianglesColorTextureRenderer extends TrianglesBatchingRenderer {
     _getHash() {
         const scene = this._scene;
@@ -11,11 +11,10 @@ export class TrianglesColorTextureRenderer extends TrianglesBatchingRenderer {
     }
 
     drawLayer(frameCtx, layer, renderPass) {
-        super.drawLayer(frameCtx, layer, renderPass, {incrementDrawState: true});
+        super.drawLayer(frameCtx, layer, renderPass, { incrementDrawState: true });
     }
 
     _buildVertexShader() {
-
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
@@ -36,7 +35,7 @@ export class TrianglesColorTextureRenderer extends TrianglesBatchingRenderer {
 
         this._addMatricesUniformBlockLines(src);
 
-        src.push("uniform mat3 uvDecodeMatrix;")
+        src.push("uniform mat3 uvDecodeMatrix;");
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
@@ -70,6 +69,7 @@ export class TrianglesColorTextureRenderer extends TrianglesBatchingRenderer {
         if (scene.entityOffsetsEnabled) {
             src.push("worldPosition.xyz = worldPosition.xyz + offset;");
         }
+
         src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
         src.push("vViewPosition = viewPosition;");
         src.push("vColor = vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0, float(color.a) / 255.0);");
@@ -80,10 +80,12 @@ export class TrianglesColorTextureRenderer extends TrianglesBatchingRenderer {
             src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
+
         if (clipping) {
             src.push("vWorldPosition = worldPosition;");
             src.push("vFlags = flags;");
         }
+
         src.push("gl_Position = clipPos;");
         src.push("}");
         src.push("}");
@@ -96,6 +98,7 @@ export class TrianglesColorTextureRenderer extends TrianglesBatchingRenderer {
         const lightsState = scene._lightsState;
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
+        const useAlphaCutoff = this._useAlphaCutoff;
         const src = [];
         src.push("#version 300 es");
         src.push("// Triangles batching color texture fragment shader");
@@ -154,6 +157,7 @@ export class TrianglesColorTextureRenderer extends TrianglesBatchingRenderer {
             src.push("uniform vec4 sliceColor;");
         }
         this._addMatricesUniformBlockLines(src);
+
         src.push("uniform vec4 lightAmbient;");
         for (let i = 0, len = lightsState.lights.length; i < len; i++) {
             const light = lightsState.lights[i];
@@ -171,6 +175,10 @@ export class TrianglesColorTextureRenderer extends TrianglesBatchingRenderer {
                 src.push("uniform vec3 lightPos" + i + ";");
                 src.push("uniform vec3 lightDir" + i + ";");
             }
+        }
+
+        if (useAlphaCutoff) {
+            src.push("uniform float materialAlphaCutoff;");
         }
 
         src.push("in vec4 vViewPosition;");
@@ -240,11 +248,21 @@ export class TrianglesColorTextureRenderer extends TrianglesBatchingRenderer {
         }
 
         src.push("vec4 color =  vec4((lightAmbient.rgb * lightAmbient.a * newColor.rgb) + (reflectedColor * newColor.rgb), newColor.a);");
-        if (gammaOutput) {
-            src.push("vec4 colorTexel = color * sRGBToLinear(texture(uColorMap, vUV));");
-        } else {
-            src.push("vec4 colorTexel = color * texture(uColorMap, vUV);");
+
+        src.push("vec4 sampleColor = texture(uColorMap, vUV);");
+
+        if (useAlphaCutoff) {
+            src.push("if (sampleColor.a < materialAlphaCutoff) {");
+            src.push("   discard;");
+            src.push("}");
         }
+
+        if (gammaOutput) {
+            src.push("sampleColor = sRGBToLinear(sampleColor);");
+        }
+
+        src.push("vec4 colorTexel = color * sampleColor;");
+
         src.push("float opacity = color.a;");
 
         if (this._withSAO) {

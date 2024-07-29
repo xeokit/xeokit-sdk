@@ -5,13 +5,13 @@
   "conversionDate": "10-08-2023- 02-05-01",
   "outputDir": null,
   "xktFiles": [
-    "architectural.xkt",
+    "sprinklers.xkt",
     "electrical.xkt",
     "fireAlarms.xkt",
     "mechanical.xkt",
     "plumbing.xkt",
-    "sprinklers.xkt",
-    "structure.xkt"
+    "structure.xkt",
+    "architectural.xkt"
   ],
   "metaModelFiles": [
     "architectural.json",

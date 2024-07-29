@@ -45,6 +45,19 @@ export declare class DistanceMeasurement extends Component {
   get visible(): boolean;
 
   /**
+   * Sets whether this DistanceMeasurement is highlighted or not.
+   *
+   * @type {Boolean}
+   */
+  set highlighted(arg: boolean);
+  /**
+   * Gets whether this DistanceMeasurement is highlighted or not.
+   *
+   * @type {Boolean}
+   */
+  get highlighted(): boolean;
+
+  /**
    * Sets if the origin {@link Marker} is visible.
    *
    * @type {Boolean}
@@ -218,4 +231,11 @@ export declare class DistanceMeasurement extends Component {
    * @type {Boolean}
    */
   get labelsOnWires() : boolean;
+
+  /**
+   * Sets the higlihted state on a measurement
+   *
+   * @type {String}
+   */
+  setHighlighted(highlighted: boolean): void;
 }

@@ -24,7 +24,7 @@ export class VBOBatchingLinesLayer {
      */
     constructor(cfg) {
 
-        console.info("Creating VBOBatchingLinesLayer");
+       // console.info("Creating VBOBatchingLinesLayer");
 
         /**
          * Index of this LinesBatchingLayer in {@link VBOSceneModel#_layerList}.
@@ -79,6 +79,11 @@ export class VBOBatchingLinesLayer {
         if (cfg.origin) {
             this._state.origin = math.vec3(cfg.origin);
         }
+
+        /**
+         * The type of primitives in this layer.
+         */
+        this.primitive = cfg.primitive;
     }
 
     get aabb() {

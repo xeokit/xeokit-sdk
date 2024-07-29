@@ -36,7 +36,7 @@ export class VBOInstancingTrianglesLayer {
      */
     constructor(cfg) {
 
-         console.info("Creating VBOInstancingTrianglesLayer");
+      //   console.info("Creating VBOInstancingTrianglesLayer");
 
         /**
          * Owner model
@@ -139,6 +139,11 @@ export class VBOInstancingTrianglesLayer {
          * @type {number|*}
          */
         this.numIndices = cfg.geometry.numIndices;
+
+        /**
+         * The type of primitives in this layer.
+         */
+        this.primitive = cfg.geometry.primitive;
     }
 
     get aabb() {
@@ -252,7 +257,7 @@ export class VBOInstancingTrianglesLayer {
 
         const portion = {};
 
-        if (this.model.scene.pickSurfacePrecisionEnabled) {
+        if (this.model.scene.readableGeometryEnabled) {
             portion.matrix = meshMatrix.slice();
             portion.inverseMatrix = null; // Lazy-computed in precisionRayPickSurface
             portion.normalMatrix = null; // Lazy-computed in precisionRayPickSurface
@@ -690,7 +695,7 @@ export class VBOInstancingTrianglesLayer {
     }
 
     getEachVertex(portionId, callback) {
-        if (!this.model.scene.pickSurfacePrecisionEnabled) {
+        if (!this.model.scene.readableGeometryEnabled) {
             return false;
         }
         const state = this._state;
@@ -702,13 +707,12 @@ export class VBOInstancingTrianglesLayer {
         }
         const positions = geometry.quantizedPositions;
         const origin = state.origin;
-        const offset = portion.offset;
-        const offsetX = origin[0] + offset[0];
-        const offsetY = origin[1] + offset[1];
-        const offsetZ = origin[2] + offset[2];
+        const offsetX = origin[0] ;
+        const offsetY = origin[1] ;
+        const offsetZ = origin[2] ;
         const worldPos = tempVec4a;
         const portionMatrix = portion.matrix;
-        const sceneModelPatrix = this.model.sceneModelMatrix;
+        const sceneModelMatrix = this.model.matrix;
         const positionsDecodeMatrix = state.positionsDecodeMatrix;
         for (let i = 0, len = positions.length; i < len; i += 3) {
             worldPos[0] = positions[i];
@@ -716,11 +720,28 @@ export class VBOInstancingTrianglesLayer {
             worldPos[2] = positions[i + 2];
             math.decompressPosition(worldPos, positionsDecodeMatrix);
             math.transformPoint3(portionMatrix, worldPos);
-            math.transformPoint3(sceneModelPatrix, worldPos);
+            math.transformPoint3(sceneModelMatrix, worldPos);
             worldPos[0] += offsetX;
             worldPos[1] += offsetY;
             worldPos[2] += offsetZ;
             callback(worldPos);
+        }
+    }
+
+    getEachIndex(portionId, callback) {
+        if (!this.model.scene.readableGeometryEnabled) {
+            return false;
+        }
+        const state = this._state;
+        const geometry = state.geometry;
+        const portion = this._portions[portionId];
+        if (!portion) {
+            this.model.error("portion not found: " + portionId);
+            return;
+        }
+        const indices = geometry.indices;
+        for (let i = 0, len = indices.length; i < len; i++) {
+            callback(indices[i]);
         }
     }
 
@@ -764,14 +785,21 @@ export class VBOInstancingTrianglesLayer {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
+        const useAlphaCutoff = this._state.textureSet && (typeof(this._state.textureSet.alphaCutoff) === "number");
         if (frameCtx.withSAO && this.model.saoEnabled) {
             if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported) {
                 if (this._renderers.pbrRendererWithSAO) {
                     this._renderers.pbrRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
             } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
-                if (this._renderers.colorTextureRendererWithSAO) {
-                    this._renderers.colorTextureRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                if (useAlphaCutoff) {
+                    if (this._renderers.colorTextureRendererWithSAOAlphaCutoff) {
+                        this._renderers.colorTextureRendererWithSAOAlphaCutoff.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
+                } else {
+                    if (this._renderers.colorTextureRendererWithSAO) {
+                        this._renderers.colorTextureRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
                 }
             } else if (this._state.normalsBuf) {
                 if (this._renderers.colorRendererWithSAO) {
@@ -787,8 +815,14 @@ export class VBOInstancingTrianglesLayer {
                 this._renderers.pbrRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
             }
         } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
-            if (this._renderers.colorTextureRenderer) {
-                this._renderers.colorTextureRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+            if (useAlphaCutoff) {
+                if (this._renderers.colorTextureRendererAlphaCutoff) {
+                    this._renderers.colorTextureRendererAlphaCutoff.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                }
+            } else {
+                if (this._renderers.colorTextureRenderer) {
+                    this._renderers.colorTextureRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                }
             }
         } else if (this._state.normalsBuf) {
             if (this._renderers.colorRenderer) {
@@ -1030,7 +1064,7 @@ export class VBOInstancingTrianglesLayer {
 
     precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) {
 
-        if (!this.model.scene.pickSurfacePrecisionEnabled) {
+        if (!this.model.scene.readableGeometryEnabled) {
             return false;
         }
 

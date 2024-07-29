@@ -59,8 +59,7 @@ class MousePickHandler {
                 {
                     const origin = math.vec3();
                     const direction = math.vec3();
-                    // The origin from math.canvasPosToWorldRay is incorrect for a perspective camera, should be the same as scene.camera.eye
-                    math.canvasPosToWorldRay(scene.canvas.canvas, scene.camera.viewMatrix, scene.camera.projMatrix, states.pointerCanvasPos, origin, direction);
+                    math.canvasPosToWorldRay(scene.canvas.canvas, scene.camera.viewMatrix, scene.camera.projMatrix, scene.camera.projection, states.pointerCanvasPos, origin, direction);
                     cameraControl.fire("rayMove", { canvasPos: states.pointerCanvasPos, ray: { origin: origin, direction: direction, canvasPos: states.pointerCanvasPos } }, true);
                 }
 
@@ -267,7 +266,7 @@ class MousePickHandler {
 
                 this._timeout = setTimeout(() => {
 
-                    if (firstClickPickResult) {
+                    if (firstClickPickResult && firstClickPickResult.worldPos) {
 
                         cameraControl.fire("picked", firstClickPickResult, true);
 

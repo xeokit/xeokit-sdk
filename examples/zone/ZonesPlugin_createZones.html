@@ -17,7 +17,7 @@
             font-family: "monospace";
             font-weight: bold;
             position: absolute;
-            width: 25px;
+            min-width: 25px;
             height: 25px;
             border-radius: 15px;
             border: 2px solid #ffffff;
@@ -199,7 +199,7 @@
 
         container: document.getElementById("annotationsContainer"),
 
-        markerHTML: "<div class='annotation-marker' style='background-color: {{markerBGColor}};'>{{glyph}}</div>",
+        markerHTML: "<div class='annotation-marker' style='background-color: {{markerBGColor}};'>&nbsp;{{glyph}}&nbsp;base:&nbsp;{{baseArea}}&nbsp;u²&nbsp;/&nbsp;surface:&nbsp;{{area}}&nbsp;u²&nbsp;/&nbsp;vol:&nbsp;{{volume}}&nbsp;u³&nbsp;</div>",
         labelHTML: "<div class='annotation-label' style='background-color: {{labelBGColor}};'><div class='annotation-title'>{{title}}</div><div class='annotation-desc'>{{description}}</div></div>",
 
         values: {
@@ -222,6 +222,7 @@
                 description: description
             },
         });
+        annotation.setMarkerAlign("center");
         adjustZoneAnnotation(zone);
 
         zone.on("destroyed", () => annotation.destroy());
@@ -240,6 +241,9 @@
             if (pos)
             {
                 zoneAnnotation.worldPos = pos;
+                zoneAnnotation.setField("baseArea", zone.baseArea.toFixed(2));
+                zoneAnnotation.setField("area", zone.area.toFixed(2));
+                zoneAnnotation.setField("volume", zone.volume.toFixed(2));
             }
         }
     };

@@ -41,7 +41,7 @@ export class VBOBatchingTrianglesLayer {
      */
     constructor(cfg) {
 
-        console.info("Creating VBOBatchingTrianglesLayer");
+     //   console.info("Creating VBOBatchingTrianglesLayer");
 
         /**
          * Owner model
@@ -131,6 +131,11 @@ export class VBOBatchingTrianglesLayer {
          * @type {boolean}
          */
         this.solid = !!cfg.solid;
+
+        /**
+         * The type of primitives in this layer.
+         */
+        this.primitive = cfg.primitive;
     }
 
     get aabb() {
@@ -327,7 +332,7 @@ export class VBOBatchingTrianglesLayer {
             numIndices: indices.length,
         };
 
-        if (scene.pickSurfacePrecisionEnabled) {
+        if (scene.readableGeometryEnabled) {
             // Quantized in-memory positions are initialized in finalize()
 
             portion.indices = indices;
@@ -364,7 +369,7 @@ export class VBOBatchingTrianglesLayer {
                 ? new Uint16Array(buffer.positions)
                 : quantizePositions(buffer.positions, this._modelAABB, this._state.positionsDecodeMatrix = math.mat4()); // BOTTLENECK
             state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, quantizedPositions.length, 3, gl.STATIC_DRAW);
-            if (this.model.scene.pickSurfacePrecisionEnabled) {
+            if (this.model.scene.readableGeometryEnabled) {
                 for (let i = 0, numPortions = this._portions.length; i < numPortions; i++) {
                     const portion = this._portions[i];
                     const start = portion.vertsBaseIndex * 3;
@@ -793,7 +798,7 @@ export class VBOBatchingTrianglesLayer {
         if (this._state.offsetsBuf) {
             this._state.offsetsBuf.setData(tempArray, firstOffset, lenOffsets);
         }
-        if (this.model.scene.pickSurfacePrecisionEnabled) {
+        if (this.model.scene.readableGeometryEnabled) {
             portion.offset[0] = offset[0];
             portion.offset[1] = offset[1];
             portion.offset[2] = offset[2];
@@ -801,7 +806,7 @@ export class VBOBatchingTrianglesLayer {
     }
 
     getEachVertex(portionId, callback) {
-        if (!this.model.scene.pickSurfacePrecisionEnabled) {
+        if (!this.model.scene.readableGeometryEnabled) {
             return;
         }
         const state = this._state;
@@ -812,22 +817,38 @@ export class VBOBatchingTrianglesLayer {
         }
         const positions = portion.quantizedPositions;
         const origin = state.origin;
-        const offset = portion.offset;
-        const offsetX = origin[0] + offset[0];
-        const offsetY = origin[1] + offset[1];
-        const offsetZ = origin[2] + offset[2];
+        const offsetX = origin[0] ;
+        const offsetY = origin[1] ;
+        const offsetZ = origin[2] ;
         const worldPos = tempVec4a;
+        const sceneModelMatrix = this.model.matrix;
+        const positionsDecodeMatrix = state.positionsDecodeMatrix;
         for (let i = 0, len = positions.length; i < len; i += 3) {
             worldPos[0] = positions[i];
             worldPos[1] = positions[i + 1];
             worldPos[2] = positions[i + 2];
             worldPos[3] = 1.0;
-            math.decompressPosition(worldPos, state.positionsDecodeMatrix);
-            math.transformPoint4(this.model.worldMatrix, worldPos);
+            math.decompressPosition(worldPos, positionsDecodeMatrix);
+            math.transformPoint4(sceneModelMatrix, worldPos);
             worldPos[0] += offsetX;
             worldPos[1] += offsetY;
             worldPos[2] += offsetZ;
             callback(worldPos);
+        }
+    }
+
+    getEachIndex(portionId, callback) {
+        if (!this.model.scene.readableGeometryEnabled) {
+            return;
+        }
+        const portion = this._portions[portionId];
+        if (!portion) {
+            this.model.error("portion not found: " + portionId);
+            return;
+        }
+        const indices = portion.indices;
+        for (let i = 0, len = indices.length; i < len; i++) {
+            callback(indices[i]);
         }
     }
 
@@ -851,14 +872,21 @@ export class VBOBatchingTrianglesLayer {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
+        const useAlphaCutoff = this._state.textureSet && (typeof(this._state.textureSet.alphaCutoff) === "number");
         if (frameCtx.withSAO && this.model.saoEnabled) {
             if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported) {
                 if (this._renderers.pbrRendererWithSAO) {
                     this._renderers.pbrRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
             } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
-                if (this._renderers.colorTextureRendererWithSAO) {
-                    this._renderers.colorTextureRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                if (useAlphaCutoff) {
+                    if (this._renderers.colorTextureRendererWithSAOAlphaCutoff) {
+                        this._renderers.colorTextureRendererWithSAOAlphaCutoff.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
+                } else {
+                    if (this._renderers.colorTextureRendererWithSAO) {
+                        this._renderers.colorTextureRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
                 }
             } else if (this._state.normalsBuf) {
                 if (this._renderers.colorRendererWithSAO) {
@@ -875,8 +903,14 @@ export class VBOBatchingTrianglesLayer {
                     this._renderers.pbrRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
             } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
-                if (this._renderers.colorTextureRenderer) {
-                    this._renderers.colorTextureRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                if (useAlphaCutoff) {
+                    if (this._renderers.colorTextureRendererAlphaCutoff) {
+                        this._renderers.colorTextureRendererAlphaCutoff.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
+                } else {
+                    if (this._renderers.colorTextureRenderer) {
+                        this._renderers.colorTextureRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
                 }
             } else if (this._state.normalsBuf) {
                 if (this._renderers.colorRenderer) {
@@ -913,8 +947,15 @@ export class VBOBatchingTrianglesLayer {
                 this._renderers.pbrRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
             }
         } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
-            if (this._renderers.colorTextureRenderer) {
-                this._renderers.colorTextureRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+            const useAlphaCutoff = this._state.textureSet && (typeof(this._state.textureSet.alphaCutoff) === "number");
+            if (useAlphaCutoff) {
+                if (this._renderers.colorTextureRendererAlphaCutoff) {
+                    this._renderers.colorTextureRendererAlphaCutoff.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+                }
+            } else {
+                if (this._renderers.colorTextureRenderer) {
+                    this._renderers.colorTextureRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+                }
             }
         } else if (this._state.normalsBuf) {
             if (this._renderers.colorRenderer) {
@@ -1118,7 +1159,7 @@ export class VBOBatchingTrianglesLayer {
 
     precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) {
 
-        if (!this.model.scene.pickSurfacePrecisionEnabled) {
+        if (!this.model.scene.readableGeometryEnabled) {
             return false;
         }
 

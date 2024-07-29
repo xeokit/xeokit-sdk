@@ -368,6 +368,8 @@ class Scene extends Component {
 
         this._aabbDirty = true;
 
+        this._readableGeometry = !!cfg.readableGeometryEnabled;
+
         /**
          * The {@link Viewer} this Scene belongs to.
          * @type {Viewer}
@@ -1292,18 +1294,27 @@ class Scene extends Component {
     }
 
     /**
-     * Whether precision surface picking is enabled.
+     * Whether geometry is readable.
      *
      * This is set via the {@link Viewer} constructor and is ````false```` by default.
      *
-     * The ````pickSurfacePrecision```` option for ````Scene#pick```` only works if this is set ````true````.
+     * The ````readableGeometryEnabled```` option for ````Scene#pick```` only works if this is set ````true````.
      *
      * Note that when ````true````, this configuration will increase the amount of browser memory used by the Viewer.
      *
-     * @returns {Boolean} True if precision picking is enabled.
+     * @returns {Boolean} True if geometry is readable.
+     */
+    get readableGeometryEnabled() {
+        return this._readableGeometry;
+    }
+
+    /**
+     * Whether precision surface picking is enabled.
+     * @deprecated
+     * @returns {*|boolean}
      */
     get pickSurfacePrecisionEnabled() {
-        return false; // Removed
+        return this._readableGeometry;
     }
 
     /**
@@ -2284,7 +2295,7 @@ class Scene extends Component {
      *
      * @param {*} params Picking parameters.
      * @param {Boolean} [params.pickSurface=false] Whether to find the picked position on the surface of the Entity.
-     * @param {Boolean} [params.pickSurfacePrecision=false] When picking an Entity surface position, indicates whether or not we want full-precision {@link PickResult#worldPos}. Only works when {@link Scene#pickSurfacePrecisionEnabled} is ````true````. If pick succeeds, the returned {@link PickResult} will have {@link PickResult#precision} set ````true````, to indicate that it contains full-precision surface pick results.
+     * @param {Boolean} [params.pickSurfacePrecision=false] When picking an Entity surface position, indicates whether or not we want full-precision {@link PickResult#worldPos}. Only works when {@link Scene#readableGeometryEnabled} is ````true````. If pick succeeds, the returned {@link PickResult} will have {@link PickResult#precision} set ````true````, to indicate that it contains full-precision surface pick results.
      * @param {Boolean} [params.pickSurfaceNormal=false] Whether to find the picked normal on the surface of the Entity. Only works if ````pickSurface```` is given.
      * @param {Number[]} [params.canvasPos] Canvas-space coordinates. When ray-picking, this will override the **origin** and ** direction** parameters and will cause the ray to be fired through the canvas at this position, directly along the negative View-space Z-axis.
      * @param {Number[]} [params.origin] World-space ray origin when ray-picking. Ignored when canvasPos given.
@@ -2301,11 +2312,6 @@ class Scene extends Component {
         if (this.canvas.boundary[2] === 0 || this.canvas.boundary[3] === 0) {
             this.error("Picking not allowed while canvas has zero width or height");
             return null;
-        }
-
-        if ((params.snapToVertex || params.snapToEdge) && !params.canvasPos) {
-            this.error("Scene.snapPick() `canvasPos` parameter expected for `snapToVertex:true` or `snapToEdge:true`");
-            return;
         }
 
         params = params || {};
@@ -2333,13 +2339,7 @@ class Scene extends Component {
         }
 
         if (params.snapToEdge || params.snapToVertex) {
-            pickResult = this._renderer.snapPick(
-                params.canvasPos,
-                params.snapRadius || 30,
-                params.snapToVertex,
-                params.snapToEdge,
-                pickResult
-            );
+            pickResult = this._renderer.snapPick(params, pickResult);
         } else {
             pickResult = this._renderer.pick(params, pickResult);
         }
@@ -2370,12 +2370,7 @@ class Scene extends Component {
             this.error("Scene.snapPick() canvasPos parameter expected");
             return;
         }
-        return this._renderer.snapPick(
-            params.canvasPos,
-            params.snapRadius || 30,
-            params.snapToVertex,
-            params.snapToEdge,
-        );
+        return this._renderer.snapPick(params);
     }
 
     /**

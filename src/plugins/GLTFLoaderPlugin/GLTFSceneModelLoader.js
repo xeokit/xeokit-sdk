@@ -65,42 +65,6 @@ class GLTFSceneModelLoader {
     }
 }
 
-function getMetaModelCorrections(metaModelJSON) {
-    const eachRootStats = {};
-    const eachChildRoot = {};
-    const metaObjects = metaModelJSON.metaObjects || [];
-    const metaObjectsMap = {};
-    for (let i = 0, len = metaObjects.length; i < len; i++) {
-        const metaObject = metaObjects[i];
-        metaObjectsMap[metaObject.id] = metaObject;
-    }
-    for (let i = 0, len = metaObjects.length; i < len; i++) {
-        const metaObject = metaObjects[i];
-        if (metaObject.parent !== undefined && metaObject.parent !== null) {
-            const metaObjectParent = metaObjectsMap[metaObject.parent];
-            if (metaObject.type === metaObjectParent.type) {
-                let rootMetaObject = metaObjectParent;
-                while (rootMetaObject.parent && metaObjectsMap[rootMetaObject.parent].type === rootMetaObject.type) {
-                    rootMetaObject = metaObjectsMap[rootMetaObject.parent];
-                }
-                const rootStats = eachRootStats[rootMetaObject.id] || (eachRootStats[rootMetaObject.id] = {
-                    numChildren: 0,
-                    countChildren: 0
-                });
-                rootStats.numChildren++;
-                eachChildRoot[metaObject.id] = rootMetaObject;
-            } else {
-
-            }
-        }
-    }
-    return {
-        metaObjectsMap,
-        eachRootStats,
-        eachChildRoot
-    };
-}
-
 function loadGLTF(plugin, src, metaModelJSON, options, sceneModel, ok, error) {
     const spinner = plugin.viewer.scene.canvas.spinner;
     spinner.processes++;
@@ -142,7 +106,9 @@ function parseGLTF(plugin, src, gltf, metaModelJSON, options, sceneModel, ok) {
         const ctx = {
             src: src,
             entityId: options.entityId,
-            metaModelCorrections: metaModelJSON ? getMetaModelCorrections(metaModelJSON) : null,
+            metaModelJSON,
+            autoMetaModel: options.autoMetaModel,
+            metaObjects: [],
             loadBuffer: options.loadBuffer,
             basePath: options.basePath,
             handlenode: options.handlenode,
@@ -161,8 +127,20 @@ function parseGLTF(plugin, src, gltf, metaModelJSON, options, sceneModel, ok) {
         };
         loadTextures(ctx);
         loadMaterials(ctx);
+        if (options.autoMetaModel) {
+          ctx.metaObjects.push({
+              id: sceneModel.id,
+              type: "Default",
+              name: sceneModel.id
+          });
+        }
         loadDefaultScene(ctx);
         sceneModel.finalize();
+        if (options.autoMetaModel) {
+            plugin.viewer.metaScene.createMetaModel(sceneModel.id, {
+                metaObjects: ctx.metaObjects
+            });
+        }
         spinner.processes--;
         ok();
     });
@@ -291,23 +269,21 @@ function loadTextureSet(ctx, material) {
     if (material.emissiveTexture) {
         textureSetCfg.emissiveTextureId = material.emissiveTexture.texture._textureId;
     }
-    // const alphaMode = material.alphaMode;
-    // switch (alphaMode) {
-    //     case "NORMAL_OPAQUE":
-    //         materialCfg.alphaMode = "opaque";
-    //         break;
-    //     case "MASK":
-    //         materialCfg.alphaMode = "mask";
-    //         break;
-    //     case "BLEND":
-    //         materialCfg.alphaMode = "blend";
-    //         break;
-    //     default:
-    // }
-    // const alphaCutoff = material.alphaCutoff;
-    // if (alphaCutoff !== undefined) {
-    //     materialCfg.alphaCutoff = alphaCutoff;
-    // }
+
+    switch (material.alphaMode) {
+        case "OPAQUE":
+            break;
+        case "MASK":
+            const alphaCutoff = material.alphaCutoff;
+            // Default from the spec https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#reference-material
+            textureSetCfg.alphaCutoff = (alphaCutoff !== undefined) ? alphaCutoff : 0.5;
+            break;
+        case "BLEND":
+            break;
+        default:
+            break;
+    }
+
     const metallicPBR = material.pbrMetallicRoughness;
     if (material.pbrMetallicRoughness) {
         const pbrMetallicRoughness = material.pbrMetallicRoughness;
@@ -356,7 +332,7 @@ function loadMaterialAttributes(ctx, material) { // Substitute RGBA for material
         opacity: 1,
         metallic: 0,
         roughness: 1,
-        doubleSided : true
+        doubleSided: true
     };
     if (extensions) {
         const specularPBR = extensions["KHR_materials_pbrSpecularGlossiness"];
@@ -430,9 +406,22 @@ function loadScene(ctx, scene) {
         const node = nodes[i];
         countMeshUsage(ctx, node);
     }
-    for (let i = 0, len = nodes.length; i < len; i++) {
+    for (let i = 0, len = nodes.length; i < len && !ctx.nodesHaveNames; i++) {
         const node = nodes[i];
-        loadNode(ctx, node, 0, null);
+        if (testIfNodesHaveNames(node)) {
+            ctx.nodesHaveNames = true;
+        }
+    }
+    if (!ctx.nodesHaveNames) {
+        for (let i = 0, len = nodes.length; i < len; i++) {
+            const node = nodes[i];
+            parseNodesWithoutNames(ctx, node, 0, null);
+        }
+    } else {
+        for (let i = 0, len = nodes.length; i < len; i++) {
+            const node = nodes[i];
+            parseNodesWithNames(ctx, node, 0, null);
+        }
     }
 }
 
@@ -454,10 +443,133 @@ function countMeshUsage(ctx, node) {
     }
 }
 
-const deferredMeshIds = [];
+function testIfNodesHaveNames(node) {
+    if (node.name) {
+        return true;
+    }
+    if (node.children) {
+        const children = node.children;
+        for (let i = 0, len = children.length; i < len; i++) {
+            const childNode = children[i];
+            if (testIfNodesHaveNames(childNode)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
-function loadNode(ctx, node, depth, matrix) {
-    const gltfData = ctx.gltfData;
+/**
+ * Parses a glTF node hierarchy that is known to NOT contain "name" attributes on the nodes.
+ * Create a SceneMesh for each mesh primitive, and a single SceneObject.
+ */
+const parseNodesWithoutNames = (function () {
+    const meshIds = [];
+    return function (ctx, node, depth, matrix, parentNode) {
+        matrix = parseNodeMatrix(node, matrix);
+        if (node.mesh) {
+            parseNodeMesh(node, ctx, matrix, meshIds);
+        }
+        if (node.children) {
+            const children = node.children;
+            for (let i = 0, len = children.length; i < len; i++) {
+                const childNode = children[i];
+                parseNodesWithoutNames(ctx, childNode, depth + 1, matrix, node);
+            }
+        }
+        if (depth === 0) {
+            let entityId = "entity-" + ctx.nextId++;
+            if (meshIds && meshIds.length > 0) {
+                ctx.sceneModel.createEntity({
+                    id: entityId,
+                    meshIds,
+                    isObject: true
+                });
+                if (ctx.autoMetaModel) {
+                    ctx.metaObjects.push({
+                        id: entityId,
+                        type: "Default",
+                        name: entityId,
+                        parent: ctx.sceneModel.id
+                    });
+                }
+                meshIds.length = 0;
+            }
+        }
+    }
+})();
+
+const parseNodesWithNames = (function () {
+
+    const objectIdStack = [];
+    const meshIdsStack = [];
+    let meshIds = null;
+
+    return function (ctx, node, depth, matrix) {
+        matrix = parseNodeMatrix(node, matrix);
+        if (meshIds && node.mesh) {
+            parseNodeMesh(node, ctx, matrix, meshIds);
+        }
+
+        if (node.name) {
+            meshIds = [];
+            let entityId = node.name;
+            if (!!entityId && ctx.sceneModel.objects[entityId]) {
+               // ctx.log(`Warning: Two or more glTF nodes found with same 'name' attribute: '${entityId} - will randomly-generating an object ID in XKT`);
+            }
+            while (!entityId || ctx.sceneModel.objects[entityId]) {
+                entityId = "entity-" + ctx.nextId++;
+            }
+            objectIdStack.push(entityId);
+            meshIdsStack.push(meshIds);
+        }
+
+        if (node.children) {
+            const children = node.children;
+            for (let i = 0, len = children.length; i < len; i++) {
+                const childNode = children[i];
+                parseNodesWithNames(ctx, childNode, depth + 1, matrix);
+            }
+        }
+
+        // Post-order visit scene node
+
+        const nodeName = node.name;
+        if ((nodeName !== undefined && nodeName !== null) || depth === 0) {
+            let entityId = objectIdStack.pop();
+            if (!entityId) { // For when there are no nodes with names
+                entityId = "entity-" + ctx.nextId++;
+            }
+            let entityMeshIds = meshIdsStack.pop();
+            if (meshIds && meshIds.length > 0) {
+                ctx.sceneModel.createEntity({
+                    id: entityId,
+                    meshIds: entityMeshIds,
+                    isObject: true
+                });
+                if (ctx.autoMetaModel) {
+                    ctx.metaObjects.push({
+                        id: entityId,
+                        type: "Default",
+                        name: entityId,
+                        parent: ctx.sceneModel.id
+                    });
+                }
+            }
+            meshIds = meshIdsStack.length > 0 ? meshIdsStack[meshIdsStack.length - 1] : null;
+        }
+    };
+})();
+
+
+/**
+ * Parses transform at the given glTF node.
+ *
+ * @param node the glTF node
+ * @param matrix Transfor matrix from parent nodes
+ * @returns {*} Transform matrix for the node
+ */
+function parseNodeMatrix(node, matrix) {
     let localMatrix;
     if (node.matrix) {
         localMatrix = node.matrix;
@@ -491,174 +603,92 @@ function loadNode(ctx, node, depth, matrix) {
             matrix = localMatrix;
         }
     }
+    return matrix;
+}
 
-    const sceneModel = ctx.sceneModel;
-    if (node.mesh) {
-        const mesh = node.mesh;
-        let createEntity;
-        if (ctx.handlenode) {
-            const actions = {};
-            if (!ctx.handlenode(ctx.sceneModel.id, node, actions)) {
-                return;
-            }
-            if (actions.createEntity) {
-                createEntity = actions.createEntity;
-            }
-        }
-        const worldMatrix = matrix ? matrix.slice() : math.identityMat4();
-        const numPrimitives = mesh.primitives.length;
-
-        if (numPrimitives > 0) {
-
-            for (let i = 0; i < numPrimitives; i++) {
-
-                const primitive = mesh.primitives[i];
-                if (primitive.mode < 4) {
-                    continue;
-                }
-
-                const meshCfg = {
-                    id: sceneModel.id + "." + ctx.numObjects++
-                };
-
-                const material = primitive.material;
-                if (material) {
-                    meshCfg.textureSetId = material._textureSetId;
-                    meshCfg.color = material._attributes.color;
-                    meshCfg.opacity = material._attributes.opacity;
-                    meshCfg.metallic = material._attributes.metallic;
-                    meshCfg.roughness = material._attributes.roughness;
-                } else {
-                    meshCfg.color = new Float32Array([1.0, 1.0, 1.0]);
-                    meshCfg.opacity = 1.0;
-                }
-
-                const backfaces = ((ctx.backfaces !== false) || (material && material.doubleSided !== false));
-
-                switch (primitive.mode) {
-                    case 0: // POINTS
-                        meshCfg.primitive = "points";
-                        break;
-                    case 1: // LINES
-                        meshCfg.primitive = "lines";
-                        break;
-                    case 2: // LINE_LOOP
-                        meshCfg.primitive = "lines";
-                        break;
-                    case 3: // LINE_STRIP
-                        meshCfg.primitive = "lines";
-                        break;
-                    case 4: // TRIANGLES
-                        meshCfg.primitive = backfaces ? "triangles" : "solid";
-                        break;
-                    case 5: // TRIANGLE_STRIP
-                        meshCfg.primitive = backfaces ? "triangles" : "solid";
-                        break;
-                    case 6: // TRIANGLE_FAN
-                        meshCfg.primitive = backfaces ? "triangles" : "solid";
-                        break;
-                    default:
-                        meshCfg.primitive = backfaces ? "triangles" : "solid";
-                }
-
-                const POSITION = primitive.attributes.POSITION;
-                if (!POSITION) {
-                    continue;
-                }
-                meshCfg.localPositions = POSITION.value;
-                meshCfg.positions = new Float64Array(meshCfg.localPositions.length);
-
-                if (primitive.attributes.NORMAL) {
-                    meshCfg.normals = primitive.attributes.NORMAL.value;
-                }
-
-                if (primitive.attributes.TEXCOORD_0) {
-                    meshCfg.uv = primitive.attributes.TEXCOORD_0.value;
-                }
-
-                if (primitive.indices) {
-                    meshCfg.indices = primitive.indices.value;
-                }
-
-                math.transformPositions3(worldMatrix, meshCfg.localPositions, meshCfg.positions);
-                const origin = math.vec3();
-                const rtcNeeded = worldToRTCPositions(meshCfg.positions, meshCfg.positions, origin); // Small cellsize guarantees better accuracy
-                if (rtcNeeded) {
-                    meshCfg.origin = origin;
-                }
-
-                sceneModel.createMesh(meshCfg);
-                deferredMeshIds.push(meshCfg.id);
-            }
-        }
+/**
+ * Parses primitives referenced by the mesh belonging to the given node, creating XKTMeshes in the XKTModel.
+ *
+ * @param node glTF node
+ * @param ctx Parsing context
+ * @param matrix Matrix for the XKTMeshes
+ * @param meshIds returns IDs of the new XKTMeshes
+ */
+function parseNodeMesh(node, ctx, matrix, meshIds) {
+    const mesh = node.mesh;
+    if (!mesh) {
+        return;
     }
-
-    if (node.children) {
-        const children = node.children;
-        for (let i = 0, len = children.length; i < len; i++) {
-            const childNode = children[i];
-            loadNode(ctx, childNode, depth + 1, matrix);
-        }
-    }
-
-    // Post-order visit scene node
-
-    if (ctx.entityId) {
-        if (depth ===0) {
-            sceneModel.createEntity({
-                id: ctx.entityId,
-                meshIds: deferredMeshIds,
-                isObject: true
-            });
-            deferredMeshIds.length = 0;
-        }
-    } else {
-        const nodeName = node.name;
-        if (((nodeName !== undefined && nodeName !== null) || depth === 0) && deferredMeshIds.length > 0) {
-            if (nodeName === undefined || nodeName === null) {
-                ctx.log(`Warning: 'name' properties not found on glTF scene nodes - will randomly-generate object IDs in XKT`);
+    const numPrimitives = mesh.primitives.length;
+    if (numPrimitives > 0) {
+        for (let i = 0; i < numPrimitives; i++) {
+            const primitive = mesh.primitives[i];
+            if (primitive.mode < 4) {
+                continue;
             }
-            let entityId = nodeName; // Fall back on generated ID when `name` not found on glTF scene node(s)
-            // if (!!entityId && sceneModel.entities[entityId]) {
-            //     ctx.log(`Warning: Two or more glTF nodes found with same 'name' attribute: '${nodeName} - will randomly-generating an object ID in XKT`);
-            // }
-            // while (!entityId || sceneModel.entities[entityId]) {
-            //     entityId = "entity-" + ctx.nextId++;
-            // }
-            if (ctx.metaModelCorrections) {
-                // Merging meshes into XKTObjects that map to metaobjects
-                const rootMetaObject = ctx.metaModelCorrections.eachChildRoot[entityId];
-                if (rootMetaObject) {
-                    const rootMetaObjectStats = ctx.metaModelCorrections.eachRootStats[rootMetaObject.id];
-                    rootMetaObjectStats.countChildren++;
-                    if (rootMetaObjectStats.countChildren >= rootMetaObjectStats.numChildren) {
-                        sceneModel.createEntity({
-                            id: rootMetaObject.id,
-                            meshIds: deferredMeshIds,
-                            isObject: true
-                        });
-                        deferredMeshIds.length = 0;
-                    }
-                } else {
-                    const metaObject = ctx.metaModelCorrections.metaObjectsMap[entityId];
-                    if (metaObject) {
-                        sceneModel.createEntity({
-                            id: entityId,
-                            meshIds: deferredMeshIds,
-                            isObject: true
-                        });
-                        deferredMeshIds.length = 0;
-                    }
-                }
+            const meshCfg = {
+                id: ctx.sceneModel.id + "." + ctx.numObjects++
+            };
+            const material = primitive.material;
+            if (material) {
+                meshCfg.textureSetId = material._textureSetId;
+                meshCfg.color = material._attributes.color;
+                meshCfg.opacity = material._attributes.opacity;
+                meshCfg.metallic = material._attributes.metallic;
+                meshCfg.roughness = material._attributes.roughness;
             } else {
-                // Create an XKTObject from the meshes at each named glTF node, don't care about metaobjects
-                sceneModel.createEntity({
-                    id: entityId,
-                    meshIds: deferredMeshIds,
-                    isObject: true
-                });
-                deferredMeshIds.length = 0;
+                meshCfg.color = new Float32Array([1.0, 1.0, 1.0]);
+                meshCfg.opacity = 1.0;
             }
+            const backfaces = ((ctx.backfaces !== false) || (material && material.doubleSided !== false));
+            switch (primitive.mode) {
+                case 0: // POINTS
+                    meshCfg.primitive = "points";
+                    break;
+                case 1: // LINES
+                    meshCfg.primitive = "lines";
+                    break;
+                case 2: // LINE_LOOP
+                    meshCfg.primitive = "lines";
+                    break;
+                case 3: // LINE_STRIP
+                    meshCfg.primitive = "lines";
+                    break;
+                case 4: // TRIANGLES
+                    meshCfg.primitive = backfaces ? "triangles" : "solid";
+                    break;
+                case 5: // TRIANGLE_STRIP
+                    meshCfg.primitive = backfaces ? "triangles" : "solid";
+                    break;
+                case 6: // TRIANGLE_FAN
+                    meshCfg.primitive = backfaces ? "triangles" : "solid";
+                    break;
+                default:
+                    meshCfg.primitive = backfaces ? "triangles" : "solid";
+            }
+            const POSITION = primitive.attributes.POSITION;
+            if (!POSITION) {
+                continue;
+            }
+            meshCfg.localPositions = POSITION.value;
+            meshCfg.positions = new Float64Array(meshCfg.localPositions.length);
+            if (primitive.attributes.NORMAL) {
+                meshCfg.normals = primitive.attributes.NORMAL.value;
+            }
+            if (primitive.attributes.TEXCOORD_0) {
+                meshCfg.uv = primitive.attributes.TEXCOORD_0.value;
+            }
+            if (primitive.indices) {
+                meshCfg.indices = primitive.indices.value;
+            }
+            math.transformPositions3(matrix, meshCfg.localPositions, meshCfg.positions);
+            const origin = math.vec3();
+            const rtcNeeded = worldToRTCPositions(meshCfg.positions, meshCfg.positions, origin); // Small cellsize guarantees better accuracy
+            if (rtcNeeded) {
+                meshCfg.origin = origin;
+            }
+            ctx.sceneModel.createMesh(meshCfg);
+            meshIds.push(meshCfg.id);
         }
     }
 }
