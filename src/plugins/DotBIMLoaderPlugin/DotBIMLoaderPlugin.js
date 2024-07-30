@@ -396,24 +396,11 @@ export class DotBIMLoaderPlugin extends Plugin {
                 }
                 const dbMeshIndex = dbMeshIndices[dbMeshId];
                 const dbMesh = fileData.meshes[dbMeshIndex];
-                let coordinatesDeconstructed = [];
-                let indicesDeconstructed = [];
-                let newIndicesCount = 0;
-                for (let i = 0; i < dbMesh.indices.length; i++) {
-                    let pointIndex = dbMesh.indices[i];
-                    let actualPositionInList = pointIndex * 3;
-                    let pointX = dbMesh.coordinates[actualPositionInList];
-                    let pointY = dbMesh.coordinates[actualPositionInList + 1];
-                    let pointZ = dbMesh.coordinates[actualPositionInList + 2];
-                    coordinatesDeconstructed.push(pointX, pointY, pointZ);
-                    indicesDeconstructed.push(newIndicesCount);
-                    newIndicesCount += 1;
-                }
                 sceneModel.createGeometry({
                     id: dbMeshId,
                     primitive: "triangles",
-                    positions: coordinatesDeconstructed,
-                    indices: indicesDeconstructed
+                    positions: dbMesh.coordinates,
+                    indices: dbMesh.indices
                 });
                 dbMeshLoaded[dbMeshId] = true;
             }
@@ -439,55 +426,89 @@ export class DotBIMLoaderPlugin extends Plugin {
 
                 const dbMeshId = element.mesh_id;
 
-                parseDBMesh(dbMeshId);
-
-                const meshId = `${objectId}-mesh`;
                 const vector = element.vector;
                 const rotation = element.rotation;
                 const props = objectDefaults ? objectDefaults[elementType] || objectDefaults["DEFAULT"] : null;
 
-                let visible = true;
-                let pickable = true;
-
                 if (element.face_colors === undefined) {
+
+                    parseDBMesh(dbMeshId);
+
+                    const meshId = `${objectId}-mesh`;
+
                     let color = element.color ? [element.color.r / 255, element.color.g / 255, element.color.b / 255] : [1, 1, 1];
-                    let opacity = element.color ? element.color.a / 255 : 1.0;
 
                     sceneModel.createMesh({
                         id: meshId,
                         geometryId: dbMeshId,
                         color,
-                        opacity,
                         quaternion: rotation && (rotation.qz !== 0 || rotation.qy !== 0 || rotation.qx !== 0 || rotation.qw !== 1.0) ? [rotation.qx, rotation.qy, rotation.qz, rotation.qw] : undefined,
                         position: vector ? [vector.x, vector.y, vector.z] : undefined
+                    });
+
+                    sceneModel.createEntity({
+                        id: objectId,
+                        meshIds: [meshId],
+                        visible: true,
+                        pickable: true,
+                        isObject: true
                     });
                 }
                 else {
                     let faceColors = element.face_colors;
-                    let vertexColorsCompressed = [];
-                    for (let i = 0; i < faceColors.length; i+=4) {
-                        vertexColorsCompressed.push(faceColors[i], faceColors[i+1], faceColors[i+2], faceColors[i+3]);
-                        vertexColorsCompressed.push(faceColors[i], faceColors[i+1], faceColors[i+2], faceColors[i+3]);
-                        vertexColorsCompressed.push(faceColors[i], faceColors[i+1], faceColors[i+2], faceColors[i+3]);
-                    }
+                    let coloredTrianglesDictionary = {};
+                    let currentTriangleIndicesCount = 0;
+                    let dbMesh = fileData.meshes[element.mesh_id];
+                    for (let i = 0, len = faceColors.length; i < len; i+=4) {
+                        let faceColor = [faceColors[i], faceColors[i+1], faceColors[i+2], faceColors[i+3]];
+                        if (coloredTrianglesDictionary[faceColor] === undefined) {
+                            coloredTrianglesDictionary[faceColor] = [];
+                        }
+                        let indexForPoint0 = dbMesh.indices[currentTriangleIndicesCount];
+                        let x0 = dbMesh.coordinates[indexForPoint0*3];
+                        let y0 = dbMesh.coordinates[indexForPoint0*3+1];
+                        let z0 = dbMesh.coordinates[indexForPoint0*3+2];
+                        let indexForPoint1 = dbMesh.indices[currentTriangleIndicesCount+1];
+                        let x1 = dbMesh.coordinates[indexForPoint1*3];
+                        let y1 = dbMesh.coordinates[indexForPoint1*3+1];
+                        let z1 = dbMesh.coordinates[indexForPoint1*3+2];
+                        let indexForPoint2 = dbMesh.indices[currentTriangleIndicesCount+2];
+                        let x2 = dbMesh.coordinates[indexForPoint2*3];
+                        let y2 = dbMesh.coordinates[indexForPoint2*3+1];
+                        let z2 = dbMesh.coordinates[indexForPoint2*3+2];
+                        coloredTrianglesDictionary[faceColor].push(x0, y0, z0, x1, y1, z1, x2, y2, z2);
 
-                    sceneModel.createMesh({
-                        id: meshId,
-                        geometryId: dbMeshId,
-                        quaternion: rotation && (rotation.qz !== 0 || rotation.qy !== 0 || rotation.qx !== 0 || rotation.qw !== 1.0) ? [rotation.qx, rotation.qy, rotation.qz, rotation.qw] : undefined,
-                        position: vector ? [vector.x, vector.y, vector.z] : undefined,
-                        colorsCompressed: vertexColorsCompressed
+                        currentTriangleIndicesCount += 3;
+                    }
+                    let meshIds = [];
+                    for (const [faceColor, trianglesCoordinates] of Object.entries(coloredTrianglesDictionary)) {
+                        sceneModel.createGeometry({
+                            id: `${dbMeshId}-${faceColor}`,
+                            primitive: "triangles",
+                            positions: trianglesCoordinates,
+                            indices: [...Array(trianglesCoordinates.length).keys()]
+                        });
+                        const meshId = `${objectId}-mesh-${faceColor}`;
+                        const faceColorArray = faceColor.split(',').map(Number);
+                        let color = [faceColorArray[0] / 255, faceColorArray[1] / 255, faceColorArray[2] / 255];
+                        console.log(color);
+                        sceneModel.createMesh({
+                            id: meshId,
+                            geometryId: `${dbMeshId}-${faceColor}`,
+                            color: color,
+                            quaternion: rotation && (rotation.qz !== 0 || rotation.qy !== 0 || rotation.qx !== 0 || rotation.qw !== 1.0) ? [rotation.qx, rotation.qy, rotation.qz, rotation.qw] : undefined,
+                            position: vector ? [vector.x, vector.y, vector.z] : undefined
+                        });
+                        meshIds.push(meshId);
+                    }
+                    sceneModel.createEntity({
+                        id: objectId,
+                        meshIds: meshIds,
+                        visible: true,
+                        pickable: true,
+                        isObject: true
                     });
                 }
-
-
-                sceneModel.createEntity({
-                    id: objectId,
-                    meshIds: [meshId],
-                    visible,
-                    pickable,
-                    isObject: true
-                });
 
                 for (let infoKey in info) {
                     let properties;
