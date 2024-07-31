@@ -436,12 +436,14 @@ export class DotBIMLoaderPlugin extends Plugin {
 
                     const meshId = `${objectId}-mesh`;
 
-                    let color = element.color ? [element.color.r / 255, element.color.g / 255, element.color.b / 255] : [1, 1, 1];
+                    let color = element.color ? [element.color.r / 255.0, element.color.g / 255.0, element.color.b / 255.0] : [1, 1, 1];
+                    let opacity = element.color ? element.color.a / 255.0 : 1.0;
 
                     sceneModel.createMesh({
                         id: meshId,
                         geometryId: dbMeshId,
-                        color,
+                        color: color,
+                        opacity: opacity,
                         quaternion: rotation && (rotation.qz !== 0 || rotation.qy !== 0 || rotation.qx !== 0 || rotation.qw !== 1.0) ? [rotation.qx, rotation.qy, rotation.qz, rotation.qw] : undefined,
                         position: vector ? [vector.x, vector.y, vector.z] : undefined
                     });
@@ -490,12 +492,13 @@ export class DotBIMLoaderPlugin extends Plugin {
                         });
                         const meshId = `${objectId}-mesh-${faceColor}`;
                         const faceColorArray = faceColor.split(',').map(Number);
-                        let color = [faceColorArray[0] / 255, faceColorArray[1] / 255, faceColorArray[2] / 255];
-                        console.log(color);
+                        let color = [faceColorArray[0] / 255.0, faceColorArray[1] / 255.0, faceColorArray[2] / 255.0];
+                        let opacity = faceColorArray[3] / 255.0;
                         sceneModel.createMesh({
                             id: meshId,
                             geometryId: `${dbMeshId}-${faceColor}`,
                             color: color,
+                            opacity: opacity,
                             quaternion: rotation && (rotation.qz !== 0 || rotation.qy !== 0 || rotation.qx !== 0 || rotation.qw !== 1.0) ? [rotation.qx, rotation.qy, rotation.qz, rotation.qw] : undefined,
                             position: vector ? [vector.x, vector.y, vector.z] : undefined
                         });
