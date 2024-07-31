@@ -224,14 +224,13 @@
 <script type="module">
 
     import {
+        Viewer,
         FastNavPlugin,
+        DotBIMLoaderPlugin,
         NavCubePlugin,
         ContextMenu,
         TreeViewPlugin
     } from "../../dist/xeokit-sdk.es.js";
-
-    import {Viewer} from "../../src/viewer/Viewer.js";
-    import {DotBIMLoaderPlugin} from "../../src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js";
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
