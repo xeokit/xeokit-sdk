@@ -9,7 +9,8 @@ class SectionCapsPlugin extends Plugin {
     constructor(viewer, cfg = {}) {
         super("SectionCaps", viewer, cfg);
         this.sectionPlanes = [];
-        this.sceneModel = viewer.scene.models.myModel;
+        // this.sceneModel = viewer.scene.models.myModel;
+        this.sceneModel = Object.keys(viewer.scene.models).map((key) => viewer.scene.models[key]);
         this.prevIntersectionModels = {};
         this.posTimeout = null;
         this.dirTimeout = null;
@@ -69,24 +70,12 @@ class SectionCapsPlugin extends Plugin {
 
         this.deletePreviousModels();
 
-        const objects = {};
+        // const objects = {};
 
-        for (const key in sceneModel.objects) {
-            const isSolid = sceneModel.objects[key].meshes[0].layer.solid ?? false;
-            if (isSolid)
-                objects[key] = sceneModel.objects[key];
-        }
+        // sceneModel = sceneModel[0];
 
-        let cloneModel = {
-            ...sceneModel,
-            objects: objects
-        }
+        const csgGeometries = this.convertWebglGeometriesToCsgGeometries(sceneModel);
 
-        const { vertices: webglVertices, indices: webglIndices } = this.getVerticesAndIndices(cloneModel);
-
-        const bb = this.calculateWebglBBs(webglVertices);
-        const center = this.calculateCenterFromBBs(bb);
-        const csgGeometries = this.createCSGGeometries(webglVertices, webglIndices, center);
         const csgPlane = this.createCSGPlane(plane);
         let caps = this.getCapGeometries(csgGeometries, csgPlane);
         this.addIntersectedGeometries(caps);
@@ -101,6 +90,32 @@ class SectionCapsPlugin extends Plugin {
                 this.prevIntersectionModels[key].destroy();
             }
         }
+    }
+
+    convertWebglGeometriesToCsgGeometries(sceneModels) {
+        let csgGeometries = {};
+        sceneModels.forEach((sceneModel) => {
+            const objects = {};
+            for (const key in sceneModel.objects) {
+                const isSolid = sceneModel.objects[key].meshes[0].layer.solid ?? false;
+                if (isSolid)
+                    objects[key] = sceneModel.objects[key];
+            }
+    
+            let cloneModel = {
+                ...sceneModel,
+                objects: objects
+            }
+    
+            const { vertices: webglVertices, indices: webglIndices } = this.getVerticesAndIndices(cloneModel);
+            const csgGeometry = this.createCSGGeometries(webglVertices, webglIndices);
+            csgGeometries = {
+                ...csgGeometries,
+                ...csgGeometry
+            }
+        })
+        
+        return csgGeometries;
     }
 
     getVerticesAndIndices(sceneModel) {
@@ -121,7 +136,7 @@ class SectionCapsPlugin extends Plugin {
         return { vertices, indices };
     }
 
-    createCSGGeometries(vertices, indices, center) {
+    createCSGGeometries(vertices, indices) {
         const geometries = {};
         for (const key in vertices) {
             const vertex = vertices[key];
@@ -185,9 +200,7 @@ class SectionCapsPlugin extends Plugin {
             else
                 csgPlaneMerged = csgPlane;
         })
-
-
-
+        console.log("csgPlaneMerged: ", csgPlaneMerged);
         return csgPlaneMerged;
     }
 
@@ -203,110 +216,6 @@ class SectionCapsPlugin extends Plugin {
         }
 
         return cappedGeometries;
-    }
-
-    calculatePositions(capVertices) {
-        const positions = {};
-        const boundingBox = {};
-        for (const key in capVertices) {
-            const polygons = capVertices[key].polygons;
-            let minX = Infinity, minY = Infinity, minZ = Infinity;
-            let maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity;
-            polygons.forEach((polygon) => {
-                const vertices = polygon.vertices;
-                for (let i = 0; i < vertices.length; i++) {
-                    const x = vertices[i].pos.x;
-                    const y = vertices[i].pos.y;
-                    const z = vertices[i].pos.z;
-
-                    if (x < minX) minX = x;
-                    if (y < minY) minY = y;
-                    if (z < minZ) minZ = z;
-
-                    if (x > maxX) maxX = x;
-                    if (y > maxY) maxY = y;
-                    if (z > maxZ) maxZ = z;
-                }
-            })
-            // boundingBoxes[key] =
-            positions[key] = [
-                (minX + maxX) / 2,
-                (minY + maxY) / 2,
-                (minZ + maxZ) / 2
-            ]
-
-            boundingBox[key] = {
-                minX, maxX, minY, maxY, minZ, maxZ
-            }
-
-        }
-        return { positions, boundingBox };
-    }
-
-    calculateWebglBBs(_vertices) {
-        const bbs = {};
-        for (const key in _vertices) {
-            const vertices = _vertices[key];
-            bbs[key] = this.calculateWebglBB(vertices);
-        }
-        return bbs;
-    }
-
-    calculateWebglBB(vertices) {
-        let minX = Infinity, minY = Infinity, minZ = Infinity;
-        let maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity;
-        for (let i = 0; i < vertices.length; i += 3) {
-            const x = vertices[i];
-            const y = vertices[i + 1];
-            const z = vertices[i + 2];
-
-            if (x < minX) minX = x;
-            if (y < minY) minY = y;
-            if (z < minZ) minZ = z;
-
-            if (x > maxX) maxX = x;
-            if (y > maxY) maxY = y;
-            if (z > maxZ) maxZ = z;
-        }
-
-        return {
-            minX, maxX, minY, maxY, minZ, maxZ
-        };
-    }
-
-    calculateCenterFromBBs(_bb) {
-        const centers = {};
-        for (const key in _bb) {
-            const bb = _bb[key];
-            centers[key] = this.calculateCenterFromBB(bb);
-        }
-
-        return centers;
-    }
-
-    calculateCenterFromBB(bb) {
-        return [
-            (bb.minX + bb.maxX) / 2,
-            (bb.minY + bb.maxY) / 2,
-            (bb.minZ + bb.maxZ) / 2
-        ]
-    }
-
-    translateToOrigin(_vertices, _centers) {
-        const translatedVertices = {};
-        for (const key in _vertices) {
-            const vertices = _vertices[key];
-            const center = _centers[key];
-            translatedVertices[key] = [];
-            for (let i = 0; i < vertices.length; i += 3) {
-                translatedVertices[key].push(
-                    vertices[i] -= center[0],
-                    vertices[i + 1] -= center[1],
-                    vertices[i + 2] -= center[2]
-                )
-            }
-        }
-        return translatedVertices;
     }
 
     addIntersectedGeometries(csgGometries) {
@@ -439,20 +348,6 @@ class SectionCapsPlugin extends Plugin {
         })
 
         return intersectedModel;
-    }
-
-    updateSceneGeometry(mesh, vertices, indices) {
-        mesh.geometry.positions = vertices;
-        mesh.geometry.indicies = indices;
-        mesh.visible = true;
-    }
-
-    doBoundingBoxesIntersect(box1, box2) {
-        return (
-            box1.minX <= box2.maxX && box1.maxX >= box2.minX &&
-            box1.minY <= box2.maxY && box1.maxY >= box2.minY &&
-            box1.minZ <= box2.maxZ && box1.maxZ >= box2.minZ
-        );
     }
 
     //#endregion
