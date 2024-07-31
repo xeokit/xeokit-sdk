@@ -681,7 +681,11 @@ function parseNodeMesh(node, ctx, matrix, meshIds) {
             if (primitive.indices) {
                 meshCfg.indices = primitive.indices.value;
             }
-            math.transformPositions3(matrix, meshCfg.localPositions, meshCfg.positions);
+            if (matrix) {
+                math.transformPositions3(matrix, meshCfg.localPositions, meshCfg.positions);
+            } else { // eqiv to math.transformPositions3(math.identityMat4(), meshCfg.localPositions, meshCfg.positions);
+                meshCfg.positions.set(meshCfg.localPositions);
+            }
             const origin = math.vec3();
             const rtcNeeded = worldToRTCPositions(meshCfg.positions, meshCfg.positions, origin); // Small cellsize guarantees better accuracy
             if (rtcNeeded) {
