@@ -201,7 +201,8 @@
             <a href="../../docs/class/src/viewer/Viewer.js~Viewer.html" target="_other">Viewer</a>
         </li>
         <li>
-            <a href="../../docs/class/src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin.html" target="_other">DotBIMLoaderPlugin</a>
+            <a href="../../docs/class/src/plugins/DotBIMLoaderPlugin/DotBIMLoaderPlugin.js~DotBIMLoaderPlugin.html"
+               target="_other">DotBIMLoaderPlugin</a>
         </li>
         <li>
             <a href="../../docs/class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html" target="_other">TreeViewPlugin</a>
@@ -265,22 +266,10 @@
 
     const sceneModel = dotBIMLoader.load({
         id: "myModel",
-        src: "../../assets/models/dotbim/TestStructure.bim",
+        src: "../../assets/models/dotbim/MulticolorHouse.bim",
         saoEnabled: true,
-        edges: true,
-        objectDefaults: { // This model has opaque windows / spaces; make them transparent
-            "IfcPlate": {
-                opacity: 0.3 // These are used as windows in this model - make transparent
-            },
-            "IfcWindow": {
-                opacity: 0.4
-            },
-            "IfcSpace": {
-                opacity: 0.4
-            }
-        },
-        // includeTypes: ["IfcDoor"],
-        rotation: [-90,0,0]
+        edges: false,
+        rotation: [-90, 0, 0]
     });
 
 
