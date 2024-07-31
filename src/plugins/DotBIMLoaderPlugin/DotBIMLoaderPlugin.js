@@ -429,6 +429,8 @@ export class DotBIMLoaderPlugin extends Plugin {
                 const vector = element.vector;
                 const rotation = element.rotation;
                 const props = objectDefaults ? objectDefaults[elementType] || objectDefaults["DEFAULT"] : null;
+                let visible = true;
+                let pickable = true;
 
                 if (element.face_colors === undefined) {
 
@@ -438,6 +440,21 @@ export class DotBIMLoaderPlugin extends Plugin {
 
                     let color = element.color ? [element.color.r / 255.0, element.color.g / 255.0, element.color.b / 255.0] : [1, 1, 1];
                     let opacity = element.color ? element.color.a / 255.0 : 1.0;
+
+                    if (props) {
+                        if (props.visible === false) {
+                            visible = false;
+                        }
+                        if (props.pickable === false) {
+                            pickable = false;
+                        }
+                        if (props.colorize) {
+                            color = props.colorize;
+                        }
+                        if (props.opacity !== undefined && props.opacity !== null) {
+                            opacity = props.opacity;
+                        }
+                    }
 
                     sceneModel.createMesh({
                         id: meshId,
@@ -451,8 +468,8 @@ export class DotBIMLoaderPlugin extends Plugin {
                     sceneModel.createEntity({
                         id: objectId,
                         meshIds: [meshId],
-                        visible: true,
-                        pickable: true,
+                        visible: visible,
+                        pickable: pickable,
                         isObject: true
                     });
                 }
@@ -492,8 +509,25 @@ export class DotBIMLoaderPlugin extends Plugin {
                         });
                         const meshId = `${objectId}-mesh-${faceColor}`;
                         const faceColorArray = faceColor.split(',').map(Number);
+
                         let color = [faceColorArray[0] / 255.0, faceColorArray[1] / 255.0, faceColorArray[2] / 255.0];
                         let opacity = faceColorArray[3] / 255.0;
+
+                        if (props) {
+                            if (props.visible === false) {
+                                visible = false;
+                            }
+                            if (props.pickable === false) {
+                                pickable = false;
+                            }
+                            if (props.colorize) {
+                                color = props.colorize;
+                            }
+                            if (props.opacity !== undefined && props.opacity !== null) {
+                                opacity = props.opacity;
+                            }
+                        }
+
                         sceneModel.createMesh({
                             id: meshId,
                             geometryId: `${dbMeshId}-${faceColor}`,
@@ -507,8 +541,8 @@ export class DotBIMLoaderPlugin extends Plugin {
                     sceneModel.createEntity({
                         id: objectId,
                         meshIds: meshIds,
-                        visible: true,
-                        pickable: true,
+                        visible: visible,
+                        pickable: pickable,
                         isObject: true
                     });
                 }
