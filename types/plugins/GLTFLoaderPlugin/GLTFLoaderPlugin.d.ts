@@ -1,4 +1,4 @@
-import { Plugin, Viewer, Entity, IFCObjectDefaults } from "../../viewer";
+import { Entity, IFCObjectDefaults, Plugin, SceneModel, Viewer } from "../../viewer";
 
 export declare interface IGLTFDefaultDataSource {
   /**
@@ -77,6 +77,8 @@ export declare type LoadGLTFModel = {
   edgeThreshold?: number[]
   /** Set ````false```` to load all the materials and textures provided by the glTF file, otherwise leave ````true```` to load the default high-performance representation optimized for low memory usage and efficient rendering. */
   performance?: boolean;
+  /** When true, generate a single MetaObject that represents the entire glTF model, and a MetaObject for each entity within it. */
+  autoMetaModel?: boolean;
 };
 
 /**
@@ -134,7 +136,7 @@ export declare class GLTFLoaderPlugin extends Plugin {
    * Loads a glTF model from a file into this GLTFLoaderPlugin's {@link Viewer}.
    *
    * @param {LoadGLTFModel} params Loading parameters.
-   * @returns {Entity} Entity representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}
+   * @returns {SceneModel} SceneModel representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}.
    */
-  load(params: LoadGLTFModel): Entity;
+  load(params: LoadGLTFModel): SceneModel;
 }
