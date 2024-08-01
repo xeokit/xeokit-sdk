@@ -1,4 +1,4 @@
-import { Plugin, Viewer, Entity, IFCObjectDefaults } from "../../viewer";
+import { Entity, IFCObjectDefaults, Plugin, Viewer } from "../../viewer";
 
 export declare interface IGLTFDefaultDataSource {
   /**
@@ -77,6 +77,8 @@ export declare type LoadGLTFModel = {
   edgeThreshold?: number[]
   /** Set ````false```` to load all the materials and textures provided by the glTF file, otherwise leave ````true```` to load the default high-performance representation optimized for low memory usage and efficient rendering. */
   performance?: boolean;
+  /** For a glTF models loaded without accompanying metadata, this PR adds the autoMetaModel option to generate a single MetaObject that represents the entire glTF model, and a MetaObject for each entity within it. */
+  autoMetaModel?: boolean;
 };
 
 /**
