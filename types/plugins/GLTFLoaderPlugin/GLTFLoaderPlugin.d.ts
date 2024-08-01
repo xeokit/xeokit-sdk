@@ -1,4 +1,4 @@
-import { Entity, IFCObjectDefaults, Plugin, Viewer } from "../../viewer";
+import { Entity, IFCObjectDefaults, Plugin, SceneModel, Viewer } from "../../viewer";
 
 export declare interface IGLTFDefaultDataSource {
   /**
@@ -138,5 +138,5 @@ export declare class GLTFLoaderPlugin extends Plugin {
    * @param {LoadGLTFModel} params Loading parameters.
    * @returns {Entity} Entity representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}
    */
-  load(params: LoadGLTFModel): Entity;
+  load(params: LoadGLTFModel): SceneModel;
 }
