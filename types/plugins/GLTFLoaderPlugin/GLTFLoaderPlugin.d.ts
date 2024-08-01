@@ -136,7 +136,7 @@ export declare class GLTFLoaderPlugin extends Plugin {
    * Loads a glTF model from a file into this GLTFLoaderPlugin's {@link Viewer}.
    *
    * @param {LoadGLTFModel} params Loading parameters.
-   * @returns {SceneModel} A high-performance model representation for efficient rendering and low memory usage.
+   * @returns {SceneModel} SceneModel representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}.
    */
   load(params: LoadGLTFModel): SceneModel;
 }
