@@ -5,6 +5,7 @@ import {sRGBEncoding} from "../../viewer/scene/constants/constants.js";
 import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords.js";
 import {parse} from '@loaders.gl/core';
 import {GLTFLoader} from '@loaders.gl/gltf/dist/esm/gltf-loader.js';
+
 import {
     ClampToEdgeWrapping,
     LinearFilter,
@@ -503,7 +504,7 @@ const parseNodesWithNames = (function () {
 
     const objectIdStack = [];
     const meshIdsStack = [];
-    let meshIds = null;
+    let meshIds = [];
 
     return function (ctx, node, depth, matrix) {
         matrix = parseNodeMatrix(node, matrix);
