@@ -990,7 +990,7 @@ export class TreeViewPlugin extends Plugin {
             this._nodeNodes[buildingNode.nodeId] = buildingNode;
         } else if (metaObjectType === "IfcBuildingStorey") {
             if (!buildingNode) {
-                this.error("Failed to build storeys hierarchy for model '" + this.metaModel.id + "' - model does not have an IfcBuilding object, or is not an IFC model");
+                this.error("Failed to build storeys hierarchy for model - model does not have an IfcBuilding object, or is not an IFC model");
                 return;
             }
             storeyNode = {
