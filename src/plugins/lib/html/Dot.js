@@ -15,7 +15,7 @@ class Dot {
         this._dotClickable = document.createElement('div');
         this._dotClickable.className += this._dotClickable.className ? ' viewer-ruler-dot-clickable' : 'viewer-ruler-dot-clickable';
 
-        this._visible = !!cfg.visible;
+        this._visible = cfg.visible !== false;
         this._culled = false;
 
         var dot = this._dot;
@@ -27,7 +27,7 @@ class Dot {
         dotStyle["z-index"] = cfg.zIndex === undefined ? "40000005" : cfg.zIndex ;
         dotStyle.width = 8 + "px";
         dotStyle.height = 8 + "px";
-        dotStyle.visibility = cfg.visible !== false ? "visible" : "hidden";
+        dotStyle.visibility = this._visible ? "visible" : "hidden";
         dotStyle.top = 0 + "px";
         dotStyle.left = 0 + "px";
         dotStyle["box-shadow"] = "0 2px 5px 0 #182A3D;";

@@ -271,10 +271,9 @@ const basePolygon3D = function(scene, color, alpha) {
     };
 };
 
-const startAAZoneCreateUI = function(scene, zoneAltitude, zoneHeight, zoneColor, zoneAlpha, pointerLens, zonesPlugin, select3dPoint, onZoneCreated) {
-    const marker1 = marker3D(scene, zoneColor);
-    const marker2 = marker3D(scene, zoneColor);
-    const basePolygon = basePolygon3D(scene, zoneColor, zoneAlpha);
+const startAARectCreateUI = function(scene, markersColor, pointerLens, select3dPoint, withPoints, onPointsSelected) {
+    const marker1 = marker3D(scene, markersColor);
+    const marker2 = marker3D(scene, markersColor);
 
     const updatePointerLens = (pointerLens
                                ? function(canvasPos) {
@@ -302,29 +301,14 @@ const startAAZoneCreateUI = function(scene, zoneAltitude, zoneHeight, zoneColor,
                 function() {
                     updatePointerLens(null);
                     marker2.update(null);
-                    basePolygon.updateBase(null);
+                    withPoints(null);
                 },
                 function(canvasPos, point2WorldPos) {
                     updatePointerLens(canvasPos);
                     marker2.update(point2WorldPos);
-
-                    if (math.distVec3(point1WorldPos, point2WorldPos) > 0.01)
-                    {
-                        const min = (idx) => Math.min(point1WorldPos[idx], point2WorldPos[idx]);
-                        const max = (idx) => Math.max(point1WorldPos[idx], point2WorldPos[idx]);
-
-                        const xmin = min(0);
-                        const ymin = min(1);
-                        const zmin = min(2);
-                        const xmax = max(0);
-                        const ymax = max(1);
-                        const zmax = max(2);
-
-                        basePolygon.updateBase([ [ xmin, ymin, zmax ], [ xmax, ymin, zmax ],
-                                                 [ xmax, ymin, zmin ], [ xmin, ymin, zmin ] ]);
-                    }
-                    else
-                        basePolygon.updateBase(null);
+                    withPoints((math.distVec3(point1WorldPos, point2WorldPos) > 0.01)
+                               &&
+                               [ point1WorldPos, point2WorldPos ]);
                 },
                 function(point2CanvasPos, point2WorldPos) {
                     // `marker2.update' makes sure marker's position has been updated from its default [0,0,0]
@@ -334,35 +318,9 @@ const startAAZoneCreateUI = function(scene, zoneAltitude, zoneHeight, zoneColor,
 
                     marker1.destroy();
                     marker2.destroy();
-                    basePolygon.destroy();
                     updatePointerLens(null);
 
-                    const min = (idx) => Math.min(point1WorldPos[idx], point2WorldPos[idx]);
-                    const max = (idx) => Math.max(point1WorldPos[idx], point2WorldPos[idx]);
-
-                    const xmin = min(0);
-                    const zmin = min(2);
-                    const xmax = max(0);
-                    const zmax = max(2);
-
-                    const zone = zonesPlugin.createZone(
-                        {
-                            id: math.createUUID(),
-                            geometry: {
-                                planeCoordinates: [
-                                    [ xmin, zmax ],
-                                    [ xmax, zmax ],
-                                    [ xmax, zmin ],
-                                    [ xmin, zmin ]
-                                ],
-                                altitude: zoneAltitude,
-                                height: zoneHeight
-                            },
-                            alpha: zoneAlpha,
-                            color: zoneColor
-                        });
-
-                    onZoneCreated(zone);
+                    onPointsSelected([ point1WorldPos, point2WorldPos ]);
                 });
         });
 
@@ -371,7 +329,6 @@ const startAAZoneCreateUI = function(scene, zoneAltitude, zoneHeight, zoneColor,
             deactivatePointSelection();
             marker1.destroy();
             marker2.destroy();
-            basePolygon.destroy();
             updatePointerLens(null);
         }
     };
@@ -1052,6 +1009,34 @@ class Zone extends Component {
     }
 }
 
+const createAAZoneFromPoints = function(pos1, pos2, zoneAltitude, zoneHeight, zoneColor, zoneAlpha, zonesPlugin) {
+
+    const min = (idx) => Math.min(pos1[idx], pos2[idx]);
+    const max = (idx) => Math.max(pos1[idx], pos2[idx]);
+
+    const xmin = min(0);
+    const zmin = min(2);
+    const xmax = max(0);
+    const zmax = max(2);
+
+    return zonesPlugin.createZone(
+        {
+            id: math.createUUID(),
+            geometry: {
+                planeCoordinates: [
+                    [ xmin, zmax ],
+                    [ xmax, zmax ],
+                    [ xmax, zmin ],
+                    [ xmin, zmin ]
+                ],
+                altitude: zoneAltitude,
+                height: zoneHeight
+            },
+            alpha: zoneAlpha,
+            color: zoneColor
+        });
+};
+
 /**
  * Creates {@link Zone}s in a {@link ZonesPlugin} from mouse input.
  *
@@ -1082,7 +1067,7 @@ class Zone extends Component {
  * const zonesControl  = new ZonesMouseControl(Zones)
  * ````
  */
-class ZonesMouseControl extends Component {
+class ZonesAAZoneControl extends Component {
 
     /**
      * Creates a ZonesMouseControl bound to the given ZonesPlugin.
@@ -1091,11 +1076,12 @@ class ZonesMouseControl extends Component {
      * @param [cfg] Configuration
      * @param {PointerLens} [cfg.pointerLens] A PointerLens to use to provide a magnified view of the cursor when snapping is enabled.
      */
-    constructor(zonesPlugin, cfg = {}) {
+    constructor(zonesPlugin, cfg, createSelect3dPoint) {
         super(zonesPlugin.viewer.scene);
 
         this.zonesPlugin = zonesPlugin;
         this.pointerLens = cfg.pointerLens;
+        this.createSelect3dPoint = createSelect3dPoint;
         this._deactivate = null;
     }
 
@@ -1132,16 +1118,35 @@ class ZonesMouseControl extends Component {
         const scene = viewer.scene;
         const self = this;
 
-        const select3dPoint = mousePointSelector(
-            viewer,
-            function(origin, direction) {
-                return planeIntersect(zoneAltitude, math.vec3([ 0, 1, 0 ]), origin, direction);
-            });
+        const select3dPoint = this.createSelect3dPoint(viewer, (origin, direction) => planeIntersect(zoneAltitude, math.vec3([ 0, 1, 0 ]), origin, direction));
 
         (function rec() {
-            self._deactivate = startAAZoneCreateUI(
-                scene, zoneAltitude, zoneHeight, zoneColor, zoneAlpha, self.pointerLens, zonesPlugin, select3dPoint,
-                zone => {
+            const basePolygon = basePolygon3D(scene, zoneColor, zoneAlpha);
+            const deactivate = startAARectCreateUI(
+                scene, zoneColor, self.pointerLens, select3dPoint,
+                points => {
+                    if (points) {
+                        const p0 = points[0];
+                        const p1 = points[1];
+                        const min = (idx) => Math.min(p0[idx], p1[idx]);
+                        const max = (idx) => Math.max(p0[idx], p1[idx]);
+
+                        const xmin = min(0);
+                        const ymin = min(1);
+                        const zmin = min(2);
+                        const xmax = max(0);
+                        const ymax = max(1);
+                        const zmax = max(2);
+
+                        basePolygon.updateBase([ [ xmin, ymin, zmax ], [ xmax, ymin, zmax ],
+                                                 [ xmax, ymin, zmin ], [ xmin, ymin, zmin ] ]);
+                    } else {
+                        basePolygon.updateBase(null);
+                    }
+                },
+                points => {
+                    basePolygon.destroy();
+                    const zone = createAAZoneFromPoints(points[0], points[1], zoneAltitude, zoneHeight, zoneColor, zoneAlpha, zonesPlugin);
                     let reactivate = true;
                     self._deactivate = () => { reactivate = false; };
                     self.fire("zoneEnd", zone);
@@ -1150,6 +1155,10 @@ class ZonesMouseControl extends Component {
                         rec();
                     }
                 }).deactivate;
+            self._deactivate = () => {
+                deactivate();
+                basePolygon.destroy();
+            };
         })();
     }
 
@@ -1172,10 +1181,36 @@ class ZonesMouseControl extends Component {
     }
 }
 
+export class ZonesMouseControl extends ZonesAAZoneControl {
+    constructor(zonesPlugin, cfg = {}) {
+        super(
+            zonesPlugin,
+            cfg,
+            (viewer, ray2WorldPos) => mousePointSelector(viewer, ray2WorldPos));
+    }
+}
+
+import {PointerCircle} from "../../extras/PointerCircle/PointerCircle.js";
+export class ZonesTouchControl extends ZonesAAZoneControl {
+    constructor(zonesPlugin, cfg = {}) {
+        const pointerCircle = new PointerCircle(zonesPlugin.viewer);
+        super(
+            zonesPlugin,
+            cfg,
+            (viewer, ray2WorldPos) => touchPointSelector(viewer, pointerCircle, ray2WorldPos));
+        this.pointerCircle = pointerCircle;
+    }
+
+    destroy() {
+        this.pointerCircle.destroy();
+        super.destroy();
+    }
+}
+
 /**
  * ZonesPlugin documentation to be added, mostly compatible with DistanceMeasurementsPlugin.
  */
-class ZonesPlugin extends Plugin {
+export class ZonesPlugin extends Plugin {
 
     /**
      * @constructor
@@ -1282,88 +1317,6 @@ class ZonesPlugin extends Plugin {
      * Destroys all {@link Zone}s first.
      */
     destroy() {
-        super.destroy();
-    }
-}
-
-import {PointerCircle} from "../../extras/PointerCircle/PointerCircle.js";
-
-export class ZonesTouchControl extends Component {
-
-    constructor(zonesPlugin, cfg = {}) {
-        super(zonesPlugin.viewer.scene);
-
-        this.zonesPlugin = zonesPlugin;
-        this.pointerLens = cfg.pointerLens;
-        this.pointerCircle = new PointerCircle(zonesPlugin.viewer);
-        this._deactivate = null;
-    }
-
-    get active() {
-        return !! this._deactivate;
-    }
-
-    activate(zoneAltitude, zoneHeight, zoneColor, zoneAlpha) {
-
-        if (typeof(zoneAltitude) === "object" && (zoneAltitude !== null)) {
-            const params = zoneAltitude;
-            const param = (name, defaultValue) => {
-                if (name in params) {
-                    return params[name];
-                } else if (defaultValue !== undefined) {
-                    return defaultValue;
-                } else {
-                    throw "config missing: " + name;
-                }
-            };
-
-            zoneAltitude = param("altitude");
-            zoneHeight   = param("height");
-            zoneColor    = param("color", "#008000");
-            zoneAlpha    = param("alpha", 0.5);
-        }
-
-        if (this._deactivate) {
-            return;
-        }
-
-        const zonesPlugin = this.zonesPlugin;
-        const viewer = zonesPlugin.viewer;
-        const scene = viewer.scene;
-        const self = this;
-
-        const select3dPoint = touchPointSelector(
-            viewer,
-            this.pointerCircle,
-            function(origin, direction) {
-                return planeIntersect(zoneAltitude, math.vec3([ 0, 1, 0 ]), origin, direction);
-            });
-
-        (function rec() {
-            self._deactivate = startAAZoneCreateUI(
-                scene, zoneAltitude, zoneHeight, zoneColor, zoneAlpha, self.pointerLens, zonesPlugin, select3dPoint,
-                zone => {
-                    let reactivate = true;
-                    self._deactivate = () => { reactivate = false; };
-                    self.fire("zoneEnd", zone);
-                    if (reactivate)
-                    {
-                        rec();
-                    }
-                }).deactivate;
-        })();
-    }
-
-    deactivate() {
-        if (this._deactivate)
-        {
-            this._deactivate();
-            this._deactivate = null;
-        }
-    }
-
-    destroy() {
-        this.deactivate();
         super.destroy();
     }
 }
@@ -1933,7 +1886,3 @@ export class ZoneTranslateTouchControl extends ZoneTranslateControl {
         super(zone, cfg, false, true);
     }
 }
-
-
-export {ZonesMouseControl}
-export {ZonesPlugin}
