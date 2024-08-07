@@ -1,5 +1,38 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.32](https://github.com/xeokit/xeokit-sdk/compare/v2.6.31...v2.6.32)
+
+### 7 August 2024
+
+-  Added XKTLoaderPlugin renderOrder option - [#1614](https://github.com/xeokit/xeokit-sdk/pull/1614)
+-  Use SceneModel.renderOrder in renderer - [#1613](https://github.com/xeokit/xeokit-sdk/pull/1613)
+-  XEOK-50 Overlay 2D - [#1612](https://github.com/xeokit/xeokit-sdk/pull/1612)
+-  [DOCUMENTATION] Replacing README.md example with XKT loading - [#1609](https://github.com/xeokit/xeokit-sdk/pull/1609)
+
+# [v2.6.31](https://github.com/xeokit/xeokit-sdk/compare/v2.6.30...v2.6.31)
+
+### 2 August 2024
+
+-  [FIX] Fix TreeiewPlugin error report when Storeys view not possible - [#1608](https://github.com/xeokit/xeokit-sdk/pull/1608)
+-  Fixed glb loader not loading when nodes are without names - [#1607](https://github.com/xeokit/xeokit-sdk/pull/1607)
+-  Adding some missing types in loaders - [#1605](https://github.com/xeokit/xeokit-sdk/pull/1605)
+-  XEOK-83 Fix null matrix handling in parseNodeMesh - [#1602](https://github.com/xeokit/xeokit-sdk/pull/1602)
+-  [FEATURE] Support face_colors for dotbim - [#1603](https://github.com/xeokit/xeokit-sdk/pull/1603)
+-  [FEATURE] add snap picking default picking data - [#1601](https://github.com/xeokit/xeokit-sdk/pull/1601)
+
+# [v2.6.30](https://github.com/xeokit/xeokit-sdk/compare/v2.6.29...v2.6.30)
+
+### 29 July 2024
+
+-  Auto gltf metamodel - [#1600](https://github.com/xeokit/xeokit-sdk/pull/1600)
+-  Make GLTFLoaderPlugin generate automatic metadata - [#1599](https://github.com/xeokit/xeokit-sdk/pull/1599)
+-  XEOK-77 Fix incorrect color composition in TrianglesColorTextureRenderer - [#1597](https://github.com/xeokit/xeokit-sdk/pull/1597)
+-  [FIX] snap picking - [#1595](https://github.com/xeokit/xeokit-sdk/pull/1595)
+-  XCD-36 GLTF alphaCutoff support - [#1596](https://github.com/xeokit/xeokit-sdk/pull/1596)
+-  XEOK-75 Bring back missing SceneModel::_createDefaultIndices definition - [#1594](https://github.com/xeokit/xeokit-sdk/pull/1594)
+-  Rebuild to fix XCD-127 - [#1591](https://github.com/xeokit/xeokit-sdk/pull/1591)
+-  [FIX] marker occlusion - [#1579](https://github.com/xeokit/xeokit-sdk/pull/1579)
+
 # [v2.6.29](https://github.com/xeokit/xeokit-sdk/compare/v2.6.28...v2.6.29)
 
 ### 16 July 2024
