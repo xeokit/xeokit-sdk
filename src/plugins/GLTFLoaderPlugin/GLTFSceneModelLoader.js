@@ -5,6 +5,7 @@ import {sRGBEncoding} from "../../viewer/scene/constants/constants.js";
 import {worldToRTCPositions} from "../../viewer/scene/math/rtcCoords.js";
 import {parse} from '@loaders.gl/core';
 import {GLTFLoader} from '@loaders.gl/gltf/dist/esm/gltf-loader.js';
+
 import {
     ClampToEdgeWrapping,
     LinearFilter,
@@ -503,7 +504,7 @@ const parseNodesWithNames = (function () {
 
     const objectIdStack = [];
     const meshIdsStack = [];
-    let meshIds = null;
+    let meshIds = [];
 
     return function (ctx, node, depth, matrix) {
         matrix = parseNodeMatrix(node, matrix);
@@ -681,7 +682,11 @@ function parseNodeMesh(node, ctx, matrix, meshIds) {
             if (primitive.indices) {
                 meshCfg.indices = primitive.indices.value;
             }
-            math.transformPositions3(matrix, meshCfg.localPositions, meshCfg.positions);
+            if (matrix) {
+                math.transformPositions3(matrix, meshCfg.localPositions, meshCfg.positions);
+            } else { // eqiv to math.transformPositions3(math.identityMat4(), meshCfg.localPositions, meshCfg.positions);
+                meshCfg.positions.set(meshCfg.localPositions);
+            }
             const origin = math.vec3();
             const rtcNeeded = worldToRTCPositions(meshCfg.positions, meshCfg.positions, origin); // Small cellsize guarantees better accuracy
             if (rtcNeeded) {

@@ -426,49 +426,126 @@ export class DotBIMLoaderPlugin extends Plugin {
 
                 const dbMeshId = element.mesh_id;
 
-                parseDBMesh(dbMeshId);
-
-                const meshId = `${objectId}-mesh`;
                 const vector = element.vector;
                 const rotation = element.rotation;
                 const props = objectDefaults ? objectDefaults[elementType] || objectDefaults["DEFAULT"] : null;
-
                 let visible = true;
                 let pickable = true;
-                let color = element.color ? [element.color.r / 255, element.color.g / 255, element.color.b / 255] : [1, 1, 1];
-                let opacity = element.color ? element.color.a / 255 : 1.0;
 
-                if (props) {
-                    if (props.visible === false) {
-                        visible = false;
+                if (element.face_colors === undefined) {
+
+                    parseDBMesh(dbMeshId);
+
+                    const meshId = `${objectId}-mesh`;
+
+                    let color = element.color ? [element.color.r / 255.0, element.color.g / 255.0, element.color.b / 255.0] : [1, 1, 1];
+                    let opacity = element.color ? element.color.a / 255.0 : 1.0;
+
+                    if (props) {
+                        if (props.visible === false) {
+                            visible = false;
+                        }
+                        if (props.pickable === false) {
+                            pickable = false;
+                        }
+                        if (props.colorize) {
+                            color = props.colorize;
+                        }
+                        if (props.opacity !== undefined && props.opacity !== null) {
+                            opacity = props.opacity;
+                        }
                     }
-                    if (props.pickable === false) {
-                        pickable = false;
-                    }
-                    if (props.colorize) {
-                        color = props.colorize;
-                    }
-                    if (props.opacity !== undefined && props.opacity !== null) {
-                        opacity = props.opacity;
-                    }
+
+                    sceneModel.createMesh({
+                        id: meshId,
+                        geometryId: dbMeshId,
+                        color: color,
+                        opacity: opacity,
+                        quaternion: rotation && (rotation.qz !== 0 || rotation.qy !== 0 || rotation.qx !== 0 || rotation.qw !== 1.0) ? [rotation.qx, rotation.qy, rotation.qz, rotation.qw] : undefined,
+                        position: vector ? [vector.x, vector.y, vector.z] : undefined
+                    });
+
+                    sceneModel.createEntity({
+                        id: objectId,
+                        meshIds: [meshId],
+                        visible: visible,
+                        pickable: pickable,
+                        isObject: true
+                    });
                 }
+                else {
+                    let faceColors = element.face_colors;
+                    let coloredTrianglesDictionary = {};
+                    let currentTriangleIndicesCount = 0;
+                    let dbMesh = fileData.meshes[element.mesh_id];
+                    for (let i = 0, len = faceColors.length; i < len; i+=4) {
+                        let faceColor = [faceColors[i], faceColors[i+1], faceColors[i+2], faceColors[i+3]];
+                        if (coloredTrianglesDictionary[faceColor] === undefined) {
+                            coloredTrianglesDictionary[faceColor] = [];
+                        }
+                        let indexForPoint0 = dbMesh.indices[currentTriangleIndicesCount];
+                        let x0 = dbMesh.coordinates[indexForPoint0*3];
+                        let y0 = dbMesh.coordinates[indexForPoint0*3+1];
+                        let z0 = dbMesh.coordinates[indexForPoint0*3+2];
+                        let indexForPoint1 = dbMesh.indices[currentTriangleIndicesCount+1];
+                        let x1 = dbMesh.coordinates[indexForPoint1*3];
+                        let y1 = dbMesh.coordinates[indexForPoint1*3+1];
+                        let z1 = dbMesh.coordinates[indexForPoint1*3+2];
+                        let indexForPoint2 = dbMesh.indices[currentTriangleIndicesCount+2];
+                        let x2 = dbMesh.coordinates[indexForPoint2*3];
+                        let y2 = dbMesh.coordinates[indexForPoint2*3+1];
+                        let z2 = dbMesh.coordinates[indexForPoint2*3+2];
+                        coloredTrianglesDictionary[faceColor].push(x0, y0, z0, x1, y1, z1, x2, y2, z2);
 
-                sceneModel.createMesh({
-                    id: meshId,
-                    geometryId: dbMeshId,
-                    color,
-                    opacity,
-                    quaternion: rotation && (rotation.qz !== 0 || rotation.qy !== 0 || rotation.qx !== 0 || rotation.qw !== 1.0) ? [rotation.qx, rotation.qy, rotation.qz, rotation.qw] : undefined,
-                    position: vector ? [vector.x, vector.y, vector.z] : undefined
-                });
+                        currentTriangleIndicesCount += 3;
+                    }
+                    let meshIds = [];
+                    for (const [faceColor, trianglesCoordinates] of Object.entries(coloredTrianglesDictionary)) {
+                        sceneModel.createGeometry({
+                            id: `${dbMeshId}-${faceColor}`,
+                            primitive: "triangles",
+                            positions: trianglesCoordinates,
+                            indices: [...Array(trianglesCoordinates.length).keys()]
+                        });
+                        const meshId = `${objectId}-mesh-${faceColor}`;
+                        const faceColorArray = faceColor.split(',').map(Number);
 
-                sceneModel.createEntity({
-                    id: objectId,
-                    meshIds: [meshId],
-                    visible,
-                    pickable,
-                    isObject: true
-                });
+                        let color = [faceColorArray[0] / 255.0, faceColorArray[1] / 255.0, faceColorArray[2] / 255.0];
+                        let opacity = faceColorArray[3] / 255.0;
+
+                        if (props) {
+                            if (props.visible === false) {
+                                visible = false;
+                            }
+                            if (props.pickable === false) {
+                                pickable = false;
+                            }
+                            if (props.colorize) {
+                                color = props.colorize;
+                            }
+                            if (props.opacity !== undefined && props.opacity !== null) {
+                                opacity = props.opacity;
+                            }
+                        }
+
+                        sceneModel.createMesh({
+                            id: meshId,
+                            geometryId: `${dbMeshId}-${faceColor}`,
+                            color: color,
+                            opacity: opacity,
+                            quaternion: rotation && (rotation.qz !== 0 || rotation.qy !== 0 || rotation.qx !== 0 || rotation.qw !== 1.0) ? [rotation.qx, rotation.qy, rotation.qz, rotation.qw] : undefined,
+                            position: vector ? [vector.x, vector.y, vector.z] : undefined
+                        });
+                        meshIds.push(meshId);
+                    }
+                    sceneModel.createEntity({
+                        id: objectId,
+                        meshIds: meshIds,
+                        visible: visible,
+                        pickable: pickable,
+                        isObject: true
+                    });
+                }
 
                 for (let infoKey in info) {
                     let properties;

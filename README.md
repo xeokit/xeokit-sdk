@@ -28,22 +28,20 @@ npm i @xeokit/xeokit-sdk
 
 The xeokit SDK lets us develop our own browser-based BIM viewer, which we can fully customize and extend with
 plugins. Let's create a [Viewer](https://xeokit.github.io/xeokit-sdk/docs/class/src/viewer/Viewer.js~Viewer.html) with
-a [WebIFCLoaderPlugin](https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/WebIFCLoaderPlugin/WebIFCLoaderPlugin.js~WebIFCLoaderPlugin.html)
-to view a IFC model in the browser, then view a sample IFC model from
+a [XKTLoaderPlugin](https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html)
+to view an XKT model in the browser, which was pre-converted from IFC model from
 the [Open IFC Model Database](http://openifcmodel.cs.auckland.ac.nz/Model/Details/274).
 
-This is just one way to load our models into xeokit. We can also load multiple models from other formats, 
+This is just one way to load our models into xeokit: by converting it to XKT and loading via XKTLoaderPlugin.
+We can also load models from other formats directly, 
 including [CityJSON](https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/CityJSONLoaderPlugin/CityJSONLoaderPlugin.js~CityJSONLoaderPlugin.html), 
 [glTF](https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/GLTFLoaderPlugin/GLTFLoaderPlugin.js~GLTFLoaderPlugin.html), 
 [LAZ](https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html) 
-and [OBJ](https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html), 
-as well as xeokit's own native highly-compressed [XKT](https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/XKTLoaderPlugin/XKTLoaderPlugin.js~XKTLoaderPlugin.html) format, 
-which we can pre-convert offline from other formats.  
+and [OBJ](https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/OBJLoaderPlugin/OBJLoaderPlugin.js~OBJLoaderPlugin.html).
 
- * [Run this example](https://xeokit.github.io/xeokit-sdk/examples/#BIMOffline_WebIFCLoaderPlugin_Duplex)
- * [Read the full tutorial](https://www.notion.so/xeokit/Viewing-an-IFC-Model-with-WebIFCLoaderPlugin-9a572b801af949bf87a21c88968bd251)
+[Run this example](https://xeokit.github.io/xeokit-sdk/examples/buildings/#xkt_vbo_Duplex)
 
-![](https://xeokit.io/img/docs/WebIFCLoaderPlugin/WebIFCLoaderPluginBig.png)
+![](assets/images/duplex_readme_example.png)
 
 
 ````html
@@ -76,9 +74,9 @@ which we can pre-convert offline from other formats.
 </body>
 <script id="source" type="module">
 
-    import {WebIFCLoaderPlugin, Viewer} from
+    import {XKTLoaderPlugin, Viewer} from
                     "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
-    import * as WebIFC from "https://cdn.jsdelivr.net/npm/web-ifc@0.0.51/web-ifc-api.js";
+    
     const viewer = new Viewer({
         canvasId: "xeokit_canvas",
         transparent: true,
@@ -89,20 +87,16 @@ which we can pre-convert offline from other formats.
     viewer.camera.look = [4.400, 3.724, 8.899];
     viewer.camera.up = [-0.018, 0.999, 0.039];
 
-    const IfcAPI = new WebIFC.IfcAPI();
-    IfcAPI.SetWasmPath("https://cdn.jsdelivr.net/npm/web-ifc@0.0.51/");
+    const xktLoader = new XKTLoaderPlugin(viewer);
 
-    IfcAPI.Init().then(() => {
-        const ifcLoader = new WebIFCLoaderPlugin(viewer, {
-            WebIFC,
-            IfcAPI
-        });
-
-        const model = ifcLoader.load({
-            src: "Duplex.ifc",
-            edges: true
-        });
+    const sceneModel = xktLoader.load({
+        id: "myModel",
+        src: "Duplex.xkt",
+        saoEnabled: true,
+        edges: true,
+        dtxEnabled: true
     });
+    
 </script>
 </html>
 ````

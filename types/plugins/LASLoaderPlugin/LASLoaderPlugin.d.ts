@@ -1,4 +1,4 @@
-import { Entity, Plugin, Viewer } from "../../viewer";
+import { Entity, Plugin, SceneModel, Viewer } from "../../viewer";
 import { ModelStats } from "../index";
 
 export declare interface ILASDefaultDataSource {
@@ -142,5 +142,5 @@ export declare class LASLoaderPlugin extends Plugin {
    * @param {LoadLASModel} params Loading parameters.
    * @returns {SceneModel} SceneModel representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}.
    */
-  load(params?: LoadLASModel): Entity;
+  load(params?: LoadLASModel): SceneModel;
 }
