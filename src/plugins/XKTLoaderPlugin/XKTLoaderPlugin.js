@@ -880,6 +880,9 @@ class XKTLoaderPlugin extends Plugin {
      * represent the returned model. Set false to always use vertex buffer objects (VBOs). Note that DTX is only applicable
      * to non-textured triangle meshes, and that VBOs are always used for meshes that have textures, line segments, or point
      * primitives. Only works while {@link DTX#enabled} is also ````true````.
+     * @param {Number} [params.renderOrder=0] Specifies the rendering order for the model. This is used to control the order in which
+     * SceneModels are drawn when they have transparent objects, to give control over the order in which those objects are blended within the transparent
+     * render pass.
      * @returns {Entity} Entity representing the model, which will have {@link Entity#isModel} set ````true```` and will be registered by {@link Entity#id} in {@link Scene#models}.
      */
     load(params = {}) {
@@ -929,7 +932,8 @@ class XKTLoaderPlugin extends Plugin {
             origin: params.origin,
             disableVertexWelding: params.disableVertexWelding || false,
             disableIndexRebucketing: params.disableIndexRebucketing || false,
-            dtxEnabled: params.dtxEnabled
+            dtxEnabled: params.dtxEnabled,
+            renderOrder: params.renderOrder
         }));
 
         const modelId = sceneModel.id;  // In case ID was auto-generated
