@@ -6,20 +6,44 @@ import { PhongMaterial } from "../../viewer/scene/materials/PhongMaterial.js";
 import CSG from "../lib/csg.js";
 
 class SectionCapsPlugin extends Plugin {
+    /**
+     * @constructor
+     * @param {Viewer} viewer The Viewer.
+     * @param {Object} cfg  Plugin configuration.
+     * @param {boolean} [cfg.enabled=true] Default value for, if this plugin is enabled or not.
+     */
     constructor(viewer, cfg = {}) {
         super("SectionCaps", viewer, cfg);
-        this.sectionPlanes = [];
-        // this.sceneModel = viewer.scene.models.myModel;
-        this.sceneModel = Object.keys(viewer.scene.models).map((key) => viewer.scene.models[key]);
-        this.prevIntersectionModels = {};
-        this.posTimeout = null;
-        this.dirTimeout = null;
-        this.setupSectionPlanes();
+        if(!viewer.scene.readableGeometryEnabled){
+            console.log('SectionCapsPlugin only works when readable geometry is enable on the viewer.');
+            return;
+        }
+        this._enabled = cfg.enabled !== false;
+        this._sectionPlanes = [];
+        this._sceneModel = Object.keys(viewer.scene.models).map((key) => viewer.scene.models[key]);
+        this._prevIntersectionModels = {};
+        this._posTimeout = null;
+        this._dirTimeout = null;
+        this._setupSectionPlanes();
+    }
+
+    set enabled(value) {
+        if(value !== undefined && value !== this._enabled){
+            this._enabled = value;
+            if(this._enabled)
+                this._addHatches(this._sceneModel, this._sectionPlanes);
+            else 
+                this._deletePreviousModels();
+        }
+    }
+
+    get enabled(){
+        return this._enabled;
     }
 
 
     //this function will be used to setup event listeners for creation of section planes
-    setupSectionPlanes(){
+    _setupSectionPlanes(){
         this._onSectionPlaneCreated = this.viewer.scene.on('sectionPlaneCreated', (sectionPlane) => {
             this._sectionPlaneCreated(sectionPlane);
         })
@@ -27,72 +51,70 @@ class SectionCapsPlugin extends Plugin {
 
     //this hook will be called when a section plane is created
     _sectionPlaneCreated(sectionPlane) {
-        this.sectionPlanes.push(sectionPlane);
-        sectionPlane.on('pos', this.onSectionPlanePosUpdated.bind(this));
-        sectionPlane.on('dir', this.onSectionPlaneDirRotated.bind(this));
-        sectionPlane.once('destroyed', this.onSectionPlaneDestroyed.bind(this));
+        this._sectionPlanes.push(sectionPlane);
+        sectionPlane.on('pos', this._onSectionPlanePosUpdated.bind(this));
+        sectionPlane.on('dir', this._onSectionPlaneDirRotated.bind(this));
+        sectionPlane.once('destroyed', this._onSectionPlaneDestroyed.bind(this));
     }
 
     //this hook will be called when a section plane is destroyed
-    onSectionPlaneDestroyed(sectionPlane) {
+    _onSectionPlaneDestroyed(sectionPlane) {
         const sectionPlaneId = sectionPlane.id;
         if(sectionPlaneId) {
-            this.sectionPlanes = this.sectionPlanes.filter((sectionPlane) => sectionPlane.id !== sectionPlaneId);
-            this.addHatches(this.sceneModel, this.sectionPlanes);
+            this._sectionPlanes = this._sectionPlanes.filter((sectionPlane) => sectionPlane.id !== sectionPlaneId);
+            this._addHatches(this._sceneModel, this._sectionPlanes);
         }
     } 
 
     //this function will be called when the position of a section plane is updated
-    onSectionPlanePosUpdated() {
-        this.deletePreviousModels();
-        if (this.posTimeout)
-            clearTimeout(this.posTimeout);
-        this.posTimeout = setTimeout(() => {
-            this.addHatches(this.sceneModel, this.sectionPlanes);
-            clearTimeout(this.posTimeout);
-            this.posTimeout = null;
+    _onSectionPlanePosUpdated() {
+        this._deletePreviousModels();
+        if (this._posTimeout)
+            clearTimeout(this._posTimeout);
+        this._posTimeout = setTimeout(() => {
+            this._addHatches(this._sceneModel, this._sectionPlanes);
+            clearTimeout(this._posTimeout);
+            this._posTimeout = null;
         }, 1000);
     }
 
     //this function will be called when the direction of a section plane is updated
-    onSectionPlaneDirRotated() {
-        this.deletePreviousModels();
-        if (this.dirTimeout)
-            clearTimeout(this.dirTimeout);
-        this.dirTimeout = setTimeout(() => {
-            this.addHatches(this.sceneModel, this.sectionPlanes);
-            clearTimeout(this.dirTimeout);
-            this.dirTimeout = null;
+    _onSectionPlaneDirRotated() {
+        this._deletePreviousModels();
+        if (this._dirTimeout)
+            clearTimeout(this._dirTimeout);
+        this._dirTimeout = setTimeout(() => {
+            this._addHatches(this._sceneModel, this._sectionPlanes);
+            clearTimeout(this._dirTimeout);
+            this._dirTimeout = null;
         }, 1000);
     }
 
-    addHatches(sceneModel, plane) {
+    _addHatches(sceneModel, plane) {
 
-        this.deletePreviousModels();
+        if(!this._enabled) return;
 
-        // const objects = {};
+        this._deletePreviousModels();
 
-        // sceneModel = sceneModel[0];
+        const csgGeometries = this._convertWebglGeometriesToCsgGeometries(sceneModel);
 
-        const csgGeometries = this.convertWebglGeometriesToCsgGeometries(sceneModel);
-
-        const csgPlane = this.createCSGPlane(plane);
-        let caps = this.getCapGeometries(csgGeometries, csgPlane);
-        this.addIntersectedGeometries(caps);
+        const csgPlane = this._createCSGPlane(plane);
+        let caps = this._getCapGeometries(csgGeometries, csgPlane);
+        this._addIntersectedGeometries(caps);
     }
 
     //#region main callers
 
-    deletePreviousModels() {
-        const keys = Object.keys(this.prevIntersectionModels).length;
+    _deletePreviousModels() {
+        const keys = Object.keys(this._prevIntersectionModels).length;
         if (keys) {
-            for (const key in this.prevIntersectionModels) {
-                this.prevIntersectionModels[key].destroy();
+            for (const key in this._prevIntersectionModels) {
+                this._prevIntersectionModels[key].destroy();
             }
         }
     }
 
-    convertWebglGeometriesToCsgGeometries(sceneModels) {
+    _convertWebglGeometriesToCsgGeometries(sceneModels) {
         let csgGeometries = {};
         sceneModels.forEach((sceneModel) => {
             const objects = {};
@@ -107,8 +129,8 @@ class SectionCapsPlugin extends Plugin {
                 objects: objects
             }
     
-            const { vertices: webglVertices, indices: webglIndices } = this.getVerticesAndIndices(cloneModel);
-            const csgGeometry = this.createCSGGeometries(webglVertices, webglIndices);
+            const { vertices: webglVertices, indices: webglIndices } = this._getVerticesAndIndices(cloneModel);
+            const csgGeometry = this._createCSGGeometries(webglVertices, webglIndices);
             csgGeometries = {
                 ...csgGeometries,
                 ...csgGeometry
@@ -118,7 +140,7 @@ class SectionCapsPlugin extends Plugin {
         return csgGeometries;
     }
 
-    getVerticesAndIndices(sceneModel) {
+    _getVerticesAndIndices(sceneModel) {
         const vertices = {};
         const indices = {};
         const objects = sceneModel.objects;
@@ -136,17 +158,17 @@ class SectionCapsPlugin extends Plugin {
         return { vertices, indices };
     }
 
-    createCSGGeometries(vertices, indices) {
+    _createCSGGeometries(vertices, indices) {
         const geometries = {};
         for (const key in vertices) {
             const vertex = vertices[key];
             const index = indices[key];
-            geometries[key] = this.createGeometry(vertex, index);
+            geometries[key] = this._createGeometry(vertex, index);
         }
         return geometries;
     }
 
-    createCSGPlane(sectionPlanes) {
+    _createCSGPlane(sectionPlanes) {
         const vertices = [
             20, 20, 0.01,
             -20, 20, 0.01,
@@ -186,25 +208,24 @@ class SectionCapsPlugin extends Plugin {
         let csgPlaneMerged = null;
 
         sectionPlanes.forEach((sectionPlane) => {
-            const planeNormal = this.getObjectNormal(vertices, indices);
+            const planeNormal = this._getObjectNormal(vertices, indices);
             const normalizedDir = math.normalizeVec3(sectionPlane.dir);
-            const rotationQuaternion = this.computeQuaternionFromVectors(planeNormal, normalizedDir);
+            const rotationQuaternion = this._computeQuaternionFromVectors(planeNormal, normalizedDir);
 
-            const planeTransformMatrix = this.getTransformationMatrix(sectionPlane.pos, rotationQuaternion, true);
-            const planeTransformedVertices = this.transformVertices(vertices, planeTransformMatrix);
+            const planeTransformMatrix = this._getTransformationMatrix(sectionPlane.pos, rotationQuaternion, true);
+            const planeTransformedVertices = this._transformVertices(vertices, planeTransformMatrix);
 
-            const csgPlane = this.createGeometry(planeTransformedVertices, indices);
+            const csgPlane = this._createGeometry(planeTransformedVertices, indices);
 
             if (csgPlaneMerged)
                 csgPlaneMerged = csgPlaneMerged.union(csgPlane);
             else
                 csgPlaneMerged = csgPlane;
         })
-        console.log("csgPlaneMerged: ", csgPlaneMerged);
         return csgPlaneMerged;
     }
 
-    getCapGeometries(csgGeometries, csgPlane) {
+    _getCapGeometries(csgGeometries, csgPlane) {
         const cappedGeometries = {};
         for (const key in csgGeometries) {
             const geometry = csgGeometries[key];
@@ -218,12 +239,12 @@ class SectionCapsPlugin extends Plugin {
         return cappedGeometries;
     }
 
-    addIntersectedGeometries(csgGometries) {
+    _addIntersectedGeometries(csgGometries) {
         for (const key in csgGometries) {
-            const webglGeometry = this.csgToWebGLGeometry(csgGometries[key]);
-            const model = this.addGeometryToScene(webglGeometry.vertices, webglGeometry.indices, key);
+            const webglGeometry = this._csgToWebGLGeometry(csgGometries[key]);
+            const model = this._addGeometryToScene(webglGeometry.vertices, webglGeometry.indices, key);
             if (model)
-                this.prevIntersectionModels[key] = model;
+                this._prevIntersectionModels[key] = model;
         }
     }
 
@@ -231,7 +252,7 @@ class SectionCapsPlugin extends Plugin {
 
     //#region utility functions
 
-    createGeometry(vertices, indices) {
+    _createGeometry(vertices, indices) {
         let polygons = [];
         for (let i = 0; i < indices.length; i += 3) {
             let points = [];
@@ -250,10 +271,10 @@ class SectionCapsPlugin extends Plugin {
         return CSG.fromPolygons(polygons);
     }
 
-    getObjectNormal(vertices, indices) {
-        const v0 = this.getVertex(vertices, indices[0]);
-        const v1 = this.getVertex(vertices, indices[1]);
-        const v2 = this.getVertex(vertices, indices[2]);
+    _getObjectNormal(vertices, indices) {
+        const v0 = this._getVertex(vertices, indices[0]);
+        const v1 = this._getVertex(vertices, indices[1]);
+        const v2 = this._getVertex(vertices, indices[2]);
 
         const edge1 = math.subVec3(v1, v0);
         const edge2 = math.subVec3(v2, v0);
@@ -263,7 +284,7 @@ class SectionCapsPlugin extends Plugin {
         return math.normalizeVec3(normal)
     }
 
-    getVertex(positionArray, index) {
+    _getVertex(positionArray, index) {
         return [
             positionArray[3 * index],
             positionArray[3 * index + 1],
@@ -271,7 +292,7 @@ class SectionCapsPlugin extends Plugin {
         ];
     }
 
-    computeQuaternionFromVectors(v1, v2) {
+    _computeQuaternionFromVectors(v1, v2) {
         const dot = v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
         const cross = {
             x: v1[1] * v2[2] - v1[2] * v2[1],
@@ -289,23 +310,23 @@ class SectionCapsPlugin extends Plugin {
         ]
     }
 
-    getTransformationMatrix(position, rotation, _isQuat = false) {
+    _getTransformationMatrix(position, rotation, _isQuat = false) {
         const quat = _isQuat ? rotation : math.eulerToQuaternion(rotation, 'XYZ');
         const mat4 = math.rotationTranslationMat4(quat, position);
         return mat4;
     }
 
-    transformVertices(vertices, transformationMatrix) {
+    _transformVertices(vertices, transformationMatrix) {
         const transformedVertices = [];
         for (let i = 0; i < vertices.length; i += 3) {
             const vertex = [vertices[i], vertices[i + 1], vertices[i + 2], 1];
-            const transformedVertex = this.multiplyMatrixAndPoint(transformationMatrix, vertex);
+            const transformedVertex = this._multiplyMatrixAndPoint(transformationMatrix, vertex);
             transformedVertices.push(transformedVertex[0], transformedVertex[1], transformedVertex[2]);
         }
         return new Float32Array(transformedVertices);
     }
 
-    multiplyMatrixAndPoint(matrix, point) {
+    _multiplyMatrixAndPoint(matrix, point) {
         const result = [];
         for (let i = 0; i < 4; i++) {
             result[i] = matrix[i] * point[0] + matrix[i + 4] * point[1] + matrix[i + 8] * point[2] + matrix[i + 12] * point[3];
@@ -314,7 +335,7 @@ class SectionCapsPlugin extends Plugin {
     }
 
     // Convert CSG to WebGL-compatible geometry
-    csgToWebGLGeometry(csgGeometry) {
+    _csgToWebGLGeometry(csgGeometry) {
         const vertices = [];
         const indices = [];
         let index = 0;
@@ -330,7 +351,7 @@ class SectionCapsPlugin extends Plugin {
         return { vertices: new Float32Array(vertices), indices: new Uint16Array(indices) };
     }
 
-    addGeometryToScene(vertices, indices, id) {
+    _addGeometryToScene(vertices, indices, id) {
         if (vertices.length <= 0 && indices.length <= 0) return;
         const intersectedModel = new Mesh(viewer.scene, {
             id,
@@ -353,7 +374,7 @@ class SectionCapsPlugin extends Plugin {
     //#endregion
 
     destroy(){
-        this.deletePreviousModels();
+        this._deletePreviousModels();
         this.viewer.scene.off(this._onSectionPlaneCreated);
         super.destroy();
     }
