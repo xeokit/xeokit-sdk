@@ -201,6 +201,18 @@ export declare class DistanceMeasurementsPlugin extends Plugin {
   }): DistanceMeasurement;
   
   /**
+   * Gets whether the distance measurement axis are visible.
+   * @returns {Boolean}
+   */
+  getAxisVisible(): boolean;
+
+  /**
+   * Sets whether the distance measurement axis are visible.
+   * @param {Boolean} axisVisible
+   */
+  setAxisVisible(axisVisible: boolean): void;
+
+  /**
    * Destroys a {@link DistanceMeasurement}.
    *
    * @param {String} id ID of DistanceMeasurement to destroy.
