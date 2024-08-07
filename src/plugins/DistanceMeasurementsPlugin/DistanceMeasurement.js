@@ -6,6 +6,7 @@ import {Component} from "../../viewer/scene/Component.js";
 
 
 const distVec3 = math.vec3();
+const tmpVec3 = math.vec3();
 
 const lengthWire = (x1, y1, x2, y2) => {
     var a = x1 - x2;
@@ -316,6 +317,29 @@ class DistanceMeasurement extends Component {
         this.labelsVisible = cfg.labelsVisible;
         this.labelsOnWires = cfg.labelsOnWires;
         this.useRotationAdjustment = cfg.useRotationAdjustment;
+
+        /**
+         * @type {number[]}
+         */
+        this._axesBasis = [
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1,
+        ];
+    }
+
+    /**
+     * @param {number[]} value 
+     */
+    set axesBasis(value) {
+        this._axesBasis = value.slice();
+        this._wpDirty = true;
+        this._needUpdate(0); // No lag
+    }
+
+    get axesBasis() {
+        return this._axesBasis;
     }
 
     _update() {
@@ -351,19 +375,27 @@ class DistanceMeasurement extends Component {
                 this._wp[15] = 1.0;
             }
             else {
+                const delta = math.subVec3(
+                    this._targetWorld,
+                    this._originWorld,
+                    tmpVec3
+                );
+
+                this.factors = math.transformVec3(this._axesBasis, delta);
+
                 this._wp[0] = this._originWorld[0];
                 this._wp[1] = this._originWorld[1];
                 this._wp[2] = this._originWorld[2];
                 this._wp[3] = 1.0;
 
-                this._wp[4] = this._targetWorld[0];
-                this._wp[5] = this._originWorld[1];
-                this._wp[6] = this._originWorld[2];
+                this._wp[4] = this._originWorld[0] + this._axesBasis[0]*this.factors[0];
+                this._wp[5] = this._originWorld[1] + this._axesBasis[4]*this.factors[0];
+                this._wp[6] = this._originWorld[2] + this._axesBasis[8]*this.factors[0];
                 this._wp[7] = 1.0;
 
-                this._wp[8] = this._targetWorld[0];
-                this._wp[9] = this._targetWorld[1];
-                this._wp[10] = this._originWorld[2];
+                this._wp[8] = this._originWorld[0] + this._axesBasis[0]*this.factors[0]+ this._axesBasis[1]*this.factors[1];
+                this._wp[9] = this._originWorld[1] + this._axesBasis[4]*this.factors[0]+ this._axesBasis[5]*this.factors[1];
+                this._wp[10] = this._originWorld[2] + this._axesBasis[8]*this.factors[0]+ this._axesBasis[9]*this.factors[1];;
                 this._wp[11] = 1.0;
 
                 this._wp[12] = this._targetWorld[0];
@@ -525,14 +557,14 @@ class DistanceMeasurement extends Component {
                 }
 
                 if (!this._xAxisLabelCulled) {
-                    this._xAxisLabel.setText(tilde + Math.abs((this._targetWorld[0] - this._originWorld[0]) * scale).toFixed(2) + unitAbbrev);
+                    this._xAxisLabel.setText(tilde + Math.abs(this.factors[0] * scale).toFixed(2) + unitAbbrev);
                     this._xAxisLabel.setCulled(!this.axisVisible);
                 } else {
                     this._xAxisLabel.setCulled(true);
                 }
 
                 if (!this._yAxisLabelCulled) {
-                    this._yAxisLabel.setText(tilde + Math.abs((this._targetWorld[1] - this._originWorld[1]) * scale).toFixed(2) + unitAbbrev);
+                    this._yAxisLabel.setText(tilde + Math.abs(this.factors[1] * scale).toFixed(2) + unitAbbrev);
                     this._yAxisLabel.setCulled(!this.axisVisible);
                 } else {
                     this._yAxisLabel.setCulled(true);
@@ -545,7 +577,7 @@ class DistanceMeasurement extends Component {
                     }
                     else {
                         this._zAxisLabel.setPrefix("Z");
-                        this._zAxisLabel.setText(tilde + Math.abs((this._targetWorld[2] - this._originWorld[2]) * scale).toFixed(2) + unitAbbrev);
+                        this._zAxisLabel.setText(tilde + Math.abs(this.factors[2] * scale).toFixed(2) + unitAbbrev);
                     }
                     this._zAxisLabel.setCulled(!this.axisVisible);
                 } else {

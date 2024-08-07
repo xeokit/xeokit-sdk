@@ -12,6 +12,10 @@ export declare class DistanceMeasurement extends Component {
    */
   plugin: DistanceMeasurementsPlugin;
 
+  set axesBasis(value: number[]);
+
+  get axesBasis(): number[];
+
   /**
    * Sets whether this DistanceMeasurement indicates that its measurement is approximate.
    *
