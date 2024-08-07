@@ -67,6 +67,8 @@ export class VBOInstancingTrianglesLayer {
             geometry: cfg.geometry,
             textureSet: cfg.textureSet,
             pbrSupported: false, // Set in #finalize if we have enough to support quality rendering
+            indices: cfg.geometry.indices, //so we can null the geometry for GC
+            positionsCompressed: cfg.geometry.positionsCompressed, //so we can null the geometry for GC
             positionsDecodeMatrix: cfg.geometry.positionsDecodeMatrix, // So we can null the geometry for GC
             colorsBuf: null,
             metallicRoughnessBuf: null,
@@ -378,7 +380,7 @@ export class VBOInstancingTrianglesLayer {
             && !!textureSet
             && !!textureSet.colorTexture;
 
-        // this._state.geometry = null;
+        this._state.geometry = null;
 
         this._finalized = true;
     }
@@ -699,13 +701,12 @@ export class VBOInstancingTrianglesLayer {
             return false;
         }
         const state = this._state;
-        const geometry = state.geometry;
         const portion = this._portions[portionId];
         if (!portion) {
             this.model.error("portion not found: " + portionId);
             return;
         }
-        const positions = geometry.positionsCompressed;
+        const positions = state.positionsCompressed;
         const origin = state.origin;
         const offsetX = origin[0] ;
         const offsetY = origin[1] ;
@@ -733,13 +734,12 @@ export class VBOInstancingTrianglesLayer {
             return false;
         }
         const state = this._state;
-        const geometry = state.geometry;
         const portion = this._portions[portionId];
         if (!portion) {
             this.model.error("portion not found: " + portionId);
             return;
         }
-        const indices = geometry.indices;
+        const indices = state.indices;
         for (let i = 0, len = indices.length; i < len; i++) {
             callback(indices[i]);
         }
