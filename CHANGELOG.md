@@ -1,5 +1,18 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.33](https://github.com/xeokit/xeokit-sdk/compare/v2.6.32...v2.6.33)
+
+### 8 August 2024
+
+-  [FIX] Fix getEachVertex for instanced VBO triangles - [#1621](https://github.com/xeokit/xeokit-sdk/pull/1621)
+-  [FIX] Fix getEachVertex for instanced VBO triangles - [#1620](https://github.com/xeokit/xeokit-sdk/pull/1620)
+-  Fix MeshVolume::volume calculation - [#1619](https://github.com/xeokit/xeokit-sdk/pull/1619)
+-  Remove preemptively added touch floor plan editing example link - [#1618](https://github.com/xeokit/xeokit-sdk/pull/1618)
+-  Allow to set different wireframe axes for distance measurements - [#1615](https://github.com/xeokit/xeokit-sdk/pull/1615)
+-  Fix/exported types update - [#1617](https://github.com/xeokit/xeokit-sdk/pull/1617)
+-  Fix/pointer lens - [#1616](https://github.com/xeokit/xeokit-sdk/pull/1616)
+-  update source - [#1](https://github.com/xeokit/xeokit-sdk/pull/1)
+
 # [v2.6.32](https://github.com/xeokit/xeokit-sdk/compare/v2.6.31...v2.6.32)
 
 ### 7 August 2024
@@ -14,7 +27,7 @@
 ### 2 August 2024
 
 -  [FIX] Fix TreeiewPlugin error report when Storeys view not possible - [#1608](https://github.com/xeokit/xeokit-sdk/pull/1608)
--  Fixed glb loader not loading when nodes are without names - [#1607](https://github.com/xeokit/xeokit-sdk/pull/1607)
+-  Fixed glb loader not loading when nodes are with names - [#1607](https://github.com/xeokit/xeokit-sdk/pull/1607)
 -  Adding some missing types in loaders - [#1605](https://github.com/xeokit/xeokit-sdk/pull/1605)
 -  XEOK-83 Fix null matrix handling in parseNodeMesh - [#1602](https://github.com/xeokit/xeokit-sdk/pull/1602)
 -  [FEATURE] Support face_colors for dotbim - [#1603](https://github.com/xeokit/xeokit-sdk/pull/1603)
