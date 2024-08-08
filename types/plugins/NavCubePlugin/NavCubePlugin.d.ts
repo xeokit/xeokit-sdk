@@ -13,11 +13,11 @@ export declare type NavCubePluginConfiguration = {
   /** Whether the shadow of the cube is visible. */
   shadowVisible?: boolean;
   /** Whether the {@link Camera} flies or jumps to each selected axis or diagonal. */
-  cameraFly?: string;
+  cameraFly?: boolean;
   /** How much of the field-of-view, in degrees, that the 3D scene should fill the {@link Canvas} when the {@link Camera} moves to an axis or diagonal. */
-  cameraFitFOV?: string;
+  cameraFitFOV?: number;
   /** When flying the {@link Camera} to each new axis or diagonal, how long, in seconds, that the Camera takes to get there. */
-  cameraFlyDuration?: string;
+  cameraFlyDuration?: number;
   /** Custom uniform color for the faces of the NavCube. */
   color?: string;
   /** Custom color for the front face of the NavCube. Overrides ````color````. */
@@ -131,18 +131,18 @@ export declare class NavCubePlugin extends Plugin {
      *
      * Default is ````0.5````.
      *
-     * @param {Boolean} value Camera flight duration in seconds.
+     * @param {Number} value Camera flight duration in seconds.
      */
-    setCameraFlyDuration(value: boolean): void;
+    setCameraFlyDuration(value: number): void;
 
     /**
      * When flying the {@link Camera} to each new axis or diagonal, gets how long, in seconds, that the Camera takes to get there.
      *
      * Default is ````0.5````.
      *
-     * @returns {Boolean} Camera flight duration in seconds.
+     * @returns {Number} Camera flight duration in seconds.
      */
-    getCameraFlyDuration(): boolean;
+    getCameraFlyDuration(): number;
 
     /**
      * Sets whether the NavCube switches between perspective and orthographic projections in synchrony with
