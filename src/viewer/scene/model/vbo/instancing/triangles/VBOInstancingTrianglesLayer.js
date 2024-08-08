@@ -707,7 +707,7 @@ export class VBOInstancingTrianglesLayer {
             this.model.error("portion not found: " + portionId);
             return;
         }
-        const positions = geometry.quantizedPositions;
+        const positions = geometry.positionsCompressed;
         const origin = state.origin;
         const offsetX = origin[0];
         const offsetY = origin[1];
