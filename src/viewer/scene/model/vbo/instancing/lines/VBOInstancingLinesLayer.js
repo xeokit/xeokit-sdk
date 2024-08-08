@@ -244,7 +244,9 @@ class VBOInstancingLinesLayer {
             this._modelMatrixCol1 = [];
             this._modelMatrixCol2 = [];
         }
-        this._state.geometry = null;
+        if (!this.model.scene.readableGeometryEnabled) {
+            this._state.geometry = null;
+        }
         this._finalized = true;
     }
 
