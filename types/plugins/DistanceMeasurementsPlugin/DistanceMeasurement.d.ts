@@ -12,8 +12,22 @@ export declare class DistanceMeasurement extends Component {
    */
   plugin: DistanceMeasurementsPlugin;
 
+  /**
+   * Sets the axes basis for the measurement.
+   * 
+   * The value is a 4x4 matrix where each column-vector defines an axis and must have unit length.
+   * 
+   * This is the ```identity``` matrix by default, meaning the measurement axes are the same as the world axes.
+   */
   set axesBasis(value: number[]);
 
+  /**
+   * Gets the axes basis for the measurement.
+   * 
+   * The value is a 4x4 matrix where each column-vector defines an axis and must have unit length.
+   * 
+   * This is the ```identity``` matrix by default, meaning the measurement axes are the same as the world axes.
+   */
   get axesBasis(): number[];
 
   /**
