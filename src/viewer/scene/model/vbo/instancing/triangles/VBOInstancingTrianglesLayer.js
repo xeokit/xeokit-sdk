@@ -36,7 +36,7 @@ export class VBOInstancingTrianglesLayer {
      */
     constructor(cfg) {
 
-      //   console.info("Creating VBOInstancingTrianglesLayer");
+        //   console.info("Creating VBOInstancingTrianglesLayer");
 
         /**
          * Owner model
@@ -378,7 +378,9 @@ export class VBOInstancingTrianglesLayer {
             && !!textureSet
             && !!textureSet.colorTexture;
 
-        this._state.geometry = null;
+        if (!this.model.scene.readableGeometryEnabled) {
+            this._state.geometry = null;
+        }
 
         this._finalized = true;
     }
@@ -707,9 +709,9 @@ export class VBOInstancingTrianglesLayer {
         }
         const positions = geometry.quantizedPositions;
         const origin = state.origin;
-        const offsetX = origin[0] ;
-        const offsetY = origin[1] ;
-        const offsetZ = origin[2] ;
+        const offsetX = origin[0];
+        const offsetY = origin[1];
+        const offsetZ = origin[2];
         const worldPos = tempVec4a;
         const portionMatrix = portion.matrix;
         const sceneModelMatrix = this.model.matrix;
@@ -785,7 +787,7 @@ export class VBOInstancingTrianglesLayer {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
-        const useAlphaCutoff = this._state.textureSet && (typeof(this._state.textureSet.alphaCutoff) === "number");
+        const useAlphaCutoff = this._state.textureSet && (typeof (this._state.textureSet.alphaCutoff) === "number");
         if (frameCtx.withSAO && this.model.saoEnabled) {
             if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported) {
                 if (this._renderers.pbrRendererWithSAO) {
