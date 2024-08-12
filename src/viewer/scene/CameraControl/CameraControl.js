@@ -644,7 +644,8 @@ class CameraControl extends Component {
             constrainVertical: false,
             smartPivot: false,
             doubleClickTimeFrame: 250,
-            
+            zoomOnMouseWheel: true,
+
             snapToVertex: DEFAULT_SNAP_VERTEX,
             snapToEdge: DEFAULT_SNAP_EDGE,
             snapRadius: DEFAULT_SNAP_PICK_RADIUS,
@@ -1733,6 +1734,26 @@ class CameraControl extends Component {
      */
     get doubleClickTimeFrame() {
         return this._configs.doubleClickTimeFrame;
+    }
+
+    /**
+     * Sets whether to zoom the camera on mouse wheel
+     *
+     * Default is ````true````
+     *
+     * @param {Boolean} enabled
+     */
+    set zoomOnMouseWheel(enabled) {
+        this._configs.zoomOnMouseWheel = !!enabled;
+    }
+
+    /**
+     * Gets whether to zoom the camera on mouse wheel
+     *
+     * @returns {Boolean}
+     */
+    get zoomOnMouseWheel() {
+        return this._configs.zoomOnMouseWheel;
     }
 
     /**
