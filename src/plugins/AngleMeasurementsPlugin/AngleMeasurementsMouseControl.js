@@ -74,7 +74,6 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
 
     _initMarkerDiv() {
         const markerDiv = document.createElement('div');
-        markerDiv.setAttribute('id', 'myMarkerDiv');
         const canvas = this.scene.canvas.canvas;
         canvas.parentNode.insertBefore(markerDiv, canvas);
 
@@ -95,9 +94,8 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
 
     _destroyMarkerDiv() {
         if (this.markerDiv) {
-            const element = document.getElementById('myMarkerDiv')
-            element.parentNode.removeChild(element)
-            this.markerDiv = null
+            this.markerDiv.parentNode.removeChild(this.markerDiv);
+            this.markerDiv = null;
         }
     }
 
