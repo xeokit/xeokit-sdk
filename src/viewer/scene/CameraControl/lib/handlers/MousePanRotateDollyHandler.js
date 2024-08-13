@@ -296,7 +296,7 @@ class MousePanRotateDollyHandler {
         let secsNowLast = null;
 
         canvas.addEventListener("wheel", this._mouseWheelHandler = (e) => {
-            if (!(configs.active && configs.pointerEnabled)) {
+            if (!(configs.active && configs.pointerEnabled && configs.zoomOnMouseWheel)) {
                 return;
             }
             const secsNow = performance.now() / 1000.0;
