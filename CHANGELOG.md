@@ -1,5 +1,19 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.35](https://github.com/xeokit/xeokit-sdk/compare/v2.6.34...v2.6.35)
+
+### 14 August 2024
+
+-  XEOK-93 Fix AngleMeasurementsMouseControl dot - [#1625](https://github.com/xeokit/xeokit-sdk/pull/1625)
+-  Move examples/picking/overlapping.js to examples/libs/overlappingPick.js - [#1624](https://github.com/xeokit/xeokit-sdk/pull/1624)
+-  XCD-101 Picking overlapping objects - [#1623](https://github.com/xeokit/xeokit-sdk/pull/1623)
+
+# [v2.6.34](https://github.com/xeokit/xeokit-sdk/compare/v2.6.33...v2.6.34)
+
+### 13 August 2024
+
+-  Export types for `DistanceMeasurementsTouchControl` - [#1622](https://github.com/xeokit/xeokit-sdk/pull/1622)
+
 # [v2.6.33](https://github.com/xeokit/xeokit-sdk/compare/v2.6.32...v2.6.33)
 
 ### 8 August 2024
