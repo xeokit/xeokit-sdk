@@ -103,7 +103,7 @@ export const setupOverlayAlignmentControl = function(viewer, overlay) {
     const copyCanvasPos = (event, vec2) => {
         vec2[0] = event.clientX;
         vec2[1] = event.clientY;
-        transformToNode(canvas.ownerDocument.body, canvas, vec2);
+        transformToNode(canvas.ownerDocument.documentElement, canvas, vec2);
         return vec2;
     };
 
