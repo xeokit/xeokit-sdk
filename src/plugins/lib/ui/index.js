@@ -117,7 +117,7 @@ export function activateDraggableDot(dot, cfg) {
 
     const onChange = event => {
         const canvasPos = math.vec2([ event.clientX, event.clientY ]);
-        transformToNode(canvas.ownerDocument.body, canvas, canvasPos);
+        transformToNode(canvas.ownerDocument.documentElement, canvas, canvasPos);
         onMove(canvasPos, pickWorldPos(canvasPos));
     };
 

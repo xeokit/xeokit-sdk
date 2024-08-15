@@ -343,7 +343,7 @@ const mousePointSelector = function(viewer, ray2WorldPos) {
         const copyCanvasPos = (event, vec2) => {
             vec2[0] = event.clientX;
             vec2[1] = event.clientY;
-            transformToNode(canvas.ownerDocument.body, canvas, vec2);
+            transformToNode(canvas.ownerDocument.documentElement, canvas, vec2);
             return vec2;
         };
 
@@ -418,7 +418,7 @@ const touchPointSelector = function(viewer, pointerCircle, ray2WorldPos) {
         const copyCanvasPos = (event, vec2) => {
             vec2[0] = event.clientX;
             vec2[1] = event.clientY;
-            transformToNode(canvas.ownerDocument.body, canvas, vec2);
+            transformToNode(canvas.ownerDocument.documentElement, canvas, vec2);
             return vec2;
         };
 
@@ -1735,7 +1735,7 @@ export class ZoneTranslateControl extends Component {
         const copyCanvasPos = (event, vec2) => {
             vec2[0] = event.clientX;
             vec2[1] = event.clientY;
-            transformToNode(canvas.ownerDocument.body, canvas, vec2);
+            transformToNode(canvas.ownerDocument.documentElement, canvas, vec2);
             return vec2;
         };
 
