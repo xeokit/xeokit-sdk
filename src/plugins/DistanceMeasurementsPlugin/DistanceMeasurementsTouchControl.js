@@ -172,8 +172,13 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
             }
 
             const touch = event.touches[0];
-            const touchX = touch.clientX;
-            const touchY = touch.clientY;
+
+            // Get the canvas's bounding rectangle
+            const rect = canvas.getBoundingClientRect();
+
+            // Calculate the touch position relative to the canvas
+            const touchX = touch.clientX - rect.left;
+            const touchY = touch.clientY - rect.top;
 
             touchStartCanvasPos.set([touchX, touchY]);
             touchMoveCanvasPos.set([touchX, touchY]);
@@ -381,9 +386,14 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
             }
 
             const touch = event.touches[0];
-            const touchX = touch.clientX;
-            const touchY = touch.clientY;
 
+            // Get the canvas's bounding rectangle
+            const rect = canvas.getBoundingClientRect();
+
+            // Calculate the touch position relative to the canvas
+            const touchX = touch.clientX - rect.left;
+            const touchY = touch.clientY - rect.top;
+            
             if (touch.identifier !== touchId) {
                 return;
             }
@@ -553,8 +563,13 @@ export class DistanceMeasurementsTouchControl extends DistanceMeasurementsContro
             }
 
             const touch = event.changedTouches[0];
-            const touchX = touch.clientX;
-            const touchY = touch.clientY;
+
+            // Get the canvas's bounding rectangle
+            const rect = canvas.getBoundingClientRect();
+
+            // Calculate the touch position relative to the canvas
+            const touchX = touch.clientX - rect.left;
+            const touchY = touch.clientY - rect.top;
 
             if (touch.identifier !== touchId) {
                 return;
