@@ -377,6 +377,9 @@ class Viewer {
             }
         }
 
+        // firing "rendering" is necessary to trigger DTX{Lines,Triangles}Layer::_uploadDeferredFlags
+        this.scene.fire("rendering", { }, true);
+
         this.scene._renderer.renderSnapshot();
 
         const imageDataURI = this.scene._renderer.readSnapshot(params);
