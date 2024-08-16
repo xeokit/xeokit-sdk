@@ -1464,6 +1464,7 @@ export class SceneModel extends Component {
         this._setWorldMatrixDirty();
         this._sceneModelDirty();
         this.glRedraw();
+        this.fire("position", this._position);
     }
 
     /**
@@ -1490,6 +1491,7 @@ export class SceneModel extends Component {
         this._setWorldMatrixDirty();
         this._sceneModelDirty();
         this.glRedraw();
+        this.fire("rotation", this._rotation);
     }
 
     /**

@@ -1076,6 +1076,7 @@ class Node extends Component {
         this._setLocalMatrixDirty();
         this._setAABBDirty();
         this.glRedraw();
+        this.fire("position", this._position);
     }
 
     /**
@@ -1102,6 +1103,7 @@ class Node extends Component {
         this._setLocalMatrixDirty();
         this._setAABBDirty();
         this.glRedraw();
+        this.fire("rotation", this._rotation);
     }
 
     /**
@@ -1153,6 +1155,7 @@ class Node extends Component {
         this._setLocalMatrixDirty();
         this._setAABBDirty();
         this.glRedraw();
+        this.fire("scale", this._scale);
     }
 
     /**

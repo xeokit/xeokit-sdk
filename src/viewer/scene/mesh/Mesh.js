@@ -439,6 +439,7 @@ class Mesh extends Component {
         this._setLocalMatrixDirty();
         this._setAABBDirty();
         this.glRedraw();
+        this.fire("position", this._position);
     }
 
     /**
@@ -465,6 +466,7 @@ class Mesh extends Component {
         this._setLocalMatrixDirty();
         this._setAABBDirty();
         this.glRedraw();
+        this.fire("rotation", this._rotation);
     }
 
     /**
@@ -516,6 +518,7 @@ class Mesh extends Component {
         this._setLocalMatrixDirty();
         this._setAABBDirty();
         this.glRedraw();
+        this.fire("scale", this._scale);
     }
 
     /**
