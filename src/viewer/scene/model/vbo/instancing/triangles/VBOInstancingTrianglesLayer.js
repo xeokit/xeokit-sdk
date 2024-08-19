@@ -1,10 +1,10 @@
-import {ENTITY_FLAGS} from '../../../ENTITY_FLAGS.js';
-import {RENDER_PASSES} from '../../../RENDER_PASSES.js';
+import { ENTITY_FLAGS } from '../../../ENTITY_FLAGS.js';
+import { RENDER_PASSES } from '../../../RENDER_PASSES.js';
 
-import {math} from "../../../../math/math.js";
-import {RenderState} from "../../../../webgl/RenderState.js";
-import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
-import {getRenderers} from "./renderers/Renderers.js";
+import { math } from "../../../../math/math.js";
+import { RenderState } from "../../../../webgl/RenderState.js";
+import { ArrayBuf } from "../../../../webgl/ArrayBuf.js";
+import { getRenderers } from "./renderers/Renderers.js";
 
 const tempUint8Vec4 = new Uint8Array(4);
 const tempFloat32 = new Float32Array(1);
@@ -36,7 +36,7 @@ export class VBOInstancingTrianglesLayer {
      */
     constructor(cfg) {
 
-      //   console.info("Creating VBOInstancingTrianglesLayer");
+        //   console.info("Creating VBOInstancingTrianglesLayer");
 
         /**
          * Owner model
@@ -708,9 +708,9 @@ export class VBOInstancingTrianglesLayer {
         }
         const positions = state.positionsCompressed;
         const origin = state.origin;
-        const offsetX = origin[0] ;
-        const offsetY = origin[1] ;
-        const offsetZ = origin[2] ;
+        const offsetX = origin[0];
+        const offsetY = origin[1];
+        const offsetZ = origin[2];
         const worldPos = tempVec4a;
         const portionMatrix = portion.matrix;
         const sceneModelMatrix = this.model.matrix;
@@ -720,8 +720,8 @@ export class VBOInstancingTrianglesLayer {
             worldPos[1] = positions[i + 1];
             worldPos[2] = positions[i + 2];
             math.decompressPosition(worldPos, positionsDecodeMatrix);
-            math.transformPoint3(portionMatrix, worldPos);
-            math.transformPoint3(sceneModelMatrix, worldPos);
+            math.transformPoint3(portionMatrix, worldPos, worldPos);
+            math.transformPoint3(sceneModelMatrix, worldPos, worldPos);
             worldPos[0] += offsetX;
             worldPos[1] += offsetY;
             worldPos[2] += offsetZ;
@@ -1117,7 +1117,7 @@ export class VBOInstancingTrianglesLayer {
             c[1] = quantizedPositions[ic + 1];
             c[2] = quantizedPositions[ic + 2];
 
-            const {positionsDecodeMatrix} = state.geometry;
+            const { positionsDecodeMatrix } = state.geometry;
 
             math.decompressPosition(a, positionsDecodeMatrix);
             math.decompressPosition(b, positionsDecodeMatrix);

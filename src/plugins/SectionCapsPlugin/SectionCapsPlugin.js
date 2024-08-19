@@ -1,5 +1,5 @@
-import {Plugin} from "../../viewer/Plugin.js";
-import {math} from "../../viewer/scene/math/math.js";
+import { Plugin } from "../../viewer/Plugin.js";
+import { math } from "../../viewer/scene/math/math.js";
 import { Mesh } from "../../viewer/scene/mesh/Mesh.js";
 import { ReadableGeometry } from "../../viewer/scene/geometry/ReadableGeometry.js";
 import { PhongMaterial } from "../../viewer/scene/materials/PhongMaterial.js";
@@ -11,14 +11,17 @@ class SectionCapsPlugin extends Plugin {
      * @param {Viewer} viewer The Viewer.
      * @param {Object} cfg  Plugin configuration.
      * @param {boolean} [cfg.enabled=true] Default value for, if this plugin is enabled or not.
+     * @param {number} [cfg.opacityThreshold=1.0] Default value to cap objects with opacity above this threshold
      */
     constructor(viewer, cfg = {}) {
         super("SectionCaps", viewer, cfg);
-        if(!viewer.scene.readableGeometryEnabled){
+        if (!viewer.scene.readableGeometryEnabled) {
             console.log('SectionCapsPlugin only works when readable geometry is enable on the viewer.');
             return;
         }
+        this._viewer = viewer;
         this._enabled = cfg.enabled !== false;
+        this._opacityThreshold = !isNaN(cfg.opacityThreshold) ? cfg.opacityThreshold : 1.0;
         this._sectionPlanes = [];
         this._sceneModel = Object.keys(viewer.scene.models).map((key) => viewer.scene.models[key]);
         this._prevIntersectionModels = {};
@@ -28,22 +31,36 @@ class SectionCapsPlugin extends Plugin {
     }
 
     set enabled(value) {
-        if(value !== undefined && value !== this._enabled){
+        if (value !== undefined && value !== this._enabled) {
             this._enabled = value;
-            if(this._enabled)
+            if (this._enabled)
                 this._addHatches(this._sceneModel, this._sectionPlanes);
-            else 
+            else
                 this._deletePreviousModels();
         }
     }
 
-    get enabled(){
+    get enabled() {
         return this._enabled;
+    }
+
+    set opacityThreshold(value) {
+        if (!isNaN(value) && value !== this._opacityThreshold) {
+            this._opacityThreshold = value;
+            if (this._enabled)
+                this._addHatches(this._sceneModel, this._sectionPlanes);
+            else
+                this._deletePreviousModels();
+        }
+    }
+
+    get opacityThreshold() {
+        return this._opacityThreshold;
     }
 
 
     //this function will be used to setup event listeners for creation of section planes
-    _setupSectionPlanes(){
+    _setupSectionPlanes() {
         this._onSectionPlaneCreated = this.viewer.scene.on('sectionPlaneCreated', (sectionPlane) => {
             this._sectionPlaneCreated(sectionPlane);
         })
@@ -60,11 +77,11 @@ class SectionCapsPlugin extends Plugin {
     //this hook will be called when a section plane is destroyed
     _onSectionPlaneDestroyed(sectionPlane) {
         const sectionPlaneId = sectionPlane.id;
-        if(sectionPlaneId) {
+        if (sectionPlaneId) {
             this._sectionPlanes = this._sectionPlanes.filter((sectionPlane) => sectionPlane.id !== sectionPlaneId);
             this._addHatches(this._sceneModel, this._sectionPlanes);
         }
-    } 
+    }
 
     //this function will be called when the position of a section plane is updated
     _onSectionPlanePosUpdated() {
@@ -92,7 +109,7 @@ class SectionCapsPlugin extends Plugin {
 
     _addHatches(sceneModel, plane) {
 
-        if(!this._enabled) return;
+        if (!this._enabled) return;
 
         this._deletePreviousModels();
 
@@ -119,16 +136,18 @@ class SectionCapsPlugin extends Plugin {
         sceneModels.forEach((sceneModel) => {
             const objects = {};
             for (const key in sceneModel.objects) {
-                const isSolid = sceneModel.objects[key].meshes[0].layer.solid ?? false;
-                if (isSolid)
+
+                const object = sceneModel.objects[key];
+                const isSolid = object.meshes[0].layer.solid !== false;
+                if (isSolid && object.opacity >= this._opacityThreshold)
                     objects[key] = sceneModel.objects[key];
             }
-    
+
             let cloneModel = {
                 ...sceneModel,
                 objects: objects
             }
-    
+
             const { vertices: webglVertices, indices: webglIndices } = this._getVerticesAndIndices(cloneModel);
             const csgGeometry = this._createCSGGeometries(webglVertices, webglIndices);
             csgGeometries = {
@@ -136,7 +155,7 @@ class SectionCapsPlugin extends Plugin {
                 ...csgGeometry
             }
         })
-        
+
         return csgGeometries;
     }
 
@@ -148,12 +167,32 @@ class SectionCapsPlugin extends Plugin {
             const value = objects[key];
             vertices[key] = [];
             indices[key] = [];
-            value.getEachVertex((_vertices) => {
-                vertices[key].push(_vertices[0], _vertices[1], _vertices[2]);
-            })
-            value.getEachIndex((_indices) => {
-                indices[key].push(_indices);
-            })
+
+            if (value.meshes.length > 1) {
+                let index = 0;
+                value.meshes.forEach((mesh) => {
+                    if (mesh.layer.solid) {
+                        vertices[key].push([]);
+                        indices[key].push([]);
+                        mesh.getEachVertex((_vertices) => {
+                            vertices[key][index].push(_vertices[0], _vertices[1], _vertices[2]);
+                        })
+                        mesh.getEachIndex((_indices) => {
+                            indices[key][index].push(_indices);
+                        })
+                        index++;
+                    }
+
+                })
+            }
+            else {
+                value.getEachVertex((_vertices) => {
+                    vertices[key].push(_vertices[0], _vertices[1], _vertices[2]);
+                })
+                value.getEachIndex((_indices) => {
+                    indices[key].push(_indices);
+                })
+            }
         }
         return { vertices, indices };
     }
@@ -163,7 +202,18 @@ class SectionCapsPlugin extends Plugin {
         for (const key in vertices) {
             const vertex = vertices[key];
             const index = indices[key];
-            geometries[key] = this._createGeometry(vertex, index);
+            if (!Array.isArray(vertex[0]))
+                geometries[key] = this._createGeometry(vertex, index);
+            else {
+                let geometry = null;
+                for (let i = 0; i < vertex.length; i++) {
+                    if (vertex[i].length > 0) {
+                        const g = this._createGeometry(vertex[i], index[i])
+                        geometry = geometry ? geometry.union(g) : g;
+                    }
+                }
+                geometries[key] = geometry;
+            }
         }
         return geometries;
     }
@@ -235,7 +285,6 @@ class SectionCapsPlugin extends Plugin {
             }
 
         }
-
         return cappedGeometries;
     }
 
@@ -338,7 +387,6 @@ class SectionCapsPlugin extends Plugin {
     _csgToWebGLGeometry(csgGeometry) {
         const vertices = [];
         const indices = [];
-        let index = 0;
         csgGeometry.polygons.forEach(polygon => {
             const vertexStartIndex = Math.floor(vertices.length / 3);
             polygon.vertices.forEach(vertex => {
@@ -353,16 +401,16 @@ class SectionCapsPlugin extends Plugin {
 
     _addGeometryToScene(vertices, indices, id) {
         if (vertices.length <= 0 && indices.length <= 0) return;
-        const intersectedModel = new Mesh(viewer.scene, {
+        const intersectedModel = new Mesh(this.viewer.scene, {
             id,
-            geometry: new ReadableGeometry(viewer.scene, {
+            geometry: new ReadableGeometry(this.viewer.scene, {
                 primitive: 'triangles',
                 positions: vertices,
                 indices: indices,
             }),
             position: [0, 0, 0],
             rotation: [0, 0, 0],
-            material: new PhongMaterial(viewer.scene, {
+            material: new PhongMaterial(this.viewer.scene, {
                 diffuse: [1, 0, 0],
                 backfaces: true,
             }),
@@ -373,11 +421,11 @@ class SectionCapsPlugin extends Plugin {
 
     //#endregion
 
-    destroy(){
+    destroy() {
         this._deletePreviousModels();
         this.viewer.scene.off(this._onSectionPlaneCreated);
         super.destroy();
     }
 }
 
-export {SectionCapsPlugin};
+export { SectionCapsPlugin };

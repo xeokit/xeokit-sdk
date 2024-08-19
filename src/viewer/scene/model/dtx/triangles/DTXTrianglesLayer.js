@@ -1,13 +1,13 @@
-import {math} from "../../../math/math.js";
-import {RenderState} from "../../../webgl/RenderState.js";
-import {Configs} from "../../../../Configs.js";
-import {ENTITY_FLAGS} from '../../ENTITY_FLAGS.js';
-import {RENDER_PASSES} from '../../RENDER_PASSES.js';
-import {getRenderers} from "./renderers/DTXTrianglesRenderers.js";
-import {DTXTrianglesBuffer} from "./lib/DTXTrianglesBuffer.js";
-import {DTXTrianglesState} from "./lib/DTXTrianglesState.js"
-import {dataTextureRamStats} from "./lib/dataTextureRamStats.js";
-import {DTXTrianglesTextureFactory} from "./lib/DTXTrianglesTextureFactory.js";
+import { math } from "../../../math/math.js";
+import { RenderState } from "../../../webgl/RenderState.js";
+import { Configs } from "../../../../Configs.js";
+import { ENTITY_FLAGS } from '../../ENTITY_FLAGS.js';
+import { RENDER_PASSES } from '../../RENDER_PASSES.js';
+import { getRenderers } from "./renderers/DTXTrianglesRenderers.js";
+import { DTXTrianglesBuffer } from "./lib/DTXTrianglesBuffer.js";
+import { DTXTrianglesState } from "./lib/DTXTrianglesState.js"
+import { dataTextureRamStats } from "./lib/dataTextureRamStats.js";
+import { DTXTrianglesTextureFactory } from "./lib/DTXTrianglesTextureFactory.js";
 
 const configs = new Configs();
 
@@ -483,8 +483,8 @@ export class DTXTrianglesLayer {
 
         textureState.texturePerObjectPositionsDecodeMatrix
             = this._dtxTextureFactory.createTextureForPositionsDecodeMatrices(
-            gl,
-            buffer.perObjectPositionsDecodeMatrices);
+                gl,
+                buffer.perObjectPositionsDecodeMatrices);
 
         textureState.texturePerVertexIdCoordinates = this._dtxTextureFactory.createTextureForPositions(
             gl,
@@ -815,10 +815,10 @@ export class DTXTrianglesLayer {
         // Color
         const textureState = this._dtxState;
         const gl = this.model.scene.canvas.gl;
-        tempUint8Array4 [0] = color[0];
-        tempUint8Array4 [1] = color[1];
-        tempUint8Array4 [2] = color[2];
-        tempUint8Array4 [3] = color[3];
+        tempUint8Array4[0] = color[0];
+        tempUint8Array4[1] = color[1];
+        tempUint8Array4[2] = color[2];
+        tempUint8Array4[3] = color[3];
         // object colors
         textureState.texturePerObjectColorsAndFlags._textureData.set(tempUint8Array4, subPortionId * 32);
         if (this._deferredSetFlagsActive) {
@@ -932,10 +932,10 @@ export class DTXTrianglesLayer {
         let f3 = (visible && (!culled) && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
         const textureState = this._dtxState;
         const gl = this.model.scene.canvas.gl;
-        tempUint8Array4 [0] = f0;
-        tempUint8Array4 [1] = f1;
-        tempUint8Array4 [2] = f2;
-        tempUint8Array4 [3] = f3;
+        tempUint8Array4[0] = f0;
+        tempUint8Array4[1] = f1;
+        tempUint8Array4[2] = f2;
+        tempUint8Array4[3] = f3;
         // object flags
         textureState.texturePerObjectColorsAndFlags._textureData.set(tempUint8Array4, subPortionId * 32 + 8);
         if (this._deferredSetFlagsActive || deferred) {
@@ -977,10 +977,10 @@ export class DTXTrianglesLayer {
         const clippable = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 255 : 0;
         const textureState = this._dtxState;
         const gl = this.model.scene.canvas.gl;
-        tempUint8Array4 [0] = clippable;
-        tempUint8Array4 [1] = 0;
-        tempUint8Array4 [2] = 1;
-        tempUint8Array4 [3] = 2;
+        tempUint8Array4[0] = clippable;
+        tempUint8Array4[1] = 0;
+        tempUint8Array4[2] = 1;
+        tempUint8Array4[3] = 2;
         // object flags2
         textureState.texturePerObjectColorsAndFlags._textureData.set(tempUint8Array4, subPortionId * 32 + 12);
         if (this._deferredSetFlagsActive || deferred) {
@@ -1026,9 +1026,9 @@ export class DTXTrianglesLayer {
         // }
         const textureState = this._dtxState;
         const gl = this.model.scene.canvas.gl;
-        tempFloat32Array3 [0] = offset[0];
-        tempFloat32Array3 [1] = offset[1];
-        tempFloat32Array3 [2] = offset[2];
+        tempFloat32Array3[0] = offset[0];
+        tempFloat32Array3[1] = offset[1];
+        tempFloat32Array3[2] = offset[2];
         // object offset
         textureState.texturePerObjectOffsets._textureData.set(tempFloat32Array3, subPortionId * 3);
         if (this._deferredSetFlagsActive) {
@@ -1112,9 +1112,9 @@ export class DTXTrianglesLayer {
             const positionsDecodeMatrix = subPortionReadableGeometry.positionsDecodeMatrix;
             const meshMatrix = subPortionReadableGeometry.meshMatrix;
             const origin = state.origin;
-            const offsetX = origin[0] ;
-            const offsetY = origin[1] ;
-            const offsetZ = origin[2] ;
+            const offsetX = origin[0];
+            const offsetY = origin[1];
+            const offsetZ = origin[2];
             const worldPos = tempVec4a;
             for (let i = 0, len = positions.length; i < len; i += 3) {
                 worldPos[0] = positions[i];
@@ -1122,8 +1122,8 @@ export class DTXTrianglesLayer {
                 worldPos[2] = positions[i + 2];
                 worldPos[3] = 1.0;
                 math.decompressPosition(worldPos, positionsDecodeMatrix);
-                math.transformPoint4(this.model.worldMatrix, worldPos);
-                math.transformPoint4(this.model.worldMatrix, worldPos);
+                math.transformPoint4(this.model.worldMatrix, worldPos, worldPos);
+                math.transformPoint4(this.model.worldMatrix, worldPos, worldPos);
                 worldPos[0] += offsetX;
                 worldPos[1] += offsetY;
                 worldPos[2] += offsetZ;

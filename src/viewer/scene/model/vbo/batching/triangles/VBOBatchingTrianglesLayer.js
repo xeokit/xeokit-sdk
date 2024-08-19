@@ -1,13 +1,13 @@
-import {ENTITY_FLAGS} from '../../../ENTITY_FLAGS.js';
-import {RENDER_PASSES} from '../../../RENDER_PASSES.js';
+import { ENTITY_FLAGS } from '../../../ENTITY_FLAGS.js';
+import { RENDER_PASSES } from '../../../RENDER_PASSES.js';
 
-import {math} from "../../../../math/math.js";
-import {RenderState} from "../../../../webgl/RenderState.js";
-import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
-import {geometryCompressionUtils} from "../../../../math/geometryCompressionUtils.js";
-import {getRenderers} from "./renderers/Renderers.js";
-import {VBOBatchingTrianglesBuffer} from "./VBOBatchingTrianglesBuffer.js";
-import {quantizePositions, transformAndOctEncodeNormals} from "../../../compression.js";
+import { math } from "../../../../math/math.js";
+import { RenderState } from "../../../../webgl/RenderState.js";
+import { ArrayBuf } from "../../../../webgl/ArrayBuf.js";
+import { geometryCompressionUtils } from "../../../../math/geometryCompressionUtils.js";
+import { getRenderers } from "./renderers/Renderers.js";
+import { VBOBatchingTrianglesBuffer } from "./VBOBatchingTrianglesBuffer.js";
+import { quantizePositions, transformAndOctEncodeNormals } from "../../../compression.js";
 
 const tempMat4 = math.mat4();
 const tempMat4b = math.mat4();
@@ -41,7 +41,7 @@ export class VBOBatchingTrianglesLayer {
      */
     constructor(cfg) {
 
-     //   console.info("Creating VBOBatchingTrianglesLayer");
+        //   console.info("Creating VBOBatchingTrianglesLayer");
 
         /**
          * Owner model
@@ -817,9 +817,9 @@ export class VBOBatchingTrianglesLayer {
         }
         const positions = portion.quantizedPositions;
         const origin = state.origin;
-        const offsetX = origin[0] ;
-        const offsetY = origin[1] ;
-        const offsetZ = origin[2] ;
+        const offsetX = origin[0];
+        const offsetY = origin[1];
+        const offsetZ = origin[2];
         const worldPos = tempVec4a;
         const sceneModelMatrix = this.model.matrix;
         const positionsDecodeMatrix = state.positionsDecodeMatrix;
@@ -829,7 +829,7 @@ export class VBOBatchingTrianglesLayer {
             worldPos[2] = positions[i + 2];
             worldPos[3] = 1.0;
             math.decompressPosition(worldPos, positionsDecodeMatrix);
-            math.transformPoint4(sceneModelMatrix, worldPos);
+            math.transformPoint4(sceneModelMatrix, worldPos, worldPos);
             worldPos[0] += offsetX;
             worldPos[1] += offsetY;
             worldPos[2] += offsetZ;
@@ -862,7 +862,7 @@ export class VBOBatchingTrianglesLayer {
             offset = portion.indicesBaseIndex;
         }
 
-        return {count, offset}
+        return { count, offset }
     }
 
     // ---------------------- COLOR RENDERING -----------------------------------
