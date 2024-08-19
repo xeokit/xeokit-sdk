@@ -8,5 +8,9 @@ export declare class SectionCapsPlugin extends Plugin {
 
     get enabled(): boolean;
 
+    set opacityThreshold(value: number);
+
+    get opacityThreshold(): number;
+
     destroy(): void;
 }
