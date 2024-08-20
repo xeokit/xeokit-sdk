@@ -656,7 +656,9 @@ const ParserV11 = {
     version: 11,
     parseArrayBuffer: function (viewer, options, arrayBuffer, sceneModel, metaModel, manifestCtx) {
         const inflatedData = decodeData(arrayBuffer);
+window._timestamp("ParserV11::decode");
         load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx);
+window._timestamp("ParserV11::load");
     }
 };
 
