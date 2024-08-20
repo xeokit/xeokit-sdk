@@ -1163,9 +1163,26 @@ class XKTLoaderPlugin extends Plugin {
     }
 
     _loadModel(src, options, sceneModel, metaModel, manifestCtx, done, error) {
+window._timestamp = (function() {
+    const start = performance.now();
+    let t = null;
+    const f = n => n.toFixed(2) + " ms";
+    return function(msg) {
+        const now = performance.now();
+        if (t === null) {
+            console.log(msg, f(now - start));
+        } else {
+            console.log(msg, f(now - t), "[total " + f(now - start) + "]");
+        }
+        t = now;
+    };
+})();
+
         this._dataSource.getXKT(src, (arrayBuffer) => {
+window._timestamp("dataSource.getXKT (arrayBuffer.byteLength " + arrayBuffer.byteLength + ")");
             this._parseModel(arrayBuffer, options, sceneModel, metaModel, manifestCtx);
             sceneModel.preFinalize();
+window._timestamp("preFinalize");
             done();
         }, error);
     }
