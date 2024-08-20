@@ -1,6 +1,6 @@
 import { Plugin } from "../../viewer/Plugin.js";
 import { GLTFLoaderPlugin } from "../GLTFLoaderPlugin/GLTFLoaderPlugin.js";
-import { ifc2gltf } from "@creooxag/cx-converter";
+import { ifc2gltf } from "../../../_aux/lib.es.js";  // @creooxag/cx-converter
 
 /**
  * Fetches a file from the given URL and returns its contents as text.
