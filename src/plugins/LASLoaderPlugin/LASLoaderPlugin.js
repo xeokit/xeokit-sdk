@@ -3,9 +3,9 @@ import {SceneModel} from "../../viewer/scene/model/index.js";
 import {Plugin} from "../../viewer/Plugin.js";
 import {LASDefaultDataSource} from "./LASDefaultDataSource.js";
 import {math} from "../../viewer/index.js";
-import {parse} from '@loaders.gl/core';
-import {LASLoader} from '@loaders.gl/las/dist/esm/las-loader.js';
-import {loadLASHeader} from "./loadLASHeader";
+import {parse} from '../../../_aux/lib.es.js';      // @loaders.gl/core
+import {LASLoader} from "../../../_aux/lib.es.js";  // @loaders.gl/las/dist/esm/las-loader.js
+import {loadLASHeader} from "./loadLASHeader.js";
 
 const MAX_VERTICES = 500000; // TODO: Rough estimate
 
