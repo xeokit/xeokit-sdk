@@ -15,6 +15,7 @@ import {ParserV7} from "./parsers/ParserV7.js";
 import {ParserV8} from "./parsers/ParserV8.js";
 import {ParserV9} from "./parsers/ParserV9.js";
 import {ParserV10} from "./parsers/ParserV10.js";
+import {ParserV11} from "./parsers/ParserV11.js";
 
 
 const parsers = {};
@@ -29,6 +30,7 @@ parsers[ParserV7.version] = ParserV7;
 parsers[ParserV8.version] = ParserV8;
 parsers[ParserV9.version] = ParserV9;
 parsers[ParserV10.version] = ParserV10;
+parsers[ParserV11.version] = ParserV11;
 
 /**
  * {@link Viewer} plugin that loads models from xeokit's optimized *````.XKT````* format.
@@ -1146,6 +1148,12 @@ class XKTLoaderPlugin extends Plugin {
             return;
         }
         //   this.log("Loading .xkt V" + xktVersion);
+
+        if (parser.parseArrayBuffer) {
+            parser.parseArrayBuffer(this.viewer, options, arrayBuffer, sceneModel, metaModel, manifestCtx);
+            return;
+        }
+
         const numElements = dataView.getUint32(4, true);
         const elements = [];
         let byteOffset = (numElements + 2) * 4;
