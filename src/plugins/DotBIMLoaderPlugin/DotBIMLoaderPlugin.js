@@ -347,7 +347,6 @@ export class DotBIMLoaderPlugin extends Plugin {
             const fileData = ctx.fileData;
             const sceneModel = ctx.sceneModel;
 
-            const dbMeshIndices = {};
             const dbMeshLoaded = {};
 
             const ifcProjectId = math.createUUID();
@@ -385,17 +384,14 @@ export class DotBIMLoaderPlugin extends Plugin {
                 propertySets: []
             };
 
-            for (let i = 0, len = fileData.meshes.length; i < len; i++) {
-                const dbMesh = fileData.meshes[i];
-                dbMeshIndices[dbMesh.mesh_id] = i;
-            }
-
-            const parseDBMesh = (dbMeshId) => {
+            const parseDBMesh = (dbMeshId, element) => {
                 if (dbMeshLoaded[dbMeshId]) {
                     return;
                 }
-                const dbMeshIndex = dbMeshIndices[dbMeshId];
-                const dbMesh = fileData.meshes[dbMeshIndex];
+
+                const dbMesh = fileData.meshes.find(obj => {
+                    return obj.mesh_id === element.mesh_id;
+                });
                 sceneModel.createGeometry({
                     id: dbMeshId,
                     primitive: "triangles",
@@ -434,7 +430,7 @@ export class DotBIMLoaderPlugin extends Plugin {
 
                 if (element.face_colors === undefined) {
 
-                    parseDBMesh(dbMeshId);
+                    parseDBMesh(dbMeshId, element);
 
                     const meshId = `${objectId}-mesh`;
 
@@ -477,7 +473,9 @@ export class DotBIMLoaderPlugin extends Plugin {
                     let faceColors = element.face_colors;
                     let coloredTrianglesDictionary = {};
                     let currentTriangleIndicesCount = 0;
-                    let dbMesh = fileData.meshes[element.mesh_id];
+                    let dbMesh = fileData.meshes.find(obj => {
+                        return obj.mesh_id === element.mesh_id;
+                    });
                     for (let i = 0, len = faceColors.length; i < len; i+=4) {
                         let faceColor = [faceColors[i], faceColors[i+1], faceColors[i+2], faceColors[i+3]];
                         if (coloredTrianglesDictionary[faceColor] === undefined) {
