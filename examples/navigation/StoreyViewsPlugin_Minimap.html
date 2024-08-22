@@ -188,7 +188,6 @@
     // Helping Variables
     //------------------------------------------------------------------------------------------------------------------
 
-    // let animationInProgress = false;
     let selectedStoreyId = '';
 
     //------------------------------------------------------------------------------------------------------------------
@@ -275,7 +274,6 @@
                 width: 400
             });
 
-            console.log('storeyMap: ', storeyMap);
 
             allStoreyMaps.push(storeyMap);
 
@@ -283,23 +281,14 @@
             img.className = 'storeyMap';
             img.src = storeyMap.imageData;
             img.id = `${storeyId}`;
-            // img.style.border = "1px solid #000000";
             img.style.borderRadius = "15px";
             img.style.background = "lightblue";
-            // img.style.width = storeyMap.width + "px";
-            // img.style.height = storeyMap.height + "px";
             img.style.width = "100%";
             img.style.height = "100%";
             img.style.opacity = 0.8;
             img.style.display = 'none';
 
             storeyDiv.appendChild(img);
-
-            // const option = `
-            //     <div class="option">
-            //         <label for="check" class="check"><i class="fas fa-check"></i></label>
-            //         <span class="floor-number">${getOrdinalSuffix(i + 1)} Floor</span>
-            //     </div>`;
 
             const option = document.createElement('div');
             option.className = 'option';
@@ -395,9 +384,7 @@
         const storeyMap = allStoreyMaps.filter(storey => storey.storeyId === storeyId)[0];
         const imageDir = math.vec2(), imagePos = math.vec2();
         storeyViewsPlugin.worldDirToStoreyMap(storeyMap, cameraDir, imageDir);
-        // storeyViewsPlugin.worldPosToStoreyMap(storeyMap, [6.730193391766312, 0.7466786957215943, 7.087141290139923], imagePos);
         storeyViewsPlugin.worldPosToStoreyMap(storeyMap, cameraPos, imagePos);
-        // console.log('imagePos: ', imagePos);
         const centerX = 400 / 2;
         const centerY = 400 / 2;
         const angle = calculateAngleFromDirection(imageDir);
