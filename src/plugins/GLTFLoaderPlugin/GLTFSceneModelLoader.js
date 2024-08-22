@@ -416,64 +416,54 @@ function loadDefaultScene(ctx) {
         });
     })(nodes);
 
-    for (let i = 0, len = nodes.length; i < len; i++) {
-        const node = nodes[i];
-        parseNodes(ctx, node, 0, null);
-    }
-}
-
-/**
- * Parses a glTF node hierarchy.
- * Create a SceneMesh for each mesh primitive, and a SceneModelEntity for the root node and each named node.
- */
-const parseNodes = function(ctx, rootNode) {
-
+    // Create a SceneMesh for each mesh primitive, and a SceneModelEntity for the root node and each named node.
     const meshIdsStack = [];
     let meshIds = null;
+    (function createSceneMeshesAndEntities(nodes, depth, parentMatrix) {
+        nodes.forEach(node => {
+            const nodeName = node.name;
+            let entityId = (((nodeName !== undefined) && (nodeName !== null) && nodeName)
+                            ||
+                            ((depth === 0) && ("entity-" + ctx.nextId++)));
 
-    (function rec(node, depth, matrix) {
-        const nodeName = node.name;
-        let entityId = (((nodeName !== undefined) && (nodeName !== null) && nodeName)
-                        ||
-                        ((depth === 0) && ("entity-" + ctx.nextId++)));
-
-        if (entityId) {
-            while (ctx.sceneModel.objects[entityId]) {
-                entityId = "entity-" + ctx.nextId++;
-            }
-            meshIdsStack.push(meshIds);
-            meshIds = [];
-        }
-
-        matrix = parseNodeMatrix(node, matrix);
-
-        if (node.mesh) {
-            parseNodeMesh(node, ctx, matrix, meshIds);
-        }
-
-        if (node.children) {
-            node.children.forEach(childNode => rec(childNode, depth + 1, matrix));
-        }
-
-        if (entityId) {
-            if (meshIds.length > 0) {
-                ctx.sceneModel.createEntity({
-                    id: entityId,
-                    meshIds: meshIds,
-                    isObject: true
-                });
-                if (ctx.autoMetaModel) {
-                    ctx.metaObjects.push({
-                        id: entityId,
-                        type: "Default",
-                        name: entityId,
-                        parent: ctx.sceneModel.id
-                    });
+            if (entityId) {
+                while (ctx.sceneModel.objects[entityId]) {
+                    entityId = "entity-" + ctx.nextId++;
                 }
+                meshIdsStack.push(meshIds);
+                meshIds = [];
             }
-            meshIds = meshIdsStack.pop();
-        }
-    })(rootNode, 0, null);
+
+            const matrix = parseNodeMatrix(node, parentMatrix);
+
+            if (node.mesh) {
+                parseNodeMesh(node, ctx, matrix, meshIds);
+            }
+
+            if (node.children) {
+                createSceneMeshesAndEntities(node.children, depth + 1, matrix);
+            }
+
+            if (entityId) {
+                if (meshIds.length > 0) {
+                    ctx.sceneModel.createEntity({
+                        id: entityId,
+                        meshIds: meshIds,
+                        isObject: true
+                    });
+                    if (ctx.autoMetaModel) {
+                        ctx.metaObjects.push({
+                            id: entityId,
+                            type: "Default",
+                            name: entityId,
+                            parent: ctx.sceneModel.id
+                        });
+                    }
+                }
+                meshIds = meshIdsStack.pop();
+            }
+        });
+    })(nodes, 0, null);
 };
 
 /**
