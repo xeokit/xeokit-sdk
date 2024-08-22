@@ -409,9 +409,7 @@ function loadDefaultScene(ctx) {
                 mesh.instances += 1;
             }
             if (node.children) {
-                const children = node.children;
-                children.forEach((childNode, i) => { if (!childNode) { error(ctx, "Node not found: " + i); } });
-                accumulateMeshInstantes(children.filter(childNode => childNode));
+                accumulateMeshInstantes(node.children);
             }
         });
     })(nodes);
