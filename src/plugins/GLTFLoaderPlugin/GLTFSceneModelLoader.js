@@ -502,29 +502,27 @@ const parseNodesWithoutNames = (function () {
 
 const parseNodesWithNames = (function () {
 
-    const objectIdStack = [];
     const meshIdsStack = [];
-    let meshIds = [];
+    let meshIds = null;
 
     return function (ctx, node, depth, matrix) {
-        matrix = parseNodeMatrix(node, matrix);
-        if (meshIds && node.mesh) {
-            parseNodeMesh(node, ctx, matrix, meshIds);
-        }
+        const nodeName = node.name;
+        let entityId = (((nodeName !== undefined) && (nodeName !== null) && nodeName)
+                        ||
+                        ((depth === 0) && ("entity-" + ctx.nextId++)));
 
-        if (node.name) {
-            meshIds = [];
-            let entityId = node.name;
-            if (!!entityId && ctx.sceneModel.objects[entityId]) {
-               // ctx.log(`Warning: Two or more glTF nodes found with same 'name' attribute: '${entityId} - will randomly-generating an object ID in XKT`);
-            }
-            while (!entityId || ctx.sceneModel.objects[entityId]) {
+        if (entityId) {
+            while (ctx.sceneModel.objects[entityId]) {
                 entityId = "entity-" + ctx.nextId++;
             }
-            objectIdStack.push(entityId);
             meshIdsStack.push(meshIds);
+            meshIds = [];
         }
 
+        matrix = parseNodeMatrix(node, matrix);
+        if (node.mesh) {
+            parseNodeMesh(node, ctx, matrix, meshIds);
+        }
         if (node.children) {
             const children = node.children;
             for (let i = 0, len = children.length; i < len; i++) {
@@ -533,19 +531,11 @@ const parseNodesWithNames = (function () {
             }
         }
 
-        // Post-order visit scene node
-
-        const nodeName = node.name;
-        if ((nodeName !== undefined && nodeName !== null) || depth === 0) {
-            let entityId = objectIdStack.pop();
-            if (!entityId) { // For when there are no nodes with names
-                entityId = "entity-" + ctx.nextId++;
-            }
-            let entityMeshIds = meshIdsStack.pop();
-            if (meshIds && meshIds.length > 0) {
+        if (entityId) {
+            if (meshIds.length > 0) {
                 ctx.sceneModel.createEntity({
                     id: entityId,
-                    meshIds: entityMeshIds,
+                    meshIds: meshIds,
                     isObject: true
                 });
                 if (ctx.autoMetaModel) {
@@ -557,7 +547,7 @@ const parseNodesWithNames = (function () {
                     });
                 }
             }
-            meshIds = meshIdsStack.length > 0 ? meshIdsStack[meshIdsStack.length - 1] : null;
+            meshIds = meshIdsStack.pop();
         }
     };
 })();
