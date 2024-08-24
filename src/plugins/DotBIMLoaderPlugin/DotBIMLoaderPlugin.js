@@ -503,7 +503,7 @@ export class DotBIMLoaderPlugin extends Plugin {
                             id: `${dbMeshId}-${faceColor}`,
                             primitive: "triangles",
                             positions: trianglesCoordinates,
-                            indices: [...Array(trianglesCoordinates.length).keys()]
+                            indices: [...Array(trianglesCoordinates.length / 3).keys()]
                         });
                         const meshId = `${objectId}-mesh-${faceColor}`;
                         const faceColorArray = faceColor.split(',').map(Number);
