@@ -1,5 +1,18 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.36](https://github.com/xeokit/xeokit-sdk/compare/v2.6.35...v2.6.36)
+
+### 24 August 2024
+
+-  Added minimap example link to navigation examples html page - [#1638](https://github.com/xeokit/xeokit-sdk/pull/1638)
+-  Take into account canvas rect for touch-based measurements - [#1628](https://github.com/xeokit/xeokit-sdk/pull/1628)
+-  [TIDY] Removed unused RGBA packing func from depth shader - [#1634](https://github.com/xeokit/xeokit-sdk/pull/1634)
+-  [FIX] Support unsorted set of meshes for face colors - [#1637](https://github.com/xeokit/xeokit-sdk/pull/1637)
+-  XEOK-96 DTX minimap interaction fix - [#1636](https://github.com/xeokit/xeokit-sdk/pull/1636)
+-  Add examples using entity's surfaceArea and volume properties - [#1632](https://github.com/xeokit/xeokit-sdk/pull/1632)
+-  Use documentElement instead of body for client{X,Y}=&gt;canvasPos transformation - [#1630](https://github.com/xeokit/xeokit-sdk/pull/1630)
+-  XEOK-94 Fix DTX snapshot rendering - [#1629](https://github.com/xeokit/xeokit-sdk/pull/1629)
+
 # [v2.6.35](https://github.com/xeokit/xeokit-sdk/compare/v2.6.34...v2.6.35)
 
 ### 14 August 2024
