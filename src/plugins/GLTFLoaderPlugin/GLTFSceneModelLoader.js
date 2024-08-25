@@ -395,173 +395,74 @@ function loadDefaultScene(ctx) {
         error(ctx, "glTF has no default scene");
         return;
     }
-    loadScene(ctx, scene);
-}
 
-function loadScene(ctx, scene) {
     const nodes = scene.nodes;
     if (!nodes) {
         return;
     }
-    for (let i = 0, len = nodes.length; i < len; i++) {
-        const node = nodes[i];
-        countMeshUsage(ctx, node);
-    }
-    for (let i = 0, len = nodes.length; i < len && !ctx.nodesHaveNames; i++) {
-        const node = nodes[i];
-        if (testIfNodesHaveNames(node)) {
-            ctx.nodesHaveNames = true;
-        }
-    }
-    if (!ctx.nodesHaveNames) {
-        for (let i = 0, len = nodes.length; i < len; i++) {
-            const node = nodes[i];
-            parseNodesWithoutNames(ctx, node, 0, null);
-        }
-    } else {
-        for (let i = 0, len = nodes.length; i < len; i++) {
-            const node = nodes[i];
-            parseNodesWithNames(ctx, node, 0, null);
-        }
-    }
-}
 
-function countMeshUsage(ctx, node) {
-    const mesh = node.mesh;
-    if (mesh) {
-        mesh.instances = mesh.instances ? mesh.instances + 1 : 1;
-    }
-    if (node.children) {
-        const children = node.children;
-        for (let i = 0, len = children.length; i < len; i++) {
-            const childNode = children[i];
-            if (!childNode) {
-                error(ctx, "Node not found: " + i);
-                continue;
+    (function accumulateMeshInstantes(nodes) {
+        nodes.forEach(node => {
+            const mesh = node.mesh;
+            if (mesh) {
+                mesh.instances ||= 0;
+                mesh.instances += 1;
             }
-            countMeshUsage(ctx, childNode);
-        }
-    }
-}
-
-function testIfNodesHaveNames(node) {
-    if (node.name) {
-        return true;
-    }
-    if (node.children) {
-        const children = node.children;
-        for (let i = 0, len = children.length; i < len; i++) {
-            const childNode = children[i];
-            if (testIfNodesHaveNames(childNode)) {
-                return true;
+            if (node.children) {
+                accumulateMeshInstantes(node.children);
             }
-        }
-    }
-    return false;
-}
+        });
+    })(nodes);
 
-/**
- * Parses a glTF node hierarchy that is known to NOT contain "name" attributes on the nodes.
- * Create a SceneMesh for each mesh primitive, and a single SceneObject.
- */
-const parseNodesWithoutNames = (function () {
-    const meshIds = [];
-    return function (ctx, node, depth, matrix, parentNode) {
-        matrix = parseNodeMatrix(node, matrix);
-        if (node.mesh) {
-            parseNodeMesh(node, ctx, matrix, meshIds);
-        }
-        if (node.children) {
-            const children = node.children;
-            for (let i = 0, len = children.length; i < len; i++) {
-                const childNode = children[i];
-                parseNodesWithoutNames(ctx, childNode, depth + 1, matrix, node);
-            }
-        }
-        if (depth === 0) {
-            let entityId = "entity-" + ctx.nextId++;
-            if (meshIds && meshIds.length > 0) {
-                ctx.sceneModel.createEntity({
-                    id: entityId,
-                    meshIds,
-                    isObject: true
-                });
-                if (ctx.autoMetaModel) {
-                    ctx.metaObjects.push({
-                        id: entityId,
-                        type: "Default",
-                        name: entityId,
-                        parent: ctx.sceneModel.id
-                    });
-                }
-                meshIds.length = 0;
-            }
-        }
-    }
-})();
-
-const parseNodesWithNames = (function () {
-
-    const objectIdStack = [];
+    // Create a SceneMesh for each mesh primitive, and a SceneModelEntity for the root node and each named node.
     const meshIdsStack = [];
-    let meshIds = [];
+    let meshIds = null;
+    (function createSceneMeshesAndEntities(nodes, depth, parentMatrix) {
+        nodes.forEach(node => {
+            const nodeName = node.name;
+            let entityId = (((nodeName !== undefined) && (nodeName !== null) && nodeName)
+                            ||
+                            ((depth === 0) && ("entity-" + ctx.nextId++)));
 
-    return function (ctx, node, depth, matrix) {
-        matrix = parseNodeMatrix(node, matrix);
-        if (meshIds && node.mesh) {
-            parseNodeMesh(node, ctx, matrix, meshIds);
-        }
-
-        if (node.name) {
-            meshIds = [];
-            let entityId = node.name;
-            if (!!entityId && ctx.sceneModel.objects[entityId]) {
-               // ctx.log(`Warning: Two or more glTF nodes found with same 'name' attribute: '${entityId} - will randomly-generating an object ID in XKT`);
-            }
-            while (!entityId || ctx.sceneModel.objects[entityId]) {
-                entityId = "entity-" + ctx.nextId++;
-            }
-            objectIdStack.push(entityId);
-            meshIdsStack.push(meshIds);
-        }
-
-        if (node.children) {
-            const children = node.children;
-            for (let i = 0, len = children.length; i < len; i++) {
-                const childNode = children[i];
-                parseNodesWithNames(ctx, childNode, depth + 1, matrix);
-            }
-        }
-
-        // Post-order visit scene node
-
-        const nodeName = node.name;
-        if ((nodeName !== undefined && nodeName !== null) || depth === 0) {
-            let entityId = objectIdStack.pop();
-            if (!entityId) { // For when there are no nodes with names
-                entityId = "entity-" + ctx.nextId++;
-            }
-            let entityMeshIds = meshIdsStack.pop();
-            if (meshIds && meshIds.length > 0) {
-                ctx.sceneModel.createEntity({
-                    id: entityId,
-                    meshIds: entityMeshIds,
-                    isObject: true
-                });
-                if (ctx.autoMetaModel) {
-                    ctx.metaObjects.push({
-                        id: entityId,
-                        type: "Default",
-                        name: entityId,
-                        parent: ctx.sceneModel.id
-                    });
+            if (entityId) {
+                while (ctx.sceneModel.objects[entityId]) {
+                    entityId = "entity-" + ctx.nextId++;
                 }
+                meshIdsStack.push(meshIds);
+                meshIds = [];
             }
-            meshIds = meshIdsStack.length > 0 ? meshIdsStack[meshIdsStack.length - 1] : null;
-        }
-    };
-})();
 
+            const matrix = parseNodeMatrix(node, parentMatrix);
+
+            if (node.mesh) {
+                parseNodeMesh(node, ctx, matrix, meshIds);
+            }
+
+            if (node.children) {
+                createSceneMeshesAndEntities(node.children, depth + 1, matrix);
+            }
+
+            if (entityId) {
+                if (meshIds.length > 0) {
+                    ctx.sceneModel.createEntity({
+                        id: entityId,
+                        meshIds: meshIds,
+                        isObject: true
+                    });
+                    if (ctx.autoMetaModel) {
+                        ctx.metaObjects.push({
+                            id: entityId,
+                            type: "Default",
+                            name: entityId,
+                            parent: ctx.sceneModel.id
+                        });
+                    }
+                }
+                meshIds = meshIdsStack.pop();
+            }
+        });
+    })(nodes, 0, null);
+};
 
 /**
  * Parses transform at the given glTF node.
