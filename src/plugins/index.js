@@ -7,6 +7,7 @@ export * from "./FastNavPlugin/index.js";
 export * from "./GLTFLoaderPlugin/index.js";
 export * from "./NavCubePlugin/index.js";
 export * from "./OBJLoaderPlugin/index.js";
+export * from "./SectionCapsPlugin/index.js";
 export * from "./SectionPlanesPlugin/index.js";
 export * from "./StoreyViewsPlugin/index.js";
 export * from "./FaceAlignedSectionPlanesPlugin/index.js";
