@@ -721,8 +721,8 @@ export class VBOInstancingTrianglesLayer {
             worldPos[1] = positions[i + 1];
             worldPos[2] = positions[i + 2];
             math.decompressPosition(worldPos, positionsDecodeMatrix);
-            math.transformPoint3(portionMatrix, worldPos);
-            math.transformPoint3(sceneModelMatrix, worldPos);
+            math.transformPoint3(portionMatrix, worldPos, worldPos);
+            math.transformPoint3(sceneModelMatrix, worldPos, worldPos);
             worldPos[0] += offsetX;
             worldPos[1] += offsetY;
             worldPos[2] += offsetZ;
