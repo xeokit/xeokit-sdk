@@ -19,6 +19,8 @@ export declare type TreeViewPluginConfiguration = {
   pruneEmptyNodes?: boolean;
   /** Optional {@link ITreeViewRenderService} to use. Defaults to the {@link TreeViewPlugin}'s default {@link RenderService}. */
   renderService?: ITreeViewRenderService;
+  /** When true, will show indeterminate state for checkboxes when some but not all child nodes are checked */
+  showIndeterminate?: boolean;
 };
 
 /**

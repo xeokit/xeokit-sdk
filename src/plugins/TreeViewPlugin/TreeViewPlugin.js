@@ -361,6 +361,7 @@ export class TreeViewPlugin extends Plugin {
      * vertical World axis. For all hierarchy types, other node types will be ordered in the ascending alphanumeric order of their titles.
      * @param {Boolean} [cfg.pruneEmptyNodes=true] When true, will not contain nodes that don't have content in the {@link Scene}. These are nodes whose {@link MetaObject}s don't have {@link Entity}s.
      * @param {RenderService} [cfg.renderService] Optional {@link RenderService} to use. Defaults to the {@link TreeViewPlugin}'s default {@link RenderService}.
+     * @param {Boolean} [cfg.showIndeterminate=false] When true, will show indeterminate state for checkboxes when some but not all child nodes are checked
      */
     constructor(viewer, cfg = {}) {
 
@@ -412,6 +413,7 @@ export class TreeViewPlugin extends Plugin {
         this._pruneEmptyNodes = cfg.pruneEmptyNodes;
         this._showListItemElementId = null;
         this._renderService = cfg.renderService || new RenderService();
+        this._showIndeterminate = cfg.showIndeterminate ?? false;
 
         if (!this._renderService) {
             throw new Error('TreeViewPlugin: no render service set');
