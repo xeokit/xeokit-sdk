@@ -1,5 +1,13 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.38](https://github.com/xeokit/xeokit-sdk/compare/v2.6.36...v2.6.38)
+
+### 26 August 2024
+
+-  XCD-139 GLB displayed incorrectly in treeview - [#1639](https://github.com/xeokit/xeokit-sdk/pull/1639)
+-  Add separator as an independent li tag. - [#1640](https://github.com/xeokit/xeokit-sdk/pull/1640)
+-  XEOK-99 Fix dotbim_Multicolor house on macOS - [#1641](https://github.com/xeokit/xeokit-sdk/pull/1641)
+
 # [v2.6.36](https://github.com/xeokit/xeokit-sdk/compare/v2.6.35...v2.6.36)
 
 ### 24 August 2024
