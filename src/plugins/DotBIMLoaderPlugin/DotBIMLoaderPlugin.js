@@ -545,24 +545,17 @@ export class DotBIMLoaderPlugin extends Plugin {
                     });
                 }
 
+                let properties = [];
                 for (let infoKey in info) {
-                    let properties;
-                    if (infoKey.startsWith("IFC_Pset_")) {
-                        if (!properties) {
-                            properties = [];
-                        }
-                        properties.push({
-                            name: infoKey,
-                            value: info[infoKey]
-                        });
-                    }
-                    if (properties) {
-                        metaModelData.propertySets.push({
-                            id: objectId,
-                            properties
-                        });
-                    }
+                    properties.push({
+                        name: infoKey,
+                        value: info[infoKey]
+                    });
                 }
+                metaModelData.propertySets.push({
+                    id: objectId,
+                    properties
+                });
 
                 metaModelData.metaObjects.push({
                     id: objectId,
