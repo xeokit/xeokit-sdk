@@ -453,8 +453,10 @@ export class TreeViewPlugin extends Plugin {
                 } else {
                     parent.numVisibleEntities--;
                 }
-
-                this._renderService.setCheckbox(parent.nodeId, (parent.numVisibleEntities > 0));
+                const indeterminate = this._showIndeterminate 
+                  && parent.numVisibleEntities > 0 
+                  && parent.numVisibleEntities < parent.numEntities;
+                this._renderService.setCheckbox(parent.nodeId, (parent.numVisibleEntities > 0), indeterminate);
 
                 parent = parent.parent;
             }
@@ -536,8 +538,10 @@ export class TreeViewPlugin extends Plugin {
                 } else {
                     parent.numVisibleEntities -= numUpdated;
                 }
-
-                this._renderService.setCheckbox(parent.nodeId, (parent.numVisibleEntities > 0));
+                const indeterminate = this._showIndeterminate 
+                  && parent.numVisibleEntities > 0 
+                  && parent.numVisibleEntities < parent.numEntities;
+                this._renderService.setCheckbox(parent.nodeId, (parent.numVisibleEntities > 0), indeterminate);
                 
                 parent = parent.parent;
             }
