@@ -55,7 +55,14 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, math, SectionPlanesPlugin, XKTLoaderPlugin} from "../../dist/xeokit-sdk.min.es.js";
+    import { Viewer, SectionPlanesPlugin, SceneModel, XKTLoaderPlugin, SectionCapsPlugin, math } from "../../dist/xeokit-sdk.min.es.js";
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Helping variables
+    //------------------------------------------------------------------------------------------------------------------
+
+    let prevIntersectionModels = {};
+    let posTimeout = null, dirTimeout = null;
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -63,7 +70,8 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
-        transparent: true
+        transparent: true,
+        readableGeometryEnabled: true
     });
 
     viewer.camera.eye = [-2.341298674548419, 22.43987089731119, 7.236688436028655];
@@ -91,6 +99,7 @@
     });
 
     sceneModel.on("loaded", () => {
+
         var t1 = performance.now();
         document.getElementById("time").innerHTML = "Model loaded in " + Math.floor(t1 - t0) / 1000.0 + " seconds<br>Objects: " + sceneModel.numEntities;
 
@@ -100,29 +109,38 @@
 
         const sectionPlanes = new SectionPlanesPlugin(viewer, {
             overviewCanvasId: "mySectionPlanesOverviewCanvas",
-            overviewVisible: true
+            overviewVisible: true,
         });
+
+        //------------------------------------------------------------------------------------------------------------------
+        // Create a SectionCaps plugin instance to cap the objects that will be sliced through the section planes
+        //------------------------------------------------------------------------------------------------------------------
+
+        const sectionCaps = new SectionCapsPlugin(viewer, {})
+
+        window.sectionCaps = sectionCaps;
 
         const sectionPlane = sectionPlanes.createSectionPlane({
             id: "mySectionPlane",
-
-            pos: viewer.scene.center,
+            pos: [0.5, 2.5, 5.0],
             dir: math.normalizeVec3([1.0, 0.01, 1])
         });
 
         sectionPlanes.showControl(sectionPlane.id);
 
-        // let i = 0;
-        // viewer.scene.on("tick", () => {
-        //     sectionPlane.pos = [sectionPlane.pos[0] + i, sectionPlane.pos[1], sectionPlane.pos[2] + i];
-        //     i += 0.001;
-        // });
-        //
-        window.viewer = viewer;
+        const sectionPlane2 = sectionPlanes.createSectionPlane({
+            id: "mySectionPlane2",
+            pos: [8.0, 2.5, 12.5],
+            dir: math.normalizeVec3([-1.0, -0.01, -1])
+        })
 
+        sectionPlanes.showControl(sectionPlane2.id);
+
+        window.viewer = viewer;
 
     });
 
 
 </script>
+
 </html>
