@@ -642,7 +642,7 @@ class ContextMenu {
                                 '</li>');
                             if (!((groupIdx === groupLen - 1) || (j < lenj - 1))) {
                                 html.push(
-                                    '<li id="' + item.id + '" class="xeokit-context-menu-item-seperator"></li>'
+                                    '<li id="' + item.id + '" class="xeokit-context-menu-item-separator"></li>'
                                 );
                             }
 
@@ -654,7 +654,7 @@ class ContextMenu {
                                 '</li>');
                             if (!((groupIdx === groupLen - 1) || (j < lenj - 1))) {
                                 html.push(
-                                    '<li id="' + item.id + '" class="xeokit-context-menu-item-seperator"></li>'
+                                    '<li id="' + item.id + '" class="xeokit-context-menu-item-separator"></li>'
                                 );
                             }
                         }
@@ -854,12 +854,10 @@ class ContextMenu {
             const shown = getShown(this._context);
             item.shown = shown;
             if (!shown) {
-                itemElement.classList.remove("xeokit-context-menu-item-visible");
-                itemElement.classList.add("xeokit-context-menu-item-hidden");
+                itemElement.style.display = "none";
                 continue;
             } else {
-                itemElement.classList.remove("ceokit-context-menu-item-hidden");
-                itemElement.classList.add("xeokit-context-menu-item-visible");
+                itemElement.style.display = "";
 
             }
             const enabled = getEnabled(this._context);
