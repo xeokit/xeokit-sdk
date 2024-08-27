@@ -783,8 +783,8 @@ export class TreeViewPlugin extends Plugin {
     collapse() {
         for (let i = 0, len = this._rootNodes.length; i < len; i++) {
             const rootNode = this._rootNodes[i];
-            const objectId = rootNode.objectId;
-            this._collapseNode(objectId);
+            const nodeId = rootNode.nodeId;
+            this._collapseNode(nodeId);
         }
     }
 
