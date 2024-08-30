@@ -366,6 +366,16 @@ class DistanceMeasurement extends Component {
         const scene = this.plugin.viewer.scene;
 
         if (this._wpDirty) {
+            const delta = math.subVec3(
+                this._targetWorld,
+                this._originWorld,
+                tmpVec3
+            );
+
+            /**
+             * The length detected for each measurement axis.
+             */
+            this._factors = math.transformVec3(this._axesBasis, delta);
 
             this._measurementOrientation = determineMeasurementOrientation(this._originWorld, this._targetWorld, 0);
             if(this._measurementOrientation === 'Vertical' && this.useRotationAdjustment){
@@ -390,16 +400,6 @@ class DistanceMeasurement extends Component {
                 this._wp[15] = 1.0;
             }
             else {
-                const delta = math.subVec3(
-                    this._targetWorld,
-                    this._originWorld,
-                    tmpVec3
-                );
-
-                /**
-                 * The length detected for each measurement axis.
-                 */
-                this._factors = math.transformVec3(this._axesBasis, delta);
 
                 this._wp[0] = this._originWorld[0];
                 this._wp[1] = this._originWorld[1];
