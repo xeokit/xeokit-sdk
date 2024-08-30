@@ -7,9 +7,9 @@ const configs = new Configs();
  */
 export class VBOBatchingTrianglesBuffer {
 
-    constructor() {
-        this.maxVerts = configs.maxGeometryBatchSize;
-        this.maxIndices = configs.maxGeometryBatchSize * 3; // Rough rule-of-thumb
+    constructor(maxBatchSize = configs.maxGeometryBatchSize) {
+        this.maxVerts = maxBatchSize;
+        this.maxIndices = maxBatchSize * 3; // Rough rule-of-thumb
         this.positions = [];
         this.colors = [];
         this.uv = [];
