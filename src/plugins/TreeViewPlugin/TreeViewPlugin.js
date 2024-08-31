@@ -701,6 +701,8 @@ export class TreeViewPlugin extends Plugin {
             return; // Node may not exist for the given object if (this._pruneEmptyNodes == true)
         }
 
+        this.collapse();
+
         const nodeId = node.nodeId;
 
         const switchElement = this._renderService.getSwitchElement(nodeId);
