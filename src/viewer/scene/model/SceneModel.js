@@ -2505,7 +2505,21 @@ export class SceneModel extends Component {
         if (cfg.image) { // Ignore transcoder for Images
             const image = cfg.image;
             image.crossOrigin = "Anonymous";
-            texture.setImage(image, {minFilter, magFilter, wrapS, wrapT, wrapR, flipY: cfg.flipY, encoding});
+            if (image.compressed) {
+                // see `parsedImage` in @loaders.gl/gltf/src/lib/parsers/parse-gltf.ts
+                // NOTE: @loaders.gl in its current version discards potential mipmaps, leaving only a single one
+                const data = image.data;
+                texture.setCompressedData({
+                    mipmaps: data,
+                    props: {
+                        format: data[0].format,
+                        minFilter: minFilter,
+                        magFilter: magFilter
+                    }
+                });
+            } else {
+                texture.setImage(image, {minFilter, magFilter, wrapS, wrapT, wrapR, flipY: cfg.flipY, encoding});
+            }
         } else if (cfg.src) {
             const ext = cfg.src.split('.').pop();
             switch (ext) { // Don't transcode recognized image file types
