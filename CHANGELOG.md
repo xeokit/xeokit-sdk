@@ -1,5 +1,20 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.41](https://github.com/xeokit/xeokit-sdk/compare/v2.6.38...v2.6.41)
+
+### 4 September 2024
+
+-  Fix ShowNode method in TreeViewPlugin does not collapse the tree - [#1650](https://github.com/xeokit/xeokit-sdk/pull/1650)
+-  XCD-147 Implement an example of annotation touch create - [#1654](https://github.com/xeokit/xeokit-sdk/pull/1654)
+-  XCD-145 Fix GLTFLoaderPlugin KTX loading - [#1653](https://github.com/xeokit/xeokit-sdk/pull/1653)
+-  Fix: update VBOBatchingTrianglesBuffer constructor  - [#1648](https://github.com/xeokit/xeokit-sdk/pull/1648)
+-  Updated FastNavPlugin type definitions - [#1649](https://github.com/xeokit/xeokit-sdk/pull/1649)
+-  Add navigation examples - [#1647](https://github.com/xeokit/xeokit-sdk/pull/1647)
+-  Removed implementation of visible and hidden classes - [#1646](https://github.com/xeokit/xeokit-sdk/pull/1646)
+-  Wrong id passed to collapseNode method - [#1644](https://github.com/xeokit/xeokit-sdk/pull/1644)
+-  [FIX] Undefined metadata in DotBIMLoaderPlugin - [#1643](https://github.com/xeokit/xeokit-sdk/pull/1643)
+-  Add option for indeterminate checkbox in TreeViewPlugin - [#1642](https://github.com/xeokit/xeokit-sdk/pull/1642)
+
 # [v2.6.38](https://github.com/xeokit/xeokit-sdk/compare/v2.6.36...v2.6.38)
 
 ### 26 August 2024
