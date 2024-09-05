@@ -49,10 +49,8 @@ export class VBOBatchingPointsLayer {
 
         this._buffer = {
             maxVerts:    maxGeometryBatchSize,
-            maxIndices:  maxGeometryBatchSize * 3, // Rough rule-of-thumb
             positions:   [ ],
             colors:      [ ],
-            intensities: [ ],
             pickColors:  [ ],
             offsets:     [ ]
         };
