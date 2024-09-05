@@ -231,35 +231,20 @@ export class VBOBatchingPointsLayer {
         const state = this._state;
         const gl = this.model.scene.canvas.gl;
         const buffer = this._buffer;
+        const maybeCreateGlBuffer = (srcData, size, usage) => (srcData.length > 0) ? new ArrayBuf(gl, gl.ARRAY_BUFFER, srcData, srcData.length, size, usage) : null;
 
         const positions = (this._preCompressedPositionsExpected
                            ? new Uint16Array(buffer.positions)
                            : (quantizePositions(new Float32Array(buffer.positions), this._modelAABB, state.positionsDecodeMatrix)));
-        if (positions.length > 0) {
-            state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, positions, positions.length, 3, gl.STATIC_DRAW);
-        }
+        state.positionsBuf  = maybeCreateGlBuffer(positions, 3, gl.STATIC_DRAW);
 
-        const colors = new Uint8Array(buffer.colors);
-        if (colors.length > 0) {
-            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colors, colors.length, 4, gl.STATIC_DRAW);
-        }
+        state.flagsBuf      = maybeCreateGlBuffer(new Float32Array(positions.length / 3), 1, gl.DYNAMIC_DRAW); // Because we build flags arrays here, get their length from the positions array
 
-        const flags = new Float32Array(positions.length / 3); // Because we build flags arrays here, get their length from the positions array
-        if (flags.length > 0) {
-            state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, flags, flags.length, 1, gl.DYNAMIC_DRAW);
-        }
+        state.colorsBuf     = maybeCreateGlBuffer(new Uint8Array(buffer.colors), 4, gl.STATIC_DRAW);
 
-        const pickColors = new Uint8Array(buffer.pickColors);
-        if (pickColors.length > 0) {
-            state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, pickColors, pickColors.length, 4, gl.STATIC_DRAW);
-        }
+        state.pickColorsBuf = maybeCreateGlBuffer(new Uint8Array(buffer.pickColors), 4, gl.STATIC_DRAW);
 
-        if (this.model.scene.entityOffsetsEnabled) {
-            const offsets = new Float32Array(buffer.offsets);
-            if (offsets.length > 0) {
-                state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, offsets, offsets.length, 3, gl.DYNAMIC_DRAW);
-            }
-        }
+        state.offsetsBuf    = this.model.scene.entityOffsetsEnabled ? maybeCreateGlBuffer(new Float32Array(buffer.offsets), 3, gl.DYNAMIC_DRAW) : null;
 
         this._buffer = null;
         this._finalized = true;
