@@ -52,7 +52,6 @@ export class VBOBatchingPointsLayer {
             positions:   [ ],
             colors:      [ ],
             pickColors:  [ ],
-            offsets:     [ ],
             vertsIndex:  0
         };
 
@@ -201,14 +200,6 @@ export class VBOBatchingPointsLayer {
             }
         }
 
-        if (this.model.scene.entityOffsetsEnabled) {
-            for (let i = 0; i < numVerts; i++) {
-                buffer.offsets.push(0);
-                buffer.offsets.push(0);
-                buffer.offsets.push(0);
-            }
-        }
-
         const portionId = this._portions.length / 2;
 
         this._portions.push(this._buffer.vertsIndex);
@@ -241,13 +232,13 @@ export class VBOBatchingPointsLayer {
                            : (quantizePositions(new Float32Array(buffer.positions), this._modelAABB, state.positionsDecodeMatrix)));
         state.positionsBuf  = maybeCreateGlBuffer(positions, 3, gl.STATIC_DRAW);
 
-        state.flagsBuf      = maybeCreateGlBuffer(new Float32Array(positions.length / 3), 1, gl.DYNAMIC_DRAW); // Because we build flags arrays here, get their length from the positions array
+        state.flagsBuf      = maybeCreateGlBuffer(new Float32Array(this._buffer.vertsIndex), 1, gl.DYNAMIC_DRAW); // Because we build flags arrays here, get their length from the positions array
 
         state.colorsBuf     = maybeCreateGlBuffer(new Uint8Array(buffer.colors), 4, gl.STATIC_DRAW);
 
         state.pickColorsBuf = maybeCreateGlBuffer(new Uint8Array(buffer.pickColors), 4, gl.STATIC_DRAW);
 
-        state.offsetsBuf    = this.model.scene.entityOffsetsEnabled ? maybeCreateGlBuffer(new Float32Array(buffer.offsets), 3, gl.DYNAMIC_DRAW) : null;
+        state.offsetsBuf    = this.model.scene.entityOffsetsEnabled ? maybeCreateGlBuffer(new Float32Array(this._buffer.vertsIndex * 3), 3, gl.DYNAMIC_DRAW) : null;
 
         this._buffer = null;
         this._finalized = true;
