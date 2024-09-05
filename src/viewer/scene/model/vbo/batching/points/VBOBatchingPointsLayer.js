@@ -141,8 +141,6 @@ export class VBOBatchingPointsLayer {
             throw "Already finalized";
         }
 
-        const positions = cfg.positions;
-        const positionsCompressed = cfg.positionsCompressed;
         const color = cfg.color;
         const colorsCompressed = cfg.colorsCompressed;
         const colors = cfg.colors;
@@ -152,37 +150,18 @@ export class VBOBatchingPointsLayer {
         const positionsIndex = buffer.positions.length;
         const vertsIndex = positionsIndex / 3;
 
-        let numVerts;
-
         math.expandAABB3(this._modelAABB, cfg.aabb);
 
-        if (this._preCompressedPositionsExpected) {
-
-            if (!positionsCompressed) {
-                throw "positionsCompressed expected";
-            }
-
-            for (let i = 0, len = positionsCompressed.length; i < len; i++) {
-                buffer.positions.push(positionsCompressed[i]);
-            }
-
-            numVerts = positionsCompressed.length / 3;
-
-        } else {
-
-            if (!positions) {
-                throw "positions expected";
-            }
-
-            numVerts = positions.length / 3;
-
-            const lenPositions = positions.length;
-            const positionsBase = buffer.positions.length;
-
-            for (let i = 0, len = positions.length; i < len; i++) {
-                buffer.positions.push(positions[i]);
-            }
+        const positions = this._preCompressedPositionsExpected ? cfg.positionsCompressed : cfg.positions;
+        if (! positions) {
+            throw ((this._preCompressedPositionsExpected ? "positionsCompressed" : "positions") + " expected");
         }
+
+        for (let i = 0, len = positions.length; i < len; i++) {
+            buffer.positions.push(positions[i]);
+        }
+
+        const numVerts = positions.length / 3;
 
         if (colorsCompressed) {
             for (let i = 0, len = colorsCompressed.length; i < len; i++) {
@@ -254,14 +233,10 @@ export class VBOBatchingPointsLayer {
         const buffer = this._buffer;
 
         if (buffer.positions.length > 0) {
-            if (this._preCompressedPositionsExpected) {
-                const positions = new Uint16Array(buffer.positions);
-                state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, positions, buffer.positions.length, 3, gl.STATIC_DRAW);
-            } else {
-                const positions = new Float32Array(buffer.positions);
-                const quantizedPositions = quantizePositions(positions, this._modelAABB, state.positionsDecodeMatrix);
-                state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, buffer.positions.length, 3, gl.STATIC_DRAW);
-            }
+            const positions = (this._preCompressedPositionsExpected
+                               ? new Uint16Array(buffer.positions)
+                               : quantizePositions(new Float32Array(buffer.positions), this._modelAABB, state.positionsDecodeMatrix));
+            state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, positions, positions.length, 3, gl.STATIC_DRAW);
         }
 
         if (buffer.colors.length > 0) {
