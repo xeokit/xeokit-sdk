@@ -108,11 +108,6 @@ export class VBOBatchingPointsLayer {
             this.aabbDirty = false;
         }
         return this._aabb;
-
-        /**
-         * The type of primitives in this layer.
-         */
-        this.primitive = cfg.primitive;
     }
 
     /**
