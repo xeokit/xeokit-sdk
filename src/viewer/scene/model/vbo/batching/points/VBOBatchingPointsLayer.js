@@ -52,7 +52,8 @@ export class VBOBatchingPointsLayer {
             positions:   [ ],
             colors:      [ ],
             pickColors:  [ ],
-            offsets:     [ ]
+            offsets:     [ ],
+            vertsIndex:  0
         };
 
         this._scratchMemory = cfg.scratchMemory;
@@ -124,7 +125,7 @@ export class VBOBatchingPointsLayer {
         if (this._finalized) {
             throw "Already finalized";
         }
-        return ((this._buffer.positions.length + lenPositions) < (this._buffer.maxVerts * 3));
+        return (this._buffer.vertsIndex + (lenPositions / 3)) < this._buffer.maxVerts;
     }
 
     /**
@@ -155,8 +156,6 @@ export class VBOBatchingPointsLayer {
         const pickColor = cfg.pickColor;
 
         const buffer = this._buffer;
-        const positionsIndex = buffer.positions.length;
-        const vertsIndex = positionsIndex / 3;
 
         math.expandAABB3(this._modelAABB, cfg.aabb);
 
@@ -217,8 +216,9 @@ export class VBOBatchingPointsLayer {
 
         const portionId = this._portions.length / 2;
 
-        this._portions.push(vertsIndex);
+        this._portions.push(this._buffer.vertsIndex);
         this._portions.push(numVerts);
+        this._buffer.vertsIndex += numVerts;
 
         this._numPortions++;
         this.model.numPortions++;
