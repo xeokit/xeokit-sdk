@@ -144,14 +144,7 @@ export class VBOBatchingPointsLayer {
             throw "Already finalized";
         }
 
-        const color = cfg.color;
-        const colorsCompressed = cfg.colorsCompressed;
-        const colors = cfg.colors;
-        const pickColor = cfg.pickColor;
-
         const buffer = this._buffer;
-
-        math.expandAABB3(this._modelAABB, cfg.aabb);
 
         const positions = this._preCompressedPositionsExpected ? cfg.positionsCompressed : cfg.positions;
         if (! positions) {
@@ -163,6 +156,11 @@ export class VBOBatchingPointsLayer {
         }
 
         const numVerts = positions.length / 3;
+
+        const color = cfg.color;
+        const colorsCompressed = cfg.colorsCompressed;
+        const colors = cfg.colors;
+        const pickColor = cfg.pickColor;
 
         if (colorsCompressed) {
             for (let i = 0, len = colorsCompressed.length; i < len; i++) {
@@ -199,6 +197,8 @@ export class VBOBatchingPointsLayer {
                 buffer.pickColors.push(pickColor[3]);
             }
         }
+
+        math.expandAABB3(this._modelAABB, cfg.aabb);
 
         const portionId = this._portions.length / 2;
 
