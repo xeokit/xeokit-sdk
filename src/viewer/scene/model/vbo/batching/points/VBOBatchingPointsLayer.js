@@ -232,36 +232,32 @@ export class VBOBatchingPointsLayer {
         const gl = this.model.scene.canvas.gl;
         const buffer = this._buffer;
 
-        if (buffer.positions.length > 0) {
-            const positions = (this._preCompressedPositionsExpected
-                               ? new Uint16Array(buffer.positions)
-                               : quantizePositions(new Float32Array(buffer.positions), this._modelAABB, state.positionsDecodeMatrix));
+        const positions = (this._preCompressedPositionsExpected
+                           ? new Uint16Array(buffer.positions)
+                           : (quantizePositions(new Float32Array(buffer.positions), this._modelAABB, state.positionsDecodeMatrix)));
+        if (positions.length > 0) {
             state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, positions, positions.length, 3, gl.STATIC_DRAW);
         }
 
-        if (buffer.colors.length > 0) {
-            const colors = new Uint8Array(buffer.colors);
-            let normalized = false;
-            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colors, buffer.colors.length, 4, gl.STATIC_DRAW, normalized);
+        const colors = new Uint8Array(buffer.colors);
+        if (colors.length > 0) {
+            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colors, colors.length, 4, gl.STATIC_DRAW);
         }
 
-        if (buffer.positions.length > 0) { // Because we build flags arrays here, get their length from the positions array
-            const flagsLength = buffer.positions.length / 3;
-            const flags = new Float32Array(flagsLength);
-            let notNormalized = false;
-            state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, flags, flags.length, 1, gl.DYNAMIC_DRAW, notNormalized);
+        const flags = new Float32Array(positions.length / 3); // Because we build flags arrays here, get their length from the positions array
+        if (flags.length > 0) {
+            state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, flags, flags.length, 1, gl.DYNAMIC_DRAW);
         }
 
-        if (buffer.pickColors.length > 0) {
-            const pickColors = new Uint8Array(buffer.pickColors);
-            let normalized = false;
-            state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, pickColors, buffer.pickColors.length, 4, gl.STATIC_DRAW, normalized);
+        const pickColors = new Uint8Array(buffer.pickColors);
+        if (pickColors.length > 0) {
+            state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, pickColors, pickColors.length, 4, gl.STATIC_DRAW);
         }
 
         if (this.model.scene.entityOffsetsEnabled) {
-            if (buffer.offsets.length > 0) {
-                const offsets = new Float32Array(buffer.offsets);
-                state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, offsets, buffer.offsets.length, 3, gl.DYNAMIC_DRAW);
+            const offsets = new Float32Array(buffer.offsets);
+            if (offsets.length > 0) {
+                state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, offsets, offsets.length, 3, gl.DYNAMIC_DRAW);
             }
         }
 
