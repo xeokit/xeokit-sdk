@@ -128,11 +128,11 @@ export declare class StoreyViewsPlugin extends Plugin {
 
 
   /**
-   * Gets the ID of the storey that contains the given 3D World-space position.
-   *.
-    * @param {Number[]} worldPos 3D World-space position.
-    * @returns {String} ID of the storey containing the position, or null if the position falls outside all the storeys.
-    */
+   * Returns whether a position is above or below a building
+   * 
+   * @param {Number[]} worldPos 3D World-space position.
+   * @returns {String} ID of the lowest/highest story or null.
+   */
   isPositionAboveOrBelowBuilding(worldPos: number[]): string;
 
   /**

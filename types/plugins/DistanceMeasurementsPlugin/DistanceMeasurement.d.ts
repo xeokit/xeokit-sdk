@@ -104,6 +104,20 @@ export declare class DistanceMeasurement extends Component {
   get targetVisible(): boolean;
 
   /**
+     * Sets if the measurement is adjusted based on rotation
+     *
+     * @type {Boolean}
+     */
+  set useRotationAdjustment(arg: boolean);
+
+  /**
+   * Gets if the measurement is adjusted based on rotation
+   *
+   * @type {Boolean}
+   */
+  get useRotationAdjustment(): boolean;
+
+  /**
    * Sets if the direct point-to-point wire between {@link DistanceMeasurement.origin} and {@link DistanceMeasurement.target} is visible.
    *
    * @type {Boolean}

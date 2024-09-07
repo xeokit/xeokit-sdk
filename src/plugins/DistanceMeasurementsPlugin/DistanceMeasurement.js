@@ -240,6 +240,7 @@ class DistanceMeasurement extends Component {
         this._visible = false;
         this._originVisible = false;
         this._targetVisible = false;
+        this._useRotationAdjustment = false;
         this._wireVisible = false;
         this._axisVisible = false;
         this._xAxisVisible = false;
@@ -316,7 +317,7 @@ class DistanceMeasurement extends Component {
         this.lengthLabelEnabled = cfg.lengthLabelEnabled;
         this.labelsVisible = cfg.labelsVisible;
         this.labelsOnWires = cfg.labelsOnWires;
-        this.useRotationAdjustment = cfg.useRotationAdjustment;
+        this._useRotationAdjustment = cfg.useRotationAdjustment;
 
         /**
          * @type {number[]}
@@ -378,7 +379,7 @@ class DistanceMeasurement extends Component {
             this._factors = math.transformVec3(this._axesBasis, delta);
 
             this._measurementOrientation = determineMeasurementOrientation(this._originWorld, this._targetWorld, 0);
-            if(this._measurementOrientation === 'Vertical' && this.useRotationAdjustment){
+            if (this._measurementOrientation === 'Vertical' && this._useRotationAdjustment) {
                 this._wp[0] = this._originWorld[0];
                 this._wp[1] = this._originWorld[1];
                 this._wp[2] = this._originWorld[2];
@@ -589,7 +590,7 @@ class DistanceMeasurement extends Component {
                 }
 
                 if (!this._zAxisLabelCulled) {
-                    if(this._measurementOrientation === 'Vertical' && this.useRotationAdjustment) {
+                    if (this._measurementOrientation === 'Vertical' && this._useRotationAdjustment) {
                         this._zAxisLabel.setPrefix("");
                         this._zAxisLabel.setText(tilde + Math.abs(math.lenVec3(math.subVec3(this._targetWorld, [this._originWorld[0], this._targetWorld[1], this._originWorld[2]], distVec3)) * scale).toFixed(2) + unitAbbrev);
                     }
@@ -782,6 +783,25 @@ class DistanceMeasurement extends Component {
      */
     get targetVisible() {
         return this._targetVisible;
+    }
+
+    /**
+     * Sets if the measurement is adjusted based on rotation
+     *
+     * @type {Boolean}
+     */
+    set useRotationAdjustment(value) {
+        value = value !== undefined ? Boolean(value) : this.plugin.useRotationAdjustment;
+        this._useRotationAdjustment = value;
+    }
+
+    /**
+     * Gets if the measurement is adjusted based on rotation
+     *
+     * @type {Boolean}
+     */
+    get useRotationAdjustment() {
+        return this._useRotationAdjustment;
     }
 
     /**
