@@ -48,23 +48,44 @@ export class VBOBatchingPointsLayer {
         const maxGeometryBatchSize = Math.min(5000000, cfg.maxGeometryBatchSize || window.Infinity);
 
         const attribute = function() {
-            const array = [ ];
+            const portions = [ ];
 
             return {
                 append: function(data, times = 1, denormalizeScale = 1.0) {
-                    for (let t = 0; t < times; ++t) {
-                        if (denormalizeScale === 1.0) {
-                            for (let i = 0, len = data.length; i < len; i++) {
-                                array.push(data[i]);
-                            }
+                    portions.push({ data: data, times: times, denormalizeScale: denormalizeScale });
+                },
+                compileBuffer: function(type) {
+                    let len = 0;
+                    portions.forEach(p => { len += p.times * p.data.length; });
+                    const buf = new type(len);
+
+                    let begin = 0;
+                    portions.forEach(p => {
+                        const data = p.data;
+                        const dScale = p.denormalizeScale;
+                        const subBuf = buf.subarray(begin);
+
+                        if (dScale === 1.0) {
+                            subBuf.set(data, 0);
                         } else {
-                            for (let i = 0, len = data.length; i < len; i++) {
-                                array.push(data[i] * denormalizeScale);
+                            for (let i = 0; i < data.length; ++i) {
+                                subBuf[i] = data[i] * dScale;
                             }
                         }
-                    }
-                },
-                compileBuffer: type => new type(array)
+
+                        let soFar = data.length;
+                        const allDataLen = p.times * data.length;
+                        while (soFar < allDataLen) {
+                            const toCopy = Math.min(soFar, allDataLen - soFar);
+                            subBuf.set(subBuf.subarray(0, toCopy), soFar);
+                            soFar += toCopy;
+                        }
+
+                        begin += soFar;
+                    });
+
+                    return buf;
+                }
             };
         };
 
