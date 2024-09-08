@@ -5,7 +5,6 @@ import {math} from "../../../../math/math.js";
 import {RenderState} from "../../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
 import {getRenderers} from "./renderers/VBOBatchingPointsRenderers.js";
-import {VBOBatchingPointsBuffer} from "./VBOBatchingPointsBuffer.js";
 import {quantizePositions} from "../../../compression.js";
 
 /**
@@ -46,7 +45,58 @@ export class VBOBatchingPointsLayer {
 
         this._renderers = getRenderers(cfg.model.scene);
 
-        this._buffer = new VBOBatchingPointsBuffer(cfg.maxGeometryBatchSize);
+        const maxGeometryBatchSize = Math.min(5000000, cfg.maxGeometryBatchSize || window.Infinity);
+
+        const attribute = function() {
+            const portions = [ ];
+
+            return {
+                append: function(data, times = 1, denormalizeScale = 1.0) {
+                    portions.push({ data: data, times: times, denormalizeScale: denormalizeScale });
+                },
+                compileBuffer: function(type) {
+                    let len = 0;
+                    portions.forEach(p => { len += p.times * p.data.length; });
+                    const buf = new type(len);
+
+                    let begin = 0;
+                    portions.forEach(p => {
+                        const data = p.data;
+                        const dScale = p.denormalizeScale;
+                        const subBuf = buf.subarray(begin);
+
+                        if (dScale === 1.0) {
+                            subBuf.set(data, 0);
+                        } else {
+                            for (let i = 0; i < data.length; ++i) {
+                                subBuf[i] = data[i] * dScale;
+                            }
+                        }
+
+                        let soFar = data.length;
+                        const allDataLen = p.times * data.length;
+                        while (soFar < allDataLen) {
+                            const toCopy = Math.min(soFar, allDataLen - soFar);
+                            subBuf.set(subBuf.subarray(0, toCopy), soFar);
+                            soFar += toCopy;
+                        }
+
+                        begin += soFar;
+                    });
+
+                    return buf;
+                }
+            };
+        };
+
+        this._buffer = {
+            maxVerts:   maxGeometryBatchSize,
+            positions:  attribute(),
+            colors:     attribute(),
+            pickColors: attribute(),
+            vertsIndex: 0
+        };
+
         this._scratchMemory = cfg.scratchMemory;
 
         this._state = new RenderState({
@@ -99,11 +149,6 @@ export class VBOBatchingPointsLayer {
             this.aabbDirty = false;
         }
         return this._aabb;
-
-        /**
-         * The type of primitives in this layer.
-         */
-        this.primitive = cfg.primitive;
     }
 
     /**
@@ -116,7 +161,7 @@ export class VBOBatchingPointsLayer {
         if (this._finalized) {
             throw "Already finalized";
         }
-        return ((this._buffer.positions.length + lenPositions) < (this._buffer.maxVerts * 3));
+        return (this._buffer.vertsIndex + (lenPositions / 3)) < this._buffer.maxVerts;
     }
 
     /**
@@ -141,97 +186,40 @@ export class VBOBatchingPointsLayer {
             throw "Already finalized";
         }
 
-        const positions = cfg.positions;
-        const positionsCompressed = cfg.positionsCompressed;
+        const buffer = this._buffer;
+
+        const positions = this._preCompressedPositionsExpected ? cfg.positionsCompressed : cfg.positions;
+        if (! positions) {
+            throw ((this._preCompressedPositionsExpected ? "positionsCompressed" : "positions") + " expected");
+        }
+
+        buffer.positions.append(positions);
+
+        const numVerts = positions.length / 3;
+
         const color = cfg.color;
         const colorsCompressed = cfg.colorsCompressed;
         const colors = cfg.colors;
         const pickColor = cfg.pickColor;
 
-        const buffer = this._buffer;
-        const positionsIndex = buffer.positions.length;
-        const vertsIndex = positionsIndex / 3;
+        if (colorsCompressed) {
+            buffer.colors.append(colorsCompressed);
+        } else if (colors) {
+            buffer.colors.append(colors, 1, 255.0);
+        } else if (color) {
+            // Color is pre-quantized by VBOSceneModel
+            buffer.colors.append([ color[0], color[1], color[2], 1.0 ], numVerts);
+        }
 
-        let numVerts;
+        buffer.pickColors.append(pickColor.slice(0, 4), numVerts);
 
         math.expandAABB3(this._modelAABB, cfg.aabb);
 
-        if (this._preCompressedPositionsExpected) {
-
-            if (!positionsCompressed) {
-                throw "positionsCompressed expected";
-            }
-
-            for (let i = 0, len = positionsCompressed.length; i < len; i++) {
-                buffer.positions.push(positionsCompressed[i]);
-            }
-
-            numVerts = positionsCompressed.length / 3;
-
-        } else {
-
-            if (!positions) {
-                throw "positions expected";
-            }
-
-            numVerts = positions.length / 3;
-
-            const lenPositions = positions.length;
-            const positionsBase = buffer.positions.length;
-
-            for (let i = 0, len = positions.length; i < len; i++) {
-                buffer.positions.push(positions[i]);
-            }
-        }
-
-        if (colorsCompressed) {
-            for (let i = 0, len = colorsCompressed.length; i < len; i++) {
-                buffer.colors.push(colorsCompressed[i]);
-            }
-
-        } else if (colors) {
-            for (let i = 0, len = colors.length; i < len; i++) {
-                buffer.colors.push(colors[i] * 255);
-            }
-
-        } else if (color) {
-
-            const r = color[0]; // Color is pre-quantized by VBOSceneModel
-            const g = color[1];
-            const b = color[2];
-            const a = 1.0;
-
-            for (let i = 0; i < numVerts; i++) {
-                buffer.colors.push(r);
-                buffer.colors.push(g);
-                buffer.colors.push(b);
-                buffer.colors.push(a);
-            }
-        }
-
-        {
-            const pickColorsBase = buffer.pickColors.length;
-            const lenPickColors = numVerts * 4;
-            for (let i = pickColorsBase, len = pickColorsBase + lenPickColors; i < len; i += 4) {
-                buffer.pickColors.push(pickColor[0]);
-                buffer.pickColors.push(pickColor[1]);
-                buffer.pickColors.push(pickColor[2]);
-                buffer.pickColors.push(pickColor[3]);
-            }
-        }
-
-        if (this.model.scene.entityOffsetsEnabled) {
-            for (let i = 0; i < numVerts; i++) {
-                buffer.offsets.push(0);
-                buffer.offsets.push(0);
-                buffer.offsets.push(0);
-            }
-        }
-
         const portionId = this._portions.length / 2;
 
-        this._portions.push(vertsIndex);
+        this._portions.push(this._buffer.vertsIndex);
         this._portions.push(numVerts);
+        this._buffer.vertsIndex += numVerts;
 
         this._numPortions++;
         this.model.numPortions++;
@@ -252,43 +240,20 @@ export class VBOBatchingPointsLayer {
         const state = this._state;
         const gl = this.model.scene.canvas.gl;
         const buffer = this._buffer;
+        const maybeCreateGlBuffer = (srcData, size, usage) => (srcData.length > 0) ? new ArrayBuf(gl, gl.ARRAY_BUFFER, srcData, srcData.length, size, usage) : null;
 
-        if (buffer.positions.length > 0) {
-            if (this._preCompressedPositionsExpected) {
-                const positions = new Uint16Array(buffer.positions);
-                state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, positions, buffer.positions.length, 3, gl.STATIC_DRAW);
-            } else {
-                const positions = new Float32Array(buffer.positions);
-                const quantizedPositions = quantizePositions(positions, this._modelAABB, state.positionsDecodeMatrix);
-                state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, buffer.positions.length, 3, gl.STATIC_DRAW);
-            }
-        }
+        const positions = (this._preCompressedPositionsExpected
+                           ? buffer.positions.compileBuffer(Uint16Array)
+                           : (quantizePositions(buffer.positions.compileBuffer(Float32Array), this._modelAABB, state.positionsDecodeMatrix)));
+        state.positionsBuf  = maybeCreateGlBuffer(positions, 3, gl.STATIC_DRAW);
 
-        if (buffer.colors.length > 0) {
-            const colors = new Uint8Array(buffer.colors);
-            let normalized = false;
-            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colors, buffer.colors.length, 4, gl.STATIC_DRAW, normalized);
-        }
+        state.flagsBuf      = maybeCreateGlBuffer(new Float32Array(this._buffer.vertsIndex), 1, gl.DYNAMIC_DRAW); // Because we build flags arrays here, get their length from the positions array
 
-        if (buffer.positions.length > 0) { // Because we build flags arrays here, get their length from the positions array
-            const flagsLength = buffer.positions.length / 3;
-            const flags = new Float32Array(flagsLength);
-            let notNormalized = false;
-            state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, flags, flags.length, 1, gl.DYNAMIC_DRAW, notNormalized);
-        }
+        state.colorsBuf     = maybeCreateGlBuffer(buffer.colors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW);
 
-        if (buffer.pickColors.length > 0) {
-            const pickColors = new Uint8Array(buffer.pickColors);
-            let normalized = false;
-            state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, pickColors, buffer.pickColors.length, 4, gl.STATIC_DRAW, normalized);
-        }
+        state.pickColorsBuf = maybeCreateGlBuffer(buffer.pickColors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW);
 
-        if (this.model.scene.entityOffsetsEnabled) {
-            if (buffer.offsets.length > 0) {
-                const offsets = new Float32Array(buffer.offsets);
-                state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, offsets, buffer.offsets.length, 3, gl.DYNAMIC_DRAW);
-            }
-        }
+        state.offsetsBuf    = this.model.scene.entityOffsetsEnabled ? maybeCreateGlBuffer(new Float32Array(this._buffer.vertsIndex * 3), 3, gl.DYNAMIC_DRAW) : null;
 
         this._buffer = null;
         this._finalized = true;
