@@ -161,7 +161,7 @@ export class VBOBatchingPointsLayer {
         if (this._finalized) {
             throw "Already finalized";
         }
-        return (this._buffer.vertsIndex + (lenPositions / 3)) < this._buffer.maxVerts;
+        return (this._buffer.vertsIndex + (lenPositions / 3)) <= this._buffer.maxVerts;
     }
 
     /**
