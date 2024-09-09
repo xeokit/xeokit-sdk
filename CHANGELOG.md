@@ -1,5 +1,12 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.42](https://github.com/xeokit/xeokit-sdk/compare/v2.6.41...v2.6.42)
+
+### 9 September 2024
+
+-  XEOK-87 Fix handling of big las models - [#1658](https://github.com/xeokit/xeokit-sdk/pull/1658)
+-  Update classes to be documentation friendly - [#1657](https://github.com/xeokit/xeokit-sdk/pull/1657)
+
 # [v2.6.41](https://github.com/xeokit/xeokit-sdk/compare/v2.6.38...v2.6.41)
 
 ### 4 September 2024
