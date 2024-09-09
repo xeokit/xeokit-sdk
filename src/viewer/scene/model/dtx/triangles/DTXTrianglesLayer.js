@@ -822,14 +822,14 @@ export class DTXTrianglesLayer {
         // object colors
         textureState.texturePerObjectColorsAndFlags._textureData.set(tempUint8Array4, subPortionId * 32);
         if (this._deferredSetFlagsActive) {
-            console.info("_subPortionSetColor defer");
+            //console.info("_subPortionSetColor defer");
             this._deferredSetFlagsDirty = true;
             return;
         }
         if (++this._numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
             this._beginDeferredFlags(); // Subsequent flags updates now deferred
         }
-        console.info("_subPortionSetColor write through");
+        //console.info("_subPortionSetColor write through");
         gl.bindTexture(gl.TEXTURE_2D, textureState.texturePerObjectColorsAndFlags._texture);
         gl.texSubImage2D(
             gl.TEXTURE_2D,
