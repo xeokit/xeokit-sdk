@@ -339,6 +339,7 @@ class LASLoaderPlugin extends Plugin {
         }
 
         const sceneModel = new SceneModel(this.viewer.scene, utils.apply(params, {
+            maxGeometryBatchSize: MAX_VERTICES,
             isModel: true
         }));
 

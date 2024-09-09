@@ -45,7 +45,7 @@ export class VBOBatchingPointsLayer {
 
         this._renderers = getRenderers(cfg.model.scene);
 
-        const maxGeometryBatchSize = Math.min(5000000, cfg.maxGeometryBatchSize || window.Infinity);
+        const maxGeometryBatchSize = cfg.maxGeometryBatchSize || 5000000;
 
         const attribute = function() {
             const portions = [ ];
@@ -161,7 +161,7 @@ export class VBOBatchingPointsLayer {
         if (this._finalized) {
             throw "Already finalized";
         }
-        return (this._buffer.vertsIndex + (lenPositions / 3)) < this._buffer.maxVerts;
+        return (this._buffer.vertsIndex + (lenPositions / 3)) <= this._buffer.maxVerts;
     }
 
     /**
