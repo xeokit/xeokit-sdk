@@ -143,6 +143,9 @@ export class RenderService {
       }
       if (indeterminate !== checkbox.indeterminate) {
         checkbox.indeterminate = indeterminate;
+        if (indeterminate) {
+          checkbox.checked = false;
+        }
       }
     }
   }
