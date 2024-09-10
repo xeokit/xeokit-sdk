@@ -636,9 +636,8 @@ class ContextMenu {
                         if (itemSubMenu) {
 
                             html.push(
-                                '<li id="' + item.id + '" class="xeokit-context-menu-item">' +
+                                '<li id="' + item.id + '" class="xeokit-context-menu-item xeokit-context-menu-submenu">' +
                                 actionTitle +
-                                ' [MORE]' +
                                 '</li>');
                             if (!((groupIdx === groupLen - 1) || (j < lenj - 1))) {
                                 html.push(
