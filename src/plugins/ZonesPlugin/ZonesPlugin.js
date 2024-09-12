@@ -7,7 +7,7 @@ import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
 import {math} from "../../viewer/scene/math/math.js";
 import {Mesh} from "../../viewer/scene/mesh/Mesh.js";
 import {Dot} from "../lib/html/Dot.js";
-import {activateDraggableDots, Dot3D, transformToNode} from "../../../src/plugins/lib/ui/index.js";
+import {activateDraggableDots, Dot3D, touchPointSelector, transformToNode} from "../../../src/plugins/lib/ui/index.js";
 
 const hex2rgb = function(color) {
     const rgb = idx => parseInt(color.substr(idx + 1, 2), 16) / 255;
