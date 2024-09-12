@@ -1,5 +1,14 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.43](https://github.com/xeokit/xeokit-sdk/compare/v2.6.42...v2.6.43)
+
+### 12 September 2024
+
+-  XCD-155 Fix missing touchPointSelector - [#1666](https://github.com/xeokit/xeokit-sdk/pull/1666)
+-  fix: use css class to mark submenu - [#1662](https://github.com/xeokit/xeokit-sdk/pull/1662)
+-  XEOK-111 Prevent LASLoaderPlugin infinite loop - [#1661](https://github.com/xeokit/xeokit-sdk/pull/1661)
+-  chore: disable dtx console.info logs which slow down render - [#1660](https://github.com/xeokit/xeokit-sdk/pull/1660)
+
 # [v2.6.42](https://github.com/xeokit/xeokit-sdk/compare/v2.6.41...v2.6.42)
 
 ### 9 September 2024
