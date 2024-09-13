@@ -461,6 +461,7 @@ class ContextMenu {
         this._updateItemsTitles();
         this._updateItemsEnabledStatus();
         this._showMenu(this._rootMenu.id, pageX, pageY);
+        this._updateSubMenuInfo();
         this._shown = true;
         this.fire("shown", {});
     }
@@ -867,6 +868,29 @@ class ContextMenu {
                 itemElement.classList.remove("disabled");
             }
         }
+    }
+
+    _updateSubMenuInfo() {
+        if (!this._context) return;
+        let itemElement, itemRect, subMenuElement, initialStyles, showOnLeft, subMenuWidth;
+        this._itemList.forEach((item) => {
+            if (item.subMenu) {
+                itemElement = item.itemElement;
+                itemRect = itemElement.getBoundingClientRect();
+                subMenuElement = item.subMenu.menuElement;
+                initialStyles = {
+                    visibility: subMenuElement.style.visibility,
+                    display: subMenuElement.style.display,
+                }
+                subMenuElement.style.display = "block";
+                subMenuElement.style.visibility = "hidden";
+                subMenuWidth = item.subMenu.menuElement.getBoundingClientRect().width;
+                subMenuElement.style.visibility = initialStyles.visibility;
+                subMenuElement.style.display = initialStyles.display;
+                showOnLeft = ((itemRect.right + subMenuWidth) > window.innerWidth);
+                itemElement.setAttribute("data-submenuposition", showOnLeft ? "left" : "right");
+            }
+        })
     }
 
     _showMenu(menuId, pageX, pageY) { // Shows the given menu, at the specified page coordinates
