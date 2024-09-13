@@ -3492,7 +3492,7 @@ export class SceneModel extends Component {
             flags = flags | ENTITY_FLAGS.SELECTED;
         }
         cfg.flags = flags;
-        this._createEntity(cfg);
+        return this._createEntity(cfg);
     }
 
     _createEntity(cfg) {
@@ -3523,6 +3523,7 @@ export class SceneModel extends Component {
         this._entities[cfg.id] = entity;
         this._entitiesToFinalize.push(entity);
         this.numEntities++;
+        return entity;
     }
 
     /**
