@@ -3129,6 +3129,7 @@ export class SceneModel extends Component {
             cfg.meshMatrix = cfg.transform.worldMatrix;
         }
         mesh.portionId = mesh.layer.createPortion(mesh, cfg);
+        mesh.numPrimitives = cfg.numPrimitives;
         this._meshes[cfg.id] = mesh;
         this._unusedMeshes[cfg.id] = mesh;
         this._meshList.push(mesh);
