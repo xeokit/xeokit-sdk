@@ -554,7 +554,8 @@ export class DotBIMLoaderPlugin extends Plugin {
                 }
                 metaModelData.propertySets.push({
                     id: objectId,
-                    properties
+                    name: "Properties",
+                    properties: properties
                 });
 
                 metaModelData.metaObjects.push({
