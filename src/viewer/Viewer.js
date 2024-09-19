@@ -491,10 +491,14 @@ class Viewer {
 
         for (let i = 0, len = pluginContainerElements.length; i < len; i++) {
             const containerElement = pluginContainerElements[i];
+            //only calculate the scale for first plugin
+            //for all others keep the scale 1 otherwise it will keep multiplying the scale with the base scale of canvas
+            //resulting in increase/decreased size for the the canvas that is being overlapped
+            const scale = i == 0 ? snapshotCanvas.width / containerElement.clientWidth : 1;
             await html2canvas(containerElement, {
                 canvas: snapshotCanvas,
                 backgroundColor: null,
-                scale: snapshotCanvas.width / containerElement.clientWidth
+                scale
             });
         }
         if (!params.includeGizmos) {
