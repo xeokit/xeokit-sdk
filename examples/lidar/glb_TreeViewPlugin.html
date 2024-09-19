@@ -129,13 +129,6 @@
     <img class="info-icon" src="../../assets/images/gltf_logo.png"/>
     <h1>GLTFLoaderPlugin & TreeViewPlugin</h1>
     <h2>Making a LiDAR scan appear in the TreeViewPlugin</h2>
-    <p>The GLTFLoader's <b>elementId</b> parameter causes
-        the entire model to be loaded into a single Entity that gets this ID.</p>
-       <p>In conjunction with that parameter, we can also
-        use the GLTFLoaderPlugin's <b>metaModelJSON</b> parameter to create a MetaModel with a MetaObject that corresponds
-           to that Entity.</p>
-    <p>The TreeViewPlugin is then able to have a node that represents the LiDAR model and controls the
-        visibility of that Entity.</p>
     <h3>Stats</h3>
     <ul>
         <li>
@@ -224,11 +217,6 @@
 
     //----------------------------------------------------------------------------------------------------------------------
     // Load a model and fit it to view
-    //
-    // - Specify an `elementId` parameter, which causes the entire model to be loaded into a single Entity that gets this ID.
-    // - Specify a `metaModelJSON` parameter, which creates a MetaModel with two MetaObjects, one of which corresponds
-    //   to our Entity. Then the TreeViewPlugin is able to have a node that can represent the model and control the
-    //   visibility of the Entity.
     //----------------------------------------------------------------------------------------------------------------------
 
     const gltfLoader = new GLTFLoaderPlugin(viewer);
