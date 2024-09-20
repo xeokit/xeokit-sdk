@@ -259,6 +259,33 @@
         return annotations.annotations["myAnnotation_" + zone.id];
     };
 
+    const setZoneVisible = function(zone, visible) {
+        zone.visible = visible;
+        const zoneAnnotation = getZoneAnnotation(zone);
+        if (zoneAnnotation)
+        {
+            zoneAnnotation.setMarkerShown(visible);
+            zoneAnnotation.setLabelShown(visible);
+        }
+    };
+
+    const sceneContextMenu = new ContextMenu({
+        items: [
+            [
+                {
+                    title: "Hide visible Zones ",
+                    getEnabled: context => (zonesPlugin.zones.filter(z => z.visible).length > 0),
+                    doAction: context => zonesPlugin.zones.filter(z => z.visible).forEach(z => setZoneVisible(z, false))
+                },
+                {
+                    title: "Show hidden Zones ",
+                    getEnabled: context => (zonesPlugin.zones.filter(z => !z.visible).length > 0),
+                    doAction: context => zonesPlugin.zones.filter(z => !z.visible).forEach(z => setZoneVisible(z, true))
+                }
+            ]
+        ]
+    });
+
     let curZoneEdit = null;
 
     const zoneEditContextMenu = new ContextMenu({
@@ -380,6 +407,10 @@
                     }
                 },
                 {
+                    title: "Hide Zone",
+                    doAction: contextZone => setZoneVisible(contextZone, false)
+                },
+                {
                     title: "Delete Zone",
                     doAction: function(contextZone) {
                         if (window.confirm("Delete the zone?"))
@@ -419,6 +450,11 @@
         {
             curZoneContextMenu.context = pickZone;
             curZoneContextMenu.show(canvasPos[0], canvasPos[1] + 50);
+        }
+        else
+        {
+            sceneContextMenu.context = { };
+            sceneContextMenu.show(canvasPos[0], canvasPos[1] + 50);
         }
     });
 
