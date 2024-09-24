@@ -109,6 +109,7 @@ function parseGLTF(plugin, src, gltf, metaModelJSON, options, sceneModel, ok) {
             entityId: options.entityId,
             metaModelJSON,
             autoMetaModel: options.autoMetaModel,
+            globalizeObjectIds: options.globalizeObjectIds,
             metaObjects: [],
             loadBuffer: options.loadBuffer,
             basePath: options.basePath,
@@ -444,16 +445,17 @@ function loadDefaultScene(ctx) {
 
             if (entityId) {
                 if (meshIds.length > 0) {
+                    const globalId = ctx.globalizeObjectIds ? math.globalizeObjectId(ctx.sceneModel.id, entityId) : entityId;
                     ctx.sceneModel.createEntity({
-                        id: entityId,
+                        id: globalId,
                         meshIds: meshIds,
                         isObject: true
                     });
                     if (ctx.autoMetaModel) {
                         ctx.metaObjects.push({
-                            id: entityId,
+                            id: globalId,
                             type: "Default",
-                            name: entityId,
+                            name: globalId,
                             parent: ctx.sceneModel.id
                         });
                     }
