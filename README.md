@@ -102,9 +102,10 @@ and [OBJ](https://xeokit.github.io/xeokit-sdk/docs/class/src/plugins/OBJLoaderPl
 ````
 
 
+## Included Libraries
 
+This project includes the following third-party libraries:
 
+### html2canvas
 
-
-
-
+This project includes `html2canvas`, which is licensed under the MIT License. The compiled binaries are included in the `third_party/html2canvas` directory. The full text of the license is included in the `third_party/html2canvas/LICENSE` file.
