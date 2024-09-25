@@ -323,6 +323,7 @@ class LASLoaderPlugin extends Plugin {
      * @param {String} [params.src] Path to a LAS file, as an alternative to the ````las```` parameter.
      * @param {ArrayBuffer} [params.las] The LAS file data, as an alternative to the ````src```` parameter.
      * @param {Boolean} [params.loadMetadata=true] Whether to load metadata for the LAS model.
+     * @param {Boolean} [params.rotateX=false] Whether to rotate the LAS point positions 90 degrees. This is done to each point as it's loaded.
      * @param {Number[]} [params.origin=[0,0,0]] The model's World-space double-precision 3D origin. Use this to position the model within xeokit's World coordinate system, using double-precision coordinates.
      * @param {Number[]} [params.position=[0,0,0]] The model single-precision 3D position, relative to the ````origin```` parameter.
      * @param {Number[]} [params.scale=[1,1,1]] The model's scale.
