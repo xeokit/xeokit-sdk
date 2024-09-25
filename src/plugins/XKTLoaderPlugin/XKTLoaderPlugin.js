@@ -996,9 +996,9 @@ class XKTLoaderPlugin extends Plugin {
                         globalizeObjectIds: options.globalizeObjectIds
                     });
                     if (params.src) {
-                        this._loadModel(params.src, params, options, sceneModel, null, manifestCtx, finish, error);
+                        this._loadModel(params.src, options, sceneModel, null, manifestCtx, finish, error);
                     } else {
-                        this._parseModel(params.xkt, params, options, sceneModel, null, manifestCtx);
+                        this._parseModel(params.xkt, options, sceneModel, null, manifestCtx);
                         finish();
                     }
                 }, (errMsg) => {
@@ -1012,9 +1012,9 @@ class XKTLoaderPlugin extends Plugin {
                     globalizeObjectIds: options.globalizeObjectIds
                 });
                 if (params.src) {
-                    this._loadModel(params.src, params, options, sceneModel, null, manifestCtx, finish, error);
+                    this._loadModel(params.src, options, sceneModel, null, manifestCtx, finish, error);
                 } else {
-                    this._parseModel(params.xkt, params, options, sceneModel, null, manifestCtx);
+                    this._parseModel(params.xkt, options, sceneModel, null, manifestCtx);
                     finish();
                 }
             }
@@ -1023,9 +1023,9 @@ class XKTLoaderPlugin extends Plugin {
         } else {
 
             if (params.src) {
-                this._loadModel(params.src, params, options, sceneModel, metaModel, manifestCtx, finish, error);
+                this._loadModel(params.src, options, sceneModel, metaModel, manifestCtx, finish, error);
             } else if (params.xkt) {
-                this._parseModel(params.xkt, params, options, sceneModel, metaModel, manifestCtx);
+                this._parseModel(params.xkt, options, sceneModel, metaModel, manifestCtx);
                 finish();
             } else if (params.manifestSrc || params.manifest) {
                 const baseDir = params.manifestSrc ? getBaseDirectory(params.manifestSrc) : "";
@@ -1059,7 +1059,7 @@ class XKTLoaderPlugin extends Plugin {
                             done();
                         } else {
                             this._dataSource.getXKT(`${baseDir}${xktFiles[i]}`, (arrayBuffer) => {
-                                this._parseModel(arrayBuffer, params, options, sceneModel, null /* Ignore metamodel in XKT */, manifestCtx);
+                                this._parseModel(arrayBuffer, options, sceneModel, null /* Ignore metamodel in XKT */, manifestCtx);
                                 sceneModel.preFinalize();
                                 i++;
                                 this.scheduleTask(loadNext, 200);
@@ -1077,7 +1077,7 @@ class XKTLoaderPlugin extends Plugin {
                             done();
                         } else {
                             this._dataSource.getXKT(`${baseDir}${xktFiles[i]}`, (arrayBuffer) => {
-                                this._parseModel(arrayBuffer, params, options, sceneModel, metaModel, manifestCtx);
+                                this._parseModel(arrayBuffer, options, sceneModel, metaModel, manifestCtx);
                                 sceneModel.preFinalize();
                                 i++;
                                 this.scheduleTask(loadNext, 200);
@@ -1127,15 +1127,15 @@ class XKTLoaderPlugin extends Plugin {
         return sceneModel;
     }
 
-    _loadModel(src, params, options, sceneModel, metaModel, manifestCtx, done, error) {
-        this._dataSource.getXKT(params.src, (arrayBuffer) => {
-            this._parseModel(arrayBuffer, params, options, sceneModel, metaModel, manifestCtx);
+    _loadModel(src, options, sceneModel, metaModel, manifestCtx, done, error) {
+        this._dataSource.getXKT(src, (arrayBuffer) => {
+            this._parseModel(arrayBuffer, options, sceneModel, metaModel, manifestCtx);
             sceneModel.preFinalize();
             done();
         }, error);
     }
 
-    async _parseModel(arrayBuffer, params, options, sceneModel, metaModel, manifestCtx) {
+    async _parseModel(arrayBuffer, options, sceneModel, metaModel, manifestCtx) {
         if (sceneModel.destroyed) {
             return;
         }
