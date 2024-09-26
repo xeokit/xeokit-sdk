@@ -1,6 +1,7 @@
 import {math} from './math.js';
 
 const tempVec3a = math.vec3();
+const tempVec4  = math.vec4();
 
 /**
  * Given a view matrix and a relative-to-center (RTC) coordinate origin, returns a view matrix
@@ -129,7 +130,10 @@ function rtcToWorldPos(rtcCenter, rtcPos, worldPos) {
  * @param rtcPlanePos
  * @returns {*}
  */
-function getPlaneRTCPos(dist, dir, rtcCenter, rtcPlanePos) {
+function getPlaneRTCPos(dist, dir, rtcOrigin, rtcPlanePos, rotationMatrixConjugate) {
+    const rtcCenter = (rotationMatrixConjugate
+                       ? (tempVec4.set(rtcOrigin, 0), tempVec4[3] = 1, math.mulMat4v4(rotationMatrixConjugate, tempVec4, tempVec4))
+                       : rtcOrigin);
     const rtcCenterToPlaneDist = math.dotVec3(dir, rtcCenter) + dist;
     const dirNormalized = math.normalizeVec3(dir, tempVec3a);
     math.mulVec3Scalar(dirNormalized, -rtcCenterToPlaneDist, rtcPlanePos);
