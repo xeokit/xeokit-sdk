@@ -894,10 +894,8 @@ class XKTLoaderPlugin extends Plugin {
             delete params.id;
         }
 
-        if (!params.src && !params.xkt && !params.manifestSrc && !params.manifest) {
-            this.error("load() param expected: src, xkt, manifestSrc or manifestData");
-            return sceneModel; // Return new empty model
-        }
+        if (!params.src && !params.xkt && !params.manifestSrc && !params.manifest)
+            throw new Error("XKTLoaderPlugin: load() param expected: src, xkt, manifestSrc or manifestData");
 
         const options = {};
         const includeTypes = params.includeTypes || this._includeTypes;
