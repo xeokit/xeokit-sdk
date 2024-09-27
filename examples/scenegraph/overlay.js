@@ -1,4 +1,6 @@
-import { math, Mesh, PhongMaterial, ReadableGeometry, Texture } from "../../dist/xeokit-sdk.min.es.js";
+import {Marker, math} from "../../dist/xeokit-sdk.min.es.js";
+import {Dot} from "../../src/plugins/lib/html/Dot.js";
+
 
 const planeIntersect = function(p0, n, origin, direction) {
     const t = - (math.dotVec3(origin, n) - p0) / math.dotVec3(direction, n);
@@ -21,39 +23,6 @@ const transformToNode = function(from, to, vec) {
     vec[0] += fromRec.left - toRec.left;
     vec[1] += fromRec.top  - toRec.top;
 };
-
-import {Marker} from "../../src/viewer/scene/marker/Marker.js";
-import {Dot} from "../../src/plugins/lib/html/Dot.js";
-
-export const createOverlay = function(scene, src) {
-    const tex = new Texture(scene, { src: src });
-
-    const [ xmin, ymin, zmin, xmax, ymax, zmax ] = [ 0, 0, 0, 1, 0, 1 ];
-    const positions = [ xmin, ymax, zmax, xmax, ymax, zmax, xmax, ymax, zmin, xmin, ymax, zmin ];
-    const indices = [ 0, 1, 2, 0, 2, 3 ];
-
-    return new Mesh(scene, {
-        pickable: false,
-        geometry: new ReadableGeometry(
-            scene,
-            {
-                positions: positions,
-                indices:   indices,
-                normals:   math.buildNormals(positions, indices),
-                uv: [ 0, 1, 1, 1, 1, 0, 0, 0 ]
-            }),
-        material: new PhongMaterial(scene, {
-            alpha: 0.75,
-            diffuse:  [0, 0, 0],
-            ambient:  [0, 0, 0],
-            specular: [0, 0, 0],
-            diffuseMap:  tex,
-            emissiveMap: tex,
-            backfaces: true
-        })
-    });
-};
-
 
 export const setupOverlayAlignmentControl = function(viewer, overlay) {
 
@@ -280,4 +249,3 @@ export const setupOverlayAlignmentControl = function(viewer, overlay) {
         setStepRotation: v => stepRotation = v
     };
 };
-
