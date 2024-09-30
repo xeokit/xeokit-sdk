@@ -165,12 +165,13 @@
 
     });
 
-    const lasLoaderPlugin = new LASLoaderPlugin(viewer);
+    const lasLoaderPlugin = new LASLoaderPlugin(viewer, {
+        rotate: [-90, 0, 0] // Bake rotation into LAS points as they are loaded
+    });
 
     const lasSceneModel = lasLoaderPlugin.load({
         id: "myModel2",
-        src: "../../assets/models/las/example-no-1.laz",
-        rotate: [-90, 0, 0] // Bake rotation into LAS points as they are loaded
+        src: "../../assets/models/las/example-no-1.laz"
     });
 
     //------------------------------------------------------------------------------------------------------------------
