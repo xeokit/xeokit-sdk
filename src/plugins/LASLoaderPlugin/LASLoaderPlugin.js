@@ -212,6 +212,10 @@ class LASLoaderPlugin extends Plugin {
      * @param {Number} [cfg.skip=1] Configures LASLoaderPlugin to load every **n** points.
      * @param {Number} [cfg.fp64=false] Configures if LASLoaderPlugin assumes that LAS positions are stored in 64-bit floats instead of 32-bit.
      * @param {Number} [cfg.colorDepth=8] Configures whether LASLoaderPlugin assumes that LAS colors are encoded using 8 or 16 bits. Accepted values are 8, 16 an "auto".
+     * @param {Boolean} [cfg.center=false] Whether to center the LAS points.  Applied before "rotateX", "rotate" and "transform".
+     * @param {Boolean} [cfg.rotateX=false] Whether to rotate the LAS point positions 90 degrees. Applied after "center".
+     * @param {Number[]} [cfg.rotate=[0,0,0]] Rotations to immediately apply to the LAS points, given as Euler angles in degrees, for each of the X, Y and Z axis. Rotation is applied after "center" and "rotateX".
+     * @param {Number[]} [cfg.transform] 4x4 transform matrix to immediately apply to the LAS points. This is applied after "center", "rotateX" and "rotate". Typically used instead of "rotateX" and "rotate".
      */
     constructor(viewer, cfg = {}) {
 
@@ -221,6 +225,10 @@ class LASLoaderPlugin extends Plugin {
         this.skip = cfg.skip;
         this.fp64 = cfg.fp64;
         this.colorDepth = cfg.colorDepth;
+        this.center = cfg.center;
+        this.rotate = cfg.rotate;
+        this.rotateX = cfg.rotateX;
+        this.transform = cfg.transform;
     }
 
     /**
@@ -316,6 +324,106 @@ class LASLoaderPlugin extends Plugin {
     }
 
     /**
+     * Gets if LASLoaderPlugin immediately centers LAS positions.
+     *
+     * If this is ````true```` then centering is the first thing that happens to LAS positions as they are loaded.
+     *
+     * Default value is ````false````.
+     *
+     * @returns {Boolean} True if LASLoaderPlugin immediately centers LAS positions.
+     */
+    get center() {
+        return this._center;
+    }
+
+    /**
+     * Configures if LASLoaderPlugin immediately centers LAS positions.
+     *
+     * If this is ````true```` then centering is the first thing that happens to LAS positions as they are loaded.
+     *
+     * Default value is ````false````.
+     *
+     * @param {Boolean} value True if LASLoaderPlugin immediately centers LAS positions.
+     */
+    set center(value) {
+        this._center = !!value;
+    }
+
+    /**
+     * Gets the current transformation to apply to LAS positions as they are loaded.
+     *
+     * If this is ````true````, then LAS positions will be transformed after they are centered and rotated.
+     *
+     * Default value is null.
+     *
+     * @returns {Number[]|null} A 16-element array containing a 4x4 transformation matrix.
+     */
+    get transform() {
+        return this._transform;
+    }
+
+    /**
+     * Sets the current transformation to apply to LAS positions as they are loaded.
+     *
+     * If this is ````true````, then LAS positions will be transformed after they are centered and rotated.
+     *
+     * Default value is null.
+     *
+     * @param {Number[]|null} transform A 16-element array containing a 4x4 transformation matrix.
+     */
+    set transform(transform) {
+        this._transform = transform;
+    }
+
+    /**
+     * Gets the current rotations to apply to LAS positions as they are loaded.
+     *
+     * Rotations are an array of three Euler angles in degrees, for each of the X, Y and Z axis, applied in that order.
+     *
+     * Default value is null.
+     *
+     * @returns {Number[]|null} If defined, an array of three Euler angles in degrees, for each of the X, Y and Z axis. Null if undefined.
+     */
+    get rotate() {
+        return this._rotate;
+    }
+
+    /**
+     * Sets the current rotations to apply to LAS positions as they are loaded.
+     *
+     * Rotations are an array of three Euler angles in degrees, for each of the X, Y and Z axis, applied in that order.
+     *
+     * Default value is null.
+     *
+     * @param {Number[]|null} rotate Array of three Euler angles in degrees, for each of the X, Y and Z axis.
+     */
+    set rotate(rotate) {
+        this._rotate = rotate;
+    }
+
+    /**
+     * Gets if LAS positions are rotated 90 degrees about X as they are loaded.
+     *
+     * Default value is ````false````.
+     *
+     * @returns {*}
+     */
+    get rotateX() {
+        return this._rotateX;
+    }
+
+    /**
+     * Sets if LAS positions are rotated 90 degrees about X as they are loaded.
+     *
+     * Default value is ````false````.
+     *
+     * @param rotateX
+     */
+    set rotateX(rotateX) {
+        this._rotateX = rotateX;
+    }
+
+    /**
      * Loads an ````LAS```` model into this LASLoaderPlugin's {@link Viewer}.
      *
      * @param {*} params Loading parameters.
@@ -323,7 +431,6 @@ class LASLoaderPlugin extends Plugin {
      * @param {String} [params.src] Path to a LAS file, as an alternative to the ````las```` parameter.
      * @param {ArrayBuffer} [params.las] The LAS file data, as an alternative to the ````src```` parameter.
      * @param {Boolean} [params.loadMetadata=true] Whether to load metadata for the LAS model.
-     * @param {Boolean} [params.rotateX=false] Whether to rotate the LAS point positions 90 degrees. This is done to each point as it's loaded.
      * @param {Number[]} [params.origin=[0,0,0]] The model's World-space double-precision 3D origin. Use this to position the model within xeokit's World coordinate system, using double-precision coordinates.
      * @param {Number[]} [params.position=[0,0,0]] The model single-precision 3D position, relative to the ````origin```` parameter.
      * @param {Number[]} [params.scale=[1,1,1]] The model's scale.
@@ -395,15 +502,61 @@ class LASLoaderPlugin extends Plugin {
 
     _parseModel(arrayBuffer, params, options, sceneModel) {
 
-        function readPositions(attributesPosition) {
+        const readPositions = (attributesPosition) => {
             const positionsValue = attributesPosition.value;
-            if (params.rotateX) {
+            if (this._center) {
+                const centerPos = math.vec3();
+                const numPoints = positionsValue.length;
+                for (let i = 0, len = positionsValue.length; i < len; i += 3) {
+                    centerPos[0] += positionsValue[i + 0];
+                    centerPos[1] += positionsValue[i + 1];
+                    centerPos[2] += positionsValue[i + 2];
+                }
+                centerPos[0] /= numPoints;
+                centerPos[1] /= numPoints;
+                centerPos[2] /= numPoints;
+                for (let i = 0, len = positionsValue.length; i < len; i += 3) {
+                    positionsValue[i + 0] -= centerPos[0];
+                    positionsValue[i + 1] -= centerPos[1];
+                    positionsValue[i + 2] -= centerPos[2];
+                }
+            }
+            if (this._rotateX) {
                 if (positionsValue) {
                     for (let i = 0, len = positionsValue.length; i < len; i += 3) {
                         const temp = positionsValue[i + 1];
                         positionsValue[i + 1] = positionsValue[i + 2];
                         positionsValue[i + 2] = temp;
                     }
+                }
+            }
+            if (this._rotate) {
+                const quaternion = math.identityQuaternion();
+                const mat = math.mat4();
+                math.eulerToQuaternion(this._rotate, "XYZ", quaternion);
+                math.quaternionToRotationMat4(quaternion, mat);
+                const pos = math.vec3();
+                for (let i = 0, len = positionsValue.length; i < len; i += 3) {
+                    pos[0] = positionsValue[i + 0];
+                    pos[1] = positionsValue[i + 1];
+                    pos[2] = positionsValue[i + 2];
+                    math.transformPoint3(mat, pos, pos);
+                    positionsValue[i + 0] = pos[0];
+                    positionsValue[i + 1] = pos[1];
+                    positionsValue[i + 2] = pos[2];
+                }
+            }
+            if (this._transform) {
+                const mat = math.mat4(this._transform);
+                const pos = math.vec3();
+                for (let i = 0, len = positionsValue.length; i < len; i += 3) {
+                    pos[0] = positionsValue[i + 0];
+                    pos[1] = positionsValue[i + 1];
+                    pos[2] = positionsValue[i + 2];
+                    math.transformPoint3(mat, pos, pos);
+                    positionsValue[i + 0] = pos[0];
+                    positionsValue[i + 1] = pos[1];
+                    positionsValue[i + 2] = pos[2];
                 }
             }
             return positionsValue;
