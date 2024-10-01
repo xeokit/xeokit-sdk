@@ -19,6 +19,7 @@ import {SAO} from "../postfx/SAO.js";
 import {CrossSections} from "../postfx/CrossSections.js";
 import {PointsMaterial} from "../materials/PointsMaterial.js";
 import {LinesMaterial} from "../materials/LinesMaterial.js";
+import {SectionCaps} from '../sectionCaps/SectionCaps.js';
 
 // Enables runtime check for redundant calls to object state update methods, eg. Scene#_objectVisibilityUpdated
 const ASSERT_OBJECT_STATE_UPDATE = false;
@@ -887,6 +888,8 @@ class Scene extends Component {
             dontClear: true // Never destroy this component with Scene#clear();
         });
 
+        this._sectionCaps = new SectionCaps(this);
+
         // Default lights
 
         new AmbientLight(this, {
@@ -987,6 +990,10 @@ class Scene extends Component {
     // Methods below are called by various component types to register themselves on their
     // Scene. Violates Hollywood Principle, where we could just filter on type in _addComponent,
     // but this is faster than checking the type of each component in such a filter.
+
+    _capMaterialUpdated() {
+        this._sectionCaps._onCapMaterialUpdated();
+    }
 
     _sectionPlaneCreated(sectionPlane) {
         this.sectionPlanes[sectionPlane.id] = sectionPlane;
@@ -2796,6 +2803,9 @@ class Scene extends Component {
             }
         }
 
+        //destroy section caps separately because it's not a component
+        this._sectionCaps.destroy();
+
         this.canvas.gl = null;
 
         // Memory leak prevention
@@ -2818,6 +2828,7 @@ class Scene extends Component {
         this._highlightedObjectIds = null;
         this._selectedObjectIds = null;
         this._colorizedObjectIds = null;
+        this._sectionCaps = null;
         this.types = null;
         this.components = null;
         this.canvas = null;
