@@ -1605,7 +1605,7 @@ export class SceneModel extends Component {
         if (this._matrixDirty) {
             math.quaternionToRotationMat4(this._quaternion, this._worldRotationMatrix);
             math.conjugateQuaternion(this._quaternion, this._conjugateQuaternion);
-            math.quaternionToRotationMat4(this._quaternion, this._worldRotationMatrixConjugate);
+            math.quaternionToRotationMat4(this._conjugateQuaternion, this._worldRotationMatrixConjugate);
             this._matrix.set(this._worldRotationMatrix);
             math.translateMat4v(this._position, this._matrix);
             this._matrixDirty = false;

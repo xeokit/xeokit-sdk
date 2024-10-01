@@ -32,7 +32,7 @@ export class DTXTrianglesPickNormalsRenderer {
         const state = dataTextureLayer._state;
         const textureState = state.textureState;
         const origin = dataTextureLayer._state.origin;
-        const {rotationMatrixConjugate} = model;
+        const {rotationMatrix} = model;
 
         const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
         const projMatrix = frameCtx.pickProjMatrix || camera.projMatrix;
@@ -94,7 +94,7 @@ export class DTXTrianglesPickNormalsRenderer {
                         if (active) {
                             const sectionPlane = sectionPlanes[sectionPlaneIndex];
                             if (origin) {
-                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a, rotationMatrixConjugate);
+                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a, rotationMatrix);
                                 gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                             } else {
                                 gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
