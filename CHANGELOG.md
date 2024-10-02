@@ -1,5 +1,38 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.46](https://github.com/xeokit/xeokit-sdk/compare/v2.6.45...v2.6.46)
+
+### 2 October 2024
+
+-  Fix(vbo-layer) Fixing get each vertex api in VBOInstancingTrianglesLayer - [#1585](https://github.com/xeokit/xeokit-sdk/pull/1585)
+-  Fix rotation transformation in getEachVertex. - [#1685](https://github.com/xeokit/xeokit-sdk/pull/1685)
+-  [FIX] XKTLoaderPlugin returns sceneModel before it is defined - [#1682](https://github.com/xeokit/xeokit-sdk/pull/1682)
+
+# [v2.6.45](https://github.com/xeokit/xeokit-sdk/compare/v2.6.44...v2.6.45)
+
+### 30 September 2024
+
+-  [FEATURE] LASLoaderPlugin point transform options - [#1684](https://github.com/xeokit/xeokit-sdk/pull/1684)
+-  XEOK-17 Fix SectionPlanes for rotated models - [#1683](https://github.com/xeokit/xeokit-sdk/pull/1683)
+-  [FIX] Fixing the glbTreeViewPlugin.html behaviour by using autoMetaModel - [#1677](https://github.com/xeokit/xeokit-sdk/pull/1677)
+
+# [v2.6.44](https://github.com/xeokit/xeokit-sdk/compare/v2.6.43...v2.6.44)
+
+### 25 September 2024
+
+-  API documentation fix - [#1681](https://github.com/xeokit/xeokit-sdk/pull/1681)
+-  [IMPROVEMENT]: Simpler and more robust obtention of mouse canvas coordinates - [#1679](https://github.com/xeokit/xeokit-sdk/pull/1679)
+-  XCD-159 Optionally globalize GLTF's entityId - [#1680](https://github.com/xeokit/xeokit-sdk/pull/1680)
+-  XCD-158 Demonstrate Zone hiding and showing with an example - [#1678](https://github.com/xeokit/xeokit-sdk/pull/1678)
+-  [FIX] Fix snapshots in presence of multiple plugins - [#1676](https://github.com/xeokit/xeokit-sdk/pull/1676)
+-  [FIX] Fill empty name of property sets for elements in DotBIMLoaderPlugin - [#1675](https://github.com/xeokit/xeokit-sdk/pull/1675)
+-  Copy SceneModelMesh::aabb before translating by origin - [#1674](https://github.com/xeokit/xeokit-sdk/pull/1674)
+-  XEOK-115 Fix object.numPrimitives and numTriangles are NaN #1671 - [#1673](https://github.com/xeokit/xeokit-sdk/pull/1673)
+-  XEOK-114 Fix wrong aabb value after rotating a model - [#1670](https://github.com/xeokit/xeokit-sdk/pull/1670)
+-  Update indeterminate state in TreeViewPlugin - [#1663](https://github.com/xeokit/xeokit-sdk/pull/1663)
+-  Add submenu position attribute on the li tag containing a submenu - [#1668](https://github.com/xeokit/xeokit-sdk/pull/1668)
+-  Return created SceneModelEntity in SceneModel.createEntity method - [#1669](https://github.com/xeokit/xeokit-sdk/pull/1669)
+
 # [v2.6.43](https://github.com/xeokit/xeokit-sdk/compare/v2.6.42...v2.6.43)
 
 ### 12 September 2024
