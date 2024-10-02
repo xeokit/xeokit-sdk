@@ -96,7 +96,7 @@ export class VBOInstancingLinesSnapRenderer extends VBORenderer {
         let offset = 0;
         const mat4Size = 4 * 4;
 
-        this._matricesUniformBlockBufferData.set(rotationMatrixConjugate, 0);
+        this._matricesUniformBlockBufferData.set(rotationMatrix, 0);
         this._matricesUniformBlockBufferData.set(rtcViewMatrix, offset += mat4Size);
         this._matricesUniformBlockBufferData.set(camera.projMatrix, offset += mat4Size);
         this._matricesUniformBlockBufferData.set(state.positionsDecodeMatrix, offset += mat4Size);

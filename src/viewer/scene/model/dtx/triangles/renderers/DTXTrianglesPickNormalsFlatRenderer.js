@@ -99,7 +99,7 @@ export class DTXTrianglesPickNormalsFlatRenderer {
         }
         gl.uniform2fv(this._uPickClipPos, frameCtx.pickClipPos);
         gl.uniform2f(this._uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
-        gl.uniformMatrix4fv(this._uSceneModelMatrix, false, rotationMatrixConjugate);
+        gl.uniformMatrix4fv(this._uSceneModelMatrix, false, rotationMatrix);
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
         gl.uniformMatrix4fv(this._uProjMatrix, false, projMatrix);
         gl.uniform3fv(this._uCameraEyeRtc, rtcCameraEye);
@@ -123,7 +123,7 @@ export class DTXTrianglesPickNormalsFlatRenderer {
                         if (active) {
                             const sectionPlane = sectionPlanes[sectionPlaneIndex];
                             if (origin) {
-                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a, rotationMatrixConjugate);
+                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a, rotationMatrix);
                                 gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                             } else {
                                 gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
