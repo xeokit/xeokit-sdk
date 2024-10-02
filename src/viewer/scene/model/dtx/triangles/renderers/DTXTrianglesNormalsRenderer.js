@@ -84,7 +84,7 @@ export class DTXTrianglesNormalsRenderer {
 
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniformMatrix4fv(this._uWorldMatrix, false, rotationMatrixConjugate);
+        gl.uniformMatrix4fv(this._uWorldMatrix, false, rotationMatrix);
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
         gl.uniformMatrix4fv(this._uProjMatrix, false, camera.projMatrix);
 
@@ -106,7 +106,7 @@ export class DTXTrianglesNormalsRenderer {
                         if (active) {
                             const sectionPlane = sectionPlanes[sectionPlaneIndex];
                             if (origin) {
-                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
+                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a, rotationMatrix);
                                 gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                             } else {
                                 gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);

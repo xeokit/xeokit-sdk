@@ -10,6 +10,7 @@ import { VBOSceneModel } from "../models/VBOSceneModel/VBOSceneModel";
 import { Mesh } from "../mesh";
 import { Node } from "../nodes";
 import { Input } from "../input/input";
+import { SectionPlane } from "../sectionPlane/SectionPlane";
 
 export declare type TickEvent = {
   /** The ID of this Scene. */
@@ -74,6 +75,20 @@ export declare class Scene extends Component {
    */
    on(event: "tick", callback: (tickEvent: TickEvent) => void, scope?: any): string;
 
+   /**
+   * Fires when a section plane is created.
+   * @param {String} event The sectionPlaneCreated event
+   * @param {Function} callback Callback fired on the event
+   */
+   on(event: "sectionPlaneCreated", callback: (measurement: SectionPlane) => void): void;
+
+   /**
+    * Fires when a measurement is destroyed.
+    * @param {String} event The sectionPlaneDestroyed event
+    * @param {Function} callback Callback fired on the event
+    */
+   on(event: "sectionPlaneDestroyed", callback: (measurement: SectionPlane) => void): void;
+
   /**
    * The epoch time (in milliseconds since 1970) when this Scene was instantiated.
    */
@@ -95,6 +110,14 @@ export declare class Scene extends Component {
    * @type {{String:Entity}}
    */
   get objects(): {[key: string]: Entity};
+
+  /**
+   * Map of {@link SectionPlane}s that represent sliced section planes.
+   *
+   * Each {@link SectionPlane} is mapped here by {@link SectionPlane.id}.
+   * @type {{String:SectionPlane}}
+   */
+  get sectionPlanes(): { [key: string]: SectionPlane };
 
   /**
    * Map of currently visible {@link Entity}s that represent objects.

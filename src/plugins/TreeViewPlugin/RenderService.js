@@ -135,11 +135,17 @@ export class RenderService {
     return element.checked;
   }
 
-  setCheckbox(nodeId, checked) {
+  setCheckbox(nodeId, checked, indeterminate = false) {
     const checkbox = document.getElementById(`checkbox-${nodeId}`);
     if (checkbox) {
       if (checked !== checkbox.checked) {
         checkbox.checked = checked;
+      }
+      if (indeterminate !== checkbox.indeterminate) {
+        checkbox.indeterminate = indeterminate;
+        if (indeterminate) {
+          checkbox.checked = false;
+        }
       }
     }
   }

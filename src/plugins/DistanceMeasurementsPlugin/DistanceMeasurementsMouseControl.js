@@ -82,7 +82,6 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
 
     _initMarkerDiv() {
         const markerDiv = document.createElement('div');
-        markerDiv.setAttribute('id', 'myMarkerDiv');
         const canvas = this.scene.canvas.canvas;
         canvas.parentNode.insertBefore(markerDiv, canvas);
         markerDiv.style.background = "black";
@@ -102,9 +101,8 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
 
     _destroyMarkerDiv() {
         if (this._markerDiv) {
-            const element = document.getElementById('myMarkerDiv')
-            element.parentNode.removeChild(element)
-            this._markerDiv = null
+            this._markerDiv.parentNode.removeChild(this._markerDiv);
+            this._markerDiv = null;
         }
     }
 

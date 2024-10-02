@@ -41,7 +41,7 @@ export class VBOBatchingTrianglesLayer {
      */
     constructor(cfg) {
 
-        console.info("Creating VBOBatchingTrianglesLayer");
+     //   console.info("Creating VBOBatchingTrianglesLayer");
 
         /**
          * Owner model
@@ -816,18 +816,24 @@ export class VBOBatchingTrianglesLayer {
             return;
         }
         const positions = portion.quantizedPositions;
-        const origin = state.origin;
-        const offsetX = origin[0] ;
-        const offsetY = origin[1] ;
-        const offsetZ = origin[2] ;
+        const sceneModelMatrix = this.model.matrix;
+        const origin = math.vec4();
+        origin.set(state.origin, 0);
+        origin[3] = 1;
+        math.mulMat4v4(sceneModelMatrix, origin, origin);
+        const offsetX = origin[0];
+        const offsetY = origin[1];
+        const offsetZ = origin[2];
         const worldPos = tempVec4a;
+        const positionsDecodeMatrix = state.positionsDecodeMatrix;
         for (let i = 0, len = positions.length; i < len; i += 3) {
             worldPos[0] = positions[i];
             worldPos[1] = positions[i + 1];
             worldPos[2] = positions[i + 2];
             worldPos[3] = 1.0;
-            math.decompressPosition(worldPos, state.positionsDecodeMatrix);
-            math.transformPoint4(this.model.worldMatrix, worldPos);
+            math.decompressPosition(worldPos, positionsDecodeMatrix);
+            worldPos[3] = 1;
+            math.mulMat4v4(sceneModelMatrix, worldPos, worldPos);
             worldPos[0] += offsetX;
             worldPos[1] += offsetY;
             worldPos[2] += offsetZ;
@@ -870,14 +876,21 @@ export class VBOBatchingTrianglesLayer {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
+        const useAlphaCutoff = this._state.textureSet && (typeof(this._state.textureSet.alphaCutoff) === "number");
         if (frameCtx.withSAO && this.model.saoEnabled) {
             if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported) {
                 if (this._renderers.pbrRendererWithSAO) {
                     this._renderers.pbrRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
             } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
-                if (this._renderers.colorTextureRendererWithSAO) {
-                    this._renderers.colorTextureRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                if (useAlphaCutoff) {
+                    if (this._renderers.colorTextureRendererWithSAOAlphaCutoff) {
+                        this._renderers.colorTextureRendererWithSAOAlphaCutoff.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
+                } else {
+                    if (this._renderers.colorTextureRendererWithSAO) {
+                        this._renderers.colorTextureRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
                 }
             } else if (this._state.normalsBuf) {
                 if (this._renderers.colorRendererWithSAO) {
@@ -894,8 +907,14 @@ export class VBOBatchingTrianglesLayer {
                     this._renderers.pbrRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
             } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
-                if (this._renderers.colorTextureRenderer) {
-                    this._renderers.colorTextureRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                if (useAlphaCutoff) {
+                    if (this._renderers.colorTextureRendererAlphaCutoff) {
+                        this._renderers.colorTextureRendererAlphaCutoff.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
+                } else {
+                    if (this._renderers.colorTextureRenderer) {
+                        this._renderers.colorTextureRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
                 }
             } else if (this._state.normalsBuf) {
                 if (this._renderers.colorRenderer) {
@@ -932,8 +951,15 @@ export class VBOBatchingTrianglesLayer {
                 this._renderers.pbrRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
             }
         } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
-            if (this._renderers.colorTextureRenderer) {
-                this._renderers.colorTextureRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+            const useAlphaCutoff = this._state.textureSet && (typeof(this._state.textureSet.alphaCutoff) === "number");
+            if (useAlphaCutoff) {
+                if (this._renderers.colorTextureRendererAlphaCutoff) {
+                    this._renderers.colorTextureRendererAlphaCutoff.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+                }
+            } else {
+                if (this._renderers.colorTextureRenderer) {
+                    this._renderers.colorTextureRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
+                }
             }
         } else if (this._state.normalsBuf) {
             if (this._renderers.colorRenderer) {

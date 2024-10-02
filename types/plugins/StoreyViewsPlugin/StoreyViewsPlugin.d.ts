@@ -6,6 +6,8 @@ import { StoreyMap } from "./StoreyMap";
 export declare type StoreyViewsPluginConfiguration = {
   /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
   id?: string;
+  /** Optional configuration, if enabled, the elements of each floor map image will be proportionally resized to encompass the entire image. This leads to varying scales among different floor map images. If disabled, each floor map image will display the model's extents, ensuring a consistent scale across all images */
+  fitStoreyMaps? : Boolean;
 };
 
 /**
@@ -115,6 +117,23 @@ export declare class StoreyViewsPlugin extends Plugin {
     * @returns {String} ID of the storey containing the position, or null if the position falls outside all the storeys.
     */
   getStoreyContainingWorldPos(worldPos: number[]): string;
+
+  /**
+   * Gets the ID of the storey which's bounding box contains the y point of the world position
+   * 
+   * @param {Number[]} worldPos 3D World-space position.
+   * @returns {String} ID of the storey containing the position, or null if the position falls outside all the storeys.
+   */
+  getStoreyInVerticalRange(worldPos: number[]): string;
+
+
+  /**
+   * Returns whether a position is above or below a building
+   * 
+   * @param {Number[]} worldPos 3D World-space position.
+   * @returns {String} ID of the lowest/highest story or null.
+   */
+  isPositionAboveOrBelowBuilding(worldPos: number[]): string;
 
   /**
    * Converts a 3D World-space position to a 2D position within a StoreyMap image.

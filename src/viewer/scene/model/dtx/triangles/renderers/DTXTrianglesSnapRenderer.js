@@ -115,7 +115,7 @@ export class DTXTrianglesSnapRenderer {
         gl.uniform3fv(this._uCoordinateScaler, coordinateScaler);
         gl.uniform1i(this._uRenderPass, renderPass);
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
-        gl.uniformMatrix4fv(this._uSceneModelMatrix, false, rotationMatrixConjugate);
+        gl.uniformMatrix4fv(this._uSceneModelMatrix, false, rotationMatrix);
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
         gl.uniformMatrix4fv(this._uProjMatrix, false, camera.projMatrix);
         if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
@@ -137,7 +137,7 @@ export class DTXTrianglesSnapRenderer {
                         if (active) {
                             const sectionPlane = sectionPlanes[sectionPlaneIndex];
                             if (origin) {
-                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
+                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a, rotationMatrix);
                                 gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                             } else {
                                 gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -310,6 +310,14 @@ export class DTXTrianglesSnapRenderer {
         // get flags & flags2
         src.push("uvec4 flags = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);");
         src.push("uvec4 flags2 = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);");
+
+        // flags.w = NOT_RENDERED | PICK
+        // renderPass = PICK
+
+        src.push(`if (int(flags.w) != renderPass) {`);
+        src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
+        src.push("   return;"); // Cull vertex
+        src.push("}");
 
         src.push("{");
 

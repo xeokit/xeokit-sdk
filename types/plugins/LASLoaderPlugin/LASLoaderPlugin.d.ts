@@ -1,4 +1,4 @@
-import { Entity, Plugin, Viewer } from "../../viewer";
+import { Entity, Plugin, SceneModel, Viewer } from "../../viewer";
 import { ModelStats } from "../index";
 
 export declare interface ILASDefaultDataSource {
@@ -23,6 +23,14 @@ export declare type LASLoaderPluginConfiguration = {
   fp64?: number;
   /** Configures whether LASLoaderPlugin assumes that LAS colors are encoded using 8 or 16 bits. Accepted values are 8, 16 an "auto". */
   colorDepth?: 8 | 16 | "auto";
+    /** Whether to center the LAS points. Applied before "rotateX", "rotate" and "transform".  */
+    center?: boolean;
+    /** Whether to rotate the LAS point positions 90 degrees. Applied after "center". */
+    rotateX?: boolean;
+    /** Rotations to apply to the LAS points, given as Euler angles in degrees, for each of the X, Y and Z axis. Rotation is applied after "center" and "rotateX".*/
+    rotate?: number[];
+    /** 4x4 transform matrix to immediately apply to the LAS points. This is applied after "center", "rotateX" and "rotate". Typically used instead of "rotateX" and "rotate". */
+    transform?: number[];
 };
 
 export declare type LoadLASModel = {
@@ -32,6 +40,10 @@ export declare type LoadLASModel = {
   src?: string;
   /** The LAS file data, as an alternative to the ````src```` parameter. */
   las?: ArrayBuffer;
+  /** Create entity with this id */
+  entityId?: string;
+  /** Creates a MetaModel from json */
+  metaModelJSON?: any;
   /** Whether to load metadata for the LAS model. */
   loadMetadata?: boolean;
   /** The model's World-space double-precision 3D origin. Use this to position the model within xeokit's World coordinate system, using double-precision coordinates. */
@@ -85,7 +97,7 @@ export declare class LASLoaderPlugin extends Plugin {
    *
    * @param {Number} value The **n**th point that LASLoaderPlugin will read.
    */
-  set skip(arg: number);
+  set skip(value: number);
 
   /**
    * When LASLoaderPlugin is configured to load every **n** points, returns the value of **n**.
@@ -103,7 +115,7 @@ export declare class LASLoaderPlugin extends Plugin {
    *
    * @param {Boolean} value True if LASLoaderPlugin assumes that positions are stored in 64-bit floats instead of 32-bit.
    */
-  set fp64(arg: boolean);
+  set fp64(value: boolean);
 
   /**
    * Gets if LASLoaderPlugin assumes that LAS positions are stored in 64-bit floats instead of 32-bit.
@@ -123,8 +135,8 @@ export declare class LASLoaderPlugin extends Plugin {
    *
    * @param {Number|String} value Valid values are 8, 16 and "auto".
    */
-  set colorDepth(arg: 8 | 16 | "auto");
-  
+  set colorDepth(value: 8 | 16 | "auto");
+
   /**
    * Gets whether LASLoaderPlugin assumes that LAS colors are encoded using 8 or 16 bits.
    *
@@ -135,12 +147,94 @@ export declare class LASLoaderPlugin extends Plugin {
    * @returns {Number|String} Possible returned values are 8, 16 and "auto".
    */
   get colorDepth(): 8 | 16 | "auto";
-  
+
+  /**
+   * Gets if LASLoaderPlugin immediately centers LAS positions.
+   *
+   * If this is ````true```` then centering is the first thing that happens to LAS positions as they are loaded.
+   *
+   * Default value is ````false````.
+   *
+   * @returns {Boolean} True if LASLoaderPlugin immediately centers LAS positions.
+   */
+  get center():number[];
+
+  /**
+   * Configures if LASLoaderPlugin immediately centers LAS positions.
+   *
+   * If this is ````true```` then centering is the first thing that happens to LAS positions as they are loaded.
+   *
+   * Default value is ````false````.
+   *
+   * @param {Boolean} value True if LASLoaderPlugin immediately centers LAS positions.
+   */
+  set center(value:number[]);
+
+  /**
+   * Gets the current transformation to apply to LAS positions as they are loaded.
+   *
+   * If this is ````true```` then LAS positions will be transformed right after they are centered.
+   *
+   * Default value is null.
+   *
+   * @returns {Number[]|null} A 16-element array containing a 4x4 transformation matrix.
+   */
+  get transform(): number[];
+
+  /**
+   * Sets the current transformation to apply to LAS positions as they are loaded.
+   *
+   * Default value is null.
+   *
+   * @param {Number[]|null} transform A 16-element array containing a 4x4 transformation matrix.
+   */
+  set transform(transform: number[]);
+
+  /**
+   * Gets the current rotations to apply to LAS positions as they are loaded.
+   *
+   * Rotations are an array of three Euler angles in degrees, for each of the X, Y and Z axis, applied in that order.
+   *
+   * Default value is null.
+   *
+   * @returns {Number[]|null} If defined, an array of three Euler angles in degrees, for each of the X, Y and Z axis. Null if undefined.
+   */
+  get rotate():number[];
+
+  /**
+   * Sets the current rotations to apply to LAS positions as they are loaded.
+   *
+   * Rotations are an array of three Euler angles in degrees, for each of the X, Y and Z axis, applied in that order.
+   *
+   * Default value is null.
+   *
+   * @param {Number[]|null} rotate Array of three Euler angles in degrees, for each of the X, Y and Z axis.
+   */
+  set rotate(rotate:number[]) ;
+
+  /**
+   * Gets if LAS positions are rotated 90 degrees about X as they are loaded.
+   *
+   * Default value is ````false````.
+   *
+   * @returns {*}
+   */
+  get rotateX() :boolean;
+
+  /**
+   * Sets if LAS positions are rotated 90 degrees about X as they are loaded.
+   *
+   * Default value is ````false````.
+   *
+   * @param rotateX
+   */
+  set rotateX(rotateX:boolean);
+
   /**
    * Loads an ````LAS```` model into this LASLoaderPlugin's {@link Viewer}.
    *
    * @param {LoadLASModel} params Loading parameters.
    * @returns {SceneModel} SceneModel representing the model, which will have {@link Entity.isModel} set ````true```` and will be registered by {@link Entity.id} in {@link Scene.models}.
    */
-  load(params?: LoadLASModel): Entity;
+  load(params?: LoadLASModel): SceneModel;
 }

@@ -4,6 +4,8 @@ import { Viewer } from "../../viewer/Viewer";
 export declare type FastNavPluginConfiguration = {
   /** Optional ID for this plugin, so that we can find it within {@link Viewer.plugins}. */
   id?: string;
+  /** Whether to temporarily hide color textures whenever we interact with the Viewer. */
+  hideColorTexture?: boolean;
   /** Whether to temporarily hide physically-based rendering (PBR) whenever we interact with the Viewer. */
   hidePBR?: boolean;
   /** Whether to temporarily hide scalable ambient occlusion (SAO) whenever we interact with the Viewer. */

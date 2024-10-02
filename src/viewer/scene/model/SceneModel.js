@@ -1155,7 +1155,10 @@ export class SceneModel extends Component {
         this._meshList = [];
 
         this.layerList = []; // For GL state efficiency when drawing, InstancingLayers are in first part, BatchingLayers are in second
+        this._layersToFinalize = [];
+
         this._entityList = [];
+        this._entitiesToFinalize = [];
 
         this._geometries = {};
         this._dtxBuckets = {}; // Geometries with optimizations used for data texture representation
@@ -1231,6 +1234,7 @@ export class SceneModel extends Component {
         this._numTriangles = 0;
         this._numLines = 0;
         this._numPoints = 0;
+        this._layersFinalized = false;
 
         this._edgeThreshold = cfg.edgeThreshold || 10;
 
@@ -1601,7 +1605,7 @@ export class SceneModel extends Component {
         if (this._matrixDirty) {
             math.quaternionToRotationMat4(this._quaternion, this._worldRotationMatrix);
             math.conjugateQuaternion(this._quaternion, this._conjugateQuaternion);
-            math.quaternionToRotationMat4(this._quaternion, this._worldRotationMatrixConjugate);
+            math.quaternionToRotationMat4(this._conjugateQuaternion, this._worldRotationMatrixConjugate);
             this._matrix.set(this._worldRotationMatrix);
             math.translateMat4v(this._position, this._matrix);
             this._matrixDirty = false;
@@ -2501,7 +2505,21 @@ export class SceneModel extends Component {
         if (cfg.image) { // Ignore transcoder for Images
             const image = cfg.image;
             image.crossOrigin = "Anonymous";
-            texture.setImage(image, {minFilter, magFilter, wrapS, wrapT, wrapR, flipY: cfg.flipY, encoding});
+            if (image.compressed) {
+                // see `parsedImage` in @loaders.gl/gltf/src/lib/parsers/parse-gltf.ts
+                // NOTE: @loaders.gl in its current version discards potential mipmaps, leaving only a single one
+                const data = image.data;
+                texture.setCompressedData({
+                    mipmaps: data,
+                    props: {
+                        format: data[0].format,
+                        minFilter: minFilter,
+                        magFilter: magFilter
+                    }
+                });
+            } else {
+                texture.setImage(image, {minFilter, magFilter, wrapS, wrapT, wrapR, flipY: cfg.flipY, encoding});
+            }
         } else if (cfg.src) {
             const ext = cfg.src.split('.').pop();
             switch (ext) { // Don't transcode recognized image file types
@@ -2640,6 +2658,7 @@ export class SceneModel extends Component {
             id: textureSetId,
             model: this,
             colorTexture,
+            alphaCutoff: cfg.alphaCutoff,
             metallicRoughnessTexture,
             normalsTexture,
             emissiveTexture,
@@ -3073,6 +3092,14 @@ export class SceneModel extends Component {
         return this._createMesh(cfg);
     }
 
+    _createDefaultIndices(numIndices) {
+        const indices = [];
+        for (let i = 0; i < numIndices; i++) {
+            indices.push(i);
+        }
+        return indices;
+    }
+
     _createMesh(cfg) {
         const mesh = new SceneModelMesh(this, cfg.id, cfg.color, cfg.opacity, cfg.transform, cfg.textureSet);
         mesh.pickId = this.scene._renderer.getPickID(mesh);
@@ -3102,6 +3129,7 @@ export class SceneModel extends Component {
             cfg.meshMatrix = cfg.transform.worldMatrix;
         }
         mesh.portionId = mesh.layer.createPortion(mesh, cfg);
+        mesh.numPrimitives = cfg.numPrimitives;
         this._meshes[cfg.id] = mesh;
         this._unusedMeshes[cfg.id] = mesh;
         this._meshList.push(mesh);
@@ -3172,7 +3200,7 @@ export class SceneModel extends Component {
         let dtxLayer = this._dtxLayers[layerId];
         if (dtxLayer) {
             if (!dtxLayer.canCreatePortion(cfg)) {
-                dtxLayer.finalize();
+                //  dtxLayer.finalize();
                 delete this._dtxLayers[layerId];
                 dtxLayer = null;
             } else {
@@ -3193,6 +3221,7 @@ export class SceneModel extends Component {
         }
         this._dtxLayers[layerId] = dtxLayer;
         this.layerList.push(dtxLayer);
+        this._layersToFinalize.push(dtxLayer);
         return dtxLayer;
     }
 
@@ -3299,6 +3328,7 @@ export class SceneModel extends Component {
         }
         this._vboBatchingLayers[layerId] = vboBatchingLayer;
         this.layerList.push(vboBatchingLayer);
+        this._layersToFinalize.push(vboBatchingLayer);
         return vboBatchingLayer;
     }
 
@@ -3391,6 +3421,7 @@ export class SceneModel extends Component {
         }
         this._vboInstancingLayers[layerId] = vboInstancingLayer;
         this.layerList.push(vboInstancingLayer);
+        this._layersToFinalize.push(vboInstancingLayer);
         return vboInstancingLayer;
     }
 
@@ -3462,7 +3493,7 @@ export class SceneModel extends Component {
             flags = flags | ENTITY_FLAGS.SELECTED;
         }
         cfg.flags = flags;
-        this._createEntity(cfg);
+        return this._createEntity(cfg);
     }
 
     _createEntity(cfg) {
@@ -3491,38 +3522,48 @@ export class SceneModel extends Component {
             lodCullable); // Internally sets SceneModelEntity#parent to this SceneModel
         this._entityList.push(entity);
         this._entities[cfg.id] = entity;
+        this._entitiesToFinalize.push(entity);
         this.numEntities++;
+        return entity;
     }
 
     /**
-     * Finalizes this SceneModel.
-     *
-     * Once finalized, you can't add anything more to this SceneModel.
+     * Pre-renders all meshes that have been added, even if the SceneModel has not bee finalized yet.
+     * This is use for progressively showing the SceneModel while it is being loaded or constructed.
+     * @returns {boolean}
      */
-    finalize() {
+    preFinalize() {
         if (this.destroyed) {
-            return;
+            return false;
+        }
+        if (this._layersToFinalize.length === 0) {
+            return false;
         }
         this._createDummyEntityForUnusedMeshes();
-        for (let i = 0, len = this.layerList.length; i < len; i++) {
-            const layer = this.layerList[i];
+        for (let i = 0, len = this._layersToFinalize.length; i < len; i++) {
+            const layer = this._layersToFinalize[i];
             layer.finalize();
         }
-        this._geometries = {};
-        this._dtxBuckets = {};
-        this._textures = {};
-        this._textureSets = {};
-        this._dtxLayers = {};
-        this._vboInstancingLayers = {};
         this._vboBatchingLayers = {};
-        for (let i = 0, len = this._entityList.length; i < len; i++) {
-            const entity = this._entityList[i];
+        this._vboInstancingLayers = {};
+        this._dtxLayers = {};
+        this._layersToFinalize = [];
+        for (let i = 0, len = this._entitiesToFinalize.length; i < len; i++) {
+            const entity = this._entitiesToFinalize[i];
             entity._finalize();
         }
-        for (let i = 0, len = this._entityList.length; i < len; i++) {
-            const entity = this._entityList[i];
+        for (let i = 0, len = this._entitiesToFinalize.length; i < len; i++) {
+            const entity = this._entitiesToFinalize[i];
             entity._finalize2();
         }
+        this._entitiesToFinalize = [];
+        this.scene._aabbDirty = true;
+        this._viewMatrixDirty = true;
+        this._matrixDirty = true;
+        this._aabbDirty = true;
+        this._setWorldMatrixDirty();
+        this._sceneModelDirty();
+        this.position = this._position;
         // Sort layers to reduce WebGL shader switching when rendering them
         this.layerList.sort((a, b) => {
             if (a.sortId < b.sortId) {
@@ -3538,15 +3579,23 @@ export class SceneModel extends Component {
             layer.layerIndex = i;
         }
         this.glRedraw();
-        this.scene._aabbDirty = true;
-        this._viewMatrixDirty = true;
-        this._matrixDirty = true;
-        this._aabbDirty = true;
+        this._layersFinalized = true;
+    }
 
-        this._setWorldMatrixDirty();
-        this._sceneModelDirty();
-
-        this.position = this._position;
+    /**
+     * Finalizes this SceneModel.
+     *
+     * Once finalized, you can't add anything more to this SceneModel.
+     */
+    finalize() {
+        if (this.destroyed) {
+            return;
+        }
+        this.preFinalize();
+        this._geometries = {};
+        this._dtxBuckets = {};
+        this._textures = {};
+        this._textureSets = {};
     }
 
     /** @private */
@@ -3584,7 +3633,7 @@ export class SceneModel extends Component {
     _createDummyEntityForUnusedMeshes() {
         const unusedMeshIds = Object.keys(this._unusedMeshes);
         if (unusedMeshIds.length > 0) {
-            const entityId = `${this.id}-dummyEntityForUnusedMeshes`;
+            const entityId = `${this.id}-${math.createUUID()}`;
             this.warn(`Creating dummy SceneModelEntity "${entityId}" for unused SceneMeshes: [${unusedMeshIds.join(",")}]`)
             this.createEntity({
                 id: entityId,
@@ -3956,6 +4005,7 @@ export class SceneModel extends Component {
         for (let i = 0, len = this._entityList.length; i < len; i++) {
             this._entityList[i]._destroy();
         }
+        this._layersToFinalize = {};
         // Object.entries(this._geometries).forEach(([id, geometry]) => {
         //     geometry.destroy();
         // });

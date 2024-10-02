@@ -7,6 +7,8 @@ export declare type ContextMenuConfiguration = {
   enabled?: boolean;
   /** Whether this ````ContextMenu```` automatically hides whenever we mouse-down or tap anywhere in the page. */
   hideOnMouseDown?: boolean;
+  /** Whether this ````ContextMenu```` automatically hides whenever we call its action. */
+  hideOnAction?: boolean;
 };
 
 /**

@@ -1,5 +1,141 @@
 ## xeokit-sdk Changelog
 
+# [v2.6.43](https://github.com/xeokit/xeokit-sdk/compare/v2.6.42...v2.6.43)
+
+### 12 September 2024
+
+-  XCD-155 Fix missing touchPointSelector - [#1666](https://github.com/xeokit/xeokit-sdk/pull/1666)
+-  fix: use css class to mark submenu - [#1662](https://github.com/xeokit/xeokit-sdk/pull/1662)
+-  XEOK-111 Prevent LASLoaderPlugin infinite loop - [#1661](https://github.com/xeokit/xeokit-sdk/pull/1661)
+-  chore: disable dtx console.info logs which slow down render - [#1660](https://github.com/xeokit/xeokit-sdk/pull/1660)
+
+# [v2.6.42](https://github.com/xeokit/xeokit-sdk/compare/v2.6.41...v2.6.42)
+
+### 9 September 2024
+
+-  XEOK-87 Fix handling of big las models - [#1658](https://github.com/xeokit/xeokit-sdk/pull/1658)
+-  Update classes to be documentation friendly - [#1657](https://github.com/xeokit/xeokit-sdk/pull/1657)
+
+# [v2.6.41](https://github.com/xeokit/xeokit-sdk/compare/v2.6.38...v2.6.41)
+
+### 4 September 2024
+
+-  Fix ShowNode method in TreeViewPlugin does not collapse the tree - [#1650](https://github.com/xeokit/xeokit-sdk/pull/1650)
+-  XCD-147 Implement an example of annotation touch create - [#1654](https://github.com/xeokit/xeokit-sdk/pull/1654)
+-  XCD-145 Fix GLTFLoaderPlugin KTX loading - [#1653](https://github.com/xeokit/xeokit-sdk/pull/1653)
+-  Fix: update VBOBatchingTrianglesBuffer constructor  - [#1648](https://github.com/xeokit/xeokit-sdk/pull/1648)
+-  Updated FastNavPlugin type definitions - [#1649](https://github.com/xeokit/xeokit-sdk/pull/1649)
+-  Add navigation examples - [#1647](https://github.com/xeokit/xeokit-sdk/pull/1647)
+-  Removed implementation of visible and hidden classes - [#1646](https://github.com/xeokit/xeokit-sdk/pull/1646)
+-  Wrong id passed to collapseNode method - [#1644](https://github.com/xeokit/xeokit-sdk/pull/1644)
+-  [FIX] Undefined metadata in DotBIMLoaderPlugin - [#1643](https://github.com/xeokit/xeokit-sdk/pull/1643)
+-  Add option for indeterminate checkbox in TreeViewPlugin - [#1642](https://github.com/xeokit/xeokit-sdk/pull/1642)
+
+# [v2.6.38](https://github.com/xeokit/xeokit-sdk/compare/v2.6.36...v2.6.38)
+
+### 26 August 2024
+
+-  XCD-139 GLB displayed incorrectly in treeview - [#1639](https://github.com/xeokit/xeokit-sdk/pull/1639)
+-  Add separator as an independent li tag. - [#1640](https://github.com/xeokit/xeokit-sdk/pull/1640)
+-  XEOK-99 Fix dotbim_Multicolor house on macOS - [#1641](https://github.com/xeokit/xeokit-sdk/pull/1641)
+
+# [v2.6.36](https://github.com/xeokit/xeokit-sdk/compare/v2.6.35...v2.6.36)
+
+### 24 August 2024
+
+-  Added minimap example link to navigation examples html page - [#1638](https://github.com/xeokit/xeokit-sdk/pull/1638)
+-  Take into account canvas rect for touch-based measurements - [#1628](https://github.com/xeokit/xeokit-sdk/pull/1628)
+-  [TIDY] Removed unused RGBA packing func from depth shader - [#1634](https://github.com/xeokit/xeokit-sdk/pull/1634)
+-  [FIX] Support unsorted set of meshes for face colors - [#1637](https://github.com/xeokit/xeokit-sdk/pull/1637)
+-  XEOK-96 DTX minimap interaction fix - [#1636](https://github.com/xeokit/xeokit-sdk/pull/1636)
+-  Add examples using entity's surfaceArea and volume properties - [#1632](https://github.com/xeokit/xeokit-sdk/pull/1632)
+-  Use documentElement instead of body for client{X,Y}=&gt;canvasPos transformation - [#1630](https://github.com/xeokit/xeokit-sdk/pull/1630)
+-  XEOK-94 Fix DTX snapshot rendering - [#1629](https://github.com/xeokit/xeokit-sdk/pull/1629)
+
+# [v2.6.35](https://github.com/xeokit/xeokit-sdk/compare/v2.6.34...v2.6.35)
+
+### 14 August 2024
+
+-  XEOK-93 Fix AngleMeasurementsMouseControl dot - [#1625](https://github.com/xeokit/xeokit-sdk/pull/1625)
+-  Move examples/picking/overlapping.js to examples/libs/overlappingPick.js - [#1624](https://github.com/xeokit/xeokit-sdk/pull/1624)
+-  XCD-101 Picking overlapping objects - [#1623](https://github.com/xeokit/xeokit-sdk/pull/1623)
+
+# [v2.6.34](https://github.com/xeokit/xeokit-sdk/compare/v2.6.33...v2.6.34)
+
+### 13 August 2024
+
+-  Export types for `DistanceMeasurementsTouchControl` - [#1622](https://github.com/xeokit/xeokit-sdk/pull/1622)
+
+# [v2.6.33](https://github.com/xeokit/xeokit-sdk/compare/v2.6.32...v2.6.33)
+
+### 8 August 2024
+
+-  [FIX] Fix getEachVertex for instanced VBO triangles - [#1621](https://github.com/xeokit/xeokit-sdk/pull/1621)
+-  [FIX] Fix getEachVertex for instanced VBO triangles - [#1620](https://github.com/xeokit/xeokit-sdk/pull/1620)
+-  Fix MeshVolume::volume calculation - [#1619](https://github.com/xeokit/xeokit-sdk/pull/1619)
+-  Remove preemptively added touch floor plan editing example link - [#1618](https://github.com/xeokit/xeokit-sdk/pull/1618)
+-  Allow to set different wireframe axes for distance measurements - [#1615](https://github.com/xeokit/xeokit-sdk/pull/1615)
+-  Fix/exported types update - [#1617](https://github.com/xeokit/xeokit-sdk/pull/1617)
+-  Fix/pointer lens - [#1616](https://github.com/xeokit/xeokit-sdk/pull/1616)
+-  update source - [#1](https://github.com/xeokit/xeokit-sdk/pull/1)
+
+# [v2.6.32](https://github.com/xeokit/xeokit-sdk/compare/v2.6.31...v2.6.32)
+
+### 7 August 2024
+
+-  Added XKTLoaderPlugin renderOrder option - [#1614](https://github.com/xeokit/xeokit-sdk/pull/1614)
+-  Use SceneModel.renderOrder in renderer - [#1613](https://github.com/xeokit/xeokit-sdk/pull/1613)
+-  XEOK-50 Overlay 2D - [#1612](https://github.com/xeokit/xeokit-sdk/pull/1612)
+-  [DOCUMENTATION] Replacing README.md example with XKT loading - [#1609](https://github.com/xeokit/xeokit-sdk/pull/1609)
+
+# [v2.6.31](https://github.com/xeokit/xeokit-sdk/compare/v2.6.30...v2.6.31)
+
+### 2 August 2024
+
+-  [FIX] Fix TreeiewPlugin error report when Storeys view not possible - [#1608](https://github.com/xeokit/xeokit-sdk/pull/1608)
+-  Fixed glb loader not loading when nodes are with names - [#1607](https://github.com/xeokit/xeokit-sdk/pull/1607)
+-  Adding some missing types in loaders - [#1605](https://github.com/xeokit/xeokit-sdk/pull/1605)
+-  XEOK-83 Fix null matrix handling in parseNodeMesh - [#1602](https://github.com/xeokit/xeokit-sdk/pull/1602)
+-  [FEATURE] Support face_colors for dotbim - [#1603](https://github.com/xeokit/xeokit-sdk/pull/1603)
+-  [FEATURE] add snap picking default picking data - [#1601](https://github.com/xeokit/xeokit-sdk/pull/1601)
+
+# [v2.6.30](https://github.com/xeokit/xeokit-sdk/compare/v2.6.29...v2.6.30)
+
+### 29 July 2024
+
+-  Auto gltf metamodel - [#1600](https://github.com/xeokit/xeokit-sdk/pull/1600)
+-  Make GLTFLoaderPlugin generate automatic metadata - [#1599](https://github.com/xeokit/xeokit-sdk/pull/1599)
+-  XEOK-77 Fix incorrect color composition in TrianglesColorTextureRenderer - [#1597](https://github.com/xeokit/xeokit-sdk/pull/1597)
+-  [FIX] snap picking - [#1595](https://github.com/xeokit/xeokit-sdk/pull/1595)
+-  XCD-36 GLTF alphaCutoff support - [#1596](https://github.com/xeokit/xeokit-sdk/pull/1596)
+-  XEOK-75 Bring back missing SceneModel::_createDefaultIndices definition - [#1594](https://github.com/xeokit/xeokit-sdk/pull/1594)
+-  Rebuild to fix XCD-127 - [#1591](https://github.com/xeokit/xeokit-sdk/pull/1591)
+-  [FIX] marker occlusion - [#1579](https://github.com/xeokit/xeokit-sdk/pull/1579)
+
+# [v2.6.29](https://github.com/xeokit/xeokit-sdk/compare/v2.6.28...v2.6.29)
+
+### 16 July 2024
+
+-  [FIX] Fix SceneModel.getEachVertex - [#1587](https://github.com/xeokit/xeokit-sdk/pull/1587)
+-  [FEATURE] Progressive SceneModel loading - [#1586](https://github.com/xeokit/xeokit-sdk/pull/1586)
+-  XEOK-64 PointerCircle::destroy error - [#1583](https://github.com/xeokit/xeokit-sdk/pull/1583)
+-  [FIX] Incorrect imports - [#1578](https://github.com/xeokit/xeokit-sdk/pull/1578)
+-  XEOK-62 Fix Zone sides winding - [#1576](https://github.com/xeokit/xeokit-sdk/pull/1576)
+-  Mesh volume and area - [#1574](https://github.com/xeokit/xeokit-sdk/pull/1574)
+-  XEOK-59 Zone area - [#1573](https://github.com/xeokit/xeokit-sdk/pull/1573)
+-  Fix ZonesPlugin_createZones glyph CSS width - [#1571](https://github.com/xeokit/xeokit-sdk/pull/1571)
+-  Example/minimap - [#1570](https://github.com/xeokit/xeokit-sdk/pull/1570)
+-  XEOK-53 Zone volume - [#1569](https://github.com/xeokit/xeokit-sdk/pull/1569)
+-  Fix/measurement types - [#1568](https://github.com/xeokit/xeokit-sdk/pull/1568)
+-  XCD-109 Snapping change of a measurement in progress - [#1565](https://github.com/xeokit/xeokit-sdk/pull/1565)
+
+# [v2.6.28](https://github.com/xeokit/xeokit-sdk/compare/v2.6.27...v2.6.28)
+
+### 2 July 2024
+
+-  [FIX] Camera incorrectly zooms to end of measurement after completion - [#1566](https://github.com/xeokit/xeokit-sdk/pull/1566)
+-  Contributing.md - [#1559](https://github.com/xeokit/xeokit-sdk/pull/1559)
+
 # [v2.6.27](https://github.com/xeokit/xeokit-sdk/compare/v2.6.26...v2.6.27)
 
 ### 2 July 2024

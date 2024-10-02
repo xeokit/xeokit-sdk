@@ -32,6 +32,12 @@ export class DTXTrianglesPickNormalsRenderer {
         const state = dataTextureLayer._state;
         const textureState = state.textureState;
         const origin = dataTextureLayer._state.origin;
+        const {rotationMatrix} = model;
+
+        const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
+        const projMatrix = frameCtx.pickProjMatrix || camera.projMatrix;
+        const eye = frameCtx.pickOrigin || camera.eye;
+        const far = frameCtx.pickProjMatrix ? frameCtx.pickZFar : camera.project.far;
 
         if (!this._program) {
             this._allocate(dataTextureLayer);
@@ -50,15 +56,7 @@ export class DTXTrianglesPickNormalsRenderer {
             this._uTexturePerObjectMatrix
         );
 
-        let cameraEye = camera.eye;
-
-        // if (frameCtx.pickViewMatrix) {
-        //     textureState.bindPickCameraTexture(
-        //         this._program,
-        //         this._uTextureCameraMatrices
-        //     );
-        //     cameraEye = frameCtx.pickOrigin || cameraEye;
-        // }
+        let cameraEye = eye;
 
         const originCameraEye = [
             cameraEye[0] - origin[0],
@@ -77,7 +75,7 @@ export class DTXTrianglesPickNormalsRenderer {
         gl.uniform2f(this._uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
         if (scene.logarithmicDepthBufferEnabled) {
-            const logDepthBufFC = 2.0 / (Math.log(camera.project.far + 1.0) / Math.LN2);  // TODO: Far should be from projection objectInstanceMatrix?
+            const logDepthBufFC = 2.0 / (Math.log(far + 1.0) / Math.LN2);  // TODO: Far should be from projection objectInstanceMatrix?
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
 
@@ -96,7 +94,7 @@ export class DTXTrianglesPickNormalsRenderer {
                         if (active) {
                             const sectionPlane = sectionPlanes[sectionPlaneIndex];
                             if (origin) {
-                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
+                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a, rotationMatrix);
                                 gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                             } else {
                                 gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);

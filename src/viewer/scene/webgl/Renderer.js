@@ -32,6 +32,9 @@ const Renderer = function (scene, options) {
     let drawableTypeInfo = {};
     let drawables = {};
 
+    let postSortDrawableList = [];
+    let postCullDrawableList = [];
+
     let drawableListDirty = true;
     let stateSortDirty = true;
     let imageDirty = true;
@@ -264,33 +267,33 @@ const Renderer = function (scene, options) {
     }
 
     function sortDrawableList() {
-        for (let type in drawableTypeInfo) {
-            if (drawableTypeInfo.hasOwnProperty(type)) {
-                const drawableInfo = drawableTypeInfo[type];
-                if (drawableInfo.isStateSortable) {
-                    drawableInfo.drawableListPreCull.sort(drawableInfo.stateSortCompare);
-                }
-            }
-        }
-    }
-
-    function cullDrawableList() {
+        let lenDrawableList = 0;
         for (let type in drawableTypeInfo) {
             if (drawableTypeInfo.hasOwnProperty(type)) {
                 const drawableInfo = drawableTypeInfo[type];
                 const drawableListPreCull = drawableInfo.drawableListPreCull;
-                const drawableList = drawableInfo.drawableList;
-                let lenDrawableList = 0;
                 for (let i = 0, len = drawableListPreCull.length; i < len; i++) {
                     const drawable = drawableListPreCull[i];
-                    drawable.rebuildRenderFlags();
-                    if (!drawable.renderFlags.culled) {
-                        drawableList[lenDrawableList++] = drawable;
-                    }
+                    postSortDrawableList[lenDrawableList++] = drawable;
                 }
-                drawableList.length = lenDrawableList;
             }
         }
+        postSortDrawableList.length = lenDrawableList;
+        postSortDrawableList.sort((a, b) => {
+            return a.renderOrder - b.renderOrder;
+        });
+    }
+
+    function cullDrawableList() {
+        let lenDrawableList = 0;
+        for (let i = 0, len = postSortDrawableList.length; i < len; i++) {
+            const drawable = postSortDrawableList[i];
+            drawable.rebuildRenderFlags();
+            if (!drawable.renderFlags.culled) {
+                postCullDrawableList[lenDrawableList++] = drawable;
+            }
+        }
+        postCullDrawableList.length = lenDrawableList;
     }
 
     function draw(params) {
@@ -366,25 +369,16 @@ const Renderer = function (scene, options) {
         if (params.clear !== false) {
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         }
+        for (let i = 0, len = postCullDrawableList.length; i < len; i++) {
 
-        for (let type in drawableTypeInfo) {
-            if (drawableTypeInfo.hasOwnProperty(type)) {
+            const drawable = postCullDrawableList[i];
 
-                const drawableInfo = drawableTypeInfo[type];
-                const drawableList = drawableInfo.drawableList;
+            if (drawable.culled === true || drawable.visible === false || !drawable.drawDepth || !drawable.saoEnabled) {
+                continue;
+            }
 
-                for (let i = 0, len = drawableList.length; i < len; i++) {
-
-                    const drawable = drawableList[i];
-
-                    if (drawable.culled === true || drawable.visible === false || !drawable.drawDepth || !drawable.saoEnabled) {
-                        continue;
-                    }
-
-                    if (drawable.renderFlags.colorOpaque) {
-                        drawable.drawDepth(frameCtx);
-                    }
-                }
+            if (drawable.renderFlags.colorOpaque) {
+                drawable.drawDepth(frameCtx);
             }
         }
 
@@ -567,93 +561,85 @@ const Renderer = function (scene, options) {
         // Render normal opaque solids, defer others to bins to render after
         //------------------------------------------------------------------------------------------------------
 
-        for (let type in drawableTypeInfo) {
-            if (drawableTypeInfo.hasOwnProperty(type)) {
+        for (let i = 0, len = postCullDrawableList.length; i < len; i++) {
 
-                const drawableInfo = drawableTypeInfo[type];
-                const drawableList = drawableInfo.drawableList;
+            drawable = postCullDrawableList[i];
 
-                for (i = 0, len = drawableList.length; i < len; i++) {
+            if (drawable.culled === true || drawable.visible === false) {
+                continue;
+            }
 
-                    drawable = drawableList[i];
+            const renderFlags = drawable.renderFlags;
 
-                    if (drawable.culled === true || drawable.visible === false) {
-                        continue;
-                    }
+            if (renderFlags.colorOpaque) {
+                if (saoEnabled && saoPossible && drawable.saoEnabled) {
+                    normalDrawSAOBin[normalDrawSAOBinLen++] = drawable;
+                } else {
+                    drawable.drawColorOpaque(frameCtx);
+                }
+            }
 
-                    const renderFlags = drawable.renderFlags;
+            if (transparentEnabled) {
+                if (renderFlags.colorTransparent) {
+                    normalFillTransparentBin[normalFillTransparentBinLen++] = drawable;
+                }
+            }
 
-                    if (renderFlags.colorOpaque) {
-                        if (saoEnabled && saoPossible && drawable.saoEnabled) {
-                            normalDrawSAOBin[normalDrawSAOBinLen++] = drawable;
-                        } else {
-                            drawable.drawColorOpaque(frameCtx);
-                        }
-                    }
+            if (renderFlags.xrayedSilhouetteTransparent) {
+                xrayedFillTransparentBin[xrayedFillTransparentBinLen++] = drawable;
+            }
 
-                    if (transparentEnabled) {
-                        if (renderFlags.colorTransparent) {
-                            normalFillTransparentBin[normalFillTransparentBinLen++] = drawable;
-                        }
-                    }
+            if (renderFlags.xrayedSilhouetteOpaque) {
+                xrayedFillOpaqueBin[xrayedFillOpaqueBinLen++] = drawable;
+            }
 
-                    if (renderFlags.xrayedSilhouetteTransparent) {
-                        xrayedFillTransparentBin[xrayedFillTransparentBinLen++] = drawable;
-                    }
+            if (renderFlags.highlightedSilhouetteTransparent) {
+                highlightedFillTransparentBin[highlightedFillTransparentBinLen++] = drawable;
+            }
 
-                    if (renderFlags.xrayedSilhouetteOpaque) {
-                        xrayedFillOpaqueBin[xrayedFillOpaqueBinLen++] = drawable;
-                    }
+            if (renderFlags.highlightedSilhouetteOpaque) {
+                highlightedFillOpaqueBin[highlightedFillOpaqueBinLen++] = drawable;
+            }
 
-                    if (renderFlags.highlightedSilhouetteTransparent) {
-                        highlightedFillTransparentBin[highlightedFillTransparentBinLen++] = drawable;
-                    }
+            if (renderFlags.selectedSilhouetteTransparent) {
+                selectedFillTransparentBin[selectedFillTransparentBinLen++] = drawable;
+            }
 
-                    if (renderFlags.highlightedSilhouetteOpaque) {
-                        highlightedFillOpaqueBin[highlightedFillOpaqueBinLen++] = drawable;
-                    }
+            if (renderFlags.selectedSilhouetteOpaque) {
+                selectedFillOpaqueBin[selectedFillOpaqueBinLen++] = drawable;
+            }
 
-                    if (renderFlags.selectedSilhouetteTransparent) {
-                        selectedFillTransparentBin[selectedFillTransparentBinLen++] = drawable;
-                    }
+            if (drawable.edges && edgesEnabled) {
+                if (renderFlags.edgesOpaque) {
+                    normalEdgesOpaqueBin[normalEdgesOpaqueBinLen++] = drawable;
+                }
 
-                    if (renderFlags.selectedSilhouetteOpaque) {
-                        selectedFillOpaqueBin[selectedFillOpaqueBinLen++] = drawable;
-                    }
+                if (renderFlags.edgesTransparent) {
+                    normalEdgesTransparentBin[normalEdgesTransparentBinLen++] = drawable;
+                }
 
-                    if (drawable.edges && edgesEnabled) {
-                        if (renderFlags.edgesOpaque) {
-                            normalEdgesOpaqueBin[normalEdgesOpaqueBinLen++] = drawable;
-                        }
+                if (renderFlags.selectedEdgesTransparent) {
+                    selectedEdgesTransparentBin[selectedEdgesTransparentBinLen++] = drawable;
+                }
 
-                        if (renderFlags.edgesTransparent) {
-                            normalEdgesTransparentBin[normalEdgesTransparentBinLen++] = drawable;
-                        }
+                if (renderFlags.selectedEdgesOpaque) {
+                    selectedEdgesOpaqueBin[selectedEdgesOpaqueBinLen++] = drawable;
+                }
 
-                        if (renderFlags.selectedEdgesTransparent) {
-                            selectedEdgesTransparentBin[selectedEdgesTransparentBinLen++] = drawable;
-                        }
+                if (renderFlags.xrayedEdgesTransparent) {
+                    xrayEdgesTransparentBin[xrayEdgesTransparentBinLen++] = drawable;
+                }
 
-                        if (renderFlags.selectedEdgesOpaque) {
-                            selectedEdgesOpaqueBin[selectedEdgesOpaqueBinLen++] = drawable;
-                        }
+                if (renderFlags.xrayedEdgesOpaque) {
+                    xrayEdgesOpaqueBin[xrayEdgesOpaqueBinLen++] = drawable;
+                }
 
-                        if (renderFlags.xrayedEdgesTransparent) {
-                            xrayEdgesTransparentBin[xrayEdgesTransparentBinLen++] = drawable;
-                        }
+                if (renderFlags.highlightedEdgesTransparent) {
+                    highlightedEdgesTransparentBin[highlightedEdgesTransparentBinLen++] = drawable;
+                }
 
-                        if (renderFlags.xrayedEdgesOpaque) {
-                            xrayEdgesOpaqueBin[xrayEdgesOpaqueBinLen++] = drawable;
-                        }
-
-                        if (renderFlags.highlightedEdgesTransparent) {
-                            highlightedEdgesTransparentBin[highlightedEdgesTransparentBinLen++] = drawable;
-                        }
-
-                        if (renderFlags.highlightedEdgesOpaque) {
-                            highlightedEdgesOpaqueBin[highlightedEdgesOpaqueBinLen++] = drawable;
-                        }
-                    }
+                if (renderFlags.highlightedEdgesOpaque) {
+                    highlightedEdgesOpaqueBin[highlightedEdgesOpaqueBinLen++] = drawable;
                 }
             }
         }
@@ -1063,7 +1049,7 @@ const Renderer = function (scene, options) {
         frameCtx.pickInvisible = !!params.pickInvisible;
         frameCtx.pickClipPos = [
             getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
-            getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight),
+            getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight)
         ];
 
         gl.viewport(0, 0, 1, 1);
@@ -1076,30 +1062,23 @@ const Renderer = function (scene, options) {
         const includeEntityIds = params.includeEntityIds;
         const excludeEntityIds = params.excludeEntityIds;
 
-        for (let type in drawableTypeInfo) {
-            if (drawableTypeInfo.hasOwnProperty(type)) {
-
-                const drawableInfo = drawableTypeInfo[type];
-                const drawableList = drawableInfo.drawableList;
-
-                for (let i = 0, len = drawableList.length; i < len; i++) {
-
-                    const drawable = drawableList[i];
-
-                    if (!drawable.drawPickMesh || (params.pickInvisible !== true && drawable.visible === false) || drawable.pickable === false) {
-                        continue;
-                    }
-                    if (includeEntityIds && !includeEntityIds[drawable.id]) { // TODO: push this logic into drawable
-                        continue;
-                    }
-                    if (excludeEntityIds && excludeEntityIds[drawable.id]) {
-                        continue;
-                    }
-
-                    drawable.drawPickMesh(frameCtx);
-                }
+        for (let i = 0, len = postCullDrawableList.length; i < len; i++) {
+            const drawable = postCullDrawableList[i];
+            if (drawable.culled === true || drawable.visible === false) {
+                continue;
             }
+            if (!drawable.drawPickMesh || (params.pickInvisible !== true && drawable.visible === false) || drawable.pickable === false) {
+                continue;
+            }
+            if (includeEntityIds && !includeEntityIds[drawable.id]) { // TODO: push this logic into drawable
+                continue;
+            }
+            if (excludeEntityIds && excludeEntityIds[drawable.id]) {
+                continue;
+            }
+            drawable.drawPickMesh(frameCtx);
         }
+
         const pix = pickBuffer.read(0, 0);
         const pickID = pix[0] + (pix[1] << 8) + (pix[2] << 16) + (pix[3] << 24);
 
@@ -1129,7 +1108,7 @@ const Renderer = function (scene, options) {
         // frameCtx.pickInvisible = !!params.pickInvisible;
         frameCtx.pickClipPos = [
             getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
-            getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight),
+            getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight)
         ];
 
         gl.viewport(0, 0, 1, 1);
@@ -1178,7 +1157,7 @@ const Renderer = function (scene, options) {
             frameCtx.pickElementsOffset = pickable.pickElementsOffset;
             frameCtx.pickClipPos = [
                 getClipPosX(canvasPos[0] * resolutionScale, gl.drawingBufferWidth),
-                getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight),
+                getClipPosY(canvasPos[1] * resolutionScale, gl.drawingBufferHeight)
             ];
 
             gl.viewport(0, 0, 1, 1);
@@ -1243,15 +1222,14 @@ const Renderer = function (scene, options) {
     function drawSnapInit(frameCtx) {
         frameCtx.snapPickLayerParams = [];
         frameCtx.snapPickLayerNumber = 0;
-        for (let type in drawableTypeInfo) {
-            const drawableInfo = drawableTypeInfo[type];
-            const drawableList = drawableInfo.drawableList;
-            for (let i = 0, len = drawableList.length; i < len; i++) {
-                const drawable = drawableList[i];
-                if (drawable.drawSnapInit) {
-                    if (!drawable.culled && drawable.visible && drawable.pickable) {
-                        drawable.drawSnapInit(frameCtx);
-                    }
+
+        for (let i = 0, len = postCullDrawableList.length; i < len; i++) {
+
+            const drawable = postCullDrawableList[i];
+
+            if (drawable.drawSnapInit) {
+                if (!drawable.culled && drawable.visible && drawable.pickable) {
+                    drawable.drawSnapInit(frameCtx);
                 }
             }
         }
@@ -1261,11 +1239,11 @@ const Renderer = function (scene, options) {
     function drawSnap(frameCtx) {
         frameCtx.snapPickLayerParams = frameCtx.snapPickLayerParams || [];
         frameCtx.snapPickLayerNumber = frameCtx.snapPickLayerParams.length;
-        for (let type in drawableTypeInfo) {
-            const drawableInfo = drawableTypeInfo[type];
-            const drawableList = drawableInfo.drawableList;
-            for (let i = 0, len = drawableList.length; i < len; i++) {
-                const drawable = drawableList[i];
+        for (let i = 0, len = postCullDrawableList.length; i < len; i++) {
+
+            const drawable = postCullDrawableList[i];
+
+            if (drawable.drawSnapInit) {
                 if (drawable.drawSnap) {
                     if (!drawable.culled && drawable.visible && drawable.pickable) {
                         drawable.drawSnap(frameCtx);
@@ -1539,13 +1517,16 @@ const Renderer = function (scene, options) {
             }
 
             const snappedEntity = (snappedPickable && snappedPickable.delegatePickedEntity) ? snappedPickable.delegatePickedEntity() : snappedPickable;
+            if (!snappedEntity && pickable) {
+                pickable = pickable.delegatePickedEntity ? pickable.delegatePickedEntity() : pickable;
+            }
 
             pickResult.reset();
             pickResult.snappedToEdge = (snapType === "edge");
             pickResult.snappedToVertex = (snapType === "vertex");
-            pickResult.worldPos = snappedWorldPos;
-            pickResult.worldNormal = snappedWorldNormal;
-            pickResult.entity = snappedEntity;
+            pickResult.worldPos = snappedWorldPos || worldPos;
+            pickResult.worldNormal = snappedWorldNormal || worldNormal;
+            pickResult.entity = snappedEntity || pickable;
             pickResult.canvasPos = canvasPos || scene.camera.projectWorldPos(worldPos || snappedWorldPos);
             pickResult.snappedCanvasPos = snappedCanvasPos || canvasPos;
 
@@ -1652,19 +1633,16 @@ const Renderer = function (scene, options) {
             gl.disable(gl.BLEND);
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-            for (let type in drawableTypeInfo) {
-                if (drawableTypeInfo.hasOwnProperty(type)) {
-                    const drawableInfo = drawableTypeInfo[type];
-                    const drawableList = drawableInfo.drawableList;
-                    for (let i = 0, len = drawableList.length; i < len; i++) {
-                        const drawable = drawableList[i];
-                        if (!drawable.drawOcclusion || drawable.culled === true || drawable.visible === false || drawable.pickable === false) { // TODO: Option to exclude transparent?
-                            continue;
-                        }
 
-                        drawable.drawOcclusion(frameCtx);
-                    }
+            for (let i = 0, len = postCullDrawableList.length; i < len; i++) {
+
+                const drawable = postCullDrawableList[i];
+
+                if (!drawable.drawOcclusion || drawable.culled === true || drawable.visible === false || drawable.pickable === false) { // TODO: Option to exclude transparent?
+                    continue;
                 }
+
+                drawable.drawOcclusion(frameCtx);
             }
 
             this._occlusionTester.drawMarkers(frameCtx);

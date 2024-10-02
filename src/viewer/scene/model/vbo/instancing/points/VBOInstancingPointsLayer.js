@@ -27,7 +27,7 @@ export class VBOInstancingPointsLayer {
      */
     constructor(cfg) {
 
-        console.info("VBOInstancingPointsLayer");
+      //  console.info("VBOInstancingPointsLayer");
 
         /**
          * Owner model

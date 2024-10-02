@@ -1300,15 +1300,11 @@ class Input extends Component {
             this.mouseCanvasPos[1] = event.y;
         } else {
             let element = event.target;
-            let totalOffsetLeft = 0;
-            let totalOffsetTop = 0;
-            while (element.offsetParent) {
-                totalOffsetLeft += element.offsetLeft;
-                totalOffsetTop += element.offsetTop;
-                element = element.offsetParent;
-            }
-            this.mouseCanvasPos[0] = event.pageX - totalOffsetLeft;
-            this.mouseCanvasPos[1] = event.pageY - totalOffsetTop;
+
+            const rect = element.getBoundingClientRect();
+
+            this.mouseCanvasPos[0] = event.clientX - rect.left;
+            this.mouseCanvasPos[1] = event.clientY - rect.top;
         }
     }
 

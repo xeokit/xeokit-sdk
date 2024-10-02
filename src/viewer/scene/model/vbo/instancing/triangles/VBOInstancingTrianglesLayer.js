@@ -36,7 +36,7 @@ export class VBOInstancingTrianglesLayer {
      */
     constructor(cfg) {
 
-         console.info("Creating VBOInstancingTrianglesLayer");
+        //   console.info("Creating VBOInstancingTrianglesLayer");
 
         /**
          * Owner model
@@ -378,7 +378,10 @@ export class VBOInstancingTrianglesLayer {
             && !!textureSet
             && !!textureSet.colorTexture;
 
-        // this._state.geometry = null;
+
+        if (!this.model.scene.readableGeometryEnabled) {
+            this._state.geometry = null;
+        }
 
         this._finalized = true;
     }
@@ -705,31 +708,26 @@ export class VBOInstancingTrianglesLayer {
             this.model.error("portion not found: " + portionId);
             return;
         }
-        /*
-         * quantizedPositions are not available on geometry
-         */
-        // const positions = geometry.quantizedPositions;
         const positions = geometry.positionsCompressed;
-        const origin = state.origin;
-        const offsetX = origin[0] ;
-        const offsetY = origin[1] ;
-        const offsetZ = origin[2] ;
+        const sceneModelMatrix = this.model.matrix;
+        const origin = math.vec4();
+        origin.set(state.origin, 0);
+        origin[3] = 1;
+        math.mulMat4v4(sceneModelMatrix, origin, origin);
+        const offsetX = origin[0];
+        const offsetY = origin[1];
+        const offsetZ = origin[2];
         const worldPos = tempVec4a;
         const portionMatrix = portion.matrix;
-        const sceneModelPatrix = this.model.sceneModelMatrix;
-        /**
-         * SceneModelMatrix is undefined
-         * Could not find the declaration for this matrix anywhere
-         */
-        console.log('sceneModelPatrix: ', sceneModelPatrix);
         const positionsDecodeMatrix = state.positionsDecodeMatrix;
         for (let i = 0, len = positions.length; i < len; i += 3) {
             worldPos[0] = positions[i];
             worldPos[1] = positions[i + 1];
             worldPos[2] = positions[i + 2];
             math.decompressPosition(worldPos, positionsDecodeMatrix);
-            math.transformPoint3(portionMatrix, worldPos);
-            math.transformPoint3(sceneModelPatrix, worldPos);
+            math.transformPoint3(portionMatrix, worldPos, worldPos);
+            worldPos[3] = 1;
+            math.mulMat4v4(sceneModelMatrix, worldPos, worldPos);
             worldPos[0] += offsetX;
             worldPos[1] += offsetY;
             worldPos[2] += offsetZ;
@@ -794,14 +792,21 @@ export class VBOInstancingTrianglesLayer {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
+        const useAlphaCutoff = this._state.textureSet && (typeof (this._state.textureSet.alphaCutoff) === "number");
         if (frameCtx.withSAO && this.model.saoEnabled) {
             if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported) {
                 if (this._renderers.pbrRendererWithSAO) {
                     this._renderers.pbrRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
                 }
             } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
-                if (this._renderers.colorTextureRendererWithSAO) {
-                    this._renderers.colorTextureRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                if (useAlphaCutoff) {
+                    if (this._renderers.colorTextureRendererWithSAOAlphaCutoff) {
+                        this._renderers.colorTextureRendererWithSAOAlphaCutoff.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
+                } else {
+                    if (this._renderers.colorTextureRendererWithSAO) {
+                        this._renderers.colorTextureRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    }
                 }
             } else if (this._state.normalsBuf) {
                 if (this._renderers.colorRendererWithSAO) {
@@ -817,8 +822,14 @@ export class VBOInstancingTrianglesLayer {
                 this._renderers.pbrRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
             }
         } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
-            if (this._renderers.colorTextureRenderer) {
-                this._renderers.colorTextureRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+            if (useAlphaCutoff) {
+                if (this._renderers.colorTextureRendererAlphaCutoff) {
+                    this._renderers.colorTextureRendererAlphaCutoff.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                }
+            } else {
+                if (this._renderers.colorTextureRenderer) {
+                    this._renderers.colorTextureRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                }
             }
         } else if (this._state.normalsBuf) {
             if (this._renderers.colorRenderer) {

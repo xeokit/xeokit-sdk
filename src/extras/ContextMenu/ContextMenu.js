@@ -1,4 +1,4 @@
-import {Map} from "../../viewer/scene/utils/Map.js";
+import { Map } from "../../viewer/scene/utils/Map.js";
 
 const idMap = new Map();
 
@@ -461,6 +461,7 @@ class ContextMenu {
         this._updateItemsTitles();
         this._updateItemsEnabledStatus();
         this._showMenu(this._rootMenu.id, pageX, pageY);
+        this._updateSubMenuInfo();
         this._shown = true;
         this.fire("shown", {});
     }
@@ -636,21 +637,26 @@ class ContextMenu {
                         if (itemSubMenu) {
 
                             html.push(
-                                '<li id="' + item.id + '" class="xeokit-context-menu-item" style="' +
-                                ((groupIdx === groupLen - 1) || ((j < lenj - 1)) ? 'border-bottom: 0' : 'border-bottom: 1px solid black') +
-                                '">' +
+                                '<li id="' + item.id + '" class="xeokit-context-menu-item xeokit-context-menu-submenu">' +
                                 actionTitle +
-                                ' [MORE]' +
                                 '</li>');
+                            if (!((groupIdx === groupLen - 1) || (j < lenj - 1))) {
+                                html.push(
+                                    '<li id="' + item.id + '" class="xeokit-context-menu-item-separator"></li>'
+                                );
+                            }
 
                         } else {
 
                             html.push(
-                                '<li id="' + item.id + '" class="xeokit-context-menu-item" style="' +
-                                ((groupIdx === groupLen - 1) || ((j < lenj - 1)) ? 'border-bottom: 0' : 'border-bottom: 1px solid black') +
-                                '">' +
+                                '<li id="' + item.id + '" class="xeokit-context-menu-item">' +
                                 actionTitle +
                                 '</li>');
+                            if (!((groupIdx === groupLen - 1) || (j < lenj - 1))) {
+                                html.push(
+                                    '<li id="' + item.id + '" class="xeokit-context-menu-item-separator"></li>'
+                                );
+                            }
                         }
                     }
                 }
@@ -848,14 +854,11 @@ class ContextMenu {
             const shown = getShown(this._context);
             item.shown = shown;
             if (!shown) {
-                itemElement.style.visibility = "hidden";
-                itemElement.style.height = "0";
-                itemElement.style.padding = "0";
+                itemElement.style.display = "none";
                 continue;
             } else {
-                itemElement.style.visibility = "visible";
-                itemElement.style.height = "auto";
-                itemElement.style.padding = null;
+                itemElement.style.display = "";
+
             }
             const enabled = getEnabled(this._context);
             item.enabled = enabled;
@@ -865,6 +868,29 @@ class ContextMenu {
                 itemElement.classList.remove("disabled");
             }
         }
+    }
+
+    _updateSubMenuInfo() {
+        if (!this._context) return;
+        let itemElement, itemRect, subMenuElement, initialStyles, showOnLeft, subMenuWidth;
+        this._itemList.forEach((item) => {
+            if (item.subMenu) {
+                itemElement = item.itemElement;
+                itemRect = itemElement.getBoundingClientRect();
+                subMenuElement = item.subMenu.menuElement;
+                initialStyles = {
+                    visibility: subMenuElement.style.visibility,
+                    display: subMenuElement.style.display,
+                }
+                subMenuElement.style.display = "block";
+                subMenuElement.style.visibility = "hidden";
+                subMenuWidth = item.subMenu.menuElement.getBoundingClientRect().width;
+                subMenuElement.style.visibility = initialStyles.visibility;
+                subMenuElement.style.display = initialStyles.display;
+                showOnLeft = ((itemRect.right + subMenuWidth) > window.innerWidth);
+                itemElement.setAttribute("data-submenuposition", showOnLeft ? "left" : "right");
+            }
+        })
     }
 
     _showMenu(menuId, pageX, pageY) { // Shows the given menu, at the specified page coordinates
@@ -925,4 +951,4 @@ class ContextMenu {
     }
 }
 
-export {ContextMenu};
+export { ContextMenu };

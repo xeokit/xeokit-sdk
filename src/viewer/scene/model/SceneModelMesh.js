@@ -375,6 +375,16 @@ export class SceneModelMesh {
      */
     set aabb(aabb) { // Called by SceneModel
         this._aabbLocal = aabb;
+        if (this.origin) {
+            this._aabbLocal = aabb.slice(0);
+            const origin = this.origin;
+            this._aabbLocal[0] += origin[0];
+            this._aabbLocal[1] += origin[1];
+            this._aabbLocal[2] += origin[2];
+            this._aabbLocal[3] += origin[0];
+            this._aabbLocal[4] += origin[1];
+            this._aabbLocal[5] += origin[2];
+        }
     }
 
     /**
@@ -390,15 +400,6 @@ export class SceneModelMesh {
             } else {
                 math.transformOBB3(this.model.worldMatrix, tempOBB3, tempOBB3b);
                 math.OBB3ToAABB3(tempOBB3b, this._aabbWorld);
-            }
-            if (this.origin) {
-                const origin = this.origin;
-                this._aabbWorld[0] += origin[0];
-                this._aabbWorld[1] += origin[1];
-                this._aabbWorld[2] += origin[2];
-                this._aabbWorld[3] += origin[0];
-                this._aabbWorld[4] += origin[1];
-                this._aabbWorld[5] += origin[2];
             }
             this._aabbWorldDirty = false;
         }

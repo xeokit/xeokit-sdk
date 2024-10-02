@@ -91,7 +91,7 @@ export class MeshVolume {
             volume += math.dotVec3(v1, v3);
         }
 
-        return volume;
+        return volume / 6;
     }
 }
 

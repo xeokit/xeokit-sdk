@@ -702,7 +702,13 @@ class StoreyViewsPlugin extends Plugin {
         return null;
     }
 
-    isPositionAboveOrBelowBuilding(worldPos){
+    /**
+     * Returns whether a position is above or below a building
+     * 
+     * @param {Number[]} worldPos 3D World-space position.
+     * @returns {String} ID of the lowest/highest story or null.
+     */
+    isPositionAboveOrBelowBuilding(worldPos) {
         const keys = Object.keys(this.storeys);
         const ids = [keys[0], keys[keys.length-1]];
         if(worldPos[1] < this.storeys[ids[0]].storeyAABB[1])

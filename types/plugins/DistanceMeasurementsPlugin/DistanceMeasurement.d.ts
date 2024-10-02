@@ -13,6 +13,24 @@ export declare class DistanceMeasurement extends Component {
   plugin: DistanceMeasurementsPlugin;
 
   /**
+   * Sets the axes basis for the measurement.
+   * 
+   * The value is a 4x4 matrix where each column-vector defines an axis and must have unit length.
+   * 
+   * This is the ```identity``` matrix by default, meaning the measurement axes are the same as the world axes.
+   */
+  set axesBasis(value: number[]);
+
+  /**
+   * Gets the axes basis for the measurement.
+   * 
+   * The value is a 4x4 matrix where each column-vector defines an axis and must have unit length.
+   * 
+   * This is the ```identity``` matrix by default, meaning the measurement axes are the same as the world axes.
+   */
+  get axesBasis(): number[];
+
+  /**
    * Sets whether this DistanceMeasurement indicates that its measurement is approximate.
    *
    * This is ````true```` by default.
@@ -84,6 +102,20 @@ export declare class DistanceMeasurement extends Component {
    * @type {Boolean}
    */
   get targetVisible(): boolean;
+
+  /**
+     * Sets if the measurement is adjusted based on rotation
+     *
+     * @type {Boolean}
+     */
+  set useRotationAdjustment(arg: boolean);
+
+  /**
+   * Gets if the measurement is adjusted based on rotation
+   *
+   * @type {Boolean}
+   */
+  get useRotationAdjustment(): boolean;
 
   /**
    * Sets if the direct point-to-point wire between {@link DistanceMeasurement.origin} and {@link DistanceMeasurement.target} is visible.

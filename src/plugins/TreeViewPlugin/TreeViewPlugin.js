@@ -361,6 +361,7 @@ export class TreeViewPlugin extends Plugin {
      * vertical World axis. For all hierarchy types, other node types will be ordered in the ascending alphanumeric order of their titles.
      * @param {Boolean} [cfg.pruneEmptyNodes=true] When true, will not contain nodes that don't have content in the {@link Scene}. These are nodes whose {@link MetaObject}s don't have {@link Entity}s.
      * @param {RenderService} [cfg.renderService] Optional {@link RenderService} to use. Defaults to the {@link TreeViewPlugin}'s default {@link RenderService}.
+     * @param {Boolean} [cfg.showIndeterminate=false] When true, will show indeterminate state for checkboxes when some but not all child nodes are checked
      */
     constructor(viewer, cfg = {}) {
 
@@ -412,6 +413,7 @@ export class TreeViewPlugin extends Plugin {
         this._pruneEmptyNodes = cfg.pruneEmptyNodes;
         this._showListItemElementId = null;
         this._renderService = cfg.renderService || new RenderService();
+        this._showIndeterminate = cfg.showIndeterminate ?? false;
 
         if (!this._renderService) {
             throw new Error('TreeViewPlugin: no render service set');
@@ -453,8 +455,10 @@ export class TreeViewPlugin extends Plugin {
                 } else {
                     parent.numVisibleEntities--;
                 }
-
-                this._renderService.setCheckbox(parent.nodeId, (parent.numVisibleEntities > 0));
+                const indeterminate = this._showIndeterminate 
+                  && parent.numVisibleEntities > 0 
+                  && parent.numVisibleEntities < parent.numEntities;
+                this._renderService.setCheckbox(parent.nodeId, (parent.numVisibleEntities > 0), indeterminate);
 
                 parent = parent.parent;
             }
@@ -536,8 +540,10 @@ export class TreeViewPlugin extends Plugin {
                 } else {
                     parent.numVisibleEntities -= numUpdated;
                 }
-
-                this._renderService.setCheckbox(parent.nodeId, (parent.numVisibleEntities > 0));
+                const indeterminate = this._showIndeterminate 
+                  && parent.numVisibleEntities > 0 
+                  && parent.numVisibleEntities < parent.numEntities;
+                this._renderService.setCheckbox(parent.nodeId, (parent.numVisibleEntities > 0), indeterminate);
                 
                 parent = parent.parent;
             }
@@ -695,6 +701,8 @@ export class TreeViewPlugin extends Plugin {
             return; // Node may not exist for the given object if (this._pruneEmptyNodes == true)
         }
 
+        this.collapse();
+
         const nodeId = node.nodeId;
 
         const switchElement = this._renderService.getSwitchElement(nodeId);
@@ -777,8 +785,8 @@ export class TreeViewPlugin extends Plugin {
     collapse() {
         for (let i = 0, len = this._rootNodes.length; i < len; i++) {
             const rootNode = this._rootNodes[i];
-            const objectId = rootNode.objectId;
-            this._collapseNode(objectId);
+            const nodeId = rootNode.nodeId;
+            this._collapseNode(nodeId);
         }
     }
 
@@ -990,7 +998,7 @@ export class TreeViewPlugin extends Plugin {
             this._nodeNodes[buildingNode.nodeId] = buildingNode;
         } else if (metaObjectType === "IfcBuildingStorey") {
             if (!buildingNode) {
-                this.error("Failed to build storeys hierarchy for model '" + this.metaModel.id + "' - model does not have an IfcBuilding object, or is not an IFC model");
+                this.error("Failed to build storeys hierarchy for model - model does not have an IfcBuilding object, or is not an IFC model");
                 return;
             }
             storeyNode = {

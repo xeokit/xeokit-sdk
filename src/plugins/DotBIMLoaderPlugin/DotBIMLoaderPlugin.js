@@ -16,8 +16,8 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  * set ````true```` and will be registered by {@link Entity#id} in {@link Scene#objects}.
  * * When loading, can set the World-space position, scale and rotation of each model within World space,
  * along with initial properties for all the model's {@link Entity}s.
- * * Allows to mask which IFC types we want to load.
- * * Allows to configure initial viewer state for specified IFC types (color, visibility, selection, highlighted, X-rayed, pickable, etc).
+ * * Allows to mask which types we want to load.
+ * * Allows to configure initial viewer state for specified types (color, visibility, selection, highlighted, X-rayed, pickable, etc).
  *
  * ## Usage
  *
@@ -87,9 +87,9 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  * });
  * ````
  *
- * ## Including and excluding IFC types
+ * ## Including and excluding types
  *
- * We can also load only those objects that have the specified IFC types. In the example below, we'll load only the
+ * We can also load only those objects that have the specified types. In the example below, we'll load only the
  * objects that represent walls.
  *
  * ````javascript
@@ -100,7 +100,7 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  * });
  * ````
  *
- * We can also load only those objects that **don't** have the specified IFC types. In the example below, we'll load only the
+ * We can also load only those objects that **don't** have the specified types. In the example below, we'll load only the
  * objects that do not represent empty space.
  *
  * ````javascript
@@ -111,13 +111,13 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  * });
  * ````
  *
- * # Configuring initial IFC object appearances
+ * # Configuring initial object appearances
  *
- * We can specify the custom initial appearance of loaded objects according to their IFC types.
+ * We can specify the custom initial appearance of loaded objects according to their types.
  *
  * This is useful for things like:
  *
- * * setting the colors to our objects according to their IFC types,
+ * * setting the colors to our objects according to their types,
  * * automatically hiding ````IfcSpace```` objects, and
  * * ensuring that ````IfcWindow```` objects are always transparent.
  * <br>
@@ -149,7 +149,7 @@ import {IFCObjectDefaults} from "../../viewer/metadata/IFCObjectDefaults.js";
  * });
  * ````
  *
- * When we don't customize the appearance of IFC types, as just above, then IfcSpace elements tend to obscure other
+ * When we don't customize the appearance of types, as just above, then IfcSpace elements tend to obscure other
  * elements, which can be confusing.
  *
  * It's often helpful to make IfcSpaces transparent and unpickable, like this:
@@ -347,55 +347,51 @@ export class DotBIMLoaderPlugin extends Plugin {
             const fileData = ctx.fileData;
             const sceneModel = ctx.sceneModel;
 
-            const dbMeshIndices = {};
             const dbMeshLoaded = {};
 
-            const ifcProjectId = math.createUUID();
-            const ifcSiteId = math.createUUID();
-            const ifcBuildingId = math.createUUID();
-            const ifcBuildingStoryId = math.createUUID();
+            const projectId = math.createUUID();
+            const siteId = math.createUUID();
+            const buildingId = math.createUUID();
+            const buildingStoryId = math.createUUID();
 
             const metaModelData = {
                 metaObjects: [
                     {
-                        id: ifcProjectId,
-                        name: "IfcProject",
-                        type: "IfcProject",
+                        id: projectId,
+                        name: "Project",
+                        type: "Project",
                         parent: null
                     },
                     {
-                        id: ifcSiteId,
-                        name: "IfcSite",
-                        type: "IfcSite",
-                        parent: ifcProjectId
+                        id: siteId,
+                        name: "Site",
+                        type: "Site",
+                        parent: projectId
                     },
                     {
-                        id: ifcBuildingId,
-                        name: "IfcBuilding",
-                        type: "IfcBuilding",
-                        parent: ifcSiteId
+                        id: buildingId,
+                        name: "Building",
+                        type: "Building",
+                        parent: siteId
                     },
                     {
-                        id: ifcBuildingStoryId,
-                        name: "IfcBuildingStorey",
-                        type: "IfcBuildingStorey",
-                        parent: ifcBuildingId
+                        id: buildingStoryId,
+                        name: "BuildingStorey",
+                        type: "BuildingStorey",
+                        parent: buildingId
                     }
                 ],
                 propertySets: []
             };
 
-            for (let i = 0, len = fileData.meshes.length; i < len; i++) {
-                const dbMesh = fileData.meshes[i];
-                dbMeshIndices[dbMesh.mesh_id] = i;
-            }
-
-            const parseDBMesh = (dbMeshId) => {
+            const parseDBMesh = (dbMeshId, element) => {
                 if (dbMeshLoaded[dbMeshId]) {
                     return;
                 }
-                const dbMeshIndex = dbMeshIndices[dbMeshId];
-                const dbMesh = fileData.meshes[dbMeshIndex];
+
+                const dbMesh = fileData.meshes.find(obj => {
+                    return obj.mesh_id === element.mesh_id;
+                });
                 sceneModel.createGeometry({
                     id: dbMeshId,
                     primitive: "triangles",
@@ -426,74 +422,147 @@ export class DotBIMLoaderPlugin extends Plugin {
 
                 const dbMeshId = element.mesh_id;
 
-                parseDBMesh(dbMeshId);
-
-                const meshId = `${objectId}-mesh`;
                 const vector = element.vector;
                 const rotation = element.rotation;
                 const props = objectDefaults ? objectDefaults[elementType] || objectDefaults["DEFAULT"] : null;
-
                 let visible = true;
                 let pickable = true;
-                let color = element.color ? [element.color.r / 255, element.color.g / 255, element.color.b / 255] : [1, 1, 1];
-                let opacity = element.color ? element.color.a / 255 : 1.0;
 
-                if (props) {
-                    if (props.visible === false) {
-                        visible = false;
-                    }
-                    if (props.pickable === false) {
-                        pickable = false;
-                    }
-                    if (props.colorize) {
-                        color = props.colorize;
-                    }
-                    if (props.opacity !== undefined && props.opacity !== null) {
-                        opacity = props.opacity;
-                    }
-                }
+                if (element.face_colors === undefined) {
 
-                sceneModel.createMesh({
-                    id: meshId,
-                    geometryId: dbMeshId,
-                    color,
-                    opacity,
-                    quaternion: rotation && (rotation.qz !== 0 || rotation.qy !== 0 || rotation.qx !== 0 || rotation.qw !== 1.0) ? [rotation.qx, rotation.qy, rotation.qz, rotation.qw] : undefined,
-                    position: vector ? [vector.x, vector.y, vector.z] : undefined
-                });
+                    parseDBMesh(dbMeshId, element);
 
-                sceneModel.createEntity({
-                    id: objectId,
-                    meshIds: [meshId],
-                    visible,
-                    pickable,
-                    isObject: true
-                });
+                    const meshId = `${objectId}-mesh`;
 
-                for (let infoKey in info) {
-                    let properties;
-                    if (infoKey.startsWith("IFC_Pset_")) {
-                        if (!properties) {
-                            properties = [];
+                    let color = element.color ? [element.color.r / 255.0, element.color.g / 255.0, element.color.b / 255.0] : [1, 1, 1];
+                    let opacity = element.color ? element.color.a / 255.0 : 1.0;
+
+                    if (props) {
+                        if (props.visible === false) {
+                            visible = false;
                         }
-                        properties.push({
-                            name: infoKey,
-                            value: info[infoKey]
-                        });
+                        if (props.pickable === false) {
+                            pickable = false;
+                        }
+                        if (props.colorize) {
+                            color = props.colorize;
+                        }
+                        if (props.opacity !== undefined && props.opacity !== null) {
+                            opacity = props.opacity;
+                        }
                     }
-                    if (properties) {
-                        metaModelData.propertySets.push({
-                            id: objectId,
-                            properties
-                        });
-                    }
+
+                    sceneModel.createMesh({
+                        id: meshId,
+                        geometryId: dbMeshId,
+                        color: color,
+                        opacity: opacity,
+                        quaternion: rotation && (rotation.qz !== 0 || rotation.qy !== 0 || rotation.qx !== 0 || rotation.qw !== 1.0) ? [rotation.qx, rotation.qy, rotation.qz, rotation.qw] : undefined,
+                        position: vector ? [vector.x, vector.y, vector.z] : undefined
+                    });
+
+                    sceneModel.createEntity({
+                        id: objectId,
+                        meshIds: [meshId],
+                        visible: visible,
+                        pickable: pickable,
+                        isObject: true
+                    });
                 }
+                else {
+                    let faceColors = element.face_colors;
+                    let coloredTrianglesDictionary = {};
+                    let currentTriangleIndicesCount = 0;
+                    let dbMesh = fileData.meshes.find(obj => {
+                        return obj.mesh_id === element.mesh_id;
+                    });
+                    for (let i = 0, len = faceColors.length; i < len; i+=4) {
+                        let faceColor = [faceColors[i], faceColors[i+1], faceColors[i+2], faceColors[i+3]];
+                        if (coloredTrianglesDictionary[faceColor] === undefined) {
+                            coloredTrianglesDictionary[faceColor] = [];
+                        }
+                        let indexForPoint0 = dbMesh.indices[currentTriangleIndicesCount];
+                        let x0 = dbMesh.coordinates[indexForPoint0*3];
+                        let y0 = dbMesh.coordinates[indexForPoint0*3+1];
+                        let z0 = dbMesh.coordinates[indexForPoint0*3+2];
+                        let indexForPoint1 = dbMesh.indices[currentTriangleIndicesCount+1];
+                        let x1 = dbMesh.coordinates[indexForPoint1*3];
+                        let y1 = dbMesh.coordinates[indexForPoint1*3+1];
+                        let z1 = dbMesh.coordinates[indexForPoint1*3+2];
+                        let indexForPoint2 = dbMesh.indices[currentTriangleIndicesCount+2];
+                        let x2 = dbMesh.coordinates[indexForPoint2*3];
+                        let y2 = dbMesh.coordinates[indexForPoint2*3+1];
+                        let z2 = dbMesh.coordinates[indexForPoint2*3+2];
+                        coloredTrianglesDictionary[faceColor].push(x0, y0, z0, x1, y1, z1, x2, y2, z2);
+
+                        currentTriangleIndicesCount += 3;
+                    }
+                    let meshIds = [];
+                    for (const [faceColor, trianglesCoordinates] of Object.entries(coloredTrianglesDictionary)) {
+                        sceneModel.createGeometry({
+                            id: `${dbMeshId}-${faceColor}`,
+                            primitive: "triangles",
+                            positions: trianglesCoordinates,
+                            indices: [...Array(trianglesCoordinates.length / 3).keys()]
+                        });
+                        const meshId = `${objectId}-mesh-${faceColor}`;
+                        const faceColorArray = faceColor.split(',').map(Number);
+
+                        let color = [faceColorArray[0] / 255.0, faceColorArray[1] / 255.0, faceColorArray[2] / 255.0];
+                        let opacity = faceColorArray[3] / 255.0;
+
+                        if (props) {
+                            if (props.visible === false) {
+                                visible = false;
+                            }
+                            if (props.pickable === false) {
+                                pickable = false;
+                            }
+                            if (props.colorize) {
+                                color = props.colorize;
+                            }
+                            if (props.opacity !== undefined && props.opacity !== null) {
+                                opacity = props.opacity;
+                            }
+                        }
+
+                        sceneModel.createMesh({
+                            id: meshId,
+                            geometryId: `${dbMeshId}-${faceColor}`,
+                            color: color,
+                            opacity: opacity,
+                            quaternion: rotation && (rotation.qz !== 0 || rotation.qy !== 0 || rotation.qx !== 0 || rotation.qw !== 1.0) ? [rotation.qx, rotation.qy, rotation.qz, rotation.qw] : undefined,
+                            position: vector ? [vector.x, vector.y, vector.z] : undefined
+                        });
+                        meshIds.push(meshId);
+                    }
+                    sceneModel.createEntity({
+                        id: objectId,
+                        meshIds: meshIds,
+                        visible: visible,
+                        pickable: pickable,
+                        isObject: true
+                    });
+                }
+
+                let properties = [];
+                for (let infoKey in info) {
+                    properties.push({
+                        name: infoKey,
+                        value: info[infoKey]
+                    });
+                }
+                metaModelData.propertySets.push({
+                    id: objectId,
+                    name: "Properties",
+                    properties: properties
+                });
 
                 metaModelData.metaObjects.push({
                     id: objectId,
                     name: info && info.Name && info.Name !== "None" ? info.Name : `${element.type} ${objectId}`,
                     type: element.type,
-                    parent: ifcBuildingStoryId,
+                    parent: buildingStoryId,
                     propertySetIds: [objectId]
                 });
             }

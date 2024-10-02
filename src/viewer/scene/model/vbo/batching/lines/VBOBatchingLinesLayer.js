@@ -24,7 +24,7 @@ export class VBOBatchingLinesLayer {
      */
     constructor(cfg) {
 
-        console.info("Creating VBOBatchingLinesLayer");
+       // console.info("Creating VBOBatchingLinesLayer");
 
         /**
          * Index of this LinesBatchingLayer in {@link VBOSceneModel#_layerList}.

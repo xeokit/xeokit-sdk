@@ -17,11 +17,12 @@ const tempMat4a = math.mat4();
  * @private
  */
 export class VBORenderer {
-    constructor(scene, withSAO = false, {instancing = false, edges = false} = {}) {
+    constructor(scene, withSAO = false, {instancing = false, edges = false, useAlphaCutoff = false} = {}) {
         this._scene = scene;
         this._withSAO = withSAO;
         this._instancing = instancing;
         this._edges = edges;
+        this._useAlphaCutoff = useAlphaCutoff;
         this._hash = this._getHash();
 
         /**
@@ -131,7 +132,7 @@ export class VBORenderer {
                             const sectionPlane = sectionPlanes[sectionPlaneIndex];
                             const origin = layer._state.origin;
                             if (origin) {
-                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
+                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a, model.rotationMatrix);
                                 gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                             } else {
                                 gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -270,6 +271,10 @@ export class VBORenderer {
         if (this._withSAO) {
             this._uOcclusionTexture = "uOcclusionTexture";
             this._uSAOParams = program.getLocation("uSAOParams");
+        }
+
+        if (this._useAlphaCutoff) {
+            this._alphaCutoffLocation = program.getLocation("materialAlphaCutoff");
         }
 
         if (scene.logarithmicDepthBufferEnabled) {
@@ -457,7 +462,7 @@ export class VBORenderer {
         let offset = 0;
         const mat4Size = 4 * 4;
 
-        this._matricesUniformBlockBufferData.set(rotationMatrixConjugate, 0);
+        this._matricesUniformBlockBufferData.set(rotationMatrix, 0);
 
         const gotOrigin = (origin[0] !== 0 || origin[1] !== 0 || origin[2] !== 0);
         const gotPosition = (position[0] !== 0 || position[1] !== 0 || position[2] !== 0);
@@ -607,6 +612,10 @@ export class VBORenderer {
                 frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
                 frameCtx.bindTexture++;
             }
+        }
+
+        if (this._useAlphaCutoff) {
+            gl.uniform1f(this._alphaCutoffLocation, textureSet.alphaCutoff);
         }
 
         if (colorUniform) {

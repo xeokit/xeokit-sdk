@@ -54,7 +54,7 @@ export class DTXTrianglesLayer {
 
     constructor(model, cfg) {
 
-        console.info("Creating DTXTrianglesLayer");
+        //console.info("Creating DTXTrianglesLayer");
 
         dataTextureRamStats.numberOfLayers++;
 
@@ -822,14 +822,14 @@ export class DTXTrianglesLayer {
         // object colors
         textureState.texturePerObjectColorsAndFlags._textureData.set(tempUint8Array4, subPortionId * 32);
         if (this._deferredSetFlagsActive) {
-            console.info("_subPortionSetColor defer");
+            //console.info("_subPortionSetColor defer");
             this._deferredSetFlagsDirty = true;
             return;
         }
         if (++this._numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
             this._beginDeferredFlags(); // Subsequent flags updates now deferred
         }
-        console.info("_subPortionSetColor write through");
+        //console.info("_subPortionSetColor write through");
         gl.bindTexture(gl.TEXTURE_2D, textureState.texturePerObjectColorsAndFlags._texture);
         gl.texSubImage2D(
             gl.TEXTURE_2D,
@@ -1122,8 +1122,8 @@ export class DTXTrianglesLayer {
                 worldPos[2] = positions[i + 2];
                 worldPos[3] = 1.0;
                 math.decompressPosition(worldPos, positionsDecodeMatrix);
-                math.transformPoint4(this.model.worldMatrix, worldPos);
-                math.transformPoint4(this.model.worldMatrix, worldPos);
+                math.transformPoint4(this.model.worldMatrix, worldPos, worldPos);
+                math.transformPoint4(this.model.worldMatrix, worldPos, worldPos);
                 worldPos[0] += offsetX;
                 worldPos[1] += offsetY;
                 worldPos[2] += offsetZ;

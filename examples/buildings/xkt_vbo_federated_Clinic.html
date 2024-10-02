@@ -138,26 +138,25 @@
             padding: 0;
         }
 
-        .xeokit-context-menu ul li {
+        .xeokit-context-menu-item {
             list-style-type: none;
             padding-left: 10px;
             padding-right: 20px;
             padding-top: 4px;
             padding-bottom: 4px;
             color: black;
-            border-bottom: 1px solid gray;
             background: rgba(255, 255, 255, 0.46);
             cursor: pointer;
             width: calc(100% - 30px);
         }
 
-        .xeokit-context-menu ul li:hover {
+        .xeokit-context-menu-item:hover {
             background: black;
             color: white;
             font-weight: normal;
         }
 
-        .xeokit-context-menu ul li span {
+        .xeokit-context-menu-item span {
             display: inline-block;
         }
 
@@ -174,6 +173,14 @@
             background: #eeeeee;
             font-weight: normal;
         }
+
+        .xeokit-context-menu-item-separator {
+            background: rgba(0, 0, 0, 1);
+            height: 1px;
+            width: 100%;
+        }
+
+        
 
         .buttons {
             display: flex;

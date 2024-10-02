@@ -37,7 +37,11 @@ export class DTXTrianglesPickDepthRenderer {
         const textureState = state.textureState;
         const origin = dataTextureLayer._state.origin;
         const {position, rotationMatrix, rotationMatrixConjugate} = model;
+
         const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
+        const projMatrix = frameCtx.pickProjMatrix || camera.projMatrix;
+        const eye = frameCtx.pickOrigin || camera.eye;
+        const far = frameCtx.pickProjMatrix ? frameCtx.pickZFar : camera.project.far;
 
         if (!this._program) {
             this._allocate();
@@ -77,15 +81,15 @@ export class DTXTrianglesPickDepthRenderer {
             rtcOrigin[2] += position[2];
             rtcViewMatrix = createRTCViewMat(viewMatrix, rtcOrigin, tempMat4a);
             rtcCameraEye = tempVec3c;
-            rtcCameraEye[0] = camera.eye[0] - rtcOrigin[0];
-            rtcCameraEye[1] = camera.eye[1] - rtcOrigin[1];
-            rtcCameraEye[2] = camera.eye[2] - rtcOrigin[2];
+            rtcCameraEye[0] = eye[0] - rtcOrigin[0];
+            rtcCameraEye[1] = eye[1] - rtcOrigin[1];
+            rtcCameraEye[2] = eye[2] - rtcOrigin[2];
             frameCtx.snapPickOrigin[0] = rtcOrigin[0];
             frameCtx.snapPickOrigin[1] = rtcOrigin[1];
             frameCtx.snapPickOrigin[2] = rtcOrigin[2];
         } else {
             rtcViewMatrix = viewMatrix;
-            rtcCameraEye = camera.eye;
+            rtcCameraEye = eye;
             frameCtx.snapPickOrigin[0] = 0;
             frameCtx.snapPickOrigin[1] = 0;
             frameCtx.snapPickOrigin[2] = 0;
@@ -98,11 +102,11 @@ export class DTXTrianglesPickDepthRenderer {
         gl.uniform2f(this._uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
         gl.uniform1f(this._uPickZNear, frameCtx.pickZNear);
         gl.uniform1f(this._uPickZFar, frameCtx.pickZFar);
-        gl.uniformMatrix4fv(this._uSceneModelMatrix, false, rotationMatrixConjugate);
+        gl.uniformMatrix4fv(this._uSceneModelMatrix, false, rotationMatrix);
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
-        gl.uniformMatrix4fv(this._uProjMatrix, false, camera.projMatrix);
+        gl.uniformMatrix4fv(this._uProjMatrix, false, projMatrix);
         if (scene.logarithmicDepthBufferEnabled) {
-            const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2); // TODO: Far from pick project matrix?
+            const logDepthBufFC = 2.0 / (Math.log(far + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
 
@@ -121,7 +125,7 @@ export class DTXTrianglesPickDepthRenderer {
                         if (active) {
                             const sectionPlane = sectionPlanes[sectionPlaneIndex];
                             if (origin) {
-                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a);
+                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a, rotationMatrix);
                                 gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                             } else {
                                 gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);

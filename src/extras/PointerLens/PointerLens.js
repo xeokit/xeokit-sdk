@@ -65,20 +65,23 @@ export class PointerLens {
         this._lensCursorDiv.style.pointerEvents = "none";
 
         this._lensContainer = document.createElement('div');
+        this._lensContainerId = cfg.containerId || 'xeokit-lens';
+        this._lensContainer.setAttribute("id", this._lensContainerId);
+
         this._lensContainer.style.border = "1px solid black";
         this._lensContainer.style.background = "white";
     //    this._lensContainer.style.opacity = "0";
         this._lensContainer.style.borderRadius = "50%";
         this._lensContainer.style.width = "300px";
         this._lensContainer.style.height = "300px";
-        this._lensContainer.style.marginTop = "85px";
-        this._lensContainer.style.marginLeft = "25px";
+        
         this._lensContainer.style.zIndex = "15000";
         this._lensContainer.style.position = "absolute";
         this._lensContainer.style.pointerEvents = "none";
         this._lensContainer.style.visibility = "hidden";
 
         this._lensCanvas = document.createElement('canvas');
+        this._lensCanvas.id = `${this._lensContainerId}-canvas`;
         // this._lensCanvas.style.background = "darkblue";
         this._lensCanvas.style.borderRadius = "50%";
 
@@ -95,7 +98,12 @@ export class PointerLens {
 
         this._canvasPos = null;
         this._snappedCanvasPos = null;
-        this._lensPosToggle = true;
+        this._lensPosToggle = cfg.lensPosToggle || true;
+        this._lensPosToggleAmount = cfg.lensPosToggleAmount || 85;
+        this._lensPosMarginLeft = cfg.lensPosMarginLeft || 85;
+        this._lensPosMarginTop = cfg.lensPosMarginTop || 25;
+        this._lensContainer.style.marginTop = `${this._lensPosMarginTop}px`;
+        this._lensContainer.style.marginLeft = `${this._lensPosMarginLeft}px`;
 
         this._zoomLevel = cfg.zoomLevel || 2;
 
@@ -125,12 +133,12 @@ export class PointerLens {
         const pointerOnLens =
             this._canvasPos[0] < lensRect.right && this._canvasPos[0] > lensRect.left &&
             this._canvasPos[1] < lensRect.bottom && this._canvasPos[1] > lensRect.top;
-        this._lensContainer.style.marginLeft = `25px`;
+            this._lensContainer.style.marginLeft = `${this._lensPosMarginLeft}px`;
         if (pointerOnLens) {
             if (this._lensPosToggle) {
-                this._lensContainer.style.marginTop = `${canvasRect.bottom - canvasRect.top - this._lensCanvas.height - 85}px`;
+                this._lensContainer.style.marginTop = `${canvasRect.bottom - canvasRect.top - this._lensCanvas.height - this._lensPosToggleAmount}px`;
             } else {
-                this._lensContainer.style.marginTop = `85px`;
+                this._lensContainer.style.marginTop = `${this._lensPosMarginTop}px`;
             }
             this._lensPosToggle = !this._lensPosToggle;
         }

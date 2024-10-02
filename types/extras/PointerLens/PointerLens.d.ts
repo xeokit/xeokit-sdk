@@ -47,6 +47,11 @@ export class PointerLens {
     constructor(viewer: Viewer, cfg?: {
         active?: boolean;
         zoomFactor?: number;
+        containerId?: string;
+        lensPosToggle?: boolean,
+        lensPosToggleAmount?: number,
+        lensPosMarginLeft?: number,
+        lensPosMarginTop?: number;
     });
 
     /**
@@ -136,6 +141,48 @@ export class PointerLens {
      * @returns {boolean} Whether this PointerLens is visible.
      */
     get visible(): boolean;
+
+    /**
+     * Sets whether the pointer lens container should toggle position when mouse is over it.
+     *
+     * @param {boolean} lensPosToggle Whether we should toggle position.
+     */
+    set lensPosToggle(lensPosToggle: boolean);
+
+    /**
+     * Gets whether we should toggle position.
+     *
+     * @returns {boolean} Whether we should toggle position.
+     */
+    get lensPosToggle(): boolean;
+
+    /**
+     * Sets whether we toggle position in vertical or horizontal.
+     *
+     * @param {boolean} lensPosToggleVertical Vertical or horizontal change.
+     */
+    set lensPosToggleVertical(lensPosToggleVertical: boolean);
+
+    /**
+     * Gets whether we toggle position in vertical or horizontal.
+     *
+     * @returns {boolean} Vertical or horizontal change.
+     */
+    get lensPosToggleVertical(): boolean;
+
+    /**
+     * Sets amount of pixels we toggle position.
+     *
+     * @param {number} lensPosToggleAmount Amount of pixels we toggle position.
+     */
+    set lensPosToggleAmount(lensPosToggleAmount: number);
+
+    /**
+     * Gets amount of pixels we toggle position.
+     *
+     * @returns {number} Amount of pixels we toggle position.
+     */
+    get lensPosToggleAmount(): number;
 
     /**
      * Destroys this PointerLens.
