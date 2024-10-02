@@ -378,6 +378,7 @@ export class VBOInstancingTrianglesLayer {
             && !!textureSet
             && !!textureSet.colorTexture;
 
+
         if (!this.model.scene.readableGeometryEnabled) {
             this._state.geometry = null;
         }
