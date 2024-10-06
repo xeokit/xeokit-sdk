@@ -40,23 +40,23 @@
     "filePath": "src/viewer/metadata/MetaModel.js",
     "lines": [
       {
-        "lineNumber": 160,
+        "lineNumber": 162,
         "line": "    /**"
       },
       {
-        "lineNumber": 161,
+        "lineNumber": 163,
         "line": "     * Load metamodel data into this MetaModel."
       },
       {
-        "lineNumber": 162,
+        "lineNumber": 164,
         "line": "     * @param metaModelData"
       },
       {
-        "lineNumber": 163,
+        "lineNumber": 165,
         "line": "     */"
       },
       {
-        "lineNumber": 164,
+        "lineNumber": 166,
         "line": "    loadData(metaModelData, options = {}) {"
       }
     ],
@@ -66,6 +66,73 @@
     ],
     "docParams": [
       "metaModelData"
+    ]
+  },
+  {
+    "name": "getPlaneRTCPos",
+    "filePath": "src/viewer/scene/math/rtcCoords.js",
+    "lines": [
+      {
+        "lineNumber": 121,
+        "line": "/**"
+      },
+      {
+        "lineNumber": 122,
+        "line": " * Given a 3D plane defined by distance from origin and direction, and an RTC center position,"
+      },
+      {
+        "lineNumber": 123,
+        "line": " * return a plane position that is relative to the RTC center."
+      },
+      {
+        "lineNumber": 124,
+        "line": " *"
+      },
+      {
+        "lineNumber": 125,
+        "line": " * @private"
+      },
+      {
+        "lineNumber": 126,
+        "line": " * @param dist"
+      },
+      {
+        "lineNumber": 127,
+        "line": " * @param dir"
+      },
+      {
+        "lineNumber": 128,
+        "line": " * @param rtcCenter"
+      },
+      {
+        "lineNumber": 129,
+        "line": " * @param rtcPlanePos"
+      },
+      {
+        "lineNumber": 130,
+        "line": " * @returns {*}"
+      },
+      {
+        "lineNumber": 131,
+        "line": " */"
+      },
+      {
+        "lineNumber": 132,
+        "line": "function getPlaneRTCPos(dist, dir, rtcOrigin, rtcPlanePos, rotationMatrix) {"
+      }
+    ],
+    "codeParams": [
+      "dist",
+      "dir",
+      "rtcOrigin",
+      "rtcPlanePos",
+      "rotationMatrix"
+    ],
+    "docParams": [
+      "dist",
+      "dir",
+      "rtcCenter",
+      "rtcPlanePos"
     ]
   },
   {
@@ -214,71 +281,71 @@
     "filePath": "src/viewer/scene/model/vbo/batching/lines/VBOBatchingLinesLayer.js",
     "lines": [
       {
-        "lineNumber": 108,
+        "lineNumber": 113,
         "line": "    /**"
       },
       {
-        "lineNumber": 109,
+        "lineNumber": 114,
         "line": "     * Creates a new portion within this LinesBatchingLayer, returns the new portion ID."
       },
       {
-        "lineNumber": 110,
-        "line": "     *"
-      },
-      {
-        "lineNumber": 111,
-        "line": "     * Gives the portion the specified geometry, color and matrix."
-      },
-      {
-        "lineNumber": 112,
-        "line": "     *"
-      },
-      {
-        "lineNumber": 113,
-        "line": "     * @param mesh The SceneModelMesh that owns the portion"
-      },
-      {
-        "lineNumber": 114,
-        "line": "     * @param cfg.positions Flat float Local-space positions array."
-      },
-      {
         "lineNumber": 115,
-        "line": "     * @param cfg.positionsCompressed Flat quantized positions array - decompressed with TrianglesBatchingLayer positionsDecodeMatrix"
+        "line": "     *"
       },
       {
         "lineNumber": 116,
-        "line": "     * @param cfg.indices  Flat int indices array."
+        "line": "     * Gives the portion the specified geometry, color and matrix."
       },
       {
         "lineNumber": 117,
-        "line": "     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]"
+        "line": "     *"
       },
       {
         "lineNumber": 118,
-        "line": "     * @param cfg.opacity Opacity [0..255]"
+        "line": "     * @param mesh The SceneModelMesh that owns the portion"
       },
       {
         "lineNumber": 119,
-        "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
+        "line": "     * @param cfg.positions Flat float Local-space positions array."
       },
       {
         "lineNumber": 120,
-        "line": "     * @param cfg.aabb Flat float AABB World-space AABB"
+        "line": "     * @param cfg.positionsCompressed Flat quantized positions array - decompressed with TrianglesBatchingLayer positionsDecodeMatrix"
       },
       {
         "lineNumber": 121,
-        "line": "     * @param cfg.pickColor Quantized pick color"
+        "line": "     * @param cfg.indices  Flat int indices array."
       },
       {
         "lineNumber": 122,
-        "line": "     * @returns {number} Portion ID"
+        "line": "     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]"
       },
       {
         "lineNumber": 123,
-        "line": "     */"
+        "line": "     * @param cfg.opacity Opacity [0..255]"
       },
       {
         "lineNumber": 124,
+        "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
+      },
+      {
+        "lineNumber": 125,
+        "line": "     * @param cfg.aabb Flat float AABB World-space AABB"
+      },
+      {
+        "lineNumber": 126,
+        "line": "     * @param cfg.pickColor Quantized pick color"
+      },
+      {
+        "lineNumber": 127,
+        "line": "     * @returns {number} Portion ID"
+      },
+      {
+        "lineNumber": 128,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 129,
         "line": "    createPortion(mesh, cfg) {"
       }
     ],
@@ -295,71 +362,71 @@
     "filePath": "src/viewer/scene/model/vbo/batching/points/VBOBatchingPointsLayer.js",
     "lines": [
       {
-        "lineNumber": 116,
+        "lineNumber": 166,
         "line": "    /**"
       },
       {
-        "lineNumber": 117,
+        "lineNumber": 167,
         "line": "     * Creates a new portion within this PointsBatchingLayer, returns the new portion ID."
       },
       {
-        "lineNumber": 118,
+        "lineNumber": 168,
         "line": "     *"
       },
       {
-        "lineNumber": 119,
+        "lineNumber": 169,
         "line": "     * Gives the portion the specified geometry, color and matrix."
       },
       {
-        "lineNumber": 120,
+        "lineNumber": 170,
         "line": "     *"
       },
       {
-        "lineNumber": 121,
+        "lineNumber": 171,
         "line": "     * @param mesh The SceneModelMesh that owns the portion"
       },
       {
-        "lineNumber": 122,
+        "lineNumber": 172,
         "line": "     * @param cfg.positions Flat float Local-space positions array."
       },
       {
-        "lineNumber": 123,
+        "lineNumber": 173,
         "line": "     * @param cfg.positionsCompressed Flat quantized positions array - decompressed with PointsBatchingLayer positionsDecodeMatrix"
       },
       {
-        "lineNumber": 124,
+        "lineNumber": 174,
         "line": "     * @param [cfg.colorsCompressed] Quantized RGB colors [0..255,0..255,0..255,0..255]"
       },
       {
-        "lineNumber": 125,
+        "lineNumber": 175,
         "line": "     * @param [cfg.colors] Flat float colors array."
       },
       {
-        "lineNumber": 126,
+        "lineNumber": 176,
         "line": "     * @param cfg.color Float RGB color [0..1,0..1,0..1]"
       },
       {
-        "lineNumber": 127,
+        "lineNumber": 177,
         "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
       },
       {
-        "lineNumber": 128,
+        "lineNumber": 178,
         "line": "     * @param cfg.aabb Flat float AABB World-space AABB"
       },
       {
-        "lineNumber": 129,
+        "lineNumber": 179,
         "line": "     * @param cfg.pickColor Quantized pick color"
       },
       {
-        "lineNumber": 130,
+        "lineNumber": 180,
         "line": "     * @returns {number} Portion ID"
       },
       {
-        "lineNumber": 131,
+        "lineNumber": 181,
         "line": "     */"
       },
       {
-        "lineNumber": 132,
+        "lineNumber": 182,
         "line": "    createPortion(mesh, cfg) {"
       }
     ],
@@ -376,103 +443,103 @@
     "filePath": "src/viewer/scene/model/vbo/batching/triangles/VBOBatchingTrianglesLayer.js",
     "lines": [
       {
-        "lineNumber": 160,
+        "lineNumber": 165,
         "line": "    /**"
       },
       {
-        "lineNumber": 161,
+        "lineNumber": 166,
         "line": "     * Creates a new portion within this TrianglesBatchingLayer, returns the new portion ID."
       },
       {
-        "lineNumber": 162,
-        "line": "     *"
-      },
-      {
-        "lineNumber": 163,
-        "line": "     * Gives the portion the specified geometry, color and matrix."
-      },
-      {
-        "lineNumber": 164,
-        "line": "     *"
-      },
-      {
-        "lineNumber": 165,
-        "line": "     * @param mesh The SceneModelMesh that owns the portion"
-      },
-      {
-        "lineNumber": 166,
-        "line": "     * @param cfg.positions Flat float Local-space positions array."
-      },
-      {
         "lineNumber": 167,
-        "line": "     * @param cfg.positionsCompressed Flat quantized positions array - decompressed with TrianglesBatchingLayer positionsDecodeMatrix"
+        "line": "     *"
       },
       {
         "lineNumber": 168,
-        "line": "     * @param [cfg.normals] Flat float normals array."
+        "line": "     * Gives the portion the specified geometry, color and matrix."
       },
       {
         "lineNumber": 169,
-        "line": "     * @param [cfg.uv] Flat UVs array."
+        "line": "     *"
       },
       {
         "lineNumber": 170,
-        "line": "     * @param [cfg.uvCompressed]"
+        "line": "     * @param mesh The SceneModelMesh that owns the portion"
       },
       {
         "lineNumber": 171,
-        "line": "     * @param [cfg.colors] Flat float colors array."
+        "line": "     * @param cfg.positions Flat float Local-space positions array."
       },
       {
         "lineNumber": 172,
-        "line": "     * @param [cfg.colorsCompressed]"
+        "line": "     * @param cfg.positionsCompressed Flat quantized positions array - decompressed with TrianglesBatchingLayer positionsDecodeMatrix"
       },
       {
         "lineNumber": 173,
-        "line": "     * @param cfg.indices  Flat int indices array."
+        "line": "     * @param [cfg.normals] Flat float normals array."
       },
       {
         "lineNumber": 174,
-        "line": "     * @param [cfg.edgeIndices] Flat int edges indices array."
+        "line": "     * @param [cfg.uv] Flat UVs array."
       },
       {
         "lineNumber": 175,
-        "line": "     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]"
+        "line": "     * @param [cfg.uvCompressed]"
       },
       {
         "lineNumber": 176,
-        "line": "     * @param cfg.metallic Metalness factor [0..255]"
+        "line": "     * @param [cfg.colors] Flat float colors array."
       },
       {
         "lineNumber": 177,
-        "line": "     * @param cfg.roughness Roughness factor [0..255]"
+        "line": "     * @param [cfg.colorsCompressed]"
       },
       {
         "lineNumber": 178,
-        "line": "     * @param cfg.opacity Opacity [0..255]"
+        "line": "     * @param cfg.indices  Flat int indices array."
       },
       {
         "lineNumber": 179,
-        "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
+        "line": "     * @param [cfg.edgeIndices] Flat int edges indices array."
       },
       {
         "lineNumber": 180,
-        "line": "     * @param cfg.aabb Flat float AABB World-space AABB"
+        "line": "     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]"
       },
       {
         "lineNumber": 181,
-        "line": "     * @param cfg.pickColor Quantized pick color"
+        "line": "     * @param cfg.metallic Metalness factor [0..255]"
       },
       {
         "lineNumber": 182,
-        "line": "     * @returns {number} Portion ID"
+        "line": "     * @param cfg.roughness Roughness factor [0..255]"
       },
       {
         "lineNumber": 183,
-        "line": "     */"
+        "line": "     * @param cfg.opacity Opacity [0..255]"
       },
       {
         "lineNumber": 184,
+        "line": "     * @param [cfg.meshMatrix] Flat float 4x4 matrix"
+      },
+      {
+        "lineNumber": 185,
+        "line": "     * @param cfg.aabb Flat float AABB World-space AABB"
+      },
+      {
+        "lineNumber": 186,
+        "line": "     * @param cfg.pickColor Quantized pick color"
+      },
+      {
+        "lineNumber": 187,
+        "line": "     * @returns {number} Portion ID"
+      },
+      {
+        "lineNumber": 188,
+        "line": "     */"
+      },
+      {
+        "lineNumber": 189,
         "line": "    createPortion(mesh, cfg) {"
       }
     ],

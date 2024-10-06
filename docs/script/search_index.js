@@ -18,6 +18,24 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/plugins/anglemeasurementsplugin/index.js~anglemeasurementeditcontrol",
+    "class/src/plugins/AngleMeasurementsPlugin/index.js~AngleMeasurementEditControl.html",
+    "<span>AngleMeasurementEditControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/AngleMeasurementsPlugin/index.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/anglemeasurementsplugin/index.js~anglemeasurementeditmousecontrol",
+    "class/src/plugins/AngleMeasurementsPlugin/index.js~AngleMeasurementEditMouseControl.html",
+    "<span>AngleMeasurementEditMouseControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/AngleMeasurementsPlugin/index.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/anglemeasurementsplugin/index.js~anglemeasurementedittouchcontrol",
+    "class/src/plugins/AngleMeasurementsPlugin/index.js~AngleMeasurementEditTouchControl.html",
+    "<span>AngleMeasurementEditTouchControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/AngleMeasurementsPlugin/index.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/plugins/anglemeasurementsplugin/anglemeasurementscontrol.js~anglemeasurementscontrol",
     "class/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js~AngleMeasurementsControl.html",
     "<span>AngleMeasurementsControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/AngleMeasurementsPlugin/AngleMeasurementsControl.js</span>",
@@ -228,6 +246,24 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "@xeokit/xeokit-sdk/src/plugins/distancemeasurementsplugin/index.js~distancemeasurementeditcontrol",
+    "class/src/plugins/DistanceMeasurementsPlugin/index.js~DistanceMeasurementEditControl.html",
+    "<span>DistanceMeasurementEditControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/DistanceMeasurementsPlugin/index.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/distancemeasurementsplugin/index.js~distancemeasurementeditmousecontrol",
+    "class/src/plugins/DistanceMeasurementsPlugin/index.js~DistanceMeasurementEditMouseControl.html",
+    "<span>DistanceMeasurementEditMouseControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/DistanceMeasurementsPlugin/index.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/distancemeasurementsplugin/index.js~distancemeasurementedittouchcontrol",
+    "class/src/plugins/DistanceMeasurementsPlugin/index.js~DistanceMeasurementEditTouchControl.html",
+    "<span>DistanceMeasurementEditTouchControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/DistanceMeasurementsPlugin/index.js</span>",
+    "class"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/plugins/distancemeasurementsplugin/distancemeasurementscontrol.js~distancemeasurementscontrol",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js~DistanceMeasurementsControl.html",
     "<span>DistanceMeasurementsControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsControl.js</span>",
@@ -249,6 +285,12 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/plugins/distancemeasurementsplugin/distancemeasurementstouchcontrol.js~distancemeasurementstouchcontrol",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js~DistanceMeasurementsTouchControl.html",
     "<span>DistanceMeasurementsTouchControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurementsTouchControl.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js~dot3d",
+    "class/src/plugins/lib/ui/index.js~Dot3D.html",
+    "<span>Dot3D</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js</span>",
     "class"
   ],
   [
@@ -537,6 +579,18 @@ window.esdocSearchIndex = [
     "@xeokit/xeokit-sdk/src/viewer/scene/mesh/mesh.js~mesh",
     "class/src/viewer/scene/mesh/Mesh.js~Mesh.html",
     "<span>Mesh</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/mesh/Mesh.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/math/meshsurfacearea.js~meshsurfacearea",
+    "class/src/viewer/scene/math/MeshSurfaceArea.js~MeshSurfaceArea.html",
+    "<span>MeshSurfaceArea</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/MeshSurfaceArea.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/math/meshvolume.js~meshvolume",
+    "class/src/viewer/scene/math/MeshVolume.js~MeshVolume.html",
+    "<span>MeshVolume</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/MeshVolume.js</span>",
     "class"
   ],
   [
@@ -1116,12 +1170,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin",
-    "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html",
-    "<span>TreeViewPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/TreeViewPlugin/TreeViewPlugin.js</span>",
-    "class"
-  ],
-  [
     "@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js~unsignedbytetype",
     "variable/index.html#static-variable-UnsignedByteType",
     "<span>UnsignedByteType</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/constants/constants.js</span>",
@@ -1224,70 +1272,88 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/index.js~zoneeditcontrol",
-    "class/src/plugins/ZonesPlugin/index.js~ZoneEditControl.html",
-    "<span>ZoneEditControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/index.js</span>",
+    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/zonesplugin.js~zoneeditcontrol",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZoneEditControl.html",
+    "<span>ZoneEditControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/ZonesPlugin.js</span>",
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/index.js~zoneeditmousecontrol",
-    "class/src/plugins/ZonesPlugin/index.js~ZoneEditMouseControl.html",
-    "<span>ZoneEditMouseControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/index.js</span>",
+    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/zonesplugin.js~zoneeditmousecontrol",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZoneEditMouseControl.html",
+    "<span>ZoneEditMouseControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/ZonesPlugin.js</span>",
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/index.js~zoneedittouchcontrol",
-    "class/src/plugins/ZonesPlugin/index.js~ZoneEditTouchControl.html",
-    "<span>ZoneEditTouchControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/index.js</span>",
+    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/zonesplugin.js~zoneedittouchcontrol",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZoneEditTouchControl.html",
+    "<span>ZoneEditTouchControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/ZonesPlugin.js</span>",
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/index.js~zonetranslatecontrol",
-    "class/src/plugins/ZonesPlugin/index.js~ZoneTranslateControl.html",
-    "<span>ZoneTranslateControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/index.js</span>",
+    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/zonesplugin.js~zonetranslatecontrol",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZoneTranslateControl.html",
+    "<span>ZoneTranslateControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/ZonesPlugin.js</span>",
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/index.js~zonetranslatemousecontrol",
-    "class/src/plugins/ZonesPlugin/index.js~ZoneTranslateMouseControl.html",
-    "<span>ZoneTranslateMouseControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/index.js</span>",
+    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/zonesplugin.js~zonetranslatemousecontrol",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZoneTranslateMouseControl.html",
+    "<span>ZoneTranslateMouseControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/ZonesPlugin.js</span>",
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/index.js~zonetranslatetouchcontrol",
-    "class/src/plugins/ZonesPlugin/index.js~ZoneTranslateTouchControl.html",
-    "<span>ZoneTranslateTouchControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/index.js</span>",
+    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/zonesplugin.js~zonetranslatetouchcontrol",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZoneTranslateTouchControl.html",
+    "<span>ZoneTranslateTouchControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/ZonesPlugin.js</span>",
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/index.js~zonesmousecontrol",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesMouseControl.html",
-    "<span>ZonesMouseControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/index.js</span>",
+    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/zonesplugin.js~zonesaazonecontrol",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesAAZoneControl.html",
+    "<span>ZonesAAZoneControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/ZonesPlugin.js</span>",
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/index.js~zonesplugin",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPlugin.html",
-    "<span>ZonesPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/index.js</span>",
+    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/zonesplugin.js~zonesmousecontrol",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesMouseControl.html",
+    "<span>ZonesMouseControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/ZonesPlugin.js</span>",
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/index.js~zonespolysurfacemousecontrol",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceMouseControl.html",
-    "<span>ZonesPolysurfaceMouseControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/index.js</span>",
+    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/zonesplugin.js~zonesplugin",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPlugin.html",
+    "<span>ZonesPlugin</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/ZonesPlugin.js</span>",
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/index.js~zonespolysurfacetouchcontrol",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl.html",
-    "<span>ZonesPolysurfaceTouchControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/index.js</span>",
+    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/zonesplugin.js~zonespolysurfacemousecontrol",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceMouseControl.html",
+    "<span>ZonesPolysurfaceMouseControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/ZonesPlugin.js</span>",
     "class"
   ],
   [
-    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/index.js~zonestouchcontrol",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesTouchControl.html",
-    "<span>ZonesTouchControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/index.js</span>",
+    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/zonesplugin.js~zonespolysurfacetouchcontrol",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceTouchControl.html",
+    "<span>ZonesPolysurfaceTouchControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/ZonesPlugin.js</span>",
     "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/zonesplugin/zonesplugin.js~zonestouchcontrol",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesTouchControl.html",
+    "<span>ZonesTouchControl</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/ZonesPlugin/ZonesPlugin.js</span>",
+    "class"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js~activatedraggabledot",
+    "function/index.html#static-function-activateDraggableDot",
+    "<span>activateDraggableDot</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js~activatedraggabledots",
+    "function/index.html#static-function-activateDraggableDots",
+    "<span>activateDraggableDots</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js</span>",
+    "function"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/scene/geometry/builders/buildboxgeometry.js~buildboxgeometry",
@@ -1386,6 +1452,18 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "@xeokit/xeokit-sdk/src/viewer/scene/math/meshsurfacearea.js~meshsurfacearea",
+    "variable/index.html#static-variable-meshSurfaceArea",
+    "<span>meshSurfaceArea</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/MeshSurfaceArea.js</span>",
+    "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/viewer/scene/math/meshvolume.js~meshvolume",
+    "variable/index.html#static-variable-meshVolume",
+    "<span>meshVolume</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/math/MeshVolume.js</span>",
+    "variable"
+  ],
+  [
     "@xeokit/xeokit-sdk/src/viewer/utils/os.js~os",
     "variable/index.html#static-variable-os",
     "<span>os</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/utils/os.js</span>",
@@ -1414,6 +1492,18 @@ window.esdocSearchIndex = [
     "variable/index.html#static-variable-stats",
     "<span>stats</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/viewer/scene/stats.js</span>",
     "variable"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js~touchpointselector",
+    "function/index.html#static-function-touchPointSelector",
+    "<span>touchPointSelector</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js</span>",
+    "function"
+  ],
+  [
+    "@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js~transformtonode",
+    "function/index.html#static-function-transformToNode",
+    "<span>transformToNode</span> <span class=\"search-result-import-path\">@xeokit/xeokit-sdk/src/plugins/lib/ui/index.js</span>",
+    "function"
   ],
   [
     "@xeokit/xeokit-sdk/src/viewer/scene/model/calculateuniquepositions.js~uniquifypositions",
@@ -2592,6 +2682,30 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/plugins/anglemeasurementsplugin/index.js~anglemeasurementeditcontrol#constructor",
+    "class/src/plugins/AngleMeasurementsPlugin/index.js~AngleMeasurementEditControl.html#instance-constructor-constructor",
+    "src/plugins/AngleMeasurementsPlugin/index.js~AngleMeasurementEditControl#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/index.js~anglemeasurementeditcontrol#deactivate",
+    "class/src/plugins/AngleMeasurementsPlugin/index.js~AngleMeasurementEditControl.html#instance-method-deactivate",
+    "src/plugins/AngleMeasurementsPlugin/index.js~AngleMeasurementEditControl#deactivate",
+    "method"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/index.js~anglemeasurementeditmousecontrol#constructor",
+    "class/src/plugins/AngleMeasurementsPlugin/index.js~AngleMeasurementEditMouseControl.html#instance-constructor-constructor",
+    "src/plugins/AngleMeasurementsPlugin/index.js~AngleMeasurementEditMouseControl#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/anglemeasurementsplugin/index.js~anglemeasurementedittouchcontrol#constructor",
+    "class/src/plugins/AngleMeasurementsPlugin/index.js~AngleMeasurementEditTouchControl.html#instance-constructor-constructor",
+    "src/plugins/AngleMeasurementsPlugin/index.js~AngleMeasurementEditTouchControl#constructor",
+    "method"
+  ],
+  [
     "src/plugins/annotationsplugin/annotation.js",
     "file/src/plugins/AnnotationsPlugin/Annotation.js.html",
     "src/plugins/AnnotationsPlugin/Annotation.js",
@@ -2602,6 +2716,12 @@ window.esdocSearchIndex = [
     "class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html#instance-method-destroy",
     "src/plugins/AnnotationsPlugin/Annotation.js~Annotation#destroy",
     "method"
+  ],
+  [
+    "src/plugins/annotationsplugin/annotation.js~annotation#entity",
+    "class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html#instance-member-entity",
+    "src/plugins/AnnotationsPlugin/Annotation.js~Annotation#entity",
+    "member"
   ],
   [
     "src/plugins/annotationsplugin/annotation.js~annotation#eye",
@@ -2658,9 +2778,27 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/plugins/annotationsplugin/annotation.js~annotation#setfrompickresult",
+    "class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html#instance-method-setFromPickResult",
+    "src/plugins/AnnotationsPlugin/Annotation.js~Annotation#setFromPickResult",
+    "method"
+  ],
+  [
+    "src/plugins/annotationsplugin/annotation.js~annotation#setlabelposition",
+    "class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html#instance-method-setLabelPosition",
+    "src/plugins/AnnotationsPlugin/Annotation.js~Annotation#setLabelPosition",
+    "method"
+  ],
+  [
     "src/plugins/annotationsplugin/annotation.js~annotation#setlabelshown",
     "class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html#instance-method-setLabelShown",
     "src/plugins/AnnotationsPlugin/Annotation.js~Annotation#setLabelShown",
+    "method"
+  ],
+  [
+    "src/plugins/annotationsplugin/annotation.js~annotation#setmarkeralign",
+    "class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html#instance-method-setMarkerAlign",
+    "src/plugins/AnnotationsPlugin/Annotation.js~Annotation#setMarkerAlign",
     "method"
   ],
   [
@@ -2679,6 +2817,12 @@ window.esdocSearchIndex = [
     "src/plugins/annotationsplugin/annotation.js~annotation#up",
     "class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html#instance-member-up",
     "src/plugins/AnnotationsPlugin/Annotation.js~Annotation#up",
+    "member"
+  ],
+  [
+    "src/plugins/annotationsplugin/annotation.js~annotation#worldpos",
+    "class/src/plugins/AnnotationsPlugin/Annotation.js~Annotation.html#instance-member-worldPos",
+    "src/plugins/AnnotationsPlugin/Annotation.js~Annotation#worldPos",
     "member"
   ],
   [
@@ -2904,6 +3048,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#axesbasis",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-set-axesBasis",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#axesBasis",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#axesbasis",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-get-axesBasis",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#axesBasis",
+    "member"
+  ],
+  [
     "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#axisenabled",
     "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-set-axisEnabled",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#axisEnabled",
@@ -3043,7 +3199,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#userotationadjustment",
-    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-member-useRotationAdjustment",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-set-useRotationAdjustment",
+    "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#useRotationAdjustment",
+    "member"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/distancemeasurement.js~distancemeasurement#userotationadjustment",
+    "class/src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement.html#instance-get-useRotationAdjustment",
     "src/plugins/DistanceMeasurementsPlugin/DistanceMeasurement.js~DistanceMeasurement#useRotationAdjustment",
     "member"
   ],
@@ -3570,6 +3732,30 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/plugins/distancemeasurementsplugin/index.js~distancemeasurementeditcontrol#constructor",
+    "class/src/plugins/DistanceMeasurementsPlugin/index.js~DistanceMeasurementEditControl.html#instance-constructor-constructor",
+    "src/plugins/DistanceMeasurementsPlugin/index.js~DistanceMeasurementEditControl#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/index.js~distancemeasurementeditcontrol#deactivate",
+    "class/src/plugins/DistanceMeasurementsPlugin/index.js~DistanceMeasurementEditControl.html#instance-method-deactivate",
+    "src/plugins/DistanceMeasurementsPlugin/index.js~DistanceMeasurementEditControl#deactivate",
+    "method"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/index.js~distancemeasurementeditmousecontrol#constructor",
+    "class/src/plugins/DistanceMeasurementsPlugin/index.js~DistanceMeasurementEditMouseControl.html#instance-constructor-constructor",
+    "src/plugins/DistanceMeasurementsPlugin/index.js~DistanceMeasurementEditMouseControl#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/distancemeasurementsplugin/index.js~distancemeasurementedittouchcontrol#constructor",
+    "class/src/plugins/DistanceMeasurementsPlugin/index.js~DistanceMeasurementEditTouchControl.html#instance-constructor-constructor",
+    "src/plugins/DistanceMeasurementsPlugin/index.js~DistanceMeasurementEditTouchControl#constructor",
+    "method"
+  ],
+  [
     "src/plugins/dotbimloaderplugin/dotbimdefaultdatasource.js",
     "file/src/plugins/DotBIMLoaderPlugin/DotBIMDefaultDataSource.js.html",
     "src/plugins/DotBIMLoaderPlugin/DotBIMDefaultDataSource.js",
@@ -4026,12 +4212,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/plugins/gltfloaderplugin/gltfscenemodelloader.js",
-    "file/src/plugins/GLTFLoaderPlugin/GLTFSceneModelLoader.js.html",
-    "src/plugins/GLTFLoaderPlugin/GLTFSceneModelLoader.js",
-    "file"
-  ],
-  [
     "src/plugins/gltfloaderplugin/index.js",
     "file/src/plugins/GLTFLoaderPlugin/index.js.html",
     "src/plugins/GLTFLoaderPlugin/index.js",
@@ -4066,6 +4246,18 @@ window.esdocSearchIndex = [
     "file/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js.html",
     "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js",
     "file"
+  ],
+  [
+    "src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin#center",
+    "class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html#instance-get-center",
+    "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin#center",
+    "member"
+  ],
+  [
+    "src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin#center",
+    "class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html#instance-set-center",
+    "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin#center",
+    "member"
   ],
   [
     "src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin#colordepth",
@@ -4116,6 +4308,30 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin#rotate",
+    "class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html#instance-get-rotate",
+    "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin#rotate",
+    "member"
+  ],
+  [
+    "src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin#rotate",
+    "class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html#instance-set-rotate",
+    "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin#rotate",
+    "member"
+  ],
+  [
+    "src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin#rotatex",
+    "class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html#instance-get-rotateX",
+    "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin#rotateX",
+    "member"
+  ],
+  [
+    "src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin#rotatex",
+    "class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html#instance-set-rotateX",
+    "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin#rotateX",
+    "member"
+  ],
+  [
     "src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin#skip",
     "class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html#instance-get-skip",
     "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin#skip",
@@ -4125,6 +4341,18 @@ window.esdocSearchIndex = [
     "src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin#skip",
     "class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html#instance-set-skip",
     "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin#skip",
+    "member"
+  ],
+  [
+    "src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin#transform",
+    "class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html#instance-get-transform",
+    "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin#transform",
+    "member"
+  ],
+  [
+    "src/plugins/lasloaderplugin/lasloaderplugin.js~lasloaderplugin#transform",
+    "class/src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin.html#instance-set-transform",
+    "src/plugins/LASLoaderPlugin/LASLoaderPlugin.js~LASLoaderPlugin#transform",
     "member"
   ],
   [
@@ -4638,9 +4866,21 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#getstoreyinverticalrange",
+    "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-getStoreyInVerticalRange",
+    "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#getStoreyInVerticalRange",
+    "method"
+  ],
+  [
     "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#gotostoreycamera",
     "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-gotoStoreyCamera",
     "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#gotoStoreyCamera",
+    "method"
+  ],
+  [
+    "src/plugins/storeyviewsplugin/storeyviewsplugin.js~storeyviewsplugin#ispositionaboveorbelowbuilding",
+    "class/src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin.html#instance-method-isPositionAboveOrBelowBuilding",
+    "src/plugins/StoreyViewsPlugin/StoreyViewsPlugin.js~StoreyViewsPlugin#isPositionAboveOrBelowBuilding",
     "method"
   ],
   [
@@ -4852,90 +5092,6 @@ window.esdocSearchIndex = [
     "class/src/plugins/TreeViewPlugin/TreeViewNode.js~TreeViewNode.html#instance-get-xrayed",
     "src/plugins/TreeViewPlugin/TreeViewNode.js~TreeViewNode#xrayed",
     "member"
-  ],
-  [
-    "src/plugins/treeviewplugin/treeviewplugin.js",
-    "file/src/plugins/TreeViewPlugin/TreeViewPlugin.js.html",
-    "src/plugins/TreeViewPlugin/TreeViewPlugin.js",
-    "file"
-  ],
-  [
-    "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#addmodel",
-    "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-method-addModel",
-    "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#addModel",
-    "method"
-  ],
-  [
-    "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#collapse",
-    "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-method-collapse",
-    "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#collapse",
-    "method"
-  ],
-  [
-    "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#constructor",
-    "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-constructor-constructor",
-    "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#constructor",
-    "method"
-  ],
-  [
-    "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#destroy",
-    "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-method-destroy",
-    "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#destroy",
-    "method"
-  ],
-  [
-    "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#errors",
-    "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-member-errors",
-    "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#errors",
-    "member"
-  ],
-  [
-    "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#expandtodepth",
-    "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-method-expandToDepth",
-    "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#expandToDepth",
-    "method"
-  ],
-  [
-    "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#hierarchy",
-    "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-set-hierarchy",
-    "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#hierarchy",
-    "member"
-  ],
-  [
-    "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#hierarchy",
-    "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-get-hierarchy",
-    "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#hierarchy",
-    "member"
-  ],
-  [
-    "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#removemodel",
-    "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-method-removeModel",
-    "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#removeModel",
-    "method"
-  ],
-  [
-    "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#shownode",
-    "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-method-showNode",
-    "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#showNode",
-    "method"
-  ],
-  [
-    "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#unshownode",
-    "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-method-unShowNode",
-    "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#unShowNode",
-    "method"
-  ],
-  [
-    "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#valid",
-    "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-member-valid",
-    "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#valid",
-    "member"
-  ],
-  [
-    "src/plugins/treeviewplugin/treeviewplugin.js~treeviewplugin#withnodetree",
-    "class/src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin.html#instance-method-withNodeTree",
-    "src/plugins/TreeViewPlugin/TreeViewPlugin.js~TreeViewPlugin#withNodeTree",
-    "method"
   ],
   [
     "src/plugins/treeviewplugin/index.js",
@@ -5280,6 +5436,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/plugins/xktloaderplugin/parsers/parserv11.js",
+    "file/src/plugins/XKTLoaderPlugin/parsers/ParserV11.js.html",
+    "src/plugins/XKTLoaderPlugin/parsers/ParserV11.js",
+    "file"
+  ],
+  [
     "src/plugins/xktloaderplugin/parsers/parserv2.js",
     "file/src/plugins/XKTLoaderPlugin/parsers/ParserV2.js.html",
     "src/plugins/XKTLoaderPlugin/parsers/ParserV2.js",
@@ -5370,274 +5532,262 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/plugins/zonesplugin/zonesplugin.js",
+    "file/src/plugins/ZonesPlugin/ZonesPlugin.js.html",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js",
+    "file"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zoneeditcontrol#constructor",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZoneEditControl.html#instance-constructor-constructor",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZoneEditControl#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zoneeditcontrol#deactivate",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZoneEditControl.html#instance-method-deactivate",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZoneEditControl#deactivate",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zoneeditmousecontrol#constructor",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZoneEditMouseControl.html#instance-constructor-constructor",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZoneEditMouseControl#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zoneedittouchcontrol#constructor",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZoneEditTouchControl.html#instance-constructor-constructor",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZoneEditTouchControl#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonetranslatecontrol#constructor",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZoneTranslateControl.html#instance-constructor-constructor",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZoneTranslateControl#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonetranslatecontrol#deactivate",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZoneTranslateControl.html#instance-method-deactivate",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZoneTranslateControl#deactivate",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonetranslatemousecontrol#constructor",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZoneTranslateMouseControl.html#instance-constructor-constructor",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZoneTranslateMouseControl#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonetranslatetouchcontrol#constructor",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZoneTranslateTouchControl.html#instance-constructor-constructor",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZoneTranslateTouchControl#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonesaazonecontrol#activate",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesAAZoneControl.html#instance-method-activate",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesAAZoneControl#activate",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonesaazonecontrol#active",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesAAZoneControl.html#instance-get-active",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesAAZoneControl#active",
+    "member"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonesaazonecontrol#constructor",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesAAZoneControl.html#instance-constructor-constructor",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesAAZoneControl#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonesaazonecontrol#createselect3dpoint",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesAAZoneControl.html#instance-member-createSelect3dPoint",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesAAZoneControl#createSelect3dPoint",
+    "member"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonesaazonecontrol#deactivate",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesAAZoneControl.html#instance-method-deactivate",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesAAZoneControl#deactivate",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonesaazonecontrol#destroy",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesAAZoneControl.html#instance-method-destroy",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesAAZoneControl#destroy",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonesaazonecontrol#pointerlens",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesAAZoneControl.html#instance-member-pointerLens",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesAAZoneControl#pointerLens",
+    "member"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonesaazonecontrol#zonesplugin",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesAAZoneControl.html#instance-member-zonesPlugin",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesAAZoneControl#zonesPlugin",
+    "member"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonesmousecontrol#constructor",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesMouseControl.html#instance-constructor-constructor",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesMouseControl#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonesplugin#constructor",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPlugin.html#instance-constructor-constructor",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPlugin#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonesplugin#createzone",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPlugin.html#instance-method-createZone",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPlugin#createZone",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonesplugin#defaultcolor",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPlugin.html#instance-member-defaultColor",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPlugin#defaultColor",
+    "member"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonesplugin#destroy",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPlugin.html#instance-method-destroy",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPlugin#destroy",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonesplugin#zindex",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPlugin.html#instance-member-zIndex",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPlugin#zIndex",
+    "member"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonesplugin#zones",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPlugin.html#instance-get-zones",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPlugin#zones",
+    "member"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonespolysurfacemousecontrol#activate",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceMouseControl.html#instance-method-activate",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceMouseControl#activate",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonespolysurfacemousecontrol#active",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceMouseControl.html#instance-get-active",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceMouseControl#active",
+    "member"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonespolysurfacemousecontrol#constructor",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceMouseControl.html#instance-constructor-constructor",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceMouseControl#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonespolysurfacemousecontrol#deactivate",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceMouseControl.html#instance-method-deactivate",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceMouseControl#deactivate",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonespolysurfacemousecontrol#destroy",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceMouseControl.html#instance-method-destroy",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceMouseControl#destroy",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonespolysurfacemousecontrol#pointerlens",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceMouseControl.html#instance-member-pointerLens",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceMouseControl#pointerLens",
+    "member"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonespolysurfacemousecontrol#zonesplugin",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceMouseControl.html#instance-member-zonesPlugin",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceMouseControl#zonesPlugin",
+    "member"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonespolysurfacetouchcontrol#activate",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceTouchControl.html#instance-method-activate",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceTouchControl#activate",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonespolysurfacetouchcontrol#active",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceTouchControl.html#instance-get-active",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceTouchControl#active",
+    "member"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonespolysurfacetouchcontrol#constructor",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceTouchControl.html#instance-constructor-constructor",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceTouchControl#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonespolysurfacetouchcontrol#deactivate",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceTouchControl.html#instance-method-deactivate",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceTouchControl#deactivate",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonespolysurfacetouchcontrol#destroy",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceTouchControl.html#instance-method-destroy",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceTouchControl#destroy",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonespolysurfacetouchcontrol#pointercircle",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceTouchControl.html#instance-member-pointerCircle",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceTouchControl#pointerCircle",
+    "member"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonespolysurfacetouchcontrol#pointerlens",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceTouchControl.html#instance-member-pointerLens",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceTouchControl#pointerLens",
+    "member"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonespolysurfacetouchcontrol#zonesplugin",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceTouchControl.html#instance-member-zonesPlugin",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesPolysurfaceTouchControl#zonesPlugin",
+    "member"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonestouchcontrol#constructor",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesTouchControl.html#instance-constructor-constructor",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesTouchControl#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonestouchcontrol#destroy",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesTouchControl.html#instance-method-destroy",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesTouchControl#destroy",
+    "method"
+  ],
+  [
+    "src/plugins/zonesplugin/zonesplugin.js~zonestouchcontrol#pointercircle",
+    "class/src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesTouchControl.html#instance-member-pointerCircle",
+    "src/plugins/ZonesPlugin/ZonesPlugin.js~ZonesTouchControl#pointerCircle",
+    "member"
+  ],
+  [
     "src/plugins/zonesplugin/index.js",
     "file/src/plugins/ZonesPlugin/index.js.html",
     "src/plugins/ZonesPlugin/index.js",
     "file"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zoneeditcontrol#constructor",
-    "class/src/plugins/ZonesPlugin/index.js~ZoneEditControl.html#instance-constructor-constructor",
-    "src/plugins/ZonesPlugin/index.js~ZoneEditControl#constructor",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zoneeditcontrol#deactivate",
-    "class/src/plugins/ZonesPlugin/index.js~ZoneEditControl.html#instance-method-deactivate",
-    "src/plugins/ZonesPlugin/index.js~ZoneEditControl#deactivate",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zoneeditmousecontrol#constructor",
-    "class/src/plugins/ZonesPlugin/index.js~ZoneEditMouseControl.html#instance-constructor-constructor",
-    "src/plugins/ZonesPlugin/index.js~ZoneEditMouseControl#constructor",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zoneedittouchcontrol#constructor",
-    "class/src/plugins/ZonesPlugin/index.js~ZoneEditTouchControl.html#instance-constructor-constructor",
-    "src/plugins/ZonesPlugin/index.js~ZoneEditTouchControl#constructor",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonetranslatecontrol#constructor",
-    "class/src/plugins/ZonesPlugin/index.js~ZoneTranslateControl.html#instance-constructor-constructor",
-    "src/plugins/ZonesPlugin/index.js~ZoneTranslateControl#constructor",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonetranslatecontrol#deactivate",
-    "class/src/plugins/ZonesPlugin/index.js~ZoneTranslateControl.html#instance-method-deactivate",
-    "src/plugins/ZonesPlugin/index.js~ZoneTranslateControl#deactivate",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonetranslatemousecontrol#constructor",
-    "class/src/plugins/ZonesPlugin/index.js~ZoneTranslateMouseControl.html#instance-constructor-constructor",
-    "src/plugins/ZonesPlugin/index.js~ZoneTranslateMouseControl#constructor",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonetranslatetouchcontrol#constructor",
-    "class/src/plugins/ZonesPlugin/index.js~ZoneTranslateTouchControl.html#instance-constructor-constructor",
-    "src/plugins/ZonesPlugin/index.js~ZoneTranslateTouchControl#constructor",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonesmousecontrol#activate",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesMouseControl.html#instance-method-activate",
-    "src/plugins/ZonesPlugin/index.js~ZonesMouseControl#activate",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonesmousecontrol#active",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesMouseControl.html#instance-get-active",
-    "src/plugins/ZonesPlugin/index.js~ZonesMouseControl#active",
-    "member"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonesmousecontrol#constructor",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesMouseControl.html#instance-constructor-constructor",
-    "src/plugins/ZonesPlugin/index.js~ZonesMouseControl#constructor",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonesmousecontrol#deactivate",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesMouseControl.html#instance-method-deactivate",
-    "src/plugins/ZonesPlugin/index.js~ZonesMouseControl#deactivate",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonesmousecontrol#destroy",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesMouseControl.html#instance-method-destroy",
-    "src/plugins/ZonesPlugin/index.js~ZonesMouseControl#destroy",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonesmousecontrol#pointerlens",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesMouseControl.html#instance-member-pointerLens",
-    "src/plugins/ZonesPlugin/index.js~ZonesMouseControl#pointerLens",
-    "member"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonesmousecontrol#zonesplugin",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesMouseControl.html#instance-member-zonesPlugin",
-    "src/plugins/ZonesPlugin/index.js~ZonesMouseControl#zonesPlugin",
-    "member"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonesplugin#constructor",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPlugin.html#instance-constructor-constructor",
-    "src/plugins/ZonesPlugin/index.js~ZonesPlugin#constructor",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonesplugin#createzone",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPlugin.html#instance-method-createZone",
-    "src/plugins/ZonesPlugin/index.js~ZonesPlugin#createZone",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonesplugin#defaultcolor",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPlugin.html#instance-member-defaultColor",
-    "src/plugins/ZonesPlugin/index.js~ZonesPlugin#defaultColor",
-    "member"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonesplugin#destroy",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPlugin.html#instance-method-destroy",
-    "src/plugins/ZonesPlugin/index.js~ZonesPlugin#destroy",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonesplugin#zindex",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPlugin.html#instance-member-zIndex",
-    "src/plugins/ZonesPlugin/index.js~ZonesPlugin#zIndex",
-    "member"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonesplugin#zones",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPlugin.html#instance-get-zones",
-    "src/plugins/ZonesPlugin/index.js~ZonesPlugin#zones",
-    "member"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonespolysurfacemousecontrol#activate",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceMouseControl.html#instance-method-activate",
-    "src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceMouseControl#activate",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonespolysurfacemousecontrol#active",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceMouseControl.html#instance-get-active",
-    "src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceMouseControl#active",
-    "member"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonespolysurfacemousecontrol#constructor",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceMouseControl.html#instance-constructor-constructor",
-    "src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceMouseControl#constructor",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonespolysurfacemousecontrol#deactivate",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceMouseControl.html#instance-method-deactivate",
-    "src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceMouseControl#deactivate",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonespolysurfacemousecontrol#destroy",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceMouseControl.html#instance-method-destroy",
-    "src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceMouseControl#destroy",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonespolysurfacemousecontrol#pointerlens",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceMouseControl.html#instance-member-pointerLens",
-    "src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceMouseControl#pointerLens",
-    "member"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonespolysurfacemousecontrol#zonesplugin",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceMouseControl.html#instance-member-zonesPlugin",
-    "src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceMouseControl#zonesPlugin",
-    "member"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonespolysurfacetouchcontrol#activate",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl.html#instance-method-activate",
-    "src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl#activate",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonespolysurfacetouchcontrol#active",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl.html#instance-get-active",
-    "src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl#active",
-    "member"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonespolysurfacetouchcontrol#constructor",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl.html#instance-constructor-constructor",
-    "src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl#constructor",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonespolysurfacetouchcontrol#deactivate",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl.html#instance-method-deactivate",
-    "src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl#deactivate",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonespolysurfacetouchcontrol#destroy",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl.html#instance-method-destroy",
-    "src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl#destroy",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonespolysurfacetouchcontrol#pointercircle",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl.html#instance-member-pointerCircle",
-    "src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl#pointerCircle",
-    "member"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonespolysurfacetouchcontrol#pointerlens",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl.html#instance-member-pointerLens",
-    "src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl#pointerLens",
-    "member"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonespolysurfacetouchcontrol#zonesplugin",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl.html#instance-member-zonesPlugin",
-    "src/plugins/ZonesPlugin/index.js~ZonesPolysurfaceTouchControl#zonesPlugin",
-    "member"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonestouchcontrol#activate",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesTouchControl.html#instance-method-activate",
-    "src/plugins/ZonesPlugin/index.js~ZonesTouchControl#activate",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonestouchcontrol#active",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesTouchControl.html#instance-get-active",
-    "src/plugins/ZonesPlugin/index.js~ZonesTouchControl#active",
-    "member"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonestouchcontrol#constructor",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesTouchControl.html#instance-constructor-constructor",
-    "src/plugins/ZonesPlugin/index.js~ZonesTouchControl#constructor",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonestouchcontrol#deactivate",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesTouchControl.html#instance-method-deactivate",
-    "src/plugins/ZonesPlugin/index.js~ZonesTouchControl#deactivate",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonestouchcontrol#destroy",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesTouchControl.html#instance-method-destroy",
-    "src/plugins/ZonesPlugin/index.js~ZonesTouchControl#destroy",
-    "method"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonestouchcontrol#pointercircle",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesTouchControl.html#instance-member-pointerCircle",
-    "src/plugins/ZonesPlugin/index.js~ZonesTouchControl#pointerCircle",
-    "member"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonestouchcontrol#pointerlens",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesTouchControl.html#instance-member-pointerLens",
-    "src/plugins/ZonesPlugin/index.js~ZonesTouchControl#pointerLens",
-    "member"
-  ],
-  [
-    "src/plugins/zonesplugin/index.js~zonestouchcontrol#zonesplugin",
-    "class/src/plugins/ZonesPlugin/index.js~ZonesTouchControl.html#instance-member-zonesPlugin",
-    "src/plugins/ZonesPlugin/index.js~ZonesTouchControl#zonesPlugin",
-    "member"
   ],
   [
     "src/plugins/index.js",
@@ -5674,6 +5824,60 @@ window.esdocSearchIndex = [
     "file/src/plugins/lib/html/Wire.js.html",
     "src/plugins/lib/html/Wire.js",
     "file"
+  ],
+  [
+    "src/plugins/lib/ui/index.js",
+    "file/src/plugins/lib/ui/index.js.html",
+    "src/plugins/lib/ui/index.js",
+    "file"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~dot3d#constructor",
+    "class/src/plugins/lib/ui/index.js~Dot3D.html#instance-constructor-constructor",
+    "src/plugins/lib/ui/index.js~Dot3D#constructor",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~dot3d#destroy",
+    "class/src/plugins/lib/ui/index.js~Dot3D.html#instance-method-destroy",
+    "src/plugins/lib/ui/index.js~Dot3D#destroy",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~dot3d#setclickable",
+    "class/src/plugins/lib/ui/index.js~Dot3D.html#instance-method-setClickable",
+    "src/plugins/lib/ui/index.js~Dot3D#setClickable",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~dot3d#setculled",
+    "class/src/plugins/lib/ui/index.js~Dot3D.html#instance-method-setCulled",
+    "src/plugins/lib/ui/index.js~Dot3D#setCulled",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~dot3d#setfillcolor",
+    "class/src/plugins/lib/ui/index.js~Dot3D.html#instance-method-setFillColor",
+    "src/plugins/lib/ui/index.js~Dot3D#setFillColor",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~dot3d#sethighlighted",
+    "class/src/plugins/lib/ui/index.js~Dot3D.html#instance-method-setHighlighted",
+    "src/plugins/lib/ui/index.js~Dot3D#setHighlighted",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~dot3d#setopacity",
+    "class/src/plugins/lib/ui/index.js~Dot3D.html#instance-method-setOpacity",
+    "src/plugins/lib/ui/index.js~Dot3D#setOpacity",
+    "method"
+  ],
+  [
+    "src/plugins/lib/ui/index.js~dot3d#setvisible",
+    "class/src/plugins/lib/ui/index.js~Dot3D.html#instance-method-setVisible",
+    "src/plugins/lib/ui/index.js~Dot3D#setVisible",
+    "method"
   ],
   [
     "src/viewer/configs.js",
@@ -6864,6 +7068,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#keyboardenabledonlyifmouseover",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-keyboardEnabledOnlyIfMouseover",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#keyboardEnabledOnlyIfMouseover",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#keyboardenabledonlyifmouseover",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-keyboardEnabledOnlyIfMouseover",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#keyboardEnabledOnlyIfMouseover",
+    "member"
+  ],
+  [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#keyboardlayout",
     "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-keyboardLayout",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#keyboardLayout",
@@ -7083,6 +7299,18 @@ window.esdocSearchIndex = [
     "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#touchpanrate",
     "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-touchPanRate",
     "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#touchPanRate",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#zoomonmousewheel",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-set-zoomOnMouseWheel",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#zoomOnMouseWheel",
+    "member"
+  ],
+  [
+    "src/viewer/scene/cameracontrol/cameracontrol.js~cameracontrol#zoomonmousewheel",
+    "class/src/viewer/scene/CameraControl/CameraControl.js~CameraControl.html#instance-get-zoomOnMouseWheel",
+    "src/viewer/scene/CameraControl/CameraControl.js~CameraControl#zoomOnMouseWheel",
     "member"
   ],
   [
@@ -11592,6 +11820,138 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/viewer/scene/math/meshsurfacearea.js",
+    "file/src/viewer/scene/math/MeshSurfaceArea.js.html",
+    "src/viewer/scene/math/MeshSurfaceArea.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/math/meshsurfacearea.js~meshsurfacearea#addindex",
+    "class/src/viewer/scene/math/MeshSurfaceArea.js~MeshSurfaceArea.html#instance-method-addIndex",
+    "src/viewer/scene/math/MeshSurfaceArea.js~MeshSurfaceArea#addIndex",
+    "method"
+  ],
+  [
+    "src/viewer/scene/math/meshsurfacearea.js~meshsurfacearea#addvertex",
+    "class/src/viewer/scene/math/MeshSurfaceArea.js~MeshSurfaceArea.html#instance-method-addVertex",
+    "src/viewer/scene/math/MeshSurfaceArea.js~MeshSurfaceArea#addVertex",
+    "method"
+  ],
+  [
+    "src/viewer/scene/math/meshsurfacearea.js~meshsurfacearea#constructor",
+    "class/src/viewer/scene/math/MeshSurfaceArea.js~MeshSurfaceArea.html#instance-constructor-constructor",
+    "src/viewer/scene/math/MeshSurfaceArea.js~MeshSurfaceArea#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/math/meshsurfacearea.js~meshsurfacearea#indices",
+    "class/src/viewer/scene/math/MeshSurfaceArea.js~MeshSurfaceArea.html#instance-member-indices",
+    "src/viewer/scene/math/MeshSurfaceArea.js~MeshSurfaceArea#indices",
+    "member"
+  ],
+  [
+    "src/viewer/scene/math/meshsurfacearea.js~meshsurfacearea#lenindices",
+    "class/src/viewer/scene/math/MeshSurfaceArea.js~MeshSurfaceArea.html#instance-member-lenIndices",
+    "src/viewer/scene/math/MeshSurfaceArea.js~MeshSurfaceArea#lenIndices",
+    "member"
+  ],
+  [
+    "src/viewer/scene/math/meshsurfacearea.js~meshsurfacearea#lenvertices",
+    "class/src/viewer/scene/math/MeshSurfaceArea.js~MeshSurfaceArea.html#instance-member-lenVertices",
+    "src/viewer/scene/math/MeshSurfaceArea.js~MeshSurfaceArea#lenVertices",
+    "member"
+  ],
+  [
+    "src/viewer/scene/math/meshsurfacearea.js~meshsurfacearea#reset",
+    "class/src/viewer/scene/math/MeshSurfaceArea.js~MeshSurfaceArea.html#instance-method-reset",
+    "src/viewer/scene/math/MeshSurfaceArea.js~MeshSurfaceArea#reset",
+    "method"
+  ],
+  [
+    "src/viewer/scene/math/meshsurfacearea.js~meshsurfacearea#surfacearea",
+    "class/src/viewer/scene/math/MeshSurfaceArea.js~MeshSurfaceArea.html#instance-get-surfaceArea",
+    "src/viewer/scene/math/MeshSurfaceArea.js~MeshSurfaceArea#surfaceArea",
+    "member"
+  ],
+  [
+    "src/viewer/scene/math/meshsurfacearea.js~meshsurfacearea#vertices",
+    "class/src/viewer/scene/math/MeshSurfaceArea.js~MeshSurfaceArea.html#instance-member-vertices",
+    "src/viewer/scene/math/MeshSurfaceArea.js~MeshSurfaceArea#vertices",
+    "member"
+  ],
+  [
+    "src/viewer/scene/math/meshvolume.js",
+    "file/src/viewer/scene/math/MeshVolume.js.html",
+    "src/viewer/scene/math/MeshVolume.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/math/meshvolume.js~meshvolume#addindex",
+    "class/src/viewer/scene/math/MeshVolume.js~MeshVolume.html#instance-method-addIndex",
+    "src/viewer/scene/math/MeshVolume.js~MeshVolume#addIndex",
+    "method"
+  ],
+  [
+    "src/viewer/scene/math/meshvolume.js~meshvolume#addvertex",
+    "class/src/viewer/scene/math/MeshVolume.js~MeshVolume.html#instance-method-addVertex",
+    "src/viewer/scene/math/MeshVolume.js~MeshVolume#addVertex",
+    "method"
+  ],
+  [
+    "src/viewer/scene/math/meshvolume.js~meshvolume#constructor",
+    "class/src/viewer/scene/math/MeshVolume.js~MeshVolume.html#instance-constructor-constructor",
+    "src/viewer/scene/math/MeshVolume.js~MeshVolume#constructor",
+    "method"
+  ],
+  [
+    "src/viewer/scene/math/meshvolume.js~meshvolume#indices",
+    "class/src/viewer/scene/math/MeshVolume.js~MeshVolume.html#instance-member-indices",
+    "src/viewer/scene/math/MeshVolume.js~MeshVolume#indices",
+    "member"
+  ],
+  [
+    "src/viewer/scene/math/meshvolume.js~meshvolume#lenindices",
+    "class/src/viewer/scene/math/MeshVolume.js~MeshVolume.html#instance-member-lenIndices",
+    "src/viewer/scene/math/MeshVolume.js~MeshVolume#lenIndices",
+    "member"
+  ],
+  [
+    "src/viewer/scene/math/meshvolume.js~meshvolume#lenvertices",
+    "class/src/viewer/scene/math/MeshVolume.js~MeshVolume.html#instance-member-lenVertices",
+    "src/viewer/scene/math/MeshVolume.js~MeshVolume#lenVertices",
+    "member"
+  ],
+  [
+    "src/viewer/scene/math/meshvolume.js~meshvolume#primitive",
+    "class/src/viewer/scene/math/MeshVolume.js~MeshVolume.html#instance-member-primitive",
+    "src/viewer/scene/math/MeshVolume.js~MeshVolume#primitive",
+    "member"
+  ],
+  [
+    "src/viewer/scene/math/meshvolume.js~meshvolume#reset",
+    "class/src/viewer/scene/math/MeshVolume.js~MeshVolume.html#instance-method-reset",
+    "src/viewer/scene/math/MeshVolume.js~MeshVolume#reset",
+    "method"
+  ],
+  [
+    "src/viewer/scene/math/meshvolume.js~meshvolume#setprimitive",
+    "class/src/viewer/scene/math/MeshVolume.js~MeshVolume.html#instance-method-setPrimitive",
+    "src/viewer/scene/math/MeshVolume.js~MeshVolume#setPrimitive",
+    "method"
+  ],
+  [
+    "src/viewer/scene/math/meshvolume.js~meshvolume#vertices",
+    "class/src/viewer/scene/math/MeshVolume.js~MeshVolume.html#instance-member-vertices",
+    "src/viewer/scene/math/MeshVolume.js~MeshVolume#vertices",
+    "member"
+  ],
+  [
+    "src/viewer/scene/math/meshvolume.js~meshvolume#volume",
+    "class/src/viewer/scene/math/MeshVolume.js~MeshVolume.html#instance-get-volume",
+    "src/viewer/scene/math/MeshVolume.js~MeshVolume#volume",
+    "member"
+  ],
+  [
     "src/viewer/scene/math/buildedgeindices.js",
     "file/src/viewer/scene/math/buildEdgeIndices.js.html",
     "src/viewer/scene/math/buildEdgeIndices.js",
@@ -11607,6 +11967,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/math/index.js",
     "file/src/viewer/scene/math/index.js.html",
     "src/viewer/scene/math/index.js",
+    "file"
+  ],
+  [
+    "src/viewer/scene/math/istrianglemeshsolid.js",
+    "file/src/viewer/scene/math/isTriangleMeshSolid.js.html",
+    "src/viewer/scene/math/isTriangleMeshSolid.js",
     "file"
   ],
   [
@@ -11997,6 +12363,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/mesh/mesh.js~mesh#receivesshadow",
     "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-set-receivesShadow",
     "src/viewer/scene/mesh/Mesh.js~Mesh#receivesShadow",
+    "member"
+  ],
+  [
+    "src/viewer/scene/mesh/mesh.js~mesh#renderorder",
+    "class/src/viewer/scene/mesh/Mesh.js~Mesh.html#instance-member-renderOrder",
+    "src/viewer/scene/mesh/Mesh.js~Mesh#renderOrder",
     "member"
   ],
   [
@@ -12672,6 +13044,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#prefinalize",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-method-preFinalize",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#preFinalize",
+    "method"
+  ],
+  [
     "src/viewer/scene/model/scenemodel.js~scenemodel#quaternion",
     "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-set-quaternion",
     "src/viewer/scene/model/SceneModel.js~SceneModel#quaternion",
@@ -12693,6 +13071,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/model/scenemodel.js~scenemodel#receivesshadow",
     "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-set-receivesShadow",
     "src/viewer/scene/model/SceneModel.js~SceneModel#receivesShadow",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodel.js~scenemodel#renderorder",
+    "class/src/viewer/scene/model/SceneModel.js~SceneModel.html#instance-member-renderOrder",
+    "src/viewer/scene/model/SceneModel.js~SceneModel#renderOrder",
     "member"
   ],
   [
@@ -12912,6 +13296,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/model/scenemodelentity.js~scenemodelentity#geteachindex",
+    "class/src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity.html#instance-method-getEachIndex",
+    "src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity#getEachIndex",
+    "method"
+  ],
+  [
     "src/viewer/scene/model/scenemodelentity.js~scenemodelentity#geteachvertex",
     "class/src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity.html#instance-method-getEachVertex",
     "src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity#getEachVertex",
@@ -13044,6 +13434,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/model/scenemodelentity.js~scenemodelentity#surfacearea",
+    "class/src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity.html#instance-get-surfaceArea",
+    "src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity#surfaceArea",
+    "member"
+  ],
+  [
     "src/viewer/scene/model/scenemodelentity.js~scenemodelentity#visible",
     "class/src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity.html#instance-get-visible",
     "src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity#visible",
@@ -13053,6 +13449,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/model/scenemodelentity.js~scenemodelentity#visible",
     "class/src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity.html#instance-set-visible",
     "src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity#visible",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodelentity.js~scenemodelentity#volume",
+    "class/src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity.html#instance-get-volume",
+    "src/viewer/scene/model/SceneModelEntity.js~SceneModelEntity#volume",
     "member"
   ],
   [
@@ -13098,6 +13500,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/viewer/scene/model/scenemodelmesh.js~scenemodelmesh#surfacearea",
+    "class/src/viewer/scene/model/SceneModelMesh.js~SceneModelMesh.html#instance-get-surfaceArea",
+    "src/viewer/scene/model/SceneModelMesh.js~SceneModelMesh#surfaceArea",
+    "member"
+  ],
+  [
     "src/viewer/scene/model/scenemodelmesh.js~scenemodelmesh#textureset",
     "class/src/viewer/scene/model/SceneModelMesh.js~SceneModelMesh.html#instance-member-textureSet",
     "src/viewer/scene/model/SceneModelMesh.js~SceneModelMesh#textureSet",
@@ -13107,6 +13515,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/model/scenemodelmesh.js~scenemodelmesh#transform",
     "class/src/viewer/scene/model/SceneModelMesh.js~SceneModelMesh.html#instance-member-transform",
     "src/viewer/scene/model/SceneModelMesh.js~SceneModelMesh#transform",
+    "member"
+  ],
+  [
+    "src/viewer/scene/model/scenemodelmesh.js~scenemodelmesh#volume",
+    "class/src/viewer/scene/model/SceneModelMesh.js~SceneModelMesh.html#instance-get-volume",
+    "src/viewer/scene/model/SceneModelMesh.js~SceneModelMesh#volume",
     "member"
   ],
   [
@@ -13126,6 +13540,12 @@ window.esdocSearchIndex = [
     "file/src/viewer/scene/model/SceneModelTextureSet.js.html",
     "src/viewer/scene/model/SceneModelTextureSet.js",
     "file"
+  ],
+  [
+    "src/viewer/scene/model/scenemodeltextureset.js~scenemodeltextureset#alphacutoff",
+    "class/src/viewer/scene/model/SceneModelTextureSet.js~SceneModelTextureSet.html#instance-member-alphaCutoff",
+    "src/viewer/scene/model/SceneModelTextureSet.js~SceneModelTextureSet#alphaCutoff",
+    "member"
   ],
   [
     "src/viewer/scene/model/scenemodeltextureset.js~scenemodeltextureset#colortexture",
@@ -13563,12 +13983,6 @@ window.esdocSearchIndex = [
     "src/viewer/scene/model/vbo/batching/lines/renderers/vboscenemodellinebatchingrenderer.js",
     "file/src/viewer/scene/model/vbo/batching/lines/renderers/VBOSceneModelLineBatchingRenderer.js.html",
     "src/viewer/scene/model/vbo/batching/lines/renderers/VBOSceneModelLineBatchingRenderer.js",
-    "file"
-  ],
-  [
-    "src/viewer/scene/model/vbo/batching/points/vbobatchingpointsbuffer.js",
-    "file/src/viewer/scene/model/vbo/batching/points/VBOBatchingPointsBuffer.js.html",
-    "src/viewer/scene/model/vbo/batching/points/VBOBatchingPointsBuffer.js",
     "file"
   ],
   [
@@ -15405,6 +15819,12 @@ window.esdocSearchIndex = [
     "src/viewer/scene/scene/scene.js~scene#pointsmaterial",
     "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-pointsMaterial",
     "src/viewer/scene/scene/Scene.js~Scene#pointsMaterial",
+    "member"
+  ],
+  [
+    "src/viewer/scene/scene/scene.js~scene#readablegeometryenabled",
+    "class/src/viewer/scene/scene/Scene.js~Scene.html#instance-get-readableGeometryEnabled",
+    "src/viewer/scene/scene/Scene.js~Scene#readableGeometryEnabled",
     "member"
   ],
   [

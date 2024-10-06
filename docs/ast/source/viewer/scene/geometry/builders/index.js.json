@@ -1,29 +1,29 @@
 {
   "type": "File",
   "start": 0,
-  "end": 380,
+  "end": 420,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 9,
-      "column": 43
+      "line": 10,
+      "column": 39
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 380,
+    "end": 420,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 9,
-        "column": 43
+        "line": 10,
+        "column": 39
       }
     },
     "sourceType": "module",
@@ -341,6 +341,41 @@
             "raw": "\"./buildPolylineGeometry.js\""
           },
           "value": "./buildPolylineGeometry.js"
+        }
+      },
+      {
+        "type": "ExportAllDeclaration",
+        "start": 381,
+        "end": 420,
+        "loc": {
+          "start": {
+            "line": 10,
+            "column": 0
+          },
+          "end": {
+            "line": 10,
+            "column": 39
+          }
+        },
+        "source": {
+          "type": "StringLiteral",
+          "start": 395,
+          "end": 419,
+          "loc": {
+            "start": {
+              "line": 10,
+              "column": 14
+            },
+            "end": {
+              "line": 10,
+              "column": 38
+            }
+          },
+          "extra": {
+            "rawValue": "./buildLineGeometry.js",
+            "raw": "\"./buildLineGeometry.js\""
+          },
+          "value": "./buildLineGeometry.js"
         }
       }
     ],
@@ -1556,6 +1591,140 @@
     },
     {
       "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 381,
+      "end": 387,
+      "loc": {
+        "start": {
+          "line": 10,
+          "column": 0
+        },
+        "end": {
+          "line": 10,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "*",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": 10,
+        "updateContext": null
+      },
+      "value": "*",
+      "start": 388,
+      "end": 389,
+      "loc": {
+        "start": {
+          "line": 10,
+          "column": 7
+        },
+        "end": {
+          "line": 10,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "from",
+      "start": 390,
+      "end": 394,
+      "loc": {
+        "start": {
+          "line": 10,
+          "column": 9
+        },
+        "end": {
+          "line": 10,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./buildLineGeometry.js",
+      "start": 395,
+      "end": 419,
+      "loc": {
+        "start": {
+          "line": 10,
+          "column": 14
+        },
+        "end": {
+          "line": 10,
+          "column": 38
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 419,
+      "end": 420,
+      "loc": {
+        "start": {
+          "line": 10,
+          "column": 38
+        },
+        "end": {
+          "line": 10,
+          "column": 39
+        }
+      }
+    },
+    {
+      "type": {
         "label": "eof",
         "beforeExpr": false,
         "startsExpr": false,
@@ -1567,16 +1736,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 380,
-      "end": 380,
+      "start": 420,
+      "end": 420,
       "loc": {
         "start": {
-          "line": 9,
-          "column": 43
+          "line": 10,
+          "column": 39
         },
         "end": {
-          "line": 9,
-          "column": 43
+          "line": 10,
+          "column": 39
         }
       }
     }
