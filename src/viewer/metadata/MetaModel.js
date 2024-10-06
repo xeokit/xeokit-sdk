@@ -126,9 +126,9 @@ class MetaModel {
          * The {@link MetaObject}s in this MetaModel, each mapped to its ID.
          *
          * @property metaObjects
-         * @type  {MetaObject[]}
+         * @type  {{String:MetaObject}}
          */
-        this.metaObjects = [];
+        this.metaObjects = {};
 
         /**
          * Connectivity graph.
@@ -227,7 +227,7 @@ class MetaModel {
                     this.metaScene.metaObjects[id] = metaObject;
                     metaObject.metaModels = [];
                 }
-                this.metaObjects.push(metaObject);
+                this.metaObjects[id] =metaObject;
                 if (!metaObjectData.parent) {
                     this.rootMetaObjects.push(metaObject);
                     metaScene.rootMetaObjects[id] = metaObject;
@@ -351,8 +351,9 @@ class MetaModel {
             metaObjects: [],
             propertySets: []
         };
-        for (let i = 0, len = this.metaObjects.length; i < len; i++) {
-            const metaObject = this.metaObjects[i];
+        const metaObjectsList = Object.values(this.metaObjects);
+        for (let i = 0, len = metaObjectsList.length; i < len; i++) {
+            const metaObject = metaObjectsList[i];
             const metaObjectCfg = {
                 id: metaObject.id,
                 originalSystemId: metaObject.originalSystemId,

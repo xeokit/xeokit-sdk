@@ -10233,9 +10233,9 @@
                                         "line": 492,
                                         "column": 18
                                       },
-                                      "identifierName": "zAxisVisibld"
+                                      "identifierName": "zAxisVisible"
                                     },
-                                    "name": "zAxisVisibld"
+                                    "name": "zAxisVisible"
                                   },
                                   "value": {
                                     "type": "LogicalExpression",
@@ -25747,9 +25747,9 @@
                                           "line": 492,
                                           "column": 18
                                         },
-                                        "identifierName": "zAxisVisibld"
+                                        "identifierName": "zAxisVisible"
                                       },
-                                      "name": "zAxisVisibld"
+                                      "name": "zAxisVisible"
                                     },
                                     "value": {
                                       "type": "LogicalExpression",
@@ -50055,7 +50055,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "zAxisVisibld",
+      "value": "zAxisVisible",
       "start": 21643,
       "end": 21655,
       "loc": {
