@@ -96,6 +96,7 @@ export class VBOBatchingPointsSnapInitRenderer extends VBORenderer {
         gl.uniform3fv(this._uCoordinateScaler, coordinateScaler);
         gl.uniform1i(this._uRenderPass, renderPass);
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
+        gl.uniform1f(this._uPointSize, 1.0);
 
         let offset = 0;
         const mat4Size = 4 * 4;
@@ -139,6 +140,7 @@ export class VBOBatchingPointsSnapInitRenderer extends VBORenderer {
         this.uInverseVectorAB = program.getLocation("snapInvVectorAB");
         this._uLayerNumber = program.getLocation("layerNumber");
         this._uCoordinateScaler = program.getLocation("coordinateScaler");
+        this._uPointSize = program.getLocation("pointSize");
     }
 
     _bindProgram() {
@@ -179,6 +181,7 @@ export class VBOBatchingPointsSnapInitRenderer extends VBORenderer {
         src.push("uniform vec3 uCameraEyeRtc;");
         src.push("uniform vec2 snapVectorA;");
         src.push("uniform vec2 snapInvVectorAB;");
+        src.push("uniform float pointSize;");
         if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             src.push("uniform float logDepthBufFC;");
             src.push("out float vFragDepth;");
@@ -226,6 +229,7 @@ export class VBOBatchingPointsSnapInitRenderer extends VBORenderer {
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
         src.push("gl_Position = clipPos;");
+        src.push("gl_PointSize = pointSize;");
         src.push("  }");
         src.push("}");
         return src;
