@@ -1583,9 +1583,7 @@ export class SceneModel extends Component {
      * @type {Number[]}
      */
     get matrix() {
-        if (this._matrixDirty) {
-            this._rebuildMatrices();
-        }
+        this._rebuildMatrices();
         return this._matrix;
     }
 
@@ -1595,9 +1593,7 @@ export class SceneModel extends Component {
      * @type {Number[]}
      */
     get rotationMatrix() {
-        if (this._matrixDirty) {
-            this._rebuildMatrices();
-        }
+        this._rebuildMatrices();
         return this._worldRotationMatrix;
     }
 
@@ -1621,9 +1617,7 @@ export class SceneModel extends Component {
      * @type {Number[]}
      */
     get rotationMatrixConjugate() {
-        if (this._matrixDirty) {
-            this._rebuildMatrices();
-        }
+        this._rebuildMatrices();
         return this._worldRotationMatrixConjugate;
     }
 
@@ -1668,9 +1662,7 @@ export class SceneModel extends Component {
     }
 
     _rebuildViewMatrices() {
-        if (this._matrixDirty) {
-            this._rebuildMatrices();
-        }
+        this._rebuildMatrices();
         if (this._viewMatrixDirty) {
             math.mulMat4(this.scene.camera.viewMatrix, this._matrix, this._viewMatrix);
             math.inverseMat4(this._viewMatrix, this._viewNormalMatrix);
