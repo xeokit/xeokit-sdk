@@ -1709,8 +1709,6 @@ export class SceneModel extends Component {
             math.transposeMat4(this._viewNormalMatrix);
             this._viewMatrixDirty = false;
         }
-        math.inverseMat4(this._viewMatrix, this._viewNormalMatrix);
-        math.transposeMat4(this._viewNormalMatrix);
         return this._viewNormalMatrix;
     }
 
