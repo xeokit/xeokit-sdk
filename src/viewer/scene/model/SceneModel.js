@@ -1609,6 +1609,7 @@ export class SceneModel extends Component {
             this._matrix.set(this._worldRotationMatrix);
             math.translateMat4v(this._position, this._matrix);
             this._matrixDirty = false;
+            this._viewMatrixDirty = true;
         }
     }
 
@@ -1669,7 +1670,6 @@ export class SceneModel extends Component {
     _rebuildViewMatrices() {
         if (this._matrixDirty) {
             this._rebuildMatrices();
-            this._viewMatrixDirty = true;
         }
         if (this._viewMatrixDirty) {
             math.mulMat4(this.scene.camera.viewMatrix, this._matrix, this._viewMatrix);
