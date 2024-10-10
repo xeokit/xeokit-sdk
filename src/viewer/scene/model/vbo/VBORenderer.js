@@ -132,7 +132,7 @@ export class VBORenderer {
                             const sectionPlane = sectionPlanes[sectionPlaneIndex];
                             const origin = layer._state.origin;
                             if (origin) {
-                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a, model.rotationMatrix);
+                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a, model.matrix);
                                 gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                             } else {
                                 gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -439,7 +439,7 @@ export class VBORenderer {
         const {camera} = model.scene;
         const {viewNormalMatrix, project} = camera;
         const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix
-        const {position, rotationMatrix, rotationMatrixConjugate, worldNormalMatrix} = model;
+        const {position, rotationMatrix, worldNormalMatrix} = model;
 
         if (!this._program) {
             this._allocate();

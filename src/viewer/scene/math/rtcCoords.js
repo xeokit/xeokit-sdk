@@ -130,9 +130,9 @@ function rtcToWorldPos(rtcCenter, rtcPos, worldPos) {
  * @param rtcPlanePos
  * @returns {*}
  */
-function getPlaneRTCPos(dist, dir, rtcOrigin, rtcPlanePos, rotationMatrix) {
-    const rtcCenter = (rotationMatrix
-                       ? (tempVec4.set(rtcOrigin, 0), tempVec4[3] = 1, math.mulMat4v4(rotationMatrix, tempVec4, tempVec4))
+function getPlaneRTCPos(dist, dir, rtcOrigin, rtcPlanePos, originMatrix) {
+    const rtcCenter = (originMatrix
+                       ? (tempVec4.set(rtcOrigin, 0), tempVec4[3] = 1, math.mulMat4v4(originMatrix, tempVec4, tempVec4))
                        : rtcOrigin);
     const rtcCenterToPlaneDist = math.dotVec3(dir, rtcCenter) + dist;
     const dirNormalized = math.normalizeVec3(dir, tempVec3a);

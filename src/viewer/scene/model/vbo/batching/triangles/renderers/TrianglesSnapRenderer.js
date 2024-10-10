@@ -38,7 +38,7 @@ export class TrianglesSnapRenderer extends VBORenderer{
         const gl = scene.canvas.gl;
         const state = batchingLayer._state;
         const origin = batchingLayer._state.origin;
-        const {position, rotationMatrix, rotationMatrixConjugate} = model;
+        const {position, rotationMatrix} = model;
         const aabb = batchingLayer.aabb; // Per-layer AABB for best RTC accuracy
         const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
 

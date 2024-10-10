@@ -36,7 +36,7 @@ export class DTXTrianglesNormalsRenderer {
         const gl = scene.canvas.gl;
         const state = dataTextureLayer._state;
         const origin = dataTextureLayer._state.origin;
-        const {position, rotationMatrix, rotationMatrixConjugate} = model;
+        const {position, rotationMatrix} = model;
         const viewMatrix = camera.viewMatrix;
 
         if (!this._program) {
@@ -106,7 +106,7 @@ export class DTXTrianglesNormalsRenderer {
                         if (active) {
                             const sectionPlane = sectionPlanes[sectionPlaneIndex];
                             if (origin) {
-                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a, rotationMatrix);
+                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a, model.matrix);
                                 gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                             } else {
                                 gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
