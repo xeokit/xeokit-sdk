@@ -1666,6 +1666,19 @@ export class SceneModel extends Component {
         return this._worldNormalMatrix;
     }
 
+    _rebuildViewMatrices() {
+        if (this._matrixDirty) {
+            this._rebuildMatrices();
+            this._viewMatrixDirty = true;
+        }
+        if (this._viewMatrixDirty) {
+            math.mulMat4(this.scene.camera.viewMatrix, this._matrix, this._viewMatrix);
+            math.inverseMat4(this._viewMatrix, this._viewNormalMatrix);
+            math.transposeMat4(this._viewNormalMatrix);
+            this._viewMatrixDirty = false;
+        }
+    }
+
     /**
      * Called by private renderers in ./lib, returns the view matrix with which to
      * render this SceneModel. The view matrix is the concatenation of the
@@ -1677,16 +1690,7 @@ export class SceneModel extends Component {
         if (!this._viewMatrix) {
             return this.scene.camera.viewMatrix;
         }
-        if (this._matrixDirty) {
-            this._rebuildMatrices();
-            this._viewMatrixDirty = true;
-        }
-        if (this._viewMatrixDirty) {
-            math.mulMat4(this.scene.camera.viewMatrix, this._matrix, this._viewMatrix);
-            math.inverseMat4(this._viewMatrix, this._viewNormalMatrix);
-            math.transposeMat4(this._viewNormalMatrix);
-            this._viewMatrixDirty = false;
-        }
+        this._rebuildViewMatrices();
         return this._viewMatrix;
     }
 
@@ -1699,16 +1703,7 @@ export class SceneModel extends Component {
         if (!this._viewNormalMatrix) {
             return this.scene.camera.viewNormalMatrix;
         }
-        if (this._matrixDirty) {
-            this._rebuildMatrices();
-            this._viewMatrixDirty = true;
-        }
-        if (this._viewMatrixDirty) {
-            math.mulMat4(this.scene.camera.viewMatrix, this._matrix, this._viewMatrix);
-            math.inverseMat4(this._viewMatrix, this._viewNormalMatrix);
-            math.transposeMat4(this._viewNormalMatrix);
-            this._viewMatrixDirty = false;
-        }
+        this._rebuildViewMatrices();
         return this._viewNormalMatrix;
     }
 
