@@ -39,7 +39,7 @@ export class DTXTrianglesSilhouetteRenderer {
         const state = dataTextureLayer._state;
         const textureState = state.textureState;
         const origin = dataTextureLayer._state.origin;
-        const {position, rotationMatrix, rotationMatrixConjugate} = model;
+        const {position, rotationMatrix} = model;
         const viewMatrix = camera.viewMatrix;
 
         if (!this._program) {
