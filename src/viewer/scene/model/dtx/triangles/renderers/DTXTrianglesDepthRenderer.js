@@ -36,7 +36,7 @@ export class DTXTrianglesDepthRenderer {
         const state = dataTextureLayer._state;
         const textureState = state.textureState;
         const origin = dataTextureLayer._state.origin;
-        const {position, rotationMatrix, rotationMatrixConjugate} = model;
+        const {position, rotationMatrix} = model;
 
         if (!this._program) {
             this._allocate();
@@ -114,7 +114,7 @@ export class DTXTrianglesDepthRenderer {
                         if (active) {
                             const sectionPlane = sectionPlanes[sectionPlaneIndex];
                             if (origin) {
-                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a, rotationMatrix);
+                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a, model.matrix);
                                 gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                             } else {
                                 gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
