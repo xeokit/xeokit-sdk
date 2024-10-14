@@ -4,6 +4,8 @@ import {CameraControl} from "./scene/CameraControl/CameraControl.js";
 import {MetaScene} from "./metadata/MetaScene.js";
 import {LocaleService} from "./localization/LocaleService.js";
 import html2canvas from 'html2canvas/dist/html2canvas.esm.js';
+import {math} from "./scene/math/math.js";
+import {transformToNode} from "../plugins/lib/ui/index.js";
 
 /**
  * The 3D Viewer at the heart of the xeokit SDK.
@@ -495,9 +497,13 @@ class Viewer {
             //for all others keep the scale 1 otherwise it will keep multiplying the scale with the base scale of canvas
             //resulting in increase/decreased size for the the canvas that is being overlapped
             const scale = i == 0 ? snapshotCanvas.width / containerElement.clientWidth : 1;
+            const off = math.vec2([ 0, 0 ]);
+            transformToNode(canvas, containerElement, off);
             await html2canvas(containerElement, {
                 canvas: snapshotCanvas,
                 backgroundColor: null,
+                x: off[0],
+                y: off[1],
                 scale
             });
         }
