@@ -258,6 +258,8 @@ class StoreyViewsPlugin extends Plugin {
          */
         this.storeys = {};
 
+        this._storeysList = null;
+
         /**
          * A set of {@link Storey}s for each {@link MetaModel}.
          *
@@ -299,6 +301,7 @@ class StoreyViewsPlugin extends Plugin {
                     this.fire("storeys", this.storeys);
                 });
                 this.storeys[storeyId] = storey;
+                this._storeysList= null;
                 if (!this.modelStoreys[modelId]) {
                     this.modelStoreys[modelId] = {};
                 }
@@ -319,6 +322,7 @@ class StoreyViewsPlugin extends Plugin {
                         model.off(storey._onModelDestroyed);
                     }
                     delete this.storeys[storyObjectId];
+                    this._storeysList= null;
                 }
             }
             delete this.modelStoreys[modelId];
@@ -423,7 +427,7 @@ class StoreyViewsPlugin extends Plugin {
      * @param {String} storeyId ID of the ````IfcBuildingStorey```` object.
      * @param {*} [options] Options for showing the Entitys within the storey.
      * @param {Boolean} [options.hideOthers=false] When ````true````, hide all other {@link Entity}s.
-    */
+     */
     showStoreyObjects(storeyId, options = {}) {
 
         const storey = this.storeys[storeyId];
@@ -448,7 +452,7 @@ class StoreyViewsPlugin extends Plugin {
 
         this.withStoreyObjects(storeyId, (entity, metaObject) => {
             if (entity) {
-                    entity.visible = true;
+                entity.visible = true;
             }
         });
     }
@@ -684,7 +688,7 @@ class StoreyViewsPlugin extends Plugin {
 
     /**
      * Gets the ID of the storey which's bounding box contains the y point of the world position
-     * 
+     *
      * @param {Number[]} worldPos 3D World-space position.
      * @returns {String} ID of the storey containing the position, or null if the position falls outside all the storeys.
      */
@@ -803,6 +807,42 @@ class StoreyViewsPlugin extends Plugin {
     destroy() {
         this.viewer.scene.off(this._onModelLoaded);
         super.destroy();
+    }
+
+    /**
+     * Gets Storeys in a list, spatially sorted on the vertical World axis, the lowest Storey first.
+     *
+     * @returns {null}
+     */
+    get storeysList() {
+        if (!this._storeysList) {
+            this._storeysList = Object.values(this.storeys);
+            this._storeysList.sort(this._getSpatialSortFunc());
+        }
+        return this._storeysList;
+    }
+
+    _getSpatialSortFunc() {
+        const viewer = this.viewer;
+        const scene = viewer.scene;
+        const camera = scene.camera;
+        return this._spatialSortFunc || (this._spatialSortFunc = (storey1, storey2) => {
+            let idx = 0;
+            if (camera.xUp) {
+                idx = 0;
+            } else if (camera.yUp) {
+                idx = 1;
+            } else {
+                idx = 2;
+            }
+            if (storey1.aabb[idx] > storey2.aabb[idx]) {
+                return -1;
+            }
+            if (storey1.aabb[idx] < storey2.aabb[idx]) {
+                return 1;
+            }
+            return 0;
+        });
     }
 }
 

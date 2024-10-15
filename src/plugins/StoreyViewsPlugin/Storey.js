@@ -41,7 +41,7 @@ class Storey {
         /**
          * Axis-aligned World-space boundary of the {@link Entity}s that represent the IfcBuildingStorey.
          *
-         * The boundary is a six-element Float32Array containing the min/max extents of the
+         * The boundary is a six-element Float64Array containing the min/max extents of the
          * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````
          *
          * @property storeyAABB
@@ -52,7 +52,7 @@ class Storey {
         /**
          * Axis-aligned World-space boundary of the {@link Entity}s that represent the IfcBuildingStorey.
          *
-         * The boundary is a six-element Float32Array containing the min/max extents of the
+         * The boundary is a six-element Float64Array containing the min/max extents of the
          * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````
          *
          * @deprecated
@@ -64,7 +64,7 @@ class Storey {
         /**
          * Axis-aligned World-space boundary of the {@link Entity}s that represent the model.
          *
-         * The boundary is a six-element Float32Array containing the min/max extents of the
+         * The boundary is a six-element Float64Array containing the min/max extents of the
          * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````
          *
          * @property modelAABB

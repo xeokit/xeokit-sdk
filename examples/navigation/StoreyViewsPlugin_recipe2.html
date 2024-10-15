@@ -139,11 +139,12 @@
         cameraMemento.saveCamera(viewer.scene);
 
         const storeyDiv = document.getElementById("storeys");
-        const storeyIds = Object.keys(storeyViewsPlugin.storeys);
+        const storeys = storeyViewsPlugin.storeysList;
 
-        for (var i = storeyIds.length - 1; i >= 0; i--) { // Bottom to top
+        for (let i = 0, len = storeys.length; i < len; i++) {
 
-            const storeyId = storeyIds[i];
+            const storey = storeys[i];
+            const storeyId = storey.storeyId;
 
             const storeyMap = storeyViewsPlugin.createStoreyMap(storeyId, {
                 format: "png",

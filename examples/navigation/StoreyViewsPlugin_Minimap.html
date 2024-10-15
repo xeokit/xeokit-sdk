@@ -263,17 +263,18 @@
 
         const storeyDiv = document.getElementById("storeys");
         const optionsDiv = document.getElementById("dropdown-options");
-        const storeyIds = Object.keys(storeyViewsPlugin.storeys);
 
-        for (var i = 0, len = storeyIds.length; i < len; i++) {
+        const storeys = storeyViewsPlugin.storeysList;
 
-            const storeyId = storeyIds[i];
+        for (let i = 0, len = storeys.length; i < len; i++) {
+
+            const storey = storeys[i];
+            const storeyId = storey.storeyId;
 
             const storeyMap = storeyViewsPlugin.createStoreyMap(storeyId, {
                 format: "png",
                 width: 400
             });
-
 
             allStoreyMaps.push(storeyMap);
 
