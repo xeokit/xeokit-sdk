@@ -1204,8 +1204,8 @@ export class TreeViewPlugin extends Plugin {
         if (!children || children.length === 0) {
             return;
         }
-        if (this._hierarchy === "storeys" && node.type === "IfcBuilding") {
-            // Assumes that children of an IfcBuilding will always be IfcBuildingStoreys
+        const firstChild = children[0];
+        if (this._hierarchy === "storeys" && firstChild.type === "IfcBuildingStorey") {
             children.sort(this._getSpatialSortFunc());
         } else {
             children.sort(this._alphaSortFunc);
