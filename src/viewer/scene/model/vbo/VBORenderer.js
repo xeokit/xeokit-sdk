@@ -17,12 +17,14 @@ const tempMat4a = math.mat4();
  * @private
  */
 export class VBORenderer {
-    constructor(scene, withSAO = false, {instancing = false, edges = false, useAlphaCutoff = false} = {}) {
+    constructor(scene, withSAO = false, {instancing = false, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, isSnapInit = false} = {}) {
         this._scene = scene;
         this._withSAO = withSAO;
         this._instancing = instancing;
         this._edges = edges;
         this._useAlphaCutoff = useAlphaCutoff;
+        this._hashPointsMaterial = hashPointsMaterial;
+        this._isSnapInit = isSnapInit;
         this._hash = this._getHash();
 
         /**
@@ -54,7 +56,7 @@ export class VBORenderer {
      * @returns { string }
      */
     _getHash() {
-        return this._scene._sectionPlanesState.getHash();
+        return this._scene._sectionPlanesState.getHash() + (this._hashPointsMaterial ? this._scene.pointsMaterial.hash : "");
     }
 
     _buildShader() {
