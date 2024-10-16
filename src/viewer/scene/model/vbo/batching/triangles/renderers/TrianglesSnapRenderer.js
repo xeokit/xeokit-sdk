@@ -13,7 +13,12 @@ const SNAPPING_LOG_DEPTH_BUF_ENABLED = true; // Improves occlusion accuracy at d
 /**
  * @private
  */
-export class TrianglesSnapRenderer extends VBORenderer{
+export class TrianglesSnapRenderer extends VBORenderer {
+
+    constructor(scene, isSnapInit) {
+        super(scene, false, { isSnapInit: isSnapInit });
+    }
+
     drawLayer(frameCtx, batchingLayer, renderPass) {
 
         if (!this._program) {
@@ -121,12 +126,14 @@ export class TrianglesSnapRenderer extends VBORenderer{
         // TODO: Use drawElements count and offset to draw only one entity
         //=============================================================
 
-        if (frameCtx.snapMode === "edge") {
-            if (state.edgeIndicesBuf) {
-                state.edgeIndicesBuf.bind();
-                gl.drawElements(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0);
-                state.edgeIndicesBuf.unbind(); // needed?
-            }
+        if (this._isSnapInit) {
+            state.indicesBuf.bind();
+            gl.drawElements(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
+            state.indicesBuf.unbind();
+        } else if ((frameCtx.snapMode === "edge") && state.edgeIndicesBuf) {
+            state.edgeIndicesBuf.bind();
+            gl.drawElements(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0);
+            state.edgeIndicesBuf.unbind(); // needed?
         } else {
             gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
         }
@@ -143,10 +150,10 @@ export class TrianglesSnapRenderer extends VBORenderer{
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
 
-        this.uVectorA = program.getLocation("snapVectorA"); 
-        this.uInverseVectorAB = program.getLocation("snapInvVectorAB"); 
-        this._uLayerNumber = program.getLocation("layerNumber"); 
-        this._uCoordinateScaler = program.getLocation("coordinateScaler"); 
+        this.uVectorA = program.getLocation("snapVectorA");
+        this.uInverseVectorAB = program.getLocation("snapInvVectorAB");
+        this._uLayerNumber = program.getLocation("layerNumber");
+        this._uCoordinateScaler = program.getLocation("coordinateScaler");
     }
 
     _bindProgram() {
@@ -154,12 +161,12 @@ export class TrianglesSnapRenderer extends VBORenderer{
     }
 
     _buildVertexShader() {
+        const isSnapInit = this._isSnapInit;
         const scene = this._scene;
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
-        const pointsMaterial = scene.pointsMaterial._state;
         const src = [];
         src.push ('#version 300 es');
-        src.push("// SnapBatchingDepthRenderer vertex shader");
+        src.push("// TrianglesSnapRenderer vertex shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -174,6 +181,9 @@ export class TrianglesSnapRenderer extends VBORenderer{
         src.push("precision mediump sampler2D;");
         src.push("#endif");
         src.push("uniform int renderPass;");
+        if (isSnapInit) {
+            src.push("in vec4 pickColor;");
+        }
         src.push("in vec3 position;");
         if (scene.entityOffsetsEnabled) {
             src.push("in vec3 offset;");
@@ -182,8 +192,8 @@ export class TrianglesSnapRenderer extends VBORenderer{
 
         this._addMatricesUniformBlockLines(src);
 
-        src.push("uniform vec2 snapVectorA;"); 
-        src.push("uniform vec2 snapInvVectorAB;"); 
+        src.push("uniform vec2 snapVectorA;");
+        src.push("uniform vec2 snapInvVectorAB;");
         if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             src.push("uniform float logDepthBufFC;");
             src.push("out float vFragDepth;");
@@ -197,29 +207,37 @@ export class TrianglesSnapRenderer extends VBORenderer{
         src.push("    float y = (clipPos.y - snapVectorA.y) * snapInvVectorAB.y;");
         src.push("    return vec2(x, y);")
         src.push("}");
-        if (clipping) {
+        if (isSnapInit) {
+            src.push("flat out vec4 vPickColor;");
+        }
+        if (clipping || isSnapInit) {
             src.push("out vec4 vWorldPosition;");
+        }
+        if (clipping) {
             src.push("out float vFlags;");
         }
         src.push("out highp vec3 relativeToOriginPosition;");
         src.push("void main(void) {");
-
         // pickFlag = NOT_RENDERED | PICK
         // renderPass = PICK
-
         src.push(`int pickFlag = int(flags) >> 12 & 0xF;`);
         src.push(`if (pickFlag != renderPass) {`);
-        src.push("      gl_Position = vec4(2.0, 0.0, 0.0, 0.0);"); // Cull vertex
+        src.push("      gl_Position = vec4(" + (isSnapInit ? "0.0" : "2.0") + ", 0.0, 0.0, 0.0);"); // Cull vertex
         src.push("  } else {");
         src.push("      vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
         if (scene.entityOffsetsEnabled) {
             src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
         }
-        src.push("relativeToOriginPosition = worldPosition.xyz;")
+        src.push("      relativeToOriginPosition = worldPosition.xyz;");
         src.push("      vec4 viewPosition  = viewMatrix * worldPosition; ");
-        if (clipping) {
+        if (clipping || isSnapInit) {
             src.push("      vWorldPosition = worldPosition;");
+        }
+        if (clipping) {
             src.push("      vFlags = flags;");
+        }
+        if (isSnapInit) {
+            src.push("vPickColor = pickColor;");
         }
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         src.push("float tmp = clipPos.w;")
@@ -227,23 +245,26 @@ export class TrianglesSnapRenderer extends VBORenderer{
         src.push("clipPos.xy = remapClipPos(clipPos.xy);");
         src.push("clipPos.xyzw *= tmp;");
         if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
-           src.push("vFragDepth = 1.0 + clipPos.w;");
+            src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
         src.push("gl_Position = clipPos;");
-        src.push("gl_PointSize = 1.0;"); // Windows needs this?
+        if (! isSnapInit) {
+            src.push("gl_PointSize = 1.0;"); // Windows needs this?
+        }
         src.push("  }");
         src.push("}");
         return src;
     }
 
     _buildFragmentShader() {
+        const isSnapInit = this._isSnapInit;
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push ('#version 300 es');
-        src.push("// SnapBatchingDepthRenderer fragment shader");
+        src.push("// TrianglesSnapRenderer fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -256,10 +277,15 @@ export class TrianglesSnapRenderer extends VBORenderer{
             src.push("uniform float logDepthBufFC;");
             src.push("in float vFragDepth;");
         }
-        src.push("uniform int layerNumber;"); 
-        src.push("uniform vec3 coordinateScaler;"); 
-        if (clipping) {
+        src.push("uniform int layerNumber;");
+        src.push("uniform vec3 coordinateScaler;");
+        if (clipping || isSnapInit) {
             src.push("in vec4 vWorldPosition;");
+        }
+        if (isSnapInit) {
+            src.push("flat in vec4 vPickColor;");
+        }
+        if (clipping) {
             src.push("in float vFlags;");
             for (let i = 0; i < sectionPlanesState.getNumAllocatedSectionPlanes(); i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
@@ -268,7 +294,13 @@ export class TrianglesSnapRenderer extends VBORenderer{
             }
         }
         src.push("in highp vec3 relativeToOriginPosition;");
-        src.push("out highp ivec4 outCoords;");
+        if (isSnapInit) {
+            src.push("layout(location = 0) out highp ivec4 outCoords;");
+            src.push("layout(location = 1) out highp ivec4 outNormal;");
+            src.push("layout(location = 2) out lowp uvec4 outPickColor;");
+        } else {
+            src.push("out highp ivec4 outCoords;");
+        }
         src.push("void main(void) {");
         if (clipping) {
             src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
@@ -283,9 +315,24 @@ export class TrianglesSnapRenderer extends VBORenderer{
             src.push("  }");
         }
         if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
-            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
+            if (isSnapInit) {
+                src.push("    float dx = dFdx(vFragDepth);");
+                src.push("    float dy = dFdy(vFragDepth);");
+                src.push("    float diff = sqrt(dx*dx+dy*dy);");
+            } else {
+                src.push("    float diff = 0.0;");
+            }
+            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth + diff ) * logDepthBufFC * 0.5;");
         }
-        src.push("outCoords = ivec4(relativeToOriginPosition.xyz*coordinateScaler.xyz, layerNumber);")
+        src.push("outCoords = ivec4(relativeToOriginPosition.xyz*coordinateScaler.xyz, " + (isSnapInit ? "-" : "") + "layerNumber);");
+
+        if (isSnapInit) {
+            src.push("vec3 xTangent = dFdx( vWorldPosition.xyz );");
+            src.push("vec3 yTangent = dFdy( vWorldPosition.xyz );");
+            src.push("vec3 worldNormal = normalize( cross( xTangent, yTangent ) );");
+            src.push(`outNormal = ivec4(worldNormal * float(${math.MAX_INT}), 1.0);`);
+            src.push("outPickColor = uvec4(vPickColor);");
+        }
         src.push("}");
         return src;
     }
