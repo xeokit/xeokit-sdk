@@ -7,12 +7,7 @@ import {TrianglesBatchingRenderer} from "./TrianglesBatchingRenderer.js";
 
 export class EdgesRenderer extends TrianglesBatchingRenderer {
     constructor(scene, colorUniform) {
-        super(scene, false, {instancing: false, edges: true});
-        this._colorUniform = colorUniform;
-    }
-
-    drawLayer(frameCtx, batchingLayer, renderPass) {
-        super.drawLayer(frameCtx, batchingLayer, renderPass, { colorUniform: this._colorUniform });
+        super(scene, false, {instancing: false, edges: true, colorUniform: colorUniform});
     }
 
     _buildVertexShader() {
