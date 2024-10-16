@@ -13,11 +13,13 @@ const tempVec3a = math.vec3();
 const tempVec3c = math.vec3();
 const tempMat4a = math.mat4();
 
+const SNAPPING_LOG_DEPTH_BUF_ENABLED = true; // Improves occlusion accuracy at distance
+
 /**
  * @private
  */
 export class VBORenderer {
-    constructor(scene, withSAO = false, {instancing = false, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, hashLigthsSAO = false, hashGammaOutput = false, colorUniform = false, isSnapInit = false, incrementDrawState = false} = {}) {
+    constructor(scene, withSAO = false, {instancing = false, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, hashLigthsSAO = false, hashGammaOutput = false, colorUniform = false, isSnap = false, isSnapInit = false, incrementDrawState = false} = {}) {
         this._scene = scene;
         this._withSAO = withSAO;
         this._instancing = instancing;
@@ -27,6 +29,7 @@ export class VBORenderer {
         this._hashLigthsSAO = hashLigthsSAO;
         this._hashGammaOutput = hashGammaOutput;
         this._colorUniform = colorUniform;
+        this._isSnap = isSnap;
         this._isSnapInit = isSnapInit;
         this._incrementDrawState = incrementDrawState;
         this._hash = this._getHash();
@@ -305,6 +308,17 @@ export class VBORenderer {
         if (scene.crossSections) {
             this._uSliceColor = program.getLocation("sliceColor");
             this._uSliceThickness = program.getLocation("sliceThickness");
+        }
+
+        if (this._isSnap) {
+            if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
+                this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
+            }
+
+            this.uVectorA = program.getLocation("snapVectorA");
+            this.uInverseVectorAB = program.getLocation("snapInvVectorAB");
+            this._uLayerNumber = program.getLocation("layerNumber");
+            this._uCoordinateScaler = program.getLocation("coordinateScaler");
         }
     }
 
