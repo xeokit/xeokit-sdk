@@ -1,6 +1,4 @@
-import {TrianglesBatchingRenderer} from "./TrianglesBatchingRenderer.js";
 import {EdgesRenderer} from "./EdgesRenderer.js";
-
 
 /**
  * @private
@@ -16,13 +14,11 @@ export class EdgesEmphasisRenderer extends EdgesRenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
-
         src.push("#version 300 es");
-        src.push("// EdgesEmphasisRenderer vertex shader");
+        src.push("// Batched geometry edges drawing vertex shader");
 
         src.push("uniform int renderPass;");
         src.push("uniform vec4 color;");
-
         src.push("in vec3 position;");
         if (scene.entityOffsetsEnabled) {
             src.push("in vec3 offset;");
@@ -75,7 +71,7 @@ export class EdgesEmphasisRenderer extends EdgesRenderer {
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
         src.push("gl_Position = clipPos;");
-        src.push("vColor = vec4(color.r, color.g, color.b, color.a);");
+        src.push("vColor = color;");
         src.push("}");
         src.push("}");
         return src;
@@ -87,8 +83,7 @@ export class EdgesEmphasisRenderer extends EdgesRenderer {
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push("#version 300 es");
-        src.push("// EdgesEmphasisRenderer fragment shader");
-
+        src.push("// Batched geometry edges drawing fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
