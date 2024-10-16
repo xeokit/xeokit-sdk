@@ -16,7 +16,7 @@ const SNAPPING_LOG_DEPTH_BUF_ENABLED = true; // Improves occlusion accuracy at d
 export class TrianglesSnapRenderer extends VBORenderer {
 
     constructor(scene, isSnapInit) {
-        super(scene, false, { isSnapInit: isSnapInit });
+        super(scene, false, { isSnap: true, isSnapInit: isSnapInit });
     }
 
     drawLayer(frameCtx, batchingLayer, renderPass) {
@@ -139,21 +139,6 @@ export class TrianglesSnapRenderer extends VBORenderer {
         }
 
         gl.bindVertexArray(null);
-    }
-
-    _allocate() {
-        super._allocate();
-
-        const program = this._program;
-
-        if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
-            this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
-        }
-
-        this.uVectorA = program.getLocation("snapVectorA");
-        this.uInverseVectorAB = program.getLocation("snapInvVectorAB");
-        this._uLayerNumber = program.getLocation("layerNumber");
-        this._uCoordinateScaler = program.getLocation("coordinateScaler");
     }
 
     _buildVertexShader() {
