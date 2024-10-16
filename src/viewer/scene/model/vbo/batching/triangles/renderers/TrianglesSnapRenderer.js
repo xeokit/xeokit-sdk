@@ -19,7 +19,16 @@ export class TrianglesSnapRenderer extends VBORenderer {
         super(scene, false, { isSnap: true, isSnapInit: isSnapInit });
     }
 
-    drawLayer(frameCtx, batchingLayer, renderPass) {
+    drawLayer(frameCtx, layer, renderPass) {
+
+        const scene = this._scene;
+        const gl = scene.canvas.gl;
+        const {_state: state, model} = layer;
+        const {origin, positionsDecodeMatrix} = state;
+        const {camera} = model.scene;
+        const {project} = camera;
+        const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
+        const {position, rotationMatrix} = model;
 
         if (!this._program) {
             this._allocate();
@@ -30,83 +39,37 @@ export class TrianglesSnapRenderer extends VBORenderer {
 
         if (frameCtx.lastProgramId !== this._program.id) {
             frameCtx.lastProgramId = this._program.id;
-            this._bindProgram({ });
+            this._bindProgram(frameCtx);
         }
 
-        const model = batchingLayer.model;
-        const scene = model.scene;
-        const camera = scene.camera;
-        const gl = scene.canvas.gl;
-        const state = batchingLayer._state;
-        const origin = batchingLayer._state.origin;
-        const {position, rotationMatrix} = model;
-        const aabb = batchingLayer.aabb; // Per-layer AABB for best RTC accuracy
-        const {project} = camera;
-        const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
-
-        if (this._vaoCache.has(batchingLayer)) {
-            gl.bindVertexArray(this._vaoCache.get(batchingLayer));
+        if (this._vaoCache.has(layer)) {
+            gl.bindVertexArray(this._vaoCache.get(layer));
         } else {
-            this._vaoCache.set(batchingLayer, this._makeVAO(state))
+            this._vaoCache.set(layer, this._makeVAO(state))
         }
-
-        const coordinateScaler = tempVec3a;
-        coordinateScaler[0] = math.safeInv(aabb[3] - aabb[0]) * math.MAX_INT;
-        coordinateScaler[1] = math.safeInv(aabb[4] - aabb[1]) * math.MAX_INT;
-        coordinateScaler[2] = math.safeInv(aabb[5] - aabb[2]) * math.MAX_INT;
-
-        frameCtx.snapPickCoordinateScale[0] = math.safeInv(coordinateScaler[0]);
-        frameCtx.snapPickCoordinateScale[1] = math.safeInv(coordinateScaler[1]);
-        frameCtx.snapPickCoordinateScale[2] = math.safeInv(coordinateScaler[2]);
 
         let rtcViewMatrix;
-        let rtcCameraEye;
+        const rtcOrigin = tempVec3a;
+        rtcOrigin.set([0, 0, 0]);
 
-        if (origin || position[0] !== 0 || position[1] !== 0 || position[2] !== 0) {
-            const rtcOrigin = tempVec3b;
-            if (origin) {
-                const rotatedOrigin = tempVec3c;
-                math.transformPoint3(rotationMatrix, origin, rotatedOrigin);
-                rtcOrigin[0] = rotatedOrigin[0];
-                rtcOrigin[1] = rotatedOrigin[1];
-                rtcOrigin[2] = rotatedOrigin[2];
-            } else {
-                rtcOrigin[0] = 0;
-                rtcOrigin[1] = 0;
-                rtcOrigin[2] = 0;
+        const gotOrigin = (origin[0] !== 0 || origin[1] !== 0 || origin[2] !== 0);
+        const gotPosition = (position[0] !== 0 || position[1] !== 0 || position[2] !== 0);
+        if (gotOrigin || gotPosition) {
+            if (gotOrigin) {
+                math.transformPoint3(rotationMatrix, origin, rtcOrigin);
             }
-            rtcOrigin[0] += position[0];
-            rtcOrigin[1] += position[1];
-            rtcOrigin[2] += position[2];
+            math.addVec3(rtcOrigin, position, rtcOrigin);
             rtcViewMatrix = createRTCViewMat(viewMatrix, rtcOrigin, tempMat4a);
-            rtcCameraEye = tempVec3d;
-            rtcCameraEye[0] = camera.eye[0] - rtcOrigin[0];
-            rtcCameraEye[1] = camera.eye[1] - rtcOrigin[1];
-            rtcCameraEye[2] = camera.eye[2] - rtcOrigin[2];
-            frameCtx.snapPickOrigin[0] = rtcOrigin[0];
-            frameCtx.snapPickOrigin[1] = rtcOrigin[1];
-            frameCtx.snapPickOrigin[2] = rtcOrigin[2];
         } else {
             rtcViewMatrix = viewMatrix;
-            rtcCameraEye = camera.eye;
-            frameCtx.snapPickOrigin[0] = 0;
-            frameCtx.snapPickOrigin[1] = 0;
-            frameCtx.snapPickOrigin[2] = 0;
         }
-
-        gl.uniform2fv(this.uVectorA, frameCtx.snapVectorA);
-        gl.uniform2fv(this.uInverseVectorAB, frameCtx.snapInvVectorAB);
-        gl.uniform1i(this._uLayerNumber, frameCtx.snapPickLayerNumber);
-        gl.uniform3fv(this._uCoordinateScaler, coordinateScaler);
-        gl.uniform1i(this._uRenderPass, renderPass);
 
         let offset = 0;
         const mat4Size = 4 * 4;
-
         this._matricesUniformBlockBufferData.set(rotationMatrix, 0);
         this._matricesUniformBlockBufferData.set(rtcViewMatrix, offset += mat4Size);
         this._matricesUniformBlockBufferData.set(frameCtx.pickProjMatrix || project.matrix, offset += mat4Size);
-        this._matricesUniformBlockBufferData.set(state.positionsDecodeMatrix, offset += mat4Size);
+        this._matricesUniformBlockBufferData.set(positionsDecodeMatrix, offset += mat4Size);
 
         gl.bindBuffer(gl.UNIFORM_BUFFER, this._matricesUniformBlockBuffer);
         gl.bufferData(gl.UNIFORM_BUFFER, this._matricesUniformBlockBufferData, gl.DYNAMIC_DRAW);
@@ -116,12 +79,31 @@ export class TrianglesSnapRenderer extends VBORenderer {
             this._matricesUniformBlockBufferBindingPoint,
             this._matricesUniformBlockBuffer);
 
+        this.setSectionPlanesStateUniforms(layer);
+
         if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2); // TODO: Far from pick project matrix?
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
 
-        this.setSectionPlanesStateUniforms(batchingLayer);
+        const aabb = layer.aabb; // Per-layer AABB for best RTC accuracy
+        const coordinateScaler = tempVec3b;
+        coordinateScaler[0] = math.safeInv(aabb[3] - aabb[0]) * math.MAX_INT;
+        coordinateScaler[1] = math.safeInv(aabb[4] - aabb[1]) * math.MAX_INT;
+        coordinateScaler[2] = math.safeInv(aabb[5] - aabb[2]) * math.MAX_INT;
+
+        frameCtx.snapPickCoordinateScale[0] = math.safeInv(coordinateScaler[0]);
+        frameCtx.snapPickCoordinateScale[1] = math.safeInv(coordinateScaler[1]);
+        frameCtx.snapPickCoordinateScale[2] = math.safeInv(coordinateScaler[2]);
+        frameCtx.snapPickOrigin[0] = rtcOrigin[0];
+        frameCtx.snapPickOrigin[1] = rtcOrigin[1];
+        frameCtx.snapPickOrigin[2] = rtcOrigin[2];
+
+        gl.uniform2fv(this.uVectorA, frameCtx.snapVectorA);
+        gl.uniform2fv(this.uInverseVectorAB, frameCtx.snapInvVectorAB);
+        gl.uniform1i(this._uLayerNumber, frameCtx.snapPickLayerNumber);
+        gl.uniform3fv(this._uCoordinateScaler, coordinateScaler);
+        gl.uniform1i(this._uRenderPass, renderPass);
 
         //=============================================================
         // TODO: Use drawElements count and offset to draw only one entity
