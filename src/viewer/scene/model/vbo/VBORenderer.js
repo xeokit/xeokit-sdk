@@ -17,13 +17,15 @@ const tempMat4a = math.mat4();
  * @private
  */
 export class VBORenderer {
-    constructor(scene, withSAO = false, {instancing = false, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, colorUniform = false, isSnapInit = false, incrementDrawState = false} = {}) {
+    constructor(scene, withSAO = false, {instancing = false, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, hashLigthsSAO = false, hashGammaOutput = false, colorUniform = false, isSnapInit = false, incrementDrawState = false} = {}) {
         this._scene = scene;
         this._withSAO = withSAO;
         this._instancing = instancing;
         this._edges = edges;
         this._useAlphaCutoff = useAlphaCutoff;
         this._hashPointsMaterial = hashPointsMaterial;
+        this._hashLigthsSAO = hashLigthsSAO;
+        this._hashGammaOutput = hashGammaOutput;
         this._colorUniform = colorUniform;
         this._isSnapInit = isSnapInit;
         this._incrementDrawState = incrementDrawState;
@@ -58,7 +60,22 @@ export class VBORenderer {
      * @returns { string }
      */
     _getHash() {
-        return this._scene._sectionPlanesState.getHash() + (this._hashPointsMaterial ? this._scene.pointsMaterial.hash : "");
+        const scene = this._scene;
+        const hash = [ ];
+        if (this._hashGammaOutput) {
+            hash.push(scene.gammaOutput);
+        }
+        if (this._hashLigthsSAO) {
+            hash.push(scene._lightsState.getHash());
+        }
+        hash.push(scene._sectionPlanesState.getHash() + (this._hashPointsMaterial ? scene.pointsMaterial.hash : ""));
+        if (this._hashLigthsSAO) {
+            hash.push(this._withSAO ? "sao" : "nosao");
+        }
+        if (this._useAlphaCutoff) {
+            hash.push("alphaCutoff");
+        }
+        return hash.join(";");
     }
 
     _buildShader() {
