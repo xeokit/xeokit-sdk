@@ -5,8 +5,8 @@ import {TrianglesBatchingRenderer} from "./TrianglesBatchingRenderer.js";
  */
 export class TrianglesSilhouetteRenderer extends TrianglesBatchingRenderer {
 
-    drawLayer(frameCtx, batchingLayer, renderPass) {
-        super.drawLayer(frameCtx, batchingLayer, renderPass, { colorUniform: true });
+    constructor(scene) {
+        super(scene, false, { colorUniform: true });
     }
 
     _buildVertexShader() {
