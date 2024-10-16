@@ -4,13 +4,13 @@ import {TrianglesBatchingRenderer} from "./TrianglesBatchingRenderer.js";
  * @private
  */
 export class TrianglesColorRenderer extends TrianglesBatchingRenderer {
+    constructor(scene, withSAO) {
+        super(scene, withSAO, { incrementDrawState: true });
+    }
+
     _getHash() {
         const scene = this._scene;
         return [scene._lightsState.getHash(), scene._sectionPlanesState.getHash(), (this._withSAO ? "sao" : "nosao")].join(";");
-    }
-
-    drawLayer(frameCtx, layer, renderPass) {
-        super.drawLayer(frameCtx, layer, renderPass, { incrementDrawState: true });
     }
 
     _buildVertexShader() {
