@@ -130,7 +130,7 @@ class Renderers {
             this._pickDepthRenderer = new TrianglesPickDepthRenderer(this._scene);
         }
         if (!this._snapInitRenderer) {
-            this._snapInitRenderer = new TrianglesSnapInitRenderer(this._scene, false);
+            this._snapInitRenderer = new TrianglesSnapInitRenderer(this._scene);
         }
         if (!this._snapRenderer) {
             this._snapRenderer = new TrianglesSnapRenderer(this._scene);
