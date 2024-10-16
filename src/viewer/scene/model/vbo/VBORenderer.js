@@ -17,7 +17,7 @@ const tempMat4a = math.mat4();
  * @private
  */
 export class VBORenderer {
-    constructor(scene, withSAO = false, {instancing = false, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, colorUniform = false, isSnapInit = false} = {}) {
+    constructor(scene, withSAO = false, {instancing = false, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, colorUniform = false, isSnapInit = false, incrementDrawState = false} = {}) {
         this._scene = scene;
         this._withSAO = withSAO;
         this._instancing = instancing;
@@ -26,6 +26,7 @@ export class VBORenderer {
         this._hashPointsMaterial = hashPointsMaterial;
         this._colorUniform = colorUniform;
         this._isSnapInit = isSnapInit;
+        this._incrementDrawState = incrementDrawState;
         this._hash = this._getHash();
 
         /**
@@ -631,7 +632,7 @@ export class VBORenderer {
             }
         }
 
-        this._draw({state, frameCtx, incrementDrawState});
+        this._draw({state, frameCtx, incrementDrawState: incrementDrawState || this._incrementDrawState});
 
         gl.bindVertexArray(null);
     }
