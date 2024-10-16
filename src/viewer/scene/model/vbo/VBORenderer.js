@@ -647,6 +647,5 @@ export class VBORenderer {
             this._program.destroy();
         }
         this._program = null;
-        stats.memory.programs--;
     }
 }
