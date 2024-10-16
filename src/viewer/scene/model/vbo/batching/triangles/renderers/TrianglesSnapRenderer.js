@@ -41,6 +41,7 @@ export class TrianglesSnapRenderer extends VBORenderer {
         const origin = batchingLayer._state.origin;
         const {position, rotationMatrix} = model;
         const aabb = batchingLayer.aabb; // Per-layer AABB for best RTC accuracy
+        const {project} = camera;
         const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
 
         if (this._vaoCache.has(batchingLayer)) {
@@ -104,7 +105,7 @@ export class TrianglesSnapRenderer extends VBORenderer {
 
         this._matricesUniformBlockBufferData.set(rotationMatrix, 0);
         this._matricesUniformBlockBufferData.set(rtcViewMatrix, offset += mat4Size);
-        this._matricesUniformBlockBufferData.set(camera.projMatrix, offset += mat4Size);
+        this._matricesUniformBlockBufferData.set(frameCtx.pickProjMatrix || project.matrix, offset += mat4Size);
         this._matricesUniformBlockBufferData.set(state.positionsDecodeMatrix, offset += mat4Size);
 
         gl.bindBuffer(gl.UNIFORM_BUFFER, this._matricesUniformBlockBuffer);
