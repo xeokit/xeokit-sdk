@@ -446,18 +446,15 @@ export class VBORenderer {
     }
 
     drawLayer(frameCtx, layer, renderPass, {colorUniform = false, incrementDrawState = false} = {}) {
-        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
 
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const {_state: state, model} = layer;
-        const {textureSet, origin, positionsDecodeMatrix} = state;
-        const lightsState = scene._lightsState;
-        const pointsMaterial = scene.pointsMaterial;
+        const {origin, positionsDecodeMatrix} = state;
         const {camera} = model.scene;
-        const {viewNormalMatrix, project} = camera;
-        const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix
-        const {position, rotationMatrix, worldNormalMatrix} = model;
+        const {project} = camera;
+        const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
+        const {position, rotationMatrix} = model;
 
         if (!this._program) {
             this._allocate();
@@ -477,37 +474,30 @@ export class VBORenderer {
             this._vaoCache.set(layer, this._makeVAO(state))
         }
 
-        let offset = 0;
-        const mat4Size = 4 * 4;
-
-        this._matricesUniformBlockBufferData.set(rotationMatrix, 0);
+        let rtcViewMatrix;
+        const rtcOrigin = tempVec3a;
+        rtcOrigin.set([0, 0, 0]);
 
         const gotOrigin = (origin[0] !== 0 || origin[1] !== 0 || origin[2] !== 0);
         const gotPosition = (position[0] !== 0 || position[1] !== 0 || position[2] !== 0);
         if (gotOrigin || gotPosition) {
-            const rtcOrigin = tempVec3a;
             if (gotOrigin) {
-                const rotatedOrigin = math.transformPoint3(rotationMatrix, origin, tempVec3c);
-                rtcOrigin[0] = rotatedOrigin[0];
-                rtcOrigin[1] = rotatedOrigin[1];
-                rtcOrigin[2] = rotatedOrigin[2];
-            } else {
-                rtcOrigin[0] = 0;
-                rtcOrigin[1] = 0;
-                rtcOrigin[2] = 0;
+                math.transformPoint3(rotationMatrix, origin, rtcOrigin);
             }
-            rtcOrigin[0] += position[0];
-            rtcOrigin[1] += position[1];
-            rtcOrigin[2] += position[2];
-            this._matricesUniformBlockBufferData.set(createRTCViewMat(viewMatrix, rtcOrigin, tempMat4a), offset += mat4Size);
+            math.addVec3(rtcOrigin, position, rtcOrigin);
+            rtcViewMatrix = createRTCViewMat(viewMatrix, rtcOrigin, tempMat4a);
         } else {
-            this._matricesUniformBlockBufferData.set(viewMatrix, offset += mat4Size);
+            rtcViewMatrix = viewMatrix;
         }
 
+        let offset = 0;
+        const mat4Size = 4 * 4;
+        this._matricesUniformBlockBufferData.set(rotationMatrix, 0);
+        this._matricesUniformBlockBufferData.set(rtcViewMatrix, offset += mat4Size);
         this._matricesUniformBlockBufferData.set(frameCtx.pickProjMatrix || project.matrix, offset += mat4Size);
         this._matricesUniformBlockBufferData.set(positionsDecodeMatrix, offset += mat4Size);
-        this._matricesUniformBlockBufferData.set(worldNormalMatrix, offset += mat4Size);
-        this._matricesUniformBlockBufferData.set(viewNormalMatrix, offset += mat4Size);
+        this._matricesUniformBlockBufferData.set(model.worldNormalMatrix, offset += mat4Size);
+        this._matricesUniformBlockBufferData.set(camera.viewNormalMatrix, offset += mat4Size);
 
         gl.bindBuffer(gl.UNIFORM_BUFFER, this._matricesUniformBlockBuffer);
         gl.bufferData(gl.UNIFORM_BUFFER, this._matricesUniformBlockBufferData, gl.DYNAMIC_DRAW);
@@ -516,9 +506,6 @@ export class VBORenderer {
             gl.UNIFORM_BUFFER,
             this._matricesUniformBlockBufferBindingPoint,
             this._matricesUniformBlockBuffer);
-
-
-        gl.uniform1i(this._uRenderPass, renderPass);
 
         this.setSectionPlanesStateUniforms(layer);
 
@@ -535,6 +522,8 @@ export class VBORenderer {
                 gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
             }
         }
+
+        gl.uniform1i(this._uRenderPass, renderPass);
 
         if (this._uPickZNear) {
             gl.uniform1f(this._uPickZNear, frameCtx.pickZNear);
@@ -556,6 +545,7 @@ export class VBORenderer {
             gl.uniformMatrix3fv(this._uUVDecodeMatrix, false, state.uvDecodeMatrix);
         }
 
+        const pointsMaterial = scene.pointsMaterial;
         if (this._uIntensityRange && pointsMaterial.filterIntensity) {
             gl.uniform2f(this._uIntensityRange, pointsMaterial.minIntensity, pointsMaterial.maxIntensity);
         }
@@ -571,6 +561,8 @@ export class VBORenderer {
             gl.uniform1f(this._uNearPlaneHeight, nearPlaneHeight);
         }
 
+        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
+        const textureSet = state.textureSet;
         if (textureSet) {
             const {
                 colorTexture,
@@ -603,6 +595,7 @@ export class VBORenderer {
 
         }
 
+        const lightsState = scene._lightsState;
         if (lightsState.reflectionMaps.length > 0 && lightsState.reflectionMaps[0].texture && this._uReflectionMap) {
             this._program.bindTexture(this._uReflectionMap, lightsState.reflectionMaps[0].texture, frameCtx.textureUnit);
             frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
