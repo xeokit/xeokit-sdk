@@ -51,78 +51,74 @@
 // Import the modules we need for this example
 //------------------------------------------------------------------------------------------------------------------
 
-import { math, SectionPlanesPlugin, Viewer, XKTLoaderPlugin } from "../../dist/xeokit-sdk.min.es.js";
-import { createOverlay, setupOverlayAlignmentControl } from "./overlay.js";
+import { SectionPlanesPlugin, Viewer, XKTLoaderPlugin } from "../../dist/xeokit-sdk.min.es.js";
 
 //------------------------------------------------------------------------------------------------------------------
 // Create a Viewer
 //------------------------------------------------------------------------------------------------------------------
 
-const viewer = new Viewer({
-    canvasId: "myCanvas",
-    transparent: true
-});
+const viewer = new Viewer({ canvasId: "myCanvas" });
 
-viewer.camera.eye = [-9.11, 20.01, 5.13];
-viewer.camera.look = [9.07, 0.77, -9.78];
-viewer.camera.up = [0.47, 0.76, -0.38];
-viewer.camera.perspective.near = 0.1;
-viewer.camera.perspective.far = 5000.0;
-
-viewer.cameraControl.followPointer = true;
-
-const sao = viewer.scene.sao;
-sao.enabled = true;
+viewer.camera.eye  = [7, 30,  -8];
+viewer.camera.look = [7,  0, -10];
+viewer.camera.up   = [0,  1,   0];
 
 //------------------------------------------------------------------------------------------------------------------
-// Add a XKTModelsPlugin - we'll use this to load the model geometry
+// Add a XKTModelsPlugin and load the .xkt model
 //------------------------------------------------------------------------------------------------------------------
 
-const xktLoader = new XKTLoaderPlugin(viewer);
+new XKTLoaderPlugin(viewer).load({ src: "../../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt" });
 
 //------------------------------------------------------------------------------------------------------------------
-// Load the .xkt model and IFC metadata
+// Add a SectionPlanesPlugin and create a cross-section plane through the middle of the first floor
 //------------------------------------------------------------------------------------------------------------------
 
-const sceneModel = xktLoader.load({
-    id: "myModel",
-    src: "../../assets/models/xkt/v8/ifc/Schependomlaan.ifc.xkt",
-    edges: true,
-    saoEnabled: true
-});
+new SectionPlanesPlugin(viewer, { overviewVisible: false }).createSectionPlane({ pos: [0, 1, 0], dir: [0, -1, 0] });
 
 //------------------------------------------------------------------------------------------------------------------
-// Add a SectionPlanesPlugin - we'll use this to create cross-section planes
+// Setup the image plane
 //------------------------------------------------------------------------------------------------------------------
 
-const sectionPlanes = new SectionPlanesPlugin(viewer, {
-    overviewVisible: false
-});
+import { buildPlaneGeometry, math, Mesh, PhongMaterial, ReadableGeometry, Texture } from "../../dist/xeokit-sdk.min.es.js";
+import { setupOverlayAlignmentControl } from "./overlay.js";
 
-//------------------------------------------------------------------------------------------------------------------
-// Create a cross-section plane
-//------------------------------------------------------------------------------------------------------------------
+const image = new Image();
+image.src = "../../assets/images/schependomlaanPlanView.png";
+image.onload = function() {
+    // Create the floor plan Texture
+    const scene = viewer.scene;
+    const planTexture = new Texture(scene, { image: image });
 
-const sectionPlane = sectionPlanes.createSectionPlane({
-    id: "mySectionPlane",
-    pos: [45, 1, -45],
-    dir: [0.0, -1.0, 0.0]
-});
+    // Create the floor plan Mesh
+    const planMesh = new Mesh(scene, {
+        pickable: false,
+        geometry: new ReadableGeometry(scene, buildPlaneGeometry()),
+        material: new PhongMaterial(scene, {
+            alpha: 0.75,
+            diffuse:  [0, 0, 0],
+            diffuseMap:  planTexture,
+            emissiveMap: planTexture,
+            backfaces: true
+        })
+    });
 
-const planPath = "../../assets/images/schependomlaanPlanView.png";
-const planAltitude = 0.1;
-const planAspect = 2000 / 1897; // based on the image dimensions
+    // Scale and position the Mesh
+    // const planHeight = 0.1
+    // const planPosition = [ 10.946, planHeight, -10.343 ];
+    // const planScale = 22.66;
+    const planHeight = 0.1;
+    const planPosition = [ -4, planHeight, -6 ];
+    const planScale = 10;
+    const t = math.translationMat4v(planPosition);
+    // Preserve image's aspect ratio when scaling
+    const s = math.scalingMat4v([planScale * image.width / image.height, 1, planScale]);
+    planMesh.matrix = math.mulMat4(t, s, math.mat4());
 
-const overlay = createOverlay(viewer.scene, planPath);
-
-const t = math.translationMat4v([ -8, planAltitude, -10.5 ]);
-const s = math.scalingMat4v([10 * planAspect, 1, 10]);
-overlay.matrix = math.mulMat4(t, s, math.mat4());
-
-const overlayCtrl = setupOverlayAlignmentControl(viewer, overlay);
-
-window.document.addEventListener("keydown", e => overlayCtrl.setStepRotation(e.shiftKey));
-window.document.addEventListener("keyup",   e => overlayCtrl.setStepRotation(e.shiftKey));
+    // Use the illustrative alignment control to put the overlay in the desired place
+    const overlayCtrl = setupOverlayAlignmentControl(viewer, planMesh);
+    window.document.addEventListener("keydown", e => overlayCtrl.setStepRotation(e.shiftKey));
+    window.document.addEventListener("keyup",   e => overlayCtrl.setStepRotation(e.shiftKey));
+};
 
     </script>
 </html>
