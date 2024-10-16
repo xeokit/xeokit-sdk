@@ -17,13 +17,14 @@ const tempMat4a = math.mat4();
  * @private
  */
 export class VBORenderer {
-    constructor(scene, withSAO = false, {instancing = false, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, isSnapInit = false} = {}) {
+    constructor(scene, withSAO = false, {instancing = false, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, colorUniform = false, isSnapInit = false} = {}) {
         this._scene = scene;
         this._withSAO = withSAO;
         this._instancing = instancing;
         this._edges = edges;
         this._useAlphaCutoff = useAlphaCutoff;
         this._hashPointsMaterial = hashPointsMaterial;
+        this._colorUniform = colorUniform;
         this._isSnapInit = isSnapInit;
         this._hash = this._getHash();
 
@@ -603,7 +604,7 @@ export class VBORenderer {
             gl.uniform1f(this._alphaCutoffLocation, textureSet.alphaCutoff);
         }
 
-        if (colorUniform) {
+        if (colorUniform || this._colorUniform) {
             const colorKey = this._edges ? "edgeColor" : "fillColor";
             const alphaKey = this._edges ? "edgeAlpha" : "fillAlpha";
 
