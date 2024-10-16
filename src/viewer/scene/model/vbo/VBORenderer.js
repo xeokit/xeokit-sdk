@@ -10,6 +10,7 @@ const edgesDefaultColor = new Float32Array([0, 0, 0, 1]);
 
 const tempVec4 = math.vec4();
 const tempVec3a = math.vec3();
+const tempVec3b = math.vec3();
 const tempVec3c = math.vec3();
 const tempMat4a = math.mat4();
 
@@ -156,7 +157,7 @@ export class VBORenderer {
                             const sectionPlane = sectionPlanes[sectionPlaneIndex];
                             const origin = layer._state.origin;
                             if (origin) {
-                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3a, model.matrix);
+                                const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3b, model.matrix);
                                 gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
                             } else {
                                 gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
@@ -496,8 +497,10 @@ export class VBORenderer {
         this._matricesUniformBlockBufferData.set(rtcViewMatrix, offset += mat4Size);
         this._matricesUniformBlockBufferData.set(frameCtx.pickProjMatrix || project.matrix, offset += mat4Size);
         this._matricesUniformBlockBufferData.set(positionsDecodeMatrix, offset += mat4Size);
-        this._matricesUniformBlockBufferData.set(model.worldNormalMatrix, offset += mat4Size);
-        this._matricesUniformBlockBufferData.set(camera.viewNormalMatrix, offset += mat4Size);
+        if (! this._isSnap) {
+            this._matricesUniformBlockBufferData.set(model.worldNormalMatrix, offset += mat4Size);
+            this._matricesUniformBlockBufferData.set(camera.viewNormalMatrix, offset += mat4Size);
+        }
 
         gl.bindBuffer(gl.UNIFORM_BUFFER, this._matricesUniformBlockBuffer);
         gl.bufferData(gl.UNIFORM_BUFFER, this._matricesUniformBlockBufferData, gl.DYNAMIC_DRAW);
@@ -516,11 +519,52 @@ export class VBORenderer {
             gl.uniformMatrix4fv(this._uShadowProjMatrix, false, frameCtx.shadowProjMatrix); // Not tested
         }
 
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (scene.logarithmicDepthBufferEnabled || (this._isSnap && SNAPPING_LOG_DEPTH_BUF_ENABLED)) {
             if (this._uLogDepthBufFC) {
                 const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2); // TODO: Far from pick project matrix?
                 gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
             }
+        }
+
+        if (this._isSnap) {
+            const aabb = layer.aabb; // Per-layer AABB for best RTC accuracy
+            const coordinateScaler = tempVec3c;
+            coordinateScaler[0] = math.safeInv(aabb[3] - aabb[0]) * math.MAX_INT;
+            coordinateScaler[1] = math.safeInv(aabb[4] - aabb[1]) * math.MAX_INT;
+            coordinateScaler[2] = math.safeInv(aabb[5] - aabb[2]) * math.MAX_INT;
+
+            frameCtx.snapPickCoordinateScale[0] = math.safeInv(coordinateScaler[0]);
+            frameCtx.snapPickCoordinateScale[1] = math.safeInv(coordinateScaler[1]);
+            frameCtx.snapPickCoordinateScale[2] = math.safeInv(coordinateScaler[2]);
+            frameCtx.snapPickOrigin[0] = rtcOrigin[0];
+            frameCtx.snapPickOrigin[1] = rtcOrigin[1];
+            frameCtx.snapPickOrigin[2] = rtcOrigin[2];
+
+            gl.uniform3fv(this._uCoordinateScaler, coordinateScaler);
+            gl.uniform2fv(this.uVectorA, frameCtx.snapVectorA);
+            gl.uniform2fv(this.uInverseVectorAB, frameCtx.snapInvVectorAB);
+            gl.uniform1i(this._uLayerNumber, frameCtx.snapPickLayerNumber);
+            gl.uniform1i(this._uRenderPass, renderPass);
+
+            //=============================================================
+            // TODO: Use drawElements count and offset to draw only one entity
+            //=============================================================
+
+            if (this._isSnapInit) {
+                state.indicesBuf.bind();
+                gl.drawElements(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
+                state.indicesBuf.unbind();
+            } else if ((frameCtx.snapMode === "edge") && state.edgeIndicesBuf) {
+                state.edgeIndicesBuf.bind();
+                gl.drawElements(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0);
+                state.edgeIndicesBuf.unbind(); // needed?
+            } else {
+                gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
+            }
+
+            gl.bindVertexArray(null);
+
+            return;
         }
 
         gl.uniform1i(this._uRenderPass, renderPass);
