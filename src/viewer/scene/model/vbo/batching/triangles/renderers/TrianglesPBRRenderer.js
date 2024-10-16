@@ -10,12 +10,7 @@ TEXTURE_DECODE_FUNCS[sRGBEncoding] = "sRGBToLinear";
  */
 export class TrianglesPBRRenderer extends TrianglesBatchingRenderer {
     constructor(scene, withSAO) {
-        super(scene, withSAO, { incrementDrawState: true });
-    }
-
-    _getHash() {
-        const scene = this._scene;
-        return [scene.gammaOutput, scene._lightsState.getHash(), scene._sectionPlanesState.getHash(), (this._withSAO ? "sao" : "nosao")].join(";");
+        super(scene, withSAO, { incrementDrawState: true, hashLigthsSAO: true, hashGammaOutput: true });
     }
 
     _buildVertexShader() {
