@@ -4,9 +4,8 @@ import {TrianglesBatchingRenderer} from "./TrianglesBatchingRenderer.js";
  * @private
  */
 export class TrianglesFlatColorRenderer extends TrianglesBatchingRenderer {
-    _getHash() {
-        const scene = this._scene;
-        return [scene._lightsState.getHash(), scene._sectionPlanesState.getHash(), (this._withSAO ? "sao" : "nosao")].join(";");
+    constructor(scene, withSAO) {
+        super(scene, withSAO, { hashLigthsSAO: true });
     }
 
     _buildVertexShader() {
