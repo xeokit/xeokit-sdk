@@ -289,11 +289,4 @@ export class TrianglesSnapRenderer extends VBORenderer {
         src.push("}");
         return src;
     }
-
-    destroy() {
-        if (this._program) {
-            this._program.destroy();
-        }
-        this._program = null;
-    }
 }
