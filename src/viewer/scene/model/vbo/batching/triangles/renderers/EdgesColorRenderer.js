@@ -18,9 +18,8 @@ export class EdgesColorRenderer extends EdgesRenderer {
         src.push("// Batched geometry edges drawing vertex shader");
 
         src.push("uniform int renderPass;");
-
-        src.push("in vec3 position;");
         src.push("in vec4 color;");
+        src.push("in vec3 position;");
         if (scene.entityOffsetsEnabled) {
             src.push("in vec3 offset;");
         }
@@ -43,10 +42,11 @@ export class EdgesColorRenderer extends EdgesRenderer {
         }
 
         src.push("out vec4 vColor;");
+
         src.push("void main(void) {");
 
         // edgeFlag = NOT_RENDERED | EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
-        // renderPass = EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT
+        // renderPass = EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
 
         src.push(`int edgeFlag = int(flags) >> 8 & 0xF;`);
         src.push(`if (edgeFlag != renderPass) {`);
@@ -71,8 +71,7 @@ export class EdgesColorRenderer extends EdgesRenderer {
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
         src.push("gl_Position = clipPos;");
-        //src.push("vColor = vec4(float(color.r-100.0) / 255.0, float(color.g-100.0) / 255.0, float(color.b-100.0) / 255.0, float(color.a) / 255.0);");
-        src.push("vColor = vec4(float(color.r*0.5) / 255.0, float(color.g*0.5) / 255.0, float(color.b*0.5) / 255.0, float(color.a) / 255.0);");
+        src.push("vColor = vec4(color.rgb * 0.5, color.a) / 255.0;");
         src.push("}");
         src.push("}");
         return src;
