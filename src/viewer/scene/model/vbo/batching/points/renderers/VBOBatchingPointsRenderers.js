@@ -3,7 +3,6 @@ import {VBOBatchingPointsSilhouetteRenderer} from "./VBOBatchingPointsSilhouette
 import {VBOBatchingPointsPickMeshRenderer} from "./VBOBatchingPointsPickMeshRenderer.js";
 import {VBOBatchingPointsPickDepthRenderer} from "./VBOBatchingPointsPickDepthRenderer.js";
 import {VBOBatchingPointsOcclusionRenderer} from "./VBOBatchingPointsOcclusionRenderer.js";
-import {VBOBatchingPointsSnapInitRenderer} from "./VBOBatchingPointsSnapInitRenderer.js";
 import {VBOBatchingPointsSnapRenderer} from "./VBOBatchingPointsSnapRenderer.js";
 
 /**
@@ -83,14 +82,14 @@ class VBOBatchingPointsRenderers {
 
     get snapInitRenderer() {
         if (!this._snapInitRenderer) {
-            this._snapInitRenderer = new VBOBatchingPointsSnapInitRenderer(this._scene, false);
+            this._snapInitRenderer = new VBOBatchingPointsSnapRenderer(this._scene, true);
         }
         return this._snapInitRenderer;
     }
 
     get snapRenderer() {
         if (!this._snapRenderer) {
-            this._snapRenderer = new VBOBatchingPointsSnapRenderer(this._scene);
+            this._snapRenderer = new VBOBatchingPointsSnapRenderer(this._scene, false);
         }
         return this._snapRenderer;
     }
