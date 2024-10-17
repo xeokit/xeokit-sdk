@@ -555,12 +555,13 @@ export class VBORenderer {
 
             if (this._isSnapInit && (this._isSnap !== "points")) {
                 state.indicesBuf.bind();
-                gl.drawElements(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
+                gl.drawElements((this._isSnap === "lines") ? gl.LINES : gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
                 state.indicesBuf.unbind();
-            } else if ((frameCtx.snapMode === "edge") && (this._isSnap !== "points") && state.edgeIndicesBuf) {
-                state.edgeIndicesBuf.bind();
-                gl.drawElements(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0);
-                state.edgeIndicesBuf.unbind(); // needed?
+            } else if ((frameCtx.snapMode === "edge") && (this._isSnap !== "points")) {
+                const indicesBuf = ((this._isSnap !== "lines") && state.edgeIndicesBuf) || state.indicesBuf;
+                indicesBuf.bind();
+                gl.drawElements(gl.LINES, indicesBuf.numItems, indicesBuf.itemType, 0);
+                indicesBuf.unbind(); // needed?
             } else {
                 gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
             }
