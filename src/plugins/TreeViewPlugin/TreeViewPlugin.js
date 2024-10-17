@@ -984,7 +984,7 @@ export class TreeViewPlugin extends Plugin {
             buildingNode = {
                 nodeId: `${this._id}-${objectId}`,
                 objectId: objectId,
-                title: (metaObject.metaModels.length === 0) ? "na" : this._rootNames[metaObject.metaModels[0].id] || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
+                title: (metaObject.metaModels.length === 0) ? "_createStoreysNodes2" : this._rootNames[metaObject.metaModels[0].id] || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
                 type: metaObjectType,
                 parent: null,
                 numEntities: 0,
@@ -1087,7 +1087,7 @@ export class TreeViewPlugin extends Plugin {
             rootNode = {
                 nodeId: `${this._id}-${objectId}`,
                 objectId: objectId,
-                title: metaObject.metaModels.length === 0 ? "na" : this._rootNames[metaObject.metaModels[0].id] || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
+                title: metaObject.metaModels.length === 0 ? "_createTypesNodes2" : this._rootNames[metaObject.metaModels[0].id] || ((metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType),
                 type: metaObjectType,
                 parent: null,
                 numEntities: 0,
@@ -1168,7 +1168,7 @@ export class TreeViewPlugin extends Plugin {
         const node = {
             nodeId: `${this._id}-${objectId}`,
             objectId: objectId,
-            title: (!parent) ? metaObject.metaModels.length === 0 ? "na" : (this._rootNames[metaObject.metaModels[0].id] || metaObjectName) : (metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
+            title: (!parent) ? metaObject.metaModels.length === 0 ? "_createContainmentNodes2" : (this._rootNames[metaObject.metaModels[0].id] || metaObjectName) : (metaObjectName && metaObjectName !== "" && metaObjectName !== "Undefined" && metaObjectName !== "Default") ? metaObjectName : metaObjectType,
             type: metaObjectType,
             parent: parent,
             numEntities: 0,
