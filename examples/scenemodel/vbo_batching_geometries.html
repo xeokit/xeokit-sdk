@@ -6,9 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>xeokit Example</title>
     <link href="../css/pageStyle.css" rel="stylesheet"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script> -->
     <link href="../css/dat-gui-light-style.css" rel="stylesheet"/>
-    <script src="../libs/dat.gui.min.js" type="text/javascript"></script>
 </head>
 <body>
 <input type="checkbox" id="info-button"/>
@@ -80,7 +79,7 @@
         buildBoxLinesGeometry,
         buildGridGeometry,
         buildVectorTextGeometry
-    } from "../../dist/xeokit-sdk.min.es.js";
+    } from "../../src/index.js";
 
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -88,9 +87,10 @@
 
     const viewer = new Viewer({
         canvasId: "myCanvas",
-        transparent: true
+        transparent: true,
+    readableGeometryEnabled: true,
     });
-
+window.viewer = viewer;
     viewer.scene.camera.eye = [-10.970825516832445, 12.854221661021146, 24.950601235099196];
     viewer.scene.camera.look = [8.500572204589844, 2.190000057220459, 0];
     viewer.scene.camera.up = [0.18, 0.93, -0.25];
@@ -111,9 +111,10 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const sceneModel = new SceneModel(viewer.scene, {
+        edges: true,
         id: "myGeometries"
     });
-
+window.sceneModel = sceneModel;
     // Box triangles
 
     const box = buildBoxGeometry({
@@ -251,11 +252,20 @@
 
     const map = {};
 
+    const RNG = function(seed) {
+        var m = 2**35 - 31
+        var a = 185852
+        var s = seed % m
+        return () => (s = s * a % m) / m;
+    };
+
+    const rnd = RNG(4);
+
     for (let i = 0; i < 2000;) {
 
-        const x = Math.random();
-        const y = Math.random();
-        const z = Math.random();
+        const x = rnd();
+        const y = rnd();
+        const z = rnd();
 
         const hash = "" + x + "." + y + "." + z;
         if (map[hash]) {
@@ -268,10 +278,10 @@
         positions.push(y);
         positions.push(z);
 
-        colors.push(Math.random());
-        colors.push(Math.random());
-        colors.push(Math.random());
-        colors.push(Math.random());
+        colors.push(rnd());
+        colors.push(rnd());
+        colors.push(rnd());
+        colors.push(rnd());
 
         i++;
     }
@@ -299,6 +309,9 @@
     });
 
     sceneModel.finalize();
+
+    import {setupPickIndicator} from "../test.js";
+    setupPickIndicator(viewer);
 
 </script>
 </html>

@@ -6,20 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>xeokit Example</title>
     <link href="../css/pageStyle.css" rel="stylesheet"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
   </head>
   <body>
     <canvas id="myCanvas"></canvas>
   </body>
   <script type="module">
 
-    import {Viewer, XKTLoaderPlugin} from "../../dist/xeokit-sdk.es.js";
+    import {Viewer, XKTLoaderPlugin} from "../../src/index.js";
 
     const viewer = new Viewer({ canvasId: "myCanvas" });
 
     const src = window.document.location.hash.match(/src=([^&]+)/);
     const model = new XKTLoaderPlugin(viewer).load({ src: src[1] });
     model.on("loaded", () => viewer.cameraFlight.jumpTo(model));
-
+window.viewer = viewer;
   </script>
 </html>

@@ -89,7 +89,14 @@
 <body>
 <input type="checkbox" id="info-button"/>
 <label for="info-button" class="info-button"><i class="far fa-3x fa-question-circle"></i></label>
-<canvas id="myCanvas"></canvas>
+<div>
+  <div style="position: absolute; width: 100%; height: 100%; border: 1px solid black; box-sizing: border-box;">
+    <div style="top: 30px; border: 1px solid blue; box-sizing: border-box;">Artificial offset 50x30 px</div>
+    <div style="position: relative; height: 100%; left: 50px; border: 1px solid green; box-sizing: border-box;">
+<canvas id="myCanvas" style="position: relative; transform: translate(10px, 30px); border: 1px solid red; box-sizing: border-box;"></canvas>
+    </div>
+  </div>
+</div>
 <div class="slideout-sidebar">
     <img class="info-icon" src="../../assets/images/measure_distance_icon.png"/>
     <h1>DistanceMeasurementPlugin with DistanceMeasurementsMouseControl and PointerLens</h1>
@@ -141,7 +148,7 @@
     // Import the modules we need for this example
     //------------------------------------------------------------------------------------------------------------------
 
-    import {Viewer, XKTLoaderPlugin, ContextMenu, PointerLens, DistanceMeasurementsPlugin, DistanceMeasurementsMouseControl, DistanceMeasurementEditMouseControl} from "../../dist/xeokit-sdk.es.js";
+    import {Viewer, XKTLoaderPlugin, ContextMenu, PointerLens, DistanceMeasurementsPlugin, DistanceMeasurementsMouseControl, DistanceMeasurementEditMouseControl, AngleMeasurementsPlugin, AngleMeasurementsMouseControl} from "../../src/index.js";
     
     //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer and arrange the camera
@@ -179,6 +186,7 @@
     //------------------------------------------------------------------------------------------------------------------
 
     const distanceMeasurementsPlugin = new DistanceMeasurementsPlugin(viewer);
+//    const distanceMeasurementsPlugin = new AngleMeasurementsPlugin(viewer);
 
     distanceMeasurementsPlugin.on("measurementStart", (distanceMeasurement) => {
         console.log("measurementStart");
@@ -198,6 +206,7 @@
         console.log("target", distanceMeasurement.target.entity);
     });
 
+//    const distanceMeasurementsMouseControl = new AngleMeasurementsMouseControl(distanceMeasurementsPlugin, {
     const distanceMeasurementsMouseControl = new DistanceMeasurementsMouseControl(distanceMeasurementsPlugin, {
         pointerLens: new PointerLens(viewer),
         snapping: true // Default
