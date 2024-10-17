@@ -132,21 +132,6 @@ export class VBOBatchingPointsSnapRenderer extends VBORenderer {
         gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
     }
 
-    _allocate() {
-        super._allocate();
-
-        const program = this._program;
-
-        if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
-            this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
-        }
-        this.uVectorA = program.getLocation("snapVectorA");
-        this.uInverseVectorAB = program.getLocation("snapInvVectorAB");
-        this._uLayerNumber = program.getLocation("layerNumber");
-        this._uCoordinateScaler = program.getLocation("coordinateScaler");
-        this._uPointSize = program.getLocation("pointSize");
-    }
-
     _buildVertexShader() {
         const isSnapInit = this._isSnapInit;
         const scene = this._scene;
