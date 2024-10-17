@@ -198,7 +198,7 @@ export class VBOBatchingPointsSnapRenderer extends VBORenderer{
 
         src.push(`int pickFlag = int(flags) >> 12 & 0xF;`);
         src.push(`if (pickFlag != renderPass) {`);
-        src.push("      gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
+        src.push("      gl_Position = vec4(2.0, 0.0, 0.0, 0.0);"); // Cull vertex
         src.push("  } else {");
         src.push("      vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
         if (scene.entityOffsetsEnabled) {
