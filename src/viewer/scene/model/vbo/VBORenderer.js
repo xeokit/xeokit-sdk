@@ -545,16 +545,19 @@ export class VBORenderer {
             gl.uniform2fv(this.uInverseVectorAB, frameCtx.snapInvVectorAB);
             gl.uniform1i(this._uLayerNumber, frameCtx.snapPickLayerNumber);
             gl.uniform1i(this._uRenderPass, renderPass);
+            if (this._uPointSize) {
+                gl.uniform1f(this._uPointSize, 1.0);
+            }
 
             //=============================================================
             // TODO: Use drawElements count and offset to draw only one entity
             //=============================================================
 
-            if (this._isSnapInit) {
+            if (this._isSnapInit && (this._isSnap !== "points")) {
                 state.indicesBuf.bind();
                 gl.drawElements(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
                 state.indicesBuf.unbind();
-            } else if ((frameCtx.snapMode === "edge") && state.edgeIndicesBuf) {
+            } else if ((frameCtx.snapMode === "edge") && (this._isSnap !== "points") && state.edgeIndicesBuf) {
                 state.edgeIndicesBuf.bind();
                 gl.drawElements(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0);
                 state.edgeIndicesBuf.unbind(); // needed?
