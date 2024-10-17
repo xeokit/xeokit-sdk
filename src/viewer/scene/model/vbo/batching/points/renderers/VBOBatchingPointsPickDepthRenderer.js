@@ -6,8 +6,9 @@ import {VBOBatchingPointsRenderer} from "../VBOBatchingPointsRenderer.js";
 
 
 export class VBOBatchingPointsPickDepthRenderer extends VBOBatchingPointsRenderer {
-    _getHash() {
-        return this._scene._sectionPlanesState.getHash() + (this._scene.pointsMaterial.hash);
+
+    constructor(scene) {
+        super(scene, false, { hashPointsMaterial: true });
     }
 
     _buildVertexShader() {
