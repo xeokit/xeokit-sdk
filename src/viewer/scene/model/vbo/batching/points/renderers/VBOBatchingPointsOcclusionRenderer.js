@@ -11,8 +11,9 @@ const ENABLE_LOG_DEPTH_BUF = false;
  * @private
  */
 class VBOBatchingPointsOcclusionRenderer extends VBOBatchingPointsRenderer {
-    _getHash() {
-        return this._scene._sectionPlanesState.getHash() + (this._scene.pointsMaterial.hash);
+
+    constructor(scene) {
+        super(scene, false, { hashPointsMaterial: true });
     }
 
     _buildVertexShader() {

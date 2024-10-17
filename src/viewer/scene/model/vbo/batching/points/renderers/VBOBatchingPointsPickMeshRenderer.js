@@ -6,12 +6,12 @@ import {VBOBatchingPointsRenderer} from "../VBOBatchingPointsRenderer.js";
 
 
 export class VBOBatchingPointsPickMeshRenderer extends VBOBatchingPointsRenderer {
-    _getHash() {
-        return this._scene._sectionPlanesState.getHash() + (this._scene.pointsMaterial.hash);
+
+    constructor(scene) {
+        super(scene, false, { hashPointsMaterial: true });
     }
 
     _buildVertexShader() {
-
         const scene = this._scene;
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const pointsMaterial = scene.pointsMaterial._state;
