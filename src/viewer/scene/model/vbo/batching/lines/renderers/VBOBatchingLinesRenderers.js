@@ -1,6 +1,5 @@
 import {VBOBatchingLinesColorRenderer} from "./VBOBatchingLinesColorRenderer.js";
 import {VBOBatchingLinesSilhouetteRenderer} from "./VBOBatchingLinesSilhouetteRenderer.js";
-import {VBOBatchingLinesSnapInitRenderer} from "./VBOBatchingLinesSnapInitRenderer.js";
 import {VBOBatchingLinesSnapRenderer} from "./VBOBatchingLinesSnapRenderer.js";
 
 /**
@@ -47,14 +46,14 @@ class VBOBatchingLinesRenderers {
 
     get snapInitRenderer() {
         if (!this._snapInitRenderer) {
-            this._snapInitRenderer = new VBOBatchingLinesSnapInitRenderer(this._scene, false);
+            this._snapInitRenderer = new VBOBatchingLinesSnapRenderer(this._scene, true);
         }
         return this._snapInitRenderer;
     }
 
     get snapRenderer() {
         if (!this._snapRenderer) {
-            this._snapRenderer = new VBOBatchingLinesSnapRenderer(this._scene);
+            this._snapRenderer = new VBOBatchingLinesSnapRenderer(this._scene, false);
         }
         return this._snapRenderer;
     }
