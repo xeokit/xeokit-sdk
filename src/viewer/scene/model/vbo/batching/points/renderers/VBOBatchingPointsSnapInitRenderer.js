@@ -26,7 +26,7 @@ export class VBOBatchingPointsSnapInitRenderer extends VBORenderer {
 
         if (frameCtx.lastProgramId !== this._program.id) {
             frameCtx.lastProgramId = this._program.id;
-            this._bindProgram();
+            this._bindProgram(frameCtx);
         }
 
         const model = batchingLayer.model;
@@ -138,10 +138,6 @@ export class VBOBatchingPointsSnapInitRenderer extends VBORenderer {
         this._uLayerNumber = program.getLocation("layerNumber");
         this._uCoordinateScaler = program.getLocation("coordinateScaler");
         this._uPointSize = program.getLocation("pointSize");
-    }
-
-    _bindProgram() {
-        this._program.bind();
     }
 
     _buildVertexShader() {
