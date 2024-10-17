@@ -4,16 +4,12 @@ import {VBOBatchingPointsRenderer} from "../VBOBatchingPointsRenderer.js";
  * @private
  */
 export class VBOBatchingPointsSilhouetteRenderer extends VBOBatchingPointsRenderer {
-    _getHash() {
-        return this._scene._sectionPlanesState.getHash() + this._scene.pointsMaterial.hash;
-    }
 
-    drawLayer(frameCtx, pointsBatchingLayer, renderPass) {
-        super.drawLayer(frameCtx, pointsBatchingLayer, renderPass, { colorUniform: true });
+    constructor(scene) {
+        super(scene, false, { hashPointsMaterial: true, colorUniform: true });
     }
 
     _buildVertexShader() {
-
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
