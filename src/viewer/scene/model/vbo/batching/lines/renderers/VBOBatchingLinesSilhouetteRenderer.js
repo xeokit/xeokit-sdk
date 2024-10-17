@@ -5,12 +5,11 @@ import {VBOSceneModelLineBatchingRenderer} from "./VBOSceneModelLineBatchingRend
  */
 export class VBOBatchingLinesSilhouetteRenderer extends VBOSceneModelLineBatchingRenderer {
 
-    drawLayer(frameCtx, batchingLayer, renderPass) {
-        super.drawLayer(frameCtx, batchingLayer, renderPass, { colorUniform: true });
+    constructor(scene) {
+        super(scene, false, { colorUniform: true });
     }
 
     _buildVertexShader() {
-
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;

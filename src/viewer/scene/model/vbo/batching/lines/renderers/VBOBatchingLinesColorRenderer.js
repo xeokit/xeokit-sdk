@@ -5,8 +5,8 @@ import {VBOSceneModelLineBatchingRenderer} from "./VBOSceneModelLineBatchingRend
  */
 export class VBOBatchingLinesColorRenderer extends VBOSceneModelLineBatchingRenderer {
 
-    drawLayer(frameCtx, layer, renderPass) {
-        super.drawLayer(frameCtx, layer, renderPass, { incrementDrawState: true });
+    constructor(scene) {
+        super(scene, false, { incrementDrawState: true });
     }
 
     _buildVertexShader() {
