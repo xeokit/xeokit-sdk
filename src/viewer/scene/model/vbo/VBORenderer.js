@@ -557,17 +557,18 @@ export class VBORenderer {
 
             if ((this._progMode === "snapInitMode") && (this._primType !== "pointType")) {
                 state.indicesBuf.bind();
+                const mode = (this._primType === "lineType") ? gl.LINES : gl.TRIANGLES;
                 if (this._instancing) {
-                    gl.drawElementsInstanced(gl.LINES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
+                    gl.drawElementsInstanced(mode, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
                 } else {
-                    gl.drawElements((this._primType === "lineType") ? gl.LINES : gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
+                    gl.drawElements(mode, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
                 }
                 state.indicesBuf.unbind();
             } else if ((frameCtx.snapMode === "edge") && (this._primType !== "pointType")) {
                 const indicesBuf = ((this._isSnap !== "lines") && state.edgeIndicesBuf) || state.indicesBuf;
                 indicesBuf.bind();
                 if (this._instancing) {
-                    gl.drawElementsInstanced(gl.LINES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
+                    gl.drawElementsInstanced(gl.LINES, indicesBuf.numItems, indicesBuf.itemType, 0, state.numInstances);
                 } else {
                     gl.drawElements(gl.LINES, indicesBuf.numItems, indicesBuf.itemType, 0);
                 }
