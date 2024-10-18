@@ -5,13 +5,8 @@ import {TrianglesInstancingRenderer} from "./TrianglesInstancingRenderer.js";
  */
 
 export class TrianglesColorTextureRenderer extends TrianglesInstancingRenderer {
-    _getHash() {
-        const scene = this._scene;
-        return [scene.gammaOutput, scene._lightsState.getHash(), scene._sectionPlanesState.getHash(), (this._withSAO ? "sao" : "nosao"), this._useAlphaCutoff ? "alphaCutoffYes" : "alphaCutoffNo"].join(";");
-    }
-
-    drawLayer(frameCtx, layer, renderPass) {
-        super.drawLayer(frameCtx, layer, renderPass, { incrementDrawState: true });
+    constructor(scene, withSAO, useAlphaCutoff) {
+        super(scene, withSAO, { incrementDrawState: true, useAlphaCutoff: useAlphaCutoff, hashLigthsSAO: true, hashGammaOutput: true });
     }
 
     _buildVertexShader() {

@@ -167,28 +167,28 @@ class Renderers {
 
     get colorTextureRenderer() {
         if (!this._colorTextureRenderer) {
-            this._colorTextureRenderer = new TrianglesColorTextureRenderer(this._scene, false);
+            this._colorTextureRenderer = new TrianglesColorTextureRenderer(this._scene, false, false);
         }
         return this._colorTextureRenderer;
     }
 
     get colorTextureRendererWithSAO() {
         if (!this._colorTextureRendererWithSAO) {
-            this._colorTextureRendererWithSAO = new TrianglesColorTextureRenderer(this._scene, true);
+            this._colorTextureRendererWithSAO = new TrianglesColorTextureRenderer(this._scene, true, false);
         }
         return this._colorTextureRendererWithSAO;
     }
 
     get colorTextureRendererAlphaCutoff() {
         if (!this._colorTextureRendererAlphaCutoff) {
-            this._colorTextureRendererAlphaCutoff = new TrianglesColorTextureRenderer(this._scene, false, { useAlphaCutoff: true });
+            this._colorTextureRendererAlphaCutoff = new TrianglesColorTextureRenderer(this._scene, false, true);
         }
         return this._colorTextureRendererAlphaCutoff;
     }
 
     get colorTextureRendererWithSAOAlphaCutoff() {
         if (!this._colorTextureRendererWithSAOAlphaCutoff) {
-            this._colorTextureRendererWithSAOAlphaCutoff = new TrianglesColorTextureRenderer(this._scene, true, { useAlphaCutoff: true });
+            this._colorTextureRendererWithSAOAlphaCutoff = new TrianglesColorTextureRenderer(this._scene, true, true);
         }
         return this._colorTextureRendererWithSAOAlphaCutoff;
     }
