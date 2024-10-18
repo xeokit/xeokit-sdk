@@ -5,8 +5,8 @@ import {VBOInstancingLinesRenderer} from "./VBOInstancingLinesRenderer.js";
  */
 export class VBOInstancingLinesColorRenderer extends VBOInstancingLinesRenderer {
 
-    drawLayer(frameCtx, layer, renderPass) {
-        super.drawLayer(frameCtx, layer, renderPass, {incrementDrawState: true});
+    constructor(scene) {
+        super(scene, false, { incrementDrawState: true });
     }
 
     _buildVertexShader() {
