@@ -4,8 +4,8 @@ import {VBORenderer} from "./../../../VBORenderer.js";
  * @private
  */
 export class VBOInstancingPointsRenderer extends VBORenderer {
-    constructor(scene, withSAO) {
-        super(scene, withSAO, {instancing: true});
+    constructor(scene, withSAO, {hashPointsMaterial = false, colorUniform = false, incrementDrawState = false} = {}) {
+        super(scene, withSAO, {instancing: true, hashPointsMaterial, colorUniform, incrementDrawState});
     }
 
     _draw(drawCfg) {
