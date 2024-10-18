@@ -5,8 +5,8 @@ import {VBOInstancingLinesRenderer} from "./VBOInstancingLinesRenderer.js";
  */
 export class VBOInstancingLinesSilhouetteRenderer extends VBOInstancingLinesRenderer {
 
-    drawLayer(frameCtx, instancingLayer, renderPass) {
-        super.drawLayer(frameCtx, instancingLayer, renderPass, { colorUniform: true });
+    constructor(scene) {
+        super(scene, false, { colorUniform: true });
     }
 
     _buildVertexShader() {
