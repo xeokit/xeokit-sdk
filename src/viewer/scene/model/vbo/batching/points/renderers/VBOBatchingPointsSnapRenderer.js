@@ -8,7 +8,7 @@ const SNAPPING_LOG_DEPTH_BUF_ENABLED = true; // Improves occlusion accuracy at d
 export class VBOBatchingPointsSnapRenderer extends VBORenderer {
 
     constructor(scene, isSnapInit) {
-        super(scene, false, { isSnap: "points", isSnapInit: isSnapInit });
+        super(scene, false, { primType: "pointType", isSnap: true, isSnapInit: isSnapInit });
     }
 
     _buildVertexShader() {
