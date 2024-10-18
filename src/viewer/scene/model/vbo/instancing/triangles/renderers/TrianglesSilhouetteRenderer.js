@@ -5,9 +5,8 @@ import {TrianglesInstancingRenderer} from "./TrianglesInstancingRenderer.js";
  */
 export class TrianglesSilhouetteRenderer extends TrianglesInstancingRenderer {
 
-    drawLayer(frameCtx, instancingLayer, renderPass) {
-        // TODO color uniform true ???
-        super.drawLayer(frameCtx, instancingLayer, renderPass, { colorUniform: true });
+    constructor(scene) {
+        super(scene, false, { colorUniform: true });
     }
 
     _buildVertexShader() {
