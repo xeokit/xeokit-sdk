@@ -4,8 +4,8 @@ import {VBORenderer} from "./../../../VBORenderer.js";
  * @private
  */
 export class VBOInstancingLinesRenderer extends VBORenderer {
-    constructor(scene, withSAO) {
-        super(scene, withSAO, {instancing: true});
+    constructor(scene, withSAO, {colorUniform = false, incrementDrawState = false} = {}) {
+        super(scene, withSAO, {instancing: true, colorUniform, incrementDrawState});
     }
 
     _draw(drawCfg) {
