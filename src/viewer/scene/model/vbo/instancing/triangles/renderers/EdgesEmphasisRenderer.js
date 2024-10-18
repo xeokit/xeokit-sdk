@@ -77,7 +77,7 @@ export class EdgesEmphasisRenderer extends EdgesRenderer {
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
         src.push("gl_Position = clipPos;");
-        src.push("vColor = vec4(color.r, color.g, color.b, color.a);");
+        src.push("vColor = color;");
         src.push("}");
         src.push("}");
         return src;
