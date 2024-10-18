@@ -1,6 +1,5 @@
 import {VBOInstancingLinesColorRenderer} from "./VBOInstancingLinesColorRenderer.js";
 import {VBOInstancingLinesSilhouetteRenderer} from "./VBOInstancingLinesSilhouetteRenderer.js";
-import {VBOInstancingLinesSnapInitRenderer} from "./VBOInstancingLinesSnapInitRenderer.js";
 import {VBOInstancingLinesSnapRenderer} from "./VBOInstancingLinesSnapRenderer.js";
 
 /**
@@ -47,14 +46,14 @@ class VBOInstancingLinesRenderers {
 
     get snapInitRenderer() {
         if (!this._snapInitRenderer) {
-            this._snapInitRenderer = new VBOInstancingLinesSnapInitRenderer(this._scene, false);
+            this._snapInitRenderer = new VBOInstancingLinesSnapRenderer(this._scene, true);
         }
         return this._snapInitRenderer;
     }
 
     get snapRenderer() {
         if (!this._snapRenderer) {
-            this._snapRenderer = new VBOInstancingLinesSnapRenderer(this._scene);
+            this._snapRenderer = new VBOInstancingLinesSnapRenderer(this._scene, false);
         }
         return this._snapRenderer;
     }
