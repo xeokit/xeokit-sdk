@@ -4,8 +4,9 @@ import {VBOInstancingPointsRenderer} from "./VBOInstancingPointsRenderer.js";
  * @private
  */
 export class VBOInstancingPointsPickMeshRenderer extends VBOInstancingPointsRenderer {
-    _getHash() {
-        return this._scene._sectionPlanesState.getHash() + this._scene.pointsMaterial.hash;
+
+    constructor(scene) {
+        super(scene, false, { hashPointsMaterial: true });
     }
 
     _buildVertexShader() {
