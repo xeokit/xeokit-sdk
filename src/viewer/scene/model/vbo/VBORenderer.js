@@ -557,12 +557,20 @@ export class VBORenderer {
 
             if ((this._progMode === "snapInitMode") && (this._primType !== "pointType")) {
                 state.indicesBuf.bind();
-                gl.drawElements((this._primType === "lineType") ? gl.LINES : gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
+                if (this._instancing) {
+                    gl.drawElementsInstanced(gl.LINES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
+                } else {
+                    gl.drawElements((this._primType === "lineType") ? gl.LINES : gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
+                }
                 state.indicesBuf.unbind();
             } else if ((frameCtx.snapMode === "edge") && (this._primType !== "pointType")) {
                 const indicesBuf = ((this._isSnap !== "lines") && state.edgeIndicesBuf) || state.indicesBuf;
                 indicesBuf.bind();
-                gl.drawElements(gl.LINES, indicesBuf.numItems, indicesBuf.itemType, 0);
+                if (this._instancing) {
+                    gl.drawElementsInstanced(gl.LINES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
+                } else {
+                    gl.drawElements(gl.LINES, indicesBuf.numItems, indicesBuf.itemType, 0);
+                }
                 indicesBuf.unbind(); // needed?
             } else {
                 if (this._instancing) {
