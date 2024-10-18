@@ -9,7 +9,7 @@ const SNAPPING_LOG_DEPTH_BUF_ENABLED = true; // Improves occlusion accuracy at d
 export class TrianglesSnapRenderer extends VBORenderer {
 
     constructor(scene, isSnapInit) {
-        super(scene, false, { isSnap: true, isSnapInit: isSnapInit });
+        super(scene, false, { primType: "triangleType", isSnap: true, isSnapInit: isSnapInit });
     }
 
     _buildVertexShader() {
