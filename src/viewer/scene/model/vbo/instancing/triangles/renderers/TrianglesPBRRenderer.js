@@ -9,13 +9,8 @@ TEXTURE_DECODE_FUNCS[sRGBEncoding] = "sRGBToLinear";
  * @private
  */
 export class TrianglesPBRRenderer extends TrianglesInstancingRenderer {
-    _getHash() {
-        const scene = this._scene;
-        return [scene.gammaOutput, scene._lightsState.getHash(), scene._sectionPlanesState.getHash(), (this._withSAO ? "sao" : "nosao")].join(";");
-    }
-
-    drawLayer(frameCtx, layer, renderPass) {
-        super.drawLayer(frameCtx, layer, renderPass, { incrementDrawState: true });
+    constructor(scene, withSAO) {
+        super(scene, withSAO, { incrementDrawState: true, hashLigthsSAO: true, hashGammaOutput: true });
     }
 
     _buildVertexShader() {
