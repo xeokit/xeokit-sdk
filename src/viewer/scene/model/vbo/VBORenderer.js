@@ -568,145 +568,143 @@ export class VBORenderer {
                 gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
             }
 
-            gl.bindVertexArray(null);
+        } else {                // ! isSnap
 
-            return;
-        }
+            gl.uniform1i(this._uRenderPass, renderPass);
 
-        gl.uniform1i(this._uRenderPass, renderPass);
-
-        if (this._uPickZNear) {
-            gl.uniform1f(this._uPickZNear, frameCtx.pickZNear);
-        }
-
-        if (this._uPickZFar) {
-            gl.uniform1f(this._uPickZFar, frameCtx.pickZFar);
-        }
-
-        if (this._uPickClipPos) {
-            gl.uniform2fv(this._uPickClipPos, frameCtx.pickClipPos);
-        }
-
-        if (this._uDrawingBufferSize) {
-            gl.uniform2f(this._uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
-        }
-
-        if (this._uUVDecodeMatrix) {
-            gl.uniformMatrix3fv(this._uUVDecodeMatrix, false, state.uvDecodeMatrix);
-        }
-
-        const pointsMaterial = scene.pointsMaterial;
-        if (this._uIntensityRange && pointsMaterial.filterIntensity) {
-            gl.uniform2f(this._uIntensityRange, pointsMaterial.minIntensity, pointsMaterial.maxIntensity);
-        }
-
-        if (this._uPointSize) {
-            gl.uniform1f(this._uPointSize, pointsMaterial.pointSize);
-        }
-
-        if (this._uNearPlaneHeight) {
-            const nearPlaneHeight = (scene.camera.projection === "ortho") ?
-                1.0
-                : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0)));
-            gl.uniform1f(this._uNearPlaneHeight, nearPlaneHeight);
-        }
-
-        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
-        const textureSet = state.textureSet;
-        if (textureSet) {
-            const {
-                colorTexture,
-                metallicRoughnessTexture,
-                emissiveTexture,
-                normalsTexture,
-                occlusionTexture,
-            } = textureSet;
-
-            if (this._uColorMap && colorTexture) {
-                this._program.bindTexture(this._uColorMap, colorTexture.texture, frameCtx.textureUnit);
-                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            }
-            if (this._uMetallicRoughMap && metallicRoughnessTexture) {
-                this._program.bindTexture(this._uMetallicRoughMap, metallicRoughnessTexture.texture, frameCtx.textureUnit);
-                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            }
-            if (this._uEmissiveMap && emissiveTexture) {
-                this._program.bindTexture(this._uEmissiveMap, emissiveTexture.texture, frameCtx.textureUnit);
-                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            }
-            if (this._uNormalMap && normalsTexture) {
-                this._program.bindTexture(this._uNormalMap, normalsTexture.texture, frameCtx.textureUnit);
-                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            }
-            if (this._uAOMap && occlusionTexture) {
-                this._program.bindTexture(this._uAOMap, occlusionTexture.texture, frameCtx.textureUnit);
-                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+            if (this._uPickZNear) {
+                gl.uniform1f(this._uPickZNear, frameCtx.pickZNear);
             }
 
-        }
+            if (this._uPickZFar) {
+                gl.uniform1f(this._uPickZFar, frameCtx.pickZFar);
+            }
 
-        const lightsState = scene._lightsState;
-        if (lightsState.reflectionMaps.length > 0 && lightsState.reflectionMaps[0].texture && this._uReflectionMap) {
-            this._program.bindTexture(this._uReflectionMap, lightsState.reflectionMaps[0].texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            frameCtx.bindTexture++;
-        }
+            if (this._uPickClipPos) {
+                gl.uniform2fv(this._uPickClipPos, frameCtx.pickClipPos);
+            }
 
-        if (lightsState.lightMaps.length > 0 && lightsState.lightMaps[0].texture && this._uLightMap) {
-            this._program.bindTexture(this._uLightMap, lightsState.lightMaps[0].texture, frameCtx.textureUnit);
-            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-            frameCtx.bindTexture++;
-        }
+            if (this._uDrawingBufferSize) {
+                gl.uniform2f(this._uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
+            }
 
-        if (this._withSAO) {
-            const sao = scene.sao;
-            const saoEnabled = sao.possible;
-            if (saoEnabled) {
-                const viewportWidth = gl.drawingBufferWidth;
-                const viewportHeight = gl.drawingBufferHeight;
-                tempVec4[0] = viewportWidth;
-                tempVec4[1] = viewportHeight;
-                tempVec4[2] = sao.blendCutoff;
-                tempVec4[3] = sao.blendFactor;
-                gl.uniform4fv(this._uSAOParams, tempVec4);
-                this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, frameCtx.textureUnit);
+            if (this._uUVDecodeMatrix) {
+                gl.uniformMatrix3fv(this._uUVDecodeMatrix, false, state.uvDecodeMatrix);
+            }
+
+            const pointsMaterial = scene.pointsMaterial;
+            if (this._uIntensityRange && pointsMaterial.filterIntensity) {
+                gl.uniform2f(this._uIntensityRange, pointsMaterial.minIntensity, pointsMaterial.maxIntensity);
+            }
+
+            if (this._uPointSize) {
+                gl.uniform1f(this._uPointSize, pointsMaterial.pointSize);
+            }
+
+            if (this._uNearPlaneHeight) {
+                const nearPlaneHeight = (scene.camera.projection === "ortho") ?
+                      1.0
+                      : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0)));
+                gl.uniform1f(this._uNearPlaneHeight, nearPlaneHeight);
+            }
+
+            const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
+            const textureSet = state.textureSet;
+            if (textureSet) {
+                const {
+                    colorTexture,
+                    metallicRoughnessTexture,
+                    emissiveTexture,
+                    normalsTexture,
+                    occlusionTexture,
+                } = textureSet;
+
+                if (this._uColorMap && colorTexture) {
+                    this._program.bindTexture(this._uColorMap, colorTexture.texture, frameCtx.textureUnit);
+                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+                }
+                if (this._uMetallicRoughMap && metallicRoughnessTexture) {
+                    this._program.bindTexture(this._uMetallicRoughMap, metallicRoughnessTexture.texture, frameCtx.textureUnit);
+                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+                }
+                if (this._uEmissiveMap && emissiveTexture) {
+                    this._program.bindTexture(this._uEmissiveMap, emissiveTexture.texture, frameCtx.textureUnit);
+                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+                }
+                if (this._uNormalMap && normalsTexture) {
+                    this._program.bindTexture(this._uNormalMap, normalsTexture.texture, frameCtx.textureUnit);
+                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+                }
+                if (this._uAOMap && occlusionTexture) {
+                    this._program.bindTexture(this._uAOMap, occlusionTexture.texture, frameCtx.textureUnit);
+                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+                }
+
+            }
+
+            const lightsState = scene._lightsState;
+            if (lightsState.reflectionMaps.length > 0 && lightsState.reflectionMaps[0].texture && this._uReflectionMap) {
+                this._program.bindTexture(this._uReflectionMap, lightsState.reflectionMaps[0].texture, frameCtx.textureUnit);
                 frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
                 frameCtx.bindTexture++;
             }
-        }
 
-        if (this._useAlphaCutoff) {
-            gl.uniform1f(this._alphaCutoffLocation, textureSet.alphaCutoff);
-        }
-
-        if (colorUniform || this._colorUniform) {
-            const colorKey = this._edges ? "edgeColor" : "fillColor";
-            const alphaKey = this._edges ? "edgeAlpha" : "fillAlpha";
-
-            if (renderPass === RENDER_PASSES[`${this._edges ? "EDGES" : "SILHOUETTE"}_XRAYED`]) {
-                const material = scene.xrayMaterial._state;
-                const color = material[colorKey];
-                const alpha = material[alphaKey];
-                gl.uniform4f(this._uColor, color[0], color[1], color[2], alpha);
-
-            } else if (renderPass === RENDER_PASSES[`${this._edges ? "EDGES" : "SILHOUETTE"}_HIGHLIGHTED`]) {
-                const material = scene.highlightMaterial._state;
-                const color = material[colorKey];
-                const alpha = material[alphaKey];
-                gl.uniform4f(this._uColor, color[0], color[1], color[2], alpha);
-
-            } else if (renderPass === RENDER_PASSES[`${this._edges ? "EDGES" : "SILHOUETTE"}_SELECTED`]) {
-                const material = scene.selectedMaterial._state;
-                const color = material[colorKey];
-                const alpha = material[alphaKey];
-                gl.uniform4f(this._uColor, color[0], color[1], color[2], alpha);
-
-            } else {
-                gl.uniform4fv(this._uColor, this._edges ? edgesDefaultColor : defaultColor);
+            if (lightsState.lightMaps.length > 0 && lightsState.lightMaps[0].texture && this._uLightMap) {
+                this._program.bindTexture(this._uLightMap, lightsState.lightMaps[0].texture, frameCtx.textureUnit);
+                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+                frameCtx.bindTexture++;
             }
-        }
 
-        this._draw({state, frameCtx, incrementDrawState: incrementDrawState || this._incrementDrawState});
+            if (this._withSAO) {
+                const sao = scene.sao;
+                const saoEnabled = sao.possible;
+                if (saoEnabled) {
+                    const viewportWidth = gl.drawingBufferWidth;
+                    const viewportHeight = gl.drawingBufferHeight;
+                    tempVec4[0] = viewportWidth;
+                    tempVec4[1] = viewportHeight;
+                    tempVec4[2] = sao.blendCutoff;
+                    tempVec4[3] = sao.blendFactor;
+                    gl.uniform4fv(this._uSAOParams, tempVec4);
+                    this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, frameCtx.textureUnit);
+                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+                    frameCtx.bindTexture++;
+                }
+            }
+
+            if (this._useAlphaCutoff) {
+                gl.uniform1f(this._alphaCutoffLocation, textureSet.alphaCutoff);
+            }
+
+            if (colorUniform || this._colorUniform) {
+                const colorKey = this._edges ? "edgeColor" : "fillColor";
+                const alphaKey = this._edges ? "edgeAlpha" : "fillAlpha";
+
+                if (renderPass === RENDER_PASSES[`${this._edges ? "EDGES" : "SILHOUETTE"}_XRAYED`]) {
+                    const material = scene.xrayMaterial._state;
+                    const color = material[colorKey];
+                    const alpha = material[alphaKey];
+                    gl.uniform4f(this._uColor, color[0], color[1], color[2], alpha);
+
+                } else if (renderPass === RENDER_PASSES[`${this._edges ? "EDGES" : "SILHOUETTE"}_HIGHLIGHTED`]) {
+                    const material = scene.highlightMaterial._state;
+                    const color = material[colorKey];
+                    const alpha = material[alphaKey];
+                    gl.uniform4f(this._uColor, color[0], color[1], color[2], alpha);
+
+                } else if (renderPass === RENDER_PASSES[`${this._edges ? "EDGES" : "SILHOUETTE"}_SELECTED`]) {
+                    const material = scene.selectedMaterial._state;
+                    const color = material[colorKey];
+                    const alpha = material[alphaKey];
+                    gl.uniform4f(this._uColor, color[0], color[1], color[2], alpha);
+
+                } else {
+                    gl.uniform4fv(this._uColor, this._edges ? edgesDefaultColor : defaultColor);
+                }
+            }
+
+            this._draw({state, frameCtx, incrementDrawState: incrementDrawState || this._incrementDrawState});
+        }
 
         gl.bindVertexArray(null);
     }
