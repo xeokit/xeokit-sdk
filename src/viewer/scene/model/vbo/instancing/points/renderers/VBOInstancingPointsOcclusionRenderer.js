@@ -10,8 +10,9 @@ const ENABLE_LOG_DEPTH_BUF = false;
  * @private
  */
 export class VBOInstancingPointsOcclusionRenderer extends VBOInstancingPointsRenderer {
-    _getHash() {
-        return this._scene._sectionPlanesState.getHash() + this._scene.pointsMaterial.hash;
+
+    constructor(scene) {
+        super(scene, false, { hashPointsMaterial: true });
     }
 
     _buildVertexShader() {
