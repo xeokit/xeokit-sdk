@@ -1,8 +1,7 @@
 import {TrianglesColorRenderer} from "./TrianglesColorRenderer.js";
 import {TrianglesFlatColorRenderer} from "./TrianglesFlatColorRenderer.js";
 import {TrianglesSilhouetteRenderer} from "./TrianglesSilhouetteRenderer.js";
-import {EdgesEmphasisRenderer} from "./EdgesEmphasisRenderer.js";
-import {EdgesColorRenderer} from "./EdgesColorRenderer.js";
+import {EdgesRenderer} from "./EdgesRenderer.js";
 import {TrianglesPickMeshRenderer} from "./TrianglesPickMeshRenderer.js";
 import {TrianglesPickDepthRenderer} from "./TrianglesPickDepthRenderer.js";
 import {TrianglesPickNormalsRenderer} from "./TrianglesPickNormalsRenderer.js";
@@ -224,14 +223,14 @@ class Renderers {
 
     get edgesRenderer() {
         if (!this._edgesRenderer) {
-            this._edgesRenderer = new EdgesEmphasisRenderer(this._scene);
+            this._edgesRenderer = new EdgesRenderer(this._scene, true);
         }
         return this._edgesRenderer;
     }
 
     get edgesColorRenderer() {
         if (!this._edgesColorRenderer) {
-            this._edgesColorRenderer = new EdgesColorRenderer(this._scene);
+            this._edgesColorRenderer = new EdgesRenderer(this._scene, false);
         }
         return this._edgesColorRenderer;
     }
