@@ -20,19 +20,18 @@ const SNAPPING_LOG_DEPTH_BUF_ENABLED = true; // Improves occlusion accuracy at d
  * @private
  */
 export class VBORenderer {
-    constructor(scene, withSAO = false, {instancing = false, primType, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, hashLigthsSAO = false, hashGammaOutput = false, colorUniform = false, isSnap = false, isSnapInit = false, incrementDrawState = false} = {}) {
+    constructor(scene, withSAO = false, {instancing = false, primType, progMode, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, hashLigthsSAO = false, hashGammaOutput = false, colorUniform = false, incrementDrawState = false} = {}) {
         this._scene = scene;
         this._withSAO = withSAO;
         this._instancing = instancing;
         this._primType = primType;
+        this._progMode = progMode;
         this._edges = edges;
         this._useAlphaCutoff = useAlphaCutoff;
         this._hashPointsMaterial = hashPointsMaterial;
         this._hashLigthsSAO = hashLigthsSAO;
         this._hashGammaOutput = hashGammaOutput;
         this._colorUniform = colorUniform;
-        this._isSnap = isSnap;
-        this._isSnapInit = isSnapInit;
         this._incrementDrawState = incrementDrawState;
         this._hash = this._getHash();
 
@@ -312,7 +311,7 @@ export class VBORenderer {
             this._uSliceThickness = program.getLocation("sliceThickness");
         }
 
-        if (this._isSnap) {
+        if ((this._progMode === "snapInitMode") || (this._progMode === "snapMode")) {
             if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
                 this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
             }
@@ -449,6 +448,8 @@ export class VBORenderer {
 
     drawLayer(frameCtx, layer, renderPass, {colorUniform = false, incrementDrawState = false} = {}) {
 
+        const isSnap = (this._progMode === "snapInitMode") || (this._progMode === "snapMode");
+
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const {_state: state, model} = layer;
@@ -498,7 +499,7 @@ export class VBORenderer {
         this._matricesUniformBlockBufferData.set(rtcViewMatrix, offset += mat4Size);
         this._matricesUniformBlockBufferData.set(frameCtx.pickProjMatrix || project.matrix, offset += mat4Size);
         this._matricesUniformBlockBufferData.set(positionsDecodeMatrix, offset += mat4Size);
-        if (! this._isSnap) {
+        if (! isSnap) {
             this._matricesUniformBlockBufferData.set(model.worldNormalMatrix, offset += mat4Size);
             this._matricesUniformBlockBufferData.set(camera.viewNormalMatrix, offset += mat4Size);
         }
@@ -520,14 +521,14 @@ export class VBORenderer {
             gl.uniformMatrix4fv(this._uShadowProjMatrix, false, frameCtx.shadowProjMatrix); // Not tested
         }
 
-        if (scene.logarithmicDepthBufferEnabled || (this._isSnap && SNAPPING_LOG_DEPTH_BUF_ENABLED)) {
+        if (scene.logarithmicDepthBufferEnabled || (isSnap && SNAPPING_LOG_DEPTH_BUF_ENABLED)) {
             if (this._uLogDepthBufFC) {
                 const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2); // TODO: Far from pick project matrix?
                 gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
             }
         }
 
-        if (this._isSnap) {
+        if (isSnap) {
             const aabb = layer.aabb; // Per-layer AABB for best RTC accuracy
             const coordinateScaler = tempVec3c;
             coordinateScaler[0] = math.safeInv(aabb[3] - aabb[0]) * math.MAX_INT;
@@ -554,7 +555,7 @@ export class VBORenderer {
             // TODO: Use drawElements count and offset to draw only one entity
             //=============================================================
 
-            if (this._isSnapInit && (this._primType !== "pointType")) {
+            if ((this._progMode === "snapInitMode") && (this._primType !== "pointType")) {
                 state.indicesBuf.bind();
                 gl.drawElements((this._primType === "lineType") ? gl.LINES : gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
                 state.indicesBuf.unbind();

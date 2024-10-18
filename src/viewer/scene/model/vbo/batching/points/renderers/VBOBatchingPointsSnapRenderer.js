@@ -8,11 +8,11 @@ const SNAPPING_LOG_DEPTH_BUF_ENABLED = true; // Improves occlusion accuracy at d
 export class VBOBatchingPointsSnapRenderer extends VBORenderer {
 
     constructor(scene, isSnapInit) {
-        super(scene, false, { primType: "pointType", isSnap: true, isSnapInit: isSnapInit });
+        super(scene, false, { primType: "pointType", progMode: isSnapInit ? "snapInitMode" : "snapMode" });
     }
 
     _buildVertexShader() {
-        const isSnapInit = this._isSnapInit;
+        const isSnapInit = this._progMode === "snapInitMode";
         const scene = this._scene;
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
@@ -110,7 +110,7 @@ export class VBOBatchingPointsSnapRenderer extends VBORenderer {
     }
 
     _buildFragmentShader() {
-        const isSnapInit = this._isSnapInit;
+        const isSnapInit = this._progMode === "snapInitMode";
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
