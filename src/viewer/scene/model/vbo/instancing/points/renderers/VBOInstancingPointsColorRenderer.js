@@ -4,12 +4,9 @@ import {VBOInstancingPointsRenderer} from "./VBOInstancingPointsRenderer.js";
  * @private
  */
 class VBOInstancingPointsColorRenderer extends VBOInstancingPointsRenderer {
-    _getHash() {
-        return this._scene._sectionPlanesState.getHash() + this._scene.pointsMaterial.hash;
-    }
 
-    drawLayer(frameCtx, layer, renderPass) {
-        super.drawLayer(frameCtx, layer, renderPass, { incrementDrawState: true });
+    constructor(scene) {
+        super(scene, false, { hashPointsMaterial: true, incrementDrawState: true });
     }
 
     _buildVertexShader() {
