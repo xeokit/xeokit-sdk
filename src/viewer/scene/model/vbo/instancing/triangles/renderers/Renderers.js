@@ -129,12 +129,11 @@ class Renderers {
         if (!this._pickDepthRenderer) {
             this._pickDepthRenderer = new TrianglesPickDepthRenderer(this._scene);
         }
-        if (!this._snapInitRenderer) {
-            this._snapInitRenderer = new TrianglesSnapInitRenderer(this._scene, false);
-        }
-        if (!this._snapRenderer) {
-            this._snapRenderer = new TrianglesSnapRenderer(this._scene);
-        }
+        // Return to make sure the getter calls never get optimized away as incorrectly considered nonconsequential
+        return [
+            this.snapInitRenderer,
+            this.snapRenderer
+        ];
     }
 
     get colorRenderer() {
