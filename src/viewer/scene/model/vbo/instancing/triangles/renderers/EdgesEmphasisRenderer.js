@@ -60,7 +60,7 @@ export class EdgesEmphasisRenderer extends EdgesRenderer {
 
         src.push("} else {");
 
-        src.push("vec4 worldPosition = worldMatrix * positionsDecodeMatrix * vec4(position, 1.0); ");
+        src.push("vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
 
         src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
         if (scene.entityOffsetsEnabled) {
