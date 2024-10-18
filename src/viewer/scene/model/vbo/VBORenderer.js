@@ -565,7 +565,11 @@ export class VBORenderer {
                 gl.drawElements(gl.LINES, indicesBuf.numItems, indicesBuf.itemType, 0);
                 indicesBuf.unbind(); // needed?
             } else {
-                gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
+                if (this._instancing) {
+                    gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
+                } else {
+                    gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
+                }
             }
 
         } else {                // ! isSnap
