@@ -20,10 +20,11 @@ const SNAPPING_LOG_DEPTH_BUF_ENABLED = true; // Improves occlusion accuracy at d
  * @private
  */
 export class VBORenderer {
-    constructor(scene, withSAO = false, {instancing = false, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, hashLigthsSAO = false, hashGammaOutput = false, colorUniform = false, isSnap = false, isSnapInit = false, incrementDrawState = false} = {}) {
+    constructor(scene, withSAO = false, {instancing = false, primType, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, hashLigthsSAO = false, hashGammaOutput = false, colorUniform = false, isSnap = false, isSnapInit = false, incrementDrawState = false} = {}) {
         this._scene = scene;
         this._withSAO = withSAO;
         this._instancing = instancing;
+        this._primType = primType;
         this._edges = edges;
         this._useAlphaCutoff = useAlphaCutoff;
         this._hashPointsMaterial = hashPointsMaterial;
@@ -553,11 +554,11 @@ export class VBORenderer {
             // TODO: Use drawElements count and offset to draw only one entity
             //=============================================================
 
-            if (this._isSnapInit && (this._isSnap !== "points")) {
+            if (this._isSnapInit && (this._primType !== "pointType")) {
                 state.indicesBuf.bind();
-                gl.drawElements((this._isSnap === "lines") ? gl.LINES : gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
+                gl.drawElements((this._primType === "lineType") ? gl.LINES : gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
                 state.indicesBuf.unbind();
-            } else if ((frameCtx.snapMode === "edge") && (this._isSnap !== "points")) {
+            } else if ((frameCtx.snapMode === "edge") && (this._primType !== "pointType")) {
                 const indicesBuf = ((this._isSnap !== "lines") && state.edgeIndicesBuf) || state.indicesBuf;
                 indicesBuf.bind();
                 gl.drawElements(gl.LINES, indicesBuf.numItems, indicesBuf.itemType, 0);
