@@ -1,4 +1,5 @@
 import {math} from "../../viewer/scene/math/math.js";
+import {transformToNode} from "../lib/ui/index.js";
 import {DistanceMeasurementsControl} from "./DistanceMeasurementsControl.js";
 
 const MOUSE_FIRST_CLICK_EXPECTED = 0;
@@ -181,9 +182,6 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
 
         this._mouseState = MOUSE_FIRST_CLICK_EXPECTED;
 
-        const getTop = el => el.offsetTop + (el.offsetParent && (el.offsetParent !== canvas.parentNode) && getTop(el.offsetParent));
-        const getLeft = el => el.offsetLeft + (el.offsetParent && (el.offsetParent !== canvas.parentNode) && getLeft(el.offsetParent));
-
         const pagePos = math.vec2();
 
         const hoverOn = event => {
@@ -198,8 +196,10 @@ export class DistanceMeasurementsMouseControl extends DistanceMeasurementsContro
                         this._markerDiv.style.left = `${pagePos[0] - 5}px`;
                         this._markerDiv.style.top = `${pagePos[1] - 5}px`;
                     } else {
-                        this._markerDiv.style.left = `${getLeft(canvas) + canvasPos[0] - 5}px`;
-                        this._markerDiv.style.top = `${getTop(canvas) + canvasPos[1] - 5}px`;
+                        const markerPos = math.vec2(canvasPos);
+                        transformToNode(canvas, this._markerDiv.parentNode, markerPos);
+                        this._markerDiv.style.left = `${markerPos[0] - 5}px`;
+                        this._markerDiv.style.top = `${markerPos[1] - 5}px`;
                     }
 
                     this._markerDiv.style.background = "pink";
