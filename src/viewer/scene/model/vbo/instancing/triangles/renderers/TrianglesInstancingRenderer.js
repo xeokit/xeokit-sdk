@@ -4,8 +4,8 @@ import {VBORenderer} from "./../../../VBORenderer.js";
  * @private
  */
 export class TrianglesInstancingRenderer extends VBORenderer {
-    constructor(scene, withSAO, {edges = false, useAlphaCutoff = false, colorUniform = false} = {}) {
-        super(scene, withSAO, {instancing: true, edges, useAlphaCutoff, colorUniform});
+    constructor(scene, withSAO, {edges = false, useAlphaCutoff = false, hashLigthsSAO = false, hashGammaOutput = false, colorUniform = false, incrementDrawState = false} = {}) {
+        super(scene, withSAO, {instancing: true, edges, useAlphaCutoff, hashLigthsSAO, hashGammaOutput, colorUniform, incrementDrawState});
     }
 
     _draw(drawCfg) {
