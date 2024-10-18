@@ -5,7 +5,6 @@ import {VBOInstancingPointsPickDepthRenderer} from "./VBOInstancingPointsPickDep
 import {VBOInstancingPointsOcclusionRenderer} from "./VBOInstancingPointsOcclusionRenderer.js";
 import {VBOInstancingPointsDepthRenderer} from "./VBOInstancingPointsDepthRenderer.js";
 import {VBOInstancingPointsShadowRenderer} from "./VBOInstancingPointsShadowRenderer.js";
-import {VBOInstancingPointsSnapInitRenderer} from "./VBOInstancingPointsSnapInitRenderer.js";
 import {VBOInstancingPointsSnapRenderer} from "./VBOInstancingPointsSnapRenderer.js";
 
 /**
@@ -107,14 +106,14 @@ import {VBOInstancingPointsSnapRenderer} from "./VBOInstancingPointsSnapRenderer
 
     get snapInitRenderer() {
         if (!this._snapInitRenderer) {
-            this._snapInitRenderer = new VBOInstancingPointsSnapInitRenderer(this._scene, false);
+            this._snapInitRenderer = new VBOInstancingPointsSnapRenderer(this._scene, true);
         }
         return this._snapInitRenderer;
     }
 
     get snapRenderer() {
         if (!this._snapRenderer) {
-            this._snapRenderer = new VBOInstancingPointsSnapRenderer(this._scene);
+            this._snapRenderer = new VBOInstancingPointsSnapRenderer(this._scene, false);
         }
         return this._snapRenderer;
     }
