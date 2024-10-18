@@ -9,7 +9,7 @@ const SNAPPING_LOG_DEPTH_BUF_ENABLED = true; // Improves occlusion accuracy at d
 export class VBOBatchingLinesSnapRenderer extends VBORenderer {
 
     constructor(scene, isSnapInit) {
-        super(scene, false, { isSnap: "lines", isSnapInit: isSnapInit });
+        super(scene, false, { primType: "lineType", isSnap: true, isSnapInit: isSnapInit });
     }
 
     _buildVertexShader() {
