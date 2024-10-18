@@ -4,13 +4,8 @@ import {TrianglesInstancingRenderer} from "./TrianglesInstancingRenderer.js";
  * @private
  */
 class TrianglesColorRenderer extends TrianglesInstancingRenderer {
-    _getHash() {
-        const scene = this._scene;
-        return [scene._lightsState.getHash(), scene._sectionPlanesState.getHash(), (this._withSAO ? "sao" : "nosao")].join(";");
-    }
-
-    drawLayer(frameCtx, layer, renderPass) {
-        super.drawLayer(frameCtx, layer, renderPass, { incrementDrawState: true });
+    constructor(scene, withSAO) {
+        super(scene, withSAO, { incrementDrawState: true, hashLigthsSAO: true });
     }
 
     _buildVertexShader() {
