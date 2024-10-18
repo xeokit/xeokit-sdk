@@ -11,7 +11,6 @@ import {TrianglesShadowRenderer} from "./TrianglesShadowRenderer.js";
 import {TrianglesPBRRenderer} from "./TrianglesPBRRenderer.js";
 import {TrianglesPickNormalsFlatRenderer} from "./TrianglesPickNormalsFlatRenderer.js";
 import {TrianglesColorTextureRenderer} from "./TrianglesColorTextureRenderer.js";
-import {TrianglesSnapInitRenderer} from "./TrianglesSnapInitRenderer.js";
 import {TrianglesSnapRenderer} from "./TrianglesSnapRenderer.js";
 
 /**
@@ -278,14 +277,14 @@ class Renderers {
 
     get snapRenderer() {
         if (!this._snapRenderer) {
-            this._snapRenderer = new TrianglesSnapRenderer(this._scene);
+            this._snapRenderer = new TrianglesSnapRenderer(this._scene, false);
         }
         return this._snapRenderer;
     }
 
     get snapInitRenderer() {
         if (!this._snapInitRenderer) {
-            this._snapInitRenderer = new TrianglesSnapInitRenderer(this._scene);
+            this._snapInitRenderer = new TrianglesSnapRenderer(this._scene, true);
         }
         return this._snapInitRenderer;
     }
