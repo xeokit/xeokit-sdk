@@ -716,7 +716,18 @@ export class VBORenderer {
                 }
             }
 
-            this._draw({state, frameCtx, incrementDrawState: incrementDrawState || this._incrementDrawState});
+            if (this._primType === "lineType") {
+                if (this._instancing) {
+                    gl.drawElementsInstanced(gl.LINES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
+                } else {
+                    gl.drawElements(gl.LINES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
+                }
+                if (incrementDrawState || this._incrementDrawState) {
+                    frameCtx.drawElements++;
+                }
+            } else {
+                this._draw({state, frameCtx, incrementDrawState: incrementDrawState || this._incrementDrawState});
+            }
         }
 
         gl.bindVertexArray(null);
