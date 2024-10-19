@@ -1,12 +1,12 @@
-import {VBOInstancingPointsRenderer} from "./VBOInstancingPointsRenderer.js";
+import {VBORenderer} from "../../../VBORenderer.js";
 
 /**
  * @private
  */
-export class VBOInstancingPointsPickMeshRenderer extends VBOInstancingPointsRenderer {
+export class VBOInstancingPointsPickMeshRenderer extends VBORenderer {
 
     constructor(scene) {
-        super(scene, false, { hashPointsMaterial: true });
+        super(scene, false, { instancing: true, primType: "pointType", progMode: "pickMeshMode", hashPointsMaterial: true });
     }
 
     _buildVertexShader() {

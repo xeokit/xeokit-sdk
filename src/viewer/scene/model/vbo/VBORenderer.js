@@ -725,6 +725,15 @@ export class VBORenderer {
                 if (incrementDrawState || this._incrementDrawState) {
                     frameCtx.drawElements++;
                 }
+            } else if (this._primType === "pointType") {
+                if (this._instancing) {
+                    gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
+                } else {
+                    gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
+                }
+                if (incrementDrawState || this._incrementDrawState) {
+                    frameCtx.drawElements++;
+                }
             } else {
                 this._draw({state, frameCtx, incrementDrawState: incrementDrawState || this._incrementDrawState});
             }

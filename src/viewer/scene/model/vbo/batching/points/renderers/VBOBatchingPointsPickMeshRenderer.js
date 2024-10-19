@@ -1,14 +1,12 @@
-import {VBOBatchingPointsRenderer} from "../VBOBatchingPointsRenderer.js";
+import {VBORenderer} from "../../../VBORenderer.js";
 
 /**
  * @private
  */
-
-
-export class VBOBatchingPointsPickMeshRenderer extends VBOBatchingPointsRenderer {
+export class VBOBatchingPointsPickMeshRenderer extends VBORenderer {
 
     constructor(scene) {
-        super(scene, false, { hashPointsMaterial: true });
+        super(scene, false, { instancing: false, primType: "pointType", progMode: "pickMeshMode", hashPointsMaterial: true });
     }
 
     _buildVertexShader() {
