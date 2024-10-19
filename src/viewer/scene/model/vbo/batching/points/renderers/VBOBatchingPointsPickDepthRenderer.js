@@ -25,8 +25,6 @@ export class VBOBatchingPointsPickDepthRenderer extends VBOBatchingPointsRendere
         }
         src.push("in float flags;");
 
-        src.push("uniform bool pickInvisible;");
-
         this._addMatricesUniformBlockLines(src);
 
         this._addRemapClipPosLines(src);

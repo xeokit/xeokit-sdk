@@ -27,7 +27,6 @@ export class TrianglesPickNormalsRenderer extends TrianglesInstancingRenderer {
         src.push("in vec4 modelNormalMatrixCol0;");
         src.push("in vec4 modelNormalMatrixCol1;");
         src.push("in vec4 modelNormalMatrixCol2;");
-        src.push("uniform bool pickInvisible;");
 
         this._addMatricesUniformBlockLines(src);
 

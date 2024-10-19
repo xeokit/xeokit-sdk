@@ -23,8 +23,6 @@ export class TrianglesPickDepthRenderer extends TrianglesBatchingRenderer {
         }
         src.push("in float flags;");
 
-        src.push("uniform bool pickInvisible;");
-
         this._addMatricesUniformBlockLines(src);
 
         if (scene.logarithmicDepthBufferEnabled) {

@@ -21,7 +21,6 @@ export class TrianglesPickNormalsRenderer extends TrianglesBatchingRenderer {
         }
         src.push("in vec3 normal;");
         src.push("in float flags;");
-        src.push("uniform bool pickInvisible;");
 
         this._addMatricesUniformBlockLines(src);
 
