@@ -1,4 +1,4 @@
-import {TrianglesBatchingRenderer} from "./TrianglesBatchingRenderer.js";
+import {VBORenderer} from "./../../../VBORenderer.js";
 
 // Logarithmic depth buffer involves an accuracy tradeoff, sacrificing
 // accuracy at close range to improve accuracy at long range. This can
@@ -9,7 +9,10 @@ const ENABLE_LOG_DEPTH_BUF = false;
 /**
  * @private
  */
-export class TrianglesOcclusionRenderer extends TrianglesBatchingRenderer {
+export class TrianglesOcclusionRenderer extends VBORenderer {
+    constructor(scene) {
+        super(scene, false, { instancing: false, primType: "triangleType", progMode: "occlusionMode" });
+    }
 
     _buildVertexShader() {
         const scene = this._scene;
