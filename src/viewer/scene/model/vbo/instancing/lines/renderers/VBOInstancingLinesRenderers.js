@@ -31,20 +31,6 @@ class VBOInstancingLinesRenderers {
         }
     }
 
-    eagerCreateRenders() {
-
-        // Pre-initialize renderers that would otherwise be lazy-initialised
-        // on user interaction, such as picking or emphasis, so that there is no delay
-        // when user first begins interacting with the viewer.
-
-        if (!this._snapInitRenderer) {
-            this._snapInitRenderer = new VBOInstancingLinesSnapInitRenderer(this._scene, false);
-        }
-        if (!this._snapRenderer) {
-            this._snapRenderer = new VBOInstancingLinesSnapRenderer(this._scene);
-        }
-    }
-
     get colorRenderer() {
         if (!this._colorRenderer) {
             this._colorRenderer = new VBOInstancingLinesColorRenderer(this._scene);
@@ -112,28 +98,3 @@ export function getRenderers(scene) {
     }
     return instancingRenderers;
 }
-
-/*
-
-function getSnapInstancingRenderers(scene) {
-    const sceneId = scene.id;
-    let instancingRenderers = cachedRenderers[sceneId];
-    if (!instancingRenderers) {
-        instancingRenderers = new VBOInstancingLineSnapRenderers(scene);
-        cachedRenderers[sceneId] = instancingRenderers;
-        instancingRenderers._compile();
-        instancingRenderers.eagerCreateRenders();
-        scene.on("compile", () => {
-            instancingRenderers._compile();
-            instancingRenderers.eagerCreateRenders();
-        });
-        scene.on("destroyed", () => {
-            delete cachedRenderers[sceneId];
-            instancingRenderers._destroy();
-        });
-    }
-    return instancingRenderers;
-}
-
- */
-
