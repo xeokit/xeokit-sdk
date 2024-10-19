@@ -735,7 +735,27 @@ export class VBORenderer {
                     frameCtx.drawElements++;
                 }
             } else {
-                this._draw({state, frameCtx, incrementDrawState: incrementDrawState || this._incrementDrawState});
+                if (this._instancing) {
+                    if (this._edges) {
+                        gl.drawElementsInstanced(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0, state.numInstances);
+                    } else {
+                        gl.drawElementsInstanced(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
+
+                        if (incrementDrawState || this._incrementDrawState) {
+                            frameCtx.drawElements++;
+                        }
+                    }
+                } else {
+                    if (this._edges) {
+                        gl.drawElements(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0);
+                    } else {
+                        gl.drawElements(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
+
+                        if (incrementDrawState || this._incrementDrawState) {
+                            frameCtx.drawElements++;
+                        }
+                    }
+                }
             }
         }
 
