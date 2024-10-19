@@ -94,7 +94,6 @@ export class TrianglesSnapInitRenderer extends VBORenderer {
         gl.uniform1i(this._uLayerNumber, frameCtx.snapPickLayerNumber);
         gl.uniform3fv(this._uCoordinateScaler, coordinateScaler);
         gl.uniform1i(this._uRenderPass, renderPass);
-        gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
 
         let offset = 0;
         const mat4Size = 4 * 4;
@@ -174,7 +173,6 @@ export class TrianglesSnapInitRenderer extends VBORenderer {
             src.push("in vec3 offset;");
         }
         src.push("in float flags;");
-        src.push("uniform bool pickInvisible;");
 
         this._addMatricesUniformBlockLines(src);
 
