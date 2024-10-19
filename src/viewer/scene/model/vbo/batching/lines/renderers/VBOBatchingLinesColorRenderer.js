@@ -1,12 +1,12 @@
-import {VBOSceneModelLineBatchingRenderer} from "./VBOSceneModelLineBatchingRenderer.js";
+import {VBORenderer} from "../../../VBORenderer.js";
 
 /**
  * @private
  */
-export class VBOBatchingLinesColorRenderer extends VBOSceneModelLineBatchingRenderer {
+export class VBOBatchingLinesColorRenderer extends VBORenderer {
 
     constructor(scene) {
-        super(scene, false, { incrementDrawState: true });
+        super(scene, false, { instancing: false, primType: "lineType", progMode: "colorMode", incrementDrawState: true });
     }
 
     _buildVertexShader() {

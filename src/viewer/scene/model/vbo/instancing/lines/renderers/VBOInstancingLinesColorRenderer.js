@@ -1,12 +1,12 @@
-import {VBOInstancingLinesRenderer} from "./VBOInstancingLinesRenderer.js";
+import {VBORenderer} from "../../../VBORenderer.js";
 
 /**
  * @private
  */
-export class VBOInstancingLinesColorRenderer extends VBOInstancingLinesRenderer {
+export class VBOInstancingLinesColorRenderer extends VBORenderer {
 
     constructor(scene) {
-        super(scene, false, { incrementDrawState: true });
+        super(scene, false, { instancing: true, primType: "lineType", progMode: "colorMode", incrementDrawState: true });
     }
 
     _buildVertexShader() {
