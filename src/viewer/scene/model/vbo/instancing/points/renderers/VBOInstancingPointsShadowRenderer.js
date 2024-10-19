@@ -1,13 +1,14 @@
-import {VBOInstancingPointsRenderer} from "./VBOInstancingPointsRenderer.js";
+import {VBORenderer} from "../../../VBORenderer.js";
 
 /**
  * Renders InstancingLayer fragment depths to a shadow map.
  *
  * @private
  */
-export class VBOInstancingPointsShadowRenderer extends VBOInstancingPointsRenderer {
-    _getHash() {
-        return this._scene._sectionPlanesState.getHash() + this._scene.pointsMaterial.hash;
+export class VBOInstancingPointsShadowRenderer extends VBORenderer {
+
+    constructor(scene) {
+        super(scene, false, { instancing: true, primType: "pointType", progMode: "shadowMode", hashPointsMaterial: true });
     }
 
     _buildVertexShader() {
