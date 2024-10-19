@@ -1,12 +1,12 @@
-import {VBOBatchingPointsRenderer} from "../VBOBatchingPointsRenderer.js";
+import {VBORenderer} from "../../../VBORenderer.js";
 
 /**
  * @private
  */
-export class VBOBatchingPointsSilhouetteRenderer extends VBOBatchingPointsRenderer {
+export class VBOBatchingPointsSilhouetteRenderer extends VBORenderer {
 
     constructor(scene) {
-        super(scene, false, { hashPointsMaterial: true, colorUniform: true });
+        super(scene, false, { instancing: false, primType: "pointType", progMode: "silhouetteMode", hashPointsMaterial: true, colorUniform: true });
     }
 
     _buildVertexShader() {
