@@ -1,10 +1,12 @@
-import {TrianglesBatchingRenderer} from "./TrianglesBatchingRenderer.js";
-
+import {VBORenderer} from "./../../../VBORenderer.js";
 
 /**
  * @private
  */
-export class TrianglesDepthRenderer extends TrianglesBatchingRenderer {
+export class TrianglesDepthRenderer extends VBORenderer {
+    constructor(scene) {
+        super(scene, false, { instancing: false, primType: "triangleType", progMode: "depthMode" });
+    }
 
     _buildVertexShader() {
         const scene = this._scene;

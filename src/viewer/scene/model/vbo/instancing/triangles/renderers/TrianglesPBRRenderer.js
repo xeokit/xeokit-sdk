@@ -1,5 +1,5 @@
+import {VBORenderer} from "./../../../VBORenderer.js";
 import {LinearEncoding, sRGBEncoding} from "../../../../../constants/constants.js";
-import {TrianglesInstancingRenderer} from "./TrianglesInstancingRenderer.js";
 
 const TEXTURE_DECODE_FUNCS = {};
 TEXTURE_DECODE_FUNCS[LinearEncoding] = "linearToLinear";
@@ -8,9 +8,9 @@ TEXTURE_DECODE_FUNCS[sRGBEncoding] = "sRGBToLinear";
 /**
  * @private
  */
-export class TrianglesPBRRenderer extends TrianglesInstancingRenderer {
+export class TrianglesPBRRenderer extends VBORenderer {
     constructor(scene, withSAO) {
-        super(scene, withSAO, { incrementDrawState: true, hashLigthsSAO: true, hashGammaOutput: true });
+        super(scene, withSAO, { instancing: true, primType: "triangleType", progMode: "pbrMode", incrementDrawState: true, hashLigthsSAO: true, hashGammaOutput: true });
     }
 
     _buildVertexShader() {
