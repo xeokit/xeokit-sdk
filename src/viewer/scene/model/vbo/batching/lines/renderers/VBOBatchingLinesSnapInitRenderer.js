@@ -89,7 +89,6 @@ export class VBOBatchingLinesSnapInitRenderer extends VBORenderer {
             frameCtx.snapPickOrigin[2] = 0;
         }
 
-        gl.uniform3fv(this._uCameraEyeRtc, rtcCameraEye);
         gl.uniform2fv(this.uVectorA, frameCtx.snapVectorA);
         gl.uniform2fv(this.uInverseVectorAB, frameCtx.snapInvVectorAB);
         gl.uniform1i(this._uLayerNumber, frameCtx.snapPickLayerNumber);
@@ -138,7 +137,6 @@ export class VBOBatchingLinesSnapInitRenderer extends VBORenderer {
         if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
-        this._uCameraEyeRtc = program.getLocation("uCameraEyeRtc");
         this.uVectorA = program.getLocation("snapVectorA");
         this.uInverseVectorAB = program.getLocation("snapInvVectorAB");
         this._uLayerNumber = program.getLocation("layerNumber");
@@ -180,7 +178,6 @@ export class VBOBatchingLinesSnapInitRenderer extends VBORenderer {
 
         this._addMatricesUniformBlockLines(src);
 
-        src.push("uniform vec3 uCameraEyeRtc;");
         src.push("uniform vec2 snapVectorA;");
         src.push("uniform vec2 snapInvVectorAB;");
         if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
