@@ -1,60 +1,62 @@
-import {VBORenderer} from "../../../VBORenderer.js";
+import {VBORenderer} from "../VBORenderer.js";
 
 /**
  * @private
  */
-export class VBOBatchingLinesSilhouetteRenderer extends VBORenderer {
+export class VBOLinesSilhouetteRenderer extends VBORenderer {
 
-    constructor(scene) {
-        super(scene, false, { instancing: false, primType: "lineType", progMode: "silhouetteMode", colorUniform: true });
+    constructor(scene, instancing) {
+        super(scene, false, { instancing: instancing, primType: "lineType", progMode: "silhouetteMode", colorUniform: true });
     }
 
     _buildVertexShader() {
         const scene = this._scene;
-        const sectionPlanesState = scene._sectionPlanesState;
-        const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
-
+        const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push('#version 300 es');
-        src.push("// Lines batching silhouette vertex shader");
-
+        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " vertex shader");
         src.push("uniform int renderPass;");
-
         src.push("in vec3 position;");
+        src.push("in float flags;");
         if (scene.entityOffsetsEnabled) {
             src.push("in vec3 offset;");
         }
-        src.push("in float flags;");
+
+        if (this._instancing) {
+            src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
+            src.push("in vec4 modelMatrixCol1;");
+            src.push("in vec4 modelMatrixCol2;");
+        }
 
         this._addMatricesUniformBlockLines(src);
-
-        src.push("uniform vec4 color;");
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
             src.push("out float vFragDepth;");
         }
-
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
             src.push("out float vFlags;");
         }
+        src.push("uniform vec4 color;");
 
         src.push("void main(void) {");
-
         // silhouetteFlag = NOT_RENDERED | SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | | SILHOUETTE_XRAYED
         // renderPass = SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | | SILHOUETTE_XRAYED
-
         src.push(`int silhouetteFlag = int(flags) >> 4 & 0xF;`);
         src.push(`if (silhouetteFlag != renderPass) {`);
         src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
         src.push("} else {");
-
-        src.push("      vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
-        if (scene.entityOffsetsEnabled) {
-            src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
+        if (this._instancing) {
+            src.push("vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0);");
+            src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
+        } else {
+            src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0));");
         }
-        src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
+        if (scene.entityOffsetsEnabled) {
+            src.push("worldPosition.xyz = worldPosition.xyz + offset;");
+        }
+        src.push("vec4 viewPosition  = viewMatrix * worldPosition;");
         if (clipping) {
             src.push("vWorldPosition = worldPosition;");
             src.push("vFlags = flags;");
@@ -70,14 +72,12 @@ export class VBOBatchingLinesSilhouetteRenderer extends VBORenderer {
     }
 
     _buildFragmentShader() {
-
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push('#version 300 es');
-        src.push("// Lines batching silhouette fragment shader");
-
+        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
