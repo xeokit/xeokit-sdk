@@ -121,21 +121,7 @@ export class VBOInstancingLinesColorRenderer extends VBOInstancingLinesRenderer 
             src.push("if (dist > 0.0) { discard; }");
             src.push("}");
         }
-
-        // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
-        // Would be more efficient to defer this, then render lines later, using same depth buffer for Z-reject
-
-        if (this._withSAO) {
-            src.push("   float viewportWidth     = uSAOParams[0];");
-            src.push("   float viewportHeight    = uSAOParams[1];");
-            src.push("   float blendCutoff       = uSAOParams[2];");
-            src.push("   float blendFactor       = uSAOParams[3];");
-            src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
-            src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBAToDepth(texture(uOcclusionTexture, uv))) * blendFactor;");
-            src.push("   outColor            = vec4(vColor.rgb * ambient, vColor.a);");
-        } else {
-            src.push("    outColor           = vColor;");
-        }
+        src.push("    outColor           = vColor;");
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("gl_FragDepth = log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
