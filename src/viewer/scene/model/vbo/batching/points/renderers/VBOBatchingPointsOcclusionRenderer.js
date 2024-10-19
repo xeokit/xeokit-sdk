@@ -1,5 +1,4 @@
-import {VBOBatchingPointsRenderer} from "../VBOBatchingPointsRenderer.js";
-
+import {VBORenderer} from "../../../VBORenderer.js";
 
 // Logarithmic depth buffer involves an accuracy tradeoff, sacrificing
 // accuracy at close range to improve accuracy at long range. This can
@@ -10,10 +9,10 @@ const ENABLE_LOG_DEPTH_BUF = false;
 /**
  * @private
  */
-class VBOBatchingPointsOcclusionRenderer extends VBOBatchingPointsRenderer {
+class VBOBatchingPointsOcclusionRenderer extends VBORenderer {
 
     constructor(scene) {
-        super(scene, false, { hashPointsMaterial: true });
+        super(scene, false, { instancing: false, primType: "pointType", progMode: "occlusionMode", hashPointsMaterial: true });
     }
 
     _buildVertexShader() {

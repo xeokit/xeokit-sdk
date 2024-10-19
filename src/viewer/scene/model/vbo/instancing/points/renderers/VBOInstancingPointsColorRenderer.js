@@ -1,12 +1,12 @@
-import {VBOInstancingPointsRenderer} from "./VBOInstancingPointsRenderer.js";
+import {VBORenderer} from "../../../VBORenderer.js";
 
 /**
  * @private
  */
-class VBOInstancingPointsColorRenderer extends VBOInstancingPointsRenderer {
+class VBOInstancingPointsColorRenderer extends VBORenderer {
 
     constructor(scene) {
-        super(scene, false, { hashPointsMaterial: true, incrementDrawState: true });
+        super(scene, false, { instancing: true, primType: "pointType", progMode: "colorMode", hashPointsMaterial: true, incrementDrawState: true });
     }
 
     _buildVertexShader() {
