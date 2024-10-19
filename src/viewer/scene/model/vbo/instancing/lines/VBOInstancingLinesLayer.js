@@ -4,7 +4,7 @@ import {RENDER_PASSES} from '../../../RENDER_PASSES.js';
 import {math} from "../../../../math/math.js";
 import {RenderState} from "../../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
-import {getRenderers} from "./renderers/VBOInstancingLinesRenderers.js";
+import {getLinesRenderers} from "../../renderers/VBOLinesRenderers.js";
 
 const tempUint8Vec4 = new Uint8Array(4);
 const tempFloat32 = new Float32Array(1);
@@ -47,7 +47,7 @@ class VBOInstancingLinesLayer {
          */
         this.layerIndex = cfg.layerIndex;
 
-        this._renderers = getRenderers(cfg.model.scene);
+        this._renderers = getLinesRenderers(cfg.model.scene, true);
 
         this._aabb = math.collapseAABB3();
 
