@@ -17,7 +17,7 @@ class VBOBatchingPointsColorRenderer extends VBOBatchingPointsRenderer {
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
-        const pointsMaterial = scene.pointsMaterial;
+        const pointsMaterial = scene.pointsMaterial._state;
         const src = [];
         src.push('#version 300 es');
         src.push("// Points batching color vertex shader");
