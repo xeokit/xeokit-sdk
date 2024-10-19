@@ -23,8 +23,6 @@ export class TrianglesPickMeshRenderer extends TrianglesBatchingRenderer {
 
         src.push("in vec4 pickColor;");
 
-        src.push("uniform bool pickInvisible;");
-
         this._addMatricesUniformBlockLines(src);
 
         if (scene.logarithmicDepthBufferEnabled) {
