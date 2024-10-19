@@ -6,7 +6,7 @@ import {RenderState} from "../../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
 import {geometryCompressionUtils} from "../../../../math/geometryCompressionUtils.js";
 import {getRenderers} from "./renderers/Renderers.js";
-import {VBOBatchingTrianglesBuffer} from "./VBOBatchingTrianglesBuffer.js";
+import {Configs} from "../../../../../Configs.js";
 import {quantizePositions, transformAndOctEncodeNormals} from "../../../compression.js";
 
 const tempMat4 = math.mat4();
@@ -20,6 +20,8 @@ const tempVec3d = math.vec3();
 const tempVec3e = math.vec3();
 const tempVec3f = math.vec3();
 const tempVec3g = math.vec3();
+
+const configs = new Configs();
 
 /**
  * @private
@@ -69,7 +71,20 @@ export class VBOBatchingTrianglesLayer {
         this.layerIndex = cfg.layerIndex;
 
         this._renderers = getRenderers(cfg.model.scene);
-        this._buffer = new VBOBatchingTrianglesBuffer(cfg.maxGeometryBatchSize);
+        const maxBatchSize = cfg.maxGeometryBatchSize ?? configs.maxGeometryBatchSize;
+        this._buffer = {
+            maxVerts:          maxBatchSize,
+            maxIndices:        maxBatchSize * 3, // Rough rule-of-thumb
+            positions:         [],
+            colors:            [],
+            uv:                [],
+            metallicRoughness: [],
+            normals:           [],
+            pickColors:        [],
+            offsets:           [],
+            indices:           [],
+            edgeIndices:       []
+        };
         this._scratchMemory = cfg.scratchMemory;
 
         this._state = new RenderState({
