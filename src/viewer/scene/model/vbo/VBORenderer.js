@@ -446,9 +446,10 @@ export class VBORenderer {
         return vao;
     }
 
-    drawLayer(frameCtx, layer, renderPass, {colorUniform = false, incrementDrawState = false} = {}) {
+    drawLayer(frameCtx, layer, renderPass) {
 
         const isSnap = (this._progMode === "snapInitMode") || (this._progMode === "snapMode");
+        const incrementDrawState = this._incrementDrawState;
 
         const scene = this._scene;
         const gl = scene.canvas.gl;
@@ -689,7 +690,7 @@ export class VBORenderer {
                 gl.uniform1f(this._alphaCutoffLocation, textureSet.alphaCutoff);
             }
 
-            if (colorUniform || this._colorUniform) {
+            if (this._colorUniform) {
                 const colorKey = this._edges ? "edgeColor" : "fillColor";
                 const alphaKey = this._edges ? "edgeAlpha" : "fillAlpha";
 
@@ -722,7 +723,7 @@ export class VBORenderer {
                 } else {
                     gl.drawElements(gl.LINES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
                 }
-                if (incrementDrawState || this._incrementDrawState) {
+                if (incrementDrawState) {
                     frameCtx.drawElements++;
                 }
             } else if (this._primType === "pointType") {
@@ -731,7 +732,7 @@ export class VBORenderer {
                 } else {
                     gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
                 }
-                if (incrementDrawState || this._incrementDrawState) {
+                if (incrementDrawState) {
                     frameCtx.drawElements++;
                 }
             } else {
@@ -741,7 +742,7 @@ export class VBORenderer {
                     } else {
                         gl.drawElementsInstanced(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
 
-                        if (incrementDrawState || this._incrementDrawState) {
+                        if (incrementDrawState) {
                             frameCtx.drawElements++;
                         }
                     }
@@ -751,7 +752,7 @@ export class VBORenderer {
                     } else {
                         gl.drawElements(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
 
-                        if (incrementDrawState || this._incrementDrawState) {
+                        if (incrementDrawState) {
                             frameCtx.drawElements++;
                         }
                     }
