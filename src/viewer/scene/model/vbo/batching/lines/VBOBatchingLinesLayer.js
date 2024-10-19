@@ -4,7 +4,7 @@ import {RENDER_PASSES} from '../../../RENDER_PASSES.js';
 import {math} from "../../../../math/math.js";
 import {RenderState} from "../../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
-import {getRenderers} from "./renderers/VBOBatchingLinesRenderers.js";
+import {getLinesRenderers} from "../../renderers/VBOLinesRenderers.js";
 import {quantizePositions} from "../../../compression.js";
 
 /**
@@ -31,7 +31,7 @@ export class VBOBatchingLinesLayer {
          */
         this.layerIndex = cfg.layerIndex;
 
-        this._renderers = getRenderers(cfg.model.scene);
+        this._renderers = getLinesRenderers(cfg.model.scene, false);
         this.model = cfg.model;
         const maxGeometryBatchSize = Math.min(5000000, cfg.maxGeometryBatchSize ?? 5000000);
         this._buffer = {

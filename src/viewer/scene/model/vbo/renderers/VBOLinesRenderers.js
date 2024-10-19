@@ -1,14 +1,15 @@
-import {VBOLinesColorRenderer} from "../../../renderers/VBOLinesColorRenderer.js";
-import {VBOLinesSilhouetteRenderer} from "../../../renderers/VBOLinesSilhouetteRenderer.js";
-import {VBOLinesSnapRenderer} from "../../../renderers/VBOLinesSnapRenderer.js";
+import {VBOLinesColorRenderer} from "./VBOLinesColorRenderer.js";
+import {VBOLinesSilhouetteRenderer} from "./VBOLinesSilhouetteRenderer.js";
+import {VBOLinesSnapRenderer} from "./VBOLinesSnapRenderer.js";
 
 /**
  * @private
  */
-class VBOInstancingLinesRenderers {
+class VBOLinesRenderers {
 
-    constructor(scene) {
+    constructor(scene, instancing) {
         this._scene = scene;
+        this._instancing = instancing;
     }
 
     _compile() {
@@ -32,32 +33,31 @@ class VBOInstancingLinesRenderers {
 
     get colorRenderer() {
         if (!this._colorRenderer) {
-            this._colorRenderer = new VBOLinesColorRenderer(this._scene, true);
+            this._colorRenderer = new VBOLinesColorRenderer(this._scene, this._instancing);
         }
         return this._colorRenderer;
     }
 
     get silhouetteRenderer() {
         if (!this._silhouetteRenderer) {
-            this._silhouetteRenderer = new VBOLinesSilhouetteRenderer(this._scene, true);
+            this._silhouetteRenderer = new VBOLinesSilhouetteRenderer(this._scene, this._instancing);
         }
         return this._silhouetteRenderer;
     }
 
     get snapInitRenderer() {
         if (!this._snapInitRenderer) {
-            this._snapInitRenderer = new VBOLinesSnapRenderer(this._scene, true, true);
+            this._snapInitRenderer = new VBOLinesSnapRenderer(this._scene, this._instancing, true);
         }
         return this._snapInitRenderer;
     }
 
     get snapRenderer() {
         if (!this._snapRenderer) {
-            this._snapRenderer = new VBOLinesSnapRenderer(this._scene, true, false);
+            this._snapRenderer = new VBOLinesSnapRenderer(this._scene, this._instancing, false);
         }
         return this._snapRenderer;
     }
-
 
     _destroy() {
         if (this._colorRenderer) {
@@ -75,25 +75,25 @@ class VBOInstancingLinesRenderers {
     }
 }
 
-const cachedRenderers = {};
+const cachedRenderers = { batching: { }, instancing: { } };
 
 /**
  * @private
  */
-export function getRenderers(scene) {
+export function getLinesRenderers(scene, instancing) {
     const sceneId = scene.id;
-    let instancingRenderers = cachedRenderers[sceneId];
-    if (!instancingRenderers) {
-        instancingRenderers = new VBOInstancingLinesRenderers(scene);
-        cachedRenderers[sceneId] = instancingRenderers;
-        instancingRenderers._compile();
+    const cache = cachedRenderers[instancing ? "instancing" : "batching"];
+    if (! (sceneId in cache)) {
+        const renderers = new VBOLinesRenderers(scene, instancing);
+        cache[sceneId] = renderers;
+        renderers._compile();
         scene.on("compile", () => {
-            instancingRenderers._compile();
+            renderers._compile();
         });
         scene.on("destroyed", () => {
-            delete cachedRenderers[sceneId];
-            instancingRenderers._destroy();
+            delete cache[sceneId];
+            renderers._destroy();
         });
     }
-    return instancingRenderers;
+    return cache[sceneId];
 }
