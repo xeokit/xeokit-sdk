@@ -1,6 +1,6 @@
 import {VBOLinesColorRenderer} from "../../../renderers/VBOLinesColorRenderer.js";
 import {VBOLinesSilhouetteRenderer} from "../../../renderers/VBOLinesSilhouetteRenderer.js";
-import {VBOInstancingLinesSnapRenderer} from "./VBOInstancingLinesSnapRenderer.js";
+import {VBOLinesSnapRenderer} from "../../../renderers/VBOLinesSnapRenderer.js";
 
 /**
  * @private
@@ -46,14 +46,14 @@ class VBOInstancingLinesRenderers {
 
     get snapInitRenderer() {
         if (!this._snapInitRenderer) {
-            this._snapInitRenderer = new VBOInstancingLinesSnapRenderer(this._scene, true);
+            this._snapInitRenderer = new VBOLinesSnapRenderer(this._scene, true, true);
         }
         return this._snapInitRenderer;
     }
 
     get snapRenderer() {
         if (!this._snapRenderer) {
-            this._snapRenderer = new VBOInstancingLinesSnapRenderer(this._scene, false);
+            this._snapRenderer = new VBOLinesSnapRenderer(this._scene, true, false);
         }
         return this._snapRenderer;
     }
