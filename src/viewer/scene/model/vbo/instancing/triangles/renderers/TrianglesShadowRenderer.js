@@ -1,11 +1,14 @@
-import {TrianglesInstancingRenderer} from "./TrianglesInstancingRenderer.js";
+import {VBORenderer} from "./../../../VBORenderer.js";
 
 /**
  * Renders InstancingLayer fragment depths to a shadow map.
  *
  * @private
  */
-export class TrianglesShadowRenderer extends TrianglesInstancingRenderer {
+export class TrianglesShadowRenderer extends VBORenderer {
+    constructor(scene) {
+        super(scene, false, { instancing: true, primType: "triangleType", progMode: "shadowMode" });
+    }
 
     _buildVertexShader() {
         const scene = this._scene;

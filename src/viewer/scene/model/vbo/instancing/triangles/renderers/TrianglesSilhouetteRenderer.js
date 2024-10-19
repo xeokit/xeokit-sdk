@@ -1,12 +1,11 @@
-import {TrianglesInstancingRenderer} from "./TrianglesInstancingRenderer.js";
+import {VBORenderer} from "./../../../VBORenderer.js";
 
 /**
  * @private
  */
-export class TrianglesSilhouetteRenderer extends TrianglesInstancingRenderer {
-
+export class TrianglesSilhouetteRenderer extends VBORenderer {
     constructor(scene) {
-        super(scene, false, { colorUniform: true });
+        super(scene, false, { instancing: true, primType: "triangleType", progMode: "silhouetteMode", colorUniform: true });
     }
 
     _buildVertexShader() {
