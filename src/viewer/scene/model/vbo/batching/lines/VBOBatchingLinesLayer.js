@@ -5,7 +5,6 @@ import {math} from "../../../../math/math.js";
 import {RenderState} from "../../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
 import {getRenderers} from "./renderers/VBOBatchingLinesRenderers.js";
-import {VBOBatchingLinesBuffer} from "./lib/VBOBatchingLinesBuffer.js";
 import {quantizePositions} from "../../../compression.js";
 
 /**
@@ -34,7 +33,15 @@ export class VBOBatchingLinesLayer {
 
         this._renderers = getRenderers(cfg.model.scene);
         this.model = cfg.model;
-        this._buffer = new VBOBatchingLinesBuffer(cfg.maxGeometryBatchSize);
+        const maxGeometryBatchSize = Math.min(5000000, cfg.maxGeometryBatchSize ?? 5000000);
+        this._buffer = {
+            maxVerts:   maxGeometryBatchSize,
+            maxIndices: maxGeometryBatchSize * 3, // Rough rule-of-thumb
+            positions:  [],
+            colors:     [],
+            offsets:    [],
+            indices:    []
+        };
         this._scratchMemory = cfg.scratchMemory;
 
         this._state = new RenderState({
