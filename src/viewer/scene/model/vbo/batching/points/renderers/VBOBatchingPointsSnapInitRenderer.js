@@ -94,7 +94,6 @@ export class VBOBatchingPointsSnapInitRenderer extends VBORenderer {
         gl.uniform1i(this._uLayerNumber, frameCtx.snapPickLayerNumber);
         gl.uniform3fv(this._uCoordinateScaler, coordinateScaler);
         gl.uniform1i(this._uRenderPass, renderPass);
-        gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
         gl.uniform1f(this._uPointSize, 1.0);
 
         let offset = 0;
@@ -174,7 +173,6 @@ export class VBOBatchingPointsSnapInitRenderer extends VBORenderer {
             src.push("in vec3 offset;");
         }
         src.push("in float flags;");
-        src.push("uniform bool pickInvisible;");
 
         this._addMatricesUniformBlockLines(src);
 
