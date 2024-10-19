@@ -1,4 +1,4 @@
-import {VBOBatchingLinesColorRenderer} from "./VBOBatchingLinesColorRenderer.js";
+import {VBOLinesColorRenderer} from "../../../renderers/VBOLinesColorRenderer.js";
 import {VBOBatchingLinesSilhouetteRenderer} from "./VBOBatchingLinesSilhouetteRenderer.js";
 import {VBOBatchingLinesSnapRenderer} from "./VBOBatchingLinesSnapRenderer.js";
 
@@ -32,7 +32,7 @@ class VBOBatchingLinesRenderers {
 
     get colorRenderer() {
         if (!this._colorRenderer) {
-            this._colorRenderer = new VBOBatchingLinesColorRenderer(this._scene, false);
+            this._colorRenderer = new VBOLinesColorRenderer(this._scene, false);
         }
         return this._colorRenderer;
     }
