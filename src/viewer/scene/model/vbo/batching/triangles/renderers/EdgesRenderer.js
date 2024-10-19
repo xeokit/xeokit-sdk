@@ -1,13 +1,11 @@
-import {TrianglesBatchingRenderer} from "./TrianglesBatchingRenderer.js";
+import {VBORenderer} from "./../../../VBORenderer.js";
 
 /**
  * @private
  */
-
-
-export class EdgesRenderer extends TrianglesBatchingRenderer {
+export class EdgesRenderer extends VBORenderer {
     constructor(scene, colorUniform) {
-        super(scene, false, {instancing: false, edges: true, colorUniform: colorUniform});
+        super(scene, false, { instancing: false, primType: "triangleType", progMode: "edgesMode", edges: true, colorUniform: colorUniform });
     }
 
     _buildVertexShader() {
