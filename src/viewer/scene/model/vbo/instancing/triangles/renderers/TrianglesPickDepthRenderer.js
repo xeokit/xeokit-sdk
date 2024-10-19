@@ -26,8 +26,6 @@ export class TrianglesPickDepthRenderer extends TrianglesInstancingRenderer {
         src.push("in vec4 modelMatrixCol1;");
         src.push("in vec4 modelMatrixCol2;");
 
-        src.push("uniform bool pickInvisible;");
-
         this._addMatricesUniformBlockLines(src);
 
         this._addRemapClipPosLines(src);
