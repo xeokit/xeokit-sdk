@@ -1,9 +1,12 @@
-import {TrianglesBatchingRenderer} from "./TrianglesBatchingRenderer.js";
+import {VBORenderer} from "./../../../VBORenderer.js";
 
 /**
  * @private
  */
-export class TrianglesPickMeshRenderer extends TrianglesBatchingRenderer {
+export class TrianglesPickMeshRenderer extends VBORenderer {
+    constructor(scene) {
+        super(scene, false, { instancing: false, primType: "triangleType", progMode: "pickMeshMode" });
+    }
 
     _buildVertexShader() {
         const scene = this._scene;
