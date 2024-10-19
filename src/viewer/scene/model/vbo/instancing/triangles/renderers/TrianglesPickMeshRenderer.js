@@ -1,9 +1,12 @@
-import {TrianglesInstancingRenderer} from "./TrianglesInstancingRenderer.js";
+import {VBORenderer} from "./../../../VBORenderer.js";
 
 /**
  * @private
  */
-export class TrianglesPickMeshRenderer extends TrianglesInstancingRenderer {
+export class TrianglesPickMeshRenderer extends VBORenderer {
+    constructor(scene) {
+        super(scene, false, { instancing: true, primType: "triangleType", progMode: "pickMeshMode" });
+    }
 
     _buildVertexShader() {
         const scene = this._scene;

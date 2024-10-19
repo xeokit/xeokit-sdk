@@ -1,10 +1,13 @@
+import {VBORenderer} from "./../../../VBORenderer.js";
 import { math } from "../../../../../math/math.js";
-import {TrianglesInstancingRenderer} from "./TrianglesInstancingRenderer.js";
 
 /**
  * @private
  */
-export class TrianglesPickNormalsRenderer extends TrianglesInstancingRenderer {
+export class TrianglesPickNormalsRenderer extends VBORenderer {
+    constructor(scene) {
+        super(scene, false, { instancing: true, primType: "triangleType", progMode: "pickNormalsMode" });
+    }
 
     _buildVertexShader() {
         const scene = this._scene;
