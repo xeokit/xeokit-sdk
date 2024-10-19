@@ -1,11 +1,11 @@
-import {TrianglesBatchingRenderer} from "./TrianglesBatchingRenderer.js";
+import {VBORenderer} from "./../../../VBORenderer.js";
 
 /**
  * @private
  */
-export class TrianglesFlatColorRenderer extends TrianglesBatchingRenderer {
+export class TrianglesFlatColorRenderer extends VBORenderer {
     constructor(scene, withSAO) {
-        super(scene, withSAO, { hashLigthsSAO: true });
+        super(scene, withSAO, { instancing: false, primType: "triangleType", progMode: "flatColorMode", hashLigthsSAO: true });
     }
 
     _buildVertexShader() {

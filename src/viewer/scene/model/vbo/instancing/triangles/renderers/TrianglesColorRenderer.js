@@ -1,11 +1,11 @@
-import {TrianglesInstancingRenderer} from "./TrianglesInstancingRenderer.js";
+import {VBORenderer} from "./../../../VBORenderer.js";
 
 /**
  * @private
  */
-class TrianglesColorRenderer extends TrianglesInstancingRenderer {
+class TrianglesColorRenderer extends VBORenderer {
     constructor(scene, withSAO) {
-        super(scene, withSAO, { incrementDrawState: true, hashLigthsSAO: true });
+        super(scene, withSAO, { instancing: true, primType: "triangleType", progMode: "colorMode", incrementDrawState: true, hashLigthsSAO: true });
     }
 
     _buildVertexShader() {
