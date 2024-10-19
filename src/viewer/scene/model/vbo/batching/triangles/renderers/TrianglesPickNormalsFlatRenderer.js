@@ -20,7 +20,6 @@ export class TrianglesPickNormalsFlatRenderer extends TrianglesBatchingRenderer 
             src.push("in vec3 offset;");
         }
         src.push("in float flags;");
-        src.push("uniform bool pickInvisible;");
 
         this._addMatricesUniformBlockLines(src);
 

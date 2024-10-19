@@ -170,7 +170,6 @@ export class VBORenderer {
             this._uColor = program.getLocation("silhouetteColor");
         }
         this._uUVDecodeMatrix = program.getLocation("uvDecodeMatrix");
-        this._uPickInvisible = program.getLocation("pickInvisible");
         this._uGammaFactor = program.getLocation("gammaFactor");
 
         gl.uniformBlockBinding(
@@ -519,10 +518,6 @@ export class VBORenderer {
             if (this._uZFar) {
                 gl.uniform1f(this._uZFar, scene.camera.project.far)
             }
-        }
-
-        if (this._uPickInvisible) {
-            gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
         }
 
         if (this._uPickZNear) {
