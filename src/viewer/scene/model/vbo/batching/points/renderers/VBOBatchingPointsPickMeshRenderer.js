@@ -28,8 +28,6 @@ export class VBOBatchingPointsPickMeshRenderer extends VBOBatchingPointsRenderer
 
         src.push("in vec4 pickColor;");
 
-        src.push("uniform bool pickInvisible;");
-
         this._addMatricesUniformBlockLines(src);
 
         this._addRemapClipPosLines(src);
