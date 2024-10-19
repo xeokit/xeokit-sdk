@@ -1,5 +1,5 @@
 import {VBOLinesColorRenderer} from "../../../renderers/VBOLinesColorRenderer.js";
-import {VBOInstancingLinesSilhouetteRenderer} from "./VBOInstancingLinesSilhouetteRenderer.js";
+import {VBOLinesSilhouetteRenderer} from "../../../renderers/VBOLinesSilhouetteRenderer.js";
 import {VBOInstancingLinesSnapRenderer} from "./VBOInstancingLinesSnapRenderer.js";
 
 /**
@@ -39,7 +39,7 @@ class VBOInstancingLinesRenderers {
 
     get silhouetteRenderer() {
         if (!this._silhouetteRenderer) {
-            this._silhouetteRenderer = new VBOInstancingLinesSilhouetteRenderer(this._scene);
+            this._silhouetteRenderer = new VBOLinesSilhouetteRenderer(this._scene, true);
         }
         return this._silhouetteRenderer;
     }
