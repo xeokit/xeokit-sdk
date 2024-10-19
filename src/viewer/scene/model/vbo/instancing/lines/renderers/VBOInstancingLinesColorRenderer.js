@@ -36,9 +36,6 @@ export class VBOInstancingLinesColorRenderer extends VBOInstancingLinesRenderer 
             src.push("uniform float logDepthBufFC;");
             src.push("out float vFragDepth;");
         }
-
-        src.push("uniform vec4 lightAmbient;");
-
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
             src.push("out float vFlags;");
