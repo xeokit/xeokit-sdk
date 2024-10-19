@@ -1,13 +1,14 @@
-import {VBOBatchingPointsRenderer} from "../VBOBatchingPointsRenderer.js";
+import {VBORenderer} from "../../../VBORenderer.js";
 
 /**
  * Renders pointsBatchingLayer fragment depths to a shadow map.
  *
  * @private
  */
-export class VBOBatchingPointsShadowRenderer extends VBOBatchingPointsRenderer {
-    _getHash() {
-        return this._scene._sectionPlanesState.getHash() + (this._scene.pointsMaterial.hash);
+export class VBOBatchingPointsShadowRenderer extends VBORenderer {
+
+    constructor(scene) {
+        super(scene, false, { instancing: false, primType: "pointType", progMode: "shadowMode", hashPointsMaterial: true });
     }
 
     _buildVertexShader() {

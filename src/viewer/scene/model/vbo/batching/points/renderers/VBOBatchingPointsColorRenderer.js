@@ -1,12 +1,12 @@
-import {VBOBatchingPointsRenderer} from "../VBOBatchingPointsRenderer.js";
+import {VBORenderer} from "../../../VBORenderer.js";
 
 /**
  * @private
  */
-class VBOBatchingPointsColorRenderer extends VBOBatchingPointsRenderer {
+class VBOBatchingPointsColorRenderer extends VBORenderer {
 
     constructor(scene) {
-        super(scene, false, { hashPointsMaterial: true, incrementDrawState: true });
+        super(scene, false, { instancing: false, primType: "pointType", progMode: "colorMode", hashPointsMaterial: true, incrementDrawState: true });
     }
 
     _buildVertexShader() {
