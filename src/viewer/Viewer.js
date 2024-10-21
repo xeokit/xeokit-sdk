@@ -498,7 +498,9 @@ class Viewer {
             //resulting in increase/decreased size for the the canvas that is being overlapped
             const scale = i == 0 ? snapshotCanvas.width / containerElement.clientWidth : 1;
             const off = math.vec2([ 0, 0 ]);
-            transformToNode(canvas, containerElement, off);
+            if (i === 0) {
+                transformToNode(canvas, containerElement, off);
+            }
             await html2canvas(containerElement, {
                 canvas: snapshotCanvas,
                 backgroundColor: null,
