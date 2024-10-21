@@ -1,8 +1,8 @@
 import {VBOPointsColorRenderer} from "../../../renderers/VBOPointsColorRenderer.js";
-import {VBOBatchingPointsSilhouetteRenderer} from "./VBOBatchingPointsSilhouetteRenderer.js";
 import {VBOBatchingPointsPickMeshRenderer} from "./VBOBatchingPointsPickMeshRenderer.js";
 import {VBOBatchingPointsPickDepthRenderer} from "./VBOBatchingPointsPickDepthRenderer.js";
 import {VBOBatchingPointsOcclusionRenderer} from "./VBOBatchingPointsOcclusionRenderer.js";
+import {VBOPointsSilhouetteRenderer} from "../../../renderers/VBOPointsSilhouetteRenderer.js";
 import {VBOBatchingPointsSnapRenderer} from "./VBOBatchingPointsSnapRenderer.js";
 
 /**
@@ -54,7 +54,7 @@ class VBOBatchingPointsRenderers {
 
     get silhouetteRenderer() {
         if (!this._silhouetteRenderer) {
-            this._silhouetteRenderer = new VBOBatchingPointsSilhouetteRenderer(this._scene);
+            this._silhouetteRenderer = new VBOPointsSilhouetteRenderer(this._scene, false);
         }
         return this._silhouetteRenderer;
     }
