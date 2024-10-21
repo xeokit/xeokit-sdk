@@ -493,19 +493,15 @@ class Viewer {
 
         for (let i = 0, len = pluginContainerElements.length; i < len; i++) {
             const containerElement = pluginContainerElements[i];
-            //only calculate the scale for first plugin
-            //for all others keep the scale 1 otherwise it will keep multiplying the scale with the base scale of canvas
-            //resulting in increase/decreased size for the the canvas that is being overlapped
-            const scale = i == 0 ? snapshotCanvas.width / containerElement.clientWidth : 1;
-            const off = math.vec2([ 0, 0 ]);
-            transformToNode(canvas, containerElement, off);
             await html2canvas(containerElement, {
                 canvas: snapshotCanvas,
                 backgroundColor: null,
-                x: off[0],
-                y: off[1],
-                scale
+                scale: snapshotCanvas.width / containerElement.clientWidth
             });
+            // Reverts translation and scaling applied to the snapshotCanvas's context
+            // by the html2canvas call (inside the ForeignObjectRenderer's constructor)
+            // (implemented to compensate XCD-153 issue)
+            snapshotCanvas.getContext("2d").resetTransform();
         }
         if (!params.includeGizmos) {
             this.sendToPlugins("snapshotFinished");
