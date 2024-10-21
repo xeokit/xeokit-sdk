@@ -1,10 +1,10 @@
 import {VBOPointsColorRenderer} from "../../../renderers/VBOPointsColorRenderer.js";
-import {VBOInstancingPointsSilhouetteRenderer} from "./VBOInstancingPointsSilhouetteRenderer.js";
 import {VBOInstancingPointsPickMeshRenderer} from "./VBOInstancingPointsPickMeshRenderer.js";
 import {VBOInstancingPointsPickDepthRenderer} from "./VBOInstancingPointsPickDepthRenderer.js";
 import {VBOInstancingPointsOcclusionRenderer} from "./VBOInstancingPointsOcclusionRenderer.js";
 import {VBOInstancingPointsDepthRenderer} from "./VBOInstancingPointsDepthRenderer.js";
 import {VBOInstancingPointsShadowRenderer} from "./VBOInstancingPointsShadowRenderer.js";
+import {VBOPointsSilhouetteRenderer} from "../../../renderers/VBOPointsSilhouetteRenderer.js";
 import {VBOInstancingPointsSnapRenderer} from "./VBOInstancingPointsSnapRenderer.js";
 
 /**
@@ -64,7 +64,7 @@ import {VBOInstancingPointsSnapRenderer} from "./VBOInstancingPointsSnapRenderer
 
     get silhouetteRenderer() {
         if (!this._silhouetteRenderer) {
-            this._silhouetteRenderer = new VBOInstancingPointsSilhouetteRenderer(this._scene);
+            this._silhouetteRenderer = new VBOPointsSilhouetteRenderer(this._scene, true);
         }
         return this._silhouetteRenderer;
     }
