@@ -110,16 +110,12 @@ class VBOInstancingPointsDepthRenderer extends VBORenderer {
             }
         }
 
-        src.push("const float   packUpScale = 256. / 255.;");
-        src.push("const float   unpackDownscale = 255. / 256.;");
-        src.push("const vec3    packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );");
-        src.push("const vec4    unpackFactors = unpackDownscale / vec4( packFactors, 1. );");
-        src.push("const float   shiftRight8 = 1.0 / 256.;");
-
-        src.push("vec4 packDepthToRGBA( const in float v ) {");
-        src.push("    vec4 r = vec4( fract( v * packFactors ), v );");
-        src.push("    r.yzw -= r.xyz * shiftRight8;");
-        src.push("    return r * packUpScale;");
+        src.push("vec4 packDepth(const in float depth) {");
+        src.push("  const vec4 bitShift = vec4(256.0*256.0*256.0, 256.0*256.0, 256.0, 1.0);");
+        src.push("  const vec4 bitMask  = vec4(0.0, 1.0/256.0, 1.0/256.0, 1.0/256.0);");
+        src.push("  vec4 res = fract(depth * bitShift);");
+        src.push("  res -= res.xxyz * bitMask;");
+        src.push("  return res * 256. / 255.;");
         src.push("}");
 
         src.push("out vec4 outColor;");
@@ -145,10 +141,10 @@ class VBOInstancingPointsDepthRenderer extends VBORenderer {
             src.push("if (dist > 0.0) { discard; }");
             src.push("}");
         }
-        src.push("    outColor = packDepthToRGBA( gl_FragCoord.z); "); // Must be linear depth
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("gl_FragDepth = log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
+        src.push("outColor = packDepth(gl_FragCoord.z);"); // Must be linear depth
         src.push("}");
         return src;
     }
