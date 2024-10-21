@@ -14,10 +14,6 @@ const SNAPPING_LOG_DEPTH_BUF_ENABLED = true; // Improves occlusion accuracy at d
  * @private
  */
 export class TrianglesSnapRenderer extends VBORenderer{
-    _getHash() {
-        return this._scene._sectionPlanesState.getHash() + (this._scene.pointsMaterial.hash);
-    }
-
     drawLayer(frameCtx, batchingLayer, renderPass) {
 
         if (!this._program) {
