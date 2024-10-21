@@ -1,7 +1,7 @@
 import {VBOPointsColorRenderer} from "../../../renderers/VBOPointsColorRenderer.js";
 import {VBOPointsOcclusionRenderer} from "../../../renderers/VBOPointsOcclusionRenderer.js";
 import {VBOPointsPickDepthRenderer} from "../../../renderers/VBOPointsPickDepthRenderer.js";
-import {VBOInstancingPointsPickMeshRenderer} from "./VBOInstancingPointsPickMeshRenderer.js";
+import {VBOPointsPickMeshRenderer} from "../../../renderers/VBOPointsPickMeshRenderer.js";
 import {VBOInstancingPointsDepthRenderer} from "./VBOInstancingPointsDepthRenderer.js";
 import {VBOInstancingPointsShadowRenderer} from "./VBOInstancingPointsShadowRenderer.js";
 import {VBOPointsSilhouetteRenderer} from "../../../renderers/VBOPointsSilhouetteRenderer.js";
@@ -78,7 +78,7 @@ import {VBOPointsSnapRenderer} from "../../../renderers/VBOPointsSnapRenderer.js
 
     get pickMeshRenderer() {
         if (!this._pickMeshRenderer) {
-            this._pickMeshRenderer = new VBOInstancingPointsPickMeshRenderer(this._scene);
+            this._pickMeshRenderer = new VBOPointsPickMeshRenderer(this._scene, true);
         }
         return this._pickMeshRenderer;
     }
