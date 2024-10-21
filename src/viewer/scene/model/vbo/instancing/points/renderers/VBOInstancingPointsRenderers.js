@@ -1,4 +1,4 @@
-import {VBOInstancingPointsColorRenderer} from "./VBOInstancingPointsColorRenderer.js";
+import {VBOPointsColorRenderer} from "../../../renderers/VBOPointsColorRenderer.js";
 import {VBOInstancingPointsSilhouetteRenderer} from "./VBOInstancingPointsSilhouetteRenderer.js";
 import {VBOInstancingPointsPickMeshRenderer} from "./VBOInstancingPointsPickMeshRenderer.js";
 import {VBOInstancingPointsPickDepthRenderer} from "./VBOInstancingPointsPickDepthRenderer.js";
@@ -57,7 +57,7 @@ import {VBOInstancingPointsSnapRenderer} from "./VBOInstancingPointsSnapRenderer
 
     get colorRenderer() {
         if (!this._colorRenderer) {
-            this._colorRenderer = new VBOInstancingPointsColorRenderer(this._scene, false);
+            this._colorRenderer = new VBOPointsColorRenderer(this._scene, true);
         }
         return this._colorRenderer;
     }
