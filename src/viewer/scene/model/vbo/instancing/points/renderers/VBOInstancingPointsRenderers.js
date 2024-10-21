@@ -3,7 +3,7 @@ import {VBOPointsOcclusionRenderer} from "../../../renderers/VBOPointsOcclusionR
 import {VBOPointsPickDepthRenderer} from "../../../renderers/VBOPointsPickDepthRenderer.js";
 import {VBOPointsPickMeshRenderer} from "../../../renderers/VBOPointsPickMeshRenderer.js";
 import {VBOInstancingPointsDepthRenderer} from "./VBOInstancingPointsDepthRenderer.js";
-import {VBOInstancingPointsShadowRenderer} from "./VBOInstancingPointsShadowRenderer.js";
+import {VBOPointsShadowRenderer} from "../../../renderers/VBOPointsShadowRenderer.js";
 import {VBOPointsSilhouetteRenderer} from "../../../renderers/VBOPointsSilhouetteRenderer.js";
 import {VBOPointsSnapRenderer} from "../../../renderers/VBOPointsSnapRenderer.js";
 
@@ -99,7 +99,7 @@ import {VBOPointsSnapRenderer} from "../../../renderers/VBOPointsSnapRenderer.js
 
     get shadowRenderer() {
         if (!this._shadowRenderer) {
-            this._shadowRenderer = new VBOInstancingPointsShadowRenderer(this._scene);
+            this._shadowRenderer = new VBOPointsShadowRenderer(this._scene, true);
         }
         return this._shadowRenderer;
     }
