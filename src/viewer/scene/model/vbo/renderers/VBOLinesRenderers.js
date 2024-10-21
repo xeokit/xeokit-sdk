@@ -2,97 +2,48 @@ import {VBOLinesColorRenderer} from "./VBOLinesColorRenderer.js";
 import {VBOLinesSilhouetteRenderer} from "./VBOLinesSilhouetteRenderer.js";
 import {VBOLinesSnapRenderer} from "./VBOLinesSnapRenderer.js";
 
-/**
- * @private
- */
-class VBOLinesRenderers {
-
-    constructor(scene, instancing) {
-        this._scene = scene;
-        this._instancing = instancing;
-    }
-
-    _compile() {
-        if (this._colorRenderer && (!this._colorRenderer.getValid())) {
-            this._colorRenderer.destroy();
-            this._colorRenderer = null;
-        }
-        if (this._silhouetteRenderer && (!this._silhouetteRenderer.getValid())) {
-            this._silhouetteRenderer.destroy();
-            this._silhouetteRenderer = null;
-        }
-        if (this._snapInitRenderer && (!this._snapInitRenderer.getValid())) {
-            this._snapInitRenderer.destroy();
-            this._snapInitRenderer = null;
-        }
-        if (this._snapRenderer && (!this._snapRenderer.getValid())) {
-            this._snapRenderer.destroy();
-            this._snapRenderer = null;
-        }
-    }
-
-    get colorRenderer() {
-        if (!this._colorRenderer) {
-            this._colorRenderer = new VBOLinesColorRenderer(this._scene, this._instancing);
-        }
-        return this._colorRenderer;
-    }
-
-    get silhouetteRenderer() {
-        if (!this._silhouetteRenderer) {
-            this._silhouetteRenderer = new VBOLinesSilhouetteRenderer(this._scene, this._instancing);
-        }
-        return this._silhouetteRenderer;
-    }
-
-    get snapInitRenderer() {
-        if (!this._snapInitRenderer) {
-            this._snapInitRenderer = new VBOLinesSnapRenderer(this._scene, this._instancing, true);
-        }
-        return this._snapInitRenderer;
-    }
-
-    get snapRenderer() {
-        if (!this._snapRenderer) {
-            this._snapRenderer = new VBOLinesSnapRenderer(this._scene, this._instancing, false);
-        }
-        return this._snapRenderer;
-    }
-
-    _destroy() {
-        if (this._colorRenderer) {
-            this._colorRenderer.destroy();
-        }
-        if (this._silhouetteRenderer) {
-            this._silhouetteRenderer.destroy();
-        }
-        if (this._snapInitRenderer) {
-            this._snapInitRenderer.destroy();
-        }
-        if (this._snapRenderer) {
-            this._snapRenderer.destroy();
-        }
-    }
-}
-
 const cachedRenderers = { batching: { }, instancing: { } };
 
 /**
  * @private
  */
 export function getLinesRenderers(scene, instancing) {
-    const sceneId = scene.id;
     const cache = cachedRenderers[instancing ? "instancing" : "batching"];
+    const sceneId = scene.id;
     if (! (sceneId in cache)) {
-        const renderers = new VBOLinesRenderers(scene, instancing);
-        cache[sceneId] = renderers;
-        renderers._compile();
-        scene.on("compile", () => {
-            renderers._compile();
-        });
+        const sceneCache = { };
+
+        const cached = function(progMode, instantiate) {
+            if (! (progMode in sceneCache)) {
+                sceneCache[progMode] = instantiate();
+            }
+            return sceneCache[progMode];
+        };
+
+        cache[sceneId] = {
+            get colorRenderer()      { return cached("colorMode",      () => new VBOLinesColorRenderer     (scene, instancing       )); },
+            get silhouetteRenderer() { return cached("silhouetteMode", () => new VBOLinesSilhouetteRenderer(scene, instancing       )); },
+            get snapInitRenderer()   { return cached("snapInitMode",   () => new VBOLinesSnapRenderer      (scene, instancing, true )); },
+            get snapRenderer()       { return cached("snapMode",       () => new VBOLinesSnapRenderer      (scene, instancing, false)); }
+        };
+
+        const compile = function() {
+            for (let [progMode, renderer] of Object.entries(sceneCache)) {
+                if (! renderer.getValid()) {
+                    renderer.destroy();
+                    delete sceneCache[progMode];
+                }
+            }
+        };
+
+        compile();
+        scene.on("compile", compile);
         scene.on("destroyed", () => {
             delete cache[sceneId];
-            renderers._destroy();
+            for (let [progMode, renderer] of Object.entries(sceneCache)) {
+                renderer.destroy();
+                delete sceneCache[progMode];
+            }
         });
     }
     return cache[sceneId];
