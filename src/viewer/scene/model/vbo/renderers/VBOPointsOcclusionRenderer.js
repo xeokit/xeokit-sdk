@@ -1,4 +1,4 @@
-import {VBORenderer} from "../../../VBORenderer.js";
+import {VBORenderer} from "../VBORenderer.js";
 
 // Logarithmic depth buffer involves an accuracy tradeoff, sacrificing
 // accuracy at close range to improve accuracy at long range. This can
@@ -9,28 +9,35 @@ const ENABLE_LOG_DEPTH_BUF = false;
 /**
  * @private
  */
-class VBOBatchingPointsOcclusionRenderer extends VBORenderer {
+export class VBOPointsOcclusionRenderer extends VBORenderer {
 
-    constructor(scene) {
-        super(scene, false, { instancing: false, primType: "pointType", progMode: "occlusionMode", hashPointsMaterial: true });
+    constructor(scene, instancing) {
+        super(scene, false, { instancing: instancing, primType: "pointType", progMode: "occlusionMode", hashPointsMaterial: true });
     }
 
     _buildVertexShader() {
         const scene = this._scene;
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
-        const pointsMaterial = scene.pointsMaterial._state;
         const src = [];
         src.push('#version 300 es');
-        src.push("// Points batching occlusion vertex shader");
+        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " vertex shader");
         src.push("uniform int renderPass;");
         src.push("in vec3 position;");
+        src.push("in vec4 color;");
+        src.push("in float flags;");
         if (scene.entityOffsetsEnabled) {
             src.push("in vec3 offset;");
         }
-        src.push("in float flags;");
+
+        if (this._instancing) {
+            src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
+            src.push("in vec4 modelMatrixCol1;");
+            src.push("in vec4 modelMatrixCol2;");
+        }
 
         this._addMatricesUniformBlockLines(src);
 
+        const pointsMaterial = scene.pointsMaterial._state;
         src.push("uniform float pointSize;");
         if (pointsMaterial.perspectivePoints) {
             src.push("uniform float nearPlaneHeight;");
@@ -44,26 +51,28 @@ class VBOBatchingPointsOcclusionRenderer extends VBORenderer {
             src.push("out vec4 vWorldPosition;");
             src.push("out float vFlags;");
         }
-        src.push("void main(void) {");
 
+        src.push("void main(void) {");
         // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
         // renderPass = COLOR_OPAQUE
         // Only opaque objects can be occluders
-
         src.push(`int colorFlag = int(flags) & 0xF;`);
         src.push(`if (colorFlag != renderPass) {`);
         src.push("      gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
-
-        src.push("  } else {");
-        src.push("      vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
+        src.push("} else {");
+        if (this._instancing) {
+            src.push("  vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
+            src.push("  worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
+        } else {
+            src.push("  vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
+        }
         if (scene.entityOffsetsEnabled) {
             src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
         }
-
-        src.push("      vec4 viewPosition  = viewMatrix * worldPosition; ");
+        src.push("  vec4 viewPosition  = viewMatrix * worldPosition; ");
         if (clipping) {
-            src.push("      vWorldPosition = worldPosition;");
-            src.push("      vFlags = flags;");
+            src.push("vWorldPosition = worldPosition;");
+            src.push("vFlags = flags;");
         }
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (ENABLE_LOG_DEPTH_BUF && scene.logarithmicDepthBufferEnabled) {
@@ -77,7 +86,7 @@ class VBOBatchingPointsOcclusionRenderer extends VBORenderer {
         } else {
             src.push("gl_PointSize = pointSize;");
         }
-        src.push("  }");
+        src.push("}");
         src.push("}");
         return src;
     }
@@ -88,7 +97,7 @@ class VBOBatchingPointsOcclusionRenderer extends VBORenderer {
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push('#version 300 es');
-        src.push("// Points batching occlusion fragment shader");
+        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -138,5 +147,3 @@ class VBOBatchingPointsOcclusionRenderer extends VBORenderer {
         return src;
     }
 }
-
-export {VBOBatchingPointsOcclusionRenderer};
