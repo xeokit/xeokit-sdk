@@ -1,35 +1,35 @@
-import {VBORenderer} from "../../../VBORenderer.js";
+import {VBORenderer} from "../VBORenderer.js";
 
 /**
- * Renders InstancingLayer fragment depths to a shadow map.
- *
  * @private
  */
-export class VBOInstancingPointsShadowRenderer extends VBORenderer {
+export class VBOPointsShadowRenderer extends VBORenderer {
 
-    constructor(scene) {
-        super(scene, false, { instancing: true, primType: "pointType", progMode: "shadowMode", hashPointsMaterial: true });
+    constructor(scene, instancing) {
+        // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
+        // but never used (and probably not maintained), as opposed to VBOInstancingPointsShadowRenderer in the same commit
+        super(scene, false, { instancing: instancing, primType: "pointType", progMode: "shadowMode", hashPointsMaterial: true });
     }
 
     _buildVertexShader() {
         const scene = this._scene;
-        const sectionPlanesState = scene._sectionPlanesState;
-        const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
+        const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const pointsMaterial = scene.pointsMaterial._state;
         const src = [];
-        src.push ('#version 300 es');
-        src.push("// Instancing geometry shadow drawing vertex shader");
+        src.push('#version 300 es');
+        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " vertex shader");
         src.push("in vec3 position;");
+        src.push("in vec4 color;");
+        src.push("in float flags;");
         if (scene.entityOffsetsEnabled) {
             src.push("in vec3 offset;");
         }
-        src.push("in vec4 color;");
-        src.push("in float flags;");
-        src.push("in vec4 modelMatrixCol0;");
-        src.push("in vec4 modelMatrixCol1;");
-        src.push("in vec4 modelMatrixCol2;");
-        src.push("uniform mat4 shadowViewMatrix;");
-        src.push("uniform mat4 shadowProjMatrix;");
+
+        if (this._instancing) {
+            src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
+            src.push("in vec4 modelMatrixCol1;");
+            src.push("in vec4 modelMatrixCol2;");
+        }
 
         this._addMatricesUniformBlockLines(src);
 
@@ -37,29 +37,40 @@ export class VBOInstancingPointsShadowRenderer extends VBORenderer {
         if (pointsMaterial.perspectivePoints) {
             src.push("uniform float nearPlaneHeight;");
         }
+
+        src.push("uniform mat4 shadowProjMatrix;");
+        if (this._instancing) {
+            src.push("uniform mat4 shadowViewMatrix;");
+        } else {
+            src.push("uniform mat4 positionsDecodeMatrix;");
+        }
+
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
             src.push("out float vFlags;");
         }
         src.push("void main(void) {");
-        src.push("int colorFlag     = int(flags) & 0xF;");
-        src.push("bool visible      = (colorFlag > 0);");
-        src.push("bool transparent  = ((float(color.a) / 255.0) < 1.0);");
-        src.push(`if (!visible || transparent) {`);
-        src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
+        src.push(`int colorFlag = int(flags) & 0xF;`);
+        src.push("bool visible = (colorFlag > 0);");
+        src.push("bool transparent = ((float(color.a) / 255.0) < 1.0);");
+        src.push("if (!visible || transparent) {");
+        src.push("    gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
         src.push("} else {");
-        src.push("  vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0); ");
-        src.push("  worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
-        if (scene.entityOffsetsEnabled) {
-            src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
+        if (this._instancing) {
+            src.push("vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0);");
+            src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
+        } else {
+            src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0));");
         }
-        src.push("  vec4 viewPosition  = shadowViewMatrix * worldPosition; ");
-
+        if (scene.entityOffsetsEnabled) {
+            src.push("worldPosition.xyz = worldPosition.xyz + offset;");
+        }
+        src.push("vec4 viewPosition  = shadowViewMatrix * worldPosition;");
         if (clipping) {
             src.push("vWorldPosition = worldPosition;");
             src.push("vFlags = flags;");
         }
-        src.push("  gl_Position = shadowProjMatrix * viewPosition;");
+        src.push("gl_Position = shadowProjMatrix * viewPosition;");
         src.push("}");
         if (pointsMaterial.perspectivePoints) {
             src.push("gl_PointSize = (nearPlaneHeight * pointSize) / gl_Position.w;");
@@ -77,9 +88,8 @@ export class VBOInstancingPointsShadowRenderer extends VBORenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
-        src.push ('#version 300 es');
-        src.push("// Instancing geometry depth drawing fragment shader");
-
+        src.push('#version 300 es');
+        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -87,7 +97,7 @@ export class VBOInstancingPointsShadowRenderer extends VBORenderer {
         src.push("precision mediump float;");
         src.push("precision mediump int;");
         src.push("#endif");
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (this._instancing && scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
             src.push("in float vFragDepth;");
         }
@@ -100,7 +110,6 @@ export class VBOInstancingPointsShadowRenderer extends VBORenderer {
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
-
         src.push("vec4 encodeFloat( const in float v ) {");
         src.push("  const vec4 bitShift = vec4(256 * 256 * 256, 256 * 256, 256, 1.0);");
         src.push("  const vec4 bitMask = vec4(0, 1.0 / 256.0, 1.0 / 256.0, 1.0 / 256.0);");
@@ -126,13 +135,13 @@ export class VBOInstancingPointsShadowRenderer extends VBORenderer {
                 src.push("   dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
                 src.push("}");
             }
-            src.push("if (dist > 0.0) { discard; }");
+            src.push("  if (dist > 0.0) { discard; }");
             src.push("}");
         }
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (this._instancing && scene.logarithmicDepthBufferEnabled) {
             src.push("gl_FragDepth = log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
-        src.push("    outColor = encodeFloat( gl_FragCoord.z); ");
+        src.push("outColor = encodeFloat(gl_FragCoord.z);");
         src.push("}");
         return src;
     }
