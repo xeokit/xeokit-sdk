@@ -1,4 +1,4 @@
-import {VBOBatchingPointsColorRenderer} from "./VBOBatchingPointsColorRenderer.js";
+import {VBOPointsColorRenderer} from "../../../renderers/VBOPointsColorRenderer.js";
 import {VBOBatchingPointsSilhouetteRenderer} from "./VBOBatchingPointsSilhouetteRenderer.js";
 import {VBOBatchingPointsPickMeshRenderer} from "./VBOBatchingPointsPickMeshRenderer.js";
 import {VBOBatchingPointsPickDepthRenderer} from "./VBOBatchingPointsPickDepthRenderer.js";
@@ -47,7 +47,7 @@ class VBOBatchingPointsRenderers {
 
     get colorRenderer() {
         if (!this._colorRenderer) {
-            this._colorRenderer = new VBOBatchingPointsColorRenderer(this._scene);
+            this._colorRenderer = new VBOPointsColorRenderer(this._scene, false);
         }
         return this._colorRenderer;
     }
