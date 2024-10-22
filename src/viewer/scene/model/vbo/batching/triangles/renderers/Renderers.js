@@ -5,12 +5,12 @@ import {TrianglesSilhouetteRenderer} from "./TrianglesSilhouetteRenderer.js";
 import {VBOTrianglesEdgesRenderer} from "../../../renderers/VBOTrianglesEdgesRenderer.js";
 import {VBOTrianglesFlatColorRenderer} from "../../../renderers/VBOTrianglesFlatColorRenderer.js";
 import {VBOTrianglesOcclusionRenderer} from "../../../renderers/VBOTrianglesOcclusionRenderer.js";
-import {TrianglesShadowRenderer} from "./TrianglesShadowRenderer.js";
 import {VBOTrianglesPBRRenderer} from "../../../renderers/VBOTrianglesPBRRenderer.js";
 import {VBOTrianglesPickDepthRenderer} from "../../../renderers/VBOTrianglesPickDepthRenderer.js";
 import {VBOTrianglesPickMeshRenderer} from "../../../renderers/VBOTrianglesPickMeshRenderer.js";
 import {VBOTrianglesPickNormalsFlatRenderer} from "../../../renderers/VBOTrianglesPickNormalsFlatRenderer.js";
 import {VBOTrianglesPickNormalsRenderer} from "../../../renderers/VBOTrianglesPickNormalsRenderer.js";
+import {VBOTrianglesShadowRenderer} from "../../../renderers/VBOTrianglesShadowRenderer.js";
 import {TrianglesSnapRenderer} from "./TrianglesSnapRenderer.js";
 
 /**
@@ -266,7 +266,7 @@ class Renderers {
 
     get shadowRenderer() {
         if (!this._shadowRenderer) {
-            this._shadowRenderer = new TrianglesShadowRenderer(this._scene);
+            this._shadowRenderer = new VBOTrianglesShadowRenderer(this._scene, false);
         }
         return this._shadowRenderer;
     }
