@@ -29,27 +29,43 @@ const configs = new Configs();
 export class VBOBatchingTrianglesLayer {
 
     /**
-     * @param model
+     * @param cfg
      * @param cfg.model
-     * @param cfg.autoNormals
      * @param cfg.layerIndex
+     * @param cfg.primitive
      * @param cfg.positionsDecodeMatrix
-     * @param cfg.uvDecodeMatrix
      * @param cfg.maxGeometryBatchSize
      * @param cfg.origin
      * @param cfg.scratchMemory
-     * @param cfg.textureSet
      * @param cfg.solid
+     * @param cfg.autoNormals
+     * @param cfg.uvDecodeMatrix
+     * @param cfg.textureSet
      */
     constructor(cfg) {
-
-     //   console.info("Creating VBOBatchingTrianglesLayer");
 
         /**
          * Owner model
          * @type {VBOSceneModel}
          */
         this.model = cfg.model;
+
+        /**
+         * Index of this Layer in {@link VBOSceneModel#_layerList}.
+         * @type {Number}
+         */
+        this.layerIndex = cfg.layerIndex;
+
+        /**
+         * The type of primitives in this layer.
+         */
+        this.primitive = cfg.primitive;
+
+        /**
+         * When true, this layer contains solid triangle meshes, otherwise this layer contains surface triangle meshes
+         * @type {boolean}
+         */
+        this.solid = !!cfg.solid;
 
         /**
          * State sorting key.
@@ -64,41 +80,36 @@ export class VBOBatchingTrianglesLayer {
             + (cfg.textureSet && cfg.textureSet.colorTexture ? "-colorTexture" : "")
             + (cfg.textureSet && cfg.textureSet.metallicRoughnessTexture ? "-metallicRoughnessTexture" : "");
 
-        /**
-         * Index of this TrianglesBatchingLayer in {@link VBOSceneModel#_layerList}.
-         * @type {Number}
-         */
-        this.layerIndex = cfg.layerIndex;
-
         this._renderers = getTrianglesRenderers(cfg.model.scene, false);
-        const maxBatchSize = cfg.maxGeometryBatchSize ?? configs.maxGeometryBatchSize;
+
+        const maxGeometryBatchSize = cfg.maxGeometryBatchSize ?? configs.maxGeometryBatchSize;
         this._buffer = {
-            maxVerts:          maxBatchSize,
-            maxIndices:        maxBatchSize * 3, // Rough rule-of-thumb
+            maxVerts:          maxGeometryBatchSize,
+            maxIndices:        maxGeometryBatchSize * 3, // Rough rule-of-thumb
             positions:         [],
             colors:            [],
+            offsets:           [],
+            indices:           [],
             uv:                [],
             metallicRoughness: [],
             normals:           [],
             pickColors:        [],
-            offsets:           [],
-            indices:           [],
             edgeIndices:       []
         };
         this._scratchMemory = cfg.scratchMemory;
 
         this._state = new RenderState({
-            origin: math.vec3(),
+            origin: cfg.origin ? math.vec3(cfg.origin) : math.vec3(),
             positionsBuf: null,
-            offsetsBuf: null,
-            normalsBuf: null,
             colorsBuf: null,
+            offsetsBuf: null,
+            indicesBuf: null,
+            flagsBuf: null,
+            positionsDecodeMatrix: cfg.positionsDecodeMatrix ? math.mat4(cfg.positionsDecodeMatrix) : null,
             uvBuf: null,
             metallicRoughnessBuf: null,
-            flagsBuf: null,
-            indicesBuf: null,
+            normalsBuf: null,
             edgeIndicesBuf: null,
-            positionsDecodeMatrix: cfg.positionsDecodeMatrix ? math.mat4(cfg.positionsDecodeMatrix) : null,
             uvDecodeMatrix: cfg.uvDecodeMatrix ? math.mat3(cfg.uvDecodeMatrix) : null,
             textureSet: cfg.textureSet,
             pbrSupported: false // Set in #finalize if we have enough to support quality rendering
@@ -125,17 +136,6 @@ export class VBOBatchingTrianglesLayer {
         this.aabbDirty = true;
 
         this._finalized = false;
-
-        /**
-         * When true, this layer contains solid triangle meshes, otherwise this layer contains surface triangle meshes
-         * @type {boolean}
-         */
-        this.solid = !!cfg.solid;
-
-        /**
-         * The type of primitives in this layer.
-         */
-        this.primitive = cfg.primitive;
     }
 
     get aabb() {
@@ -150,7 +150,7 @@ export class VBOBatchingTrianglesLayer {
     }
 
     /**
-     * Tests if there is room for another portion in this TrianglesBatchingLayer.
+     * Tests if there is room for another portion in this Layer.
      *
      * @param lenPositions Number of positions we'd like to create in the portion.
      * @param lenIndices Number of indices we'd like to create in this portion.
@@ -164,27 +164,27 @@ export class VBOBatchingTrianglesLayer {
     }
 
     /**
-     * Creates a new portion within this TrianglesBatchingLayer, returns the new portion ID.
+     * Creates a new portion within this Layer, returns the new portion ID.
      *
      * Gives the portion the specified geometry, color and matrix.
      *
      * @param mesh The SceneModelMesh that owns the portion
      * @param cfg.positions Flat float Local-space positions array.
-     * @param cfg.positionsCompressed Flat quantized positions array - decompressed with TrianglesBatchingLayer positionsDecodeMatrix
+     * @param cfg.positionsCompressed Flat quantized positions array - decompressed with positionsDecodeMatrix
+     * @param cfg.indices  Flat int indices array.
+     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]
+     * @param cfg.opacity Opacity [0..255]
+     * @param cfg.aabb Flat float AABB World-space AABB
+     * @param cfg.pickColor Quantized pick color
      * @param [cfg.normals] Flat float normals array.
      * @param [cfg.uv] Flat UVs array.
      * @param [cfg.uvCompressed]
      * @param [cfg.colors] Flat float colors array.
      * @param [cfg.colorsCompressed]
-     * @param cfg.indices  Flat int indices array.
      * @param [cfg.edgeIndices] Flat int edges indices array.
-     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]
      * @param cfg.metallic Metalness factor [0..255]
      * @param cfg.roughness Roughness factor [0..255]
-     * @param cfg.opacity Opacity [0..255]
      * @param [cfg.meshMatrix] Flat float 4x4 matrix
-     * @param cfg.aabb Flat float AABB World-space AABB
-     * @param cfg.pickColor Quantized pick color
      * @returns {number} Portion ID
      */
     createPortion(mesh, cfg) {
@@ -195,20 +195,20 @@ export class VBOBatchingTrianglesLayer {
 
         const positions = cfg.positions;
         const positionsCompressed = cfg.positionsCompressed;
+        const indices = cfg.indices;
+        const color = cfg.color;
+        const opacity = cfg.opacity;
+        const pickColor = cfg.pickColor;
         const normals = cfg.normals;
         const normalsCompressed = cfg.normalsCompressed;
         const uv = cfg.uv;
         const uvCompressed = cfg.uvCompressed;
         const colors = cfg.colors;
         const colorsCompressed = cfg.colorsCompressed;
-        const indices = cfg.indices;
         const edgeIndices = cfg.edgeIndices;
-        const color = cfg.color;
         const metallic = cfg.metallic;
         const roughness = cfg.roughness;
-        const opacity = cfg.opacity;
         const meshMatrix = cfg.meshMatrix;
-        const pickColor = cfg.pickColor;
 
         const scene = this.model.scene;
         const buffer = this._buffer;
@@ -235,6 +235,21 @@ export class VBOBatchingTrianglesLayer {
                 buffer.positions.push(positions[i]);
             }
         }
+
+        if (indices) {
+            for (let i = 0, len = indices.length; i < len; i++) {
+                buffer.indices.push(vertsBaseIndex + indices[i]);
+            }
+        }
+
+        if (scene.entityOffsetsEnabled) {
+            for (let i = 0; i < numVerts; i++) {
+                buffer.offsets.push(0);
+                buffer.offsets.push(0);
+                buffer.offsets.push(0);
+            }
+        }
+
 
         if (normalsCompressed && normalsCompressed.length > 0) {
             for (let i = 0, len = normalsCompressed.length; i < len; i++) {
@@ -293,11 +308,6 @@ export class VBOBatchingTrianglesLayer {
             }
         }
 
-        for (let i = 0, len = indices.length; i < len; i++) {
-            buffer.indices.push(vertsBaseIndex + indices[i]);
-        }
-
-
         if (edgeIndices) {
             for (let i = 0, len = edgeIndices.length; i < len; i++) {
                 buffer.edgeIndices.push(vertsBaseIndex + edgeIndices[i]);
@@ -312,14 +322,6 @@ export class VBOBatchingTrianglesLayer {
                 buffer.pickColors.push(pickColor[1]);
                 buffer.pickColors.push(pickColor[2]);
                 buffer.pickColors.push(pickColor[3]);
-            }
-        }
-
-        if (scene.entityOffsetsEnabled) {
-            for (let i = 0; i < numVerts; i++) {
-                buffer.offsets.push(0);
-                buffer.offsets.push(0);
-                buffer.offsets.push(0);
             }
         }
 
@@ -343,7 +345,7 @@ export class VBOBatchingTrianglesLayer {
         this._portions.push(portion);
         this._numPortions++;
         this.model.numPortions++;
-        this._numVerts += portion.numVerts;
+        this._numVerts += numVerts;
         this._meshes.push(mesh);
         return portionId;
     }
@@ -363,9 +365,9 @@ export class VBOBatchingTrianglesLayer {
         const buffer = this._buffer;
 
         if (buffer.positions.length > 0) {
-            const quantizedPositions = (this._state.positionsDecodeMatrix)
-                ? new Uint16Array(buffer.positions)
-                : quantizePositions(buffer.positions, this._modelAABB, this._state.positionsDecodeMatrix = math.mat4()); // BOTTLENECK
+            const quantizedPositions = state.positionsDecodeMatrix
+                  ? new Uint16Array(buffer.positions)
+                  : quantizePositions(buffer.positions, this._modelAABB, state.positionsDecodeMatrix = math.mat4()); // BOTTLENECK
             state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, quantizedPositions.length, 3, gl.STATIC_DRAW);
             if (this.model.scene.readableGeometryEnabled) {
                 for (let i = 0, numPortions = this._portions.length; i < numPortions; i++) {
@@ -377,16 +379,35 @@ export class VBOBatchingTrianglesLayer {
             }
         }
 
-        if (buffer.normals.length > 0) { // Normals are already oct-encoded
-            const normals = new Int8Array(buffer.normals);
-            let normalized = true; // For oct encoded UInts
-            state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, normals, buffer.normals.length, 3, gl.STATIC_DRAW, normalized);
+        if (buffer.positions.length > 0) { // Because we build flags arrays here, get their length from the positions array
+            const flagsLength = buffer.positions.length / 3;
+            const flags = new Float32Array(flagsLength);
+            const notNormalized = false;
+            state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, flags, flags.length, 1, gl.DYNAMIC_DRAW, notNormalized);
         }
 
         if (buffer.colors.length > 0) { // Colors are already compressed
             const colors = new Uint8Array(buffer.colors);
             let normalized = false;
             state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colors, buffer.colors.length, 4, gl.DYNAMIC_DRAW, normalized);
+        }
+
+        if (this.model.scene.entityOffsetsEnabled) {
+            if (buffer.offsets.length > 0) {
+                const offsets = new Float32Array(buffer.offsets);
+                state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, offsets, buffer.offsets.length, 3, gl.DYNAMIC_DRAW);
+            }
+        }
+
+        if (buffer.indices.length > 0) {
+            const indices = new Uint32Array(buffer.indices);
+            state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, indices, buffer.indices.length, 1, gl.STATIC_DRAW);
+        }
+
+        if (buffer.normals.length > 0) { // Normals are already oct-encoded
+            const normals = new Int8Array(buffer.normals);
+            let normalized = true; // For oct encoded UInts
+            state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, normals, buffer.normals.length, 3, gl.STATIC_DRAW, normalized);
         }
 
         if (buffer.uv.length > 0) {
@@ -409,30 +430,12 @@ export class VBOBatchingTrianglesLayer {
             state.metallicRoughnessBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, metallicRoughness, buffer.metallicRoughness.length, 2, gl.STATIC_DRAW, normalized);
         }
 
-        if (buffer.positions.length > 0) { // Because we build flags arrays here, get their length from the positions array
-            const flagsLength = (buffer.positions.length / 3);
-            const flags = new Float32Array(flagsLength);
-            const notNormalized = false;
-            state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, flags, flags.length, 1, gl.DYNAMIC_DRAW, notNormalized);
-        }
-
         if (buffer.pickColors.length > 0) {
             const pickColors = new Uint8Array(buffer.pickColors);
             let normalized = false;
             state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, pickColors, buffer.pickColors.length, 4, gl.STATIC_DRAW, normalized);
         }
 
-        if (this.model.scene.entityOffsetsEnabled) {
-            if (buffer.offsets.length > 0) {
-                const offsets = new Float32Array(buffer.offsets);
-                state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, offsets, buffer.offsets.length, 3, gl.DYNAMIC_DRAW);
-            }
-        }
-
-        if (buffer.indices.length > 0) {
-            const indices = new Uint32Array(buffer.indices);
-            state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, indices, buffer.indices.length, 1, gl.STATIC_DRAW);
-        }
         if (buffer.edgeIndices.length > 0) {
             const edgeIndices = new Uint32Array(buffer.edgeIndices);
             state.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, edgeIndices, buffer.edgeIndices.length, 1, gl.STATIC_DRAW);
@@ -1130,29 +1133,29 @@ export class VBOBatchingTrianglesLayer {
             state.offsetsBuf.destroy();
             state.offsetsBuf = null;
         }
-        if (state.normalsBuf) {
-            state.normalsBuf.destroy();
-            state.normalsBuf = null;
-        }
         if (state.colorsBuf) {
             state.colorsBuf.destroy();
             state.colorsBuf = null;
-        }
-        if (state.metallicRoughnessBuf) {
-            state.metallicRoughnessBuf.destroy();
-            state.metallicRoughnessBuf = null;
         }
         if (state.flagsBuf) {
             state.flagsBuf.destroy();
             state.flagsBuf = null;
         }
-        if (state.pickColorsBuf) {
-            state.pickColorsBuf.destroy();
-            state.pickColorsBuf = null;
-        }
         if (state.indicesBuf) {
             state.indicesBuf.destroy();
             state.indicesBuf = null;
+        }
+        if (state.normalsBuf) {
+            state.normalsBuf.destroy();
+            state.normalsBuf = null;
+        }
+        if (state.metallicRoughnessBuf) {
+            state.metallicRoughnessBuf.destroy();
+            state.metallicRoughnessBuf = null;
+        }
+        if (state.pickColorsBuf) {
+            state.pickColorsBuf.destroy();
+            state.pickColorsBuf = null;
         }
         if (state.edgeIndicesBuf) {
             state.edgeIndicesBuf.destroy();
@@ -1161,5 +1164,3 @@ export class VBOBatchingTrianglesLayer {
         state.destroy();
     }
 }
-
-
