@@ -83,9 +83,6 @@ export class VBOInstancingPointsLayer {
         this._numPickableLayerPortions = 0;
         this._numCulledLayerPortions = 0;
 
-        /** @private */
-        this.numIndices = cfg.geometry.numIndices;
-
         // Per-instance arrays
         this._pickColors = [];
         this._offsets = [];
