@@ -11,7 +11,7 @@ import {VBOTrianglesPickNormalsFlatRenderer} from "../../../renderers/VBOTriangl
 import {VBOTrianglesPickNormalsRenderer} from "../../../renderers/VBOTrianglesPickNormalsRenderer.js";
 import {VBOTrianglesShadowRenderer} from "../../../renderers/VBOTrianglesShadowRenderer.js";
 import {VBOTrianglesSilhouetteRenderer} from "../../../renderers/VBOTrianglesSilhouetteRenderer.js";
-import {TrianglesSnapRenderer} from "./TrianglesSnapRenderer.js";
+import {VBOTrianglesSnapRenderer} from "../../../renderers/VBOTrianglesSnapRenderer.js";
 
 /**
  * @private
@@ -270,14 +270,14 @@ class Renderers {
 
     get snapRenderer() {
         if (!this._snapRenderer) {
-            this._snapRenderer = new TrianglesSnapRenderer(this._scene, false);
+            this._snapRenderer = new VBOTrianglesSnapRenderer(this._scene, true, false);
         }
         return this._snapRenderer;
     }
 
     get snapInitRenderer() {
         if (!this._snapInitRenderer) {
-            this._snapInitRenderer = new TrianglesSnapRenderer(this._scene, true);
+            this._snapInitRenderer = new VBOTrianglesSnapRenderer(this._scene, true, true);
         }
         return this._snapInitRenderer;
     }
