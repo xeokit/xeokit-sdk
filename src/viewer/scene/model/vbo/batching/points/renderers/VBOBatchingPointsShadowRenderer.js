@@ -29,7 +29,6 @@ export class VBOBatchingPointsShadowRenderer extends VBOBatchingPointsRenderer {
             src.push("out vec4 vWorldPosition;");
             src.push("out float vFlags;");
         }
-        src.push("out vec4 vViewPosition;");
         src.push("void main(void) {");
         src.push("  int colorFlag       = int(flags) & 0xF;");
         src.push("  bool visible        = (colorFlag > 0);");
@@ -46,7 +45,6 @@ export class VBOBatchingPointsShadowRenderer extends VBOBatchingPointsRenderer {
             src.push("      vWorldPosition = worldPosition;");
             src.push("      vFlags = flags;");
         }
-        src.push("      vViewPosition = viewPosition;");
         src.push("      gl_Position = shadowProjMatrix * viewPosition;");
         src.push("  }");
         src.push("}");
@@ -76,7 +74,6 @@ export class VBOBatchingPointsShadowRenderer extends VBOBatchingPointsRenderer {
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
-        src.push("in vec4 vViewPosition;");
 
         src.push("vec4 encodeFloat( const in float v ) {");
         src.push("  const vec4 bitShift = vec4(256 * 256 * 256, 256 * 256, 256, 1.0);");
