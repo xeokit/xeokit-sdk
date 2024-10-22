@@ -107,7 +107,7 @@ export declare interface ITreeViewRenderService {
    * @param nodeId {String} The node id.
    * @param checked {Boolean} Whether the node is checked.
    */
-  setCheckbox(nodeId: string, checked: boolean): void;
+  setCheckbox(nodeId: string, checked: boolean, indeterminate: boolean): void;
 
   /**
    * Sets the node's xrayed state.
