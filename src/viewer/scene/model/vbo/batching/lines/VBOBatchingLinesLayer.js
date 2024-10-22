@@ -53,7 +53,7 @@ export class VBOBatchingLinesLayer {
             colorsBuf: null,
             flagsBuf: null,
             indicesBuf: null,
-            positionsDecodeMatrix: math.mat4(),
+            positionsDecodeMatrix: cfg.positionsDecodeMatrix ? math.mat4(cfg.positionsDecodeMatrix) : null,
             origin: null
         });
 
@@ -78,13 +78,6 @@ export class VBOBatchingLinesLayer {
         this.aabbDirty = true;
 
         this._finalized = false;
-
-        if (cfg.positionsDecodeMatrix) {
-            this._state.positionsDecodeMatrix.set(cfg.positionsDecodeMatrix);
-            this._preCompressedPositionsExpected = true;
-        } else {
-            this._preCompressedPositionsExpected = false;
-        }
 
         if (cfg.origin) {
             this._state.origin = math.vec3(cfg.origin);
@@ -157,7 +150,7 @@ export class VBOBatchingLinesLayer {
 
         math.expandAABB3(this._modelAABB, cfg.aabb);
 
-        if (this._preCompressedPositionsExpected) {
+        if (this._state.positionsDecodeMatrix) {
             if (!positionsCompressed) {
                 throw "positionsCompressed expected";
             }
@@ -234,12 +227,12 @@ export class VBOBatchingLinesLayer {
         const buffer = this._buffer;
 
         if (buffer.positions.length > 0) {
-            if (this._preCompressedPositionsExpected) {
+            if (state.positionsDecodeMatrix) {
                 const positions = new Uint16Array(buffer.positions);
                 state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, positions, buffer.positions.length, 3, gl.STATIC_DRAW);
             } else {
                 const positions = new Float32Array(buffer.positions);
-                const quantizedPositions = quantizePositions(positions, this._modelAABB, state.positionsDecodeMatrix);
+                const quantizedPositions = quantizePositions(positions, this._modelAABB, state.positionsDecodeMatrix = math.mat4());
                 state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, buffer.positions.length, 3, gl.STATIC_DRAW);
             }
         }
