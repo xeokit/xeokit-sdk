@@ -85,9 +85,6 @@ class VBOInstancingLinesLayer {
         this._numPickableLayerPortions = 0;
         this._numCulledLayerPortions = 0;
 
-        /** @private */
-        this.numIndices = cfg.geometry.numIndices;
-
         // Vertex arrays
         this._colors = [];
         this._offsets = [];
@@ -232,7 +229,6 @@ class VBOInstancingLinesLayer {
         }
         if (geometry.indices && geometry.indices.length > 0) {
             state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(geometry.indices), geometry.indices.length, 1, gl.STATIC_DRAW);
-            state.numIndices = geometry.indices.length;
         }
         if (this._modelMatrixCol0.length > 0) {
             const normalized = false;
