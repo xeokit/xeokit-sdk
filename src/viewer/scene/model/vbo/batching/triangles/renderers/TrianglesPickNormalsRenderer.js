@@ -47,7 +47,6 @@ export class TrianglesPickNormalsRenderer extends TrianglesBatchingRenderer {
             src.push("out float vFlags;");
         }
         src.push("out vec3 vWorldNormal;");
-        src.push("out vec4 outColor;");
         src.push("void main(void) {");
         // pickFlag = NOT_RENDERED | PICK
         // renderPass = PICK
