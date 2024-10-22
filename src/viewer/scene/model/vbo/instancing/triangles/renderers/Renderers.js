@@ -4,13 +4,13 @@ import {VBOTrianglesDepthRenderer} from "../../../renderers/VBOTrianglesDepthRen
 import {TrianglesSilhouetteRenderer} from "./TrianglesSilhouetteRenderer.js";
 import {VBOTrianglesEdgesRenderer} from "../../../renderers/VBOTrianglesEdgesRenderer.js";
 import {VBOTrianglesFlatColorRenderer} from "../../../renderers/VBOTrianglesFlatColorRenderer.js";
-import {TrianglesPickNormalsRenderer} from "./TrianglesPickNormalsRenderer.js";
 import {VBOTrianglesOcclusionRenderer} from "../../../renderers/VBOTrianglesOcclusionRenderer.js";
 import {TrianglesShadowRenderer} from "./TrianglesShadowRenderer.js";
 import {VBOTrianglesPBRRenderer} from "../../../renderers/VBOTrianglesPBRRenderer.js";
 import {VBOTrianglesPickDepthRenderer} from "../../../renderers/VBOTrianglesPickDepthRenderer.js";
 import {VBOTrianglesPickMeshRenderer} from "../../../renderers/VBOTrianglesPickMeshRenderer.js";
 import {VBOTrianglesPickNormalsFlatRenderer} from "../../../renderers/VBOTrianglesPickNormalsFlatRenderer.js";
+import {VBOTrianglesPickNormalsRenderer} from "../../../renderers/VBOTrianglesPickNormalsRenderer.js";
 import {TrianglesSnapRenderer} from "./TrianglesSnapRenderer.js";
 
 /**
@@ -238,7 +238,7 @@ class Renderers {
 
     get pickNormalsRenderer() {
         if (!this._pickNormalsRenderer) {
-            this._pickNormalsRenderer = new TrianglesPickNormalsRenderer(this._scene);
+            this._pickNormalsRenderer = new VBOTrianglesPickNormalsRenderer(this._scene, true);
         }
         return this._pickNormalsRenderer;
     }
