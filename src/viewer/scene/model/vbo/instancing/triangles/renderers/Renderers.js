@@ -1,7 +1,6 @@
 import {VBOTrianglesColorRenderer} from "../../../renderers/VBOTrianglesColorRenderer.js";
 import {VBOTrianglesColorTextureRenderer} from "../../../renderers/VBOTrianglesColorTextureRenderer.js";
 import {VBOTrianglesDepthRenderer} from "../../../renderers/VBOTrianglesDepthRenderer.js";
-import {TrianglesSilhouetteRenderer} from "./TrianglesSilhouetteRenderer.js";
 import {VBOTrianglesEdgesRenderer} from "../../../renderers/VBOTrianglesEdgesRenderer.js";
 import {VBOTrianglesFlatColorRenderer} from "../../../renderers/VBOTrianglesFlatColorRenderer.js";
 import {VBOTrianglesOcclusionRenderer} from "../../../renderers/VBOTrianglesOcclusionRenderer.js";
@@ -11,6 +10,7 @@ import {VBOTrianglesPickMeshRenderer} from "../../../renderers/VBOTrianglesPickM
 import {VBOTrianglesPickNormalsFlatRenderer} from "../../../renderers/VBOTrianglesPickNormalsFlatRenderer.js";
 import {VBOTrianglesPickNormalsRenderer} from "../../../renderers/VBOTrianglesPickNormalsRenderer.js";
 import {VBOTrianglesShadowRenderer} from "../../../renderers/VBOTrianglesShadowRenderer.js";
+import {VBOTrianglesSilhouetteRenderer} from "../../../renderers/VBOTrianglesSilhouetteRenderer.js";
 import {TrianglesSnapRenderer} from "./TrianglesSnapRenderer.js";
 
 /**
@@ -118,14 +118,11 @@ class Renderers {
         // Pre-initialize certain renderers that would otherwise be lazy-initialised
         // on user interaction, such as picking or emphasis, so that there is no delay
         // when user first begins interacting with the viewer.
-
-        if (!this._silhouetteRenderer) { // Used for highlighting and selection
-            this._silhouetteRenderer = new TrianglesSilhouetteRenderer(this._scene);
-        }
         // Return to make sure the getter calls never get optimized away as incorrectly considered nonconsequential
         return [
             this.pickDepthRenderer,
             this.pickMeshRenderer,
+            this.silhouetteRenderer,
             this.snapInitRenderer,
             this.snapRenderer
         ];
@@ -203,7 +200,7 @@ class Renderers {
 
     get silhouetteRenderer() {
         if (!this._silhouetteRenderer) {
-            this._silhouetteRenderer = new TrianglesSilhouetteRenderer(this._scene);
+            this._silhouetteRenderer = new VBOTrianglesSilhouetteRenderer(this._scene, true);
         }
         return this._silhouetteRenderer;
     }
