@@ -5,7 +5,10 @@ import {math} from "../../../../math/math.js";
 import {RenderState} from "../../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
 import {getLinesRenderers} from "../../renderers/VBOLinesRenderers.js";
+import {Configs} from "../../../../../Configs.js";
 import {quantizePositions} from "../../../compression.js";
+
+const configs = new Configs();
 
 /**
  * @private
@@ -33,7 +36,7 @@ export class VBOBatchingLinesLayer {
 
         this._renderers = getLinesRenderers(cfg.model.scene, false);
         this.model = cfg.model;
-        const maxGeometryBatchSize = Math.min(5000000, cfg.maxGeometryBatchSize ?? 5000000);
+        const maxGeometryBatchSize = cfg.maxGeometryBatchSize ?? configs.maxGeometryBatchSize;
         this._buffer = {
             maxVerts:   maxGeometryBatchSize,
             maxIndices: maxGeometryBatchSize * 3, // Rough rule-of-thumb
