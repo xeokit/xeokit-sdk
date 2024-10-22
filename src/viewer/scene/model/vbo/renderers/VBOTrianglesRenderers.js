@@ -13,347 +13,6 @@ import {VBOTrianglesShadowRenderer} from "./VBOTrianglesShadowRenderer.js";
 import {VBOTrianglesSilhouetteRenderer} from "./VBOTrianglesSilhouetteRenderer.js";
 import {VBOTrianglesSnapRenderer} from "./VBOTrianglesSnapRenderer.js";
 
-
-/**
- * @private
- */
-class VBOTrianglesRenderers {
-
-    constructor(scene, instancing) {
-        this._scene = scene;
-        this._instancing = instancing;
-    }
-
-    _compile() {
-        if (this._colorRenderer && (!this._colorRenderer.getValid())) {
-            this._colorRenderer.destroy();
-            this._colorRenderer = null;
-        }
-        if (this._colorRendererWithSAO && (!this._colorRendererWithSAO.getValid())) {
-            this._colorRendererWithSAO.destroy();
-            this._colorRendererWithSAO = null;
-        }
-        if (this._flatColorRenderer && (!this._flatColorRenderer.getValid())) {
-            this._flatColorRenderer.destroy();
-            this._flatColorRenderer = null;
-        }
-        if (this._flatColorRendererWithSAO && (!this._flatColorRendererWithSAO.getValid())) {
-            this._flatColorRendererWithSAO.destroy();
-            this._flatColorRendererWithSAO = null;
-        }
-        if (this._colorTextureRenderer && (!this._colorTextureRenderer.getValid())) {
-            this._colorTextureRenderer.destroy();
-            this._colorTextureRenderer = null;
-        }
-        if (this._colorTextureRendererWithSAO && (!this._colorTextureRendererWithSAO.getValid())) {
-            this._colorTextureRendererWithSAO.destroy();
-            this._colorTextureRendererWithSAO = null;
-        }
-        if (this._colorTextureRendererAlphaCutoff && (!this._colorTextureRendererAlphaCutoff.getValid())) {
-            this._colorTextureRendererAlphaCutoff.destroy();
-            this._colorTextureRendererAlphaCutoff = null;
-        }
-        if (this._colorTextureRendererWithSAOAlphaCutoff && (!this._colorTextureRendererWithSAOAlphaCutoff.getValid())) {
-            this._colorTextureRendererWithSAOAlphaCutoff.destroy();
-            this._colorTextureRendererWithSAOAlphaCutoff = null;
-        }
-        if (this._pbrRenderer && (!this._pbrRenderer.getValid())) {
-            this._pbrRenderer.destroy();
-            this._pbrRenderer = null;
-        }
-        if (this._pbrRendererWithSAO && (!this._pbrRendererWithSAO.getValid())) {
-            this._pbrRendererWithSAO.destroy();
-            this._pbrRendererWithSAO = null;
-        }
-        if (this._depthRenderer && (!this._depthRenderer.getValid())) {
-            this._depthRenderer.destroy();
-            this._depthRenderer = null;
-        }
-        if (this._silhouetteRenderer && (!this._silhouetteRenderer.getValid())) {
-            this._silhouetteRenderer.destroy();
-            this._silhouetteRenderer = null;
-        }
-        if (this._edgesRenderer && (!this._edgesRenderer.getValid())) {
-            this._edgesRenderer.destroy();
-            this._edgesRenderer = null;
-        }
-        if (this._edgesColorRenderer && (!this._edgesColorRenderer.getValid())) {
-            this._edgesColorRenderer.destroy();
-            this._edgesColorRenderer = null;
-        }
-        if (this._pickMeshRenderer && (!this._pickMeshRenderer.getValid())) {
-            this._pickMeshRenderer.destroy();
-            this._pickMeshRenderer = null;
-        }
-        if (this._pickDepthRenderer && (!this._pickDepthRenderer.getValid())) {
-            this._pickDepthRenderer.destroy();
-            this._pickDepthRenderer = null;
-        }
-        if (this._pickNormalsRenderer && this._pickNormalsRenderer.getValid() === false) {
-            this._pickNormalsRenderer.destroy();
-            this._pickNormalsRenderer = null;
-        }
-        if (this._pickNormalsFlatRenderer && this._pickNormalsFlatRenderer.getValid() === false) {
-            this._pickNormalsFlatRenderer.destroy();
-            this._pickNormalsFlatRenderer = null;
-        }
-        if (this._occlusionRenderer && this._occlusionRenderer.getValid() === false) {
-            this._occlusionRenderer.destroy();
-            this._occlusionRenderer = null;
-        }
-        if (this._shadowRenderer && (!this._shadowRenderer.getValid())) {
-            this._shadowRenderer.destroy();
-            this._shadowRenderer = null;
-        }
-        if (this._snapInitRenderer && (!this._snapInitRenderer.getValid())) {
-            this._snapInitRenderer.destroy();
-            this._snapInitRenderer = null;
-        }
-        if (this._snapRenderer && (!this._snapRenderer.getValid())) {
-            this._snapRenderer.destroy();
-            this._snapRenderer = null;
-        }
-    }
-
-    eagerCreateRenders() {
-
-        // Pre-initialize certain renderers that would otherwise be lazy-initialised
-        // on user interaction, such as picking or emphasis, so that there is no delay
-        // when user first begins interacting with the viewer.
-        // Return to make sure the getter calls never get optimized away as incorrectly considered nonconsequential
-        return [
-            this.pickDepthRenderer,
-            this.pickMeshRenderer,
-            this.silhouetteRenderer,
-            this.snapInitRenderer,
-            this.snapRenderer
-        ];
-    }
-
-    get colorRenderer() {
-        if (!this._colorRenderer) {
-            this._colorRenderer = new VBOTrianglesColorRenderer(this._scene, this._instancing, false);
-        }
-        return this._colorRenderer;
-    }
-
-    get colorRendererWithSAO() {
-        if (!this._colorRendererWithSAO) {
-            this._colorRendererWithSAO = new VBOTrianglesColorRenderer(this._scene, this._instancing, true);
-        }
-        return this._colorRendererWithSAO;
-    }
-
-    get flatColorRenderer() {
-        if (!this._flatColorRenderer) {
-            this._flatColorRenderer = new VBOTrianglesFlatColorRenderer(this._scene, this._instancing, false);
-        }
-        return this._flatColorRenderer;
-    }
-
-    get flatColorRendererWithSAO() {
-        if (!this._flatColorRendererWithSAO) {
-            this._flatColorRendererWithSAO = new VBOTrianglesFlatColorRenderer(this._scene, this._instancing, true);
-        }
-        return this._flatColorRendererWithSAO;
-    }
-
-    get colorTextureRenderer() {
-        if (!this._colorTextureRenderer) {
-            this._colorTextureRenderer = new VBOTrianglesColorTextureRenderer(this._scene, this._instancing, false, false);
-        }
-        return this._colorTextureRenderer;
-    }
-
-    get colorTextureRendererWithSAO() {
-        if (!this._colorTextureRendererWithSAO) {
-            this._colorTextureRendererWithSAO = new VBOTrianglesColorTextureRenderer(this._scene, this._instancing, true, false);
-        }
-        return this._colorTextureRendererWithSAO;
-    }
-
-    get colorTextureRendererAlphaCutoff() {
-        if (!this._colorTextureRendererAlphaCutoff) {
-            this._colorTextureRendererAlphaCutoff = new VBOTrianglesColorTextureRenderer(this._scene, this._instancing, false, true);
-        }
-        return this._colorTextureRendererAlphaCutoff;
-    }
-
-    get colorTextureRendererWithSAOAlphaCutoff() {
-        if (!this._colorTextureRendererWithSAOAlphaCutoff) {
-            this._colorTextureRendererWithSAOAlphaCutoff = new VBOTrianglesColorTextureRenderer(this._scene, this._instancing, true, true);
-        }
-        return this._colorTextureRendererWithSAOAlphaCutoff;
-    }
-
-    get pbrRenderer() {
-        if (!this._pbrRenderer) {
-            this._pbrRenderer = new VBOTrianglesPBRRenderer(this._scene, this._instancing, false);
-        }
-        return this._pbrRenderer;
-    }
-
-    get pbrRendererWithSAO() {
-        if (!this._pbrRendererWithSAO) {
-            this._pbrRendererWithSAO = new VBOTrianglesPBRRenderer(this._scene, this._instancing, true);
-        }
-        return this._pbrRendererWithSAO;
-    }
-
-    get silhouetteRenderer() {
-        if (!this._silhouetteRenderer) {
-            this._silhouetteRenderer = new VBOTrianglesSilhouetteRenderer(this._scene, this._instancing);
-        }
-        return this._silhouetteRenderer;
-    }
-
-    get depthRenderer() {
-        if (!this._depthRenderer) {
-            this._depthRenderer = new VBOTrianglesDepthRenderer(this._scene, this._instancing);
-        }
-        return this._depthRenderer;
-    }
-
-    get edgesRenderer() {
-        if (!this._edgesRenderer) {
-            this._edgesRenderer = new VBOTrianglesEdgesRenderer(this._scene, this._instancing, true);
-        }
-        return this._edgesRenderer;
-    }
-
-    get edgesColorRenderer() {
-        if (!this._edgesColorRenderer) {
-            this._edgesColorRenderer = new VBOTrianglesEdgesRenderer(this._scene, this._instancing, false);
-        }
-        return this._edgesColorRenderer;
-    }
-
-    get pickMeshRenderer() {
-        if (!this._pickMeshRenderer) {
-            this._pickMeshRenderer = new VBOTrianglesPickMeshRenderer(this._scene, this._instancing);
-        }
-        return this._pickMeshRenderer;
-    }
-
-    get pickNormalsRenderer() {
-        if (!this._pickNormalsRenderer) {
-            this._pickNormalsRenderer = new VBOTrianglesPickNormalsRenderer(this._scene, this._instancing);
-        }
-        return this._pickNormalsRenderer;
-    }
-
-    get pickNormalsFlatRenderer() {
-        if (!this._pickNormalsFlatRenderer) {
-            this._pickNormalsFlatRenderer = new VBOTrianglesPickNormalsFlatRenderer(this._scene, this._instancing);
-        }
-        return this._pickNormalsFlatRenderer;
-    }
-
-    get pickDepthRenderer() {
-        if (!this._pickDepthRenderer) {
-            this._pickDepthRenderer = new VBOTrianglesPickDepthRenderer(this._scene, this._instancing);
-        }
-        return this._pickDepthRenderer;
-    }
-
-    get occlusionRenderer() {
-        if (!this._occlusionRenderer) {
-            this._occlusionRenderer = new VBOTrianglesOcclusionRenderer(this._scene, this._instancing);
-        }
-        return this._occlusionRenderer;
-    }
-
-    get shadowRenderer() {
-        if (!this._shadowRenderer) {
-            this._shadowRenderer = new VBOTrianglesShadowRenderer(this._scene, this._instancing);
-        }
-        return this._shadowRenderer;
-    }
-
-    get snapRenderer() {
-        if (!this._snapRenderer) {
-            this._snapRenderer = new VBOTrianglesSnapRenderer(this._scene, this._instancing, false);
-        }
-        return this._snapRenderer;
-    }
-
-    get snapInitRenderer() {
-        if (!this._snapInitRenderer) {
-            this._snapInitRenderer = new VBOTrianglesSnapRenderer(this._scene, this._instancing, true);
-        }
-        return this._snapInitRenderer;
-    }
-
-    _destroy() {
-        if (this._colorRenderer) {
-            this._colorRenderer.destroy();
-        }
-        if (this._colorRendererWithSAO) {
-            this._colorRendererWithSAO.destroy();
-        }
-        if (this._flatColorRenderer) {
-            this._flatColorRenderer.destroy();
-        }
-        if (this._flatColorRendererWithSAO) {
-            this._flatColorRendererWithSAO.destroy();
-        }
-        if (this._colorTextureRenderer) {
-            this._colorTextureRenderer.destroy();
-        }
-        if (this._colorTextureRendererWithSAO) {
-            this._colorTextureRendererWithSAO.destroy();
-        }
-        if (this._colorTextureRendererAlphaCutoff) {
-            this._colorTextureRendererAlphaCutoff.destroy();
-        }
-        if (this._colorTextureRendererWithSAOAlphaCutoff) {
-            this._colorTextureRendererWithSAOAlphaCutoff.destroy();
-        }
-        if (this._pbrRenderer) {
-            this._pbrRenderer.destroy();
-        }
-        if (this._pbrRendererWithSAO) {
-            this._pbrRendererWithSAO.destroy();
-        }
-        if (this._depthRenderer) {
-            this._depthRenderer.destroy();
-        }
-        if (this._silhouetteRenderer) {
-            this._silhouetteRenderer.destroy();
-        }
-        if (this._edgesRenderer) {
-            this._edgesRenderer.destroy();
-        }
-        if (this._edgesColorRenderer) {
-            this._edgesColorRenderer.destroy();
-        }
-        if (this._pickMeshRenderer) {
-            this._pickMeshRenderer.destroy();
-        }
-        if (this._pickDepthRenderer) {
-            this._pickDepthRenderer.destroy();
-        }
-        if (this._pickNormalsRenderer) {
-            this._pickNormalsRenderer.destroy();
-        }
-        if (this._pickNormalsFlatRenderer) {
-            this._pickNormalsFlatRenderer.destroy();
-        }
-        if (this._occlusionRenderer) {
-            this._occlusionRenderer.destroy();
-        }
-        if (this._shadowRenderer) {
-            this._shadowRenderer.destroy();
-        }
-        if (this._snapInitRenderer) {
-            this._snapInitRenderer.destroy();
-        }
-        if (this._snapRenderer) {
-            this._snapRenderer.destroy();
-        }
-    }
-}
-
 const cachedRenderers = { batching: { }, instancing: { } };
 
 /**
@@ -363,18 +22,69 @@ export function getTrianglesRenderers(scene, instancing) {
     const cache = cachedRenderers[instancing ? "instancing" : "batching"];
     const sceneId = scene.id;
     if (! (sceneId in cache)) {
-        const renderers = new VBOTrianglesRenderers(scene, instancing);
-        renderers._compile();
-        renderers.eagerCreateRenders();
-        scene.on("compile", () => {
-            renderers._compile();
-            renderers.eagerCreateRenders();
-        });
+        const sceneCache = { };
+
+        const cached = function(progMode, instantiate) {
+            if (! (progMode in sceneCache)) {
+                sceneCache[progMode] = instantiate();
+            }
+            return sceneCache[progMode];
+        };
+
+        cache[sceneId] = {
+            get colorRenderer()                          { return cached("colorMode",           () => new VBOTrianglesColorRenderer          (scene, instancing, false       )); },
+            get colorRendererWithSAO()                   { return cached("colorMode S",         () => new VBOTrianglesColorRenderer          (scene, instancing, true        )); },
+            get colorTextureRenderer()                   { return cached("colorTextureMode",    () => new VBOTrianglesColorTextureRenderer   (scene, instancing, false, false)); },
+            get colorTextureRendererAlphaCutoff()        { return cached("colorTextureMode A",  () => new VBOTrianglesColorTextureRenderer   (scene, instancing, false, true )); },
+            get colorTextureRendererWithSAO()            { return cached("colorTextureMode S",  () => new VBOTrianglesColorTextureRenderer   (scene, instancing, true, false )); },
+            get colorTextureRendererWithSAOAlphaCutoff() { return cached("colorTextureMode SA", () => new VBOTrianglesColorTextureRenderer   (scene, instancing, true, true  )); },
+            get depthRenderer()                          { return cached("depthMode",           () => new VBOTrianglesDepthRenderer          (scene, instancing              )); },
+            get edgesColorRenderer()                     { return cached("edgesMode C",         () => new VBOTrianglesEdgesRenderer          (scene, instancing, false       )); },
+            get edgesRenderer()                          { return cached("edgesMode",           () => new VBOTrianglesEdgesRenderer          (scene, instancing, true        )); },
+            get flatColorRenderer()                      { return cached("flatColorMode",       () => new VBOTrianglesFlatColorRenderer      (scene, instancing, false       )); },
+            get flatColorRendererWithSAO()               { return cached("flatColorMode S",     () => new VBOTrianglesFlatColorRenderer      (scene, instancing, true        )); },
+            get occlusionRenderer()                      { return cached("occlusionMode",       () => new VBOTrianglesOcclusionRenderer      (scene, instancing              )); },
+            get pbrRenderer()                            { return cached("pbrMode",             () => new VBOTrianglesPBRRenderer            (scene, instancing, false       )); },
+            get pbrRendererWithSAO()                     { return cached("pbrMode S",           () => new VBOTrianglesPBRRenderer            (scene, instancing, true        )); },
+            get pickDepthRenderer()                      { return cached("pickDepthMode",       () => new VBOTrianglesPickDepthRenderer      (scene, instancing              )); },
+            get pickMeshRenderer()                       { return cached("pickMeshMode",        () => new VBOTrianglesPickMeshRenderer       (scene, instancing              )); },
+            get pickNormalsFlatRenderer()                { return cached("pickNormalsFlatMode", () => new VBOTrianglesPickNormalsFlatRenderer(scene, instancing              )); },
+            get pickNormalsRenderer()                    { return cached("pickNormalsMode",     () => new VBOTrianglesPickNormalsRenderer    (scene, instancing              )); },
+            get shadowRenderer()                         { return cached("shadowMode",          () => new VBOTrianglesShadowRenderer         (scene, instancing              )); },
+            get silhouetteRenderer()                     { return cached("silhouetteMode",      () => new VBOTrianglesSilhouetteRenderer     (scene, instancing              )); },
+            get snapInitRenderer()                       { return cached("snapInitMode",        () => new VBOTrianglesSnapRenderer           (scene, instancing, true        )); },
+            get snapRenderer()                           { return cached("snapMode",            () => new VBOTrianglesSnapRenderer           (scene, instancing, false       )); }
+        };
+
+        const compile = function() {
+            for (let [progMode, renderer] of Object.entries(sceneCache)) {
+                if (! renderer.getValid()) {
+                    renderer.destroy();
+                    delete sceneCache[progMode];
+                }
+            }
+            // Pre-initialize certain renderers that would otherwise be lazy-initialised
+            // on user interaction, such as picking or emphasis, so that there is no delay
+            // when user first begins interacting with the viewer.
+            // Return to make sure the getter calls never get optimized away as incorrectly considered nonconsequential
+            return [
+                cache[sceneId].pickDepthRenderer,
+                cache[sceneId].pickMeshRenderer,
+                cache[sceneId].silhouetteRenderer,
+                cache[sceneId].snapInitRenderer,
+                cache[sceneId].snapRenderer
+            ];
+        };
+
+        compile();
+        scene.on("compile", compile);
         scene.on("destroyed", () => {
             delete cache[sceneId];
-            renderers._destroy();
+            for (let [progMode, renderer] of Object.entries(sceneCache)) {
+                renderer.destroy();
+                delete sceneCache[progMode];
+            }
         });
-        cache[sceneId] = renderers;
     }
     return cache[sceneId];
 }
