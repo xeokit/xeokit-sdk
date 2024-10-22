@@ -16,9 +16,10 @@ const configs = new Configs();
 export class VBOBatchingLinesLayer {
 
     /**
-     * @param model
      * @param cfg
+     * @param cfg.model
      * @param cfg.layerIndex
+     * @param cfg.primitive
      * @param cfg.positionsDecodeMatrix
      * @param cfg.maxGeometryBatchSize
      * @param cfg.origin
@@ -26,16 +27,31 @@ export class VBOBatchingLinesLayer {
      */
     constructor(cfg) {
 
-       // console.info("Creating VBOBatchingLinesLayer");
+        /**
+         * Owner model
+         * @type {VBOSceneModel}
+         */
+        this.model = cfg.model;
 
         /**
-         * Index of this LinesBatchingLayer in {@link VBOSceneModel#_layerList}.
+         * Index of this Layer in {@link VBOSceneModel#_layerList}.
          * @type {Number}
          */
         this.layerIndex = cfg.layerIndex;
 
+        /**
+         * The type of primitives in this layer.
+         */
+        this.primitive = cfg.primitive;
+
+        /**
+         * State sorting key.
+         * @type {string}
+         */
+        this.sortId = "LinesBatchingLayer";
+
         this._renderers = getLinesRenderers(cfg.model.scene, false);
-        this.model = cfg.model;
+
         const maxGeometryBatchSize = cfg.maxGeometryBatchSize ?? configs.maxGeometryBatchSize;
         this._buffer = {
             maxVerts:   maxGeometryBatchSize,
@@ -48,13 +64,13 @@ export class VBOBatchingLinesLayer {
         this._scratchMemory = cfg.scratchMemory;
 
         this._state = new RenderState({
+            origin: cfg.origin && math.vec3(cfg.origin),
             positionsBuf: null,
-            offsetsBuf: null,
             colorsBuf: null,
-            flagsBuf: null,
+            offsetsBuf: null,
             indicesBuf: null,
-            positionsDecodeMatrix: cfg.positionsDecodeMatrix ? math.mat4(cfg.positionsDecodeMatrix) : null,
-            origin: null
+            flagsBuf: null,
+            positionsDecodeMatrix: cfg.positionsDecodeMatrix && math.mat4(cfg.positionsDecodeMatrix),
         });
 
         // These counts are used to avoid unnecessary render passes
@@ -78,15 +94,6 @@ export class VBOBatchingLinesLayer {
         this.aabbDirty = true;
 
         this._finalized = false;
-
-        if (cfg.origin) {
-            this._state.origin = math.vec3(cfg.origin);
-        }
-
-        /**
-         * The type of primitives in this layer.
-         */
-        this.primitive = cfg.primitive;
     }
 
     get aabb() {
@@ -101,7 +108,7 @@ export class VBOBatchingLinesLayer {
     }
 
     /**
-     * Tests if there is room for another portion in this LinesBatchingLayer.
+     * Tests if there is room for another portion in this Layer.
      *
      * @param lenPositions Number of positions we'd like to create in the portion.
      * @param lenIndices Number of indices we'd like to create in this portion.
@@ -115,19 +122,17 @@ export class VBOBatchingLinesLayer {
     }
 
     /**
-     * Creates a new portion within this LinesBatchingLayer, returns the new portion ID.
+     * Creates a new portion within this Layer, returns the new portion ID.
      *
      * Gives the portion the specified geometry, color and matrix.
      *
      * @param mesh The SceneModelMesh that owns the portion
      * @param cfg.positions Flat float Local-space positions array.
-     * @param cfg.positionsCompressed Flat quantized positions array - decompressed with TrianglesBatchingLayer positionsDecodeMatrix
+     * @param cfg.positionsCompressed Flat quantized positions array - decompressed with positionsDecodeMatrix
      * @param cfg.indices  Flat int indices array.
      * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]
      * @param cfg.opacity Opacity [0..255]
-     * @param [cfg.meshMatrix] Flat float 4x4 matrix
      * @param cfg.aabb Flat float AABB World-space AABB
-     * @param cfg.pickColor Quantized pick color
      * @returns {number} Portion ID
      */
     createPortion(mesh, cfg) {
@@ -142,9 +147,9 @@ export class VBOBatchingLinesLayer {
         const color = cfg.color;
         const opacity = cfg.opacity;
 
+        const scene = this.model.scene;
         const buffer = this._buffer;
-        const positionsIndex = buffer.positions.length;
-        const vertsIndex = positionsIndex / 3;
+        const vertsBaseIndex = buffer.positions.length / 3;
 
         let numVerts;
 
@@ -168,32 +173,31 @@ export class VBOBatchingLinesLayer {
             }
         }
 
-        if (color) {
+        if (indices) {
+            for (let i = 0, len = indices.length; i < len; i++) {
+                buffer.indices.push(vertsBaseIndex + indices[i]);
+            }
+        }
 
+        if (scene.entityOffsetsEnabled) {
+            for (let i = 0; i < numVerts; i++) {
+                buffer.offsets.push(0);
+                buffer.offsets.push(0);
+                buffer.offsets.push(0);
+            }
+        }
+
+
+        if (color) {
             const r = color[0]; // Color is pre-quantized by VBOSceneModel
             const g = color[1];
             const b = color[2];
             const a = opacity;
-
             for (let i = 0; i < numVerts; i++) {
                 buffer.colors.push(r);
                 buffer.colors.push(g);
                 buffer.colors.push(b);
                 buffer.colors.push(a);
-            }
-        }
-
-        if (indices) {
-            for (let i = 0, len = indices.length; i < len; i++) {
-                buffer.indices.push(indices[i] + vertsIndex);
-            }
-        }
-
-        if (this.model.scene.entityOffsetsEnabled) {
-            for (let i = 0; i < numVerts; i++) {
-                buffer.offsets.push(0);
-                buffer.offsets.push(0);
-                buffer.offsets.push(0);
             }
         }
 
@@ -203,14 +207,12 @@ export class VBOBatchingLinesLayer {
             vertsBaseIndex: vertsBaseIndex,
             numVerts: numVerts,
         };
+
         this._portions.push(portion);
         this._numPortions++;
         this.model.numPortions++;
-
         this._numVerts += numVerts;
-
         this._meshes.push(mesh);
-
         return portionId;
     }
 
@@ -229,20 +231,10 @@ export class VBOBatchingLinesLayer {
         const buffer = this._buffer;
 
         if (buffer.positions.length > 0) {
-            if (state.positionsDecodeMatrix) {
-                const positions = new Uint16Array(buffer.positions);
-                state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, positions, buffer.positions.length, 3, gl.STATIC_DRAW);
-            } else {
-                const positions = new Float32Array(buffer.positions);
-                const quantizedPositions = quantizePositions(positions, this._modelAABB, state.positionsDecodeMatrix = math.mat4());
-                state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, buffer.positions.length, 3, gl.STATIC_DRAW);
-            }
-        }
-
-        if (buffer.colors.length > 0) {
-            const colors = new Uint8Array(buffer.colors);
-            let normalized = false;
-            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colors, buffer.colors.length, 4, gl.DYNAMIC_DRAW, normalized);
+            const quantizedPositions = state.positionsDecodeMatrix
+                  ? new Uint16Array(buffer.positions)
+                  : quantizePositions(buffer.positions, this._modelAABB, state.positionsDecodeMatrix = math.mat4()); // BOTTLENECK
+            state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, quantizedPositions.length, 3, gl.STATIC_DRAW);
         }
 
         if (buffer.positions.length > 0) { // Because we build flags arrays here, get their length from the positions array
@@ -250,6 +242,12 @@ export class VBOBatchingLinesLayer {
             const flags = new Float32Array(flagsLength);
             const notNormalized = false;
             state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, flags, flags.length, 1, gl.DYNAMIC_DRAW, notNormalized);
+        }
+
+        if (buffer.colors.length > 0) { // Colors are already compressed
+            const colors = new Uint8Array(buffer.colors);
+            let normalized = false;
+            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colors, buffer.colors.length, 4, gl.DYNAMIC_DRAW, normalized);
         }
 
         if (this.model.scene.entityOffsetsEnabled) {
@@ -452,7 +450,9 @@ export class VBOBatchingLinesLayer {
             tempArray[i + 2] = b;
             tempArray[i + 3] = a;
         }
-        this._state.colorsBuf.setData(tempArray, firstColor, lenColor);
+        if (this._state.colorsBuf) {
+            this._state.colorsBuf.setData(tempArray, firstColor, lenColor);
+        }
     }
 
     setTransparent(portionId, flags, transparent) {
@@ -581,7 +581,9 @@ export class VBOBatchingLinesLayer {
             tempArray[i + 1] = y;
             tempArray[i + 2] = z;
         }
-        this._state.offsetsBuf.setData(tempArray, firstOffset, lenOffsets);
+        if (this._state.offsetsBuf) {
+            this._state.offsetsBuf.setData(tempArray, firstOffset, lenOffsets);
+        }
     }
 
     __drawLayer(renderFlags, frameCtx, renderer, pass) {
@@ -596,8 +598,9 @@ export class VBOBatchingLinesLayer {
         if (((renderOpaque ? (this._numTransparentLayerPortions < this._numPortions) : (this._numTransparentLayerPortions > 0)))
             &&
             (this._numXRayedLayerPortions < this._numPortions)) {
+            const renderer = this._renderers.colorRenderer;
             const pass = renderOpaque ? RENDER_PASSES.COLOR_OPAQUE : RENDER_PASSES.COLOR_TRANSPARENT;
-            this.__drawLayer(renderFlags, frameCtx, this._renderers.colorRenderer, pass);
+            this.__drawLayer(renderFlags, frameCtx, renderer, pass);
         }
     }
 
@@ -614,7 +617,7 @@ export class VBOBatchingLinesLayer {
     drawDepth(renderFlags, frameCtx) {
     }
 
-    // ---------------------- EMPHASIS RENDERING -----------------------------------
+    // ---------------------- SILHOUETTE RENDERING -----------------------------------
 
     __drawSilhouette(renderFlags, frameCtx, renderPass) {
         this.__drawLayer(renderFlags, frameCtx, this._renderers.silhouetteRenderer, renderPass);
