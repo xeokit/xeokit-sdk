@@ -245,10 +245,10 @@ export class VBOBatchingLinesLayer {
             state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colors, buffer.colors.length, 4, gl.DYNAMIC_DRAW, normalized);
         }
 
-        if (buffer.colors.length > 0) { // Because we build flags arrays here, get their length from the colors array
-            const flagsLength = buffer.colors.length / 4;
+        if (buffer.positions.length > 0) { // Because we build flags arrays here, get their length from the positions array
+            const flagsLength = buffer.positions.length / 3;
             const flags = new Float32Array(flagsLength);
-            let notNormalized = false;
+            const notNormalized = false;
             state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, flags, flags.length, 1, gl.DYNAMIC_DRAW, notNormalized);
         }
 
