@@ -197,11 +197,13 @@ export class VBOBatchingLinesLayer {
             }
         }
 
-        const portionId = this._portions.length / 2;
+        const portionId = this._portions.length;
 
-        this._portions.push(vertsIndex);
-        this._portions.push(numVerts);
-
+        const portion = {
+            vertsBaseIndex: vertsBaseIndex,
+            numVerts: numVerts,
+        };
+        this._portions.push(portion);
         this._numPortions++;
         this.model.numPortions++;
 
@@ -433,10 +435,11 @@ export class VBOBatchingLinesLayer {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        const portionsIdx = portionId * 2;
-        const vertexBase = this._portions[portionsIdx];
-        const numVerts = this._portions[portionsIdx + 1];
-        const firstColor = vertexBase * 4;
+        const portionsIdx = portionId;
+        const portion = this._portions[portionsIdx];
+        const vertsBaseIndex = portion.vertsBaseIndex;
+        const numVerts = portion.numVerts;
+        const firstColor = vertsBaseIndex * 4;
         const lenColor = numVerts * 4;
         const tempArray = this._scratchMemory.getUInt8Array(lenColor);
         const r = color[0];
@@ -472,10 +475,11 @@ export class VBOBatchingLinesLayer {
             throw "Not finalized";
         }
 
-        const portionsIdx = portionId * 2;
-        const vertexBase = this._portions[portionsIdx];
-        const numVerts = this._portions[portionsIdx + 1];
-        const firstFlag = vertexBase;
+        const portionsIdx = portionId;
+        const portion = this._portions[portionsIdx];
+        const vertsBaseIndex = portion.vertsBaseIndex;
+        const numVerts = portion.numVerts;
+        const firstFlag = vertsBaseIndex;
         const lenFlags = numVerts;
 
         const visible = !!(flags & ENTITY_FLAGS.VISIBLE);
@@ -562,10 +566,11 @@ export class VBOBatchingLinesLayer {
             this.model.error("Entity#offset not enabled for this Viewer"); // See Viewer entityOffsetsEnabled
             return;
         }
-        const portionsIdx = portionId * 2;
-        const vertexBase = this._portions[portionsIdx];
-        const numVerts = this._portions[portionsIdx + 1];
-        const firstOffset = vertexBase * 3;
+        const portionsIdx = portionId;
+        const portion = this._portions[portionsIdx];
+        const vertsBaseIndex = portion.vertsBaseIndex;
+        const numVerts = portion.numVerts;
+        const firstOffset = vertsBaseIndex * 3;
         const lenOffsets = numVerts * 3;
         const tempArray = this._scratchMemory.getFloat32Array(lenOffsets);
         const x = offset[0];
