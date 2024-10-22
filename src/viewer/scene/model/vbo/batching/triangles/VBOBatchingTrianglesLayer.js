@@ -5,7 +5,7 @@ import {math} from "../../../../math/math.js";
 import {RenderState} from "../../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
 import {geometryCompressionUtils} from "../../../../math/geometryCompressionUtils.js";
-import {getRenderers} from "./renderers/Renderers.js";
+import {getTrianglesRenderers} from "../../renderers/VBOTrianglesRenderers.js";
 import {Configs} from "../../../../../Configs.js";
 import {quantizePositions, transformAndOctEncodeNormals} from "../../../compression.js";
 
@@ -70,7 +70,7 @@ export class VBOBatchingTrianglesLayer {
          */
         this.layerIndex = cfg.layerIndex;
 
-        this._renderers = getRenderers(cfg.model.scene);
+        this._renderers = getTrianglesRenderers(cfg.model.scene, false);
         const maxBatchSize = cfg.maxGeometryBatchSize ?? configs.maxGeometryBatchSize;
         this._buffer = {
             maxVerts:          maxBatchSize,
