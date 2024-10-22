@@ -29,7 +29,7 @@ export class TrianglesShadowRenderer extends TrianglesBatchingRenderer {
             src.push("out float vFlags;");
         }
         src.push("out vec4 vViewPosition;");
-        src.push("out vec4 outColor;");
+
         src.push("void main(void) {");
         src.push(`  int colorFlag = int(flags) & 0xF;`);
         src.push("  bool visible        = (colorFlag > 0);");
