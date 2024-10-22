@@ -1275,7 +1275,7 @@ export class VBOBatchingTrianglesLayer {
         }
         if (state.indicesBuf) {
             state.indicesBuf.destroy();
-            state.indicessBuf = null;
+            state.indicesBuf = null;
         }
         if (state.edgeIndicesBuf) {
             state.edgeIndicesBuf.destroy();
