@@ -1,5 +1,5 @@
-import {VBORenderer} from "./../../../VBORenderer.js";
-import {LinearEncoding, sRGBEncoding} from "../../../../../constants/constants.js";
+import {VBORenderer} from "../VBORenderer.js";
+import {LinearEncoding, sRGBEncoding} from "../../../constants/constants.js";
 
 const TEXTURE_DECODE_FUNCS = {};
 TEXTURE_DECODE_FUNCS[LinearEncoding] = "linearToLinear";
@@ -8,47 +8,58 @@ TEXTURE_DECODE_FUNCS[sRGBEncoding] = "sRGBToLinear";
 /**
  * @private
  */
-export class TrianglesPBRRenderer extends VBORenderer {
-    constructor(scene, withSAO) {
-        super(scene, withSAO, { instancing: true, primType: "triangleType", progMode: "pbrMode", incrementDrawState: true, hashLigthsSAO: true, hashGammaOutput: true });
+export class VBOTrianglesPBRRenderer extends VBORenderer {
+
+    constructor(scene, instancing, withSAO) {
+        super(scene, withSAO, { instancing: instancing, primType: "triangleType", progMode: "pbrMode", incrementDrawState: true, hashLigthsSAO: true, hashGammaOutput: true });
     }
 
     _buildVertexShader() {
-
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
-        const lightsState = scene._lightsState;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const clippingCaps = sectionPlanesState.clippingCaps;
         const src = [];
         src.push("#version 300 es");
-        src.push("// Instancing geometry quality drawing vertex shader");
-
-
+        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " vertex shader");
+        if (! this._instancing) {
+            src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
+            src.push("precision highp float;");
+            src.push("precision highp int;");
+            src.push("precision highp usampler2D;");
+            src.push("precision highp isampler2D;");
+            src.push("precision highp sampler2D;");
+            src.push("#else");
+            src.push("precision mediump float;");
+            src.push("precision mediump int;");
+            src.push("precision mediump usampler2D;");
+            src.push("precision mediump isampler2D;");
+            src.push("precision mediump sampler2D;");
+            src.push("#endif");
+        }
         src.push("uniform int renderPass;");
-
         src.push("in vec3 position;");
         src.push("in vec3 normal;");
         src.push("in vec4 color;");
         src.push("in vec2 uv;");
         src.push("in vec2 metallicRoughness;");
         src.push("in float flags;");
-
         if (scene.entityOffsetsEnabled) {
             src.push("in vec3 offset;");
         }
 
-        src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
-        src.push("in vec4 modelMatrixCol1;");
-        src.push("in vec4 modelMatrixCol2;");
-
-        src.push("in vec4 modelNormalMatrixCol0;");
-        src.push("in vec4 modelNormalMatrixCol1;");
-        src.push("in vec4 modelNormalMatrixCol2;");
+        if (this._instancing) {
+            src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
+            src.push("in vec4 modelMatrixCol1;");
+            src.push("in vec4 modelMatrixCol2;");
+            src.push("in vec4 modelNormalMatrixCol0;");
+            src.push("in vec4 modelNormalMatrixCol1;");
+            src.push("in vec4 modelNormalMatrixCol2;");
+        }
 
         this._addMatricesUniformBlockLines(src, true);
 
-        src.push("uniform mat3 uvDecodeMatrix;")
+        src.push("uniform mat3 uvDecodeMatrix;");
 
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
@@ -73,6 +84,7 @@ export class TrianglesPBRRenderer extends VBORenderer {
         src.push("out vec2 vUV;");
         src.push("out vec2 vMetallicRoughness;");
 
+        const lightsState = scene._lightsState;
         if (lightsState.lightMaps.length > 0) {
             src.push("out vec3 vWorldNormal;");
         }
@@ -95,18 +107,24 @@ export class TrianglesPBRRenderer extends VBORenderer {
         src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
 
         src.push("} else {");
-
-        src.push("vec4 worldPosition =  positionsDecodeMatrix * vec4(position, 1.0); ");
-        src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
-        if (scene.entityOffsetsEnabled) {
-            src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
+        if (this._instancing) {
+            src.push("vec4 worldPosition =  positionsDecodeMatrix * vec4(position, 1.0); ");
+            src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
+        } else {
+            src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
         }
-
+        if (scene.entityOffsetsEnabled) {
+            src.push("worldPosition.xyz = worldPosition.xyz + offset;");
+        }
         src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
-
-        src.push("vec4 modelNormal = vec4(octDecode(normal.xy), 0.0); ");
-        src.push("vec4 worldNormal = worldNormalMatrix * vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
-        src.push("vec3 viewNormal = vec4(viewNormalMatrix * worldNormal).xyz;");
+        if (this._instancing) {
+            src.push("vec4 modelNormal = vec4(octDecode(normal.xy), 0.0); ");
+            src.push("vec4 worldNormal = worldNormalMatrix * vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
+            src.push("vec3 viewNormal = vec4(viewNormalMatrix * worldNormal).xyz;");
+        } else {
+            src.push("vec4 worldNormal = worldNormalMatrix * vec4(octDecode(normal.xy), 0.0); ");
+            src.push("vec3 viewNormal = normalize((viewNormalMatrix * worldNormal).xyz);");
+        }
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
@@ -147,10 +165,8 @@ export class TrianglesPBRRenderer extends VBORenderer {
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const clippingCaps = sectionPlanesState.clippingCaps;
         const src = [];
-        src.push("#version 300 es");
-        src.push("// Instancing geometry quality drawing fragment shader");
-
-
+        src.push('#version 300 es');
+        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -170,19 +186,16 @@ export class TrianglesPBRRenderer extends VBORenderer {
         src.push("uniform sampler2D uEmissiveMap;");
         src.push("uniform sampler2D uNormalMap;");
         src.push("uniform sampler2D uAOMap;");
+        src.push("in vec4 vViewPosition;");
+        src.push("in vec3 vViewNormal;");
+        src.push("in vec4 vColor;");
+        src.push("in vec2 vUV;");
+        src.push("in vec2 vMetallicRoughness;");
 
-        if (this._withSAO) {
-            src.push("uniform sampler2D uOcclusionTexture;");
-            src.push("uniform vec4      uSAOParams;");
+        this._addMatricesUniformBlockLines(src, true);
 
-            src.push("const float       packUpscale = 256. / 255.;");
-            src.push("const float       unpackDownScale = 255. / 256.;");
-            src.push("const vec3        packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );");
-            src.push("const vec4        unPackFactors = unpackDownScale / vec4( packFactors, 1. );");
-
-            src.push("float unpackRGBToFloat( const in vec4 v ) {");
-            src.push("    return dot( v, unPackFactors );");
-            src.push("}");
+        if (lightsState.lightMaps.length > 0) {
+            src.push("in vec3 vWorldNormal;");
         }
 
         if (lightsState.reflectionMaps.length > 0) {
@@ -211,6 +224,20 @@ export class TrianglesPBRRenderer extends VBORenderer {
                 src.push("uniform vec3 lightPos" + i + ";");
                 src.push("uniform vec3 lightDir" + i + ";");
             }
+        }
+
+        if (this._withSAO) {
+            src.push("uniform sampler2D uOcclusionTexture;");
+            src.push("uniform vec4      uSAOParams;");
+
+            src.push("const float       packUpscale = 256. / 255.;");
+            src.push("const float       unpackDownScale = 255. / 256.;");
+            src.push("const vec3        packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );");
+            src.push("const vec4        unPackFactors = unpackDownScale / vec4( packFactors, 1. );");
+
+            src.push("float unpackRGBToFloat( const in vec4 v ) {");
+            src.push("    return dot( v, unPackFactors );");
+            src.push("}");
         }
 
         src.push("uniform float gammaFactor;");
@@ -242,18 +269,6 @@ export class TrianglesPBRRenderer extends VBORenderer {
             }
         }
 
-        src.push("in vec4 vViewPosition;");
-        src.push("in vec3 vViewNormal;");
-        src.push("in vec4 vColor;");
-        src.push("in vec2 vUV;");
-        src.push("in vec2 vMetallicRoughness;");
-
-        if (lightsState.lightMaps.length > 0) {
-            src.push("in vec3 vWorldNormal;");
-        }
-
-        this._addMatricesUniformBlockLines(src, true);
-
         // CONSTANT DEFINITIONS
 
         src.push("#define PI 3.14159265359");
@@ -279,7 +294,7 @@ export class TrianglesPBRRenderer extends VBORenderer {
         src.push("      vec3 N = normalize( surf_norm );");
         src.push("      vec3 mapN = texel.xyz * 2.0 - 1.0;");
         src.push("      mat3 tsn = mat3( S, T, N );");
-        //     src.push("      mapN *= 3.0;");
+        // src.push("      mapN *= 3.0;");
         src.push("      return normalize( tsn * mapN );");
         src.push("}");
 
@@ -307,10 +322,10 @@ export class TrianglesPBRRenderer extends VBORenderer {
         src.push("};");
 
         src.push("struct Material {");
-        src.push("   vec3    diffuseColor;");
-        src.push("   float   specularRoughness;");
-        src.push("   vec3    specularColor;");
-        src.push("   float   shine;"); // Only used for Phong
+        src.push("   vec3  diffuseColor;");
+        src.push("   float specularRoughness;");
+        src.push("   vec3  specularColor;");
+        src.push("   float shine;"); // Only used for Phong
         src.push("};");
 
         // IRRADIANCE EVALUATION
@@ -385,16 +400,13 @@ export class TrianglesPBRRenderer extends VBORenderer {
         src.push("}");
 
         if (lightsState.lightMaps.length > 0 || lightsState.reflectionMaps.length > 0) {
-
             src.push("void computePBRLightMapping(const in Geometry geometry, const in Material material, inout ReflectedLight reflectedLight) {");
-
             if (lightsState.lightMaps.length > 0) {
                 src.push("   vec3 irradiance = " + TEXTURE_DECODE_FUNCS[lightsState.lightMaps[0].encoding] + "(texture(lightMap, geometry.worldNormal)).rgb;");
                 src.push("   irradiance *= PI;");
                 src.push("   vec3 diffuseBRDFContrib = (RECIPROCAL_PI * material.diffuseColor);");
                 src.push("   reflectedLight.diffuse += irradiance * diffuseBRDFContrib;");
             }
-
             if (lightsState.reflectionMaps.length > 0) {
                 src.push("   vec3 reflectVec             = reflect(geometry.viewEyeDir, geometry.viewNormal);");
                 src.push("   reflectVec                  = inverseTransformDirection(reflectVec, viewMatrix);");
@@ -403,7 +415,6 @@ export class TrianglesPBRRenderer extends VBORenderer {
                 src.push("   vec3 specularBRDFContrib    = BRDF_Specular_GGX_Environment(geometry, material.specularColor, material.specularRoughness);");
                 src.push("   reflectedLight.specular     += radiance * specularBRDFContrib;");
             }
-
             src.push("}");
         }
 
@@ -464,7 +475,7 @@ export class TrianglesPBRRenderer extends VBORenderer {
 
         src.push("vec4 colorTexel = sRGBToLinear(texture(uColorMap, vUV));");
         src.push("baseColor *= colorTexel.rgb;");
-        // src.push("opacity = colorTexel.a;");
+        // src.push("opacity *=/= colorTexel.a;"); // batching had "*=", instancing had "="
 
         src.push("vec3 metalRoughTexel = texture(uMetallicRoughMap, vUV).rgb;");
         src.push("metallic *= metalRoughTexel.b;");
@@ -489,9 +500,7 @@ export class TrianglesPBRRenderer extends VBORenderer {
         }
 
         for (let i = 0, len = lightsState.lights.length; i < len; i++) {
-
             const light = lightsState.lights[i];
-
             if (light.type === "ambient") {
                 continue;
             }
@@ -539,7 +548,7 @@ export class TrianglesPBRRenderer extends VBORenderer {
             src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBToFloat(texture(uOcclusionTexture, uv))) * blendFactor;");
             src.push("   fragColor               = vec4(outgoingLight.rgb * ambient * aoFactor, opacity);");
         } else {
-            src.push("   fragColor            = vec4(outgoingLight.rgb, opacity);");
+            src.push("   fragColor               = vec4(outgoingLight.rgb * aoFactor, opacity);");
         }
 
         if (gammaOutput) {
