@@ -9,7 +9,7 @@ import {TrianglesPickDepthRenderer} from "./TrianglesPickDepthRenderer.js";
 import {TrianglesPickNormalsRenderer} from "./TrianglesPickNormalsRenderer.js";
 import {VBOTrianglesOcclusionRenderer} from "../../../renderers/VBOTrianglesOcclusionRenderer.js";
 import {TrianglesShadowRenderer} from "./TrianglesShadowRenderer.js";
-import {TrianglesPBRRenderer} from "./TrianglesPBRRenderer.js";
+import {VBOTrianglesPBRRenderer} from "../../../renderers/VBOTrianglesPBRRenderer.js";
 import {TrianglesPickNormalsFlatRenderer} from "./TrianglesPickNormalsFlatRenderer.js";
 import {TrianglesSnapRenderer} from "./TrianglesSnapRenderer.js";
 
@@ -193,14 +193,14 @@ class Renderers {
 
     get pbrRenderer() {
         if (!this._pbrRenderer) {
-            this._pbrRenderer = new TrianglesPBRRenderer(this._scene, false);
+            this._pbrRenderer = new VBOTrianglesPBRRenderer(this._scene, false, false);
         }
         return this._pbrRenderer;
     }
 
     get pbrRendererWithSAO() {
         if (!this._pbrRendererWithSAO) {
-            this._pbrRendererWithSAO = new TrianglesPBRRenderer(this._scene, true);
+            this._pbrRendererWithSAO = new VBOTrianglesPBRRenderer(this._scene, false, true);
         }
         return this._pbrRendererWithSAO;
     }
