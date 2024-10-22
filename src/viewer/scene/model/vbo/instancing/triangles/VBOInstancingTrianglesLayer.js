@@ -94,9 +94,6 @@ export class VBOInstancingTrianglesLayer {
         this._numPickableLayerPortions = 0;
         this._numCulledLayerPortions = 0;
 
-        /** @private */
-        this.numIndices = cfg.geometry.numIndices;
-
         // Vertex arrays
         this._colors = [];
         this._metallicRoughness = [];
@@ -133,12 +130,6 @@ export class VBOInstancingTrianglesLayer {
          * @type {boolean}
          */
         this.solid = !!cfg.solid;
-
-        /**
-         * The number of indices in this layer.
-         * @type {number|*}
-         */
-        this.numIndices = cfg.geometry.numIndices;
 
         /**
          * The type of primitives in this layer.
@@ -332,7 +323,6 @@ export class VBOInstancingTrianglesLayer {
         }
         if (geometry.indices && geometry.indices.length > 0) {
             state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(geometry.indices), geometry.indices.length, 1, gl.STATIC_DRAW);
-            state.numIndices = geometry.indices.length;
         }
         if (geometry.edgeIndices && geometry.edgeIndices.length > 0) {
             state.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(geometry.edgeIndices), geometry.edgeIndices.length, 1, gl.STATIC_DRAW);
