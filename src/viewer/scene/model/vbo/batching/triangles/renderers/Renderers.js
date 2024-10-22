@@ -7,7 +7,7 @@ import {VBOTrianglesFlatColorRenderer} from "../../../renderers/VBOTrianglesFlat
 import {TrianglesPickMeshRenderer} from "./TrianglesPickMeshRenderer.js";
 import {TrianglesPickDepthRenderer} from "./TrianglesPickDepthRenderer.js";
 import {TrianglesPickNormalsRenderer} from "./TrianglesPickNormalsRenderer.js";
-import {TrianglesOcclusionRenderer} from "./TrianglesOcclusionRenderer.js";
+import {VBOTrianglesOcclusionRenderer} from "../../../renderers/VBOTrianglesOcclusionRenderer.js";
 import {TrianglesShadowRenderer} from "./TrianglesShadowRenderer.js";
 import {TrianglesPBRRenderer} from "./TrianglesPBRRenderer.js";
 import {TrianglesPickNormalsFlatRenderer} from "./TrianglesPickNormalsFlatRenderer.js";
@@ -263,7 +263,7 @@ class Renderers {
 
     get occlusionRenderer() {
         if (!this._occlusionRenderer) {
-            this._occlusionRenderer = new TrianglesOcclusionRenderer(this._scene);
+            this._occlusionRenderer = new VBOTrianglesOcclusionRenderer(this._scene, false);
         }
         return this._occlusionRenderer;
     }
