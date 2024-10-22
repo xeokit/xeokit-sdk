@@ -1,5 +1,6 @@
 import {VBOTrianglesColorRenderer} from "../../../renderers/VBOTrianglesColorRenderer.js";
 import {VBOTrianglesColorTextureRenderer} from "../../../renderers/VBOTrianglesColorTextureRenderer.js";
+import {VBOTrianglesDepthRenderer} from "../../../renderers/VBOTrianglesDepthRenderer.js";
 import {TrianglesFlatColorRenderer} from "./TrianglesFlatColorRenderer.js";
 import {TrianglesSilhouetteRenderer} from "./TrianglesSilhouetteRenderer.js";
 import {VBOTrianglesEdgesRenderer} from "../../../renderers/VBOTrianglesEdgesRenderer.js";
@@ -7,7 +8,6 @@ import {TrianglesPickMeshRenderer} from "./TrianglesPickMeshRenderer.js";
 import {TrianglesPickDepthRenderer} from "./TrianglesPickDepthRenderer.js";
 import {TrianglesPickNormalsRenderer} from "./TrianglesPickNormalsRenderer.js";
 import {TrianglesOcclusionRenderer} from "./TrianglesOcclusionRenderer.js";
-import {TrianglesDepthRenderer} from "./TrianglesDepthRenderer.js";
 import {TrianglesShadowRenderer} from "./TrianglesShadowRenderer.js";
 import {TrianglesPBRRenderer} from "./TrianglesPBRRenderer.js";
 import {TrianglesPickNormalsFlatRenderer} from "./TrianglesPickNormalsFlatRenderer.js";
@@ -214,7 +214,7 @@ class Renderers {
 
     get depthRenderer() {
         if (!this._depthRenderer) {
-            this._depthRenderer = new TrianglesDepthRenderer(this._scene);
+            this._depthRenderer = new VBOTrianglesDepthRenderer(this._scene, false);
         }
         return this._depthRenderer;
     }
