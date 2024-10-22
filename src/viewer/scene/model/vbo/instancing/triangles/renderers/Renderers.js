@@ -1,9 +1,9 @@
 import {VBOTrianglesColorRenderer} from "../../../renderers/VBOTrianglesColorRenderer.js";
 import {VBOTrianglesColorTextureRenderer} from "../../../renderers/VBOTrianglesColorTextureRenderer.js";
 import {VBOTrianglesDepthRenderer} from "../../../renderers/VBOTrianglesDepthRenderer.js";
-import {TrianglesFlatColorRenderer} from "./TrianglesFlatColorRenderer.js";
 import {TrianglesSilhouetteRenderer} from "./TrianglesSilhouetteRenderer.js";
 import {VBOTrianglesEdgesRenderer} from "../../../renderers/VBOTrianglesEdgesRenderer.js";
+import {VBOTrianglesFlatColorRenderer} from "../../../renderers/VBOTrianglesFlatColorRenderer.js";
 import {TrianglesPickMeshRenderer} from "./TrianglesPickMeshRenderer.js";
 import {TrianglesPickDepthRenderer} from "./TrianglesPickDepthRenderer.js";
 import {TrianglesPickNormalsRenderer} from "./TrianglesPickNormalsRenderer.js";
@@ -151,14 +151,14 @@ class Renderers {
 
     get flatColorRenderer() {
         if (!this._flatColorRenderer) {
-            this._flatColorRenderer = new TrianglesFlatColorRenderer(this._scene, false);
+            this._flatColorRenderer = new VBOTrianglesFlatColorRenderer(this._scene, true, false);
         }
         return this._flatColorRenderer;
     }
 
     get flatColorRendererWithSAO() {
         if (!this._flatColorRendererWithSAO) {
-            this._flatColorRendererWithSAO = new TrianglesFlatColorRenderer(this._scene, true);
+            this._flatColorRendererWithSAO = new VBOTrianglesFlatColorRenderer(this._scene, true, true);
         }
         return this._flatColorRendererWithSAO;
     }
