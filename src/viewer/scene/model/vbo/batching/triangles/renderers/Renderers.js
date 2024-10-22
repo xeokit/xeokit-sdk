@@ -1,4 +1,5 @@
 import {VBOTrianglesColorRenderer} from "../../../renderers/VBOTrianglesColorRenderer.js";
+import {VBOTrianglesColorTextureRenderer} from "../../../renderers/VBOTrianglesColorTextureRenderer.js";
 import {TrianglesFlatColorRenderer} from "./TrianglesFlatColorRenderer.js";
 import {TrianglesSilhouetteRenderer} from "./TrianglesSilhouetteRenderer.js";
 import {VBOTrianglesEdgesRenderer} from "../../../renderers/VBOTrianglesEdgesRenderer.js";
@@ -10,7 +11,6 @@ import {TrianglesDepthRenderer} from "./TrianglesDepthRenderer.js";
 import {TrianglesShadowRenderer} from "./TrianglesShadowRenderer.js";
 import {TrianglesPBRRenderer} from "./TrianglesPBRRenderer.js";
 import {TrianglesPickNormalsFlatRenderer} from "./TrianglesPickNormalsFlatRenderer.js";
-import {TrianglesColorTextureRenderer} from "./TrianglesColorTextureRenderer.js";
 import {TrianglesSnapRenderer} from "./TrianglesSnapRenderer.js";
 
 /**
@@ -165,28 +165,28 @@ class Renderers {
 
     get colorTextureRenderer() {
         if (!this._colorTextureRenderer) {
-            this._colorTextureRenderer = new TrianglesColorTextureRenderer(this._scene, false, false);
+            this._colorTextureRenderer = new VBOTrianglesColorTextureRenderer(this._scene, false, false, false);
         }
         return this._colorTextureRenderer;
     }
 
     get colorTextureRendererWithSAO() {
         if (!this._colorTextureRendererWithSAO) {
-            this._colorTextureRendererWithSAO = new TrianglesColorTextureRenderer(this._scene, true, false);
+            this._colorTextureRendererWithSAO = new VBOTrianglesColorTextureRenderer(this._scene, false, true, false);
         }
         return this._colorTextureRendererWithSAO;
     }
 
     get colorTextureRendererAlphaCutoff() {
         if (!this._colorTextureRendererAlphaCutoff) {
-            this._colorTextureRendererAlphaCutoff = new TrianglesColorTextureRenderer(this._scene, false, true);
+            this._colorTextureRendererAlphaCutoff = new VBOTrianglesColorTextureRenderer(this._scene, false, false, true);
         }
         return this._colorTextureRendererAlphaCutoff;
     }
 
     get colorTextureRendererWithSAOAlphaCutoff() {
         if (!this._colorTextureRendererWithSAOAlphaCutoff) {
-            this._colorTextureRendererWithSAOAlphaCutoff = new TrianglesColorTextureRenderer(this._scene, true, true);
+            this._colorTextureRendererWithSAOAlphaCutoff = new VBOTrianglesColorTextureRenderer(this._scene, false, true, true);
         }
         return this._colorTextureRendererWithSAOAlphaCutoff;
     }
