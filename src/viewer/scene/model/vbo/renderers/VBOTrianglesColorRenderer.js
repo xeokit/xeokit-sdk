@@ -1,32 +1,36 @@
-import {VBORenderer} from "./../../../VBORenderer.js";
+import {VBORenderer} from "../VBORenderer.js";
 
 /**
  * @private
  */
-export class TrianglesColorRenderer extends VBORenderer {
-    constructor(scene, withSAO) {
-        super(scene, withSAO, { instancing: false, primType: "triangleType", progMode: "colorMode", incrementDrawState: true, hashLigthsSAO: true });
+export class VBOTrianglesColorRenderer extends VBORenderer {
+
+    constructor(scene, instancing, withSAO) {
+        super(scene, withSAO, { instancing: instancing, primType: "triangleType", progMode: "colorMode", incrementDrawState: true, hashLigthsSAO: true });
     }
 
     _buildVertexShader() {
         const scene = this._scene;
-        const sectionPlanesState = scene._sectionPlanesState;
-        const lightsState = scene._lightsState;
-        const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
-        let light;
+        const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
-        src.push("#version 300 es");
-        src.push("// Triangles batching draw vertex shader");
-
+        src.push('#version 300 es');
+        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " vertex shader");
         src.push("uniform int renderPass;");
-
         src.push("in vec3 position;");
         src.push("in vec3 normal;");
         src.push("in vec4 color;");
         src.push("in float flags;");
-
         if (scene.entityOffsetsEnabled) {
             src.push("in vec3 offset;");
+        }
+
+        if (this._instancing) {
+            src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
+            src.push("in vec4 modelMatrixCol1;");
+            src.push("in vec4 modelMatrixCol2;");
+            src.push("in vec4 modelNormalMatrixCol0;");
+            src.push("in vec4 modelNormalMatrixCol1;");
+            src.push("in vec4 modelNormalMatrixCol2;");
         }
 
         this._addMatricesUniformBlockLines(src, true);
@@ -39,11 +43,15 @@ export class TrianglesColorRenderer extends VBORenderer {
             src.push("}");
             src.push("out float isPerspective;");
         }
+        if (clipping) {
+            src.push("out vec4 vWorldPosition;");
+            src.push("out float vFlags;");
+        }
 
+        const lightsState = scene._lightsState;
         src.push("uniform vec4 lightAmbient;");
-
         for (let i = 0, len = lightsState.lights.length; i < len; i++) {
-            light = lightsState.lights[i];
+            const light = lightsState.lights[i];
             if (light.type === "ambient") {
                 continue;
             }
@@ -59,7 +67,6 @@ export class TrianglesColorRenderer extends VBORenderer {
                 src.push("uniform vec3 lightDir" + i + ";");
             }
         }
-
         src.push("vec3 octDecode(vec2 oct) {");
         src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
         src.push("    if (v.z < 0.0) {");
@@ -67,32 +74,42 @@ export class TrianglesColorRenderer extends VBORenderer {
         src.push("    }");
         src.push("    return normalize(v);");
         src.push("}");
-
-        if (clipping) {
-            src.push("out vec4 vWorldPosition;");
-            src.push("out float vFlags;");
-        }
         src.push("out vec4 vColor;");
 
         src.push("void main(void) {");
-
         // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
-        // renderPass = COLOR_OPAQUE
-
+        // renderPass = COLOR_OPAQUE | COLOR_TRANSPARENT
         src.push(`int colorFlag = int(flags) & 0xF;`);
         src.push(`if (colorFlag != renderPass) {`);
         src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
-
         src.push("} else {");
-
-        src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
+        if (this._instancing) {
+            src.push("vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0);");
+            src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
+        } else {
+            src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0));");
+        }
         if (scene.entityOffsetsEnabled) {
             src.push("worldPosition.xyz = worldPosition.xyz + offset;");
         }
-        src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
+        src.push("vec4 viewPosition  = viewMatrix * worldPosition;");
+        if (clipping) {
+            src.push("vWorldPosition = worldPosition;");
+            src.push("vFlags = flags;");
+        }
+        src.push("vec4 clipPos = projMatrix * viewPosition;");
+        if (scene.logarithmicDepthBufferEnabled) {
+            src.push("vFragDepth = 1.0 + clipPos.w;");
+            src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
+        }
+        src.push("gl_Position = clipPos;");
 
-        src.push("vec4 worldNormal =  worldNormalMatrix * vec4(octDecode(normal.xy), 0.0); ");
-
+        if (this._instancing) {
+            src.push("vec4 modelNormal = vec4(octDecode(normal.xy), 0.0);");
+            src.push("vec4 worldNormal = worldNormalMatrix * vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
+        } else {
+            src.push("vec4 worldNormal =  worldNormalMatrix * vec4(octDecode(normal.xy), 0.0);");
+        }
         src.push("vec3 viewNormal = normalize((viewNormalMatrix * worldNormal).xyz);");
 
         src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
@@ -100,7 +117,7 @@ export class TrianglesColorRenderer extends VBORenderer {
 
         src.push("float lambertian = 1.0;");
         for (let i = 0, len = lightsState.lights.length; i < len; i++) {
-            light = lightsState.lights[i];
+            const light = lightsState.lights[i];
             if (light.type === "ambient") {
                 continue;
             }
@@ -132,18 +149,7 @@ export class TrianglesColorRenderer extends VBORenderer {
         src.push("vec3 rgb = (vec3(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0));");
         src.push("vColor =  vec4((lightAmbient.rgb * lightAmbient.a * rgb) + (reflectedColor * rgb), float(color.a) / 255.0);");
 
-        src.push("vec4 clipPos = projMatrix * viewPosition;");
-        if (scene.logarithmicDepthBufferEnabled) {
-            src.push("vFragDepth = 1.0 + clipPos.w;");
-            src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
-        }
-        if (clipping) {
-            src.push("vWorldPosition = worldPosition;");
-            src.push("vFlags = flags;");
-        }
-        src.push("gl_Position = clipPos;");
         src.push("}");
-
         src.push("}");
         return src;
     }
@@ -153,8 +159,8 @@ export class TrianglesColorRenderer extends VBORenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
-        src.push("#version 300 es");
-        src.push("// Triangles batching draw fragment shader");
+        src.push('#version 300 es');
+        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -162,13 +168,11 @@ export class TrianglesColorRenderer extends VBORenderer {
         src.push("precision mediump float;");
         src.push("precision mediump int;");
         src.push("#endif");
-
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("in float isPerspective;");
             src.push("uniform float logDepthBufFC;");
             src.push("in float vFragDepth;");
         }
-
         if (this._withSAO) {
             src.push("uniform sampler2D uOcclusionTexture;");
             src.push("uniform vec4      uSAOParams;");
@@ -215,13 +219,6 @@ export class TrianglesColorRenderer extends VBORenderer {
             src.push("}");
         }
 
-        if (scene.logarithmicDepthBufferEnabled) {
-            src.push("    float dx = dFdx(vFragDepth);")
-            src.push("    float dy = dFdy(vFragDepth);")
-            src.push("    float diff = sqrt(dx*dx+dy*dy);");
-            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth + diff ) * logDepthBufFC * 0.5;");
-        }
-
         if (this._withSAO) {
             // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
             // Would be more efficient to defer this, then render lines later, using same depth buffer for Z-reject
@@ -231,9 +228,16 @@ export class TrianglesColorRenderer extends VBORenderer {
             src.push("   float blendFactor       = uSAOParams[3];");
             src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
             src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBToFloat(texture(uOcclusionTexture, uv))) * blendFactor;");
-            src.push("   outColor            = vec4(newColor.rgb * ambient, newColor.a);");
+            src.push("   outColor                = vec4(newColor.rgb * ambient, newColor.a);");
         } else {
-            src.push("   outColor            = newColor;");
+            src.push("   outColor                = newColor;");
+        }
+
+        if (scene.logarithmicDepthBufferEnabled) {
+            src.push("float dx = dFdx(vFragDepth);");
+            src.push("float dy = dFdy(vFragDepth);");
+            src.push("float diff = sqrt(dx*dx+dy*dy);");
+            src.push("gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth + diff ) * logDepthBufFC * 0.5;");
         }
 
         src.push("}");
