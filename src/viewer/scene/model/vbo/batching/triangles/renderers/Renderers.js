@@ -4,12 +4,12 @@ import {VBOTrianglesDepthRenderer} from "../../../renderers/VBOTrianglesDepthRen
 import {TrianglesSilhouetteRenderer} from "./TrianglesSilhouetteRenderer.js";
 import {VBOTrianglesEdgesRenderer} from "../../../renderers/VBOTrianglesEdgesRenderer.js";
 import {VBOTrianglesFlatColorRenderer} from "../../../renderers/VBOTrianglesFlatColorRenderer.js";
-import {TrianglesPickMeshRenderer} from "./TrianglesPickMeshRenderer.js";
 import {TrianglesPickNormalsRenderer} from "./TrianglesPickNormalsRenderer.js";
 import {VBOTrianglesOcclusionRenderer} from "../../../renderers/VBOTrianglesOcclusionRenderer.js";
 import {TrianglesShadowRenderer} from "./TrianglesShadowRenderer.js";
 import {VBOTrianglesPBRRenderer} from "../../../renderers/VBOTrianglesPBRRenderer.js";
 import {VBOTrianglesPickDepthRenderer} from "../../../renderers/VBOTrianglesPickDepthRenderer.js";
+import {VBOTrianglesPickMeshRenderer} from "../../../renderers/VBOTrianglesPickMeshRenderer.js";
 import {TrianglesPickNormalsFlatRenderer} from "./TrianglesPickNormalsFlatRenderer.js";
 import {TrianglesSnapRenderer} from "./TrianglesSnapRenderer.js";
 
@@ -122,12 +122,10 @@ class Renderers {
         if (!this._silhouetteRenderer) { // Used for highlighting and selection
             this._silhouetteRenderer = new TrianglesSilhouetteRenderer(this._scene);
         }
-        if (!this._pickMeshRenderer) {
-            this._pickMeshRenderer = new TrianglesPickMeshRenderer(this._scene);
-        }
         // Return to make sure the getter calls never get optimized away as incorrectly considered nonconsequential
         return [
             this.pickDepthRenderer,
+            this.pickMeshRenderer,
             this.snapInitRenderer,
             this.snapRenderer
         ];
@@ -233,7 +231,7 @@ class Renderers {
 
     get pickMeshRenderer() {
         if (!this._pickMeshRenderer) {
-            this._pickMeshRenderer = new TrianglesPickMeshRenderer(this._scene);
+            this._pickMeshRenderer = new VBOTrianglesPickMeshRenderer(this._scene, false);
         }
         return this._pickMeshRenderer;
     }
