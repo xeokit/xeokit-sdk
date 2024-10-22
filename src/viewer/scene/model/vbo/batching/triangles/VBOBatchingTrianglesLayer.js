@@ -457,10 +457,6 @@ export class VBOBatchingTrianglesLayer {
         this._finalized = true;
     }
 
-    isEmpty() {
-        return (!this._state.indicesBuf);
-    }
-
     initFlags(portionId, flags, meshTransparent) {
         if (flags & ENTITY_FLAGS.VISIBLE) {
             this._numVisibleLayerPortions++;
