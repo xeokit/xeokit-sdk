@@ -1,15 +1,15 @@
-import {VBORenderer} from "../../../VBORenderer.js";
-import {math} from "../../../../../math/math.js";
+import {VBORenderer} from "../VBORenderer.js";
+import {math} from "../../../math/math.js";
 
 const SNAPPING_LOG_DEPTH_BUF_ENABLED = true; // Improves occlusion accuracy at distance
 
 /**
  * @private
  */
-export class TrianglesSnapRenderer extends VBORenderer {
+export class VBOTrianglesSnapRenderer extends VBORenderer {
 
-    constructor(scene, isSnapInit) {
-        super(scene, false, { instancing: false, primType: "triangleType", progMode: isSnapInit ? "snapInitMode" : "snapMode" });
+    constructor(scene, instancing, isSnapInit) {
+        super(scene, false, { instancing: instancing, primType: "triangleType", progMode: isSnapInit ? "snapInitMode" : "snapMode" });
     }
 
     _buildVertexShader() {
@@ -17,8 +17,8 @@ export class TrianglesSnapRenderer extends VBORenderer {
         const scene = this._scene;
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
-        src.push ('#version 300 es');
-        src.push("// TrianglesSnapRenderer vertex shader");
+        src.push('#version 300 es');
+        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " vertex shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -33,14 +33,20 @@ export class TrianglesSnapRenderer extends VBORenderer {
         src.push("precision mediump sampler2D;");
         src.push("#endif");
         src.push("uniform int renderPass;");
+        src.push("in vec3 position;");
         if (isSnapInit) {
             src.push("in vec4 pickColor;");
         }
-        src.push("in vec3 position;");
+        src.push("in float flags;");
         if (scene.entityOffsetsEnabled) {
             src.push("in vec3 offset;");
         }
-        src.push("in float flags;");
+
+        if (this._instancing) {
+            src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
+            src.push("in vec4 modelMatrixCol1;");
+            src.push("in vec4 modelMatrixCol2;");
+        }
 
         this._addMatricesUniformBlockLines(src);
 
@@ -76,12 +82,17 @@ export class TrianglesSnapRenderer extends VBORenderer {
         src.push(`if (pickFlag != renderPass) {`);
         src.push("      gl_Position = vec4(" + (isSnapInit ? "0.0" : "2.0") + ", 0.0, 0.0, 0.0);"); // Cull vertex
         src.push("  } else {");
-        src.push("      vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0)); ");
+        if (this._instancing) {
+            src.push("      vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0);");
+            src.push("      worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
+        } else {
+            src.push("      vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0));");
+        }
         if (scene.entityOffsetsEnabled) {
             src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
         }
         src.push("      relativeToOriginPosition = worldPosition.xyz;");
-        src.push("      vec4 viewPosition  = viewMatrix * worldPosition; ");
+        src.push("      vec4 viewPosition  = viewMatrix * worldPosition;");
         if (clipping || isSnapInit) {
             src.push("      vWorldPosition = worldPosition;");
         }
@@ -115,8 +126,8 @@ export class TrianglesSnapRenderer extends VBORenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
-        src.push ('#version 300 es');
-        src.push("// TrianglesSnapRenderer fragment shader");
+        src.push('#version 300 es');
+        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
