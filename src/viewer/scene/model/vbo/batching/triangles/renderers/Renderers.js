@@ -1,7 +1,7 @@
 import {TrianglesColorRenderer} from "./TrianglesColorRenderer.js";
 import {TrianglesFlatColorRenderer} from "./TrianglesFlatColorRenderer.js";
 import {TrianglesSilhouetteRenderer} from "./TrianglesSilhouetteRenderer.js";
-import {EdgesRenderer} from "./EdgesRenderer.js";
+import {VBOTrianglesEdgesRenderer} from "../../../renderers/VBOTrianglesEdgesRenderer.js";
 import {TrianglesPickMeshRenderer} from "./TrianglesPickMeshRenderer.js";
 import {TrianglesPickDepthRenderer} from "./TrianglesPickDepthRenderer.js";
 import {TrianglesPickNormalsRenderer} from "./TrianglesPickNormalsRenderer.js";
@@ -221,14 +221,14 @@ class Renderers {
 
     get edgesRenderer() {
         if (!this._edgesRenderer) {
-            this._edgesRenderer = new EdgesRenderer(this._scene, true);
+            this._edgesRenderer = new VBOTrianglesEdgesRenderer(this._scene, false, true);
         }
         return this._edgesRenderer;
     }
 
     get edgesColorRenderer() {
         if (!this._edgesColorRenderer) {
-            this._edgesColorRenderer = new EdgesRenderer(this._scene, false);
+            this._edgesColorRenderer = new VBOTrianglesEdgesRenderer(this._scene, false, false);
         }
         return this._edgesColorRenderer;
     }
