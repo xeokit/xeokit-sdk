@@ -4,7 +4,7 @@ import {RENDER_PASSES} from '../../../RENDER_PASSES.js';
 import {math} from "../../../../math/math.js";
 import {RenderState} from "../../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
-import {getRenderers} from "./renderers/Renderers.js";
+import {getTrianglesRenderers} from "../../renderers/VBOTrianglesRenderers.js";
 
 const tempUint8Vec4 = new Uint8Array(4);
 const tempFloat32 = new Float32Array(1);
@@ -56,7 +56,7 @@ export class VBOInstancingTrianglesLayer {
          */
         this.layerIndex = cfg.layerIndex;
 
-        this._renderers = getRenderers(cfg.model.scene);
+        this._renderers = getTrianglesRenderers(cfg.model.scene, true);
 
         this._aabb = math.collapseAABB3();
 
