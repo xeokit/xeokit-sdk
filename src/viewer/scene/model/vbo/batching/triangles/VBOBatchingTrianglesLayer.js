@@ -98,8 +98,8 @@ export class VBOBatchingTrianglesLayer {
             flagsBuf: null,
             indicesBuf: null,
             edgeIndicesBuf: null,
-            positionsDecodeMatrix: null,
-            uvDecodeMatrix: null,
+            positionsDecodeMatrix: cfg.positionsDecodeMatrix ? math.mat4(cfg.positionsDecodeMatrix) : null,
+            uvDecodeMatrix: cfg.uvDecodeMatrix ? math.mat3(cfg.uvDecodeMatrix) : null,
             textureSet: cfg.textureSet,
             pbrSupported: false // Set in #finalize if we have enough to support quality rendering
         });
@@ -125,21 +125,6 @@ export class VBOBatchingTrianglesLayer {
         this.aabbDirty = true;
 
         this._finalized = false;
-
-        if (cfg.positionsDecodeMatrix) {
-            this._state.positionsDecodeMatrix = math.mat4(cfg.positionsDecodeMatrix);
-        }
-
-        if (cfg.uvDecodeMatrix) {
-            this._state.uvDecodeMatrix = math.mat3(cfg.uvDecodeMatrix);
-            this._preCompressedUVsExpected = true;
-        } else {
-            this._preCompressedUVsExpected = false;
-        }
-
-        if (cfg.origin) {
-            this._state.origin.set(cfg.origin);
-        }
 
         /**
          * When true, this layer contains solid triangle meshes, otherwise this layer contains surface triangle meshes
