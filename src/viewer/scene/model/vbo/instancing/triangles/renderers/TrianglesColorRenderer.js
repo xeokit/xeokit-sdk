@@ -28,7 +28,7 @@ class TrianglesColorRenderer extends TrianglesInstancingRenderer {
         src.push("uniform int renderPass;");
 
         src.push("in vec3 position;");
-        src.push("in vec2 normal;");
+        src.push("in vec3 normal;");
         src.push("in vec4 color;");
         src.push("in float flags;");
 
