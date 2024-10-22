@@ -1,35 +1,34 @@
-import {VBORenderer} from "./../../../VBORenderer.js";
+import {VBORenderer} from "../VBORenderer.js";
 
 /**
  * @private
  */
-export class TrianglesColorTextureRenderer extends VBORenderer {
-    constructor(scene, withSAO, useAlphaCutoff) {
-        super(scene, withSAO, { instancing: true, primType: "triangleType", progMode: "colorTextureMode", incrementDrawState: true, useAlphaCutoff: useAlphaCutoff, hashLigthsSAO: true, hashGammaOutput: true });
+export class VBOTrianglesColorTextureRenderer extends VBORenderer {
+
+    constructor(scene, instancing, withSAO, useAlphaCutoff) {
+        super(scene, withSAO, { instancing: instancing, primType: "triangleType", progMode: "colorTextureMode", incrementDrawState: true, useAlphaCutoff: useAlphaCutoff, hashLigthsSAO: true, hashGammaOutput: true });
     }
 
     _buildVertexShader() {
         const scene = this._scene;
-        const sectionPlanesState = scene._sectionPlanesState;
-        const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
+        const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
-        src.push("#version 300 es");
-        src.push("// Instancing geometry drawing vertex shader");
-
+        src.push('#version 300 es');
+        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " vertex shader");
         src.push("uniform int renderPass;");
-
         src.push("in vec3 position;");
-        src.push("in vec4 color;");
         src.push("in vec2 uv;");
+        src.push("in vec4 color;");
         src.push("in float flags;");
-
         if (scene.entityOffsetsEnabled) {
             src.push("in vec3 offset;");
         }
 
-        src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
-        src.push("in vec4 modelMatrixCol1;");
-        src.push("in vec4 modelMatrixCol2;");
+        if (this._instancing) {
+            src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
+            src.push("in vec4 modelMatrixCol1;");
+            src.push("in vec4 modelMatrixCol2;");
+        }
 
         this._addMatricesUniformBlockLines(src);
 
@@ -49,42 +48,39 @@ export class TrianglesColorTextureRenderer extends VBORenderer {
             src.push("out float vFlags;");
         }
         src.push("out vec4 vViewPosition;");
-        src.push("out vec4 vColor;");
         src.push("out vec2 vUV;");
+        src.push("out vec4 vColor;");
 
         src.push("void main(void) {");
-
         // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
         // renderPass = COLOR_OPAQUE | COLOR_TRANSPARENT
-
         src.push(`int colorFlag = int(flags) & 0xF;`);
         src.push(`if (colorFlag != renderPass) {`);
         src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
-
         src.push("} else {");
-
-        src.push("vec4 worldPosition =  positionsDecodeMatrix * vec4(position, 1.0); ");
-        src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
+        if (this._instancing) {
+            src.push("vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0);");
+            src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
+        } else {
+            src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0));");
+        }
         if (scene.entityOffsetsEnabled) {
             src.push("worldPosition.xyz = worldPosition.xyz + offset;");
         }
-
-        src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
+        src.push("vec4 viewPosition  = viewMatrix * worldPosition;");
         src.push("vViewPosition = viewPosition;");
-        src.push("vColor = vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0, float(color.a) / 255.0);");
         src.push("vUV = (uvDecodeMatrix * vec3(uv, 1.0)).xy;");
+        src.push("vColor = vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0, float(color.a) / 255.0);");
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
-
         if (clipping) {
             src.push("vWorldPosition = worldPosition;");
             src.push("vFlags = flags;");
         }
-
         src.push("gl_Position = clipPos;");
         src.push("}");
         src.push("}");
@@ -93,15 +89,11 @@ export class TrianglesColorTextureRenderer extends VBORenderer {
 
     _buildFragmentShader() {
         const scene = this._scene;
-        const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
-        const lightsState = scene._lightsState;
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
-        const useAlphaCutoff = this._useAlphaCutoff;
         const src = [];
-        src.push("#version 300 es");
-        src.push("// Instancing geometry drawing fragment shader");
-
+        src.push('#version 300 es');
+        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -109,7 +101,6 @@ export class TrianglesColorTextureRenderer extends VBORenderer {
         src.push("precision mediump float;");
         src.push("precision mediump int;");
         src.push("#endif");
-
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("in float isPerspective;");
             src.push("uniform float logDepthBufFC;");
@@ -119,7 +110,6 @@ export class TrianglesColorTextureRenderer extends VBORenderer {
         if (this._withSAO) {
             src.push("uniform sampler2D uOcclusionTexture;");
             src.push("uniform vec4      uSAOParams;");
-
             src.push("const float       packUpscale = 256. / 255.;");
             src.push("const float       unpackDownScale = 255. / 256.;");
             src.push("const vec3        packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );");
@@ -139,6 +129,8 @@ export class TrianglesColorTextureRenderer extends VBORenderer {
         src.push("vec4 gammaToLinear( in vec4 value) {");
         src.push("  return vec4( pow( value.xyz, vec3( gammaFactor ) ), value.w );");
         src.push("}");
+
+        const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
         if (gammaOutput) {
             src.push("vec4 linearToGamma( in vec4 value, in float gammaFactor ) {");
             src.push("  return vec4( pow( value.xyz, vec3( 1.0 / gammaFactor ) ), value.w );");
@@ -158,6 +150,7 @@ export class TrianglesColorTextureRenderer extends VBORenderer {
         this._addMatricesUniformBlockLines(src);
 
         src.push("uniform vec4 lightAmbient;");
+        const lightsState = scene._lightsState;
         for (let i = 0, len = lightsState.lights.length; i < len; i++) {
             const light = lightsState.lights[i];
             if (light.type === "ambient") {
@@ -176,15 +169,15 @@ export class TrianglesColorTextureRenderer extends VBORenderer {
             }
         }
 
+        const useAlphaCutoff = this._useAlphaCutoff;
         if (useAlphaCutoff) {
             src.push("uniform float materialAlphaCutoff;");
         }
 
         src.push("in vec4 vViewPosition;");
-        src.push("in vec4 vColor;");
         src.push("in vec2 vUV;");
+        src.push("in vec4 vColor;");
         src.push("out vec4 outColor;");
-
         src.push("void main(void) {");
         src.push("  vec4 newColor;");
         src.push("  newColor = vColor;");
@@ -228,7 +221,7 @@ export class TrianglesColorTextureRenderer extends VBORenderer {
                 }
             } else if (light.type === "point") {
                 if (light.space === "view") {
-                    src.push("viewLightDir = -normalize(lightPos" + i + " - viewPosition.xyz);");
+                    src.push("viewLightDir = -normalize(lightPos" + i + " - vViewPosition.xyz);");
                 } else {
                     src.push("viewLightDir = -normalize((viewMatrix * vec4(lightPos" + i + ", 0.0)).xyz);");
                 }
@@ -274,7 +267,6 @@ export class TrianglesColorTextureRenderer extends VBORenderer {
         } else {
             src.push("   outColor                = vec4(colorTexel.rgb, opacity);");
         }
-
         if (gammaOutput) {
             src.push("outColor = linearToGamma(outColor, gammaFactor);");
         }
@@ -282,7 +274,6 @@ export class TrianglesColorTextureRenderer extends VBORenderer {
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
-
         src.push("}");
         return src;
     }
