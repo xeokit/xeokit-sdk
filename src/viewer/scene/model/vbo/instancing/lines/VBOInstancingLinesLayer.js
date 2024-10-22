@@ -63,7 +63,7 @@ class VBOInstancingLinesLayer {
             numInstances: 0,
             origin: null,
             geometry: cfg.geometry,
-            positionsDecodeMatrix: cfg.geometry.positionsDecodeMatrix, // So we can null the geometry for GC
+            positionsDecodeMatrix: math.mat4(cfg.geometry.positionsDecodeMatrix), // So we can null the geometry for GC
             positionsBuf: null,
             colorsBuf: null,
             flagsBuf: null,
@@ -229,7 +229,6 @@ class VBOInstancingLinesLayer {
         if (geometry.positionsCompressed && geometry.positionsCompressed.length > 0) {
             const normalized = false;
             state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, geometry.positionsCompressed, geometry.positionsCompressed.length, 3, gl.STATIC_DRAW, normalized);
-            state.positionsDecodeMatrix = math.mat4(geometry.positionsDecodeMatrix);
         }
         if (geometry.indices && geometry.indices.length > 0) {
             state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(geometry.indices), geometry.indices.length, 1, gl.STATIC_DRAW);
