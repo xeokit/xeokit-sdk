@@ -380,11 +380,14 @@
         isChecked: (element) => {
             return element.checked;
         },
-        setCheckbox: (nodeId, checked) => {
+        setCheckbox: (nodeId, checked, indeterminate) => {
             const checkbox = document.getElementById(`cb-${nodeId}`);
             if (checkbox) {
                 if (checked !== checkbox.checked) {
                     checkbox.checked = checked;
+                }
+                if (indeterminate !== checkbox.indeterminate) {
+                    checkbox.indeterminate = indeterminate;
                 }
             }
         },
