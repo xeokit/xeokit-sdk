@@ -5,11 +5,11 @@ import {TrianglesSilhouetteRenderer} from "./TrianglesSilhouetteRenderer.js";
 import {VBOTrianglesEdgesRenderer} from "../../../renderers/VBOTrianglesEdgesRenderer.js";
 import {VBOTrianglesFlatColorRenderer} from "../../../renderers/VBOTrianglesFlatColorRenderer.js";
 import {TrianglesPickMeshRenderer} from "./TrianglesPickMeshRenderer.js";
-import {TrianglesPickDepthRenderer} from "./TrianglesPickDepthRenderer.js";
 import {TrianglesPickNormalsRenderer} from "./TrianglesPickNormalsRenderer.js";
 import {VBOTrianglesOcclusionRenderer} from "../../../renderers/VBOTrianglesOcclusionRenderer.js";
 import {TrianglesShadowRenderer} from "./TrianglesShadowRenderer.js";
 import {VBOTrianglesPBRRenderer} from "../../../renderers/VBOTrianglesPBRRenderer.js";
+import {VBOTrianglesPickDepthRenderer} from "../../../renderers/VBOTrianglesPickDepthRenderer.js";
 import {TrianglesPickNormalsFlatRenderer} from "./TrianglesPickNormalsFlatRenderer.js";
 import {TrianglesSnapRenderer} from "./TrianglesSnapRenderer.js";
 
@@ -125,11 +125,9 @@ class Renderers {
         if (!this._pickMeshRenderer) {
             this._pickMeshRenderer = new TrianglesPickMeshRenderer(this._scene);
         }
-        if (!this._pickDepthRenderer) {
-            this._pickDepthRenderer = new TrianglesPickDepthRenderer(this._scene);
-        }
         // Return to make sure the getter calls never get optimized away as incorrectly considered nonconsequential
         return [
+            this.pickDepthRenderer,
             this.snapInitRenderer,
             this.snapRenderer
         ];
@@ -256,7 +254,7 @@ class Renderers {
 
     get pickDepthRenderer() {
         if (!this._pickDepthRenderer) {
-            this._pickDepthRenderer = new TrianglesPickDepthRenderer(this._scene);
+            this._pickDepthRenderer = new VBOTrianglesPickDepthRenderer(this._scene, true);
         }
         return this._pickDepthRenderer;
     }
