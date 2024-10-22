@@ -28,7 +28,6 @@ export class TrianglesShadowRenderer extends TrianglesBatchingRenderer {
             src.push("out vec4 vWorldPosition;");
             src.push("out float vFlags;");
         }
-        src.push("out vec4 vViewPosition;");
 
         src.push("void main(void) {");
         src.push(`  int colorFlag = int(flags) & 0xF;`);
@@ -46,7 +45,6 @@ export class TrianglesShadowRenderer extends TrianglesBatchingRenderer {
             src.push("      vWorldPosition = worldPosition;");
             src.push("      vFlags = flags;");
         }
-        src.push("      vViewPosition = viewPosition;");
         src.push("      gl_Position = shadowProjMatrix * viewPosition;");
         src.push("  }");
         src.push("}");
@@ -76,8 +74,6 @@ export class TrianglesShadowRenderer extends TrianglesBatchingRenderer {
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
-        src.push("in vec4 vViewPosition;");
-
         src.push("vec4 encodeFloat( const in float v ) {");
         src.push("  const vec4 bitShift = vec4(256 * 256 * 256, 256 * 256, 256, 1.0);");
         src.push("  const vec4 bitMask = vec4(0, 1.0 / 256.0, 1.0 / 256.0, 1.0 / 256.0);");
