@@ -1,4 +1,4 @@
-import {TrianglesColorRenderer} from "./TrianglesColorRenderer.js";
+import {VBOTrianglesColorRenderer} from "../../../renderers/VBOTrianglesColorRenderer.js";
 import {TrianglesFlatColorRenderer} from "./TrianglesFlatColorRenderer.js";
 import {TrianglesSilhouetteRenderer} from "./TrianglesSilhouetteRenderer.js";
 import {VBOTrianglesEdgesRenderer} from "../../../renderers/VBOTrianglesEdgesRenderer.js";
@@ -137,14 +137,14 @@ class Renderers {
 
     get colorRenderer() {
         if (!this._colorRenderer) {
-            this._colorRenderer = new TrianglesColorRenderer(this._scene, false);
+            this._colorRenderer = new VBOTrianglesColorRenderer(this._scene, false, false);
         }
         return this._colorRenderer;
     }
 
     get colorRendererWithSAO() {
         if (!this._colorRendererWithSAO) {
-            this._colorRendererWithSAO = new TrianglesColorRenderer(this._scene, true);
+            this._colorRendererWithSAO = new VBOTrianglesColorRenderer(this._scene, false, true);
         }
         return this._colorRendererWithSAO;
     }
