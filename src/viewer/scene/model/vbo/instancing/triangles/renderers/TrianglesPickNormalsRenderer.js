@@ -19,7 +19,7 @@ export class TrianglesPickNormalsRenderer extends TrianglesInstancingRenderer {
         if (scene.entityOffsetsEnabled) {
             src.push("in vec3 offset;");
         }
-        src.push("in vec2 normal;");
+        src.push("in vec3 normal;");
         src.push("in float flags;");
         src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
         src.push("in vec4 modelMatrixCol1;");
