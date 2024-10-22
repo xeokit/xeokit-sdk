@@ -1,34 +1,33 @@
-import {VBORenderer} from "./../../../VBORenderer.js";
+import {VBORenderer} from "../VBORenderer.js";
 
 /**
  * @private
  */
-export class TrianglesFlatColorRenderer extends VBORenderer {
-    constructor(scene, withSAO) {
-        super(scene, withSAO, { instancing: true, primType: "triangleType", progMode: "flatColorMode", hashLigthsSAO: true });
+export class VBOTrianglesFlatColorRenderer extends VBORenderer {
+
+    constructor(scene, instancing, withSAO) {
+        super(scene, withSAO, { instancing: instancing, primType: "triangleType", progMode: "flatColorMode", hashLigthsSAO: true });
     }
 
     _buildVertexShader() {
         const scene = this._scene;
-        const sectionPlanesState = scene._sectionPlanesState;
-        const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
+        const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
-        src.push("#version 300 es");
-        src.push("// Instancing geometry flat-shading drawing vertex shader");
-
+        src.push('#version 300 es');
+        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " vertex shader");
         src.push("uniform int renderPass;");
-
         src.push("in vec3 position;");
         src.push("in vec4 color;");
         src.push("in float flags;");
-
         if (scene.entityOffsetsEnabled) {
             src.push("in vec3 offset;");
         }
 
-        src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
-        src.push("in vec4 modelMatrixCol1;");
-        src.push("in vec4 modelMatrixCol2;");
+        if (this._instancing) {
+            src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
+            src.push("in vec4 modelMatrixCol1;");
+            src.push("in vec4 modelMatrixCol2;");
+        }
 
         this._addMatricesUniformBlockLines(src);
 
@@ -40,48 +39,42 @@ export class TrianglesFlatColorRenderer extends VBORenderer {
             src.push("}");
             src.push("out float isPerspective;");
         }
-
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
             src.push("out float vFlags;");
         }
-
         src.push("out vec4 vViewPosition;");
         src.push("out vec4 vColor;");
 
         src.push("void main(void) {");
-
         // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
         // renderPass = COLOR_OPAQUE | COLOR_TRANSPARENT
-
         src.push(`int colorFlag = int(flags) & 0xF;`);
         src.push(`if (colorFlag != renderPass) {`);
         src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
-
         src.push("} else {");
-
-        src.push("vec4 worldPosition =  positionsDecodeMatrix * vec4(position, 1.0); ");
-        src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
-        if (scene.entityOffsetsEnabled) {
-            src.push("      worldPosition.xyz = worldPosition.xyz + offset;");
+        if (this._instancing) {
+            src.push("vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0);");
+            src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
+        } else {
+            src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0));");
         }
-
-        src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
-        src.push("vViewPosition = viewPosition;");
-        src.push("vColor = vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0, float(color.a) / 255.0);");
-
+        if (scene.entityOffsetsEnabled) {
+            src.push("worldPosition.xyz = worldPosition.xyz + offset;");
+        }
+        src.push("vec4 viewPosition  = viewMatrix * worldPosition;");
+        if (clipping) {
+            src.push("vWorldPosition = worldPosition;");
+            src.push("vFlags = flags;");
+        }
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
-
-        if (clipping) {
-            src.push("vWorldPosition = worldPosition;");
-            src.push("vFlags = flags;");
-        }
-
         src.push("gl_Position = clipPos;");
+        src.push("vViewPosition = viewPosition;");
+        src.push("vColor = vec4(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0, float(color.a) / 255.0);");
         src.push("}");
         src.push("}");
         return src;
@@ -90,14 +83,10 @@ export class TrianglesFlatColorRenderer extends VBORenderer {
     _buildFragmentShader() {
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
-        const lightsState = scene._lightsState;
-        let i;
-        let len;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
-        src.push("#version 300 es");
-        src.push("// Instancing geometry flat-shading drawing fragment shader");
-
+        src.push('#version 300 es');
+        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -122,7 +111,6 @@ export class TrianglesFlatColorRenderer extends VBORenderer {
             src.push("    return dot( v, unPackFactors );");
             src.push("}");
         }
-
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
             src.push("in float vFlags;");
@@ -134,12 +122,11 @@ export class TrianglesFlatColorRenderer extends VBORenderer {
             src.push("uniform float sliceThickness;");
             src.push("uniform vec4 sliceColor;");
         }
-
         this._addMatricesUniformBlockLines(src);
 
         src.push("uniform vec4 lightAmbient;");
-
-        for (i = 0, len = lightsState.lights.length; i < len; i++) {
+        const lightsState = scene._lightsState;
+        for (let i = 0, len = lightsState.lights.length; i < len; i++) {
             const light = lightsState.lights[i];
             if (light.type === "ambient") {
                 continue;
@@ -160,7 +147,6 @@ export class TrianglesFlatColorRenderer extends VBORenderer {
         src.push("in vec4 vViewPosition;");
         src.push("in vec4 vColor;");
         src.push("out vec4 outColor;");
-
         src.push("void main(void) {");
         src.push("  vec4 newColor;");
         src.push("  newColor = vColor;");
@@ -191,7 +177,7 @@ export class TrianglesFlatColorRenderer extends VBORenderer {
         src.push("vec3 yTangent = dFdy( vViewPosition.xyz );");
         src.push("vec3 viewNormal = normalize( cross( xTangent, yTangent ) );");
 
-        for (i = 0, len = lightsState.lights.length; i < len; i++) {
+        for (let i = 0, len = lightsState.lights.length; i < len; i++) {
             const light = lightsState.lights[i];
             if (light.type === "ambient") {
                 continue;
@@ -232,15 +218,14 @@ export class TrianglesFlatColorRenderer extends VBORenderer {
             src.push("   float blendFactor       = uSAOParams[3];");
             src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
             src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBToFloat(texture(uOcclusionTexture, uv))) * blendFactor;");
-            src.push("   outColor            = vec4(fragColor.rgb * ambient, fragColor.a);");
+            src.push("   outColor                = vec4(fragColor.rgb * ambient, fragColor.a);");
         } else {
-            src.push("    outColor           = fragColor;");
+            src.push("   outColor                = fragColor;");
         }
 
         if (scene.logarithmicDepthBufferEnabled) {
-            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
+            src.push("gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
-
         src.push("}");
         return src;
     }
