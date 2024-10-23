@@ -5,7 +5,10 @@ import {math} from "../../../../math/math.js";
 import {RenderState} from "../../../../webgl/RenderState.js";
 import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
 import {getPointsRenderers} from "../../renderers/VBOPointsRenderers.js";
+import {Configs} from "../../../../../Configs.js";
 import {quantizePositions} from "../../../compression.js";
+
+const configs = new Configs();
 
 /**
  * @private
@@ -13,17 +16,16 @@ import {quantizePositions} from "../../../compression.js";
 export class VBOBatchingPointsLayer {
 
     /**
-     * @param model
      * @param cfg
+     * @param cfg.model
      * @param cfg.layerIndex
+     * @param cfg.primitive
      * @param cfg.positionsDecodeMatrix
      * @param cfg.maxGeometryBatchSize
      * @param cfg.origin
      * @param cfg.scratchMemory
      */
     constructor(cfg) {
-
-     //   console.info("Creating VBOBatchingPointsLayer");
 
         /**
          * Owner model
@@ -32,20 +34,25 @@ export class VBOBatchingPointsLayer {
         this.model = cfg.model;
 
         /**
+         * Index of this Layer in {@link VBOSceneModel#_layerList}.
+         * @type {Number}
+         */
+        this.layerIndex = cfg.layerIndex;
+
+        /**
+         * The type of primitives in this layer.
+         */
+        this.primitive = cfg.primitive;
+
+        /**
          * State sorting key.
          * @type {string}
          */
         this.sortId = "PointsBatchingLayer";
 
-        /**
-         * Index of this PointsBatchingLayer in {@link VBOSceneModel#_layerList}.
-         * @type {Number}
-         */
-        this.layerIndex = cfg.layerIndex;
-
         this._renderers = getPointsRenderers(cfg.model.scene, false);
 
-        const maxGeometryBatchSize = cfg.maxGeometryBatchSize || 5000000;
+        const maxGeometryBatchSize = cfg.maxGeometryBatchSize ?? configs.maxGeometryBatchSize;
 
         const attribute = function() {
             const portions = [ ];
@@ -95,16 +102,15 @@ export class VBOBatchingPointsLayer {
             colors:     attribute(),
             pickColors: attribute(),
         };
-
         this._scratchMemory = cfg.scratchMemory;
 
         this._state = new RenderState({
+            origin: cfg.origin && math.vec3(cfg.origin),
             positionsBuf: null,
-            offsetsBuf: null,
             colorsBuf: null,
+            offsetsBuf: null,
             flagsBuf: null,
-            positionsDecodeMatrix: math.mat4(),
-            origin: null
+            positionsDecodeMatrix: cfg.positionsDecodeMatrix && math.mat4(cfg.positionsDecodeMatrix),
         });
 
         // These counts are used to avoid unnecessary render passes
@@ -127,17 +133,6 @@ export class VBOBatchingPointsLayer {
         this.aabbDirty = true;
 
         this._finalized = false;
-
-        if (cfg.positionsDecodeMatrix) {
-            this._state.positionsDecodeMatrix.set(cfg.positionsDecodeMatrix);
-            this._preCompressedPositionsExpected = true;
-        } else {
-            this._preCompressedPositionsExpected = false;
-        }
-
-        if (cfg.origin) {
-            this._state.origin = math.vec3(cfg.origin);
-        }
     }
 
     get aabb() {
@@ -152,7 +147,7 @@ export class VBOBatchingPointsLayer {
     }
 
     /**
-     * Tests if there is room for another portion in this PointsBatchingLayer.
+     * Tests if there is room for another portion in this Layer.
      *
      * @param lenPositions Number of positions we'd like to create in the portion.
      * @returns {Boolean} True if OK to create another portion.
@@ -165,17 +160,16 @@ export class VBOBatchingPointsLayer {
     }
 
     /**
-     * Creates a new portion within this PointsBatchingLayer, returns the new portion ID.
+     * Creates a new portion within this Layer, returns the new portion ID.
      *
      * Gives the portion the specified geometry, color and matrix.
      *
      * @param mesh The SceneModelMesh that owns the portion
      * @param cfg.positions Flat float Local-space positions array.
-     * @param cfg.positionsCompressed Flat quantized positions array - decompressed with PointsBatchingLayer positionsDecodeMatrix
+     * @param cfg.positionsCompressed Flat quantized positions array - decompressed with positionsDecodeMatrix
      * @param [cfg.colorsCompressed] Quantized RGB colors [0..255,0..255,0..255,0..255]
      * @param [cfg.colors] Flat float colors array.
      * @param cfg.color Float RGB color [0..1,0..1,0..1]
-     * @param [cfg.meshMatrix] Flat float 4x4 matrix
      * @param cfg.aabb Flat float AABB World-space AABB
      * @param cfg.pickColor Quantized pick color
      * @returns {number} Portion ID
@@ -188,9 +182,9 @@ export class VBOBatchingPointsLayer {
 
         const buffer = this._buffer;
 
-        const positions = this._preCompressedPositionsExpected ? cfg.positionsCompressed : cfg.positions;
+        const positions = this._state.positionsDecodeMatrix ? cfg.positionsCompressed : cfg.positions;
         if (! positions) {
-            throw ((this._preCompressedPositionsExpected ? "positionsCompressed" : "positions") + " expected");
+            throw ((this._state.positionsDecodeMatrix ? "positionsCompressed" : "positions") + " expected");
         }
 
         buffer.positions.append(positions);
@@ -245,9 +239,9 @@ export class VBOBatchingPointsLayer {
         const buffer = this._buffer;
         const maybeCreateGlBuffer = (srcData, size, usage) => (srcData.length > 0) ? new ArrayBuf(gl, gl.ARRAY_BUFFER, srcData, srcData.length, size, usage) : null;
 
-        const positions = (this._preCompressedPositionsExpected
+        const positions = (state.positionsDecodeMatrix
                            ? buffer.positions.compileBuffer(Uint16Array)
-                           : (quantizePositions(buffer.positions.compileBuffer(Float64Array), this._modelAABB, state.positionsDecodeMatrix)));
+                           : (quantizePositions(buffer.positions.compileBuffer(Float64Array), this._modelAABB, state.positionsDecodeMatrix = math.mat4())));
         state.positionsBuf  = maybeCreateGlBuffer(positions, 3, gl.STATIC_DRAW);
 
         state.flagsBuf      = maybeCreateGlBuffer(new Float32Array(this._numVerts), 1, gl.DYNAMIC_DRAW);
@@ -295,7 +289,12 @@ export class VBOBatchingPointsLayer {
             this._numTransparentLayerPortions++;
             this.model.numTransparentLayerPortions++;
         }
-        this._setFlags(portionId, flags, meshTransparent);
+        const deferred = false;
+        this._setFlags(portionId, flags, meshTransparent, deferred);
+    }
+
+    flushInitFlags() {
+        this._setDeferredFlags();
     }
 
     setVisible(portionId, flags, transparent) {
@@ -430,7 +429,9 @@ export class VBOBatchingPointsLayer {
             tempArray[i + 2] = b;
             tempArray[i + 3] = a; // this used to be unset for points, so effectively random (from last use)
         }
-        this._state.colorsBuf.setData(tempArray, firstColor, lenColor);
+        if (this._state.colorsBuf) {
+            this._state.colorsBuf.setData(tempArray, firstColor, lenColor);
+        }
     }
 
     setTransparent(portionId, flags, transparent) {
@@ -447,7 +448,7 @@ export class VBOBatchingPointsLayer {
     /**
      * flags are 4bits values encoded on a 32bit base. color flag on the first 4 bits, silhouette flag on the next 4 bits and so on for edge, pick and clippable.
      */
-    _setFlags(portionId, flags, transparent) {
+    _setFlags(portionId, flags, transparent, deferred = false) {
 
         if (!this._finalized) {
             throw "Not finalized";
@@ -459,7 +460,6 @@ export class VBOBatchingPointsLayer {
         const numVerts = portion.numVerts;
         const firstFlag = vertsBaseIndex;
         const lenFlags = numVerts;
-        const tempArray = this._scratchMemory.getFloat32Array(lenFlags);
 
         const visible = !!(flags & ENTITY_FLAGS.VISIBLE);
         const xrayed = !!(flags & ENTITY_FLAGS.XRAYED);
@@ -498,18 +498,42 @@ export class VBOBatchingPointsLayer {
 
         const clippableFlag = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 1 : 0;
 
-        for (let i = 0; i < lenFlags; i++) {
-            let vertFlag = 0;
-            vertFlag |= colorFlag;
-            vertFlag |= silhouetteFlag << 4;
-            // no edges
-            vertFlag |= pickFlag << 12;
-            vertFlag |= clippableFlag << 16;
+        if (deferred) {
+            // Avoid zillions of individual WebGL bufferSubData calls - buffer them to apply in one shot
+            if (!this._deferredFlagValues) {
+                this._deferredFlagValues = new Float32Array(this._numVerts);
+            }
+            for (let i = firstFlag, len = (firstFlag + lenFlags); i < len; i++) {
+                let vertFlag = 0;
+                vertFlag |= colorFlag;
+                vertFlag |= silhouetteFlag << 4;
+                // no edges
+                vertFlag |= pickFlag << 12;
+                vertFlag |= clippableFlag << 16;
 
-            tempArray[i] = vertFlag;
+                this._deferredFlagValues[i] = vertFlag;
+            }
+        } else if (this._state.flagsBuf) {
+            const tempArray = this._scratchMemory.getFloat32Array(lenFlags);
+            for (let i = 0; i < lenFlags; i++) {
+                let vertFlag = 0;
+                vertFlag |= colorFlag;
+                vertFlag |= silhouetteFlag << 4;
+                // no edges
+                vertFlag |= pickFlag << 12;
+                vertFlag |= clippableFlag << 16;
+
+                tempArray[i] = vertFlag;
+            }
+            this._state.flagsBuf.setData(tempArray, firstFlag, lenFlags);
         }
+    }
 
-        this._state.flagsBuf.setData(tempArray, firstFlag);
+    _setDeferredFlags() {
+        if (this._deferredFlagValues) {
+            this._state.flagsBuf.setData(this._deferredFlagValues);
+            this._deferredFlagValues = null;
+        }
     }
 
     setOffset(portionId, offset) {
@@ -535,64 +559,67 @@ export class VBOBatchingPointsLayer {
             tempArray[i + 1] = y;
             tempArray[i + 2] = z;
         }
-        this._state.offsetsBuf.setData(tempArray, firstOffset, lenOffsets);
+        if (this._state.offsetsBuf) {
+            this._state.offsetsBuf.setData(tempArray, firstOffset, lenOffsets);
+        }
     }
 
-    //-- NORMAL RENDERING ----------------------------------------------------------------------------------------------
+    __drawLayer(renderFlags, frameCtx, renderer, pass) {
+        if ((this._numCulledLayerPortions < this._numPortions) && (this._numVisibleLayerPortions > 0)) {
+            renderer.drawLayer(frameCtx, this, pass);
+        }
+    }
+
+    // ---------------------- COLOR RENDERING -----------------------------------
+
+    __drawColor(renderFlags, frameCtx, renderOpaque) {
+        if (((renderOpaque ? (this._numTransparentLayerPortions < this._numPortions) : (this._numTransparentLayerPortions > 0)))
+            &&
+            (this._numXRayedLayerPortions < this._numPortions)) {
+            const renderer = this._renderers.colorRenderer;
+            const pass = renderOpaque ? RENDER_PASSES.COLOR_OPAQUE : RENDER_PASSES.COLOR_TRANSPARENT;
+            this.__drawLayer(renderFlags, frameCtx, renderer, pass);
+        }
+    }
 
     drawColorOpaque(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
-            return;
-        }
-        if (this._renderers.colorRenderer) {
-            this._renderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-        }
+        this.__drawColor(renderFlags, frameCtx, true);
     }
 
     drawColorTransparent(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
-            return;
-        }
-        if (this._renderers.colorRenderer) {
-            this._renderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
-        }
+        this.__drawColor(renderFlags, frameCtx, false);
     }
 
-    // -- RENDERING SAO POST EFFECT TARGETS ----------------------------------------------------------------------------
+    // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
 
     drawDepth(renderFlags, frameCtx) {
     }
 
-    // -- EMPHASIS RENDERING -------------------------------------------------------------------------------------------
+    // ---------------------- SILHOUETTE RENDERING -----------------------------------
+
+    __drawSilhouette(renderFlags, frameCtx, renderPass) {
+        this.__drawLayer(renderFlags, frameCtx, this._renderers.silhouetteRenderer, renderPass);
+    }
 
     drawSilhouetteXRayed(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
-            return;
-        }
-        if (this._renderers.silhouetteRenderer) {
-            this._renderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_XRAYED);
+        if (this._numXRayedLayerPortions > 0) {
+            this.__drawSilhouette(renderFlags, frameCtx, RENDER_PASSES.SILHOUETTE_XRAYED);
         }
     }
 
     drawSilhouetteHighlighted(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
-            return;
-        }
-        if (this._renderers.silhouetteRenderer) {
-            this._renderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_HIGHLIGHTED);
+        if (this._numHighlightedLayerPortions > 0) {
+            this.__drawSilhouette(renderFlags, frameCtx, RENDER_PASSES.SILHOUETTE_HIGHLIGHTED);
         }
     }
 
     drawSilhouetteSelected(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
-            return;
-        }
-        if (this._renderers.silhouetteRenderer) {
-            this._renderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_SELECTED);
+        if (this._numSelectedLayerPortions > 0) {
+            this.__drawSilhouette(renderFlags, frameCtx, RENDER_PASSES.SILHOUETTE_SELECTED);
         }
     }
 
-    //-- EDGES RENDERING -----------------------------------------------------------------------------------------------
+    // ---------------------- EDGES RENDERING -----------------------------------
 
     drawEdgesColorOpaque(renderFlags, frameCtx) {
     }
@@ -612,59 +639,32 @@ export class VBOBatchingPointsLayer {
     //---- PICKING ----------------------------------------------------------------------------------------------------
 
     drawPickMesh(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
-            return;
-        }
-        if (this._renderers.pickMeshRenderer) {
-            this._renderers.pickMeshRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
-        }
+        this.__drawLayer(renderFlags, frameCtx, this._renderers.pickMeshRenderer, RENDER_PASSES.PICK);
     }
 
     drawPickDepths(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
-            return;
-        }
-        if (this._renderers.pickDepthRenderer) {
-            this._renderers.pickDepthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
-        }
+        this.__drawLayer(renderFlags, frameCtx, this._renderers.pickDepthRenderer, RENDER_PASSES.PICK);
     }
 
     drawPickNormals(renderFlags, frameCtx) {
     }
 
     drawSnapInit(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
-            return;
-        }
-        if (this._renderers.snapInitRenderer) {
-            this._renderers.snapInitRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
-        }
+        this.__drawLayer(renderFlags, frameCtx, this._renderers.snapInitRenderer, RENDER_PASSES.PICK);
     }
 
     drawSnap(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
-            return;
-        }
-        if (this._renderers.snapRenderer) {
-            this._renderers.snapRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
-        }
+        this.__drawLayer(renderFlags, frameCtx, this._renderers.snapRenderer, RENDER_PASSES.PICK);
     }
 
-    //---- OCCLUSION TESTING -------------------------------------------------------------------------------------------
 
     drawOcclusion(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
-            return;
-        }
-        if (this._renderers.occlusionRenderer) {
-            this._renderers.occlusionRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-        }
+        this.__drawLayer(renderFlags, frameCtx, this._renderers.occlusionRenderer, RENDER_PASSES.COLOR_OPAQUE);
     }
-
-    //---- SHADOWS -----------------------------------------------------------------------------------------------------
 
     drawShadow(renderFlags, frameCtx) {
     }
+
 
     destroy() {
         const state = this._state;
