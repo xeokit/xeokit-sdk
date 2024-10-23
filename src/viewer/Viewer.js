@@ -499,7 +499,8 @@ class Viewer {
             const scale = i == 0 ? snapshotCanvas.width / containerElement.clientWidth : 1;
             const off = math.vec2([ 0, 0 ]);
             if (i === 0) {
-                transformToNode(canvas, containerElement, off);
+                // For specifics of these particular arguments see XCD-153
+                transformToNode(canvas.ownerDocument.body, canvas, off);
             }
             await html2canvas(containerElement, {
                 canvas: snapshotCanvas,
