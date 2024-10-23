@@ -131,6 +131,7 @@ export class VBOBatchingTrianglesLayer {
         this._portions = [];
         this._meshes = [];
         this._numVerts = 0;
+        this._numIndices = 0;
 
         this._aabb = math.collapseAABB3();
         this.aabbDirty = true;
@@ -160,7 +161,7 @@ export class VBOBatchingTrianglesLayer {
         if (this._finalized) {
             throw "Already finalized";
         }
-        return ((this._buffer.positions.length + lenPositions) < (this._buffer.maxVerts * 3) && (this._buffer.indices.length + lenIndices) < (this._buffer.maxIndices));
+        return ((this._numVerts + (lenPositions / 3) <= this._buffer.maxVerts) && (this._numIndices + lenIndices) < (this._buffer.maxIndices));
     }
 
     /**
@@ -212,7 +213,7 @@ export class VBOBatchingTrianglesLayer {
 
         const scene = this.model.scene;
         const buffer = this._buffer;
-        const vertsBaseIndex = buffer.positions.length / 3;
+        const vertsBaseIndex = this._numVerts;
 
         let numVerts;
 
@@ -240,6 +241,7 @@ export class VBOBatchingTrianglesLayer {
             for (let i = 0, len = indices.length; i < len; i++) {
                 buffer.indices.push(vertsBaseIndex + indices[i]);
             }
+            this._numIndices += indices.length;
         }
 
         if (scene.entityOffsetsEnabled) {
