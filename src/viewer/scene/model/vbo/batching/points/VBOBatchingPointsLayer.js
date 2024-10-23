@@ -94,7 +94,6 @@ export class VBOBatchingPointsLayer {
             positions:  attribute(),
             colors:     attribute(),
             pickColors: attribute(),
-            vertsIndex: 0
         };
 
         this._scratchMemory = cfg.scratchMemory;
@@ -122,6 +121,7 @@ export class VBOBatchingPointsLayer {
         this._modelAABB = math.collapseAABB3(); // Model-space AABB
         this._portions = [];
         this._meshes = [];
+        this._numVerts = 0;
 
         this._aabb = math.collapseAABB3();
         this.aabbDirty = true;
@@ -161,7 +161,7 @@ export class VBOBatchingPointsLayer {
         if (this._finalized) {
             throw "Already finalized";
         }
-        return (this._buffer.vertsIndex + (lenPositions / 3)) <= this._buffer.maxVerts;
+        return (this._numVerts + (lenPositions / 3)) <= this._buffer.maxVerts;
     }
 
     /**
@@ -215,14 +215,17 @@ export class VBOBatchingPointsLayer {
 
         math.expandAABB3(this._modelAABB, cfg.aabb);
 
-        const portionId = this._portions.length / 2;
+        const portionId = this._portions.length;
 
-        this._portions.push(this._buffer.vertsIndex);
-        this._portions.push(numVerts);
-        this._buffer.vertsIndex += numVerts;
+        const portion = {
+            vertsBaseIndex: this._numVerts,
+            numVerts: numVerts,
+        };
 
+        this._portions.push(portion);
         this._numPortions++;
         this.model.numPortions++;
+        this._numVerts += numVerts;
         this._meshes.push(mesh);
         return portionId;
     }
@@ -247,13 +250,13 @@ export class VBOBatchingPointsLayer {
                            : (quantizePositions(buffer.positions.compileBuffer(Float64Array), this._modelAABB, state.positionsDecodeMatrix)));
         state.positionsBuf  = maybeCreateGlBuffer(positions, 3, gl.STATIC_DRAW);
 
-        state.flagsBuf      = maybeCreateGlBuffer(new Float32Array(this._buffer.vertsIndex), 1, gl.DYNAMIC_DRAW); // Because we build flags arrays here, get their length from the positions array
+        state.flagsBuf      = maybeCreateGlBuffer(new Float32Array(this._numVerts), 1, gl.DYNAMIC_DRAW);
 
         state.colorsBuf     = maybeCreateGlBuffer(buffer.colors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW);
 
         state.pickColorsBuf = maybeCreateGlBuffer(buffer.pickColors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW);
 
-        state.offsetsBuf    = this.model.scene.entityOffsetsEnabled ? maybeCreateGlBuffer(new Float32Array(this._buffer.vertsIndex * 3), 3, gl.DYNAMIC_DRAW) : null;
+        state.offsetsBuf    = this.model.scene.entityOffsetsEnabled ? maybeCreateGlBuffer(new Float32Array(this._numVerts * 3), 3, gl.DYNAMIC_DRAW) : null;
 
         this._buffer = null;
         this._finalized = true;
@@ -410,10 +413,11 @@ export class VBOBatchingPointsLayer {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        const portionsIdx = portionId * 2;
-        const vertexBase = this._portions[portionsIdx];
-        const numVerts = this._portions[portionsIdx + 1];
-        const firstColor = vertexBase * 4;
+        const portionsIdx = portionId;
+        const portion = this._portions[portionsIdx];
+        const vertsBaseIndex = portion.vertsBaseIndex;
+        const numVerts = portion.numVerts;
+        const firstColor = vertsBaseIndex * 4;
         const lenColor = numVerts * 4;
         const tempArray = this._scratchMemory.getUInt8Array(lenColor);
         const r = color[0];
@@ -449,10 +453,11 @@ export class VBOBatchingPointsLayer {
             throw "Not finalized";
         }
 
-        const portionsIdx = portionId * 2;
-        const vertexBase = this._portions[portionsIdx];
-        const numVerts = this._portions[portionsIdx + 1];
-        const firstFlag = vertexBase;
+        const portionsIdx = portionId;
+        const portion = this._portions[portionsIdx];
+        const vertsBaseIndex = portion.vertsBaseIndex;
+        const numVerts = portion.numVerts;
+        const firstFlag = vertsBaseIndex;
         const lenFlags = numVerts;
         const tempArray = this._scratchMemory.getFloat32Array(lenFlags);
 
@@ -515,10 +520,11 @@ export class VBOBatchingPointsLayer {
             this.model.error("Entity#offset not enabled for this Viewer"); // See Viewer entityOffsetsEnabled
             return;
         }
-        const portionsIdx = portionId * 2;
-        const vertexBase = this._portions[portionsIdx];
-        const numVerts = this._portions[portionsIdx + 1];
-        const firstOffset = vertexBase * 3;
+        const portionsIdx = portionId;
+        const portion = this._portions[portionsIdx];
+        const vertsBaseIndex = portion.vertsBaseIndex;
+        const numVerts = portion.numVerts;
+        const firstOffset = vertsBaseIndex * 3;
         const lenOffsets = numVerts * 3;
         const tempArray = this._scratchMemory.getFloat32Array(lenOffsets);
         const x = offset[0];
