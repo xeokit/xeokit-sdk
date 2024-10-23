@@ -53,13 +53,56 @@ export class VBOBatchingLinesLayer {
         this._renderers = getLinesRenderers(cfg.model.scene, false);
 
         const maxGeometryBatchSize = cfg.maxGeometryBatchSize ?? configs.maxGeometryBatchSize;
+
+        const attribute = function() {
+            const portions = [ ];
+
+            return {
+                append: function(data, times = 1, denormalizeScale = 1.0, increment = 0.0) {
+                    portions.push({ data: data, times: times, denormalizeScale: denormalizeScale, increment: increment });
+                },
+                compileBuffer: function(type) {
+                    let len = 0;
+                    portions.forEach(p => { len += p.times * p.data.length; });
+                    const buf = new type(len);
+
+                    let begin = 0;
+                    portions.forEach(p => {
+                        const data = p.data;
+                        const dScale = p.denormalizeScale;
+                        const increment = p.increment;
+                        const subBuf = buf.subarray(begin);
+
+                        if ((dScale === 1.0) && (increment === 0.0)) {
+                            subBuf.set(data);
+                        } else {
+                            for (let i = 0; i < data.length; ++i) {
+                                subBuf[i] = increment + data[i] * dScale;
+                            }
+                        }
+
+                        let soFar = data.length;
+                        const allDataLen = p.times * data.length;
+                        while (soFar < allDataLen) {
+                            const toCopy = Math.min(soFar, allDataLen - soFar);
+                            subBuf.set(subBuf.subarray(0, toCopy), soFar);
+                            soFar += toCopy;
+                        }
+
+                        begin += soFar;
+                    });
+
+                    return buf;
+                }
+            };
+        };
+
         this._buffer = {
             maxVerts:   maxGeometryBatchSize,
             maxIndices: maxGeometryBatchSize * 3, // Rough rule-of-thumb
-            positions:  [],
-            colors:     [],
-            offsets:    [],
-            indices:    []
+            positions:  attribute(),
+            colors:     attribute(),
+            indices:    attribute(),
         };
         this._scratchMemory = cfg.scratchMemory;
 
@@ -142,66 +185,32 @@ export class VBOBatchingLinesLayer {
             throw "Already finalized";
         }
 
-        const positions = cfg.positions;
-        const positionsCompressed = cfg.positionsCompressed;
-        const indices = cfg.indices;
-        const color = cfg.color;
-        const opacity = cfg.opacity;
-
-        const scene = this.model.scene;
         const buffer = this._buffer;
         const vertsBaseIndex = this._numVerts;
 
-        let numVerts;
-
-        math.expandAABB3(this._modelAABB, cfg.aabb);
-
-        if (this._state.positionsDecodeMatrix) {
-            if (!positionsCompressed) {
-                throw "positionsCompressed expected";
-            }
-            numVerts = positionsCompressed.length / 3;
-            for (let i = 0, len = positionsCompressed.length; i < len; i++) {
-                buffer.positions.push(positionsCompressed[i]);
-            }
-        } else {
-            if (!positions) {
-                throw "positions expected";
-            }
-            numVerts = positions.length / 3;
-            for (let i = 0, len = positions.length; i < len; i++) {
-                buffer.positions.push(positions[i]);
-            }
+        const useCompressed = this._state.positionsDecodeMatrix;
+        const positions = useCompressed ? cfg.positionsCompressed : cfg.positions;
+        if (! positions) {
+            throw ((useCompressed ? "positionsCompressed" : "positions") + " expected");
         }
 
+        buffer.positions.append(positions);
+
+        const numVerts = positions.length / 3;
+
+        const indices = cfg.indices;
         if (indices) {
-            for (let i = 0, len = indices.length; i < len; i++) {
-                buffer.indices.push(vertsBaseIndex + indices[i]);
-            }
+            buffer.indices.append(indices, 1, 1.0, vertsBaseIndex);
             this._numIndices += indices.length;
         }
 
-        if (scene.entityOffsetsEnabled) {
-            for (let i = 0; i < numVerts; i++) {
-                buffer.offsets.push(0);
-                buffer.offsets.push(0);
-                buffer.offsets.push(0);
-            }
-        }
-
-
+        const color = cfg.color;
         if (color) {
-            const r = color[0]; // Color is pre-quantized by VBOSceneModel
-            const g = color[1];
-            const b = color[2];
-            const a = opacity;
-            for (let i = 0; i < numVerts; i++) {
-                buffer.colors.push(r);
-                buffer.colors.push(g);
-                buffer.colors.push(b);
-                buffer.colors.push(a);
-            }
+            // Color is pre-quantized by VBOSceneModel
+            buffer.colors.append([ color[0], color[1], color[2], cfg.opacity ], numVerts);
         }
+
+        math.expandAABB3(this._modelAABB, cfg.aabb);
 
         const portionId = this._portions.length;
 
@@ -231,38 +240,20 @@ export class VBOBatchingLinesLayer {
         const state = this._state;
         const gl = this.model.scene.canvas.gl;
         const buffer = this._buffer;
+        const maybeCreateGlBuffer = (target, srcData, size, usage, normalized = false) => (srcData.length > 0) ? new ArrayBuf(gl, target, srcData, srcData.length, size, usage, normalized) : null;
 
-        if (buffer.positions.length > 0) {
-            const quantizedPositions = state.positionsDecodeMatrix
-                  ? new Uint16Array(buffer.positions)
-                  : quantizePositions(buffer.positions, this._modelAABB, state.positionsDecodeMatrix = math.mat4()); // BOTTLENECK
-            state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, quantizedPositions.length, 3, gl.STATIC_DRAW);
-        }
+        const positions = (state.positionsDecodeMatrix
+                           ? buffer.positions.compileBuffer(Uint16Array)
+                           : (quantizePositions(buffer.positions.compileBuffer(Float64Array), this._modelAABB, state.positionsDecodeMatrix = math.mat4())));
+        state.positionsBuf  = maybeCreateGlBuffer(gl.ARRAY_BUFFER, positions, 3, gl.STATIC_DRAW);
 
-        if (buffer.positions.length > 0) { // Because we build flags arrays here, get their length from the positions array
-            const flagsLength = buffer.positions.length / 3;
-            const flags = new Float32Array(flagsLength);
-            const notNormalized = false;
-            state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, flags, flags.length, 1, gl.DYNAMIC_DRAW, notNormalized);
-        }
+        state.flagsBuf      = maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(this._numVerts), 1, gl.DYNAMIC_DRAW);
 
-        if (buffer.colors.length > 0) { // Colors are already compressed
-            const colors = new Uint8Array(buffer.colors);
-            let normalized = false;
-            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colors, buffer.colors.length, 4, gl.DYNAMIC_DRAW, normalized);
-        }
+        state.colorsBuf     = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.colors.compileBuffer(Uint8Array), 4, gl.DYNAMIC_DRAW);
 
-        if (this.model.scene.entityOffsetsEnabled) {
-            if (buffer.offsets.length > 0) {
-                const offsets = new Float32Array(buffer.offsets);
-                state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, offsets, buffer.offsets.length, 3, gl.DYNAMIC_DRAW);
-            }
-        }
+        state.offsetsBuf    = this.model.scene.entityOffsetsEnabled ? maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(this._numVerts * 3), 3, gl.DYNAMIC_DRAW) : null;
 
-        if (buffer.indices.length > 0) {
-            const indices = new Uint32Array(buffer.indices);
-            state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, indices, buffer.indices.length, 1, gl.STATIC_DRAW);
-        }
+        state.indicesBuf    = maybeCreateGlBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer.indices.compileBuffer(Uint32Array), 1, gl.STATIC_DRAW);
 
         this._buffer = null;
         this._finalized = true;
