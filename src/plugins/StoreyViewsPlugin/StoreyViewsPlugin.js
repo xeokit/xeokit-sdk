@@ -541,7 +541,11 @@ class StoreyViewsPlugin extends Plugin {
             height = Math.round(width * aspect);
         }
 
-        this._objectsMemento.saveObjects(scene);
+        const mask = {
+            visible: true,
+        }
+
+        this._objectsMemento.saveObjects(scene, mask);
         this._cameraMemento.saveCamera(scene);
 
         this.showStoreyObjects(storeyId, utils.apply(options, {
@@ -556,7 +560,7 @@ class StoreyViewsPlugin extends Plugin {
             format: format,
         });
 
-        this._objectsMemento.restoreObjects(scene);
+        this._objectsMemento.restoreObjects(scene, mask);
         this._cameraMemento.restoreCamera(scene);
 
         return new StoreyMap(storeyId, src, format, width, height, padding);
