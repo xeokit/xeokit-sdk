@@ -58,8 +58,8 @@ export class VBOBatchingPointsLayer {
             const portions = [ ];
 
             return {
-                append: function(data, times = 1, denormalizeScale = 1.0) {
-                    portions.push({ data: data, times: times, denormalizeScale: denormalizeScale });
+                append: function(data, times = 1, denormalizeScale = 1.0, increment = 0.0) {
+                    portions.push({ data: data, times: times, denormalizeScale: denormalizeScale, increment: increment });
                 },
                 compileBuffer: function(type) {
                     let len = 0;
@@ -70,13 +70,14 @@ export class VBOBatchingPointsLayer {
                     portions.forEach(p => {
                         const data = p.data;
                         const dScale = p.denormalizeScale;
+                        const increment = p.increment;
                         const subBuf = buf.subarray(begin);
 
-                        if (dScale === 1.0) {
-                            subBuf.set(data, 0);
+                        if ((dScale === 1.0) && (increment === 0.0)) {
+                            subBuf.set(data);
                         } else {
                             for (let i = 0; i < data.length; ++i) {
-                                subBuf[i] = data[i] * dScale;
+                                subBuf[i] = increment + data[i] * dScale;
                             }
                         }
 
@@ -237,20 +238,20 @@ export class VBOBatchingPointsLayer {
         const state = this._state;
         const gl = this.model.scene.canvas.gl;
         const buffer = this._buffer;
-        const maybeCreateGlBuffer = (srcData, size, usage) => (srcData.length > 0) ? new ArrayBuf(gl, gl.ARRAY_BUFFER, srcData, srcData.length, size, usage) : null;
+        const maybeCreateGlBuffer = (target, srcData, size, usage, normalized = false) => (srcData.length > 0) ? new ArrayBuf(gl, target, srcData, srcData.length, size, usage, normalized) : null;
 
         const positions = (state.positionsDecodeMatrix
                            ? buffer.positions.compileBuffer(Uint16Array)
                            : (quantizePositions(buffer.positions.compileBuffer(Float64Array), this._modelAABB, state.positionsDecodeMatrix = math.mat4())));
-        state.positionsBuf  = maybeCreateGlBuffer(positions, 3, gl.STATIC_DRAW);
+        state.positionsBuf  = maybeCreateGlBuffer(gl.ARRAY_BUFFER, positions, 3, gl.STATIC_DRAW);
 
-        state.flagsBuf      = maybeCreateGlBuffer(new Float32Array(this._numVerts), 1, gl.DYNAMIC_DRAW);
+        state.flagsBuf      = maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(this._numVerts), 1, gl.DYNAMIC_DRAW);
 
-        state.colorsBuf     = maybeCreateGlBuffer(buffer.colors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW);
+        state.colorsBuf     = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.colors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW);
 
-        state.pickColorsBuf = maybeCreateGlBuffer(buffer.pickColors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW);
+        state.offsetsBuf    = this.model.scene.entityOffsetsEnabled ? maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(this._numVerts * 3), 3, gl.DYNAMIC_DRAW) : null;
 
-        state.offsetsBuf    = this.model.scene.entityOffsetsEnabled ? maybeCreateGlBuffer(new Float32Array(this._numVerts * 3), 3, gl.DYNAMIC_DRAW) : null;
+        state.pickColorsBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.pickColors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW);
 
         this._buffer = null;
         this._finalized = true;
