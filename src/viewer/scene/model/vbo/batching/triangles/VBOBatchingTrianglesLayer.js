@@ -83,18 +83,61 @@ export class VBOBatchingTrianglesLayer {
         this._renderers = getTrianglesRenderers(cfg.model.scene, false);
 
         const maxGeometryBatchSize = cfg.maxGeometryBatchSize ?? configs.maxGeometryBatchSize;
+
+        const attribute = function() {
+            const portions = [ ];
+
+            return {
+                append: function(data, times = 1, denormalizeScale = 1.0, increment = 0.0) {
+                    portions.push({ data: data, times: times, denormalizeScale: denormalizeScale, increment: increment });
+                },
+                compileBuffer: function(type) {
+                    let len = 0;
+                    portions.forEach(p => { len += p.times * p.data.length; });
+                    const buf = new type(len);
+
+                    let begin = 0;
+                    portions.forEach(p => {
+                        const data = p.data;
+                        const dScale = p.denormalizeScale;
+                        const increment = p.increment;
+                        const subBuf = buf.subarray(begin);
+
+                        if ((dScale === 1.0) && (increment === 0.0)) {
+                            subBuf.set(data);
+                        } else {
+                            for (let i = 0; i < data.length; ++i) {
+                                subBuf[i] = increment + data[i] * dScale;
+                            }
+                        }
+
+                        let soFar = data.length;
+                        const allDataLen = p.times * data.length;
+                        while (soFar < allDataLen) {
+                            const toCopy = Math.min(soFar, allDataLen - soFar);
+                            subBuf.set(subBuf.subarray(0, toCopy), soFar);
+                            soFar += toCopy;
+                        }
+
+                        begin += soFar;
+                    });
+
+                    return buf;
+                }
+            };
+        };
+
         this._buffer = {
             maxVerts:          maxGeometryBatchSize,
             maxIndices:        maxGeometryBatchSize * 3, // Rough rule-of-thumb
-            positions:         [],
-            colors:            [],
-            offsets:           [],
-            indices:           [],
-            uv:                [],
-            metallicRoughness: [],
-            normals:           [],
-            pickColors:        [],
-            edgeIndices:       []
+            positions:         attribute(),
+            colors:            attribute(),
+            indices:           attribute(),
+            uv:                attribute(),
+            metallicRoughness: attribute(),
+            normals:           attribute(),
+            pickColors:        attribute(),
+            edgeIndices:       attribute(),
         };
         this._scratchMemory = cfg.scratchMemory;
 
@@ -109,6 +152,7 @@ export class VBOBatchingTrianglesLayer {
             uvBuf: null,
             metallicRoughnessBuf: null,
             normalsBuf: null,
+            pickColorsBuf: null,
             edgeIndicesBuf: null,
             uvDecodeMatrix: cfg.uvDecodeMatrix ? math.mat3(cfg.uvDecodeMatrix) : null,
             textureSet: cfg.textureSet,
@@ -194,138 +238,82 @@ export class VBOBatchingTrianglesLayer {
             throw "Already finalized";
         }
 
-        const positions = cfg.positions;
-        const positionsCompressed = cfg.positionsCompressed;
-        const indices = cfg.indices;
-        const color = cfg.color;
-        const opacity = cfg.opacity;
-        const pickColor = cfg.pickColor;
-        const normals = cfg.normals;
-        const normalsCompressed = cfg.normalsCompressed;
-        const uv = cfg.uv;
-        const uvCompressed = cfg.uvCompressed;
-        const colors = cfg.colors;
-        const colorsCompressed = cfg.colorsCompressed;
-        const edgeIndices = cfg.edgeIndices;
-        const metallic = cfg.metallic;
-        const roughness = cfg.roughness;
-        const meshMatrix = cfg.meshMatrix;
-
-        const scene = this.model.scene;
         const buffer = this._buffer;
         const vertsBaseIndex = this._numVerts;
 
-        let numVerts;
-
-        math.expandAABB3(this._modelAABB, cfg.aabb);
-
-        if (this._state.positionsDecodeMatrix) {
-            if (!positionsCompressed) {
-                throw "positionsCompressed expected";
-            }
-            numVerts = positionsCompressed.length / 3;
-            for (let i = 0, len = positionsCompressed.length; i < len; i++) {
-                buffer.positions.push(positionsCompressed[i]);
-            }
-        } else {
-            if (!positions) {
-                throw "positions expected";
-            }
-            numVerts = positions.length / 3;
-            for (let i = 0, len = positions.length; i < len; i++) {
-                buffer.positions.push(positions[i]);
-            }
+        const useCompressed = this._state.positionsDecodeMatrix;
+        const positions = useCompressed ? cfg.positionsCompressed : cfg.positions;
+        if (! positions) {
+            throw ((useCompressed ? "positionsCompressed" : "positions") + " expected");
         }
 
-        if (indices) {
-            for (let i = 0, len = indices.length; i < len; i++) {
-                buffer.indices.push(vertsBaseIndex + indices[i]);
-            }
-            this._numIndices += indices.length;
-        }
+        buffer.positions.append(positions);
 
-        if (scene.entityOffsetsEnabled) {
-            for (let i = 0; i < numVerts; i++) {
-                buffer.offsets.push(0);
-                buffer.offsets.push(0);
-                buffer.offsets.push(0);
-            }
-        }
+        const numVerts = positions.length / 3;
 
+        const indices = cfg.indices;
+        buffer.indices.append(indices, 1, 1.0, vertsBaseIndex);
 
+        const normalsCompressed = cfg.normalsCompressed;
+        const normals = cfg.normals;
         if (normalsCompressed && normalsCompressed.length > 0) {
-            for (let i = 0, len = normalsCompressed.length; i < len; i++) {
-                buffer.normals.push(normalsCompressed[i]);
-            }
+            buffer.normals.append(normalsCompressed);
         } else if (normals && normals.length > 0) {
             const worldNormalMatrix = tempMat4;
+            const meshMatrix = cfg.meshMatrix;
             if (meshMatrix) {
                 math.inverseMat4(math.transposeMat4(meshMatrix, tempMat4b), worldNormalMatrix); // Note: order of inverse and transpose doesn't matter
             } else {
                 math.identityMat4(worldNormalMatrix, worldNormalMatrix);
             }
-            transformAndOctEncodeNormals(worldNormalMatrix, normals, normals.length, buffer.normals, buffer.normals.length);
+            const normalsData = [ ];
+            transformAndOctEncodeNormals(worldNormalMatrix, normals, normals.length, normalsData, 0);
+            buffer.normals.append(normalsData);
         }
+
+        const color = cfg.color;
+        const colorsCompressed = cfg.colorsCompressed;
+        const colors = cfg.colors;
 
         if (colors) {
+            const colorsData = [ ];
             for (let i = 0, len = colors.length; i < len; i += 3) {
-                buffer.colors.push(colors[i] * 255);
-                buffer.colors.push(colors[i + 1] * 255);
-                buffer.colors.push(colors[i + 2] * 255);
-                buffer.colors.push(255);
+                colorsData.push(colors[i] * 255);
+                colorsData.push(colors[i + 1] * 255);
+                colorsData.push(colors[i + 2] * 255);
+                colorsData.push(255);
             }
+            buffer.colors.append(colorsData);
         } else if (colorsCompressed) {
+            const colorsData = [ ];
             for (let i = 0, len = colorsCompressed.length; i < len; i += 3) {
-                buffer.colors.push(colorsCompressed[i]);
-                buffer.colors.push(colorsCompressed[i + 1]);
-                buffer.colors.push(colorsCompressed[i + 2]);
-                buffer.colors.push(255);
+                colorsData.push(colorsCompressed[i]);
+                colorsData.push(colorsCompressed[i + 1]);
+                colorsData.push(colorsCompressed[i + 2]);
+                colorsData.push(255);
             }
+            buffer.colors.append(colorsData);
         } else if (color) {
-            const r = color[0]; // Color is pre-quantized by VBOSceneModel
-            const g = color[1];
-            const b = color[2];
-            const a = opacity;
-            for (let i = 0; i < numVerts; i++) {
-                buffer.colors.push(r);
-                buffer.colors.push(g);
-                buffer.colors.push(b);
-                buffer.colors.push(a);
-            }
-        }
-        const metallicValue = (metallic !== null && metallic !== undefined) ? metallic : 0;
-        const roughnessValue = (roughness !== null && roughness !== undefined) ? roughness : 255;
-        for (let i = 0; i < numVerts; i++) {
-            buffer.metallicRoughness.push(metallicValue);
-            buffer.metallicRoughness.push(roughnessValue);
+            // Color is pre-quantized by VBOSceneModel
+            buffer.colors.append([ color[0], color[1], color[2], cfg.opacity ], numVerts);
         }
 
-        if (uv && uv.length > 0) {
-            for (let i = 0, len = uv.length; i < len; i++) {
-                buffer.uv.push(uv[i]);
-            }
-        } else if (uvCompressed && uvCompressed.length > 0) {
-            for (let i = 0, len = uvCompressed.length; i < len; i++) {
-                buffer.uv.push(uvCompressed[i]);
-            }
+        buffer.metallicRoughness.append([ cfg.metallic ?? 0, cfg.roughness ?? 255 ], numVerts);
+
+        const nonEmpty = v => v && (v.length > 0) && v;
+        const uv = nonEmpty(cfg.uv) || nonEmpty(cfg.uvCompressed);
+        if (uv) {
+            buffer.uv.append(uv);
         }
 
+        const edgeIndices = cfg.edgeIndices;
         if (edgeIndices) {
-            for (let i = 0, len = edgeIndices.length; i < len; i++) {
-                buffer.edgeIndices.push(vertsBaseIndex + edgeIndices[i]);
-            }
+            buffer.edgeIndices.append(edgeIndices, 1, 1.0, vertsBaseIndex);
         }
 
-        {
-            const pickColorsBase = buffer.pickColors.length;
-            const lenPickColors = numVerts * 4;
-            for (let i = pickColorsBase, len = pickColorsBase + lenPickColors; i < len; i += 4) {
-                buffer.pickColors.push(pickColor[0]);
-                buffer.pickColors.push(pickColor[1]);
-                buffer.pickColors.push(pickColor[2]);
-                buffer.pickColors.push(pickColor[3]);
-            }
-        }
+        buffer.pickColors.append(cfg.pickColor.slice(0, 4), numVerts);
+
+        math.expandAABB3(this._modelAABB, cfg.aabb);
 
         const portionId = this._portions.length;
 
@@ -334,6 +322,7 @@ export class VBOBatchingTrianglesLayer {
             numVerts: numVerts,
         };
 
+        const scene = this.model.scene;
         if (scene.readableGeometryEnabled) {
             // Quantized in-memory positions are initialized in finalize()
 
@@ -348,6 +337,7 @@ export class VBOBatchingTrianglesLayer {
         this._numPortions++;
         this.model.numPortions++;
         this._numVerts += numVerts;
+        this._numIndices += indices.length;
         this._meshes.push(mesh);
         return portionId;
     }
@@ -365,83 +355,53 @@ export class VBOBatchingTrianglesLayer {
         const state = this._state;
         const gl = this.model.scene.canvas.gl;
         const buffer = this._buffer;
+        const maybeCreateGlBuffer = (target, srcData, size, usage, normalized = false) => (srcData.length > 0) ? new ArrayBuf(gl, target, srcData, srcData.length, size, usage, normalized) : null;
 
-        if (buffer.positions.length > 0) {
-            const quantizedPositions = state.positionsDecodeMatrix
-                  ? new Uint16Array(buffer.positions)
-                  : quantizePositions(buffer.positions, this._modelAABB, state.positionsDecodeMatrix = math.mat4()); // BOTTLENECK
-            state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, quantizedPositions, quantizedPositions.length, 3, gl.STATIC_DRAW);
+        const positions = (state.positionsDecodeMatrix
+                           ? buffer.positions.compileBuffer(Uint16Array)
+                           : (quantizePositions(buffer.positions.compileBuffer(Float64Array), this._modelAABB, state.positionsDecodeMatrix = math.mat4())));
+        state.positionsBuf  = maybeCreateGlBuffer(gl.ARRAY_BUFFER, positions, 3, gl.STATIC_DRAW);
+
+        if (positions.length > 0) {
             if (this.model.scene.readableGeometryEnabled) {
                 for (let i = 0, numPortions = this._portions.length; i < numPortions; i++) {
                     const portion = this._portions[i];
                     const start = portion.vertsBaseIndex * 3;
                     const end = start + (portion.numVerts * 3);
-                    portion.quantizedPositions = quantizedPositions.slice(start, end);
+                    portion.quantizedPositions = positions.slice(start, end);
                 }
             }
         }
 
-        if (buffer.positions.length > 0) { // Because we build flags arrays here, get their length from the positions array
-            const flagsLength = buffer.positions.length / 3;
-            const flags = new Float32Array(flagsLength);
-            const notNormalized = false;
-            state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, flags, flags.length, 1, gl.DYNAMIC_DRAW, notNormalized);
-        }
+        state.flagsBuf      = maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(this._numVerts), 1, gl.DYNAMIC_DRAW);
 
-        if (buffer.colors.length > 0) { // Colors are already compressed
-            const colors = new Uint8Array(buffer.colors);
-            let normalized = false;
-            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colors, buffer.colors.length, 4, gl.DYNAMIC_DRAW, normalized);
-        }
+        state.colorsBuf     = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.colors.compileBuffer(Uint8Array), 4, gl.DYNAMIC_DRAW);
 
-        if (this.model.scene.entityOffsetsEnabled) {
-            if (buffer.offsets.length > 0) {
-                const offsets = new Float32Array(buffer.offsets);
-                state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, offsets, buffer.offsets.length, 3, gl.DYNAMIC_DRAW);
-            }
-        }
+        state.offsetsBuf    = this.model.scene.entityOffsetsEnabled ? maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(this._numVerts * 3), 3, gl.DYNAMIC_DRAW) : null;
 
-        if (buffer.indices.length > 0) {
-            const indices = new Uint32Array(buffer.indices);
-            state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, indices, buffer.indices.length, 1, gl.STATIC_DRAW);
-        }
+        state.indicesBuf    = maybeCreateGlBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer.indices.compileBuffer(Uint32Array), 1, gl.STATIC_DRAW);
 
-        if (buffer.normals.length > 0) { // Normals are already oct-encoded
-            const normals = new Int8Array(buffer.normals);
-            let normalized = true; // For oct encoded UInts
-            state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, normals, buffer.normals.length, 3, gl.STATIC_DRAW, normalized);
-        }
+        // Normals are already oct-encoded, so `normalized = true` for oct encoded UInts
+        state.normalsBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.normals.compileBuffer(Int8Array), 3, gl.STATIC_DRAW, true);
 
-        if (buffer.uv.length > 0) {
-            if (!state.uvDecodeMatrix) {
-                const bounds = geometryCompressionUtils.getUVBounds(buffer.uv);
-                const result = geometryCompressionUtils.compressUVs(buffer.uv, bounds.min, bounds.max);
-                const uv = result.quantized;
-                let notNormalized = false;
-                state.uvDecodeMatrix = math.mat3(result.decodeMatrix);
-                state.uvBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, uv, uv.length, 2, gl.STATIC_DRAW, notNormalized);
+        const uvs = buffer.uv.compileBuffer(Float32Array);
+        if (uvs.length > 0) {
+            if (state.uvDecodeMatrix) {
+                state.uvBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, uvs, 2, gl.STATIC_DRAW);
             } else {
-                let notNormalized = false;
-                state.uvBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, buffer.uv, buffer.uv.length, 2, gl.STATIC_DRAW, notNormalized);
+                const bounds = geometryCompressionUtils.getUVBounds(uvs);
+                const result = geometryCompressionUtils.compressUVs(uvs, bounds.min, bounds.max);
+                const uv = result.quantized;
+                state.uvDecodeMatrix = math.mat3(result.decodeMatrix);
+                state.uvBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, result.quantized, 2, gl.STATIC_DRAW);
             }
         }
 
-        if (buffer.metallicRoughness.length > 0) {
-            const metallicRoughness = new Uint8Array(buffer.metallicRoughness);
-            let normalized = false;
-            state.metallicRoughnessBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, metallicRoughness, buffer.metallicRoughness.length, 2, gl.STATIC_DRAW, normalized);
-        }
+        state.metallicRoughnessBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.metallicRoughness.compileBuffer(Uint8Array), 2, gl.STATIC_DRAW);
 
-        if (buffer.pickColors.length > 0) {
-            const pickColors = new Uint8Array(buffer.pickColors);
-            let normalized = false;
-            state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, pickColors, buffer.pickColors.length, 4, gl.STATIC_DRAW, normalized);
-        }
+        state.pickColorsBuf        = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.pickColors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW);
 
-        if (buffer.edgeIndices.length > 0) {
-            const edgeIndices = new Uint32Array(buffer.edgeIndices);
-            state.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, edgeIndices, buffer.edgeIndices.length, 1, gl.STATIC_DRAW);
-        }
+        state.edgeIndicesBuf       = maybeCreateGlBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer.edgeIndices.compileBuffer(Uint32Array), 1, gl.STATIC_DRAW);
 
         this._state.pbrSupported
             = !!state.metallicRoughnessBuf
