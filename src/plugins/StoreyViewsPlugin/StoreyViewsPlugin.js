@@ -836,8 +836,8 @@ class StoreyViewsPlugin extends Plugin {
                 idx = 2;
             }
             const metaScene = this.viewer.metaScene;
-            const storey1MetaObject = metaScene.metaObjects[storey1.id];
-            const storey2MetaObject = metaScene.metaObjects[storey2.id];
+            const storey1MetaObject = metaScene.metaObjects[storey1.storeyId];
+            const storey2MetaObject = metaScene.metaObjects[storey2.storeyId];
 
             if (storey1MetaObject && (storey1MetaObject.attributes && storey1MetaObject.attributes.elevation !== undefined) &&
                 storey2MetaObject && (storey2MetaObject.attributes && storey2MetaObject.attributes.elevation !== undefined)) {
