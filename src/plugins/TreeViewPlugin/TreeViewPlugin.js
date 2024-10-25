@@ -1205,7 +1205,7 @@ export class TreeViewPlugin extends Plugin {
             return;
         }
         const firstChild = children[0];
-        if (this._hierarchy === "storeys" && firstChild.type === "IfcBuildingStorey") {
+        if ((this._hierarchy === "storeys" || this._hierarchy === "containment") &&  firstChild.type === "IfcBuildingStorey") {
             children.sort(this._getSpatialSortFunc());
         } else {
             children.sort(this._alphaSortFunc);
@@ -1216,21 +1216,11 @@ export class TreeViewPlugin extends Plugin {
         }
     }
 
-    _getSpatialSortFunc() { // Creates cached sort func with Viewer in scope
+    _getSpatialSortFunc() {
         const viewer = this.viewer;
         const scene = viewer.scene;
         const camera = scene.camera;
-        const metaScene = viewer.metaScene;
-        return this._spatialSortFunc || (this._spatialSortFunc = (node1, node2) => {
-            if (!node1.aabb || !node2.aabb) {
-                // Sorting on lowest point of the AABB is likely more more robust when objects could overlap storeys
-                if (!node1.aabb) {
-                    node1.aabb = scene.getAABB(metaScene.getObjectIDsInSubtree(node1.objectId));
-                }
-                if (!node2.aabb) {
-                    node2.aabb = scene.getAABB(metaScene.getObjectIDsInSubtree(node2.objectId));
-                }
-            }
+        return this._spatialSortFunc || (this._spatialSortFunc = (storey1, storey2) => {
             let idx = 0;
             if (camera.xUp) {
                 idx = 0;
@@ -1239,13 +1229,24 @@ export class TreeViewPlugin extends Plugin {
             } else {
                 idx = 2;
             }
-            if (node1.aabb[idx] > node2.aabb[idx]) {
-                return -1;
+            const metaScene = this.viewer.metaScene;
+            const storey1MetaObject = metaScene.metaObjects[storey1.objectId];
+            const storey2MetaObject = metaScene.metaObjects[storey2.objectId];
+
+            if (storey1MetaObject && (storey1MetaObject.attributes && storey1MetaObject.attributes.elevation !== undefined) &&
+                storey2MetaObject && (storey2MetaObject.attributes && storey2MetaObject.attributes.elevation !== undefined)) {
+                const elevation1 = storey1MetaObject.attributes.elevation;
+                const elevation2 = storey2MetaObject.attributes.elevation;
+                if (elevation1 > elevation2) {
+                    return -1;
+                }
+                if (elevation1 < elevation2) {
+                    return 1;
+                }
+                return 0;
+            } else {
+                return 0;
             }
-            if (node1.aabb[idx] < node2.aabb[idx]) {
-                return 1;
-            }
-            return 0;
         });
     }
 
