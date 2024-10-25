@@ -16,6 +16,7 @@ class MousePickHandler {
         this._clicks = 0;
         this._timeout = null;
         this._lastPickedEntityId = null;
+        this._lastClickedWorldPos = null;
 
         let leftDown = false;
         let rightDown = false;
@@ -165,11 +166,16 @@ class MousePickHandler {
                     if (pickResult && pickResult.worldPos) {
                         pivotController.setPivotPos(pickResult.worldPos);
                         pivotController.startPivot();
+                        this._lastClickedWorldPos = pickResult.worldPos;
                     } else {
                         if (configs.smartPivot) {
                             pivotController.setCanvasPivotPos(states.pointerCanvasPos);
                         } else {
-                            pivotController.setPivotPos(scene.camera.look);
+                            if (this._lastClickedWorldPos) {
+                                pivotController.setPivotPos(this._lastClickedWorldPos);
+                            } else {
+                                pivotController.setPivotPos(scene.camera.look);
+                            }
                         }
                         pivotController.startPivot();
                     }
