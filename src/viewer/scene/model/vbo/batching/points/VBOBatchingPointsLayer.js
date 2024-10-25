@@ -247,7 +247,7 @@ export class VBOBatchingPointsLayer {
 
         state.flagsBuf      = maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(this._numVerts), 1, gl.DYNAMIC_DRAW);
 
-        state.colorsBuf     = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.colors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW);
+        state.colorsBuf     = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.colors.compileBuffer(Uint8Array), 4, gl.DYNAMIC_DRAW);
 
         state.offsetsBuf    = this.model.scene.entityOffsetsEnabled ? maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(this._numVerts * 3), 3, gl.DYNAMIC_DRAW) : null;
 
