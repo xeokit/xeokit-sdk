@@ -142,7 +142,7 @@ export class VBOBatchingTrianglesLayer {
         this._scratchMemory = cfg.scratchMemory;
 
         this._state = new RenderState({
-            origin: cfg.origin ? math.vec3(cfg.origin) : math.vec3(),
+            origin: cfg.origin && math.vec3(cfg.origin),
             positionsBuf: null,
             colorsBuf: null,
             offsetsBuf: null,
@@ -777,7 +777,9 @@ export class VBOBatchingTrianglesLayer {
         const positions = portion.quantizedPositions;
         const sceneModelMatrix = this.model.matrix;
         const origin = math.vec4();
-        origin.set(state.origin, 0);
+        if (state.origin) {
+            origin.set(state.origin, 0);
+        }
         origin[3] = 1;
         math.mulMat4v4(sceneModelMatrix, origin, origin);
         const offsetX = origin[0];
