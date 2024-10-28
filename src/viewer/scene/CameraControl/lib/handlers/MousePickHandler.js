@@ -166,7 +166,7 @@ class MousePickHandler {
                     if (pickResult && pickResult.worldPos) {
                         pivotController.setPivotPos(pickResult.worldPos);
                         pivotController.startPivot();
-                        this._lastClickedWorldPos = pickResult.worldPos;
+                        this._lastClickedWorldPos = pickResult.worldPos.slice();
                     } else {
                         if (configs.smartPivot) {
                             pivotController.setCanvasPivotPos(states.pointerCanvasPos);
