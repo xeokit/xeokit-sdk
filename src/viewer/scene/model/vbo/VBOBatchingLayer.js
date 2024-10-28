@@ -1,19 +1,20 @@
-import {ENTITY_FLAGS} from '../../../ENTITY_FLAGS.js';
-import {RENDER_PASSES} from '../../../RENDER_PASSES.js';
+import {ENTITY_FLAGS} from "../ENTITY_FLAGS.js";
+import {RENDER_PASSES} from "../RENDER_PASSES.js";
 
-import {math} from "../../../../math/math.js";
-import {RenderState} from "../../../../webgl/RenderState.js";
-import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
-import {getLinesRenderers} from "../../renderers/VBOLinesRenderers.js";
-import {Configs} from "../../../../../Configs.js";
-import {quantizePositions} from "../../../compression.js";
+import {math} from "../../math/math.js";
+import {RenderState} from "../../webgl/RenderState.js";
+import {ArrayBuf} from "../../webgl/ArrayBuf.js";
+import {getPointsRenderers} from "./renderers/VBOPointsRenderers.js";
+import {getLinesRenderers} from "./renderers/VBOLinesRenderers.js";
+import {Configs} from "../../../Configs.js";
+import {quantizePositions} from "../compression.js";
 
 const configs = new Configs();
 
 /**
  * @private
  */
-export class VBOBatchingLinesLayer {
+export class VBOBatchingLayer {
 
     /**
      * @param cfg
@@ -48,9 +49,9 @@ export class VBOBatchingLinesLayer {
          * State sorting key.
          * @type {string}
          */
-        this.sortId = "LinesBatchingLayer";
+        this.sortId = (cfg.primitive === "points") ? "PointsBatchingLayer" : "LinesBatchingLayer";
 
-        this._renderers = getLinesRenderers(cfg.model.scene, false);
+        this._renderers = ((cfg.primitive === "points") ? getPointsRenderers : getLinesRenderers)(cfg.model.scene, false);
 
         const maxGeometryBatchSize = cfg.maxGeometryBatchSize ?? configs.maxGeometryBatchSize;
 
@@ -99,10 +100,10 @@ export class VBOBatchingLinesLayer {
 
         this._buffer = {
             maxVerts:   maxGeometryBatchSize,
-            maxIndices: maxGeometryBatchSize * 3, // Rough rule-of-thumb
             positions:  attribute(),
             colors:     attribute(),
-            indices:    attribute(),
+            indices:    attribute(), // used for lines
+            pickColors: attribute(), // used for points
         };
         this._scratchMemory = cfg.scratchMemory;
 
@@ -161,7 +162,7 @@ export class VBOBatchingLinesLayer {
         if (this._finalized) {
             throw "Already finalized";
         }
-        return ((this._numVerts + (lenPositions / 3) <= this._buffer.maxVerts) && (this._numIndices + lenIndices) < (this._buffer.maxIndices));
+        return ((this._numVerts + (lenPositions / 3)) <= this._buffer.maxVerts) && ((this._numIndices + lenIndices) <= (this._buffer.maxVerts * 3));
     }
 
     /**
@@ -173,9 +174,12 @@ export class VBOBatchingLinesLayer {
      * @param cfg.positions Flat float Local-space positions array.
      * @param cfg.positionsCompressed Flat quantized positions array - decompressed with positionsDecodeMatrix
      * @param cfg.indices  Flat int indices array.
-     * @param cfg.color Quantized RGB color [0..255,0..255,0..255,0..255]
-     * @param cfg.opacity Opacity [0..255]
+     * @param [cfg.colorsCompressed] Quantized RGB colors [0..255,0..255,0..255,0..255] (points)
+     * @param [cfg.colors] Flat float colors array. (points)
+     * @param cfg.color Float RGB color [0..1,0..1,0..1] (points) or Quantized RGB color [0..255,0..255,0..255,0..255] (lines)
+     * @param cfg.opacity Opacity [0..255] (lines)
      * @param cfg.aabb Flat float AABB World-space AABB
+     * @param cfg.pickColor Quantized pick color (points)
      * @returns {number} Portion ID
      */
     createPortion(mesh, cfg) {
@@ -185,7 +189,6 @@ export class VBOBatchingLinesLayer {
         }
 
         const buffer = this._buffer;
-        const vertsBaseIndex = this._numVerts;
 
         const useCompressed = this._state.positionsDecodeMatrix;
         const positions = useCompressed ? cfg.positionsCompressed : cfg.positions;
@@ -199,14 +202,24 @@ export class VBOBatchingLinesLayer {
 
         const indices = cfg.indices;
         if (indices) {
-            buffer.indices.append(indices, 1, 1.0, vertsBaseIndex);
+            buffer.indices.append(indices, 1, 1.0, this._numVerts);
             this._numIndices += indices.length;
         }
 
+        const colorsCompressed = cfg.colorsCompressed;
+        const colors = cfg.colors;
         const color = cfg.color;
-        if (color) {
+        if (colorsCompressed) {
+            buffer.colors.append(colorsCompressed);
+        } else if (colors) {
+            buffer.colors.append(colors, 1, 255.0);
+        } else if (color) {
             // Color is pre-quantized by VBOSceneModel
-            buffer.colors.append([ color[0], color[1], color[2], cfg.opacity ], numVerts);
+            buffer.colors.append([ color[0], color[1], color[2], (this.primitive === "points") ? 1.0 : cfg.opacity ], numVerts);
+        }
+
+        if (this.primitive !== "lines") {
+            buffer.pickColors.append(cfg.pickColor.slice(0, 4), numVerts);
         }
 
         math.expandAABB3(this._modelAABB, cfg.aabb);
@@ -214,7 +227,7 @@ export class VBOBatchingLinesLayer {
         const portionId = this._portions.length;
 
         const portion = {
-            vertsBaseIndex: vertsBaseIndex,
+            vertsBaseIndex: this._numVerts,
             numVerts: numVerts,
         };
 
@@ -254,6 +267,8 @@ export class VBOBatchingLinesLayer {
 
         state.indicesBuf    = maybeCreateGlBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer.indices.compileBuffer(Uint32Array), 1, gl.STATIC_DRAW);
 
+        state.pickColorsBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.pickColors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW);
+
         this._buffer = null;
         this._finalized = true;
     }
@@ -291,7 +306,7 @@ export class VBOBatchingLinesLayer {
             this._numTransparentLayerPortions++;
             this.model.numTransparentLayerPortions++;
         }
-        const deferred = true;
+        const deferred = this.primitive !== "points";
         this._setFlags(portionId, flags, meshTransparent, deferred);
     }
 
@@ -359,7 +374,7 @@ export class VBOBatchingLinesLayer {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        // Probably not applicable to lines
+        // Not applicable to point clouds, and probably not to lines
     }
 
     setClippable(portionId, flags) {
@@ -429,7 +444,7 @@ export class VBOBatchingLinesLayer {
             tempArray[i + 0] = r;
             tempArray[i + 1] = g;
             tempArray[i + 2] = b;
-            tempArray[i + 3] = a;
+            tempArray[i + 3] = a; // this used to be unset for points, so effectively random (from last use)
         }
         if (this._state.colorsBuf) {
             this._state.colorsBuf.setData(tempArray, firstColor, lenColor);
@@ -642,9 +657,15 @@ export class VBOBatchingLinesLayer {
     //---- PICKING ----------------------------------------------------------------------------------------------------
 
     drawPickMesh(renderFlags, frameCtx) {
+        if (this._state.pickColorsBuf) {
+            this.__drawLayer(renderFlags, frameCtx, this._renderers.pickMeshRenderer, RENDER_PASSES.PICK);
+        }
     }
 
     drawPickDepths(renderFlags, frameCtx) {
+        if (this._state.pickColorsBuf) {
+            this.__drawLayer(renderFlags, frameCtx, this._renderers.pickDepthRenderer, RENDER_PASSES.PICK);
+        }
     }
 
     drawPickNormals(renderFlags, frameCtx) {
@@ -660,6 +681,9 @@ export class VBOBatchingLinesLayer {
 
 
     drawOcclusion(renderFlags, frameCtx) {
+        if (this.primitive !== "lines") {
+            this.__drawLayer(renderFlags, frameCtx, this._renderers.occlusionRenderer, RENDER_PASSES.COLOR_OPAQUE);
+        }
     }
 
     drawShadow(renderFlags, frameCtx) {
@@ -687,6 +711,10 @@ export class VBOBatchingLinesLayer {
         if (state.indicesBuf) {
             state.indicesBuf.destroy();
             state.indicesBuf = null;
+        }
+        if (state.pickColorsBuf) {
+            state.pickColorsBuf.destroy();
+            state.pickColorsBuf = null;
         }
         state.destroy();
     }
