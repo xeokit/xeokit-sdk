@@ -6,8 +6,22 @@ import {RenderState} from "../../webgl/RenderState.js";
 import {ArrayBuf} from "../../webgl/ArrayBuf.js";
 import {getPointsRenderers} from "./renderers/VBOPointsRenderers.js";
 import {getLinesRenderers} from "./renderers/VBOLinesRenderers.js";
+import {getTrianglesRenderers} from "./renderers/VBOTrianglesRenderers.js";
 import {Configs} from "../../../Configs.js";
-import {quantizePositions} from "../compression.js";
+import {quantizePositions, transformAndOctEncodeNormals} from "../compression.js";
+import {geometryCompressionUtils} from "../../math/geometryCompressionUtils.js";
+
+const tempMat4 = math.mat4();
+const tempMat4b = math.mat4();
+const tempVec4a = math.vec4([0, 0, 0, 1]);
+
+const tempVec3a = math.vec3();
+const tempVec3b = math.vec3();
+const tempVec3c = math.vec3();
+const tempVec3d = math.vec3();
+const tempVec3e = math.vec3();
+const tempVec3f = math.vec3();
+const tempVec3g = math.vec3();
 
 const configs = new Configs();
 
@@ -25,6 +39,8 @@ export class VBOBatchingLayer {
      * @param cfg.maxGeometryBatchSize
      * @param cfg.origin
      * @param cfg.scratchMemory
+     * @param cfg.uvDecodeMatrix
+     * @param cfg.textureSet
      */
     constructor(cfg) {
 
@@ -46,12 +62,29 @@ export class VBOBatchingLayer {
         this.primitive = cfg.primitive;
 
         /**
+         * When true, this layer contains solid triangle meshes, otherwise this layer contains surface triangle meshes
+         * @type {boolean}
+         */
+        this.solid = (cfg.primitive === "solid");
+
+        /**
          * State sorting key.
          * @type {string}
          */
-        this.sortId = (cfg.primitive === "points") ? "PointsBatchingLayer" : "LinesBatchingLayer";
+        this.sortId = ((cfg.primitive === "points")
+                       ? "PointsBatchingLayer"
+                       : ((cfg.primitive === "lines")
+                          ? "LinesBatchingLayer"
+                          : ("TrianglesBatchingLayer" + (this.solid ? "-solid" : "-surface") + "-autonormals"
+                             // TODO: These two parts need to be IDs (ie. unique):
+                             + (cfg.textureSet && cfg.textureSet.colorTexture ? "-colorTexture" : "")
+                             + (cfg.textureSet && cfg.textureSet.metallicRoughnessTexture ? "-metallicRoughnessTexture" : ""))));
 
-        this._renderers = ((cfg.primitive === "points") ? getPointsRenderers : getLinesRenderers)(cfg.model.scene, false);
+        this._renderers = ((cfg.primitive === "points") ? getPointsRenderers : ((cfg.primitive === "lines") ? getLinesRenderers : getTrianglesRenderers))(cfg.model.scene, false);
+
+        this._hasEdges = (cfg.primitive !== "points") && (cfg.primitive !== "lines");
+
+        this._retainGeometry = cfg.model.scene.readableGeometryEnabled && (cfg.primitive !== "points") && (cfg.primitive !== "lines");
 
         const maxGeometryBatchSize = cfg.maxGeometryBatchSize ?? configs.maxGeometryBatchSize;
 
@@ -99,11 +132,15 @@ export class VBOBatchingLayer {
         };
 
         this._buffer = {
-            maxVerts:   maxGeometryBatchSize,
-            positions:  attribute(),
-            colors:     attribute(),
-            indices:    attribute(), // used for lines
-            pickColors: attribute(), // used for points
+            maxVerts:          maxGeometryBatchSize,
+            positions:         attribute(),
+            colors:            attribute(),
+            indices:           attribute(), // used for non-points
+            uv:                attribute(), // used for triangulated
+            metallicRoughness: attribute(), // used for triangulated
+            normals:           attribute(), // used for triangulated
+            pickColors:        attribute(), // used for non-lines
+            edgeIndices:       attribute(), // used for triangulated
         };
         this._scratchMemory = cfg.scratchMemory;
 
@@ -115,6 +152,14 @@ export class VBOBatchingLayer {
             indicesBuf: null,
             flagsBuf: null,
             positionsDecodeMatrix: cfg.positionsDecodeMatrix && math.mat4(cfg.positionsDecodeMatrix),
+            uvBuf: null,
+            metallicRoughnessBuf: null,
+            normalsBuf: null,
+            pickColorsBuf: null,
+            edgeIndicesBuf: null,
+            uvDecodeMatrix: cfg.uvDecodeMatrix && math.mat3(cfg.uvDecodeMatrix),
+            textureSet: cfg.textureSet,
+            pbrSupported: false // Set in #finalize if we have enough to support quality rendering
         });
 
         // These counts are used to avoid unnecessary render passes
@@ -125,6 +170,9 @@ export class VBOBatchingLayer {
         this._numSelectedLayerPortions = 0;
         this._numHighlightedLayerPortions = 0;
         this._numClippableLayerPortions = 0;
+        if (this._hasEdges) {
+            this._numEdgesLayerPortions = 0;
+        }
         this._numPickableLayerPortions = 0;
         this._numCulledLayerPortions = 0;
 
@@ -174,12 +222,19 @@ export class VBOBatchingLayer {
      * @param cfg.positions Flat float Local-space positions array.
      * @param cfg.positionsCompressed Flat quantized positions array - decompressed with positionsDecodeMatrix
      * @param cfg.indices  Flat int indices array.
-     * @param [cfg.colorsCompressed] Quantized RGB colors [0..255,0..255,0..255,0..255] (points)
-     * @param [cfg.colors] Flat float colors array. (points)
-     * @param cfg.color Float RGB color [0..1,0..1,0..1] (points) or Quantized RGB color [0..255,0..255,0..255,0..255] (lines)
-     * @param cfg.opacity Opacity [0..255] (lines)
+     * @param [cfg.colorsCompressed] Quantized RGB colors [0..255,0..255,0..255,0..255] (non-lines)
+     * @param [cfg.colors] Flat float colors array (non-lines)
+     * @param cfg.color Float RGB color [0..1,0..1,0..1] (points) or Quantized RGB color [0..255,0..255,0..255,0..255] (non-points)
+     * @param cfg.opacity Opacity [0..255] (non-points)
      * @param cfg.aabb Flat float AABB World-space AABB
-     * @param cfg.pickColor Quantized pick color (points)
+     * @param cfg.pickColor Quantized pick color (non-lines)
+     * @param [cfg.normals] Flat float normals array (triangulated)
+     * @param [cfg.uv] Flat UVs array (triangulated)
+     * @param [cfg.uvCompressed] (triangulated)
+     * @param [cfg.edgeIndices] Flat int edges indices array (triangulated)
+     * @param cfg.metallic Metalness factor [0..255] (triangulated)
+     * @param cfg.roughness Roughness factor [0..255] (triangulated)
+     * @param [cfg.meshMatrix] Flat float 4x4 matrix (triangulated)
      * @returns {number} Portion ID
      */
     createPortion(mesh, cfg) {
@@ -189,6 +244,7 @@ export class VBOBatchingLayer {
         }
 
         const buffer = this._buffer;
+        const vertsBaseIndex = this._numVerts;
 
         const useCompressed = this._state.positionsDecodeMatrix;
         const positions = useCompressed ? cfg.positionsCompressed : cfg.positions;
@@ -202,20 +258,73 @@ export class VBOBatchingLayer {
 
         const indices = cfg.indices;
         if (indices) {
-            buffer.indices.append(indices, 1, 1.0, this._numVerts);
-            this._numIndices += indices.length;
+            buffer.indices.append(indices, 1, 1.0, vertsBaseIndex);
         }
 
-        const colorsCompressed = cfg.colorsCompressed;
+        const normalsCompressed = cfg.normalsCompressed;
+        const normals = cfg.normals;
+        if (normalsCompressed && normalsCompressed.length > 0) {
+            buffer.normals.append(normalsCompressed);
+        } else if (normals && normals.length > 0) {
+            const worldNormalMatrix = tempMat4;
+            const meshMatrix = cfg.meshMatrix;
+            if (meshMatrix) {
+                math.inverseMat4(math.transposeMat4(meshMatrix, tempMat4b), worldNormalMatrix); // Note: order of inverse and transpose doesn't matter
+            } else {
+                math.identityMat4(worldNormalMatrix, worldNormalMatrix);
+            }
+            const normalsData = [ ];
+            transformAndOctEncodeNormals(worldNormalMatrix, normals, normals.length, normalsData, 0);
+            buffer.normals.append(normalsData);
+        }
+
         const colors = cfg.colors;
+        const colorsCompressed = cfg.colorsCompressed;
         const color = cfg.color;
-        if (colorsCompressed) {
-            buffer.colors.append(colorsCompressed);
-        } else if (colors) {
-            buffer.colors.append(colors, 1, 255.0);
+        if (colors) {
+            if (this.primitive === "points") {
+                buffer.colors.append(colors, 1, 255.0);
+            } else {            // triangulated
+                const colorsData = [ ];
+                for (let i = 0, len = colors.length; i < len; i += 3) {
+                    colorsData.push(colors[i] * 255);
+                    colorsData.push(colors[i + 1] * 255);
+                    colorsData.push(colors[i + 2] * 255);
+                    colorsData.push(255);
+                }
+                buffer.colors.append(colorsData);
+            }
+        } else if (colorsCompressed) {
+            if (this.primitive === "points") {
+                buffer.colors.append(colorsCompressed);
+            } else {            // triangulated
+                const colorsData = [ ];
+                for (let i = 0, len = colorsCompressed.length; i < len; i += 3) {
+                    colorsData.push(colorsCompressed[i]);
+                    colorsData.push(colorsCompressed[i + 1]);
+                    colorsData.push(colorsCompressed[i + 2]);
+                    colorsData.push(255);
+                }
+                buffer.colors.append(colorsData);
+            }
         } else if (color) {
             // Color is pre-quantized by VBOSceneModel
             buffer.colors.append([ color[0], color[1], color[2], (this.primitive === "points") ? 1.0 : cfg.opacity ], numVerts);
+        }
+
+        if ((this.primitive !== "points") && (this.primitive !== "lines")) {
+            buffer.metallicRoughness.append([ cfg.metallic ?? 0, cfg.roughness ?? 255 ], numVerts);
+        }
+
+        const nonEmpty = v => v && (v.length > 0) && v;
+        const uv = nonEmpty(cfg.uv) || nonEmpty(cfg.uvCompressed);
+        if (uv) {
+            buffer.uv.append(uv);
+        }
+
+        const edgeIndices = cfg.edgeIndices;
+        if (edgeIndices) {
+            buffer.edgeIndices.append(edgeIndices, 1, 1.0, vertsBaseIndex);
         }
 
         if (this.primitive !== "lines") {
@@ -227,14 +336,25 @@ export class VBOBatchingLayer {
         const portionId = this._portions.length;
 
         const portion = {
-            vertsBaseIndex: this._numVerts,
+            vertsBaseIndex: vertsBaseIndex,
             numVerts: numVerts,
         };
+
+        if (this._retainGeometry) {
+            // Quantized in-memory positions are initialized in finalize()
+
+            portion.indices = indices;
+
+            if (this.model.scene.entityOffsetsEnabled) {
+                portion.offset = new Float32Array(3);
+            }
+        }
 
         this._portions.push(portion);
         this._numPortions++;
         this.model.numPortions++;
         this._numVerts += numVerts;
+        this._numIndices += indices ? indices.length : 0;
         this._meshes.push(mesh);
         return portionId;
     }
@@ -259,6 +379,15 @@ export class VBOBatchingLayer {
                            : (quantizePositions(buffer.positions.compileBuffer(Float64Array), this._modelAABB, state.positionsDecodeMatrix = math.mat4())));
         state.positionsBuf  = maybeCreateGlBuffer(gl.ARRAY_BUFFER, positions, 3, gl.STATIC_DRAW);
 
+        if ((positions.length > 0) && this._retainGeometry) {
+            for (let i = 0, numPortions = this._portions.length; i < numPortions; i++) {
+                const portion = this._portions[i];
+                const start = portion.vertsBaseIndex * 3;
+                const end = start + (portion.numVerts * 3);
+                portion.quantizedPositions = positions.slice(start, end);
+            }
+        }
+
         state.flagsBuf      = maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(this._numVerts), 1, gl.DYNAMIC_DRAW);
 
         state.colorsBuf     = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.colors.compileBuffer(Uint8Array), 4, gl.DYNAMIC_DRAW);
@@ -267,7 +396,40 @@ export class VBOBatchingLayer {
 
         state.indicesBuf    = maybeCreateGlBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer.indices.compileBuffer(Uint32Array), 1, gl.STATIC_DRAW);
 
-        state.pickColorsBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.pickColors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW);
+        // Normals are already oct-encoded, so `normalized = true` for oct encoded UInts
+        state.normalsBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.normals.compileBuffer(Int8Array), 3, gl.STATIC_DRAW, true);
+
+        const uvs = buffer.uv.compileBuffer(Float32Array);
+        if (uvs.length > 0) {
+            if (state.uvDecodeMatrix) {
+                state.uvBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, uvs, 2, gl.STATIC_DRAW);
+            } else {
+                const bounds = geometryCompressionUtils.getUVBounds(uvs);
+                const result = geometryCompressionUtils.compressUVs(uvs, bounds.min, bounds.max);
+                const uv = result.quantized;
+                state.uvDecodeMatrix = math.mat3(result.decodeMatrix);
+                state.uvBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, result.quantized, 2, gl.STATIC_DRAW);
+            }
+        }
+
+        state.metallicRoughnessBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.metallicRoughness.compileBuffer(Uint8Array), 2, gl.STATIC_DRAW);
+
+        state.pickColorsBuf        = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.pickColors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW);
+
+        state.edgeIndicesBuf       = maybeCreateGlBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer.edgeIndices.compileBuffer(Uint32Array), 1, gl.STATIC_DRAW);
+
+        this._state.pbrSupported
+            = !!state.metallicRoughnessBuf
+            && !!state.uvBuf
+            && !!state.normalsBuf
+            && !!state.textureSet
+            && !!state.textureSet.colorTexture
+            && !!state.textureSet.metallicRoughnessTexture;
+
+        this._state.colorTextureSupported
+            = !!state.uvBuf
+            && !!state.textureSet
+            && !!state.textureSet.colorTexture;
 
         this._buffer = null;
         this._finalized = true;
@@ -293,6 +455,10 @@ export class VBOBatchingLayer {
         if (flags & ENTITY_FLAGS.CLIPPABLE) {
             this._numClippableLayerPortions++;
             this.model.numClippableLayerPortions++;
+        }
+        if (this._hasEdges && flags & ENTITY_FLAGS.EDGES) {
+            this._numEdgesLayerPortions++;
+            this.model.numEdgesLayerPortions++;
         }
         if (flags & ENTITY_FLAGS.PICKABLE) {
             this._numPickableLayerPortions++;
@@ -374,7 +540,16 @@ export class VBOBatchingLayer {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        // Not applicable to point clouds, and probably not to lines
+        if (this._hasEdges) {
+            if (flags & ENTITY_FLAGS.EDGES) {
+                this._numEdgesLayerPortions++;
+                this.model.numEdgesLayerPortions++;
+            } else {
+                this._numEdgesLayerPortions--;
+                this.model.numEdgesLayerPortions--;
+            }
+            this._setFlags(portionId, flags, transparent);
+        }
     }
 
     setClippable(portionId, flags) {
@@ -482,7 +657,7 @@ export class VBOBatchingLayer {
         const xrayed = !!(flags & ENTITY_FLAGS.XRAYED);
         const highlighted = !!(flags & ENTITY_FLAGS.HIGHLIGHTED);
         const selected = !!(flags & ENTITY_FLAGS.SELECTED);
-        // no edges
+        const edges = !!(this._hasEdges && flags & ENTITY_FLAGS.EDGES);
         const pickable = !!(flags & ENTITY_FLAGS.PICKABLE);
         const culled = !!(flags & ENTITY_FLAGS.CULLED);
 
@@ -512,6 +687,25 @@ export class VBOBatchingLayer {
             silhouetteFlag = RENDER_PASSES.NOT_RENDERED;
         }
 
+        let edgeFlag = 0;
+        if ((!this._hasEdges) || (!visible) || culled) {
+            edgeFlag = RENDER_PASSES.NOT_RENDERED;
+        } else if (selected) {
+            edgeFlag = RENDER_PASSES.EDGES_SELECTED;
+        } else if (highlighted) {
+            edgeFlag = RENDER_PASSES.EDGES_HIGHLIGHTED;
+        } else if (xrayed) {
+            edgeFlag = RENDER_PASSES.EDGES_XRAYED;
+        } else if (edges) {
+            if (transparent) {
+                edgeFlag = RENDER_PASSES.EDGES_COLOR_TRANSPARENT;
+            } else {
+                edgeFlag = RENDER_PASSES.EDGES_COLOR_OPAQUE;
+            }
+        } else {
+            edgeFlag = RENDER_PASSES.NOT_RENDERED;
+        }
+
         let pickFlag = (visible && !culled && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
 
         const clippableFlag = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 1 : 0;
@@ -525,7 +719,7 @@ export class VBOBatchingLayer {
                 let vertFlag = 0;
                 vertFlag |= colorFlag;
                 vertFlag |= silhouetteFlag << 4;
-                // no edges
+                vertFlag |= edgeFlag << 8;
                 vertFlag |= pickFlag << 12;
                 vertFlag |= clippableFlag << 16;
 
@@ -537,7 +731,7 @@ export class VBOBatchingLayer {
                 let vertFlag = 0;
                 vertFlag |= colorFlag;
                 vertFlag |= silhouetteFlag << 4;
-                // no edges
+                vertFlag |= edgeFlag << 8;
                 vertFlag |= pickFlag << 12;
                 vertFlag |= clippableFlag << 16;
 
@@ -580,10 +774,90 @@ export class VBOBatchingLayer {
         if (this._state.offsetsBuf) {
             this._state.offsetsBuf.setData(tempArray, firstOffset, lenOffsets);
         }
+        if (this._retainGeometry) {
+            portion.offset[0] = offset[0];
+            portion.offset[1] = offset[1];
+            portion.offset[2] = offset[2];
+        }
     }
+
+    getEachVertex(portionId, callback) {
+        if (!this._retainGeometry) {
+            return;
+        }
+        const state = this._state;
+        const portion = this._portions[portionId];
+        if (!portion) {
+            this.model.error("portion not found: " + portionId);
+            return;
+        }
+        const positions = portion.quantizedPositions;
+        const sceneModelMatrix = this.model.matrix;
+        const origin = math.vec4();
+        if (state.origin) {
+            origin.set(state.origin, 0);
+        }
+        origin[3] = 1;
+        math.mulMat4v4(sceneModelMatrix, origin, origin);
+        const offsetX = origin[0];
+        const offsetY = origin[1];
+        const offsetZ = origin[2];
+        const worldPos = tempVec4a;
+        const positionsDecodeMatrix = state.positionsDecodeMatrix;
+        for (let i = 0, len = positions.length; i < len; i += 3) {
+            worldPos[0] = positions[i];
+            worldPos[1] = positions[i + 1];
+            worldPos[2] = positions[i + 2];
+            worldPos[3] = 1.0;
+            math.decompressPosition(worldPos, positionsDecodeMatrix);
+            worldPos[3] = 1;
+            math.mulMat4v4(sceneModelMatrix, worldPos, worldPos);
+            worldPos[0] += offsetX;
+            worldPos[1] += offsetY;
+            worldPos[2] += offsetZ;
+            callback(worldPos);
+        }
+    }
+
+    getEachIndex(portionId, callback) {
+        if (!this._retainGeometry) {
+            return;
+        }
+        const portion = this._portions[portionId];
+        if (!portion) {
+            this.model.error("portion not found: " + portionId);
+            return;
+        }
+        const indices = portion.indices;
+        for (let i = 0, len = indices.length; i < len; i++) {
+            callback(indices[i]);
+        }
+    }
+
 
     __drawLayer(renderFlags, frameCtx, renderer, pass) {
         if ((this._numCulledLayerPortions < this._numPortions) && (this._numVisibleLayerPortions > 0)) {
+            const backfacePasses = (this.primitive !== "points") && (this.primitive !== "lines") && [
+                RENDER_PASSES.COLOR_OPAQUE,
+                RENDER_PASSES.COLOR_TRANSPARENT,
+                RENDER_PASSES.PICK,
+                RENDER_PASSES.SILHOUETTE_HIGHLIGHTED,
+                RENDER_PASSES.SILHOUETTE_SELECTED,
+                RENDER_PASSES.SILHOUETTE_XRAYED,
+            ];
+            if (backfacePasses && backfacePasses.includes(pass)) {
+                // _updateBackfaceCull
+                const backfaces = true; // See XCD-230
+                if (frameCtx.backfaces !== backfaces) {
+                    const gl = frameCtx.gl;
+                    if (backfaces) {
+                        gl.disable(gl.CULL_FACE);
+                    } else {
+                        gl.enable(gl.CULL_FACE);
+                    }
+                    frameCtx.backfaces = backfaces;
+                }
+            }
             renderer.drawLayer(frameCtx, this, pass);
         }
     }
@@ -591,10 +865,33 @@ export class VBOBatchingLayer {
     // ---------------------- COLOR RENDERING -----------------------------------
 
     __drawColor(renderFlags, frameCtx, renderOpaque) {
-        if (((renderOpaque ? (this._numTransparentLayerPortions < this._numPortions) : (this._numTransparentLayerPortions > 0)))
+        if ((renderOpaque ? (this._numTransparentLayerPortions < this._numPortions) : (this._numTransparentLayerPortions > 0))
             &&
             (this._numXRayedLayerPortions < this._numPortions)) {
-            const renderer = this._renderers.colorRenderer;
+            const usePBR = frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported;
+            const useColorTexture = frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported;
+            const useAlphaCutoff = this._state.textureSet && (typeof(this._state.textureSet.alphaCutoff) === "number");
+            const renderer = (((this.primitive === "points") || (this.primitive === "lines"))
+                              ? this._renderers.colorRenderer
+                              : ((renderOpaque && frameCtx.withSAO && this.model.saoEnabled)
+                                 ? (usePBR
+                                    ? this._renderers.pbrRendererWithSAO
+                                    : (useColorTexture
+                                       ? (useAlphaCutoff
+                                          ? this._renderers.colorTextureRendererWithSAOAlphaCutoff
+                                          : this._renderers.colorTextureRendererWithSAO)
+                                       : (this._state.normalsBuf
+                                          ? this._renderers.colorRendererWithSAO
+                                          : this._renderers.flatColorRendererWithSAO)))
+                                 : (usePBR
+                                    ? this._renderers.pbrRenderer
+                                    : (useColorTexture
+                                       ? (useAlphaCutoff
+                                          ? this._renderers.colorTextureRendererAlphaCutoff
+                                          : this._renderers.colorTextureRenderer)
+                                       : (this._state.normalsBuf
+                                          ? this._renderers.colorRenderer
+                                          : this._renderers.flatColorRenderer)))));
             const pass = renderOpaque ? RENDER_PASSES.COLOR_OPAQUE : RENDER_PASSES.COLOR_TRANSPARENT;
             this.__drawLayer(renderFlags, frameCtx, renderer, pass);
         }
@@ -610,7 +907,17 @@ export class VBOBatchingLayer {
 
     // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
 
+    __drawPost(renderFlags, frameCtx, renderer) {
+        // Assume whatever post-effect uses depth or normals (eg SAO) does not apply to transparent objects
+        if ((this.primitive !== "points") && (this.primitive !== "lines")
+            &&
+            (this._numTransparentLayerPortions < this._numPortions) && (this._numXRayedLayerPortions < this._numPortions)) {
+            this.__drawLayer(renderFlags, frameCtx, renderer, RENDER_PASSES.COLOR_OPAQUE);
+        }
+    }
+
     drawDepth(renderFlags, frameCtx) {
+        this.__drawPost(renderFlags, frameCtx, this._renderers.depthRenderer);
     }
 
     // ---------------------- SILHOUETTE RENDERING -----------------------------------
@@ -640,18 +947,33 @@ export class VBOBatchingLayer {
     // ---------------------- EDGES RENDERING -----------------------------------
 
     drawEdgesColorOpaque(renderFlags, frameCtx) {
+        if (this._hasEdges && (this._numEdgesLayerPortions > 0)) {
+            this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesColorRenderer, RENDER_PASSES.EDGES_COLOR_OPAQUE);
+        }
     }
 
     drawEdgesColorTransparent(renderFlags, frameCtx) {
+        if (this._hasEdges && (this._numEdgesLayerPortions > 0) && (this._numTransparentLayerPortions > 0)) {
+            this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesColorRenderer, RENDER_PASSES.EDGES_COLOR_TRANSPARENT);
+        }
     }
 
     drawEdgesHighlighted(renderFlags, frameCtx) {
+        if (this._hasEdges && (this._numHighlightedLayerPortions > 0)) {
+            this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesRenderer, RENDER_PASSES.EDGES_HIGHLIGHTED);
+        }
     }
 
     drawEdgesSelected(renderFlags, frameCtx) {
+        if (this._hasEdges && (this._numSelectedLayerPortions > 0)) {
+            this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesRenderer, RENDER_PASSES.EDGES_SELECTED);
+        }
     }
 
     drawEdgesXRayed(renderFlags, frameCtx) {
+        if (this._hasEdges && (this._numXRayedLayerPortions > 0)) {
+            this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesRenderer, RENDER_PASSES.EDGES_XRAYED);
+        }
     }
 
     //---- PICKING ----------------------------------------------------------------------------------------------------
@@ -669,6 +991,12 @@ export class VBOBatchingLayer {
     }
 
     drawPickNormals(renderFlags, frameCtx) {
+        if (this._state.pickColorsBuf && (this.primitive !== "points") && (this.primitive !== "lines")) {
+            const renderer = (false // TODO: this._state.normalsBuf
+                              ? this._renderers.pickNormalsRenderer
+                              : this._renderers.pickNormalsFlatRenderer);
+            this.__drawLayer(renderFlags, frameCtx, renderer, RENDER_PASSES.PICK);
+        }
     }
 
     drawSnapInit(renderFlags, frameCtx) {
@@ -687,8 +1015,108 @@ export class VBOBatchingLayer {
     }
 
     drawShadow(renderFlags, frameCtx) {
+        if ((this.primitive !== "points") && (this.primitive !== "lines")) {
+            this.__drawLayer(renderFlags, frameCtx, this._renderers.shadowRenderer, RENDER_PASSES.COLOR_OPAQUE);
+        }
     }
 
+    //------------------------------------------------------------------------------------------------
+
+    precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) {
+
+        if (!this._retainGeometry) {
+            return false;
+        }
+
+        const state = this._state;
+        const portion = this._portions[portionId];
+
+        if (!portion) {
+            this.model.error("portion not found: " + portionId);
+            return false;
+        }
+
+        const positions = portion.quantizedPositions;
+        const indices = portion.indices;
+        const origin = state.origin;
+        const offset = portion.offset;
+
+        const rtcRayOrigin = tempVec3a;
+        const rtcRayDir = tempVec3b;
+
+        rtcRayOrigin.set(origin ? math.subVec3(worldRayOrigin, origin, tempVec3c) : worldRayOrigin);  // World -> RTC
+        rtcRayDir.set(worldRayDir);
+
+        if (offset) {
+            math.subVec3(rtcRayOrigin, offset);
+        }
+
+        math.transformRay(this.model.worldNormalMatrix, rtcRayOrigin, rtcRayDir, rtcRayOrigin, rtcRayDir); // RTC -> local
+
+        const a = tempVec3d;
+        const b = tempVec3e;
+        const c = tempVec3f;
+
+        let gotIntersect = false;
+        let closestDist = 0;
+        const closestIntersectPos = tempVec3g;
+
+        for (let i = 0, len = indices.length; i < len; i += 3) {
+
+            const ia = indices[i] * 3;
+            const ib = indices[i + 1] * 3;
+            const ic = indices[i + 2] * 3;
+
+            a[0] = positions[ia];
+            a[1] = positions[ia + 1];
+            a[2] = positions[ia + 2];
+
+            b[0] = positions[ib];
+            b[1] = positions[ib + 1];
+            b[2] = positions[ib + 2];
+
+            c[0] = positions[ic];
+            c[1] = positions[ic + 1];
+            c[2] = positions[ic + 2];
+
+            math.decompressPosition(a, state.positionsDecodeMatrix);
+            math.decompressPosition(b, state.positionsDecodeMatrix);
+            math.decompressPosition(c, state.positionsDecodeMatrix);
+
+            if (math.rayTriangleIntersect(rtcRayOrigin, rtcRayDir, a, b, c, closestIntersectPos)) {
+
+                math.transformPoint3(this.model.worldMatrix, closestIntersectPos, closestIntersectPos);
+
+                if (offset) {
+                    math.addVec3(closestIntersectPos, offset);
+                }
+
+                if (origin) {
+                    math.addVec3(closestIntersectPos, origin);
+                }
+
+                const dist = Math.abs(math.lenVec3(math.subVec3(closestIntersectPos, worldRayOrigin, [])));
+
+                if (!gotIntersect || dist > closestDist) {
+                    closestDist = dist;
+                    worldSurfacePos.set(closestIntersectPos);
+                    if (worldNormal) { // Not that wasteful to eagerly compute - unlikely to hit >2 surfaces on most geometry
+                        math.triangleNormal(a, b, c, worldNormal);
+                    }
+                    gotIntersect = true;
+                }
+            }
+        }
+
+        if (gotIntersect && worldNormal) {
+            math.transformVec3(this.model.worldNormalMatrix, worldNormal, worldNormal);
+            math.normalizeVec3(worldNormal);
+        }
+
+        return gotIntersect;
+    }
+
+    // ---------
 
     destroy() {
         const state = this._state;
@@ -708,13 +1136,25 @@ export class VBOBatchingLayer {
             state.flagsBuf.destroy();
             state.flagsBuf = null;
         }
-        if (state.indicesBuf) {
-            state.indicesBuf.destroy();
-            state.indicesBuf = null;
+        if (state.metallicRoughnessBuf) {
+            state.metallicRoughnessBuf.destroy();
+            state.metallicRoughnessBuf = null;
         }
         if (state.pickColorsBuf) {
             state.pickColorsBuf.destroy();
             state.pickColorsBuf = null;
+        }
+        if (state.indicesBuf) {
+            state.indicesBuf.destroy();
+            state.indicesBuf = null;
+        }
+        if (state.normalsBuf) {
+            state.normalsBuf.destroy();
+            state.normalsBuf = null;
+        }
+        if (state.edgeIndicesBuf) {
+            state.edgeIndicesBuf.destroy();
+            state.edgeIndicessBuf = null;
         }
         state.destroy();
     }
