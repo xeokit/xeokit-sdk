@@ -258,10 +258,10 @@ export class VBOBatchingTrianglesLayer {
                 buffer.colors.push(255);
             }
         } else if (colorsCompressed) {
-            for (let i = 0, len = colors.length; i < len; i += 3) {
-                buffer.colors.push(colors[i]);
-                buffer.colors.push(colors[i + 1]);
-                buffer.colors.push(colors[i + 2]);
+            for (let i = 0, len = colorsCompressed.length; i < len; i += 3) {
+                buffer.colors.push(colorsCompressed[i]);
+                buffer.colors.push(colorsCompressed[i + 1]);
+                buffer.colors.push(colorsCompressed[i + 2]);
                 buffer.colors.push(255);
             }
         } else if (color) {
