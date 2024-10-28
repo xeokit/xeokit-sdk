@@ -124,7 +124,6 @@ export class VBOBatchingLinesLayer {
         this._numSelectedLayerPortions = 0;
         this._numHighlightedLayerPortions = 0;
         this._numClippableLayerPortions = 0;
-        this._numEdgesLayerPortions = 0;
         this._numPickableLayerPortions = 0;
         this._numCulledLayerPortions = 0;
 
@@ -280,10 +279,6 @@ export class VBOBatchingLinesLayer {
             this._numClippableLayerPortions++;
             this.model.numClippableLayerPortions++;
         }
-        if (flags & ENTITY_FLAGS.EDGES) {
-            this._numEdgesLayerPortions++;
-            this.model.numEdgesLayerPortions++;
-        }
         if (flags & ENTITY_FLAGS.PICKABLE) {
             this._numPickableLayerPortions++;
             this.model.numPickableLayerPortions++;
@@ -364,14 +359,7 @@ export class VBOBatchingLinesLayer {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        if (flags & ENTITY_FLAGS.EDGES) {
-            this._numEdgesLayerPortions++;
-            this.model.numEdgesLayerPortions++;
-        } else {
-            this._numEdgesLayerPortions--;
-            this.model.numEdgesLayerPortions--;
-        }
-        this._setFlags(portionId, flags, transparent);
+        // Probably not applicable to lines
     }
 
     setClippable(portionId, flags) {
