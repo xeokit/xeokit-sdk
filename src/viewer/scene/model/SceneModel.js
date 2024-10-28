@@ -5,9 +5,8 @@ import {SceneModelMesh} from './SceneModelMesh.js';
 import {getScratchMemory, putScratchMemory} from "./vbo/ScratchMemory.js";
 import {VBOBatchingTrianglesLayer} from './vbo/batching/triangles/VBOBatchingTrianglesLayer.js';
 import {VBOInstancingTrianglesLayer} from './vbo/instancing/triangles/VBOInstancingTrianglesLayer.js';
-import {VBOBatchingLinesLayer} from './vbo/batching/lines/VBOBatchingLinesLayer.js';
+import {VBOBatchingLayer} from './vbo/VBOBatchingLayer.js';
 import {VBOInstancingLinesLayer} from './vbo/instancing/lines/VBOInstancingLinesLayer.js';
-import {VBOBatchingPointsLayer} from './vbo/batching/points/VBOBatchingPointsLayer.js';
 import {VBOInstancingPointsLayer} from './vbo/instancing/points/VBOInstancingPointsLayer.js';
 import {DTXLinesLayer} from "./dtx/lines/DTXLinesLayer.js";
 import {DTXTrianglesLayer} from "./dtx/triangles/DTXTrianglesLayer.js";
@@ -3218,9 +3217,8 @@ export class SceneModel extends Component {
         let vboBatchingLayer = this._vboBatchingLayers[layerId];
         if (vboBatchingLayer) {
             const lenPositions = cfg.positionsCompressed ? cfg.positionsCompressed.length : cfg.positions.length;
-            const canCreatePortion = (cfg.primitive === "points")
-                ? vboBatchingLayer.canCreatePortion(lenPositions)
-                : vboBatchingLayer.canCreatePortion(lenPositions, cfg.indices.length);
+            const canCreatePortion = vboBatchingLayer.canCreatePortion(
+                lenPositions, (cfg.primitive === "points") ? 0 : cfg.indices.length);
             if (!canCreatePortion) {
                 vboBatchingLayer.finalize();
                 delete this._vboBatchingLayers[layerId];
@@ -3281,21 +3279,8 @@ export class SceneModel extends Component {
                     });
                     break;
                 case "lines":
-                    // console.info(`[SceneModel ${this.id}]: creating VBOBatchingLinesLayer`);
-                    vboBatchingLayer = new VBOBatchingLinesLayer({
-                        model,
-                        layerIndex: 0, // This is set in #finalize()
-                        scratchMemory: this._vboBatchingLayerScratchMemory,
-                        positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
-                        uvDecodeMatrix: cfg.uvDecodeMatrix, // Can be undefined
-                        origin,
-                        maxGeometryBatchSize: this._maxGeometryBatchSize,
-                        primitive: cfg.primitive
-                    });
-                    break;
                 case "points":
-                    // console.info(`[SceneModel ${this.id}]: creating VBOBatchingPointsLayer`);
-                    vboBatchingLayer = new VBOBatchingPointsLayer({
+                    vboBatchingLayer = new VBOBatchingLayer({
                         model,
                         layerIndex: 0, // This is set in #finalize()
                         scratchMemory: this._vboBatchingLayerScratchMemory,
