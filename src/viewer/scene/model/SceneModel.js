@@ -3,7 +3,6 @@ import {math} from "../math/math.js";
 import {buildEdgeIndices} from '../math/buildEdgeIndices.js';
 import {SceneModelMesh} from './SceneModelMesh.js';
 import {getScratchMemory, putScratchMemory} from "./vbo/ScratchMemory.js";
-import {VBOBatchingTrianglesLayer} from './vbo/batching/triangles/VBOBatchingTrianglesLayer.js';
 import {VBOInstancingTrianglesLayer} from './vbo/instancing/triangles/VBOInstancingTrianglesLayer.js';
 import {VBOBatchingLayer} from './vbo/VBOBatchingLayer.js';
 import {VBOInstancingLinesLayer} from './vbo/instancing/lines/VBOInstancingLinesLayer.js';
@@ -3231,53 +3230,8 @@ export class SceneModel extends Component {
         {
             switch (cfg.primitive) {
                 case "triangles":
-                    // console.info(`[SceneModel ${this.id}]: creating TrianglesBatchingLayer`);
-                    vboBatchingLayer = new VBOBatchingTrianglesLayer({
-                        model,
-                        textureSet,
-                        layerIndex: 0, // This is set in #finalize()
-                        scratchMemory: this._vboBatchingLayerScratchMemory,
-                        positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
-                        uvDecodeMatrix: cfg.uvDecodeMatrix, // Can be undefined
-                        origin,
-                        maxGeometryBatchSize: this._maxGeometryBatchSize,
-                        solid: (cfg.primitive === "solid"),
-                        autoNormals: true,
-                        primitive: cfg.primitive
-                    });
-                    break;
                 case "solid":
-                    // console.info(`[SceneModel ${this.id}]: creating TrianglesBatchingLayer`);
-                    vboBatchingLayer = new VBOBatchingTrianglesLayer({
-                        model,
-                        textureSet,
-                        layerIndex: 0, // This is set in #finalize()
-                        scratchMemory: this._vboBatchingLayerScratchMemory,
-                        positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
-                        uvDecodeMatrix: cfg.uvDecodeMatrix, // Can be undefined
-                        origin,
-                        maxGeometryBatchSize: this._maxGeometryBatchSize,
-                        solid: (cfg.primitive === "solid"),
-                        autoNormals: true,
-                        primitive: cfg.primitive
-                    });
-                    break;
                 case "surface":
-                    // console.info(`[SceneModel ${this.id}]: creating TrianglesBatchingLayer`);
-                    vboBatchingLayer = new VBOBatchingTrianglesLayer({
-                        model,
-                        textureSet,
-                        layerIndex: 0, // This is set in #finalize()
-                        scratchMemory: this._vboBatchingLayerScratchMemory,
-                        positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
-                        uvDecodeMatrix: cfg.uvDecodeMatrix, // Can be undefined
-                        origin,
-                        maxGeometryBatchSize: this._maxGeometryBatchSize,
-                        solid: (cfg.primitive === "solid"),
-                        autoNormals: true,
-                        primitive: cfg.primitive
-                    });
-                    break;
                 case "lines":
                 case "points":
                     vboBatchingLayer = new VBOBatchingLayer({
@@ -3286,6 +3240,7 @@ export class SceneModel extends Component {
                         scratchMemory: this._vboBatchingLayerScratchMemory,
                         positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
                         uvDecodeMatrix: cfg.uvDecodeMatrix, // Can be undefined
+                        textureSet,
                         origin,
                         maxGeometryBatchSize: this._maxGeometryBatchSize,
                         primitive: cfg.primitive
