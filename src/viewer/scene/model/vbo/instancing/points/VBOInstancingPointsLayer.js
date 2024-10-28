@@ -395,7 +395,7 @@ export class VBOInstancingPointsLayer {
         tempUint8Vec4[0] = color[0];
         tempUint8Vec4[1] = color[1];
         tempUint8Vec4[2] = color[2];
-        this._state.colorsBuf.setData(tempUint8Vec4, portionId * 3);
+        this._state.colorsBuf.setData(tempUint8Vec4, portionId * 4);
     }
 
     setTransparent(portionId, flags, transparent) {
