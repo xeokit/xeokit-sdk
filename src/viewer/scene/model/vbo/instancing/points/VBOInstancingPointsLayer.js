@@ -49,12 +49,63 @@ export class VBOInstancingPointsLayer {
         this._renderers = getPointsRenderers(cfg.model.scene, true);
         this._aabb = math.collapseAABB3();
 
+        const attribute = function() {
+            const portions = [ ];
+
+            return {
+                append: function(data, times = 1, denormalizeScale = 1.0, increment = 0.0) {
+                    portions.push({ data: data, times: times, denormalizeScale: denormalizeScale, increment: increment });
+                },
+                compileBuffer: function(type) {
+                    let len = 0;
+                    portions.forEach(p => { len += p.times * p.data.length; });
+                    const buf = new type(len);
+
+                    let begin = 0;
+                    portions.forEach(p => {
+                        const data = p.data;
+                        const dScale = p.denormalizeScale;
+                        const increment = p.increment;
+                        const subBuf = buf.subarray(begin);
+
+                        if ((dScale === 1.0) && (increment === 0.0)) {
+                            subBuf.set(data);
+                        } else {
+                            for (let i = 0; i < data.length; ++i) {
+                                subBuf[i] = increment + data[i] * dScale;
+                            }
+                        }
+
+                        let soFar = data.length;
+                        const allDataLen = p.times * data.length;
+                        while (soFar < allDataLen) {
+                            const toCopy = Math.min(soFar, allDataLen - soFar);
+                            subBuf.set(subBuf.subarray(0, toCopy), soFar);
+                            soFar += toCopy;
+                        }
+
+                        begin += soFar;
+                    });
+
+                    return buf;
+                }
+            };
+        };
+
+        this._buffer = {
+            // Modeling matrix per instance, array for each column
+            modelMatrixCol0: attribute(),
+            modelMatrixCol1: attribute(),
+            modelMatrixCol2: attribute(),
+            pickColors:      attribute()
+        };
+
         this._state = new RenderState({
             obb: math.OBB3(),
             numInstances: 0,
             origin: cfg.origin ? math.vec3(cfg.origin) : null,
             geometry: cfg.geometry,
-            positionsDecodeMatrix: cfg.geometry.positionsDecodeMatrix, // So we can null the geometry for GC
+            positionsDecodeMatrix: math.mat4(cfg.geometry.positionsDecodeMatrix), // So we can null the geometry for GC
             colorsBuf: null,
             flagsBuf: null,
             offsetsBuf: null,
@@ -75,15 +126,6 @@ export class VBOInstancingPointsLayer {
         this._numEdgesLayerPortions = 0;
         this._numPickableLayerPortions = 0;
         this._numCulledLayerPortions = 0;
-
-        // Per-instance arrays
-        this._pickColors = [];
-        this._offsets = [];
-
-        // Modeling matrix per instance, array for each column
-        this._modelMatrixCol0 = [];
-        this._modelMatrixCol1 = [];
-        this._modelMatrixCol2 = [];
 
         this._portions = [];
         this._meshes = [];
@@ -119,52 +161,31 @@ export class VBOInstancingPointsLayer {
      * @param mesh The SceneModelMesh that owns the portion
      * @param cfg Portion params
      * @param cfg.meshMatrix Flat float 4x4 matrix.
-     * @param [cfg.worldMatrix] Flat float 4x4 matrix.
      * @param cfg.pickColor Quantized pick color
      * @returns {number} Portion ID.
      */
     createPortion(mesh, cfg) {
 
-        const meshMatrix = cfg.meshMatrix;
-        const pickColor = cfg.pickColor;
-
         if (this._finalized) {
             throw "Already finalized";
         }
 
-        if (this.model.scene.entityOffsetsEnabled) {
-            this._offsets.push(0);
-            this._offsets.push(0);
-            this._offsets.push(0);
+        const buffer = this._buffer;
+
+        const meshMatrix = cfg.meshMatrix;
+        buffer.modelMatrixCol0.append([ meshMatrix[0], meshMatrix[4], meshMatrix[8], meshMatrix[12] ]);
+        buffer.modelMatrixCol1.append([ meshMatrix[1], meshMatrix[5], meshMatrix[9], meshMatrix[13] ]);
+        buffer.modelMatrixCol2.append([ meshMatrix[2], meshMatrix[6], meshMatrix[10], meshMatrix[14] ]);
+
+        if (this.primitive !== "lines") {
+            buffer.pickColors.append(cfg.pickColor.slice(0, 4));
         }
-
-        this._modelMatrixCol0.push(meshMatrix[0]);
-        this._modelMatrixCol0.push(meshMatrix[4]);
-        this._modelMatrixCol0.push(meshMatrix[8]);
-        this._modelMatrixCol0.push(meshMatrix[12]);
-
-        this._modelMatrixCol1.push(meshMatrix[1]);
-        this._modelMatrixCol1.push(meshMatrix[5]);
-        this._modelMatrixCol1.push(meshMatrix[9]);
-        this._modelMatrixCol1.push(meshMatrix[13]);
-
-        this._modelMatrixCol2.push(meshMatrix[2]);
-        this._modelMatrixCol2.push(meshMatrix[6]);
-        this._modelMatrixCol2.push(meshMatrix[10]);
-        this._modelMatrixCol2.push(meshMatrix[14]);
-
-        // Per-instance pick colors
-
-        this._pickColors.push(pickColor[0]);
-        this._pickColors.push(pickColor[1]);
-        this._pickColors.push(pickColor[2]);
-        this._pickColors.push(pickColor[3]);
 
         this._state.numInstances++;
 
         const portionId = this._portions.length;
-        this._portions.push({});
 
+        this._portions.push({});
         this._numPortions++;
         this.model.numPortions++;
         this._meshes.push(mesh);
@@ -172,51 +193,36 @@ export class VBOInstancingPointsLayer {
     }
 
     finalize() {
+
         if (this._finalized) {
             throw "Already finalized";
         }
-        const gl = this.model.scene.canvas.gl;
-        const flagsLength = this._pickColors.length / 4;
+
         const state = this._state;
+        const gl = this.model.scene.canvas.gl;
+        const buffer = this._buffer;
+        const maybeCreateGlBuffer = (target, srcData, size, usage, normalized = false) => (srcData.length > 0) ? new ArrayBuf(gl, target, srcData, srcData.length, size, usage, normalized) : null;
+
+        state.modelMatrixCol0Buf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.modelMatrixCol0.compileBuffer(Float32Array), 4, gl.STATIC_DRAW);
+        state.modelMatrixCol1Buf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.modelMatrixCol1.compileBuffer(Float32Array), 4, gl.STATIC_DRAW);
+        state.modelMatrixCol2Buf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.modelMatrixCol2.compileBuffer(Float32Array), 4, gl.STATIC_DRAW);
+
+        state.pickColorsBuf      = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.pickColors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW);
+
+        state.flagsBuf           = maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(state.numInstances), 1, gl.DYNAMIC_DRAW);
+
+        state.offsetsBuf         = this.model.scene.entityOffsetsEnabled ? maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(state.numInstances * 3), 3, gl.DYNAMIC_DRAW) : null;
+
         const geometry = state.geometry;
-        if (flagsLength > 0) {
-            // Because we only build flags arrays here, 
-            // get their length from the colors array
-            let notNormalized = false;
-            state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(flagsLength), flagsLength, 1, gl.DYNAMIC_DRAW, notNormalized);
+        if (geometry.positionsCompressed) {
+            state.positionsBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, geometry.positionsCompressed, 3, gl.STATIC_DRAW);
         }
-        if (this.model.scene.entityOffsetsEnabled) {
-            if (this._offsets.length > 0) {
-                const notNormalized = false;
-                state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._offsets), this._offsets.length, 3, gl.DYNAMIC_DRAW, notNormalized);
-                this._offsets = []; // Release memory
-            }
-        }
-        if (geometry.positionsCompressed && geometry.positionsCompressed.length > 0) {
-            const normalized = false;
-            state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, geometry.positionsCompressed, geometry.positionsCompressed.length, 3, gl.STATIC_DRAW, normalized);
-            state.positionsDecodeMatrix = math.mat4(geometry.positionsDecodeMatrix);
-        }
-        if (geometry.colorsCompressed && geometry.colorsCompressed.length > 0) {
-            const colorsCompressed = new Uint8Array(geometry.colorsCompressed);
-            const notNormalized = false;
-            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colorsCompressed, colorsCompressed.length, 4, gl.STATIC_DRAW, notNormalized);
+        if (geometry.colorsCompressed) {
+            state.colorsBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Uint8Array(geometry.colorsCompressed), 4, gl.STATIC_DRAW);
             state.colorsForPointsNotInstancing = true;
         }
-        if (this._modelMatrixCol0.length > 0) {
-            const normalized = false;
-            state.modelMatrixCol0Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelMatrixCol0), this._modelMatrixCol0.length, 4, gl.STATIC_DRAW, normalized);
-            state.modelMatrixCol1Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelMatrixCol1), this._modelMatrixCol1.length, 4, gl.STATIC_DRAW, normalized);
-            state.modelMatrixCol2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelMatrixCol2), this._modelMatrixCol2.length, 4, gl.STATIC_DRAW, normalized);
-            this._modelMatrixCol0 = [];
-            this._modelMatrixCol1 = [];
-            this._modelMatrixCol2 = [];
-        }
-        if (this._pickColors.length > 0) {
-            const normalized = false;
-            state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._pickColors), this._pickColors.length, 4, gl.STATIC_DRAW, normalized);
-            this._pickColors = []; // Release memory
-        }
+
+        this._buffer = null;
         state.geometry = null;
         this._finalized = true;
     }
