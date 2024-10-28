@@ -60,6 +60,62 @@ export class VBOInstancingTrianglesLayer {
 
         this._aabb = math.collapseAABB3();
 
+        const attribute = function() {
+            const portions = [ ];
+
+            return {
+                append: function(data, times = 1, denormalizeScale = 1.0, increment = 0.0) {
+                    portions.push({ data: data, times: times, denormalizeScale: denormalizeScale, increment: increment });
+                },
+                compileBuffer: function(type) {
+                    let len = 0;
+                    portions.forEach(p => { len += p.times * p.data.length; });
+                    const buf = new type(len);
+
+                    let begin = 0;
+                    portions.forEach(p => {
+                        const data = p.data;
+                        const dScale = p.denormalizeScale;
+                        const increment = p.increment;
+                        const subBuf = buf.subarray(begin);
+
+                        if ((dScale === 1.0) && (increment === 0.0)) {
+                            subBuf.set(data);
+                        } else {
+                            for (let i = 0; i < data.length; ++i) {
+                                subBuf[i] = increment + data[i] * dScale;
+                            }
+                        }
+
+                        let soFar = data.length;
+                        const allDataLen = p.times * data.length;
+                        while (soFar < allDataLen) {
+                            const toCopy = Math.min(soFar, allDataLen - soFar);
+                            subBuf.set(subBuf.subarray(0, toCopy), soFar);
+                            soFar += toCopy;
+                        }
+
+                        begin += soFar;
+                    });
+
+                    return buf;
+                }
+            };
+        };
+
+        this._buffer = {
+            // Modeling matrix per instance, array for each column
+            modelMatrixCol0: attribute(),
+            modelMatrixCol1: attribute(),
+            modelMatrixCol2: attribute(),
+            colors:          attribute(),
+            metallicRoughness: attribute(),
+            modelNormalMatrixCol0: attribute(),
+            modelNormalMatrixCol1: attribute(),
+            modelNormalMatrixCol2: attribute(),
+            pickColors:      attribute()
+        };
+
         this._state = new RenderState({
             numInstances: 0,
             obb: math.OBB3(),
@@ -67,7 +123,7 @@ export class VBOInstancingTrianglesLayer {
             geometry: cfg.geometry,
             textureSet: cfg.textureSet,
             pbrSupported: false, // Set in #finalize if we have enough to support quality rendering
-            positionsDecodeMatrix: cfg.geometry.positionsDecodeMatrix, // So we can null the geometry for GC
+            positionsDecodeMatrix: math.mat4(cfg.geometry.positionsDecodeMatrix), // So we can null the geometry for GC
             colorsBuf: null,
             metallicRoughnessBuf: null,
             flagsBuf: null,
@@ -93,22 +149,6 @@ export class VBOInstancingTrianglesLayer {
         this._numEdgesLayerPortions = 0;
         this._numPickableLayerPortions = 0;
         this._numCulledLayerPortions = 0;
-
-        // Vertex arrays
-        this._colors = [];
-        this._metallicRoughness = [];
-        this._pickColors = [];
-        this._offsets = [];
-
-        // Modeling matrix per instance, array for each column
-        this._modelMatrixCol0 = [];
-        this._modelMatrixCol1 = [];
-        this._modelMatrixCol2 = [];
-
-        // Modeling normal matrix per instance, array for each column
-        this._modelNormalMatrixCol0 = [];
-        this._modelNormalMatrixCol1 = [];
-        this._modelNormalMatrixCol2 = [];
 
         this._portions = [];
         this._meshes = [];
@@ -154,97 +194,51 @@ export class VBOInstancingTrianglesLayer {
      *
      * @param mesh The SceneModelMesh that owns the portion
      * @param cfg Portion params
+     * @param cfg.meshMatrix Flat float 4x4 matrix.
      * @param cfg.color Color [0..255,0..255,0..255]
+     * @param cfg.opacity Opacity [0..255].
      * @param cfg.metallic Metalness factor [0..255]
      * @param cfg.roughness Roughness factor [0..255]
-     * @param cfg.opacity Opacity [0..255].
-     * @param cfg.meshMatrix Flat float 4x4 matrix.
-     * @param [cfg.worldMatrix] Flat float 4x4 matrix.
      * @param cfg.pickColor Quantized pick color
      * @returns {number} Portion ID.
      */
     createPortion(mesh, cfg) {
 
-        const color = cfg.color;
-        const metallic = cfg.metallic;
-        const roughness = cfg.roughness;
-        const opacity = cfg.opacity !== null && cfg.opacity !== undefined ? cfg.opacity : 255;
-        const meshMatrix = cfg.meshMatrix;
-        const pickColor = cfg.pickColor;
-
         if (this._finalized) {
             throw "Already finalized";
         }
 
-        const r = color[0]; // Color is pre-quantized by SceneModel
-        const g = color[1];
-        const b = color[2];
+        const buffer = this._buffer;
 
-        this._colors.push(r);
-        this._colors.push(g);
-        this._colors.push(b);
-        this._colors.push(opacity);
+        const meshMatrix = cfg.meshMatrix;
+        buffer.modelMatrixCol0.append([ meshMatrix[0], meshMatrix[4], meshMatrix[8], meshMatrix[12] ]);
+        buffer.modelMatrixCol1.append([ meshMatrix[1], meshMatrix[5], meshMatrix[9], meshMatrix[13] ]);
+        buffer.modelMatrixCol2.append([ meshMatrix[2], meshMatrix[6], meshMatrix[10], meshMatrix[14] ]);
 
-        this._metallicRoughness.push((metallic !== null && metallic !== undefined) ? metallic : 0);
-        this._metallicRoughness.push((roughness !== null && roughness !== undefined) ? roughness : 255);
-
-        if (this.model.scene.entityOffsetsEnabled) {
-            this._offsets.push(0);
-            this._offsets.push(0);
-            this._offsets.push(0);
+        if (this.primitive !== "points") {
+            const color = cfg.color; // Color is pre-quantized by SceneModel
+            buffer.colors.append([ color[0], color[1], color[2], cfg.opacity ?? 255 ]);
         }
 
-        this._modelMatrixCol0.push(meshMatrix[0]);
-        this._modelMatrixCol0.push(meshMatrix[4]);
-        this._modelMatrixCol0.push(meshMatrix[8]);
-        this._modelMatrixCol0.push(meshMatrix[12]);
-
-        this._modelMatrixCol1.push(meshMatrix[1]);
-        this._modelMatrixCol1.push(meshMatrix[5]);
-        this._modelMatrixCol1.push(meshMatrix[9]);
-        this._modelMatrixCol1.push(meshMatrix[13]);
-
-        this._modelMatrixCol2.push(meshMatrix[2]);
-        this._modelMatrixCol2.push(meshMatrix[6]);
-        this._modelMatrixCol2.push(meshMatrix[10]);
-        this._modelMatrixCol2.push(meshMatrix[14]);
+        buffer.metallicRoughness.append([ cfg.metallic ?? 0, cfg.roughness ?? 255 ]);
 
         if (this._state.geometry.normals) {
-
             // Note: order of inverse and transpose doesn't matter
-
-            let transposedMat = math.transposeMat4(meshMatrix, math.mat4()); // TODO: Use cached matrix
-            let normalMatrix = math.inverseMat4(transposedMat);
-
-            this._modelNormalMatrixCol0.push(normalMatrix[0]);
-            this._modelNormalMatrixCol0.push(normalMatrix[4]);
-            this._modelNormalMatrixCol0.push(normalMatrix[8]);
-            this._modelNormalMatrixCol0.push(normalMatrix[12]);
-
-            this._modelNormalMatrixCol1.push(normalMatrix[1]);
-            this._modelNormalMatrixCol1.push(normalMatrix[5]);
-            this._modelNormalMatrixCol1.push(normalMatrix[9]);
-            this._modelNormalMatrixCol1.push(normalMatrix[13]);
-
-            this._modelNormalMatrixCol2.push(normalMatrix[2]);
-            this._modelNormalMatrixCol2.push(normalMatrix[6]);
-            this._modelNormalMatrixCol2.push(normalMatrix[10]);
-            this._modelNormalMatrixCol2.push(normalMatrix[14]);
+            const normalMatrix = math.inverseMat4(math.transposeMat4(meshMatrix, math.mat4()));
+            buffer.modelNormalMatrixCol0.append([ normalMatrix[0], normalMatrix[4], normalMatrix[8], normalMatrix[12] ]);
+            buffer.modelNormalMatrixCol0.append([ normalMatrix[1], normalMatrix[5], normalMatrix[9], normalMatrix[13] ]);
+            buffer.modelNormalMatrixCol0.append([ normalMatrix[2], normalMatrix[6], normalMatrix[10], normalMatrix[14] ]);
         }
 
-        // Per-vertex pick colors
-
-        this._pickColors.push(pickColor[0]);
-        this._pickColors.push(pickColor[1]);
-        this._pickColors.push(pickColor[2]);
-        this._pickColors.push(pickColor[3]);
+        if (this.primitive !== "lines") {
+            buffer.pickColors.append(cfg.pickColor.slice(0, 4));
+        }
 
         this._state.numInstances++;
 
         const portionId = this._portions.length;
 
         const portion = {};
-
         if (this.model.scene.readableGeometryEnabled) {
             portion.matrix = meshMatrix.slice();
             portion.inverseMatrix = null; // Lazy-computed in precisionRayPickSurface
@@ -256,7 +250,6 @@ export class VBOInstancingTrianglesLayer {
         }
 
         this._portions.push(portion);
-
         this._numPortions++;
         this.model.numPortions++;
         this._meshes.push(mesh);
@@ -266,96 +259,57 @@ export class VBOInstancingTrianglesLayer {
     finalize() {
 
         if (this._finalized) {
-            return;
+            throw "Already finalized";
         }
 
         const state = this._state;
-        const geometry = state.geometry;
-        const textureSet = state.textureSet;
         const gl = this.model.scene.canvas.gl;
-        const colorsLength = this._colors.length;
-        const flagsLength = colorsLength / 4;
+        const buffer = this._buffer;
+        const maybeCreateGlBuffer = (target, srcData, size, usage, normalized = false) => (srcData.length > 0) ? new ArrayBuf(gl, target, srcData, srcData.length, size, usage, normalized) : null;
 
-        if (colorsLength > 0) {
-            let notNormalized = false;
-            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._colors), this._colors.length, 4, gl.DYNAMIC_DRAW, notNormalized);
-            this._colors = []; // Release memory
+        state.modelMatrixCol0Buf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.modelMatrixCol0.compileBuffer(Float32Array), 4, gl.STATIC_DRAW);
+        state.modelMatrixCol1Buf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.modelMatrixCol1.compileBuffer(Float32Array), 4, gl.STATIC_DRAW);
+        state.modelMatrixCol2Buf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.modelMatrixCol2.compileBuffer(Float32Array), 4, gl.STATIC_DRAW);
+
+        state.colorsBuf          = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.colors.compileBuffer(Uint8Array), 4, gl.DYNAMIC_DRAW);
+
+        state.metallicRoughnessBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.metallicRoughness.compileBuffer(Uint8Array), 2, gl.STATIC_DRAW);
+
+        state.pickColorsBuf      = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.pickColors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW);
+
+        state.flagsBuf           = maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(state.numInstances), 1, gl.DYNAMIC_DRAW);
+
+        state.offsetsBuf         = this.model.scene.entityOffsetsEnabled ? maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(state.numInstances * 3), 3, gl.DYNAMIC_DRAW) : null;
+
+        const geometry = state.geometry;
+        if (geometry.positionsCompressed) {
+            state.positionsBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, geometry.positionsCompressed, 3, gl.STATIC_DRAW);
         }
-
-        if (this._metallicRoughness.length > 0) {
-            const metallicRoughness = new Uint8Array(this._metallicRoughness);
-            let normalized = false;
-            state.metallicRoughnessBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, metallicRoughness, this._metallicRoughness.length, 2, gl.STATIC_DRAW, normalized);
-        }
-
-        if (flagsLength > 0) {
-            // Because we only build flags arrays here,
-            // get their length from the colors array
-            let notNormalized = false;
-            state.flagsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(flagsLength), flagsLength, 1, gl.DYNAMIC_DRAW, notNormalized);
-        }
-
-        if (this.model.scene.entityOffsetsEnabled) {
-            if (this._offsets.length > 0) {
-                const notNormalized = false;
-                state.offsetsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._offsets), this._offsets.length, 3, gl.DYNAMIC_DRAW, notNormalized);
-                this._offsets = []; // Release memory
-            }
-        }
-
-        if (geometry.positionsCompressed && geometry.positionsCompressed.length > 0) {
-            const normalized = false;
-            state.positionsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, geometry.positionsCompressed, geometry.positionsCompressed.length, 3, gl.STATIC_DRAW, normalized);
-            state.positionsDecodeMatrix = math.mat4(geometry.positionsDecodeMatrix);
+        if ((this.primitive !== "points") && geometry.indices) {
+            state.indicesBuf = maybeCreateGlBuffer(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(geometry.indices), 1, gl.STATIC_DRAW);
         }
         // if (geometry.normalsCompressed && geometry.normalsCompressed.length > 0) {
         //     const normalized = true; // For oct-encoded UInt8
         //     state.normalsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, geometry.normalsCompressed, geometry.normalsCompressed.length, 3, gl.STATIC_DRAW, normalized);
         // }
-        if (geometry.colorsCompressed && geometry.colorsCompressed.length > 0) {
-            const colorsCompressed = new Uint8Array(geometry.colorsCompressed);
-            const notNormalized = false;
-            state.colorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, colorsCompressed, colorsCompressed.length, 4, gl.STATIC_DRAW, notNormalized);
+        if (geometry.colorsCompressed) {
+            state.colorsBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Uint8Array(geometry.colorsCompressed), 4, gl.STATIC_DRAW);
         }
-        if (geometry.uvCompressed && geometry.uvCompressed.length > 0) {
-            const uvCompressed = geometry.uvCompressed;
+        if (geometry.uvCompressed) {
+            state.uvBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, geometry.uvCompressed, 2, gl.STATIC_DRAW);
             state.uvDecodeMatrix = geometry.uvDecodeMatrix;
-            state.uvBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, uvCompressed, uvCompressed.length, 2, gl.STATIC_DRAW, false);
         }
-        if (geometry.indices && geometry.indices.length > 0) {
-            state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(geometry.indices), geometry.indices.length, 1, gl.STATIC_DRAW);
-        }
-        if (geometry.edgeIndices && geometry.edgeIndices.length > 0) {
-            state.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(geometry.edgeIndices), geometry.edgeIndices.length, 1, gl.STATIC_DRAW);
+        if (geometry.edgeIndices) {
+            state.edgeIndicesBuf = maybeCreateGlBuffer(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(geometry.edgeIndices), 1, gl.STATIC_DRAW);
         }
 
-        if (this._modelMatrixCol0.length > 0) {
-
-            const normalized = false;
-
-            state.modelMatrixCol0Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelMatrixCol0), this._modelMatrixCol0.length, 4, gl.STATIC_DRAW, normalized);
-            state.modelMatrixCol1Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelMatrixCol1), this._modelMatrixCol1.length, 4, gl.STATIC_DRAW, normalized);
-            state.modelMatrixCol2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelMatrixCol2), this._modelMatrixCol2.length, 4, gl.STATIC_DRAW, normalized);
-            this._modelMatrixCol0 = [];
-            this._modelMatrixCol1 = [];
-            this._modelMatrixCol2 = [];
-
-            if (state.normalsBuf) {
-                state.modelNormalMatrixCol0Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelNormalMatrixCol0), this._modelNormalMatrixCol0.length, 4, gl.STATIC_DRAW, normalized);
-                state.modelNormalMatrixCol1Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelNormalMatrixCol1), this._modelNormalMatrixCol1.length, 4, gl.STATIC_DRAW, normalized);
-                state.modelNormalMatrixCol2Buf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Float32Array(this._modelNormalMatrixCol2), this._modelNormalMatrixCol2.length, 4, gl.STATIC_DRAW, normalized);
-                this._modelNormalMatrixCol0 = [];
-                this._modelNormalMatrixCol1 = [];
-                this._modelNormalMatrixCol2 = [];
-            }
+        if (state.modelMatrixCol0Buf && state.normalsBuf) { // WARNING: normalsBuf is never defined at the moment
+            state.modelNormalMatrixCol0Buf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.modelNormalMatrixCol0.compileBuffer(Float32Array), 4, gl.STATIC_DRAW);
+            state.modelNormalMatrixCol1Buf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.modelNormalMatrixCol1.compileBuffer(Float32Array), 4, gl.STATIC_DRAW);
+            state.modelNormalMatrixCol2Buf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.modelNormalMatrixCol2.compileBuffer(Float32Array), 4, gl.STATIC_DRAW);
         }
 
-        if (this._pickColors.length > 0) {
-            const normalized = false;
-            state.pickColorsBuf = new ArrayBuf(gl, gl.ARRAY_BUFFER, new Uint8Array(this._pickColors), this._pickColors.length, 4, gl.STATIC_DRAW, normalized);
-            this._pickColors = []; // Release memory
-        }
-
+        const textureSet = state.textureSet;
         state.pbrSupported
             = !!state.metallicRoughnessBuf
             && !!state.uvBuf
@@ -370,10 +324,10 @@ export class VBOInstancingTrianglesLayer {
             && !!textureSet.colorTexture;
 
 
+        this._buffer = null;
         if (!this.model.scene.readableGeometryEnabled) {
             this._state.geometry = null;
         }
-
         this._finalized = true;
     }
 
