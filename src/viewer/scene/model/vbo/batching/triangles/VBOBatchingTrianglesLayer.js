@@ -328,8 +328,6 @@ export class VBOBatchingTrianglesLayer {
         const portion = {
             vertsBaseIndex: vertsBaseIndex,
             numVerts: numVerts,
-            indicesBaseIndex: buffer.indices.length - indices.length,
-            numIndices: indices.length,
         };
 
         if (scene.readableGeometryEnabled) {
@@ -850,19 +848,6 @@ export class VBOBatchingTrianglesLayer {
         for (let i = 0, len = indices.length; i < len; i++) {
             callback(indices[i]);
         }
-    }
-
-    getElementsCountAndOffset(portionId) {
-        let count = null;
-        let offset = null;
-        const portion = this._portions[portionId];
-
-        if (portion) {
-            count = portion.numIndices;
-            offset = portion.indicesBaseIndex;
-        }
-
-        return {count, offset}
     }
 
     // ---------------------- COLOR RENDERING -----------------------------------
