@@ -22,7 +22,6 @@ export class VBOInstancingPointsLayer {
      * @param cfg.layerIndex
      * @param cfg.model
      * @param cfg.geometry
-     * @param cfg.material
      * @param cfg.origin
      */
     constructor(cfg) {
@@ -34,12 +33,6 @@ export class VBOInstancingPointsLayer {
          * @type {VBOSceneModel}
          */
         this.model = cfg.model;
-
-        /**
-         * Shared material
-         * @type {VBOSceneModelGeometry}
-         */
-        this.material = cfg.material;
 
         /**
          * State sorting key.
