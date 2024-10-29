@@ -3,7 +3,6 @@ import {math} from "../math/math.js";
 import {buildEdgeIndices} from '../math/buildEdgeIndices.js';
 import {SceneModelMesh} from './SceneModelMesh.js';
 import {getScratchMemory, putScratchMemory} from "./vbo/ScratchMemory.js";
-import {VBOInstancingTrianglesLayer} from './vbo/instancing/triangles/VBOInstancingTrianglesLayer.js';
 import {VBOBatchingLayer} from './vbo/VBOBatchingLayer.js';
 import {VBOInstancingLayer} from './vbo/VBOInstancingLayer.js';
 import {DTXLinesLayer} from "./dtx/lines/DTXLinesLayer.js";
@@ -3280,38 +3279,8 @@ export class SceneModel extends Component {
         while (!vboInstancingLayer) {
             switch (geometry.primitive) {
                 case "triangles":
-                    // console.info(`[SceneModel ${this.id}]: creating TrianglesInstancingLayer`);
-                    vboInstancingLayer = new VBOInstancingTrianglesLayer({
-                        model,
-                        textureSet,
-                        geometry,
-                        origin,
-                        layerIndex: 0,
-                        solid: false
-                    });
-                    break;
                 case "solid":
-                    // console.info(`[SceneModel ${this.id}]: creating TrianglesInstancingLayer`);
-                    vboInstancingLayer = new VBOInstancingTrianglesLayer({
-                        model,
-                        textureSet,
-                        geometry,
-                        origin,
-                        layerIndex: 0,
-                        solid: true
-                    });
-                    break;
                 case "surface":
-                    // console.info(`[SceneModel ${this.id}]: creating TrianglesInstancingLayer`);
-                    vboInstancingLayer = new VBOInstancingTrianglesLayer({
-                        model,
-                        textureSet,
-                        geometry,
-                        origin,
-                        layerIndex: 0,
-                        solid: false
-                    });
-                    break;
                 case "lines":
                 case "points":
                     vboInstancingLayer = new VBOInstancingLayer({
