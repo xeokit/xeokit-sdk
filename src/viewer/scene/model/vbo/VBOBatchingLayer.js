@@ -384,7 +384,7 @@ export class VBOBatchingLayer {
                 const portion = this._portions[i];
                 const start = portion.vertsBaseIndex * 3;
                 const end = start + (portion.numVerts * 3);
-                portion.quantizedPositions = positions.slice(start, end);
+                portion.quantizedPositions = positions.subarray(start, end);
             }
         }
 
