@@ -75,8 +75,6 @@ export class VBOInstancingLayer {
 
         this._hasEdges = (this.primitive !== "points") && (this.primitive !== "lines");
 
-        this._retainGeometry = this.model.scene.readableGeometryEnabled && (this.primitive !== "points") && (this.primitive !== "lines");
-
         const attribute = function() {
             const portions = [ ];
 
@@ -211,6 +209,7 @@ export class VBOInstancingLayer {
         }
 
         const buffer = this._buffer;
+        const geometry = this._state.geometry;
 
         const meshMatrix = cfg.meshMatrix;
         buffer.modelMatrixCol0.append([ meshMatrix[0], meshMatrix[4], meshMatrix[8], meshMatrix[12] ]);
@@ -225,7 +224,7 @@ export class VBOInstancingLayer {
         if ((this.primitive !== "points") && (this.primitive !== "lines")) {
             buffer.metallicRoughness.append([ cfg.metallic ?? 0, cfg.roughness ?? 255 ]);
 
-            if (this._state.geometry.normals) {
+            if (geometry.normals) {
                 // Note: order of inverse and transpose doesn't matter
                 const normalMatrix = math.inverseMat4(math.transposeMat4(meshMatrix, math.mat4()));
                 buffer.modelNormalMatrixCol0.append([ normalMatrix[0], normalMatrix[4], normalMatrix[8], normalMatrix[12] ]);
@@ -242,16 +241,16 @@ export class VBOInstancingLayer {
 
         const portionId = this._portions.length;
 
-        const portion = {};
-        if (this._retainGeometry) {
-            portion.matrix = meshMatrix.slice();
-            portion.inverseMatrix = null; // Lazy-computed in precisionRayPickSurface
-            portion.normalMatrix = null; // Lazy-computed in precisionRayPickSurface
-
-            if (this.model.scene.entityOffsetsEnabled) {
-                portion.offset = new Float32Array(3);
+        const portion = {
+            retainedGeometry: this.model.scene.readableGeometryEnabled && (this.primitive !== "points") && (this.primitive !== "lines") && {
+                quantizedPositions: geometry.positionsCompressed,
+                indices:            geometry.indices,
+                offset:             this.model.scene.entityOffsetsEnabled && math.vec3(),
+                matrix:             meshMatrix.slice(),
+                inverseMatrix:      null, // Lazy-computed in precisionRayPickSurface
+                normalMatrix:       null, // Lazy-computed in precisionRayPickSurface
             }
-        }
+        };
 
         this._portions.push(portion);
         this._numPortions++;
@@ -331,9 +330,7 @@ export class VBOInstancingLayer {
 
 
         this._buffer = null;
-        if (!this._retainGeometry) {
-            this._state.geometry = null;
-        }
+        this._state.geometry = null;
         this._finalized = true;
     }
 
@@ -610,32 +607,31 @@ export class VBOInstancingLayer {
             this.model.error("Entity#offset not enabled for this Viewer"); // See Viewer entityOffsetsEnabled
             return;
         }
+        const portion = this._portions[portionId];
         tempVec3fa[0] = offset[0];
         tempVec3fa[1] = offset[1];
         tempVec3fa[2] = offset[2];
         if (this._state.offsetsBuf) {
             this._state.offsetsBuf.setData(tempVec3fa, portionId * 3);
         }
-        if (this._retainGeometry) {
-            const portion = this._portions[portionId];
-            portion.offset[0] = offset[0];
-            portion.offset[1] = offset[1];
-            portion.offset[2] = offset[2];
+        if (portion.retainedGeometry) {
+            portion.retainedGeometry.offset.set(offset);
         }
     }
 
     getEachVertex(portionId, callback) {
-        if (!this._retainGeometry) {
-            return false;
-        }
-        const state = this._state;
-        const geometry = state.geometry;
         const portion = this._portions[portionId];
         if (!portion) {
             this.model.error("portion not found: " + portionId);
             return;
         }
-        const positions = geometry.positionsCompressed;
+
+        const retainedGeometry = portion.retainedGeometry;
+        if (!retainedGeometry) {
+            return;
+        }
+        const state = this._state;
+        const positions = retainedGeometry.quantizedPositions;
         const sceneModelMatrix = this.model.matrix;
         const origin = math.vec4();
         if (state.origin) {
@@ -647,14 +643,15 @@ export class VBOInstancingLayer {
         const offsetY = origin[1];
         const offsetZ = origin[2];
         const worldPos = tempVec4a;
-        const portionMatrix = portion.matrix;
         const positionsDecodeMatrix = state.positionsDecodeMatrix;
         for (let i = 0, len = positions.length; i < len; i += 3) {
             worldPos[0] = positions[i];
             worldPos[1] = positions[i + 1];
             worldPos[2] = positions[i + 2];
             math.decompressPosition(worldPos, positionsDecodeMatrix);
-            math.transformPoint3(portionMatrix, worldPos, worldPos);
+            if (retainedGeometry.matrix) {
+                math.transformPoint3(retainedGeometry.matrix, worldPos, worldPos);
+            }
             worldPos[3] = 1;
             math.mulMat4v4(sceneModelMatrix, worldPos, worldPos);
             worldPos[0] += offsetX;
@@ -665,19 +662,11 @@ export class VBOInstancingLayer {
     }
 
     getEachIndex(portionId, callback) {
-        if (!this._retainGeometry) {
-            return false;
-        }
-        const state = this._state;
-        const geometry = state.geometry;
         const portion = this._portions[portionId];
         if (!portion) {
             this.model.error("portion not found: " + portionId);
-            return;
-        }
-        const indices = geometry.indices;
-        for (let i = 0, len = indices.length; i < len; i++) {
-            callback(indices[i]);
+        } else if (portion.retainedGeometry) {
+            portion.retainedGeometry.indices.forEach(i => callback(i));
         }
     }
 
@@ -904,32 +893,31 @@ export class VBOInstancingLayer {
     //------------------------------------------------------------------------------------------------
 
     precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) {
-
-        if (!this._retainGeometry) {
-            return false;
-        }
-
-        const geometry = this._state.geometry;
-        const state = this._state;
         const portion = this._portions[portionId];
-
         if (!portion) {
             this.model.error("portion not found: " + portionId);
             return false;
         }
 
-        if (!portion.inverseMatrix) {
-            portion.inverseMatrix = math.inverseMat4(portion.matrix, math.mat4());
+        const retainedGeometry = portion.retainedGeometry;
+        if (!retainedGeometry) {
+            return false;
         }
 
-        if (worldNormal && !portion.normalMatrix) {
-            portion.normalMatrix = math.transposeMat4(portion.inverseMatrix, math.mat4());
+        const state = this._state;
+
+        if (retainedGeometry.matrix && (! retainedGeometry.inverseMatrix)) {
+            retainedGeometry.inverseMatrix = math.inverseMat4(retainedGeometry.matrix, math.mat4());
         }
 
-        const quantizedPositions = geometry.quantizedPositions;
-        const indices = geometry.indices;
-        const origin = state.origin;
-        const offset = portion.offset;
+        if (worldNormal && retainedGeometry.inverseMatrix && (! retainedGeometry.normalMatrix)) {
+            retainedGeometry.normalMatrix = math.transposeMat4(retainedGeometry.inverseMatrix, math.mat4());
+        }
+
+        const origin    = state.origin;
+        const positions = retainedGeometry.quantizedPositions;
+        const indices   = retainedGeometry.indices;
+        const offset    = retainedGeometry.offset;
 
         const rtcRayOrigin = tempVec3a;
         const rtcRayDir = tempVec3b;
@@ -941,9 +929,11 @@ export class VBOInstancingLayer {
             math.subVec3(rtcRayOrigin, offset);
         }
 
-        math.transformRay(this.model.worldNormalMatrix, rtcRayOrigin, rtcRayDir, rtcRayOrigin, rtcRayDir);
+        math.transformRay(this.model.worldNormalMatrix, rtcRayOrigin, rtcRayDir, rtcRayOrigin, rtcRayDir); // RTC -> local
 
-        math.transformRay(portion.inverseMatrix, rtcRayOrigin, rtcRayDir, rtcRayOrigin, rtcRayDir);
+        if (retainedGeometry.inverseMatrix) {
+            math.transformRay(retainedGeometry.inverseMatrix, rtcRayOrigin, rtcRayDir, rtcRayOrigin, rtcRayDir);
+        }
 
         const a = tempVec3d;
         const b = tempVec3e;
@@ -955,23 +945,23 @@ export class VBOInstancingLayer {
 
         for (let i = 0, len = indices.length; i < len; i += 3) {
 
-            const ia = indices[i + 0] * 3;
+            const ia = indices[i] * 3;
             const ib = indices[i + 1] * 3;
             const ic = indices[i + 2] * 3;
 
-            a[0] = quantizedPositions[ia];
-            a[1] = quantizedPositions[ia + 1];
-            a[2] = quantizedPositions[ia + 2];
+            a[0] = positions[ia];
+            a[1] = positions[ia + 1];
+            a[2] = positions[ia + 2];
 
-            b[0] = quantizedPositions[ib];
-            b[1] = quantizedPositions[ib + 1];
-            b[2] = quantizedPositions[ib + 2];
+            b[0] = positions[ib];
+            b[1] = positions[ib + 1];
+            b[2] = positions[ib + 2];
 
-            c[0] = quantizedPositions[ic];
-            c[1] = quantizedPositions[ic + 1];
-            c[2] = quantizedPositions[ic + 2];
+            c[0] = positions[ic];
+            c[1] = positions[ic + 1];
+            c[2] = positions[ic + 2];
 
-            const {positionsDecodeMatrix} = state.geometry;
+            const positionsDecodeMatrix = state.positionsDecodeMatrix;
 
             math.decompressPosition(a, positionsDecodeMatrix);
             math.decompressPosition(b, positionsDecodeMatrix);
@@ -979,7 +969,9 @@ export class VBOInstancingLayer {
 
             if (math.rayTriangleIntersect(rtcRayOrigin, rtcRayDir, a, b, c, closestIntersectPos)) {
 
-                math.transformPoint3(portion.matrix, closestIntersectPos, closestIntersectPos);
+                if (retainedGeometry.matrix) {
+                    math.transformPoint3(retainedGeometry.matrix, closestIntersectPos, closestIntersectPos);
+                }
 
                 math.transformPoint3(this.model.worldMatrix, closestIntersectPos, closestIntersectPos);
 
@@ -1005,7 +997,9 @@ export class VBOInstancingLayer {
         }
 
         if (gotIntersect && worldNormal) {
-            math.transformVec3(portion.normalMatrix, worldNormal, worldNormal);
+            if (retainedGeometry.normalMatrix) {
+                math.transformVec3(retainedGeometry.normalMatrix, worldNormal, worldNormal);
+            }
             math.transformVec3(this.model.worldNormalMatrix, worldNormal, worldNormal);
             math.normalizeVec3(worldNormal);
         }
