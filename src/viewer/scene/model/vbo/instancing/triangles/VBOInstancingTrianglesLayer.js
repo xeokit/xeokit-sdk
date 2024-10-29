@@ -119,7 +119,7 @@ export class VBOInstancingTrianglesLayer {
         this._state = new RenderState({
             numInstances: 0,
             obb: math.OBB3(),
-            origin: math.vec3(),
+            origin: cfg.origin && math.vec3(cfg.origin),
             geometry: cfg.geometry,
             textureSet: cfg.textureSet,
             pbrSupported: false, // Set in #finalize if we have enough to support quality rendering
@@ -155,10 +155,6 @@ export class VBOInstancingTrianglesLayer {
 
         this._aabb = math.collapseAABB3();
         this.aabbDirty = true;
-
-        if (cfg.origin) {
-            this._state.origin.set(cfg.origin);
-        }
 
         this._finalized = false;
 
@@ -662,7 +658,9 @@ export class VBOInstancingTrianglesLayer {
         const positions = geometry.positionsCompressed;
         const sceneModelMatrix = this.model.matrix;
         const origin = math.vec4();
-        origin.set(state.origin, 0);
+        if (state.origin) {
+            origin.set(state.origin, 0);
+        }
         origin[3] = 1;
         math.mulMat4v4(sceneModelMatrix, origin, origin);
         const offsetX = origin[0];
