@@ -715,347 +715,193 @@ export class VBOInstancingLayer {
         this._state.modelMatrixCol2Buf.setData(tempFloat32Vec4, offset);
     }
 
-    // ---------------------- COLOR RENDERING -----------------------------------
 
-    drawColorOpaque(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
-            return;
-        }
-        if ((this.primitive === "points") || (this.primitive === "lines")) {
-            if (this._renderers.colorRenderer) {
-                this._renderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-            }
-        } else {
-            this._updateBackfaceCull(renderFlags, frameCtx);
-            const useAlphaCutoff = this._state.textureSet && (typeof (this._state.textureSet.alphaCutoff) === "number");
-            if (frameCtx.withSAO && this.model.saoEnabled) {
-                if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported) {
-                    if (this._renderers.pbrRendererWithSAO) {
-                        this._renderers.pbrRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-                    }
-                } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
-                    if (useAlphaCutoff) {
-                        if (this._renderers.colorTextureRendererWithSAOAlphaCutoff) {
-                            this._renderers.colorTextureRendererWithSAOAlphaCutoff.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-                        }
+    __drawLayer(renderFlags, frameCtx, renderer, pass) {
+        if ((this._numCulledLayerPortions < this._numPortions) && (this._numVisibleLayerPortions > 0)) {
+            const backfacePasses = (this.primitive !== "points") && (this.primitive !== "lines") && [
+                RENDER_PASSES.COLOR_OPAQUE,
+                RENDER_PASSES.COLOR_TRANSPARENT,
+                RENDER_PASSES.PICK,
+                RENDER_PASSES.SILHOUETTE_HIGHLIGHTED,
+                RENDER_PASSES.SILHOUETTE_SELECTED,
+                RENDER_PASSES.SILHOUETTE_XRAYED,
+            ];
+            if (backfacePasses && backfacePasses.includes(pass)) {
+                // _updateBackfaceCull
+                const backfaces = true; // See XCD-230
+                if (frameCtx.backfaces !== backfaces) {
+                    const gl = frameCtx.gl;
+                    if (backfaces) {
+                        gl.disable(gl.CULL_FACE);
                     } else {
-                        if (this._renderers.colorTextureRendererWithSAO) {
-                            this._renderers.colorTextureRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-                        }
+                        gl.enable(gl.CULL_FACE);
                     }
-                } else if (this._state.normalsBuf) {
-                    if (this._renderers.colorRendererWithSAO) {
-                        this._renderers.colorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-                    }
-                } else {
-                    if (this._renderers.flatColorRendererWithSAO) {
-                        this._renderers.flatColorRendererWithSAO.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-                    }
-                }
-            } else if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported) {
-                if (this._renderers.pbrRenderer) {
-                    this._renderers.pbrRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-                }
-            } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
-                if (useAlphaCutoff) {
-                    if (this._renderers.colorTextureRendererAlphaCutoff) {
-                        this._renderers.colorTextureRendererAlphaCutoff.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-                    }
-                } else {
-                    if (this._renderers.colorTextureRenderer) {
-                        this._renderers.colorTextureRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-                    }
-                }
-            } else if (this._state.normalsBuf) {
-                if (this._renderers.colorRenderer) {
-                    this._renderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
-                }
-            } else {
-                if (this._renderers.flatColorRenderer) {
-                    this._renderers.flatColorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+                    frameCtx.backfaces = backfaces;
                 }
             }
+            renderer.drawLayer(frameCtx, this, pass);
         }
     }
 
-    _updateBackfaceCull(renderFlags, frameCtx) {
-        const backfaces = true; // See XCD-230
-        if (frameCtx.backfaces !== backfaces) {
-            const gl = frameCtx.gl;
-            if (backfaces) {
-                gl.disable(gl.CULL_FACE);
-            } else {
-                gl.enable(gl.CULL_FACE);
-            }
-            frameCtx.backfaces = backfaces;
+    // ---------------------- COLOR RENDERING -----------------------------------
+
+    __drawColor(renderFlags, frameCtx, renderOpaque) {
+        if ((renderOpaque ? (this._numTransparentLayerPortions < this._numPortions) : (this._numTransparentLayerPortions > 0))
+            &&
+            (this._numXRayedLayerPortions < this._numPortions)) {
+            const usePBR = frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported;
+            const useColorTexture = frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported;
+            const useAlphaCutoff = this._state.textureSet && (typeof(this._state.textureSet.alphaCutoff) === "number");
+            const renderer = (((this.primitive === "points") || (this.primitive === "lines"))
+                              ? this._renderers.colorRenderer
+                              : ((renderOpaque && frameCtx.withSAO && this.model.saoEnabled)
+                                 ? (usePBR
+                                    ? this._renderers.pbrRendererWithSAO
+                                    : (useColorTexture
+                                       ? (useAlphaCutoff
+                                          ? this._renderers.colorTextureRendererWithSAOAlphaCutoff
+                                          : this._renderers.colorTextureRendererWithSAO)
+                                       : (this._state.normalsBuf
+                                          ? this._renderers.colorRendererWithSAO
+                                          : this._renderers.flatColorRendererWithSAO)))
+                                 : (usePBR
+                                    ? this._renderers.pbrRenderer
+                                    : (useColorTexture
+                                       ? (useAlphaCutoff
+                                          ? this._renderers.colorTextureRendererAlphaCutoff
+                                          : this._renderers.colorTextureRenderer)
+                                       : (this._state.normalsBuf
+                                          ? this._renderers.colorRenderer
+                                          : this._renderers.flatColorRenderer)))));
+            const pass = renderOpaque ? RENDER_PASSES.COLOR_OPAQUE : RENDER_PASSES.COLOR_TRANSPARENT;
+            this.__drawLayer(renderFlags, frameCtx, renderer, pass);
         }
+    }
+
+    drawColorOpaque(renderFlags, frameCtx) {
+        this.__drawColor(renderFlags, frameCtx, true);
     }
 
     drawColorTransparent(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === 0 || this._numXRayedLayerPortions === this._numPortions) {
-            return;
-        }
-        if ((this.primitive === "points") || (this.primitive === "lines")) {
-            if (this._renderers.colorRenderer) {
-                this._renderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
-            }
-        } else {
-            this._updateBackfaceCull(renderFlags, frameCtx);
-            if (frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported) {
-                if (this._renderers.pbrRenderer) {
-                    this._renderers.pbrRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
-		}
-            } else if (frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported) {
-		const useAlphaCutoff = this._state.textureSet && (typeof(this._state.textureSet.alphaCutoff) === "number");
-		if (useAlphaCutoff) {
-                    if (this._renderers.colorTextureRendererAlphaCutoff) {
-			this._renderers.colorTextureRendererAlphaCutoff.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
-                    }
-		} else {
-                    if (this._renderers.colorTextureRenderer) {
-			this._renderers.colorTextureRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
-                    }
-		}
-            } else if (this._state.normalsBuf) {
-                if (this._renderers.colorRenderer) {
-                    this._renderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
-                }
-            } else {
-                if (this._renderers.flatColorRenderer) {
-                    this._renderers.flatColorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_TRANSPARENT);
-                }
-            }
-        }
+        this.__drawColor(renderFlags, frameCtx, false);
     }
 
     // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
 
+    __drawPost(renderFlags, frameCtx, renderer) {
+        // Assume whatever post-effect uses depth or normals (eg SAO) does not apply to transparent objects
+        if ((this.primitive !== "points") && (this.primitive !== "lines")
+            &&
+            (this._numTransparentLayerPortions < this._numPortions) && (this._numXRayedLayerPortions < this._numPortions)) {
+            this.__drawLayer(renderFlags, frameCtx, renderer, RENDER_PASSES.COLOR_OPAQUE);
+        }
+    }
+
     drawDepth(renderFlags, frameCtx) {
-        if ((this.primitive === "points") || (this.primitive === "lines")) {
-            return;
-        }
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
-            return;
-        }
-        this._updateBackfaceCull(renderFlags, frameCtx);
-        if (this._renderers.depthRenderer) {
-            this._renderers.depthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE); // Assume whatever post-effect uses depth (eg SAO) does not apply to transparent objects
-        }
+        this.__drawPost(renderFlags, frameCtx, this._renderers.depthRenderer);
     }
 
     // ---------------------- SILHOUETTE RENDERING -----------------------------------
 
+    __drawSilhouette(renderFlags, frameCtx, renderPass) {
+        this.__drawLayer(renderFlags, frameCtx, this._renderers.silhouetteRenderer, renderPass);
+    }
+
     drawSilhouetteXRayed(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
-            return;
-        }
-        if ((this.primitive !== "points") && (this.primitive !== "lines")) {
-            this._updateBackfaceCull(renderFlags, frameCtx);
-        }
-        if (this._renderers.silhouetteRenderer) {
-            this._renderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_XRAYED);
+        if (this._numXRayedLayerPortions > 0) {
+            this.__drawSilhouette(renderFlags, frameCtx, RENDER_PASSES.SILHOUETTE_XRAYED);
         }
     }
 
     drawSilhouetteHighlighted(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
-            return;
-        }
-        if ((this.primitive !== "points") && (this.primitive !== "lines")) {
-            this._updateBackfaceCull(renderFlags, frameCtx);
-        }
-        if (this._renderers.silhouetteRenderer) {
-            this._renderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_HIGHLIGHTED);
+        if (this._numHighlightedLayerPortions > 0) {
+            this.__drawSilhouette(renderFlags, frameCtx, RENDER_PASSES.SILHOUETTE_HIGHLIGHTED);
         }
     }
 
     drawSilhouetteSelected(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
-            return;
-        }
-        if ((this.primitive !== "points") && (this.primitive !== "lines")) {
-            this._updateBackfaceCull(renderFlags, frameCtx);
-        }
-        if (this._renderers.silhouetteRenderer) {
-            this._renderers.silhouetteRenderer.drawLayer(frameCtx, this, RENDER_PASSES.SILHOUETTE_SELECTED);
+        if (this._numSelectedLayerPortions > 0) {
+            this.__drawSilhouette(renderFlags, frameCtx, RENDER_PASSES.SILHOUETTE_SELECTED);
         }
     }
 
     // ---------------------- EDGES RENDERING -----------------------------------
 
     drawEdgesColorOpaque(renderFlags, frameCtx) {
-        if (! this._hasEdges) {
-            return;
-        }
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
-            return;
-        }
-        if (this._renderers.edgesColorRenderer) {
-            this._renderers.edgesColorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_COLOR_OPAQUE);
+        if (this._hasEdges && (this._numEdgesLayerPortions > 0)) {
+            this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesColorRenderer, RENDER_PASSES.EDGES_COLOR_OPAQUE);
         }
     }
 
     drawEdgesColorTransparent(renderFlags, frameCtx) {
-        if (! this._hasEdges) {
-            return;
-        }
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0 ||  this._numTransparentLayerPortions === 0) {
-            return;
-        }
-        if (this._renderers.edgesColorRenderer) {
-            this._renderers.edgesColorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_COLOR_TRANSPARENT);
+        if (this._hasEdges && (this._numEdgesLayerPortions > 0) && (this._numTransparentLayerPortions > 0)) {
+            this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesColorRenderer, RENDER_PASSES.EDGES_COLOR_TRANSPARENT);
         }
     }
 
     drawEdgesHighlighted(renderFlags, frameCtx) {
-        if (! this._hasEdges) {
-            return;
-        }
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numHighlightedLayerPortions === 0) {
-            return;
-        }
-        if (this._renderers.edgesRenderer) {
-            this._renderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_HIGHLIGHTED);
+        if (this._hasEdges && (this._numHighlightedLayerPortions > 0)) {
+            this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesRenderer, RENDER_PASSES.EDGES_HIGHLIGHTED);
         }
     }
 
     drawEdgesSelected(renderFlags, frameCtx) {
-        if (! this._hasEdges) {
-            return;
-        }
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numSelectedLayerPortions === 0) {
-            return;
-        }
-        if (this._renderers.edgesRenderer) {
-            this._renderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_SELECTED);
+        if (this._hasEdges && (this._numSelectedLayerPortions > 0)) {
+            this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesRenderer, RENDER_PASSES.EDGES_SELECTED);
         }
     }
 
     drawEdgesXRayed(renderFlags, frameCtx) {
-        if (! this._hasEdges) {
-            return;
-        }
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
-            return;
-        }
-        if (this._renderers.edgesRenderer) {
-            this._renderers.edgesRenderer.drawLayer(frameCtx, this, RENDER_PASSES.EDGES_XRAYED);
+        if (this._hasEdges && (this._numXRayedLayerPortions > 0)) {
+            this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesRenderer, RENDER_PASSES.EDGES_XRAYED);
         }
     }
 
     //---- PICKING ----------------------------------------------------------------------------------------------------
 
     drawPickMesh(renderFlags, frameCtx) {
-        if (!this._state.pickColorsBuf) {
-            return;
-        }
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
-            return;
-        }
-        if ((this.primitive !== "points") && (this.primitive !== "lines")) {
-            this._updateBackfaceCull(renderFlags, frameCtx);
-        }
-        if (this._renderers.pickMeshRenderer) {
-            this._renderers.pickMeshRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        if (this._state.pickColorsBuf) {
+            this.__drawLayer(renderFlags, frameCtx, this._renderers.pickMeshRenderer, RENDER_PASSES.PICK);
         }
     }
 
     drawPickDepths(renderFlags, frameCtx) {
-        if (!this._state.pickColorsBuf) {
-            return;
-        }
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
-            return;
-        }
-        if ((this.primitive !== "points") && (this.primitive !== "lines")) {
-            this._updateBackfaceCull(renderFlags, frameCtx);
-        }
-        if (this._renderers.pickDepthRenderer) {
-            this._renderers.pickDepthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        if (this._state.pickColorsBuf) {
+            this.__drawLayer(renderFlags, frameCtx, this._renderers.pickDepthRenderer, RENDER_PASSES.PICK);
         }
     }
 
     drawPickNormals(renderFlags, frameCtx) {
-        if ((!this._state.pickColorsBuf) || (this.primitive === "points") || (this.primitive === "lines")) {
-            return;
+        if (this._state.pickColorsBuf && (this.primitive !== "points") && (this.primitive !== "lines")) {
+            const renderer = (false // TODO: this._state.normalsBuf
+                              ? this._renderers.pickNormalsRenderer
+                              : this._renderers.pickNormalsFlatRenderer);
+            this.__drawLayer(renderFlags, frameCtx, renderer, RENDER_PASSES.PICK);
         }
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
-            return;
-        }
-        if ((this.primitive !== "points") && (this.primitive !== "lines")) {
-            this._updateBackfaceCull(renderFlags, frameCtx);
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // TODO
-        // if (this._state.normalsBuf) {
-        //     if (this._renderers.pickNormalsRenderer) {
-        //         this._renderers.pickNormalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
-        //     }
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // } else {
-        if (this._renderers.pickNormalsFlatRenderer) {
-            this._renderers.pickNormalsFlatRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
-        }
-        // }
     }
 
     drawSnapInit(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
-            return;
-        }
-        if ((this.primitive !== "points") && (this.primitive !== "lines")) {
-            this._updateBackfaceCull(renderFlags, frameCtx);
-        }
-        if (this._renderers.snapInitRenderer) {
-            this._renderers.snapInitRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
-        }
+        this.__drawLayer(renderFlags, frameCtx, this._renderers.snapInitRenderer, RENDER_PASSES.PICK);
     }
 
     drawSnap(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
-            return;
-        }
-        if ((this.primitive !== "points") && (this.primitive !== "lines")) {
-            this._updateBackfaceCull(renderFlags, frameCtx);
-        }
-        if (this._renderers.snapRenderer) {
-            this._renderers.snapRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
-        }
+        this.__drawLayer(renderFlags, frameCtx, this._renderers.snapRenderer, RENDER_PASSES.PICK);
     }
 
+
     drawOcclusion(renderFlags, frameCtx) {
-        if (this.primitive === "lines") {
-            return;
-        }
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
-            return;
-        }
-        if ((this.primitive !== "points") && (this.primitive !== "lines")) {
-            this._updateBackfaceCull(renderFlags, frameCtx);
-        }
-        if (this._renderers.occlusionRenderer) {
-            // Only opaque, filled objects can be occluders
-            this._renderers.occlusionRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+        if (this.primitive !== "lines") {
+            this.__drawLayer(renderFlags, frameCtx, this._renderers.occlusionRenderer, RENDER_PASSES.COLOR_OPAQUE);
         }
     }
 
     drawShadow(renderFlags, frameCtx) {
-        if ((this.primitive === "points") || (this.primitive === "lines")) {
-            return;
-        }
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
-            return;
-        }
         if ((this.primitive !== "points") && (this.primitive !== "lines")) {
-            this._updateBackfaceCull(renderFlags, frameCtx);
-        }
-        if (this._renderers.shadowRenderer) {
-            this._renderers.shadowRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+            this.__drawLayer(renderFlags, frameCtx, this._renderers.shadowRenderer, RENDER_PASSES.COLOR_OPAQUE);
         }
     }
 
-    //-----------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------
 
     precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) {
 
