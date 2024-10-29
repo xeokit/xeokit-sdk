@@ -695,6 +695,10 @@ export class VBOInstancingPointsLayer {
 
     destroy() {
         const state = this._state;
+        if (state.positionsBuf) {
+            state.positionsBuf.destroy();
+            state.positionsBuf = null;
+        }
         if (state.colorsBuf) {
             state.colorsBuf.destroy();
             state.colorsBuf = null;
