@@ -252,6 +252,10 @@ export class VBOInstancingTrianglesLayer {
             portion.matrix = meshMatrix.slice();
             portion.inverseMatrix = null; // Lazy-computed in precisionRayPickSurface
             portion.normalMatrix = null; // Lazy-computed in precisionRayPickSurface
+
+            if (this.model.scene.entityOffsetsEnabled) {
+                portion.offset = new Float32Array(3);
+            }
         }
 
         this._portions.push(portion);
@@ -684,6 +688,12 @@ export class VBOInstancingTrianglesLayer {
         tempVec3fa[2] = offset[2];
         if (this._state.offsetsBuf) {
             this._state.offsetsBuf.setData(tempVec3fa, portionId * 3);
+        }
+        if (this.model.scene.readableGeometryEnabled) {
+            const portion = this._portions[portionId];
+            portion.offset[0] = offset[0];
+            portion.offset[1] = offset[1];
+            portion.offset[2] = offset[2];
         }
     }
 
