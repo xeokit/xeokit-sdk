@@ -5,8 +5,7 @@ import {SceneModelMesh} from './SceneModelMesh.js';
 import {getScratchMemory, putScratchMemory} from "./vbo/ScratchMemory.js";
 import {VBOInstancingTrianglesLayer} from './vbo/instancing/triangles/VBOInstancingTrianglesLayer.js';
 import {VBOBatchingLayer} from './vbo/VBOBatchingLayer.js';
-import {VBOInstancingLinesLayer} from './vbo/instancing/lines/VBOInstancingLinesLayer.js';
-import {VBOInstancingPointsLayer} from './vbo/instancing/points/VBOInstancingPointsLayer.js';
+import {VBOInstancingLayer} from './vbo/VBOInstancingLayer.js';
 import {DTXLinesLayer} from "./dtx/lines/DTXLinesLayer.js";
 import {DTXTrianglesLayer} from "./dtx/triangles/DTXTrianglesLayer.js";
 import {ENTITY_FLAGS} from './ENTITY_FLAGS.js';
@@ -3314,18 +3313,8 @@ export class SceneModel extends Component {
                     });
                     break;
                 case "lines":
-                    // console.info(`[SceneModel ${this.id}]: creating VBOInstancingLinesLayer`);
-                    vboInstancingLayer = new VBOInstancingLinesLayer({
-                        model,
-                        textureSet,
-                        geometry,
-                        origin,
-                        layerIndex: 0
-                    });
-                    break;
                 case "points":
-                    // console.info(`[SceneModel ${this.id}]: creating PointsInstancingLayer`);
-                    vboInstancingLayer = new VBOInstancingPointsLayer({
+                    vboInstancingLayer = new VBOInstancingLayer({
                         model,
                         textureSet,
                         geometry,
