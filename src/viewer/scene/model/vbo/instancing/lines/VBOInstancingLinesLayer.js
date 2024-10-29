@@ -23,7 +23,6 @@ class VBOInstancingLinesLayer {
      * @param cfg.layerIndex
      * @param cfg.model
      * @param cfg.geometry
-     * @param cfg.material
      * @param cfg.origin
      */
     constructor(cfg) {
@@ -35,12 +34,6 @@ class VBOInstancingLinesLayer {
          * @type {VBOSceneModel}
          */
         this.model = cfg.model;
-
-        /**
-         * Shared material
-         * @type {VBOSceneModelGeometry}
-         */
-        this.material = cfg.material;
 
         /**
          * State sorting key.
