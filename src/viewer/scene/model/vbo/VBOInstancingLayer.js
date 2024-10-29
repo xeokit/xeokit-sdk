@@ -1,14 +1,14 @@
-import {ENTITY_FLAGS} from '../../../ENTITY_FLAGS.js';
-import {RENDER_PASSES} from '../../../RENDER_PASSES.js';
+import {ENTITY_FLAGS} from "../ENTITY_FLAGS.js";
+import {RENDER_PASSES} from "../RENDER_PASSES.js";
 
-import {math} from "../../../../math/math.js";
-import {RenderState} from "../../../../webgl/RenderState.js";
-import {ArrayBuf} from "../../../../webgl/ArrayBuf.js";
-import {getLinesRenderers} from "../../renderers/VBOLinesRenderers.js";
+import {math} from "../../math/math.js";
+import {RenderState} from "../../webgl/RenderState.js";
+import {ArrayBuf} from "../../webgl/ArrayBuf.js";
+import {getPointsRenderers} from "./renderers/VBOPointsRenderers.js";
+import {getLinesRenderers} from "./renderers/VBOLinesRenderers.js";
 
 const tempUint8Vec4 = new Uint8Array(4);
 const tempFloat32 = new Float32Array(1);
-
 const tempVec3fa = new Float32Array(3);
 
 const tempFloat32Vec4 = new Float32Array(4);
@@ -16,7 +16,7 @@ const tempFloat32Vec4 = new Float32Array(4);
 /**
  * @private
  */
-class VBOInstancingLinesLayer {
+export class VBOInstancingLayer {
 
     /**
      * @param cfg
@@ -27,8 +27,6 @@ class VBOInstancingLinesLayer {
      */
     constructor(cfg) {
 
-     //   console.info("VBOInstancingLinesLayer");
-
         /**
          * Owner model
          * @type {VBOSceneModel}
@@ -36,18 +34,23 @@ class VBOInstancingLinesLayer {
         this.model = cfg.model;
 
         /**
-         * State sorting key.
-         * @type {string}
-         */
-        this.sortId = "LinesInstancingLayer";
-
-        /**
          * Index of this InstancingLayer in VBOSceneModel#_layerList
          * @type {Number}
          */
         this.layerIndex = cfg.layerIndex;
 
-        this._renderers = getLinesRenderers(cfg.model.scene, true);
+        /**
+         * The type of primitives in this layer.
+         */
+        this.primitive = cfg.geometry.primitive;
+
+        /**
+         * State sorting key.
+         * @type {string}
+         */
+        this.sortId = (this.primitive === "points") ? "PointsInstancingLayer" : "LinesInstancingLayer";
+
+        this._renderers = ((this.primitive === "points") ? getPointsRenderers : getLinesRenderers)(cfg.model.scene, true);
 
         this._aabb = math.collapseAABB3();
 
@@ -99,13 +102,14 @@ class VBOInstancingLinesLayer {
             modelMatrixCol0: attribute(),
             modelMatrixCol1: attribute(),
             modelMatrixCol2: attribute(),
-            colors:          attribute()
+            colors:          attribute(), // used for non-points
+            pickColors:      attribute(), // used for non-lines
         };
 
         this._state = new RenderState({
             obb: math.OBB3(),
             numInstances: 0,
-            origin: null,
+            origin: cfg.origin && math.vec3(cfg.origin),
             geometry: cfg.geometry,
             positionsDecodeMatrix: math.mat4(cfg.geometry.positionsDecodeMatrix), // So we can null the geometry for GC
             positionsBuf: null,
@@ -114,7 +118,8 @@ class VBOInstancingLinesLayer {
             offsetsBuf: null,
             modelMatrixCol0Buf: null,
             modelMatrixCol1Buf: null,
-            modelMatrixCol2Buf: null
+            modelMatrixCol2Buf: null,
+            pickColorsBuf: null
         });
 
         // These counts are used to avoid unnecessary render passes
@@ -135,16 +140,7 @@ class VBOInstancingLinesLayer {
         this._aabb = math.collapseAABB3();
         this.aabbDirty = true;
 
-        if (cfg.origin) {
-            this._state.origin = math.vec3(cfg.origin);
-        }
-
         this._finalized = false;
-
-        /**
-         * The type of primitives in this layer.
-         */
-        this.primitive = cfg.primitive;
     }
 
     get aabb() {
@@ -170,6 +166,7 @@ class VBOInstancingLinesLayer {
      * @param cfg.meshMatrix Flat float 4x4 matrix.
      * @param cfg.color Color [0..255,0..255,0..255]
      * @param cfg.opacity Opacity [0..255].
+     * @param cfg.pickColor Quantized pick color
      * @returns {number} Portion ID.
      */
     createPortion(mesh, cfg) {
@@ -188,6 +185,10 @@ class VBOInstancingLinesLayer {
         if (this.primitive !== "points") {
             const color = cfg.color; // Color is pre-quantized by SceneModel
             buffer.colors.append([ color[0], color[1], color[2], cfg.opacity ]);
+        }
+
+        if (this.primitive !== "lines") {
+            buffer.pickColors.append(cfg.pickColor.slice(0, 4));
         }
 
         this._state.numInstances++;
@@ -216,11 +217,13 @@ class VBOInstancingLinesLayer {
         state.modelMatrixCol1Buf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.modelMatrixCol1.compileBuffer(Float32Array), 4, gl.STATIC_DRAW);
         state.modelMatrixCol2Buf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.modelMatrixCol2.compileBuffer(Float32Array), 4, gl.STATIC_DRAW);
 
-        state.colorsBuf          = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.colors.compileBuffer(Uint8Array), 4, gl.DYNAMIC_DRAW);
-
         state.flagsBuf           = maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(state.numInstances), 1, gl.DYNAMIC_DRAW);
 
+        state.colorsBuf          = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.colors.compileBuffer(Uint8Array), 4, gl.DYNAMIC_DRAW);
+
         state.offsetsBuf         = this.model.scene.entityOffsetsEnabled ? maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(state.numInstances * 3), 3, gl.DYNAMIC_DRAW) : null;
+
+        state.pickColorsBuf      = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.pickColors.compileBuffer(Uint8Array), 4, gl.STATIC_DRAW);
 
         const geometry = state.geometry;
         if (geometry.positionsCompressed) {
@@ -231,6 +234,7 @@ class VBOInstancingLinesLayer {
         }
         if (geometry.colorsCompressed) {
             state.colorsBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Uint8Array(geometry.colorsCompressed), 4, gl.STATIC_DRAW);
+            state.colorsForPointsNotInstancing = true;
         }
 
         this._buffer = null;
@@ -406,8 +410,8 @@ class VBOInstancingLinesLayer {
         tempUint8Vec4[0] = color[0];
         tempUint8Vec4[1] = color[1];
         tempUint8Vec4[2] = color[2];
-        tempUint8Vec4[3] = color[3];
-        this._state.colorsBuf.setData(tempUint8Vec4, portionId * 4, 4);
+        tempUint8Vec4[3] = color[3]; // this used to be unset for points, so effectively random (from last use)
+        this._state.colorsBuf.setData(tempUint8Vec4, portionId * 4);
     }
 
     setTransparent(portionId, flags, transparent) {
@@ -510,7 +514,7 @@ class VBOInstancingLinesLayer {
         tempVec3fa[0] = offset[0];
         tempVec3fa[1] = offset[1];
         tempVec3fa[2] = offset[2];
-        this._state.offsetsBuf.setData(tempVec3fa, portionId * 3, 3);
+        this._state.offsetsBuf.setData(tempVec3fa, portionId * 3);
     }
 
     setMatrix(portionId, matrix) {
@@ -546,13 +550,12 @@ class VBOInstancingLinesLayer {
         this._state.modelMatrixCol2Buf.setData(tempFloat32Vec4, offset);
     }
 
-    // ---------------------- NORMAL RENDERING -----------------------------------
+    // ---------------------- COLOR RENDERING -----------------------------------
 
     drawColorOpaque(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
             return;
         }
-
         if (this._renderers.colorRenderer) {
             this._renderers.colorRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
         }
@@ -572,7 +575,7 @@ class VBOInstancingLinesLayer {
     drawDepth(renderFlags, frameCtx) {
     }
 
-    // ---------------------- EMPHASIS RENDERING -----------------------------------
+    // ---------------------- SILHOUETTE RENDERING -----------------------------------
 
     drawSilhouetteXRayed(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
@@ -609,15 +612,43 @@ class VBOInstancingLinesLayer {
     drawEdgesColorTransparent(renderFlags, frameCtx) {
     }
 
-    drawEdgesXRayed(renderFlags, frameCtx) {
-    }
-
     drawEdgesHighlighted(renderFlags, frameCtx) {
     }
 
     drawEdgesSelected(renderFlags, frameCtx) {
     }
 
+    drawEdgesXRayed(renderFlags, frameCtx) {
+    }
+
+    //---- PICKING ----------------------------------------------------------------------------------------------------
+
+    drawPickMesh(renderFlags, frameCtx) {
+        if (!this._state.pickColorsBuf) {
+            return;
+        }
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (this._renderers.pickMeshRenderer) {
+            this._renderers.pickMeshRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        }
+    }
+
+    drawPickDepths(renderFlags, frameCtx) {
+        if (!this._state.pickColorsBuf) {
+            return;
+        }
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (this._renderers.pickDepthRenderer) {
+            this._renderers.pickDepthRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        }
+    }
+
+    drawPickNormals(renderFlags, frameCtx) {
+    }
 
     drawSnapInit(renderFlags, frameCtx) {
         if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
@@ -637,33 +668,31 @@ class VBOInstancingLinesLayer {
         }
     }
 
-    // ---------------------- OCCLUSION CULL RENDERING -----------------------------------
-
     drawOcclusion(renderFlags, frameCtx) {
+        if (this.primitive === "lines") {
+            return;
+        }
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0) {
+            return;
+        }
+        if (this._renderers.occlusionRenderer) {
+            // Only opaque, filled objects can be occluders
+            this._renderers.occlusionRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);
+        }
     }
-
-    // ---------------------- SHADOW BUFFER RENDERING -----------------------------------
 
     drawShadow(renderFlags, frameCtx) {
     }
-
-    //---- PICKING ----------------------------------------------------------------------------------------------------
-
-    drawPickMesh(renderFlags, frameCtx) {
-    }
-
-    drawPickDepths(renderFlags, frameCtx) {
-    }
-
-    drawPickNormals(renderFlags, frameCtx) {
-    }
-
 
     destroy() {
         const state = this._state;
         if (state.positionsBuf) {
             state.positionsBuf.destroy();
             state.positionsBuf = null;
+        }
+        if (state.offsetsBuf) {
+            state.offsetsBuf.destroy();
+            state.offsetsBuf = null;
         }
         if (state.colorsBuf) {
             state.colorsBuf.destroy();
@@ -673,9 +702,9 @@ class VBOInstancingLinesLayer {
             state.flagsBuf.destroy();
             state.flagsBuf = null;
         }
-        if (state.offsetsBuf) {
-            state.offsetsBuf.destroy();
-            state.offsetsBuf = null;
+        if (state.pickColorsBuf) {
+            state.pickColorsBuf.destroy();
+            state.pickColorsBuf = null;
         }
         if (state.modelMatrixCol0Buf) {
             state.modelMatrixCol0Buf.destroy();
@@ -692,5 +721,3 @@ class VBOInstancingLinesLayer {
         state.destroy();
     }
 }
-
-export {VBOInstancingLinesLayer};
