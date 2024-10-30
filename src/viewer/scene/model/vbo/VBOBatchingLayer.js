@@ -10,8 +10,9 @@ import {getTrianglesRenderers} from "./renderers/VBOTrianglesRenderers.js";
 import {quantizePositions, transformAndOctEncodeNormals} from "../compression.js";
 import {geometryCompressionUtils} from "../../math/geometryCompressionUtils.js";
 
+const tempFloat32 = new Float32Array(1);
+const tempVec3fa = new Float32Array(3);
 const tempMat4 = math.mat4();
-const tempMat4b = math.mat4();
 const tempVec4a = math.vec4([0, 0, 0, 1]);
 
 const tempVec3a = math.vec3();
@@ -21,6 +22,18 @@ const tempVec3d = math.vec3();
 const tempVec3e = math.vec3();
 const tempVec3f = math.vec3();
 const tempVec3g = math.vec3();
+
+// fills the whole dst array with src copies
+const fillArray = function(dst, src) {
+    dst.set(src);
+    let soFar = src.length;
+    const allDataLen = dst.length;
+    while (soFar < allDataLen) {
+        const toCopy = Math.min(soFar, allDataLen - soFar);
+        dst.set(dst.subarray(0, toCopy), soFar);
+        soFar += toCopy;
+    }
+};
 
 /**
  * @private
@@ -588,29 +601,16 @@ export class VBOBatchingLayer {
         this._setFlags(portionId, flags, transparent);
     }
 
-    setColor(portionId, color) {
+    setColor(portionId, color) { // RGBA color is normalized as ints
         if (!this._finalized) {
             throw "Not finalized";
         }
-        const portionsIdx = portionId;
-        const portion = this._portions[portionsIdx];
-        const vertsBaseIndex = portion.vertsBaseIndex;
-        const numVerts = portion.numVerts;
-        const firstColor = vertsBaseIndex * 4;
-        const lenColor = numVerts * 4;
-        const tempArray = this._scratchMemory.getUInt8Array(lenColor);
-        const r = color[0];
-        const g = color[1];
-        const b = color[2];
-        const a = color[3];
-        for (let i = 0; i < lenColor; i += 4) {
-            tempArray[i + 0] = r;
-            tempArray[i + 1] = g;
-            tempArray[i + 2] = b;
-            tempArray[i + 3] = a; // this used to be unset for points, so effectively random (from last use)
-        }
         if (this._state.colorsBuf) {
-            this._state.colorsBuf.setData(tempArray, firstColor, lenColor);
+            const portion = this._portions[portionId];
+            const tempArray = this._scratchMemory.getUInt8Array(portion.numVerts * 4);
+            // alpha used to be unset for points, so effectively random (from last use)
+            fillArray(tempArray, color.slice(0, 4));
+            this._state.colorsBuf.setData(tempArray, portion.vertsBaseIndex * 4);
         }
     }
 
@@ -633,13 +633,6 @@ export class VBOBatchingLayer {
         if (!this._finalized) {
             throw "Not finalized";
         }
-
-        const portionsIdx = portionId;
-        const portion = this._portions[portionsIdx];
-        const vertsBaseIndex = portion.vertsBaseIndex;
-        const numVerts = portion.numVerts;
-        const firstFlag = vertsBaseIndex;
-        const lenFlags = numVerts;
 
         const visible = !!(flags & ENTITY_FLAGS.VISIBLE);
         const xrayed = !!(flags & ENTITY_FLAGS.XRAYED);
@@ -694,38 +687,33 @@ export class VBOBatchingLayer {
             edgeFlag = RENDER_PASSES.NOT_RENDERED;
         }
 
-        let pickFlag = (visible && !culled && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
+        const pickFlag = (visible && !culled && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
 
         const clippableFlag = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 1 : 0;
+
+        let vertFlag = 0;
+        vertFlag |= colorFlag;
+        vertFlag |= silhouetteFlag << 4;
+        vertFlag |= edgeFlag << 8;
+        vertFlag |= pickFlag << 12;
+        vertFlag |= clippableFlag << 16;
+
+        tempFloat32[0] = vertFlag;
+
+        const portion   = this._portions[portionId];
+        const firstFlag = portion.vertsBaseIndex;
+        const lenFlags  = portion.numVerts;
 
         if (deferred) {
             // Avoid zillions of individual WebGL bufferSubData calls - buffer them to apply in one shot
             if (!this._deferredFlagValues) {
                 this._deferredFlagValues = new Float32Array(this._numVerts);
             }
-            for (let i = firstFlag, len = (firstFlag + lenFlags); i < len; i++) {
-                let vertFlag = 0;
-                vertFlag |= colorFlag;
-                vertFlag |= silhouetteFlag << 4;
-                vertFlag |= edgeFlag << 8;
-                vertFlag |= pickFlag << 12;
-                vertFlag |= clippableFlag << 16;
-
-                this._deferredFlagValues[i] = vertFlag;
-            }
+            fillArray(this._deferredFlagValues.subarray(firstFlag, firstFlag + lenFlags), tempFloat32);
         } else if (this._state.flagsBuf) {
             const tempArray = this._scratchMemory.getFloat32Array(lenFlags);
-            for (let i = 0; i < lenFlags; i++) {
-                let vertFlag = 0;
-                vertFlag |= colorFlag;
-                vertFlag |= silhouetteFlag << 4;
-                vertFlag |= edgeFlag << 8;
-                vertFlag |= pickFlag << 12;
-                vertFlag |= clippableFlag << 16;
-
-                tempArray[i] = vertFlag;
-            }
-            this._state.flagsBuf.setData(tempArray, firstFlag, lenFlags);
+            fillArray(tempArray, tempFloat32);
+            this._state.flagsBuf.setData(tempArray, firstFlag);
         }
     }
 
@@ -745,21 +733,11 @@ export class VBOBatchingLayer {
             return;
         }
         const portion = this._portions[portionId];
-        const vertsBaseIndex = portion.vertsBaseIndex;
-        const numVerts = portion.numVerts;
-        const firstOffset = vertsBaseIndex * 3;
-        const lenOffsets = numVerts * 3;
-        const tempArray = this._scratchMemory.getFloat32Array(lenOffsets);
-        const x = offset[0];
-        const y = offset[1];
-        const z = offset[2];
-        for (let i = 0; i < lenOffsets; i += 3) {
-            tempArray[i + 0] = x;
-            tempArray[i + 1] = y;
-            tempArray[i + 2] = z;
-        }
         if (this._state.offsetsBuf) {
-            this._state.offsetsBuf.setData(tempArray, firstOffset, lenOffsets);
+            tempVec3fa.set(offset);
+            const tempArray = this._scratchMemory.getFloat32Array(portion.numVerts * 3);
+            fillArray(tempArray, tempVec3fa);
+            this._state.offsetsBuf.setData(tempArray, portion.vertsBaseIndex * 3);
         }
         if (portion.retainedGeometry) {
             portion.retainedGeometry.offset.set(offset);
