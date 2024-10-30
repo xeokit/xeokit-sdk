@@ -7,7 +7,6 @@ import {ArrayBuf} from "../../webgl/ArrayBuf.js";
 import {getPointsRenderers} from "./renderers/VBOPointsRenderers.js";
 import {getLinesRenderers} from "./renderers/VBOLinesRenderers.js";
 import {getTrianglesRenderers} from "./renderers/VBOTrianglesRenderers.js";
-import {Configs} from "../../../Configs.js";
 import {quantizePositions, transformAndOctEncodeNormals} from "../compression.js";
 import {geometryCompressionUtils} from "../../math/geometryCompressionUtils.js";
 
@@ -22,8 +21,6 @@ const tempVec3d = math.vec3();
 const tempVec3e = math.vec3();
 const tempVec3f = math.vec3();
 const tempVec3g = math.vec3();
-
-const configs = new Configs();
 
 /**
  * @private
@@ -84,8 +81,6 @@ export class VBOBatchingLayer {
 
         this._hasEdges = (cfg.primitive !== "points") && (cfg.primitive !== "lines");
 
-        const maxGeometryBatchSize = cfg.maxGeometryBatchSize ?? configs.maxGeometryBatchSize;
-
         const attribute = function() {
             const portions = [ ];
 
@@ -130,7 +125,6 @@ export class VBOBatchingLayer {
         };
 
         this._buffer = {
-            maxVerts:          maxGeometryBatchSize,
             positions:         attribute(),
             colors:            attribute(),
             indices:           attribute(), // used for non-points
@@ -179,6 +173,7 @@ export class VBOBatchingLayer {
         this._meshes = [];
         this._numVerts = 0;
         this._numIndices = 0;
+        this._maxVerts = cfg.maxGeometryBatchSize;
 
         this._aabb = math.collapseAABB3();
         this.aabbDirty = true;
@@ -208,7 +203,7 @@ export class VBOBatchingLayer {
         if (this._finalized) {
             throw "Already finalized";
         }
-        return ((this._numVerts + (lenPositions / 3)) <= this._buffer.maxVerts) && ((this._numIndices + lenIndices) <= (this._buffer.maxVerts * 3));
+        return ((this._numVerts + (lenPositions / 3)) <= this._maxVerts) && ((this._numIndices + lenIndices) <= (this._maxVerts * 3));
     }
 
     /**
