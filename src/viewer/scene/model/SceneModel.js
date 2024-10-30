@@ -3850,7 +3850,7 @@ export class SceneModel extends Component {
 
     /** @private */
     setPickMatrices(pickViewMatrix, pickProjMatrix) {
-        if (this._numVisibleLayerPortions === 0) {
+        if (this.numVisibleLayerPortions === 0) {
             return;
         }
         const renderFlags = this.renderFlags;
