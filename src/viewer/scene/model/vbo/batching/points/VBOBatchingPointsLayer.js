@@ -419,10 +419,12 @@ export class VBOBatchingPointsLayer {
         const r = color[0];
         const g = color[1];
         const b = color[2];
+        const a = color[3];
         for (let i = 0; i < lenColor; i += 4) {
             tempArray[i + 0] = r;
             tempArray[i + 1] = g;
             tempArray[i + 2] = b;
+            tempArray[i + 3] = a; // this used to be unset for points, so effectively random (from last use)
         }
         this._state.colorsBuf.setData(tempArray, firstColor, lenColor);
     }
