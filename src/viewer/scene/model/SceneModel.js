@@ -1137,7 +1137,7 @@ export class SceneModel extends Component {
         this._vboBatchingLayerScratchMemory = getScratchMemory();
         this._textureTranscoder = cfg.textureTranscoder || getKTX2TextureTranscoder(this.scene.viewer);
 
-        this._maxGeometryBatchSize = cfg.maxGeometryBatchSize;
+        this._maxGeometryBatchSize = cfg.maxGeometryBatchSize ?? 5000000;
 
         this._aabb = math.collapseAABB3();
         this._aabbDirty = true;
