@@ -3916,16 +3916,14 @@ export class SceneModel extends Component {
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
             const layer = this.layerList[layerIndex];
-            if (layer.drawSnapInit) {
-                frameCtx.snapPickOrigin = [0, 0, 0];
-                frameCtx.snapPickCoordinateScale = [1, 1, 1];
-                frameCtx.snapPickLayerNumber++;
-                layer.drawSnapInit(renderFlags, frameCtx);
-                frameCtx.snapPickLayerParams[frameCtx.snapPickLayerNumber] = {
-                    origin: frameCtx.snapPickOrigin.slice(),
-                    coordinateScale: frameCtx.snapPickCoordinateScale.slice(),
-                };
-            }
+            frameCtx.snapPickOrigin = [0, 0, 0];
+            frameCtx.snapPickCoordinateScale = [1, 1, 1];
+            frameCtx.snapPickLayerNumber++;
+            layer.drawSnapInit(renderFlags, frameCtx);
+            frameCtx.snapPickLayerParams[frameCtx.snapPickLayerNumber] = {
+                origin: frameCtx.snapPickOrigin.slice(),
+                coordinateScale: frameCtx.snapPickCoordinateScale.slice(),
+            };
         }
     }
 
@@ -3940,16 +3938,14 @@ export class SceneModel extends Component {
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
             const layer = this.layerList[layerIndex];
-            if (layer.drawSnap) {
-                frameCtx.snapPickOrigin = [0, 0, 0];
-                frameCtx.snapPickCoordinateScale = [1, 1, 1];
-                frameCtx.snapPickLayerNumber++;
-                layer.drawSnap(renderFlags, frameCtx);
-                frameCtx.snapPickLayerParams[frameCtx.snapPickLayerNumber] = {
-                    origin: frameCtx.snapPickOrigin.slice(),
-                    coordinateScale: frameCtx.snapPickCoordinateScale.slice(),
-                };
-            }
+            frameCtx.snapPickOrigin = [0, 0, 0];
+            frameCtx.snapPickCoordinateScale = [1, 1, 1];
+            frameCtx.snapPickLayerNumber++;
+            layer.drawSnap(renderFlags, frameCtx);
+            frameCtx.snapPickLayerParams[frameCtx.snapPickLayerNumber] = {
+                origin: frameCtx.snapPickOrigin.slice(),
+                coordinateScale: frameCtx.snapPickCoordinateScale.slice(),
+            };
         }
     }
 
