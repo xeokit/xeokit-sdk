@@ -3722,7 +3722,7 @@ export class SceneModel extends Component {
     // -------------- RENDERING ---------------------------------------------------------------------------------------
 
     /** @private */
-    drawColorOpaque(frameCtx, layerList) {
+    drawColorOpaque(frameCtx) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
