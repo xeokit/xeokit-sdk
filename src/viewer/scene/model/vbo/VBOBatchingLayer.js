@@ -171,7 +171,6 @@ export class VBOBatchingLayer {
         });
 
         // These counts are used to avoid unnecessary render passes
-        this._numPortions = 0;
         this._numVisibleLayerPortions = 0;
         this._numTransparentLayerPortions = 0;
         this._numXRayedLayerPortions = 0;
@@ -353,7 +352,6 @@ export class VBOBatchingLayer {
         };
 
         this._portions.push(portion);
-        this._numPortions++;
         this.model.numPortions++;
         this._meshes.push(mesh);
         return portionId;
@@ -798,7 +796,7 @@ export class VBOBatchingLayer {
 
 
     __drawLayer(renderFlags, frameCtx, renderer, pass) {
-        if ((this._numCulledLayerPortions < this._numPortions) && (this._numVisibleLayerPortions > 0)) {
+        if ((this._numCulledLayerPortions < this._portions.length) && (this._numVisibleLayerPortions > 0)) {
             const backfacePasses = (this.primitive !== "points") && (this.primitive !== "lines") && [
                 RENDER_PASSES.COLOR_OPAQUE,
                 RENDER_PASSES.COLOR_TRANSPARENT,
@@ -827,9 +825,9 @@ export class VBOBatchingLayer {
     // ---------------------- COLOR RENDERING -----------------------------------
 
     __drawColor(renderFlags, frameCtx, renderOpaque) {
-        if ((renderOpaque ? (this._numTransparentLayerPortions < this._numPortions) : (this._numTransparentLayerPortions > 0))
+        if ((renderOpaque ? (this._numTransparentLayerPortions < this._portions.length) : (this._numTransparentLayerPortions > 0))
             &&
-            (this._numXRayedLayerPortions < this._numPortions)) {
+            (this._numXRayedLayerPortions < this._portions.length)) {
             const usePBR = frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported;
             const useColorTexture = frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported;
             const useAlphaCutoff = this._state.textureSet && (typeof(this._state.textureSet.alphaCutoff) === "number");
@@ -873,7 +871,7 @@ export class VBOBatchingLayer {
         // Assume whatever post-effect uses depth or normals (eg SAO) does not apply to transparent objects
         if ((this.primitive !== "points") && (this.primitive !== "lines")
             &&
-            (this._numTransparentLayerPortions < this._numPortions) && (this._numXRayedLayerPortions < this._numPortions)) {
+            (this._numTransparentLayerPortions < this._portions.length) && (this._numXRayedLayerPortions < this._portions.length)) {
             this.__drawLayer(renderFlags, frameCtx, renderer, RENDER_PASSES.COLOR_OPAQUE);
         }
     }
