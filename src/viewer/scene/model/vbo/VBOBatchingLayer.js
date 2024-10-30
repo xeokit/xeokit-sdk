@@ -95,10 +95,13 @@ export class VBOBatchingLayer {
         this._hasEdges = (cfg.primitive !== "points") && (cfg.primitive !== "lines");
 
         const attribute = function() {
+            let length = 0;
             const portions = [ ];
 
             return {
+                length: () => length,
                 append: function(data, times = 1, denormalizeScale = 1.0, increment = 0.0) {
+                    length += times * data.length;
                     portions.push({ data: data, times: times, denormalizeScale: denormalizeScale, increment: increment });
                 },
                 compileBuffer: function(type) {
@@ -184,8 +187,6 @@ export class VBOBatchingLayer {
         this._modelAABB = math.collapseAABB3(); // Model-space AABB
         this._portions = [];
         this._meshes = [];
-        this._numVerts = 0;
-        this._numIndices = 0;
         this._maxVerts = cfg.maxGeometryBatchSize;
 
         this._aabb = math.collapseAABB3();
@@ -216,7 +217,7 @@ export class VBOBatchingLayer {
         if (this._finalized) {
             throw "Already finalized";
         }
-        return ((this._numVerts + (lenPositions / 3)) <= this._maxVerts) && ((this._numIndices + lenIndices) <= (this._maxVerts * 3));
+        return ((this._buffer.positions.length() + lenPositions) <= (this._maxVerts * 3)) && ((this._buffer.indices.length() + lenIndices) <= (this._maxVerts * 3));
     }
 
     /**
@@ -250,7 +251,7 @@ export class VBOBatchingLayer {
         }
 
         const buffer = this._buffer;
-        const vertsBaseIndex = this._numVerts;
+        const vertsBaseIndex = this._buffer.positions.length() / 3;
 
         const useCompressed = this._state.positionsDecodeMatrix;
         const positions = useCompressed ? cfg.positionsCompressed : cfg.positions;
@@ -354,8 +355,6 @@ export class VBOBatchingLayer {
         this._portions.push(portion);
         this._numPortions++;
         this.model.numPortions++;
-        this._numVerts += numVerts;
-        this._numIndices += indices ? indices.length : 0;
         this._meshes.push(mesh);
         return portionId;
     }
@@ -373,6 +372,7 @@ export class VBOBatchingLayer {
         const state = this._state;
         const gl = this.model.scene.canvas.gl;
         const buffer = this._buffer;
+        const allVerts = buffer.positions.length() / 3;
         const maybeCreateGlBuffer = (target, srcData, size, usage, normalized = false) => (srcData.length > 0) ? new ArrayBuf(gl, target, srcData, srcData.length, size, usage, normalized) : null;
 
         const positions = (state.positionsDecodeMatrix
@@ -389,11 +389,11 @@ export class VBOBatchingLayer {
             }
         }
 
-        state.flagsBuf      = maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(this._numVerts), 1, gl.DYNAMIC_DRAW);
+        state.flagsBuf      = maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(allVerts), 1, gl.DYNAMIC_DRAW);
 
         state.colorsBuf     = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.colors.compileBuffer(Uint8Array), 4, gl.DYNAMIC_DRAW);
 
-        state.offsetsBuf    = this.model.scene.entityOffsetsEnabled ? maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(this._numVerts * 3), 3, gl.DYNAMIC_DRAW) : null;
+        state.offsetsBuf    = this.model.scene.entityOffsetsEnabled ? maybeCreateGlBuffer(gl.ARRAY_BUFFER, new Float32Array(allVerts * 3), 3, gl.DYNAMIC_DRAW) : null;
 
         state.indicesBuf    = maybeCreateGlBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer.indices.compileBuffer(Uint32Array), 1, gl.STATIC_DRAW);
 
@@ -707,7 +707,8 @@ export class VBOBatchingLayer {
         if (deferred) {
             // Avoid zillions of individual WebGL bufferSubData calls - buffer them to apply in one shot
             if (!this._deferredFlagValues) {
-                this._deferredFlagValues = new Float32Array(this._numVerts);
+                const lastP = this._portions[this._portions.length - 1];
+                this._deferredFlagValues = new Float32Array(lastP.vertsBaseIndex + lastP.numVerts);
             }
             fillArray(this._deferredFlagValues.subarray(firstFlag, firstFlag + lenFlags), tempFloat32);
         } else if (this._state.flagsBuf) {
