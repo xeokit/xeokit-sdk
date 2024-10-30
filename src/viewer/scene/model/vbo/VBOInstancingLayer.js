@@ -161,7 +161,9 @@ export class VBOInstancingLayer {
         this._numHighlightedLayerPortions = 0;
         this._numSelectedLayerPortions = 0;
         this._numClippableLayerPortions = 0;
-        this._numEdgesLayerPortions = 0;
+        if (this._hasEdges) {
+            this._numEdgesLayerPortions = 0;
+        }
         this._numPickableLayerPortions = 0;
         this._numCulledLayerPortions = 0;
 
@@ -304,9 +306,8 @@ export class VBOInstancingLayer {
             state.uvBuf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, geometry.uvCompressed, 2, gl.STATIC_DRAW);
             state.uvDecodeMatrix = geometry.uvDecodeMatrix;
         }
-        if (geometry.edgeIndices) {
-            state.edgeIndicesBuf = maybeCreateGlBuffer(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(geometry.edgeIndices), 1, gl.STATIC_DRAW);
-        }
+
+        state.edgeIndicesBuf = maybeCreateGlBuffer(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(geometry.edgeIndices), 1, gl.STATIC_DRAW);
 
         if (state.modelMatrixCol0Buf && state.normalsBuf) { // WARNING: normalsBuf is never defined at the moment
             state.modelNormalMatrixCol0Buf = maybeCreateGlBuffer(gl.ARRAY_BUFFER, buffer.modelNormalMatrixCol0.compileBuffer(Float32Array), 4, gl.STATIC_DRAW);
@@ -358,7 +359,7 @@ export class VBOInstancingLayer {
             this._numClippableLayerPortions++;
             this.model.numClippableLayerPortions++;
         }
-        if (flags & ENTITY_FLAGS.EDGES) {
+        if (this._hasEdges && flags & ENTITY_FLAGS.EDGES) {
             this._numEdgesLayerPortions++;
             this.model.numEdgesLayerPortions++;
         }
@@ -437,14 +438,16 @@ export class VBOInstancingLayer {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        if (flags & ENTITY_FLAGS.EDGES) {
-            this._numEdgesLayerPortions++;
-            this.model.numEdgesLayerPortions++;
-        } else {
-            this._numEdgesLayerPortions--;
-            this.model.numEdgesLayerPortions--;
+        if (this._hasEdges) {
+            if (flags & ENTITY_FLAGS.EDGES) {
+                this._numEdgesLayerPortions++;
+                this.model.numEdgesLayerPortions++;
+            } else {
+                this._numEdgesLayerPortions--;
+                this.model.numEdgesLayerPortions--;
+            }
+            this._setFlags(portionId, flags, meshTransparent);
         }
-        this._setFlags(portionId, flags, meshTransparent);
     }
 
     setClippable(portionId, flags) {
@@ -532,7 +535,7 @@ export class VBOInstancingLayer {
         const xrayed = !!(flags & ENTITY_FLAGS.XRAYED);
         const highlighted = !!(flags & ENTITY_FLAGS.HIGHLIGHTED);
         const selected = !!(flags & ENTITY_FLAGS.SELECTED);
-        const edges = !!(flags & ENTITY_FLAGS.EDGES);
+        const edges = !!(this._hasEdges && flags & ENTITY_FLAGS.EDGES);
         const pickable = !!(flags & ENTITY_FLAGS.PICKABLE);
         const culled = !!(flags & ENTITY_FLAGS.CULLED);
 
@@ -563,7 +566,7 @@ export class VBOInstancingLayer {
         }
 
         let edgeFlag = 0;
-        if (!visible || culled) {
+        if ((!this._hasEdges) || (!visible) || culled) {
             edgeFlag = RENDER_PASSES.NOT_RENDERED;
         } else if (selected) {
             edgeFlag = RENDER_PASSES.EDGES_SELECTED;
