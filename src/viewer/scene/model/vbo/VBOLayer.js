@@ -4,11 +4,144 @@ import {RENDER_PASSES} from "../RENDER_PASSES.js";
 import {math} from "../../math/math.js";
 import {RenderState} from "../../webgl/RenderState.js";
 import {ArrayBuf} from "../../webgl/ArrayBuf.js";
-import {getPointsRenderers} from "./renderers/VBOPointsRenderers.js";
-import {getLinesRenderers} from "./renderers/VBOLinesRenderers.js";
-import {getTrianglesRenderers} from "./renderers/VBOTrianglesRenderers.js";
 import {quantizePositions, transformAndOctEncodeNormals} from "../compression.js";
 import {geometryCompressionUtils} from "../../math/geometryCompressionUtils.js";
+
+import { VBOPointsColorRenderer              } from "./renderers/VBOPointsColorRenderer.js";
+import { VBOPointsOcclusionRenderer          } from "./renderers/VBOPointsOcclusionRenderer.js";
+import { VBOPointsPickDepthRenderer          } from "./renderers/VBOPointsPickDepthRenderer.js";
+import { VBOPointsPickMeshRenderer           } from "./renderers/VBOPointsPickMeshRenderer.js";
+import { VBOPointsShadowRenderer             } from "./renderers/VBOPointsShadowRenderer.js";
+import { VBOPointsSilhouetteRenderer         } from "./renderers/VBOPointsSilhouetteRenderer.js";
+import { VBOPointsSnapRenderer               } from "./renderers/VBOPointsSnapRenderer.js";
+
+import { VBOLinesColorRenderer               } from "./renderers/VBOLinesColorRenderer.js";
+import { VBOLinesSilhouetteRenderer          } from "./renderers/VBOLinesSilhouetteRenderer.js";
+import { VBOLinesSnapRenderer                } from "./renderers/VBOLinesSnapRenderer.js";
+
+import { VBOTrianglesColorRenderer           } from "./renderers/VBOTrianglesColorRenderer.js";
+import { VBOTrianglesColorTextureRenderer    } from "./renderers/VBOTrianglesColorTextureRenderer.js";
+import { VBOTrianglesDepthRenderer           } from "./renderers/VBOTrianglesDepthRenderer.js";
+import { VBOTrianglesEdgesRenderer           } from "./renderers/VBOTrianglesEdgesRenderer.js";
+import { VBOTrianglesFlatColorRenderer       } from "./renderers/VBOTrianglesFlatColorRenderer.js";
+import { VBOTrianglesOcclusionRenderer       } from "./renderers/VBOTrianglesOcclusionRenderer.js";
+import { VBOTrianglesPBRRenderer             } from "./renderers/VBOTrianglesPBRRenderer.js";
+import { VBOTrianglesPickDepthRenderer       } from "./renderers/VBOTrianglesPickDepthRenderer.js";
+import { VBOTrianglesPickMeshRenderer        } from "./renderers/VBOTrianglesPickMeshRenderer.js";
+import { VBOTrianglesPickNormalsFlatRenderer } from "./renderers/VBOTrianglesPickNormalsFlatRenderer.js";
+import { VBOTrianglesPickNormalsRenderer     } from "./renderers/VBOTrianglesPickNormalsRenderer.js";
+import { VBOTrianglesShadowRenderer          } from "./renderers/VBOTrianglesShadowRenderer.js";
+import { VBOTrianglesSilhouetteRenderer      } from "./renderers/VBOTrianglesSilhouetteRenderer.js";
+import { VBOTrianglesSnapRenderer            } from "./renderers/VBOTrianglesSnapRenderer.js";
+
+
+const getRenderers = (function() {
+    const cachedRenderers = { };
+
+    return function(scene, instancing, primitive) {
+        const batchInstKey = instancing ? "instancing" : "batching";
+        if (! (batchInstKey in cachedRenderers)) {
+            cachedRenderers[batchInstKey] = { };
+        }
+        const primKey = ((primitive === "points") || (primitive === "lines")) ? primitive : "triangles";
+        if (! (primKey in cachedRenderers[batchInstKey])) {
+            cachedRenderers[batchInstKey][primKey] = { };
+        }
+        const cache = cachedRenderers[batchInstKey][primKey];
+        const sceneId = scene.id;
+        if (! (sceneId in cache)) {
+
+            // Pre-initialize certain renderers that would otherwise be lazy-initialised on user interaction,
+            // such as picking or emphasis, so that there is no delay when user first begins interacting with the viewer.
+            const eager = function(klass, ...args) {
+                let renderer = new klass(scene, instancing, ...args);
+                return {
+                    drawLayer: (frameCtx, layer, renderPass) => renderer.drawLayer(frameCtx, layer, renderPass),
+                    revalidate: force => {
+                        if (force || (! renderer.getValid())) {
+                            renderer.destroy();
+                            renderer = new klass(scene, instancing, ...args);
+                        }
+                    }
+                };
+            };
+
+            const lazy = function(klass, ...args) {
+                let renderer = null;
+                return {
+                    drawLayer: (frameCtx, layer, renderPass) => {
+                        if (! renderer) {
+                            renderer = new klass(scene, instancing, ...args);
+                        }
+                        renderer.drawLayer(frameCtx, layer, renderPass);
+                    },
+                    revalidate: force => {
+                        if (renderer && (force || (! renderer.getValid()))) {
+                            renderer.destroy();
+                            renderer = null;
+                        }
+                    }
+                };
+            };
+
+            if (primitive === "points") {
+                cache[sceneId] = {
+                    colorRenderer:      lazy(VBOPointsColorRenderer),
+                    occlusionRenderer:  lazy(VBOPointsOcclusionRenderer),
+                    pickDepthRenderer:  lazy(VBOPointsPickDepthRenderer),
+                    pickMeshRenderer:   lazy(VBOPointsPickMeshRenderer),
+                    // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
+                    // but never used (and probably not maintained), as opposed to VBOInstancingPointsShadowRenderer in the same commit
+                    shadowRenderer:     instancing && lazy(VBOPointsShadowRenderer),
+                    silhouetteRenderer: lazy(VBOPointsSilhouetteRenderer),
+                    snapInitRenderer:   lazy(VBOPointsSnapRenderer, true),
+                    snapRenderer:       lazy(VBOPointsSnapRenderer, false)
+                };
+            } else if (primitive === "lines") {
+                cache[sceneId] = {
+                    colorRenderer:      lazy(VBOLinesColorRenderer),
+                    silhouetteRenderer: lazy(VBOLinesSilhouetteRenderer),
+                    snapInitRenderer:   lazy(VBOLinesSnapRenderer, true),
+                    snapRenderer:       lazy(VBOLinesSnapRenderer, false)
+                };
+            } else {
+                cache[sceneId] = {
+                    colorRenderer:                          lazy(VBOTrianglesColorRenderer, false),
+                    colorRendererWithSAO:                   lazy(VBOTrianglesColorRenderer, true),
+                    colorTextureRenderer:                   lazy(VBOTrianglesColorTextureRenderer, false, false),
+                    colorTextureRendererAlphaCutoff:        lazy(VBOTrianglesColorTextureRenderer, false, true),
+                    colorTextureRendererWithSAO:            lazy(VBOTrianglesColorTextureRenderer, true,  false),
+                    colorTextureRendererWithSAOAlphaCutoff: lazy(VBOTrianglesColorTextureRenderer, true,  true),
+                    depthRenderer:                          lazy(VBOTrianglesDepthRenderer),
+                    edgesColorRenderer:                     lazy(VBOTrianglesEdgesRenderer, false),
+                    edgesRenderer:                          lazy(VBOTrianglesEdgesRenderer, true),
+                    flatColorRenderer:                      lazy(VBOTrianglesFlatColorRenderer, false),
+                    flatColorRendererWithSAO:               lazy(VBOTrianglesFlatColorRenderer, true),
+                    occlusionRenderer:                      lazy(VBOTrianglesOcclusionRenderer),
+                    pbrRenderer:                            lazy(VBOTrianglesPBRRenderer, false),
+                    pbrRendererWithSAO:                     lazy(VBOTrianglesPBRRenderer, true),
+                    pickDepthRenderer:                      eager(VBOTrianglesPickDepthRenderer),
+                    pickMeshRenderer:                       eager(VBOTrianglesPickMeshRenderer),
+                    pickNormalsFlatRenderer:                lazy(VBOTrianglesPickNormalsFlatRenderer),
+                    pickNormalsRenderer:                    lazy(VBOTrianglesPickNormalsRenderer),
+                    shadowRenderer:                         lazy(VBOTrianglesShadowRenderer),
+                    silhouetteRenderer:                     eager(VBOTrianglesSilhouetteRenderer),
+                    snapInitRenderer:                       eager(VBOTrianglesSnapRenderer, true),
+                    snapRenderer:                           eager(VBOTrianglesSnapRenderer, false)
+                };
+            }
+
+            const compile = () => Object.values(cache[sceneId]).forEach(r => r && r.revalidate(false));
+            compile();
+            scene.on("compile", compile);
+            scene.on("destroyed", () => {
+                Object.values(cache[sceneId]).forEach(r => r && r.revalidate(true));
+                delete cache[sceneId];
+            });
+        }
+        return cache[sceneId];
+    };
+})();
 
 const tempFloat32 = new Float32Array(1);
 const tempFloat32Vec4 = new Float32Array(4);
@@ -100,7 +233,7 @@ export class VBOLayer {
                                  (cfg.textureSet && cfg.textureSet.metallicRoughnessTexture ? "-metallicRoughnessTexture" : ""))))
                         : ""));
 
-        this._renderers = ((this.primitive === "points") ? getPointsRenderers : ((this.primitive === "lines") ? getLinesRenderers : getTrianglesRenderers))(cfg.model.scene, instancing);
+        this._renderers = getRenderers(cfg.model.scene, instancing, this.primitive);
 
         this._hasEdges = (this.primitive !== "points") && (this.primitive !== "lines");
 
