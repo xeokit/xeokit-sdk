@@ -3,8 +3,7 @@ import {math} from "../math/math.js";
 import {buildEdgeIndices} from '../math/buildEdgeIndices.js';
 import {SceneModelMesh} from './SceneModelMesh.js';
 import {getScratchMemory, putScratchMemory} from "./vbo/ScratchMemory.js";
-import {VBOBatchingLayer} from './vbo/VBOBatchingLayer.js';
-import {VBOInstancingLayer} from './vbo/VBOInstancingLayer.js';
+import {VBOLayer} from './vbo/VBOLayer.js';
 import {DTXLinesLayer} from "./dtx/lines/DTXLinesLayer.js";
 import {DTXTrianglesLayer} from "./dtx/triangles/DTXTrianglesLayer.js";
 import {ENTITY_FLAGS} from './ENTITY_FLAGS.js';
@@ -3232,7 +3231,7 @@ export class SceneModel extends Component {
                 case "surface":
                 case "lines":
                 case "points":
-                    vboBatchingLayer = new VBOBatchingLayer({
+                    vboBatchingLayer = new VBOLayer(false, {
                         model,
                         layerIndex: 0, // This is set in #finalize()
                         scratchMemory: this._vboBatchingLayerScratchMemory,
@@ -3283,12 +3282,14 @@ export class SceneModel extends Component {
                 case "surface":
                 case "lines":
                 case "points":
-                    vboInstancingLayer = new VBOInstancingLayer({
+                    vboInstancingLayer = new VBOLayer(true, {
                         model,
+                        scratchMemory: this._vboBatchingLayerScratchMemory,
                         textureSet,
                         geometry,
                         origin,
-                        layerIndex: 0
+                        layerIndex: 0,
+                        primitive: geometry.primitive
                     });
                     break;
             }
