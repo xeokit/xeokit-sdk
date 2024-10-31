@@ -3205,9 +3205,8 @@ export class SceneModel extends Component {
         const model = this;
         const origin = cfg.origin;
         const renderLayer = cfg.renderLayer || 0;
-        const positionsDecodeHash = cfg.positionsDecodeMatrix || cfg.positionsDecodeBoundary ?
-            this._createHashStringFromMatrix(cfg.positionsDecodeMatrix || cfg.positionsDecodeBoundary)
-            : "-";
+        const posDecode = cfg.positionsDecodeMatrix || cfg.positionsDecodeBoundary;
+        const positionsDecodeHash = posDecode ? (JSON.stringify(posDecode).split("").reduce((hash, char) => (((hash << 5) - hash + char.charCodeAt(0)) | 0), 0) >>> 0).toString(16) : "-";
         const textureSetId = cfg.textureSetId || "-";
         const layerId = `${Math.round(origin[0])}.${Math.round(origin[1])}.${Math.round(origin[2])}.${cfg.primitive}.${positionsDecodeHash}.${textureSetId}`;
         let vboBatchingLayer = this._vboBatchingLayers[layerId];
@@ -3249,18 +3248,6 @@ export class SceneModel extends Component {
         this.layerList.push(vboBatchingLayer);
         this._layersToFinalize.push(vboBatchingLayer);
         return vboBatchingLayer;
-    }
-
-    _createHashStringFromMatrix(matrix) {
-        const matrixString = JSON.stringify(matrix);
-        let hash = 0;
-        for (let i = 0; i < matrixString.length; i++) {
-            const char = matrixString.charCodeAt(i);
-            hash = (hash << 5) - hash + char;
-            hash |= 0; // Convert to 32-bit integer
-        }
-        const hashString = (hash >>> 0).toString(16);
-        return hashString;
     }
 
     _getVBOInstancingLayer(cfg) {
