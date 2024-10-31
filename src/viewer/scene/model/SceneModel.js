@@ -1288,7 +1288,26 @@ export class SceneModel extends Component {
             }
         });
 
-        this._createDefaultTextureSet();
+        // Every SceneModelMesh gets at least the default TextureSet,
+        // which contains empty default textures filled with color
+        const defineTex = (texId, preloadColor) => {
+            return this._textures[texId] = new SceneModelTexture({
+                id: texId,
+                texture: new Texture2D({
+                    gl: this.scene.canvas.gl,
+                    preloadColor: preloadColor
+                })
+            });
+        };
+
+        this._textureSets[DEFAULT_TEXTURE_SET_ID] = new SceneModelTextureSet({
+            id: DEFAULT_TEXTURE_SET_ID,
+            colorTexture:             defineTex(DEFAULT_COLOR_TEXTURE_ID,       [1, 1, 1, 1]), // [r, g, b, a]}),
+            metallicRoughnessTexture: defineTex(DEFAULT_METAL_ROUGH_TEXTURE_ID, [0, 1, 1, 1]), // [_, roughness, metalness, _],
+            normalsTexture:           defineTex(DEFAULT_NORMALS_TEXTURE_ID,     [0, 0, 0, 0]), // [x, y, z, _] - these must be zeros
+            emissiveTexture:          defineTex(DEFAULT_EMISSIVE_TEXTURE_ID,    [0, 0, 0, 1]), // [x, y, z, _]
+            occlusionTexture:         defineTex(DEFAULT_OCCLUSION_TEXTURE_ID,   [1, 1, 1, 1])  // [x, y, z, _]
+        });
 
         this.visible = cfg.visible;
         this.culled = cfg.culled;
@@ -1308,60 +1327,6 @@ export class SceneModel extends Component {
 
     _meshMatrixDirty(mesh) {
         this._meshesWithDirtyMatrices[this._numMeshesWithDirtyMatrices++] = mesh;
-    }
-
-    _createDefaultTextureSet() {
-        // Every SceneModelMesh gets at least the default TextureSet,
-        // which contains empty default textures filled with color
-        const defaultColorTexture = new SceneModelTexture({
-            id: DEFAULT_COLOR_TEXTURE_ID,
-            texture: new Texture2D({
-                gl: this.scene.canvas.gl,
-                preloadColor: [1, 1, 1, 1] // [r, g, b, a]})
-            })
-        });
-        const defaultMetalRoughTexture = new SceneModelTexture({
-            id: DEFAULT_METAL_ROUGH_TEXTURE_ID,
-            texture: new Texture2D({
-                gl: this.scene.canvas.gl,
-                preloadColor: [0, 1, 1, 1] // [unused, roughness, metalness, unused]
-            })
-        });
-        const defaultNormalsTexture = new SceneModelTexture({
-            id: DEFAULT_NORMALS_TEXTURE_ID,
-            texture: new Texture2D({
-                gl: this.scene.canvas.gl,
-                preloadColor: [0, 0, 0, 0] // [x, y, z, unused] - these must be zeros
-            })
-        });
-        const defaultEmissiveTexture = new SceneModelTexture({
-            id: DEFAULT_EMISSIVE_TEXTURE_ID,
-            texture: new Texture2D({
-                gl: this.scene.canvas.gl,
-                preloadColor: [0, 0, 0, 1] // [x, y, z, unused]
-            })
-        });
-        const defaultOcclusionTexture = new SceneModelTexture({
-            id: DEFAULT_OCCLUSION_TEXTURE_ID,
-            texture: new Texture2D({
-                gl: this.scene.canvas.gl,
-                preloadColor: [1, 1, 1, 1] // [x, y, z, unused]
-            })
-        });
-        this._textures[DEFAULT_COLOR_TEXTURE_ID] = defaultColorTexture;
-        this._textures[DEFAULT_METAL_ROUGH_TEXTURE_ID] = defaultMetalRoughTexture;
-        this._textures[DEFAULT_NORMALS_TEXTURE_ID] = defaultNormalsTexture;
-        this._textures[DEFAULT_EMISSIVE_TEXTURE_ID] = defaultEmissiveTexture;
-        this._textures[DEFAULT_OCCLUSION_TEXTURE_ID] = defaultOcclusionTexture;
-        this._textureSets[DEFAULT_TEXTURE_SET_ID] = new SceneModelTextureSet({
-            id: DEFAULT_TEXTURE_SET_ID,
-            model: this,
-            colorTexture: defaultColorTexture,
-            metallicRoughnessTexture: defaultMetalRoughTexture,
-            normalsTexture: defaultNormalsTexture,
-            emissiveTexture: defaultEmissiveTexture,
-            occlusionTexture: defaultOcclusionTexture
-        });
     }
 
     //------------------------------------------------------------------------------------------------------------------
