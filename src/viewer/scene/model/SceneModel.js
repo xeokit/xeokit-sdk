@@ -2266,6 +2266,14 @@ export class SceneModel extends Component {
         }
     }
 
+    _createDefaultIndices(numIndices) {
+        const indices = [];
+        for (let i = 0; i < numIndices; i++) {
+            indices.push(i);
+        }
+        return indices;
+    }
+
     /**
      * Creates a reusable geometry within this SceneModel.
      *
@@ -2321,8 +2329,7 @@ export class SceneModel extends Component {
             return null;
         }
         if (!cfg.buckets && !cfg.indices && (cfg.primitive === "triangles" || cfg.primitive === "solid" || cfg.primitive === "surface")) {
-            const numPositions = (cfg.positions || cfg.positionsCompressed).length / 3;
-            cfg.indices = this._createDefaultIndices(numPositions);
+            cfg.indices = this._createDefaultIndices((cfg.positions || cfg.positionsCompressed).length / 3);
         }
         if (!cfg.buckets && !cfg.indices && cfg.primitive !== "points") {
             this.error(`[createGeometry] Param expected: indices (required for '${cfg.primitive}' primitive type)`);
@@ -2744,18 +2751,37 @@ export class SceneModel extends Component {
             return false;
         }
 
-        const instancing = (cfg.geometryId !== undefined);
-        const batching = !instancing;
+        const geometryId = cfg.geometryId;
+        const instancing = geometryId !== undefined;
 
-        if (batching) {
+        if (instancing) {
+            if (cfg.positions || cfg.positionsCompressed || cfg.indices || cfg.edgeIndices || cfg.normals || cfg.normalsCompressed || cfg.uv || cfg.uvCompressed || cfg.positionsDecodeMatrix) {
+                this.error(`Mesh geometry parameters not expected when instancing a geometry (not expected: positions, positionsCompressed, indices, edgeIndices, normals, normalsCompressed, uv, uvCompressed, positionsDecodeMatrix)`);
+                return false;
+            }
+
+            cfg.geometry = this._geometries[geometryId];
+            if (!cfg.geometry) {
+                this.error(`[createMesh] Geometry not found: ${geometryId} - ensure that you create it first with createGeometry()`);
+                return false;
+            }
+        } else {
+            cfg.primitive ??= "triangles";
+        }
+
+        const primitive = instancing ? cfg.geometry.primitive : cfg.primitive;
+        const isTriangular = (primitive === "triangles") || (primitive === "solid") || (primitive === "surface");
+        const textureSetId = cfg.textureSetId;
+        const useDTX = this._dtxEnabled && isTriangular && (! textureSetId);
+
+        cfg.origin = cfg.origin ? math.addVec3(this._origin, cfg.origin, math.vec3()) : this._origin;
+
+        if (! instancing) {
 
             // Batched geometry
 
-            if (cfg.primitive === undefined || cfg.primitive === null) {
-                cfg.primitive = "triangles";
-            }
-            if (cfg.primitive !== "points" && cfg.primitive !== "lines" && cfg.primitive !== "triangles" && cfg.primitive !== "solid" && cfg.primitive !== "surface") {
-                this.error(`Unsupported value for 'primitive': '${cfg.primitive}'  ('geometryId' is absent) - supported values are 'points', 'lines', 'triangles', 'solid' and 'surface'.`);
+            if (primitive !== "points" && primitive !== "lines" && primitive !== "triangles" && primitive !== "solid" && primitive !== "surface") {
+                this.error(`Unsupported value for 'primitive': '${primitive}'  ('geometryId' is absent) - supported values are 'points', 'lines', 'triangles', 'solid' and 'surface'.`);
                 return false;
             }
             if (!cfg.positions && !cfg.positionsCompressed && !cfg.buckets) {
@@ -2774,25 +2800,18 @@ export class SceneModel extends Component {
                 this.error("Param expected: 'uvCompressed' should be accompanied by `uvDecodeMatrix` ('geometryId' is absent)");
                 return false;
             }
-            if (!cfg.buckets && !cfg.indices && (cfg.primitive === "triangles" || cfg.primitive === "solid" || cfg.primitive === "surface")) {
-                const numPositions = (cfg.positions || cfg.positionsCompressed).length / 3;
-                cfg.indices = this._createDefaultIndices(numPositions);
-            }
-            if (!cfg.buckets && !cfg.indices && cfg.primitive !== "points") {
-                this.error(`Param expected: indices (required for '${cfg.primitive}' primitive type)`);
-                return false;
+            if (!cfg.buckets && !cfg.indices) {
+                if (isTriangular) {
+                    cfg.indices = this._createDefaultIndices((cfg.positions || cfg.positionsCompressed).length / 3);
+                } else if (primitive === "lines") {
+                    this.error(`Param expected: indices (required for '${primitive}' primitive type)`);
+                    return false;
+                }
             }
             if ((cfg.matrix || cfg.position || cfg.rotation || cfg.scale) && (cfg.positionsCompressed || cfg.positionsDecodeBoundary)) {
                 this.error("Unexpected params: 'matrix', 'rotation', 'scale', 'position' not allowed with 'positionsCompressed'");
                 return false;
             }
-
-            const useDTX = (!!this._dtxEnabled && (cfg.primitive === "triangles"
-                    || cfg.primitive === "solid"
-                    || cfg.primitive === "surface"))
-                && (!cfg.textureSetId);
-
-            cfg.origin = cfg.origin ? math.addVec3(this._origin, cfg.origin, math.vec3()) : this._origin;
 
             // MATRIX - optional for batching
 
@@ -2801,193 +2820,85 @@ export class SceneModel extends Component {
             } else if (cfg.scale || cfg.rotation || cfg.position || cfg.quaternion) {
                 const scale = cfg.scale || DEFAULT_SCALE;
                 const position = cfg.position || DEFAULT_POSITION;
-                if (cfg.rotation) {
-                    math.eulerToQuaternion(cfg.rotation, "XYZ", tempQuaternion);
-                    cfg.meshMatrix = math.composeMat4(position, tempQuaternion, scale, math.mat4());
-                } else {
-                    cfg.meshMatrix = math.composeMat4(position, cfg.quaternion || DEFAULT_QUATERNION, scale, math.mat4());
-                }
+                const quaternion = (cfg.rotation
+                                    ? math.eulerToQuaternion(cfg.rotation, "XYZ", tempQuaternion)
+                                    : cfg.quaternion || DEFAULT_QUATERNION);
+                cfg.meshMatrix = math.composeMat4(position, quaternion, scale, math.mat4());
             }
 
             if (cfg.positionsDecodeBoundary) {
                 cfg.positionsDecodeMatrix = createPositionsDecodeMatrix(cfg.positionsDecodeBoundary, math.mat4());
             }
 
-            if (useDTX) {
+            // RTC && COMPRESSION
 
-                // DTX
-
-                cfg.type = DTX;
-
-                // NPR
-
-                cfg.color = (cfg.color) ? new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)]) : defaultCompressedColor;
-                cfg.opacity = (cfg.opacity !== undefined && cfg.opacity !== null) ? Math.floor(cfg.opacity * 255) : 255;
-
-                // RTC
-
-                if (cfg.positions) {
-                    const rtcCenter = math.vec3();
-                    const rtcPositions = [];
-                    const rtcNeeded = worldToRTCPositions(cfg.positions, rtcPositions, rtcCenter);
-                    if (rtcNeeded) {
-                        cfg.positions = rtcPositions;
-                        cfg.origin = math.addVec3(cfg.origin, rtcCenter, rtcCenter);
-                    }
+            if (cfg.positions) {
+                const rtcPositions = [];
+                const rtcNeeded = worldToRTCPositions(cfg.positions, rtcPositions, tempVec3a);
+                if (rtcNeeded) {
+                    cfg.positions = rtcPositions;
+                    cfg.origin = math.addVec3(cfg.origin, tempVec3a, math.vec3());
                 }
 
-                // COMPRESSION
-
-                if (cfg.positions) {
-                    const aabb = math.collapseAABB3();
+                const aabb = math.collapseAABB3();
+                if (useDTX) {
                     cfg.positionsDecodeMatrix = math.mat4();
                     math.expandAABB3Points3(aabb, cfg.positions);
                     cfg.positionsCompressed = quantizePositions(cfg.positions, aabb, cfg.positionsDecodeMatrix);
-                    cfg.aabb = aabb;
-
-                } else if (cfg.positionsCompressed) {
-                    const aabb = math.collapseAABB3();
-                    math.expandAABB3Points3(aabb, cfg.positionsCompressed);
-                    geometryCompressionUtils.decompressAABB(aabb, cfg.positionsDecodeMatrix);
-                    cfg.aabb = aabb;
-
-                }
-                if (cfg.buckets) {
-                    const aabb = math.collapseAABB3();
-                    for (let i = 0, len = cfg.buckets.length; i < len; i++) {
-                        const bucket = cfg.buckets[i];
-                        if (bucket.positions) {
-                            math.expandAABB3Points3(aabb, bucket.positions);
-                        } else if (bucket.positionsCompressed) {
-                            math.expandAABB3Points3(aabb, bucket.positionsCompressed);
-                        }
-                    }
-                    if (cfg.positionsDecodeMatrix) {
-                        geometryCompressionUtils.decompressAABB(aabb, cfg.positionsDecodeMatrix);
-                    }
-                    cfg.aabb = aabb;
-                }
-
-                if (cfg.meshMatrix) {
-                    math.AABB3ToOBB3(cfg.aabb, tempOBB3);
-                    math.transformOBB3(cfg.meshMatrix, tempOBB3);
-                    math.OBB3ToAABB3(tempOBB3, cfg.aabb);
-                }
-
-                // EDGES
-
-                if (!cfg.buckets && !cfg.edgeIndices && (cfg.primitive === "triangles" || cfg.primitive === "solid" || cfg.primitive === "surface")) {
-                    if (cfg.positions) { // Faster
-                        cfg.edgeIndices = buildEdgeIndices(cfg.positions, cfg.indices, null, 2.0);
-                    } else {
-                        cfg.edgeIndices = buildEdgeIndices(cfg.positionsCompressed, cfg.indices, cfg.positionsDecodeMatrix, 2.0);
-                    }
-                }
-
-                // BUCKETING
-
-                if (!cfg.buckets) {
-                    cfg.buckets = createDTXBuckets(cfg, this._enableVertexWelding, this._enableIndexBucketing);
-                }
-
-            } else {
-
-                // VBO
-
-                cfg.type = VBO_BATCHED;
-
-                // PBR
-
-                cfg.color = (cfg.color) ? new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)]) : [255, 255, 255];
-                cfg.opacity = (cfg.opacity !== undefined && cfg.opacity !== null) ? Math.floor(cfg.opacity * 255) : 255;
-                cfg.metallic = (cfg.metallic !== undefined && cfg.metallic !== null) ? Math.floor(cfg.metallic * 255) : 0;
-                cfg.roughness = (cfg.roughness !== undefined && cfg.roughness !== null) ? Math.floor(cfg.roughness * 255) : 255;
-
-                // RTC
-
-                if (cfg.positions) {
-                    const rtcPositions = [];
-                    const rtcNeeded = worldToRTCPositions(cfg.positions, rtcPositions, tempVec3a);
-                    if (rtcNeeded) {
-                        cfg.positions = rtcPositions;
-                        cfg.origin = math.addVec3(cfg.origin, tempVec3a, math.vec3());
-                    }
-                }
-
-                if (cfg.positions) {
-                    const aabb = math.collapseAABB3();
+                } else {
                     if (cfg.meshMatrix) {
                         math.transformPositions3(cfg.meshMatrix, cfg.positions, cfg.positions);
                         cfg.meshMatrix = null; // Positions now baked, don't need any more
                     }
                     math.expandAABB3Points3(aabb, cfg.positions);
-                    cfg.aabb = aabb;
+                }
+                cfg.aabb = aabb;
+            } else if (cfg.positionsCompressed) {
+                const aabb = math.collapseAABB3();
+                math.expandAABB3Points3(aabb, cfg.positionsCompressed);
+                geometryCompressionUtils.decompressAABB(aabb, cfg.positionsDecodeMatrix);
+                cfg.aabb = aabb;
+            }
 
-                } else {
-                    const aabb = math.collapseAABB3();
-                    math.expandAABB3Points3(aabb, cfg.positionsCompressed);
+            if (useDTX && cfg.buckets) {
+                const aabb = math.collapseAABB3();
+                cfg.buckets.forEach(bucket => {
+                    const positions = bucket.positions || bucket.positionsCompressed;
+                    if (positions) {
+                        math.expandAABB3Points3(aabb, positions);
+                    }
+                });
+                if (cfg.positionsDecodeMatrix) {
                     geometryCompressionUtils.decompressAABB(aabb, cfg.positionsDecodeMatrix);
-                    cfg.aabb = aabb;
                 }
+                cfg.aabb = aabb;
+            }
 
-                if (cfg.meshMatrix) {
-                    math.AABB3ToOBB3(cfg.aabb, tempOBB3);
-                    math.transformOBB3(cfg.meshMatrix, tempOBB3);
-                    math.OBB3ToAABB3(tempOBB3, cfg.aabb);
-                }
+            // EDGES
 
-                // EDGES
-
-                if (!cfg.buckets && !cfg.edgeIndices && (cfg.primitive === "triangles" || cfg.primitive === "solid" || cfg.primitive === "surface")) {
-                    if (cfg.positions) {
-                        cfg.edgeIndices = buildEdgeIndices(cfg.positions, cfg.indices, null, 2.0);
-                    } else {
-                        cfg.edgeIndices = buildEdgeIndices(cfg.positionsCompressed, cfg.indices, cfg.positionsDecodeMatrix, 2.0);
-                    }
-                }
-
-                // TEXTURE
-
-                // cfg.textureSetId = cfg.textureSetId || DEFAULT_TEXTURE_SET_ID;
-                if (cfg.textureSetId) {
-                    cfg.textureSet = this._textureSets[cfg.textureSetId];
-                    if (!cfg.textureSet) {
-                        this.error(`[createMesh] Texture set not found: ${cfg.textureSetId} - ensure that you create it first with createTextureSet()`);
-                        return false;
-                    }
-                }
+            if (isTriangular && (! cfg.buckets)) {
+                cfg.edgeIndices ||= buildEdgeIndices(cfg.positions || cfg.positionsCompressed, cfg.indices, cfg.positions ? null : cfg.positionsDecodeMatrix, 2.0);
             }
 
         } else {
 
             // INSTANCING
 
-            if (cfg.positions || cfg.positionsCompressed || cfg.indices || cfg.edgeIndices || cfg.normals || cfg.normalsCompressed || cfg.uv || cfg.uvCompressed || cfg.positionsDecodeMatrix) {
-                this.error(`Mesh geometry parameters not expected when instancing a geometry (not expected: positions, positionsCompressed, indices, edgeIndices, normals, normalsCompressed, uv, uvCompressed, positionsDecodeMatrix)`);
-                return false;
-            }
-
-            cfg.geometry = this._geometries[cfg.geometryId];
-            if (!cfg.geometry) {
-                this.error(`[createMesh] Geometry not found: ${cfg.geometryId} - ensure that you create it first with createGeometry()`);
-                return false;
-            }
-
-            cfg.origin = cfg.origin ? math.addVec3(this._origin, cfg.origin, math.vec3()) : this._origin;
             cfg.positionsDecodeMatrix = cfg.geometry.positionsDecodeMatrix;
 
-            if (cfg.transformId) {
+            cfg.aabb = math.AABB3(cfg.geometry.aabb);
+
+            const transformId = cfg.transformId;
+            if (transformId) {
 
                 // TRANSFORM
 
-                cfg.transform = this._transforms[cfg.transformId];
+                cfg.transform = this._transforms[transformId];
 
                 if (!cfg.transform) {
-                    this.error(`[createMesh] Transform not found: ${cfg.transformId} - ensure that you create it first with createTransform()`);
+                    this.error(`[createMesh] Transform not found: ${transformId} - ensure that you create it first with createTransform()`);
                     return false;
                 }
-
-                cfg.aabb = cfg.geometry.aabb;
 
             } else {
 
@@ -2998,84 +2909,57 @@ export class SceneModel extends Component {
                 } else if (cfg.scale || cfg.rotation || cfg.position || cfg.quaternion) {
                     const scale = cfg.scale || DEFAULT_SCALE;
                     const position = cfg.position || DEFAULT_POSITION;
-                    if (cfg.rotation) {
-                        math.eulerToQuaternion(cfg.rotation, "XYZ", tempQuaternion);
-                        cfg.meshMatrix = math.composeMat4(position, tempQuaternion, scale, math.mat4());
-                    } else {
-                        cfg.meshMatrix = math.composeMat4(position, cfg.quaternion || DEFAULT_QUATERNION, scale, math.mat4());
-                    }
+                    const quaternion = (cfg.rotation
+                                        ? math.eulerToQuaternion(cfg.rotation, "XYZ", tempQuaternion)
+                                        : cfg.quaternion || DEFAULT_QUATERNION);
+                    cfg.meshMatrix = math.composeMat4(position, quaternion, scale, math.mat4());
                 }
+            }
+        }
 
-                math.AABB3ToOBB3(cfg.geometry.aabb, tempOBB3);
-                math.transformOBB3(cfg.meshMatrix, tempOBB3);
-                cfg.aabb = math.OBB3ToAABB3(tempOBB3, math.AABB3());
+        if (cfg.meshMatrix) {
+            math.AABB3ToOBB3(cfg.aabb, tempOBB3);
+            math.transformOBB3(cfg.meshMatrix, tempOBB3, tempOBB3);
+            math.OBB3ToAABB3(tempOBB3, cfg.aabb);
+        }
+
+        cfg.color = cfg.color ? new Uint8Array(cfg.color.slice(0, 3).map(v => Math.floor(v * 255))) : defaultCompressedColor;
+        cfg.opacity = Math.floor((cfg.opacity ?? 1) * 255);
+
+        if (useDTX) {
+            cfg.type = DTX;
+
+            // BUCKETING
+            if (instancing) {
+                cfg.buckets = this._dtxBuckets[geometryId]; // lazy generated, reused
+            }
+            if (!cfg.buckets) {
+                cfg.buckets = createDTXBuckets(instancing ? cfg.geometry : cfg, this._enableVertexWelding, this._enableIndexBucketing);
+                if (instancing) {
+                    this._dtxBuckets[geometryId] = cfg.buckets;
+                }
             }
 
-            const useDTX = (!!this._dtxEnabled
-                    && (cfg.geometry.primitive === "triangles"
-                        || cfg.geometry.primitive === "solid"
-                        || cfg.geometry.primitive === "surface"))
-                && (!cfg.textureSetId);
+        } else {
+            cfg.type = instancing ? VBO_INSTANCED : VBO_BATCHED;
 
-            if (useDTX) {
+            // PBR
+            cfg.metallic  = Math.floor((cfg.metallic  ?? 0) * 255);
+            cfg.roughness = Math.floor((cfg.roughness ?? 1) * 255);
 
-                // DTX
-
-                cfg.type = DTX;
-
-                // NPR
-
-                cfg.color = (cfg.color) ? new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)]) : defaultCompressedColor;
-                cfg.opacity = (cfg.opacity !== undefined && cfg.opacity !== null) ? Math.floor(cfg.opacity * 255) : 255;
-
-                // BUCKETING - lazy generated, reused
-
-                let buckets = this._dtxBuckets[cfg.geometryId];
-                if (!buckets) {
-                    buckets = createDTXBuckets(cfg.geometry, this._enableVertexWelding, this._enableIndexBucketing);
-                    this._dtxBuckets[cfg.geometryId] = buckets;
-                }
-                cfg.buckets = buckets;
-
-            } else {
-
-                // VBO
-
-                cfg.type = VBO_INSTANCED;
-
-                // PBR
-
-                cfg.color = (cfg.color) ? new Uint8Array([Math.floor(cfg.color[0] * 255), Math.floor(cfg.color[1] * 255), Math.floor(cfg.color[2] * 255)]) : defaultCompressedColor;
-                cfg.opacity = (cfg.opacity !== undefined && cfg.opacity !== null) ? Math.floor(cfg.opacity * 255) : 255;
-                cfg.metallic = (cfg.metallic !== undefined && cfg.metallic !== null) ? Math.floor(cfg.metallic * 255) : 0;
-                cfg.roughness = (cfg.roughness !== undefined && cfg.roughness !== null) ? Math.floor(cfg.roughness * 255) : 255;
-
-                // TEXTURE
-
-                if (cfg.textureSetId) {
-                    cfg.textureSet = this._textureSets[cfg.textureSetId];
-                    // if (!cfg.textureSet) {
-                    //     this.error(`[createMesh] Texture set not found: ${cfg.textureSetId} - ensure that you create it first with createTextureSet()`);
-                    //     return false;
-                    // }
+            // TEXTURE
+            // cfg.textureSetId = cfg.textureSetId || DEFAULT_TEXTURE_SET_ID;
+            if (textureSetId) {
+                cfg.textureSet = this._textureSets[textureSetId];
+                if ((! instancing) && (!cfg.textureSet)) {
+                    this.error(`[createMesh] Texture set not found: ${textureSetId} - ensure that you create it first with createTextureSet()`);
+                    return false;
                 }
             }
         }
 
         cfg.numPrimitives = this._getNumPrimitives(cfg);
 
-        return this._createMesh(cfg);
-    }
-
-    _createDefaultIndices(numIndices) {
-        const indices = [];
-        for (let i = 0; i < numIndices; i++) {
-            indices.push(i);
-        }
-        return indices;
-    }
-
-    _createMesh(cfg) {
         const mesh = new SceneModelMesh(this, cfg.id, cfg.color, cfg.opacity, cfg.transform, cfg.textureSet);
         const pickId = this.scene._renderer.getPickID(mesh);
         mesh.pickId = pickId;
