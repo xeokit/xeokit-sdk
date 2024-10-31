@@ -76,10 +76,12 @@ class DistanceMeasurement extends Component {
         } : null;
 
         const onMouseDown = (event) => {
+            cfg.onMouseDown && cfg.onMouseDown(event, this);
             this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new MouseEvent('mousedown', event));
         } ;
 
         const onMouseUp =  (event) => {
+            cfg.onMouseUp && cfg.onMouseUp(event, this);
             this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new MouseEvent('mouseup', event));
         };
 

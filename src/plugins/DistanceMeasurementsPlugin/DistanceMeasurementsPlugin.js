@@ -337,6 +337,24 @@ class DistanceMeasurementsPlugin extends Plugin {
       });
     };
 
+    this._onMouseDown = (event, measurement) => {
+      this.fire("mouseDown", {
+        plugin: this,
+        distanceMeasurement: measurement,
+        measurement,
+        event,
+      });
+    };
+
+    this._onMouseUp = (event, measurement) => {
+      this.fire("mouseUp", {
+        plugin: this,
+        distanceMeasurement: measurement,
+        measurement,
+        event,
+      });
+    };
+
     this._onContextMenu = (event, measurement) => {
       this.fire("contextMenu", {
         plugin: this,
@@ -502,6 +520,8 @@ class DistanceMeasurementsPlugin extends Plugin {
       labelsOnWires:params.labelsOnWires !== false && this.defaultLabelsOnWires !== false,
       onMouseOver: this._onMouseOver,
       onMouseLeave: this._onMouseLeave,
+      onMouseDown: this._onMouseDown,
+      onMouseUp: this._onMouseUp,
       onContextMenu: this._onContextMenu,
     });
     this._measurements[measurement.id] = measurement;
