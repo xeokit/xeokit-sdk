@@ -3314,7 +3314,7 @@ export class SceneModel extends Component {
     }
 
     _createHashStringFromMatrix(matrix) {
-        const matrixString = matrix.join('');
+        const matrixString = matrix.join(";");
         let hash = 0;
         for (let i = 0; i < matrixString.length; i++) {
             const char = matrixString.charCodeAt(i);
