@@ -5,10 +5,10 @@ import {VBORenderer} from "../VBORenderer.js";
  */
 export class VBOPointsShadowRenderer extends VBORenderer {
 
-    constructor(scene, instancing) {
+    constructor(scene, instancing, primitive) {
         // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
         // but never used (and probably not maintained), as opposed to VBOInstancingPointsShadowRenderer in the same commit
-        super(scene, false, { instancing: instancing, primType: "pointType", progMode: "shadowMode", hashPointsMaterial: true });
+        super(scene, instancing, primitive, false, { progMode: "shadowMode", hashPointsMaterial: true });
     }
 
     _buildVertexShader() {
@@ -16,8 +16,6 @@ export class VBOPointsShadowRenderer extends VBORenderer {
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const pointsMaterial = scene.pointsMaterial._state;
         const src = [];
-        src.push('#version 300 es');
-        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " vertex shader");
         src.push("in vec3 position;");
         src.push("in vec4 color;");
         src.push("in float flags;");
@@ -88,8 +86,6 @@ export class VBOPointsShadowRenderer extends VBORenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
-        src.push('#version 300 es');
-        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
