@@ -3122,41 +3122,22 @@ export class SceneModel extends Component {
         }
         if (cfg.meshIds === undefined) {
             this.error("Config missing: meshIds");
-            return;
+            return null;
         }
-        let flags = 0;
-        if (this._visible && cfg.visible !== false) {
-            flags = flags | ENTITY_FLAGS.VISIBLE;
-        }
-        if (this._pickable && cfg.pickable !== false) {
-            flags = flags | ENTITY_FLAGS.PICKABLE;
-        }
-        if (this._culled && cfg.culled !== false) {
-            flags = flags | ENTITY_FLAGS.CULLED;
-        }
-        if (this._clippable && cfg.clippable !== false) {
-            flags = flags | ENTITY_FLAGS.CLIPPABLE;
-        }
-        if (this._collidable && cfg.collidable !== false) {
-            flags = flags | ENTITY_FLAGS.COLLIDABLE;
-        }
-        if (this._edges && cfg.edges !== false) {
-            flags = flags | ENTITY_FLAGS.EDGES;
-        }
-        if (this._xrayed && cfg.xrayed !== false) {
-            flags = flags | ENTITY_FLAGS.XRAYED;
-        }
-        if (this._highlighted && cfg.highlighted !== false) {
-            flags = flags | ENTITY_FLAGS.HIGHLIGHTED;
-        }
-        if (this._selected && cfg.selected !== false) {
-            flags = flags | ENTITY_FLAGS.SELECTED;
-        }
-        cfg.flags = flags;
-        return this._createEntity(cfg);
-    }
 
-    _createEntity(cfg) {
+        const notFalse = v => v !== false;
+        let flags = 0;
+        flags |= (this._visible     && notFalse(cfg.visible)     && ENTITY_FLAGS.VISIBLE);
+        flags |= (this._pickable    && notFalse(cfg.pickable)    && ENTITY_FLAGS.PICKABLE);
+        flags |= (this._culled      && notFalse(cfg.culled)      && ENTITY_FLAGS.CULLED);
+        flags |= (this._clippable   && notFalse(cfg.clippable)   && ENTITY_FLAGS.CLIPPABLE);
+        flags |= (this._collidable  && notFalse(cfg.collidable)  && ENTITY_FLAGS.COLLIDABLE);
+        flags |= (this._xrayed      && notFalse(cfg.xrayed)      && ENTITY_FLAGS.XRAYED);
+        flags |= (this._highlighted && notFalse(cfg.highlighted) && ENTITY_FLAGS.HIGHLIGHTED);
+        flags |= (this._selected    && notFalse(cfg.selected)    && ENTITY_FLAGS.SELECTED);
+        flags |= (this._edges       && notFalse(cfg.edges)       && ENTITY_FLAGS.EDGES);
+        cfg.flags = flags;
+
         let meshes = [];
         for (let i = 0, len = cfg.meshIds.length; i < len; i++) {
             const meshId = cfg.meshIds[i];
