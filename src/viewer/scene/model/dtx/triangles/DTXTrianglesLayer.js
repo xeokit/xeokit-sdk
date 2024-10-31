@@ -4,7 +4,6 @@ import {Configs} from "../../../../Configs.js";
 import {ENTITY_FLAGS} from '../../ENTITY_FLAGS.js';
 import {RENDER_PASSES} from '../../RENDER_PASSES.js';
 import {getRenderers} from "./renderers/DTXTrianglesRenderers.js";
-import {DTXTrianglesBuffer} from "./lib/DTXTrianglesBuffer.js";
 import {DTXTrianglesState} from "./lib/DTXTrianglesState.js"
 import {dataTextureRamStats} from "./lib/dataTextureRamStats.js";
 import {DTXTrianglesTextureFactory} from "./lib/DTXTrianglesTextureFactory.js";
@@ -54,8 +53,6 @@ export class DTXTrianglesLayer {
 
     constructor(model, cfg) {
 
-        //console.info("Creating DTXTrianglesLayer");
-
         dataTextureRamStats.numberOfLayers++;
 
         this._layerNumber = numLayers++;
@@ -64,7 +61,46 @@ export class DTXTrianglesLayer {
 
         this._renderers = getRenderers(model.scene);
         this.model = model;
-        this._buffer = new DTXTrianglesBuffer();
+        this._buffer = {
+            positionsCompressed: [],
+            lenPositionsCompressed: 0,
+
+            metallicRoughness: [],
+
+            indices8Bits: [],
+            lenIndices8Bits: 0,
+
+            indices16Bits: [],
+            lenIndices16Bits: 0,
+
+            indices32Bits: [],
+            lenIndices32Bits: 0,
+
+            edgeIndices8Bits: [],
+            lenEdgeIndices8Bits: 0,
+
+            edgeIndices16Bits: [],
+            lenEdgeIndices16Bits: 0,
+
+            edgeIndices32Bits: [],
+            lenEdgeIndices32Bits: 0,
+
+            perObjectColors: [],
+            perObjectPickColors: [],
+            perObjectSolid: [],
+            perObjectOffsets: [],
+            perObjectPositionsDecodeMatrices: [],
+            perObjectInstancePositioningMatrices: [],
+            perObjectVertexBases: [],
+            perObjectIndexBaseOffsets: [],
+            perObjectEdgeIndexBaseOffsets: [],
+            perTriangleNumberPortionId8Bits: [],
+            perTriangleNumberPortionId16Bits: [],
+            perTriangleNumberPortionId32Bits: [],
+            perEdgeNumberPortionId8Bits: [],
+            perEdgeNumberPortionId16Bits: [],
+            perEdgeNumberPortionId32Bits: []
+        };
         this._dtxState = new DTXTrianglesState();
         this._dtxTextureFactory = new DTXTrianglesTextureFactory();
 
