@@ -19,11 +19,11 @@ const SNAPPING_LOG_DEPTH_BUF_ENABLED = true; // Improves occlusion accuracy at d
  * @private
  */
 export class VBORenderer {
-    constructor(scene, withSAO = false, {instancing = false, primType, progMode, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, hashLigthsSAO = false, hashGammaOutput = false, colorUniform = false, incrementDrawState = false} = {}) {
+    constructor(scene, instancing, primitive, withSAO = false, {progMode, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, hashLigthsSAO = false, hashGammaOutput = false, colorUniform = false, incrementDrawState = false} = {}) {
         this._scene = scene;
-        this._withSAO = withSAO;
         this._instancing = instancing;
-        this._primType = primType;
+        this._primitive = primitive;
+        this._withSAO = withSAO;
         this._progMode = progMode;
         this._edges = edges;
         this._useAlphaCutoff = useAlphaCutoff;
@@ -82,9 +82,13 @@ export class VBORenderer {
     }
 
     _buildShader() {
+        const preamble = (type, src) => [
+            "#version 300 es",
+            "// " + this._primitive + " " + (this._instancing ? "instancing" : "batching") + " " + this._progMode + " " + type + " shader"
+        ].concat(src);
         return {
-            vertex: this._buildVertexShader(),
-            fragment: this._buildFragmentShader()
+            vertex:   preamble("vertex",   this._buildVertexShader()),
+            fragment: preamble("fragment", this._buildFragmentShader())
         };
     }
 
@@ -555,17 +559,17 @@ export class VBORenderer {
             // TODO: Use drawElements count and offset to draw only one entity
             //=============================================================
 
-            if ((this._progMode === "snapInitMode") && (this._primType !== "pointType")) {
+            if ((this._progMode === "snapInitMode") && (this._primitive !== "points")) {
                 state.indicesBuf.bind();
-                const mode = (this._primType === "lineType") ? gl.LINES : gl.TRIANGLES;
+                const mode = (this._primitive === "lines") ? gl.LINES : gl.TRIANGLES;
                 if (this._instancing) {
                     gl.drawElementsInstanced(mode, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
                 } else {
                     gl.drawElements(mode, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
                 }
                 state.indicesBuf.unbind();
-            } else if ((frameCtx.snapMode === "edge") && (this._primType !== "pointType")) {
-                const indicesBuf = ((this._isSnap !== "lines") && state.edgeIndicesBuf) || state.indicesBuf;
+            } else if ((frameCtx.snapMode === "edge") && (this._primitive !== "points")) {
+                const indicesBuf = ((this._primitive !== "lines") && state.edgeIndicesBuf) || state.indicesBuf;
                 indicesBuf.bind();
                 if (this._instancing) {
                     gl.drawElementsInstanced(gl.LINES, indicesBuf.numItems, indicesBuf.itemType, 0, state.numInstances);
@@ -716,7 +720,7 @@ export class VBORenderer {
                 }
             }
 
-            if (this._primType === "lineType") {
+            if (this._primitive === "lines") {
                 if (this._instancing) {
                     gl.drawElementsInstanced(gl.LINES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
                 } else {
@@ -725,7 +729,7 @@ export class VBORenderer {
                 if (incrementDrawState) {
                     frameCtx.drawElements++;
                 }
-            } else if (this._primType === "pointType") {
+            } else if (this._primitive === "points") {
                 if (this._instancing) {
                     gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
                 } else {
