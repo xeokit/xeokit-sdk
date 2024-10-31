@@ -8,8 +8,8 @@ const SNAPPING_LOG_DEPTH_BUF_ENABLED = true; // Improves occlusion accuracy at d
  */
 export class VBOTrianglesSnapRenderer extends VBORenderer {
 
-    constructor(scene, instancing, isSnapInit) {
-        super(scene, false, { instancing: instancing, primType: "triangleType", progMode: isSnapInit ? "snapInitMode" : "snapMode" });
+    constructor(scene, instancing, primitive, isSnapInit) {
+        super(scene, instancing, primitive, false, { progMode: isSnapInit ? "snapInitMode" : "snapMode" });
     }
 
     _buildVertexShader() {
@@ -17,8 +17,6 @@ export class VBOTrianglesSnapRenderer extends VBORenderer {
         const scene = this._scene;
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
-        src.push('#version 300 es');
-        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " vertex shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -126,8 +124,6 @@ export class VBOTrianglesSnapRenderer extends VBORenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
-        src.push('#version 300 es');
-        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
