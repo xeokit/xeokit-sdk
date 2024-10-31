@@ -938,6 +938,30 @@ class Input extends Component {
         this.KEY_SPACE = 32;
 
         /**
+         * Code for the left mouse button.
+         * @property MOUSE_LEFT_BUTTON
+         * @final
+         * @type {Number}
+         */
+        this.MOUSE_LEFT_BUTTON = 260;
+
+        /**
+         * Code for the middle mouse button.
+         * @property MOUSE_MIDDLE_BUTTON
+         * @final
+         * @type {Number}
+         */
+        this.MOUSE_MIDDLE_BUTTON = 261;
+
+        /**
+         * Code for the right mouse button.
+         * @property MOUSE_RIGHT_BUTTON
+         * @final
+         * @type {Number}
+         */
+        this.MOUSE_RIGHT_BUTTON = 262;
+
+        /**
          * The canvas element that mouse and keyboards are bound to.
          *
          * @final

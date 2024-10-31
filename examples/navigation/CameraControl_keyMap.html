@@ -106,6 +106,12 @@
     keyMap[cameraControl.AXIS_VIEW_FRONT] = [input.KEY_NUM_4];
     keyMap[cameraControl.AXIS_VIEW_TOP] = [input.KEY_NUM_5];
     keyMap[cameraControl.AXIS_VIEW_BOTTOM] = [input.KEY_NUM_6];
+    keyMap[cameraControl.MOUSE_PAN] = [[input.KEY_SHIFT, input.MOUSE_LEFT_BUTTON]];
+    keyMap[cameraControl.MOUSE_ROTATE] = [
+        [input.KEY_SHIFT, input.MOUSE_MIDDLE_BUTTON],
+        [input.KEY_SHIFT, input.MOUSE_RIGHT_BUTTON]
+    ]
+    keyMap[cameraControl.MOUSE_DOLLY] = [[input.KEY_CTRL, input.MOUSE_RIGHT_BUTTON]];
 
     cameraControl.keyMap = keyMap;
 
