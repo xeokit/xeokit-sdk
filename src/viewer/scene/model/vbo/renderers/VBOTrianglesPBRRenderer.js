@@ -10,8 +10,8 @@ TEXTURE_DECODE_FUNCS[sRGBEncoding] = "sRGBToLinear";
  */
 export class VBOTrianglesPBRRenderer extends VBORenderer {
 
-    constructor(scene, instancing, withSAO) {
-        super(scene, withSAO, { instancing: instancing, primType: "triangleType", progMode: "pbrMode", incrementDrawState: true, hashLigthsSAO: true, hashGammaOutput: true });
+    constructor(scene, instancing, primitive, withSAO) {
+        super(scene, instancing, primitive, withSAO, { progMode: "pbrMode", incrementDrawState: true, hashLigthsSAO: true, hashGammaOutput: true });
     }
 
     _buildVertexShader() {
@@ -20,8 +20,6 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const clippingCaps = sectionPlanesState.clippingCaps;
         const src = [];
-        src.push("#version 300 es");
-        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " vertex shader");
         if (! this._instancing) {
             src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
             src.push("precision highp float;");
@@ -165,8 +163,6 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const clippingCaps = sectionPlanesState.clippingCaps;
         const src = [];
-        src.push('#version 300 es');
-        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");

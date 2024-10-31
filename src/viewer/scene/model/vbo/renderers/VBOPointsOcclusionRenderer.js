@@ -11,16 +11,14 @@ const ENABLE_LOG_DEPTH_BUF = false;
  */
 export class VBOPointsOcclusionRenderer extends VBORenderer {
 
-    constructor(scene, instancing) {
-        super(scene, false, { instancing: instancing, primType: "pointType", progMode: "occlusionMode", hashPointsMaterial: true });
+    constructor(scene, instancing, primitive) {
+        super(scene, instancing, primitive, false, { progMode: "occlusionMode", hashPointsMaterial: true });
     }
 
     _buildVertexShader() {
         const scene = this._scene;
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
-        src.push('#version 300 es');
-        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " vertex shader");
         src.push("uniform int renderPass;");
         src.push("in vec3 position;");
         src.push("in vec4 color;");
@@ -96,8 +94,6 @@ export class VBOPointsOcclusionRenderer extends VBORenderer {
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
-        src.push('#version 300 es');
-        src.push("// " + this._primType + " " + this._instancing + " " + this._progMode + " fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
