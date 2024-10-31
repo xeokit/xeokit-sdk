@@ -3620,233 +3620,61 @@ export class SceneModel extends Component {
 
     // -------------- RENDERING ---------------------------------------------------------------------------------------
 
-    /** @private */
-    drawColorOpaque(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawColorOpaque(renderFlags, frameCtx);
-        }
-    }
-
-    /** @private */
-    drawColorTransparent(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawColorTransparent(renderFlags, frameCtx);
-        }
-    }
-
-    /** @private */
-    drawDepth(frameCtx) { // Dedicated to SAO because it skips transparent objects
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawDepth(renderFlags, frameCtx);
-        }
-    }
-
-    /** @private */
-    drawSilhouetteXRayed(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawSilhouetteXRayed(renderFlags, frameCtx);
-        }
-    }
-
-    /** @private */
-    drawSilhouetteHighlighted(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawSilhouetteHighlighted(renderFlags, frameCtx);
-        }
-    }
-
-    /** @private */
-    drawSilhouetteSelected(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawSilhouetteSelected(renderFlags, frameCtx);
-        }
-    }
-
-    /** @private */
-    drawEdgesColorOpaque(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawEdgesColorOpaque(renderFlags, frameCtx);
-        }
-    }
-
-    /** @private */
-    drawEdgesColorTransparent(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawEdgesColorTransparent(renderFlags, frameCtx);
-        }
-    }
-
-    /** @private */
-    drawEdgesXRayed(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawEdgesXRayed(renderFlags, frameCtx);
-        }
-    }
-
-    /** @private */
-    drawEdgesHighlighted(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawEdgesHighlighted(renderFlags, frameCtx);
-        }
-    }
-
-    /** @private */
-    drawEdgesSelected(frameCtx) {
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawEdgesSelected(renderFlags, frameCtx);
-        }
-    }
 
     /**
      * @private
      */
-    drawOcclusion(frameCtx) {
-        if (this.numVisibleLayerPortions === 0) {
+    _withEachVisibleLayer(testNumVisibleLayerPortions, cb) {
+        if (testNumVisibleLayerPortions && (this.numVisibleLayerPortions === 0)) {
             return;
         }
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
             const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawOcclusion(renderFlags, frameCtx);
+            cb(this.layerList[layerIndex]);
         }
     }
 
-    /**
-     * @private
-     */
-    drawShadow(frameCtx) {
-        if (this.numVisibleLayerPortions === 0) {
-            return;
-        }
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawShadow(renderFlags, frameCtx);
-        }
+    drawColorOpaque          (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawColorOpaque          (this.renderFlags, frameCtx)); }
+    drawColorTransparent     (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawColorTransparent     (this.renderFlags, frameCtx)); }
+    drawDepth                (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawDepth                (this.renderFlags, frameCtx)); } // Dedicated to SAO because it skips transparent objects
+    drawSilhouetteXRayed     (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawSilhouetteXRayed     (this.renderFlags, frameCtx)); }
+    drawSilhouetteHighlighted(frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawSilhouetteHighlighted(this.renderFlags, frameCtx)); }
+    drawSilhouetteSelected   (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawSilhouetteSelected   (this.renderFlags, frameCtx)); }
+    drawEdgesColorOpaque     (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawEdgesColorOpaque     (this.renderFlags, frameCtx)); }
+    drawEdgesColorTransparent(frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawEdgesColorTransparent(this.renderFlags, frameCtx)); }
+    drawEdgesXRayed          (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawEdgesXRayed          (this.renderFlags, frameCtx)); }
+    drawEdgesHighlighted     (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawEdgesHighlighted     (this.renderFlags, frameCtx)); }
+    drawEdgesSelected        (frameCtx) { this._withEachVisibleLayer(false, layer => layer.drawEdgesSelected        (this.renderFlags, frameCtx)); }
+    drawOcclusion            (frameCtx) { this._withEachVisibleLayer(true,  layer => layer.drawOcclusion            (this.renderFlags, frameCtx)); }
+    drawShadow               (frameCtx) { this._withEachVisibleLayer(true,  layer => layer.drawShadow               (this.renderFlags, frameCtx)); }
+    drawPickMesh             (frameCtx) { this._withEachVisibleLayer(true,  layer => layer.drawPickMesh             (this.renderFlags, frameCtx)); }
+    drawPickDepths           (frameCtx) { this._withEachVisibleLayer(true,  layer => layer.drawPickDepths           (this.renderFlags, frameCtx)); }
+    drawPickNormals          (frameCtx) { this._withEachVisibleLayer(true,  layer => layer.drawPickNormals          (this.renderFlags, frameCtx)); }
+
+    setPickMatrices(pickViewMatrix, pickProjMatrix) { this._withEachVisibleLayer(true,  layer => layer.setPickMatrices && layer.setPickMatrices(pickViewMatrix, pickProjMatrix)); }
+
+    _drawSnapEachVisibleLayer(frameCtx, isSnapInit) {
+        this._withEachVisibleLayer(
+            true,
+            layer => {
+                frameCtx.snapPickOrigin = [0, 0, 0];
+                frameCtx.snapPickCoordinateScale = [1, 1, 1];
+                frameCtx.snapPickLayerNumber++;
+                if (isSnapInit) {
+                    layer.drawSnapInit(this.renderFlags, frameCtx);
+                } else {
+                    layer.drawSnap(this.renderFlags, frameCtx);
+                }
+                frameCtx.snapPickLayerParams[frameCtx.snapPickLayerNumber] = {
+                    origin: frameCtx.snapPickOrigin.slice(),
+                    coordinateScale: frameCtx.snapPickCoordinateScale.slice(),
+                };
+            });
     }
 
-    /** @private */
-    setPickMatrices(pickViewMatrix, pickProjMatrix) {
-        if (this.numVisibleLayerPortions === 0) {
-            return;
-        }
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            const layer = this.layerList[layerIndex];
-            if (layer.setPickMatrices) {
-                layer.setPickMatrices(pickViewMatrix, pickProjMatrix);
-            }
-        }
-    }
-
-    /** @private */
-    drawPickMesh(frameCtx) {
-        if (this.numVisibleLayerPortions === 0) {
-            return;
-        }
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawPickMesh(renderFlags, frameCtx);
-        }
-    }
-
-    /**
-     * Called by SceneModelMesh.drawPickDepths()
-     * @private
-     */
-    drawPickDepths(frameCtx) {
-        if (this.numVisibleLayerPortions === 0) {
-            return;
-        }
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawPickDepths(renderFlags, frameCtx);
-        }
-    }
-
-    /**
-     * Called by SceneModelMesh.drawPickNormals()
-     * @private
-     */
-    drawPickNormals(frameCtx) {
-        if (this.numVisibleLayerPortions === 0) {
-            return;
-        }
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawPickNormals(renderFlags, frameCtx);
-        }
-    }
-
-    /**
-     * @private
-     */
-    drawSnapInit(frameCtx) {
-        if (this.numVisibleLayerPortions === 0) {
-            return;
-        }
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            const layer = this.layerList[layerIndex];
-            frameCtx.snapPickOrigin = [0, 0, 0];
-            frameCtx.snapPickCoordinateScale = [1, 1, 1];
-            frameCtx.snapPickLayerNumber++;
-            layer.drawSnapInit(renderFlags, frameCtx);
-            frameCtx.snapPickLayerParams[frameCtx.snapPickLayerNumber] = {
-                origin: frameCtx.snapPickOrigin.slice(),
-                coordinateScale: frameCtx.snapPickCoordinateScale.slice(),
-            };
-        }
-    }
-
-    /**
-     * @private
-     */
-    drawSnap(frameCtx) {
-        if (this.numVisibleLayerPortions === 0) {
-            return;
-        }
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            const layer = this.layerList[layerIndex];
-            frameCtx.snapPickOrigin = [0, 0, 0];
-            frameCtx.snapPickCoordinateScale = [1, 1, 1];
-            frameCtx.snapPickLayerNumber++;
-            layer.drawSnap(renderFlags, frameCtx);
-            frameCtx.snapPickLayerParams[frameCtx.snapPickLayerNumber] = {
-                origin: frameCtx.snapPickOrigin.slice(),
-                coordinateScale: frameCtx.snapPickCoordinateScale.slice(),
-            };
-        }
-    }
+    drawSnapInit(frameCtx) { this._drawSnapEachVisibleLayer(frameCtx, true ); }
+    drawSnap(frameCtx)     { this._drawSnapEachVisibleLayer(frameCtx, false); }
 
     /**
      * Destroys this SceneModel.
