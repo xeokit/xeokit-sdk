@@ -1133,7 +1133,7 @@ export class SceneModel extends Component {
         this._enableVertexWelding = false; // Not needed for most objects, and very expensive, so disabled
         this._enableIndexBucketing = false; // Until fixed: https://github.com/xeokit/xeokit-sdk/issues/1204
 
-        this._vboBatchingLayerScratchMemory = getScratchMemory();
+        this._scratchMemory = getScratchMemory();
         this._textureTranscoder = cfg.textureTranscoder || getKTX2TextureTranscoder(this.scene.viewer);
 
         this._maxGeometryBatchSize = cfg.maxGeometryBatchSize ?? 5000000;
@@ -1143,8 +1143,7 @@ export class SceneModel extends Component {
 
         this._quantizationRanges = {};
 
-        this._vboInstancingLayers = {};
-        this._vboBatchingLayers = {};
+        this._vboLayers = {};
         this._dtxLayers = {};
 
         this._meshList = [];
@@ -3093,11 +3092,8 @@ export class SceneModel extends Component {
                 mesh.aabb = cfg.aabb;
                 break;
             case VBO_BATCHED:
-                mesh.layer = this._getVBOBatchingLayer(cfg);
-                mesh.aabb = cfg.aabb;
-                break;
             case VBO_INSTANCED:
-                mesh.layer = this._getVBOInstancingLayer(cfg);
+                mesh.layer = this._getVBOLayer(cfg.type === VBO_INSTANCED, cfg);
                 mesh.aabb = cfg.aabb;
                 break;
         }
@@ -3201,96 +3197,46 @@ export class SceneModel extends Component {
         return dtxLayer;
     }
 
-    _getVBOBatchingLayer(cfg) {
-        const model = this;
+    _getVBOLayer(instancing, cfg) {
+        const geometry = instancing && cfg.geometry;
+        const primitive = instancing ? geometry.primitive : cfg.primitive;
         const origin = cfg.origin;
-        const renderLayer = cfg.renderLayer || 0;
-        const posDecode = cfg.positionsDecodeMatrix || cfg.positionsDecodeBoundary;
+        const posDecode = (! instancing) && (cfg.positionsDecodeMatrix || cfg.positionsDecodeBoundary);
         const positionsDecodeHash = posDecode ? (JSON.stringify(posDecode).split("").reduce((hash, char) => (((hash << 5) - hash + char.charCodeAt(0)) | 0), 0) >>> 0).toString(16) : "-";
         const textureSetId = cfg.textureSetId || "-";
-        const layerId = `${Math.round(origin[0])}.${Math.round(origin[1])}.${Math.round(origin[2])}.${cfg.primitive}.${positionsDecodeHash}.${textureSetId}`;
-        let vboBatchingLayer = this._vboBatchingLayers[layerId];
-        if (vboBatchingLayer) {
-            const lenPositions = cfg.positionsCompressed ? cfg.positionsCompressed.length : cfg.positions.length;
-            const canCreatePortion = vboBatchingLayer.canCreatePortion(
-                lenPositions, (cfg.primitive === "points") ? 0 : cfg.indices.length);
-            if (!canCreatePortion) {
-                vboBatchingLayer.finalize();
-                delete this._vboBatchingLayers[layerId];
-                vboBatchingLayer = null;
-            } else {
-                return vboBatchingLayer;
-            }
-        }
-        let textureSet = cfg.textureSet;
-        {
-            switch (cfg.primitive) {
-                case "triangles":
-                case "solid":
-                case "surface":
-                case "lines":
-                case "points":
-                    vboBatchingLayer = new VBOLayer(false, {
-                        model,
-                        layerIndex: 0, // This is set in #finalize()
-                        scratchMemory: this._vboBatchingLayerScratchMemory,
-                        positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
-                        uvDecodeMatrix: cfg.uvDecodeMatrix, // Can be undefined
-                        textureSet,
-                        origin,
-                        maxGeometryBatchSize: this._maxGeometryBatchSize,
-                        primitive: cfg.primitive
-                    });
-                    break;
-            }
-        }
-        this._vboBatchingLayers[layerId] = vboBatchingLayer;
-        this.layerList.push(vboBatchingLayer);
-        this._layersToFinalize.push(vboBatchingLayer);
-        return vboBatchingLayer;
-    }
+        const geometryId = instancing ? cfg.geometryId : "-";
+        const layerId = (instancing ? "instancing" : "batching") + `.${Math.round(origin[0])}.${Math.round(origin[1])}.${Math.round(origin[2])}.${primitive}.${positionsDecodeHash}.${textureSetId}.${geometryId}`;
 
-    _getVBOInstancingLayer(cfg) {
-        const model = this;
-        const origin = cfg.origin;
-        const textureSetId = cfg.textureSetId || "-";
-        const geometryId = cfg.geometryId;
-        const layerId = `${Math.round(origin[0])}.${Math.round(origin[1])}.${Math.round(origin[2])}.${textureSetId}.${geometryId}`;
-        let vboInstancingLayer = this._vboInstancingLayers[layerId];
-        if (vboInstancingLayer) {
-            return vboInstancingLayer;
-        }
-        let textureSet = cfg.textureSet;
-        const geometry = cfg.geometry;
-        while (!vboInstancingLayer) {
-            switch (geometry.primitive) {
-                case "triangles":
-                case "solid":
-                case "surface":
-                case "lines":
-                case "points":
-                    vboInstancingLayer = new VBOLayer(true, {
-                        model,
-                        scratchMemory: this._vboBatchingLayerScratchMemory,
-                        textureSet,
-                        geometry,
-                        origin,
-                        layerIndex: 0,
-                        primitive: geometry.primitive
-                    });
-                    break;
+        if ((! instancing) && (layerId in this._vboLayers)) {
+            const layer = this._vboLayers[layerId];
+            const lenPositions = cfg.positionsCompressed ? cfg.positionsCompressed.length : cfg.positions.length;
+            if (! layer.canCreatePortion(lenPositions, (primitive === "points") ? 0 : cfg.indices.length)) {
+                layer.finalize();
+                delete this._vboLayers[layerId];
             }
-            // const lenPositions = geometry.positionsCompressed.length;
-            // if (!vboInstancingLayer.canCreatePortion(lenPositions, geometry.indices.length)) { // FIXME: indices should be optional
-            //     vboInstancingLayer.finalize();
-            //     delete this._vboInstancingLayers[layerId];
-            //     vboInstancingLayer = null;
-            // }
         }
-        this._vboInstancingLayers[layerId] = vboInstancingLayer;
-        this.layerList.push(vboInstancingLayer);
-        this._layersToFinalize.push(vboInstancingLayer);
-        return vboInstancingLayer;
+
+        if (! (layerId in this._vboLayers)) {
+            const layer = new VBOLayer(instancing, {
+                model: this,
+                primitive: primitive,
+                origin: origin,
+                textureSet: cfg.textureSet,
+                scratchMemory: this._scratchMemory,
+                layerIndex: 0,
+                ...(instancing ? {
+                    geometry: geometry,
+                } : {
+                    maxGeometryBatchSize: this._maxGeometryBatchSize,
+                    positionsDecodeMatrix: cfg.positionsDecodeMatrix,  // Can be undefined
+                    uvDecodeMatrix: cfg.uvDecodeMatrix, // Can be undefined
+                })
+            });
+            this.layerList.push(layer);
+            this._layersToFinalize.push(layer);
+            this._vboLayers[layerId] = layer;
+        }
+        return this._vboLayers[layerId];
     }
 
     /**
@@ -3412,8 +3358,7 @@ export class SceneModel extends Component {
             const layer = this._layersToFinalize[i];
             layer.finalize();
         }
-        this._vboBatchingLayers = {};
-        this._vboInstancingLayers = {};
+        this._vboLayers = {};
         this._dtxLayers = {};
         this._layersToFinalize = [];
         for (let i = 0, len = this._entitiesToFinalize.length; i < len; i++) {
@@ -3667,18 +3612,8 @@ export class SceneModel extends Component {
      * Destroys this SceneModel.
      */
     destroy() {
-        for (let layerId in this._vboBatchingLayers) {
-            if (this._vboBatchingLayers.hasOwnProperty(layerId)) {
-                this._vboBatchingLayers[layerId].destroy();
-            }
-        }
-        this._vboBatchingLayers = {};
-        for (let layerId in this._vboInstancingLayers) {
-            if (this._vboInstancingLayers.hasOwnProperty(layerId)) {
-                this._vboInstancingLayers[layerId].destroy();
-            }
-        }
-        this._vboInstancingLayers = {};
+        Object.values(this._vboLayers).forEach(l => l.destroy());
+        this._vboLayers = {};
         this.scene.camera.off(this._onCameraViewMatrix);
         this.scene.off(this._onTick);
         for (let i = 0, len = this.layerList.length; i < len; i++) {
@@ -3688,7 +3623,7 @@ export class SceneModel extends Component {
         for (let i = 0, len = this._entityList.length; i < len; i++) {
             this._entityList[i]._destroy();
         }
-        this._layersToFinalize = {};
+        this._layersToFinalize = [];
         // Object.entries(this._geometries).forEach(([id, geometry]) => {
         //     geometry.destroy();
         // });
