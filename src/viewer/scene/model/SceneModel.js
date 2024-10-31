@@ -3077,29 +3077,14 @@ export class SceneModel extends Component {
 
     _createMesh(cfg) {
         const mesh = new SceneModelMesh(this, cfg.id, cfg.color, cfg.opacity, cfg.transform, cfg.textureSet);
-        mesh.pickId = this.scene._renderer.getPickID(mesh);
-        const pickId = mesh.pickId;
-        const a = pickId >> 24 & 0xFF;
-        const b = pickId >> 16 & 0xFF;
-        const g = pickId >> 8 & 0xFF;
-        const r = pickId & 0xFF;
-        cfg.pickColor = new Uint8Array([r, g, b, a]); // Quantized pick color
-        cfg.solid = (cfg.primitive === "solid");
+        const pickId = this.scene._renderer.getPickID(mesh);
+        mesh.pickId = pickId;
         mesh.origin = math.vec3(cfg.origin);
-        switch (cfg.type) {
-            case DTX:
-                mesh.layer = this._getDTXLayer(cfg);
-                mesh.aabb = cfg.aabb;
-                break;
-            case VBO_BATCHED:
-            case VBO_INSTANCED:
-                mesh.layer = this._getVBOLayer(cfg.type === VBO_INSTANCED, cfg);
-                mesh.aabb = cfg.aabb;
-                break;
-        }
-        if (cfg.transform) {
-            cfg.meshMatrix = cfg.transform.worldMatrix;
-        }
+        mesh.layer = (cfg.type === DTX) ? this._getDTXLayer(cfg) : this._getVBOLayer(cfg.type === VBO_INSTANCED, cfg);
+        mesh.aabb = cfg.aabb;
+        cfg.pickColor = new Uint8Array([pickId & 0xFF, pickId >> 8 & 0xFF, pickId >> 16 & 0xFF, pickId >> 24 & 0xFF]); // Quantized pick color
+        cfg.solid = (cfg.primitive === "solid");
+        cfg.meshMatrix = cfg.transform ? cfg.transform.worldMatrix : cfg.meshMatrix;
         mesh.portionId = mesh.layer.createPortion(mesh, cfg);
         mesh.numPrimitives = cfg.numPrimitives;
         this._meshes[cfg.id] = mesh;
