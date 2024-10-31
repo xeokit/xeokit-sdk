@@ -2893,7 +2893,7 @@ export class SceneModel extends Component {
                 // BUCKETING
 
                 if (!cfg.buckets) {
-                    cfg.buckets = createDTXBuckets(cfg, this._enableVertexWelding && this._enableIndexBucketing);
+                    cfg.buckets = createDTXBuckets(cfg, this._enableVertexWelding, this._enableIndexBucketing);
                 }
 
             } else {
