@@ -4,7 +4,6 @@ import {buildEdgeIndices} from '../math/buildEdgeIndices.js';
 import {SceneModelMesh} from './SceneModelMesh.js';
 import {getScratchMemory, putScratchMemory} from "./vbo/ScratchMemory.js";
 import {VBOLayer} from './vbo/VBOLayer.js';
-import {DTXLinesLayer} from "./dtx/lines/DTXLinesLayer.js";
 import {DTXTrianglesLayer} from "./dtx/triangles/DTXTrianglesLayer.js";
 import {ENTITY_FLAGS} from './ENTITY_FLAGS.js';
 import {RenderFlags} from "../webgl/RenderFlags.js";
@@ -2983,9 +2982,6 @@ export class SceneModel extends Component {
             case "solid":
             case "surface":
                 dtxLayer = new DTXTrianglesLayer(this, {layerIndex: 0, origin, primitive}); // layerIndex is set in #finalize()
-                break;
-            case "lines":
-                dtxLayer = new DTXLinesLayer(this, {layerIndex: 0, origin, primitive}); // layerIndex is set in #finalize()
                 break;
             default:
                 return;
