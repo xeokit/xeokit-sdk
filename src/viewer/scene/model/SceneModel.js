@@ -2761,7 +2761,7 @@ export class SceneModel extends Component {
                 cfg.primitive = "triangles";
             }
             if (cfg.primitive !== "points" && cfg.primitive !== "lines" && cfg.primitive !== "triangles" && cfg.primitive !== "solid" && cfg.primitive !== "surface") {
-                this.error(`Unsupported value for 'primitive': '${primitive}'  ('geometryId' is absent) - supported values are 'points', 'lines', 'triangles', 'solid' and 'surface'.`);
+                this.error(`Unsupported value for 'primitive': '${cfg.primitive}'  ('geometryId' is absent) - supported values are 'points', 'lines', 'triangles', 'solid' and 'surface'.`);
                 return false;
             }
             if (!cfg.positions && !cfg.positionsCompressed && !cfg.buckets) {
@@ -2785,7 +2785,6 @@ export class SceneModel extends Component {
                 cfg.indices = this._createDefaultIndices(numPositions);
             }
             if (!cfg.buckets && !cfg.indices && cfg.primitive !== "points") {
-                cfg.indices = this._createDefaultIndices(numIndices)
                 this.error(`Param expected: indices (required for '${cfg.primitive}' primitive type)`);
                 return false;
             }
