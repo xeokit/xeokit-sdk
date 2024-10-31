@@ -54,13 +54,13 @@ const getRenderers = (function() {
             // Pre-initialize certain renderers that would otherwise be lazy-initialised on user interaction,
             // such as picking or emphasis, so that there is no delay when user first begins interacting with the viewer.
             const eager = function(klass, ...args) {
-                let renderer = new klass(scene, instancing, ...args);
+                let renderer = new klass(scene, instancing, primitive, ...args);
                 return {
                     drawLayer: (frameCtx, layer, renderPass) => renderer.drawLayer(frameCtx, layer, renderPass),
                     revalidate: force => {
                         if (force || (! renderer.getValid())) {
                             renderer.destroy();
-                            renderer = new klass(scene, instancing, ...args);
+                            renderer = new klass(scene, instancing, primitive, ...args);
                         }
                     }
                 };
@@ -71,7 +71,7 @@ const getRenderers = (function() {
                 return {
                     drawLayer: (frameCtx, layer, renderPass) => {
                         if (! renderer) {
-                            renderer = new klass(scene, instancing, ...args);
+                            renderer = new klass(scene, instancing, primitive, ...args);
                         }
                         renderer.drawLayer(frameCtx, layer, renderPass);
                     },
