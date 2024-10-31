@@ -2581,74 +2581,39 @@ export class SceneModel extends Component {
         const textureSetId = cfg.id;
         if (textureSetId === undefined || textureSetId === null) {
             this.error("[createTextureSet] Config missing: id");
-            return;
+            return false;
         }
         if (this._textureSets[textureSetId]) {
             this.error(`[createTextureSet] Texture set already created: ${textureSetId}`);
-            return;
+            return false;
         }
-        let colorTexture;
-        if (cfg.colorTextureId !== undefined && cfg.colorTextureId !== null) {
-            colorTexture = this._textures[cfg.colorTextureId];
-            if (!colorTexture) {
-                this.error(`[createTextureSet] Texture not found: ${cfg.colorTextureId} - ensure that you create it first with createTexture()`);
-                return;
+
+        const getTexture = (cfgId, defaultKey) => {
+            const id = cfgId ?? defaultKey;
+            if (id in this._textures) {
+                return this._textures[id];
+            } else {
+                throw cfgId;
             }
-        } else {
-            colorTexture = this._textures[DEFAULT_COLOR_TEXTURE_ID];
+        };
+
+        try {
+            const textureSet = new SceneModelTextureSet({
+                id: textureSetId,
+                model: this,
+                alphaCutoff: cfg.alphaCutoff,
+                colorTexture:             getTexture(cfg.colorTextureId,             DEFAULT_COLOR_TEXTURE_ID),
+                metallicRoughnessTexture: getTexture(cfg.metallicRoughnessTextureId, DEFAULT_METAL_ROUGH_TEXTURE_ID),
+                normalsTexture:           getTexture(cfg.normalsTextureId,           DEFAULT_NORMALS_TEXTURE_ID),
+                emissiveTexture:          getTexture(cfg.emissiveTextureId,          DEFAULT_EMISSIVE_TEXTURE_ID),
+                occlusionTexture:         getTexture(cfg.occlusionTextureId,         DEFAULT_OCCLUSION_TEXTURE_ID)
+            });
+            this._textureSets[textureSetId] = textureSet;
+            return textureSet;
+        } catch (id) {
+            this.error(`[createTextureSet] Texture not found: ${id} - ensure that you create it first with createTexture()`);
+            return false;
         }
-        let metallicRoughnessTexture;
-        if (cfg.metallicRoughnessTextureId !== undefined && cfg.metallicRoughnessTextureId !== null) {
-            metallicRoughnessTexture = this._textures[cfg.metallicRoughnessTextureId];
-            if (!metallicRoughnessTexture) {
-                this.error(`[createTextureSet] Texture not found: ${cfg.metallicRoughnessTextureId} - ensure that you create it first with createTexture()`);
-                return;
-            }
-        } else {
-            metallicRoughnessTexture = this._textures[DEFAULT_METAL_ROUGH_TEXTURE_ID];
-        }
-        let normalsTexture;
-        if (cfg.normalsTextureId !== undefined && cfg.normalsTextureId !== null) {
-            normalsTexture = this._textures[cfg.normalsTextureId];
-            if (!normalsTexture) {
-                this.error(`[createTextureSet] Texture not found: ${cfg.normalsTextureId} - ensure that you create it first with createTexture()`);
-                return;
-            }
-        } else {
-            normalsTexture = this._textures[DEFAULT_NORMALS_TEXTURE_ID];
-        }
-        let emissiveTexture;
-        if (cfg.emissiveTextureId !== undefined && cfg.emissiveTextureId !== null) {
-            emissiveTexture = this._textures[cfg.emissiveTextureId];
-            if (!emissiveTexture) {
-                this.error(`[createTextureSet] Texture not found: ${cfg.emissiveTextureId} - ensure that you create it first with createTexture()`);
-                return;
-            }
-        } else {
-            emissiveTexture = this._textures[DEFAULT_EMISSIVE_TEXTURE_ID];
-        }
-        let occlusionTexture;
-        if (cfg.occlusionTextureId !== undefined && cfg.occlusionTextureId !== null) {
-            occlusionTexture = this._textures[cfg.occlusionTextureId];
-            if (!occlusionTexture) {
-                this.error(`[createTextureSet] Texture not found: ${cfg.occlusionTextureId} - ensure that you create it first with createTexture()`);
-                return;
-            }
-        } else {
-            occlusionTexture = this._textures[DEFAULT_OCCLUSION_TEXTURE_ID];
-        }
-        const textureSet = new SceneModelTextureSet({
-            id: textureSetId,
-            model: this,
-            colorTexture,
-            alphaCutoff: cfg.alphaCutoff,
-            metallicRoughnessTexture,
-            normalsTexture,
-            emissiveTexture,
-            occlusionTexture
-        });
-        this._textureSets[textureSetId] = textureSet;
-        return textureSet;
     }
 
     /**
