@@ -3217,10 +3217,20 @@ export class SceneModel extends Component {
         const layerId = `${Math.round(origin[0])}.${Math.round(origin[1])}.${Math.round(origin[2])}.${cfg.primitive}.${positionsDecodeHash}.${textureSetId}`;
         let vboBatchingLayer = this._vboBatchingLayers[layerId];
         if (vboBatchingLayer) {
-            return vboBatchingLayer;
+            const lenPositions = cfg.positionsCompressed ? cfg.positionsCompressed.length : cfg.positions.length;
+            const canCreatePortion = (cfg.primitive === "points")
+                ? vboBatchingLayer.canCreatePortion(lenPositions)
+                : vboBatchingLayer.canCreatePortion(lenPositions, cfg.indices.length);
+            if (!canCreatePortion) {
+                vboBatchingLayer.finalize();
+                delete this._vboBatchingLayers[layerId];
+                vboBatchingLayer = null;
+            } else {
+                return vboBatchingLayer;
+            }
         }
         let textureSet = cfg.textureSet;
-        while (!vboBatchingLayer) {
+        {
             switch (cfg.primitive) {
                 case "triangles":
                     // console.info(`[SceneModel ${this.id}]: creating TrianglesBatchingLayer`);
@@ -3296,15 +3306,6 @@ export class SceneModel extends Component {
                         primitive: cfg.primitive
                     });
                     break;
-            }
-            const lenPositions = cfg.positionsCompressed ? cfg.positionsCompressed.length : cfg.positions.length;
-            const canCreatePortion = (cfg.primitive === "points")
-                ? vboBatchingLayer.canCreatePortion(lenPositions)
-                : vboBatchingLayer.canCreatePortion(lenPositions, cfg.indices.length);
-            if (!canCreatePortion) {
-                vboBatchingLayer.finalize();
-                delete this._vboBatchingLayers[layerId];
-                vboBatchingLayer = null;
             }
         }
         this._vboBatchingLayers[layerId] = vboBatchingLayer;
