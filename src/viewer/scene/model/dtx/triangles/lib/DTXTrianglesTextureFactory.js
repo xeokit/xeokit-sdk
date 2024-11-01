@@ -41,18 +41,17 @@ export class DTXTrianglesTextureFactory {
 
     }
 
-    /**
-     * Enables the currently binded ````WebGLTexture```` to be used as a data texture.
-     *
-     * @param {WebGL2RenderingContext} gl
-     *
-     * @private
-     */
-    disableBindedTextureFiltering(gl) {
+    _createBindableDataTexture(gl, internalFormat, textureWidth, textureHeight, format, type, texArray, passTexArray) {
+        const texture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.texStorage2D(gl.TEXTURE_2D, 1, internalFormat, textureWidth, textureHeight);
+        gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, format, type, texArray, 0);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+        return new BindableDataTexture(gl, texture, textureWidth, textureHeight, passTexArray ? texArray : null);
     }
 
     /**
@@ -150,16 +149,35 @@ export class DTXTrianglesTextureFactory {
             // is-solid flag
             texArray.set([solid[i] ? 1 : 0, 0, 0, 0], i * 32 + 28);
         }
-        const texture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGBA8UI, textureWidth, textureHeight);
-        gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, gl.RGBA_INTEGER, gl.UNSIGNED_BYTE, texArray, 0);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.bindTexture(gl.TEXTURE_2D, null);
-        return new BindableDataTexture(gl, texture, textureWidth, textureHeight, texArray);
+
+        return this._createBindableDataTexture(gl, gl.RGBA8UI, textureWidth, textureHeight, gl.RGBA_INTEGER, gl.UNSIGNED_BYTE, texArray, true);
+    }
+
+    _createDataTexture(gl, dataArrays, dataLen, dataWidth, arrayType, internalFormat, type, textureWidth, format, statsProp, passTexArray) {
+        const textureHeight = Math.ceil(dataLen / textureWidth);
+        if (textureHeight === 0) {
+            throw "texture height===0";
+        }
+        const texArray = new arrayType(textureWidth * textureHeight * dataWidth);
+        dataTextureRamStats[statsProp] += texArray.byteLength;
+        dataTextureRamStats.numberOfTextures++;
+        for (let i = 0, j = 0, len = dataArrays.length; i < len; i++) {
+            const pc = dataArrays[i];
+            texArray.set(pc, j);
+            j += pc.length;
+        }
+        return this._createBindableDataTexture(gl, internalFormat, textureWidth, textureHeight, format, type, texArray, passTexArray);
+    }
+
+
+    _createTextureForMatrices(gl, name, matrices, statsProp, passTexArray) {
+
+        const numMatrices = matrices.length;
+        if (numMatrices === 0) {
+            throw "num " + name + " matrices===0";
+        }
+        // in one row we can fit 512 matrices
+        return this._createDataTexture(gl, matrices, numMatrices, 16, Float32Array, gl.RGBA32F, gl.FLOAT, 512 * 4, gl.RGBA, statsProp, passTexArray);
     }
 
     /**
@@ -176,29 +194,7 @@ export class DTXTrianglesTextureFactory {
      * @returns {BindableDataTexture}
      */
     createTextureForInstancingMatrices(gl, instanceMatrices) {
-        const numMatrices = instanceMatrices.length;
-        if (numMatrices === 0) {
-            throw "num instance matrices===0";
-        }
-        // in one row we can fit 512 matrices
-        const textureWidth = 512 * 4;
-        const textureHeight = Math.ceil(numMatrices / (textureWidth / 4));
-        const texArray = new Float32Array(4 * textureWidth * textureHeight);
-        // dataTextureRamStats.sizeDataPositionDecodeMatrices += texArray.byteLength;
-        dataTextureRamStats.numberOfTextures++;
-        for (let i = 0; i < instanceMatrices.length; i++) {            // 4x4 values
-            texArray.set(instanceMatrices[i], i * 16);
-        }
-        const texture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGBA32F, textureWidth, textureHeight);
-        gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, gl.RGBA, gl.FLOAT, texArray, 0);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.bindTexture(gl.TEXTURE_2D, null);
-        return new BindableDataTexture(gl, texture, textureWidth, textureHeight, texArray);
+        return this._createTextureForMatrices(gl, "instance", instanceMatrices, "sizeDataInstancesMatrices", true);
     }
 
     /**
@@ -215,29 +211,19 @@ export class DTXTrianglesTextureFactory {
      * @returns {BindableDataTexture}
      */
     createTextureForPositionsDecodeMatrices(gl, positionDecodeMatrices) {
-        const numMatrices = positionDecodeMatrices.length;
-        if (numMatrices === 0) {
-            throw "num decode+entity matrices===0";
-        }
-        // in one row we can fit 512 matrices
-        const textureWidth = 512 * 4;
-        const textureHeight = Math.ceil(numMatrices / (textureWidth / 4));
-        const texArray = new Float32Array(4 * textureWidth * textureHeight);
-        dataTextureRamStats.sizeDataPositionDecodeMatrices += texArray.byteLength;
-        dataTextureRamStats.numberOfTextures++;
-        for (let i = 0; i < positionDecodeMatrices.length; i++) {            // 4x4 values
-            texArray.set(positionDecodeMatrices[i], i * 16);
-        }
-        const texture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGBA32F, textureWidth, textureHeight);
-        gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, gl.RGBA, gl.FLOAT, texArray, 0);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.bindTexture(gl.TEXTURE_2D, null);
-        return new BindableDataTexture(gl, texture, textureWidth, textureHeight);
+        return this._createTextureForMatrices(gl, "decode+entity", positionDecodeMatrices, "sizeDataPositionDecodeMatrices", false);
+    }
+
+
+    _createTextureForSingleItems(gl, dataArrays, lenData, arrayType, internalFormat, type, itemWidth, format, statsProp) {
+        return ((lenData === 0)
+                ? { texture: null, textureHeight: 0 }
+                : this._createDataTexture(gl, dataArrays, lenData / itemWidth, itemWidth, arrayType, internalFormat, type, 4096, format, statsProp, false));
+    }
+
+
+    _createTextureForIndices(gl, indicesArrays, lenIndices, arrayType, internalFormat, type) {
+        return this._createTextureForSingleItems(gl, indicesArrays, lenIndices, arrayType, internalFormat, type, 3, gl.RGB_INTEGER, "sizeDataTextureIndices");
     }
 
     /**
@@ -248,30 +234,7 @@ export class DTXTrianglesTextureFactory {
      * @returns {BindableDataTexture}
      */
     createTextureFor8BitIndices(gl, indicesArrays, lenIndices) {
-        if (lenIndices === 0) {
-            return {texture: null, textureHeight: 0,};
-        }
-        const textureWidth = 4096;
-        const textureHeight = Math.ceil(lenIndices / 3 / textureWidth);
-        if (textureHeight === 0) {
-            throw "texture height===0";
-        }
-        const texArraySize = textureWidth * textureHeight * 3;
-        const texArray = new Uint8Array(texArraySize);
-        dataTextureRamStats.sizeDataTextureIndices += texArray.byteLength;
-        dataTextureRamStats.numberOfTextures++;
-        for (let i = 0, j = 0, len = indicesArrays.length; i < len; i++) {
-            const pc = indicesArrays[i];
-            texArray.set(pc, j);
-            j += pc.length;
-        }
-        const texture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGB8UI, textureWidth, textureHeight);
-        gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, gl.RGB_INTEGER, gl.UNSIGNED_BYTE, texArray, 0);
-        this.disableBindedTextureFiltering(gl);
-        gl.bindTexture(gl.TEXTURE_2D, null);
-        return new BindableDataTexture(gl, texture, textureWidth, textureHeight);
+        return this._createTextureForIndices(gl, indicesArrays, lenIndices, Uint8Array, gl.RGB8UI, gl.UNSIGNED_BYTE);
     }
 
     /**
@@ -282,30 +245,7 @@ export class DTXTrianglesTextureFactory {
      * @returns {BindableDataTexture}
      */
     createTextureFor16BitIndices(gl, indicesArrays, lenIndices) {
-        if (lenIndices === 0) {
-            return {texture: null, textureHeight: 0,};
-        }
-        const textureWidth = 4096;
-        const textureHeight = Math.ceil(lenIndices / 3 / textureWidth);
-        if (textureHeight === 0) {
-            throw "texture height===0";
-        }
-        const texArraySize = textureWidth * textureHeight * 3;
-        const texArray = new Uint16Array(texArraySize);
-        dataTextureRamStats.sizeDataTextureIndices += texArray.byteLength;
-        dataTextureRamStats.numberOfTextures++;
-        for (let i = 0, j = 0, len = indicesArrays.length; i < len; i++) {
-            const pc = indicesArrays[i];
-            texArray.set(pc, j);
-            j += pc.length;
-        }
-        const texture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGB16UI, textureWidth, textureHeight);
-        gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, gl.RGB_INTEGER, gl.UNSIGNED_SHORT, texArray, 0);
-        this.disableBindedTextureFiltering(gl);
-        gl.bindTexture(gl.TEXTURE_2D, null);
-        return new BindableDataTexture(gl, texture, textureWidth, textureHeight);
+        return this._createTextureForIndices(gl, indicesArrays, lenIndices, Uint16Array, gl.RGB16UI, gl.UNSIGNED_SHORT);
     }
 
     /**
@@ -316,30 +256,12 @@ export class DTXTrianglesTextureFactory {
      * @returns {BindableDataTexture}
      */
     createTextureFor32BitIndices(gl, indicesArrays, lenIndices) {
-        if (lenIndices === 0) {
-            return {texture: null, textureHeight: 0,};
-        }
-        const textureWidth = 4096;
-        const textureHeight = Math.ceil(lenIndices / 3 / textureWidth);
-        if (textureHeight === 0) {
-            throw "texture height===0";
-        }
-        const texArraySize = textureWidth * textureHeight * 3;
-        const texArray = new Uint32Array(texArraySize);
-        dataTextureRamStats.sizeDataTextureIndices += texArray.byteLength;
-        dataTextureRamStats.numberOfTextures++;
-        for (let i = 0, j = 0, len = indicesArrays.length; i < len; i++) {
-            const pc = indicesArrays[i];
-            texArray.set(pc, j);
-            j += pc.length;
-        }
-        const texture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGB32UI, textureWidth, textureHeight);
-        gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, gl.RGB_INTEGER, gl.UNSIGNED_INT, texArray, 0);
-        this.disableBindedTextureFiltering(gl);
-        gl.bindTexture(gl.TEXTURE_2D, null);
-        return new BindableDataTexture(gl, texture, textureWidth, textureHeight);
+        return this._createTextureForIndices(gl, indicesArrays, lenIndices, Uint32Array, gl.RGB32UI, gl.UNSIGNED_INT);
+    }
+
+
+    _createTextureForEdgeIndices(gl, indicesArrays, lenIndices, arrayType, internalFormat, type) {
+        return this._createTextureForSingleItems(gl, indicesArrays, lenIndices, arrayType, internalFormat, type, 2, gl.RG_INTEGER, "sizeDataTextureEdgeIndices");
     }
 
     /**
@@ -350,30 +272,7 @@ export class DTXTrianglesTextureFactory {
      * @returns {BindableDataTexture}
      */
     createTextureFor8BitsEdgeIndices(gl, indicesArrays, lenIndices) {
-        if (lenIndices === 0) {
-            return {texture: null, textureHeight: 0,};
-        }
-        const textureWidth = 4096;
-        const textureHeight = Math.ceil(lenIndices / 2 / textureWidth);
-        if (textureHeight === 0) {
-            throw "texture height===0";
-        }
-        const texArraySize = textureWidth * textureHeight * 2;
-        const texArray = new Uint8Array(texArraySize);
-        dataTextureRamStats.sizeDataTextureEdgeIndices += texArray.byteLength;
-        dataTextureRamStats.numberOfTextures++;
-        for (let i = 0, j = 0, len = indicesArrays.length; i < len; i++) {
-            const pc = indicesArrays[i];
-            texArray.set(pc, j);
-            j += pc.length;
-        }
-        const texture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RG8UI, textureWidth, textureHeight);
-        gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, gl.RG_INTEGER, gl.UNSIGNED_BYTE, texArray, 0);
-        this.disableBindedTextureFiltering(gl);
-        gl.bindTexture(gl.TEXTURE_2D, null);
-        return new BindableDataTexture(gl, texture, textureWidth, textureHeight);
+        return this._createTextureForEdgeIndices(gl, indicesArrays, lenIndices, Uint8Array, gl.RG8UI, gl.UNSIGNED_BYTE);
     }
 
     /**
@@ -384,30 +283,7 @@ export class DTXTrianglesTextureFactory {
      * @returns {BindableDataTexture}
      */
     createTextureFor16BitsEdgeIndices(gl, indicesArrays, lenIndices) {
-        if (lenIndices === 0) {
-            return {texture: null, textureHeight: 0,};
-        }
-        const textureWidth = 4096;
-        const textureHeight = Math.ceil(lenIndices / 2 / textureWidth);
-        if (textureHeight === 0) {
-            throw "texture height===0";
-        }
-        const texArraySize = textureWidth * textureHeight * 2;
-        const texArray = new Uint16Array(texArraySize);
-        dataTextureRamStats.sizeDataTextureEdgeIndices += texArray.byteLength;
-        dataTextureRamStats.numberOfTextures++;
-        for (let i = 0, j = 0, len = indicesArrays.length; i < len; i++) {
-            const pc = indicesArrays[i];
-            texArray.set(pc, j);
-            j += pc.length;
-        }
-        const texture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RG16UI, textureWidth, textureHeight);
-        gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, gl.RG_INTEGER, gl.UNSIGNED_SHORT, texArray, 0);
-        this.disableBindedTextureFiltering(gl);
-        gl.bindTexture(gl.TEXTURE_2D, null);
-        return new BindableDataTexture(gl, texture, textureWidth, textureHeight);
+        return this._createTextureForEdgeIndices(gl, indicesArrays, lenIndices, Uint16Array, gl.RG16UI, gl.UNSIGNED_SHORT);
     }
 
     /**
@@ -418,30 +294,7 @@ export class DTXTrianglesTextureFactory {
      * @returns {BindableDataTexture}
      */
     createTextureFor32BitsEdgeIndices(gl, indicesArrays, lenIndices) {
-        if (lenIndices === 0) {
-            return {texture: null, textureHeight: 0,};
-        }
-        const textureWidth = 4096;
-        const textureHeight = Math.ceil(lenIndices / 2 / textureWidth);
-        if (textureHeight === 0) {
-            throw "texture height===0";
-        }
-        const texArraySize = textureWidth * textureHeight * 2;
-        const texArray = new Uint32Array(texArraySize);
-        dataTextureRamStats.sizeDataTextureEdgeIndices += texArray.byteLength;
-        dataTextureRamStats.numberOfTextures++;
-        for (let i = 0, j = 0, len = indicesArrays.length; i < len; i++) {
-            const pc = indicesArrays[i];
-            texArray.set(pc, j);
-            j += pc.length;
-        }
-        const texture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RG32UI, textureWidth, textureHeight);
-        gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, gl.RG_INTEGER, gl.UNSIGNED_INT, texArray, 0);
-        this.disableBindedTextureFiltering(gl);
-        gl.bindTexture(gl.TEXTURE_2D, null);
-        return new BindableDataTexture(gl, texture, textureWidth, textureHeight);
+        return this._createTextureForEdgeIndices(gl, indicesArrays, lenIndices, Uint32Array, gl.RG32UI, gl.UNSIGNED_INT);
     }
 
     /**
@@ -458,31 +311,7 @@ export class DTXTrianglesTextureFactory {
      * @returns {BindableDataTexture}
      */
     createTextureForPositions(gl, positionsArrays, lenPositions) {
-        const numVertices = lenPositions / 3;
-        const textureWidth = 4096;
-        const textureHeight = Math.ceil(numVertices / textureWidth);
-        if (textureHeight === 0) {
-            throw "texture height===0";
-        }
-        const texArraySize = textureWidth * textureHeight * 3;
-        const texArray = new Uint16Array(texArraySize);
-        dataTextureRamStats.sizeDataTexturePositions += texArray.byteLength;
-        dataTextureRamStats.numberOfTextures++;
-        for (let i = 0, j = 0, len = positionsArrays.length; i < len; i++) {
-            const pc = positionsArrays[i];
-            texArray.set(pc, j);
-            j += pc.length;
-        }
-        const texture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGB16UI, textureWidth, textureHeight);
-        gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, gl.RGB_INTEGER, gl.UNSIGNED_SHORT, texArray, 0);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.bindTexture(gl.TEXTURE_2D, null);
-        return new BindableDataTexture(gl, texture, textureWidth, textureHeight);
+        return this._createTextureForSingleItems(gl, positionsArrays, lenPositions, Uint16Array, gl.RGB16UI, gl.UNSIGNED_SHORT, 3, gl.RGB_INTEGER, "sizeDataTexturePositions");
     }
 
     /**
@@ -492,29 +321,6 @@ export class DTXTrianglesTextureFactory {
      * @returns {BindableDataTexture}
      */
     createTextureForPackedPortionIds(gl, portionIdsArray) {
-        if (portionIdsArray.length === 0) {
-            return {texture: null, textureHeight: 0,};
-        }
-        const lenArray = portionIdsArray.length;
-        const textureWidth = 4096;
-        const textureHeight = Math.ceil(lenArray / textureWidth);
-        if (textureHeight === 0) {
-            throw "texture height===0";
-        }
-        const texArraySize = textureWidth * textureHeight;
-        const texArray = new Uint16Array(texArraySize);
-        texArray.set(portionIdsArray, 0);
-        dataTextureRamStats.sizeDataTexturePortionIds += texArray.byteLength;
-        dataTextureRamStats.numberOfTextures++;
-        const texture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.R16UI, textureWidth, textureHeight);
-        gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, gl.RED_INTEGER, gl.UNSIGNED_SHORT, texArray, 0);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.bindTexture(gl.TEXTURE_2D, null);
-        return new BindableDataTexture(gl, texture, textureWidth, textureHeight);
+        return this._createTextureForSingleItems(gl, [ portionIdsArray ], portionIdsArray.length, Uint16Array, gl.R16UI, gl.UNSIGNED_SHORT, 1, gl.RED_INTEGER, "sizeDataTexturePortionIds");
     }
 }
