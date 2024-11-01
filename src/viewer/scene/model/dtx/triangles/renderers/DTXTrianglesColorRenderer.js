@@ -242,7 +242,6 @@ export class DTXTrianglesColorRenderer {
         this.uTexturePerObjectPositionsDecodeMatrix = "uObjectPerObjectPositionsDecodeMatrix";
         this.uTexturePerObjectColorsAndFlags = "uObjectPerObjectColorsAndFlags";
         this._uTexturePerVertexIdCoordinates = "uTexturePerVertexIdCoordinates";
-        this._uTexturePerPolygonIdNormals = "uTexturePerPolygonIdNormals";
         this._uTexturePerPolygonIdIndices = "uTexturePerPolygonIdIndices";
         this._uTexturePerPolygonIdPortionIds = "uTexturePerPolygonIdPortionIds";
         this._uTexturePerObjectMatrix= "uTexturePerObjectMatrix";
