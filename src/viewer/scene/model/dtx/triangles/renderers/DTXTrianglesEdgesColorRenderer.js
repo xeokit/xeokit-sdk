@@ -151,19 +151,14 @@ export class DTXTrianglesEdgesColorRenderer {
     }
 
     _allocate() {
-
         const scene = this._scene;
         const gl = scene.canvas.gl;
-
         this._program = new Program(gl, this._buildShader());
-
         if (this._program.errors) {
             this.errors = this._program.errors;
             return;
         }
-
         const program = this._program;
-
         this._uRenderPass = program.getLocation("renderPass");
         this._uSceneModelMatrix = program.getLocation("sceneModelMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
@@ -177,7 +172,6 @@ export class DTXTrianglesEdgesColorRenderer {
                 dir: program.getLocation("sectionPlaneDir" + i)
             });
         }
-
         if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
@@ -191,14 +185,11 @@ export class DTXTrianglesEdgesColorRenderer {
     }
 
     _bindProgram() {
-
         const scene = this._scene;
         const gl = scene.canvas.gl;
         const program = this._program;
         const project = scene.camera.project;
-
         program.bind();
-
         if (scene.logarithmicDepthBufferEnabled) {
             const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
@@ -217,7 +208,7 @@ export class DTXTrianglesEdgesColorRenderer {
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push("#version 300 es");
-        src.push("// TrianglesDataTextureEdgesColorRenderer");
+        src.push("// DTXTrianglesEdgesColorRenderer vertex shader");
 
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
@@ -332,9 +323,7 @@ export class DTXTrianglesEdgesColorRenderer {
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
         src.push("gl_Position = clipPos;");
-        src.push("vec4 rgb = vec4(color.rgba);");
-        //src.push("vColor = vec4(float(color.r-100.0) / 255.0, float(color.g-100.0) / 255.0, float(color.b-100.0) / 255.0, float(color.a) / 255.0);");
-        src.push("vColor = vec4(float(rgb.r*0.5) / 255.0, float(rgb.g*0.5) / 255.0, float(rgb.b*0.5) / 255.0, float(rgb.a) / 255.0);");
+        src.push("vColor = vec4(vec3(color.rgb) * 0.5, float(color.a)) / 255.0;");
         src.push("}");
         src.push("}");
         return src;
@@ -345,7 +334,7 @@ export class DTXTrianglesEdgesColorRenderer {
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push('#version 300 es');
-        src.push("// TrianglesDataTextureEdgesColorRenderer");
+        src.push("// DTXTrianglesEdgesColorRenderer fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -383,7 +372,7 @@ export class DTXTrianglesEdgesColorRenderer {
             src.push("}");
         }
         if (scene.logarithmicDepthBufferEnabled) {
-              src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
+            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
         src.push("   outColor            = vColor;");
         src.push("}");
