@@ -36,16 +36,19 @@ class BindableDataTexture {
  * @private
  */
 export class DTXTrianglesTextureFactory {
-
-    constructor() {
-
+    /*
+     * @param {WebGL2RenderingContext} gl
+     */
+    constructor(gl) {
+        this._gl = gl;
     }
 
-    _createBindableDataTexture(gl, dataCnt, type, entrySize, textureWidth, populateTexArray, statsProp, passTexArray) {
+    _createBindableDataTexture(dataCnt, type, entrySize, textureWidth, populateTexArray, statsProp, passTexArray) {
         if ((entrySize > 4) && ((entrySize % 4) > 0)) {
             throw "Unhandled data size " + entrySize;
         }
         const size = 1 + (entrySize - 1) % 4;
+        const gl = this._gl;
         const [ arrayType, internalFormat, format ] = (function() {
             switch(type) {
             case gl.UNSIGNED_BYTE:
@@ -96,7 +99,6 @@ export class DTXTrianglesTextureFactory {
      * - 4 RGBA columns per row: for each object (pick) color and flags(2)
      * - N rows where N is the number of objects
      *
-     * @param {WebGL2RenderingContext} gl
      * @param {ArrayLike<ArrayLike<int>>} colors Array of colors for all objects in the layer
      * @param {ArrayLike<ArrayLike<int>>} pickColors Array of pickColors for all objects in the layer
      * @param {ArrayLike<int>} vertexBases Array of position-index-bases foteh all objects in the layer
@@ -106,7 +108,7 @@ export class DTXTrianglesTextureFactory {
      *
      * @returns {BindableDataTexture}
      */
-    createTextureForColorsAndFlags(gl, colors, pickColors, vertexBases, indexBaseOffsets, edgeIndexBaseOffsets, solid) {
+    createTextureForColorsAndFlags(colors, pickColors, vertexBases, indexBaseOffsets, edgeIndexBaseOffsets, solid) {
         // The number of rows in the texture is the number of objects in the layer.
         const numPortions = colors.length;
 
@@ -132,10 +134,10 @@ export class DTXTrianglesTextureFactory {
         };
 
         const size = 4;
-        return this._createBindableDataTexture(gl, numPortions * 8 * size, gl.UNSIGNED_BYTE, size, 512 * 8, populateTexArray, "sizeDataColorsAndFlags", true);
+        return this._createBindableDataTexture(numPortions * 8 * size, this._gl.UNSIGNED_BYTE, size, 512 * 8, populateTexArray, "sizeDataColorsAndFlags", true);
     }
 
-    _createDataTexture(gl, dataArrays, dataCnt, type, size, textureWidth, statsProp, passTexArray) {
+    _createDataTexture(dataArrays, dataCnt, type, size, textureWidth, statsProp, passTexArray) {
         const populateTexArray = texArray => {
             for (let i = 0, j = 0, len = dataArrays.length; i < len; i++) {
                 const pc = dataArrays[i];
@@ -143,18 +145,17 @@ export class DTXTrianglesTextureFactory {
                 j += pc.length;
             }
         };
-        return this._createBindableDataTexture(gl, dataCnt, type, size, textureWidth, populateTexArray, statsProp, passTexArray);
+        return this._createBindableDataTexture(dataCnt, type, size, textureWidth, populateTexArray, statsProp, passTexArray);
     }
 
 
-    _createTextureForMatrices(gl, name, matrices, statsProp, passTexArray) {
-
+    _createTextureForMatrices(matrices, statsProp, passTexArray) {
         const numMatrices = matrices.length;
         if (numMatrices === 0) {
-            throw "num " + name + " matrices===0";
+            throw "num " + statsProp + " matrices===0";
         }
         // in one row we can fit 512 matrices
-        return this._createDataTexture(gl, matrices, numMatrices * 16, gl.FLOAT, 16, 512 * 4, statsProp, passTexArray);
+        return this._createDataTexture(matrices, numMatrices * 16, this._gl.FLOAT, 16, 512 * 4, statsProp, passTexArray);
     }
 
     /**
@@ -165,13 +166,12 @@ export class DTXTrianglesTextureFactory {
      *   Thus, each row will contain 16 packed half-floats corresponding to a complete positions decode matrix)
      * - N rows where N is the number of objects
      *
-     * @param {WebGL2RenderingContext} gl
      * @param {ArrayLike<Matrix4x4>} instanceMatrices Array of geometry instancing matrices for all objects in the layer. Null if the objects are not instanced.
      *
      * @returns {BindableDataTexture}
      */
-    createTextureForInstancingMatrices(gl, instanceMatrices) {
-        return this._createTextureForMatrices(gl, "instance", instanceMatrices, "sizeDataInstancesMatrices", true);
+    createTextureForInstancingMatrices(instanceMatrices) {
+        return this._createTextureForMatrices(instanceMatrices, "sizeDataInstancesMatrices", true);
     }
 
     /**
@@ -182,100 +182,31 @@ export class DTXTrianglesTextureFactory {
      *   Thus, each row will contain 16 packed half-floats corresponding to a complete positions decode matrix)
      * - N rows where N is the number of objects
      *
-     * @param {WebGL2RenderingContext} gl
      * @param {ArrayLike<Matrix4x4>} positionDecodeMatrices Array of positions decode matrices for all objects in the layer
      *
      * @returns {BindableDataTexture}
      */
-    createTextureForPositionsDecodeMatrices(gl, positionDecodeMatrices) {
-        return this._createTextureForMatrices(gl, "decode+entity", positionDecodeMatrices, "sizeDataPositionDecodeMatrices", false);
+    createTextureForPositionsDecodeMatrices(positionDecodeMatrices) {
+        return this._createTextureForMatrices(positionDecodeMatrices, "sizeDataPositionDecodeMatrices", false);
     }
 
 
-    _createTextureForSingleItems(gl, dataArrays, dataCnt, type, size, statsProp) {
+    _createTextureForSingleItems(dataArrays, dataCnt, type, size, statsProp) {
         return ((dataCnt === 0)
                 ? { texture: null, textureHeight: 0 }
-                : this._createDataTexture(gl, dataArrays, dataCnt, type, size, 4096, statsProp, false));
+                : this._createDataTexture(dataArrays, dataCnt, type, size, 4096, statsProp, false));
     }
 
 
-    _createTextureForIndices(gl, indicesArrays, lenIndices, type) {
-        return this._createTextureForSingleItems(gl, indicesArrays, lenIndices, type, 3, "sizeDataTextureIndices");
+    createTextureForIndices(indicesArrays, lenIndices, type) {
+        return this._createTextureForSingleItems(indicesArrays, lenIndices, type, 3, "sizeDataTextureIndices");
     }
 
-    /**
-     * @param {WebGL2RenderingContext} gl
-     * @param indicesArrays
-     * @param lenIndices
-     *
-     * @returns {BindableDataTexture}
-     */
-    createTextureFor8BitIndices(gl, indicesArrays, lenIndices) {
-        return this._createTextureForIndices(gl, indicesArrays, lenIndices, gl.UNSIGNED_BYTE);
+    createTextureForEdgeIndices(indicesArrays, lenIndices, type) {
+        return this._createTextureForSingleItems(indicesArrays, lenIndices, type, 2, "sizeDataTextureEdgeIndices");
     }
 
     /**
-     * @param {WebGL2RenderingContext} gl
-     * @param indicesArrays
-     * @param lenIndices
-     *
-     * @returns {BindableDataTexture}
-     */
-    createTextureFor16BitIndices(gl, indicesArrays, lenIndices) {
-        return this._createTextureForIndices(gl, indicesArrays, lenIndices, gl.UNSIGNED_SHORT);
-    }
-
-    /**
-     * @param {WebGL2RenderingContext} gl
-     * @param indicesArrays
-     * @param lenIndices
-     *
-     * @returns {BindableDataTexture}
-     */
-    createTextureFor32BitIndices(gl, indicesArrays, lenIndices) {
-        return this._createTextureForIndices(gl, indicesArrays, lenIndices, gl.UNSIGNED_INT);
-    }
-
-
-    _createTextureForEdgeIndices(gl, indicesArrays, lenIndices, type) {
-        return this._createTextureForSingleItems(gl, indicesArrays, lenIndices, type, 2, "sizeDataTextureEdgeIndices");
-    }
-
-    /**
-     * @param {WebGL2RenderingContext} gl
-     * @param indicesArrays
-     * @param lenIndices
-     *
-     * @returns {BindableDataTexture}
-     */
-    createTextureFor8BitsEdgeIndices(gl, indicesArrays, lenIndices) {
-        return this._createTextureForEdgeIndices(gl, indicesArrays, lenIndices, gl.UNSIGNED_BYTE);
-    }
-
-    /**
-     * @param {WebGL2RenderingContext} gl
-     * @param indicesArrays
-     * @param lenIndices
-     *
-     * @returns {BindableDataTexture}
-     */
-    createTextureFor16BitsEdgeIndices(gl, indicesArrays, lenIndices) {
-        return this._createTextureForEdgeIndices(gl, indicesArrays, lenIndices, gl.UNSIGNED_SHORT);
-    }
-
-    /**
-     * @param {WebGL2RenderingContext} gl
-     * @param indicesArrays
-     * @param lenIndices
-     *
-     * @returns {BindableDataTexture}
-     */
-    createTextureFor32BitsEdgeIndices(gl, indicesArrays, lenIndices) {
-        return this._createTextureForEdgeIndices(gl, indicesArrays, lenIndices, gl.UNSIGNED_INT);
-    }
-
-    /**
-     * @param {WebGL2RenderingContext} gl
      * @param {ArrayLike<int>} positionsArrays Arrays of  quantized positions in the layer
      * @param lenPositions
      *
@@ -287,17 +218,16 @@ export class DTXTrianglesTextureFactory {
      *
      * @returns {BindableDataTexture}
      */
-    createTextureForPositions(gl, positionsArrays, lenPositions) {
-        return this._createTextureForSingleItems(gl, positionsArrays, lenPositions, gl.UNSIGNED_SHORT, 3, "sizeDataTexturePositions");
+    createTextureForPositions(positionsArrays, lenPositions) {
+        return this._createTextureForSingleItems(positionsArrays, lenPositions, this._gl.UNSIGNED_SHORT, 3, "sizeDataTexturePositions");
     }
 
     /**
-     * @param {WebGL2RenderingContext} gl
      * @param {ArrayLike<int>} portionIdsArray
      *
      * @returns {BindableDataTexture}
      */
-    createTextureForPackedPortionIds(gl, portionIdsArray) {
-        return this._createTextureForSingleItems(gl, [ portionIdsArray ], portionIdsArray.length, gl.UNSIGNED_SHORT, 1, "sizeDataTexturePortionIds");
+    createTextureForPackedPortionIds(portionIdsArray) {
+        return this._createTextureForSingleItems([ portionIdsArray ], portionIdsArray.length, this._gl.UNSIGNED_SHORT, 1, "sizeDataTexturePortionIds");
     }
 }
