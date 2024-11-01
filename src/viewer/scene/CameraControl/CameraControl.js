@@ -972,6 +972,17 @@ class CameraControl extends Component {
         return false;
     }
 
+    _isMouseAction(action) {
+        switch (action) {
+            case this.MOUSE_ROTATE:
+            case this.MOUSE_DOLLY:
+            case this.MOUSE_PAN:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     /**
      * Returns true if any keys configured for the given action are down.
      * @param action
@@ -983,7 +994,7 @@ class CameraControl extends Component {
         if (!keys) {
             return false;
         }
-        if (keys.length === 0) return true;
+        if (keys.length === 0 && this._isMouseAction(action)) return true;
         if (!keyDownMap) {
             keyDownMap = this.scene.input.keyDown;
         }
