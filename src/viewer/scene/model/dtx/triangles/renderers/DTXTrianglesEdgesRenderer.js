@@ -30,7 +30,6 @@ export class DTXTrianglesEdgesRenderer {
     }
 
     drawLayer(frameCtx, dataTextureLayer, renderPass) {
-
         const model = dataTextureLayer.model;
         const scene = model.scene;
         const camera = scene.camera;
@@ -42,7 +41,7 @@ export class DTXTrianglesEdgesRenderer {
         const viewMatrix = camera.viewMatrix;
 
         if (!this._program) {
-            this._allocate(dataTextureLayer);
+            this._allocate();
             if (this.errors) {
                 return;
             }
@@ -193,6 +192,7 @@ export class DTXTrianglesEdgesRenderer {
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
         this._uSectionPlanes = [];
+
         for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
             this._uSectionPlanes.push({
                 active: program.getLocation("sectionPlaneActive" + i),
@@ -203,12 +203,13 @@ export class DTXTrianglesEdgesRenderer {
         if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
+
         this.uTexturePerObjectPositionsDecodeMatrix = "uObjectPerObjectPositionsDecodeMatrix";
         this.uTexturePerObjectColorsAndFlags = "uObjectPerObjectColorsAndFlags";
         this._uTexturePerVertexIdCoordinates = "uTexturePerVertexIdCoordinates";
         this._uTexturePerPolygonIdEdgeIndices = "uTexturePerPolygonIdEdgeIndices";
         this._uTexturePerEdgeIdPortionIds = "uTexturePerEdgeIdPortionIds";
-        this._uTexturePerObjectMatrix= "uTexturePerObjectMatrix";
+        this._uTexturePerObjectMatrix = "uTexturePerObjectMatrix";
     }
 
     _bindProgram() {
@@ -329,6 +330,7 @@ export class DTXTrianglesEdgesRenderer {
         src.push("int indexPositionV = uniqueVertexIndexes[gl_VertexID % 2] >> 12;")
 
         src.push("mat4 objectInstanceMatrix = mat4 (texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));")
+
         src.push("mat4 objectDecodeAndInstanceMatrix = objectInstanceMatrix * mat4 (texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));")
 
         // get position
@@ -349,7 +351,7 @@ export class DTXTrianglesEdgesRenderer {
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
         src.push("gl_Position = clipPos;");
-        src.push("vColor = vec4(color.r, color.g, color.b, color.a);");
+        src.push("vColor = color;");
         src.push("}");
         src.push("}");
         return src;
