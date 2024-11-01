@@ -41,7 +41,21 @@ export class DTXTrianglesTextureFactory {
 
     }
 
-    _createBindableDataTexture(gl, internalFormat, textureWidth, textureHeight, format, type, texArray, passTexArray) {
+    _createBindableDataTexture(gl, dataCnt, entrySize, textureWidth, arrayType, internalFormat, format, type, populateTexArray, statsProp, passTexArray) {
+        if ((entrySize > 4) && ((entrySize % 4) > 0)) {
+            throw "Unhandled data size " + entrySize;
+        }
+        const size = 1 + (entrySize - 1) % 4;
+        const textureHeight = Math.ceil(dataCnt / size / textureWidth);
+        if (textureHeight === 0) {
+            throw "texture height===0";
+        }
+        const texArray = new arrayType(textureWidth * textureHeight * size);
+        dataTextureRamStats[statsProp] += texArray.byteLength;
+        dataTextureRamStats.numberOfTextures++;
+
+        populateTexArray(texArray);
+
         const texture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.texStorage2D(gl.TEXTURE_2D, 1, internalFormat, textureWidth, textureHeight);
@@ -78,95 +92,43 @@ export class DTXTrianglesTextureFactory {
      * @returns {BindableDataTexture}
      */
     createTextureForColorsAndFlags(gl, colors, pickColors, vertexBases, indexBaseOffsets, edgeIndexBaseOffsets, solid) {
+        // The number of rows in the texture is the number of objects in the layer.
         const numPortions = colors.length;
 
-        // The number of rows in the texture is the number of
-        // objects in the layer.
+        const pack32as4x8 = ui32 => [
+            (ui32 >> 24) & 255,
+            (ui32 >> 16) & 255,
+            (ui32 >>  8) & 255,
+            (ui32)       & 255
+        ];
 
-        this.numPortions = numPortions;
+        const populateTexArray = texArray => {
+            for (let i = 0; i < numPortions; i++) {
+                // 8 columns per texture row:
+                texArray.set(colors[i],                            i * 32 +  0); // - col0: (RGBA) object color RGBA
+                texArray.set(pickColors[i],                        i * 32 +  4); // - col1: (packed Uint32 as RGBA) object pick color
+                texArray.set([0, 0, 0, 0],                         i * 32 +  8); // - col2: (packed 4 bytes as RGBA) object flags
+                texArray.set([0, 0, 0, 0],                         i * 32 + 12); // - col3: (packed 4 bytes as RGBA) object flags2
+                texArray.set(pack32as4x8(vertexBases[i]),          i * 32 + 16); // - col4: (packed Uint32 bytes as RGBA) vertex base
+                texArray.set(pack32as4x8(indexBaseOffsets[i]),     i * 32 + 20); // - col5: (packed Uint32 bytes as RGBA) index base offset
+                texArray.set(pack32as4x8(edgeIndexBaseOffsets[i]), i * 32 + 24); // - col6: (packed Uint32 bytes as RGBA) edge index base offset
+                texArray.set([solid[i] ? 1 : 0, 0, 0, 0],          i * 32 + 28); // - col7: (packed 4 bytes as RGBA) is-solid flag for objects
+            }
+        };
 
-        const textureWidth = 512 * 8;
-        const textureHeight = Math.ceil(numPortions / (textureWidth / 8));
-
-        if (textureHeight === 0) {
-            throw "texture height===0";
-        }
-
-        // 8 columns per texture row:
-        // - col0: (RGBA) object color RGBA
-        // - col1: (packed Uint32 as RGBA) object pick color
-        // - col2: (packed 4 bytes as RGBA) object flags
-        // - col3: (packed 4 bytes as RGBA) object flags2
-        // - col4: (packed Uint32 bytes as RGBA) vertex base
-        // - col5: (packed Uint32 bytes as RGBA) index base offset
-        // - col6: (packed Uint32 bytes as RGBA) edge index base offset
-        // - col7: (packed 4 bytes as RGBA) is-solid flag for objects
-
-        const texArray = new Uint8Array(4 * textureWidth * textureHeight);
-
-        dataTextureRamStats.sizeDataColorsAndFlags += texArray.byteLength;
-        dataTextureRamStats.numberOfTextures++;
-
-        for (let i = 0; i < numPortions; i++) {
-            // object color
-            texArray.set(colors [i], i * 32 + 0);
-            texArray.set(pickColors [i], i * 32 + 4); // object pick color
-            texArray.set([0, 0, 0, 0], i * 32 + 8);     // object flags
-            texArray.set([0, 0, 0, 0], i * 32 + 12);        // object flags2
-
-            // vertex base
-            texArray.set([
-                    (vertexBases[i] >> 24) & 255,
-                    (vertexBases[i] >> 16) & 255,
-                    (vertexBases[i] >> 8) & 255,
-                    (vertexBases[i]) & 255,
-                ],
-                i * 32 + 16
-            );
-
-            // triangles index base offset
-            texArray.set(
-                [
-                    (indexBaseOffsets[i] >> 24) & 255,
-                    (indexBaseOffsets[i] >> 16) & 255,
-                    (indexBaseOffsets[i] >> 8) & 255,
-                    (indexBaseOffsets[i]) & 255,
-                ],
-                i * 32 + 20
-            );
-
-            // edge index base offset
-            texArray.set(
-                [
-                    (edgeIndexBaseOffsets[i] >> 24) & 255,
-                    (edgeIndexBaseOffsets[i] >> 16) & 255,
-                    (edgeIndexBaseOffsets[i] >> 8) & 255,
-                    (edgeIndexBaseOffsets[i]) & 255,
-                ],
-                i * 32 + 24
-            );
-
-            // is-solid flag
-            texArray.set([solid[i] ? 1 : 0, 0, 0, 0], i * 32 + 28);
-        }
-
-        return this._createBindableDataTexture(gl, gl.RGBA8UI, textureWidth, textureHeight, gl.RGBA_INTEGER, gl.UNSIGNED_BYTE, texArray, true);
+        const size = 4;
+        return this._createBindableDataTexture(gl, numPortions * 8 * size, size, 512 * 8, Uint8Array, gl.RGBA8UI, gl.RGBA_INTEGER, gl.UNSIGNED_BYTE, populateTexArray, "sizeDataColorsAndFlags", true);
     }
 
-    _createDataTexture(gl, dataArrays, dataLen, dataWidth, arrayType, internalFormat, type, textureWidth, format, statsProp, passTexArray) {
-        const textureHeight = Math.ceil(dataLen / textureWidth);
-        if (textureHeight === 0) {
-            throw "texture height===0";
-        }
-        const texArray = new arrayType(textureWidth * textureHeight * dataWidth);
-        dataTextureRamStats[statsProp] += texArray.byteLength;
-        dataTextureRamStats.numberOfTextures++;
-        for (let i = 0, j = 0, len = dataArrays.length; i < len; i++) {
-            const pc = dataArrays[i];
-            texArray.set(pc, j);
-            j += pc.length;
-        }
-        return this._createBindableDataTexture(gl, internalFormat, textureWidth, textureHeight, format, type, texArray, passTexArray);
+    _createDataTexture(gl, dataArrays, dataCnt, size, textureWidth, arrayType, internalFormat, format, type, statsProp, passTexArray) {
+        const populateTexArray = texArray => {
+            for (let i = 0, j = 0, len = dataArrays.length; i < len; i++) {
+                const pc = dataArrays[i];
+                texArray.set(pc, j);
+                j += pc.length;
+            }
+        };
+        return this._createBindableDataTexture(gl, dataCnt, size, textureWidth, arrayType, internalFormat, format, type, populateTexArray, statsProp, passTexArray);
     }
 
 
@@ -177,7 +139,7 @@ export class DTXTrianglesTextureFactory {
             throw "num " + name + " matrices===0";
         }
         // in one row we can fit 512 matrices
-        return this._createDataTexture(gl, matrices, numMatrices, 16, Float32Array, gl.RGBA32F, gl.FLOAT, 512 * 4, gl.RGBA, statsProp, passTexArray);
+        return this._createDataTexture(gl, matrices, numMatrices * 16, 16, 512 * 4, Float32Array, gl.RGBA32F, gl.RGBA, gl.FLOAT, statsProp, passTexArray);
     }
 
     /**
@@ -215,15 +177,15 @@ export class DTXTrianglesTextureFactory {
     }
 
 
-    _createTextureForSingleItems(gl, dataArrays, lenData, arrayType, internalFormat, type, itemWidth, format, statsProp) {
-        return ((lenData === 0)
+    _createTextureForSingleItems(gl, dataArrays, dataCnt, size, arrayType, internalFormat, format, type, statsProp) {
+        return ((dataCnt === 0)
                 ? { texture: null, textureHeight: 0 }
-                : this._createDataTexture(gl, dataArrays, lenData / itemWidth, itemWidth, arrayType, internalFormat, type, 4096, format, statsProp, false));
+                : this._createDataTexture(gl, dataArrays, dataCnt, size, 4096, arrayType, internalFormat, format, type, statsProp, false));
     }
 
 
     _createTextureForIndices(gl, indicesArrays, lenIndices, arrayType, internalFormat, type) {
-        return this._createTextureForSingleItems(gl, indicesArrays, lenIndices, arrayType, internalFormat, type, 3, gl.RGB_INTEGER, "sizeDataTextureIndices");
+        return this._createTextureForSingleItems(gl, indicesArrays, lenIndices, 3, arrayType, internalFormat, gl.RGB_INTEGER, type, "sizeDataTextureIndices");
     }
 
     /**
@@ -261,7 +223,7 @@ export class DTXTrianglesTextureFactory {
 
 
     _createTextureForEdgeIndices(gl, indicesArrays, lenIndices, arrayType, internalFormat, type) {
-        return this._createTextureForSingleItems(gl, indicesArrays, lenIndices, arrayType, internalFormat, type, 2, gl.RG_INTEGER, "sizeDataTextureEdgeIndices");
+        return this._createTextureForSingleItems(gl, indicesArrays, lenIndices, 2, arrayType, internalFormat, gl.RG_INTEGER, type, "sizeDataTextureEdgeIndices");
     }
 
     /**
@@ -311,7 +273,7 @@ export class DTXTrianglesTextureFactory {
      * @returns {BindableDataTexture}
      */
     createTextureForPositions(gl, positionsArrays, lenPositions) {
-        return this._createTextureForSingleItems(gl, positionsArrays, lenPositions, Uint16Array, gl.RGB16UI, gl.UNSIGNED_SHORT, 3, gl.RGB_INTEGER, "sizeDataTexturePositions");
+        return this._createTextureForSingleItems(gl, positionsArrays, lenPositions, 3, Uint16Array, gl.RGB16UI, gl.RGB_INTEGER, gl.UNSIGNED_SHORT, "sizeDataTexturePositions");
     }
 
     /**
@@ -321,6 +283,6 @@ export class DTXTrianglesTextureFactory {
      * @returns {BindableDataTexture}
      */
     createTextureForPackedPortionIds(gl, portionIdsArray) {
-        return this._createTextureForSingleItems(gl, [ portionIdsArray ], portionIdsArray.length, Uint16Array, gl.R16UI, gl.UNSIGNED_SHORT, 1, gl.RED_INTEGER, "sizeDataTexturePortionIds");
+        return this._createTextureForSingleItems(gl, [ portionIdsArray ], portionIdsArray.length, 1, Uint16Array, gl.R16UI, gl.RED_INTEGER, gl.UNSIGNED_SHORT, "sizeDataTexturePortionIds");
     }
 }
