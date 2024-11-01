@@ -212,7 +212,6 @@ export class DTXTrianglesSnapRenderer {
         this._uTexturePerVertexIdCoordinates = "uTexturePerVertexIdCoordinates";
         this._uTexturePerPolygonIdEdgeIndices = "uTexturePerPolygonIdEdgeIndices";
         this._uTexturePerEdgeIdPortionIds = "uTexturePerEdgeIdPortionIds";
-        this._uTextureModelMatrices = "uTextureModelMatrices";
         this._uTexturePerObjectMatrix= "uTexturePerObjectMatrix";
         this._uCameraEyeRtc = program.getLocation("uCameraEyeRtc");
         this.uVectorA = program.getLocation("uSnapVectorA");
