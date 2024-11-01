@@ -61,6 +61,7 @@ export class DTXTrianglesLayer {
 
         this._renderers = getRenderers(model.scene);
         this.model = model;
+        const gl = model.scene.canvas.gl;
         this._buffer = {
             positionsCompressed: [],
             lenPositionsCompressed: 0,
@@ -102,7 +103,7 @@ export class DTXTrianglesLayer {
             perEdgeNumberPortionId32Bits: []
         };
         this._dtxState = new DTXTrianglesState();
-        this._dtxTextureFactory = new DTXTrianglesTextureFactory();
+        this._dtxTextureFactory = new DTXTrianglesTextureFactory(gl);
 
         this._state = new RenderState({
             origin: math.vec3(cfg.origin),
@@ -503,10 +504,10 @@ export class DTXTrianglesLayer {
         const textureState = this._dtxState;
         const gl = this.model.scene.canvas.gl;
         const buffer = this._buffer;
+        const texFac = this._dtxTextureFactory;
 
         state.gl = gl;
-        textureState.texturePerObjectColorsAndFlags = this._dtxTextureFactory.createTextureForColorsAndFlags(
-            gl,
+        textureState.texturePerObjectColorsAndFlags = texFac.createTextureForColorsAndFlags(
             buffer.perObjectColors,
             buffer.perObjectPickColors,
             buffer.perObjectVertexBases,
@@ -514,83 +515,68 @@ export class DTXTrianglesLayer {
             buffer.perObjectEdgeIndexBaseOffsets,
             buffer.perObjectSolid);
 
-        textureState.texturePerObjectInstanceMatrices
-            = this._dtxTextureFactory.createTextureForInstancingMatrices(gl, buffer.perObjectInstancePositioningMatrices);
+        textureState.texturePerObjectInstanceMatrices = texFac.createTextureForInstancingMatrices(
+            buffer.perObjectInstancePositioningMatrices);
 
-        textureState.texturePerObjectPositionsDecodeMatrix
-            = this._dtxTextureFactory.createTextureForPositionsDecodeMatrices(
-            gl,
+        textureState.texturePerObjectPositionsDecodeMatrix = texFac.createTextureForPositionsDecodeMatrices(
             buffer.perObjectPositionsDecodeMatrices);
 
-        textureState.texturePerVertexIdCoordinates = this._dtxTextureFactory.createTextureForPositions(
-            gl,
+        textureState.texturePerVertexIdCoordinates = texFac.createTextureForPositions(
             buffer.positionsCompressed,
             buffer.lenPositionsCompressed);
 
-        textureState.texturePerPolygonIdPortionIds8Bits = this._dtxTextureFactory.createTextureForPackedPortionIds(
-            gl,
+        textureState.texturePerPolygonIdPortionIds8Bits = texFac.createTextureForPackedPortionIds(
             buffer.perTriangleNumberPortionId8Bits);
 
-        textureState.texturePerPolygonIdPortionIds16Bits = this._dtxTextureFactory.createTextureForPackedPortionIds(
-            gl,
+        textureState.texturePerPolygonIdPortionIds16Bits = texFac.createTextureForPackedPortionIds(
             buffer.perTriangleNumberPortionId16Bits);
 
-        textureState.texturePerPolygonIdPortionIds32Bits = this._dtxTextureFactory.createTextureForPackedPortionIds(
-            gl,
+        textureState.texturePerPolygonIdPortionIds32Bits = texFac.createTextureForPackedPortionIds(
             buffer.perTriangleNumberPortionId32Bits);
 
         if (buffer.perEdgeNumberPortionId8Bits.length > 0) {
-            textureState.texturePerEdgeIdPortionIds8Bits = this._dtxTextureFactory.createTextureForPackedPortionIds(
-                gl,
+            textureState.texturePerEdgeIdPortionIds8Bits = texFac.createTextureForPackedPortionIds(
                 buffer.perEdgeNumberPortionId8Bits);
         }
 
         if (buffer.perEdgeNumberPortionId16Bits.length > 0) {
-            textureState.texturePerEdgeIdPortionIds16Bits = this._dtxTextureFactory.createTextureForPackedPortionIds(
-                gl,
+            textureState.texturePerEdgeIdPortionIds16Bits = texFac.createTextureForPackedPortionIds(
                 buffer.perEdgeNumberPortionId16Bits);
         }
 
         if (buffer.perEdgeNumberPortionId32Bits.length > 0) {
-            textureState.texturePerEdgeIdPortionIds32Bits = this._dtxTextureFactory.createTextureForPackedPortionIds(
-                gl,
+            textureState.texturePerEdgeIdPortionIds32Bits = texFac.createTextureForPackedPortionIds(
                 buffer.perEdgeNumberPortionId32Bits);
         }
 
         if (buffer.lenIndices8Bits > 0) {
-            textureState.texturePerPolygonIdIndices8Bits = this._dtxTextureFactory.createTextureFor8BitIndices(
-                gl,
-                buffer.indices8Bits, buffer.lenIndices8Bits);
+            textureState.texturePerPolygonIdIndices8Bits = texFac.createTextureForIndices(
+                buffer.indices8Bits, buffer.lenIndices8Bits, gl.UNSIGNED_BYTE);
         }
 
         if (buffer.lenIndices16Bits > 0) {
-            textureState.texturePerPolygonIdIndices16Bits = this._dtxTextureFactory.createTextureFor16BitIndices(
-                gl,
-                buffer.indices16Bits, buffer.lenIndices16Bits);
+            textureState.texturePerPolygonIdIndices16Bits = texFac.createTextureForIndices(
+                buffer.indices16Bits, buffer.lenIndices16Bits, gl.UNSIGNED_SHORT);
         }
 
         if (buffer.lenIndices32Bits > 0) {
-            textureState.texturePerPolygonIdIndices32Bits = this._dtxTextureFactory.createTextureFor32BitIndices(
-                gl,
-                buffer.indices32Bits, buffer.lenIndices32Bits);
+            textureState.texturePerPolygonIdIndices32Bits = texFac.createTextureForIndices(
+                buffer.indices32Bits, buffer.lenIndices32Bits, gl.UNSIGNED_INT);
         }
 
         if (buffer.lenEdgeIndices8Bits > 0) {
-            textureState.texturePerPolygonIdEdgeIndices8Bits = this._dtxTextureFactory.createTextureFor8BitsEdgeIndices(
-                gl,
-                buffer.edgeIndices8Bits, buffer.lenEdgeIndices8Bits);
+            textureState.texturePerPolygonIdEdgeIndices8Bits = texFac.createTextureForEdgeIndices(
+                buffer.edgeIndices8Bits, buffer.lenEdgeIndices8Bits, gl.UNSIGNED_BYTE);
         }
 
         if (buffer.lenEdgeIndices16Bits > 0) {
-            textureState.texturePerPolygonIdEdgeIndices16Bits = this._dtxTextureFactory.createTextureFor16BitsEdgeIndices(
-                gl,
-                buffer.edgeIndices16Bits, buffer.lenEdgeIndices16Bits);
+            textureState.texturePerPolygonIdEdgeIndices16Bits = texFac.createTextureForEdgeIndices(
+                buffer.edgeIndices16Bits, buffer.lenEdgeIndices16Bits, gl.UNSIGNED_SHORT);
         }
 
         if (buffer.lenEdgeIndices32Bits > 0) {
-            textureState.texturePerPolygonIdEdgeIndices32Bits = this._dtxTextureFactory.createTextureFor32BitsEdgeIndices(
-                gl,
-                buffer.edgeIndices32Bits, buffer.lenEdgeIndices32Bits);
+            textureState.texturePerPolygonIdEdgeIndices32Bits = texFac.createTextureForEdgeIndices(
+                buffer.edgeIndices32Bits, buffer.lenEdgeIndices32Bits, gl.UNSIGNED_INT);
         }
 
         textureState.finalize();
