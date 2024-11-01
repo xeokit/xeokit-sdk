@@ -1,5 +1,6 @@
 export const dataTextureRamStats = {
     sizeDataColorsAndFlags: 0,
+    sizeDataInstancesMatrices: 0,
     sizeDataPositionDecodeMatrices: 0,
     sizeDataTextureOffsets: 0,
     sizeDataTexturePositions: 0,
