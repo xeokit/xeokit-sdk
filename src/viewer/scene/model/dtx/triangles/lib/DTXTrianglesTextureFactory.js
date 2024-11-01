@@ -41,11 +41,26 @@ export class DTXTrianglesTextureFactory {
 
     }
 
-    _createBindableDataTexture(gl, dataCnt, entrySize, textureWidth, arrayType, internalFormat, format, type, populateTexArray, statsProp, passTexArray) {
+    _createBindableDataTexture(gl, dataCnt, type, entrySize, textureWidth, populateTexArray, statsProp, passTexArray) {
         if ((entrySize > 4) && ((entrySize % 4) > 0)) {
             throw "Unhandled data size " + entrySize;
         }
         const size = 1 + (entrySize - 1) % 4;
+        const [ arrayType, internalFormat, format ] = (function() {
+            switch(type) {
+            case gl.UNSIGNED_BYTE:
+                return [ Uint8Array,   ...((size === 1) ? [ gl.R8UI,  gl.RED_INTEGER ] : ((size === 2) ? [ gl.RG8UI,  gl.RG_INTEGER ] : ((size === 3) ? [ gl.RGB8UI,  gl.RGB_INTEGER ] : [ gl.RGBA8UI,  gl.RGBA_INTEGER ]))) ];
+            case gl.UNSIGNED_SHORT:
+                return [ Uint16Array,  ...((size === 1) ? [ gl.R16UI, gl.RED_INTEGER ] : ((size === 2) ? [ gl.RG16UI, gl.RG_INTEGER ] : ((size === 3) ? [ gl.RGB16UI, gl.RGB_INTEGER ] : [ gl.RGBA16UI, gl.RGBA_INTEGER ]))) ];
+            case gl.UNSIGNED_INT:
+                return [ Uint32Array,  ...((size === 1) ? [ gl.R32UI, gl.RED_INTEGER ] : ((size === 2) ? [ gl.RG32UI, gl.RG_INTEGER ] : ((size === 3) ? [ gl.RGB32UI, gl.RGB_INTEGER ] : [ gl.RGBA32UI, gl.RGBA_INTEGER ]))) ];
+            case gl.FLOAT:
+                return [ Float32Array, ...((size === 1) ? [ gl.R32F,  gl.RED ]         : ((size === 2) ? [ gl.RG32F,  gl.RG ]         : ((size === 3) ? [ gl.RGB32F,  gl.RGB ]         : [ gl.RGBA32F,  gl.RGBA ]))) ];
+            default:
+                throw "Unhandled data type " + type;
+            }
+        })();
+
         const textureHeight = Math.ceil(dataCnt / size / textureWidth);
         if (textureHeight === 0) {
             throw "texture height===0";
@@ -117,10 +132,10 @@ export class DTXTrianglesTextureFactory {
         };
 
         const size = 4;
-        return this._createBindableDataTexture(gl, numPortions * 8 * size, size, 512 * 8, Uint8Array, gl.RGBA8UI, gl.RGBA_INTEGER, gl.UNSIGNED_BYTE, populateTexArray, "sizeDataColorsAndFlags", true);
+        return this._createBindableDataTexture(gl, numPortions * 8 * size, gl.UNSIGNED_BYTE, size, 512 * 8, populateTexArray, "sizeDataColorsAndFlags", true);
     }
 
-    _createDataTexture(gl, dataArrays, dataCnt, size, textureWidth, arrayType, internalFormat, format, type, statsProp, passTexArray) {
+    _createDataTexture(gl, dataArrays, dataCnt, type, size, textureWidth, statsProp, passTexArray) {
         const populateTexArray = texArray => {
             for (let i = 0, j = 0, len = dataArrays.length; i < len; i++) {
                 const pc = dataArrays[i];
@@ -128,7 +143,7 @@ export class DTXTrianglesTextureFactory {
                 j += pc.length;
             }
         };
-        return this._createBindableDataTexture(gl, dataCnt, size, textureWidth, arrayType, internalFormat, format, type, populateTexArray, statsProp, passTexArray);
+        return this._createBindableDataTexture(gl, dataCnt, type, size, textureWidth, populateTexArray, statsProp, passTexArray);
     }
 
 
@@ -139,7 +154,7 @@ export class DTXTrianglesTextureFactory {
             throw "num " + name + " matrices===0";
         }
         // in one row we can fit 512 matrices
-        return this._createDataTexture(gl, matrices, numMatrices * 16, 16, 512 * 4, Float32Array, gl.RGBA32F, gl.RGBA, gl.FLOAT, statsProp, passTexArray);
+        return this._createDataTexture(gl, matrices, numMatrices * 16, gl.FLOAT, 16, 512 * 4, statsProp, passTexArray);
     }
 
     /**
@@ -177,15 +192,15 @@ export class DTXTrianglesTextureFactory {
     }
 
 
-    _createTextureForSingleItems(gl, dataArrays, dataCnt, size, arrayType, internalFormat, format, type, statsProp) {
+    _createTextureForSingleItems(gl, dataArrays, dataCnt, type, size, statsProp) {
         return ((dataCnt === 0)
                 ? { texture: null, textureHeight: 0 }
-                : this._createDataTexture(gl, dataArrays, dataCnt, size, 4096, arrayType, internalFormat, format, type, statsProp, false));
+                : this._createDataTexture(gl, dataArrays, dataCnt, type, size, 4096, statsProp, false));
     }
 
 
-    _createTextureForIndices(gl, indicesArrays, lenIndices, arrayType, internalFormat, type) {
-        return this._createTextureForSingleItems(gl, indicesArrays, lenIndices, 3, arrayType, internalFormat, gl.RGB_INTEGER, type, "sizeDataTextureIndices");
+    _createTextureForIndices(gl, indicesArrays, lenIndices, type) {
+        return this._createTextureForSingleItems(gl, indicesArrays, lenIndices, type, 3, "sizeDataTextureIndices");
     }
 
     /**
@@ -196,7 +211,7 @@ export class DTXTrianglesTextureFactory {
      * @returns {BindableDataTexture}
      */
     createTextureFor8BitIndices(gl, indicesArrays, lenIndices) {
-        return this._createTextureForIndices(gl, indicesArrays, lenIndices, Uint8Array, gl.RGB8UI, gl.UNSIGNED_BYTE);
+        return this._createTextureForIndices(gl, indicesArrays, lenIndices, gl.UNSIGNED_BYTE);
     }
 
     /**
@@ -207,7 +222,7 @@ export class DTXTrianglesTextureFactory {
      * @returns {BindableDataTexture}
      */
     createTextureFor16BitIndices(gl, indicesArrays, lenIndices) {
-        return this._createTextureForIndices(gl, indicesArrays, lenIndices, Uint16Array, gl.RGB16UI, gl.UNSIGNED_SHORT);
+        return this._createTextureForIndices(gl, indicesArrays, lenIndices, gl.UNSIGNED_SHORT);
     }
 
     /**
@@ -218,12 +233,12 @@ export class DTXTrianglesTextureFactory {
      * @returns {BindableDataTexture}
      */
     createTextureFor32BitIndices(gl, indicesArrays, lenIndices) {
-        return this._createTextureForIndices(gl, indicesArrays, lenIndices, Uint32Array, gl.RGB32UI, gl.UNSIGNED_INT);
+        return this._createTextureForIndices(gl, indicesArrays, lenIndices, gl.UNSIGNED_INT);
     }
 
 
-    _createTextureForEdgeIndices(gl, indicesArrays, lenIndices, arrayType, internalFormat, type) {
-        return this._createTextureForSingleItems(gl, indicesArrays, lenIndices, 2, arrayType, internalFormat, gl.RG_INTEGER, type, "sizeDataTextureEdgeIndices");
+    _createTextureForEdgeIndices(gl, indicesArrays, lenIndices, type) {
+        return this._createTextureForSingleItems(gl, indicesArrays, lenIndices, type, 2, "sizeDataTextureEdgeIndices");
     }
 
     /**
@@ -234,7 +249,7 @@ export class DTXTrianglesTextureFactory {
      * @returns {BindableDataTexture}
      */
     createTextureFor8BitsEdgeIndices(gl, indicesArrays, lenIndices) {
-        return this._createTextureForEdgeIndices(gl, indicesArrays, lenIndices, Uint8Array, gl.RG8UI, gl.UNSIGNED_BYTE);
+        return this._createTextureForEdgeIndices(gl, indicesArrays, lenIndices, gl.UNSIGNED_BYTE);
     }
 
     /**
@@ -245,7 +260,7 @@ export class DTXTrianglesTextureFactory {
      * @returns {BindableDataTexture}
      */
     createTextureFor16BitsEdgeIndices(gl, indicesArrays, lenIndices) {
-        return this._createTextureForEdgeIndices(gl, indicesArrays, lenIndices, Uint16Array, gl.RG16UI, gl.UNSIGNED_SHORT);
+        return this._createTextureForEdgeIndices(gl, indicesArrays, lenIndices, gl.UNSIGNED_SHORT);
     }
 
     /**
@@ -256,7 +271,7 @@ export class DTXTrianglesTextureFactory {
      * @returns {BindableDataTexture}
      */
     createTextureFor32BitsEdgeIndices(gl, indicesArrays, lenIndices) {
-        return this._createTextureForEdgeIndices(gl, indicesArrays, lenIndices, Uint32Array, gl.RG32UI, gl.UNSIGNED_INT);
+        return this._createTextureForEdgeIndices(gl, indicesArrays, lenIndices, gl.UNSIGNED_INT);
     }
 
     /**
@@ -273,7 +288,7 @@ export class DTXTrianglesTextureFactory {
      * @returns {BindableDataTexture}
      */
     createTextureForPositions(gl, positionsArrays, lenPositions) {
-        return this._createTextureForSingleItems(gl, positionsArrays, lenPositions, 3, Uint16Array, gl.RGB16UI, gl.RGB_INTEGER, gl.UNSIGNED_SHORT, "sizeDataTexturePositions");
+        return this._createTextureForSingleItems(gl, positionsArrays, lenPositions, gl.UNSIGNED_SHORT, 3, "sizeDataTexturePositions");
     }
 
     /**
@@ -283,6 +298,6 @@ export class DTXTrianglesTextureFactory {
      * @returns {BindableDataTexture}
      */
     createTextureForPackedPortionIds(gl, portionIdsArray) {
-        return this._createTextureForSingleItems(gl, [ portionIdsArray ], portionIdsArray.length, 1, Uint16Array, gl.R16UI, gl.RED_INTEGER, gl.UNSIGNED_SHORT, "sizeDataTexturePortionIds");
+        return this._createTextureForSingleItems(gl, [ portionIdsArray ], portionIdsArray.length, gl.UNSIGNED_SHORT, 1, "sizeDataTexturePortionIds");
     }
 }
