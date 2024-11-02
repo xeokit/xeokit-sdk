@@ -178,8 +178,6 @@ export class DTXTrianglesEdgesColorRenderer {
             });
         }
 
-        //this._aOffset = program.getAttribute("offset");
-
         if (scene.logarithmicDepthBufferEnabled) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
@@ -237,10 +235,6 @@ export class DTXTrianglesEdgesColorRenderer {
 
         src.push("uniform int renderPass;");
 
-        if (scene.entityOffsetsEnabled) {
-            //    src.push("in vec3 offset;");
-        }
-
         src.push("uniform mat4 sceneModelMatrix;");
         src.push("uniform mat4 viewMatrix;");
         src.push("uniform mat4 projMatrix;");
@@ -248,7 +242,6 @@ export class DTXTrianglesEdgesColorRenderer {
         src.push("uniform highp sampler2D uObjectPerObjectPositionsDecodeMatrix;");
         src.push("uniform highp sampler2D uTexturePerObjectMatrix;");
         src.push("uniform lowp usampler2D uObjectPerObjectColorsAndFlags;");
-        src.push("uniform highp sampler2D uObjectPerObjectOffsets;");
         src.push("uniform mediump usampler2D uTexturePerVertexIdCoordinates;");
         src.push("uniform highp usampler2D uTexturePerPolygonIdEdgeIndices;");
         src.push("uniform mediump usampler2D uTexturePerEdgeIdPortionIds;");
