@@ -35,7 +35,7 @@ export class DTXTrianglesPickMeshRenderer {
         }
         if (frameCtx.lastProgramId !== this._program.id) {
             frameCtx.lastProgramId = this._program.id;
-            this._bindProgram(frameCtx);
+            this._bindProgram();
         }
         const model = dataTextureLayer.model;
         const scene = model.scene;
@@ -165,7 +165,6 @@ export class DTXTrianglesPickMeshRenderer {
         }
         const program = this._program;
         this._uRenderPass = program.getLocation("renderPass");
-        this._uPickInvisible = program.getLocation("pickInvisible");
         this._uPickClipPos = program.getLocation("pickClipPos");
         this._uDrawingBufferSize = program.getLocation("drawingBufferSize");
         this._uSceneModelMatrix = program.getLocation("sceneModelMatrix");
@@ -192,11 +191,8 @@ export class DTXTrianglesPickMeshRenderer {
         this._uCameraEyeRtc = program.getLocation("uCameraEyeRtc");
     }
 
-    _bindProgram(frameCtx) {
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
+    _bindProgram() {
         this._program.bind();
-        gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
     }
 
     _buildShader() {
@@ -232,9 +228,6 @@ export class DTXTrianglesPickMeshRenderer {
         src.push("uniform mat4 sceneModelMatrix;");
         src.push("uniform mat4 viewMatrix;");
         src.push("uniform mat4 projMatrix;");
-
-        src.push("uniform bool pickInvisible;");
-        // src.push("uniform sampler2D uOcclusionTexture;"); 
 
         src.push("uniform highp sampler2D uObjectPerObjectPositionsDecodeMatrix;");
         src.push("uniform highp sampler2D uTexturePerObjectMatrix;");
