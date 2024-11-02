@@ -3749,15 +3749,6 @@ export class SceneModel extends Component {
     }
 
     /** @private */
-    drawNormals(frameCtx) { // Dedicated to SAO because it skips transparent objects
-        const renderFlags = this.renderFlags;
-        for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {
-            const layerIndex = renderFlags.visibleLayers[i];
-            this.layerList[layerIndex].drawNormals(renderFlags, frameCtx);
-        }
-    }
-
-    /** @private */
     drawSilhouetteXRayed(frameCtx) {
         const renderFlags = this.renderFlags;
         for (let i = 0, len = renderFlags.visibleLayers.length; i < len; i++) {

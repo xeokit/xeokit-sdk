@@ -8,7 +8,6 @@ import {DTXTrianglesSnapRenderer} from "./DTXTrianglesSnapRenderer.js";
 import {DTXTrianglesSnapInitRenderer} from "./DTXTrianglesSnapInitRenderer.js";
 import {DTXTrianglesOcclusionRenderer} from "./DTXTrianglesOcclusionRenderer.js";
 import {DTXTrianglesDepthRenderer} from "./DTXTrianglesDepthRenderer.js";
-import {DTXTrianglesNormalsRenderer} from "./DTXTrianglesNormalsRenderer.js";
 import {DTXTrianglesPickNormalsFlatRenderer} from "./DTXTrianglesPickNormalsFlatRenderer.js";
 
 /**
@@ -44,10 +43,6 @@ class DTXTrianglesRenderers {
         if (this._depthRenderer && (!this._depthRenderer.getValid())) {
             this._depthRenderer.destroy();
             this._depthRenderer = null;
-        }
-        if (this._normalsRenderer && (!this._normalsRenderer.getValid())) {
-            this._normalsRenderer.destroy();
-            this._normalsRenderer = null;
         }
         if (this._silhouetteRenderer && (!this._silhouetteRenderer.getValid())) {
             this._silhouetteRenderer.destroy();
@@ -156,13 +151,6 @@ class DTXTrianglesRenderers {
         return this._depthRenderer;
     }
 
-    get normalsRenderer() {
-        if (!this._normalsRenderer) {
-            this._normalsRenderer = new DTXTrianglesNormalsRenderer(this._scene);
-        }
-        return this._normalsRenderer;
-    }
-
     get edgesRenderer() {
         if (!this._edgesRenderer) {
             this._edgesRenderer = new DTXTrianglesEdgesRenderer(this._scene);
@@ -244,9 +232,6 @@ class DTXTrianglesRenderers {
         }
         if (this._depthRenderer) {
             this._depthRenderer.destroy();
-        }
-        if (this._normalsRenderer) {
-            this._normalsRenderer.destroy();
         }
         if (this._silhouetteRenderer) {
             this._silhouetteRenderer.destroy();
