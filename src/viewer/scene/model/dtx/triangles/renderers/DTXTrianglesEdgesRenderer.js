@@ -253,10 +253,6 @@ export class DTXTrianglesEdgesRenderer {
 
         src.push("uniform int renderPass;");
 
-        // if (scene.entityOffsetsEnabled) {
-        //     src.push("in vec3 offset;");
-        // }
-
         src.push("uniform mat4 sceneModelMatrix;");
         src.push("uniform mat4 viewMatrix;");
         src.push("uniform mat4 projMatrix;");
