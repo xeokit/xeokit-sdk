@@ -178,7 +178,6 @@ export class DTXTrianglesPickNormalsFlatRenderer {
         }
         const program = this._program;
         this._uRenderPass = program.getLocation("renderPass");
-        this._uPickInvisible = program.getLocation("pickInvisible");
         this._uPickClipPos = program.getLocation("pickClipPos");
         this._uDrawingBufferSize = program.getLocation("drawingBufferSize");
         this._uSceneModelMatrix = program.getLocation("sceneModelMatrix");
