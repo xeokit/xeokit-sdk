@@ -555,9 +555,6 @@ export class VBOBatchingPointsLayer {
     drawDepth(renderFlags, frameCtx) {
     }
 
-    drawNormals(renderFlags, frameCtx) {
-    }
-
     // -- EMPHASIS RENDERING -------------------------------------------------------------------------------------------
 
     drawSilhouetteXRayed(renderFlags, frameCtx) {
