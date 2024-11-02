@@ -584,9 +584,6 @@ class VBOInstancingLinesLayer {
     drawDepth(renderFlags, frameCtx) {
     }
 
-    drawNormals(renderFlags, frameCtx) {
-    }
-
     // ---------------------- EMPHASIS RENDERING -----------------------------------
 
     drawSilhouetteXRayed(renderFlags, frameCtx) {

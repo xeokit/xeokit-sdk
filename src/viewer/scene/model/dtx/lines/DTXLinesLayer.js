@@ -816,9 +816,6 @@ export class DTXLinesLayer {
     drawDepth(renderFlags, frameCtx) {
     }
 
-    drawNormals(renderFlags, frameCtx) {
-    }
-
     drawSilhouetteXRayed(renderFlags, frameCtx) {
         // if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numXRayedLayerPortions === 0) {
         //     return;
