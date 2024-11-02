@@ -22,7 +22,7 @@ export class DTXTrianglesState {
          *
          * @type BindableDataTexture
          */
-        this.texturePerObjectOffsets = null;
+        this.texturePerObjectOffsets = null; // NEVER ASSIGNED TO
 
         this.texturePerObjectInstanceMatrices = null;
 
