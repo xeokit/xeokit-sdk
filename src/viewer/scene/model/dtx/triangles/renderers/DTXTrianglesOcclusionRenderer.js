@@ -175,7 +175,6 @@ export class DTXTrianglesOcclusionRenderer {
         }
         const program = this._program;
         this._uRenderPass = program.getLocation("renderPass");
-        this._uPickInvisible = program.getLocation("pickInvisible");
         this._uWorldMatrix = program.getLocation("sceneModelMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
