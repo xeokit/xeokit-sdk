@@ -132,35 +132,6 @@ export class DTXTrianglesTextureFactory {
     }
 
     /**
-     * This will generate a texture for all object offsets.
-     *
-     * @param {WebGL2RenderingContext} gl
-     * @param {int[]} offsets Array of int[3], one XYZ offset array for each object
-     *
-     * @returns {BindableDataTexture}
-     */
-    createTextureForObjectOffsets(gl, numOffsets) {
-        const textureWidth = 512;
-        const textureHeight = Math.ceil(numOffsets / textureWidth);
-        if (textureHeight === 0) {
-            throw "texture height===0";
-        }
-        const texArray = new Float32Array(3 * textureWidth * textureHeight).fill(0);
-        dataTextureRamStats.sizeDataTextureOffsets += texArray.byteLength;
-        dataTextureRamStats.numberOfTextures++;
-        const texture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texStorage2D(gl.TEXTURE_2D, 1, gl.RGB32F, textureWidth, textureHeight);
-        gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, gl.RGB, gl.FLOAT, texArray, 0);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.bindTexture(gl.TEXTURE_2D, null);
-        return new BindableDataTexture(gl, texture, textureWidth, textureHeight, texArray);
-    }
-
-    /**
      * This will generate a texture for all positions decode matrices in the layer.
      *
      * The texture will have:
