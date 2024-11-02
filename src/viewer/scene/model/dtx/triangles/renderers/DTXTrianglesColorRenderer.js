@@ -409,6 +409,12 @@ export class DTXTrianglesColorRenderer {
         src.push("   return;"); // Cull vertex
         src.push("} else {");
 
+        src.push("uvec4 color = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);");
+        src.push(`if (color.a == 0u) {`);
+        src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
+        src.push("   return;");
+        src.push("};");
+
         src.push("ivec4 packedVertexBase = ivec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+4, objectIndexCoords.y), 0));");
         src.push("ivec4 packedIndexBaseOffset = ivec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+5, objectIndexCoords.y), 0));");
 
@@ -431,12 +437,6 @@ export class DTXTrianglesColorRenderer {
         src.push("positions[0] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.r, indexPositionV.r), 0));")
         src.push("positions[1] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.g, indexPositionV.g), 0));")
         src.push("positions[2] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.b, indexPositionV.b), 0));")
-
-        src.push("uvec4 color = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);");
-        src.push(`if (color.a == 0u) {`);
-        src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
-        src.push("   return;");
-        src.push("};");
 
         src.push("vec3 normal = normalize(cross(positions[2] - positions[0], positions[1] - positions[0]));");
         src.push("vec3 position;");
