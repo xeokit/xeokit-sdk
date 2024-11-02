@@ -984,16 +984,6 @@ export class VBOBatchingTrianglesLayer {
         }
     }
 
-    drawNormals(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numTransparentLayerPortions === this._numPortions || this._numXRayedLayerPortions === this._numPortions) {
-            return;
-        }
-        this._updateBackfaceCull(renderFlags, frameCtx);
-        if (this._renderers.normalsRenderer) {
-            this._renderers.normalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.COLOR_OPAQUE);  // Assume whatever post-effect uses normals (eg SAO) does not apply to transparent objects
-        }
-    }
-
     // ---------------------- SILHOUETTE RENDERING -----------------------------------
 
     drawSilhouetteXRayed(renderFlags, frameCtx) {
