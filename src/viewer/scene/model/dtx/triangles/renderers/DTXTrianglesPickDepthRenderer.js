@@ -91,7 +91,6 @@ export class DTXTrianglesPickDepthRenderer {
 
         gl.uniform3fv(this._uCameraEyeRtc, rtcCameraEye);
         gl.uniform1i(this._uRenderPass, renderPass);
-        gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
         gl.uniform2fv(this._uPickClipPos, frameCtx.pickClipPos);
         gl.uniform2f(this._uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
         gl.uniform1f(this._uPickZNear, frameCtx.pickZNear);
@@ -172,7 +171,6 @@ export class DTXTrianglesPickDepthRenderer {
         }
         const program = this._program;
         this._uRenderPass = program.getLocation("renderPass");
-        this._uPickInvisible = program.getLocation("pickInvisible");
         this._uPickClipPos = program.getLocation("pickClipPos");
         this._uDrawingBufferSize = program.getLocation("drawingBufferSize");
         this._uSceneModelMatrix = program.getLocation("sceneModelMatrix");
@@ -239,7 +237,6 @@ export class DTXTrianglesPickDepthRenderer {
         src.push("uniform mat4 sceneModelMatrix;");
         src.push("uniform mat4 viewMatrix;");
         src.push("uniform mat4 projMatrix;");
-        src.push("uniform bool pickInvisible;");
 
         src.push("uniform highp sampler2D uObjectPerObjectPositionsDecodeMatrix;");
         src.push("uniform highp sampler2D uTexturePerObjectMatrix;");
