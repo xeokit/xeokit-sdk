@@ -117,7 +117,6 @@ export class DTXTrianglesSnapRenderer {
         gl.uniform1i(this._uLayerNumber, frameCtx.snapPickLayerNumber);
         gl.uniform3fv(this._uCoordinateScaler, coordinateScaler);
         gl.uniform1i(this._uRenderPass, renderPass);
-        gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
         gl.uniformMatrix4fv(this._uSceneModelMatrix, false, rotationMatrix);
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
         gl.uniformMatrix4fv(this._uProjMatrix, false, projMatrix);
@@ -194,7 +193,6 @@ export class DTXTrianglesSnapRenderer {
         }
         const program = this._program;
         this._uRenderPass = program.getLocation("renderPass");
-        this._uPickInvisible = program.getLocation("pickInvisible");
         this._uSceneModelMatrix = program.getLocation("sceneModelMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
