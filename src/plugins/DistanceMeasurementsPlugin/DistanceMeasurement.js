@@ -87,6 +87,8 @@ class DistanceMeasurement extends Component {
         this._labelsOnWires = false;
         this._clickable = false;
 
+        this._drawables = [ ];
+
         const onMouseOver = cfg.onMouseOver ? (event) => {
             cfg.onMouseOver(event, this);
             this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new MouseEvent('mouseover', event));
@@ -117,8 +119,8 @@ class DistanceMeasurement extends Component {
             this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new WheelEvent('wheel', event));
         };
 
-        const makeDot = (cfg) => {
-            return new Dot3D(scene, cfg, this._container, {
+        const makeDot = (cfg, coordinateVector) => {
+            const dot = new Dot3D(scene, cfg, this._container, {
                 fillColor: this._color,
                 zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2 : undefined,
                 onMouseOver,
@@ -129,12 +131,20 @@ class DistanceMeasurement extends Component {
                 onMouseMove,
                 onContextMenu
             });
+            dot.on("worldPos", (value) => {
+                coordinateVector.set(value || [0,0,0]);
+                this._wpDirty = true;
+                this._needUpdate(0); // No lag
+            });
+            this._drawables.push(dot);
+            return dot;
         };
-        this._originDot = makeDot(cfg.origin);
-        this._targetDot = makeDot(cfg.target);
+        this._originDot = makeDot(cfg.origin, this._originWorld);
+        this._targetDot = makeDot(cfg.target, this._targetWorld);
+
 
         const makeWire = (color, thickness) => {
-            return new Wire(this._container, {
+            const wire = new Wire(this._container, {
                 color: color,
                 thickness: thickness,
                 thicknessClickable: 6,
@@ -147,6 +157,8 @@ class DistanceMeasurement extends Component {
                 onMouseMove,
                 onContextMenu
             });
+            this._drawables.push(wire);
+            return wire;
         };
         this._lengthWire = makeWire(this._color, 2);
         this._xAxisWire  = makeWire("#FF0000", 1);
@@ -154,7 +166,7 @@ class DistanceMeasurement extends Component {
         this._zAxisWire  = makeWire("blue", 1);
 
         const makeLabel = (color, prefix, zIndexOffset) => {
-            return new Label(this._container, {
+            const label = new Label(this._container, {
                 fillColor: this._color,
                 prefix: "",
                 text: "",
@@ -167,23 +179,13 @@ class DistanceMeasurement extends Component {
                 onMouseMove,
                 onContextMenu
             });
+            this._drawables.push(label);
+            return label;
         };
         this._lengthLabel = makeLabel(this._color, "",  4);
         this._xAxisLabel  = makeLabel("red",       "X", 3);
         this._yAxisLabel  = makeLabel("green",     "Y", 3);
         this._zAxisLabel  = makeLabel("blue",      "Z", 3);
-
-        this._originDot.on("worldPos", (value) => {
-            this._originWorld.set(value || [0,0,0]); 
-            this._wpDirty = true;
-            this._needUpdate(0); // No lag
-        });
-
-        this._targetDot.on("worldPos", (value) => {
-            this._targetWorld.set(value || [0,0,0]); 
-            this._wpDirty = true;
-            this._needUpdate(0); // No lag
-        });
 
         this._onViewMatrix = scene.camera.on("viewMatrix", () => {
             this._vpDirty = true;
@@ -1034,16 +1036,7 @@ class DistanceMeasurement extends Component {
      * @param highlighted
      */
     setHighlighted(highlighted) {
-        this._originDot.setHighlighted(highlighted);
-        this._targetDot.setHighlighted(highlighted);
-        this._xAxisWire.setHighlighted(highlighted);
-        this._yAxisWire.setHighlighted(highlighted);
-        this._zAxisWire.setHighlighted(highlighted);
-        this._xAxisLabel.setHighlighted(highlighted);
-        this._yAxisLabel.setHighlighted(highlighted);
-        this._zAxisLabel.setHighlighted(highlighted);
-        this._lengthWire.setHighlighted(highlighted);
-        this._lengthLabel.setHighlighted(highlighted);
+        this._drawables.forEach(d => d.setHighlighted(highlighted));
     }
 
     /**
@@ -1052,18 +1045,8 @@ class DistanceMeasurement extends Component {
      * @type {Boolean}
      */
     set clickable(value) {
-        value = !!value;
-        this._clickable = value;
-        this._originDot.setClickable(this._clickable);
-        this._targetDot.setClickable(this._clickable);
-        this._xAxisWire.setClickable(this._clickable);
-        this._yAxisWire.setClickable(this._clickable);
-        this._zAxisWire.setClickable(this._clickable);
-        this._lengthWire.setClickable(this._clickable);
-        this._xAxisLabel.setClickable(this._clickable);
-        this._yAxisLabel.setClickable(this._clickable);
-        this._zAxisLabel.setClickable(this._clickable);
-        this._lengthLabel.setClickable(this._clickable);
+        this._clickable = !!value;
+        this._drawables.forEach(d => d.setClickable(this._clickable));
     }
 
     /**
@@ -1105,16 +1088,7 @@ class DistanceMeasurement extends Component {
             scene.off(this._onSectionPlaneUpdated);
         }
 
-        this._originDot.destroy();
-        this._targetDot.destroy();
-        this._xAxisWire.destroy();
-        this._yAxisWire.destroy();
-        this._zAxisWire.destroy();
-        this._lengthLabel.destroy();
-        this._xAxisLabel.destroy();
-        this._yAxisLabel.destroy();
-        this._zAxisLabel.destroy();
-        this._lengthWire.destroy();
+        this._drawables.forEach(d => d.destroy());
 
         super.destroy();
     }
