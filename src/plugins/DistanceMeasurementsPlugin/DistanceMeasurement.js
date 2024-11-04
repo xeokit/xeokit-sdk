@@ -1078,7 +1078,7 @@ class DistanceMeasurement extends Component {
         value = value !== undefined ? Boolean(value) : this.plugin.defaultLengthLabelEnabled;
         this._lengthLabelEnabled = value;
         var labelsVisible = this._visible && this._labelsVisible;
-        this._lengthLabel.setVisible(labelsVisible && !this._lengthAxisLabelCulled && this._clickable && this._axisEnabled && this._lengthLabelEnabled);
+        this._lengthLabel.setVisible(labelsVisible && this._clickable && this._axisEnabled && this._lengthLabelEnabled);
         this._cpDirty = true;
         this._needUpdate();
     }
