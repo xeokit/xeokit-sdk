@@ -20,8 +20,6 @@ function determineMeasurementOrientation(A, B, distance) {
     return yDiff > distance ? 'Vertical' : 'Horizontal';
 }
 
-// function findDistance
-
 /**
  * @desc Measures the distance between two 3D points.
  *
@@ -65,6 +63,30 @@ class DistanceMeasurement extends Component {
 
         this._color = cfg.color || this.plugin.defaultColor;
 
+        this._measurementOrientation = 'Horizontal';
+        this._wpDirty = false;
+        this._vpDirty = false;
+        this._cpDirty = false;
+        this._sectionPlanesDirty = true;
+
+        this._visible = false;
+        this._originVisible = false;
+        this._targetVisible = false;
+        this._useRotationAdjustment = false;
+        this._wireVisible = false;
+        this._axisVisible = false;
+        this._xAxisVisible = false;
+        this._yAxisVisible = false;
+        this._zAxisVisible = false;
+        this._axisEnabled = true;
+        this._xLabelEnabled = false;
+        this._yLabelEnabled = false;
+        this._zLabelEnabled = false;
+        this._lengthLabelEnabled = false;
+        this._labelsVisible = false;
+        this._labelsOnWires = false;
+        this._clickable = false;
+
         const onMouseOver = cfg.onMouseOver ? (event) => {
             cfg.onMouseOver(event, this);
             this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new MouseEvent('mouseover', event));
@@ -95,165 +117,61 @@ class DistanceMeasurement extends Component {
             this.plugin.viewer.scene.canvas.canvas.dispatchEvent(new WheelEvent('wheel', event));
         };
 
-        this._originDot = new Dot3D(scene, cfg.origin, this._container, {
-            fillColor: this._color,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2 : undefined,
-            onMouseOver,
-            onMouseLeave,
-            onMouseWheel,
-            onMouseDown,
-            onMouseUp,
-            onMouseMove,
-            onContextMenu
-        });
+        const makeDot = (cfg) => {
+            return new Dot3D(scene, cfg, this._container, {
+                fillColor: this._color,
+                zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2 : undefined,
+                onMouseOver,
+                onMouseLeave,
+                onMouseWheel,
+                onMouseDown,
+                onMouseUp,
+                onMouseMove,
+                onContextMenu
+            });
+        };
+        this._originDot = makeDot(cfg.origin);
+        this._targetDot = makeDot(cfg.target);
 
-        this._targetDot = new Dot3D(scene, cfg.target, this._container, {
-            fillColor: this._color,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 2 : undefined,
-            onMouseOver,
-            onMouseLeave,
-            onMouseWheel,
-            onMouseDown,
-            onMouseUp,
-            onMouseMove,
-            onContextMenu
-        });
+        const makeWire = (color, thickness) => {
+            return new Wire(this._container, {
+                color: color,
+                thickness: thickness,
+                thicknessClickable: 6,
+                zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1 : undefined,
+                onMouseOver,
+                onMouseLeave,
+                onMouseWheel,
+                onMouseDown,
+                onMouseUp,
+                onMouseMove,
+                onContextMenu
+            });
+        };
+        this._lengthWire = makeWire(this._color, 2);
+        this._xAxisWire  = makeWire("#FF0000", 1);
+        this._yAxisWire  = makeWire("green", 1);
+        this._zAxisWire  = makeWire("blue", 1);
 
-        this._lengthWire = new Wire(this._container, {
-            color: this._color,
-            thickness: 2,
-            thicknessClickable: 6,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1 : undefined,
-            onMouseOver,
-            onMouseLeave,
-            onMouseWheel,
-            onMouseDown,
-            onMouseUp,
-            onMouseMove,
-            onContextMenu
-        });
-
-        this._xAxisWire = new Wire(this._container, {
-            color: "#FF0000",
-            thickness: 1,
-            thicknessClickable: 6,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1 : undefined,
-            onMouseOver,
-            onMouseLeave,
-            onMouseWheel,
-            onMouseDown,
-            onMouseUp,
-            onMouseMove,
-            onContextMenu
-        });
-
-        this._yAxisWire = new Wire(this._container, {
-            color: "green",
-            thickness: 1,
-            thicknessClickable: 6,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1 : undefined,
-            onMouseOver,
-            onMouseLeave,
-            onMouseWheel,
-            onMouseDown,
-            onMouseUp,
-            onMouseMove,
-            onContextMenu
-        });
-
-        this._zAxisWire = new Wire(this._container, {
-            color: "blue",
-            thickness: 1,
-            thicknessClickable: 6,
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 1 : undefined,
-            onMouseOver,
-            onMouseLeave,
-            onMouseWheel,
-            onMouseDown,
-            onMouseUp,
-            onMouseMove,
-            onContextMenu
-        });
-
-        this._lengthLabel = new Label(this._container, {
-            fillColor: this._color,
-            prefix: "",
-            text: "",
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 4 : undefined,
-            onMouseOver,
-            onMouseLeave,
-            onMouseWheel,
-            onMouseDown,
-            onMouseUp,
-            onMouseMove,
-            onContextMenu
-        });
-
-        this._xAxisLabel = new Label(this._container, {
-            fillColor: "red",
-            prefix: "X",
-            text: "",
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 3 : undefined,
-            onMouseOver,
-            onMouseLeave,
-            onMouseWheel,
-            onMouseDown,
-            onMouseUp,
-            onMouseMove,
-            onContextMenu
-        });
-
-        this._yAxisLabel = new Label(this._container, {
-            fillColor: "green",
-            prefix: "Y",
-            text: "",
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 3 : undefined,
-            onMouseOver,
-            onMouseLeave,
-            onMouseWheel,
-            onMouseDown,
-            onMouseUp,
-            onMouseMove,
-            onContextMenu
-        });
-
-        this._zAxisLabel = new Label(this._container, {
-            fillColor: "blue",
-            prefix: "Z",
-            text: "",
-            zIndex: plugin.zIndex !== undefined ? plugin.zIndex + 3 : undefined,
-            onMouseOver,
-            onMouseLeave,
-            onMouseWheel,
-            onMouseDown,
-            onMouseUp,
-            onMouseMove,
-            onContextMenu
-        });
-
-        this._measurementOrientation = 'Horizontal';
-        this._wpDirty = false;
-        this._vpDirty = false;
-        this._cpDirty = false;
-        this._sectionPlanesDirty = true;
-
-        this._visible = false;
-        this._originVisible = false;
-        this._targetVisible = false;
-        this._useRotationAdjustment = false;
-        this._wireVisible = false;
-        this._axisVisible = false;
-        this._xAxisVisible = false;
-        this._yAxisVisible = false;
-        this._zAxisVisible = false;
-        this._axisEnabled = true;
-        this._xLabelEnabled = false;
-        this._yLabelEnabled = false;
-        this._zLabelEnabled = false;
-        this._lengthLabelEnabled = false;
-        this._labelsVisible = false;
-        this._labelsOnWires = false;
-        this._clickable = false;
+        const makeLabel = (color, prefix, zIndexOffset) => {
+            return new Label(this._container, {
+                fillColor: this._color,
+                prefix: "",
+                text: "",
+                zIndex: plugin.zIndex !== undefined ? plugin.zIndex + zIndexOffset : undefined,
+                onMouseOver,
+                onMouseLeave,
+                onMouseWheel,
+                onMouseDown,
+                onMouseUp,
+                onMouseMove,
+                onContextMenu
+            });
+        };
+        this._lengthLabel = makeLabel(this._color, "",  4);
+        this._xAxisLabel  = makeLabel("red",       "X", 3);
+        this._yAxisLabel  = makeLabel("green",     "Y", 3);
+        this._zAxisLabel  = makeLabel("blue",      "Z", 3);
 
         this._originDot.on("worldPos", (value) => {
             this._originWorld.set(value || [0,0,0]); 
