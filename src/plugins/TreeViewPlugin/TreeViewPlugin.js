@@ -1235,8 +1235,8 @@ export class TreeViewPlugin extends Plugin {
 
             if (storey1MetaObject && (storey1MetaObject.attributes && storey1MetaObject.attributes.elevation !== undefined) &&
                 storey2MetaObject && (storey2MetaObject.attributes && storey2MetaObject.attributes.elevation !== undefined)) {
-                const elevation1 = storey1MetaObject.attributes.elevation;
-                const elevation2 = storey2MetaObject.attributes.elevation;
+                const elevation1 = Number.parseFloat(storey1MetaObject.attributes.elevation);
+                const elevation2 = Number.parseFloat(storey2MetaObject.attributes.elevation);
                 if (elevation1 > elevation2) {
                     return -1;
                 }
