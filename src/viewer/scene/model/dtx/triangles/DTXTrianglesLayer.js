@@ -1,12 +1,100 @@
+import {ENTITY_FLAGS} from "../../ENTITY_FLAGS.js";
+import {RENDER_PASSES} from "../../RENDER_PASSES.js";
+
 import {math} from "../../../math/math.js";
 import {RenderState} from "../../../webgl/RenderState.js";
 import {Configs} from "../../../../Configs.js";
-import {ENTITY_FLAGS} from '../../ENTITY_FLAGS.js';
-import {RENDER_PASSES} from '../../RENDER_PASSES.js';
-import {getRenderers} from "./renderers/DTXTrianglesRenderers.js";
-import {DTXTrianglesState} from "./lib/DTXTrianglesState.js"
+import {DTXTrianglesState} from "./lib/DTXTrianglesState.js";
 import {dataTextureRamStats} from "./lib/dataTextureRamStats.js";
 import {DTXTrianglesTextureFactory} from "./lib/DTXTrianglesTextureFactory.js";
+
+import {DTXTrianglesColorRenderer}           from "./renderers/DTXTrianglesColorRenderer.js";
+import {DTXTrianglesDepthRenderer}           from "./renderers/DTXTrianglesDepthRenderer.js";
+import {DTXTrianglesEdgesColorRenderer}      from "./renderers/DTXTrianglesEdgesColorRenderer.js";
+import {DTXTrianglesEdgesRenderer}           from "./renderers/DTXTrianglesEdgesRenderer.js";
+import {DTXTrianglesOcclusionRenderer}       from "./renderers/DTXTrianglesOcclusionRenderer.js";
+import {DTXTrianglesPickDepthRenderer}       from "./renderers/DTXTrianglesPickDepthRenderer.js";
+import {DTXTrianglesPickMeshRenderer}        from "./renderers/DTXTrianglesPickMeshRenderer.js";
+import {DTXTrianglesPickNormalsFlatRenderer} from "./renderers/DTXTrianglesPickNormalsFlatRenderer.js";
+import {DTXTrianglesSilhouetteRenderer}      from "./renderers/DTXTrianglesSilhouetteRenderer.js";
+import {DTXTrianglesSnapInitRenderer}        from "./renderers/DTXTrianglesSnapInitRenderer.js";
+import {DTXTrianglesSnapRenderer}            from "./renderers/DTXTrianglesSnapRenderer.js";
+
+export const getRenderers = (function() {
+    const cachedRenderers = { };
+
+    return function(scene) {
+        const batchInstKey = "dtx";
+        if (! (batchInstKey in cachedRenderers)) {
+            cachedRenderers[batchInstKey] = { };
+        }
+        const primKey = "triangles";
+        if (! (primKey in cachedRenderers[batchInstKey])) {
+            cachedRenderers[batchInstKey][primKey] = { };
+        }
+        const cache = cachedRenderers[batchInstKey][primKey];
+        const sceneId = scene.id;
+        if (! (sceneId in cache)) {
+
+            // Pre-initialize certain renderers that would otherwise be lazy-initialised on user interaction,
+            // such as picking or emphasis, so that there is no delay when user first begins interacting with the viewer.
+            const eager = function(instantiate) {
+                let renderer = instantiate(scene);
+                return {
+                    drawLayer: (frameCtx, layer, renderPass) => renderer.drawLayer(frameCtx, layer, renderPass),
+                    revalidate: force => {
+                        if (force || (! renderer.getValid())) {
+                            renderer.destroy();
+                            renderer = instantiate(scene);
+                        }
+                    }
+                };
+            };
+
+            const lazy = function(instantiate) {
+                let renderer = null;
+                return {
+                    drawLayer: (frameCtx, layer, renderPass) => {
+                        if (! renderer) {
+                            renderer = instantiate(scene);
+                        }
+                        renderer.drawLayer(frameCtx, layer, renderPass);
+                    },
+                    revalidate: force => {
+                        if (renderer && (force || (! renderer.getValid()))) {
+                            renderer.destroy();
+                            renderer = null;
+                        }
+                    }
+                };
+            };
+
+            cache[sceneId] = {
+                colorRenderer:           lazy(s => new DTXTrianglesColorRenderer(s, false)),
+                colorRendererWithSAO:    lazy(s => new DTXTrianglesColorRenderer(s, true)),
+                depthRenderer:           lazy(s => new DTXTrianglesDepthRenderer(s)),
+                edgesColorRenderer:      lazy(s => new DTXTrianglesEdgesColorRenderer(s)),
+                edgesRenderer:           lazy(s => new DTXTrianglesEdgesRenderer(s)),
+                occlusionRenderer:       lazy(s => new DTXTrianglesOcclusionRenderer(s)),
+                pickDepthRenderer:       eager(s => new DTXTrianglesPickDepthRenderer(s)),
+                pickMeshRenderer:        eager(s => new DTXTrianglesPickMeshRenderer(s)),
+                pickNormalsFlatRenderer: eager(s => new DTXTrianglesPickNormalsFlatRenderer(s)),
+                silhouetteRenderer:      eager(s => new DTXTrianglesSilhouetteRenderer(s)),
+                snapInitRenderer:        eager(s => new DTXTrianglesSnapInitRenderer(s)),
+                snapRenderer:            eager(s => new DTXTrianglesSnapRenderer(s)),
+            };
+
+            const compile = () => Object.values(cache[sceneId]).forEach(r => r && r.revalidate(false));
+            compile();
+            scene.on("compile", compile);
+            scene.on("destroyed", () => {
+                Object.values(cache[sceneId]).forEach(r => r && r.revalidate(true));
+                delete cache[sceneId];
+            });
+        }
+        return cache[sceneId];
+    };
+})();
 
 const configs = new Configs();
 
