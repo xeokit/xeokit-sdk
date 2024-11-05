@@ -365,9 +365,6 @@ export class DTXTrianglesEdgesRenderer {
         const src = [];
         src.push('#version 300 es');
         src.push("// DTXTrianglesEdgesRenderer fragment shader");
-        if (scene.logarithmicDepthBufferEnabled) {
-            src.push("#extension GL_EXT_frag_depth : enable");
-        }
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
