@@ -16,9 +16,8 @@ const tempMat4a = math.mat4();
  */
 export class DTXTrianglesPickNormalsFlatRenderer {
 
-    constructor(scene, withSAO) {
+    constructor(scene) {
         this._scene = scene;
-        this._withSAO = withSAO;
         this._hash = this._getHash();
         this._allocate();
     }
@@ -28,8 +27,7 @@ export class DTXTrianglesPickNormalsFlatRenderer {
     };
 
     _getHash() {
-        const scene = this._scene;
-        return [scene._lightsState.getHash(), scene._sectionPlanesState.getHash(), (this._withSAO ? "sao" : "nosao")].join(";");
+        return this._scene._sectionPlanesState.getHash();
     }
 
     drawLayer(frameCtx, dataTextureLayer, renderPass) {
