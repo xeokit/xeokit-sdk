@@ -68,10 +68,6 @@ class DTXTrianglesRenderers {
             this._snapInitRenderer.destroy();
             this._snapInitRenderer = null;
         }
-        if (this._pickNormalsRenderer && this._pickNormalsRenderer.getValid() === false) {
-            this._pickNormalsRenderer.destroy();
-            this._pickNormalsRenderer = null;
-        }
         if (this._pickNormalsFlatRenderer && this._pickNormalsFlatRenderer.getValid() === false) {
             this._pickNormalsFlatRenderer.destroy();
             this._pickNormalsFlatRenderer = null;
@@ -97,8 +93,8 @@ class DTXTrianglesRenderers {
         if (!this._pickDepthRenderer) {
             this._pickDepthRenderer = new DTXTrianglesPickDepthRenderer(this._scene);
         }
-        if (!this._pickNormalsRenderer) {
-            this._pickNormalsRenderer = new DTXTrianglesPickNormalsFlatRenderer(this._scene);
+        if (!this._pickNormalsFlatRenderer) {
+            this._pickNormalsFlatRenderer = new DTXTrianglesPickNormalsFlatRenderer(this._scene);
         }
         if (!this._snapRenderer) {
             this._snapRenderer = new DTXTrianglesSnapRenderer(this._scene);
@@ -159,13 +155,6 @@ class DTXTrianglesRenderers {
             this._pickMeshRenderer = new DTXTrianglesPickMeshRenderer(this._scene);
         }
         return this._pickMeshRenderer;
-    }
-
-    get pickNormalsRenderer() {
-        if (!this._pickNormalsRenderer) {
-            this._pickNormalsRenderer = new DTXTrianglesPickNormalsFlatRenderer(this._scene);
-        }
-        return this._pickNormalsRenderer;
     }
 
     get pickNormalsFlatRenderer() {
@@ -239,9 +228,6 @@ class DTXTrianglesRenderers {
         }
         if (this._snapInitRenderer) {
             this._snapInitRenderer.destroy();
-        }
-        if (this._pickNormalsRenderer) {
-            this._pickNormalsRenderer.destroy();
         }
         if (this._pickNormalsFlatRenderer) {
             this._pickNormalsFlatRenderer.destroy();
