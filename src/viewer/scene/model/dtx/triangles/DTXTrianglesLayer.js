@@ -1353,8 +1353,8 @@ export class DTXTrianglesLayer {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
-        if (this._renderers.pickNormalsRenderer) {
-            this._renderers.pickNormalsRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        if (this._renderers.pickNormalsFlatRenderer) {
+            this._renderers.pickNormalsFlatRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }
     }
 
