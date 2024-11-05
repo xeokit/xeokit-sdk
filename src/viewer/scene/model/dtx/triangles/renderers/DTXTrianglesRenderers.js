@@ -36,10 +36,6 @@ class DTXTrianglesRenderers {
             this._flatColorRendererWithSAO.destroy();
             this._flatColorRendererWithSAO = null;
         }
-        if (this._colorQualityRendererWithSAO && (!this._colorQualityRendererWithSAO.getValid())) {
-            this._colorQualityRendererWithSAO.destroy();
-            this._colorQualityRendererWithSAO = null;
-        }
         if (this._depthRenderer && (!this._depthRenderer.getValid())) {
             this._depthRenderer.destroy();
             this._depthRenderer = null;
@@ -128,13 +124,6 @@ class DTXTrianglesRenderers {
             this._colorRendererWithSAO = new DTXTrianglesColorRenderer(this._scene, true);
         }
         return this._colorRendererWithSAO;
-    }
-
-    get colorQualityRendererWithSAO() {
-        // if (!this._colorQualityRendererWithSAO) {
-        //     this._colorQualityRendererWithSAO = new TrianglesDataTextureColorQualityRenderer(this._scene, true);
-        // }
-        return this._colorQualityRendererWithSAO;
     }
 
     get silhouetteRenderer() {
@@ -226,9 +215,6 @@ class DTXTrianglesRenderers {
         }
         if (this._flatColorRendererWithSAO) {
             this._flatColorRendererWithSAO.destroy();
-        }
-        if (this._colorQualityRendererWithSAO) {
-            this._colorQualityRendererWithSAO.destroy();
         }
         if (this._depthRenderer) {
             this._depthRenderer.destroy();
