@@ -894,8 +894,8 @@ class CameraControl extends Component {
                     keyMap[this.AXIS_VIEW_TOP] = [input.KEY_NUM_5];
                     keyMap[this.AXIS_VIEW_BOTTOM] = [input.KEY_NUM_6];
                     keyMap[this.MOUSE_PAN] = [
-                        [input.KEY_SHIFT],
-                        this._configs.panRightClick ? [input.MOUSE_RIGHT_BUTTON] : [input.MOUSE_MIDDLE_BUTTON]
+                        [input.MOUSE_LEFT_BUTTON, input.KEY_SHIFT],
+                        this._configs.panRightClick ? input.MOUSE_RIGHT_BUTTON : input.MOUSE_MIDDLE_BUTTON
                     ]
                     keyMap[this.MOUSE_ROTATE] = [input.MOUSE_LEFT_BUTTON];
                     keyMap[this.MOUSE_DOLLY] = [];
@@ -921,8 +921,8 @@ class CameraControl extends Component {
                     keyMap[this.AXIS_VIEW_TOP] = [input.KEY_NUM_5];
                     keyMap[this.AXIS_VIEW_BOTTOM] = [input.KEY_NUM_6];
                     keyMap[this.MOUSE_PAN] = [
-                        [input.KEY_SHIFT],
-                        this._configs.panRightClick ? [input.MOUSE_RIGHT_BUTTON] : [input.MOUSE_MIDDLE_BUTTON]
+                        [input.MOUSE_LEFT_BUTTON, input.KEY_SHIFT],
+                        this._configs.panRightClick ? input.MOUSE_RIGHT_BUTTON : input.MOUSE_MIDDLE_BUTTON
                     ]
                     keyMap[this.MOUSE_ROTATE] = [input.MOUSE_LEFT_BUTTON];
                     keyMap[this.MOUSE_DOLLY] = [];
@@ -1444,6 +1444,16 @@ class CameraControl extends Component {
      */
     set panRightClick(value) {
         this._configs.panRightClick = value !== false;
+        const panKeyMap = this._keyMap[this.MOUSE_PAN];
+        if (panKeyMap && panKeyMap.length > 0) {
+            const input = this.scene.input;
+            for (let i = 0, len = panKeyMap.length; i < len; i++) {
+                if (this._configs.panRightClick && panKeyMap[i] === input.MOUSE_MIDDLE_BUTTON) 
+                    this._keyMap[this.MOUSE_PAN][i] = input.MOUSE_RIGHT_BUTTON;
+                else if (!this._configs.panRightClick && panKeyMap[i] === input.MOUSE_RIGHT_BUTTON)
+                    this._keyMap[this.MOUSE_PAN][i] = input.MOUSE_MIDDLE_BUTTON;
+            }
+        }
     }
 
     /**
