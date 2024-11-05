@@ -296,7 +296,6 @@ export class DTXTrianglesSnapRenderer {
             src.push("out vec4 vWorldPosition;");
             src.push("flat out uint vFlags2;");
         }
-        src.push("out vec4 vViewPosition;");
         src.push("out highp vec3 relativeToOriginPosition;");
         src.push("void main(void) {");
 
@@ -354,13 +353,11 @@ export class DTXTrianglesSnapRenderer {
             src.push("  vWorldPosition = worldPosition;");
             src.push("  vFlags2 = flags2.r;");
         }
-        src.push("vViewPosition = viewPosition;");
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         src.push("float tmp = clipPos.w;")
         src.push("clipPos.xyzw /= tmp;")
         src.push("clipPos.xy = remapClipPos(clipPos.xy);");
         src.push("clipPos.xyzw *= tmp;")
-        src.push("vViewPosition = clipPos;");
         if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
