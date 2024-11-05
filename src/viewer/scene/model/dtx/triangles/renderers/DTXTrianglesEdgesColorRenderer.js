@@ -14,35 +14,38 @@ export class DTXTrianglesEdgesColorRenderer {
     constructor(scene) {
         this._scene = scene;
         this._hash = this._getHash();
+        this._programName = "DTXTrianglesEdgesColorRenderer";
+        this._useLogDepthBuffer = scene.logarithmicDepthBufferEnabled;
         this._allocate();
     }
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         return this._scene._sectionPlanesState.getHash();
     }
 
     drawLayer(frameCtx, dataTextureLayer, renderPass) {
-
         if (!this._program) {
             this._allocate();
-            if (this.errors) {
+            if (!this._program) {
                 return;
             }
         }
 
-        if (frameCtx.lastProgramId !== this._program.id) {
-            frameCtx.lastProgramId = this._program.id;
-            this._bindProgram();
+        const program = this._program;
+
+        if (frameCtx.lastProgramId !== program.id) {
+            frameCtx.lastProgramId = program.id;
+            program.bind();
         }
 
         const scene = this._scene;
+        const gl = scene.canvas.gl;
         const camera = scene.camera;
         const model = dataTextureLayer.model;
-        const gl = scene.canvas.gl;
         const state = dataTextureLayer._state;
         const textureState = state.textureState;
         const origin = dataTextureLayer._state.origin;
@@ -50,10 +53,10 @@ export class DTXTrianglesEdgesColorRenderer {
         const viewMatrix = camera.viewMatrix;
 
         textureState.bindCommonTextures(
-            this._program,
-            this.uTexturePerObjectPositionsDecodeMatrix,
+            program,
+            this._uTexturePerObjectPositionsDecodeMatrix,
             this._uTexturePerVertexIdCoordinates,
-            this.uTexturePerObjectColorsAndFlags,
+            this._uTexturePerObjectColorsAndFlags,
             this._uTexturePerObjectMatrix
         );
 
@@ -77,6 +80,11 @@ export class DTXTrianglesEdgesColorRenderer {
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
         gl.uniformMatrix4fv(this._uProjMatrix, false, camera.projMatrix);
         gl.uniform1i(this._uRenderPass, renderPass);
+
+        if (this._useLogDepthBuffer) {
+            const logDepthBufFC = 2.0 / (Math.log(camera.project.far + 1.0) / Math.LN2);
+            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
+        }
 
         const numAllocatedSectionPlanes = scene._sectionPlanesState.getNumAllocatedSectionPlanes();
         const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
@@ -108,7 +116,7 @@ export class DTXTrianglesEdgesColorRenderer {
         }
         if (state.numEdgeIndices8Bits > 0) {
             textureState.bindEdgeIndicesTextures(
-                this._program,
+                program,
                 this._uTexturePerEdgeIdPortionIds,
                 this._uTexturePerPolygonIdEdgeIndices,
                 8 // 8 bits edge indices
@@ -117,7 +125,7 @@ export class DTXTrianglesEdgesColorRenderer {
         }
         if (state.numEdgeIndices16Bits > 0) {
             textureState.bindEdgeIndicesTextures(
-                this._program,
+                program,
                 this._uTexturePerEdgeIdPortionIds,
                 this._uTexturePerPolygonIdEdgeIndices,
                 16 // 16 bits edge indices
@@ -126,7 +134,7 @@ export class DTXTrianglesEdgesColorRenderer {
         }
         if (state.numEdgeIndices32Bits > 0) {
             textureState.bindEdgeIndicesTextures(
-                this._program,
+                program,
                 this._uTexturePerEdgeIdPortionIds,
                 this._uTexturePerPolygonIdEdgeIndices,
                 32 // 32 bits edge indices
@@ -139,17 +147,24 @@ export class DTXTrianglesEdgesColorRenderer {
     _allocate() {
         const scene = this._scene;
         const gl = scene.canvas.gl;
-        this._program = new Program(gl, this._buildShader());
-        if (this._program.errors) {
-            this.errors = this._program.errors;
-            console.error(this.errors);
+        const program = new Program(gl, {
+            vertex:   this._buildVertexShader(),
+            fragment: this._buildFragmentShader()
+        });
+
+        const errors = program.errors;
+        if (errors) {
+            console.error(errors);
             return;
         }
-        const program = this._program;
+
+        this._program = program;
+
         this._uRenderPass = program.getLocation("renderPass");
         this._uSceneModelMatrix = program.getLocation("sceneModelMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
+
         this._uSectionPlanes = [];
         for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
             this._uSectionPlanes.push({
@@ -158,37 +173,17 @@ export class DTXTrianglesEdgesColorRenderer {
                 dir: program.getLocation("sectionPlaneDir" + i)
             });
         }
-        if (scene.logarithmicDepthBufferEnabled) {
+
+        if (this._useLogDepthBuffer) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
-        this.uTexturePerObjectPositionsDecodeMatrix = "uObjectPerObjectPositionsDecodeMatrix";
-        this.uTexturePerObjectColorsAndFlags = "uObjectPerObjectColorsAndFlags";
+
+        this._uTexturePerObjectPositionsDecodeMatrix = "uObjectPerObjectPositionsDecodeMatrix";
         this._uTexturePerVertexIdCoordinates = "uTexturePerVertexIdCoordinates";
-        this._uTexturePerPolygonIdEdgeIndices = "uTexturePerPolygonIdEdgeIndices";
-        this._uTexturePerEdgeIdPortionIds = "uTexturePerEdgeIdPortionIds";
+        this._uTexturePerObjectColorsAndFlags = "uObjectPerObjectColorsAndFlags";
         this._uTexturePerObjectMatrix = "uTexturePerObjectMatrix";
-    }
-
-    _bindProgram() {
-
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-        const program = this._program;
-        const project = scene.camera.project;
-
-        program.bind();
-
-        if (scene.logarithmicDepthBufferEnabled) {
-            const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
-            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
-        }
-    }
-
-    _buildShader() {
-        return {
-            vertex: this._buildVertexShader(),
-            fragment: this._buildFragmentShader()
-        };
+        this._uTexturePerEdgeIdPortionIds = "uTexturePerEdgeIdPortionIds";
+        this._uTexturePerPolygonIdEdgeIndices = "uTexturePerPolygonIdEdgeIndices";
     }
 
     _buildVertexShader() {
@@ -196,7 +191,7 @@ export class DTXTrianglesEdgesColorRenderer {
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push("#version 300 es");
-        src.push("// DTXTrianglesEdgesColorRenderer vertex shader");
+        src.push("// " + this._programName + " vertex shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -224,13 +219,13 @@ export class DTXTrianglesEdgesColorRenderer {
         src.push("uniform highp usampler2D uTexturePerPolygonIdEdgeIndices;");
         src.push("uniform mediump usampler2D uTexturePerEdgeIdPortionIds;");
 
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (this._useLogDepthBuffer) {
             src.push("uniform float logDepthBufFC;");
             src.push("out float vFragDepth;");
+            src.push("out float isPerspective;");
             src.push("bool isPerspectiveMatrix(mat4 m) {");
             src.push("    return (m[2][3] == - 1.0);");
             src.push("}");
-            src.push("out float isPerspective;");
         }
 
         if (clipping) {
@@ -258,10 +253,15 @@ export class DTXTrianglesEdgesColorRenderer {
 
         // flags.z = NOT_RENDERED | EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
         // renderPass = EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT
-
         src.push(`if (int(flags.z) != renderPass) {`);
         src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
         src.push("   return;"); // Cull vertex
+        src.push("}");
+
+        src.push("uvec4 color = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);");
+        src.push(`if (color.a == 0u) {`);
+        src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
+        src.push("   return;");
         src.push("}");
 
         src.push("{");
@@ -285,13 +285,6 @@ export class DTXTrianglesEdgesColorRenderer {
 
         src.push("vec3 position = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH, indexPositionV), 0));");
 
-        src.push("uvec4 color = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);");
-        src.push(`if (color.a == 0u) {`);
-        src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
-        src.push("   return;");
-        src.push("};");
-        src.push("vColor = vec4(vec3(color.rgb) * 0.5, float(color.a)) / 255.0;");
-
         src.push("vec4 worldPosition = sceneModelMatrix * (objectDecodeAndInstanceMatrix * vec4(position, 1.0));");
         src.push("vec4 viewPosition = viewMatrix * worldPosition;");
 
@@ -301,11 +294,13 @@ export class DTXTrianglesEdgesColorRenderer {
         }
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (this._useLogDepthBuffer) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
         src.push("gl_Position = clipPos;");
+
+        src.push("vColor = vec4(vec3(color.rgb) * 0.5, float(color.a)) / 255.0;");
 
         src.push("  }");
         src.push("}");
@@ -318,7 +313,7 @@ export class DTXTrianglesEdgesColorRenderer {
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push('#version 300 es');
-        src.push("// DTXTrianglesEdgesColorRenderer fragment shader");
+        src.push("// " + this._programName + " fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -327,7 +322,7 @@ export class DTXTrianglesEdgesColorRenderer {
         src.push("precision mediump int;");
         src.push("#endif");
 
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (this._useLogDepthBuffer) {
             src.push("in float isPerspective;");
             src.push("uniform float logDepthBufFC;");
             src.push("in float vFragDepth;");
@@ -359,7 +354,8 @@ export class DTXTrianglesEdgesColorRenderer {
             src.push("      if (dist > 0.0) { discard; }");
             src.push("  }");
         }
-        if (scene.logarithmicDepthBufferEnabled) {
+
+        if (this._useLogDepthBuffer) {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
 
