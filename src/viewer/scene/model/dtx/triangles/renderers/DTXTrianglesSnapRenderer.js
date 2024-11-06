@@ -256,12 +256,10 @@ export class DTXTrianglesSnapRenderer {
             src.push("}");
         }
 
+        src.push("out highp vec4 vWorldPosition;");
         if (clipping) {
-            src.push("out vec4 vWorldPosition;");
             src.push("flat out uint vFlags2;");
         }
-
-        src.push("out highp vec3 relativeToOriginPosition;");
 
         src.push("void main(void) {");
 
@@ -310,8 +308,8 @@ export class DTXTrianglesSnapRenderer {
         src.push("vec4 worldPosition = sceneModelMatrix * (objectDecodeAndInstanceMatrix * vec4(position, 1.0));");
         src.push("vec4 viewPosition = viewMatrix * worldPosition;");
 
+        src.push("vWorldPosition = worldPosition;");
         if (clipping) {
-            src.push("vWorldPosition = worldPosition;");
             src.push("vFlags2 = flags2.r;");
         }
 
@@ -324,7 +322,6 @@ export class DTXTrianglesSnapRenderer {
         src.push("clipPos.xy = (clipPos.xy / clipPos.w - snapVectorA) * snapInvVectorAB * clipPos.w;");
         src.push("gl_Position = clipPos;");
 
-        src.push("relativeToOriginPosition = worldPosition.xyz;");
         src.push("gl_PointSize = 1.0;"); // Windows needs this?
         src.push("  }");
         src.push("}");
@@ -352,8 +349,8 @@ export class DTXTrianglesSnapRenderer {
             src.push("in float vFragDepth;");
         }
 
+        src.push("in highp vec4 vWorldPosition;");
         if (clipping) {
-            src.push("in vec4 vWorldPosition;");
             src.push("flat in uint vFlags2;");
             for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
@@ -364,7 +361,6 @@ export class DTXTrianglesSnapRenderer {
 
         src.push("uniform int uLayerNumber;");
         src.push("uniform vec3 uCoordinateScaler;");
-        src.push("in highp vec3 relativeToOriginPosition;");
         src.push("out highp ivec4 outCoords;");
 
         src.push("void main(void) {");
@@ -385,7 +381,7 @@ export class DTXTrianglesSnapRenderer {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
 
-        src.push("outCoords = ivec4(relativeToOriginPosition.xyz * uCoordinateScaler.xyz, uLayerNumber);");
+        src.push("outCoords = ivec4(vWorldPosition.xyz * uCoordinateScaler.xyz, uLayerNumber);");
         src.push("}");
         return src;
     }
