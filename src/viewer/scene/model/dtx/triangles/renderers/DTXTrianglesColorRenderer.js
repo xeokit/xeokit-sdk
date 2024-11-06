@@ -17,12 +17,14 @@ export class DTXTrianglesColorRenderer {
         this._scene = scene;
         this._withSAO = withSAO;
         this._hash = this._getHash();
+        this._programName = "DTXTrianglesColorRenderer";
+        this._useLogDepthBuffer = scene.logarithmicDepthBufferEnabled;
         this._allocate();
     }
 
     getValid() {
         return this._hash === this._getHash();
-    };
+    }
 
     _getHash() {
         const scene = this._scene;
@@ -30,23 +32,64 @@ export class DTXTrianglesColorRenderer {
     }
 
     drawLayer(frameCtx, dataTextureLayer, renderPass) {
-
         if (!this._program) {
             this._allocate();
-            if (this.errors) {
+            if (!this._program) {
                 return;
             }
         }
 
-        if (frameCtx.lastProgramId !== this._program.id) {
-            frameCtx.lastProgramId = this._program.id;
-            this._bindProgram(frameCtx);
+        const program = this._program;
+
+        if (frameCtx.lastProgramId !== program.id) {
+            frameCtx.lastProgramId = program.id;
+            program.bind();
+
+            const scene = this._scene;
+            const gl = scene.canvas.gl;
+            const lightsState = scene._lightsState;
+
+            if (this._uLightAmbient) {
+                gl.uniform4fv(this._uLightAmbient, lightsState.getAmbientColorAndIntensity());
+            }
+            const lights = lightsState.lights;
+            for (let i = 0, len = lights.length; i < len; i++) {
+                const light = lights[i];
+
+                if (this._uLightColor[i]) {
+                    gl.uniform4f(this._uLightColor[i], light.color[0], light.color[1], light.color[2], light.intensity);
+                }
+                if (this._uLightPos[i]) {
+                    gl.uniform3fv(this._uLightPos[i], light.pos);
+                    if (this._uLightAttenuation[i]) {
+                        gl.uniform1f(this._uLightAttenuation[i], light.attenuation);
+                    }
+                }
+                if (this._uLightDir[i]) {
+                    gl.uniform3fv(this._uLightDir[i], light.dir);
+                }
+            }
+
+            if (this._withSAO) {
+                const sao = scene.sao;
+                const saoEnabled = sao.possible;
+                if (saoEnabled) {
+                    const viewportWidth = gl.drawingBufferWidth;
+                    const viewportHeight = gl.drawingBufferHeight;
+                    tempVec4a[0] = viewportWidth;
+                    tempVec4a[1] = viewportHeight;
+                    tempVec4a[2] = sao.blendCutoff;
+                    tempVec4a[3] = sao.blendFactor;
+                    gl.uniform4fv(this._uSAOParams, tempVec4a);
+                    this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 10);
+                }
+            }
         }
 
         const scene = this._scene;
+        const gl = scene.canvas.gl;
         const camera = scene.camera;
         const model = dataTextureLayer.model;
-        const gl = scene.canvas.gl;
         const state = dataTextureLayer._state;
         const textureState = state.textureState;
         const origin = dataTextureLayer._state.origin;
@@ -54,10 +97,10 @@ export class DTXTrianglesColorRenderer {
         const viewMatrix = camera.viewMatrix;
 
         textureState.bindCommonTextures(
-            this._program,
-            this.uTexturePerObjectPositionsDecodeMatrix,
+            program,
+            this._uTexturePerObjectPositionsDecodeMatrix,
             this._uTexturePerVertexIdCoordinates,
-            this.uTexturePerObjectColorsAndFlags,
+            this._uTexturePerObjectColorsAndFlags,
             this._uTexturePerObjectMatrix
         );
 
@@ -83,7 +126,7 @@ export class DTXTrianglesColorRenderer {
         gl.uniform3fv(this._uCameraEyeRtc, math.subVec3(camera.eye, rtcOrigin, tempVec3b));
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (this._useLogDepthBuffer) {
             const logDepthBufFC = 2.0 / (Math.log(camera.project.far + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
@@ -118,7 +161,7 @@ export class DTXTrianglesColorRenderer {
         }
         if (state.numIndices8Bits > 0) {
             textureState.bindTriangleIndicesTextures(
-                this._program,
+                program,
                 this._uTexturePerPolygonIdPortionIds,
                 this._uTexturePerPolygonIdIndices,
                 8 // 8 bits indices
@@ -127,7 +170,7 @@ export class DTXTrianglesColorRenderer {
         }
         if (state.numIndices16Bits > 0) {
             textureState.bindTriangleIndicesTextures(
-                this._program,
+                program,
                 this._uTexturePerPolygonIdPortionIds,
                 this._uTexturePerPolygonIdIndices,
                 16 // 16 bits indices
@@ -136,7 +179,7 @@ export class DTXTrianglesColorRenderer {
         }
         if (state.numIndices32Bits > 0) {
             textureState.bindTriangleIndicesTextures(
-                this._program,
+                program,
                 this._uTexturePerPolygonIdPortionIds,
                 this._uTexturePerPolygonIdIndices,
                 32 // 32 bits indices
@@ -149,17 +192,25 @@ export class DTXTrianglesColorRenderer {
     _allocate() {
         const scene = this._scene;
         const gl = scene.canvas.gl;
-        this._program = new Program(gl, this._buildShader());
-        if (this._program.errors) {
-            this.errors = this._program.errors;
-            console.error(this.errors);
+        const program = new Program(gl, {
+            vertex:   this._buildVertexShader(),
+            fragment: this._buildFragmentShader()
+        });
+
+        const errors = program.errors;
+        if (errors) {
+            console.error(errors);
             return;
         }
-        const program = this._program;
+
+        this._program = program;
+
         this._uRenderPass = program.getLocation("renderPass");
         this._uSceneModelMatrix = program.getLocation("sceneModelMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
+        this._uCameraEyeRtc = program.getLocation("uCameraEyeRtc");
+
         this._uSectionPlanes = [];
         for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
             this._uSectionPlanes.push({
@@ -168,16 +219,17 @@ export class DTXTrianglesColorRenderer {
                 dir: program.getLocation("sectionPlaneDir" + i)
             });
         }
-        if (scene.logarithmicDepthBufferEnabled) {
+
+        if (this._useLogDepthBuffer) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
-        this.uTexturePerObjectPositionsDecodeMatrix = "uObjectPerObjectPositionsDecodeMatrix";
-        this.uTexturePerObjectColorsAndFlags = "uObjectPerObjectColorsAndFlags";
+
+        this._uTexturePerObjectPositionsDecodeMatrix = "uObjectPerObjectPositionsDecodeMatrix";
         this._uTexturePerVertexIdCoordinates = "uTexturePerVertexIdCoordinates";
-        this._uTexturePerPolygonIdIndices = "uTexturePerPolygonIdIndices";
+        this._uTexturePerObjectColorsAndFlags = "uObjectPerObjectColorsAndFlags";
+        this._uTexturePerObjectMatrix = "uTexturePerObjectMatrix";
         this._uTexturePerPolygonIdPortionIds = "uTexturePerPolygonIdPortionIds";
-        this._uTexturePerObjectMatrix= "uTexturePerObjectMatrix";
-        this._uCameraEyeRtc = program.getLocation("uCameraEyeRtc");
+        this._uTexturePerPolygonIdIndices = "uTexturePerPolygonIdIndices";
 
         if (this._withSAO) {
             this._uOcclusionTexture = "uOcclusionTexture";
@@ -214,69 +266,12 @@ export class DTXTrianglesColorRenderer {
         }
     }
 
-    _bindProgram(frameCtx) {
-
-        const scene = this._scene;
-        const gl = scene.canvas.gl;
-        const program = this._program;
-        const project = scene.camera.project;
-
-        program.bind();
-
-        if (scene.logarithmicDepthBufferEnabled) {
-            const logDepthBufFC = 2.0 / (Math.log(project.far + 1.0) / Math.LN2);
-            gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
-        }
-
-        if (this._uLightAmbient) {
-            gl.uniform4fv(this._uLightAmbient, scene._lightsState.getAmbientColorAndIntensity());
-        }
-        const lights = scene._lightsState.lights;
-        for (let i = 0, len = lights.length; i < len; i++) {
-            const light = lights[i];
-
-            if (this._uLightColor[i]) {
-                gl.uniform4f(this._uLightColor[i], light.color[0], light.color[1], light.color[2], light.intensity);
-            }
-            if (this._uLightPos[i]) {
-                gl.uniform3fv(this._uLightPos[i], light.pos);
-                if (this._uLightAttenuation[i]) {
-                    gl.uniform1f(this._uLightAttenuation[i], light.attenuation);
-                }
-            }
-            if (this._uLightDir[i]) {
-                gl.uniform3fv(this._uLightDir[i], light.dir);
-            }
-        }
-        if (this._withSAO) {
-            const sao = scene.sao;
-            const saoEnabled = sao.possible;
-            if (saoEnabled) {
-                const viewportWidth = gl.drawingBufferWidth;
-                const viewportHeight = gl.drawingBufferHeight;
-                tempVec4a[0] = viewportWidth;
-                tempVec4a[1] = viewportHeight;
-                tempVec4a[2] = sao.blendCutoff;
-                tempVec4a[3] = sao.blendFactor;
-                gl.uniform4fv(this._uSAOParams, tempVec4a);
-                this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 10);
-            }
-        }
-    }
-
-    _buildShader() {
-        return {
-            vertex: this._buildVertexShader(),
-            fragment: this._buildFragmentShader()
-        };
-    }
-
     _buildVertexShader() {
         const scene = this._scene;
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push("#version 300 es");
-        src.push("// DTXTrianglesColorRenderer vertex shader");
+        src.push("// " + this._programName + " vertex shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -305,9 +300,7 @@ export class DTXTrianglesColorRenderer {
         src.push("uniform mediump usampler2D uTexturePerPolygonIdPortionIds;");
         src.push("uniform vec3 uCameraEyeRtc;");
 
-        src.push("vec3 positions[3];");
-
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (this._useLogDepthBuffer) {
             src.push("uniform float logDepthBufFC;");
             src.push("out float vFragDepth;");
             src.push("out float isPerspective;");
@@ -361,7 +354,6 @@ export class DTXTrianglesColorRenderer {
 
         // flags.x = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
         // renderPass = COLOR_OPAQUE
-
         src.push(`if (int(flags.x) != renderPass) {`);
         src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
         src.push("   return;"); // Cull vertex
@@ -393,9 +385,10 @@ export class DTXTrianglesColorRenderer {
         src.push("mat4 objectDecodeAndInstanceMatrix = objectInstanceMatrix * mat4 (texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));");
         src.push("uint solid = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+7, objectIndexCoords.y), 0).r;");
 
-        src.push("positions[0] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.r, indexPositionV.r), 0));");
-        src.push("positions[1] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.g, indexPositionV.g), 0));");
-        src.push("positions[2] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.b, indexPositionV.b), 0));");
+        src.push("vec3 positions[] = vec3[](");
+        src.push("  vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.r, indexPositionV.r), 0)),");
+        src.push("  vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.g, indexPositionV.g), 0)),");
+        src.push("  vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.b, indexPositionV.b), 0)));");
 
         src.push("vec3 normal = normalize(cross(positions[2] - positions[0], positions[1] - positions[0]));");
         src.push("vec3 position = positions[gl_VertexID % 3];");
@@ -426,7 +419,7 @@ export class DTXTrianglesColorRenderer {
         }
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (this._useLogDepthBuffer) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
@@ -477,7 +470,7 @@ export class DTXTrianglesColorRenderer {
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push('#version 300 es');
-        src.push("// DTXTrianglesColorRenderer fragment shader");
+        src.push("// " + this._programName + " fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -486,7 +479,7 @@ export class DTXTrianglesColorRenderer {
         src.push("precision mediump int;");
         src.push("#endif");
 
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (this._useLogDepthBuffer) {
             src.push("in float isPerspective;");
             src.push("uniform float logDepthBufFC;");
             src.push("in float vFragDepth;");
@@ -530,9 +523,8 @@ export class DTXTrianglesColorRenderer {
             src.push("  }");
         }
 
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (this._useLogDepthBuffer) {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
-            //src.push("    gl_FragDepth = log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
 
         if (this._withSAO) {
