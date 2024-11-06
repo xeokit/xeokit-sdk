@@ -14,6 +14,8 @@ export class DTXTrianglesPickNormalsFlatRenderer {
     constructor(scene) {
         this._scene = scene;
         this._hash = this._getHash();
+        this._programName = "DTXTrianglesPickNormalsFlatRenderer";
+        this._useLogDepthBuffer = scene.logarithmicDepthBufferEnabled;
         this._allocate();
     }
 
@@ -26,23 +28,24 @@ export class DTXTrianglesPickNormalsFlatRenderer {
     }
 
     drawLayer(frameCtx, dataTextureLayer, renderPass) {
-
         if (!this._program) {
             this._allocate();
-            if (this.errors) {
+            if (!this._program) {
                 return;
             }
         }
 
-        if (frameCtx.lastProgramId !== this._program.id) {
-            frameCtx.lastProgramId = this._program.id;
-            this._bindProgram();
+        const program = this._program;
+
+        if (frameCtx.lastProgramId !== program.id) {
+            frameCtx.lastProgramId = program.id;
+            program.bind();
         }
 
         const scene = this._scene;
+        const gl = scene.canvas.gl;
         const camera = scene.camera;
         const model = dataTextureLayer.model;
-        const gl = scene.canvas.gl;
         const state = dataTextureLayer._state;
         const textureState = state.textureState;
         const origin = dataTextureLayer._state.origin;
@@ -53,10 +56,10 @@ export class DTXTrianglesPickNormalsFlatRenderer {
         const far = frameCtx.pickProjMatrix ? frameCtx.pickZFar : camera.project.far;
 
         textureState.bindCommonTextures(
-            this._program,
-            this.uTexturePerObjectPositionsDecodeMatrix,
+            program,
+            this._uTexturePerObjectPositionsDecodeMatrix,
             this._uTexturePerVertexIdCoordinates,
-            this.uTexturePerObjectColorsAndFlags,
+            this._uTexturePerObjectColorsAndFlags,
             this._uTexturePerObjectMatrix
         );
 
@@ -84,7 +87,7 @@ export class DTXTrianglesPickNormalsFlatRenderer {
         gl.uniform2fv(this._uPickClipPos, frameCtx.pickClipPos);
         gl.uniform2f(this._uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (this._useLogDepthBuffer) {
             const logDepthBufFC = 2.0 / (Math.log(far + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
@@ -119,7 +122,7 @@ export class DTXTrianglesPickNormalsFlatRenderer {
         }
         if (state.numIndices8Bits > 0) {
             textureState.bindTriangleIndicesTextures(
-                this._program,
+                program,
                 this._uTexturePerPolygonIdPortionIds,
                 this._uTexturePerPolygonIdIndices,
                 8 // 8 bits indices
@@ -128,7 +131,7 @@ export class DTXTrianglesPickNormalsFlatRenderer {
         }
         if (state.numIndices16Bits > 0) {
             textureState.bindTriangleIndicesTextures(
-                this._program,
+                program,
                 this._uTexturePerPolygonIdPortionIds,
                 this._uTexturePerPolygonIdIndices,
                 16 // 16 bits indices
@@ -137,7 +140,7 @@ export class DTXTrianglesPickNormalsFlatRenderer {
         }
         if (state.numIndices32Bits > 0) {
             textureState.bindTriangleIndicesTextures(
-                this._program,
+                program,
                 this._uTexturePerPolygonIdPortionIds,
                 this._uTexturePerPolygonIdIndices,
                 32 // 32 bits indices
@@ -150,17 +153,25 @@ export class DTXTrianglesPickNormalsFlatRenderer {
     _allocate() {
         const scene = this._scene;
         const gl = scene.canvas.gl;
-        this._program = new Program(gl, this._buildShader());
-        if (this._program.errors) {
-            this.errors = this._program.errors;
-            console.error(this.errors);
+        const program = new Program(gl, {
+            vertex:   this._buildVertexShader(),
+            fragment: this._buildFragmentShader()
+        });
+
+        const errors = program.errors;
+        if (errors) {
+            console.error(errors);
             return;
         }
-        const program = this._program;
+
+        this._program = program;
+
         this._uRenderPass = program.getLocation("renderPass");
         this._uSceneModelMatrix = program.getLocation("sceneModelMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
+        this._uCameraEyeRtc = program.getLocation("uCameraEyeRtc");
+
         this._uSectionPlanes = [];
         for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
             this._uSectionPlanes.push({
@@ -169,35 +180,19 @@ export class DTXTrianglesPickNormalsFlatRenderer {
                 dir: program.getLocation("sectionPlaneDir" + i)
             });
         }
-        if (scene.logarithmicDepthBufferEnabled) {
+
+        if (this._useLogDepthBuffer) {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
-        this.uTexturePerObjectPositionsDecodeMatrix = "uObjectPerObjectPositionsDecodeMatrix";
-        this.uTexturePerObjectColorsAndFlags = "uObjectPerObjectColorsAndFlags";
+
+        this._uTexturePerObjectPositionsDecodeMatrix = "uObjectPerObjectPositionsDecodeMatrix";
         this._uTexturePerVertexIdCoordinates = "uTexturePerVertexIdCoordinates";
-        this._uTexturePerPolygonIdIndices = "uTexturePerPolygonIdIndices";
+        this._uTexturePerObjectColorsAndFlags = "uObjectPerObjectColorsAndFlags";
+        this._uTexturePerObjectMatrix = "uTexturePerObjectMatrix";
         this._uTexturePerPolygonIdPortionIds = "uTexturePerPolygonIdPortionIds";
-        this._uTexturePerObjectMatrix= "uTexturePerObjectMatrix";
-        this._uCameraEyeRtc = program.getLocation("uCameraEyeRtc");
+        this._uTexturePerPolygonIdIndices = "uTexturePerPolygonIdIndices";
         this._uPickClipPos = program.getLocation("pickClipPos");
         this._uDrawingBufferSize = program.getLocation("drawingBufferSize");
-    }
-
-    _bindProgram() {
-        this._program.bind();
-
-        const scene = this._scene;
-        if (scene.logarithmicDepthBufferEnabled) {
-            const logDepthBufFC = 2.0 / (Math.log(scene.camera.project.far + 1.0) / Math.LN2);
-            scene.canvas.gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
-        }
-    }
-
-    _buildShader() {
-        return {
-            vertex: this._buildVertexShader(),
-            fragment: this._buildFragmentShader()
-        };
     }
 
     _buildVertexShader() {
@@ -205,7 +200,7 @@ export class DTXTrianglesPickNormalsFlatRenderer {
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push("#version 300 es");
-        src.push("// DTXTrianglesPickNormalsFlatRenderer vertex shader");
+        src.push("// " + this._programName + " vertex shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -227,8 +222,8 @@ export class DTXTrianglesPickNormalsFlatRenderer {
         src.push("uniform mat4 projMatrix;");
 
         src.push("uniform highp sampler2D uObjectPerObjectPositionsDecodeMatrix;");
-        src.push("uniform lowp usampler2D uObjectPerObjectColorsAndFlags;");
         src.push("uniform highp sampler2D uTexturePerObjectMatrix;");
+        src.push("uniform lowp usampler2D uObjectPerObjectColorsAndFlags;");
         src.push("uniform mediump usampler2D uTexturePerVertexIdCoordinates;");
         src.push("uniform highp usampler2D uTexturePerPolygonIdIndices;");
         src.push("uniform mediump usampler2D uTexturePerPolygonIdPortionIds;");
@@ -236,9 +231,7 @@ export class DTXTrianglesPickNormalsFlatRenderer {
         src.push("uniform vec2 pickClipPos;");
         src.push("uniform vec2 drawingBufferSize;");
 
-        src.push("vec3 positions[3];");
-
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (this._useLogDepthBuffer) {
             src.push("uniform float logDepthBufFC;");
             src.push("out float vFragDepth;");
             src.push("out float isPerspective;");
@@ -249,7 +242,6 @@ export class DTXTrianglesPickNormalsFlatRenderer {
         src.push("}");
 
         src.push("out vec4 vWorldPosition;");
-
         if (clipping) {
             src.push("flat out uint vFlags2;");
         }
@@ -268,8 +260,9 @@ export class DTXTrianglesPickNormalsFlatRenderer {
 
         // get flags & flags2
         src.push("uvec4 flags = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);");
-        src.push("uvec4 flags2 = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);");  // pickFlag = NOT_RENDERED | PICK
+        src.push("uvec4 flags2 = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);");
 
+        // pickFlag = NOT_RENDERED | PICK
         // renderPass = PICK
         src.push(`if (int(flags.w) != renderPass) {`);
         src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
@@ -277,6 +270,12 @@ export class DTXTrianglesPickNormalsFlatRenderer {
         src.push("}");
 
         src.push("{");
+
+        src.push("uvec4 color = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);");
+        src.push(`if (color.a == 0u) {`);
+        src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
+        src.push("   return;");
+        src.push("};");
 
         src.push("ivec4 packedVertexBase = ivec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+4, objectIndexCoords.y), 0));");
         src.push("ivec4 packedIndexBaseOffset = ivec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+5, objectIndexCoords.y), 0));");
@@ -296,16 +295,10 @@ export class DTXTrianglesPickNormalsFlatRenderer {
         src.push("mat4 objectDecodeAndInstanceMatrix = objectInstanceMatrix * mat4 (texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));");
         src.push("uint solid = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+7, objectIndexCoords.y), 0).r;");
 
-        src.push("positions[0] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.r, indexPositionV.r), 0));");
-        src.push("positions[1] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.g, indexPositionV.g), 0));");
-        src.push("positions[2] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.b, indexPositionV.b), 0));");
-
-        src.push("uvec4 color = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);");
-
-        src.push(`if (color.a == 0u) {`);
-        src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
-        src.push("   return;");
-        src.push("};");
+        src.push("vec3 positions[] = vec3[](");
+        src.push("  vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.r, indexPositionV.r), 0)),");
+        src.push("  vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.g, indexPositionV.g), 0)),");
+        src.push("  vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.b, indexPositionV.b), 0)));");
 
         src.push("vec3 normal = normalize(cross(positions[2] - positions[0], positions[1] - positions[0]));");
         src.push("vec3 position = positions[gl_VertexID % 3];");
@@ -334,7 +327,7 @@ export class DTXTrianglesPickNormalsFlatRenderer {
         }
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (this._useLogDepthBuffer) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
@@ -351,7 +344,7 @@ export class DTXTrianglesPickNormalsFlatRenderer {
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
         src.push('#version 300 es');
-        src.push("// DTXTrianglesPickNormalsFlatRenderer fragment shader");
+        src.push("// " + this._programName + " fragment shader");
         src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
         src.push("precision highp float;");
         src.push("precision highp int;");
@@ -360,7 +353,7 @@ export class DTXTrianglesPickNormalsFlatRenderer {
         src.push("precision mediump int;");
         src.push("#endif");
 
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (this._useLogDepthBuffer) {
             src.push("in float isPerspective;");
             src.push("uniform float logDepthBufFC;");
             src.push("in float vFragDepth;");
@@ -375,6 +368,7 @@ export class DTXTrianglesPickNormalsFlatRenderer {
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
+
         src.push("out highp ivec4 outNormal;");
 
         src.push("void main(void) {");
@@ -391,7 +385,7 @@ export class DTXTrianglesPickNormalsFlatRenderer {
             src.push("  }");
         }
 
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (this._useLogDepthBuffer) {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
         src.push("  vec3 xTangent = dFdx( vWorldPosition.xyz );");
