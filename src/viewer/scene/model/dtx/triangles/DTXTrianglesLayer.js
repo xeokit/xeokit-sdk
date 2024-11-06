@@ -190,13 +190,13 @@ export class DTXTrianglesLayer {
             perEdgeNumberPortionId16Bits: [],
             perEdgeNumberPortionId32Bits: []
         };
-        this._dtxState = new DTXTrianglesState();
+
         this._dtxTextureFactory = new DTXTrianglesTextureFactory(gl);
 
         this._state = new RenderState({
             origin: math.vec3(cfg.origin),
             metallicRoughnessBuf: null,
-            textureState: this._dtxState,
+            textureState: new DTXTrianglesState(),
             numIndices8Bits: 0,
             numIndices16Bits: 0,
             numIndices32Bits: 0,
@@ -588,13 +588,12 @@ export class DTXTrianglesLayer {
             return;
         }
 
-        const state = this._state;
-        const textureState = this._dtxState;
+        const textureState = this._state.textureState;
         const gl = this.model.scene.canvas.gl;
         const buffer = this._buffer;
         const texFac = this._dtxTextureFactory;
 
-        state.gl = gl;
+        this._state.gl = gl;
         textureState.texturePerObjectColorsAndFlags = texFac.createTextureForColorsAndFlags(
             buffer.perObjectColors,
             buffer.perObjectPickColors,
@@ -845,7 +844,7 @@ export class DTXTrianglesLayer {
         }
         this._deferredSetFlagsDirty = false;
         const gl = this.model.scene.canvas.gl;
-        const textureState = this._dtxState;
+        const textureState = this._state.textureState;
         gl.bindTexture(gl.TEXTURE_2D, textureState.texturePerObjectColorsAndFlags._texture);
         gl.texSubImage2D(
             gl.TEXTURE_2D,
@@ -918,7 +917,7 @@ export class DTXTrianglesLayer {
             throw "Not finalized";
         }
         // Color
-        const textureState = this._dtxState;
+        const textureState = this._state.textureState;
         const gl = this.model.scene.canvas.gl;
         tempUint8Array4 [0] = color[0];
         tempUint8Array4 [1] = color[1];
@@ -1035,7 +1034,7 @@ export class DTXTrianglesLayer {
         // Pick
 
         let f3 = (visible && (!culled) && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
-        const textureState = this._dtxState;
+        const textureState = this._state.textureState;
         const gl = this.model.scene.canvas.gl;
         tempUint8Array4 [0] = f0;
         tempUint8Array4 [1] = f1;
@@ -1080,7 +1079,7 @@ export class DTXTrianglesLayer {
             throw "Not finalized";
         }
         const clippable = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 255 : 0;
-        const textureState = this._dtxState;
+        const textureState = this._state.textureState;
         const gl = this.model.scene.canvas.gl;
         tempUint8Array4 [0] = clippable;
         tempUint8Array4 [1] = 0;
@@ -1130,7 +1129,7 @@ export class DTXTrianglesLayer {
         //     this.model.error("Entity#matrix not enabled for this Viewer"); // See Viewer entityMatrixsEnabled
         //     return;
         // }
-        const textureState = this._dtxState;
+        const textureState = this._state.textureState;
         const gl = this.model.scene.canvas.gl;
         tempMat4a.set(matrix);
         textureState.texturePerObjectInstanceMatrices._textureData.set(tempMat4a, subPortionId * 16);
