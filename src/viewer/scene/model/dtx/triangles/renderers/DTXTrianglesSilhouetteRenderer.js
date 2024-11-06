@@ -143,8 +143,8 @@ export class DTXTrianglesSilhouetteRenderer {
         if (state.numIndices8Bits > 0) {
             textureState.bindTriangleIndicesTextures(
                 program,
-                this._uTexturePerPolygonIdPortionIds,
-                this._uTexturePerPolygonIdIndices,
+                this._uTexturePerPrimitiveIdPortionIds,
+                this._uTexturePerPrimitiveIdIndices,
                 8 // 8 bits indices
             );
             gl.drawArrays(gl.TRIANGLES, 0, state.numIndices8Bits);
@@ -152,8 +152,8 @@ export class DTXTrianglesSilhouetteRenderer {
         if (state.numIndices16Bits > 0) {
             textureState.bindTriangleIndicesTextures(
                 program,
-                this._uTexturePerPolygonIdPortionIds,
-                this._uTexturePerPolygonIdIndices,
+                this._uTexturePerPrimitiveIdPortionIds,
+                this._uTexturePerPrimitiveIdIndices,
                 16 // 16 bits indices
             );
             gl.drawArrays(gl.TRIANGLES, 0, state.numIndices16Bits);
@@ -161,8 +161,8 @@ export class DTXTrianglesSilhouetteRenderer {
         if (state.numIndices32Bits > 0) {
             textureState.bindTriangleIndicesTextures(
                 program,
-                this._uTexturePerPolygonIdPortionIds,
-                this._uTexturePerPolygonIdIndices,
+                this._uTexturePerPrimitiveIdPortionIds,
+                this._uTexturePerPrimitiveIdIndices,
                 32 // 32 bits indices
             );
             gl.drawArrays(gl.TRIANGLES, 0, state.numIndices32Bits);
@@ -210,8 +210,8 @@ export class DTXTrianglesSilhouetteRenderer {
         this._uTexturePerVertexIdCoordinates = "uTexturePerVertexIdCoordinates";
         this._uTexturePerObjectColorsAndFlags = "uObjectPerObjectColorsAndFlags";
         this._uTexturePerObjectMatrix = "uTexturePerObjectMatrix";
-        this._uTexturePerPolygonIdPortionIds = "uTexturePerPolygonIdPortionIds";
-        this._uTexturePerPolygonIdIndices = "uTexturePerPolygonIdIndices";
+        this._uTexturePerPrimitiveIdPortionIds = "uTexturePerPrimitiveIdPortionIds";
+        this._uTexturePerPrimitiveIdIndices = "uTexturePerPrimitiveIdIndices";
     }
 
     _buildVertexShader() {
@@ -244,8 +244,8 @@ export class DTXTrianglesSilhouetteRenderer {
         src.push("uniform highp sampler2D uTexturePerObjectMatrix;");
         src.push("uniform lowp usampler2D uObjectPerObjectColorsAndFlags;");
         src.push("uniform mediump usampler2D uTexturePerVertexIdCoordinates;");
-        src.push("uniform highp usampler2D uTexturePerPolygonIdIndices;");
-        src.push("uniform mediump usampler2D uTexturePerPolygonIdPortionIds;");
+        src.push("uniform highp usampler2D uTexturePerPrimitiveIdIndices;");
+        src.push("uniform mediump usampler2D uTexturePerPrimitiveIdPortionIds;");
         src.push("uniform vec3 uCameraEyeRtc;");
 
         if (this._useLogDepthBuffer) {
@@ -268,13 +268,13 @@ export class DTXTrianglesSilhouetteRenderer {
         src.push("void main(void) {");
 
         // constants
-        src.push("int polygonIndex = gl_VertexID / 3;");
+        src.push("int primitiveIndex = gl_VertexID / 3;");
 
         // get packed object-id
-        src.push("int h_packed_object_id_index = (polygonIndex >> 3) & 4095;");
-        src.push("int v_packed_object_id_index = (polygonIndex >> 3) >> 12;");
+        src.push("int h_packed_object_id_index = (primitiveIndex >> 3) & 4095;");
+        src.push("int v_packed_object_id_index = (primitiveIndex >> 3) >> 12;");
 
-        src.push("int objectIndex = int(texelFetch(uTexturePerPolygonIdPortionIds, ivec2(h_packed_object_id_index, v_packed_object_id_index), 0).r);");
+        src.push("int objectIndex = int(texelFetch(uTexturePerPrimitiveIdPortionIds, ivec2(h_packed_object_id_index, v_packed_object_id_index), 0).r);");
         src.push("ivec2 objectIndexCoords = ivec2(objectIndex % 512, objectIndex / 512);");
 
         // get flags & flags2
@@ -294,10 +294,10 @@ export class DTXTrianglesSilhouetteRenderer {
         src.push("ivec4 packedIndexBaseOffset = ivec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+5, objectIndexCoords.y), 0));");
         src.push("int indexBaseOffset = (packedIndexBaseOffset.r << 24) + (packedIndexBaseOffset.g << 16) + (packedIndexBaseOffset.b << 8) + packedIndexBaseOffset.a;");
 
-        src.push("int h_index = (polygonIndex - indexBaseOffset) & 4095;");
-        src.push("int v_index = (polygonIndex - indexBaseOffset) >> 12;");
+        src.push("int h_index = (primitiveIndex - indexBaseOffset) & 4095;");
+        src.push("int v_index = (primitiveIndex - indexBaseOffset) >> 12;");
 
-        src.push("ivec3 vertexIndices = ivec3(texelFetch(uTexturePerPolygonIdIndices, ivec2(h_index, v_index), 0));");
+        src.push("ivec3 vertexIndices = ivec3(texelFetch(uTexturePerPrimitiveIdIndices, ivec2(h_index, v_index), 0));");
         src.push("ivec3 uniqueVertexIndexes = vertexIndices + (packedVertexBase.r << 24) + (packedVertexBase.g << 16) + (packedVertexBase.b << 8) + packedVertexBase.a;");
 
         src.push("ivec3 indexPositionH = uniqueVertexIndexes & 4095;");
