@@ -116,7 +116,7 @@ export declare class StoreyViewsPlugin extends Plugin {
     * @param {Number[]} worldPos 3D World-space position.
     * @returns {String} ID of the storey containing the position, or null if the position falls outside all the storeys.
     */
-  getStoreyContainingWorldPos(worldPos: number[]): string;
+  getStoreyContainingWorldPos(worldPos: number[], modelId: null | string): string;
 
   /**
    * Gets the ID of the storey which's bounding box contains the y point of the world position
@@ -124,7 +124,7 @@ export declare class StoreyViewsPlugin extends Plugin {
    * @param {Number[]} worldPos 3D World-space position.
    * @returns {String} ID of the storey containing the position, or null if the position falls outside all the storeys.
    */
-  getStoreyInVerticalRange(worldPos: number[]): string;
+  getStoreyInVerticalRange(worldPos: number[], modelId: null | string): string;
 
 
   /**
@@ -133,7 +133,7 @@ export declare class StoreyViewsPlugin extends Plugin {
    * @param {Number[]} worldPos 3D World-space position.
    * @returns {String} ID of the lowest/highest story or null.
    */
-  isPositionAboveOrBelowBuilding(worldPos: number[]): string;
+  isPositionAboveOrBelowBuilding(worldPos: number[], modelId: null | string): string;
 
   /**
    * Converts a 3D World-space position to a 2D position within a StoreyMap image.

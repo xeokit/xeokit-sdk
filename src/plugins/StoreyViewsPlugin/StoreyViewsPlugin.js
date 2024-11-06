@@ -680,9 +680,10 @@ class StoreyViewsPlugin extends Plugin {
      * @param {Number[]} worldPos 3D World-space position.
      * @returns {String} ID of the storey containing the position, or null if the position falls outside all the storeys.
      */
-    getStoreyContainingWorldPos(worldPos) {
-        for (var storeyId in this.storeys) {
-            const storey = this.storeys[storeyId];
+    getStoreyContainingWorldPos(worldPos, modelId = null) {
+        const storeys = modelId ? this._filterStoreys(modelId) : this.storeys;
+        for (let storeyId in storeys) {
+            const storey = storeys[storeyId];
             if (math.point3AABB3AbsoluteIntersect(storey.storeyAABB, worldPos)) {
                 return storeyId;
             }
@@ -696,9 +697,10 @@ class StoreyViewsPlugin extends Plugin {
      * @param {Number[]} worldPos 3D World-space position.
      * @returns {String} ID of the storey containing the position, or null if the position falls outside all the storeys.
      */
-    getStoreyInVerticalRange(worldPos) {
-        for (let storeyId in this.storeys) {
-            const storey = this.storeys[storeyId];
+    getStoreyInVerticalRange(worldPos, modelId = null) {
+        const storeys = modelId ? this._filterStoreys(modelId) : this.storeys;
+        for (let storeyId in storeys) {
+            const storey = storeys[storeyId];
             const aabb = [0, 0, 0, 0, 0, 0], pos = [0, 0, 0];
             aabb[1] = storey.storeyAABB[1];
             aabb[4] = storey.storeyAABB[4];
@@ -716,12 +718,14 @@ class StoreyViewsPlugin extends Plugin {
      * @param {Number[]} worldPos 3D World-space position.
      * @returns {String} ID of the lowest/highest story or null.
      */
-    isPositionAboveOrBelowBuilding(worldPos) {
-        const keys = Object.keys(this.storeys);
+    isPositionAboveOrBelowBuilding(worldPos, modelId = null) {
+        const storeys = modelId ? this._filterStoreys(modelId) : this.storeys;
+        const keys = Object.keys(storeys);
+        if(keys.length <= 0) return null;
         const ids = [keys[0], keys[keys.length - 1]];
-        if (worldPos[1] < this.storeys[ids[0]].storeyAABB[1])
+        if (worldPos[1] < storeys[ids[0]].storeyAABB[1])
             return ids[0];
-        else if (worldPos[1] > this.storeys[ids[1]].storeyAABB[4])
+        else if (worldPos[1] > storeys[ids[1]].storeyAABB[4])
             return ids[1];
         return null;
     }
@@ -864,6 +868,12 @@ class StoreyViewsPlugin extends Plugin {
                 return 0;
             }
         });
+    }
+
+    _filterStoreys(modelId) {
+        return Object.fromEntries(
+            Object.entries(this.storeys).filter(([_, value]) => value.modelId === modelId)
+        );
     }
 }
 
