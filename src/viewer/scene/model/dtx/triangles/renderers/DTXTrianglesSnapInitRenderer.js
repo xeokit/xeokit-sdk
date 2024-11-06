@@ -261,12 +261,10 @@ export class DTXTrianglesSnapInitRenderer {
         src.push("}");
 
         src.push("flat out vec4 vPickColor;");
-        src.push("out vec4 vWorldPosition;");
+        src.push("out highp vec4 vWorldPosition;");
         if (clipping) {
             src.push("flat out uint vFlags2;");
         }
-
-        src.push("out highp vec3 relativeToOriginPosition;");
 
         src.push("void main(void) {");
 
@@ -357,7 +355,6 @@ export class DTXTrianglesSnapInitRenderer {
         src.push("clipPos.xy = (clipPos.xy / clipPos.w - snapVectorA) * snapInvVectorAB * clipPos.w;");
         src.push("gl_Position = clipPos;");
 
-        src.push("relativeToOriginPosition = worldPosition.xyz;");
         // TODO: Normalize color "/ 255.0"?
         src.push("vPickColor = vec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0));");
         src.push("  }");
@@ -386,7 +383,7 @@ export class DTXTrianglesSnapInitRenderer {
             src.push("in float vFragDepth;");
         }
 
-        src.push("in vec4 vWorldPosition;");
+        src.push("in highp vec4 vWorldPosition;");
         if (clipping) {
             src.push("flat in uint vFlags2;");
             for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
@@ -398,7 +395,6 @@ export class DTXTrianglesSnapInitRenderer {
 
         src.push("uniform int uLayerNumber;");
         src.push("uniform vec3 uCoordinateScaler;");
-        src.push("in highp vec3 relativeToOriginPosition;");
         src.push("flat in vec4 vPickColor;");
         src.push("layout(location = 0) out highp ivec4 outCoords;");
         src.push("layout(location = 1) out highp ivec4 outNormal;");
@@ -423,7 +419,7 @@ export class DTXTrianglesSnapInitRenderer {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth + diff ) * logDepthBufFC * 0.5;");
         }
 
-        src.push("outCoords = ivec4(relativeToOriginPosition.xyz * uCoordinateScaler.xyz, - uLayerNumber);");
+        src.push("outCoords = ivec4(vWorldPosition.xyz * uCoordinateScaler.xyz, - uLayerNumber);");
         src.push("vec3 xTangent = dFdx( vWorldPosition.xyz );");
         src.push("vec3 yTangent = dFdy( vWorldPosition.xyz );");
         src.push("vec3 worldNormal = normalize( cross( xTangent, yTangent ) );");
