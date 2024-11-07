@@ -6,6 +6,8 @@ const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
 const tempMat4a = math.mat4();
 
+const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
+
 /**
  * @private
  */
@@ -13,12 +15,13 @@ export class DTXTrianglesEdgesColorRenderer {
 
     constructor(scene) {
         this._scene = scene;
-        const gl = scene.canvas.gl;
         this._hash = this._getHash();
+        const gl = scene.canvas.gl;
 
         this._programName = "DTXTrianglesEdgesColorRenderer";
         this._useLogDepthBuffer = scene.logarithmicDepthBufferEnabled;
         this._getLogDepthFar = (frameCtx, cameraProjectFar) => cameraProjectFar;
+        this._fragDepthDiff = (vFragDepth) => "0.0";
         this._usePickMatrix = false;
         // flags.z = NOT_RENDERED | EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
         // renderPass = EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT
@@ -27,13 +30,14 @@ export class DTXTrianglesEdgesColorRenderer {
         this._appendVertexDefinitions = (src) => src.push("out vec4 vColor;");
         this._transformClipPos = (src, clipPos) => { };
         this._needVertexColor = true;
-        this._appendVertexOutputs = (src, color) => src.push(`vColor = vec4(vec3(${color}.rgb) * 0.5, float(${color}.a)) / 255.0;`);
+        this._needPickColor = false;
+        this._appendVertexOutputs = (src, color, pickColor) => src.push(`vColor = vec4(vec3(${color}.rgb) * 0.5, float(${color}.a)) / 255.0;`);
         this._appendFragmentDefinitions = (src) => {
             src.push("in vec4 vColor;");
             src.push("out vec4 outColor;");
         };
         this._needvWorldPosition = false;
-        this._appendFragmentOutputs = (src) => src.push("   outColor = vColor;");
+        this._appendFragmentOutputs = (src, vWorldPosition) => src.push("   outColor = vColor;");
         this._setupInputs = (program) => { };
         this._setRenderState = (frameCtx, dataTextureLayer, renderPass, rtcOrigin) => { };
         this._getGlMode = (frameCtx) => gl.LINES;
@@ -250,9 +254,6 @@ export class DTXTrianglesEdgesColorRenderer {
             src.push("uniform float logDepthBufFC;");
             src.push("out float vFragDepth;");
             src.push("out float isPerspective;");
-            src.push("bool isPerspectiveMatrix(mat4 m) {");
-            src.push("    return (m[2][3] == - 1.0);");
-            src.push("}");
         }
 
         if (this._needvWorldPosition || clipping) {
@@ -329,12 +330,16 @@ export class DTXTrianglesEdgesColorRenderer {
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (this._useLogDepthBuffer) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
-            src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
+            src.push(`isPerspective = float (${isPerspectiveMatrix("projMatrix")});`);
         }
         this._transformClipPos(src, "clipPos");
         src.push("gl_Position = clipPos;");
 
-        this._appendVertexOutputs(src, this._needVertexColor && "color");
+        if (this._needPickColor) {
+            // TODO: Normalize color "/ 255.0"?
+            src.push("vec4 pickColor = vec4(texelFetch(uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0));");
+        }
+        this._appendVertexOutputs(src, this._needVertexColor && "color", this._needPickColor && "pickColor");
 
         src.push("  }");
         src.push("}");
@@ -391,10 +396,10 @@ export class DTXTrianglesEdgesColorRenderer {
         }
 
         if (this._useLogDepthBuffer) {
-            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
+            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth + " + this._fragDepthDiff("vFragDepth") + " ) * logDepthBufFC * 0.5;");
         }
 
-        this._appendFragmentOutputs(src);
+        this._appendFragmentOutputs(src, this._needvWorldPosition && "vWorldPosition");
 
         src.push("}");
         return src;
