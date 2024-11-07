@@ -37,14 +37,16 @@ export class DTXTrianglesSnapRenderer {
         this._needVertexColor = false;
         this._needPickColor = false;
         this._needGl_Position = false;
-        this._appendVertexOutputs = (src, color, pickColor, gl_Position) => src.push("gl_PointSize = 1.0;"); // Windows needs this?
+        this._needViewMatrixPositionNormal = false;
+        this._appendVertexOutputs = (src, color, pickColor, gl_Position, view) => src.push("gl_PointSize = 1.0;"); // Windows needs this?
         this._appendFragmentDefinitions = (src) => {
             src.push("uniform int uLayerNumber;");
             src.push("uniform vec3 uCoordinateScaler;");
             src.push("out highp ivec4 outCoords;");
         };
         this._needvWorldPosition = true;
-        this._appendFragmentOutputs = (src, vWorldPosition) => src.push(`outCoords = ivec4(${vWorldPosition}.xyz * uCoordinateScaler.xyz, uLayerNumber);`);
+        this._needGl_FragCoord = false;
+        this._appendFragmentOutputs = (src, vWorldPosition, gl_FragCoord) => src.push(`outCoords = ivec4(${vWorldPosition}.xyz * uCoordinateScaler.xyz, uLayerNumber);`);
         this._setupInputs = (program) => {
             this._uSnapVectorA = program.getLocation("snapVectorA");
             this._uSnapInvVectorAB = program.getLocation("snapInvVectorAB");
@@ -369,7 +371,7 @@ export class DTXTrianglesSnapRenderer {
             // TODO: Normalize color "/ 255.0"?
             src.push("vec4 pickColor = vec4(texelFetch(uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0));");
         }
-        this._appendVertexOutputs(src, this._needVertexColor && "color", this._needPickColor && "pickColor", this._needGl_Position &&"gl_Position");
+        this._appendVertexOutputs(src, this._needVertexColor && "color", this._needPickColor && "pickColor", this._needGl_Position && "gl_Position", this._needViewMatrixPositionNormal && null);
 
         src.push("  }");
         src.push("}");
@@ -429,7 +431,7 @@ export class DTXTrianglesSnapRenderer {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth + " + this._fragDepthDiff("vFragDepth") + " ) * logDepthBufFC * 0.5;");
         }
 
-        this._appendFragmentOutputs(src, this._needvWorldPosition && "vWorldPosition");
+        this._appendFragmentOutputs(src, this._needvWorldPosition && "vWorldPosition", this._needGl_FragCoord && "gl_FragCoord");
 
         src.push("}");
         return src;
