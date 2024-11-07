@@ -8,6 +8,8 @@ const tempVec3c = math.vec3();
 const tempVec4a = math.vec4();
 const tempMat4a = math.mat4();
 
+const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
+
 /**
  * @private
  */
@@ -17,8 +19,184 @@ export class DTXTrianglesColorRenderer {
         this._scene = scene;
         this._withSAO = withSAO;
         this._hash = this._getHash();
+        const gl = scene.canvas.gl;
+
         this._programName = "DTXTrianglesColorRenderer";
         this._useLogDepthBuffer = scene.logarithmicDepthBufferEnabled;
+        this._getLogDepthFar = (frameCtx, cameraProjectFar) => cameraProjectFar;
+        this._fragDepthDiff = (vFragDepth) => "0.0";
+        this._usePickMatrix = false;
+        // flags.x = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
+        // renderPass = COLOR_OPAQUE
+        this._renderPassFlag = "x";
+        this._cullOnAlphaZero = true;
+        this._appendVertexDefinitions = (src) => {
+            src.push("uniform vec4 lightAmbient;");
+            const lightsState = scene._lightsState;
+            for (let i = 0, len = lightsState.lights.length; i < len; i++) {
+                const light = lightsState.lights[i];
+                if (light.type === "ambient") {
+                    continue;
+                }
+                src.push("uniform vec4 lightColor" + i + ";");
+                if (light.type === "dir") {
+                    src.push("uniform vec3 lightDir" + i + ";");
+                }
+                if (light.type === "point") {
+                    src.push("uniform vec3 lightPos" + i + ";");
+                }
+                if (light.type === "spot") {
+                    src.push("uniform vec3 lightPos" + i + ";");
+                    src.push("uniform vec3 lightDir" + i + ";");
+                }
+            }
+            src.push("out vec4 vColor;");
+        };
+        this._transformClipPos = (src, clipPos) => { };
+        this._needVertexColor = true;
+        this._needPickColor = false;
+        this._needGl_Position = false;
+        this._needViewMatrixPositionNormal = true;
+        this._appendVertexOutputs = (src, color, pickColor, gl_Position, view) => {
+            const lightsState = scene._lightsState;
+            src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
+            src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
+            src.push("float lambertian = 1.0;");
+            for (let i = 0, len = lightsState.lights.length; i < len; i++) {
+                const light = lightsState.lights[i];
+                if (light.type === "ambient") {
+                    continue;
+                }
+                if (light.type === "dir") {
+                    if (light.space === "view") {
+                        src.push(`viewLightDir = normalize(lightDir${i});`);
+                    } else {
+                        src.push(`viewLightDir = normalize((${view.viewMatrix} * vec4(lightDir${i}, 0.0)).xyz);`);
+                    }
+                } else if (light.type === "point") {
+                    if (light.space === "view") {
+                        src.push(`viewLightDir = -normalize(lightPos${i} - ${view.viewPosition}.xyz);`);
+                    } else {
+                        src.push(`viewLightDir = -normalize((${view.viewMatrix} * vec4(lightPos${i}, 0.0)).xyz);`);
+                    }
+                } else if (light.type === "spot") {
+                    if (light.space === "view") {
+                        src.push(`viewLightDir = normalize(lightDir${i});`);
+                    } else {
+                        src.push(`viewLightDir = normalize((${view.viewMatrix} * vec4(lightDir${i}, 0.0)).xyz);`);
+                    }
+                } else {
+                    continue;
+                }
+                src.push(`lambertian = max(dot(-${view.viewNormal}, viewLightDir), 0.0);`);
+                src.push(`reflectedColor += lambertian * (lightColor${i}.rgb * lightColor${i}.a);`);
+            }
+            src.push(`vColor = vec4(lightAmbient.rgb * lightAmbient.a + reflectedColor, 1) * vec4(${color}) / 255.0;`);
+        };
+        this._appendFragmentDefinitions = (src) => {
+            src.push("in vec4 vColor;");
+            if (this._withSAO) {
+                src.push("uniform sampler2D uOcclusionTexture;");
+                src.push("uniform vec4      uSAOParams;");
+                src.push("const float       packUpscale = 256. / 255.;");
+                src.push("const float       unpackDownScale = 255. / 256.;");
+                src.push("const vec3        packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );");
+                src.push("const vec4        unPackFactors = unpackDownScale / vec4( packFactors, 1. );");
+                src.push("float unpackRGBToFloat( const in vec4 v ) {");
+                src.push("    return dot( v, unPackFactors );");
+                src.push("}");
+            }
+            src.push("out vec4 outColor;");
+        };
+        this._needvWorldPosition = false;
+        this._needGl_FragCoord = true;
+        this._appendFragmentOutputs = (src, vWorldPosition, gl_FragCoord) => {
+            if (this._withSAO) {
+                // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
+                // Would be more efficient to defer this, then render lines later, using same depth buffer for Z-reject
+                src.push("   float viewportWidth     = uSAOParams[0];");
+                src.push("   float viewportHeight    = uSAOParams[1];");
+                src.push("   float blendCutoff       = uSAOParams[2];");
+                src.push("   float blendFactor       = uSAOParams[3];");
+                src.push(`   vec2 uv                 = vec2(${gl_FragCoord}.x / viewportWidth, ${gl_FragCoord}.y / viewportHeight);`);
+                src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBToFloat(texture(uOcclusionTexture, uv))) * blendFactor;");
+                src.push("   outColor            = vec4(vColor.rgb * ambient, vColor.a);");
+            } else {
+                src.push("   outColor            = vColor;");
+            }
+        };
+        this._setupInputs = (program) => {
+            this._uLightAmbient = program.getLocation("lightAmbient");
+            this._uLightColor = [];
+            this._uLightDir = [];
+            this._uLightPos = [];
+            this._uLightAttenuation = [];
+            const lights = scene._lightsState.lights;
+            for (let i = 0, len = lights.length; i < len; i++) {
+                const light = lights[i];
+                switch (light.type) {
+                case "dir":
+                    this._uLightColor[i] = program.getLocation("lightColor" + i);
+                    this._uLightPos[i] = null;
+                    this._uLightDir[i] = program.getLocation("lightDir" + i);
+                    break;
+                case "point":
+                    this._uLightColor[i] = program.getLocation("lightColor" + i);
+                    this._uLightPos[i] = program.getLocation("lightPos" + i);
+                    this._uLightDir[i] = null;
+                    this._uLightAttenuation[i] = program.getLocation("lightAttenuation" + i);
+                    break;
+                case "spot":
+                    this._uLightColor[i] = program.getLocation("lightColor" + i);
+                    this._uLightPos[i] = program.getLocation("lightPos" + i);
+                    this._uLightDir[i] = program.getLocation("lightDir" + i);
+                    this._uLightAttenuation[i] = program.getLocation("lightAttenuation" + i);
+                    break;
+                }
+            }
+            if (this._withSAO) {
+                this._uOcclusionTexture = "uOcclusionTexture";
+                this._uSAOParams = program.getLocation("uSAOParams");
+            }
+        };
+        this._setRenderState = (frameCtx, dataTextureLayer, renderPass, rtcOrigin) => {
+            const lightsState = scene._lightsState;
+            if (this._uLightAmbient) {
+                gl.uniform4fv(this._uLightAmbient, lightsState.getAmbientColorAndIntensity());
+            }
+            const lights = lightsState.lights;
+            for (let i = 0, len = lights.length; i < len; i++) {
+                const light = lights[i];
+                if (this._uLightColor[i]) {
+                    gl.uniform4f(this._uLightColor[i], light.color[0], light.color[1], light.color[2], light.intensity);
+                }
+                if (this._uLightPos[i]) {
+                    gl.uniform3fv(this._uLightPos[i], light.pos);
+                    if (this._uLightAttenuation[i]) {
+                        gl.uniform1f(this._uLightAttenuation[i], light.attenuation);
+                    }
+                }
+                if (this._uLightDir[i]) {
+                    gl.uniform3fv(this._uLightDir[i], light.dir);
+                }
+            }
+            if (this._withSAO) {
+                const sao = scene.sao;
+                const saoEnabled = sao.possible;
+                if (saoEnabled) {
+                    const viewportWidth = gl.drawingBufferWidth;
+                    const viewportHeight = gl.drawingBufferHeight;
+                    tempVec4a[0] = viewportWidth;
+                    tempVec4a[1] = viewportHeight;
+                    tempVec4a[2] = sao.blendCutoff;
+                    tempVec4a[3] = sao.blendFactor;
+                    gl.uniform4fv(this._uSAOParams, tempVec4a);
+                    this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 10);
+                }
+            }
+        };
+        this._getGlMode = (frameCtx) => gl.TRIANGLES;
+
         this._allocate();
     }
 
@@ -44,46 +222,6 @@ export class DTXTrianglesColorRenderer {
         if (frameCtx.lastProgramId !== program.id) {
             frameCtx.lastProgramId = program.id;
             program.bind();
-
-            const scene = this._scene;
-            const gl = scene.canvas.gl;
-            const lightsState = scene._lightsState;
-
-            if (this._uLightAmbient) {
-                gl.uniform4fv(this._uLightAmbient, lightsState.getAmbientColorAndIntensity());
-            }
-            const lights = lightsState.lights;
-            for (let i = 0, len = lights.length; i < len; i++) {
-                const light = lights[i];
-
-                if (this._uLightColor[i]) {
-                    gl.uniform4f(this._uLightColor[i], light.color[0], light.color[1], light.color[2], light.intensity);
-                }
-                if (this._uLightPos[i]) {
-                    gl.uniform3fv(this._uLightPos[i], light.pos);
-                    if (this._uLightAttenuation[i]) {
-                        gl.uniform1f(this._uLightAttenuation[i], light.attenuation);
-                    }
-                }
-                if (this._uLightDir[i]) {
-                    gl.uniform3fv(this._uLightDir[i], light.dir);
-                }
-            }
-
-            if (this._withSAO) {
-                const sao = scene.sao;
-                const saoEnabled = sao.possible;
-                if (saoEnabled) {
-                    const viewportWidth = gl.drawingBufferWidth;
-                    const viewportHeight = gl.drawingBufferHeight;
-                    tempVec4a[0] = viewportWidth;
-                    tempVec4a[1] = viewportHeight;
-                    tempVec4a[2] = sao.blendCutoff;
-                    tempVec4a[3] = sao.blendFactor;
-                    gl.uniform4fv(this._uSAOParams, tempVec4a);
-                    this._program.bindTexture(this._uOcclusionTexture, frameCtx.occlusionTexture, 10);
-                }
-            }
         }
 
         const scene = this._scene;
@@ -94,7 +232,7 @@ export class DTXTrianglesColorRenderer {
         const textureState = state.textureState;
         const origin = dataTextureLayer._state.origin;
         const {position, rotationMatrix} = model;
-        const viewMatrix = camera.viewMatrix;
+        const viewMatrix = (this._usePickMatrix && frameCtx.pickViewMatrix) || camera.viewMatrix;
 
         textureState.bindCommonTextures(
             program,
@@ -126,8 +264,10 @@ export class DTXTrianglesColorRenderer {
         gl.uniform3fv(this._uCameraEyeRtc, math.subVec3(camera.eye, rtcOrigin, tempVec3b));
         gl.uniform1i(this._uRenderPass, renderPass);
 
+        this._setRenderState(frameCtx, dataTextureLayer, renderPass, rtcOrigin);
+
         if (this._useLogDepthBuffer) {
-            const logDepthBufFC = 2.0 / (Math.log(camera.project.far + 1.0) / Math.LN2);
+            const logDepthBufFC = 2.0 / (Math.log(this._getLogDepthFar(frameCtx, camera.project.far) + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
 
@@ -159,6 +299,7 @@ export class DTXTrianglesColorRenderer {
                 }
             }
         }
+        const glMode = this._getGlMode(frameCtx);
         if (state.numIndices8Bits > 0) {
             textureState.bindTriangleIndicesTextures(
                 program,
@@ -166,7 +307,7 @@ export class DTXTrianglesColorRenderer {
                 this._uTexturePerPrimitiveIdIndices,
                 8 // 8 bits indices
             );
-            gl.drawArrays(gl.TRIANGLES, 0, state.numIndices8Bits);
+            gl.drawArrays(glMode, 0, state.numIndices8Bits);
         }
         if (state.numIndices16Bits > 0) {
             textureState.bindTriangleIndicesTextures(
@@ -175,7 +316,7 @@ export class DTXTrianglesColorRenderer {
                 this._uTexturePerPrimitiveIdIndices,
                 16 // 16 bits indices
             );
-            gl.drawArrays(gl.TRIANGLES, 0, state.numIndices16Bits);
+            gl.drawArrays(glMode, 0, state.numIndices16Bits);
         }
         if (state.numIndices32Bits > 0) {
             textureState.bindTriangleIndicesTextures(
@@ -184,7 +325,7 @@ export class DTXTrianglesColorRenderer {
                 this._uTexturePerPrimitiveIdIndices,
                 32 // 32 bits indices
             );
-            gl.drawArrays(gl.TRIANGLES, 0, state.numIndices32Bits);
+            gl.drawArrays(glMode, 0, state.numIndices32Bits);
         }
         frameCtx.drawElements++;
     }
@@ -231,39 +372,7 @@ export class DTXTrianglesColorRenderer {
         this._uTexturePerPrimitiveIdPortionIds = "uTexturePerPrimitiveIdPortionIds";
         this._uTexturePerPrimitiveIdIndices = "uTexturePerPrimitiveIdIndices";
 
-        if (this._withSAO) {
-            this._uOcclusionTexture = "uOcclusionTexture";
-            this._uSAOParams = program.getLocation("uSAOParams");
-        }
-
-        this._uLightAmbient = program.getLocation("lightAmbient");
-        this._uLightColor = [];
-        this._uLightDir = [];
-        this._uLightPos = [];
-        this._uLightAttenuation = [];
-        const lights = scene._lightsState.lights;
-        for (let i = 0, len = lights.length; i < len; i++) {
-            const light = lights[i];
-            switch (light.type) {
-                case "dir":
-                    this._uLightColor[i] = program.getLocation("lightColor" + i);
-                    this._uLightPos[i] = null;
-                    this._uLightDir[i] = program.getLocation("lightDir" + i);
-                    break;
-                case "point":
-                    this._uLightColor[i] = program.getLocation("lightColor" + i);
-                    this._uLightPos[i] = program.getLocation("lightPos" + i);
-                    this._uLightDir[i] = null;
-                    this._uLightAttenuation[i] = program.getLocation("lightAttenuation" + i);
-                    break;
-                case "spot":
-                    this._uLightColor[i] = program.getLocation("lightColor" + i);
-                    this._uLightPos[i] = program.getLocation("lightPos" + i);
-                    this._uLightDir[i] = program.getLocation("lightDir" + i);
-                    this._uLightAttenuation[i] = program.getLocation("lightAttenuation" + i);
-                    break;
-            }
-        }
+        this._setupInputs(program);
     }
 
     _buildVertexShader() {
@@ -306,35 +415,14 @@ export class DTXTrianglesColorRenderer {
             src.push("out float isPerspective;");
         }
 
-        src.push("bool isPerspectiveMatrix(mat4 m) {");
-        src.push("    return (m[2][3] == - 1.0);");
-        src.push("}");
-
+        if (this._needvWorldPosition || clipping) {
+            src.push("out " + (this._needvWorldPosition ? "highp " : "") + "vec4 vWorldPosition;");
+        }
         if (clipping) {
-            src.push("out vec4 vWorldPosition;");
             src.push("flat out uint vFlags2;");
         }
 
-        src.push("uniform vec4 lightAmbient;");
-        const lightsState = scene._lightsState;
-        for (let i = 0, len = lightsState.lights.length; i < len; i++) {
-            const light = lightsState.lights[i];
-            if (light.type === "ambient") {
-                continue;
-            }
-            src.push("uniform vec4 lightColor" + i + ";");
-            if (light.type === "dir") {
-                src.push("uniform vec3 lightDir" + i + ";");
-            }
-            if (light.type === "point") {
-                src.push("uniform vec3 lightPos" + i + ";");
-            }
-            if (light.type === "spot") {
-                src.push("uniform vec3 lightPos" + i + ";");
-                src.push("uniform vec3 lightDir" + i + ";");
-            }
-        }
-        src.push("out vec4 vColor;");
+        this._appendVertexDefinitions(src);
 
         src.push("void main(void) {");
 
@@ -352,20 +440,22 @@ export class DTXTrianglesColorRenderer {
         src.push("uvec4 flags = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);");
         src.push("uvec4 flags2 = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);");
 
-        // flags.x = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
-        // renderPass = COLOR_OPAQUE
-        src.push(`if (int(flags.x) != renderPass) {`);
+        src.push("if (int(flags." + this._renderPassFlag + ") != renderPass) {");
         src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
         src.push("   return;"); // Cull vertex
         src.push("}");
 
-        src.push("{");
+        if (this._cullOnAlphaZero || this._needVertexColor) {
+            src.push("uvec4 color = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);");
+        }
+        if (this._cullOnAlphaZero) {
+            src.push(`if (color.a == 0u) {`);
+            src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
+            src.push("   return;");
+            src.push("}");
+        }
 
-        src.push("uvec4 color = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);");
-        src.push(`if (color.a == 0u) {`);
-        src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
-        src.push("   return;");
-        src.push("};");
+        src.push("{");
 
         src.push("ivec4 packedVertexBase = ivec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+4, objectIndexCoords.y), 0));");
         src.push("ivec4 packedIndexBaseOffset = ivec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+5, objectIndexCoords.y), 0));");
@@ -383,29 +473,36 @@ export class DTXTrianglesColorRenderer {
         src.push("mat4 objectInstanceMatrix = mat4 (texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));");
 
         src.push("mat4 objectDecodeAndInstanceMatrix = objectInstanceMatrix * mat4 (texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));");
-        src.push("uint solid = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+7, objectIndexCoords.y), 0).r;");
 
+        src.push("uint solid = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+7, objectIndexCoords.y), 0).r;");
         src.push("vec3 positions[] = vec3[](");
         src.push("  vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.r, indexPositionV.r), 0)),");
         src.push("  vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.g, indexPositionV.g), 0)),");
         src.push("  vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.b, indexPositionV.b), 0)));");
-
         src.push("vec3 normal = normalize(cross(positions[2] - positions[0], positions[1] - positions[0]));");
         src.push("vec3 position = positions[gl_VertexID % 3];");
-        src.push("vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);");
-
+        if (this._needViewMatrixPositionNormal) {
+            src.push("vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);");
+        }
         // when the geometry is not solid, if needed, flip the triangle winding
         src.push("if (solid != 1u) {");
-        src.push("  if (isPerspectiveMatrix(projMatrix)) {");
+        src.push(`  if (${isPerspectiveMatrix("projMatrix")}) {`);
         src.push("      vec3 uCameraEyeRtcInQuantizedSpace = (inverse(sceneModelMatrix * objectDecodeAndInstanceMatrix) * vec4(uCameraEyeRtc, 1)).xyz;");
         src.push("      if (dot(position.xyz - uCameraEyeRtcInQuantizedSpace, normal) < 0.0) {");
         src.push("          position = positions[2 - (gl_VertexID % 3)];");
-        src.push("          viewNormal = -viewNormal;");
+        if (this._needViewMatrixPositionNormal) {
+            src.push("          viewNormal = -viewNormal;");
+        }
         src.push("      }");
         src.push("  } else {");
+        if (!this._needViewMatrixPositionNormal) {
+            src.push("      vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);");
+        }
         src.push("      if (viewNormal.z < 0.0) {");
         src.push("          position = positions[2 - (gl_VertexID % 3)];");
-        src.push("          viewNormal = -viewNormal;");
+        if (this._needViewMatrixPositionNormal) {
+            src.push("          viewNormal = -viewNormal;");
+        }
         src.push("      }");
         src.push("  }");
         src.push("}");
@@ -413,52 +510,27 @@ export class DTXTrianglesColorRenderer {
         src.push("vec4 worldPosition = sceneModelMatrix * (objectDecodeAndInstanceMatrix * vec4(position, 1.0));");
         src.push("vec4 viewPosition = viewMatrix * worldPosition;");
 
-        if (clipping) {
+        if (this._needvWorldPosition || clipping) {
             src.push("vWorldPosition = worldPosition;");
+        }
+        if (clipping) {
             src.push("vFlags2 = flags2.r;");
         }
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (this._useLogDepthBuffer) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
-            src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
+            src.push(`isPerspective = float (${isPerspectiveMatrix("projMatrix")});`);
         }
+        this._transformClipPos(src, "clipPos");
         src.push("gl_Position = clipPos;");
 
-        src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
-        src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
-        src.push("float lambertian = 1.0;");
-        for (let i = 0, len = lightsState.lights.length; i < len; i++) {
-            const light = lightsState.lights[i];
-            if (light.type === "ambient") {
-                continue;
-            }
-            if (light.type === "dir") {
-                if (light.space === "view") {
-                    src.push("viewLightDir = normalize(lightDir" + i + ");");
-                } else {
-                    src.push("viewLightDir = normalize((viewMatrix * vec4(lightDir" + i + ", 0.0)).xyz);");
-                }
-            } else if (light.type === "point") {
-                if (light.space === "view") {
-                    src.push("viewLightDir = -normalize(lightPos" + i + " - viewPosition.xyz);");
-                } else {
-                    src.push("viewLightDir = -normalize((viewMatrix * vec4(lightPos" + i + ", 0.0)).xyz);");
-                }
-            } else if (light.type === "spot") {
-                if (light.space === "view") {
-                    src.push("viewLightDir = normalize(lightDir" + i + ");");
-                } else {
-                    src.push("viewLightDir = normalize((viewMatrix * vec4(lightDir" + i + ", 0.0)).xyz);");
-                }
-            } else {
-                continue;
-            }
-            src.push("lambertian = max(dot(-viewNormal, viewLightDir), 0.0);");
-            src.push("reflectedColor += lambertian * (lightColor" + i + ".rgb * lightColor" + i + ".a);");
+        if (this._needPickColor) {
+            // TODO: Normalize color "/ 255.0"?
+            src.push("vec4 pickColor = vec4(texelFetch(uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0));");
         }
+        this._appendVertexOutputs(src, this._needVertexColor && "color", this._needPickColor && "pickColor", this._needGl_Position &&"gl_Position", this._needViewMatrixPositionNormal && {viewMatrix: "viewMatrix", viewPosition: "viewPosition", viewNormal: "viewNormal"});
 
-        src.push("vColor = vec4(lightAmbient.rgb * lightAmbient.a + reflectedColor, 1) * vec4(color) / 255.0;");
         src.push("  }");
         src.push("}");
         return src;
@@ -485,8 +557,10 @@ export class DTXTrianglesColorRenderer {
             src.push("in float vFragDepth;");
         }
 
+        if (this._needvWorldPosition || clipping) {
+            src.push("in " + (this._needvWorldPosition ? "highp " : "") + "vec4 vWorldPosition;");
+        }
         if (clipping) {
-            src.push("in vec4 vWorldPosition;");
             src.push("flat in uint vFlags2;");
             for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
@@ -495,19 +569,7 @@ export class DTXTrianglesColorRenderer {
             }
         }
 
-        src.push("in vec4 vColor;");
-        if (this._withSAO) {
-            src.push("uniform sampler2D uOcclusionTexture;");
-            src.push("uniform vec4      uSAOParams;");
-            src.push("const float       packUpscale = 256. / 255.;");
-            src.push("const float       unpackDownScale = 255. / 256.;");
-            src.push("const vec3        packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );");
-            src.push("const vec4        unPackFactors = unpackDownScale / vec4( packFactors, 1. );");
-            src.push("float unpackRGBToFloat( const in vec4 v ) {");
-            src.push("    return dot( v, unPackFactors );");
-            src.push("}");
-        }
-        src.push("out vec4 outColor;");
+        this._appendFragmentDefinitions(src);
 
         src.push("void main(void) {");
         if (clipping) {
@@ -524,22 +586,10 @@ export class DTXTrianglesColorRenderer {
         }
 
         if (this._useLogDepthBuffer) {
-            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
+            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth + " + this._fragDepthDiff("vFragDepth") + " ) * logDepthBufFC * 0.5;");
         }
 
-        if (this._withSAO) {
-            // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
-            // Would be more efficient to defer this, then render lines later, using same depth buffer for Z-reject
-            src.push("   float viewportWidth     = uSAOParams[0];");
-            src.push("   float viewportHeight    = uSAOParams[1];");
-            src.push("   float blendCutoff       = uSAOParams[2];");
-            src.push("   float blendFactor       = uSAOParams[3];");
-            src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
-            src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBToFloat(texture(uOcclusionTexture, uv))) * blendFactor;");
-            src.push("   outColor            = vec4(vColor.rgb * ambient, vColor.a);");
-        } else {
-            src.push("   outColor            = vColor;");
-        }
+        this._appendFragmentOutputs(src, this._needvWorldPosition && "vWorldPosition", this._needGl_FragCoord && "gl_FragCoord");
 
         src.push("}");
         return src;
