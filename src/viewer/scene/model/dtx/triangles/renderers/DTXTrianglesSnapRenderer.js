@@ -76,7 +76,6 @@ export class DTXTrianglesSnapRenderer {
         );
 
         let rtcViewMatrix;
-        let rtcCameraEye;
 
         const gotOrigin = (origin[0] !== 0 || origin[1] !== 0 || origin[2] !== 0);
         const gotPosition = (position[0] !== 0 || position[1] !== 0 || position[2] !== 0);
@@ -96,22 +95,16 @@ export class DTXTrianglesSnapRenderer {
             rtcOrigin[1] += position[1];
             rtcOrigin[2] += position[2];
             rtcViewMatrix = createRTCViewMat(viewMatrix, rtcOrigin, tempMat4a);
-            rtcCameraEye = tempVec3d;
-            rtcCameraEye[0] = eye[0] - rtcOrigin[0];
-            rtcCameraEye[1] = eye[1] - rtcOrigin[1];
-            rtcCameraEye[2] = eye[2] - rtcOrigin[2];
             frameCtx.snapPickOrigin[0] = rtcOrigin[0];
             frameCtx.snapPickOrigin[1] = rtcOrigin[1];
             frameCtx.snapPickOrigin[2] = rtcOrigin[2];
         } else {
             rtcViewMatrix = viewMatrix;
-            rtcCameraEye = eye;
             frameCtx.snapPickOrigin[0] = 0;
             frameCtx.snapPickOrigin[1] = 0;
             frameCtx.snapPickOrigin[2] = 0;
         }
 
-        gl.uniform3fv(this._uCameraEyeRtc, rtcCameraEye);
         gl.uniform2fv(this.uVectorA, frameCtx.snapVectorA);
         gl.uniform2fv(this.uInverseVectorAB, frameCtx.snapInvVectorAB);
         gl.uniform1i(this._uLayerNumber, frameCtx.snapPickLayerNumber);
@@ -213,7 +206,6 @@ export class DTXTrianglesSnapRenderer {
         this._uTexturePerPolygonIdEdgeIndices = "uTexturePerPolygonIdEdgeIndices";
         this._uTexturePerEdgeIdPortionIds = "uTexturePerEdgeIdPortionIds";
         this._uTexturePerObjectMatrix= "uTexturePerObjectMatrix";
-        this._uCameraEyeRtc = program.getLocation("uCameraEyeRtc");
         this.uVectorA = program.getLocation("uSnapVectorA");
         this.uInverseVectorAB = program.getLocation("uSnapInvVectorAB");
         this._uLayerNumber = program.getLocation("uLayerNumber");
@@ -264,7 +256,6 @@ export class DTXTrianglesSnapRenderer {
         src.push("uniform mediump usampler2D uTexturePerVertexIdCoordinates;");
         src.push("uniform highp usampler2D uTexturePerPolygonIdEdgeIndices;");
         src.push("uniform mediump usampler2D uTexturePerEdgeIdPortionIds;");
-        src.push("uniform vec3 uCameraEyeRtc;");
         src.push("uniform vec2 uSnapVectorA;");
         src.push("uniform vec2 uSnapInvVectorAB;");
 
