@@ -640,6 +640,19 @@ export class SceneModelEntity {
         this.model.glRedraw();
     }
 
+    set testRotation(rotate) {
+        console.log('SE LLAMA A TEST ROTATION');
+        const aabb = new Float64Array([2,1.23,1.745,3.78554,1.1179810329437254,1.856])
+        console.log('AABB', aabb);
+        for (let i = 0, len = this.meshes.length; i < len; i++) {
+            this.meshes[i].aabb = aabb;
+        }
+        this._aabbDirty = true;
+        this.model._aabbDirty = true;
+        this.scene._aabbDirty = true;
+        this.model.glRedraw();
+    }
+
     get saoEnabled() {
         return this.model.saoEnabled;
     }
@@ -727,6 +740,7 @@ export class SceneModelEntity {
     }
 
     _destroy() {
+        console.log('SceneModelEntity _destroy');
         const scene = this.model.scene;
         if (this._isObject) {
             scene._deregisterObject(this);
@@ -755,6 +769,8 @@ export class SceneModelEntity {
         for (let i = 0, len = this.meshes.length; i < len; i++) {
             this.meshes[i]._destroy();
         }
+        console.log('meshes destroyed', this.meshes);
         scene._aabbDirty = true;
+        this.model.glRedraw();
     }
 }

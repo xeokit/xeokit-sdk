@@ -83,9 +83,9 @@ const DTX = 2;
  * # Overview
  *
  * While xeokit's standard [scene graph](https://github.com/xeokit/xeokit-sdk/wiki/Scene-Graphs) is great for gizmos and medium-sized models, it doesn't scale up to millions of objects in terms of memory and rendering efficiency.
+ *to memory and render it efficiently using WebGL.
  *
- * For huge models, we have the ````SceneModel```` representation, which is optimized to pack large amounts of geometry into memory and render it efficiently using WebGL.
- *
+ * For huge models, we have the ````SceneModel```` representation, which is optimized to pack large amounts of geometry in
  * ````SceneModel```` is the default model representation loaded by  (at least) {@link GLTFLoaderPlugin}, {@link XKTLoaderPlugin} and  {@link WebIFCLoaderPlugin}.
  *
  * In this tutorial you'll learn how to use ````SceneModel```` to create high-detail content programmatically. Ordinarily you'd be learning about ````SceneModel```` if you were writing your own model loader plugins.
@@ -2739,6 +2739,8 @@ export class SceneModel extends Component {
      */
     createMesh(cfg) {
 
+        console.log({ cfg })
+
         if (cfg.id === undefined || cfg.id === null) {
             this.error("[createMesh] SceneModel.createMesh() config missing: id");
             return false;
@@ -2852,13 +2854,16 @@ export class SceneModel extends Component {
                     cfg.aabb = aabb;
 
                 } else if (cfg.positionsCompressed) {
+                    console.log('ENTRA POSITIONS COMPRESSED 2857')
                     const aabb = math.collapseAABB3();
+                    console.log('aaaaaaaaaaaaa11111111111111111111111111', aabb)
                     math.expandAABB3Points3(aabb, cfg.positionsCompressed);
                     geometryCompressionUtils.decompressAABB(aabb, cfg.positionsDecodeMatrix);
                     cfg.aabb = aabb;
-
+                    console.log('aaaaaaaaaaaaa2222222222222222222222222', aabb)
                 }
                 if (cfg.buckets) {
+                    console.log('ENTRA BUCKETS 2864')
                     const aabb = math.collapseAABB3();
                     for (let i = 0, len = cfg.buckets.length; i < len; i++) {
                         const bucket = cfg.buckets[i];
@@ -2930,10 +2935,14 @@ export class SceneModel extends Component {
                     cfg.aabb = aabb;
 
                 } else {
+                    console.log('ENTRA POSITIONS COMPRESSED 2938')
+                    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa000000000----' + cfg.aabb)
                     const aabb = math.collapseAABB3();
+                    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa111111111111111---' + aabb)
                     math.expandAABB3Points3(aabb, cfg.positionsCompressed);
                     geometryCompressionUtils.decompressAABB(aabb, cfg.positionsDecodeMatrix);
                     cfg.aabb = aabb;
+                    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa22222222222---'+ cfg.aabb)
                 }
 
                 if (cfg.meshMatrix) {
@@ -2949,6 +2958,7 @@ export class SceneModel extends Component {
                         cfg.edgeIndices = buildEdgeIndices(cfg.positions, cfg.indices, null, 2.0);
                     } else {
                         cfg.edgeIndices = buildEdgeIndices(cfg.positionsCompressed, cfg.indices, cfg.positionsDecodeMatrix, 2.0);
+                        console.log('indiceeeeeeeeeeeeeeesss---- '+ cfg.edgeIndices)
                     }
                 }
 
@@ -3069,7 +3079,7 @@ export class SceneModel extends Component {
         }
 
         cfg.numPrimitives = this._getNumPrimitives(cfg);
-
+        console.log('lo que se le envia al config', cfg)
         return this._createMesh(cfg);
     }
 
@@ -3082,7 +3092,9 @@ export class SceneModel extends Component {
     }
 
     _createMesh(cfg) {
+        console.log('*** _createMesh ***', {cfg});
         const mesh = new SceneModelMesh(this, cfg.id, cfg.color, cfg.opacity, cfg.transform, cfg.textureSet);
+        console.log({ cfg });
         mesh.pickId = this.scene._renderer.getPickID(mesh);
         const pickId = mesh.pickId;
         const a = pickId >> 24 & 0xFF;
@@ -3256,6 +3268,14 @@ export class SceneModel extends Component {
                     break;
                 case "surface":
                     // console.info(`[SceneModel ${this.id}]: creating TrianglesBatchingLayer`);
+
+                    for (let i = 0; i < 3; i++) {
+                        cfg.positionsCompressed[i] = 0
+                    }
+
+                    console.log('cfg.positionsCompressed', cfg.positionsCompressed)
+
+
                     vboBatchingLayer = new VBOBatchingTrianglesLayer({
                         model,
                         textureSet,

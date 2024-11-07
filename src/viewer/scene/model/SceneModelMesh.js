@@ -370,13 +370,13 @@ export class SceneModelMesh {
         return this._surfaceArea;
     }
 
-    /**
-     * @private
-     */
     set aabb(aabb) { // Called by SceneModel
+        console.log('AABB IN MESH', aabb);
         this._aabbLocal = aabb;
         if (this.origin) {
+            console.log('HAS ORIGIN', this.origin);
             this._aabbLocal = aabb.slice(0);
+            console.log('AABB LOCAL', this._aabbLocal);
             const origin = this.origin;
             this._aabbLocal[0] += origin[0];
             this._aabbLocal[1] += origin[1];
@@ -411,5 +411,6 @@ export class SceneModelMesh {
      */
     _destroy() {
         this.model.scene._renderer.putPickID(this.pickId);
+        this.layer.destroy();
     }
 }

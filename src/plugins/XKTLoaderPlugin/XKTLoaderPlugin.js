@@ -608,6 +608,8 @@ class XKTLoaderPlugin extends Plugin {
      */
     constructor(viewer, cfg = {}) {
 
+        console.log("PASA POR AQUI ==== XKTLoaderPlugin");
+
         super("XKTLoader", viewer, cfg);
 
         this._maxGeometryBatchSize = cfg.maxGeometryBatchSize;
@@ -936,6 +938,8 @@ class XKTLoaderPlugin extends Plugin {
             renderOrder: params.renderOrder
         }));
 
+        console.log("PASA POR AQUI ==== XKTLoaderPlugin.load, crea sceneModel");
+
         const modelId = sceneModel.id;  // In case ID was auto-generated
 
         const metaModel = new MetaModel({
@@ -1017,7 +1021,6 @@ class XKTLoaderPlugin extends Plugin {
                 }
             }
 
-
         } else {
 
             if (params.src) {
@@ -1081,8 +1084,8 @@ class XKTLoaderPlugin extends Plugin {
                                 this.scheduleTask(loadNext, 200);
                             }, error);
                         }
+                        loadNext();
                     }
-                    loadNext();
                 };
                 if (params.manifest) {
                     const manifestData = params.manifest;
@@ -1137,6 +1140,7 @@ class XKTLoaderPlugin extends Plugin {
         if (sceneModel.destroyed) {
             return;
         }
+
         const dataView = new DataView(arrayBuffer);
         const dataArray = new Uint8Array(arrayBuffer);
         const xktVersion = dataView.getUint32(0, true);

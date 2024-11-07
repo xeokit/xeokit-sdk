@@ -113,6 +113,79 @@ const imagDataToImage = (function () {
     };
 })();
 
+// Create translation matrix
+
+function applyTransformation(matrix, rotation = [0, 0, 0], translation = [0, 0, 0], scale = [1, 1, 1]) {
+    // Ensure matrix is a Float64Array
+    matrix = Float64Array.from(matrix);
+
+    // Create translation matrix
+    const translationMatrix = new Float64Array([
+        1, 0, 0, translation[0],
+        0, 1, 0, translation[1],
+        0, 0, 1, translation[2],
+        0, 0, 0, 1
+    ]);
+
+    // Calculate rotation cosines and sines
+    const [cosX, sinX] = [Math.cos(rotation[0]), Math.sin(rotation[0])];
+    const [cosY, sinY] = [Math.cos(rotation[1]), Math.sin(rotation[1])];
+    const [cosZ, sinZ] = [Math.cos(rotation[2]), Math.sin(rotation[2])];
+
+    // Define rotation matrices
+    const rotationXMatrix = new Float64Array([
+        1, 0, 0, 0,
+        0, cosX, -sinX, 0,
+        0, sinX, cosX, 0,
+        0, 0, 0, 1
+    ]);
+
+    const rotationYMatrix = new Float64Array([
+        cosY, 0, sinY, 0,
+        0, 1, 0, 0,
+        -sinY, 0, cosY, 0,
+        0, 0, 0, 1
+    ]);
+
+    const rotationZMatrix = new Float64Array([
+        cosZ, -sinZ, 0, 0,
+        sinZ, cosZ, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    ]);
+
+    // Create scaling matrix
+    const scalingMatrix = new Float64Array([
+        scale[0], 0, 0, 0,
+        0, scale[1], 0, 0,
+        0, 0, scale[2], 0,
+        0, 0, 0, 1
+    ]);
+
+    // Helper function to multiply two 4x4 matrices
+    const multiplyMatrices = (a, b) => {
+        const result = new Float64Array(16);
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
+                result[i * 4 + j] = a[i * 4 + 0] * b[0 * 4 + j] +
+                                    a[i * 4 + 1] * b[1 * 4 + j] +
+                                    a[i * 4 + 2] * b[2 * 4 + j] +
+                                    a[i * 4 + 3] * b[3 * 4 + j];
+            }
+        }
+        return result;
+    };
+
+    // Apply transformations: scale -> rotate -> translate
+    let transformedMatrix = multiplyMatrices(matrix, scalingMatrix);
+    transformedMatrix = multiplyMatrices(transformedMatrix, rotationZMatrix);
+    transformedMatrix = multiplyMatrices(transformedMatrix, rotationYMatrix);
+    transformedMatrix = multiplyMatrices(transformedMatrix, rotationXMatrix);
+    transformedMatrix = multiplyMatrices(transformedMatrix, translationMatrix);
+
+    return transformedMatrix;
+}
+
 function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx) {
 
     const modelPartId = manifestCtx.getNextId();
@@ -266,6 +339,10 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
 
     for (let tileIndex = 0; tileIndex < numTiles; tileIndex++) {
 
+        let applyTransform = false;
+
+        let alreadyAppliedTransform = false;
+
         const lastTileIndex = (numTiles - 1);
 
         const atLastTile = (tileIndex === lastTileIndex);
@@ -293,9 +370,20 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
 
         for (let tileEntityIndex = firstTileEntityIndex; tileEntityIndex <= lastTileEntityIndex; tileEntityIndex++) {
 
+            applyTransform = false;
+
             const xktEntityId = eachEntityId[tileEntityIndex];
 
+            // if (xktEntityId === '3m7na0bKKHxfOIbCQH2QFp' && !alreadyAppliedTransform) {
+            //     console.log('FOOORRRR',{ xktEntityId, tileIndex, firstTileEntityIndex, lastTileEntityIndex });
+            //     applyTransform = true;
+            //     alreadyAppliedTransform = true;
+            //     tileEntityIndex = tileEntityIndex === 0 ? tileEntityIndex : tileEntityIndex - 1;
+            //     console.log({ tileEntityIndex, applyTransform, alreadyAppliedTransform });
+            // }
+
             const entityId = options.globalizeObjectIds ? math.globalizeObjectId(sceneModel.id, xktEntityId) : xktEntityId;
+
 
             const finalTileEntityIndex = (numEntities - 1);
             const atLastTileEntity = (tileEntityIndex === finalTileEntityIndex);
@@ -307,6 +395,7 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
             const metaObject = viewer.metaScene.metaObjects[entityId];
             const entityDefaults = {};
             const meshDefaults = {};
+
 
             if (metaObject) {
 
@@ -484,7 +573,8 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
                             sceneModel.createMesh(utils.apply(meshDefaults, {
                                 id: meshId,
                                 textureSetId,
-                                origin: tileCenter,
+                                origin: meshIndex % 2 === 0 ? tileCenter : [tileCenter[1], tileCenter[0], tileCenter[2] * 2],
+                                // rotation: [90, 90, 90],
                                 primitive: geometryArrays.primitiveName,
                                 positionsCompressed: transformedAndRecompressedPositions,
                                 normalsCompressed: geometryArrays.geometryNormals,
@@ -596,10 +686,44 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
 
                     if (geometryValid) {
 
-                        sceneModel.createMesh(utils.apply(meshDefaults, {
+
+                        // sceneModel.createMesh(utils.apply(meshDefaults, {
+                        //     id: meshId,
+                        //     textureSetId,
+                        //     origin: tileCenter,
+                        //     // origin: meshIndex % 2 === 0 ? tileCenter : [tileCenter[1], tileCenter[0], tileCenter[2] * 2],
+                        //     primitive: primitiveName,
+                        //     // positionsCompressed: geometryPositions,
+                        //     positions: positions,
+                        //     // rotation: [0, 0, 0],
+                        //     // scala: [1 / 1000, 1/1000, 1/1000],
+                        //     // normalsCompressed: geometryNormals,
+                        //     normals: normals,
+                        //     // uv: geometryUVs && geometryUVs.length > 0 ? geometryUVs : null,
+                        //     uv: geometryUVs && geometryUVs.length > 0 ? uvs : null,
+                        //     colorsCompressed: geometryColors,
+                        //     // indices: geometryIndices,
+                        //     indices: indices,
+                        //     // edgeIndices: geometryEdgeIndices,
+                        //     edgeIndices: edgeIndices,
+                        //     // matrix: [1, 0,0,0, 0,1, 0,0, 0,0,1,0, 0,0,0,1],
+                        //     // positionsDecodeMatrix: [0, 2 / 1000,0,0, 1 / 1000,0, 0,0, 0,0,1 / 1000,0, 0,0,0,1],
+                        //     color: meshColor,
+                        //     metallic: meshMetallic,
+                        //     roughness: meshRoughness,
+                        //     opacity: meshOpacity
+                        // }));
+
+                        const rotation = [90, 0, 0];
+
+                        const radianes = rotation.map(r => r * Math.PI / 180);
+
+
+                        const mesh = sceneModel.createMesh(utils.apply(meshDefaults, {
                             id: meshId,
                             textureSetId,
                             origin: tileCenter,
+                            // origin: meshIndex % 2 === 0 ? tileCenter : [tileCenter[1], tileCenter[0], tileCenter[2] * 2],
                             primitive: primitiveName,
                             positionsCompressed: geometryPositions,
                             normalsCompressed: geometryNormals,
@@ -607,12 +731,15 @@ function load(viewer, options, inflatedData, sceneModel, metaModel, manifestCtx)
                             colorsCompressed: geometryColors,
                             indices: geometryIndices,
                             edgeIndices: geometryEdgeIndices,
-                            positionsDecodeMatrix: tileDecodeMatrix,
+                            // positionsDecodeMatrix: tileDecodeMatrix,
+                            // positionsDecodeMatrix: applyTransformation(tileDecodeMatrix, radianes),
+                            positionsDecodeMatrix: applyTransform ? applyTransformation(tileDecodeMatrix, radianes) : tileDecodeMatrix,
                             color: meshColor,
                             metallic: meshMetallic,
                             roughness: meshRoughness,
                             opacity: meshOpacity
                         }));
+
 
                         meshIds.push(meshId);
                     }
