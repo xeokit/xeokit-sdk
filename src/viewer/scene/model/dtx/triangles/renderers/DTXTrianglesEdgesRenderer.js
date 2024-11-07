@@ -7,8 +7,6 @@ const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
 const tempMat4a = math.mat4();
 
-const defaultColor = new Float32Array([0, 0, 0, 1]);
-
 /**
  * @private
  */
@@ -16,9 +14,51 @@ export class DTXTrianglesEdgesRenderer {
 
     constructor(scene) {
         this._scene = scene;
+        const gl = scene.canvas.gl;
         this._hash = this._getHash();
+
         this._programName = "DTXTrianglesEdgesRenderer";
         this._useLogDepthBuffer = scene.logarithmicDepthBufferEnabled;
+        this._getLogDepthFar = (frameCtx, cameraProjectFar) => cameraProjectFar;
+        this._usePickMatrix = false;
+        // flags.z = NOT_RENDERED | EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
+        // renderPass = EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
+        this._renderPassFlag = "z";
+        this._cullOnAlphaZero = true;
+        this._appendVertexDefinitions = (src) => { };
+        this._transformClipPos = (src) => { };
+        this._needVertexColor = false;
+        this._appendVertexOutputs = (src, color) => { };
+        this._appendFragmentDefinitions = (src) => {
+            src.push("uniform vec4 color;");
+            src.push("out vec4 outColor;");
+        };
+        this._needvWorldPosition = false;
+        this._appendFragmentOutputs = (src) => src.push("   outColor = color;");
+        this._setupInputs = (program) => { this._uColor = program.getLocation("color"); };
+        const defaultColor = new Float32Array([0, 0, 0, 1]);
+        this._setRenderState = (frameCtx, dataTextureLayer, renderPass, rtcOrigin) => {
+            if (renderPass === RENDER_PASSES.EDGES_XRAYED) {
+                const material = scene.xrayMaterial._state;
+                const edgeColor = material.edgeColor;
+                const edgeAlpha = material.edgeAlpha;
+                gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
+            } else if (renderPass === RENDER_PASSES.EDGES_HIGHLIGHTED) {
+                const material = scene.highlightMaterial._state;
+                const edgeColor = material.edgeColor;
+                const edgeAlpha = material.edgeAlpha;
+                gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
+            } else if (renderPass === RENDER_PASSES.EDGES_SELECTED) {
+                const material = scene.selectedMaterial._state;
+                const edgeColor = material.edgeColor;
+                const edgeAlpha = material.edgeAlpha;
+                gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
+            } else {
+                gl.uniform4fv(this._uColor, defaultColor);
+            }
+        };
+        this._getGlMode = (frameCtx) => gl.LINES;
+
         this._allocate();
     }
 
@@ -53,7 +93,7 @@ export class DTXTrianglesEdgesRenderer {
         const textureState = state.textureState;
         const origin = dataTextureLayer._state.origin;
         const {position, rotationMatrix} = model;
-        const viewMatrix = camera.viewMatrix;
+        const viewMatrix = (this._usePickMatrix && frameCtx.pickViewMatrix) || camera.viewMatrix;
 
         textureState.bindCommonTextures(
             program,
@@ -84,30 +124,10 @@ export class DTXTrianglesEdgesRenderer {
         gl.uniformMatrix4fv(this._uProjMatrix, false, camera.projMatrix);
         gl.uniform1i(this._uRenderPass, renderPass);
 
-        if (renderPass === RENDER_PASSES.EDGES_XRAYED) {
-            const material = scene.xrayMaterial._state;
-            const edgeColor = material.edgeColor;
-            const edgeAlpha = material.edgeAlpha;
-            gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
-
-        } else if (renderPass === RENDER_PASSES.EDGES_HIGHLIGHTED) {
-            const material = scene.highlightMaterial._state;
-            const edgeColor = material.edgeColor;
-            const edgeAlpha = material.edgeAlpha;
-            gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
-
-        } else if (renderPass === RENDER_PASSES.EDGES_SELECTED) {
-            const material = scene.selectedMaterial._state;
-            const edgeColor = material.edgeColor;
-            const edgeAlpha = material.edgeAlpha;
-            gl.uniform4f(this._uColor, edgeColor[0], edgeColor[1], edgeColor[2], edgeAlpha);
-
-        } else {
-            gl.uniform4fv(this._uColor, defaultColor);
-        }
+        this._setRenderState(frameCtx, dataTextureLayer, renderPass, rtcOrigin);
 
         if (this._useLogDepthBuffer) {
-            const logDepthBufFC = 2.0 / (Math.log(camera.project.far + 1.0) / Math.LN2);
+            const logDepthBufFC = 2.0 / (Math.log(this._getLogDepthFar(frameCtx, camera.project.far) + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
 
@@ -139,6 +159,7 @@ export class DTXTrianglesEdgesRenderer {
                 }
             }
         }
+        const glMode = this._getGlMode(frameCtx);
         if (state.numEdgeIndices8Bits > 0) {
             textureState.bindEdgeIndicesTextures(
                 program,
@@ -146,7 +167,7 @@ export class DTXTrianglesEdgesRenderer {
                 this._uTexturePerPrimitiveIdIndices,
                 8 // 8 bits edge indices
             );
-            gl.drawArrays(gl.LINES, 0, state.numEdgeIndices8Bits);
+            gl.drawArrays(glMode, 0, state.numEdgeIndices8Bits);
         }
         if (state.numEdgeIndices16Bits > 0) {
             textureState.bindEdgeIndicesTextures(
@@ -155,7 +176,7 @@ export class DTXTrianglesEdgesRenderer {
                 this._uTexturePerPrimitiveIdIndices,
                 16 // 16 bits edge indices
             );
-            gl.drawArrays(gl.LINES, 0, state.numEdgeIndices16Bits);
+            gl.drawArrays(glMode, 0, state.numEdgeIndices16Bits);
         }
         if (state.numEdgeIndices32Bits > 0) {
             textureState.bindEdgeIndicesTextures(
@@ -164,7 +185,7 @@ export class DTXTrianglesEdgesRenderer {
                 this._uTexturePerPrimitiveIdIndices,
                 32 // 32 bits edge indices
             );
-            gl.drawArrays(gl.LINES, 0, state.numEdgeIndices32Bits);
+            gl.drawArrays(glMode, 0, state.numEdgeIndices32Bits);
         }
         frameCtx.drawElements++;
     }
@@ -189,7 +210,6 @@ export class DTXTrianglesEdgesRenderer {
         this._uSceneModelMatrix = program.getLocation("sceneModelMatrix");
         this._uViewMatrix = program.getLocation("viewMatrix");
         this._uProjMatrix = program.getLocation("projMatrix");
-        this._uColor = program.getLocation("color");
 
         this._uSectionPlanes = [];
         for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
@@ -210,6 +230,8 @@ export class DTXTrianglesEdgesRenderer {
         this._uTexturePerObjectMatrix = "uTexturePerObjectMatrix";
         this._uTexturePerPrimitiveIdPortionIds = "uTexturePerPrimitiveIdPortionIds";
         this._uTexturePerPrimitiveIdIndices = "uTexturePerPrimitiveIdIndices";
+
+        this._setupInputs(program);
     }
 
     _buildVertexShader() {
@@ -254,10 +276,14 @@ export class DTXTrianglesEdgesRenderer {
             src.push("}");
         }
 
+        if (this._needvWorldPosition || clipping) {
+            src.push("out " + (this._needvWorldPosition ? "highp " : "") + "vec4 vWorldPosition;");
+        }
         if (clipping) {
-            src.push("out vec4 vWorldPosition;");
             src.push("flat out uint vFlags2;");
         }
+
+        this._appendVertexDefinitions(src);
 
         src.push("void main(void) {");
 
@@ -275,18 +301,20 @@ export class DTXTrianglesEdgesRenderer {
         src.push("uvec4 flags = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);");
         src.push("uvec4 flags2 = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);");
 
-        // flags.z = NOT_RENDERED | EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
-        // renderPass = EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
-        src.push(`if (int(flags.z) != renderPass) {`);
+        src.push("if (int(flags." + this._renderPassFlag + ") != renderPass) {");
         src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
         src.push("   return;"); // Cull vertex
         src.push("}");
 
-        src.push("uvec4 color = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);");
-        src.push(`if (color.a == 0u) {`);
-        src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
-        src.push("   return;");
-        src.push("}");
+        if (this._cullOnAlphaZero || this._needVertexColor) {
+            src.push("uvec4 color = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);");
+        }
+        if (this._cullOnAlphaZero) {
+            src.push(`if (color.a == 0u) {`);
+            src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
+            src.push("   return;");
+            src.push("}");
+        }
 
         src.push("{");
 
@@ -312,8 +340,10 @@ export class DTXTrianglesEdgesRenderer {
         src.push("vec4 worldPosition = sceneModelMatrix * (objectDecodeAndInstanceMatrix * vec4(position, 1.0));");
         src.push("vec4 viewPosition = viewMatrix * worldPosition;");
 
-        if (clipping) {
+        if (this._needvWorldPosition || clipping) {
             src.push("vWorldPosition = worldPosition;");
+        }
+        if (clipping) {
             src.push("vFlags2 = flags2.r;");
         }
 
@@ -322,7 +352,10 @@ export class DTXTrianglesEdgesRenderer {
             src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
         }
+        this._transformClipPos(src, "clipPos");
         src.push("gl_Position = clipPos;");
+
+        this._appendVertexOutputs(src, this._needVertexColor && "color");
 
         src.push("  }");
         src.push("}");
@@ -350,8 +383,10 @@ export class DTXTrianglesEdgesRenderer {
             src.push("in float vFragDepth;");
         }
 
+        if (this._needvWorldPosition || clipping) {
+            src.push("in " + (this._needvWorldPosition ? "highp " : "") + "vec4 vWorldPosition;");
+        }
         if (clipping) {
-            src.push("in vec4 vWorldPosition;");
             src.push("flat in uint vFlags2;");
             for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
@@ -360,8 +395,7 @@ export class DTXTrianglesEdgesRenderer {
             }
         }
 
-        src.push("uniform vec4 color;");
-        src.push("out vec4 outColor;");
+        this._appendFragmentDefinitions(src);
 
         src.push("void main(void) {");
         if (clipping) {
@@ -381,7 +415,7 @@ export class DTXTrianglesEdgesRenderer {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
 
-        src.push("   outColor = color;");
+        this._appendFragmentOutputs(src);
 
         src.push("}");
         return src;
