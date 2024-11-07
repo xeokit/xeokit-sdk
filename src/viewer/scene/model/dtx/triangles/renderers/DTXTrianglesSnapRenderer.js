@@ -36,7 +36,8 @@ export class DTXTrianglesSnapRenderer {
         this._transformClipPos = (src, clipPos) => src.push(`${clipPos}.xy = (${clipPos}.xy / ${clipPos}.w - snapVectorA) * snapInvVectorAB * ${clipPos}.w;`);
         this._needVertexColor = false;
         this._needPickColor = false;
-        this._appendVertexOutputs = (src, color, pickColor) => src.push("gl_PointSize = 1.0;"); // Windows needs this?
+        this._needGl_Position = false;
+        this._appendVertexOutputs = (src, color, pickColor, gl_Position) => src.push("gl_PointSize = 1.0;"); // Windows needs this?
         this._appendFragmentDefinitions = (src) => {
             src.push("uniform int uLayerNumber;");
             src.push("uniform vec3 uCoordinateScaler;");
@@ -368,7 +369,7 @@ export class DTXTrianglesSnapRenderer {
             // TODO: Normalize color "/ 255.0"?
             src.push("vec4 pickColor = vec4(texelFetch(uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0));");
         }
-        this._appendVertexOutputs(src, this._needVertexColor && "color", this._needPickColor && "pickColor");
+        this._appendVertexOutputs(src, this._needVertexColor && "color", this._needPickColor && "pickColor", this._needGl_Position &&"gl_Position");
 
         src.push("  }");
         src.push("}");
