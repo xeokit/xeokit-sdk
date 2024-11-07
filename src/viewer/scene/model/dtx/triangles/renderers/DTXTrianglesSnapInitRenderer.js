@@ -7,6 +7,8 @@ const tempVec3b = math.vec3();
 const tempVec3c = math.vec3();
 const tempMat4a = math.mat4();
 
+const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
+
 /**
  * @private
  */
@@ -15,8 +17,69 @@ export class DTXTrianglesSnapInitRenderer {
     constructor(scene) {
         this._scene = scene;
         this._hash = this._getHash();
+        const gl = scene.canvas.gl;
+
         this._programName = "DTXTrianglesSnapInitRenderer";
         this._useLogDepthBuffer = true; // Improves occlusion accuracy at distance
+        this._getLogDepthFar = (frameCtx, cameraProjectFar) => frameCtx.pickProjMatrix ? frameCtx.pickZFar : cameraProjectFar;
+        this._fragDepthDiff = (vFragDepth) => `length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))`;
+        this._usePickMatrix = true;
+        // flags.w = NOT_RENDERED | PICK
+        // renderPass = PICK
+        this._renderPassFlag = "w";
+        this._cullOnAlphaZero = true;
+        this._appendVertexDefinitions = (src) => {
+            src.push("flat out vec4 vPickColor;");
+            src.push("uniform vec2 snapVectorA;");
+            src.push("uniform vec2 snapInvVectorAB;");
+        };
+        // divide by w to get into NDC, and after transformation multiply by w to get back into clip space
+        this._transformClipPos = (src, clipPos) => src.push(`${clipPos}.xy = (${clipPos}.xy / ${clipPos}.w - snapVectorA) * snapInvVectorAB * ${clipPos}.w;`);
+        this._needVertexColor = false;
+        this._needPickColor = true;
+        this._appendVertexOutputs = (src, color, pickColor) => src.push(`vPickColor = ${pickColor};`);
+        this._appendFragmentDefinitions = (src) => {
+            src.push("uniform int uLayerNumber;");
+            src.push("uniform vec3 uCoordinateScaler;");
+            src.push("flat in vec4 vPickColor;");
+            src.push("layout(location = 0) out highp ivec4 outCoords;");
+            src.push("layout(location = 1) out highp ivec4 outNormal;");
+            src.push("layout(location = 2) out lowp uvec4 outPickColor;");
+        };
+        this._needvWorldPosition = true;
+        this._appendFragmentOutputs = (src, vWorldPosition) => {
+            src.push(`outCoords = ivec4(${vWorldPosition}.xyz * uCoordinateScaler.xyz, - uLayerNumber);`);
+            src.push(`vec3 xTangent = dFdx( ${vWorldPosition}.xyz );`);
+            src.push(`vec3 yTangent = dFdy( ${vWorldPosition}.xyz );`);
+            src.push("vec3 worldNormal = normalize( cross( xTangent, yTangent ) );");
+            src.push(`outNormal = ivec4(worldNormal * float(${math.MAX_INT}), 1.0);`);
+            src.push("outPickColor = uvec4(vPickColor);");
+        };
+        this._setupInputs = (program) => {
+            this._uSnapVectorA = program.getLocation("snapVectorA");
+            this._uSnapInvVectorAB = program.getLocation("snapInvVectorAB");
+            this._uLayerNumber = program.getLocation("uLayerNumber");
+            this._uCoordinateScaler = program.getLocation("uCoordinateScaler");
+        };
+        this._setRenderState = (frameCtx, dataTextureLayer, renderPass, rtcOrigin) => {
+            const aabb = dataTextureLayer.aabb; // Per-layer AABB for best RTC accuracy
+            const coordinateScaler = tempVec3c;
+            coordinateScaler[0] = math.safeInv(aabb[3] - aabb[0]) * math.MAX_INT;
+            coordinateScaler[1] = math.safeInv(aabb[4] - aabb[1]) * math.MAX_INT;
+            coordinateScaler[2] = math.safeInv(aabb[5] - aabb[2]) * math.MAX_INT;
+            frameCtx.snapPickCoordinateScale[0] = math.safeInv(coordinateScaler[0]);
+            frameCtx.snapPickCoordinateScale[1] = math.safeInv(coordinateScaler[1]);
+            frameCtx.snapPickCoordinateScale[2] = math.safeInv(coordinateScaler[2]);
+            frameCtx.snapPickOrigin[0] = rtcOrigin[0];
+            frameCtx.snapPickOrigin[1] = rtcOrigin[1];
+            frameCtx.snapPickOrigin[2] = rtcOrigin[2];
+            gl.uniform2fv(this._uSnapVectorA, frameCtx.snapVectorA);
+            gl.uniform2fv(this._uSnapInvVectorAB, frameCtx.snapInvVectorAB);
+            gl.uniform1i(this._uLayerNumber, frameCtx.snapPickLayerNumber);
+            gl.uniform3fv(this._uCoordinateScaler, coordinateScaler);
+        };
+        this._getGlMode = (frameCtx) => gl.TRIANGLES;
+
         this._allocate();
     }
 
@@ -51,7 +114,7 @@ export class DTXTrianglesSnapInitRenderer {
         const textureState = state.textureState;
         const origin = dataTextureLayer._state.origin;
         const {position, rotationMatrix} = model;
-        const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
+        const viewMatrix = (this._usePickMatrix && frameCtx.pickViewMatrix) || camera.viewMatrix;
         const projMatrix = frameCtx.pickProjMatrix || camera.projMatrix;
         const eye = frameCtx.pickOrigin || camera.eye;
         const far = frameCtx.pickProjMatrix ? frameCtx.pickZFar : camera.project.far;
@@ -80,31 +143,16 @@ export class DTXTrianglesSnapInitRenderer {
             rtcViewMatrix = viewMatrix;
         }
 
-        const aabb = dataTextureLayer.aabb; // Per-layer AABB for best RTC accuracy
-        const coordinateScaler = tempVec3c;
-        coordinateScaler[0] = math.safeInv(aabb[3] - aabb[0]) * math.MAX_INT;
-        coordinateScaler[1] = math.safeInv(aabb[4] - aabb[1]) * math.MAX_INT;
-        coordinateScaler[2] = math.safeInv(aabb[5] - aabb[2]) * math.MAX_INT;
-
-        frameCtx.snapPickCoordinateScale[0] = math.safeInv(coordinateScaler[0]);
-        frameCtx.snapPickCoordinateScale[1] = math.safeInv(coordinateScaler[1]);
-        frameCtx.snapPickCoordinateScale[2] = math.safeInv(coordinateScaler[2]);
-        frameCtx.snapPickOrigin[0] = rtcOrigin[0];
-        frameCtx.snapPickOrigin[1] = rtcOrigin[1];
-        frameCtx.snapPickOrigin[2] = rtcOrigin[2];
-
-        gl.uniform2fv(this._uSnapVectorA, frameCtx.snapVectorA);
-        gl.uniform2fv(this._uSnapInvVectorAB, frameCtx.snapInvVectorAB);
-        gl.uniform1i(this._uLayerNumber, frameCtx.snapPickLayerNumber);
-        gl.uniform3fv(this._uCoordinateScaler, coordinateScaler);
         gl.uniformMatrix4fv(this._uSceneModelMatrix, false, rotationMatrix);
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
         gl.uniformMatrix4fv(this._uProjMatrix, false, projMatrix);
         gl.uniform3fv(this._uCameraEyeRtc, math.subVec3(eye, rtcOrigin, tempVec3b));
         gl.uniform1i(this._uRenderPass, renderPass);
 
+        this._setRenderState(frameCtx, dataTextureLayer, renderPass, rtcOrigin);
+
         if (this._useLogDepthBuffer) {
-            const logDepthBufFC = 2.0 / (Math.log(far + 1.0) / Math.LN2);
+            const logDepthBufFC = 2.0 / (Math.log(this._getLogDepthFar(frameCtx, camera.project.far) + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
 
@@ -136,6 +184,7 @@ export class DTXTrianglesSnapInitRenderer {
                 }
             }
         }
+        const glMode = this._getGlMode(frameCtx);
         if (state.numIndices8Bits > 0) {
             textureState.bindTriangleIndicesTextures(
                 program,
@@ -143,7 +192,7 @@ export class DTXTrianglesSnapInitRenderer {
                 this._uTexturePerPrimitiveIdIndices,
                 8 // 8 bits indices
             );
-            gl.drawArrays(gl.TRIANGLES, 0, state.numIndices8Bits);
+            gl.drawArrays(glMode, 0, state.numIndices8Bits);
         }
         if (state.numIndices16Bits > 0) {
             textureState.bindTriangleIndicesTextures(
@@ -152,7 +201,7 @@ export class DTXTrianglesSnapInitRenderer {
                 this._uTexturePerPrimitiveIdIndices,
                 16 // 16 bits indices
             );
-            gl.drawArrays(gl.TRIANGLES, 0, state.numIndices16Bits);
+            gl.drawArrays(glMode, 0, state.numIndices16Bits);
         }
         if (state.numIndices32Bits > 0) {
             textureState.bindTriangleIndicesTextures(
@@ -161,7 +210,7 @@ export class DTXTrianglesSnapInitRenderer {
                 this._uTexturePerPrimitiveIdIndices,
                 32 // 32 bits indices
             );
-            gl.drawArrays(gl.TRIANGLES, 0, state.numIndices32Bits);
+            gl.drawArrays(glMode, 0, state.numIndices32Bits);
         }
         frameCtx.drawElements++;
     }
@@ -208,10 +257,7 @@ export class DTXTrianglesSnapInitRenderer {
         this._uTexturePerPrimitiveIdPortionIds = "uTexturePerPrimitiveIdPortionIds";
         this._uTexturePerPrimitiveIdIndices = "uTexturePerPrimitiveIdIndices";
 
-        this._uSnapVectorA = program.getLocation("snapVectorA");
-        this._uSnapInvVectorAB = program.getLocation("snapInvVectorAB");
-        this._uLayerNumber = program.getLocation("uLayerNumber");
-        this._uCoordinateScaler = program.getLocation("uCoordinateScaler");
+        this._setupInputs(program);
     }
 
     _buildVertexShader() {
@@ -247,8 +293,6 @@ export class DTXTrianglesSnapInitRenderer {
         src.push("uniform highp usampler2D uTexturePerPrimitiveIdIndices;");
         src.push("uniform mediump usampler2D uTexturePerPrimitiveIdPortionIds;");
         src.push("uniform vec3 uCameraEyeRtc;");
-        src.push("uniform vec2 snapVectorA;");
-        src.push("uniform vec2 snapInvVectorAB;");
 
         if (this._useLogDepthBuffer) {
             src.push("uniform float logDepthBufFC;");
@@ -256,15 +300,14 @@ export class DTXTrianglesSnapInitRenderer {
             src.push("out float isPerspective;");
         }
 
-        src.push("bool isPerspectiveMatrix(mat4 m) {");
-        src.push("    return (m[2][3] == - 1.0);");
-        src.push("}");
-
-        src.push("flat out vec4 vPickColor;");
-        src.push("out highp vec4 vWorldPosition;");
+        if (this._needvWorldPosition || clipping) {
+            src.push("out " + (this._needvWorldPosition ? "highp " : "") + "vec4 vWorldPosition;");
+        }
         if (clipping) {
             src.push("flat out uint vFlags2;");
         }
+
+        this._appendVertexDefinitions(src);
 
         src.push("void main(void) {");
 
@@ -282,20 +325,22 @@ export class DTXTrianglesSnapInitRenderer {
         src.push("uvec4 flags = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);");
         src.push("uvec4 flags2 = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);");
 
-        // flags.w = NOT_RENDERED | PICK
-        // renderPass = PICK
-        src.push(`if (int(flags.w) != renderPass) {`);
+        src.push("if (int(flags." + this._renderPassFlag + ") != renderPass) {");
         src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
         src.push("   return;"); // Cull vertex
         src.push("}");
 
-        src.push("{");
+        if (this._cullOnAlphaZero || this._needVertexColor) {
+            src.push("uvec4 color = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);");
+        }
+        if (this._cullOnAlphaZero) {
+            src.push(`if (color.a == 0u) {`);
+            src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
+            src.push("   return;");
+            src.push("}");
+        }
 
-        src.push("uvec4 color = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);");
-        src.push(`if (color.a == 0u) {`);
-        src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
-        src.push("   return;");
-        src.push("};");
+        src.push("{");
 
         src.push("ivec4 packedVertexBase = ivec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+4, objectIndexCoords.y), 0));");
         src.push("ivec4 packedIndexBaseOffset = ivec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+5, objectIndexCoords.y), 0));");
@@ -313,19 +358,17 @@ export class DTXTrianglesSnapInitRenderer {
         src.push("mat4 objectInstanceMatrix = mat4 (texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));");
 
         src.push("mat4 objectDecodeAndInstanceMatrix = objectInstanceMatrix * mat4 (texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));");
-        src.push("uint solid = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+7, objectIndexCoords.y), 0).r;");
 
+        src.push("uint solid = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+7, objectIndexCoords.y), 0).r;");
         src.push("vec3 positions[] = vec3[](");
         src.push("  vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.r, indexPositionV.r), 0)),");
         src.push("  vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.g, indexPositionV.g), 0)),");
         src.push("  vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.b, indexPositionV.b), 0)));");
-
         src.push("vec3 normal = normalize(cross(positions[2] - positions[0], positions[1] - positions[0]));");
         src.push("vec3 position = positions[gl_VertexID % 3];");
-
         // when the geometry is not solid, if needed, flip the triangle winding
         src.push("if (solid != 1u) {");
-        src.push("  if (isPerspectiveMatrix(projMatrix)) {");
+        src.push(`  if (${isPerspectiveMatrix("projMatrix")}) {`);
         src.push("      vec3 uCameraEyeRtcInQuantizedSpace = (inverse(sceneModelMatrix * objectDecodeAndInstanceMatrix) * vec4(uCameraEyeRtc, 1)).xyz;");
         src.push("      if (dot(position.xyz - uCameraEyeRtcInQuantizedSpace, normal) < 0.0) {");
         src.push("          position = positions[2 - (gl_VertexID % 3)];");
@@ -341,7 +384,9 @@ export class DTXTrianglesSnapInitRenderer {
         src.push("vec4 worldPosition = sceneModelMatrix * (objectDecodeAndInstanceMatrix * vec4(position, 1.0));");
         src.push("vec4 viewPosition = viewMatrix * worldPosition;");
 
-        src.push("vWorldPosition = worldPosition;");
+        if (this._needvWorldPosition || clipping) {
+            src.push("vWorldPosition = worldPosition;");
+        }
         if (clipping) {
             src.push("vFlags2 = flags2.r;");
         }
@@ -349,14 +394,17 @@ export class DTXTrianglesSnapInitRenderer {
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (this._useLogDepthBuffer) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
-            src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
+            src.push(`isPerspective = float (${isPerspectiveMatrix("projMatrix")});`);
         }
-        // divide by w to get into NDC, and after transformation multiply by w to get back into clip space
-        src.push("clipPos.xy = (clipPos.xy / clipPos.w - snapVectorA) * snapInvVectorAB * clipPos.w;");
+        this._transformClipPos(src, "clipPos");
         src.push("gl_Position = clipPos;");
 
-        // TODO: Normalize color "/ 255.0"?
-        src.push("vPickColor = vec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0));");
+        if (this._needPickColor) {
+            // TODO: Normalize color "/ 255.0"?
+            src.push("vec4 pickColor = vec4(texelFetch(uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0));");
+        }
+        this._appendVertexOutputs(src, this._needVertexColor && "color", this._needPickColor && "pickColor");
+
         src.push("  }");
         src.push("}");
         return src;
@@ -383,7 +431,9 @@ export class DTXTrianglesSnapInitRenderer {
             src.push("in float vFragDepth;");
         }
 
-        src.push("in highp vec4 vWorldPosition;");
+        if (this._needvWorldPosition || clipping) {
+            src.push("in " + (this._needvWorldPosition ? "highp " : "") + "vec4 vWorldPosition;");
+        }
         if (clipping) {
             src.push("flat in uint vFlags2;");
             for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
@@ -393,12 +443,7 @@ export class DTXTrianglesSnapInitRenderer {
             }
         }
 
-        src.push("uniform int uLayerNumber;");
-        src.push("uniform vec3 uCoordinateScaler;");
-        src.push("flat in vec4 vPickColor;");
-        src.push("layout(location = 0) out highp ivec4 outCoords;");
-        src.push("layout(location = 1) out highp ivec4 outNormal;");
-        src.push("layout(location = 2) out lowp uvec4 outPickColor;");
+        this._appendFragmentDefinitions(src);
 
         src.push("void main(void) {");
         if (clipping) {
@@ -415,16 +460,11 @@ export class DTXTrianglesSnapInitRenderer {
         }
 
         if (this._useLogDepthBuffer) {
-            src.push("    float diff = length(vec2(dFdx(vFragDepth), dFdy(vFragDepth)));");
-            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth + diff ) * logDepthBufFC * 0.5;");
+            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth + " + this._fragDepthDiff("vFragDepth") + " ) * logDepthBufFC * 0.5;");
         }
 
-        src.push("outCoords = ivec4(vWorldPosition.xyz * uCoordinateScaler.xyz, - uLayerNumber);");
-        src.push("vec3 xTangent = dFdx( vWorldPosition.xyz );");
-        src.push("vec3 yTangent = dFdy( vWorldPosition.xyz );");
-        src.push("vec3 worldNormal = normalize( cross( xTangent, yTangent ) );");
-        src.push(`outNormal = ivec4(worldNormal * float(${math.MAX_INT}), 1.0);`);
-        src.push("outPickColor = uvec4(vPickColor);");
+        this._appendFragmentOutputs(src, this._needvWorldPosition && "vWorldPosition");
+
         src.push("}");
         return src;
     }
