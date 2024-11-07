@@ -32,7 +32,8 @@ export class DTXTrianglesEdgesRenderer {
         this._transformClipPos = (src, clipPos) => { };
         this._needVertexColor = false;
         this._needPickColor = false;
-        this._appendVertexOutputs = (src, color, pickColor) => { };
+        this._needGl_Position = false;
+        this._appendVertexOutputs = (src, color, pickColor, gl_Position) => { };
         this._appendFragmentDefinitions = (src) => {
             src.push("uniform vec4 color;");
             src.push("out vec4 outColor;");
@@ -360,7 +361,7 @@ export class DTXTrianglesEdgesRenderer {
             // TODO: Normalize color "/ 255.0"?
             src.push("vec4 pickColor = vec4(texelFetch(uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0));");
         }
-        this._appendVertexOutputs(src, this._needVertexColor && "color", this._needPickColor && "pickColor");
+        this._appendVertexOutputs(src, this._needVertexColor && "color", this._needPickColor && "pickColor", this._needGl_Position &&"gl_Position");
 
         src.push("  }");
         src.push("}");
