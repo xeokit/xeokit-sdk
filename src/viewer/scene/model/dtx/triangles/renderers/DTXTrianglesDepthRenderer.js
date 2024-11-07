@@ -33,13 +33,15 @@ export class DTXTrianglesDepthRenderer {
         this._needVertexColor = false;
         this._needPickColor = false;
         this._needGl_Position = true;
-        this._appendVertexOutputs = (src, color, pickColor, gl_Position) => src.push(`vHighPrecisionZW = ${gl_Position}.zw;`);
+        this._needViewMatrixPositionNormal = false;
+        this._appendVertexOutputs = (src, color, pickColor, gl_Position, view) => src.push(`vHighPrecisionZW = ${gl_Position}.zw;`);
         this._appendFragmentDefinitions = (src) => {
             src.push("in highp vec2 vHighPrecisionZW;");
             src.push("out vec4 outColor;");
         };
         this._needvWorldPosition = false;
-        this._appendFragmentOutputs = (src, vWorldPosition) => src.push("    outColor = vec4(vec3((1.0 - vHighPrecisionZW[0] / vHighPrecisionZW[1]) / 2.0), 1.0);");
+        this._needGl_FragCoord = false;
+        this._appendFragmentOutputs = (src, vWorldPosition, gl_FragCoord) => src.push("    outColor = vec4(vec3((1.0 - vHighPrecisionZW[0] / vHighPrecisionZW[1]) / 2.0), 1.0);");
         this._setupInputs = (program) => { };
         this._setRenderState = (frameCtx, dataTextureLayer, renderPass, rtcOrigin) => { };
         this._getGlMode = (frameCtx) => gl.TRIANGLES;
@@ -327,17 +329,28 @@ export class DTXTrianglesDepthRenderer {
         src.push("  vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.b, indexPositionV.b), 0)));");
         src.push("vec3 normal = normalize(cross(positions[2] - positions[0], positions[1] - positions[0]));");
         src.push("vec3 position = positions[gl_VertexID % 3];");
+        if (this._needViewMatrixPositionNormal) {
+            src.push("vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);");
+        }
         // when the geometry is not solid, if needed, flip the triangle winding
         src.push("if (solid != 1u) {");
         src.push(`  if (${isPerspectiveMatrix("projMatrix")}) {`);
         src.push("      vec3 uCameraEyeRtcInQuantizedSpace = (inverse(sceneModelMatrix * objectDecodeAndInstanceMatrix) * vec4(uCameraEyeRtc, 1)).xyz;");
         src.push("      if (dot(position.xyz - uCameraEyeRtcInQuantizedSpace, normal) < 0.0) {");
         src.push("          position = positions[2 - (gl_VertexID % 3)];");
+        if (this._needViewMatrixPositionNormal) {
+            src.push("          viewNormal = -viewNormal;");
+        }
         src.push("      }");
         src.push("  } else {");
-        src.push("      vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);");
+        if (!this._needViewMatrixPositionNormal) {
+            src.push("      vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);");
+        }
         src.push("      if (viewNormal.z < 0.0) {");
         src.push("          position = positions[2 - (gl_VertexID % 3)];");
+        if (this._needViewMatrixPositionNormal) {
+            src.push("          viewNormal = -viewNormal;");
+        }
         src.push("      }");
         src.push("  }");
         src.push("}");
@@ -364,7 +377,7 @@ export class DTXTrianglesDepthRenderer {
             // TODO: Normalize color "/ 255.0"?
             src.push("vec4 pickColor = vec4(texelFetch(uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0));");
         }
-        this._appendVertexOutputs(src, this._needVertexColor && "color", this._needPickColor && "pickColor", this._needGl_Position &&"gl_Position");
+        this._appendVertexOutputs(src, this._needVertexColor && "color", this._needPickColor && "pickColor", this._needGl_Position &&"gl_Position", this._needViewMatrixPositionNormal && {viewMatrix: "viewMatrix", viewPosition: "viewPosition", viewNormal: "viewNormal"});
 
         src.push("  }");
         src.push("}");
@@ -424,7 +437,7 @@ export class DTXTrianglesDepthRenderer {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth + " + this._fragDepthDiff("vFragDepth") + " ) * logDepthBufFC * 0.5;");
         }
 
-        this._appendFragmentOutputs(src, this._needvWorldPosition && "vWorldPosition");
+        this._appendFragmentOutputs(src, this._needvWorldPosition && "vWorldPosition", this._needGl_FragCoord && "gl_FragCoord");
 
         src.push("}");
         return src;
