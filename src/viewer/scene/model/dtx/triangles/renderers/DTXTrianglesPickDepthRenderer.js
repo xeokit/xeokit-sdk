@@ -6,6 +6,8 @@ const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
 const tempMat4a = math.mat4();
 
+const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
+
 /**
  * @private
  */
@@ -14,8 +16,67 @@ export class DTXTrianglesPickDepthRenderer {
     constructor(scene) {
         this._scene = scene;
         this._hash = this._getHash();
+        const gl = scene.canvas.gl;
+
         this._programName = "DTXTrianglesPickDepthRenderer";
         this._useLogDepthBuffer = scene.logarithmicDepthBufferEnabled;
+        this._fragDepthDiff = (vFragDepth) => "0.0";
+        this._getViewParams = (frameCtx, camera) => ({
+            viewMatrix: frameCtx.pickViewMatrix || camera.viewMatrix,
+            projMatrix: frameCtx.pickProjMatrix || camera.projMatrix,
+            eye: frameCtx.pickOrigin || camera.eye,
+            far: frameCtx.pickProjMatrix ? frameCtx.pickZFar : camera.project.far
+        });
+        // flags.w = NOT_RENDERED | PICK
+        // renderPass = PICK
+        this._renderPassFlag = "w";
+        this._cullOnAlphaZero = true;
+        this._appendVertexDefinitions = (src) => {
+            src.push("uniform vec2 pickClipPos;");
+            src.push("uniform vec2 drawingBufferSize;");
+            src.push("out vec4 vViewPosition;");
+        };
+        // divide by w to get into NDC, and after transformation multiply by w to get back into clip space
+        this._transformClipPos = (src, clipPos) => src.push(`${clipPos}.xy = (${clipPos}.xy / ${clipPos}.w - pickClipPos) * drawingBufferSize * ${clipPos}.w;`);
+        this._needVertexColor = false;
+        this._needPickColor = false;
+        this._needGl_Position = false;
+        this._needViewMatrixPositionNormal = true;
+        this._appendVertexOutputs = (src, color, pickColor, gl_Position, view) => src.push(`vViewPosition = ${view.viewPosition};`);
+        this._appendFragmentDefinitions = (src) => {
+            src.push("uniform float pickZNear;");
+            src.push("uniform float pickZFar;");
+            src.push("in vec4 vViewPosition;");
+            src.push("vec4 packDepth(const in float depth) {");
+            src.push("  const vec4 bitShift = vec4(256.0*256.0*256.0, 256.0*256.0, 256.0, 1.0);");
+            src.push("  const vec4 bitMask  = vec4(0.0, 1.0/256.0, 1.0/256.0, 1.0/256.0);");
+            src.push("  vec4 res = fract(depth * bitShift);");
+            src.push("  res -= res.xxyz * bitMask;");
+            src.push("  return res;");
+            src.push("}");
+            src.push("out vec4 outPackedDepth;");
+        };
+        this._needvWorldPosition = false;
+        this._needGl_FragCoord = false;
+        this._appendFragmentOutputs = (src, vWorldPosition, gl_FragCoord) => {
+            src.push("    float zNormalizedDepth = abs((pickZNear + vViewPosition.z) / (pickZFar - pickZNear));");
+            src.push("    outPackedDepth = packDepth(zNormalizedDepth);");  // Must be linear depth
+            // TRY: src.push("    outPackedDepth = vec4(zNormalizedDepth, fract(zNormalizedDepth * vec3(256.0, 256.0*256.0, 256.0*256.0*256.0)));");
+        };
+        this._setupInputs = (program) => {
+            this._uPickClipPos = program.getLocation("pickClipPos");
+            this._uDrawingBufferSize = program.getLocation("drawingBufferSize");
+            this._uPickZNear = program.getLocation("pickZNear");
+            this._uPickZFar = program.getLocation("pickZFar");
+        };
+        this._setRenderState = (frameCtx, dataTextureLayer, renderPass, rtcOrigin) => {
+            gl.uniform2fv(this._uPickClipPos, frameCtx.pickClipPos);
+            gl.uniform2f(this._uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
+            gl.uniform1f(this._uPickZNear, frameCtx.pickZNear);
+            gl.uniform1f(this._uPickZFar, frameCtx.pickZFar);
+        };
+        this._getGlMode = (frameCtx) => gl.TRIANGLES;
+
         this._allocate();
     }
 
@@ -44,16 +105,12 @@ export class DTXTrianglesPickDepthRenderer {
 
         const scene = this._scene;
         const gl = scene.canvas.gl;
-        const camera = scene.camera;
         const model = dataTextureLayer.model;
         const state = dataTextureLayer._state;
         const textureState = state.textureState;
         const origin = dataTextureLayer._state.origin;
         const {position, rotationMatrix} = model;
-        const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
-        const projMatrix = frameCtx.pickProjMatrix || camera.projMatrix;
-        const eye = frameCtx.pickOrigin || camera.eye;
-        const far = frameCtx.pickProjMatrix ? frameCtx.pickZFar : camera.project.far;
+        const viewParams = this._getViewParams(frameCtx, scene.camera);
 
         textureState.bindCommonTextures(
             program,
@@ -74,23 +131,21 @@ export class DTXTrianglesPickDepthRenderer {
                 math.transformPoint3(rotationMatrix, origin, rtcOrigin);
             }
             math.addVec3(rtcOrigin, position, rtcOrigin);
-            rtcViewMatrix = createRTCViewMat(viewMatrix, rtcOrigin, tempMat4a);
+            rtcViewMatrix = createRTCViewMat(viewParams.viewMatrix, rtcOrigin, tempMat4a);
         } else {
-            rtcViewMatrix = viewMatrix;
+            rtcViewMatrix = viewParams.viewMatrix;
         }
 
         gl.uniformMatrix4fv(this._uSceneModelMatrix, false, rotationMatrix);
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
-        gl.uniformMatrix4fv(this._uProjMatrix, false, projMatrix);
-        gl.uniform3fv(this._uCameraEyeRtc, math.subVec3(eye, rtcOrigin, tempVec3b));
+        gl.uniformMatrix4fv(this._uProjMatrix, false, viewParams.projMatrix);
+        gl.uniform3fv(this._uCameraEyeRtc, math.subVec3(viewParams.eye, rtcOrigin, tempVec3b));
         gl.uniform1i(this._uRenderPass, renderPass);
-        gl.uniform2fv(this._uPickClipPos, frameCtx.pickClipPos);
-        gl.uniform2f(this._uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
-        gl.uniform1f(this._uPickZNear, frameCtx.pickZNear);
-        gl.uniform1f(this._uPickZFar, frameCtx.pickZFar);
+
+        this._setRenderState(frameCtx, dataTextureLayer, renderPass, rtcOrigin);
 
         if (this._useLogDepthBuffer) {
-            const logDepthBufFC = 2.0 / (Math.log(far + 1.0) / Math.LN2);
+            const logDepthBufFC = 2.0 / (Math.log(viewParams.far + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
 
@@ -122,6 +177,7 @@ export class DTXTrianglesPickDepthRenderer {
                 }
             }
         }
+        const glMode = this._getGlMode(frameCtx);
         if (state.numIndices8Bits > 0) {
             textureState.bindTriangleIndicesTextures(
                 program,
@@ -129,7 +185,7 @@ export class DTXTrianglesPickDepthRenderer {
                 this._uTexturePerPrimitiveIdIndices,
                 8 // 8 bits indices
             );
-            gl.drawArrays(gl.TRIANGLES, 0, state.numIndices8Bits);
+            gl.drawArrays(glMode, 0, state.numIndices8Bits);
         }
         if (state.numIndices16Bits > 0) {
             textureState.bindTriangleIndicesTextures(
@@ -138,7 +194,7 @@ export class DTXTrianglesPickDepthRenderer {
                 this._uTexturePerPrimitiveIdIndices,
                 16 // 16 bits indices
             );
-            gl.drawArrays(gl.TRIANGLES, 0, state.numIndices16Bits);
+            gl.drawArrays(glMode, 0, state.numIndices16Bits);
         }
         if (state.numIndices32Bits > 0) {
             textureState.bindTriangleIndicesTextures(
@@ -147,7 +203,7 @@ export class DTXTrianglesPickDepthRenderer {
                 this._uTexturePerPrimitiveIdIndices,
                 32 // 32 bits indices
             );
-            gl.drawArrays(gl.TRIANGLES, 0, state.numIndices32Bits);
+            gl.drawArrays(glMode, 0, state.numIndices32Bits);
         }
         frameCtx.drawElements++;
     }
@@ -193,10 +249,8 @@ export class DTXTrianglesPickDepthRenderer {
         this._uTexturePerObjectMatrix = "uTexturePerObjectMatrix";
         this._uTexturePerPrimitiveIdPortionIds = "uTexturePerPrimitiveIdPortionIds";
         this._uTexturePerPrimitiveIdIndices = "uTexturePerPrimitiveIdIndices";
-        this._uPickClipPos = program.getLocation("pickClipPos");
-        this._uDrawingBufferSize = program.getLocation("drawingBufferSize");
-        this._uPickZNear = program.getLocation("pickZNear");
-        this._uPickZFar = program.getLocation("pickZFar");
+
+        this._setupInputs(program);
     }
 
     _buildVertexShader() {
@@ -232,8 +286,6 @@ export class DTXTrianglesPickDepthRenderer {
         src.push("uniform highp usampler2D uTexturePerPrimitiveIdIndices;");
         src.push("uniform mediump usampler2D uTexturePerPrimitiveIdPortionIds;");
         src.push("uniform vec3 uCameraEyeRtc;");
-        src.push("uniform vec2 pickClipPos;");
-        src.push("uniform vec2 drawingBufferSize;");
 
         if (this._useLogDepthBuffer) {
             src.push("uniform float logDepthBufFC;");
@@ -241,16 +293,14 @@ export class DTXTrianglesPickDepthRenderer {
             src.push("out float isPerspective;");
         }
 
-        src.push("bool isPerspectiveMatrix(mat4 m) {");
-        src.push("    return (m[2][3] == - 1.0);");
-        src.push("}");
-
+        if (this._needvWorldPosition || clipping) {
+            src.push("out " + (this._needvWorldPosition ? "highp " : "") + "vec4 vWorldPosition;");
+        }
         if (clipping) {
-            src.push("out vec4 vWorldPosition;");
             src.push("flat out uint vFlags2;");
         }
 
-        src.push("out vec4 vViewPosition;");
+        this._appendVertexDefinitions(src);
 
         src.push("void main(void) {");
 
@@ -268,20 +318,22 @@ export class DTXTrianglesPickDepthRenderer {
         src.push("uvec4 flags = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);");
         src.push("uvec4 flags2 = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);");
 
-        // flags.w = NOT_RENDERED | PICK
-        // renderPass = PICK
-        src.push(`if (int(flags.w) != renderPass) {`);
+        src.push("if (int(flags." + this._renderPassFlag + ") != renderPass) {");
         src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
         src.push("   return;"); // Cull vertex
         src.push("}");
 
-        src.push("{");
+        if (this._cullOnAlphaZero || this._needVertexColor) {
+            src.push("uvec4 color = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);");
+        }
+        if (this._cullOnAlphaZero) {
+            src.push(`if (color.a == 0u) {`);
+            src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
+            src.push("   return;");
+            src.push("}");
+        }
 
-        src.push("uvec4 color = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);");
-        src.push(`if (color.a == 0u) {`);
-        src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
-        src.push("   return;");
-        src.push("};");
+        src.push("{");
 
         src.push("ivec4 packedVertexBase = ivec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+4, objectIndexCoords.y), 0));");
         src.push("ivec4 packedIndexBaseOffset = ivec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+5, objectIndexCoords.y), 0));");
@@ -299,27 +351,36 @@ export class DTXTrianglesPickDepthRenderer {
         src.push("mat4 objectInstanceMatrix = mat4 (texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));");
 
         src.push("mat4 objectDecodeAndInstanceMatrix = objectInstanceMatrix * mat4 (texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));");
-        src.push("uint solid = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+7, objectIndexCoords.y), 0).r;");
 
+        src.push("uint solid = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+7, objectIndexCoords.y), 0).r;");
         src.push("vec3 positions[] = vec3[](");
         src.push("  vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.r, indexPositionV.r), 0)),");
         src.push("  vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.g, indexPositionV.g), 0)),");
         src.push("  vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.b, indexPositionV.b), 0)));");
-
         src.push("vec3 normal = normalize(cross(positions[2] - positions[0], positions[1] - positions[0]));");
         src.push("vec3 position = positions[gl_VertexID % 3];");
-
+        if (this._needViewMatrixPositionNormal) {
+            src.push("vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);");
+        }
         // when the geometry is not solid, if needed, flip the triangle winding
         src.push("if (solid != 1u) {");
-        src.push("  if (isPerspectiveMatrix(projMatrix)) {");
+        src.push(`  if (${isPerspectiveMatrix("projMatrix")}) {`);
         src.push("      vec3 uCameraEyeRtcInQuantizedSpace = (inverse(sceneModelMatrix * objectDecodeAndInstanceMatrix) * vec4(uCameraEyeRtc, 1)).xyz;");
         src.push("      if (dot(position.xyz - uCameraEyeRtcInQuantizedSpace, normal) < 0.0) {");
         src.push("          position = positions[2 - (gl_VertexID % 3)];");
+        if (this._needViewMatrixPositionNormal) {
+            src.push("          viewNormal = -viewNormal;");
+        }
         src.push("      }");
         src.push("  } else {");
-        src.push("      vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);");
+        if (!this._needViewMatrixPositionNormal) {
+            src.push("      vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);");
+        }
         src.push("      if (viewNormal.z < 0.0) {");
         src.push("          position = positions[2 - (gl_VertexID % 3)];");
+        if (this._needViewMatrixPositionNormal) {
+            src.push("          viewNormal = -viewNormal;");
+        }
         src.push("      }");
         src.push("  }");
         src.push("}");
@@ -327,20 +388,27 @@ export class DTXTrianglesPickDepthRenderer {
         src.push("vec4 worldPosition = sceneModelMatrix * (objectDecodeAndInstanceMatrix * vec4(position, 1.0));");
         src.push("vec4 viewPosition = viewMatrix * worldPosition;");
 
-        if (clipping) {
+        if (this._needvWorldPosition || clipping) {
             src.push("vWorldPosition = worldPosition;");
+        }
+        if (clipping) {
             src.push("vFlags2 = flags2.r;");
         }
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (this._useLogDepthBuffer) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
-            src.push("isPerspective = float (isPerspectiveMatrix(projMatrix));");
+            src.push(`isPerspective = float (${isPerspectiveMatrix("projMatrix")});`);
         }
-        src.push("clipPos.xy = (clipPos.xy / clipPos.w - pickClipPos) * drawingBufferSize * clipPos.w;");
+        this._transformClipPos(src, "clipPos");
         src.push("gl_Position = clipPos;");
 
-        src.push("vViewPosition = viewPosition;");
+        if (this._needPickColor) {
+            // TODO: Normalize color "/ 255.0"?
+            src.push("vec4 pickColor = vec4(texelFetch(uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0));");
+        }
+        this._appendVertexOutputs(src, this._needVertexColor && "color", this._needPickColor && "pickColor", this._needGl_Position &&"gl_Position", this._needViewMatrixPositionNormal && {viewMatrix: "viewMatrix", viewPosition: "viewPosition", viewNormal: "viewNormal"});
+
         src.push("  }");
         src.push("}");
         return src;
@@ -367,8 +435,10 @@ export class DTXTrianglesPickDepthRenderer {
             src.push("in float vFragDepth;");
         }
 
+        if (this._needvWorldPosition || clipping) {
+            src.push("in " + (this._needvWorldPosition ? "highp " : "") + "vec4 vWorldPosition;");
+        }
         if (clipping) {
-            src.push("in vec4 vWorldPosition;");
             src.push("flat in uint vFlags2;");
             for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
@@ -377,17 +447,7 @@ export class DTXTrianglesPickDepthRenderer {
             }
         }
 
-        src.push("uniform float pickZNear;");
-        src.push("uniform float pickZFar;");
-        src.push("in vec4 vViewPosition;");
-        src.push("vec4 packDepth(const in float depth) {");
-        src.push("  const vec4 bitShift = vec4(256.0*256.0*256.0, 256.0*256.0, 256.0, 1.0);");
-        src.push("  const vec4 bitMask  = vec4(0.0, 1.0/256.0, 1.0/256.0, 1.0/256.0);");
-        src.push("  vec4 res = fract(depth * bitShift);");
-        src.push("  res -= res.xxyz * bitMask;");
-        src.push("  return res;");
-        src.push("}");
-        src.push("out vec4 outPackedDepth;");
+        this._appendFragmentDefinitions(src);
 
         src.push("void main(void) {");
         if (clipping) {
@@ -404,12 +464,10 @@ export class DTXTrianglesPickDepthRenderer {
         }
 
         if (this._useLogDepthBuffer) {
-            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
+            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth + " + this._fragDepthDiff("vFragDepth") + " ) * logDepthBufFC * 0.5;");
         }
 
-        src.push("    float zNormalizedDepth = abs((pickZNear + vViewPosition.z) / (pickZFar - pickZNear));");
-        src.push("    outPackedDepth = packDepth(zNormalizedDepth);");  // Must be linear depth
-// TRY: src.push("    outPackedDepth = vec4(zNormalizedDepth, fract(zNormalizedDepth * vec3(256.0, 256.0*256.0, 256.0*256.0*256.0)));");
+        this._appendFragmentOutputs(src, this._needvWorldPosition && "vWorldPosition", this._needGl_FragCoord && "gl_FragCoord");
 
         src.push("}");
         return src;
