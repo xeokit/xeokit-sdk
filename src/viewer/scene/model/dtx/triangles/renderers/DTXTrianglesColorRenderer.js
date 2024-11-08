@@ -606,10 +606,6 @@ export class DTXTrianglesColorRenderer {
         return src;
     }
 
-    webglContextRestored() {
-        this._program = null;
-    }
-
     destroy() {
         if (this._program) {
             this._program.destroy();
