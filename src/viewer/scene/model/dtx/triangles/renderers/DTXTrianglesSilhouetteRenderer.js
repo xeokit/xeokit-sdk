@@ -85,10 +85,7 @@ export class DTXTrianglesSilhouetteRenderer {
 
     drawLayer(frameCtx, dataTextureLayer, renderPass) {
         if (!this._program) {
-            this._allocate();
-            if (!this._program) {
-                return;
-            }
+            return;
         }
 
         const program = this._program;
