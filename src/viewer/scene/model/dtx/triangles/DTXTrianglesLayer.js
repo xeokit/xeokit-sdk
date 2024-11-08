@@ -666,8 +666,6 @@ export class DTXTrianglesLayer {
                 buffer.edgeIndices32Bits, buffer.lenEdgeIndices32Bits, gl.UNSIGNED_INT);
         }
 
-        textureState.finalize();
-
         // Free up memory
         this._buffer = null;
         this._bucketGeometries = {};
