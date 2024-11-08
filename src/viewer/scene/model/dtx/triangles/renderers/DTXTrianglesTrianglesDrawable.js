@@ -306,18 +306,9 @@ export class DTXTrianglesTrianglesDrawable {
 
             const model = layer.model;
             const state = layer._state;
-            const textureState = state.textureState;
             const origin = layer._state.origin;
             const {position, rotationMatrix} = model;
             const viewParams = getViewParams(frameCtx, scene.camera);
-
-            textureState.bindCommonTextures(
-                program,
-                uTexturePerObjectPositionsDecodeMatrix,
-                uTexturePerVertexIdCoordinates,
-                uTexturePerObjectColorsAndFlags,
-                uTexturePerObjectMatrix
-            );
 
             let rtcViewMatrix;
             const rtcOrigin = tempVec3a;
@@ -376,34 +367,37 @@ export class DTXTrianglesTrianglesDrawable {
                     }
                 }
             }
+
+            const textureState = state.textureState;
+            textureState.bindCommonTextures(
+                program,
+                uTexturePerObjectPositionsDecodeMatrix,
+                uTexturePerVertexIdCoordinates,
+                uTexturePerObjectColorsAndFlags,
+                uTexturePerObjectMatrix
+            );
+
             const glMode = getGlMode(frameCtx);
-            if (state.numIndices8Bits > 0) {
-                textureState.bindTriangleIndicesTextures(
-                    program,
-                    uTexturePerPrimitiveIdPortionIds,
-                    uTexturePerPrimitiveIdIndices,
-                    8 // 8 bits indices
-                );
-                gl.drawArrays(glMode, 0, state.numIndices8Bits);
-            }
-            if (state.numIndices16Bits > 0) {
-                textureState.bindTriangleIndicesTextures(
-                    program,
-                    uTexturePerPrimitiveIdPortionIds,
-                    uTexturePerPrimitiveIdIndices,
-                    16 // 16 bits indices
-                );
-                gl.drawArrays(glMode, 0, state.numIndices16Bits);
-            }
-            if (state.numIndices32Bits > 0) {
-                textureState.bindTriangleIndicesTextures(
-                    program,
-                    uTexturePerPrimitiveIdPortionIds,
-                    uTexturePerPrimitiveIdIndices,
-                    32 // 32 bits indices
-                );
-                gl.drawArrays(glMode, 0, state.numIndices32Bits);
-            }
+            const draw = (cnt, portionIdsTexture, indicesTexture) => {
+                if (cnt > 0) {
+                    portionIdsTexture.bindTexture(program, uTexturePerPrimitiveIdPortionIds, 5); // webgl texture unit
+                    indicesTexture.bindTexture(program, uTexturePerPrimitiveIdIndices, 6); // webgl texture unit
+                    gl.drawArrays(glMode, 0, cnt);
+                }
+            };
+
+            draw(state.numIndices8Bits,
+                 textureState.texturePerPolygonIdPortionIds8Bits,
+                 textureState.texturePerPolygonIdIndices8Bits);
+
+            draw(state.numIndices16Bits,
+                 textureState.texturePerPolygonIdPortionIds16Bits,
+                 textureState.texturePerPolygonIdIndices16Bits);
+
+            draw(state.numIndices32Bits,
+                 textureState.texturePerPolygonIdPortionIds32Bits,
+                 textureState.texturePerPolygonIdIndices32Bits);
+
             frameCtx.drawElements++;
         };
     }
