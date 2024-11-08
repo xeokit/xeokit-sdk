@@ -23,9 +23,13 @@ export class DTXTrianglesColorRenderer {
 
         this._programName = "DTXTrianglesColorRenderer";
         this._useLogDepthBuffer = scene.logarithmicDepthBufferEnabled;
-        this._getLogDepthFar = (frameCtx, cameraProjectFar) => cameraProjectFar;
         this._fragDepthDiff = (vFragDepth) => "0.0";
-        this._usePickMatrix = false;
+        this._getViewParams = (frameCtx, camera) => ({
+            viewMatrix: camera.viewMatrix,
+            projMatrix: camera.projMatrix,
+            eye: camera.eye,
+            far: camera.project.far
+        });
         // flags.x = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
         // renderPass = COLOR_OPAQUE
         this._renderPassFlag = "x";
@@ -226,13 +230,12 @@ export class DTXTrianglesColorRenderer {
 
         const scene = this._scene;
         const gl = scene.canvas.gl;
-        const camera = scene.camera;
         const model = dataTextureLayer.model;
         const state = dataTextureLayer._state;
         const textureState = state.textureState;
         const origin = dataTextureLayer._state.origin;
         const {position, rotationMatrix} = model;
-        const viewMatrix = (this._usePickMatrix && frameCtx.pickViewMatrix) || camera.viewMatrix;
+        const viewParams = this._getViewParams(frameCtx, scene.camera);
 
         textureState.bindCommonTextures(
             program,
@@ -253,21 +256,21 @@ export class DTXTrianglesColorRenderer {
                 math.transformPoint3(rotationMatrix, origin, rtcOrigin);
             }
             math.addVec3(rtcOrigin, position, rtcOrigin);
-            rtcViewMatrix = createRTCViewMat(viewMatrix, rtcOrigin, tempMat4a);
+            rtcViewMatrix = createRTCViewMat(viewParams.viewMatrix, rtcOrigin, tempMat4a);
         } else {
-            rtcViewMatrix = viewMatrix;
+            rtcViewMatrix = viewParams.viewMatrix;
         }
 
         gl.uniformMatrix4fv(this._uSceneModelMatrix, false, rotationMatrix);
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
-        gl.uniformMatrix4fv(this._uProjMatrix, false, camera.projMatrix);
-        gl.uniform3fv(this._uCameraEyeRtc, math.subVec3(camera.eye, rtcOrigin, tempVec3b));
+        gl.uniformMatrix4fv(this._uProjMatrix, false, viewParams.projMatrix);
+        gl.uniform3fv(this._uCameraEyeRtc, math.subVec3(viewParams.eye, rtcOrigin, tempVec3b));
         gl.uniform1i(this._uRenderPass, renderPass);
 
         this._setRenderState(frameCtx, dataTextureLayer, renderPass, rtcOrigin);
 
         if (this._useLogDepthBuffer) {
-            const logDepthBufFC = 2.0 / (Math.log(this._getLogDepthFar(frameCtx, camera.project.far) + 1.0) / Math.LN2);
+            const logDepthBufFC = 2.0 / (Math.log(viewParams.far + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
 
