@@ -910,41 +910,43 @@ export class DTXTrianglesLayer {
         }
     }
 
-    _subPortionSetColor(subPortionId, color) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-        // Color
+    _setPortionColorsAndFlags(subPortionId, offset, data, deferred) {
         const textureState = this._state.textureState;
         const gl = this.model.scene.canvas.gl;
-        tempUint8Array4 [0] = color[0];
-        tempUint8Array4 [1] = color[1];
-        tempUint8Array4 [2] = color[2];
-        tempUint8Array4 [3] = color[3];
-        // object colors
-        textureState.texturePerObjectColorsAndFlags._textureData.set(tempUint8Array4, subPortionId * 32);
-        if (this._deferredSetFlagsActive) {
-            //console.info("_subPortionSetColor defer");
+        textureState.texturePerObjectColorsAndFlags._textureData.set(data, subPortionId * 32 + offset * 4);
+        if (this._deferredSetFlagsActive || deferred) {
             this._deferredSetFlagsDirty = true;
             return;
         }
         if (++this._numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
             this._beginDeferredFlags(); // Subsequent flags updates now deferred
         }
-        //console.info("_subPortionSetColor write through");
         gl.bindTexture(gl.TEXTURE_2D, textureState.texturePerObjectColorsAndFlags._texture);
         gl.texSubImage2D(
             gl.TEXTURE_2D,
             0, // level
-            (subPortionId % 512) * 8, // xoffset
+            (subPortionId % 512) * 8 + offset, // xoffset
             Math.floor(subPortionId / 512), // yoffset
             1, // width
             1, //height
             gl.RGBA_INTEGER,
             gl.UNSIGNED_BYTE,
-            tempUint8Array4
+            data
         );
         // gl.bindTexture (gl.TEXTURE_2D, null);
+    }
+
+    _subPortionSetColor(subPortionId, color) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+
+        tempUint8Array4 [0] = color[0];
+        tempUint8Array4 [1] = color[1];
+        tempUint8Array4 [2] = color[2];
+        tempUint8Array4 [3] = color[3];
+
+        this._setPortionColorsAndFlags(subPortionId, 0, tempUint8Array4, false);
     }
 
     setTransparent(portionId, flags, transparent) {
@@ -1032,34 +1034,12 @@ export class DTXTrianglesLayer {
         // Pick
 
         let f3 = (visible && (!culled) && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
-        const textureState = this._state.textureState;
-        const gl = this.model.scene.canvas.gl;
         tempUint8Array4 [0] = f0;
         tempUint8Array4 [1] = f1;
         tempUint8Array4 [2] = f2;
         tempUint8Array4 [3] = f3;
-        // object flags
-        textureState.texturePerObjectColorsAndFlags._textureData.set(tempUint8Array4, subPortionId * 32 + 8);
-        if (this._deferredSetFlagsActive || deferred) {
-            this._deferredSetFlagsDirty = true;
-            return;
-        }
-        if (++this._numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
-            this._beginDeferredFlags(); // Subsequent flags updates now deferred
-        }
-        gl.bindTexture(gl.TEXTURE_2D, textureState.texturePerObjectColorsAndFlags._texture);
-        gl.texSubImage2D(
-            gl.TEXTURE_2D,
-            0, // level
-            (subPortionId % 512) * 8 + 2, // xoffset
-            Math.floor(subPortionId / 512), // yoffset
-            1, // width
-            1, //height
-            gl.RGBA_INTEGER,
-            gl.UNSIGNED_BYTE,
-            tempUint8Array4
-        );
-        // gl.bindTexture (gl.TEXTURE_2D, null);
+
+        this._setPortionColorsAndFlags(subPortionId, 2, tempUint8Array4, deferred);
     }
 
     _setDeferredFlags() {
@@ -1076,36 +1056,13 @@ export class DTXTrianglesLayer {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        const clippable = !!(flags & ENTITY_FLAGS.CLIPPABLE) ? 255 : 0;
-        const textureState = this._state.textureState;
-        const gl = this.model.scene.canvas.gl;
-        tempUint8Array4 [0] = clippable;
+
+        tempUint8Array4 [0] = (flags & ENTITY_FLAGS.CLIPPABLE) ? 255 : 0;
         tempUint8Array4 [1] = 0;
         tempUint8Array4 [2] = 1;
         tempUint8Array4 [3] = 2;
-        // object flags2
-        textureState.texturePerObjectColorsAndFlags._textureData.set(tempUint8Array4, subPortionId * 32 + 12);
-        if (this._deferredSetFlagsActive || deferred) {
-            // console.log("_subPortionSetFlags2 set flags defer");
-            this._deferredSetFlagsDirty = true;
-            return;
-        }
-        if (++this._numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
-            this._beginDeferredFlags(); // Subsequent flags updates now deferred
-        }
-        gl.bindTexture(gl.TEXTURE_2D, textureState.texturePerObjectColorsAndFlags._texture);
-        gl.texSubImage2D(
-            gl.TEXTURE_2D,
-            0, // level
-            (subPortionId % 512) * 8 + 3, // xoffset
-            Math.floor(subPortionId / 512), // yoffset
-            1, // width
-            1, //height
-            gl.RGBA_INTEGER,
-            gl.UNSIGNED_BYTE,
-            tempUint8Array4
-        );
-        // gl.bindTexture (gl.TEXTURE_2D, null);
+
+        this._setPortionColorsAndFlags(subPortionId, 3, tempUint8Array4, deferred);
     }
 
     setOffset(portionId, offset) {
