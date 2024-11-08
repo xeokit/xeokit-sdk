@@ -446,10 +446,6 @@ export class DTXTrianglesPickDepthRenderer {
         return src;
     }
 
-    webglContextRestored() {
-        this._program = null;
-    }
-
     destroy() {
         if (this._program) {
             this._program.destroy();
