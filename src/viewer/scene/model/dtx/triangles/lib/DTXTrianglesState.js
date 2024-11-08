@@ -148,32 +148,6 @@ export class DTXTrianglesState {
         this.textureModelMatrices = null;
     }
 
-    finalize() {
-        this.indicesPerBitnessTextures = {
-            8: this.texturePerPolygonIdIndices8Bits,
-            16: this.texturePerPolygonIdIndices16Bits,
-            32: this.texturePerPolygonIdIndices32Bits,
-        };
-
-        this.indicesPortionIdsPerBitnessTextures = {
-            8: this.texturePerPolygonIdPortionIds8Bits,
-            16: this.texturePerPolygonIdPortionIds16Bits,
-            32: this.texturePerPolygonIdPortionIds32Bits,
-        };
-
-        this.edgeIndicesPerBitnessTextures = {
-            8: this.texturePerPolygonIdEdgeIndices8Bits,
-            16: this.texturePerPolygonIdEdgeIndices16Bits,
-            32: this.texturePerPolygonIdEdgeIndices32Bits,
-        };
-
-        this.edgeIndicesPortionIdsPerBitnessTextures = {
-            8: this.texturePerEdgeIdPortionIds8Bits,
-            16: this.texturePerEdgeIdPortionIds16Bits,
-            32: this.texturePerEdgeIdPortionIds32Bits,
-        };
-    }
-
     /**
      *
      * @param {Program} glProgram
@@ -193,58 +167,6 @@ export class DTXTrianglesState {
         this.texturePerVertexIdCoordinates.bindTexture(glProgram, vertexTextureShaderName, 2);
         this.texturePerObjectColorsAndFlags.bindTexture(glProgram, objectAttributesTextureShaderName, 3);
         this.texturePerObjectInstanceMatrices.bindTexture(glProgram, objectMatricesShaderName, 4);
-    }
-
-    /**
-     *
-     * @param {Program} glProgram
-     * @param {string} portionIdsShaderName
-     * @param {string} polygonIndicesShaderName
-     * @param {8|16|32} textureBitness
-     */
-    bindTriangleIndicesTextures(
-        glProgram,
-        portionIdsShaderName,
-        polygonIndicesShaderName,
-        textureBitness,
-    ) {
-        this.indicesPortionIdsPerBitnessTextures[textureBitness].bindTexture(
-            glProgram,
-            portionIdsShaderName,
-            5 // webgl texture unit
-        );
-
-        this.indicesPerBitnessTextures[textureBitness].bindTexture(
-            glProgram,
-            polygonIndicesShaderName,
-            6 // webgl texture unit
-        );
-    }
-
-    /**
-     *
-     * @param {Program} glProgram
-     * @param {string} edgePortionIdsShaderName
-     * @param {string} edgeIndicesShaderName
-     * @param {8|16|32} textureBitness
-     */
-    bindEdgeIndicesTextures(
-        glProgram,
-        edgePortionIdsShaderName,
-        edgeIndicesShaderName,
-        textureBitness,
-    ) {
-        this.edgeIndicesPortionIdsPerBitnessTextures[textureBitness].bindTexture(
-            glProgram,
-            edgePortionIdsShaderName,
-            5 // webgl texture unit
-        );
-
-        this.edgeIndicesPerBitnessTextures[textureBitness].bindTexture(
-            glProgram,
-            edgeIndicesShaderName,
-            6 // webgl texture unit
-        );
     }
 }
 
