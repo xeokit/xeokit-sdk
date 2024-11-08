@@ -61,13 +61,6 @@ export class DTXTrianglesEdgesColorRenderer {
     }
 
     drawLayer(frameCtx, dataTextureLayer, renderPass) {
-        if (!this._program) {
-            this._allocate();
-            if (!this._program) {
-                return;
-            }
-        }
-
         const program = this._program;
 
         if (frameCtx.lastProgramId !== program.id) {
