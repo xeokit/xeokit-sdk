@@ -837,36 +837,10 @@ export class DTXTrianglesLayer {
      */
     _uploadDeferredFlags() {
         this._deferredSetFlagsActive = false;
-        if (!this._deferredSetFlagsDirty) {
-            return;
+        if (this._deferredSetFlagsDirty) {
+            this._deferredSetFlagsDirty = false;
+            this._state.textureState.texturePerObjectColorsAndFlags.reloadData();
         }
-        this._deferredSetFlagsDirty = false;
-        const gl = this.model.scene.canvas.gl;
-        const textureState = this._state.textureState;
-        gl.bindTexture(gl.TEXTURE_2D, textureState.texturePerObjectColorsAndFlags._texture);
-        gl.texSubImage2D(
-            gl.TEXTURE_2D,
-            0, // level
-            0, // xoffset
-            0, // yoffset
-            textureState.texturePerObjectColorsAndFlags._textureWidth, // width
-            textureState.texturePerObjectColorsAndFlags._textureHeight, // width
-            gl.RGBA_INTEGER,
-            gl.UNSIGNED_BYTE,
-            textureState.texturePerObjectColorsAndFlags._textureData
-        );
-        // gl.bindTexture(gl.TEXTURE_2D, textureState.texturePerObjectInstanceMatrices._texture);
-        // gl.texSubImage2D(
-        //     gl.TEXTURE_2D,
-        //     0, // level
-        //     0, // xoffset
-        //     0, // yoffset
-        //     textureState.texturePerObjectInstanceMatrices._textureWidth, // width
-        //     textureState.texturePerObjectInstanceMatrices._textureHeight, // width
-        //     gl.RGB,
-        //     gl.FLOAT,
-        //     textureState.texturePerObjectInstanceMatrices._textureData
-        // );
     }
 
     setCulled(portionId, flags, transparent) {
@@ -913,7 +887,7 @@ export class DTXTrianglesLayer {
     _setPortionColorsAndFlags(subPortionId, offset, data, deferred) {
         const textureState = this._state.textureState;
         const gl = this.model.scene.canvas.gl;
-        textureState.texturePerObjectColorsAndFlags._textureData.set(data, subPortionId * 32 + offset * 4);
+        textureState.texturePerObjectColorsAndFlags.setSubPortion(data, subPortionId, offset);
         if (this._deferredSetFlagsActive || deferred) {
             this._deferredSetFlagsDirty = true;
             return;
@@ -1087,7 +1061,7 @@ export class DTXTrianglesLayer {
         const textureState = this._state.textureState;
         const gl = this.model.scene.canvas.gl;
         tempMat4a.set(matrix);
-        textureState.texturePerObjectInstanceMatrices._textureData.set(tempMat4a, subPortionId * 16);
+        textureState.texturePerObjectInstanceMatrices.setSubPortion(tempMat4a, subPortionId);
         if (this._deferredSetFlagsActive) {
             this._deferredSetFlagsDirty = true;
             return;
