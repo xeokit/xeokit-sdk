@@ -1,4 +1,4 @@
-import {DTXTrianglesTrianglesDrawable} from "./DTXTrianglesTrianglesDrawable.js";
+import {DTXTrianglesDrawable} from "../DTXTrianglesDrawable.js";
 import {math} from "../../../../math/math.js";
 
 /**
@@ -14,7 +14,7 @@ export class DTXTrianglesOcclusionRenderer {
         const inputs = { };
         const gl = scene.canvas.gl;
 
-        const drawable = new DTXTrianglesTrianglesDrawable("DTXTrianglesOcclusionRenderer", scene, {
+        const drawable = new DTXTrianglesDrawable("DTXTrianglesOcclusionRenderer", scene, true, {
             getHash: () => [ ],
             // Logarithmic depth buffer involves an accuracy tradeoff, sacrificing
             // accuracy at close range to improve accuracy at long range. This can
