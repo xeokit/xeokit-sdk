@@ -4,9 +4,62 @@ import {RENDER_PASSES} from "../../RENDER_PASSES.js";
 import {math} from "../../../math/math.js";
 import {RenderState} from "../../../webgl/RenderState.js";
 import {Configs} from "../../../../Configs.js";
-import {DTXTrianglesState} from "./lib/DTXTrianglesState.js";
-import {dataTextureRamStats} from "./lib/dataTextureRamStats.js";
-import {DTXTrianglesTextureFactory} from "./lib/DTXTrianglesTextureFactory.js";
+
+const dataTextureRamStats = {
+    sizeDataColorsAndFlags: 0,
+    sizeDataInstancesMatrices: 0,
+    sizeDataPositionDecodeMatrices: 0,
+    sizeDataTextureOffsets: 0,
+    sizeDataTexturePositions: 0,
+    sizeDataTextureIndices: 0,
+    sizeDataTextureEdgeIndices: 0,
+    sizeDataTexturePortionIds: 0,
+    numberOfGeometries: 0,
+    numberOfPortions: 0,
+    numberOfLayers: 0,
+    numberOfTextures: 0,
+    totalPolygons: 0,
+    totalPolygons8Bits: 0,
+    totalPolygons16Bits: 0,
+    totalPolygons32Bits: 0,
+    totalEdges: 0,
+    totalEdges8Bits: 0,
+    totalEdges16Bits: 0,
+    totalEdges32Bits: 0,
+    cannotCreatePortion: {
+        because10BitsObjectId: 0,
+        becauseTextureSize: 0,
+    },
+    overheadSizeAlignementIndices: 0,
+    overheadSizeAlignementEdgeIndices: 0,
+};
+
+window.printDataTextureRamStats = function () {
+
+    console.log(JSON.stringify(dataTextureRamStats, null, 4));
+
+    let totalRamSize = 0;
+
+    Object.keys(dataTextureRamStats).forEach(key => {
+        if (key.startsWith("size")) {
+            totalRamSize += dataTextureRamStats[key];
+        }
+    });
+
+    console.log(`Total size ${totalRamSize} bytes (${(totalRamSize / 1000 / 1000).toFixed(2)} MB)`);
+    console.log(`Avg bytes / triangle: ${(totalRamSize / dataTextureRamStats.totalPolygons).toFixed(2)}`);
+
+    let percentualRamStats = {};
+
+    Object.keys(dataTextureRamStats).forEach(key => {
+        if (key.startsWith("size")) {
+            percentualRamStats[key] =
+                `${(dataTextureRamStats[key] / totalRamSize * 100).toFixed(2)} % of total`;
+        }
+    });
+
+    console.log(JSON.stringify({percentualRamUsage: percentualRamStats}, null, 4));
+};
 
 import {DTXTrianglesColorRenderer}           from "./renderers/DTXTrianglesColorRenderer.js";
 import {DTXTrianglesDepthRenderer}           from "./renderers/DTXTrianglesDepthRenderer.js";
@@ -191,12 +244,10 @@ export class DTXTrianglesLayer {
             perEdgeNumberPortionId32Bits: []
         };
 
-        this._dtxTextureFactory = new DTXTrianglesTextureFactory(gl);
-
         this._state = new RenderState({
             origin: math.vec3(cfg.origin),
             metallicRoughnessBuf: null,
-            textureState: new DTXTrianglesState(),
+            textureState: { },
             numIndices8Bits: 0,
             numIndices16Bits: 0,
             numIndices32Bits: 0,
@@ -591,80 +642,304 @@ export class DTXTrianglesLayer {
         const textureState = this._state.textureState;
         const gl = this.model.scene.canvas.gl;
         const buffer = this._buffer;
-        const texFac = this._dtxTextureFactory;
 
-        this._state.gl = gl;
-        textureState.texturePerObjectColorsAndFlags = texFac.createTextureForColorsAndFlags(
-            buffer.perObjectColors,
-            buffer.perObjectPickColors,
-            buffer.perObjectVertexBases,
-            buffer.perObjectIndexBaseOffsets,
-            buffer.perObjectEdgeIndexBaseOffsets,
-            buffer.perObjectSolid);
+        const state = this._state;
+        state.gl = gl;
 
-        textureState.texturePerObjectInstanceMatrices = texFac.createTextureForInstancingMatrices(
-            buffer.perObjectInstancePositioningMatrices);
+        const createBindableDataTexture = function(entitiesCnt, entitySize, type, entitiesPerRow, populateTexArray, statsProp, exposeData) {
+            if ((entitySize > 4) && ((entitySize % 4) > 0)) {
+                throw "Unhandled data size " + entitySize;
+            }
+            const pixelsPerEntity = Math.ceil(entitySize / 4);
+            const pixelWidth = entitySize / pixelsPerEntity;
 
-        textureState.texturePerObjectPositionsDecodeMatrix = texFac.createTextureForPositionsDecodeMatrices(
-            buffer.perObjectPositionsDecodeMatrices);
+            const [ arrayType, internalFormat, format ] = (function() {
+                switch(type) {
+                case gl.UNSIGNED_BYTE:
+                    return [ Uint8Array,   ...((pixelWidth === 1) ? [ gl.R8UI,  gl.RED_INTEGER ] : ((pixelWidth === 2) ? [ gl.RG8UI,  gl.RG_INTEGER ] : ((pixelWidth === 3) ? [ gl.RGB8UI,  gl.RGB_INTEGER ] : [ gl.RGBA8UI,  gl.RGBA_INTEGER ]))) ];
+                case gl.UNSIGNED_SHORT:
+                    return [ Uint16Array,  ...((pixelWidth === 1) ? [ gl.R16UI, gl.RED_INTEGER ] : ((pixelWidth === 2) ? [ gl.RG16UI, gl.RG_INTEGER ] : ((pixelWidth === 3) ? [ gl.RGB16UI, gl.RGB_INTEGER ] : [ gl.RGBA16UI, gl.RGBA_INTEGER ]))) ];
+                case gl.UNSIGNED_INT:
+                    return [ Uint32Array,  ...((pixelWidth === 1) ? [ gl.R32UI, gl.RED_INTEGER ] : ((pixelWidth === 2) ? [ gl.RG32UI, gl.RG_INTEGER ] : ((pixelWidth === 3) ? [ gl.RGB32UI, gl.RGB_INTEGER ] : [ gl.RGBA32UI, gl.RGBA_INTEGER ]))) ];
+                case gl.FLOAT:
+                    return [ Float32Array, ...((pixelWidth === 1) ? [ gl.R32F,  gl.RED ]         : ((pixelWidth === 2) ? [ gl.RG32F,  gl.RG ]         : ((pixelWidth === 3) ? [ gl.RGB32F,  gl.RGB ]         : [ gl.RGBA32F,  gl.RGBA ]))) ];
+                default:
+                    throw "Unhandled data type " + type;
+                }
+            })();
 
-        textureState.texturePerVertexIdCoordinates = texFac.createTextureForPositions(
-            buffer.positionsCompressed,
-            buffer.lenPositionsCompressed);
+            const textureWidth = entitiesPerRow * pixelsPerEntity;
+            const textureHeight = Math.ceil(entitiesCnt / entitiesPerRow);
+            if (textureHeight === 0) {
+                throw "texture height===0";
+            }
+            const texArray = new arrayType(textureWidth * textureHeight * pixelWidth);
+            dataTextureRamStats[statsProp] += texArray.byteLength;
+            dataTextureRamStats.numberOfTextures++;
 
-        textureState.texturePerPolygonIdPortionIds8Bits = texFac.createTextureForPackedPortionIds(
-            buffer.perTriangleNumberPortionId8Bits);
+            populateTexArray(texArray);
 
-        textureState.texturePerPolygonIdPortionIds16Bits = texFac.createTextureForPackedPortionIds(
-            buffer.perTriangleNumberPortionId16Bits);
+            const texture = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, texture);
+            gl.texStorage2D(gl.TEXTURE_2D, 1, internalFormat, textureWidth, textureHeight);
+            gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, format, type, texArray);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            gl.bindTexture(gl.TEXTURE_2D, null);
 
-        textureState.texturePerPolygonIdPortionIds32Bits = texFac.createTextureForPackedPortionIds(
-            buffer.perTriangleNumberPortionId32Bits);
+            return {
+                // called by Sampler::bindTexture
+                bind(unit) {
+                    gl.activeTexture(gl["TEXTURE" + unit]);
+                    gl.bindTexture(gl.TEXTURE_2D, texture);
+                    return true;
+                },
 
-        if (buffer.perEdgeNumberPortionId8Bits.length > 0) {
-            textureState.texturePerEdgeIdPortionIds8Bits = texFac.createTextureForPackedPortionIds(
-                buffer.perEdgeNumberPortionId8Bits);
-        }
+                unbind(unit) {
+                    // This `unbind` method is ignored at the moment to allow avoiding
+                    // to rebind same texture already bound to a texture unit.
 
-        if (buffer.perEdgeNumberPortionId16Bits.length > 0) {
-            textureState.texturePerEdgeIdPortionIds16Bits = texFac.createTextureForPackedPortionIds(
-                buffer.perEdgeNumberPortionId16Bits);
-        }
+                    // this._gl.activeTexture(this.state.gl["TEXTURE" + unit]);
+                    // this._gl.bindTexture(this.state.gl.TEXTURE_2D, null);
+                },
 
-        if (buffer.perEdgeNumberPortionId32Bits.length > 0) {
-            textureState.texturePerEdgeIdPortionIds32Bits = texFac.createTextureForPackedPortionIds(
-                buffer.perEdgeNumberPortionId32Bits);
-        }
+                textureData: exposeData && {
+                    setData(data, subPortionId, offset = 0, load = false) {
+                        texArray.set(data, subPortionId * entitySize + offset * pixelWidth);
+                        if (load) {
+                            gl.bindTexture(gl.TEXTURE_2D, texture);
+                            const xoffset = (subPortionId % entitiesPerRow) * pixelsPerEntity + offset;
+                            const yoffset = Math.floor(subPortionId / entitiesPerRow);
+                            const width = data.length / pixelWidth;
+                            gl.texSubImage2D(gl.TEXTURE_2D, 0, xoffset, yoffset, width, 1, format, type, data);
+                            // gl.bindTexture (gl.TEXTURE_2D, null);
+                        }
+                    },
 
-        if (buffer.lenIndices8Bits > 0) {
-            textureState.texturePerPolygonIdIndices8Bits = texFac.createTextureForIndices(
-                buffer.indices8Bits, buffer.lenIndices8Bits, gl.UNSIGNED_BYTE);
-        }
+                    reloadData() {
+                        gl.bindTexture(gl.TEXTURE_2D, texture);
+                        gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, format, type, texArray);
+                    }
+                }
+            };
+        };
 
-        if (buffer.lenIndices16Bits > 0) {
-            textureState.texturePerPolygonIdIndices16Bits = texFac.createTextureForIndices(
-                buffer.indices16Bits, buffer.lenIndices16Bits, gl.UNSIGNED_SHORT);
-        }
+        /*
+         * Texture that holds colors/pickColors/flags/flags2 per-object:
+         * - columns: one concept per column => color / pick-color / ...
+         * - row: the object Id
+         * This will generate an RGBA texture for:
+         * - colors
+         * - pickColors
+         * - flags
+         * - flags2
+         * - vertex bases
+         * - vertex base offsets
+         *
+         * The texture will have:
+         * - 4 RGBA columns per row: for each object (pick) color and flags(2)
+         * - N rows where N is the number of objects
+         */
+        const texturePerObjectColorsAndFlags = (function() {
+            const colors = buffer.perObjectColors;
+            const pickColors = buffer.perObjectPickColors;
+            const vertexBases = buffer.perObjectVertexBases;
+            const indexBaseOffsets = buffer.perObjectIndexBaseOffsets;
+            const edgeIndexBaseOffsets = buffer.perObjectEdgeIndexBaseOffsets;
+            const solid = buffer.perObjectSolid;
 
-        if (buffer.lenIndices32Bits > 0) {
-            textureState.texturePerPolygonIdIndices32Bits = texFac.createTextureForIndices(
-                buffer.indices32Bits, buffer.lenIndices32Bits, gl.UNSIGNED_INT);
-        }
+            // The number of rows in the texture is the number of objects in the layer.
+            const numPortions = colors.length;
 
-        if (buffer.lenEdgeIndices8Bits > 0) {
-            textureState.texturePerPolygonIdEdgeIndices8Bits = texFac.createTextureForEdgeIndices(
-                buffer.edgeIndices8Bits, buffer.lenEdgeIndices8Bits, gl.UNSIGNED_BYTE);
-        }
+            const pack32as4x8 = ui32 => [
+                (ui32 >> 24) & 255,
+                (ui32 >> 16) & 255,
+                (ui32 >>  8) & 255,
+                (ui32)       & 255
+            ];
 
-        if (buffer.lenEdgeIndices16Bits > 0) {
-            textureState.texturePerPolygonIdEdgeIndices16Bits = texFac.createTextureForEdgeIndices(
-                buffer.edgeIndices16Bits, buffer.lenEdgeIndices16Bits, gl.UNSIGNED_SHORT);
-        }
+            const populateTexArray = texArray => {
+                for (let i = 0; i < numPortions; i++) {
+                    // 8 columns per texture row:
+                    texArray.set(colors[i],                            i * 32 +  0); // - col0: (RGBA) object color RGBA
+                    texArray.set(pickColors[i],                        i * 32 +  4); // - col1: (packed Uint32 as RGBA) object pick color
+                    texArray.set([0, 0, 0, 0],                         i * 32 +  8); // - col2: (packed 4 bytes as RGBA) object flags
+                    texArray.set([0, 0, 0, 0],                         i * 32 + 12); // - col3: (packed 4 bytes as RGBA) object flags2
+                    texArray.set(pack32as4x8(vertexBases[i]),          i * 32 + 16); // - col4: (packed Uint32 bytes as RGBA) vertex base
+                    texArray.set(pack32as4x8(indexBaseOffsets[i]),     i * 32 + 20); // - col5: (packed Uint32 bytes as RGBA) index base offset
+                    texArray.set(pack32as4x8(edgeIndexBaseOffsets[i]), i * 32 + 24); // - col6: (packed Uint32 bytes as RGBA) edge index base offset
+                    texArray.set([solid[i] ? 1 : 0, 0, 0, 0],          i * 32 + 28); // - col7: (packed 4 bytes as RGBA) is-solid flag for objects
+                }
+            };
 
-        if (buffer.lenEdgeIndices32Bits > 0) {
-            textureState.texturePerPolygonIdEdgeIndices32Bits = texFac.createTextureForEdgeIndices(
-                buffer.edgeIndices32Bits, buffer.lenEdgeIndices32Bits, gl.UNSIGNED_INT);
-        }
+            return createBindableDataTexture(numPortions, 32, gl.UNSIGNED_BYTE, 512, populateTexArray, "sizeDataColorsAndFlags", true);
+        })();
+        textureState.texturePerObjectColorsAndFlagsData = texturePerObjectColorsAndFlags.textureData;
+
+        const createDataTexture = function(dataArrays, entitiesCnt, entitySize, type, entitiesPerRow, statsProp, exposeData) {
+            const populateTexArray = texArray => {
+                for (let i = 0, j = 0, len = dataArrays.length; i < len; i++) {
+                    const pc = dataArrays[i];
+                    texArray.set(pc, j);
+                    j += pc.length;
+                }
+            };
+            return createBindableDataTexture(entitiesCnt, entitySize, type, entitiesPerRow, populateTexArray, statsProp, exposeData);
+        };
+
+        const createTextureForMatrices = function(matrices, statsProp, exposeData) {
+            const numMatrices = matrices.length;
+            if (numMatrices === 0) {
+                throw "num " + statsProp + " matrices===0";
+            }
+            // in one row we can fit 512 matrices
+            return createDataTexture(matrices, numMatrices, 16, gl.FLOAT, 512, statsProp, exposeData);
+        };
+
+        /**
+         * This will generate a texture for all positions decode matrices in the layer.
+         * The texture will have:
+         * - 4 RGBA columns per row (each column will contain 4 packed half-float (16 bits) components).
+         *   Thus, each row will contain 16 packed half-floats corresponding to a complete positions decode matrix)
+         * - N rows where N is the number of objects
+         */
+        const texturePerObjectInstanceMatrices = createTextureForMatrices(buffer.perObjectInstancePositioningMatrices, "sizeDataInstancesMatrices", true);
+        textureState.texturePerObjectInstanceMatricesData = texturePerObjectInstanceMatrices.textureData;
+
+        /*
+         * Texture that holds the objectDecodeAndInstanceMatrix per-object:
+         * - columns: each column is one column of the matrix
+         * - row: the object Id
+         * The texture will have:
+         * - 4 RGBA columns per row (each column will contain 4 packed half-float (16 bits) components).
+         *   Thus, each row will contain 16 packed half-floats corresponding to a complete positions decode matrix)
+         * - N rows where N is the number of objects
+         */
+        const texturePerObjectPositionsDecodeMatrix = createTextureForMatrices(buffer.perObjectPositionsDecodeMatrices, "sizeDataPositionDecodeMatrices", false);
+
+
+        const createTextureForSingleItems = function(dataArrays, dataCnt, entitySize, type, statsProp) {
+            return createDataTexture(dataArrays, dataCnt / entitySize, entitySize, type, 4096, statsProp, false);
+        };
+
+        /*
+         * Texture that holds all the `different-vertices` used by the layer.
+         * This will generate a texture for positions in the layer.
+         *
+         * The texture will have:
+         * - 1024 columns, where each pixel will be a 16-bit-per-component RGB texture, corresponding to the XYZ of the position
+         * - a number of rows R where R*1024 is just >= than the number of vertices (positions / 3)
+         */
+        const texturePerVertexIdCoordinates = createTextureForSingleItems(
+            buffer.positionsCompressed, buffer.lenPositionsCompressed, 3, gl.UNSIGNED_SHORT, "sizeDataTexturePositions");
+
+
+        const createTextureForPackedPortionIds = function(portionIdsArray, defaultIfEmpty) {
+            return (portionIdsArray.length > 0) ? createTextureForSingleItems([ portionIdsArray ], portionIdsArray.length, 1, gl.UNSIGNED_SHORT, "sizeDataTexturePortionIds") : defaultIfEmpty;
+        };
+
+        // Textures that hold the PortionId that corresponds to a given polygon-id.
+        const polygonPortionIds8  = createTextureForPackedPortionIds(buffer.perTriangleNumberPortionId8Bits,  { texture: null });
+        const polygonPortionIds16 = createTextureForPackedPortionIds(buffer.perTriangleNumberPortionId16Bits, { texture: null });
+        const polygonPortionIds32 = createTextureForPackedPortionIds(buffer.perTriangleNumberPortionId32Bits, { texture: null });
+
+        // Texture that holds the PortionId that corresponds to a given edge-id.
+        const edgePortionIds8  = createTextureForPackedPortionIds(buffer.perEdgeNumberPortionId8Bits);
+        const edgePortionIds16 = createTextureForPackedPortionIds(buffer.perEdgeNumberPortionId16Bits);
+        const edgePortionIds32 = createTextureForPackedPortionIds(buffer.perEdgeNumberPortionId32Bits);
+
+        const createTextureForIndices = function(indicesArrays, lenIndices, type) {
+            return (lenIndices > 0) && createTextureForSingleItems(indicesArrays, lenIndices, 3, type, "sizeDataTextureIndices");
+        };
+
+        // Texture that holds the unique-vertex-indices.
+        const polygonIndices8  = createTextureForIndices(buffer.indices8Bits,  buffer.lenIndices8Bits,  gl.UNSIGNED_BYTE);
+        const polygonIndices16 = createTextureForIndices(buffer.indices16Bits, buffer.lenIndices16Bits, gl.UNSIGNED_SHORT);
+        const polygonIndices32 = createTextureForIndices(buffer.indices32Bits, buffer.lenIndices32Bits, gl.UNSIGNED_INT);
+
+        const createTextureForEdgeIndices = function(indicesArrays, lenIndices, type) {
+            return (lenIndices > 0) && createTextureForSingleItems(indicesArrays, lenIndices, 2, type, "sizeDataTextureEdgeIndices");
+        };
+
+        // Texture that holds the unique-vertex-indices for 8-bit based edge indices.
+        const edgeIndices8  = createTextureForEdgeIndices(buffer.edgeIndices8Bits,  buffer.lenEdgeIndices8Bits,  gl.UNSIGNED_BYTE);
+        const edgeIndices16 = createTextureForEdgeIndices(buffer.edgeIndices16Bits, buffer.lenEdgeIndices16Bits, gl.UNSIGNED_SHORT);
+        const edgeIndices32 = createTextureForEdgeIndices(buffer.edgeIndices32Bits, buffer.lenEdgeIndices32Bits, gl.UNSIGNED_INT);
+
+        const bindCommonTextures = function(
+            program,
+            objectDecodeMatricesShaderName,
+            vertexTextureShaderName,
+            objectAttributesTextureShaderName,
+            objectMatricesShaderName
+        ) {
+            program.bindTexture(objectDecodeMatricesShaderName, texturePerObjectPositionsDecodeMatrix, 1);
+            program.bindTexture(vertexTextureShaderName, texturePerVertexIdCoordinates, 2);
+            program.bindTexture(objectAttributesTextureShaderName, texturePerObjectColorsAndFlags, 3);
+            program.bindTexture(objectMatricesShaderName, texturePerObjectInstanceMatrices, 4);
+        };
+
+        this.drawTriangles = function(
+            program,
+            uTexturePerObjectPositionsDecodeMatrix,
+            uTexturePerVertexIdCoordinates,
+            uTexturePerObjectColorsAndFlags,
+            uTexturePerObjectMatrix,
+            uTexturePerPrimitiveIdPortionIds,
+            uTexturePerPrimitiveIdIndices,
+            glMode)
+        {
+            bindCommonTextures(
+                program,
+                uTexturePerObjectPositionsDecodeMatrix,
+                uTexturePerVertexIdCoordinates,
+                uTexturePerObjectColorsAndFlags,
+                uTexturePerObjectMatrix);
+
+            const draw = (cnt, portionIdsTexture, indicesTexture) => {
+                if (cnt > 0) {
+                    program.bindTexture(uTexturePerPrimitiveIdPortionIds, portionIdsTexture, 5); // webgl texture unit
+                    program.bindTexture(uTexturePerPrimitiveIdIndices, indicesTexture, 6); // webgl texture unit
+                    gl.drawArrays(glMode, 0, cnt);
+                }
+            };
+
+            draw(state.numIndices8Bits,  polygonPortionIds8,  polygonIndices8);
+            draw(state.numIndices16Bits, polygonPortionIds16, polygonIndices16);
+            draw(state.numIndices32Bits, polygonPortionIds32, polygonIndices32);
+        };
+
+        this.drawEdges = function(
+            program,
+            uTexturePerObjectPositionsDecodeMatrix,
+            uTexturePerVertexIdCoordinates,
+            uTexturePerObjectColorsAndFlags,
+            uTexturePerObjectMatrix,
+            uTexturePerPrimitiveIdPortionIds,
+            uTexturePerPrimitiveIdIndices,
+            glMode)
+        {
+            bindCommonTextures(
+                program,
+                uTexturePerObjectPositionsDecodeMatrix,
+                uTexturePerVertexIdCoordinates,
+                uTexturePerObjectColorsAndFlags,
+                uTexturePerObjectMatrix);
+
+            const draw = (cnt, portionIdsTexture, indicesTexture) => {
+                if (cnt > 0) {
+                    program.bindTexture(uTexturePerPrimitiveIdPortionIds, portionIdsTexture, 5); // webgl texture unit
+                    program.bindTexture(uTexturePerPrimitiveIdIndices, indicesTexture, 6); // webgl texture unit
+                    gl.drawArrays(glMode, 0, cnt);
+                }
+            };
+
+            draw(state.numEdgeIndices8Bits,  edgePortionIds8,  edgeIndices8);
+            draw(state.numEdgeIndices16Bits, edgePortionIds16, edgeIndices16);
+            draw(state.numEdgeIndices32Bits, edgePortionIds32, edgeIndices32);
+        };
 
         // Free up memory
         this._buffer = null;
@@ -839,7 +1114,7 @@ export class DTXTrianglesLayer {
         this._deferredSetFlagsActive = false;
         if (this._deferredSetFlagsDirty) {
             this._deferredSetFlagsDirty = false;
-            this._state.textureState.texturePerObjectColorsAndFlags.textureData.reloadData();
+            this._state.textureState.texturePerObjectColorsAndFlagsData.reloadData();
         }
     }
 
@@ -891,7 +1166,7 @@ export class DTXTrianglesLayer {
         } else if (++this._numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
             this._beginDeferredFlags(); // Subsequent flags updates now deferred
         }
-        this._state.textureState.texturePerObjectColorsAndFlags.textureData.setData(data, subPortionId, offset, !defer);
+        this._state.textureState.texturePerObjectColorsAndFlagsData.setData(data, subPortionId, offset, !defer);
     }
 
     _subPortionSetColor(subPortionId, color) {
@@ -1045,7 +1320,7 @@ export class DTXTrianglesLayer {
             this._beginDeferredFlags(); // Subsequent flags updates now deferred
         }
         tempMat4a.set(matrix);
-        this._state.textureState.texturePerObjectInstanceMatrices.textureData.setData(tempMat4a, subPortionId, 0, !defer);
+        this._state.textureState.texturePerObjectInstanceMatricesData.setData(tempMat4a, subPortionId, 0, !defer);
     }
 
     getEachVertex(portionId, callback) {
