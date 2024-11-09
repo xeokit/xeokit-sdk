@@ -28,7 +28,7 @@ export class DTXTrianglesSilhouetteRenderer {
             }),
             // flags.y = NOT_RENDERED | SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | SILHOUETTE_XRAYED
             // renderPass = SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | | SILHOUETTE_XRAYED
-            renderPassFlag: "y",
+            renderPassFlag: 1,
             cullOnAlphaZero: true,
             appendVertexDefinitions: (src) => src.push("out float vAlpha;"),
             // divide by w to get into NDC, and after transformation multiply by w to get back into clip space

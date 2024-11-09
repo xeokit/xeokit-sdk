@@ -25,7 +25,7 @@ export class DTXTrianglesPickMeshRenderer {
             }),
             // flags.w = NOT_RENDERED | PICK
             // renderPass = PICK
-            renderPassFlag: "w",
+            renderPassFlag: 3,
             cullOnAlphaZero: false,
             appendVertexDefinitions: (src) => {
                 src.push("uniform vec2 pickClipPos;");
