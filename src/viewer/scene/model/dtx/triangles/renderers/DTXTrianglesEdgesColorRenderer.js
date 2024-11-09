@@ -1,4 +1,4 @@
-import {DTXTrianglesEdgesDrawable} from "./DTXTrianglesEdgesDrawable.js";
+import {DTXTrianglesDrawable} from "../DTXTrianglesDrawable.js";
 import {math} from "../../../../math/math.js";
 
 /**
@@ -14,7 +14,7 @@ export class DTXTrianglesEdgesColorRenderer {
         const inputs = { };
         const gl = scene.canvas.gl;
 
-        const drawable = new DTXTrianglesEdgesDrawable("DTXTrianglesEdgesColorRenderer", scene, {
+        const drawable = new DTXTrianglesDrawable("DTXTrianglesEdgesColorRenderer", scene, false, {
             getHash: () => [ ],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             getViewParams: (frameCtx, camera) => ({

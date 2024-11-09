@@ -1,4 +1,4 @@
-import {DTXTrianglesTrianglesDrawable} from "./DTXTrianglesTrianglesDrawable.js";
+import {DTXTrianglesDrawable} from "../DTXTrianglesDrawable.js";
 import {math} from "../../../../math/math.js";
 
 const tempVec3c = math.vec3();
@@ -16,7 +16,7 @@ export class DTXTrianglesSnapInitRenderer {
         const inputs = { };
         const gl = scene.canvas.gl;
 
-        const drawable = new DTXTrianglesTrianglesDrawable("DTXTrianglesSnapInitRenderer", scene, {
+        const drawable = new DTXTrianglesDrawable("DTXTrianglesSnapInitRenderer", scene, true, {
             getHash: () => [ ],
             // Improves occlusion accuracy at distance
             getLogDepth: true && (vFragDepth => `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))`),

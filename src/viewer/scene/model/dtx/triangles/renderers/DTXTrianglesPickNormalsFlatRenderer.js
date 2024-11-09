@@ -1,4 +1,4 @@
-import {DTXTrianglesTrianglesDrawable} from "./DTXTrianglesTrianglesDrawable.js";
+import {DTXTrianglesDrawable} from "../DTXTrianglesDrawable.js";
 import {math} from "../../../../math/math.js";
 
 /**
@@ -14,7 +14,7 @@ export class DTXTrianglesPickNormalsFlatRenderer {
         const inputs = { };
         const gl = scene.canvas.gl;
 
-        const drawable = new DTXTrianglesTrianglesDrawable("DTXTrianglesPickNormalsFlatRenderer", scene, {
+        const drawable = new DTXTrianglesDrawable("DTXTrianglesPickNormalsFlatRenderer", scene, true, {
             getHash: () => [ ],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             getViewParams: (frameCtx, camera) => ({

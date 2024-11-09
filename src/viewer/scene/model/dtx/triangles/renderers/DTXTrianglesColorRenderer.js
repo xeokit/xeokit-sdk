@@ -1,4 +1,4 @@
-import {DTXTrianglesTrianglesDrawable} from "./DTXTrianglesTrianglesDrawable.js";
+import {DTXTrianglesDrawable} from "../DTXTrianglesDrawable.js";
 import {math} from "../../../../math/math.js";
 
 const tempVec4a = math.vec4();
@@ -16,7 +16,7 @@ export class DTXTrianglesColorRenderer {
         const inputs = { };
         const gl = scene.canvas.gl;
 
-        const drawable = new DTXTrianglesTrianglesDrawable("DTXTrianglesColorRenderer", scene, {
+        const drawable = new DTXTrianglesDrawable("DTXTrianglesColorRenderer", scene, true, {
             getHash: () => [scene._lightsState.getHash(), (withSAO ? "sao" : "nosao")],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             getViewParams: (frameCtx, camera) => ({

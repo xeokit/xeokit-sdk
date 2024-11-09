@@ -1,5 +1,5 @@
-import {createRTCViewMat, getPlaneRTCPos, math} from "../../../../math/index.js";
-import {Program} from "../../../../webgl/Program.js";
+import {createRTCViewMat, getPlaneRTCPos, math} from "../../../math/index.js";
+import {Program} from "../../../webgl/Program.js";
 
 const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
@@ -10,9 +10,9 @@ const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
 /**
  * @private
  */
-export class DTXTrianglesEdgesDrawable {
+export class DTXTrianglesDrawable {
 
-    constructor(programName, scene, cfg) {
+    constructor(programName, scene, isTriangle, cfg) {
 
         const getHash = () => [ scene._sectionPlanesState.getHash() ].concat(cfg.getHash()).join(";");
         const hash = getHash();
@@ -70,6 +70,9 @@ export class DTXTrianglesEdgesDrawable {
             src.push("uniform mediump usampler2D uTexturePerVertexIdCoordinates;");
             src.push("uniform highp usampler2D uTexturePerPrimitiveIdIndices;");
             src.push("uniform mediump usampler2D uTexturePerPrimitiveIdPortionIds;");
+            if (isTriangle) {
+                src.push("uniform vec3 uCameraEyeRtc;");
+            }
 
             if (getLogDepth) {
                 src.push("uniform float logDepthBufFC;");
@@ -89,7 +92,7 @@ export class DTXTrianglesEdgesDrawable {
             src.push("void main(void) {");
 
             // constants
-            src.push("int primitiveIndex = gl_VertexID / 2;");
+            src.push("int primitiveIndex = gl_VertexID / " + (isTriangle ? 3 : 2) + ";");
 
             // get packed object-id
             src.push("int h_packed_object_id_index = (primitiveIndex >> 3) & 4095;");
@@ -119,8 +122,11 @@ export class DTXTrianglesEdgesDrawable {
 
             src.push("{");
 
+            src.push("mat4 objectInstanceMatrix = mat4 (texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));");
+            src.push("mat4 objectDecodeAndInstanceMatrix = objectInstanceMatrix * mat4 (texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));");
+
             src.push("ivec4 packedVertexBase = ivec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+4, objectIndexCoords.y), 0));");
-            src.push("ivec4 packedIndexBaseOffset = ivec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+6, objectIndexCoords.y), 0));");
+            src.push("ivec4 packedIndexBaseOffset = ivec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+" + (isTriangle ? 5 : 6) + ", objectIndexCoords.y), 0));");
             src.push("int indexBaseOffset = (packedIndexBaseOffset.r << 24) + (packedIndexBaseOffset.g << 16) + (packedIndexBaseOffset.b << 8) + packedIndexBaseOffset.a;");
 
             src.push("int h_index = (primitiveIndex - indexBaseOffset) & 4095;");
@@ -129,14 +135,46 @@ export class DTXTrianglesEdgesDrawable {
             src.push("ivec3 vertexIndices = ivec3(texelFetch(uTexturePerPrimitiveIdIndices, ivec2(h_index, v_index), 0));");
             src.push("ivec3 uniqueVertexIndexes = vertexIndices + (packedVertexBase.r << 24) + (packedVertexBase.g << 16) + (packedVertexBase.b << 8) + packedVertexBase.a;");
 
-            src.push("int indexPositionH = uniqueVertexIndexes[gl_VertexID % 2] & 4095;");
-            src.push("int indexPositionV = uniqueVertexIndexes[gl_VertexID % 2] >> 12;");
-
-            src.push("mat4 objectInstanceMatrix = mat4 (texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));");
-
-            src.push("mat4 objectDecodeAndInstanceMatrix = objectInstanceMatrix * mat4 (texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));");
-
-            src.push("vec3 position = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH, indexPositionV), 0));");
+            if (isTriangle) {
+                src.push("ivec3 indexPositionH = uniqueVertexIndexes & 4095;");
+                src.push("ivec3 indexPositionV = uniqueVertexIndexes >> 12;");
+                src.push("uint solid = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+7, objectIndexCoords.y), 0).r;");
+                src.push("vec3 positions[] = vec3[](");
+                src.push("  vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.r, indexPositionV.r), 0)),");
+                src.push("  vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.g, indexPositionV.g), 0)),");
+                src.push("  vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.b, indexPositionV.b), 0)));");
+                src.push("vec3 normal = normalize(cross(positions[2] - positions[0], positions[1] - positions[0]));");
+                src.push("vec3 position = positions[gl_VertexID % 3];");
+                if (needViewMatrixPositionNormal) {
+                    src.push("vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);");
+                }
+                // when the geometry is not solid, if needed, flip the triangle winding
+                src.push("if (solid != 1u) {");
+                src.push(`  if (${isPerspectiveMatrix("projMatrix")}) {`);
+                src.push("      vec3 uCameraEyeRtcInQuantizedSpace = (inverse(sceneModelMatrix * objectDecodeAndInstanceMatrix) * vec4(uCameraEyeRtc, 1)).xyz;");
+                src.push("      if (dot(position.xyz - uCameraEyeRtcInQuantizedSpace, normal) < 0.0) {");
+                src.push("          position = positions[2 - (gl_VertexID % 3)];");
+                if (needViewMatrixPositionNormal) {
+                    src.push("          viewNormal = -viewNormal;");
+                }
+                src.push("      }");
+                src.push("  } else {");
+                if (!needViewMatrixPositionNormal) {
+                    src.push("      vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);");
+                }
+                src.push("      if (viewNormal.z < 0.0) {");
+                src.push("          position = positions[2 - (gl_VertexID % 3)];");
+                if (needViewMatrixPositionNormal) {
+                    src.push("          viewNormal = -viewNormal;");
+                }
+                src.push("      }");
+                src.push("  }");
+                src.push("}");
+            } else {
+                src.push("int indexPositionH = uniqueVertexIndexes[gl_VertexID % 2] & 4095;");
+                src.push("int indexPositionV = uniqueVertexIndexes[gl_VertexID % 2] >> 12;");
+                src.push("vec3 position = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH, indexPositionV), 0));");
+            }
 
             src.push("vec4 worldPosition = sceneModelMatrix * (objectDecodeAndInstanceMatrix * vec4(position, 1.0));");
             src.push("vec4 viewPosition = viewMatrix * worldPosition;");
@@ -160,7 +198,7 @@ export class DTXTrianglesEdgesDrawable {
                 // TODO: Normalize color "/ 255.0"?
                 src.push("vec4 pickColor = vec4(texelFetch(uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0));");
             }
-            appendVertexOutputs(src, needVertexColor && "color", needPickColor && "pickColor", needGl_Position && "gl_Position", needViewMatrixPositionNormal && null);
+            appendVertexOutputs(src, needVertexColor && "color", needPickColor && "pickColor", needGl_Position && "gl_Position", needViewMatrixPositionNormal && isTriangle && {viewMatrix: "viewMatrix", viewPosition: "viewPosition", viewNormal: "viewNormal"});
 
             src.push("  }");
             src.push("}");
@@ -243,6 +281,7 @@ export class DTXTrianglesEdgesDrawable {
         const uSceneModelMatrix = program.getLocation("sceneModelMatrix");
         const uViewMatrix = program.getLocation("viewMatrix");
         const uProjMatrix = program.getLocation("projMatrix");
+        const uCameraEyeRtc = isTriangle && program.getLocation("uCameraEyeRtc");
 
         const uSectionPlanes = [];
         for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
@@ -297,6 +336,9 @@ export class DTXTrianglesEdgesDrawable {
             gl.uniformMatrix4fv(uViewMatrix, false, rtcViewMatrix);
             gl.uniformMatrix4fv(uProjMatrix, false, viewParams.projMatrix);
             gl.uniform1i(uRenderPass, renderPass);
+            if (isTriangle) {
+                gl.uniform3fv(uCameraEyeRtc, math.subVec3(viewParams.eye, rtcOrigin, tempVec3b));
+            }
 
             setRenderState(frameCtx, layer, renderPass, rtcOrigin);
 
@@ -334,7 +376,7 @@ export class DTXTrianglesEdgesDrawable {
                 }
             }
 
-            dataTextureLayer.drawEdges(
+            (isTriangle ? layer.drawTriangles : layer.drawEdges)(
                 program,
                 uTexturePerObjectPositionsDecodeMatrix,
                 uTexturePerVertexIdCoordinates,
