@@ -334,35 +334,15 @@ export class DTXTrianglesEdgesDrawable {
                 }
             }
 
-            const textureState = state.textureState;
-            textureState.bindCommonTextures(
+            dataTextureLayer.drawEdges(
                 program,
                 uTexturePerObjectPositionsDecodeMatrix,
                 uTexturePerVertexIdCoordinates,
                 uTexturePerObjectColorsAndFlags,
-                uTexturePerObjectMatrix
-            );
-
-            const glMode = getGlMode(frameCtx);
-            const draw = (cnt, portionIdsTexture, indicesTexture) => {
-                if (cnt > 0) {
-                    program.bindTexture(uTexturePerPrimitiveIdPortionIds, portionIdsTexture, 5); // webgl texture unit
-                    program.bindTexture(uTexturePerPrimitiveIdIndices, indicesTexture, 6); // webgl texture unit
-                    gl.drawArrays(glMode, 0, cnt);
-                }
-            };
-
-            draw(state.numEdgeIndices8Bits,
-                 textureState.texturePerEdgeIdPortionIds8Bits,
-                 textureState.texturePerPolygonIdEdgeIndices8Bits);
-
-            draw(state.numEdgeIndices16Bits,
-                 textureState.texturePerEdgeIdPortionIds16Bits,
-                 textureState.texturePerPolygonIdEdgeIndices16Bits);
-
-            draw(state.numEdgeIndices32Bits,
-                 textureState.texturePerEdgeIdPortionIds32Bits,
-                 textureState.texturePerPolygonIdEdgeIndices32Bits);
+                uTexturePerObjectMatrix,
+                uTexturePerPrimitiveIdPortionIds,
+                uTexturePerPrimitiveIdIndices,
+                getGlMode(frameCtx));
 
             frameCtx.drawElements++;
         };
