@@ -27,7 +27,7 @@ export class DTXTrianglesColorRenderer {
             }),
             // flags.x = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
             // renderPass = COLOR_OPAQUE
-            renderPassFlag: "x",
+            renderPassFlag: 0,
             cullOnAlphaZero: true,
             appendVertexDefinitions: (src) => {
                 src.push("uniform vec4 lightAmbient;");

@@ -28,7 +28,7 @@ export class DTXTrianglesOcclusionRenderer {
             }),
             // flags.x = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
             // renderPass = COLOR_OPAQUE
-            renderPassFlag: "x",
+            renderPassFlag: 0,
             cullOnAlphaZero: true,
             appendVertexDefinitions: (src) => { },
             // divide by w to get into NDC, and after transformation multiply by w to get back into clip space
