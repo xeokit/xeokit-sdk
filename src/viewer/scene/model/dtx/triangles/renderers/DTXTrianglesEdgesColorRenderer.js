@@ -25,7 +25,7 @@ export class DTXTrianglesEdgesColorRenderer {
             }),
             // flags.z = NOT_RENDERED | EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
             // renderPass = EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT
-            renderPassFlag: "z",
+            renderPassFlag: 2,
             cullOnAlphaZero: true,
             appendVertexDefinitions: (src) => src.push("out vec4 vColor;"),
             transformClipPos: clipPos => clipPos,

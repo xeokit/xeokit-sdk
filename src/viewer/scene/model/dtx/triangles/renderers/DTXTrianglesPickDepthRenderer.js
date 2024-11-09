@@ -25,7 +25,7 @@ export class DTXTrianglesPickDepthRenderer {
             }),
             // flags.w = NOT_RENDERED | PICK
             // renderPass = PICK
-            renderPassFlag: "w",
+            renderPassFlag: 3,
             cullOnAlphaZero: true,
             appendVertexDefinitions: (src) => {
                 src.push("uniform vec2 pickClipPos;");
