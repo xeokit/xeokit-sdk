@@ -28,7 +28,7 @@ export class DTXTrianglesSnapInitRenderer {
             }),
             // flags.w = NOT_RENDERED | PICK
             // renderPass = PICK
-            renderPassFlag: "w",
+            renderPassFlag: 3,
             cullOnAlphaZero: true,
             appendVertexDefinitions: (src) => {
                 src.push("flat out vec4 vPickColor;");
