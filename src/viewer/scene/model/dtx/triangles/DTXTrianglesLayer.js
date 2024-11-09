@@ -839,7 +839,7 @@ export class DTXTrianglesLayer {
         this._deferredSetFlagsActive = false;
         if (this._deferredSetFlagsDirty) {
             this._deferredSetFlagsDirty = false;
-            this._state.textureState.texturePerObjectColorsAndFlags.reloadData();
+            this._state.textureState.texturePerObjectColorsAndFlags.textureData.reloadData();
         }
     }
 
@@ -885,29 +885,13 @@ export class DTXTrianglesLayer {
     }
 
     _setPortionColorsAndFlags(subPortionId, offset, data, deferred) {
-        const textureState = this._state.textureState;
-        const gl = this.model.scene.canvas.gl;
-        textureState.texturePerObjectColorsAndFlags.setSubPortion(data, subPortionId, offset);
-        if (this._deferredSetFlagsActive || deferred) {
+        const defer = this._deferredSetFlagsActive || deferred;
+        if (defer) {
             this._deferredSetFlagsDirty = true;
-            return;
-        }
-        if (++this._numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
+        } else if (++this._numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
             this._beginDeferredFlags(); // Subsequent flags updates now deferred
         }
-        gl.bindTexture(gl.TEXTURE_2D, textureState.texturePerObjectColorsAndFlags._texture);
-        gl.texSubImage2D(
-            gl.TEXTURE_2D,
-            0, // level
-            (subPortionId % 512) * 8 + offset, // xoffset
-            Math.floor(subPortionId / 512), // yoffset
-            1, // width
-            1, //height
-            gl.RGBA_INTEGER,
-            gl.UNSIGNED_BYTE,
-            data
-        );
-        // gl.bindTexture (gl.TEXTURE_2D, null);
+        this._state.textureState.texturePerObjectColorsAndFlags.textureData.setData(data, subPortionId, offset, !defer);
     }
 
     _subPortionSetColor(subPortionId, color) {
@@ -1054,35 +1038,14 @@ export class DTXTrianglesLayer {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        // if (!this.model.scene.entityMatrixsEnabled) {
-        //     this.model.error("Entity#matrix not enabled for this Viewer"); // See Viewer entityMatrixsEnabled
-        //     return;
-        // }
-        const textureState = this._state.textureState;
-        const gl = this.model.scene.canvas.gl;
-        tempMat4a.set(matrix);
-        textureState.texturePerObjectInstanceMatrices.setSubPortion(tempMat4a, subPortionId);
-        if (this._deferredSetFlagsActive) {
+        const defer = this._deferredSetFlagsActive;
+        if (defer) {
             this._deferredSetFlagsDirty = true;
-            return;
-        }
-        if (++this._numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
+        } else if (++this._numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
             this._beginDeferredFlags(); // Subsequent flags updates now deferred
         }
-        gl.bindTexture(gl.TEXTURE_2D, textureState.texturePerObjectInstanceMatrices._texture);
-        gl.texSubImage2D(
-            gl.TEXTURE_2D,
-            0, // level
-            (subPortionId % 512) * 4, // xoffset
-            Math.floor(subPortionId / 512), // yoffset
-            // 1,
-            4, // width
-            1, // height
-            gl.RGBA,
-            gl.FLOAT,
-            tempMat4a
-        );
-        // gl.bindTexture (gl.TEXTURE_2D, null);
+        tempMat4a.set(matrix);
+        this._state.textureState.texturePerObjectInstanceMatrices.textureData.setData(tempMat4a, subPortionId, 0, !defer);
     }
 
     getEachVertex(portionId, callback) {
