@@ -28,7 +28,7 @@ export class DTXTrianglesEdgesRenderer {
             }),
             // flags.z = NOT_RENDERED | EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
             // renderPass = EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
-            renderPassFlag: "z",
+            renderPassFlag: 2,
             cullOnAlphaZero: true,
             appendVertexDefinitions: (src) => { },
             transformClipPos: clipPos => clipPos,
