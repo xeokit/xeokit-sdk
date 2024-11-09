@@ -380,8 +380,8 @@ export class DTXTrianglesTrianglesDrawable {
             const glMode = getGlMode(frameCtx);
             const draw = (cnt, portionIdsTexture, indicesTexture) => {
                 if (cnt > 0) {
-                    portionIdsTexture.bindTexture(program, uTexturePerPrimitiveIdPortionIds, 5); // webgl texture unit
-                    indicesTexture.bindTexture(program, uTexturePerPrimitiveIdIndices, 6); // webgl texture unit
+                    program.bindTexture(uTexturePerPrimitiveIdPortionIds, portionIdsTexture, 5); // webgl texture unit
+                    program.bindTexture(uTexturePerPrimitiveIdIndices, indicesTexture, 6); // webgl texture unit
                     gl.drawArrays(glMode, 0, cnt);
                 }
             };
