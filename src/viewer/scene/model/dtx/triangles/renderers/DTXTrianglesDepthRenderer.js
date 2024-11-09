@@ -24,7 +24,7 @@ export class DTXTrianglesDepthRenderer {
             }),
             // flags.x = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
             // renderPass = COLOR_OPAQUE
-            renderPassFlag: "x",
+            renderPassFlag: 0,
             cullOnAlphaZero: true,
             appendVertexDefinitions: (src) => src.push("out highp vec2 vHighPrecisionZW;"),
             // divide by w to get into NDC, and after transformation multiply by w to get back into clip space
