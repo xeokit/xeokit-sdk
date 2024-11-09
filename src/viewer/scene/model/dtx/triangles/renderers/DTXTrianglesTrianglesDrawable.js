@@ -368,35 +368,15 @@ export class DTXTrianglesTrianglesDrawable {
                 }
             }
 
-            const textureState = state.textureState;
-            textureState.bindCommonTextures(
+            dataTextureLayer.drawTriangles(
                 program,
                 uTexturePerObjectPositionsDecodeMatrix,
                 uTexturePerVertexIdCoordinates,
                 uTexturePerObjectColorsAndFlags,
-                uTexturePerObjectMatrix
-            );
-
-            const glMode = getGlMode(frameCtx);
-            const draw = (cnt, portionIdsTexture, indicesTexture) => {
-                if (cnt > 0) {
-                    program.bindTexture(uTexturePerPrimitiveIdPortionIds, portionIdsTexture, 5); // webgl texture unit
-                    program.bindTexture(uTexturePerPrimitiveIdIndices, indicesTexture, 6); // webgl texture unit
-                    gl.drawArrays(glMode, 0, cnt);
-                }
-            };
-
-            draw(state.numIndices8Bits,
-                 textureState.texturePerPolygonIdPortionIds8Bits,
-                 textureState.texturePerPolygonIdIndices8Bits);
-
-            draw(state.numIndices16Bits,
-                 textureState.texturePerPolygonIdPortionIds16Bits,
-                 textureState.texturePerPolygonIdIndices16Bits);
-
-            draw(state.numIndices32Bits,
-                 textureState.texturePerPolygonIdPortionIds32Bits,
-                 textureState.texturePerPolygonIdIndices32Bits);
+                uTexturePerObjectMatrix,
+                uTexturePerPrimitiveIdPortionIds,
+                uTexturePerPrimitiveIdIndices,
+                getGlMode(frameCtx));
 
             frameCtx.drawElements++;
         };
