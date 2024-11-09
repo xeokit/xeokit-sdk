@@ -163,10 +163,10 @@ export class DTXTrianglesState {
         objectAttributesTextureShaderName,
         objectMatricesShaderName
     ) {
-        this.texturePerObjectPositionsDecodeMatrix.bindTexture(glProgram, objectDecodeMatricesShaderName, 1);
-        this.texturePerVertexIdCoordinates.bindTexture(glProgram, vertexTextureShaderName, 2);
-        this.texturePerObjectColorsAndFlags.bindTexture(glProgram, objectAttributesTextureShaderName, 3);
-        this.texturePerObjectInstanceMatrices.bindTexture(glProgram, objectMatricesShaderName, 4);
+        glProgram.bindTexture(objectDecodeMatricesShaderName, this.texturePerObjectPositionsDecodeMatrix, 1);
+        glProgram.bindTexture(vertexTextureShaderName, this.texturePerVertexIdCoordinates, 2);
+        glProgram.bindTexture(objectAttributesTextureShaderName, this.texturePerObjectColorsAndFlags, 3);
+        glProgram.bindTexture(objectMatricesShaderName, this.texturePerObjectInstanceMatrices, 4);
     }
 }
 
