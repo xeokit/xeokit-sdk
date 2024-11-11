@@ -334,7 +334,7 @@ export class VBOInstancingTrianglesLayer {
             state.indicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(geometry.indices), geometry.indices.length, 1, gl.STATIC_DRAW);
             state.numIndices = geometry.indices.length;
         }
-        if (geometry.primitive === "triangles" || geometry.primitive === "solid" || geometry.primitive === "surface") {
+        if (geometry.edgeIndices && geometry.edgeIndices.length > 0) {
             state.edgeIndicesBuf = new ArrayBuf(gl, gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(geometry.edgeIndices), geometry.edgeIndices.length, 1, gl.STATIC_DRAW);
         }
 
