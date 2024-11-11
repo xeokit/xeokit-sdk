@@ -820,6 +820,13 @@ class CameraControl extends Component {
             new KeyboardPanRotateDollyHandler(this.scene, this._controllers, this._configs, this._states, this._updates)
         ];
 
+        this._cursors = {
+            dollyForward: "zoom-in",
+            dollyBackward: "zoom-out",
+            rotate: 'grabbing',
+            pan: 'move',
+        }
+
         // Applies scheduled updates to the Camera on each Scene "tick" event
 
         this._cameraUpdater = new CameraUpdater(this.scene, this._controllers, this._configs, this._states, this._updates);
@@ -1179,6 +1186,37 @@ class CameraControl extends Component {
     set pointerEnabled(value) {
         this._reset();
         this._configs.pointerEnabled = !!value;
+    }
+
+    /**
+     * Sets the cursor to be used when a particular action is being performed.
+     *
+     * Accepted actions are:
+     * 
+     * * "dollyForward" - when the camera is dollying in the forward direction
+     * * "dollyBackward" - when the camera is dollying in the backward direction
+     * * "pan" - when the camera is being panned
+     * * "rotate" - when the camera is being rotated
+     *
+     * @param {String} action
+     * @param {String} style
+     */
+    setCursorStyle(action, style) {
+        if (Object.prototype.hasOwnProperty.call(this._cursors, action)) {
+            this._cursors = { ...this._cursors, [action]: style };
+        }
+        else
+            console.warn(`Action '${action}' is not valid for cursor styles.`);
+    }
+
+    /**
+     * Gets the current style for a particular action.
+     *
+     * @param {String} action To get the style for
+     * @returns {String} style set on the cursor for action
+     */
+    getCursorStyle(action) {
+        return this._cursors[action] || null;
     }
 
     _reset() {

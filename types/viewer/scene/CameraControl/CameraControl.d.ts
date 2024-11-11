@@ -527,6 +527,29 @@ export declare class CameraControl extends Component {
   get pointerEnabled(): boolean;
 
   /**
+   * Sets the cursor to be used when a particular action is being performed.
+   *
+   * Accepted actions are:
+   * 
+   * * "dollyForward" - when the camera is dollying in the forward direction
+   * * "dollyBackward" - when the camera is dollying in the backward direction
+   * * "pan" - when the camera is being panned
+   * * "rotate" - when the camera is being rotated
+   *
+   * @param {String} action
+   * @param {String} style
+   */
+  setCursorStyle(action: string, style: string): void;
+
+  /**
+     * Gets the current style for a particular action.
+     *
+     * @param {String} action To get the style for
+     * @returns {String} style set on the cursor for action
+     */
+  getCursorStyle(action: string): string | null;
+
+  /**
    * Sets how much the {@link Camera} dollys each second with keyboard input.
    *
    * Default is ````15.0````, to dolly the {@link Camera} ````15.0```` World-space units per second while we hold down

@@ -78,7 +78,6 @@ class MousePanRotateDollyHandler {
         });
 
         function setMousedownState(pick = true) {
-            canvas.style.cursor = "move";
             setMousedownPositions();
             if (pick) {
                 setMousedownPick();
