@@ -18,6 +18,7 @@ class CameraUpdater {
         const pickController = controllers.pickController;
         const pivotController = controllers.pivotController;
         const panController = controllers.panController;
+        const cameraControl = controllers.cameraControl;
 
         let countDown = SCALE_DOLLY_EACH_FRAME; // Decrements on each tick
         let dollyDistFactor = 1.0; // Calculated when countDown is zero
@@ -142,7 +143,7 @@ class CameraUpdater {
                 updates.rotateDeltaX *= configs.rotationInertia;
                 updates.rotateDeltaY *= configs.rotationInertia;
 
-                cursorType = "grabbing";
+                cursorType = cameraControl._cursors.rotate;
             }
 
             //----------------------------------------------------------------------------------------------------------
@@ -208,7 +209,7 @@ class CameraUpdater {
                     camera.pan(vec);
                 }
 
-                cursorType = "grabbing";
+                cursorType = cameraControl._cursors.pan;
             }
 
             updates.panDeltaX *= configs.panInertia;
@@ -222,9 +223,9 @@ class CameraUpdater {
             if (dollyDeltaForDist !== 0) {
 
                 if (dollyDeltaForDist < 0) {
-                    cursorType = "zoom-in";
+                    cursorType = cameraControl._cursors.dollyForward;
                 } else {
-                    cursorType = "zoom-out";
+                    cursorType = cameraControl._cursors.dollyBackward;
                 }
 
                 if (configs.firstPerson) {

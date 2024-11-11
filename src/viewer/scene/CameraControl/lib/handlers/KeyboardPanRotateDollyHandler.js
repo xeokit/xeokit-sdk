@@ -26,10 +26,6 @@ class KeyboardPanRotateDollyHandler {
                 return;
             }
             keyDownMap[keyCode] = true;
-
-            if (keyCode === input.KEY_SHIFT) {
-                canvas.style.cursor = "move";
-            }
         });
 
         this._onSceneKeyUp = input.on("keyup", (keyCode) => {
@@ -37,10 +33,6 @@ class KeyboardPanRotateDollyHandler {
                 return;
             }
             keyDownMap[keyCode] = false;
-
-            if (keyCode === input.KEY_SHIFT) {
-                canvas.style.cursor = null;
-            }
 
             if (controllers.pivotController.getPivoting()) {
                 controllers.pivotController.endPivot()
