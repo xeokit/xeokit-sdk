@@ -108,7 +108,7 @@ class MousePanRotateDollyHandler {
         }
 
         function isPanning() {
-            return cameraControl._isKeyDownForAction(cameraControl.MOUSE_PAN, keyDown);
+            return configs.planView || cameraControl._isKeyDownForAction(cameraControl.MOUSE_PAN, keyDown);
         }
 
         function isRotating() {
