@@ -504,6 +504,7 @@ class StoreyViewsPlugin extends Plugin {
      * @param {Number} [options.width=300] Image width in pixels. Height will be automatically determined from this, if not given.
      * @param {Number} [options.height=300] Image height in pixels, as an alternative to width. Width will be automatically determined from this, if not given.
      * @param {String} [options.format="png"] Image format. Accepted values are "png" and "jpeg".
+     * @param {Boolean} [options.captureSectionPlanes=false] Whether the storey map is sliced or not.
      * @returns {StoreyMap} The StoreyMap.
      */
     createStoreyMap(storeyId, options = {}) {
@@ -520,6 +521,7 @@ class StoreyViewsPlugin extends Plugin {
         const aabb = (this._fitStoreyMaps) ? storey.storeyAABB : storey.modelAABB;
         const aspect = Math.abs((aabb[5] - aabb[2]) / (aabb[3] - aabb[0]));
         const padding = options.padding || 0;
+        const captureSectionPlanes = !!options.captureSectionPlanes;
 
         let width;
         let height;
@@ -551,6 +553,9 @@ class StoreyViewsPlugin extends Plugin {
         this.showStoreyObjects(storeyId, utils.apply(options, {
             hideOthers: true
         }));
+        
+        if (captureSectionPlanes)
+            this._toggleSectionPlanes(false);
 
         this._arrangeStoreyMapCamera(storey);
 
@@ -562,8 +567,17 @@ class StoreyViewsPlugin extends Plugin {
 
         this._objectsMemento.restoreObjects(scene, mask);
         this._cameraMemento.restoreCamera(scene);
+        if (captureSectionPlanes)
+            this._toggleSectionPlanes(true);
 
         return new StoreyMap(storeyId, src, format, width, height, padding);
+    }
+
+    _toggleSectionPlanes(visible) {
+        const planes = this.viewer.scene.sectionPlanes;
+        for (const key in planes) {
+            planes[key].active = visible;
+        }
     }
 
     _arrangeStoreyMapCamera(storey) {
