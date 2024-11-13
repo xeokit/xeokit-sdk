@@ -1,6 +1,19 @@
 import {Dot} from "../html/Dot.js";
+import {Label} from "../html/Label.js";
+import {Wire} from "../html/Wire.js";
 import {math} from "../../../viewer/scene/math/math.js";
 import {Marker} from "../../../viewer/scene/marker/Marker.js";
+
+const tmpVec2a = math.vec2();
+const tmpVec2b = math.vec2();
+const tmpVec2c = math.vec2();
+const tmpVec2d = math.vec2();
+const tmpVec3a = math.vec3();
+const tmpVec3b = math.vec3();
+const tmpVec4a = math.vec4();
+const tmpVec4b = math.vec4();
+const tmpVec4c = math.vec4();
+const tmpVec4d = math.vec4();
 
 const nop = () => { };
 
@@ -11,8 +24,120 @@ export function transformToNode(from, to, vec) {
     vec[1] += fromRec.top  - toRec.top;
 };
 
+const toClipSpace = (camera, worldPos, p) => {
+    // to homogeneous coords
+    p.set(worldPos);
+    p[3] = 1;
+
+    // to clip space
+    math.mulMat4v4(camera.viewMatrix, p, p);
+    math.mulMat4v4(camera.projMatrix, p, p);
+};
+
+const toCanvasSpace = (canvas, parentElement, ndc, p) => {
+    p[0] = (1 + ndc[0]) * 0.5 * canvas.offsetWidth;
+    p[1] = (1 - ndc[1]) * 0.5 * canvas.offsetHeight;
+    transformToNode(canvas, parentElement, p);
+};
+
+const clipSegment = (scene, parentElement, start, end, canvasStart, canvasEnd) => {
+    const camera = scene.camera;
+    const canvas = scene.canvas.canvas;
+
+    if (math.distVec3(start, end) < 0.001) {
+        return false;
+    }
+
+    const delta = math.subVec3(end, start, tmpVec3a);
+    let s_min = 0.0;
+    let s_max = 1.0;
+
+    for (let plane of scene._sectionPlanesState.sectionPlanes) {
+        const endDot   = math.dotVec3(plane.dir, math.subVec3(plane.pos, end,   tmpVec3b));
+        const startDot = math.dotVec3(plane.dir, math.subVec3(plane.pos, start, tmpVec3b));
+
+        if ((startDot > 0) && (endDot > 0)) {
+            return false;
+        } else if ((startDot > 0) || (endDot > 0)) {
+            const denom = math.dotVec3(plane.dir, delta);
+            if (Math.abs(denom) >= 1e-6) {
+                const ratio = math.dotVec3(plane.dir, tmpVec3b) / denom;
+                if (startDot > 0) {
+                    s_min = Math.max(s_min, ratio);
+                } else {
+                    s_max = Math.min(s_max, ratio);
+                }
+            }
+        }
+    }
+
+    const p0 = tmpVec4a;
+    const p1 = tmpVec4b;
+    toClipSpace(camera, (s_min > 0) ? math.addVec3(start, math.mulVec3Scalar(delta, s_min, tmpVec3b), tmpVec3b) : start, p0);
+    toClipSpace(camera, (s_max < 1) ? math.addVec3(start, math.mulVec3Scalar(delta, s_max, tmpVec3b), tmpVec3b) : end,   p1);
+
+    const p0Behind = ((p0[2] / p0[3]) < -1) || (p0[3] < 0);
+    const p1Behind = ((p1[2] / p1[3]) < -1) || (p1[3] < 0);
+    if (p0Behind && p1Behind) {
+        return false;
+    }
+
+    const t = (p0[3] + p0[2]) / ((p0[3] + p0[2]) - (p1[3] + p1[2]));
+
+    if ((t > 0) && (t < 1)) { //p0Behind || p1Behind) {
+        // Find the intersection of a segment with the near plane in clip space, if it exists."""
+        // Calculate the interpolation factor t where the line segment crosses the near plane
+        const delta = math.subVec4(p1, p0, tmpVec4c);
+        math.mulVec4Scalar(delta, t, delta);
+        math.addVec4(p0, delta, p0Behind ? p0 : p1);
+    }
+
+    // normalize clip space coords
+    math.mulVec4Scalar(p0, 1.0 / p0[3]);
+    math.mulVec4Scalar(p1, 1.0 / p1[3]);
+
+    let t_min = 0.0;
+    let t_max = 1.0;
+
+    // If either point is outside the view frustum, clip the line segment
+
+    for (let i = 0; i < 2; ++i) {
+        const denom = p1[i] - p0[i];
+
+        const l = (-p0[3] - p0[i]) / denom;
+        const r = ( p0[3] - p0[i]) / denom;
+
+        if (denom > 0) {
+            t_min = Math.max(t_min, l);
+            t_max = Math.min(t_max, r);
+        } else {
+            t_min = Math.max(t_min, r);
+            t_max = Math.min(t_max, l);
+        }
+    }
+
+    if (t_min >= t_max) {
+        return false;
+    }
+
+    // Calculate the clipped start and end points
+    const ndcDelta = math.subVec4(p1, p0, tmpVec4c);
+    math.addVec4(p0, math.mulVec4Scalar(ndcDelta, t_max, tmpVec4d), p1);
+    math.addVec4(p0, math.mulVec4Scalar(ndcDelta, t_min, tmpVec4d), p0);
+
+    math.mulVec4Scalar(p0, 1 / p0[3]);
+    math.mulVec4Scalar(p1, 1 / p1[3]);
+
+    toCanvasSpace(canvas, parentElement, p0, canvasStart);
+    toCanvasSpace(canvas, parentElement, p1, canvasEnd);
+
+    return true;
+};
+
 export class Dot3D extends Marker {
     constructor(scene, markerCfg, parentElement, cfg = {}) {
+        const camera = scene.camera;
+
         super(scene, markerCfg);
 
         const handler = (cfgEvent, componentEvent) => {
@@ -24,6 +149,7 @@ export class Dot3D extends Marker {
             };
         };
         this._dot = new Dot(parentElement, {
+            borderColor: cfg.borderColor,
             fillColor: cfg.fillColor,
             zIndex: cfg.zIndex,
             onMouseOver:   handler(cfg.onMouseOver,   "mouseover"),
@@ -38,19 +164,57 @@ export class Dot3D extends Marker {
             onContextMenu: handler(cfg.onContextMenu, "contextmenu")
         });
 
+        const toClipSpace = (worldPos, p) => {
+            // to homogeneous coords
+            p.set(worldPos);
+            p[3] = 1;
+
+            // to clip space
+            math.mulMat4v4(camera.viewMatrix, p, p);
+            math.mulMat4v4(camera.projMatrix, p, p);
+        };
+
+        const toCanvasSpace = ndc => {
+            const canvas = scene.canvas.canvas;
+            ndc[0] = (1 + ndc[0]) * 0.5 * canvas.offsetWidth;
+            ndc[1] = (1 - ndc[1]) * 0.5 * canvas.offsetHeight;
+            transformToNode(canvas, parentElement, ndc);
+        };
+
         const updateDotPos = () => {
-            const pos = this.canvasPos.slice();
-            transformToNode(scene.canvas.canvas, parentElement, pos);
-            this._dot.setPos(pos[0], pos[1]);
+            const p0 = tmpVec4c;
+            toClipSpace(this.worldPos, p0);
+            math.mulVec3Scalar(p0, 1.0 / p0[3]);
+
+            const outsideFrustum = ((p0[3] < 0)
+                                    ||
+                                    (p0[0] < -1) || (p0[0] > 1)
+                                    ||
+                                    (p0[1] < -1) || (p0[1] > 1)
+                                    ||
+                                    (p0[2] < -1) || (p0[2] > 1));
+            const culled = outsideFrustum || scene._sectionPlanesState.sectionPlanes.some(
+                plane => (math.dotVec3(plane.dir, math.subVec3(plane.pos, this.worldPos, tmpVec3a)) > 0));
+
+            this._dot.setCulled(culled);
+            if (!culled) {
+                toCanvasSpace(p0);
+                this._dot.setPos(p0[0], p0[1]);
+            }
         };
 
         this.on("worldPos", updateDotPos);
 
-        const onViewMatrix = scene.camera.on("viewMatrix", updateDotPos);
-        const onProjMatrix = scene.camera.on("projMatrix", updateDotPos);
+        const onViewMatrix = camera.on("viewMatrix", updateDotPos);
+        const onProjMatrix = camera.on("projMatrix", updateDotPos);
+        const onCanvasBnd  = scene.canvas.on("boundary", updateDotPos);
+        const planesUpdate = scene.on("sectionPlaneUpdated", updateDotPos);
+
         this._cleanup = () => {
-            scene.camera.off(onViewMatrix);
-            scene.camera.off(onProjMatrix);
+            camera.off(onViewMatrix);
+            camera.off(onProjMatrix);
+            scene.canvas.off(onCanvasBnd);
+            scene.off(planesUpdate);
             this._dot.destroy();
         };
     }
@@ -59,12 +223,12 @@ export class Dot3D extends Marker {
         this._dot.setClickable(value);
     }
 
-    setCulled(value) {
-        this._dot.setCulled(value);
-    }
-
     setFillColor(value) {
         this._dot.setFillColor(value);
+    }
+
+    setBorderColor(value) {
+        this._dot.setBorderColor(value);
     }
 
     setHighlighted(value) {
@@ -82,6 +246,173 @@ export class Dot3D extends Marker {
     destroy() {
         this._cleanup();
         super.destroy();
+    }
+
+}
+
+export class Label3D {
+    constructor(scene, parentElement, cfg) {
+        const camera = scene.camera;
+
+        this._label = new Label(parentElement, cfg);
+        this._start = math.vec3();
+        this._mid   = math.vec3();
+        this._end   = math.vec3();
+        this._yOff  = 0;
+        this._betweenWires = false;
+
+        const setPosOnWire = (p0, p1, yOff) => {
+            p0[0] += p1[0];
+            p0[1] += p1[1];
+            math.mulVec2Scalar(p0, .5);
+            this._label.setPos(p0[0], p0[1] + yOff);
+        };
+
+        this._updatePositions = () => {
+            if (this._betweenWires) {
+                const visibleA = clipSegment(scene, parentElement, this._start, this._mid, tmpVec2a, tmpVec2b);
+                const visibleB = clipSegment(scene, parentElement, this._end,   this._mid, tmpVec2c, tmpVec2d);
+                this._label.setCulled(! (visibleA || visibleB));
+                if (visibleA && visibleB) {
+                    tmpVec2b[0] += tmpVec2d[0];
+                    tmpVec2b[1] += tmpVec2d[1];
+                    math.mulVec2Scalar(tmpVec2b, .5);
+
+                    tmpVec2b[0] += tmpVec2a[0] + tmpVec2c[0];
+                    tmpVec2b[1] += tmpVec2a[1] + tmpVec2c[1];
+                    math.mulVec2Scalar(tmpVec2b, 1/3);
+                    this._label.setPos(tmpVec2b[0], tmpVec2b[1]);
+                } else if (visibleA) {
+                    setPosOnWire(tmpVec2a, tmpVec2b, 0);
+                } else if (visibleB) {
+                    setPosOnWire(tmpVec2c, tmpVec2d, 0);
+                }
+            } else {
+                const visible = (clipSegment(scene, parentElement, this._start, this._end, tmpVec2a, tmpVec2b)
+                                 &&
+                                 (math.distVec2(tmpVec2a, tmpVec2b) >= this._labelMinAxisLength));
+                this._label.setCulled(!visible);
+                if (visible) {
+                    setPosOnWire(tmpVec2a, tmpVec2b, this._yOff);
+                }
+            }
+        };
+
+        const onViewMatrix = camera.on("viewMatrix", this._updatePositions);
+        const onProjMatrix = camera.on("projMatrix", this._updatePositions);
+        const onCanvasBnd  = scene.canvas.on("boundary", this._updatePositions);
+        const planesUpdate = scene.on("sectionPlaneUpdated", this._updatePositions);
+
+        this._cleanup = () => {
+            camera.off(onViewMatrix);
+            camera.off(onProjMatrix);
+            scene.canvas.off(onCanvasBnd);
+            scene.off(planesUpdate);
+            this._label.destroy();
+        };
+    }
+
+    setPosOnWire(p0, p1, yOff, labelMinAxisLength) {
+        this._start.set(p0);
+        this._end.set(p1);
+        this._yOff = yOff;
+        this._labelMinAxisLength = labelMinAxisLength;
+        this._betweenWires = false;
+        this._updatePositions();
+    }
+
+    setPosBetween(p0, p1, p2) {
+        this._start.set(p0);
+        this._mid.set(p1);
+        this._end.set(p2);
+        this._betweenWires = true;
+        this._updatePositions();
+    }
+
+    setFillColor(value) {
+        this._label.setFillColor(value);
+    }
+
+    setHighlighted(value) {
+        this._label.setHighlighted(value);
+    }
+
+    setText(value) {
+        this._label.setText(value);
+    }
+
+    setClickable(value) {
+        this._label.setClickable(value);
+    }
+
+    setVisible(value) {
+        this._label.setVisible(value);
+    }
+
+    destroy() {
+        this._cleanup();
+    }
+
+}
+
+export class Wire3D {
+    constructor(scene, parentElement, cfg) {
+        const camera = scene.camera;
+
+        this._wire  = new Wire(parentElement, cfg);
+        this._start = math.vec3();
+        this._end   = math.vec3();
+
+        this._updatePositions = () => {
+            const visible = clipSegment(scene, parentElement, this._start, this._end, tmpVec2a, tmpVec2b);
+            this._wire.setCulled(! visible);
+            if (visible) {
+                this._wire.setStartAndEnd(tmpVec2a[0], tmpVec2a[1], tmpVec2b[0], tmpVec2b[1]);
+            }
+        };
+
+        const onViewMatrix = camera.on("viewMatrix", this._updatePositions);
+        const onProjMatrix = camera.on("projMatrix", this._updatePositions);
+        const onCanvasBnd  = scene.canvas.on("boundary", this._updatePositions);
+        const planesUpdate = scene.on("sectionPlaneUpdated", this._updatePositions);
+
+        this._cleanup = () => {
+            camera.off(onViewMatrix);
+            camera.off(onProjMatrix);
+            scene.canvas.off(onCanvasBnd);
+            scene.off(planesUpdate);
+            this._wire.destroy();
+        };
+    }
+
+    setEnds(start, end) {
+        this._start.set(start);
+        this._end.set(end);
+        this._updatePositions();
+    }
+
+    setClickable(value) {
+        this._wire.setClickable(value);
+    }
+
+    setColor(value) {
+        this._wire.setColor(value);
+    }
+
+    setHighlighted(value) {
+        this._wire.setHighlighted(value);
+    }
+
+    setOpacity(value) {
+        this._wire.setOpacity(value);
+    }
+
+    setVisible(value) {
+        this._wire.setVisible(value);
+    }
+
+    destroy() {
+        this._cleanup();
     }
 
 }
