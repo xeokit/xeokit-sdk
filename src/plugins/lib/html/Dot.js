@@ -184,7 +184,7 @@ class Dot {
     }
 
     _updateVisibility() {
-        this._dot.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
+        this._dot.style.visibility = this._dotClickable.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
     }
 
     setVisible(visible) {

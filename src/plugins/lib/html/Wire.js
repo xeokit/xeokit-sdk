@@ -209,7 +209,7 @@ class Wire {
     }
 
     _updateVisibility() {
-        this._wire.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
+        this._wire.style.visibility = this._wireClickable.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
     }
 
     setVisible(visible) {
