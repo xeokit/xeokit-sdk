@@ -58,7 +58,7 @@ export declare type NodeConfiguration = {
 /**
  * An {@link Entity} that is a scene graph node that can have child Nodes and {@link Mesh}es.
  */
-export declare class Node extends Component implements Omit<Entity, "parent"> {
+export declare class Node extends Component {
   /**
    * @constructor
    * @param {Component} owner Owner component. When destroyed, the owner will destroy this component as well.

@@ -168,9 +168,6 @@ export declare class SceneModel extends Component {
      */
     get aabb(): number[];
 
-
-    get numEntities(): number;
-
     /**
      * The number of entities in this SceneModel.
      *
