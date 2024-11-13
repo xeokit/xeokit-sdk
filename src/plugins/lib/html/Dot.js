@@ -183,12 +183,16 @@ class Dot {
         this._dot.style.opacity = opacity;
     }
 
+    _updateVisibility() {
+        this._dot.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
+    }
+
     setVisible(visible) {
         if (this._visible === visible) {
             return;
         }
         this._visible = !!visible;
-        this._dot.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
+        this._updateVisibility();
     }
 
     setCulled(culled) {
@@ -196,7 +200,7 @@ class Dot {
             return;
         }
         this._culled = !!culled;
-        this._dot.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
+        this._updateVisibility();
     }
 
     setClickable(clickable) {

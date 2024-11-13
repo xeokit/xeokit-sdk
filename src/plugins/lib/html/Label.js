@@ -167,12 +167,16 @@ class Label {
         this._label.style.opacity = opacity;
     }
 
+    _updateVisibility() {
+        this._label.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
+    }
+
     setVisible(visible) {
         if (this._visible === visible) {
             return;
         }
         this._visible = !!visible;
-        this._label.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
+        this._updateVisibility();
     }
 
     setCulled(culled) {
@@ -180,7 +184,7 @@ class Label {
             return;
         }
         this._culled = !!culled;
-        this._label.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
+        this._updateVisibility();
     }
 
     setHighlighted(highlighted) {

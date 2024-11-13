@@ -208,12 +208,16 @@ class Wire {
         this._wire.style.opacity = opacity;
     }
 
+    _updateVisibility() {
+        this._wire.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
+    }
+
     setVisible(visible) {
         if (this._visible === visible) {
             return;
         }
         this._visible = !!visible;
-        this._wire.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
+        this._updateVisibility();
     }
 
     setCulled(culled) {
@@ -221,7 +225,7 @@ class Wire {
             return;
         }
         this._culled = !!culled;
-        this._wire.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
+        this._updateVisibility();
     }
 
     setClickable(clickable) {
