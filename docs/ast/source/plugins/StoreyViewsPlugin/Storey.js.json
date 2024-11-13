@@ -1,0 +1,5052 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 2514,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 84,
+      "column": 16
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 2514,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 84,
+        "column": 16
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "Identifier",
+        "start": 122,
+        "end": 2496,
+        "loc": {
+          "start": {
+            "line": 6,
+            "column": 0
+          },
+          "end": {
+            "line": 82,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 128,
+          "end": 134,
+          "loc": {
+            "start": {
+              "line": 6,
+              "column": 6
+            },
+            "end": {
+              "line": 6,
+              "column": 12
+            },
+            "identifierName": "Storey"
+          },
+          "name": "Storey",
+          "leadingComments": null
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 135,
+          "end": 2496,
+          "loc": {
+            "start": {
+              "line": 6,
+              "column": 13
+            },
+            "end": {
+              "line": 82,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start": 174,
+              "end": 2494,
+              "loc": {
+                "start": {
+                  "line": 11,
+                  "column": 4
+                },
+                "end": {
+                  "line": 81,
+                  "column": 5
+                }
+              },
+              "static": false,
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 174,
+                "end": 185,
+                "loc": {
+                  "start": {
+                    "line": 11,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 11,
+                    "column": 15
+                  },
+                  "identifierName": "constructor"
+                },
+                "name": "constructor",
+                "leadingComments": null
+              },
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 186,
+                  "end": 192,
+                  "loc": {
+                    "start": {
+                      "line": 11,
+                      "column": 16
+                    },
+                    "end": {
+                      "line": 11,
+                      "column": 22
+                    },
+                    "identifierName": "plugin"
+                  },
+                  "name": "plugin"
+                },
+                {
+                  "type": "Identifier",
+                  "start": 194,
+                  "end": 203,
+                  "loc": {
+                    "start": {
+                      "line": 11,
+                      "column": 24
+                    },
+                    "end": {
+                      "line": 11,
+                      "column": 33
+                    },
+                    "identifierName": "modelAABB"
+                  },
+                  "name": "modelAABB"
+                },
+                {
+                  "type": "Identifier",
+                  "start": 205,
+                  "end": 215,
+                  "loc": {
+                    "start": {
+                      "line": 11,
+                      "column": 35
+                    },
+                    "end": {
+                      "line": 11,
+                      "column": 45
+                    },
+                    "identifierName": "storeyAABB"
+                  },
+                  "name": "storeyAABB"
+                },
+                {
+                  "type": "Identifier",
+                  "start": 217,
+                  "end": 224,
+                  "loc": {
+                    "start": {
+                      "line": 11,
+                      "column": 47
+                    },
+                    "end": {
+                      "line": 11,
+                      "column": 54
+                    },
+                    "identifierName": "modelId"
+                  },
+                  "name": "modelId"
+                },
+                {
+                  "type": "Identifier",
+                  "start": 226,
+                  "end": 234,
+                  "loc": {
+                    "start": {
+                      "line": 11,
+                      "column": 56
+                    },
+                    "end": {
+                      "line": 11,
+                      "column": 64
+                    },
+                    "identifierName": "storeyId"
+                  },
+                  "name": "storeyId"
+                },
+                {
+                  "type": "Identifier",
+                  "start": 236,
+                  "end": 246,
+                  "loc": {
+                    "start": {
+                      "line": 11,
+                      "column": 66
+                    },
+                    "end": {
+                      "line": 11,
+                      "column": 76
+                    },
+                    "identifierName": "numObjects"
+                  },
+                  "name": "numObjects"
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 248,
+                "end": 2494,
+                "loc": {
+                  "start": {
+                    "line": 11,
+                    "column": 78
+                  },
+                  "end": {
+                    "line": 81,
+                    "column": 5
+                  }
+                },
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 424,
+                    "end": 445,
+                    "loc": {
+                      "start": {
+                        "line": 19,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 19,
+                        "column": 29
+                      }
+                    },
+                    "expression": {
+                      "type": "AssignmentExpression",
+                      "start": 424,
+                      "end": 444,
+                      "loc": {
+                        "start": {
+                          "line": 19,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 19,
+                          "column": 28
+                        }
+                      },
+                      "operator": "=",
+                      "left": {
+                        "type": "MemberExpression",
+                        "start": 424,
+                        "end": 435,
+                        "loc": {
+                          "start": {
+                            "line": 19,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 19,
+                            "column": 19
+                          }
+                        },
+                        "object": {
+                          "type": "ThisExpression",
+                          "start": 424,
+                          "end": 428,
+                          "loc": {
+                            "start": {
+                              "line": 19,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 19,
+                              "column": 12
+                            }
+                          },
+                          "leadingComments": null
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "start": 429,
+                          "end": 435,
+                          "loc": {
+                            "start": {
+                              "line": 19,
+                              "column": 13
+                            },
+                            "end": {
+                              "line": 19,
+                              "column": 19
+                            },
+                            "identifierName": "plugin"
+                          },
+                          "name": "plugin"
+                        },
+                        "computed": false,
+                        "leadingComments": null
+                      },
+                      "right": {
+                        "type": "Identifier",
+                        "start": 438,
+                        "end": 444,
+                        "loc": {
+                          "start": {
+                            "line": 19,
+                            "column": 22
+                          },
+                          "end": {
+                            "line": 19,
+                            "column": 28
+                          },
+                          "identifierName": "plugin"
+                        },
+                        "name": "plugin"
+                      },
+                      "leadingComments": null
+                    },
+                    "leadingComments": [
+                      {
+                        "type": "CommentBlock",
+                        "value": "*\n         * The {@link StoreyViewsPlugin} this Storey belongs to.\n         *\n         * @property plugin\n         * @type {StoreyViewsPlugin}\n         ",
+                        "start": 259,
+                        "end": 415,
+                        "loc": {
+                          "start": {
+                            "line": 13,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 18,
+                            "column": 11
+                          }
+                        }
+                      }
+                    ],
+                    "trailingComments": [
+                      {
+                        "type": "CommentBlock",
+                        "value": "*\n         * ID of the IfcBuildingStorey.\n         *\n         * This matches IDs of the IfcBuildingStorey's {@link MetaObject} and {@link Entity}.\n         *\n         * @property storeyId\n         * @type {String}\n         ",
+                        "start": 455,
+                        "end": 682,
+                        "loc": {
+                          "start": {
+                            "line": 21,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 28,
+                            "column": 11
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 691,
+                    "end": 716,
+                    "loc": {
+                      "start": {
+                        "line": 29,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 29,
+                        "column": 33
+                      }
+                    },
+                    "expression": {
+                      "type": "AssignmentExpression",
+                      "start": 691,
+                      "end": 715,
+                      "loc": {
+                        "start": {
+                          "line": 29,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 29,
+                          "column": 32
+                        }
+                      },
+                      "operator": "=",
+                      "left": {
+                        "type": "MemberExpression",
+                        "start": 691,
+                        "end": 704,
+                        "loc": {
+                          "start": {
+                            "line": 29,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 29,
+                            "column": 21
+                          }
+                        },
+                        "object": {
+                          "type": "ThisExpression",
+                          "start": 691,
+                          "end": 695,
+                          "loc": {
+                            "start": {
+                              "line": 29,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 29,
+                              "column": 12
+                            }
+                          },
+                          "leadingComments": null
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "start": 696,
+                          "end": 704,
+                          "loc": {
+                            "start": {
+                              "line": 29,
+                              "column": 13
+                            },
+                            "end": {
+                              "line": 29,
+                              "column": 21
+                            },
+                            "identifierName": "storeyId"
+                          },
+                          "name": "storeyId"
+                        },
+                        "computed": false,
+                        "leadingComments": null
+                      },
+                      "right": {
+                        "type": "Identifier",
+                        "start": 707,
+                        "end": 715,
+                        "loc": {
+                          "start": {
+                            "line": 29,
+                            "column": 24
+                          },
+                          "end": {
+                            "line": 29,
+                            "column": 32
+                          },
+                          "identifierName": "storeyId"
+                        },
+                        "name": "storeyId"
+                      },
+                      "leadingComments": null
+                    },
+                    "leadingComments": [
+                      {
+                        "type": "CommentBlock",
+                        "value": "*\n         * ID of the IfcBuildingStorey.\n         *\n         * This matches IDs of the IfcBuildingStorey's {@link MetaObject} and {@link Entity}.\n         *\n         * @property storeyId\n         * @type {String}\n         ",
+                        "start": 455,
+                        "end": 682,
+                        "loc": {
+                          "start": {
+                            "line": 21,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 28,
+                            "column": 11
+                          }
+                        }
+                      }
+                    ],
+                    "trailingComments": [
+                      {
+                        "type": "CommentBlock",
+                        "value": "*\n         * ID of the model.\n         *\n         * This matches the ID of the {@link MetaModel} that contains the IfcBuildingStorey's {@link MetaObject}.\n         *\n         * @property modelId\n         * @type {String|Number}\n         ",
+                        "start": 726,
+                        "end": 967,
+                        "loc": {
+                          "start": {
+                            "line": 31,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 38,
+                            "column": 11
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 976,
+                    "end": 999,
+                    "loc": {
+                      "start": {
+                        "line": 39,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 39,
+                        "column": 31
+                      }
+                    },
+                    "expression": {
+                      "type": "AssignmentExpression",
+                      "start": 976,
+                      "end": 998,
+                      "loc": {
+                        "start": {
+                          "line": 39,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 39,
+                          "column": 30
+                        }
+                      },
+                      "operator": "=",
+                      "left": {
+                        "type": "MemberExpression",
+                        "start": 976,
+                        "end": 988,
+                        "loc": {
+                          "start": {
+                            "line": 39,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 39,
+                            "column": 20
+                          }
+                        },
+                        "object": {
+                          "type": "ThisExpression",
+                          "start": 976,
+                          "end": 980,
+                          "loc": {
+                            "start": {
+                              "line": 39,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 39,
+                              "column": 12
+                            }
+                          },
+                          "leadingComments": null
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "start": 981,
+                          "end": 988,
+                          "loc": {
+                            "start": {
+                              "line": 39,
+                              "column": 13
+                            },
+                            "end": {
+                              "line": 39,
+                              "column": 20
+                            },
+                            "identifierName": "modelId"
+                          },
+                          "name": "modelId"
+                        },
+                        "computed": false,
+                        "leadingComments": null
+                      },
+                      "right": {
+                        "type": "Identifier",
+                        "start": 991,
+                        "end": 998,
+                        "loc": {
+                          "start": {
+                            "line": 39,
+                            "column": 23
+                          },
+                          "end": {
+                            "line": 39,
+                            "column": 30
+                          },
+                          "identifierName": "modelId"
+                        },
+                        "name": "modelId"
+                      },
+                      "leadingComments": null
+                    },
+                    "leadingComments": [
+                      {
+                        "type": "CommentBlock",
+                        "value": "*\n         * ID of the model.\n         *\n         * This matches the ID of the {@link MetaModel} that contains the IfcBuildingStorey's {@link MetaObject}.\n         *\n         * @property modelId\n         * @type {String|Number}\n         ",
+                        "start": 726,
+                        "end": 967,
+                        "loc": {
+                          "start": {
+                            "line": 31,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 38,
+                            "column": 11
+                          }
+                        }
+                      }
+                    ],
+                    "trailingComments": [
+                      {
+                        "type": "CommentBlock",
+                        "value": "*\n         * Axis-aligned World-space boundary of the {@link Entity}s that represent the IfcBuildingStorey.\n         *\n         * The boundary is a six-element Float64Array containing the min/max extents of the\n         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````\n         *\n         * @property storeyAABB\n         * @type {Number[]}\n         ",
+                        "start": 1009,
+                        "end": 1387,
+                        "loc": {
+                          "start": {
+                            "line": 41,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 49,
+                            "column": 11
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 1396,
+                    "end": 1433,
+                    "loc": {
+                      "start": {
+                        "line": 50,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 50,
+                        "column": 45
+                      }
+                    },
+                    "expression": {
+                      "type": "AssignmentExpression",
+                      "start": 1396,
+                      "end": 1432,
+                      "loc": {
+                        "start": {
+                          "line": 50,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 50,
+                          "column": 44
+                        }
+                      },
+                      "operator": "=",
+                      "left": {
+                        "type": "MemberExpression",
+                        "start": 1396,
+                        "end": 1411,
+                        "loc": {
+                          "start": {
+                            "line": 50,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 50,
+                            "column": 23
+                          }
+                        },
+                        "object": {
+                          "type": "ThisExpression",
+                          "start": 1396,
+                          "end": 1400,
+                          "loc": {
+                            "start": {
+                              "line": 50,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 50,
+                              "column": 12
+                            }
+                          },
+                          "leadingComments": null
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "start": 1401,
+                          "end": 1411,
+                          "loc": {
+                            "start": {
+                              "line": 50,
+                              "column": 13
+                            },
+                            "end": {
+                              "line": 50,
+                              "column": 23
+                            },
+                            "identifierName": "storeyAABB"
+                          },
+                          "name": "storeyAABB"
+                        },
+                        "computed": false,
+                        "leadingComments": null
+                      },
+                      "right": {
+                        "type": "CallExpression",
+                        "start": 1414,
+                        "end": 1432,
+                        "loc": {
+                          "start": {
+                            "line": 50,
+                            "column": 26
+                          },
+                          "end": {
+                            "line": 50,
+                            "column": 44
+                          }
+                        },
+                        "callee": {
+                          "type": "MemberExpression",
+                          "start": 1414,
+                          "end": 1430,
+                          "loc": {
+                            "start": {
+                              "line": 50,
+                              "column": 26
+                            },
+                            "end": {
+                              "line": 50,
+                              "column": 42
+                            }
+                          },
+                          "object": {
+                            "type": "Identifier",
+                            "start": 1414,
+                            "end": 1424,
+                            "loc": {
+                              "start": {
+                                "line": 50,
+                                "column": 26
+                              },
+                              "end": {
+                                "line": 50,
+                                "column": 36
+                              },
+                              "identifierName": "storeyAABB"
+                            },
+                            "name": "storeyAABB"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 1425,
+                            "end": 1430,
+                            "loc": {
+                              "start": {
+                                "line": 50,
+                                "column": 37
+                              },
+                              "end": {
+                                "line": 50,
+                                "column": 42
+                              },
+                              "identifierName": "slice"
+                            },
+                            "name": "slice"
+                          },
+                          "computed": false
+                        },
+                        "arguments": []
+                      },
+                      "leadingComments": null
+                    },
+                    "leadingComments": [
+                      {
+                        "type": "CommentBlock",
+                        "value": "*\n         * Axis-aligned World-space boundary of the {@link Entity}s that represent the IfcBuildingStorey.\n         *\n         * The boundary is a six-element Float64Array containing the min/max extents of the\n         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````\n         *\n         * @property storeyAABB\n         * @type {Number[]}\n         ",
+                        "start": 1009,
+                        "end": 1387,
+                        "loc": {
+                          "start": {
+                            "line": 41,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 49,
+                            "column": 11
+                          }
+                        }
+                      }
+                    ],
+                    "trailingComments": [
+                      {
+                        "type": "CommentBlock",
+                        "value": "*\n         * Axis-aligned World-space boundary of the {@link Entity}s that represent the IfcBuildingStorey.\n         *\n         * The boundary is a six-element Float64Array containing the min/max extents of the\n         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````\n         *\n         * @deprecated\n         * @property storeyAABB\n         * @type {Number[]}\n         ",
+                        "start": 1443,
+                        "end": 1844,
+                        "loc": {
+                          "start": {
+                            "line": 52,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 61,
+                            "column": 11
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 1853,
+                    "end": 1881,
+                    "loc": {
+                      "start": {
+                        "line": 62,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 62,
+                        "column": 36
+                      }
+                    },
+                    "expression": {
+                      "type": "AssignmentExpression",
+                      "start": 1853,
+                      "end": 1880,
+                      "loc": {
+                        "start": {
+                          "line": 62,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 62,
+                          "column": 35
+                        }
+                      },
+                      "operator": "=",
+                      "left": {
+                        "type": "MemberExpression",
+                        "start": 1853,
+                        "end": 1862,
+                        "loc": {
+                          "start": {
+                            "line": 62,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 62,
+                            "column": 17
+                          }
+                        },
+                        "object": {
+                          "type": "ThisExpression",
+                          "start": 1853,
+                          "end": 1857,
+                          "loc": {
+                            "start": {
+                              "line": 62,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 62,
+                              "column": 12
+                            }
+                          },
+                          "leadingComments": null
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "start": 1858,
+                          "end": 1862,
+                          "loc": {
+                            "start": {
+                              "line": 62,
+                              "column": 13
+                            },
+                            "end": {
+                              "line": 62,
+                              "column": 17
+                            },
+                            "identifierName": "aabb"
+                          },
+                          "name": "aabb"
+                        },
+                        "computed": false,
+                        "leadingComments": null
+                      },
+                      "right": {
+                        "type": "MemberExpression",
+                        "start": 1865,
+                        "end": 1880,
+                        "loc": {
+                          "start": {
+                            "line": 62,
+                            "column": 20
+                          },
+                          "end": {
+                            "line": 62,
+                            "column": 35
+                          }
+                        },
+                        "object": {
+                          "type": "ThisExpression",
+                          "start": 1865,
+                          "end": 1869,
+                          "loc": {
+                            "start": {
+                              "line": 62,
+                              "column": 20
+                            },
+                            "end": {
+                              "line": 62,
+                              "column": 24
+                            }
+                          }
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "start": 1870,
+                          "end": 1880,
+                          "loc": {
+                            "start": {
+                              "line": 62,
+                              "column": 25
+                            },
+                            "end": {
+                              "line": 62,
+                              "column": 35
+                            },
+                            "identifierName": "storeyAABB"
+                          },
+                          "name": "storeyAABB"
+                        },
+                        "computed": false
+                      },
+                      "leadingComments": null
+                    },
+                    "leadingComments": [
+                      {
+                        "type": "CommentBlock",
+                        "value": "*\n         * Axis-aligned World-space boundary of the {@link Entity}s that represent the IfcBuildingStorey.\n         *\n         * The boundary is a six-element Float64Array containing the min/max extents of the\n         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````\n         *\n         * @deprecated\n         * @property storeyAABB\n         * @type {Number[]}\n         ",
+                        "start": 1443,
+                        "end": 1844,
+                        "loc": {
+                          "start": {
+                            "line": 52,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 61,
+                            "column": 11
+                          }
+                        }
+                      }
+                    ],
+                    "trailingComments": [
+                      {
+                        "type": "CommentBlock",
+                        "value": "*\n         * Axis-aligned World-space boundary of the {@link Entity}s that represent the model.\n         *\n         * The boundary is a six-element Float64Array containing the min/max extents of the\n         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````\n         *\n         * @property modelAABB\n         * @type {Number[]}\n         ",
+                        "start": 1891,
+                        "end": 2256,
+                        "loc": {
+                          "start": {
+                            "line": 64,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 72,
+                            "column": 11
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 2265,
+                    "end": 2300,
+                    "loc": {
+                      "start": {
+                        "line": 73,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 73,
+                        "column": 43
+                      }
+                    },
+                    "expression": {
+                      "type": "AssignmentExpression",
+                      "start": 2265,
+                      "end": 2299,
+                      "loc": {
+                        "start": {
+                          "line": 73,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 73,
+                          "column": 42
+                        }
+                      },
+                      "operator": "=",
+                      "left": {
+                        "type": "MemberExpression",
+                        "start": 2265,
+                        "end": 2279,
+                        "loc": {
+                          "start": {
+                            "line": 73,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 73,
+                            "column": 22
+                          }
+                        },
+                        "object": {
+                          "type": "ThisExpression",
+                          "start": 2265,
+                          "end": 2269,
+                          "loc": {
+                            "start": {
+                              "line": 73,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 73,
+                              "column": 12
+                            }
+                          },
+                          "leadingComments": null
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "start": 2270,
+                          "end": 2279,
+                          "loc": {
+                            "start": {
+                              "line": 73,
+                              "column": 13
+                            },
+                            "end": {
+                              "line": 73,
+                              "column": 22
+                            },
+                            "identifierName": "modelAABB"
+                          },
+                          "name": "modelAABB"
+                        },
+                        "computed": false,
+                        "leadingComments": null
+                      },
+                      "right": {
+                        "type": "CallExpression",
+                        "start": 2282,
+                        "end": 2299,
+                        "loc": {
+                          "start": {
+                            "line": 73,
+                            "column": 25
+                          },
+                          "end": {
+                            "line": 73,
+                            "column": 42
+                          }
+                        },
+                        "callee": {
+                          "type": "MemberExpression",
+                          "start": 2282,
+                          "end": 2297,
+                          "loc": {
+                            "start": {
+                              "line": 73,
+                              "column": 25
+                            },
+                            "end": {
+                              "line": 73,
+                              "column": 40
+                            }
+                          },
+                          "object": {
+                            "type": "Identifier",
+                            "start": 2282,
+                            "end": 2291,
+                            "loc": {
+                              "start": {
+                                "line": 73,
+                                "column": 25
+                              },
+                              "end": {
+                                "line": 73,
+                                "column": 34
+                              },
+                              "identifierName": "modelAABB"
+                            },
+                            "name": "modelAABB"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 2292,
+                            "end": 2297,
+                            "loc": {
+                              "start": {
+                                "line": 73,
+                                "column": 35
+                              },
+                              "end": {
+                                "line": 73,
+                                "column": 40
+                              },
+                              "identifierName": "slice"
+                            },
+                            "name": "slice"
+                          },
+                          "computed": false
+                        },
+                        "arguments": []
+                      },
+                      "leadingComments": null
+                    },
+                    "leadingComments": [
+                      {
+                        "type": "CommentBlock",
+                        "value": "*\n         * Axis-aligned World-space boundary of the {@link Entity}s that represent the model.\n         *\n         * The boundary is a six-element Float64Array containing the min/max extents of the\n         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````\n         *\n         * @property modelAABB\n         * @type {Number[]}\n         ",
+                        "start": 1891,
+                        "end": 2256,
+                        "loc": {
+                          "start": {
+                            "line": 64,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 72,
+                            "column": 11
+                          }
+                        }
+                      }
+                    ],
+                    "trailingComments": [
+                      {
+                        "type": "CommentBlock",
+                        "value": "* Number of {@link Entity}s within the IfcBuildingStorey.\n         *\n         * @property numObjects\n         * @type {Number}\n         ",
+                        "start": 2310,
+                        "end": 2450,
+                        "loc": {
+                          "start": {
+                            "line": 75,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 79,
+                            "column": 11
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 2459,
+                    "end": 2488,
+                    "loc": {
+                      "start": {
+                        "line": 80,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 80,
+                        "column": 37
+                      }
+                    },
+                    "expression": {
+                      "type": "AssignmentExpression",
+                      "start": 2459,
+                      "end": 2487,
+                      "loc": {
+                        "start": {
+                          "line": 80,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 80,
+                          "column": 36
+                        }
+                      },
+                      "operator": "=",
+                      "left": {
+                        "type": "MemberExpression",
+                        "start": 2459,
+                        "end": 2474,
+                        "loc": {
+                          "start": {
+                            "line": 80,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 80,
+                            "column": 23
+                          }
+                        },
+                        "object": {
+                          "type": "ThisExpression",
+                          "start": 2459,
+                          "end": 2463,
+                          "loc": {
+                            "start": {
+                              "line": 80,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 80,
+                              "column": 12
+                            }
+                          },
+                          "leadingComments": null
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "start": 2464,
+                          "end": 2474,
+                          "loc": {
+                            "start": {
+                              "line": 80,
+                              "column": 13
+                            },
+                            "end": {
+                              "line": 80,
+                              "column": 23
+                            },
+                            "identifierName": "numObjects"
+                          },
+                          "name": "numObjects"
+                        },
+                        "computed": false,
+                        "leadingComments": null
+                      },
+                      "right": {
+                        "type": "Identifier",
+                        "start": 2477,
+                        "end": 2487,
+                        "loc": {
+                          "start": {
+                            "line": 80,
+                            "column": 26
+                          },
+                          "end": {
+                            "line": 80,
+                            "column": 36
+                          },
+                          "identifierName": "numObjects"
+                        },
+                        "name": "numObjects"
+                      },
+                      "leadingComments": null
+                    },
+                    "leadingComments": [
+                      {
+                        "type": "CommentBlock",
+                        "value": "* Number of {@link Entity}s within the IfcBuildingStorey.\n         *\n         * @property numObjects\n         * @type {Number}\n         ",
+                        "start": 2310,
+                        "end": 2450,
+                        "loc": {
+                          "start": {
+                            "line": 75,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 79,
+                            "column": 11
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "directives": []
+              },
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "*\n     * @private\n     ",
+                  "start": 142,
+                  "end": 169,
+                  "loc": {
+                    "start": {
+                      "line": 8,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 10,
+                      "column": 7
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "leadingComments": [],
+        "name": "_",
+        "trailingComments": []
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 2498,
+        "end": 2514,
+        "loc": {
+          "start": {
+            "line": 84,
+            "column": 0
+          },
+          "end": {
+            "line": 84,
+            "column": 16
+          }
+        },
+        "declaration": null,
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start": 2506,
+            "end": 2512,
+            "loc": {
+              "start": {
+                "line": 84,
+                "column": 8
+              },
+              "end": {
+                "line": 84,
+                "column": 14
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 2506,
+              "end": 2512,
+              "loc": {
+                "start": {
+                  "line": 84,
+                  "column": 8
+                },
+                "end": {
+                  "line": 84,
+                  "column": 14
+                },
+                "identifierName": "Storey"
+              },
+              "name": "Storey"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 2506,
+              "end": 2512,
+              "loc": {
+                "start": {
+                  "line": 84,
+                  "column": 8
+                },
+                "end": {
+                  "line": 84,
+                  "column": 14
+                },
+                "identifierName": "Storey"
+              },
+              "name": "Storey"
+            }
+          }
+        ],
+        "source": null
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 2498,
+        "end": 2514,
+        "loc": {
+          "start": {
+            "line": 84,
+            "column": 0
+          },
+          "end": {
+            "line": 84,
+            "column": 16
+          }
+        },
+        "declaration": {
+          "type": "ClassDeclaration",
+          "start": 122,
+          "end": 2496,
+          "loc": {
+            "start": {
+              "line": 6,
+              "column": 0
+            },
+            "end": {
+              "line": 82,
+              "column": 1
+            }
+          },
+          "id": {
+            "type": "Identifier",
+            "start": 128,
+            "end": 134,
+            "loc": {
+              "start": {
+                "line": 6,
+                "column": 6
+              },
+              "end": {
+                "line": 6,
+                "column": 12
+              },
+              "identifierName": "Storey"
+            },
+            "name": "Storey",
+            "leadingComments": null
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start": 135,
+            "end": 2496,
+            "loc": {
+              "start": {
+                "line": 6,
+                "column": 13
+              },
+              "end": {
+                "line": 82,
+                "column": 1
+              }
+            },
+            "body": [
+              {
+                "type": "ClassMethod",
+                "start": 174,
+                "end": 2494,
+                "loc": {
+                  "start": {
+                    "line": 11,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 81,
+                    "column": 5
+                  }
+                },
+                "static": false,
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 174,
+                  "end": 185,
+                  "loc": {
+                    "start": {
+                      "line": 11,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 11,
+                      "column": 15
+                    },
+                    "identifierName": "constructor"
+                  },
+                  "name": "constructor",
+                  "leadingComments": null
+                },
+                "kind": "constructor",
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 186,
+                    "end": 192,
+                    "loc": {
+                      "start": {
+                        "line": 11,
+                        "column": 16
+                      },
+                      "end": {
+                        "line": 11,
+                        "column": 22
+                      },
+                      "identifierName": "plugin"
+                    },
+                    "name": "plugin"
+                  },
+                  {
+                    "type": "Identifier",
+                    "start": 194,
+                    "end": 203,
+                    "loc": {
+                      "start": {
+                        "line": 11,
+                        "column": 24
+                      },
+                      "end": {
+                        "line": 11,
+                        "column": 33
+                      },
+                      "identifierName": "modelAABB"
+                    },
+                    "name": "modelAABB"
+                  },
+                  {
+                    "type": "Identifier",
+                    "start": 205,
+                    "end": 215,
+                    "loc": {
+                      "start": {
+                        "line": 11,
+                        "column": 35
+                      },
+                      "end": {
+                        "line": 11,
+                        "column": 45
+                      },
+                      "identifierName": "storeyAABB"
+                    },
+                    "name": "storeyAABB"
+                  },
+                  {
+                    "type": "Identifier",
+                    "start": 217,
+                    "end": 224,
+                    "loc": {
+                      "start": {
+                        "line": 11,
+                        "column": 47
+                      },
+                      "end": {
+                        "line": 11,
+                        "column": 54
+                      },
+                      "identifierName": "modelId"
+                    },
+                    "name": "modelId"
+                  },
+                  {
+                    "type": "Identifier",
+                    "start": 226,
+                    "end": 234,
+                    "loc": {
+                      "start": {
+                        "line": 11,
+                        "column": 56
+                      },
+                      "end": {
+                        "line": 11,
+                        "column": 64
+                      },
+                      "identifierName": "storeyId"
+                    },
+                    "name": "storeyId"
+                  },
+                  {
+                    "type": "Identifier",
+                    "start": 236,
+                    "end": 246,
+                    "loc": {
+                      "start": {
+                        "line": 11,
+                        "column": 66
+                      },
+                      "end": {
+                        "line": 11,
+                        "column": 76
+                      },
+                      "identifierName": "numObjects"
+                    },
+                    "name": "numObjects"
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 248,
+                  "end": 2494,
+                  "loc": {
+                    "start": {
+                      "line": 11,
+                      "column": 78
+                    },
+                    "end": {
+                      "line": 81,
+                      "column": 5
+                    }
+                  },
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 424,
+                      "end": 445,
+                      "loc": {
+                        "start": {
+                          "line": 19,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 19,
+                          "column": 29
+                        }
+                      },
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "start": 424,
+                        "end": 444,
+                        "loc": {
+                          "start": {
+                            "line": 19,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 19,
+                            "column": 28
+                          }
+                        },
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "start": 424,
+                          "end": 435,
+                          "loc": {
+                            "start": {
+                              "line": 19,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 19,
+                              "column": 19
+                            }
+                          },
+                          "object": {
+                            "type": "ThisExpression",
+                            "start": 424,
+                            "end": 428,
+                            "loc": {
+                              "start": {
+                                "line": 19,
+                                "column": 8
+                              },
+                              "end": {
+                                "line": 19,
+                                "column": 12
+                              }
+                            },
+                            "leadingComments": null
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 429,
+                            "end": 435,
+                            "loc": {
+                              "start": {
+                                "line": 19,
+                                "column": 13
+                              },
+                              "end": {
+                                "line": 19,
+                                "column": 19
+                              },
+                              "identifierName": "plugin"
+                            },
+                            "name": "plugin"
+                          },
+                          "computed": false,
+                          "leadingComments": null
+                        },
+                        "right": {
+                          "type": "Identifier",
+                          "start": 438,
+                          "end": 444,
+                          "loc": {
+                            "start": {
+                              "line": 19,
+                              "column": 22
+                            },
+                            "end": {
+                              "line": 19,
+                              "column": 28
+                            },
+                            "identifierName": "plugin"
+                          },
+                          "name": "plugin"
+                        },
+                        "leadingComments": null
+                      },
+                      "leadingComments": [
+                        {
+                          "type": "CommentBlock",
+                          "value": "*\n         * The {@link StoreyViewsPlugin} this Storey belongs to.\n         *\n         * @property plugin\n         * @type {StoreyViewsPlugin}\n         ",
+                          "start": 259,
+                          "end": 415,
+                          "loc": {
+                            "start": {
+                              "line": 13,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 18,
+                              "column": 11
+                            }
+                          }
+                        }
+                      ],
+                      "trailingComments": [
+                        {
+                          "type": "CommentBlock",
+                          "value": "*\n         * ID of the IfcBuildingStorey.\n         *\n         * This matches IDs of the IfcBuildingStorey's {@link MetaObject} and {@link Entity}.\n         *\n         * @property storeyId\n         * @type {String}\n         ",
+                          "start": 455,
+                          "end": 682,
+                          "loc": {
+                            "start": {
+                              "line": 21,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 28,
+                              "column": 11
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 691,
+                      "end": 716,
+                      "loc": {
+                        "start": {
+                          "line": 29,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 29,
+                          "column": 33
+                        }
+                      },
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "start": 691,
+                        "end": 715,
+                        "loc": {
+                          "start": {
+                            "line": 29,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 29,
+                            "column": 32
+                          }
+                        },
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "start": 691,
+                          "end": 704,
+                          "loc": {
+                            "start": {
+                              "line": 29,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 29,
+                              "column": 21
+                            }
+                          },
+                          "object": {
+                            "type": "ThisExpression",
+                            "start": 691,
+                            "end": 695,
+                            "loc": {
+                              "start": {
+                                "line": 29,
+                                "column": 8
+                              },
+                              "end": {
+                                "line": 29,
+                                "column": 12
+                              }
+                            },
+                            "leadingComments": null
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 696,
+                            "end": 704,
+                            "loc": {
+                              "start": {
+                                "line": 29,
+                                "column": 13
+                              },
+                              "end": {
+                                "line": 29,
+                                "column": 21
+                              },
+                              "identifierName": "storeyId"
+                            },
+                            "name": "storeyId"
+                          },
+                          "computed": false,
+                          "leadingComments": null
+                        },
+                        "right": {
+                          "type": "Identifier",
+                          "start": 707,
+                          "end": 715,
+                          "loc": {
+                            "start": {
+                              "line": 29,
+                              "column": 24
+                            },
+                            "end": {
+                              "line": 29,
+                              "column": 32
+                            },
+                            "identifierName": "storeyId"
+                          },
+                          "name": "storeyId"
+                        },
+                        "leadingComments": null
+                      },
+                      "leadingComments": [
+                        {
+                          "type": "CommentBlock",
+                          "value": "*\n         * ID of the IfcBuildingStorey.\n         *\n         * This matches IDs of the IfcBuildingStorey's {@link MetaObject} and {@link Entity}.\n         *\n         * @property storeyId\n         * @type {String}\n         ",
+                          "start": 455,
+                          "end": 682,
+                          "loc": {
+                            "start": {
+                              "line": 21,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 28,
+                              "column": 11
+                            }
+                          }
+                        }
+                      ],
+                      "trailingComments": [
+                        {
+                          "type": "CommentBlock",
+                          "value": "*\n         * ID of the model.\n         *\n         * This matches the ID of the {@link MetaModel} that contains the IfcBuildingStorey's {@link MetaObject}.\n         *\n         * @property modelId\n         * @type {String|Number}\n         ",
+                          "start": 726,
+                          "end": 967,
+                          "loc": {
+                            "start": {
+                              "line": 31,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 38,
+                              "column": 11
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 976,
+                      "end": 999,
+                      "loc": {
+                        "start": {
+                          "line": 39,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 39,
+                          "column": 31
+                        }
+                      },
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "start": 976,
+                        "end": 998,
+                        "loc": {
+                          "start": {
+                            "line": 39,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 39,
+                            "column": 30
+                          }
+                        },
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "start": 976,
+                          "end": 988,
+                          "loc": {
+                            "start": {
+                              "line": 39,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 39,
+                              "column": 20
+                            }
+                          },
+                          "object": {
+                            "type": "ThisExpression",
+                            "start": 976,
+                            "end": 980,
+                            "loc": {
+                              "start": {
+                                "line": 39,
+                                "column": 8
+                              },
+                              "end": {
+                                "line": 39,
+                                "column": 12
+                              }
+                            },
+                            "leadingComments": null
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 981,
+                            "end": 988,
+                            "loc": {
+                              "start": {
+                                "line": 39,
+                                "column": 13
+                              },
+                              "end": {
+                                "line": 39,
+                                "column": 20
+                              },
+                              "identifierName": "modelId"
+                            },
+                            "name": "modelId"
+                          },
+                          "computed": false,
+                          "leadingComments": null
+                        },
+                        "right": {
+                          "type": "Identifier",
+                          "start": 991,
+                          "end": 998,
+                          "loc": {
+                            "start": {
+                              "line": 39,
+                              "column": 23
+                            },
+                            "end": {
+                              "line": 39,
+                              "column": 30
+                            },
+                            "identifierName": "modelId"
+                          },
+                          "name": "modelId"
+                        },
+                        "leadingComments": null
+                      },
+                      "leadingComments": [
+                        {
+                          "type": "CommentBlock",
+                          "value": "*\n         * ID of the model.\n         *\n         * This matches the ID of the {@link MetaModel} that contains the IfcBuildingStorey's {@link MetaObject}.\n         *\n         * @property modelId\n         * @type {String|Number}\n         ",
+                          "start": 726,
+                          "end": 967,
+                          "loc": {
+                            "start": {
+                              "line": 31,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 38,
+                              "column": 11
+                            }
+                          }
+                        }
+                      ],
+                      "trailingComments": [
+                        {
+                          "type": "CommentBlock",
+                          "value": "*\n         * Axis-aligned World-space boundary of the {@link Entity}s that represent the IfcBuildingStorey.\n         *\n         * The boundary is a six-element Float64Array containing the min/max extents of the\n         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````\n         *\n         * @property storeyAABB\n         * @type {Number[]}\n         ",
+                          "start": 1009,
+                          "end": 1387,
+                          "loc": {
+                            "start": {
+                              "line": 41,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 49,
+                              "column": 11
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 1396,
+                      "end": 1433,
+                      "loc": {
+                        "start": {
+                          "line": 50,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 50,
+                          "column": 45
+                        }
+                      },
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "start": 1396,
+                        "end": 1432,
+                        "loc": {
+                          "start": {
+                            "line": 50,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 50,
+                            "column": 44
+                          }
+                        },
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "start": 1396,
+                          "end": 1411,
+                          "loc": {
+                            "start": {
+                              "line": 50,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 50,
+                              "column": 23
+                            }
+                          },
+                          "object": {
+                            "type": "ThisExpression",
+                            "start": 1396,
+                            "end": 1400,
+                            "loc": {
+                              "start": {
+                                "line": 50,
+                                "column": 8
+                              },
+                              "end": {
+                                "line": 50,
+                                "column": 12
+                              }
+                            },
+                            "leadingComments": null
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 1401,
+                            "end": 1411,
+                            "loc": {
+                              "start": {
+                                "line": 50,
+                                "column": 13
+                              },
+                              "end": {
+                                "line": 50,
+                                "column": 23
+                              },
+                              "identifierName": "storeyAABB"
+                            },
+                            "name": "storeyAABB"
+                          },
+                          "computed": false,
+                          "leadingComments": null
+                        },
+                        "right": {
+                          "type": "CallExpression",
+                          "start": 1414,
+                          "end": 1432,
+                          "loc": {
+                            "start": {
+                              "line": 50,
+                              "column": 26
+                            },
+                            "end": {
+                              "line": 50,
+                              "column": 44
+                            }
+                          },
+                          "callee": {
+                            "type": "MemberExpression",
+                            "start": 1414,
+                            "end": 1430,
+                            "loc": {
+                              "start": {
+                                "line": 50,
+                                "column": 26
+                              },
+                              "end": {
+                                "line": 50,
+                                "column": 42
+                              }
+                            },
+                            "object": {
+                              "type": "Identifier",
+                              "start": 1414,
+                              "end": 1424,
+                              "loc": {
+                                "start": {
+                                  "line": 50,
+                                  "column": 26
+                                },
+                                "end": {
+                                  "line": 50,
+                                  "column": 36
+                                },
+                                "identifierName": "storeyAABB"
+                              },
+                              "name": "storeyAABB"
+                            },
+                            "property": {
+                              "type": "Identifier",
+                              "start": 1425,
+                              "end": 1430,
+                              "loc": {
+                                "start": {
+                                  "line": 50,
+                                  "column": 37
+                                },
+                                "end": {
+                                  "line": 50,
+                                  "column": 42
+                                },
+                                "identifierName": "slice"
+                              },
+                              "name": "slice"
+                            },
+                            "computed": false
+                          },
+                          "arguments": []
+                        },
+                        "leadingComments": null
+                      },
+                      "leadingComments": [
+                        {
+                          "type": "CommentBlock",
+                          "value": "*\n         * Axis-aligned World-space boundary of the {@link Entity}s that represent the IfcBuildingStorey.\n         *\n         * The boundary is a six-element Float64Array containing the min/max extents of the\n         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````\n         *\n         * @property storeyAABB\n         * @type {Number[]}\n         ",
+                          "start": 1009,
+                          "end": 1387,
+                          "loc": {
+                            "start": {
+                              "line": 41,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 49,
+                              "column": 11
+                            }
+                          }
+                        }
+                      ],
+                      "trailingComments": [
+                        {
+                          "type": "CommentBlock",
+                          "value": "*\n         * Axis-aligned World-space boundary of the {@link Entity}s that represent the IfcBuildingStorey.\n         *\n         * The boundary is a six-element Float64Array containing the min/max extents of the\n         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````\n         *\n         * @deprecated\n         * @property storeyAABB\n         * @type {Number[]}\n         ",
+                          "start": 1443,
+                          "end": 1844,
+                          "loc": {
+                            "start": {
+                              "line": 52,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 61,
+                              "column": 11
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 1853,
+                      "end": 1881,
+                      "loc": {
+                        "start": {
+                          "line": 62,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 62,
+                          "column": 36
+                        }
+                      },
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "start": 1853,
+                        "end": 1880,
+                        "loc": {
+                          "start": {
+                            "line": 62,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 62,
+                            "column": 35
+                          }
+                        },
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "start": 1853,
+                          "end": 1862,
+                          "loc": {
+                            "start": {
+                              "line": 62,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 62,
+                              "column": 17
+                            }
+                          },
+                          "object": {
+                            "type": "ThisExpression",
+                            "start": 1853,
+                            "end": 1857,
+                            "loc": {
+                              "start": {
+                                "line": 62,
+                                "column": 8
+                              },
+                              "end": {
+                                "line": 62,
+                                "column": 12
+                              }
+                            },
+                            "leadingComments": null
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 1858,
+                            "end": 1862,
+                            "loc": {
+                              "start": {
+                                "line": 62,
+                                "column": 13
+                              },
+                              "end": {
+                                "line": 62,
+                                "column": 17
+                              },
+                              "identifierName": "aabb"
+                            },
+                            "name": "aabb"
+                          },
+                          "computed": false,
+                          "leadingComments": null
+                        },
+                        "right": {
+                          "type": "MemberExpression",
+                          "start": 1865,
+                          "end": 1880,
+                          "loc": {
+                            "start": {
+                              "line": 62,
+                              "column": 20
+                            },
+                            "end": {
+                              "line": 62,
+                              "column": 35
+                            }
+                          },
+                          "object": {
+                            "type": "ThisExpression",
+                            "start": 1865,
+                            "end": 1869,
+                            "loc": {
+                              "start": {
+                                "line": 62,
+                                "column": 20
+                              },
+                              "end": {
+                                "line": 62,
+                                "column": 24
+                              }
+                            }
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 1870,
+                            "end": 1880,
+                            "loc": {
+                              "start": {
+                                "line": 62,
+                                "column": 25
+                              },
+                              "end": {
+                                "line": 62,
+                                "column": 35
+                              },
+                              "identifierName": "storeyAABB"
+                            },
+                            "name": "storeyAABB"
+                          },
+                          "computed": false
+                        },
+                        "leadingComments": null
+                      },
+                      "leadingComments": [
+                        {
+                          "type": "CommentBlock",
+                          "value": "*\n         * Axis-aligned World-space boundary of the {@link Entity}s that represent the IfcBuildingStorey.\n         *\n         * The boundary is a six-element Float64Array containing the min/max extents of the\n         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````\n         *\n         * @deprecated\n         * @property storeyAABB\n         * @type {Number[]}\n         ",
+                          "start": 1443,
+                          "end": 1844,
+                          "loc": {
+                            "start": {
+                              "line": 52,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 61,
+                              "column": 11
+                            }
+                          }
+                        }
+                      ],
+                      "trailingComments": [
+                        {
+                          "type": "CommentBlock",
+                          "value": "*\n         * Axis-aligned World-space boundary of the {@link Entity}s that represent the model.\n         *\n         * The boundary is a six-element Float64Array containing the min/max extents of the\n         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````\n         *\n         * @property modelAABB\n         * @type {Number[]}\n         ",
+                          "start": 1891,
+                          "end": 2256,
+                          "loc": {
+                            "start": {
+                              "line": 64,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 72,
+                              "column": 11
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 2265,
+                      "end": 2300,
+                      "loc": {
+                        "start": {
+                          "line": 73,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 73,
+                          "column": 43
+                        }
+                      },
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "start": 2265,
+                        "end": 2299,
+                        "loc": {
+                          "start": {
+                            "line": 73,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 73,
+                            "column": 42
+                          }
+                        },
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "start": 2265,
+                          "end": 2279,
+                          "loc": {
+                            "start": {
+                              "line": 73,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 73,
+                              "column": 22
+                            }
+                          },
+                          "object": {
+                            "type": "ThisExpression",
+                            "start": 2265,
+                            "end": 2269,
+                            "loc": {
+                              "start": {
+                                "line": 73,
+                                "column": 8
+                              },
+                              "end": {
+                                "line": 73,
+                                "column": 12
+                              }
+                            },
+                            "leadingComments": null
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 2270,
+                            "end": 2279,
+                            "loc": {
+                              "start": {
+                                "line": 73,
+                                "column": 13
+                              },
+                              "end": {
+                                "line": 73,
+                                "column": 22
+                              },
+                              "identifierName": "modelAABB"
+                            },
+                            "name": "modelAABB"
+                          },
+                          "computed": false,
+                          "leadingComments": null
+                        },
+                        "right": {
+                          "type": "CallExpression",
+                          "start": 2282,
+                          "end": 2299,
+                          "loc": {
+                            "start": {
+                              "line": 73,
+                              "column": 25
+                            },
+                            "end": {
+                              "line": 73,
+                              "column": 42
+                            }
+                          },
+                          "callee": {
+                            "type": "MemberExpression",
+                            "start": 2282,
+                            "end": 2297,
+                            "loc": {
+                              "start": {
+                                "line": 73,
+                                "column": 25
+                              },
+                              "end": {
+                                "line": 73,
+                                "column": 40
+                              }
+                            },
+                            "object": {
+                              "type": "Identifier",
+                              "start": 2282,
+                              "end": 2291,
+                              "loc": {
+                                "start": {
+                                  "line": 73,
+                                  "column": 25
+                                },
+                                "end": {
+                                  "line": 73,
+                                  "column": 34
+                                },
+                                "identifierName": "modelAABB"
+                              },
+                              "name": "modelAABB"
+                            },
+                            "property": {
+                              "type": "Identifier",
+                              "start": 2292,
+                              "end": 2297,
+                              "loc": {
+                                "start": {
+                                  "line": 73,
+                                  "column": 35
+                                },
+                                "end": {
+                                  "line": 73,
+                                  "column": 40
+                                },
+                                "identifierName": "slice"
+                              },
+                              "name": "slice"
+                            },
+                            "computed": false
+                          },
+                          "arguments": []
+                        },
+                        "leadingComments": null
+                      },
+                      "leadingComments": [
+                        {
+                          "type": "CommentBlock",
+                          "value": "*\n         * Axis-aligned World-space boundary of the {@link Entity}s that represent the model.\n         *\n         * The boundary is a six-element Float64Array containing the min/max extents of the\n         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````\n         *\n         * @property modelAABB\n         * @type {Number[]}\n         ",
+                          "start": 1891,
+                          "end": 2256,
+                          "loc": {
+                            "start": {
+                              "line": 64,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 72,
+                              "column": 11
+                            }
+                          }
+                        }
+                      ],
+                      "trailingComments": [
+                        {
+                          "type": "CommentBlock",
+                          "value": "* Number of {@link Entity}s within the IfcBuildingStorey.\n         *\n         * @property numObjects\n         * @type {Number}\n         ",
+                          "start": 2310,
+                          "end": 2450,
+                          "loc": {
+                            "start": {
+                              "line": 75,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 79,
+                              "column": 11
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 2459,
+                      "end": 2488,
+                      "loc": {
+                        "start": {
+                          "line": 80,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 80,
+                          "column": 37
+                        }
+                      },
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "start": 2459,
+                        "end": 2487,
+                        "loc": {
+                          "start": {
+                            "line": 80,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 80,
+                            "column": 36
+                          }
+                        },
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "start": 2459,
+                          "end": 2474,
+                          "loc": {
+                            "start": {
+                              "line": 80,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 80,
+                              "column": 23
+                            }
+                          },
+                          "object": {
+                            "type": "ThisExpression",
+                            "start": 2459,
+                            "end": 2463,
+                            "loc": {
+                              "start": {
+                                "line": 80,
+                                "column": 8
+                              },
+                              "end": {
+                                "line": 80,
+                                "column": 12
+                              }
+                            },
+                            "leadingComments": null
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "start": 2464,
+                            "end": 2474,
+                            "loc": {
+                              "start": {
+                                "line": 80,
+                                "column": 13
+                              },
+                              "end": {
+                                "line": 80,
+                                "column": 23
+                              },
+                              "identifierName": "numObjects"
+                            },
+                            "name": "numObjects"
+                          },
+                          "computed": false,
+                          "leadingComments": null
+                        },
+                        "right": {
+                          "type": "Identifier",
+                          "start": 2477,
+                          "end": 2487,
+                          "loc": {
+                            "start": {
+                              "line": 80,
+                              "column": 26
+                            },
+                            "end": {
+                              "line": 80,
+                              "column": 36
+                            },
+                            "identifierName": "numObjects"
+                          },
+                          "name": "numObjects"
+                        },
+                        "leadingComments": null
+                      },
+                      "leadingComments": [
+                        {
+                          "type": "CommentBlock",
+                          "value": "* Number of {@link Entity}s within the IfcBuildingStorey.\n         *\n         * @property numObjects\n         * @type {Number}\n         ",
+                          "start": 2310,
+                          "end": 2450,
+                          "loc": {
+                            "start": {
+                              "line": 75,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 79,
+                              "column": 11
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  "directives": []
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * @private\n     ",
+                    "start": 142,
+                    "end": 169,
+                    "loc": {
+                      "start": {
+                        "line": 8,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 10,
+                        "column": 7
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "leadingComments": [
+            {
+              "type": "CommentBlock",
+              "value": "*\n * @desc Information about an ````IfcBuildingStorey````.\n *\n * These are provided by a {@link StoreyViewsPlugin}.\n ",
+              "start": 0,
+              "end": 121,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 0
+                },
+                "end": {
+                  "line": 5,
+                  "column": 3
+                }
+              }
+            }
+          ],
+          "__PseudoExport__": false,
+          "trailingComments": []
+        },
+        "specifiers": null,
+        "source": null,
+        "leadingComments": null
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": "*\n * @desc Information about an ````IfcBuildingStorey````.\n *\n * These are provided by a {@link StoreyViewsPlugin}.\n ",
+      "start": 0,
+      "end": 121,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * @private\n     ",
+      "start": 142,
+      "end": 169,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 4
+        },
+        "end": {
+          "line": 10,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n         * The {@link StoreyViewsPlugin} this Storey belongs to.\n         *\n         * @property plugin\n         * @type {StoreyViewsPlugin}\n         ",
+      "start": 259,
+      "end": 415,
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 8
+        },
+        "end": {
+          "line": 18,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n         * ID of the IfcBuildingStorey.\n         *\n         * This matches IDs of the IfcBuildingStorey's {@link MetaObject} and {@link Entity}.\n         *\n         * @property storeyId\n         * @type {String}\n         ",
+      "start": 455,
+      "end": 682,
+      "loc": {
+        "start": {
+          "line": 21,
+          "column": 8
+        },
+        "end": {
+          "line": 28,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n         * ID of the model.\n         *\n         * This matches the ID of the {@link MetaModel} that contains the IfcBuildingStorey's {@link MetaObject}.\n         *\n         * @property modelId\n         * @type {String|Number}\n         ",
+      "start": 726,
+      "end": 967,
+      "loc": {
+        "start": {
+          "line": 31,
+          "column": 8
+        },
+        "end": {
+          "line": 38,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n         * Axis-aligned World-space boundary of the {@link Entity}s that represent the IfcBuildingStorey.\n         *\n         * The boundary is a six-element Float64Array containing the min/max extents of the\n         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````\n         *\n         * @property storeyAABB\n         * @type {Number[]}\n         ",
+      "start": 1009,
+      "end": 1387,
+      "loc": {
+        "start": {
+          "line": 41,
+          "column": 8
+        },
+        "end": {
+          "line": 49,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n         * Axis-aligned World-space boundary of the {@link Entity}s that represent the IfcBuildingStorey.\n         *\n         * The boundary is a six-element Float64Array containing the min/max extents of the\n         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````\n         *\n         * @deprecated\n         * @property storeyAABB\n         * @type {Number[]}\n         ",
+      "start": 1443,
+      "end": 1844,
+      "loc": {
+        "start": {
+          "line": 52,
+          "column": 8
+        },
+        "end": {
+          "line": 61,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n         * Axis-aligned World-space boundary of the {@link Entity}s that represent the model.\n         *\n         * The boundary is a six-element Float64Array containing the min/max extents of the\n         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````\n         *\n         * @property modelAABB\n         * @type {Number[]}\n         ",
+      "start": 1891,
+      "end": 2256,
+      "loc": {
+        "start": {
+          "line": 64,
+          "column": 8
+        },
+        "end": {
+          "line": 72,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "* Number of {@link Entity}s within the IfcBuildingStorey.\n         *\n         * @property numObjects\n         * @type {Number}\n         ",
+      "start": 2310,
+      "end": 2450,
+      "loc": {
+        "start": {
+          "line": 75,
+          "column": 8
+        },
+        "end": {
+          "line": 79,
+          "column": 11
+        }
+      }
+    }
+  ],
+  "tokens": [
+    {
+      "type": "CommentBlock",
+      "value": "*\n * @desc Information about an ````IfcBuildingStorey````.\n *\n * These are provided by a {@link StoreyViewsPlugin}.\n ",
+      "start": 0,
+      "end": 121,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "class",
+        "keyword": "class",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "class",
+      "start": 122,
+      "end": 127,
+      "loc": {
+        "start": {
+          "line": 6,
+          "column": 0
+        },
+        "end": {
+          "line": 6,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "Storey",
+      "start": 128,
+      "end": 134,
+      "loc": {
+        "start": {
+          "line": 6,
+          "column": 6
+        },
+        "end": {
+          "line": 6,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 135,
+      "end": 136,
+      "loc": {
+        "start": {
+          "line": 6,
+          "column": 13
+        },
+        "end": {
+          "line": 6,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * @private\n     ",
+      "start": 142,
+      "end": 169,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 4
+        },
+        "end": {
+          "line": 10,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "constructor",
+      "start": 174,
+      "end": 185,
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 4
+        },
+        "end": {
+          "line": 11,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 185,
+      "end": 186,
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 15
+        },
+        "end": {
+          "line": 11,
+          "column": 16
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "plugin",
+      "start": 186,
+      "end": 192,
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 16
+        },
+        "end": {
+          "line": 11,
+          "column": 22
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 192,
+      "end": 193,
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 22
+        },
+        "end": {
+          "line": 11,
+          "column": 23
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "modelAABB",
+      "start": 194,
+      "end": 203,
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 24
+        },
+        "end": {
+          "line": 11,
+          "column": 33
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 203,
+      "end": 204,
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 33
+        },
+        "end": {
+          "line": 11,
+          "column": 34
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "storeyAABB",
+      "start": 205,
+      "end": 215,
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 35
+        },
+        "end": {
+          "line": 11,
+          "column": 45
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 215,
+      "end": 216,
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 45
+        },
+        "end": {
+          "line": 11,
+          "column": 46
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "modelId",
+      "start": 217,
+      "end": 224,
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 47
+        },
+        "end": {
+          "line": 11,
+          "column": 54
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 224,
+      "end": 225,
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 54
+        },
+        "end": {
+          "line": 11,
+          "column": 55
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "storeyId",
+      "start": 226,
+      "end": 234,
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 56
+        },
+        "end": {
+          "line": 11,
+          "column": 64
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 234,
+      "end": 235,
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 64
+        },
+        "end": {
+          "line": 11,
+          "column": 65
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "numObjects",
+      "start": 236,
+      "end": 246,
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 66
+        },
+        "end": {
+          "line": 11,
+          "column": 76
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 246,
+      "end": 247,
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 76
+        },
+        "end": {
+          "line": 11,
+          "column": 77
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 248,
+      "end": 249,
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 78
+        },
+        "end": {
+          "line": 11,
+          "column": 79
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n         * The {@link StoreyViewsPlugin} this Storey belongs to.\n         *\n         * @property plugin\n         * @type {StoreyViewsPlugin}\n         ",
+      "start": 259,
+      "end": 415,
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 8
+        },
+        "end": {
+          "line": 18,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "this",
+        "keyword": "this",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "this",
+      "start": 424,
+      "end": 428,
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 8
+        },
+        "end": {
+          "line": 19,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 428,
+      "end": 429,
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 12
+        },
+        "end": {
+          "line": 19,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "plugin",
+      "start": 429,
+      "end": 435,
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 13
+        },
+        "end": {
+          "line": 19,
+          "column": 19
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "=",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": true,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "=",
+      "start": 436,
+      "end": 437,
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 20
+        },
+        "end": {
+          "line": 19,
+          "column": 21
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "plugin",
+      "start": 438,
+      "end": 444,
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 22
+        },
+        "end": {
+          "line": 19,
+          "column": 28
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 444,
+      "end": 445,
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 28
+        },
+        "end": {
+          "line": 19,
+          "column": 29
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n         * ID of the IfcBuildingStorey.\n         *\n         * This matches IDs of the IfcBuildingStorey's {@link MetaObject} and {@link Entity}.\n         *\n         * @property storeyId\n         * @type {String}\n         ",
+      "start": 455,
+      "end": 682,
+      "loc": {
+        "start": {
+          "line": 21,
+          "column": 8
+        },
+        "end": {
+          "line": 28,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "this",
+        "keyword": "this",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "this",
+      "start": 691,
+      "end": 695,
+      "loc": {
+        "start": {
+          "line": 29,
+          "column": 8
+        },
+        "end": {
+          "line": 29,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 695,
+      "end": 696,
+      "loc": {
+        "start": {
+          "line": 29,
+          "column": 12
+        },
+        "end": {
+          "line": 29,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "storeyId",
+      "start": 696,
+      "end": 704,
+      "loc": {
+        "start": {
+          "line": 29,
+          "column": 13
+        },
+        "end": {
+          "line": 29,
+          "column": 21
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "=",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": true,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "=",
+      "start": 705,
+      "end": 706,
+      "loc": {
+        "start": {
+          "line": 29,
+          "column": 22
+        },
+        "end": {
+          "line": 29,
+          "column": 23
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "storeyId",
+      "start": 707,
+      "end": 715,
+      "loc": {
+        "start": {
+          "line": 29,
+          "column": 24
+        },
+        "end": {
+          "line": 29,
+          "column": 32
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 715,
+      "end": 716,
+      "loc": {
+        "start": {
+          "line": 29,
+          "column": 32
+        },
+        "end": {
+          "line": 29,
+          "column": 33
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n         * ID of the model.\n         *\n         * This matches the ID of the {@link MetaModel} that contains the IfcBuildingStorey's {@link MetaObject}.\n         *\n         * @property modelId\n         * @type {String|Number}\n         ",
+      "start": 726,
+      "end": 967,
+      "loc": {
+        "start": {
+          "line": 31,
+          "column": 8
+        },
+        "end": {
+          "line": 38,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "this",
+        "keyword": "this",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "this",
+      "start": 976,
+      "end": 980,
+      "loc": {
+        "start": {
+          "line": 39,
+          "column": 8
+        },
+        "end": {
+          "line": 39,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 980,
+      "end": 981,
+      "loc": {
+        "start": {
+          "line": 39,
+          "column": 12
+        },
+        "end": {
+          "line": 39,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "modelId",
+      "start": 981,
+      "end": 988,
+      "loc": {
+        "start": {
+          "line": 39,
+          "column": 13
+        },
+        "end": {
+          "line": 39,
+          "column": 20
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "=",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": true,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "=",
+      "start": 989,
+      "end": 990,
+      "loc": {
+        "start": {
+          "line": 39,
+          "column": 21
+        },
+        "end": {
+          "line": 39,
+          "column": 22
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "modelId",
+      "start": 991,
+      "end": 998,
+      "loc": {
+        "start": {
+          "line": 39,
+          "column": 23
+        },
+        "end": {
+          "line": 39,
+          "column": 30
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 998,
+      "end": 999,
+      "loc": {
+        "start": {
+          "line": 39,
+          "column": 30
+        },
+        "end": {
+          "line": 39,
+          "column": 31
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n         * Axis-aligned World-space boundary of the {@link Entity}s that represent the IfcBuildingStorey.\n         *\n         * The boundary is a six-element Float64Array containing the min/max extents of the\n         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````\n         *\n         * @property storeyAABB\n         * @type {Number[]}\n         ",
+      "start": 1009,
+      "end": 1387,
+      "loc": {
+        "start": {
+          "line": 41,
+          "column": 8
+        },
+        "end": {
+          "line": 49,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "this",
+        "keyword": "this",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "this",
+      "start": 1396,
+      "end": 1400,
+      "loc": {
+        "start": {
+          "line": 50,
+          "column": 8
+        },
+        "end": {
+          "line": 50,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1400,
+      "end": 1401,
+      "loc": {
+        "start": {
+          "line": 50,
+          "column": 12
+        },
+        "end": {
+          "line": 50,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "storeyAABB",
+      "start": 1401,
+      "end": 1411,
+      "loc": {
+        "start": {
+          "line": 50,
+          "column": 13
+        },
+        "end": {
+          "line": 50,
+          "column": 23
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "=",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": true,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "=",
+      "start": 1412,
+      "end": 1413,
+      "loc": {
+        "start": {
+          "line": 50,
+          "column": 24
+        },
+        "end": {
+          "line": 50,
+          "column": 25
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "storeyAABB",
+      "start": 1414,
+      "end": 1424,
+      "loc": {
+        "start": {
+          "line": 50,
+          "column": 26
+        },
+        "end": {
+          "line": 50,
+          "column": 36
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1424,
+      "end": 1425,
+      "loc": {
+        "start": {
+          "line": 50,
+          "column": 36
+        },
+        "end": {
+          "line": 50,
+          "column": 37
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "slice",
+      "start": 1425,
+      "end": 1430,
+      "loc": {
+        "start": {
+          "line": 50,
+          "column": 37
+        },
+        "end": {
+          "line": 50,
+          "column": 42
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 1430,
+      "end": 1431,
+      "loc": {
+        "start": {
+          "line": 50,
+          "column": 42
+        },
+        "end": {
+          "line": 50,
+          "column": 43
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 1431,
+      "end": 1432,
+      "loc": {
+        "start": {
+          "line": 50,
+          "column": 43
+        },
+        "end": {
+          "line": 50,
+          "column": 44
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1432,
+      "end": 1433,
+      "loc": {
+        "start": {
+          "line": 50,
+          "column": 44
+        },
+        "end": {
+          "line": 50,
+          "column": 45
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n         * Axis-aligned World-space boundary of the {@link Entity}s that represent the IfcBuildingStorey.\n         *\n         * The boundary is a six-element Float64Array containing the min/max extents of the\n         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````\n         *\n         * @deprecated\n         * @property storeyAABB\n         * @type {Number[]}\n         ",
+      "start": 1443,
+      "end": 1844,
+      "loc": {
+        "start": {
+          "line": 52,
+          "column": 8
+        },
+        "end": {
+          "line": 61,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "this",
+        "keyword": "this",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "this",
+      "start": 1853,
+      "end": 1857,
+      "loc": {
+        "start": {
+          "line": 62,
+          "column": 8
+        },
+        "end": {
+          "line": 62,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1857,
+      "end": 1858,
+      "loc": {
+        "start": {
+          "line": 62,
+          "column": 12
+        },
+        "end": {
+          "line": 62,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "aabb",
+      "start": 1858,
+      "end": 1862,
+      "loc": {
+        "start": {
+          "line": 62,
+          "column": 13
+        },
+        "end": {
+          "line": 62,
+          "column": 17
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "=",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": true,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "=",
+      "start": 1863,
+      "end": 1864,
+      "loc": {
+        "start": {
+          "line": 62,
+          "column": 18
+        },
+        "end": {
+          "line": 62,
+          "column": 19
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "this",
+        "keyword": "this",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "this",
+      "start": 1865,
+      "end": 1869,
+      "loc": {
+        "start": {
+          "line": 62,
+          "column": 20
+        },
+        "end": {
+          "line": 62,
+          "column": 24
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1869,
+      "end": 1870,
+      "loc": {
+        "start": {
+          "line": 62,
+          "column": 24
+        },
+        "end": {
+          "line": 62,
+          "column": 25
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "storeyAABB",
+      "start": 1870,
+      "end": 1880,
+      "loc": {
+        "start": {
+          "line": 62,
+          "column": 25
+        },
+        "end": {
+          "line": 62,
+          "column": 35
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1880,
+      "end": 1881,
+      "loc": {
+        "start": {
+          "line": 62,
+          "column": 35
+        },
+        "end": {
+          "line": 62,
+          "column": 36
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n         * Axis-aligned World-space boundary of the {@link Entity}s that represent the model.\n         *\n         * The boundary is a six-element Float64Array containing the min/max extents of the\n         * axis-aligned boundary, ie. ````[xmin, ymin, zmin, xmax, ymax, zmax]````\n         *\n         * @property modelAABB\n         * @type {Number[]}\n         ",
+      "start": 1891,
+      "end": 2256,
+      "loc": {
+        "start": {
+          "line": 64,
+          "column": 8
+        },
+        "end": {
+          "line": 72,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "this",
+        "keyword": "this",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "this",
+      "start": 2265,
+      "end": 2269,
+      "loc": {
+        "start": {
+          "line": 73,
+          "column": 8
+        },
+        "end": {
+          "line": 73,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 2269,
+      "end": 2270,
+      "loc": {
+        "start": {
+          "line": 73,
+          "column": 12
+        },
+        "end": {
+          "line": 73,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "modelAABB",
+      "start": 2270,
+      "end": 2279,
+      "loc": {
+        "start": {
+          "line": 73,
+          "column": 13
+        },
+        "end": {
+          "line": 73,
+          "column": 22
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "=",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": true,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "=",
+      "start": 2280,
+      "end": 2281,
+      "loc": {
+        "start": {
+          "line": 73,
+          "column": 23
+        },
+        "end": {
+          "line": 73,
+          "column": 24
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "modelAABB",
+      "start": 2282,
+      "end": 2291,
+      "loc": {
+        "start": {
+          "line": 73,
+          "column": 25
+        },
+        "end": {
+          "line": 73,
+          "column": 34
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 2291,
+      "end": 2292,
+      "loc": {
+        "start": {
+          "line": 73,
+          "column": 34
+        },
+        "end": {
+          "line": 73,
+          "column": 35
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "slice",
+      "start": 2292,
+      "end": 2297,
+      "loc": {
+        "start": {
+          "line": 73,
+          "column": 35
+        },
+        "end": {
+          "line": 73,
+          "column": 40
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "(",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2297,
+      "end": 2298,
+      "loc": {
+        "start": {
+          "line": 73,
+          "column": 40
+        },
+        "end": {
+          "line": 73,
+          "column": 41
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ")",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2298,
+      "end": 2299,
+      "loc": {
+        "start": {
+          "line": 73,
+          "column": 41
+        },
+        "end": {
+          "line": 73,
+          "column": 42
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 2299,
+      "end": 2300,
+      "loc": {
+        "start": {
+          "line": 73,
+          "column": 42
+        },
+        "end": {
+          "line": 73,
+          "column": 43
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "* Number of {@link Entity}s within the IfcBuildingStorey.\n         *\n         * @property numObjects\n         * @type {Number}\n         ",
+      "start": 2310,
+      "end": 2450,
+      "loc": {
+        "start": {
+          "line": 75,
+          "column": 8
+        },
+        "end": {
+          "line": 79,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "this",
+        "keyword": "this",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "this",
+      "start": 2459,
+      "end": 2463,
+      "loc": {
+        "start": {
+          "line": 80,
+          "column": 8
+        },
+        "end": {
+          "line": 80,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ".",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 2463,
+      "end": 2464,
+      "loc": {
+        "start": {
+          "line": 80,
+          "column": 12
+        },
+        "end": {
+          "line": 80,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "numObjects",
+      "start": 2464,
+      "end": 2474,
+      "loc": {
+        "start": {
+          "line": 80,
+          "column": 13
+        },
+        "end": {
+          "line": 80,
+          "column": 23
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "=",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": true,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "=",
+      "start": 2475,
+      "end": 2476,
+      "loc": {
+        "start": {
+          "line": 80,
+          "column": 24
+        },
+        "end": {
+          "line": 80,
+          "column": 25
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "numObjects",
+      "start": 2477,
+      "end": 2487,
+      "loc": {
+        "start": {
+          "line": 80,
+          "column": 26
+        },
+        "end": {
+          "line": 80,
+          "column": 36
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 2487,
+      "end": 2488,
+      "loc": {
+        "start": {
+          "line": 80,
+          "column": 36
+        },
+        "end": {
+          "line": 80,
+          "column": 37
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2493,
+      "end": 2494,
+      "loc": {
+        "start": {
+          "line": 81,
+          "column": 4
+        },
+        "end": {
+          "line": 81,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2495,
+      "end": 2496,
+      "loc": {
+        "start": {
+          "line": 82,
+          "column": 0
+        },
+        "end": {
+          "line": 82,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 2498,
+      "end": 2504,
+      "loc": {
+        "start": {
+          "line": 84,
+          "column": 0
+        },
+        "end": {
+          "line": 84,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2505,
+      "end": 2506,
+      "loc": {
+        "start": {
+          "line": 84,
+          "column": 7
+        },
+        "end": {
+          "line": 84,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "Storey",
+      "start": 2506,
+      "end": 2512,
+      "loc": {
+        "start": {
+          "line": 84,
+          "column": 8
+        },
+        "end": {
+          "line": 84,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 2512,
+      "end": 2513,
+      "loc": {
+        "start": {
+          "line": 84,
+          "column": 14
+        },
+        "end": {
+          "line": 84,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 2513,
+      "end": 2514,
+      "loc": {
+        "start": {
+          "line": 84,
+          "column": 15
+        },
+        "end": {
+          "line": 84,
+          "column": 16
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "eof",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 2514,
+      "end": 2514,
+      "loc": {
+        "start": {
+          "line": 84,
+          "column": 16
+        },
+        "end": {
+          "line": 84,
+          "column": 16
+        }
+      }
+    }
+  ]
+}
