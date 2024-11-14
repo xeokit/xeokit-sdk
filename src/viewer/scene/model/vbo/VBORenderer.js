@@ -21,7 +21,7 @@ const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
  * @private
  */
 export class VBORenderer {
-    constructor(scene, instancing, primitive, withSAO = false, {progMode, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, hashLigthsSAO = false, hashGammaOutput = false, colorUniform = false, incrementDrawState = false, getHash, getLogDepth, renderPassFlag, appendVertexDefinitions, transformClipPos, needVertexColor, needPickColor, needGl_Position, needViewPosition, needViewMatrixNormal, appendVertexOutputs, appendFragmentDefinitions, sectionDiscardThreshold, needSliced, needvWorldPosition, needGl_FragCoord, needViewMatrixInFragment, appendFragmentOutputs} = {}) {
+    constructor(scene, instancing, primitive, withSAO = false, {progMode, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, colorUniform = false, incrementDrawState = false, getHash, getLogDepth, clippingCaps, renderPassFlag, appendVertexDefinitions, transformClipPos, needVertexColor, needPickColor, needGl_Position, needViewPosition, needViewMatrixNormal, needWorldNormal, appendVertexOutputs, appendFragmentDefinitions, sectionDiscardThreshold, needSliced, needvWorldPosition, needGl_FragCoord, needViewMatrixInFragment, appendFragmentOutputs} = {}) {
         this._scene = scene;
         this._instancing = instancing;
         this._primitive = primitive;
@@ -30,14 +30,13 @@ export class VBORenderer {
         this._edges = edges;
         this._useAlphaCutoff = useAlphaCutoff;
         this._hashPointsMaterial = hashPointsMaterial;
-        this._hashLigthsSAO = hashLigthsSAO;
-        this._hashGammaOutput = hashGammaOutput;
         this._colorUniform = colorUniform;
         this._incrementDrawState = incrementDrawState;
         this._hash = this._getHash();
 
         this._getRendererHash = getHash;
         this._getLogDepth = getLogDepth;
+        this._clippingCaps = clippingCaps;
         this._renderPassFlag = renderPassFlag;
         this._appendVertexDefinitions = appendVertexDefinitions;
         this._transformClipPos = transformClipPos;
@@ -46,6 +45,7 @@ export class VBORenderer {
         this._needGl_Position = needGl_Position;
         this._needViewPosition = needViewPosition;
         this._needViewMatrixNormal = needViewMatrixNormal;
+        this._needWorldNormal = needWorldNormal;
         this._appendVertexOutputs = appendVertexOutputs;
         this._appendFragmentDefinitions = appendFragmentDefinitions;
         this._sectionDiscardThreshold = sectionDiscardThreshold;
@@ -85,21 +85,7 @@ export class VBORenderer {
      */
     _getHash() {
         const scene = this._scene;
-        const hash = [ ];
-        if (this._hashGammaOutput) {
-            hash.push(scene.gammaOutput);
-        }
-        if (this._hashLigthsSAO) {
-            hash.push(scene._lightsState.getHash());
-        }
-        hash.push(scene._sectionPlanesState.getHash() + (this._hashPointsMaterial ? scene.pointsMaterial.hash : ""));
-        if (this._hashLigthsSAO) {
-            hash.push(this._withSAO ? "sao" : "nosao");
-        }
-        if (this._useAlphaCutoff) {
-            hash.push("alphaCutoff");
-        }
-        return hash.concat(this._getRendererHash ? this._getRendererHash() : [ ]).join(";");
+        return [ scene._sectionPlanesState.getHash() + (this._hashPointsMaterial ? scene.pointsMaterial.hash : "") ].concat(this._getRendererHash ? this._getRendererHash() : [ ]).join(";");
     }
 
     _buildShader() {
@@ -115,6 +101,7 @@ export class VBORenderer {
 
     _buildVertexShader() {
         const getLogDepth = this._getLogDepth;
+        const clippingCaps = this._clippingCaps;
         const renderPassFlag = this._renderPassFlag;
         const appendVertexDefinitions = this._appendVertexDefinitions;
         const transformClipPos = this._transformClipPos;
@@ -123,15 +110,31 @@ export class VBORenderer {
         const needGl_Position = this._needGl_Position;
         const needViewPosition = this._needViewPosition;
         const needViewMatrixNormal = this._needViewMatrixNormal;
+        const needWorldNormal = this._needWorldNormal;
         const appendVertexOutputs = this._appendVertexOutputs;
         const needvWorldPosition = this._needvWorldPosition;
 
         const scene = this._scene;
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
+
+        src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
+        src.push("precision highp float;");
+        src.push("precision highp int;");
+        src.push("precision highp usampler2D;");
+        src.push("precision highp isampler2D;");
+        src.push("precision highp sampler2D;");
+        src.push("#else");
+        src.push("precision mediump float;");
+        src.push("precision mediump int;");
+        src.push("precision mediump usampler2D;");
+        src.push("precision mediump isampler2D;");
+        src.push("precision mediump sampler2D;");
+        src.push("#endif");
+
         src.push("uniform int renderPass;");
         src.push("in vec3 position;");
-        if (needViewMatrixNormal) {
+        if (needViewMatrixNormal || needWorldNormal) {
             src.push("in vec3 normal;");
         }
         if (needVertexColor) {
@@ -149,14 +152,14 @@ export class VBORenderer {
             src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
             src.push("in vec4 modelMatrixCol1;");
             src.push("in vec4 modelMatrixCol2;");
-            if (needViewMatrixNormal) {
+            if (needViewMatrixNormal || needWorldNormal) {
                 src.push("in vec4 modelNormalMatrixCol0;");
                 src.push("in vec4 modelNormalMatrixCol1;");
                 src.push("in vec4 modelNormalMatrixCol2;");
             }
         }
 
-        this._addMatricesUniformBlockLines(src, needViewMatrixNormal);
+        this._addMatricesUniformBlockLines(src, needViewMatrixNormal || needWorldNormal);
 
         if (getLogDepth) {
             src.push("out float vFragDepth;");
@@ -168,9 +171,12 @@ export class VBORenderer {
         }
         if (clipping) {
             src.push("out float vFlags;");
+            if (clippingCaps) {
+                src.push("out vec4 vClipPosition;");
+            }
         }
 
-        if (needViewMatrixNormal) {
+        if (needViewMatrixNormal || needWorldNormal) {
             src.push("vec3 octDecode(vec2 oct) {");
             src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
             src.push("    if (v.z < 0.0) {");
@@ -198,31 +204,37 @@ export class VBORenderer {
         }
         src.push("vec4 viewPosition  = viewMatrix * worldPosition;");
 
-        if (needvWorldPosition || clipping) {
-            src.push("vWorldPosition = worldPosition;");
-        }
-        if (clipping) {
-            src.push("vFlags = flags;");
-        }
-
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (getLogDepth) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push(`isPerspective = float (${isPerspectiveMatrix("projMatrix")});`);
         }
+
+        if (needvWorldPosition || clipping) {
+            src.push("vWorldPosition = worldPosition;");
+        }
+        if (clipping) {
+            src.push("vFlags = flags;");
+            if (clippingCaps) {
+                src.push("vClipPosition = clipPos;");
+            }
+        }
+
         src.push("gl_Position = " + transformClipPos("clipPos") + ";");
 
-        if (needViewMatrixNormal) {
+        if (needViewMatrixNormal || needWorldNormal) {
             if (this._instancing) {
                 src.push("vec4 modelNormal = vec4(octDecode(normal.xy), 0.0);");
                 src.push("vec4 worldNormal = worldNormalMatrix * vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
             } else {
                 src.push("vec4 worldNormal = worldNormalMatrix * vec4(octDecode(normal.xy), 0.0);");
             }
-            src.push("vec3 viewNormal = normalize((viewNormalMatrix * worldNormal).xyz);");
+            if (needViewMatrixNormal) {
+                src.push("vec3 viewNormal = normalize((viewNormalMatrix * worldNormal).xyz);");
+            }
         }
 
-        appendVertexOutputs(src, needVertexColor && "color", needPickColor && "pickColor", needGl_Position && "gl_Position", (needViewPosition || needViewMatrixNormal) && {viewPosition: needViewPosition && "viewPosition", viewMatrix: needViewMatrixNormal && "viewMatrix", viewNormal: needViewMatrixNormal && "viewNormal"});
+        appendVertexOutputs(src, needVertexColor && "color", needPickColor && "pickColor", needGl_Position && "gl_Position", (needViewPosition || needViewMatrixNormal) && {viewPosition: needViewPosition && "viewPosition", viewMatrix: needViewMatrixNormal && "viewMatrix", viewNormal: needViewMatrixNormal && "viewNormal"}, needWorldNormal && "worldNormal");
 
         src.push("}");
         src.push("}");
@@ -231,6 +243,9 @@ export class VBORenderer {
 
     _buildFragmentShader() {
         const getLogDepth = this._getLogDepth;
+        const clippingCaps = this._clippingCaps;
+        const needViewMatrixNormal = this._needViewMatrixNormal;
+        const needWorldNormal = this._needWorldNormal;
         const appendFragmentDefinitions = this._appendFragmentDefinitions;
         const sectionDiscardThreshold = this._sectionDiscardThreshold;
         const needSliced = this._needSliced;
@@ -262,6 +277,9 @@ export class VBORenderer {
         }
         if (clipping) {
             src.push("in float vFlags;");
+            if (clippingCaps) {
+                src.push("in vec4 vClipPosition;");
+            }
             for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
                 src.push("uniform bool sectionPlaneActive" + i + ";");
                 src.push("uniform vec3 sectionPlanePos" + i + ";");
@@ -270,10 +288,10 @@ export class VBORenderer {
         }
 
         if (needViewMatrixInFragment) {
-            this._addMatricesUniformBlockLines(src, false);
+            this._addMatricesUniformBlockLines(src, needViewMatrixNormal || needWorldNormal); // if false then WebGL error "Interface block `Matrices` is not linkable between attached shaders."
         }
 
-        appendFragmentDefinitions(src, );
+        appendFragmentDefinitions(src);
 
         src.push("void main(void) {");
         if (needSliced) {
@@ -288,7 +306,20 @@ export class VBORenderer {
                 src.push("          dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
                 src.push("      }");
             }
-            src.push("       if (dist > " + sectionDiscardThreshold + ") {  discard; }");
+            if (clippingCaps) {
+                src.push("  if (dist > (0.002 * vClipPosition.w)) {");
+                src.push("      discard;");
+                src.push("  }");
+                src.push("  if (dist > 0.0) { ");
+                src.push("      " + clippingCaps + " = vec4(1.0, 0.0, 0.0, 1.0);");
+                if (getLogDepth) {
+                    src.push("  gl_FragDepth = log2( " + getLogDepth("vFragDepth") + " ) * logDepthBufFC * 0.5;");
+                }
+                src.push("  return;");
+                src.push("}");
+            } else {
+                src.push("       if (dist > " + sectionDiscardThreshold + ") {  discard; }");
+            }
             if (needSliced) {
                 src.push("  sliced = dist > 0.0;");
             }
