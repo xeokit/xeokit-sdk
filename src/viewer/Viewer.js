@@ -491,6 +491,12 @@ class Viewer {
             }
         }
 
+        // Added to fix label's text offset in an html2canvas capture (See XEOK-151)
+        // based on https://github.com/niklasvh/html2canvas/issues/2775#issuecomment-1316356991
+        const style = document.createElement('style');
+        document.head.appendChild(style);
+        style.sheet?.insertRule('body > div:last-child img { display: inline-block; }');
+
         for (let i = 0, len = pluginContainerElements.length; i < len; i++) {
             const containerElement = pluginContainerElements[i];
             await html2canvas(containerElement, {
@@ -503,6 +509,9 @@ class Viewer {
             // (implemented to compensate XCD-153 issue)
             snapshotCanvas.getContext("2d").resetTransform();
         }
+
+        style.remove();
+
         if (!params.includeGizmos) {
             this.sendToPlugins("snapshotFinished");
         }
