@@ -6,8 +6,7 @@ import {VBORenderer} from "../VBORenderer.js";
 export class VBOTrianglesColorRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive, withSAO) {
-        const sectionPlanesState = scene._sectionPlanesState;
-        const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
+        const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const lightsState = scene._lightsState;
 
         super(scene, instancing, primitive, withSAO, {
@@ -15,6 +14,7 @@ export class VBOTrianglesColorRenderer extends VBORenderer {
 
             getHash: () => [lightsState.getHash(), (withSAO ? "sao" : "nosao")],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))`),
+            clippingCaps: false,
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
             // renderPass = COLOR_OPAQUE | COLOR_TRANSPARENT
             renderPassFlag: 0,
@@ -45,7 +45,8 @@ export class VBOTrianglesColorRenderer extends VBORenderer {
             needGl_Position: false,
             needViewPosition: true,
             needViewMatrixNormal: true,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view) => {
+            needWorldNormal: false,
+            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal) => {
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
                 src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
                 src.push("float lambertian = 1.0;");
