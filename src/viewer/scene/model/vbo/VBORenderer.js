@@ -15,11 +15,13 @@ const tempMat4a = math.mat4();
 
 const SNAPPING_LOG_DEPTH_BUF_ENABLED = true; // Improves occlusion accuracy at distance
 
+const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
+
 /**
  * @private
  */
 export class VBORenderer {
-    constructor(scene, instancing, primitive, withSAO = false, {progMode, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, hashLigthsSAO = false, hashGammaOutput = false, colorUniform = false, incrementDrawState = false} = {}) {
+    constructor(scene, instancing, primitive, withSAO = false, {progMode, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, hashLigthsSAO = false, hashGammaOutput = false, colorUniform = false, incrementDrawState = false, getHash, getLogDepth, renderPassFlag, appendVertexDefinitions, transformClipPos, needVertexColor, needPickColor, needGl_Position, needViewPosition, needViewMatrixNormal, appendVertexOutputs, appendFragmentDefinitions, sectionDiscardThreshold, needSliced, needvWorldPosition, needGl_FragCoord, needViewMatrixInFragment, appendFragmentOutputs} = {}) {
         this._scene = scene;
         this._instancing = instancing;
         this._primitive = primitive;
@@ -33,6 +35,25 @@ export class VBORenderer {
         this._colorUniform = colorUniform;
         this._incrementDrawState = incrementDrawState;
         this._hash = this._getHash();
+
+        this._getRendererHash = getHash;
+        this._getLogDepth = getLogDepth;
+        this._renderPassFlag = renderPassFlag;
+        this._appendVertexDefinitions = appendVertexDefinitions;
+        this._transformClipPos = transformClipPos;
+        this._needVertexColor = needVertexColor;
+        this._needPickColor = needPickColor;
+        this._needGl_Position = needGl_Position;
+        this._needViewPosition = needViewPosition;
+        this._needViewMatrixNormal = needViewMatrixNormal;
+        this._appendVertexOutputs = appendVertexOutputs;
+        this._appendFragmentDefinitions = appendFragmentDefinitions;
+        this._sectionDiscardThreshold = sectionDiscardThreshold;
+        this._needSliced = needSliced;
+        this._needvWorldPosition = needvWorldPosition;
+        this._needGl_FragCoord = needGl_FragCoord;
+        this._needViewMatrixInFragment = needViewMatrixInFragment;
+        this._appendFragmentOutputs = appendFragmentOutputs;
 
         /**
          * Matrices Uniform Block Buffer
@@ -78,7 +99,7 @@ export class VBORenderer {
         if (this._useAlphaCutoff) {
             hash.push("alphaCutoff");
         }
-        return hash.join(";");
+        return hash.concat(this._getRendererHash ? this._getRendererHash() : [ ]).join(";");
     }
 
     _buildShader() {
@@ -93,11 +114,195 @@ export class VBORenderer {
     }
 
     _buildVertexShader() {
-        return [""];
+        const getLogDepth = this._getLogDepth;
+        const renderPassFlag = this._renderPassFlag;
+        const appendVertexDefinitions = this._appendVertexDefinitions;
+        const transformClipPos = this._transformClipPos;
+        const needVertexColor = this._needVertexColor;
+        const needPickColor = this._needPickColor;
+        const needGl_Position = this._needGl_Position;
+        const needViewPosition = this._needViewPosition;
+        const needViewMatrixNormal = this._needViewMatrixNormal;
+        const appendVertexOutputs = this._appendVertexOutputs;
+        const needvWorldPosition = this._needvWorldPosition;
+
+        const scene = this._scene;
+        const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
+        const src = [];
+        src.push("uniform int renderPass;");
+        src.push("in vec3 position;");
+        if (needViewMatrixNormal) {
+            src.push("in vec3 normal;");
+        }
+        if (needVertexColor) {
+            src.push("in vec4 color;");
+        }
+        if (needPickColor) {
+            src.push("in vec4 pickColor;");
+        }
+        src.push("in float flags;");
+        if (scene.entityOffsetsEnabled) {
+            src.push("in vec3 offset;");
+        }
+
+        if (this._instancing) {
+            src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
+            src.push("in vec4 modelMatrixCol1;");
+            src.push("in vec4 modelMatrixCol2;");
+            if (needViewMatrixNormal) {
+                src.push("in vec4 modelNormalMatrixCol0;");
+                src.push("in vec4 modelNormalMatrixCol1;");
+                src.push("in vec4 modelNormalMatrixCol2;");
+            }
+        }
+
+        this._addMatricesUniformBlockLines(src, needViewMatrixNormal);
+
+        if (getLogDepth) {
+            src.push("out float vFragDepth;");
+            src.push("out float isPerspective;");
+        }
+
+        if (needvWorldPosition || clipping) {
+            src.push("out " + (needvWorldPosition ? "highp " : "") + "vec4 vWorldPosition;");
+        }
+        if (clipping) {
+            src.push("out float vFlags;");
+        }
+
+        if (needViewMatrixNormal) {
+            src.push("vec3 octDecode(vec2 oct) {");
+            src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
+            src.push("    if (v.z < 0.0) {");
+            src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
+            src.push("    }");
+            src.push("    return normalize(v);");
+            src.push("}");
+        }
+
+        appendVertexDefinitions(src);
+
+        src.push("void main(void) {");
+
+        src.push(`if ((int(flags) >> ${renderPassFlag * 4} & 0xF) != renderPass) {`);
+        src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
+        src.push("} else {");
+        if (this._instancing) {
+            src.push("vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0);");
+            src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
+        } else {
+            src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0));");
+        }
+        if (scene.entityOffsetsEnabled) {
+            src.push("worldPosition.xyz = worldPosition.xyz + offset;");
+        }
+        src.push("vec4 viewPosition  = viewMatrix * worldPosition;");
+
+        if (needvWorldPosition || clipping) {
+            src.push("vWorldPosition = worldPosition;");
+        }
+        if (clipping) {
+            src.push("vFlags = flags;");
+        }
+
+        src.push("vec4 clipPos = projMatrix * viewPosition;");
+        if (getLogDepth) {
+            src.push("vFragDepth = 1.0 + clipPos.w;");
+            src.push(`isPerspective = float (${isPerspectiveMatrix("projMatrix")});`);
+        }
+        src.push("gl_Position = " + transformClipPos("clipPos") + ";");
+
+        if (needViewMatrixNormal) {
+            if (this._instancing) {
+                src.push("vec4 modelNormal = vec4(octDecode(normal.xy), 0.0);");
+                src.push("vec4 worldNormal = worldNormalMatrix * vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
+            } else {
+                src.push("vec4 worldNormal = worldNormalMatrix * vec4(octDecode(normal.xy), 0.0);");
+            }
+            src.push("vec3 viewNormal = normalize((viewNormalMatrix * worldNormal).xyz);");
+        }
+
+        appendVertexOutputs(src, needVertexColor && "color", needPickColor && "pickColor", needGl_Position && "gl_Position", (needViewPosition || needViewMatrixNormal) && {viewPosition: needViewPosition && "viewPosition", viewMatrix: needViewMatrixNormal && "viewMatrix", viewNormal: needViewMatrixNormal && "viewNormal"});
+
+        src.push("}");
+        src.push("}");
+        return src;
     }
 
     _buildFragmentShader() {
-        return [""];
+        const getLogDepth = this._getLogDepth;
+        const appendFragmentDefinitions = this._appendFragmentDefinitions;
+        const sectionDiscardThreshold = this._sectionDiscardThreshold;
+        const needSliced = this._needSliced;
+        const needvWorldPosition = this._needvWorldPosition;
+        const needGl_FragCoord = this._needGl_FragCoord;
+        const needViewMatrixInFragment = this._needViewMatrixInFragment;
+        const appendFragmentOutputs = this._appendFragmentOutputs;
+
+        const scene = this._scene;
+        const sectionPlanesState = scene._sectionPlanesState;
+        const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
+        const src = [];
+        src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
+        src.push("precision highp float;");
+        src.push("precision highp int;");
+        src.push("#else");
+        src.push("precision mediump float;");
+        src.push("precision mediump int;");
+        src.push("#endif");
+
+        if (getLogDepth) {
+            src.push("uniform float logDepthBufFC;");
+            src.push("in float vFragDepth;");
+            src.push("in float isPerspective;");
+        }
+
+        if (needvWorldPosition || clipping) {
+            src.push("in " + (needvWorldPosition ? "highp " : "") + "vec4 vWorldPosition;");
+        }
+        if (clipping) {
+            src.push("in float vFlags;");
+            for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
+                src.push("uniform bool sectionPlaneActive" + i + ";");
+                src.push("uniform vec3 sectionPlanePos" + i + ";");
+                src.push("uniform vec3 sectionPlaneDir" + i + ";");
+            }
+        }
+
+        if (needViewMatrixInFragment) {
+            this._addMatricesUniformBlockLines(src, false);
+        }
+
+        appendFragmentDefinitions(src, );
+
+        src.push("void main(void) {");
+        if (needSliced) {
+            src.push("  bool sliced = false;");
+        }
+        if (clipping) {
+            src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
+            src.push("  if (clippable) {");
+            src.push("      float dist = 0.0;");
+            for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
+                src.push("      if (sectionPlaneActive" + i + ") {");
+                src.push("          dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
+                src.push("      }");
+            }
+            src.push("       if (dist > " + sectionDiscardThreshold + ") {  discard; }");
+            if (needSliced) {
+                src.push("  sliced = dist > 0.0;");
+            }
+            src.push("}");
+        }
+
+        if (getLogDepth) {
+            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( " + getLogDepth("vFragDepth") + " ) * logDepthBufFC * 0.5;");
+        }
+
+        appendFragmentOutputs(src, needvWorldPosition && "vWorldPosition", needGl_FragCoord && "gl_FragCoord", needSliced && "sliced", needViewMatrixInFragment && "viewMatrix");
+
+        src.push("}");
+        return src;
     }
 
     _addMatricesUniformBlockLines(src, normals = false) {
