@@ -110,7 +110,7 @@ export class TrianglesPBRRenderer extends TrianglesInstancingRenderer {
         src.push("vec4 viewPosition  = viewMatrix * worldPosition; ");
 
         src.push("vec4 modelNormal = vec4(octDecode(normal.xy), 0.0); ");
-        src.push("vec4 worldNormal = worldNormalMatrix * vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 1.0);");
+        src.push("vec4 worldNormal = worldNormalMatrix * vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
         src.push("vec3 viewNormal = vec4(viewNormalMatrix * worldNormal).xyz;");
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
