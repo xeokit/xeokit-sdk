@@ -86,9 +86,13 @@ export class VBOInstancingPointsShadowRenderer extends VBOInstancingPointsRender
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
-        src.push("in vec3 vViewNormal;");
-        src.push("vec3 packNormalToRGB( const in vec3 normal ) {");
-        src.push("    return normalize( normal ) * 0.5 + 0.5;");
+
+        src.push("vec4 encodeFloat( const in float v ) {");
+        src.push("  const vec4 bitShift = vec4(256 * 256 * 256, 256 * 256, 256, 1.0);");
+        src.push("  const vec4 bitMask = vec4(0, 1.0 / 256.0, 1.0 / 256.0, 1.0 / 256.0);");
+        src.push("  vec4 comp = fract(v * bitShift);");
+        src.push("  comp -= comp.xxyz * bitMask;");
+        src.push("  return comp;");
         src.push("}");
         src.push("out vec4 outColor;");
         src.push("void main(void) {");
@@ -112,7 +116,7 @@ export class VBOInstancingPointsShadowRenderer extends VBOInstancingPointsRender
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("gl_FragDepth = log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
-        src.push("    outColor = vec4(packNormalToRGB(vViewNormal), 1.0); ");
+        src.push("    outColor = encodeFloat( gl_FragCoord.z); ");
         src.push("}");
         return src;
     }
