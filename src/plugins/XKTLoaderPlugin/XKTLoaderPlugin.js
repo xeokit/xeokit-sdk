@@ -427,7 +427,7 @@ parsers[ParserV11.version] = ParserV11;
  *
  * ````javascript
  * const sceneModel = xktLoader.load({
- *   manifestSrc: "https://xeokit.github.io/xeokit-sdk/assets/models/models/xkt/Schependomlaan.xkt",
+ *   src: "https://xeokit.github.io/xeokit-sdk/assets/models/models/xkt/Schependomlaan.xkt",
  *   id: "myModel",
  * });
  * ````
@@ -1165,6 +1165,10 @@ class XKTLoaderPlugin extends Plugin {
 }
 
 function getBaseDirectory(filePath) {
+    if (filePath.indexOf('?') > -1) {
+        filePath = filePath.split('?')[0];
+    }
+
     const pathArray = filePath.split('/');
     pathArray.pop(); // Remove the file name or the last segment of the path
     return pathArray.join('/') + '/';
