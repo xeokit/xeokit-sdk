@@ -6,8 +6,7 @@ import {VBORenderer} from "../VBORenderer.js";
 export class VBOTrianglesFlatColorRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive, withSAO) {
-        const sectionPlanesState = scene._sectionPlanesState;
-        const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
+        const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const lightsState = scene._lightsState;
 
         super(scene, instancing, primitive, withSAO, {
@@ -15,6 +14,7 @@ export class VBOTrianglesFlatColorRenderer extends VBORenderer {
 
             getHash: () => [lightsState.getHash(), (withSAO ? "sao" : "nosao")],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
+            clippingCaps: false,
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
             // renderPass = COLOR_OPAQUE | COLOR_TRANSPARENT
             renderPassFlag: 0,
@@ -28,7 +28,8 @@ export class VBOTrianglesFlatColorRenderer extends VBORenderer {
             needGl_Position: false,
             needViewPosition: true,
             needViewMatrixNormal: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view) => {
+            needWorldNormal: false,
+            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal) => {
                 src.push(`vViewPosition = ${view.viewPosition};`);
                 src.push(`vColor = ${color} / 255.0;`);
             },
