@@ -19,6 +19,7 @@ export class VBOTrianglesOcclusionRenderer extends VBORenderer {
             // renderPass = COLOR_OPAQUE // instancing had also COLOR_TRANSPARENT
             renderPassFlag: 0,
             appendVertexDefinitions: (src) => { },
+            filterIntensityRange: false,
             transformClipPos: clipPos => clipPos,
             shadowParameters: null,
             needVertexColor: false,
@@ -27,14 +28,16 @@ export class VBOTrianglesOcclusionRenderer extends VBORenderer {
             needViewPosition: false,
             needViewMatrixNormal: false,
             needWorldNormal: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal) => { },
+            needWorldPosition: false,
+            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => { },
             appendFragmentDefinitions: (src) => src.push("out vec4 outColor;"),
             sectionDiscardThreshold: "0.0",
             needSliced: false,
             needvWorldPosition: false,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix) => {
+            needGl_PointCoord: false,
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
                 src.push("outColor = vec4(0.0, 0.0, 1.0, 1.0); "); // Occluders are blue
             }
         });
