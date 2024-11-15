@@ -26,6 +26,7 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
                 src.push("out vec2 vUV;");
                 src.push("out vec4 vColor;");
             },
+            filterIntensityRange: false,
             transformClipPos: clipPos => clipPos,
             shadowParameters: null,
             needVertexColor: true,
@@ -34,7 +35,8 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
             needViewPosition: true,
             needViewMatrixNormal: false,
             needWorldNormal: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal) => {
+            needWorldPosition: false,
+            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vViewPosition = ${view.viewPosition};`);
                 src.push("vUV = (uvDecodeMatrix * vec3(uv, 1.0)).xy;");
                 src.push(`vColor = vec4(${color}) / 255.0;`);
@@ -100,7 +102,8 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
             needvWorldPosition: false,
             needGl_FragCoord: true,
             needViewMatrixInFragment: true,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix) => {
+            needGl_PointCoord: false,
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
                 src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
                 src.push("float lambertian = 1.0;");
