@@ -40,6 +40,7 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                 }
             },
             transformClipPos: clipPos => clipPos,
+            shadowParameters: null,
             needVertexColor: true,
             needPickColor: false,
             needGl_Position: false,
