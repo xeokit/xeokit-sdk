@@ -56,6 +56,8 @@ export class VBORenderer {
         this._needViewMatrixInFragment = needViewMatrixInFragment;
         this._appendFragmentOutputs = appendFragmentOutputs;
 
+        this._testPerspectiveForGl_FragDepth = (primitive !== "lines") || (progMode === "snapInitMode") || (progMode === "snapMode");
+
         /**
          * Matrices Uniform Block Buffer
          *
@@ -116,6 +118,8 @@ export class VBORenderer {
         const appendVertexOutputs = this._appendVertexOutputs;
         const needvWorldPosition = this._needvWorldPosition;
 
+        const testPerspectiveForGl_FragDepth = this._testPerspectiveForGl_FragDepth;
+
         const scene = this._scene;
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const src = [];
@@ -167,7 +171,9 @@ export class VBORenderer {
 
         if (getLogDepth && (! shadowParameters)) { // likely shouldn't be testing shadowParameters, perhaps an earlier overlook
             src.push("out float vFragDepth;");
-            src.push("out float isPerspective;");
+            if (testPerspectiveForGl_FragDepth) {
+                src.push("out float isPerspective;");
+            }
         }
 
         if (needvWorldPosition || clipping) {
@@ -215,7 +221,9 @@ export class VBORenderer {
         src.push("vec4 clipPos = " + (shadowParameters ? shadowParameters.projMatrix : "projMatrix") + " * viewPosition;");
         if (getLogDepth && (! shadowParameters)) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
-            src.push(`isPerspective = float (${isPerspectiveMatrix("projMatrix")});`);
+            if (testPerspectiveForGl_FragDepth) {
+                src.push(`isPerspective = float (${isPerspectiveMatrix("projMatrix")});`);
+            }
         }
 
         if (needvWorldPosition || clipping) {
@@ -262,6 +270,8 @@ export class VBORenderer {
         const needViewMatrixInFragment = this._needViewMatrixInFragment;
         const appendFragmentOutputs = this._appendFragmentOutputs;
 
+        const testPerspectiveForGl_FragDepth = this._testPerspectiveForGl_FragDepth;
+
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
@@ -277,7 +287,9 @@ export class VBORenderer {
         if (getLogDepth) {
             src.push("uniform float logDepthBufFC;");
             src.push("in float vFragDepth;");
-            src.push("in float isPerspective;");
+            if (testPerspectiveForGl_FragDepth) {
+                src.push("in float isPerspective;");
+            }
         }
 
         if (needvWorldPosition || clipping) {
@@ -335,7 +347,7 @@ export class VBORenderer {
         }
 
         if (getLogDepth) {
-            src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( " + getLogDepth("vFragDepth") + " ) * logDepthBufFC * 0.5;");
+            src.push("gl_FragDepth = " + (testPerspectiveForGl_FragDepth ? "isPerspective == 0.0 ? gl_FragCoord.z : " : "") + "log2( " + getLogDepth("vFragDepth") + " ) * logDepthBufFC * 0.5;");
         }
 
         appendFragmentOutputs(src, needvWorldPosition && "vWorldPosition", needGl_FragCoord && "gl_FragCoord", needSliced && "sliced", needViewMatrixInFragment && "viewMatrix");
