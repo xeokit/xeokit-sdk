@@ -16,6 +16,7 @@ export class VBOLinesSilhouetteRenderer extends VBORenderer {
             // renderPass = SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | | SILHOUETTE_XRAYED
             renderPassFlag: 1,
             appendVertexDefinitions: (src) => { },
+            filterIntensityRange: false,
             transformClipPos: clipPos => clipPos,
             shadowParameters: null,
             needVertexColor: false,
@@ -24,7 +25,8 @@ export class VBOLinesSilhouetteRenderer extends VBORenderer {
             needViewPosition: false,
             needViewMatrixNormal: false,
             needWorldNormal: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal) => { },
+            needWorldPosition: false,
+            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => { },
             appendFragmentDefinitions: (src) => {
                 src.push("uniform vec4 color;");
                 src.push("out vec4 outColor;");
@@ -34,7 +36,8 @@ export class VBOLinesSilhouetteRenderer extends VBORenderer {
             needvWorldPosition: false,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix) => {
+            needGl_PointCoord: false,
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
                 src.push("outColor = color;");
             }
         });

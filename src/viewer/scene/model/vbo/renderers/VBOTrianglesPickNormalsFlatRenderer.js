@@ -20,6 +20,7 @@ export class VBOTrianglesPickNormalsFlatRenderer extends VBORenderer {
                 src.push("uniform vec2 pickClipPos;");
                 src.push("uniform vec2 drawingBufferSize;");
             },
+            filterIntensityRange: false,
             transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - pickClipPos) * drawingBufferSize / 3.0 * ${clipPos}.w, ${clipPos}.zw)`,
             shadowParameters: null,
             needVertexColor: false,
@@ -28,14 +29,16 @@ export class VBOTrianglesPickNormalsFlatRenderer extends VBORenderer {
             needViewPosition: false,
             needViewMatrixNormal: false,
             needWorldNormal: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal) => { },
+            needWorldPosition: false,
+            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => { },
             appendFragmentDefinitions: (src) => src.push("out highp ivec4 outNormal;"),
             sectionDiscardThreshold: "0.0",
             needSliced: false,
             needvWorldPosition: true,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix) => {
+            needGl_PointCoord: false,
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
                 src.push(`vec3 xTangent = dFdx(${vWorldPosition}.xyz);`);
                 src.push(`vec3 yTangent = dFdy(${vWorldPosition}.xyz);`);
                 src.push("vec3 worldNormal = normalize(cross(xTangent, yTangent));");

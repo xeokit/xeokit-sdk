@@ -17,6 +17,7 @@ export class VBOTrianglesShadowRenderer extends VBORenderer {
                 src.push("uniform mat4 shadowProjMatrix;");
                 src.push("uniform mat4 shadowViewMatrix;");
             },
+            filterIntensityRange: false,
             transformClipPos: clipPos => clipPos,
             shadowParameters: { projMatrix: "shadowProjMatrix", viewMatrix: "shadowViewMatrix" },
             needVertexColor: false,
@@ -25,7 +26,8 @@ export class VBOTrianglesShadowRenderer extends VBORenderer {
             needViewPosition: false,
             needViewMatrixNormal: false,
             needWorldNormal: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal) => { },
+            needWorldPosition: false,
+            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => { },
             appendFragmentDefinitions: (src) => {
                 src.push("vec4 encodeFloat( const in float v ) {");
                 src.push("  const vec4 bitShift = vec4(256 * 256 * 256, 256 * 256, 256, 1.0);");
@@ -41,7 +43,8 @@ export class VBOTrianglesShadowRenderer extends VBORenderer {
             needvWorldPosition: false,
             needGl_FragCoord: true,
             needViewMatrixInFragment: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix) => {
+            needGl_PointCoord: false,
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
                 src.push(`outColor = encodeFloat(${gl_FragCoord}.z);`);
             }
         });
