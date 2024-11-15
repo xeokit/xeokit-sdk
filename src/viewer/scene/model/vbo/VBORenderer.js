@@ -21,7 +21,7 @@ const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
  * @private
  */
 export class VBORenderer {
-    constructor(scene, instancing, primitive, withSAO = false, {progMode, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, colorUniform = false, incrementDrawState = false, getHash, getLogDepth, clippingCaps, renderPassFlag, appendVertexDefinitions, transformClipPos, shadowParameters, needVertexColor, needPickColor, needGl_Position, needViewPosition, needViewMatrixNormal, needWorldNormal, appendVertexOutputs, appendFragmentDefinitions, sectionDiscardThreshold, needSliced, needvWorldPosition, needGl_FragCoord, needViewMatrixInFragment, appendFragmentOutputs} = {}) {
+    constructor(scene, instancing, primitive, withSAO = false, {progMode, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, colorUniform = false, incrementDrawState = false, getHash, getLogDepth, clippingCaps, renderPassFlag, appendVertexDefinitions, transformClipPos, shadowParameters, needVertexColor, needPickColor, needGl_Position, needViewPosition, needViewMatrixNormal, needWorldNormal, appendVertexOutputs, appendFragmentDefinitions, sectionDiscardThreshold, needSliced, needvWorldPosition, needGl_FragCoord, needViewMatrixInFragment, appendFragmentOutputs, vertexCullX} = {}) {
         this._scene = scene;
         this._instancing = instancing;
         this._primitive = primitive;
@@ -55,6 +55,7 @@ export class VBORenderer {
         this._needGl_FragCoord = needGl_FragCoord;
         this._needViewMatrixInFragment = needViewMatrixInFragment;
         this._appendFragmentOutputs = appendFragmentOutputs;
+        this._vertexCullX = vertexCullX || "0.0";
 
         /**
          * Matrices Uniform Block Buffer
@@ -199,7 +200,7 @@ export class VBORenderer {
         } else {
             src.push(`if ((int(flags) >> ${renderPassFlag * 4} & 0xF) != renderPass) {`);
         }
-        src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
+        src.push(`   gl_Position = vec4(${this._vertexCullX || 0.0}, 0.0, 0.0, 0.0);`); // Cull vertex
         src.push("} else {");
         if (this._instancing) {
             src.push("vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0);");
