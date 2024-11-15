@@ -27,6 +27,7 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
                 src.push("out vec4 vColor;");
             },
             transformClipPos: clipPos => clipPos,
+            shadowParameters: null,
             needVertexColor: true,
             needPickColor: false,
             needGl_Position: false,
