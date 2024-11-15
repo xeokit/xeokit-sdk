@@ -17,6 +17,7 @@ export class VBOTrianglesDepthRenderer extends VBORenderer {
             renderPassFlag: 0,
             appendVertexDefinitions: (src) => src.push("out vec2 vHighPrecisionZW;"),
             transformClipPos: clipPos => clipPos,
+            shadowParameters: null,
             needVertexColor: false,
             needPickColor: false,
             needGl_Position: true,
