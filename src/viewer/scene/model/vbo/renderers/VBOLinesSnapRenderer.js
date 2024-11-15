@@ -25,6 +25,7 @@ export class VBOLinesSnapRenderer extends VBORenderer {
                     src.push("flat out vec4 vPickColor;");
                 }
             },
+            filterIntensityRange: false,
             transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - snapVectorA) * snapInvVectorAB * ${clipPos}.w, ${clipPos}.zw)`,
             shadowParameters: null,
             needVertexColor: false,
@@ -33,8 +34,9 @@ export class VBOLinesSnapRenderer extends VBORenderer {
             needViewPosition: false,
             needViewMatrixNormal: false,
             needWorldNormal: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal) => {
-                src.push("relativeToOriginPosition = worldPosition.xyz;");
+            needWorldPosition: true,
+            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => {
+                src.push(`relativeToOriginPosition = ${worldPosition}.xyz;`);
                 if (isSnapInit) {
                     src.push(`vPickColor = ${pickColor};`);
                 } else {
@@ -59,7 +61,8 @@ export class VBOLinesSnapRenderer extends VBORenderer {
             needvWorldPosition: isSnapInit,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix) => {
+            needGl_PointCoord: false,
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
                 src.push("outCoords = ivec4(relativeToOriginPosition.xyz * coordinateScaler.xyz, " + (isSnapInit ? "-" : "") + "layerNumber);");
 
                 if (isSnapInit) {

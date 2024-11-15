@@ -21,7 +21,7 @@ const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
  * @private
  */
 export class VBORenderer {
-    constructor(scene, instancing, primitive, withSAO = false, {progMode, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, colorUniform = false, incrementDrawState = false, getHash, getLogDepth, clippingCaps, renderPassFlag, appendVertexDefinitions, transformClipPos, shadowParameters, needVertexColor, needPickColor, needGl_Position, needViewPosition, needViewMatrixNormal, needWorldNormal, appendVertexOutputs, appendFragmentDefinitions, sectionDiscardThreshold, needSliced, needvWorldPosition, needGl_FragCoord, needViewMatrixInFragment, appendFragmentOutputs, vertexCullX} = {}) {
+    constructor(scene, instancing, primitive, withSAO = false, {progMode, edges = false, useAlphaCutoff = false, colorUniform = false, incrementDrawState = false, getHash, getLogDepth, clippingCaps, renderPassFlag, appendVertexDefinitions, filterIntensityRange, transformClipPos, shadowParameters, needVertexColor, needPickColor, needGl_Position, needViewPosition, needViewMatrixNormal, needWorldNormal, needWorldPosition, appendVertexOutputs, appendFragmentDefinitions, sectionDiscardThreshold, needSliced, needvWorldPosition, needGl_FragCoord, needViewMatrixInFragment, needGl_PointCoord, appendFragmentOutputs, vertexCullX} = {}) {
         this._scene = scene;
         this._instancing = instancing;
         this._primitive = primitive;
@@ -29,7 +29,6 @@ export class VBORenderer {
         this._progMode = progMode;
         this._edges = edges;
         this._useAlphaCutoff = useAlphaCutoff;
-        this._hashPointsMaterial = hashPointsMaterial;
         this._colorUniform = colorUniform;
         this._incrementDrawState = incrementDrawState;
         this._hash = this._getHash();
@@ -39,6 +38,7 @@ export class VBORenderer {
         this._clippingCaps = clippingCaps;
         this._renderPassFlag = renderPassFlag;
         this._appendVertexDefinitions = appendVertexDefinitions;
+        this._filterIntensityRange = filterIntensityRange;
         this._transformClipPos = transformClipPos;
         this._shadowParameters = shadowParameters;
         this._needVertexColor = needVertexColor;
@@ -47,6 +47,7 @@ export class VBORenderer {
         this._needViewPosition = needViewPosition;
         this._needViewMatrixNormal = needViewMatrixNormal;
         this._needWorldNormal = needWorldNormal;
+        this._needWorldPosition = needWorldPosition;
         this._appendVertexOutputs = appendVertexOutputs;
         this._appendFragmentDefinitions = appendFragmentDefinitions;
         this._sectionDiscardThreshold = sectionDiscardThreshold;
@@ -54,10 +55,11 @@ export class VBORenderer {
         this._needvWorldPosition = needvWorldPosition;
         this._needGl_FragCoord = needGl_FragCoord;
         this._needViewMatrixInFragment = needViewMatrixInFragment;
+        this._needGl_PointCoord = needGl_PointCoord;
         this._appendFragmentOutputs = appendFragmentOutputs;
         this._vertexCullX = vertexCullX || "0.0";
 
-        this._testPerspectiveForGl_FragDepth = (primitive !== "lines") || (progMode === "snapInitMode") || (progMode === "snapMode");
+        this._testPerspectiveForGl_FragDepth = ((primitive !== "points") && (primitive !== "lines")) || (progMode === "snapInitMode") || (progMode === "snapMode");
 
         /**
          * Matrices Uniform Block Buffer
@@ -88,8 +90,7 @@ export class VBORenderer {
      * @returns { string }
      */
     _getHash() {
-        const scene = this._scene;
-        return [ scene._sectionPlanesState.getHash() + (this._hashPointsMaterial ? scene.pointsMaterial.hash : "") ].concat(this._getRendererHash ? this._getRendererHash() : [ ]).join(";");
+        return [ this._scene._sectionPlanesState.getHash() ].concat(this._getRendererHash ? this._getRendererHash() : [ ]).join(";");
     }
 
     _buildShader() {
@@ -108,6 +109,7 @@ export class VBORenderer {
         const clippingCaps = this._clippingCaps;
         const renderPassFlag = this._renderPassFlag;
         const appendVertexDefinitions = this._appendVertexDefinitions;
+        const filterIntensityRange = this._filterIntensityRange;
         const transformClipPos = this._transformClipPos;
         const shadowParameters = this._shadowParameters;
         const needVertexColor = this._needVertexColor;
@@ -116,6 +118,7 @@ export class VBORenderer {
         const needViewPosition = this._needViewPosition;
         const needViewMatrixNormal = this._needViewMatrixNormal;
         const needWorldNormal = this._needWorldNormal;
+        const needWorldPosition = this._needWorldPosition;
         const appendVertexOutputs = this._appendVertexOutputs;
         const needvWorldPosition = this._needvWorldPosition;
 
@@ -146,7 +149,7 @@ export class VBORenderer {
         if (needViewMatrixNormal || needWorldNormal) {
             src.push("in vec3 normal;");
         }
-        if (needVertexColor || shadowParameters) {
+        if (needVertexColor || shadowParameters || filterIntensityRange) {
             src.push("in vec4 color;");
         }
         if (needPickColor) {
@@ -208,6 +211,13 @@ export class VBORenderer {
         }
         src.push(`   gl_Position = vec4(${this._vertexCullX || 0.0}, 0.0, 0.0, 0.0);`); // Cull vertex
         src.push("} else {");
+        if (filterIntensityRange) {
+            src.push("float intensity = float(color.a) / 255.0;");
+            src.push("if ((intensity < " + filterIntensityRange + "[0]) || (intensity > " + filterIntensityRange + "[1])) {");
+            src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
+            src.push("   return;");
+            src.push("}");
+        }
         if (this._instancing) {
             src.push("vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0);");
             src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
@@ -251,7 +261,7 @@ export class VBORenderer {
             }
         }
 
-        appendVertexOutputs(src, needVertexColor && "color", needPickColor && "pickColor", needGl_Position && "gl_Position", (needViewPosition || needViewMatrixNormal) && {viewPosition: needViewPosition && "viewPosition", viewMatrix: needViewMatrixNormal && "viewMatrix", viewNormal: needViewMatrixNormal && "viewNormal"}, needWorldNormal && "worldNormal");
+        appendVertexOutputs(src, needVertexColor && "color", needPickColor && "pickColor", needGl_Position && "gl_Position", (needViewPosition || needViewMatrixNormal) && {viewPosition: needViewPosition && "viewPosition", viewMatrix: needViewMatrixNormal && "viewMatrix", viewNormal: needViewMatrixNormal && "viewNormal"}, needWorldNormal && "worldNormal", needWorldPosition && "worldPosition");
 
         src.push("}");
         src.push("}");
@@ -269,6 +279,7 @@ export class VBORenderer {
         const needvWorldPosition = this._needvWorldPosition;
         const needGl_FragCoord = this._needGl_FragCoord;
         const needViewMatrixInFragment = this._needViewMatrixInFragment;
+        const needGl_PointCoord = this._needGl_PointCoord;
         const appendFragmentOutputs = this._appendFragmentOutputs;
 
         const testPerspectiveForGl_FragDepth = this._testPerspectiveForGl_FragDepth;
@@ -351,7 +362,7 @@ export class VBORenderer {
             src.push("gl_FragDepth = " + (testPerspectiveForGl_FragDepth ? "isPerspective == 0.0 ? gl_FragCoord.z : " : "") + "log2( " + getLogDepth("vFragDepth") + " ) * logDepthBufFC * 0.5;");
         }
 
-        appendFragmentOutputs(src, needvWorldPosition && "vWorldPosition", needGl_FragCoord && "gl_FragCoord", needSliced && "sliced", needViewMatrixInFragment && "viewMatrix");
+        appendFragmentOutputs(src, needvWorldPosition && "vWorldPosition", needGl_FragCoord && "gl_FragCoord", needSliced && "sliced", needViewMatrixInFragment && "viewMatrix", needGl_PointCoord && "gl_PointCoord");
 
         src.push("}");
         return src;
@@ -446,6 +457,7 @@ export class VBORenderer {
         }
 
         const program = this._program;
+        const filterIntensityRange = this._filterIntensityRange;
 
         this._uRenderPass = program.getLocation("renderPass");
 
@@ -559,8 +571,8 @@ export class VBORenderer {
             this._uLogDepthBufFC = program.getLocation("logDepthBufFC");
         }
 
-        if (scene.pointsMaterial._state.filterIntensity) {
-            this._uIntensityRange = program.getLocation("intensityRange");
+        if (filterIntensityRange) {
+            this._uIntensityRange = program.getLocation(filterIntensityRange);
         }
 
         this._uPointSize = program.getLocation("pointSize");
