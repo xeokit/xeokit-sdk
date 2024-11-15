@@ -20,6 +20,7 @@ export class VBOTrianglesOcclusionRenderer extends VBORenderer {
             renderPassFlag: 0,
             appendVertexDefinitions: (src) => { },
             transformClipPos: clipPos => clipPos,
+            shadowParameters: null,
             needVertexColor: false,
             needPickColor: false,
             needGl_Position: false,
