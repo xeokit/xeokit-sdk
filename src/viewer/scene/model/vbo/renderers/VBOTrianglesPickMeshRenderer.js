@@ -20,6 +20,7 @@ export class VBOTrianglesPickMeshRenderer extends VBORenderer {
                 src.push("uniform vec2 drawingBufferSize;");
                 src.push("out vec4 vPickColor;");
             },
+            filterIntensityRange: false,
             transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - pickClipPos) * drawingBufferSize * ${clipPos}.w, ${clipPos}.zw)`,
             shadowParameters: null,
             needVertexColor: false,
@@ -28,7 +29,8 @@ export class VBOTrianglesPickMeshRenderer extends VBORenderer {
             needViewPosition: false,
             needViewMatrixNormal: false,
             needWorldNormal: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal) => src.push(`vPickColor = ${pickColor} / 255.0;`),
+            needWorldPosition: false,
+            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => src.push(`vPickColor = ${pickColor} / 255.0;`),
             appendFragmentDefinitions: (src) => {
                 src.push("in vec4 vPickColor;");
                 src.push("out vec4 outColor;");
@@ -38,7 +40,8 @@ export class VBOTrianglesPickMeshRenderer extends VBORenderer {
             needvWorldPosition: false,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix) => {
+            needGl_PointCoord: false,
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
                 src.push("outColor = vPickColor;");
             }
         });
