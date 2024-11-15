@@ -21,7 +21,7 @@ const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
  * @private
  */
 export class VBORenderer {
-    constructor(scene, instancing, primitive, withSAO = false, {progMode, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, colorUniform = false, incrementDrawState = false, getHash, getLogDepth, clippingCaps, renderPassFlag, appendVertexDefinitions, transformClipPos, needVertexColor, needPickColor, needGl_Position, needViewPosition, needViewMatrixNormal, needWorldNormal, appendVertexOutputs, appendFragmentDefinitions, sectionDiscardThreshold, needSliced, needvWorldPosition, needGl_FragCoord, needViewMatrixInFragment, appendFragmentOutputs} = {}) {
+    constructor(scene, instancing, primitive, withSAO = false, {progMode, edges = false, useAlphaCutoff = false, hashPointsMaterial = false, colorUniform = false, incrementDrawState = false, getHash, getLogDepth, clippingCaps, renderPassFlag, appendVertexDefinitions, transformClipPos, shadowParameters, needVertexColor, needPickColor, needGl_Position, needViewPosition, needViewMatrixNormal, needWorldNormal, appendVertexOutputs, appendFragmentDefinitions, sectionDiscardThreshold, needSliced, needvWorldPosition, needGl_FragCoord, needViewMatrixInFragment, appendFragmentOutputs} = {}) {
         this._scene = scene;
         this._instancing = instancing;
         this._primitive = primitive;
@@ -40,6 +40,7 @@ export class VBORenderer {
         this._renderPassFlag = renderPassFlag;
         this._appendVertexDefinitions = appendVertexDefinitions;
         this._transformClipPos = transformClipPos;
+        this._shadowParameters = shadowParameters;
         this._needVertexColor = needVertexColor;
         this._needPickColor = needPickColor;
         this._needGl_Position = needGl_Position;
@@ -105,6 +106,7 @@ export class VBORenderer {
         const renderPassFlag = this._renderPassFlag;
         const appendVertexDefinitions = this._appendVertexDefinitions;
         const transformClipPos = this._transformClipPos;
+        const shadowParameters = this._shadowParameters;
         const needVertexColor = this._needVertexColor;
         const needPickColor = this._needPickColor;
         const needGl_Position = this._needGl_Position;
@@ -132,12 +134,14 @@ export class VBORenderer {
         src.push("precision mediump sampler2D;");
         src.push("#endif");
 
-        src.push("uniform int renderPass;");
+        if (! shadowParameters) {
+            src.push("uniform int renderPass;");
+        }
         src.push("in vec3 position;");
         if (needViewMatrixNormal || needWorldNormal) {
             src.push("in vec3 normal;");
         }
-        if (needVertexColor) {
+        if (needVertexColor || shadowParameters) {
             src.push("in vec4 color;");
         }
         if (needPickColor) {
@@ -161,7 +165,7 @@ export class VBORenderer {
 
         this._addMatricesUniformBlockLines(src, needViewMatrixNormal || needWorldNormal);
 
-        if (getLogDepth) {
+        if (getLogDepth && (! shadowParameters)) { // likely shouldn't be testing shadowParameters, perhaps an earlier overlook
             src.push("out float vFragDepth;");
             src.push("out float isPerspective;");
         }
@@ -190,7 +194,11 @@ export class VBORenderer {
 
         src.push("void main(void) {");
 
-        src.push(`if ((int(flags) >> ${renderPassFlag * 4} & 0xF) != renderPass) {`);
+        if (shadowParameters) {
+            src.push(`if (((int(flags) >> ${renderPassFlag * 4} & 0xF) <= 0) || ((float(color.a) / 255.0) < 1.0)) {`);
+        } else {
+            src.push(`if ((int(flags) >> ${renderPassFlag * 4} & 0xF) != renderPass) {`);
+        }
         src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
         src.push("} else {");
         if (this._instancing) {
@@ -202,10 +210,10 @@ export class VBORenderer {
         if (scene.entityOffsetsEnabled) {
             src.push("worldPosition.xyz = worldPosition.xyz + offset;");
         }
-        src.push("vec4 viewPosition  = viewMatrix * worldPosition;");
+        src.push("vec4 viewPosition = " + (shadowParameters ? shadowParameters.viewMatrix : "viewMatrix") + " * worldPosition;");
 
-        src.push("vec4 clipPos = projMatrix * viewPosition;");
-        if (getLogDepth) {
+        src.push("vec4 clipPos = " + (shadowParameters ? shadowParameters.projMatrix : "projMatrix") + " * viewPosition;");
+        if (getLogDepth && (! shadowParameters)) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
             src.push(`isPerspective = float (${isPerspectiveMatrix("projMatrix")});`);
         }
