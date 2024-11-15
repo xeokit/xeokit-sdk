@@ -21,6 +21,7 @@ export class VBOTrianglesEdgesRenderer extends VBORenderer {
                 }
                 src.push("out vec4 vColor;");
             },
+            filterIntensityRange: false,
             transformClipPos: clipPos => clipPos,
             shadowParameters: null,
             needVertexColor: ! colorUniform,
@@ -29,7 +30,8 @@ export class VBOTrianglesEdgesRenderer extends VBORenderer {
             needViewPosition: false,
             needViewMatrixNormal: false,
             needWorldNormal: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal) => {
+            needWorldPosition: false,
+            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => {
                 src.push("vColor = " + (colorUniform ? "color" : `vec4(${color}.rgb * 0.5, ${color}.a) / 255.0`) + ";");
             },
             appendFragmentDefinitions: (src) => {
@@ -41,7 +43,8 @@ export class VBOTrianglesEdgesRenderer extends VBORenderer {
             needvWorldPosition: false,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix) => {
+            needGl_PointCoord: false,
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
                 src.push("outColor = vColor;");
             }
         });
