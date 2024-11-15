@@ -21,6 +21,7 @@ export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
                 src.push("uniform vec2 drawingBufferSize;");
                 src.push("out vec3 vWorldNormal;");
             },
+            filterIntensityRange: false,
             transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - pickClipPos) * drawingBufferSize / 3.0 * ${clipPos}.w, ${clipPos}.zw)`,
             shadowParameters: null,
             needVertexColor: false,
@@ -29,7 +30,8 @@ export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
             needViewPosition: false,
             needViewMatrixNormal: false,
             needWorldNormal: true,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal) => src.push(`vWorldNormal = ${worldNormal}.xyz;`),
+            needWorldPosition: false,
+            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => src.push(`vWorldNormal = ${worldNormal}.xyz;`),
             appendFragmentDefinitions: (src) => {
                 src.push("in vec3 vWorldNormal;");
                 src.push("out highp ivec4 outNormal;");
@@ -39,7 +41,8 @@ export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
             needvWorldPosition: false,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix) => {
+            needGl_PointCoord: false,
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
                 src.push(`outNormal = ivec4(vWorldNormal * float(${math.MAX_INT}), 1.0);`);
             }
         });

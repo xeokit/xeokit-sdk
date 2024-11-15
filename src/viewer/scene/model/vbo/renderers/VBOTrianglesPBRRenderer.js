@@ -39,6 +39,7 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                     src.push("out vec3 vWorldNormal;");
                 }
             },
+            filterIntensityRange: false,
             transformClipPos: clipPos => clipPos,
             shadowParameters: null,
             needVertexColor: true,
@@ -47,7 +48,8 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
             needViewPosition: true,
             needViewMatrixNormal: true,
             needWorldNormal: useLightMaps,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal) => {
+            needWorldPosition: false,
+            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vViewPosition = ${view.viewPosition};`);
                 src.push(`vViewNormal = ${view.viewNormal};`);
                 src.push(`vColor = ${color};`);
@@ -294,7 +296,8 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
             needvWorldPosition: false,
             needGl_FragCoord: true,
             needViewMatrixInFragment: true,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix) => {
+            needGl_PointCoord: false,
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
                 src.push("IncidentLight  light;");
                 src.push("Material       material;");
                 src.push("Geometry       geometry;");
