@@ -20,6 +20,7 @@ export class VBOTrianglesPickDepthRenderer extends VBORenderer {
                 src.push("uniform vec2 drawingBufferSize;");
                 src.push("out vec4 vViewPosition;");
             },
+            filterIntensityRange: false,
             transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - pickClipPos) * drawingBufferSize * ${clipPos}.w, ${clipPos}.zw)`,
             shadowParameters: null,
             needVertexColor: false,
@@ -28,7 +29,8 @@ export class VBOTrianglesPickDepthRenderer extends VBORenderer {
             needViewPosition: true,
             needViewMatrixNormal: false,
             needWorldNormal: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal) => src.push(`vViewPosition = ${view.viewPosition};`),
+            needWorldPosition: false,
+            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => src.push(`vViewPosition = ${view.viewPosition};`),
             appendFragmentDefinitions: (src) => {
                 src.push("uniform float pickZNear;");
                 src.push("uniform float pickZFar;");
@@ -47,7 +49,8 @@ export class VBOTrianglesPickDepthRenderer extends VBORenderer {
             needvWorldPosition: false,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix) => {
+            needGl_PointCoord: false,
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
                 src.push("float zNormalizedDepth = abs((pickZNear + vViewPosition.z) / (pickZFar - pickZNear));");
                 src.push("outColor = packDepth(zNormalizedDepth);"); // Must be linear depth
             }

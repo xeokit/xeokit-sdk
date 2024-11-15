@@ -21,6 +21,7 @@ export class VBOTrianglesSilhouetteRenderer extends VBORenderer {
                 src.push("uniform vec4 silhouetteColor;");
                 src.push("out vec4 vColor;");
             },
+            filterIntensityRange: false,
             transformClipPos: clipPos => clipPos,
             shadowParameters: null,
             needVertexColor: true,
@@ -29,7 +30,8 @@ export class VBOTrianglesSilhouetteRenderer extends VBORenderer {
             needViewPosition: false,
             needViewMatrixNormal: false,
             needWorldNormal: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal) => {
+            needWorldPosition: false,
+            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vColor = vec4(silhouetteColor.rgb, min(silhouetteColor.a, ${color}.a / 255.0));`);
             },
             appendFragmentDefinitions: (src) => {
@@ -45,7 +47,8 @@ export class VBOTrianglesSilhouetteRenderer extends VBORenderer {
             needvWorldPosition: false,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix) => {
+            needGl_PointCoord: false,
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
                 const color = clipping ? `${sliced} ? sliceColor : vColor` : "vColor";
                 src.push("outColor = " + color + ";");
             }
