@@ -22,6 +22,7 @@ export class VBOTrianglesEdgesRenderer extends VBORenderer {
                 src.push("out vec4 vColor;");
             },
             transformClipPos: clipPos => clipPos,
+            shadowParameters: null,
             needVertexColor: ! colorUniform,
             needPickColor: false,
             needGl_Position: false,
