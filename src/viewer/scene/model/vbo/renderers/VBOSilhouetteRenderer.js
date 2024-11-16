@@ -1,4 +1,5 @@
 import {VBORenderer} from "../VBORenderer.js";
+import {RENDER_PASSES} from "../../RENDER_PASSES.js";
 
 /**
  * @private
@@ -6,12 +7,15 @@ import {VBORenderer} from "../VBORenderer.js";
 export class VBOSilhouetteRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive) {
+        const inputs = { };
+        const gl = scene.canvas.gl;
+        const defaultSilhouetteColor = new Float32Array([1, 1, 1, 1]);
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const isPoints = primitive === "points";
         const pointsMaterial = isPoints && scene.pointsMaterial;
 
         super(scene, instancing, primitive, false, {
-            progMode: "silhouetteMode", colorUniform: true,
+            progMode: "silhouetteMode",
 
             getHash: (isPoints ? () => [ pointsMaterial.hash ] : () => [ ]),
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
@@ -66,10 +70,10 @@ export class VBOSilhouetteRenderer extends VBORenderer {
                     if (instancing) {
                         src.push("in vec4 vColor;");
                     } else {
-                        src.push("uniform vec4 color;");
+                        src.push("uniform vec4 silhouetteColor;");
                     }
                 } else if (primitive === "lines") {
-                    src.push("uniform vec4 color;");
+                    src.push("uniform vec4 silhouetteColor;");
                 } else {
                     if (clipping) {
                         src.push("uniform float sliceThickness;");
@@ -94,16 +98,33 @@ export class VBOSilhouetteRenderer extends VBORenderer {
                         src.push("       discard;");
                         src.push("  }");
                     }
-                    src.push("outColor = " + (instancing ? "vColor" : "color") + ";");
+                    src.push("outColor = " + (instancing ? "vColor" : "silhouetteColor") + ";");
                 } else if (primitive === "lines") {
-                    src.push("outColor = color;");
+                    src.push("outColor = silhouetteColor;");
                 } else {
-                    const color = clipping ? `${sliced} ? sliceColor : vColor` : "vColor";
-                    src.push("outColor = " + color + ";");
+                    src.push("outColor = " + (clipping ? `${sliced} ? sliceColor : vColor` : "vColor") + ";");
                 }
             },
-            setupInputs: (program) => { },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
+            setupInputs: (program) => {
+                inputs.silhouetteColor = program.getLocation("silhouetteColor");
+            },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
+                const setSceneMaterial = material => {
+                    const color = material._state.fillColor;
+                    const alpha = material._state.fillAlpha;
+                    gl.uniform4f(inputs.silhouetteColor, color[0], color[1], color[2], alpha);
+                };
+
+                if (renderPass === RENDER_PASSES.SILHOUETTE_XRAYED) {
+                    setSceneMaterial(scene.xrayMaterial);
+                } else if (renderPass === RENDER_PASSES.SILHOUETTE_HIGHLIGHTED) {
+                    setSceneMaterial(scene.highlightMaterial);
+                } else if (renderPass === RENDER_PASSES.SILHOUETTE_SELECTED) {
+                    setSceneMaterial(scene.selectedMaterial);
+                } else {
+                    gl.uniform4fv(inputs.silhouetteColor, defaultSilhouetteColor);
+                }
+            }
         });
     }
 
