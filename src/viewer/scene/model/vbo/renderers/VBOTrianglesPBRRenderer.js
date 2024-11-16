@@ -395,7 +395,9 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                 }
 
                 src.push("outColor = fragColor;");
-            }
+            },
+            setupInputs: (program) => { },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
         });
     }
 
