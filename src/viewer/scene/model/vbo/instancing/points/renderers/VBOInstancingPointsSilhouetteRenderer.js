@@ -81,7 +81,7 @@ export class VBOInstancingPointsSilhouetteRenderer extends VBOInstancingPointsRe
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
         }
-        src.push("vColor = vec4(float(silhouetteColor.r) / 255.0, float(silhouetteColor.g) / 255.0, float(silhouetteColor.b) / 255.0, float(color.a) / 255.0);");
+        src.push("vColor = silhouetteColor;");
         src.push("gl_Position = clipPos;");
         if (pointsMaterial.perspectivePoints) {
             src.push("gl_PointSize = (nearPlaneHeight * pointSize) / clipPos.w;");
