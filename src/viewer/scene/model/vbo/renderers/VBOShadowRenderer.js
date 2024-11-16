@@ -8,6 +8,8 @@ export class VBOShadowRenderer extends VBORenderer {
     constructor(scene, instancing, primitive) {
         // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
         // but never used (and probably not maintained), as opposed to VBOInstancingPointsShadowRenderer in the same commit
+        const inputs = { };
+        const gl = scene.canvas.gl;
         const isPoints = primitive === "points";
         const pointsMaterial = isPoints && scene.pointsMaterial;
 
@@ -77,8 +79,14 @@ export class VBOShadowRenderer extends VBORenderer {
                 }
                 src.push(`outColor = encodeFloat(${gl_FragCoord}.z);`);
             },
-            setupInputs: (program) => { },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
+            setupInputs: (program) => {
+                inputs.uShadowProjMatrix = program.getLocation("shadowProjMatrix");
+                inputs.uShadowViewMatrix = program.getLocation("shadowViewMatrix");
+            },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
+                gl.uniformMatrix4fv(inputs.uShadowProjMatrix, false, frameCtx.shadowProjMatrix); // Not tested
+                gl.uniformMatrix4fv(inputs.uShadowViewMatrix, false, frameCtx.shadowViewMatrix); // Not tested
+            }
         });
     }
 
