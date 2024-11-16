@@ -21,7 +21,6 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
             renderPassFlag: 0,
             appendVertexDefinitions: (src) => {
                 src.push("uniform mat3 uvDecodeMatrix;");
-                src.push("in vec2 uv;");
                 src.push("out vec4 vViewPosition;");
                 src.push("out vec2 vUV;");
                 src.push("out vec4 vColor;");
@@ -31,14 +30,16 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
             shadowParameters: null,
             needVertexColor: true,
             needPickColor: false,
+            needUV: true,
+            needMetallicRoughness: false,
             needGl_Position: false,
             needViewPosition: true,
             needViewMatrixNormal: false,
             needWorldNormal: false,
             needWorldPosition: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => {
+            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vViewPosition = ${view.viewPosition};`);
-                src.push("vUV = (uvDecodeMatrix * vec3(uv, 1.0)).xy;");
+                src.push(`vUV = (uvDecodeMatrix * vec3(${uv}, 1.0)).xy;`);
                 src.push(`vColor = vec4(${color}) / 255.0;`);
             },
             appendFragmentDefinitions: (src) => {

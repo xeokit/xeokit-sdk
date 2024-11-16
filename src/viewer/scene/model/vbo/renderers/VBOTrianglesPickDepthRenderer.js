@@ -25,12 +25,14 @@ export class VBOTrianglesPickDepthRenderer extends VBORenderer {
             shadowParameters: null,
             needVertexColor: false,
             needPickColor: false,
+            needUV: false,
+            needMetallicRoughness: false,
             needGl_Position: false,
             needViewPosition: true,
             needViewMatrixNormal: false,
             needWorldNormal: false,
             needWorldPosition: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => src.push(`vViewPosition = ${view.viewPosition};`),
+            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => src.push(`vViewPosition = ${view.viewPosition};`),
             appendFragmentDefinitions: (src) => {
                 src.push("uniform float pickZNear;");
                 src.push("uniform float pickZFar;");
