@@ -172,7 +172,9 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
                 if (gammaOutput) {
                     src.push("outColor = linearToGamma(outColor, gammaFactor);");
                 }
-            }
+            },
+            setupInputs: (program) => { },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
         });
     }
 
