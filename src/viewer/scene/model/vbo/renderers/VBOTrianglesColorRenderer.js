@@ -9,13 +9,12 @@ export class VBOTrianglesColorRenderer extends VBORenderer {
         const inputs = { };
         const gl = scene.canvas.gl;
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
-        const lightsState = scene._lightsState;
-        const lightSetup = createLightSetup(gl, lightsState);
+        const lightSetup = createLightSetup(gl, scene._lightsState, false);
 
         super(scene, instancing, primitive, withSAO, {
             progMode: "colorMode", incrementDrawState: true,
 
-            getHash: () => [lightsState.getHash(), (withSAO ? "sao" : "nosao")],
+            getHash: () => [lightSetup.getHash(), (withSAO ? "sao" : "nosao")],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))`),
             clippingCaps: false,
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
@@ -89,7 +88,7 @@ export class VBOTrianglesColorRenderer extends VBORenderer {
                 inputs.setLightsRenderState = lightSetup.setupInputs(program);
             },
             setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
-                inputs.setLightsRenderState();
+                inputs.setLightsRenderState(frameCtx);
             }
         });
     }
