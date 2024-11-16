@@ -419,12 +419,6 @@ export class VBORenderer {
         const uPickClipPos = program.getLocation("pickClipPos");
         const uDrawingBufferSize = program.getLocation("drawingBufferSize");
 
-        const uColorMap = "uColorMap";
-        const uMetallicRoughMap = "uMetallicRoughMap";
-        const uEmissiveMap = "uEmissiveMap";
-        const uNormalMap = "uNormalMap";
-        const uAOMap = "uAOMap";
-
         const aModelMatrixCol0 = instancing && program.getAttribute("modelMatrixCol0");
         const aModelMatrixCol1 = instancing && program.getAttribute("modelMatrixCol1");
         const aModelMatrixCol2 = instancing && program.getAttribute("modelMatrixCol2");
@@ -722,38 +716,6 @@ export class VBORenderer {
                 }
 
                 const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
-                const textureSet = state.textureSet;
-                if (textureSet) {
-                    const {
-                        colorTexture,
-                        metallicRoughnessTexture,
-                        emissiveTexture,
-                        normalsTexture,
-                        occlusionTexture,
-                    } = textureSet;
-
-                    if (uColorMap && colorTexture) {
-                        program.bindTexture(uColorMap, colorTexture.texture, frameCtx.textureUnit);
-                        frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    }
-                    if (uMetallicRoughMap && metallicRoughnessTexture) {
-                        program.bindTexture(uMetallicRoughMap, metallicRoughnessTexture.texture, frameCtx.textureUnit);
-                        frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    }
-                    if (uEmissiveMap && emissiveTexture) {
-                        program.bindTexture(uEmissiveMap, emissiveTexture.texture, frameCtx.textureUnit);
-                        frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    }
-                    if (uNormalMap && normalsTexture) {
-                        program.bindTexture(uNormalMap, normalsTexture.texture, frameCtx.textureUnit);
-                        frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    }
-                    if (uAOMap && occlusionTexture) {
-                        program.bindTexture(uAOMap, occlusionTexture.texture, frameCtx.textureUnit);
-                        frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    }
-
-                }
 
                 if (lightsState.reflectionMaps.length > 0 && lightsState.reflectionMaps[0].texture && uReflectionMap) {
                     program.bindTexture(uReflectionMap, lightsState.reflectionMaps[0].texture, frameCtx.textureUnit);
@@ -785,7 +747,7 @@ export class VBORenderer {
                 }
 
                 if (useAlphaCutoff) {
-                    gl.uniform1f(alphaCutoffLocation, textureSet.alphaCutoff);
+                    gl.uniform1f(alphaCutoffLocation, state.textureSet.alphaCutoff);
                 }
 
                 if (primitive === "lines") {
