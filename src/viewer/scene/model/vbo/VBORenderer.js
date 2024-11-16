@@ -2,9 +2,6 @@ import {createRTCViewMat, getPlaneRTCPos} from "../../math/rtcCoords.js";
 import {math} from "../../math/math.js";
 import {Program} from "../../webgl/Program.js";
 import {WEBGL_INFO} from "../../webglInfo.js";
-import {RENDER_PASSES} from "./../RENDER_PASSES.js";
-
-const defaultColor = new Float32Array([1, 1, 1, 1]);
 
 const tempVec4 = math.vec4();
 const tempVec3a = math.vec3();
@@ -27,7 +24,6 @@ export class VBORenderer {
         const progMode                  = cfg.progMode;
         const edges                     = cfg.edges;
         const useAlphaCutoff            = cfg.useAlphaCutoff;
-        const colorUniform              = cfg.colorUniform;
         const incrementDrawState        = cfg.incrementDrawState;
 
         const getLogDepth               = cfg.getLogDepth;
@@ -347,8 +343,6 @@ export class VBORenderer {
 
         const uRenderPass = (! shadowParameters) && program.getLocation("renderPass");
 
-        // some shader may have color as attribute, in this case the uniform must be renamed silhouetteColor
-        const uColor = program.getLocation("color") || program.getLocation("silhouetteColor");
         const uUVDecodeMatrix = program.getLocation("uvDecodeMatrix");
         const uGammaFactor = program.getLocation("gammaFactor");
 
@@ -794,33 +788,6 @@ export class VBORenderer {
 
                 if (useAlphaCutoff) {
                     gl.uniform1f(alphaCutoffLocation, textureSet.alphaCutoff);
-                }
-
-                if (colorUniform) {
-                    const colorKey = "fillColor";
-                    const alphaKey = "fillAlpha";
-
-                    if (renderPass === RENDER_PASSES.SILHOUETTE_XRAYED) {
-                        const material = scene.xrayMaterial._state;
-                        const color = material[colorKey];
-                        const alpha = material[alphaKey];
-                        gl.uniform4f(uColor, color[0], color[1], color[2], alpha);
-
-                    } else if (renderPass === RENDER_PASSES.SILHOUETTE_HIGHLIGHTED) {
-                        const material = scene.highlightMaterial._state;
-                        const color = material[colorKey];
-                        const alpha = material[alphaKey];
-                        gl.uniform4f(uColor, color[0], color[1], color[2], alpha);
-
-                    } else if (renderPass === RENDER_PASSES.SILHOUETTE_SELECTED) {
-                        const material = scene.selectedMaterial._state;
-                        const color = material[colorKey];
-                        const alpha = material[alphaKey];
-                        gl.uniform4f(uColor, color[0], color[1], color[2], alpha);
-
-                    } else {
-                        gl.uniform4fv(uColor, defaultColor);
-                    }
                 }
 
                 if (primitive === "lines") {
