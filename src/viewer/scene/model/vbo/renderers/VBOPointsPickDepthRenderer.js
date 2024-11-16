@@ -76,7 +76,9 @@ export class VBOPointsPickDepthRenderer extends VBORenderer {
                 }
                 src.push("float zNormalizedDepth = abs((pickZNear + vViewPosition.z) / (pickZFar - pickZNear));");
                 src.push("outColor = packDepth(zNormalizedDepth);"); // Must be linear depth
-            }
+            },
+            setupInputs: (program) => { },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
         });
     }
 
