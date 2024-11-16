@@ -351,9 +351,6 @@ export class VBORenderer {
 
         const uRenderPass = (! shadowParameters) && program.getLocation("renderPass");
 
-        const uUVDecodeMatrix = program.getLocation("uvDecodeMatrix");
-        const uGammaFactor = program.getLocation("gammaFactor");
-
         gl.uniformBlockBinding(
             program.handle,
             gl.getUniformBlockIndex(program.handle, "Matrices"),
@@ -472,10 +469,6 @@ export class VBORenderer {
 
             if (uLightAmbient) {
                 gl.uniform4fv(uLightAmbient, lightsState.getAmbientColorAndIntensity());
-            }
-
-            if (uGammaFactor) {
-                gl.uniform1f(uGammaFactor, scene.gammaFactor);
             }
 
             for (let i = 0, len = lights.length; i < len; i++) {
@@ -714,10 +707,6 @@ export class VBORenderer {
 
                 if (uDrawingBufferSize) {
                     gl.uniform2f(uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
-                }
-
-                if (uUVDecodeMatrix) {
-                    gl.uniformMatrix3fv(uUVDecodeMatrix, false, state.uvDecodeMatrix);
                 }
 
                 if (uIntensityRange) {
