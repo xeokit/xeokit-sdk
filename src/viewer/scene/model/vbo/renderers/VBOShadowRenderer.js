@@ -3,24 +3,27 @@ import {VBORenderer} from "../VBORenderer.js";
 /**
  * @private
  */
-export class VBOPointsShadowRenderer extends VBORenderer {
+export class VBOShadowRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive) {
         // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
         // but never used (and probably not maintained), as opposed to VBOInstancingPointsShadowRenderer in the same commit
-        const pointsMaterial = scene.pointsMaterial._state;
+        const isPoints = primitive === "points";
+        const pointsMaterial = isPoints && scene.pointsMaterial;
 
         super(scene, instancing, primitive, false, {
             progMode: "shadowMode",
 
-            getHash: () => [ pointsMaterial.hash ],
-            getLogDepth: instancing && scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
+            getHash: (isPoints ? () => [ pointsMaterial.hash ] : () => [ ]),
+            getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             clippingCaps: false,
             renderPassFlag: 0,
             appendVertexDefinitions: (src) => {
-                src.push("uniform float pointSize;");
-                if (pointsMaterial.perspectivePoints) {
-                    src.push("uniform float nearPlaneHeight;");
+                if (isPoints) {
+                    src.push("uniform float pointSize;");
+                    if (pointsMaterial.perspectivePoints) {
+                        src.push("uniform float nearPlaneHeight;");
+                    }
                 }
                 src.push("uniform mat4 shadowProjMatrix;");
                 src.push("uniform mat4 shadowViewMatrix;");
@@ -32,18 +35,20 @@ export class VBOPointsShadowRenderer extends VBORenderer {
             needPickColor: false,
             needUV: false,
             needMetallicRoughness: false,
-            needGl_Position: pointsMaterial.perspectivePoints,
+            needGl_Position: isPoints && pointsMaterial.perspectivePoints,
             needViewPosition: false,
             needViewMatrixNormal: false,
             needWorldNormal: false,
             needWorldPosition: false,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
-                if (pointsMaterial.perspectivePoints) {
-                    src.push(`gl_PointSize = (nearPlaneHeight * pointSize) / ${gl_Position}.w;`);
-                    src.push("gl_PointSize = max(gl_PointSize, " + Math.floor(pointsMaterial.minPerspectivePointSize) + ".0);");
-                    src.push("gl_PointSize = min(gl_PointSize, " + Math.floor(pointsMaterial.maxPerspectivePointSize) + ".0);");
-                } else {
-                    src.push("gl_PointSize = pointSize;");
+                if (isPoints) {
+                    if (pointsMaterial.perspectivePoints) {
+                        src.push(`gl_PointSize = (nearPlaneHeight * pointSize) / ${gl_Position}.w;`);
+                        src.push("gl_PointSize = max(gl_PointSize, " + Math.floor(pointsMaterial.minPerspectivePointSize) + ".0);");
+                        src.push("gl_PointSize = min(gl_PointSize, " + Math.floor(pointsMaterial.maxPerspectivePointSize) + ".0);");
+                    } else {
+                        src.push("gl_PointSize = pointSize;");
+                    }
                 }
             },
             appendFragmentDefinitions: (src) => {
@@ -61,9 +66,9 @@ export class VBOPointsShadowRenderer extends VBORenderer {
             needvWorldPosition: false,
             needGl_FragCoord: true,
             needViewMatrixInFragment: false,
-            needGl_PointCoord: pointsMaterial.roundPoints,
+            needGl_PointCoord: isPoints && pointsMaterial.roundPoints,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
-                if (pointsMaterial.roundPoints) {
+                if (isPoints && pointsMaterial.roundPoints) {
                     src.push(`  vec2 cxy = 2.0 * ${gl_PointCoord} - 1.0;`);
                     src.push("  float r = dot(cxy, cxy);");
                     src.push("  if (r > 1.0) {");
