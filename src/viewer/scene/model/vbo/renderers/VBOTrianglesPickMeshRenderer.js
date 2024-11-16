@@ -25,12 +25,14 @@ export class VBOTrianglesPickMeshRenderer extends VBORenderer {
             shadowParameters: null,
             needVertexColor: false,
             needPickColor: true,
+            needUV: false,
+            needMetallicRoughness: false,
             needGl_Position: false,
             needViewPosition: false,
             needViewMatrixNormal: false,
             needWorldNormal: false,
             needWorldPosition: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => src.push(`vPickColor = ${pickColor} / 255.0;`),
+            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => src.push(`vPickColor = ${pickColor} / 255.0;`),
             appendFragmentDefinitions: (src) => {
                 src.push("in vec4 vPickColor;");
                 src.push("out vec4 outColor;");
