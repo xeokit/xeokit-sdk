@@ -504,6 +504,13 @@ export class VBORenderer {
 
         this.setSectionPlanesStateUniforms(layer);
 
+        if (this._uShadowViewMatrix) {
+            gl.uniformMatrix4fv(this._uShadowViewMatrix, false, frameCtx.shadowViewMatrix); // Not tested
+        }
+        if (this._uShadowProjMatrix) {
+            gl.uniformMatrix4fv(this._uShadowProjMatrix, false, frameCtx.shadowProjMatrix); // Not tested
+        }
+
         if (scene.logarithmicDepthBufferEnabled) {
             if (this._uLogDepthBufFC) {
                 const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2); // TODO: Far from pick project matrix?
