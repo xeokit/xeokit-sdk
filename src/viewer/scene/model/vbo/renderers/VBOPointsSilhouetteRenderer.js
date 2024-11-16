@@ -73,7 +73,9 @@ export class VBOPointsSilhouetteRenderer extends VBORenderer {
                     src.push("  }");
                 }
                 src.push("outColor = " + (instancing ? "vColor" : "color") + ";");
-            }
+            },
+            setupInputs: (program) => { },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
         });
     }
 

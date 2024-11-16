@@ -66,7 +66,9 @@ export class VBOPointsColorRenderer extends VBORenderer {
                     src.push("  }");
                 }
                 src.push("outColor = vColor;");
-            }
+            },
+            setupInputs: (program) => { },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
         });
     }
 
