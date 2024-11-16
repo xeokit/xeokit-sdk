@@ -11,7 +11,6 @@ import { VBOPointsColorRenderer              } from "./renderers/VBOPointsColorR
 import { VBOPointsOcclusionRenderer          } from "./renderers/VBOPointsOcclusionRenderer.js";
 import { VBOPointsPickDepthRenderer          } from "./renderers/VBOPointsPickDepthRenderer.js";
 import { VBOPointsPickMeshRenderer           } from "./renderers/VBOPointsPickMeshRenderer.js";
-import { VBOPointsShadowRenderer             } from "./renderers/VBOPointsShadowRenderer.js";
 
 import { VBOLinesColorRenderer               } from "./renderers/VBOLinesColorRenderer.js";
 
@@ -26,8 +25,8 @@ import { VBOTrianglesPickDepthRenderer       } from "./renderers/VBOTrianglesPic
 import { VBOTrianglesPickMeshRenderer        } from "./renderers/VBOTrianglesPickMeshRenderer.js";
 import { VBOTrianglesPickNormalsFlatRenderer } from "./renderers/VBOTrianglesPickNormalsFlatRenderer.js";
 import { VBOTrianglesPickNormalsRenderer     } from "./renderers/VBOTrianglesPickNormalsRenderer.js";
-import { VBOTrianglesShadowRenderer          } from "./renderers/VBOTrianglesShadowRenderer.js";
 
+import { VBOShadowRenderer          } from "./renderers/VBOShadowRenderer.js";
 import { VBOSilhouetteRenderer      } from "./renderers/VBOSilhouetteRenderer.js";
 import { VBOSnapRenderer            } from "./renderers/VBOSnapRenderer.js";
 
@@ -89,7 +88,7 @@ const getRenderers = (function() {
                     pickMeshRenderer:   lazy(VBOPointsPickMeshRenderer),
                     // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
                     // but never used (and probably not maintained), as opposed to VBOInstancingPointsShadowRenderer in the same commit
-                    shadowRenderer:     instancing && lazy(VBOPointsShadowRenderer),
+                    shadowRenderer:     instancing && lazy(VBOShadowRenderer),
                     silhouetteRenderer: lazy(VBOSilhouetteRenderer),
                     snapInitRenderer:   lazy(VBOSnapRenderer, true),
                     snapRenderer:       lazy(VBOSnapRenderer, false)
@@ -121,7 +120,7 @@ const getRenderers = (function() {
                     pickMeshRenderer:                       eager(VBOTrianglesPickMeshRenderer),
                     pickNormalsFlatRenderer:                lazy(VBOTrianglesPickNormalsFlatRenderer),
                     pickNormalsRenderer:                    lazy(VBOTrianglesPickNormalsRenderer),
-                    shadowRenderer:                         lazy(VBOTrianglesShadowRenderer),
+                    shadowRenderer:                         lazy(VBOShadowRenderer),
                     silhouetteRenderer:                     eager(VBOSilhouetteRenderer),
                     snapInitRenderer:                       eager(VBOSnapRenderer, true),
                     snapRenderer:                           eager(VBOSnapRenderer, false)
