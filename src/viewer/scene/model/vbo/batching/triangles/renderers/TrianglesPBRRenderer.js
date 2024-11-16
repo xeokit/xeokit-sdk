@@ -506,9 +506,9 @@ export class TrianglesPBRRenderer extends TrianglesBatchingRenderer {
                 }
             } else if (light.type === "point") {
                 if (light.space === "view") {
-                    src.push("light.direction =  normalize(lightPos" + i + " - vViewPosition.xyz);");
+                    src.push("light.direction =  -normalize(lightPos" + i + " - vViewPosition.xyz);");
                 } else {
-                    src.push("light.direction =  normalize((viewMatrix * vec4(lightPos" + i + ", 0.0)).xyz);");
+                    src.push("light.direction =  -normalize((viewMatrix * vec4(lightPos" + i + ", 0.0)).xyz);");
                 }
             } else if (light.type === "spot") {
                 if (light.space === "view") {
