@@ -1,4 +1,5 @@
 import {VBORenderer} from "../VBORenderer.js";
+import {WEBGL_INFO} from "../../../webglInfo.js";
 import {LinearEncoding, sRGBEncoding} from "../../../constants/constants.js";
 
 const TEXTURE_DECODE_FUNCS = {};
@@ -14,6 +15,7 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
         const inputs = { };
         const gl = scene.canvas.gl;
         const lightsState = scene._lightsState;
+        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
         const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
         const useLightMaps = lightsState.lightMaps.length > 0;
 
@@ -398,12 +400,37 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
             },
             setupInputs: (program) => {
                 inputs.uUVDecodeMatrix = program.getLocation("uvDecodeMatrix");
+
+                inputs.uColorMap         = program.getSampler("uColorMap");
+                inputs.uMetallicRoughMap = program.getSampler("uMetallicRoughMap");
+                inputs.uEmissiveMap      = program.getSampler("uEmissiveMap");
+                inputs.uNormalMap        = program.getSampler("uNormalMap");
+                inputs.uAOMap = program.getSampler("uAOMap");
+
                 if (gammaOutput) {
                     inputs.uGammaFactor = program.getLocation("gammaFactor");
                 }
             },
             setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
-                gl.uniformMatrix3fv(inputs.uUVDecodeMatrix, false, layer._state.uvDecodeMatrix);
+                const state = layer._state;
+                gl.uniformMatrix3fv(inputs.uUVDecodeMatrix, false, state.uvDecodeMatrix);
+
+                const textureSet = state.textureSet;
+                if (textureSet) {
+                    const setSampler = (sampler, texture) => {
+                        if (texture) {
+                            sampler.bindTexture(texture.texture, frameCtx.textureUnit);
+                            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+                        }
+                    };
+
+                    setSampler(inputs.uColorMap,         textureSet.colorTexture);
+                    setSampler(inputs.uMetallicRoughMap, textureSet.metallicRoughnessTexture);
+                    setSampler(inputs.uEmissiveMap,      textureSet.emissiveTexture);
+                    setSampler(inputs.uNormalMap,        textureSet.normalsTexture);
+                    setSampler(inputs.uAOMap, textureSet.occlusionTexture);
+                }
+
                 if (gammaOutput) {
                     gl.uniform1f(inputs.uGammaFactor, scene.gammaFactor);
                 }
