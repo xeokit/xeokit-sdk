@@ -124,7 +124,9 @@ export class VBOTrianglesColorRenderer extends VBORenderer {
                 } else {
                     src.push("   outColor                = " + color + ";");
                 }
-            }
+            },
+            setupInputs: (program) => { },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
         });
     }
 
