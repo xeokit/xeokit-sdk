@@ -4,7 +4,7 @@ import {math} from "../../../math/math.js";
 /**
  * @private
  */
-export class VBOLinesSnapRenderer extends VBORenderer {
+export class VBOSnapRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive, isSnapInit) {
         super(scene, instancing, primitive, false, {
@@ -24,6 +24,9 @@ export class VBOLinesSnapRenderer extends VBORenderer {
                 if (isSnapInit) {
                     src.push("flat out vec4 vPickColor;");
                 }
+                if ((primitive === "points") && (! instancing) && isSnapInit) {
+                    src.push("uniform float pointSize;");
+                }
             },
             filterIntensityRange: false,
             transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - snapVectorA) * snapInvVectorAB * ${clipPos}.w, ${clipPos}.zw)`,
@@ -39,7 +42,10 @@ export class VBOLinesSnapRenderer extends VBORenderer {
                 src.push(`relativeToOriginPosition = ${worldPosition}.xyz;`);
                 if (isSnapInit) {
                     src.push(`vPickColor = ${pickColor};`);
-                } else {
+                }
+                if (primitive === "points") {
+                    src.push("gl_PointSize = " + (((! instancing) && isSnapInit) ? "pointSize" : "1.0") + ";"); // Windows needs this?
+                } else if (!isSnapInit) {
                     src.push("gl_PointSize = 1.0;"); // Windows needs this?
                 }
             },
@@ -58,18 +64,23 @@ export class VBOLinesSnapRenderer extends VBORenderer {
             },
             sectionDiscardThreshold: "0.0",
             needSliced: false,
-            needvWorldPosition: isSnapInit,
+            needvWorldPosition: (primitive !== "points") && isSnapInit,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
+            vertexCullX: (!isSnapInit) && "2.0",
             needGl_PointCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
                 src.push("outCoords = ivec4(relativeToOriginPosition.xyz * coordinateScaler.xyz, " + (isSnapInit ? "-" : "") + "layerNumber);");
 
                 if (isSnapInit) {
-                    src.push(`vec3 xTangent = dFdx(${vWorldPosition}.xyz);`);
-                    src.push(`vec3 yTangent = dFdy(${vWorldPosition}.xyz);`);
-                    src.push("vec3 worldNormal = normalize(cross(xTangent, yTangent));");
-                    src.push(`outNormal = ivec4(worldNormal * float(${math.MAX_INT}), 1.0);`);
+                    if (primitive === "points") {
+                        src.push(`outNormal = ivec4(1.0, 1.0, 1.0, 1.0);`);
+                    } else {
+                        src.push(`vec3 xTangent = dFdx(${vWorldPosition}.xyz);`);
+                        src.push(`vec3 yTangent = dFdy(${vWorldPosition}.xyz);`);
+                        src.push("vec3 worldNormal = normalize(cross(xTangent, yTangent));");
+                        src.push(`outNormal = ivec4(worldNormal * float(${math.MAX_INT}), 1.0);`);
+                    }
                     src.push("outPickColor = uvec4(vPickColor);");
                 }
             }
