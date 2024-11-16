@@ -180,9 +180,6 @@ export class VBORenderer {
 
         this._uShadowViewMatrix = program.getLocation("shadowViewMatrix");
         this._uShadowProjMatrix = program.getLocation("shadowProjMatrix");
-        if (scene.logarithmicDepthBufferEnabled) {
-            this._uZFar = program.getLocation("zFar");
-        }
 
         this._uLightAmbient = program.getLocation("lightAmbient");
         this._uLightColor = [];
@@ -514,9 +511,6 @@ export class VBORenderer {
             if (this._uLogDepthBufFC) {
                 const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2); // TODO: Far from pick project matrix?
                 gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
-            }
-            if (this._uZFar) {
-                gl.uniform1f(this._uZFar, scene.camera.project.far)
             }
         }
 
