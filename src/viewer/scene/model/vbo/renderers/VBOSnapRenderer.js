@@ -38,12 +38,14 @@ export class VBOSnapRenderer extends VBORenderer {
             shadowParameters: null,
             needVertexColor: false,
             needPickColor: isSnapInit,
+            needUV: false,
+            needMetallicRoughness: false,
             needGl_Position: false,
             needViewPosition: false,
             needViewMatrixNormal: false,
             needWorldNormal: false,
             needWorldPosition: true,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => {
+            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`relativeToOriginPosition = ${worldPosition}.xyz;`);
                 if (isSnapInit) {
                     src.push(`vPickColor = ${pickColor};`);

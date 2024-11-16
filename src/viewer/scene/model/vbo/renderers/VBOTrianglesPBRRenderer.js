@@ -26,9 +26,6 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
             renderPassFlag: 0,
             appendVertexDefinitions: (src) => {
                 src.push("uniform mat3 uvDecodeMatrix;");
-                src.push("in vec2 uv;");
-                src.push("in vec2 metallicRoughness;");
-
                 src.push("out vec4 vViewPosition;");
                 src.push("out vec3 vViewNormal;");
                 src.push("out vec4 vColor;");
@@ -44,17 +41,19 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
             shadowParameters: null,
             needVertexColor: true,
             needPickColor: false,
+            needUV: true,
+            needMetallicRoughness: true,
             needGl_Position: false,
             needViewPosition: true,
             needViewMatrixNormal: true,
             needWorldNormal: useLightMaps,
             needWorldPosition: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => {
+            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vViewPosition = ${view.viewPosition};`);
                 src.push(`vViewNormal = ${view.viewNormal};`);
                 src.push(`vColor = ${color};`);
-                src.push("vUV = (uvDecodeMatrix * vec3(uv, 1.0)).xy;");
-                src.push("vMetallicRoughness = metallicRoughness;");
+                src.push(`vUV = (uvDecodeMatrix * vec3(${uv}, 1.0)).xy;`);
+                src.push(`vMetallicRoughness = ${metallicRoughness};`);
 
                 if (useLightMaps) {
                     src.push(`vWorldNormal = ${worldNormal}.xyz;`);

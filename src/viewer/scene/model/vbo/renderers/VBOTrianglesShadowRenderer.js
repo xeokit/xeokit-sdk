@@ -22,12 +22,14 @@ export class VBOTrianglesShadowRenderer extends VBORenderer {
             shadowParameters: { projMatrix: "shadowProjMatrix", viewMatrix: "shadowViewMatrix" },
             needVertexColor: false,
             needPickColor: false,
+            needUV: false,
+            needMetallicRoughness: false,
             needGl_Position: false,
             needViewPosition: false,
             needViewMatrixNormal: false,
             needWorldNormal: false,
             needWorldPosition: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => { },
+            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => { },
             appendFragmentDefinitions: (src) => {
                 src.push("vec4 encodeFloat( const in float v ) {");
                 src.push("  const vec4 bitShift = vec4(256 * 256 * 256, 256 * 256, 256, 1.0);");
