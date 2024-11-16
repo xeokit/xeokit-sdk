@@ -11,6 +11,109 @@ const tempMat4a = math.mat4();
 
 const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
 
+export const createLightSetup = function(gl, lightsState) {
+    const lights = lightsState.lights;
+    return {
+        appendDefinitions: (src) => {
+            src.push("uniform vec4 lightAmbient;");
+            for (let i = 0, len = lights.length; i < len; i++) {
+                const light = lights[i];
+                if (light.type === "ambient") {
+                    continue;
+                }
+                src.push("uniform vec4 lightColor" + i + ";");
+                if (light.type === "dir") {
+                    src.push("uniform vec3 lightDir" + i + ";");
+                }
+                if (light.type === "point") {
+                    src.push("uniform vec3 lightPos" + i + ";");
+                }
+                if (light.type === "spot") {
+                    src.push("uniform vec3 lightPos" + i + ";"); // not referenced
+                    src.push("uniform vec3 lightDir" + i + ";");
+                }
+            }
+        },
+        getAmbientColor: () => "lightAmbient.rgb * lightAmbient.a",
+        getDirectionalLights: (viewMatrix, viewPosition) => {
+            return lights.map((light, i) => {
+                const withViewLightDir = direction => ({
+                    color: `lightColor${i}.rgb * lightColor${i}.a`,
+                    direction: `normalize(${direction})`
+                });
+                if ((light.type === "dir") || (light.type === "spot")) {
+                    if (light.space === "view") {
+                        return withViewLightDir(`lightDir${i}`);
+                    } else {
+                        return withViewLightDir(`(${viewMatrix} * vec4(lightDir${i}, 0.0)).xyz`);
+                    }
+                } else if (light.type === "point") {
+                    if (light.space === "view") {
+                        return withViewLightDir(`${viewPosition}.xyz - lightPos${i}`);
+                    } else {
+                        return withViewLightDir(`(${viewMatrix} * vec4(-lightPos${i}, 0.0)).xyz`);
+                    }
+                } else {        // "ambient"
+                    return null;
+                }
+            }).filter(v => v);
+        },
+
+        setupInputs: (program) => {
+            const uLightAmbient = program.getLocation("lightAmbient");
+            const uLightColor = [];
+            const uLightDir = [];
+            const uLightPos = [];
+            const uLightAttenuation = [];
+
+            let light;
+
+            for (let i = 0, len = lights.length; i < len; i++) {
+                light = lights[i];
+                switch (light.type) {
+                case "dir":
+                    uLightColor[i] = program.getLocation("lightColor" + i);
+                    uLightPos[i] = null;
+                    uLightDir[i] = program.getLocation("lightDir" + i);
+                    break;
+                case "point":
+                    uLightColor[i] = program.getLocation("lightColor" + i);
+                    uLightPos[i] = program.getLocation("lightPos" + i);
+                    uLightDir[i] = null;
+                    uLightAttenuation[i] = program.getLocation("lightAttenuation" + i);
+                    break;
+                case "spot":
+                    uLightColor[i] = program.getLocation("lightColor" + i);
+                    uLightPos[i] = program.getLocation("lightPos" + i);
+                    uLightDir[i] = program.getLocation("lightDir" + i);
+                    uLightAttenuation[i] = program.getLocation("lightAttenuation" + i);
+                    break;
+                }
+            }
+
+            return function() {
+                gl.uniform4fv(uLightAmbient, lightsState.getAmbientColorAndIntensity());
+
+                for (let i = 0, len = lights.length; i < len; i++) {
+                    const light = lights[i];
+                    if (uLightColor[i]) {
+                        gl.uniform4f(uLightColor[i], light.color[0], light.color[1], light.color[2], light.intensity);
+                    }
+                    if (uLightPos[i]) {
+                        gl.uniform3fv(uLightPos[i], light.pos);
+                        if (uLightAttenuation[i]) {
+                            gl.uniform1f(uLightAttenuation[i], light.attenuation);
+                        }
+                    }
+                    if (uLightDir[i]) {
+                        gl.uniform3fv(uLightDir[i], light.dir);
+                    }
+                }
+            };
+        }
+    };
+};
+
 /**
  * @private
  */
@@ -356,39 +459,6 @@ export class VBORenderer {
             gl.getUniformBlockIndex(program.handle, "Matrices"),
             matricesUniformBlockBufferBindingPoint);
 
-        const uLightAmbient = program.getLocation("lightAmbient");
-        const uLightColor = [];
-        const uLightDir = [];
-        const uLightPos = [];
-        const uLightAttenuation = [];
-
-        // TODO add a gard to prevent light params if not affected by light ?
-        const lights = lightsState.lights;
-        let light;
-
-        for (let i = 0, len = lights.length; i < len; i++) {
-            light = lights[i];
-            switch (light.type) {
-                case "dir":
-                    uLightColor[i] = program.getLocation("lightColor" + i);
-                    uLightPos[i] = null;
-                    uLightDir[i] = program.getLocation("lightDir" + i);
-                    break;
-                case "point":
-                    uLightColor[i] = program.getLocation("lightColor" + i);
-                    uLightPos[i] = program.getLocation("lightPos" + i);
-                    uLightDir[i] = null;
-                    uLightAttenuation[i] = program.getLocation("lightAttenuation" + i);
-                    break;
-                case "spot":
-                    uLightColor[i] = program.getLocation("lightColor" + i);
-                    uLightPos[i] = program.getLocation("lightPos" + i);
-                    uLightDir[i] = program.getLocation("lightDir" + i);
-                    uLightAttenuation[i] = program.getLocation("lightAttenuation" + i);
-                    break;
-            }
-        }
-
         const uReflectionMap = (lightsState.reflectionMaps.length > 0) && "reflectionMap";
         const uLightMap = (lightsState.lightMaps.length > 0) && "lightMap";
 
@@ -457,26 +527,6 @@ export class VBORenderer {
             const {camera} = model.scene;
             const {project} = camera;
             const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
-
-            if (uLightAmbient) {
-                gl.uniform4fv(uLightAmbient, lightsState.getAmbientColorAndIntensity());
-            }
-
-            for (let i = 0, len = lights.length; i < len; i++) {
-                const light = lights[i];
-                if (uLightColor[i]) {
-                    gl.uniform4f(uLightColor[i], light.color[0], light.color[1], light.color[2], light.intensity);
-                }
-                if (uLightPos[i]) {
-                    gl.uniform3fv(uLightPos[i], light.pos);
-                    if (uLightAttenuation[i]) {
-                        gl.uniform1f(uLightAttenuation[i], light.attenuation);
-                    }
-                }
-                if (uLightDir[i]) {
-                    gl.uniform3fv(uLightDir[i], light.dir);
-                }
-            }
 
             if (vaoCache.has(layer)) {
                 gl.bindVertexArray(vaoCache.get(layer));
