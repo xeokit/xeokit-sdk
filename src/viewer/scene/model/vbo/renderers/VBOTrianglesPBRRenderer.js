@@ -11,6 +11,8 @@ TEXTURE_DECODE_FUNCS[sRGBEncoding] = "sRGBToLinear";
 export class VBOTrianglesPBRRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive, withSAO) {
+        const inputs = { };
+        const gl = scene.canvas.gl;
         const lightsState = scene._lightsState;
         const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
         const useLightMaps = lightsState.lightMaps.length > 0;
@@ -116,8 +118,6 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                     src.push("    return dot( v, unPackFactors );");
                     src.push("}");
                 }
-
-                src.push("uniform float gammaFactor;");
                 src.push("vec4 linearToLinear( in vec4 value ) {");
                 src.push("  return value;");
                 src.push("}");
@@ -125,7 +125,8 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                 src.push("  return vec4( mix( pow( value.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), value.rgb * 0.0773993808, vec3( lessThanEqual( value.rgb, vec3( 0.04045 ) ) ) ), value.w );");
                 src.push("}");
                 if (gammaOutput) {
-                    src.push("vec4 linearToGamma( in vec4 value, in float gammaFactor ) {");
+                    src.push("uniform float gammaFactor;");
+                    src.push("vec4 linearToGamma( in vec4 value ) {");
                     src.push("  return vec4( pow( value.xyz, vec3( 1.0 / gammaFactor ) ), value.w );");
                     src.push("}");
                 }
@@ -390,13 +391,23 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                 }
 
                 if (gammaOutput) {
-                    src.push("fragColor = linearToGamma(fragColor, gammaFactor);");
+                    src.push("fragColor = linearToGamma(fragColor);");
                 }
 
                 src.push("outColor = fragColor;");
             },
-            setupInputs: (program) => { },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
+            setupInputs: (program) => {
+                inputs.uUVDecodeMatrix = program.getLocation("uvDecodeMatrix");
+                if (gammaOutput) {
+                    inputs.uGammaFactor = program.getLocation("gammaFactor");
+                }
+            },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
+                gl.uniformMatrix3fv(inputs.uUVDecodeMatrix, false, layer._state.uvDecodeMatrix);
+                if (gammaOutput) {
+                    gl.uniform1f(inputs.uGammaFactor, scene.gammaFactor);
+                }
+            }
         });
     }
 
