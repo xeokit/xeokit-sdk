@@ -23,12 +23,14 @@ export class VBOLinesColorRenderer extends VBORenderer {
             shadowParameters: null,
             needVertexColor: true,
             needPickColor: false,
+            needUV: false,
+            needMetallicRoughness: false,
             needGl_Position: false,
             needViewPosition: false,
             needViewMatrixNormal: false,
             needWorldNormal: false,
             needWorldPosition: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => {
+            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vColor = ${color} / 255.0;`);
             },
             appendFragmentDefinitions: (src) => {
