@@ -43,7 +43,9 @@ export class VBOTrianglesPickNormalsFlatRenderer extends VBORenderer {
                 src.push(`vec3 yTangent = dFdy(${vWorldPosition}.xyz);`);
                 src.push("vec3 worldNormal = normalize(cross(xTangent, yTangent));");
                 src.push(`outNormal = ivec4(worldNormal * float(${math.MAX_INT}), 1.0);`);
-            }
+            },
+            setupInputs: (program) => { },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
         });
     }
 

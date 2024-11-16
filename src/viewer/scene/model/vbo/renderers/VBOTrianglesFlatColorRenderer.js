@@ -136,7 +136,9 @@ export class VBOTrianglesFlatColorRenderer extends VBORenderer {
                 } else {
                     src.push("   outColor                = fragColor;");
                 }
-            }
+            },
+            setupInputs: (program) => { },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
         });
     }
 
