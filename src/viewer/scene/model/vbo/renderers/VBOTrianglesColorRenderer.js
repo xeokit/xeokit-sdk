@@ -44,12 +44,14 @@ export class VBOTrianglesColorRenderer extends VBORenderer {
             shadowParameters: null,
             needVertexColor: true,
             needPickColor: false,
+            needUV: false,
+            needMetallicRoughness: false,
             needGl_Position: false,
             needViewPosition: true,
             needViewMatrixNormal: true,
             needWorldNormal: false,
             needWorldPosition: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => {
+            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
                 src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
                 src.push("float lambertian = 1.0;");
