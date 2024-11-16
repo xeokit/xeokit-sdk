@@ -1,4 +1,5 @@
 import {VBORenderer} from "../VBORenderer.js";
+import {WEBGL_INFO} from "../../../webglInfo.js";
 
 /**
  * @private
@@ -10,6 +11,7 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
         const gl = scene.canvas.gl;
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const lightsState = scene._lightsState;
+        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
         const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
 
         super(scene, instancing, primitive, withSAO, {
@@ -178,12 +180,19 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
             },
             setupInputs: (program) => {
                 inputs.uUVDecodeMatrix = program.getLocation("uvDecodeMatrix");
+                inputs.uColorMap = program.getSampler("uColorMap");
                 if (gammaOutput) {
                     inputs.uGammaFactor = program.getLocation("gammaFactor");
                 }
             },
             setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
-                gl.uniformMatrix3fv(inputs.uUVDecodeMatrix, false, layer._state.uvDecodeMatrix);
+                const state = layer._state;
+                gl.uniformMatrix3fv(inputs.uUVDecodeMatrix, false, state.uvDecodeMatrix);
+                const colorTexture = state.textureSet.colorTexture;
+                if (colorTexture) {
+                    inputs.uColorMap.bindTexture(colorTexture.texture, frameCtx.textureUnit);
+                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+                }
                 if (gammaOutput) {
                     gl.uniform1f(inputs.uGammaFactor, scene.gammaFactor);
                 }
