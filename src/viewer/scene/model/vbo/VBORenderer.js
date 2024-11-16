@@ -13,8 +13,6 @@ const tempVec3b = math.vec3();
 const tempVec3c = math.vec3();
 const tempMat4a = math.mat4();
 
-const SNAPPING_LOG_DEPTH_BUF_ENABLED = true; // Improves occlusion accuracy at distance
-
 const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
 
 /**
@@ -56,7 +54,10 @@ export class VBORenderer {
         const needViewMatrixInFragment  = cfg.needViewMatrixInFragment;
         const needGl_PointCoord         = cfg.needGl_PointCoord;
         const appendFragmentOutputs     = cfg.appendFragmentOutputs;
+        const setupInputs               = cfg.setupInputs;
+        const setRenderState            = cfg.setRenderState;
 
+        const needNormal = needViewMatrixNormal || needWorldNormal;
         const isSnap = (progMode === "snapInitMode") || (progMode === "snapMode");
         const testPerspectiveForGl_FragDepth = ((primitive !== "points") && (primitive !== "lines")) || isSnap;
 
@@ -87,13 +88,13 @@ export class VBORenderer {
         const numAllocatedSectionPlanes = sectionPlanesState.getNumAllocatedSectionPlanes();
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
 
-        const addMatricesUniformBlockLines = (src, normals) => {
+        const addMatricesUniformBlockLines = (src) => {
             src.push("uniform Matrices {");
             src.push("    mat4 worldMatrix;");
             src.push("    mat4 viewMatrix;");
             src.push("    mat4 projMatrix;");
             src.push("    mat4 positionsDecodeMatrix;");
-            if (normals) {
+            if (needNormal) {
                 src.push("    mat4 worldNormalMatrix;");
                 src.push("    mat4 viewNormalMatrix;");
             }
@@ -123,7 +124,7 @@ export class VBORenderer {
                 src.push("uniform int renderPass;");
             }
             src.push("in vec3 position;");
-            if (needViewMatrixNormal || needWorldNormal) {
+            if (needNormal) {
                 src.push("in vec3 normal;");
             }
             if (needVertexColor || shadowParameters || filterIntensityRange) {
@@ -141,16 +142,16 @@ export class VBORenderer {
                 src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
                 src.push("in vec4 modelMatrixCol1;");
                 src.push("in vec4 modelMatrixCol2;");
-                if (needViewMatrixNormal || needWorldNormal) {
+                if (needNormal) {
                     src.push("in vec4 modelNormalMatrixCol0;");
                     src.push("in vec4 modelNormalMatrixCol1;");
                     src.push("in vec4 modelNormalMatrixCol2;");
                 }
             }
 
-            addMatricesUniformBlockLines(src, needViewMatrixNormal || needWorldNormal);
+            addMatricesUniformBlockLines(src);
 
-            if (getLogDepth && (! shadowParameters)) { // likely shouldn't be testing shadowParameters, perhaps an earlier overlook
+            if (getLogDepth) { // && (! shadowParameters)) { // likely shouldn't be testing shadowParameters, perhaps an earlier overlook
                 src.push("out float vFragDepth;");
                 if (testPerspectiveForGl_FragDepth) {
                     src.push("out float isPerspective;");
@@ -167,7 +168,7 @@ export class VBORenderer {
                 }
             }
 
-            if (needViewMatrixNormal || needWorldNormal) {
+            if (needNormal) {
                 src.push("vec3 octDecode(vec2 oct) {");
                 src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
                 src.push("    if (v.z < 0.0) {");
@@ -207,7 +208,7 @@ export class VBORenderer {
             src.push("vec4 viewPosition = " + (shadowParameters ? shadowParameters.viewMatrix : "viewMatrix") + " * worldPosition;");
 
             src.push("vec4 clipPos = " + (shadowParameters ? shadowParameters.projMatrix : "projMatrix") + " * viewPosition;");
-            if (getLogDepth && (! shadowParameters)) {
+            if (getLogDepth) { // && (! shadowParameters)) { // see comment above
                 src.push("vFragDepth = 1.0 + clipPos.w;");
                 if (testPerspectiveForGl_FragDepth) {
                     src.push(`isPerspective = float (${isPerspectiveMatrix("projMatrix")});`);
@@ -226,7 +227,7 @@ export class VBORenderer {
 
             src.push("gl_Position = " + transformClipPos("clipPos") + ";");
 
-            if (needViewMatrixNormal || needWorldNormal) {
+            if (needNormal) {
                 if (instancing) {
                     src.push("vec4 modelNormal = vec4(octDecode(normal.xy), 0.0);");
                     src.push("vec4 worldNormal = worldNormalMatrix * vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
@@ -279,7 +280,7 @@ export class VBORenderer {
             }
 
             if (needViewMatrixInFragment) {
-                addMatricesUniformBlockLines(src, needViewMatrixNormal || needWorldNormal); // if false then WebGL error "Interface block `Matrices` is not linkable between attached shaders."
+                addMatricesUniformBlockLines(src);
             }
 
             appendFragmentDefinitions(src);
@@ -345,7 +346,7 @@ export class VBORenderer {
             return;
         }
 
-        const uRenderPass = program.getLocation("renderPass");
+        const uRenderPass = (! shadowParameters) && program.getLocation("renderPass");
 
         // some shader may have color as attribute, in this case the uniform must be renamed silhouetteColor
         const uColor = program.getLocation("color") || program.getLocation("silhouetteColor");
@@ -437,8 +438,9 @@ export class VBORenderer {
 
         const alphaCutoffLocation = useAlphaCutoff && program.getLocation("materialAlphaCutoff");
 
-        const uLogDepthBufFC = (isSnap || scene.logarithmicDepthBufferEnabled) && program.getLocation("logDepthBufFC");
+        const uLogDepthBufFC = getLogDepth && program.getLocation("logDepthBufFC");
 
+        const pointsMaterial = scene.pointsMaterial;
         const uIntensityRange = filterIntensityRange && program.getLocation(filterIntensityRange);
 
         const uPointSize = program.getLocation("pointSize");
@@ -447,10 +449,7 @@ export class VBORenderer {
         const uSliceColor = scene.crossSections && program.getLocation("sliceColor");
         const uSliceThickness = scene.crossSections && program.getLocation("sliceThickness");
 
-        const uVectorA = isSnap && program.getLocation("snapVectorA");
-        const uInverseVectorAB = isSnap && program.getLocation("snapInvVectorAB");
-        const uLayerNumber = isSnap && program.getLocation("layerNumber");
-        const uCoordinateScaler = isSnap && program.getLocation("coordinateScaler");
+        setupInputs(program);
 
         this.destroy = () => program.destroy();
         this.drawLayer = (frameCtx, layer, renderPass) => {
@@ -600,7 +599,7 @@ export class VBORenderer {
             matricesUniformBlockBufferData.set(rtcViewMatrix, offset += mat4Size);
             matricesUniformBlockBufferData.set(frameCtx.pickProjMatrix || project.matrix, offset += mat4Size);
             matricesUniformBlockBufferData.set(positionsDecodeMatrix, offset += mat4Size);
-            if (! isSnap) {
+            if (needNormal) {
                 matricesUniformBlockBufferData.set(model.worldNormalMatrix, offset += mat4Size);
                 matricesUniformBlockBufferData.set(camera.viewNormalMatrix, offset += mat4Size);
             }
@@ -647,7 +646,6 @@ export class VBORenderer {
                 }
             }
 
-
             if (uShadowViewMatrix) {
                 gl.uniformMatrix4fv(uShadowViewMatrix, false, frameCtx.shadowViewMatrix); // Not tested
             }
@@ -655,36 +653,21 @@ export class VBORenderer {
                 gl.uniformMatrix4fv(uShadowProjMatrix, false, frameCtx.shadowProjMatrix); // Not tested
             }
 
-            if (scene.logarithmicDepthBufferEnabled || (isSnap && SNAPPING_LOG_DEPTH_BUF_ENABLED)) {
-                if (uLogDepthBufFC) {
-                    const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2); // TODO: Far from pick project matrix?
-                    gl.uniform1f(uLogDepthBufFC, logDepthBufFC);
-                }
+            if (! shadowParameters) {
+                gl.uniform1i(uRenderPass, renderPass);
             }
 
+            if (uLogDepthBufFC) {
+                gl.uniform1f(uLogDepthBufFC, 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2)); // TODO: Far from pick project matrix?
+            }
+
+            if (uPointSize) {
+                gl.uniform1f(uPointSize, isSnap ? 1.0 : pointsMaterial.pointSize);
+            }
+
+            setRenderState(frameCtx, layer, renderPass, rtcOrigin);
+
             if (isSnap) {
-                const aabb = layer.aabb; // Per-layer AABB for best RTC accuracy
-                const coordinateScaler = tempVec3c;
-                coordinateScaler[0] = math.safeInv(aabb[3] - aabb[0]) * math.MAX_INT;
-                coordinateScaler[1] = math.safeInv(aabb[4] - aabb[1]) * math.MAX_INT;
-                coordinateScaler[2] = math.safeInv(aabb[5] - aabb[2]) * math.MAX_INT;
-
-                frameCtx.snapPickCoordinateScale[0] = math.safeInv(coordinateScaler[0]);
-                frameCtx.snapPickCoordinateScale[1] = math.safeInv(coordinateScaler[1]);
-                frameCtx.snapPickCoordinateScale[2] = math.safeInv(coordinateScaler[2]);
-                frameCtx.snapPickOrigin[0] = rtcOrigin[0];
-                frameCtx.snapPickOrigin[1] = rtcOrigin[1];
-                frameCtx.snapPickOrigin[2] = rtcOrigin[2];
-
-                gl.uniform3fv(uCoordinateScaler, coordinateScaler);
-                gl.uniform2fv(uVectorA, frameCtx.snapVectorA);
-                gl.uniform2fv(uInverseVectorAB, frameCtx.snapInvVectorAB);
-                gl.uniform1i(uLayerNumber, frameCtx.snapPickLayerNumber);
-                gl.uniform1i(uRenderPass, renderPass);
-                if (uPointSize) {
-                    gl.uniform1f(uPointSize, 1.0);
-                }
-
                 //=============================================================
                 // TODO: Use drawElements count and offset to draw only one entity
                 //=============================================================
@@ -716,9 +699,6 @@ export class VBORenderer {
                 }
 
             } else {                // ! isSnap
-
-                gl.uniform1i(uRenderPass, renderPass);
-
                 if (uPickZNear) {
                     gl.uniform1f(uPickZNear, frameCtx.pickZNear);
                 }
@@ -739,13 +719,8 @@ export class VBORenderer {
                     gl.uniformMatrix3fv(uUVDecodeMatrix, false, state.uvDecodeMatrix);
                 }
 
-                const pointsMaterial = scene.pointsMaterial;
                 if (uIntensityRange) {
                     gl.uniform2f(uIntensityRange, pointsMaterial.minIntensity, pointsMaterial.maxIntensity);
-                }
-
-                if (uPointSize) {
-                    gl.uniform1f(uPointSize, pointsMaterial.pointSize);
                 }
 
                 if (uNearPlaneHeight) {
