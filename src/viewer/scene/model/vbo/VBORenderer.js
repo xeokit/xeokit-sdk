@@ -21,43 +21,51 @@ const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
  * @private
  */
 export class VBORenderer {
-    constructor(scene, instancing, primitive, withSAO = false, {progMode, edges = false, useAlphaCutoff = false, colorUniform = false, incrementDrawState = false, getHash, getLogDepth, clippingCaps, renderPassFlag, appendVertexDefinitions, filterIntensityRange, transformClipPos, shadowParameters, needVertexColor, needPickColor, needGl_Position, needViewPosition, needViewMatrixNormal, needWorldNormal, needWorldPosition, appendVertexOutputs, appendFragmentDefinitions, sectionDiscardThreshold, needSliced, needvWorldPosition, needGl_FragCoord, needViewMatrixInFragment, needGl_PointCoord, appendFragmentOutputs, vertexCullX} = {}) {
-        this._scene = scene;
-        this._instancing = instancing;
-        this._primitive = primitive;
-        this._withSAO = withSAO;
-        this._progMode = progMode;
-        this._edges = edges;
-        this._useAlphaCutoff = useAlphaCutoff;
-        this._colorUniform = colorUniform;
-        this._incrementDrawState = incrementDrawState;
-        this._hash = this._getHash();
+    constructor(scene, instancing, primitive, withSAO = false, cfg) {
 
-        this._getRendererHash = getHash;
-        this._getLogDepth = getLogDepth;
-        this._clippingCaps = clippingCaps;
-        this._renderPassFlag = renderPassFlag;
-        this._appendVertexDefinitions = appendVertexDefinitions;
-        this._filterIntensityRange = filterIntensityRange;
-        this._transformClipPos = transformClipPos;
-        this._shadowParameters = shadowParameters;
-        this._needVertexColor = needVertexColor;
-        this._needPickColor = needPickColor;
-        this._needGl_Position = needGl_Position;
-        this._needViewPosition = needViewPosition;
-        this._needViewMatrixNormal = needViewMatrixNormal;
-        this._needWorldNormal = needWorldNormal;
-        this._needWorldPosition = needWorldPosition;
-        this._appendVertexOutputs = appendVertexOutputs;
-        this._appendFragmentDefinitions = appendFragmentDefinitions;
-        this._sectionDiscardThreshold = sectionDiscardThreshold;
-        this._needSliced = needSliced;
-        this._needvWorldPosition = needvWorldPosition;
-        this._needGl_FragCoord = needGl_FragCoord;
-        this._needViewMatrixInFragment = needViewMatrixInFragment;
-        this._needGl_PointCoord = needGl_PointCoord;
-        this._appendFragmentOutputs = appendFragmentOutputs;
-        this._vertexCullX = vertexCullX || "0.0";
+        const getHash = () => [ scene._sectionPlanesState.getHash() ].concat(cfg.getHash()).join(";");
+        const hash = getHash();
+        this.getValid = () => hash === getHash();
+
+        this._scene                     = scene;
+        this._instancing                = instancing;
+        this._primitive                 = primitive;
+        this._withSAO                   = withSAO;
+
+        this._progMode                  = cfg.progMode;
+        this._edges                     = cfg.edges;
+        this._useAlphaCutoff            = cfg.useAlphaCutoff;
+        this._colorUniform              = cfg.colorUniform;
+        this._incrementDrawState        = cfg.incrementDrawState;
+
+        this._getRendererHash           = cfg.getHash;
+        this._getLogDepth               = cfg.getLogDepth;
+        this._clippingCaps              = cfg.clippingCaps;
+        this._renderPassFlag            = cfg.renderPassFlag;
+        this._appendVertexDefinitions   = cfg.appendVertexDefinitions;
+        this._filterIntensityRange      = cfg.filterIntensityRange;
+        this._transformClipPos          = cfg.transformClipPos;
+        this._shadowParameters          = cfg.shadowParameters;
+        this._needVertexColor           = cfg.needVertexColor;
+        this._needPickColor             = cfg.needPickColor;
+        this._needGl_Position           = cfg.needGl_Position;
+        this._needViewPosition          = cfg.needViewPosition;
+        this._needViewMatrixNormal      = cfg.needViewMatrixNormal;
+        this._needWorldNormal           = cfg.needWorldNormal;
+        this._needWorldPosition         = cfg.needWorldPosition;
+        this._appendVertexOutputs       = cfg.appendVertexOutputs;
+        this._appendFragmentDefinitions = cfg.appendFragmentDefinitions;
+        this._sectionDiscardThreshold   = cfg.sectionDiscardThreshold;
+        this._needSliced                = cfg.needSliced;
+        this._needvWorldPosition        = cfg.needvWorldPosition;
+        this._needGl_FragCoord          = cfg.needGl_FragCoord;
+        this._needViewMatrixInFragment  = cfg.needViewMatrixInFragment;
+        this._needGl_PointCoord         = cfg.needGl_PointCoord;
+        this._appendFragmentOutputs     = cfg.appendFragmentOutputs;
+        this._vertexCullX = cfg.vertexCullX || "0.0";
+
+        const progMode                  = cfg.progMode;
+
 
         this._testPerspectiveForGl_FragDepth = ((primitive !== "points") && (primitive !== "lines")) || (progMode === "snapInitMode") || (progMode === "snapMode");
 
@@ -83,14 +91,6 @@ export class VBORenderer {
         this._vaoCache = new WeakMap();
 
         this._allocate();
-    }
-
-    /**
-     * Should be overrided by subclasses if it does not only "depend" on section planes state.
-     * @returns { string }
-     */
-    _getHash() {
-        return [ this._scene._sectionPlanesState.getHash() ].concat(this._getRendererHash ? this._getRendererHash() : [ ]).join(";");
     }
 
     _buildShader() {
@@ -397,10 +397,6 @@ export class VBORenderer {
         src.push("    return clipPos;")
         src.push("}");
         return src;
-    }
-
-    getValid() {
-        return this._hash === this._getHash();
     }
 
     setSectionPlanesStateUniforms(layer) {
