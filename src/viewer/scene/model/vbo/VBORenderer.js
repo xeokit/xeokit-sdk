@@ -1,6 +1,7 @@
 import {createRTCViewMat, getPlaneRTCPos} from "../../math/rtcCoords.js";
 import {math} from "../../math/math.js";
 import {Program} from "../../webgl/Program.js";
+import {LinearEncoding, sRGBEncoding} from "../../constants/constants.js";
 import {WEBGL_INFO} from "../../webglInfo.js";
 
 const tempVec4 = math.vec4();
@@ -11,9 +12,18 @@ const tempMat4a = math.mat4();
 
 const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
 
-export const createLightSetup = function(gl, lightsState) {
+export const createLightSetup = function(gl, lightsState, useMaps) {
+    const TEXTURE_DECODE_FUNCS = {
+        [LinearEncoding]: value => value,
+        [sRGBEncoding]:   value => `sRGBToLinear(${value})`
+    };
+
     const lights = lightsState.lights;
+    const lightMap      = useMaps && (lightsState.lightMaps.length      > 0) && lightsState.lightMaps[0];
+    const reflectionMap = useMaps && (lightsState.reflectionMaps.length > 0) && lightsState.reflectionMaps[0];
+
     return {
+        getHash: () => lightsState.getHash(),
         appendDefinitions: (src) => {
             src.push("uniform vec4 lightAmbient;");
             for (let i = 0, len = lights.length; i < len; i++) {
@@ -32,6 +42,18 @@ export const createLightSetup = function(gl, lightsState) {
                     src.push("uniform vec3 lightPos" + i + ";"); // not referenced
                     src.push("uniform vec3 lightDir" + i + ";");
                 }
+            }
+
+            if (lightMap) {
+                src.push("uniform samplerCube lightMap;");
+            }
+            if (reflectionMap) {
+                src.push("uniform samplerCube reflectionMap;");
+            }
+            if (lightMap || reflectionMap) {
+                src.push("vec4 sRGBToLinear(in vec4 value) {");
+                src.push("  return vec4(mix(pow(value.rgb * 0.9478672986 + 0.0521327014, vec3(2.4)), value.rgb * 0.0773993808, vec3(lessThanEqual(value.rgb, vec3(0.04045)))), value.w);");
+                src.push("}");
             }
         },
         getAmbientColor: () => "lightAmbient.rgb * lightAmbient.a",
@@ -58,7 +80,18 @@ export const createLightSetup = function(gl, lightsState) {
                 }
             }).filter(v => v);
         },
-
+        getIrradiance: useMaps && lightMap && ((worldNormal) => {
+            const decode = TEXTURE_DECODE_FUNCS[lightMap.encoding];
+            return `${decode(`texture(lightMap, ${worldNormal})`)}.rgb`;
+        }),
+        getReflectionRadiance: useMaps && reflectionMap && ((specularRoughness, reflectVec) => {
+            const maxMIPLevel = "8.0";
+            const blinnExpFromRoughness = `(2.0 / pow(${specularRoughness} + 0.0001, 2.0) - 2.0)`;
+            const desiredMIPLevel = `${maxMIPLevel} - 0.79248 - 0.5 * log2(pow(${blinnExpFromRoughness}, 2.0) + 1.0)`;
+            const specularMIPLevel = `clamp(${desiredMIPLevel}, 0.0, ${maxMIPLevel})`;
+            const decode = TEXTURE_DECODE_FUNCS[reflectionMap.encoding];
+            return `${decode(`texture(reflectionMap, ${reflectVec}, 0.5 * ${specularMIPLevel})`)}.rgb`; //TODO: a random factor - fix this
+        }),
         setupInputs: (program) => {
             const uLightAmbient = program.getLocation("lightAmbient");
             const uLightColor = [];
@@ -91,7 +124,10 @@ export const createLightSetup = function(gl, lightsState) {
                 }
             }
 
-            return function() {
+            const uLightMap      = useMaps && lightMap      && program.getSampler("lightMap");
+            const uReflectionMap = useMaps && reflectionMap && program.getSampler("reflectionMap");
+
+            return function(frameCtx) {
                 gl.uniform4fv(uLightAmbient, lightsState.getAmbientColorAndIntensity());
 
                 for (let i = 0, len = lights.length; i < len; i++) {
@@ -109,6 +145,17 @@ export const createLightSetup = function(gl, lightsState) {
                         gl.uniform3fv(uLightDir[i], light.dir);
                     }
                 }
+
+                const setSampler = (sampler, texture) => {
+                    if (sampler && texture.texture) {
+                        sampler.bindTexture(texture.texture, frameCtx.textureUnit);
+                        frameCtx.textureUnit = (frameCtx.textureUnit + 1) % WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
+                        frameCtx.bindTexture++;
+                    }
+                };
+
+                setSampler(uLightMap,      lightMap);
+                setSampler(uReflectionMap, reflectionMap);
             };
         }
     };
@@ -182,7 +229,6 @@ export class VBORenderer {
         const vaoCache = new WeakMap();
 
         const gl = scene.canvas.gl;
-        const lightsState = scene._lightsState;
 
         const sectionPlanesState = scene._sectionPlanesState;
         const numAllocatedSectionPlanes = sectionPlanesState.getNumAllocatedSectionPlanes();
@@ -459,11 +505,7 @@ export class VBORenderer {
             gl.getUniformBlockIndex(program.handle, "Matrices"),
             matricesUniformBlockBufferBindingPoint);
 
-        const uReflectionMap = (lightsState.reflectionMaps.length > 0) && "reflectionMap";
-        const uLightMap = (lightsState.lightMaps.length > 0) && "lightMap";
-
         const uSectionPlanes = [];
-
         for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
             uSectionPlanes.push({
                 active: program.getLocation("sectionPlaneActive" + i),
@@ -755,18 +797,6 @@ export class VBORenderer {
                 }
 
                 const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
-
-                if (lightsState.reflectionMaps.length > 0 && lightsState.reflectionMaps[0].texture && uReflectionMap) {
-                    program.bindTexture(uReflectionMap, lightsState.reflectionMaps[0].texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                }
-
-                if (lightsState.lightMaps.length > 0 && lightsState.lightMaps[0].texture && uLightMap) {
-                    program.bindTexture(uLightMap, lightsState.lightMaps[0].texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                    frameCtx.bindTexture++;
-                }
 
                 if (withSAO) {
                     const sao = scene.sao;

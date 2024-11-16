@@ -1,10 +1,5 @@
 import {VBORenderer, createLightSetup} from "../VBORenderer.js";
 import {WEBGL_INFO} from "../../../webglInfo.js";
-import {LinearEncoding, sRGBEncoding} from "../../../constants/constants.js";
-
-const TEXTURE_DECODE_FUNCS = {};
-TEXTURE_DECODE_FUNCS[LinearEncoding] = "linearToLinear";
-TEXTURE_DECODE_FUNCS[sRGBEncoding] = "sRGBToLinear";
 
 /**
  * @private
@@ -14,16 +9,16 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
     constructor(scene, instancing, primitive, withSAO) {
         const inputs = { };
         const gl = scene.canvas.gl;
-        const lightsState = scene._lightsState;
-        const lightSetup = createLightSetup(gl, lightsState);
+        const lightSetup = createLightSetup(gl, scene._lightsState, true);
+        const getIrradiance = lightSetup.getIrradiance;
+        const getReflectionRadiance = lightSetup.getReflectionRadiance;
         const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
         const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
-        const useLightMaps = lightsState.lightMaps.length > 0;
 
         super(scene, instancing, primitive, withSAO, {
             progMode: "pbrMode", incrementDrawState: true,
 
-            getHash: () => [lightsState.getHash(), (withSAO ? "sao" : "nosao"), gammaOutput],
+            getHash: () => [lightSetup.getHash(), (withSAO ? "sao" : "nosao"), gammaOutput],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             clippingCaps: scene._sectionPlanesState.clippingCaps && "outColor",
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
@@ -37,7 +32,7 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                 src.push("out vec2 vUV;");
                 src.push("out vec2 vMetallicRoughness;");
 
-                if (useLightMaps) {
+                if (getIrradiance) {
                     src.push("out vec3 vWorldNormal;");
                 }
             },
@@ -51,7 +46,7 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
             needGl_Position: false,
             needViewPosition: true,
             needViewMatrixNormal: true,
-            needWorldNormal: useLightMaps,
+            needWorldNormal: getIrradiance,
             needWorldPosition: false,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vViewPosition = ${view.viewPosition};`);
@@ -60,7 +55,7 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                 src.push(`vUV = (uvDecodeMatrix * vec3(${uv}, 1.0)).xy;`);
                 src.push(`vMetallicRoughness = ${metallicRoughness};`);
 
-                if (useLightMaps) {
+                if (getIrradiance) {
                     src.push(`vWorldNormal = ${worldNormal}.xyz;`);
                 }
             },
@@ -76,16 +71,8 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                 src.push("in vec2 vUV;");
                 src.push("in vec2 vMetallicRoughness;");
 
-                if (lightsState.lightMaps.length > 0) {
+                if (getIrradiance) {
                     src.push("in vec3 vWorldNormal;");
-                }
-
-                if (lightsState.reflectionMaps.length > 0) {
-                    src.push("uniform samplerCube reflectionMap;");
-                }
-
-                if (lightsState.lightMaps.length > 0) {
-                    src.push("uniform samplerCube lightMap;");
                 }
 
                 lightSetup.appendDefinitions(src);
@@ -103,10 +90,7 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                     src.push("    return dot( v, unPackFactors );");
                     src.push("}");
                 }
-                src.push("vec4 linearToLinear( in vec4 value ) {");
-                src.push("  return value;");
-                src.push("}");
-                src.push("vec4 sRGBToLinear( in vec4 value ) {");
+                src.push("vec4 sRGBToLinearPBR( in vec4 value ) {"); // temporary "PBR" postfix while sRGBToLinear is defined for lights
                 src.push("  return vec4( mix( pow( value.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), value.rgb * 0.0773993808, vec3( lessThanEqual( value.rgb, vec3( 0.04045 ) ) ) ), value.w );");
                 src.push("}");
                 if (gammaOutput) {
@@ -164,7 +148,6 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                 src.push("struct Geometry {");
                 src.push("   vec3 position;");
                 src.push("   vec3 viewNormal;");
-                src.push("   vec3 worldNormal;");
                 src.push("   vec3 viewEyeDir;");
                 src.push("};");
 
@@ -174,27 +157,6 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                 src.push("   vec3  specularColor;");
                 src.push("   float shine;"); // Only used for Phong
                 src.push("};");
-
-                // IRRADIANCE EVALUATION
-
-                src.push("float GGXRoughnessToBlinnExponent(const in float ggxRoughness) {");
-                src.push("   float r = ggxRoughness + 0.0001;");
-                src.push("   return (2.0 / (r * r) - 2.0);");
-                src.push("}");
-
-                src.push("float getSpecularMIPLevel(const in float blinnShininessExponent, const in int maxMIPLevel) {");
-                src.push("   float maxMIPLevelScalar = float( maxMIPLevel );");
-                src.push("   float desiredMIPLevel = maxMIPLevelScalar - 0.79248 - 0.5 * log2( ( blinnShininessExponent * blinnShininessExponent ) + 1.0 );");
-                src.push("   return clamp( desiredMIPLevel, 0.0, maxMIPLevelScalar );");
-                src.push("}");
-
-                if (lightsState.reflectionMaps.length > 0) {
-                    src.push("vec3 getLightProbeIndirectRadiance(const in vec3 reflectVec, const in float blinnShininessExponent, const in int maxMIPLevel) {");
-                    src.push("   float mipLevel = 0.5 * getSpecularMIPLevel(blinnShininessExponent, maxMIPLevel);"); //TODO: a random factor - fix this
-                    src.push("   vec3 envMapColor = " + TEXTURE_DECODE_FUNCS[lightsState.reflectionMaps[0].encoding] + "(texture(reflectionMap, reflectVec, mipLevel)).rgb;");
-                    src.push("  return envMapColor;");
-                    src.push("}");
-                }
 
                 // SPECULAR BRDF EVALUATION
 
@@ -246,25 +208,6 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                 src.push("   return specularColor * AB.x + AB.y;");
                 src.push("}");
 
-                if (lightsState.lightMaps.length > 0 || lightsState.reflectionMaps.length > 0) {
-                    src.push("void computePBRLightMapping(const in Geometry geometry, const in Material material, const in mat4 viewMatrix, inout ReflectedLight reflectedLight) {");
-                    if (lightsState.lightMaps.length > 0) {
-                        src.push("   vec3 irradiance = " + TEXTURE_DECODE_FUNCS[lightsState.lightMaps[0].encoding] + "(texture(lightMap, geometry.worldNormal)).rgb;");
-                        src.push("   irradiance *= PI;");
-                        src.push("   vec3 diffuseBRDFContrib = (RECIPROCAL_PI * material.diffuseColor);");
-                        src.push("   reflectedLight.diffuse += irradiance * diffuseBRDFContrib;");
-                    }
-                    if (lightsState.reflectionMaps.length > 0) {
-                        src.push("   vec3 reflectVec             = reflect(geometry.viewEyeDir, geometry.viewNormal);");
-                        src.push("   reflectVec                  = inverseTransformDirection(reflectVec, viewMatrix);");
-                        src.push("   float blinnExpFromRoughness = GGXRoughnessToBlinnExponent(material.specularRoughness);");
-                        src.push("   vec3 radiance               = getLightProbeIndirectRadiance(reflectVec, blinnExpFromRoughness, 8);");
-                        src.push("   vec3 specularBRDFContrib    = BRDF_Specular_GGX_Environment(geometry, material.specularColor, material.specularRoughness);");
-                        src.push("   reflectedLight.specular     += radiance * specularBRDFContrib;");
-                    }
-                    src.push("}");
-                }
-
                 // MAIN LIGHTING COMPUTATION FUNCTION
 
                 src.push("void computePBRLighting(const in IncidentLight incidentLight, const in Geometry geometry, const in Material material, inout ReflectedLight reflectedLight) {");
@@ -297,7 +240,7 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                 src.push("float roughness = float(vMetallicRoughness.g) / 255.0;");
                 src.push("float dielectricSpecular = 0.16 * specularF0 * specularF0;");
 
-                src.push("vec4 colorTexel = sRGBToLinear(texture(uColorMap, vUV));");
+                src.push("vec4 colorTexel = sRGBToLinearPBR(texture(uColorMap, vUV));");
                 src.push("baseColor *= colorTexel.rgb;");
                 // src.push("opacity *=/= colorTexel.a;"); // batching had "*=", instancing had "="
 
@@ -315,12 +258,15 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                 src.push("geometry.viewNormal    = -normalize(viewNormal);");
                 src.push("geometry.viewEyeDir    = normalize(vViewPosition.xyz);");
 
-                if (lightsState.lightMaps.length > 0) {
-                    src.push("geometry.worldNormal   = normalize(vWorldNormal);");
+                if (getIrradiance) {
+                    src.push(`reflectedLight.diffuse += ${getIrradiance("normalize(vWorldNormal)")} * material.diffuseColor;`);
                 }
 
-                if (lightsState.lightMaps.length > 0 || lightsState.reflectionMaps.length > 0) {
-                    src.push("computePBRLightMapping(geometry, material, " + viewMatrix + ", reflectedLight);");
+                if (getReflectionRadiance) {
+                    const reflectVec = `inverseTransformDirection(reflect(geometry.viewEyeDir, geometry.viewNormal), ${viewMatrix})`;
+                    const radiance = getReflectionRadiance("material.specularRoughness", reflectVec);
+                    const specularBRDFContrib = "BRDF_Specular_GGX_Environment(geometry, material.specularColor, material.specularRoughness)";
+                    src.push(`reflectedLight.specular += ${radiance} * ${specularBRDFContrib};`);
                 }
 
                 lightSetup.getDirectionalLights(viewMatrix, "vViewPosition").forEach(light => {
@@ -329,7 +275,7 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                     src.push("computePBRLighting(light, geometry, material, reflectedLight);");
                 });
 
-                src.push("vec3 emissiveColor = sRGBToLinear(texture(uEmissiveMap, vUV)).rgb;"); // TODO: correct gamma function
+                src.push("vec3 emissiveColor = sRGBToLinearPBR(texture(uEmissiveMap, vUV)).rgb;"); // TODO: correct gamma function
                 src.push("float aoFactor = texture(uAOMap, vUV).r;");
 
                 src.push("vec3 outgoingLight = (" + lightSetup.getAmbientColor() + " * baseColor * opacity * rgb) + (reflectedLight.diffuse) + (reflectedLight.specular) + emissiveColor;");
@@ -394,7 +340,7 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                     gl.uniform1f(inputs.uGammaFactor, scene.gammaFactor);
                 }
 
-                inputs.setLightsRenderState();
+                inputs.setLightsRenderState(frameCtx);
             }
         });
     }
