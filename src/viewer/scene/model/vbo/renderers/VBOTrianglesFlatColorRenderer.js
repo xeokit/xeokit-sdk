@@ -1,4 +1,4 @@
-import {VBORenderer} from "../VBORenderer.js";
+import {VBORenderer, createLightSetup} from "../VBORenderer.js";
 
 /**
  * @private
@@ -6,8 +6,11 @@ import {VBORenderer} from "../VBORenderer.js";
 export class VBOTrianglesFlatColorRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive, withSAO) {
+        const inputs = { };
+        const gl = scene.canvas.gl;
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const lightsState = scene._lightsState;
+        const lightSetup = createLightSetup(gl, lightsState);
 
         super(scene, instancing, primitive, withSAO, {
             progMode: "flatColorMode",
@@ -44,24 +47,7 @@ export class VBOTrianglesFlatColorRenderer extends VBORenderer {
                     src.push("uniform vec4 sliceColor;");
                 }
 
-                src.push("uniform vec4 lightAmbient;");
-                for (let i = 0, len = lightsState.lights.length; i < len; i++) {
-                    const light = lightsState.lights[i];
-                    if (light.type === "ambient") {
-                        continue;
-                    }
-                    src.push("uniform vec4 lightColor" + i + ";");
-                    if (light.type === "dir") {
-                        src.push("uniform vec3 lightDir" + i + ";");
-                    }
-                    if (light.type === "point") {
-                        src.push("uniform vec3 lightPos" + i + ";");
-                    }
-                    if (light.type === "spot") {
-                        src.push("uniform vec3 lightPos" + i + ";");
-                        src.push("uniform vec3 lightDir" + i + ";");
-                    }
-                }
+                lightSetup.appendDefinitions(src);
 
                 src.push("in vec4 vViewPosition;");
                 src.push("in vec4 vColor;");
@@ -85,45 +71,14 @@ export class VBOTrianglesFlatColorRenderer extends VBORenderer {
             needViewMatrixInFragment: true,
             needGl_PointCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
+                src.push("vec3 viewNormal = normalize(cross(dFdx(vViewPosition.xyz), dFdy(vViewPosition.xyz)));");
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
-                src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
-                src.push("float lambertian = 1.0;");
-                src.push("vec3 xTangent = dFdx(vViewPosition.xyz);");
-                src.push("vec3 yTangent = dFdy(vViewPosition.xyz);");
-                src.push("vec3 viewNormal = normalize(cross(xTangent, yTangent));");
-
-                for (let i = 0, len = lightsState.lights.length; i < len; i++) {
-                    const light = lightsState.lights[i];
-                    if (light.type === "ambient") {
-                        continue;
-                    }
-                    if (light.type === "dir") {
-                        if (light.space === "view") {
-                            src.push(`viewLightDir = normalize(lightDir${i});`);
-                        } else {
-                            src.push(`viewLightDir = normalize((${viewMatrix} * vec4(lightDir${i}, 0.0)).xyz);`);
-                        }
-                    } else if (light.type === "point") {
-                        if (light.space === "view") {
-                            src.push(`viewLightDir = -normalize(lightPos${i} - vViewPosition.xyz);`);
-                        } else {
-                            src.push(`viewLightDir = -normalize((${viewMatrix} * vec4(lightPos${i}, 0.0)).xyz);`);
-                        }
-                    } else if (light.type === "spot") {
-                        if (light.space === "view") {
-                            src.push(`viewLightDir = normalize(lightDir${i});`);
-                        } else {
-                            src.push(`viewLightDir = normalize((${viewMatrix} * vec4(lightDir${i}, 0.0)).xyz);`);
-                        }
-                    } else {
-                        continue;
-                    }
-                    src.push("lambertian = max(dot(-viewNormal, viewLightDir), 0.0);");
-                    src.push(`reflectedColor += lambertian * (lightColor${i}.rgb * lightColor${i}.a);`);
-                }
+                lightSetup.getDirectionalLights(viewMatrix, "vViewPosition").forEach(light => {
+                    src.push(`reflectedColor += max(dot(-viewNormal, ${light.direction}), 0.0) * ${light.color};`);
+                });
 
                 const color = clipping ? `${sliced} ? sliceColor : vColor` : "vColor";
-                src.push(`vec4 fragColor = vec4(lightAmbient.rgb * lightAmbient.a + reflectedColor, 1) * (${color});`);
+                src.push(`vec4 fragColor = vec4(${lightSetup.getAmbientColor()} + reflectedColor, 1) * (${color});`);
 
                 if (withSAO) {
                     // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
@@ -139,8 +94,12 @@ export class VBOTrianglesFlatColorRenderer extends VBORenderer {
                     src.push("   outColor                = fragColor;");
                 }
             },
-            setupInputs: (program) => { },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
+            setupInputs: (program) => {
+                inputs.setLightsRenderState = lightSetup.setupInputs(program);
+            },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
+                inputs.setLightsRenderState();
+            }
         });
     }
 
