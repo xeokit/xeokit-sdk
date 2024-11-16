@@ -10,15 +10,14 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
         const inputs = { };
         const gl = scene.canvas.gl;
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
-        const lightsState = scene._lightsState;
-        const lightSetup = createLightSetup(gl, lightsState);
+        const lightSetup = createLightSetup(gl, scene._lightsState, false);
         const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
         const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
 
         super(scene, instancing, primitive, withSAO, {
             progMode: "colorTextureMode", incrementDrawState: true, useAlphaCutoff: useAlphaCutoff,
 
-            getHash: () => [lightsState.getHash(), (withSAO ? "sao" : "nosao"), gammaOutput, useAlphaCutoff ? "alphaCutoffYes" : "alphaCutoffNo"],
+            getHash: () => [lightSetup.getHash(), (withSAO ? "sao" : "nosao"), gammaOutput, useAlphaCutoff ? "alphaCutoffYes" : "alphaCutoffNo"],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             clippingCaps: false,
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
@@ -148,7 +147,7 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
                 if (gammaOutput) {
                     gl.uniform1f(inputs.uGammaFactor, scene.gammaFactor);
                 }
-                inputs.setLightsRenderState();
+                inputs.setLightsRenderState(frameCtx);
             }
         });
     }
