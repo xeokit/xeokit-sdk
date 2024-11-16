@@ -31,12 +31,14 @@ export class VBOPointsPickDepthRenderer extends VBORenderer {
             shadowParameters: null,
             needVertexColor: false,
             needPickColor: false,
+            needUV: false,
+            needMetallicRoughness: false,
             needGl_Position: pointsMaterial.perspectivePoints,
             needViewPosition: true,
             needViewMatrixNormal: false,
             needWorldNormal: false,
             needWorldPosition: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => {
+            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vViewPosition = ${view.viewPosition};`);
                 if (pointsMaterial.perspectivePoints) {
                     src.push(`gl_PointSize = (nearPlaneHeight * pointSize) / ${gl_Position}.w;`);
