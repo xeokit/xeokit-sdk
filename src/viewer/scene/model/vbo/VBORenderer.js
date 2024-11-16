@@ -5,7 +5,6 @@ import {WEBGL_INFO} from "../../webglInfo.js";
 import {RENDER_PASSES} from "./../RENDER_PASSES.js";
 
 const defaultColor = new Float32Array([1, 1, 1, 1]);
-const edgesDefaultColor = new Float32Array([0, 0, 0, 1]);
 
 const tempVec4 = math.vec4();
 const tempVec3a = math.vec3();
@@ -798,29 +797,29 @@ export class VBORenderer {
                 }
 
                 if (colorUniform) {
-                    const colorKey = edges ? "edgeColor" : "fillColor";
-                    const alphaKey = edges ? "edgeAlpha" : "fillAlpha";
+                    const colorKey = "fillColor";
+                    const alphaKey = "fillAlpha";
 
-                    if (renderPass === RENDER_PASSES[`${edges ? "EDGES" : "SILHOUETTE"}_XRAYED`]) {
+                    if (renderPass === RENDER_PASSES.SILHOUETTE_XRAYED) {
                         const material = scene.xrayMaterial._state;
                         const color = material[colorKey];
                         const alpha = material[alphaKey];
                         gl.uniform4f(uColor, color[0], color[1], color[2], alpha);
 
-                    } else if (renderPass === RENDER_PASSES[`${edges ? "EDGES" : "SILHOUETTE"}_HIGHLIGHTED`]) {
+                    } else if (renderPass === RENDER_PASSES.SILHOUETTE_HIGHLIGHTED) {
                         const material = scene.highlightMaterial._state;
                         const color = material[colorKey];
                         const alpha = material[alphaKey];
                         gl.uniform4f(uColor, color[0], color[1], color[2], alpha);
 
-                    } else if (renderPass === RENDER_PASSES[`${edges ? "EDGES" : "SILHOUETTE"}_SELECTED`]) {
+                    } else if (renderPass === RENDER_PASSES.SILHOUETTE_SELECTED) {
                         const material = scene.selectedMaterial._state;
                         const color = material[colorKey];
                         const alpha = material[alphaKey];
                         gl.uniform4f(uColor, color[0], color[1], color[2], alpha);
 
                     } else {
-                        gl.uniform4fv(uColor, edges ? edgesDefaultColor : defaultColor);
+                        gl.uniform4fv(uColor, defaultColor);
                     }
                 }
 

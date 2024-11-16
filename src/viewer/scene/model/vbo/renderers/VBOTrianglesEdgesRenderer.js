@@ -1,4 +1,5 @@
 import {VBORenderer} from "../VBORenderer.js";
+import {RENDER_PASSES} from "../../RENDER_PASSES.js";
 
 /**
  * @private
@@ -6,8 +7,12 @@ import {VBORenderer} from "../VBORenderer.js";
 export class VBOTrianglesEdgesRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive, colorUniform) {
+        const inputs = { };
+        const gl = scene.canvas.gl;
+        const edgesDefaultColor = new Float32Array([0, 0, 0, 1]);
+
         super(scene, instancing, primitive, false, {
-            progMode: "edgesMode", edges: true, colorUniform: colorUniform,
+            progMode: "edgesMode", edges: true,
 
             getHash: () => [ ],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
@@ -17,7 +22,7 @@ export class VBOTrianglesEdgesRenderer extends VBORenderer {
             renderPassFlag: 2,
             appendVertexDefinitions: (src) => {
                 if (colorUniform) {
-                    src.push("uniform vec4 color;");
+                    src.push("uniform vec4 edgeColor;");
                 }
                 src.push("out vec4 vColor;");
             },
@@ -32,7 +37,7 @@ export class VBOTrianglesEdgesRenderer extends VBORenderer {
             needWorldNormal: false,
             needWorldPosition: false,
             appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => {
-                src.push("vColor = " + (colorUniform ? "color" : `vec4(${color}.rgb * 0.5, ${color}.a) / 255.0`) + ";");
+                src.push("vColor = " + (colorUniform ? "edgeColor" : `vec4(${color}.rgb * 0.5, ${color}.a) / 255.0`) + ";");
             },
             appendFragmentDefinitions: (src) => {
                 src.push("in vec4 vColor;");
@@ -47,8 +52,28 @@ export class VBOTrianglesEdgesRenderer extends VBORenderer {
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
                 src.push("outColor = vColor;");
             },
-            setupInputs: (program) => { },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
+            setupInputs: (program) => {
+                inputs.edgeColor = colorUniform && program.getLocation("edgeColor");
+            },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
+                if (colorUniform) {
+                    const setSceneMaterial = material => {
+                        const color = material._state.edgeColor;
+                        const alpha = material._state.edgeAlpha;
+                        gl.uniform4f(inputs.edgeColor, color[0], color[1], color[2], alpha);
+                    };
+
+                    if (renderPass === RENDER_PASSES.EDGES_XRAYED) {
+                        setSceneMaterial(scene.xrayMaterial);
+                    } else if (renderPass === RENDER_PASSES.EDGES_HIGHLIGHTED) {
+                        setSceneMaterial(scene.highlightMaterial);
+                    } else if (renderPass === RENDER_PASSES.EDGES_SELECTED) {
+                        setSceneMaterial(scene.selectedMaterial);
+                    } else {
+                        gl.uniform4fv(inputs.edgeColor, edgesDefaultColor);
+                    }
+                }
+            }
         });
     }
 
