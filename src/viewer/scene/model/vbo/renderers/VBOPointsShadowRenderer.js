@@ -69,7 +69,9 @@ export class VBOPointsShadowRenderer extends VBORenderer {
                     src.push("  }");
                 }
                 src.push(`outColor = encodeFloat(${gl_FragCoord}.z);`);
-            }
+            },
+            setupInputs: (program) => { },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
         });
     }
 

@@ -39,7 +39,9 @@ export class VBOLinesSilhouetteRenderer extends VBORenderer {
             needGl_PointCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
                 src.push("outColor = color;");
-            }
+            },
+            setupInputs: (program) => { },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
         });
     }
 

@@ -44,7 +44,9 @@ export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
             needGl_PointCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
                 src.push(`outNormal = ivec4(vWorldNormal * float(${math.MAX_INT}), 1.0);`);
-            }
+            },
+            setupInputs: (program) => { },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
         });
     }
 

@@ -46,7 +46,9 @@ export class VBOTrianglesShadowRenderer extends VBORenderer {
             needGl_PointCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
                 src.push(`outColor = encodeFloat(${gl_FragCoord}.z);`);
-            }
+            },
+            setupInputs: (program) => { },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
         });
     }
 
