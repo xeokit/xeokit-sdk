@@ -66,7 +66,9 @@ export class VBOPointsPickMeshRenderer extends VBORenderer {
                     src.push("  }");
                 }
                 src.push("outColor = vPickColor;");
-            }
+            },
+            setupInputs: (program) => { },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
         });
     }
 
