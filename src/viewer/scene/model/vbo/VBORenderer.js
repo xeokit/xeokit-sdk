@@ -356,9 +356,6 @@ export class VBORenderer {
             gl.getUniformBlockIndex(program.handle, "Matrices"),
             matricesUniformBlockBufferBindingPoint);
 
-        const uShadowViewMatrix = program.getLocation("shadowViewMatrix");
-        const uShadowProjMatrix = program.getLocation("shadowProjMatrix");
-
         const uLightAmbient = program.getLocation("lightAmbient");
         const uLightColor = [];
         const uLightDir = [];
@@ -632,13 +629,6 @@ export class VBORenderer {
                         }
                     }
                 }
-            }
-
-            if (uShadowViewMatrix) {
-                gl.uniformMatrix4fv(uShadowViewMatrix, false, frameCtx.shadowViewMatrix); // Not tested
-            }
-            if (uShadowProjMatrix) {
-                gl.uniformMatrix4fv(uShadowProjMatrix, false, frameCtx.shadowProjMatrix); // Not tested
             }
 
             if (! shadowParameters) {
