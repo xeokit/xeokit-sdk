@@ -129,7 +129,7 @@ export class VBORenderer {
                 src.push("in vec3 normal;");
             }
             if (needVertexColor || shadowParameters || filterIntensityRange) {
-                src.push("in vec4 color;");
+                src.push("in vec4 aColor;");
             }
             if (needPickColor) {
                 src.push("in vec4 pickColor;");
@@ -184,14 +184,14 @@ export class VBORenderer {
             src.push("void main(void) {");
 
             if (shadowParameters) {
-                src.push(`if (((int(flags) >> ${renderPassFlag * 4} & 0xF) <= 0) || ((float(color.a) / 255.0) < 1.0)) {`);
+                src.push(`if (((int(flags) >> ${renderPassFlag * 4} & 0xF) <= 0) || ((float(aColor.a) / 255.0) < 1.0)) {`);
             } else {
                 src.push(`if ((int(flags) >> ${renderPassFlag * 4} & 0xF) != renderPass) {`);
             }
             src.push(`   gl_Position = vec4(${vertexCullX || 0.0}, 0.0, 0.0, 0.0);`); // Cull vertex
             src.push("} else {");
             if (filterIntensityRange) {
-                src.push("float intensity = float(color.a) / 255.0;");
+                src.push("float intensity = float(aColor.a) / 255.0;");
                 src.push("if ((intensity < " + filterIntensityRange + "[0]) || (intensity > " + filterIntensityRange + "[1])) {");
                 src.push(`   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);`); // Cull vertex
                 src.push("   return;");
@@ -240,7 +240,7 @@ export class VBORenderer {
                 }
             }
 
-            appendVertexOutputs(src, needVertexColor && "color", needPickColor && "pickColor", needGl_Position && "gl_Position", (needViewPosition || needViewMatrixNormal) && {viewPosition: needViewPosition && "viewPosition", viewMatrix: needViewMatrixNormal && "viewMatrix", viewNormal: needViewMatrixNormal && "viewNormal"}, needWorldNormal && "worldNormal", needWorldPosition && "worldPosition");
+            appendVertexOutputs(src, needVertexColor && "aColor", needPickColor && "pickColor", needGl_Position && "gl_Position", (needViewPosition || needViewMatrixNormal) && {viewPosition: needViewPosition && "viewPosition", viewMatrix: needViewMatrixNormal && "viewMatrix", viewNormal: needViewMatrixNormal && "viewNormal"}, needWorldNormal && "worldNormal", needWorldPosition && "worldPosition");
 
             src.push("}");
             src.push("}");
@@ -412,7 +412,7 @@ export class VBORenderer {
         const aOffset = program.getAttribute("offset");
         const aNormal = program.getAttribute("normal");
         const aUV = program.getAttribute("uv");
-        const aColor = program.getAttribute("color");
+        const aColor = program.getAttribute("aColor");
         const aMetallicRoughness = program.getAttribute("metallicRoughness");
         const aFlags = program.getAttribute("flags");
         const aPickColor = program.getAttribute("pickColor");
