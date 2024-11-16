@@ -44,12 +44,14 @@ export class VBOSilhouetteRenderer extends VBORenderer {
             shadowParameters: null,
             needVertexColor: (! isPoints) && (primitive !== "lines"),
             needPickColor: false,
+            needUV: false,
+            needMetallicRoughness: false,
             needGl_Position: isPoints && pointsMaterial.perspectivePoints,
             needViewPosition: false,
             needViewMatrixNormal: false,
             needWorldNormal: false,
             needWorldPosition: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => {
+            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 if (isPoints) {
                     if (instancing) {
                         src.push(`vColor = silhouetteColor;`);

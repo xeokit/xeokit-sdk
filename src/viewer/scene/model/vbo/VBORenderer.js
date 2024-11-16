@@ -35,6 +35,8 @@ export class VBORenderer {
         const shadowParameters          = cfg.shadowParameters;
         const needVertexColor           = cfg.needVertexColor;
         const needPickColor             = cfg.needPickColor;
+        const needUV                    = cfg.needUV;
+        const needMetallicRoughness     = cfg.needMetallicRoughness;
         const needGl_Position           = cfg.needGl_Position;
         const needViewPosition          = cfg.needViewPosition;
         const needViewMatrixNormal      = cfg.needViewMatrixNormal;
@@ -127,6 +129,12 @@ export class VBORenderer {
             }
             if (needPickColor) {
                 src.push("in vec4 pickColor;");
+            }
+            if (needUV) {
+                src.push("in vec2 uv;");
+            }
+            if (needMetallicRoughness) {
+                src.push("in vec2 metallicRoughness;");
             }
             src.push("in float flags;");
             if (scene.entityOffsetsEnabled) {
@@ -234,7 +242,7 @@ export class VBORenderer {
                 }
             }
 
-            appendVertexOutputs(src, needVertexColor && "aColor", needPickColor && "pickColor", needGl_Position && "gl_Position", (needViewPosition || needViewMatrixNormal) && {viewPosition: needViewPosition && "viewPosition", viewMatrix: needViewMatrixNormal && "viewMatrix", viewNormal: needViewMatrixNormal && "viewNormal"}, needWorldNormal && "worldNormal", needWorldPosition && "worldPosition");
+            appendVertexOutputs(src, needVertexColor && "aColor", needPickColor && "pickColor", needUV && "uv", needMetallicRoughness && "metallicRoughness", needGl_Position && "gl_Position", (needViewPosition || needViewMatrixNormal) && {viewPosition: needViewPosition && "viewPosition", viewMatrix: needViewMatrixNormal && "viewMatrix", viewNormal: needViewMatrixNormal && "viewNormal"}, needWorldNormal && "worldNormal", needWorldPosition && "worldPosition");
 
             src.push("}");
             src.push("}");
