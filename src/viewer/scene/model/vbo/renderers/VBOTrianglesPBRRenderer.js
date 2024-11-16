@@ -1,4 +1,4 @@
-import {VBORenderer} from "../VBORenderer.js";
+import {VBORenderer, createLightSetup} from "../VBORenderer.js";
 import {WEBGL_INFO} from "../../../webglInfo.js";
 import {LinearEncoding, sRGBEncoding} from "../../../constants/constants.js";
 
@@ -15,6 +15,7 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
         const inputs = { };
         const gl = scene.canvas.gl;
         const lightsState = scene._lightsState;
+        const lightSetup = createLightSetup(gl, lightsState);
         const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
         const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
         const useLightMaps = lightsState.lightMaps.length > 0;
@@ -87,25 +88,7 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                     src.push("uniform samplerCube lightMap;");
                 }
 
-                src.push("uniform vec4 lightAmbient;");
-
-                for (let i = 0, len = lightsState.lights.length; i < len; i++) {
-                    const light = lightsState.lights[i];
-                    if (light.type === "ambient") {
-                        continue;
-                    }
-                    src.push("uniform vec4 lightColor" + i + ";");
-                    if (light.type === "dir") {
-                        src.push("uniform vec3 lightDir" + i + ";");
-                    }
-                    if (light.type === "point") {
-                        src.push("uniform vec3 lightPos" + i + ";");
-                    }
-                    if (light.type === "spot") {
-                        src.push("uniform vec3 lightPos" + i + ";");
-                        src.push("uniform vec3 lightDir" + i + ";");
-                    }
-                }
+                lightSetup.appendDefinitions(src);
 
                 if (withSAO) {
                     src.push("uniform sampler2D uOcclusionTexture;");
@@ -340,42 +323,16 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                     src.push("computePBRLightMapping(geometry, material, " + viewMatrix + ", reflectedLight);");
                 }
 
-                for (let i = 0, len = lightsState.lights.length; i < len; i++) {
-                    const light = lightsState.lights[i];
-                    if (light.type === "ambient") {
-                        continue;
-                    }
-                    if (light.type === "dir") {
-                        if (light.space === "view") {
-                            src.push(`light.direction = normalize(lightDir${i});`);
-                        } else {
-                            src.push(`light.direction = normalize((${viewMatrix} * vec4(lightDir${i}, 0.0)).xyz);`);
-                        }
-                    } else if (light.type === "point") {
-                        if (light.space === "view") {
-                            src.push(`light.direction = -normalize(lightPos${i} - vViewPosition.xyz);`);
-                        } else {
-                            src.push(`light.direction = -normalize((${viewMatrix} * vec4(lightPos${i}, 0.0)).xyz);`);
-                        }
-                    } else if (light.type === "spot") {
-                        if (light.space === "view") {
-                            src.push(`light.direction = normalize(lightDir${i});`);
-                        } else {
-                            src.push(`light.direction = normalize((${viewMatrix} * vec4(lightDir${i}, 0.0)).xyz);`);
-                        }
-                    } else {
-                        continue;
-                    }
-
-                    src.push(`light.color =  lightColor${i}.rgb * lightColor${i}.a;`); // a is intensity
-
+                lightSetup.getDirectionalLights(viewMatrix, "vViewPosition").forEach(light => {
+                    src.push(`light.direction = ${light.direction};`);
+                    src.push(`light.color = ${light.color};`);
                     src.push("computePBRLighting(light, geometry, material, reflectedLight);");
-                }
+                });
 
                 src.push("vec3 emissiveColor = sRGBToLinear(texture(uEmissiveMap, vUV)).rgb;"); // TODO: correct gamma function
                 src.push("float aoFactor = texture(uAOMap, vUV).r;");
 
-                src.push("vec3 outgoingLight = (lightAmbient.rgb * lightAmbient.a * baseColor * opacity * rgb) + (reflectedLight.diffuse) + (reflectedLight.specular) + emissiveColor;");
+                src.push("vec3 outgoingLight = (" + lightSetup.getAmbientColor() + " * baseColor * opacity * rgb) + (reflectedLight.diffuse) + (reflectedLight.specular) + emissiveColor;");
                 src.push("vec4 fragColor;");
 
                 if (withSAO) {
@@ -410,6 +367,8 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                 if (gammaOutput) {
                     inputs.uGammaFactor = program.getLocation("gammaFactor");
                 }
+
+                inputs.setLightsRenderState = lightSetup.setupInputs(program);
             },
             setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
                 const state = layer._state;
@@ -434,6 +393,8 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                 if (gammaOutput) {
                     gl.uniform1f(inputs.uGammaFactor, scene.gammaFactor);
                 }
+
+                inputs.setLightsRenderState();
             }
         });
     }

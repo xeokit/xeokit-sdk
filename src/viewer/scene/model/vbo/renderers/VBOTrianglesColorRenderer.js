@@ -1,4 +1,4 @@
-import {VBORenderer} from "../VBORenderer.js";
+import {VBORenderer, createLightSetup} from "../VBORenderer.js";
 
 /**
  * @private
@@ -6,8 +6,11 @@ import {VBORenderer} from "../VBORenderer.js";
 export class VBOTrianglesColorRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive, withSAO) {
+        const inputs = { };
+        const gl = scene.canvas.gl;
         const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const lightsState = scene._lightsState;
+        const lightSetup = createLightSetup(gl, lightsState);
 
         super(scene, instancing, primitive, withSAO, {
             progMode: "colorMode", incrementDrawState: true,
@@ -19,24 +22,7 @@ export class VBOTrianglesColorRenderer extends VBORenderer {
             // renderPass = COLOR_OPAQUE | COLOR_TRANSPARENT
             renderPassFlag: 0,
             appendVertexDefinitions: (src) => {
-                src.push("uniform vec4 lightAmbient;");
-                for (let i = 0, len = lightsState.lights.length; i < len; i++) {
-                    const light = lightsState.lights[i];
-                    if (light.type === "ambient") {
-                        continue;
-                    }
-                    src.push("uniform vec4 lightColor" + i + ";");
-                    if (light.type === "dir") {
-                        src.push("uniform vec3 lightDir" + i + ";");
-                    }
-                    if (light.type === "point") {
-                        src.push("uniform vec3 lightPos" + i + ";");
-                    }
-                    if (light.type === "spot") {
-                        src.push("uniform vec3 lightPos" + i + ";");
-                        src.push("uniform vec3 lightDir" + i + ";");
-                    }
-                }
+                lightSetup.appendDefinitions(src);
                 src.push("out vec4 vColor;");
             },
             filterIntensityRange: false,
@@ -53,38 +39,10 @@ export class VBOTrianglesColorRenderer extends VBORenderer {
             needWorldPosition: false,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
-                src.push("vec3 viewLightDir = vec3(0.0, 0.0, -1.0);");
-                src.push("float lambertian = 1.0;");
-                for (let i = 0, len = lightsState.lights.length; i < len; i++) {
-                    const light = lightsState.lights[i];
-                    if (light.type === "ambient") {
-                        continue;
-                    }
-                    if (light.type === "dir") {
-                        if (light.space === "view") {
-                            src.push(`viewLightDir = normalize(lightDir${i});`);
-                        } else {
-                            src.push(`viewLightDir = normalize((${view.viewMatrix} * vec4(lightDir${i}, 0.0)).xyz);`);
-                        }
-                    } else if (light.type === "point") {
-                        if (light.space === "view") {
-                            src.push(`viewLightDir = -normalize(lightPos${i} - ${view.viewPosition}.xyz);`);
-                        } else {
-                            src.push(`viewLightDir = -normalize((${view.viewMatrix} * vec4(lightPos${i}, 0.0)).xyz);`);
-                        }
-                    } else if (light.type === "spot") {
-                        if (light.space === "view") {
-                            src.push(`viewLightDir = normalize(lightDir${i});`);
-                        } else {
-                            src.push(`viewLightDir = normalize((${view.viewMatrix} * vec4(lightDir${i}, 0.0)).xyz);`);
-                        }
-                    } else {
-                        continue;
-                    }
-                    src.push(`lambertian = max(dot(-${view.viewNormal}, viewLightDir), 0.0);`);
-                    src.push(`reflectedColor += lambertian * (lightColor${i}.rgb * lightColor${i}.a);`);
-                }
-                src.push(`vColor = vec4(lightAmbient.rgb * lightAmbient.a + reflectedColor, 1) * vec4(${color}) / 255.0;`);
+                lightSetup.getDirectionalLights(view.viewMatrix, view.viewPosition).forEach(light => {
+                    src.push(`reflectedColor += max(dot(-${view.viewNormal}, ${light.direction}), 0.0) * ${light.color};`);
+                });
+                src.push(`vColor = vec4(${lightSetup.getAmbientColor()} + reflectedColor, 1) * vec4(${color}) / 255.0;`);
             },
             appendFragmentDefinitions: (src) => {
                 if (clipping) {
@@ -127,8 +85,12 @@ export class VBOTrianglesColorRenderer extends VBORenderer {
                     src.push("   outColor                = " + color + ";");
                 }
             },
-            setupInputs: (program) => { },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
+            setupInputs: (program) => {
+                inputs.setLightsRenderState = lightSetup.setupInputs(program);
+            },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
+                inputs.setLightsRenderState();
+            }
         });
     }
 
