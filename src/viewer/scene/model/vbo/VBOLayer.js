@@ -12,10 +12,8 @@ import { VBOPointsOcclusionRenderer          } from "./renderers/VBOPointsOcclus
 import { VBOPointsPickDepthRenderer          } from "./renderers/VBOPointsPickDepthRenderer.js";
 import { VBOPointsPickMeshRenderer           } from "./renderers/VBOPointsPickMeshRenderer.js";
 import { VBOPointsShadowRenderer             } from "./renderers/VBOPointsShadowRenderer.js";
-import { VBOPointsSilhouetteRenderer         } from "./renderers/VBOPointsSilhouetteRenderer.js";
 
 import { VBOLinesColorRenderer               } from "./renderers/VBOLinesColorRenderer.js";
-import { VBOLinesSilhouetteRenderer          } from "./renderers/VBOLinesSilhouetteRenderer.js";
 
 import { VBOTrianglesColorRenderer           } from "./renderers/VBOTrianglesColorRenderer.js";
 import { VBOTrianglesColorTextureRenderer    } from "./renderers/VBOTrianglesColorTextureRenderer.js";
@@ -29,8 +27,8 @@ import { VBOTrianglesPickMeshRenderer        } from "./renderers/VBOTrianglesPic
 import { VBOTrianglesPickNormalsFlatRenderer } from "./renderers/VBOTrianglesPickNormalsFlatRenderer.js";
 import { VBOTrianglesPickNormalsRenderer     } from "./renderers/VBOTrianglesPickNormalsRenderer.js";
 import { VBOTrianglesShadowRenderer          } from "./renderers/VBOTrianglesShadowRenderer.js";
-import { VBOTrianglesSilhouetteRenderer      } from "./renderers/VBOTrianglesSilhouetteRenderer.js";
 
+import { VBOSilhouetteRenderer      } from "./renderers/VBOSilhouetteRenderer.js";
 import { VBOSnapRenderer            } from "./renderers/VBOSnapRenderer.js";
 
 
@@ -92,14 +90,14 @@ const getRenderers = (function() {
                     // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
                     // but never used (and probably not maintained), as opposed to VBOInstancingPointsShadowRenderer in the same commit
                     shadowRenderer:     instancing && lazy(VBOPointsShadowRenderer),
-                    silhouetteRenderer: lazy(VBOPointsSilhouetteRenderer),
+                    silhouetteRenderer: lazy(VBOSilhouetteRenderer),
                     snapInitRenderer:   lazy(VBOSnapRenderer, true),
                     snapRenderer:       lazy(VBOSnapRenderer, false)
                 };
             } else if (primitive === "lines") {
                 cache[sceneId] = {
                     colorRenderer:      lazy(VBOLinesColorRenderer),
-                    silhouetteRenderer: lazy(VBOLinesSilhouetteRenderer),
+                    silhouetteRenderer: lazy(VBOSilhouetteRenderer),
                     snapInitRenderer:   lazy(VBOSnapRenderer, true),
                     snapRenderer:       lazy(VBOSnapRenderer, false)
                 };
@@ -124,7 +122,7 @@ const getRenderers = (function() {
                     pickNormalsFlatRenderer:                lazy(VBOTrianglesPickNormalsFlatRenderer),
                     pickNormalsRenderer:                    lazy(VBOTrianglesPickNormalsRenderer),
                     shadowRenderer:                         lazy(VBOTrianglesShadowRenderer),
-                    silhouetteRenderer:                     eager(VBOTrianglesSilhouetteRenderer),
+                    silhouetteRenderer:                     eager(VBOSilhouetteRenderer),
                     snapInitRenderer:                       eager(VBOSnapRenderer, true),
                     snapRenderer:                           eager(VBOSnapRenderer, false)
                 };
