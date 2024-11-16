@@ -51,7 +51,9 @@ export class VBOTrianglesSilhouetteRenderer extends VBORenderer {
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
                 const color = clipping ? `${sliced} ? sliceColor : vColor` : "vColor";
                 src.push("outColor = " + color + ";");
-            }
+            },
+            setupInputs: (program) => { },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
         });
     }
 
