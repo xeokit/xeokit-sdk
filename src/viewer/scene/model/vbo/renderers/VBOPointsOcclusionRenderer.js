@@ -32,12 +32,14 @@ export class VBOPointsOcclusionRenderer extends VBORenderer {
             shadowParameters: null,
             needVertexColor: false,
             needPickColor: false,
+            needUV: false,
+            needMetallicRoughness: false,
             needGl_Position: pointsMaterial.perspectivePoints,
             needViewPosition: false,
             needViewMatrixNormal: false,
             needWorldNormal: false,
             needWorldPosition: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => {
+            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 if (pointsMaterial.perspectivePoints) {
                     src.push(`gl_PointSize = (nearPlaneHeight * pointSize) / ${gl_Position}.w;`);
                     src.push("gl_PointSize = max(gl_PointSize, " + Math.floor(pointsMaterial.minPerspectivePointSize) + ".0);");

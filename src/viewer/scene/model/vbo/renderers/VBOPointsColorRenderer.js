@@ -32,12 +32,14 @@ export class VBOPointsColorRenderer extends VBORenderer {
             shadowParameters: null,
             needVertexColor: true,
             needPickColor: false,
+            needUV: false,
+            needMetallicRoughness: false,
             needGl_Position: pointsMaterial.perspectivePoints,
             needViewPosition: false,
             needViewMatrixNormal: false,
             needWorldNormal: false,
             needWorldPosition: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view, worldNormal, worldPosition) => {
+            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vColor = vec4(${color}.rgb / 255.0, 1.0);`);
                 if (pointsMaterial.perspectivePoints) {
                     src.push(`gl_PointSize = (nearPlaneHeight * pointSize) / ${gl_Position}.w;`);
