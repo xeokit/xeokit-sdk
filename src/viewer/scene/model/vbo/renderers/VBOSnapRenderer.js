@@ -1,12 +1,17 @@
 import {VBORenderer} from "../VBORenderer.js";
 import {math} from "../../../math/math.js";
 
+const tempVec3c = math.vec3();
+
 /**
  * @private
  */
 export class VBOSnapRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive, isSnapInit) {
+        const inputs = { };
+        const gl = scene.canvas.gl;
+
         super(scene, instancing, primitive, false, {
             progMode: isSnapInit ? "snapInitMode" : "snapMode",
 
@@ -50,8 +55,8 @@ export class VBOSnapRenderer extends VBORenderer {
                 }
             },
             appendFragmentDefinitions: (src) => {
-                src.push("uniform int layerNumber;");
-                src.push("uniform vec3 coordinateScaler;");
+                src.push("uniform int uLayerNumber;");
+                src.push("uniform vec3 uCoordinateScaler;");
                 src.push("in highp vec3 relativeToOriginPosition;");
                 if (isSnapInit) {
                     src.push("flat in vec4 vPickColor;");
@@ -70,7 +75,7 @@ export class VBOSnapRenderer extends VBORenderer {
             vertexCullX: (!isSnapInit) && "2.0",
             needGl_PointCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
-                src.push("outCoords = ivec4(relativeToOriginPosition.xyz * coordinateScaler.xyz, " + (isSnapInit ? "-" : "") + "layerNumber);");
+                src.push("outCoords = ivec4(relativeToOriginPosition.xyz * uCoordinateScaler.xyz, " + (isSnapInit ? "-" : "") + "uLayerNumber);");
 
                 if (isSnapInit) {
                     if (primitive === "points") {
@@ -83,6 +88,29 @@ export class VBOSnapRenderer extends VBORenderer {
                     }
                     src.push("outPickColor = uvec4(vPickColor);");
                 }
+            },
+            setupInputs: (program) => {
+                inputs.uSnapVectorA = program.getLocation("snapVectorA");
+                inputs.uSnapInvVectorAB = program.getLocation("snapInvVectorAB");
+                inputs.uLayerNumber = program.getLocation("uLayerNumber");
+                inputs.uCoordinateScaler = program.getLocation("uCoordinateScaler");
+            },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
+                const aabb = layer.aabb; // Per-layer AABB for best RTC accuracy
+                const coordinateScaler = tempVec3c;
+                coordinateScaler[0] = math.safeInv(aabb[3] - aabb[0]) * math.MAX_INT;
+                coordinateScaler[1] = math.safeInv(aabb[4] - aabb[1]) * math.MAX_INT;
+                coordinateScaler[2] = math.safeInv(aabb[5] - aabb[2]) * math.MAX_INT;
+                frameCtx.snapPickCoordinateScale[0] = math.safeInv(coordinateScaler[0]);
+                frameCtx.snapPickCoordinateScale[1] = math.safeInv(coordinateScaler[1]);
+                frameCtx.snapPickCoordinateScale[2] = math.safeInv(coordinateScaler[2]);
+                frameCtx.snapPickOrigin[0] = rtcOrigin[0];
+                frameCtx.snapPickOrigin[1] = rtcOrigin[1];
+                frameCtx.snapPickOrigin[2] = rtcOrigin[2];
+                gl.uniform2fv(inputs.uSnapVectorA, frameCtx.snapVectorA);
+                gl.uniform2fv(inputs.uSnapInvVectorAB, frameCtx.snapInvVectorAB);
+                gl.uniform1i(inputs.uLayerNumber, frameCtx.snapPickLayerNumber);
+                gl.uniform3fv(inputs.uCoordinateScaler, coordinateScaler);
             }
         });
     }
