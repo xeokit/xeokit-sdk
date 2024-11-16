@@ -64,7 +64,9 @@ export class VBOPointsOcclusionRenderer extends VBORenderer {
                     src.push("  }");
                 }
                 src.push("outColor = vec4(0.0, 0.0, 1.0, 1.0); "); // Occluders are blue
-            }
+            },
+            setupInputs: (program) => { },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
         });
     }
 
