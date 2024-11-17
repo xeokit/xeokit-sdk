@@ -9,7 +9,6 @@ import {geometryCompressionUtils} from "../../math/geometryCompressionUtils.js";
 
 import { VBOPointsColorRenderer              } from "./renderers/VBOPointsColorRenderer.js";
 import { VBOPointsOcclusionRenderer          } from "./renderers/VBOPointsOcclusionRenderer.js";
-import { VBOPointsPickMeshRenderer           } from "./renderers/VBOPointsPickMeshRenderer.js";
 
 import { VBOLinesColorRenderer               } from "./renderers/VBOLinesColorRenderer.js";
 
@@ -20,11 +19,11 @@ import { VBOTrianglesEdgesRenderer           } from "./renderers/VBOTrianglesEdg
 import { VBOTrianglesFlatColorRenderer       } from "./renderers/VBOTrianglesFlatColorRenderer.js";
 import { VBOTrianglesOcclusionRenderer       } from "./renderers/VBOTrianglesOcclusionRenderer.js";
 import { VBOTrianglesPBRRenderer             } from "./renderers/VBOTrianglesPBRRenderer.js";
-import { VBOTrianglesPickMeshRenderer        } from "./renderers/VBOTrianglesPickMeshRenderer.js";
 import { VBOTrianglesPickNormalsFlatRenderer } from "./renderers/VBOTrianglesPickNormalsFlatRenderer.js";
 import { VBOTrianglesPickNormalsRenderer     } from "./renderers/VBOTrianglesPickNormalsRenderer.js";
 
 import { VBOPickDepthRenderer       } from "./renderers/VBOPickDepthRenderer.js";
+import { VBOPickMeshRenderer        } from "./renderers/VBOPickMeshRenderer.js";
 import { VBOShadowRenderer          } from "./renderers/VBOShadowRenderer.js";
 import { VBOSilhouetteRenderer      } from "./renderers/VBOSilhouetteRenderer.js";
 import { VBOSnapRenderer            } from "./renderers/VBOSnapRenderer.js";
@@ -84,7 +83,7 @@ const getRenderers = (function() {
                     colorRenderer:      lazy(VBOPointsColorRenderer),
                     occlusionRenderer:  lazy(VBOPointsOcclusionRenderer),
                     pickDepthRenderer:  lazy(VBOPickDepthRenderer),
-                    pickMeshRenderer:   lazy(VBOPointsPickMeshRenderer),
+                    pickMeshRenderer:   lazy(VBOPickMeshRenderer),
                     // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
                     // but never used (and probably not maintained), as opposed to VBOInstancingPointsShadowRenderer in the same commit
                     shadowRenderer:     instancing && lazy(VBOShadowRenderer),
@@ -116,7 +115,7 @@ const getRenderers = (function() {
                     pbrRenderer:                            lazy(VBOTrianglesPBRRenderer, false),
                     pbrRendererWithSAO:                     lazy(VBOTrianglesPBRRenderer, true),
                     pickDepthRenderer:                      eager(VBOPickDepthRenderer),
-                    pickMeshRenderer:                       eager(VBOTrianglesPickMeshRenderer),
+                    pickMeshRenderer:                       eager(VBOPickMeshRenderer),
                     pickNormalsFlatRenderer:                lazy(VBOTrianglesPickNormalsFlatRenderer),
                     pickNormalsRenderer:                    lazy(VBOTrianglesPickNormalsRenderer),
                     shadowRenderer:                         lazy(VBOShadowRenderer),
