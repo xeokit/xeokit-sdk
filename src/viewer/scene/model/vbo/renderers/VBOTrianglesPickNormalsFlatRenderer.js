@@ -7,7 +7,7 @@ import { math } from "../../../math/math.js";
 export class VBOTrianglesPickNormalsFlatRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive) {
-        super(scene, instancing, primitive, false, {
+        super(scene, instancing, primitive, {
             progMode: "pickNormalsFlatMode",
 
             getHash: () => [ ],
