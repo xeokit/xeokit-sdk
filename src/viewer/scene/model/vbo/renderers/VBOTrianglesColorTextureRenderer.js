@@ -15,7 +15,7 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
         const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
 
         super(scene, instancing, primitive, {
-            progMode: "colorTextureMode", incrementDrawState: true, useAlphaCutoff: useAlphaCutoff,
+            progMode: "colorTextureMode", incrementDrawState: true,
 
             getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao", gammaOutput, useAlphaCutoff ? "alphaCutoffYes" : "alphaCutoffNo"],
             respectPointsMaterial: false,
@@ -106,6 +106,7 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
                 }
                 inputs.setLightsRenderState = lightSetup.setupInputs(program);
                 inputs.setSAOState = sao && sao.setupInputs(program);
+                inputs.materialAlphaCutoff = useAlphaCutoff && program.getLocation("materialAlphaCutoff");
             },
             setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
                 const state = layer._state;
@@ -120,6 +121,9 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
                 }
                 inputs.setLightsRenderState(frameCtx);
                 inputs.setSAOState && inputs.setSAOState(frameCtx);
+                if (inputs.materialAlphaCutoff) {
+                    gl.uniform1f(inputs.materialAlphaCutoff, state.textureSet.alphaCutoff);
+                }
             }
         });
     }
