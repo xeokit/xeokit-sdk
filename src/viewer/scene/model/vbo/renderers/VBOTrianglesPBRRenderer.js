@@ -20,6 +20,7 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
             progMode: "pbrMode", incrementDrawState: true,
 
             getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao", gammaOutput],
+            respectPointsMaterial: false,
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             clippingCaps: scene._sectionPlanesState.clippingCaps && "outColor",
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
@@ -212,8 +213,7 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
             needvWorldPosition: false,
             needGl_FragCoord: sao,
             needViewMatrixInFragment: true,
-            needGl_PointCoord: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix, gl_PointCoord) => {
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push("IncidentLight  light;");
                 src.push("Material       material;");
                 src.push("Geometry       geometry;");
