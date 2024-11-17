@@ -29,9 +29,6 @@ export class VBOSnapRenderer extends VBORenderer {
                 if (isSnapInit) {
                     src.push("flat out vec4 vPickColor;");
                 }
-                if ((primitive === "points") && (! instancing) && isSnapInit) {
-                    src.push("uniform float pointSize;");
-                }
             },
             filterIntensityRange: false,
             transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - snapVectorA) * snapInvVectorAB * ${clipPos}.w, ${clipPos}.zw)`,
@@ -50,9 +47,7 @@ export class VBOSnapRenderer extends VBORenderer {
                 if (isSnapInit) {
                     src.push(`vPickColor = ${pickColor};`);
                 }
-                if (primitive === "points") {
-                    src.push("gl_PointSize = " + (((! instancing) && isSnapInit) ? "pointSize" : "1.0") + ";"); // Windows needs this?
-                } else if (!isSnapInit) {
+                if ((primitive === "points") || (!isSnapInit)) {
                     src.push("gl_PointSize = 1.0;"); // Windows needs this?
                 }
             },
