@@ -6,9 +6,9 @@ import { math } from "../../../math/math.js";
  */
 export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
 
-    constructor(scene, instancing, primitive) {
+    constructor(scene, instancing, primitive, isFlat) {
         super(scene, instancing, primitive, {
-            progMode: "pickNormalsMode",
+            progMode: isFlat ? "pickNormalsFlatMode" : "pickNormalsMode",
 
             getHash: () => [ ],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
@@ -19,7 +19,9 @@ export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
             appendVertexDefinitions: (src) => {
                 src.push("uniform vec2 pickClipPos;");
                 src.push("uniform vec2 drawingBufferSize;");
-                src.push("out vec3 vWorldNormal;");
+                if (! isFlat) {
+                    src.push("out vec3 vWorldNormal;");
+                }
             },
             filterIntensityRange: false,
             transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - pickClipPos) * drawingBufferSize / 3.0 * ${clipPos}.w, ${clipPos}.zw)`,
@@ -31,20 +33,29 @@ export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
             needGl_Position: false,
             needViewPosition: false,
             needViewMatrixNormal: false,
-            needWorldNormal: true,
+            needWorldNormal: ! isFlat,
             needWorldPosition: false,
-            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => src.push(`vWorldNormal = ${worldNormal}.xyz;`),
+            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
+                if (! isFlat) {
+                    src.push(`vWorldNormal = ${worldNormal}.xyz;`);
+                }
+            },
             appendFragmentDefinitions: (src) => {
-                src.push("in vec3 vWorldNormal;");
+                if (! isFlat) {
+                    src.push("in vec3 vWorldNormal;");
+                }
                 src.push("out highp ivec4 outNormal;");
             },
             slicedColorIfClipping: false,
-            needvWorldPosition: false,
+            needvWorldPosition: isFlat,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
             needGl_PointCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix, gl_PointCoord) => {
-                src.push(`outNormal = ivec4(vWorldNormal * float(${math.MAX_INT}), 1.0);`);
+                const worldNormal = (isFlat
+                                     ? `normalize(cross(dFdx(${vWorldPosition}.xyz), dFdy(${vWorldPosition}.xyz)))`
+                                     : "vWorldNormal");
+                src.push(`outNormal = ivec4(${worldNormal} * float(${math.MAX_INT}), 1.0);`);
             },
             setupInputs: (program) => { },
             setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
