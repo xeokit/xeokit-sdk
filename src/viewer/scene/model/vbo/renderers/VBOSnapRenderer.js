@@ -16,6 +16,7 @@ export class VBOSnapRenderer extends VBORenderer {
             progMode: isSnapInit ? "snapInitMode" : "snapMode",
 
             getHash: () => [ ],
+            respectPointsMaterial: false,
             // Improves occlusion accuracy at distance
             getLogDepth: true && (vFragDepth => (isSnapInit ? `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))` : vFragDepth)),
             clippingCaps: false,
@@ -68,8 +69,7 @@ export class VBOSnapRenderer extends VBORenderer {
             needvWorldPosition: (primitive !== "points") && isSnapInit,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
-            needGl_PointCoord: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix, gl_PointCoord) => {
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push("outCoords = ivec4(relativeToOriginPosition.xyz * uCoordinateScaler.xyz, " + (isSnapInit ? "-" : "") + "uLayerNumber);");
 
                 if (isSnapInit) {
