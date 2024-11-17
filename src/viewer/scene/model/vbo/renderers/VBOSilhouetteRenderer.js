@@ -10,7 +10,6 @@ export class VBOSilhouetteRenderer extends VBORenderer {
         const inputs = { };
         const gl = scene.canvas.gl;
         const defaultSilhouetteColor = new Float32Array([1, 1, 1, 1]);
-        const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const isPoints = primitive === "points";
         const pointsMaterial = isPoints && scene.pointsMaterial;
 
@@ -77,21 +76,16 @@ export class VBOSilhouetteRenderer extends VBORenderer {
                 } else if (primitive === "lines") {
                     src.push("uniform vec4 silhouetteColor;");
                 } else {
-                    if (clipping) {
-                        src.push("uniform float sliceThickness;");
-                        src.push("uniform vec4 sliceColor;");
-                    }
                     src.push("in vec4 vColor;");
                 }
                 src.push("out vec4 outColor;");
             },
-            sectionDiscardThreshold: (isPoints || (primitive === "lines")) ? "0.0" : "sliceThickness",
-            needSliced: (! isPoints) && (primitive !== "lines") && clipping,
+            slicedColorIfClipping: (! isPoints) && (primitive !== "lines"),
             needvWorldPosition: false,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
             needGl_PointCoord: isPoints && pointsMaterial.roundPoints,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix, gl_PointCoord) => {
                 if (isPoints) {
                     if (pointsMaterial.roundPoints) {
                         src.push(`  vec2 cxy = 2.0 * ${gl_PointCoord} - 1.0;`);
@@ -104,7 +98,7 @@ export class VBOSilhouetteRenderer extends VBORenderer {
                 } else if (primitive === "lines") {
                     src.push("outColor = silhouetteColor;");
                 } else {
-                    src.push("outColor = " + (clipping ? `${sliced} ? sliceColor : vColor` : "vColor") + ";");
+                    src.push(`outColor = ${sliceColorOr("vColor")};`);
                 }
             },
             setupInputs: (program) => {

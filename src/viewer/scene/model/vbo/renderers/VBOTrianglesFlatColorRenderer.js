@@ -8,7 +8,6 @@ export class VBOTrianglesFlatColorRenderer extends VBORenderer {
     constructor(scene, instancing, primitive, withSAO) {
         const inputs = { };
         const gl = scene.canvas.gl;
-        const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const lightSetup = createLightSetup(gl, scene._lightsState, false);
 
         super(scene, instancing, primitive, withSAO, {
@@ -41,11 +40,6 @@ export class VBOTrianglesFlatColorRenderer extends VBORenderer {
                 src.push(`vColor = ${color} / 255.0;`);
             },
             appendFragmentDefinitions: (src) => {
-                if (clipping) {
-                    src.push("uniform float sliceThickness;");
-                    src.push("uniform vec4 sliceColor;");
-                }
-
                 lightSetup.appendDefinitions(src);
 
                 src.push("in vec4 vViewPosition;");
@@ -63,21 +57,19 @@ export class VBOTrianglesFlatColorRenderer extends VBORenderer {
                 }
                 src.push("out vec4 outColor;");
             },
-            sectionDiscardThreshold: clipping && "sliceThickness",
-            needSliced: clipping,
+            slicedColorIfClipping: true,
             needvWorldPosition: false,
             needGl_FragCoord: true,
             needViewMatrixInFragment: true,
             needGl_PointCoord: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix, gl_PointCoord) => {
                 src.push("vec3 viewNormal = normalize(cross(dFdx(vViewPosition.xyz), dFdy(vViewPosition.xyz)));");
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
                 lightSetup.getDirectionalLights(viewMatrix, "vViewPosition").forEach(light => {
                     src.push(`reflectedColor += max(dot(-viewNormal, ${light.direction}), 0.0) * ${light.color};`);
                 });
 
-                const color = clipping ? `${sliced} ? sliceColor : vColor` : "vColor";
-                src.push(`vec4 fragColor = vec4(${lightSetup.getAmbientColor()} + reflectedColor, 1) * (${color});`);
+                src.push(`vec4 fragColor = vec4(${lightSetup.getAmbientColor()} + reflectedColor, 1) * ${sliceColorOr("vColor")};`);
 
                 if (withSAO) {
                     // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
