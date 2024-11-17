@@ -35,13 +35,12 @@ export class VBOTrianglesDepthRenderer extends VBORenderer {
                 src.push("in vec2 vHighPrecisionZW;");
                 src.push("out vec4 outColor;");
             },
-            sectionDiscardThreshold: "0.0",
-            needSliced: false,
+            slicedColorIfClipping: false,
             needvWorldPosition: false,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
             needGl_PointCoord: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix, gl_PointCoord) => {
                 src.push("outColor = vec4(vec3((1.0 - vHighPrecisionZW[0] / vHighPrecisionZW[1]) / 2.0), 1.0);");
             },
             setupInputs: (program) => { },
