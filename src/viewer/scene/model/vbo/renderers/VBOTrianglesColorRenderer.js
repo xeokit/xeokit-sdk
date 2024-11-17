@@ -8,7 +8,6 @@ export class VBOTrianglesColorRenderer extends VBORenderer {
     constructor(scene, instancing, primitive, withSAO) {
         const inputs = { };
         const gl = scene.canvas.gl;
-        const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const lightSetup = createLightSetup(gl, scene._lightsState, false);
 
         super(scene, instancing, primitive, withSAO, {
@@ -44,10 +43,6 @@ export class VBOTrianglesColorRenderer extends VBORenderer {
                 src.push(`vColor = vec4(${lightSetup.getAmbientColor()} + reflectedColor, 1) * vec4(${color}) / 255.0;`);
             },
             appendFragmentDefinitions: (src) => {
-                if (clipping) {
-                    src.push("uniform float sliceThickness;");
-                    src.push("uniform vec4 sliceColor;");
-                }
                 src.push("in vec4 vColor;");
                 if (withSAO) {
                     src.push("uniform sampler2D uOcclusionTexture;");
@@ -62,14 +57,13 @@ export class VBOTrianglesColorRenderer extends VBORenderer {
                 }
                 src.push("out vec4 outColor;");
             },
-            sectionDiscardThreshold: clipping && "sliceThickness",
-            needSliced: clipping,
+            slicedColorIfClipping: true,
             needvWorldPosition: false,
             needGl_FragCoord: true,
             needViewMatrixInFragment: false,
             needGl_PointCoord: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
-                const color = clipping ? `${sliced} ? sliceColor : vColor` : "vColor";
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix, gl_PointCoord) => {
+                const color = sliceColorOr("vColor");
                 if (withSAO) {
                     // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
                     // Would be more efficient to defer this, then render lines later, using same depth buffer for Z-reject
