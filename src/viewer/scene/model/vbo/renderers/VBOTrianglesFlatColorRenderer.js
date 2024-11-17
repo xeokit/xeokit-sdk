@@ -15,6 +15,7 @@ export class VBOTrianglesFlatColorRenderer extends VBORenderer {
             progMode: "flatColorMode",
 
             getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao"],
+            respectPointsMaterial: false,
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             clippingCaps: false,
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
@@ -51,8 +52,7 @@ export class VBOTrianglesFlatColorRenderer extends VBORenderer {
             needvWorldPosition: false,
             needGl_FragCoord: sao,
             needViewMatrixInFragment: true,
-            needGl_PointCoord: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix, gl_PointCoord) => {
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push("vec3 viewNormal = normalize(cross(dFdx(vViewPosition.xyz), dFdy(vViewPosition.xyz)));");
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
                 lightSetup.getDirectionalLights(viewMatrix, "vViewPosition").forEach(light => {
