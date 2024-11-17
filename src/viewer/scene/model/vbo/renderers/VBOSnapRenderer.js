@@ -69,14 +69,13 @@ export class VBOSnapRenderer extends VBORenderer {
                     src.push("out highp ivec4 outCoords;");
                 }
             },
-            sectionDiscardThreshold: "0.0",
-            needSliced: false,
+            slicedColorIfClipping: false,
             needvWorldPosition: (primitive !== "points") && isSnapInit,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
             vertexCullX: (!isSnapInit) && "2.0",
             needGl_PointCoord: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix, gl_PointCoord) => {
                 src.push("outCoords = ivec4(relativeToOriginPosition.xyz * uCoordinateScaler.xyz, " + (isSnapInit ? "-" : "") + "uLayerNumber);");
 
                 if (isSnapInit) {

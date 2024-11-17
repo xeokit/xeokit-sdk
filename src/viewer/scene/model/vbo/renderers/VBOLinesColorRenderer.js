@@ -37,13 +37,12 @@ export class VBOLinesColorRenderer extends VBORenderer {
                 src.push("in vec4 vColor;");
                 src.push("out vec4 outColor;");
             },
-            sectionDiscardThreshold: "0.0",
-            needSliced: false,
+            slicedColorIfClipping: false,
             needvWorldPosition: false,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
             needGl_PointCoord: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix, gl_PointCoord) => {
                 src.push("outColor = vColor;");
             },
             setupInputs: (program) => { },
