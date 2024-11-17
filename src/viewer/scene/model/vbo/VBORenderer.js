@@ -161,11 +161,55 @@ export const createLightSetup = function(gl, lightsState, useMaps) {
     };
 };
 
+export const createSAOSetup = (gl, scene) => {
+    return {
+        appendDefinitions: (src) => {
+            src.push("uniform sampler2D uOcclusionTexture;");
+            src.push("uniform vec4      uSAOParams;");
+            src.push("const float       unpackDownScale = 255. / 256.;");
+            src.push("const vec3        packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );");
+            src.push("const vec4        unPackFactors = unpackDownScale / vec4( packFactors, 1. );");
+            src.push("float unpackRGBToFloat(const in vec4 v) {");
+            src.push("    return dot(v, unPackFactors);");
+            src.push("}");
+        },
+        getAmbient: (gl_FragCoord) => {
+            // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
+            // Would be more efficient to defer this, then render lines later, using same depth buffer for Z-reject
+            const viewportWH  = "uSAOParams.xy";
+            const uv          = `${gl_FragCoord}.xy / ${viewportWH}`;
+            const blendCutoff = "uSAOParams.z";
+            const blendFactor = "uSAOParams.w";
+            return `(smoothstep(${blendCutoff}, 1.0, unpackRGBToFloat(texture(uOcclusionTexture, ${uv}))) * ${blendFactor})`;
+        },
+        setupInputs: (program) => {
+            const uOcclusionTexture = program.getSampler("uOcclusionTexture");
+            const uSAOParams        = program.getLocation("uSAOParams");
+
+            return function(frameCtx) {
+                const sao = scene.sao;
+                if (sao.possible) {
+                    const viewportWidth = gl.drawingBufferWidth;
+                    const viewportHeight = gl.drawingBufferHeight;
+                    tempVec4[0] = viewportWidth;
+                    tempVec4[1] = viewportHeight;
+                    tempVec4[2] = sao.blendCutoff;
+                    tempVec4[3] = sao.blendFactor;
+                    gl.uniform4fv(uSAOParams, tempVec4);
+                    uOcclusionTexture.bindTexture(frameCtx.occlusionTexture, frameCtx.textureUnit);
+                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
+                    frameCtx.bindTexture++;
+                }
+            };
+        }
+    };
+};
+
 /**
  * @private
  */
 export class VBORenderer {
-    constructor(scene, instancing, primitive, withSAO = false, cfg) {
+    constructor(scene, instancing, primitive, cfg) {
 
         const getHash = () => [ scene._sectionPlanesState.getHash() ].concat(cfg.getHash()).join(";");
         const hash = getHash();
@@ -539,9 +583,6 @@ export class VBORenderer {
         const aModelNormalMatrixCol1 = instancing && program.getAttribute("modelNormalMatrixCol1");
         const aModelNormalMatrixCol2 = instancing && program.getAttribute("modelNormalMatrixCol2");
 
-        const uOcclusionTexture = withSAO && "uOcclusionTexture";
-        const uSAOParams = withSAO && program.getLocation("uSAOParams");
-
         const alphaCutoffLocation = useAlphaCutoff && program.getLocation("materialAlphaCutoff");
 
         const uLogDepthBufFC = getLogDepth && program.getLocation("logDepthBufFC");
@@ -797,25 +838,6 @@ export class VBORenderer {
                           1.0
                           : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0)));
                     gl.uniform1f(uNearPlaneHeight, nearPlaneHeight);
-                }
-
-                const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
-
-                if (withSAO) {
-                    const sao = scene.sao;
-                    const saoEnabled = sao.possible;
-                    if (saoEnabled) {
-                        const viewportWidth = gl.drawingBufferWidth;
-                        const viewportHeight = gl.drawingBufferHeight;
-                        tempVec4[0] = viewportWidth;
-                        tempVec4[1] = viewportHeight;
-                        tempVec4[2] = sao.blendCutoff;
-                        tempVec4[3] = sao.blendFactor;
-                        gl.uniform4fv(uSAOParams, tempVec4);
-                        program.bindTexture(uOcclusionTexture, frameCtx.occlusionTexture, frameCtx.textureUnit);
-                        frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                        frameCtx.bindTexture++;
-                    }
                 }
 
                 if (useAlphaCutoff) {
