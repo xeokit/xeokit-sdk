@@ -1,5 +1,4 @@
 import {VBOPointsColorRenderer} from "../../../renderers/VBOPointsColorRenderer.js";
-import {VBOPointsDepthRenderer} from "../../../renderers/VBOPointsDepthRenderer.js";
 import {VBOPointsOcclusionRenderer} from "../../../renderers/VBOPointsOcclusionRenderer.js";
 import {VBOPointsPickDepthRenderer} from "../../../renderers/VBOPointsPickDepthRenderer.js";
 import {VBOPointsPickMeshRenderer} from "../../../renderers/VBOPointsPickMeshRenderer.js";
@@ -20,10 +19,6 @@ import {VBOPointsSnapRenderer} from "../../../renderers/VBOPointsSnapRenderer.js
         if (this._colorRenderer && (!this._colorRenderer.getValid())) {
             this._colorRenderer.destroy();
             this._colorRenderer = null;
-        }
-        if (this._depthRenderer && (!this._depthRenderer.getValid())) {
-            this._depthRenderer.destroy();
-            this._depthRenderer = null;
         }
         if (this._silhouetteRenderer && (!this._silhouetteRenderer.getValid())) {
             this._silhouetteRenderer.destroy();
@@ -67,13 +62,6 @@ import {VBOPointsSnapRenderer} from "../../../renderers/VBOPointsSnapRenderer.js
             this._silhouetteRenderer = new VBOPointsSilhouetteRenderer(this._scene, true);
         }
         return this._silhouetteRenderer;
-    }
-
-    get depthRenderer() {
-        if (!this._depthRenderer) {
-            this._depthRenderer = new VBOPointsDepthRenderer(this._scene, true);
-        }
-        return this._depthRenderer;
     }
 
     get pickMeshRenderer() {
@@ -121,9 +109,6 @@ import {VBOPointsSnapRenderer} from "../../../renderers/VBOPointsSnapRenderer.js
     _destroy() {
         if (this._colorRenderer) {
             this._colorRenderer.destroy();
-        }
-        if (this._depthRenderer) {
-            this._depthRenderer.destroy();
         }
         if (this._silhouetteRenderer) {
             this._silhouetteRenderer.destroy();
