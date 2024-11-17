@@ -6,11 +6,15 @@ import {VBOInstancingPointsRenderer} from "./VBOInstancingPointsRenderer.js";
  * @private
  */
 export class VBOInstancingPointsShadowRenderer extends VBOInstancingPointsRenderer {
+    _getHash() {
+        return this._scene._sectionPlanesState.getHash() + this._scene.pointsMaterial.hash;
+    }
 
     _buildVertexShader() {
         const scene = this._scene;
         const sectionPlanesState = scene._sectionPlanesState;
         const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
+        const pointsMaterial = scene.pointsMaterial._state;
         const src = [];
         src.push ('#version 300 es');
         src.push("// Instancing geometry shadow drawing vertex shader");
@@ -29,6 +33,9 @@ export class VBOInstancingPointsShadowRenderer extends VBOInstancingPointsRender
         this._addMatricesUniformBlockLines(src);
 
         src.push("uniform float pointSize;");
+        if (pointsMaterial.perspectivePoints) {
+            src.push("uniform float nearPlaneHeight;");
+        }
         if (clipping) {
             src.push("out vec4 vWorldPosition;");
             src.push("out float vFlags;");
@@ -53,7 +60,13 @@ export class VBOInstancingPointsShadowRenderer extends VBOInstancingPointsRender
         }
         src.push("  gl_Position = shadowProjMatrix * viewPosition;");
         src.push("}");
-        src.push("gl_PointSize = pointSize;");
+        if (pointsMaterial.perspectivePoints) {
+            src.push("gl_PointSize = (nearPlaneHeight * pointSize) / gl_Position.w;");
+            src.push("gl_PointSize = max(gl_PointSize, " + Math.floor(pointsMaterial.minPerspectivePointSize) + ".0);");
+            src.push("gl_PointSize = min(gl_PointSize, " + Math.floor(pointsMaterial.maxPerspectivePointSize) + ".0);");
+        } else {
+            src.push("gl_PointSize = pointSize;");
+        }
         src.push("}");
         return src;
     }
@@ -96,11 +109,13 @@ export class VBOInstancingPointsShadowRenderer extends VBOInstancingPointsRender
         src.push("}");
         src.push("out vec4 outColor;");
         src.push("void main(void) {");
-        src.push("  vec2 cxy = 2.0 * gl_PointCoord - 1.0;");
-        src.push("  float r = dot(cxy, cxy);");
-        src.push("  if (r > 1.0) {");
-        src.push("       discard;");
-        src.push("  }");
+        if (scene.pointsMaterial.roundPoints) {
+            src.push("  vec2 cxy = 2.0 * gl_PointCoord - 1.0;");
+            src.push("  float r = dot(cxy, cxy);");
+            src.push("  if (r > 1.0) {");
+            src.push("       discard;");
+            src.push("  }");
+        }
         if (clipping) {
             src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
             src.push("  if (clippable) {");
