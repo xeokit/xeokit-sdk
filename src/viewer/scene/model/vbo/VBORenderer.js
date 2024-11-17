@@ -211,6 +211,8 @@ export const createSAOSetup = (gl, scene) => {
 export class VBORenderer {
     constructor(scene, instancing, primitive, cfg) {
 
+        const pointsMaterial = scene.pointsMaterial;
+
         const progMode                  = cfg.progMode;
         const edges                     = cfg.edges;
         const incrementDrawState        = cfg.incrementDrawState;
@@ -220,7 +222,7 @@ export class VBORenderer {
         const clippingCaps              = cfg.clippingCaps;
         const renderPassFlag            = cfg.renderPassFlag;
         const appendVertexDefinitions   = cfg.appendVertexDefinitions;
-        const filterIntensityRange      = cfg.filterIntensityRange;
+        const filterIntensityRange      = cfg.filterIntensityRange && (primitive === "points") && pointsMaterial.filterIntensity;
         const transformClipPos          = cfg.transformClipPos;
         const shadowParameters          = cfg.shadowParameters;
         const needVertexColor           = cfg.needVertexColor;
@@ -246,7 +248,6 @@ export class VBORenderer {
         const isSnap = (progMode === "snapInitMode") || (progMode === "snapMode");
         const testPerspectiveForGl_FragDepth = ((primitive !== "points") && (primitive !== "lines")) || isSnap;
         const setupPoints = respectPointsMaterial && (primitive === "points");
-        const pointsMaterial = scene.pointsMaterial;
 
         const getHash = () => [ scene._sectionPlanesState.getHash() ].concat(setupPoints ? [ pointsMaterial.hash ] : [ ]).concat(cfg.getHash()).join(";");
         const hash = getHash();
@@ -380,6 +381,10 @@ export class VBORenderer {
                 }
             }
 
+            if (filterIntensityRange) {
+                src.push("uniform vec2 intensityRange;");
+            }
+
             appendVertexDefinitions(src);
 
             src.push("void main(void) {");
@@ -393,7 +398,7 @@ export class VBORenderer {
             src.push("} else {");
             if (filterIntensityRange) {
                 src.push("float intensity = float(aColor.a) / 255.0;");
-                src.push("if ((intensity < " + filterIntensityRange + "[0]) || (intensity > " + filterIntensityRange + "[1])) {");
+                src.push("if ((intensity < intensityRange[0]) || (intensity > intensityRange[1])) {");
                 src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
                 src.push("   return;");
                 src.push("}");
@@ -796,6 +801,10 @@ export class VBORenderer {
                 gl.uniform1f(uLogDepthBufFC, 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2)); // TODO: Far from pick project matrix?
             }
 
+            if (uIntensityRange) {
+                gl.uniform2f(uIntensityRange, pointsMaterial.minIntensity, pointsMaterial.maxIntensity);
+            }
+
             if (uPointSize) {
                 gl.uniform1f(uPointSize, pointsMaterial.pointSize);
             }
@@ -847,10 +856,6 @@ export class VBORenderer {
 
                 if (uDrawingBufferSize) {
                     gl.uniform2f(uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
-                }
-
-                if (uIntensityRange) {
-                    gl.uniform2f(uIntensityRange, pointsMaterial.minIntensity, pointsMaterial.maxIntensity);
                 }
 
                 if (primitive === "lines") {
