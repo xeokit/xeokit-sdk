@@ -63,13 +63,12 @@ export class VBOShadowRenderer extends VBORenderer {
                 src.push("}");
                 src.push("out vec4 outColor;");
             },
-            sectionDiscardThreshold: "0.0",
-            needSliced: false,
+            slicedColorIfClipping: false,
             needvWorldPosition: false,
             needGl_FragCoord: true,
             needViewMatrixInFragment: false,
             needGl_PointCoord: isPoints && pointsMaterial.roundPoints,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix, gl_PointCoord) => {
                 if (isPoints && pointsMaterial.roundPoints) {
                     src.push(`  vec2 cxy = 2.0 * ${gl_PointCoord} - 1.0;`);
                     src.push("  float r = dot(cxy, cxy);");
