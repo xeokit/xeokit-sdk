@@ -6,7 +6,7 @@ import {VBORenderer} from "../VBORenderer.js";
 export class VBOLinesColorRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive) {
-        super(scene, instancing, primitive, false, {
+        super(scene, instancing, primitive, {
             progMode: "colorMode", incrementDrawState: true,
 
             getHash: () => [ ],
