@@ -8,7 +8,6 @@ import {quantizePositions, transformAndOctEncodeNormals} from "../compression.js
 import {geometryCompressionUtils} from "../../math/geometryCompressionUtils.js";
 
 import { VBOPointsColorRenderer              } from "./renderers/VBOPointsColorRenderer.js";
-import { VBOPointsOcclusionRenderer          } from "./renderers/VBOPointsOcclusionRenderer.js";
 
 import { VBOLinesColorRenderer               } from "./renderers/VBOLinesColorRenderer.js";
 
@@ -17,10 +16,10 @@ import { VBOTrianglesColorTextureRenderer    } from "./renderers/VBOTrianglesCol
 import { VBOTrianglesDepthRenderer           } from "./renderers/VBOTrianglesDepthRenderer.js";
 import { VBOTrianglesEdgesRenderer           } from "./renderers/VBOTrianglesEdgesRenderer.js";
 import { VBOTrianglesFlatColorRenderer       } from "./renderers/VBOTrianglesFlatColorRenderer.js";
-import { VBOTrianglesOcclusionRenderer       } from "./renderers/VBOTrianglesOcclusionRenderer.js";
 import { VBOTrianglesPBRRenderer             } from "./renderers/VBOTrianglesPBRRenderer.js";
 import { VBOTrianglesPickNormalsRenderer     } from "./renderers/VBOTrianglesPickNormalsRenderer.js";
 
+import { VBOOcclusionRenderer       } from "./renderers/VBOOcclusionRenderer.js";
 import { VBOPickDepthRenderer       } from "./renderers/VBOPickDepthRenderer.js";
 import { VBOPickMeshRenderer        } from "./renderers/VBOPickMeshRenderer.js";
 import { VBOShadowRenderer          } from "./renderers/VBOShadowRenderer.js";
@@ -80,7 +79,7 @@ const getRenderers = (function() {
             if (primitive === "points") {
                 cache[sceneId] = {
                     colorRenderer:      lazy(VBOPointsColorRenderer),
-                    occlusionRenderer:  lazy(VBOPointsOcclusionRenderer),
+                    occlusionRenderer:  lazy(VBOOcclusionRenderer),
                     pickDepthRenderer:  lazy(VBOPickDepthRenderer),
                     pickMeshRenderer:   lazy(VBOPickMeshRenderer),
                     // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
@@ -110,7 +109,7 @@ const getRenderers = (function() {
                     edgesRenderer:                          lazy(VBOTrianglesEdgesRenderer, true),
                     flatColorRenderer:                      lazy(VBOTrianglesFlatColorRenderer, false),
                     flatColorRendererWithSAO:               lazy(VBOTrianglesFlatColorRenderer, true),
-                    occlusionRenderer:                      lazy(VBOTrianglesOcclusionRenderer),
+                    occlusionRenderer:                      lazy(VBOOcclusionRenderer),
                     pbrRenderer:                            lazy(VBOTrianglesPBRRenderer, false),
                     pbrRendererWithSAO:                     lazy(VBOTrianglesPBRRenderer, true),
                     pickDepthRenderer:                      eager(VBOPickDepthRenderer),
