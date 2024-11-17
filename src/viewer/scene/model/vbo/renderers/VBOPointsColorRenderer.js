@@ -8,7 +8,7 @@ export class VBOPointsColorRenderer extends VBORenderer {
     constructor(scene, instancing, primitive) {
         const pointsMaterial = scene.pointsMaterial._state;
 
-        super(scene, instancing, primitive, false, {
+        super(scene, instancing, primitive, {
             progMode: "colorMode", incrementDrawState: true,
 
             getHash: () => [ pointsMaterial.hash ],

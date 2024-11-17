@@ -1,4 +1,4 @@
-import {VBORenderer, createLightSetup} from "../VBORenderer.js";
+import {VBORenderer, createLightSetup, createSAOSetup} from "../VBORenderer.js";
 
 /**
  * @private
@@ -9,11 +9,12 @@ export class VBOTrianglesColorRenderer extends VBORenderer {
         const inputs = { };
         const gl = scene.canvas.gl;
         const lightSetup = createLightSetup(gl, scene._lightsState, false);
+        const sao = withSAO && createSAOSetup(gl, scene);
 
-        super(scene, instancing, primitive, withSAO, {
+        super(scene, instancing, primitive, {
             progMode: "colorMode", incrementDrawState: true,
 
-            getHash: () => [lightSetup.getHash(), (withSAO ? "sao" : "nosao")],
+            getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao"],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))`),
             clippingCaps: false,
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
@@ -43,46 +44,26 @@ export class VBOTrianglesColorRenderer extends VBORenderer {
                 src.push(`vColor = vec4(${lightSetup.getAmbientColor()} + reflectedColor, 1) * vec4(${color}) / 255.0;`);
             },
             appendFragmentDefinitions: (src) => {
+                sao && sao.appendDefinitions(src);
                 src.push("in vec4 vColor;");
-                if (withSAO) {
-                    src.push("uniform sampler2D uOcclusionTexture;");
-                    src.push("uniform vec4      uSAOParams;");
-                    src.push("const float       packUpscale = 256. / 255.;");
-                    src.push("const float       unpackDownScale = 255. / 256.;");
-                    src.push("const vec3        packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );");
-                    src.push("const vec4        unPackFactors = unpackDownScale / vec4( packFactors, 1. );");
-                    src.push("float unpackRGBToFloat( const in vec4 v ) {");
-                    src.push("    return dot( v, unPackFactors );");
-                    src.push("}");
-                }
                 src.push("out vec4 outColor;");
             },
             slicedColorIfClipping: true,
             needvWorldPosition: false,
-            needGl_FragCoord: true,
+            needGl_FragCoord: sao,
             needViewMatrixInFragment: false,
             needGl_PointCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix, gl_PointCoord) => {
-                const color = sliceColorOr("vColor");
-                if (withSAO) {
-                    // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
-                    // Would be more efficient to defer this, then render lines later, using same depth buffer for Z-reject
-                    src.push("   float viewportWidth     = uSAOParams[0];");
-                    src.push("   float viewportHeight    = uSAOParams[1];");
-                    src.push("   float blendCutoff       = uSAOParams[2];");
-                    src.push("   float blendFactor       = uSAOParams[3];");
-                    src.push(`   vec2 uv                 = vec2(${gl_FragCoord}.x / viewportWidth, ${gl_FragCoord}.y / viewportHeight);`);
-                    src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBToFloat(texture(uOcclusionTexture, uv))) * blendFactor;");
-                    src.push("   outColor                = vec4((" + color + ").rgb * ambient, (" + color + ").a);");
-                } else {
-                    src.push("   outColor                = " + color + ";");
-                }
+                src.push(`vec4 fragColor = ${sliceColorOr("vColor")};`);
+                src.push("outColor = " + (sao ? ("vec4(fragColor.rgb * " + sao.getAmbient(gl_FragCoord) + ", fragColor.a)") : "fragColor") + ";");
             },
             setupInputs: (program) => {
                 inputs.setLightsRenderState = lightSetup.setupInputs(program);
+                inputs.setSAOState = sao && sao.setupInputs(program);
             },
             setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
                 inputs.setLightsRenderState(frameCtx);
+                inputs.setSAOState && inputs.setSAOState(frameCtx);
             }
         });
     }
