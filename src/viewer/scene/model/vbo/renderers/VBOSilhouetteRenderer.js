@@ -13,7 +13,7 @@ export class VBOSilhouetteRenderer extends VBORenderer {
         const isPoints = primitive === "points";
         const pointsMaterial = isPoints && scene.pointsMaterial;
 
-        super(scene, instancing, primitive, false, {
+        super(scene, instancing, primitive, {
             progMode: "silhouetteMode",
 
             getHash: (isPoints ? () => [ pointsMaterial.hash ] : () => [ ]),
