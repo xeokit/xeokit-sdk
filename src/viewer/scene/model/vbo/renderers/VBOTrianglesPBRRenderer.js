@@ -219,13 +219,12 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
 
                 src.push("out vec4 outColor;");
             },
-            sectionDiscardThreshold: "0.0",
-            needSliced: false,
+            slicedColorIfClipping: false,
             needvWorldPosition: false,
             needGl_FragCoord: true,
             needViewMatrixInFragment: true,
             needGl_PointCoord: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix, gl_PointCoord) => {
                 src.push("IncidentLight  light;");
                 src.push("Material       material;");
                 src.push("Geometry       geometry;");
