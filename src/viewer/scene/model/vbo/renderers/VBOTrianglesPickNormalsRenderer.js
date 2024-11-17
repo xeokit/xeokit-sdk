@@ -11,6 +11,7 @@ export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
             progMode: isFlat ? "pickNormalsFlatMode" : "pickNormalsMode",
 
             getHash: () => [ ],
+            respectPointsMaterial: false,
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             clippingCaps: false,
             // pickFlag = NOT_RENDERED | PICK
@@ -50,8 +51,7 @@ export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
             needvWorldPosition: isFlat,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
-            needGl_PointCoord: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix, gl_PointCoord) => {
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 const worldNormal = (isFlat
                                      ? `normalize(cross(dFdx(${vWorldPosition}.xyz), dFdy(${vWorldPosition}.xyz)))`
                                      : "vWorldNormal");
