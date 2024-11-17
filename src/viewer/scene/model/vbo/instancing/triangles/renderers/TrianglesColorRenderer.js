@@ -250,7 +250,7 @@ class TrianglesColorRenderer extends TrianglesInstancingRenderer {
             src.push("   float blendFactor       = uSAOParams[3];");
             src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
             src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBToFloat(texture(uOcclusionTexture, uv))) * blendFactor;");
-            src.push("   outColor                = vec4(newColor.rgb * ambient, 1.0);");
+            src.push("   outColor                = vec4(newColor.rgb * ambient, newColor.a);");
         } else {
             src.push("    outColor           = newColor;");
         }
