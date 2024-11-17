@@ -10,6 +10,7 @@ export class VBOTrianglesDepthRenderer extends VBORenderer {
             progMode: "depthMode",
 
             getHash: () => [ ],
+            respectPointsMaterial: false,
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             clippingCaps: false,
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
@@ -39,8 +40,7 @@ export class VBOTrianglesDepthRenderer extends VBORenderer {
             needvWorldPosition: false,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
-            needGl_PointCoord: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix, gl_PointCoord) => {
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push("outColor = vec4(vec3((1.0 - vHighPrecisionZW[0] / vHighPrecisionZW[1]) / 2.0), 1.0);");
             },
             setupInputs: (program) => { },
