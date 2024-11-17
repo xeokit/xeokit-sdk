@@ -213,7 +213,6 @@ export class VBORenderer {
 
         const progMode                  = cfg.progMode;
         const edges                     = cfg.edges;
-        const useAlphaCutoff            = cfg.useAlphaCutoff;
         const incrementDrawState        = cfg.incrementDrawState;
 
         const respectPointsMaterial     = cfg.respectPointsMaterial;
@@ -609,8 +608,6 @@ export class VBORenderer {
         const aModelNormalMatrixCol1 = instancing && program.getAttribute("modelNormalMatrixCol1");
         const aModelNormalMatrixCol2 = instancing && program.getAttribute("modelNormalMatrixCol2");
 
-        const alphaCutoffLocation = useAlphaCutoff && program.getLocation("materialAlphaCutoff");
-
         const uLogDepthBufFC = getLogDepth && program.getLocation("logDepthBufFC");
 
         const uIntensityRange = filterIntensityRange && program.getLocation("intensityRange");
@@ -855,10 +852,6 @@ export class VBORenderer {
 
                 if (uIntensityRange) {
                     gl.uniform2f(uIntensityRange, pointsMaterial.minIntensity, pointsMaterial.maxIntensity);
-                }
-
-                if (useAlphaCutoff) {
-                    gl.uniform1f(alphaCutoffLocation, state.textureSet.alphaCutoff);
                 }
 
                 if (primitive === "lines") {
