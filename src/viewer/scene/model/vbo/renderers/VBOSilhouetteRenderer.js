@@ -11,12 +11,12 @@ export class VBOSilhouetteRenderer extends VBORenderer {
         const gl = scene.canvas.gl;
         const defaultSilhouetteColor = new Float32Array([1, 1, 1, 1]);
         const isPoints = primitive === "points";
-        const pointsMaterial = isPoints && scene.pointsMaterial;
 
         super(scene, instancing, primitive, {
             progMode: "silhouetteMode",
 
-            getHash: (isPoints ? () => [ pointsMaterial.hash ] : () => [ ]),
+            getHash: () => [ ],
+            respectPointsMaterial: true,
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             clippingCaps: false,
             // silhouetteFlag = NOT_RENDERED | SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | SILHOUETTE_XRAYED
@@ -28,10 +28,6 @@ export class VBOSilhouetteRenderer extends VBORenderer {
                     if (instancing) {
                         src.push("uniform vec4 silhouetteColor;");
                         src.push("out vec4 vColor;");
-                    }
-                    src.push("uniform float pointSize;");
-                    if (pointsMaterial.perspectivePoints) {
-                        src.push("uniform float nearPlaneHeight;");
                     }
                 } else if (primitive !== "lines") {
                     src.push("uniform vec4 silhouetteColor;");
@@ -45,7 +41,7 @@ export class VBOSilhouetteRenderer extends VBORenderer {
             needPickColor: false,
             needUV: false,
             needMetallicRoughness: false,
-            needGl_Position: isPoints && pointsMaterial.perspectivePoints,
+            needGl_Position: false,
             needViewPosition: false,
             needViewMatrixNormal: false,
             needWorldNormal: false,
@@ -54,13 +50,6 @@ export class VBOSilhouetteRenderer extends VBORenderer {
                 if (isPoints) {
                     if (instancing) {
                         src.push(`vColor = silhouetteColor;`);
-                    }
-                    if (pointsMaterial.perspectivePoints) {
-                        src.push(`gl_PointSize = (nearPlaneHeight * pointSize) / ${gl_Position}.w;`);
-                        src.push("gl_PointSize = max(gl_PointSize, " + Math.floor(pointsMaterial.minPerspectivePointSize) + ".0);");
-                        src.push("gl_PointSize = min(gl_PointSize, " + Math.floor(pointsMaterial.maxPerspectivePointSize) + ".0);");
-                    } else {
-                        src.push("gl_PointSize = pointSize;");
                     }
                 } else if (primitive !== "lines") {
                     src.push(`vColor = vec4(silhouetteColor.rgb, min(silhouetteColor.a, ${color}.a / 255.0));`);
@@ -84,16 +73,8 @@ export class VBOSilhouetteRenderer extends VBORenderer {
             needvWorldPosition: false,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
-            needGl_PointCoord: isPoints && pointsMaterial.roundPoints,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix, gl_PointCoord) => {
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 if (isPoints) {
-                    if (pointsMaterial.roundPoints) {
-                        src.push(`  vec2 cxy = 2.0 * ${gl_PointCoord} - 1.0;`);
-                        src.push("  float r = dot(cxy, cxy);");
-                        src.push("  if (r > 1.0) {");
-                        src.push("       discard;");
-                        src.push("  }");
-                    }
                     src.push("outColor = " + (instancing ? "vColor" : "silhouetteColor") + ";");
                 } else if (primitive === "lines") {
                     src.push("outColor = silhouetteColor;");
