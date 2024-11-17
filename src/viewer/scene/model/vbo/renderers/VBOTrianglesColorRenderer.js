@@ -15,6 +15,7 @@ export class VBOTrianglesColorRenderer extends VBORenderer {
             progMode: "colorMode", incrementDrawState: true,
 
             getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao"],
+            respectPointsMaterial: false,
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))`),
             clippingCaps: false,
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
@@ -52,8 +53,7 @@ export class VBOTrianglesColorRenderer extends VBORenderer {
             needvWorldPosition: false,
             needGl_FragCoord: sao,
             needViewMatrixInFragment: false,
-            needGl_PointCoord: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix, gl_PointCoord) => {
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push(`vec4 fragColor = ${sliceColorOr("vColor")};`);
                 src.push("outColor = " + (sao ? ("vec4(fragColor.rgb * " + sao.getAmbient(gl_FragCoord) + ", fragColor.a)") : "fragColor") + ";");
             },
