@@ -9,7 +9,6 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
     constructor(scene, instancing, primitive, withSAO, useAlphaCutoff) {
         const inputs = { };
         const gl = scene.canvas.gl;
-        const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
         const lightSetup = createLightSetup(gl, scene._lightsState, false);
         const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
         const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
@@ -47,10 +46,6 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
                 src.push(`vColor = vec4(${color}) / 255.0;`);
             },
             appendFragmentDefinitions: (src) => {
-                if (clipping) {
-                    src.push("uniform float sliceThickness;");
-                    src.push("uniform vec4 sliceColor;");
-                }
                 src.push("uniform sampler2D uColorMap;");
                 if (withSAO) {
                     src.push("uniform sampler2D uOcclusionTexture;");
@@ -85,21 +80,19 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
                 src.push("in vec4 vColor;");
                 src.push("out vec4 outColor;");
             },
-            sectionDiscardThreshold: clipping && "sliceThickness",
-            needSliced: clipping,
+            slicedColorIfClipping: true,
             needvWorldPosition: false,
             needGl_FragCoord: true,
             needViewMatrixInFragment: true,
             needGl_PointCoord: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix, gl_PointCoord) => {
                 src.push("vec3 viewNormal = normalize(cross(dFdx(vViewPosition.xyz), dFdy(vViewPosition.xyz)));");
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
                 lightSetup.getDirectionalLights(viewMatrix, "vViewPosition").forEach(light => {
                     src.push(`reflectedColor += max(dot(-viewNormal, ${light.direction}), 0.0) * ${light.color};`);
                 });
 
-                const color = clipping ? `${sliced} ? sliceColor : vColor` : "vColor";
-                src.push(`vec4 color = vec4(${lightSetup.getAmbientColor()} + reflectedColor, 1) * (${color});`);
+                src.push(`vec4 color = vec4(${lightSetup.getAmbientColor()} + reflectedColor, 1) * ${sliceColorOr("vColor")};`);
 
                 src.push("vec4 sampleColor = sRGBToLinear(texture(uColorMap, vUV));");
 

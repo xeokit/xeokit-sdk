@@ -34,13 +34,12 @@ export class VBOTrianglesPickNormalsFlatRenderer extends VBORenderer {
             needWorldPosition: false,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => { },
             appendFragmentDefinitions: (src) => src.push("out highp ivec4 outNormal;"),
-            sectionDiscardThreshold: "0.0",
-            needSliced: false,
+            slicedColorIfClipping: false,
             needvWorldPosition: true,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
             needGl_PointCoord: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix, gl_PointCoord) => {
                 src.push(`vec3 xTangent = dFdx(${vWorldPosition}.xyz);`);
                 src.push(`vec3 yTangent = dFdy(${vWorldPosition}.xyz);`);
                 src.push("vec3 worldNormal = normalize(cross(xTangent, yTangent));");
