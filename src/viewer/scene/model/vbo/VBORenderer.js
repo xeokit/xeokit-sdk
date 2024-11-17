@@ -571,8 +571,6 @@ export class VBORenderer {
         const aMetallicRoughness = program.getAttribute("metallicRoughness");
         const aFlags = program.getAttribute("flags");
         const aPickColor = program.getAttribute("pickColor");
-        const uPickZNear = program.getLocation("pickZNear");
-        const uPickZFar = program.getLocation("pickZFar");
         const uPickClipPos = program.getLocation("pickClipPos");
         const uDrawingBufferSize = program.getLocation("drawingBufferSize");
 
@@ -813,14 +811,6 @@ export class VBORenderer {
                 }
 
             } else {                // ! isSnap
-                if (uPickZNear) {
-                    gl.uniform1f(uPickZNear, frameCtx.pickZNear);
-                }
-
-                if (uPickZFar) {
-                    gl.uniform1f(uPickZFar, frameCtx.pickZFar);
-                }
-
                 if (uPickClipPos) {
                     gl.uniform2fv(uPickClipPos, frameCtx.pickClipPos);
                 }
