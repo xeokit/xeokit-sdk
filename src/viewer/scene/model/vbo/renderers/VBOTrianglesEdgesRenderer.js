@@ -11,7 +11,7 @@ export class VBOTrianglesEdgesRenderer extends VBORenderer {
         const gl = scene.canvas.gl;
         const edgesDefaultColor = new Float32Array([0, 0, 0, 1]);
 
-        super(scene, instancing, primitive, false, {
+        super(scene, instancing, primitive, {
             progMode: "edgesMode", edges: true,
 
             getHash: () => [ ],
