@@ -1,4 +1,4 @@
-import {VBORenderer, createLightSetup} from "../VBORenderer.js";
+import {VBORenderer, createLightSetup, createSAOSetup} from "../VBORenderer.js";
 import {WEBGL_INFO} from "../../../webglInfo.js";
 
 /**
@@ -11,12 +11,13 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
         const gl = scene.canvas.gl;
         const lightSetup = createLightSetup(gl, scene._lightsState, false);
         const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
+        const sao = withSAO && createSAOSetup(gl, scene);
         const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
 
-        super(scene, instancing, primitive, withSAO, {
+        super(scene, instancing, primitive, {
             progMode: "colorTextureMode", incrementDrawState: true, useAlphaCutoff: useAlphaCutoff,
 
-            getHash: () => [lightSetup.getHash(), (withSAO ? "sao" : "nosao"), gammaOutput, useAlphaCutoff ? "alphaCutoffYes" : "alphaCutoffNo"],
+            getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao", gammaOutput, useAlphaCutoff ? "alphaCutoffYes" : "alphaCutoffNo"],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             clippingCaps: false,
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
@@ -47,17 +48,6 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
             },
             appendFragmentDefinitions: (src) => {
                 src.push("uniform sampler2D uColorMap;");
-                if (withSAO) {
-                    src.push("uniform sampler2D uOcclusionTexture;");
-                    src.push("uniform vec4      uSAOParams;");
-                    src.push("const float       packUpscale = 256. / 255.;");
-                    src.push("const float       unpackDownScale = 255. / 256.;");
-                    src.push("const vec3        packFactors = vec3( 256. * 256. * 256., 256. * 256.,  256. );");
-                    src.push("const vec4        unPackFactors = unpackDownScale / vec4( packFactors, 1. );");
-                    src.push("float unpackRGBToFloat( const in vec4 v ) {");
-                    src.push("    return dot( v, unPackFactors );");
-                    src.push("}");
-                }
 
                 src.push("vec4 sRGBToLinear( in vec4 value ) {");
                 src.push("  return vec4( mix( pow( value.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), value.rgb * 0.0773993808, vec3( lessThanEqual( value.rgb, vec3( 0.04045 ) ) ) ), value.w );");
@@ -70,6 +60,7 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
                 }
 
                 lightSetup.appendDefinitions(src);
+                sao && sao.appendDefinitions(src);
 
                 if (useAlphaCutoff) {
                     src.push("uniform float materialAlphaCutoff;");
@@ -82,7 +73,7 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
             },
             slicedColorIfClipping: true,
             needvWorldPosition: false,
-            needGl_FragCoord: true,
+            needGl_FragCoord: sao,
             needViewMatrixInFragment: true,
             needGl_PointCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix, gl_PointCoord) => {
@@ -101,22 +92,8 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
                 }
 
                 src.push("vec4 colorTexel = color * sampleColor;");
+                src.push("outColor = vec4(colorTexel.rgb" + (sao ? (" * " + sao.getAmbient(gl_FragCoord)) : "") + ", color.a);");
 
-                src.push("float opacity = color.a;");
-
-                if (withSAO) {
-                    // Doing SAO blend in the main solid fill draw shader just so that edge lines can be drawn over the top
-                    // Would be more efficient to defer this, then render lines later, using same depth buffer for Z-reject
-                    src.push("   float viewportWidth     = uSAOParams[0];");
-                    src.push("   float viewportHeight    = uSAOParams[1];");
-                    src.push("   float blendCutoff       = uSAOParams[2];");
-                    src.push("   float blendFactor       = uSAOParams[3];");
-                    src.push(`   vec2 uv                 = vec2(${gl_FragCoord}.x / viewportWidth, ${gl_FragCoord}.y / viewportHeight);`);
-                    src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBToFloat(texture(uOcclusionTexture, uv))) * blendFactor;");
-                    src.push("   outColor                = vec4(colorTexel.rgb * ambient, opacity);");
-                } else {
-                    src.push("   outColor                = vec4(colorTexel.rgb, opacity);");
-                }
                 if (gammaOutput) {
                     src.push("outColor = linearToGamma(outColor, gammaFactor);");
                 }
@@ -128,6 +105,7 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
                     inputs.uGammaFactor = program.getLocation("gammaFactor");
                 }
                 inputs.setLightsRenderState = lightSetup.setupInputs(program);
+                inputs.setSAOState = sao && sao.setupInputs(program);
             },
             setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
                 const state = layer._state;
@@ -141,6 +119,7 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
                     gl.uniform1f(inputs.uGammaFactor, scene.gammaFactor);
                 }
                 inputs.setLightsRenderState(frameCtx);
+                inputs.setSAOState && inputs.setSAOState(frameCtx);
             }
         });
     }

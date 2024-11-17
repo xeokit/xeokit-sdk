@@ -8,7 +8,7 @@ export class VBOPointsPickMeshRenderer extends VBORenderer {
     constructor(scene, instancing, primitive) {
         const pointsMaterial = scene.pointsMaterial;
 
-        super(scene, instancing, primitive, false, {
+        super(scene, instancing, primitive, {
             progMode: "pickMeshMode",
 
             getHash: () => [ pointsMaterial.hash ],

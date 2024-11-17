@@ -12,7 +12,7 @@ export class VBOSnapRenderer extends VBORenderer {
         const inputs = { };
         const gl = scene.canvas.gl;
 
-        super(scene, instancing, primitive, false, {
+        super(scene, instancing, primitive, {
             progMode: isSnapInit ? "snapInitMode" : "snapMode",
 
             getHash: () => [ ],

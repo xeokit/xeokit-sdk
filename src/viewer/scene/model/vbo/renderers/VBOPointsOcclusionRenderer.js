@@ -8,7 +8,7 @@ export class VBOPointsOcclusionRenderer extends VBORenderer {
     constructor(scene, instancing, primitive) {
         const pointsMaterial = scene.pointsMaterial;
 
-        super(scene, instancing, primitive, false, {
+        super(scene, instancing, primitive, {
             progMode: "occlusionMode",
 
             getHash: () => [ pointsMaterial.hash ],
