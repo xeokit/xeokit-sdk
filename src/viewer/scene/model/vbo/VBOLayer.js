@@ -19,7 +19,6 @@ import { VBOTrianglesEdgesRenderer           } from "./renderers/VBOTrianglesEdg
 import { VBOTrianglesFlatColorRenderer       } from "./renderers/VBOTrianglesFlatColorRenderer.js";
 import { VBOTrianglesOcclusionRenderer       } from "./renderers/VBOTrianglesOcclusionRenderer.js";
 import { VBOTrianglesPBRRenderer             } from "./renderers/VBOTrianglesPBRRenderer.js";
-import { VBOTrianglesPickNormalsFlatRenderer } from "./renderers/VBOTrianglesPickNormalsFlatRenderer.js";
 import { VBOTrianglesPickNormalsRenderer     } from "./renderers/VBOTrianglesPickNormalsRenderer.js";
 
 import { VBOPickDepthRenderer       } from "./renderers/VBOPickDepthRenderer.js";
@@ -116,8 +115,8 @@ const getRenderers = (function() {
                     pbrRendererWithSAO:                     lazy(VBOTrianglesPBRRenderer, true),
                     pickDepthRenderer:                      eager(VBOPickDepthRenderer),
                     pickMeshRenderer:                       eager(VBOPickMeshRenderer),
-                    pickNormalsFlatRenderer:                lazy(VBOTrianglesPickNormalsFlatRenderer),
-                    pickNormalsRenderer:                    lazy(VBOTrianglesPickNormalsRenderer),
+                    pickNormalsFlatRenderer:                lazy(VBOTrianglesPickNormalsRenderer, true),
+                    pickNormalsRenderer:                    lazy(VBOTrianglesPickNormalsRenderer, false),
                     shadowRenderer:                         lazy(VBOShadowRenderer),
                     silhouetteRenderer:                     eager(VBOSilhouetteRenderer),
                     snapInitRenderer:                       eager(VBOSnapRenderer, true),
