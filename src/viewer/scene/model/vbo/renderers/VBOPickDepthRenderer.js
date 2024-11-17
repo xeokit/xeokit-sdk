@@ -6,6 +6,8 @@ import {VBORenderer} from "../VBORenderer.js";
 export class VBOPickDepthRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive) {
+        const inputs = { };
+        const gl = scene.canvas.gl;
         const isPoints = primitive === "points";
         const pointsMaterial = scene.pointsMaterial;
 
@@ -83,8 +85,14 @@ export class VBOPickDepthRenderer extends VBORenderer {
                 src.push("float zNormalizedDepth = abs((pickZNear + vViewPosition.z) / (pickZFar - pickZNear));");
                 src.push("outColor = packDepth(zNormalizedDepth);"); // Must be linear depth
             },
-            setupInputs: (program) => { },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
+            setupInputs: (program) => {
+                inputs.uPickZNear = program.getLocation("pickZNear");
+                inputs.uPickZFar  = program.getLocation("pickZFar");
+            },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
+                gl.uniform1f(inputs.uPickZNear, frameCtx.pickZNear);
+                gl.uniform1f(inputs.uPickZFar,  frameCtx.pickZFar);
+            }
         });
     }
 
