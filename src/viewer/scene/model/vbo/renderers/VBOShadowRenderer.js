@@ -10,23 +10,16 @@ export class VBOShadowRenderer extends VBORenderer {
         // but never used (and probably not maintained), as opposed to VBOInstancingPointsShadowRenderer in the same commit
         const inputs = { };
         const gl = scene.canvas.gl;
-        const isPoints = primitive === "points";
-        const pointsMaterial = isPoints && scene.pointsMaterial;
 
         super(scene, instancing, primitive, {
             progMode: "shadowMode",
 
-            getHash: (isPoints ? () => [ pointsMaterial.hash ] : () => [ ]),
+            getHash: () => [ ],
+            respectPointsMaterial: true,
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             clippingCaps: false,
             renderPassFlag: 0,
             appendVertexDefinitions: (src) => {
-                if (isPoints) {
-                    src.push("uniform float pointSize;");
-                    if (pointsMaterial.perspectivePoints) {
-                        src.push("uniform float nearPlaneHeight;");
-                    }
-                }
                 src.push("uniform mat4 shadowProjMatrix;");
                 src.push("uniform mat4 shadowViewMatrix;");
             },
@@ -37,22 +30,12 @@ export class VBOShadowRenderer extends VBORenderer {
             needPickColor: false,
             needUV: false,
             needMetallicRoughness: false,
-            needGl_Position: isPoints && pointsMaterial.perspectivePoints,
+            needGl_Position: false,
             needViewPosition: false,
             needViewMatrixNormal: false,
             needWorldNormal: false,
             needWorldPosition: false,
-            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
-                if (isPoints) {
-                    if (pointsMaterial.perspectivePoints) {
-                        src.push(`gl_PointSize = (nearPlaneHeight * pointSize) / ${gl_Position}.w;`);
-                        src.push("gl_PointSize = max(gl_PointSize, " + Math.floor(pointsMaterial.minPerspectivePointSize) + ".0);");
-                        src.push("gl_PointSize = min(gl_PointSize, " + Math.floor(pointsMaterial.maxPerspectivePointSize) + ".0);");
-                    } else {
-                        src.push("gl_PointSize = pointSize;");
-                    }
-                }
-            },
+            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => { },
             appendFragmentDefinitions: (src) => {
                 src.push("vec4 encodeFloat( const in float v ) {");
                 src.push("  const vec4 bitShift = vec4(256 * 256 * 256, 256 * 256, 256, 1.0);");
@@ -67,15 +50,7 @@ export class VBOShadowRenderer extends VBORenderer {
             needvWorldPosition: false,
             needGl_FragCoord: true,
             needViewMatrixInFragment: false,
-            needGl_PointCoord: isPoints && pointsMaterial.roundPoints,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix, gl_PointCoord) => {
-                if (isPoints && pointsMaterial.roundPoints) {
-                    src.push(`  vec2 cxy = 2.0 * ${gl_PointCoord} - 1.0;`);
-                    src.push("  float r = dot(cxy, cxy);");
-                    src.push("  if (r > 1.0) {");
-                    src.push("       discard;");
-                    src.push("  }");
-                }
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push(`outColor = encodeFloat(${gl_FragCoord}.z);`);
             },
             setupInputs: (program) => {
