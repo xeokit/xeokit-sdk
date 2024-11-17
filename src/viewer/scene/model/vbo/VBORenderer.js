@@ -194,8 +194,7 @@ export class VBORenderer {
         const needWorldPosition         = cfg.needWorldPosition;
         const appendVertexOutputs       = cfg.appendVertexOutputs;
         const appendFragmentDefinitions = cfg.appendFragmentDefinitions;
-        const sectionDiscardThreshold   = cfg.sectionDiscardThreshold;
-        const needSliced                = cfg.needSliced;
+        const slicedColorIfClipping     = cfg.slicedColorIfClipping;
         const needvWorldPosition        = cfg.needvWorldPosition;
         const needGl_FragCoord          = cfg.needGl_FragCoord;
         const needViewMatrixInFragment  = cfg.needViewMatrixInFragment;
@@ -233,7 +232,7 @@ export class VBORenderer {
 
         const sectionPlanesState = scene._sectionPlanesState;
         const numAllocatedSectionPlanes = sectionPlanesState.getNumAllocatedSectionPlanes();
-        const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
+        const clipping = numAllocatedSectionPlanes > 0;
 
         const addMatricesUniformBlockLines = (src) => {
             src.push("uniform Matrices {");
@@ -250,7 +249,6 @@ export class VBORenderer {
         };
 
         const buildVertexShader = () => {
-            const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
             const src = [];
 
             src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
@@ -425,10 +423,14 @@ export class VBORenderer {
                 if (clippingCaps) {
                     src.push("in vec4 vClipPosition;");
                 }
-                for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
+                for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
                     src.push("uniform bool sectionPlaneActive" + i + ";");
                     src.push("uniform vec3 sectionPlanePos" + i + ";");
                     src.push("uniform vec3 sectionPlaneDir" + i + ";");
+                }
+                if (slicedColorIfClipping) {
+                    src.push("uniform float sliceThickness;");
+                    src.push("uniform vec4 sliceColor;");
                 }
             }
 
@@ -439,14 +441,14 @@ export class VBORenderer {
             appendFragmentDefinitions(src);
 
             src.push("void main(void) {");
-            if (needSliced) {
-                src.push("  bool sliced = false;");
-            }
             if (clipping) {
+                if (slicedColorIfClipping) {
+                    src.push("  bool sliced = false;");
+                }
                 src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
                 src.push("  if (clippable) {");
                 src.push("      float dist = 0.0;");
-                for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
+                for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
                     src.push("      if (sectionPlaneActive" + i + ") {");
                     src.push("          dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
                     src.push("      }");
@@ -463,9 +465,9 @@ export class VBORenderer {
                     src.push("  return;");
                     src.push("}");
                 } else {
-                    src.push("       if (dist > " + sectionDiscardThreshold + ") {  discard; }");
+                    src.push("       if (dist > " + (slicedColorIfClipping ? "sliceThickness" : "0.0") + ") {  discard; }");
                 }
-                if (needSliced) {
+                if (slicedColorIfClipping) {
                     src.push("  sliced = dist > 0.0;");
                 }
                 src.push("}");
@@ -475,7 +477,7 @@ export class VBORenderer {
                 src.push("gl_FragDepth = " + (testPerspectiveForGl_FragDepth ? "isPerspective == 0.0 ? gl_FragCoord.z : " : "") + "log2( " + getLogDepth("vFragDepth") + " ) * logDepthBufFC * 0.5;");
             }
 
-            appendFragmentOutputs(src, needvWorldPosition && "vWorldPosition", needGl_FragCoord && "gl_FragCoord", needSliced && "sliced", needViewMatrixInFragment && "viewMatrix", needGl_PointCoord && "gl_PointCoord");
+            appendFragmentOutputs(src, needvWorldPosition && "vWorldPosition", needGl_FragCoord && "gl_FragCoord", slicedColorIfClipping && (color => clipping ? `(sliced ? sliceColor : ${color})` : color), needViewMatrixInFragment && "viewMatrix", needGl_PointCoord && "gl_PointCoord");
 
             src.push("}");
             return src;
@@ -507,13 +509,15 @@ export class VBORenderer {
             matricesUniformBlockBufferBindingPoint);
 
         const uSectionPlanes = [];
-        for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
+        for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
             uSectionPlanes.push({
                 active: program.getLocation("sectionPlaneActive" + i),
                 pos: program.getLocation("sectionPlanePos" + i),
                 dir: program.getLocation("sectionPlaneDir" + i)
             });
         }
+        const uSliceThickness = clipping && slicedColorIfClipping && program.getLocation("sliceThickness");
+        const uSliceColor     = clipping && slicedColorIfClipping && program.getLocation("sliceColor");
 
         const aPosition = program.getAttribute("position");
         const aOffset = program.getAttribute("offset");
@@ -547,9 +551,6 @@ export class VBORenderer {
 
         const uPointSize = program.getLocation("pointSize");
         const uNearPlaneHeight = program.getLocation("nearPlaneHeight");
-
-        const uSliceColor = scene.crossSections && program.getLocation("sliceColor");
-        const uSliceThickness = scene.crossSections && program.getLocation("sliceThickness");
 
         setupInputs(program);
 
@@ -691,15 +692,11 @@ export class VBORenderer {
                 matricesUniformBlockBuffer);
 
 
-            const sectionPlanes = sectionPlanesState.sectionPlanes;
-            const numSectionPlanes = sectionPlanes.length;
-            if (numAllocatedSectionPlanes > 0) {
+            if (clipping) {
+                const sectionPlanes = sectionPlanesState.sectionPlanes;
+                const numSectionPlanes = sectionPlanes.length;
                 const baseIndex = layer.layerIndex * numSectionPlanes;
                 const renderFlags = model.renderFlags;
-                if (scene.crossSections) {
-                    gl.uniform4fv(uSliceColor, scene.crossSections.sliceColor);
-                    gl.uniform1f(uSliceThickness, scene.crossSections.sliceThickness);
-                }
                 for (let sectionPlaneIndex = 0; sectionPlaneIndex < numAllocatedSectionPlanes; sectionPlaneIndex++) {
                     const sectionPlaneUniforms = uSectionPlanes[sectionPlaneIndex];
                     if (sectionPlaneUniforms) {
@@ -721,6 +718,11 @@ export class VBORenderer {
                             gl.uniform1i(sectionPlaneUniforms.active, 0);
                         }
                     }
+                }
+                const crossSections = slicedColorIfClipping && scene.crossSections;
+                if (crossSections) {
+                    gl.uniform1f(uSliceThickness, crossSections.sliceThickness);
+                    gl.uniform4fv(uSliceColor,    crossSections.sliceColor);
                 }
             }
 
