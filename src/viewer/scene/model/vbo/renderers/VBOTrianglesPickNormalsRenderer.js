@@ -38,13 +38,12 @@ export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
                 src.push("in vec3 vWorldNormal;");
                 src.push("out highp ivec4 outNormal;");
             },
-            sectionDiscardThreshold: "0.0",
-            needSliced: false,
+            slicedColorIfClipping: false,
             needvWorldPosition: false,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
             needGl_PointCoord: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliced, viewMatrix, gl_PointCoord) => {
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix, gl_PointCoord) => {
                 src.push(`outNormal = ivec4(vWorldNormal * float(${math.MAX_INT}), 1.0);`);
             },
             setupInputs: (program) => { },
