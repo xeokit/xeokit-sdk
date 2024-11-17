@@ -211,15 +211,12 @@ export const createSAOSetup = (gl, scene) => {
 export class VBORenderer {
     constructor(scene, instancing, primitive, cfg) {
 
-        const getHash = () => [ scene._sectionPlanesState.getHash() ].concat(cfg.getHash()).join(";");
-        const hash = getHash();
-        this.getValid = () => hash === getHash();
-
         const progMode                  = cfg.progMode;
         const edges                     = cfg.edges;
         const useAlphaCutoff            = cfg.useAlphaCutoff;
         const incrementDrawState        = cfg.incrementDrawState;
 
+        const respectPointsMaterial     = cfg.respectPointsMaterial;
         const getLogDepth               = cfg.getLogDepth;
         const clippingCaps              = cfg.clippingCaps;
         const renderPassFlag            = cfg.renderPassFlag;
@@ -242,7 +239,6 @@ export class VBORenderer {
         const needvWorldPosition        = cfg.needvWorldPosition;
         const needGl_FragCoord          = cfg.needGl_FragCoord;
         const needViewMatrixInFragment  = cfg.needViewMatrixInFragment;
-        const needGl_PointCoord         = cfg.needGl_PointCoord;
         const appendFragmentOutputs     = cfg.appendFragmentOutputs;
         const vertexCullX               = cfg.vertexCullX;
         const setupInputs               = cfg.setupInputs;
@@ -251,6 +247,12 @@ export class VBORenderer {
         const needNormal = needViewMatrixNormal || needWorldNormal;
         const isSnap = (progMode === "snapInitMode") || (progMode === "snapMode");
         const testPerspectiveForGl_FragDepth = ((primitive !== "points") && (primitive !== "lines")) || isSnap;
+        const setupPoints = respectPointsMaterial && (primitive === "points");
+        const pointsMaterial = scene.pointsMaterial;
+
+        const getHash = () => [ scene._sectionPlanesState.getHash() ].concat(setupPoints ? [ pointsMaterial.hash ] : [ ]).concat(cfg.getHash()).join(";");
+        const hash = getHash();
+        this.getValid = () => hash === getHash();
 
         /**
          * Matrices Uniform Block Buffer
@@ -373,6 +375,13 @@ export class VBORenderer {
                 src.push("}");
             }
 
+            if (setupPoints) {
+                src.push("uniform float pointSize;");
+                if (pointsMaterial.perspectivePoints) {
+                    src.push("uniform float nearPlaneHeight;");
+                }
+            }
+
             appendVertexDefinitions(src);
 
             src.push("void main(void) {");
@@ -434,6 +443,16 @@ export class VBORenderer {
                 }
             }
 
+            if (setupPoints) {
+                if (pointsMaterial.perspectivePoints) {
+                    src.push("gl_PointSize = (nearPlaneHeight * pointSize) / gl_Position.w;");
+                    src.push("gl_PointSize = max(gl_PointSize, " + Math.floor(pointsMaterial.minPerspectivePointSize) + ".0);");
+                    src.push("gl_PointSize = min(gl_PointSize, " + Math.floor(pointsMaterial.maxPerspectivePointSize) + ".0);");
+                } else {
+                    src.push("gl_PointSize = pointSize;");
+                }
+            }
+
             appendVertexOutputs(src, needVertexColor && "aColor", needPickColor && "pickColor", needUV && "uv", needMetallicRoughness && "metallicRoughness", needGl_Position && "gl_Position", (needViewPosition || needViewMatrixNormal) && {viewPosition: needViewPosition && "viewPosition", viewMatrix: needViewMatrixNormal && "viewMatrix", viewNormal: needViewMatrixNormal && "viewNormal"}, needWorldNormal && "worldNormal", needWorldPosition && "worldPosition");
 
             src.push("}");
@@ -485,6 +504,15 @@ export class VBORenderer {
             appendFragmentDefinitions(src);
 
             src.push("void main(void) {");
+
+            if (setupPoints && pointsMaterial.roundPoints) {
+                src.push(`  vec2 cxy = 2.0 * gl_PointCoord - 1.0;`);
+                src.push("  float r = dot(cxy, cxy);");
+                src.push("  if (r > 1.0) {");
+                src.push("       discard;");
+                src.push("  }");
+            }
+
             if (clipping) {
                 if (slicedColorIfClipping) {
                     src.push("  bool sliced = false;");
@@ -521,7 +549,7 @@ export class VBORenderer {
                 src.push("gl_FragDepth = " + (testPerspectiveForGl_FragDepth ? "isPerspective == 0.0 ? gl_FragCoord.z : " : "") + "log2( " + getLogDepth("vFragDepth") + " ) * logDepthBufFC * 0.5;");
             }
 
-            appendFragmentOutputs(src, needvWorldPosition && "vWorldPosition", needGl_FragCoord && "gl_FragCoord", slicedColorIfClipping && (color => clipping ? `(sliced ? sliceColor : ${color})` : color), needViewMatrixInFragment && "viewMatrix", needGl_PointCoord && "gl_PointCoord");
+            appendFragmentOutputs(src, needvWorldPosition && "vWorldPosition", needGl_FragCoord && "gl_FragCoord", slicedColorIfClipping && (color => clipping ? `(sliced ? sliceColor : ${color})` : color), needViewMatrixInFragment && "viewMatrix");
 
             src.push("}");
             return src;
@@ -585,11 +613,10 @@ export class VBORenderer {
 
         const uLogDepthBufFC = getLogDepth && program.getLocation("logDepthBufFC");
 
-        const pointsMaterial = scene.pointsMaterial;
-        const uIntensityRange = filterIntensityRange && program.getLocation(filterIntensityRange);
+        const uIntensityRange = filterIntensityRange && program.getLocation("intensityRange");
 
-        const uPointSize = program.getLocation("pointSize");
-        const uNearPlaneHeight = program.getLocation("nearPlaneHeight");
+        const uPointSize       = setupPoints && program.getLocation("pointSize");
+        const uNearPlaneHeight = setupPoints && pointsMaterial.perspectivePoints && program.getLocation("nearPlaneHeight");
 
         setupInputs(program);
 
@@ -774,7 +801,14 @@ export class VBORenderer {
             }
 
             if (uPointSize) {
-                gl.uniform1f(uPointSize, isSnap ? 1.0 : pointsMaterial.pointSize);
+                gl.uniform1f(uPointSize, pointsMaterial.pointSize);
+            }
+
+            if (uNearPlaneHeight) {
+                const nearPlaneHeight = (scene.camera.projection === "ortho") ?
+                      1.0
+                      : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0)));
+                gl.uniform1f(uNearPlaneHeight, nearPlaneHeight);
             }
 
             setRenderState(frameCtx, layer, renderPass, rtcOrigin);
@@ -821,13 +855,6 @@ export class VBORenderer {
 
                 if (uIntensityRange) {
                     gl.uniform2f(uIntensityRange, pointsMaterial.minIntensity, pointsMaterial.maxIntensity);
-                }
-
-                if (uNearPlaneHeight) {
-                    const nearPlaneHeight = (scene.camera.projection === "ortho") ?
-                          1.0
-                          : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0)));
-                    gl.uniform1f(uNearPlaneHeight, nearPlaneHeight);
                 }
 
                 if (useAlphaCutoff) {
