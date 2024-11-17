@@ -6,8 +6,6 @@ import {VBORenderer} from "../VBORenderer.js";
 export class VBOPointsColorRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive) {
-        const filterPointsIntensity = scene.pointsMaterial.filterIntensity;
-
         super(scene, instancing, primitive, {
             progMode: "colorMode", incrementDrawState: true,
 
@@ -18,13 +16,8 @@ export class VBOPointsColorRenderer extends VBORenderer {
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
             // renderPass = COLOR_OPAQUE
             renderPassFlag: 0,
-            appendVertexDefinitions: (src) => {
-                if (filterPointsIntensity) {
-                    src.push("uniform vec2 intensityRange;");
-                }
-                src.push("out vec4 vColor;");
-            },
-            filterIntensityRange: filterPointsIntensity && "intensityRange",
+            appendVertexDefinitions: (src) => src.push("out vec4 vColor;"),
+            filterIntensityRange: true,
             transformClipPos: clipPos => clipPos,
             shadowParameters: null,
             needVertexColor: true,
