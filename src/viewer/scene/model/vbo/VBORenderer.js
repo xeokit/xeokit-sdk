@@ -402,21 +402,11 @@ export class VBORenderer {
             }
         }
 
-        if (this._instancing) {
-            if (this._edges && state.edgeIndicesBuf) {
-                state.edgeIndicesBuf.bind();
-            } else {
-                if (state.indicesBuf) {
-                    state.indicesBuf.bind();
-                }
-            }
+        if (this._edges && state.edgeIndicesBuf) {
+            state.edgeIndicesBuf.bind();
         } else {
-            if (this._edges && state.edgeIndicesBuf) {
-                state.edgeIndicesBuf.bind();
-            } else {
-                if (state.indicesBuf) {
-                    state.indicesBuf.bind();
-                }
+            if (state.indicesBuf) {
+                state.indicesBuf.bind();
             }
         }
 
