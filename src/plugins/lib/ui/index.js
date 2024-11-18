@@ -140,6 +140,8 @@ export class Dot3D extends Marker {
 
         super(scene, markerCfg);
 
+        this.__visible = true;  // "__" to not interfere with Marker::_visible
+
         const handler = (cfgEvent, componentEvent) => {
             return event => {
                 if (cfgEvent) {
@@ -182,6 +184,9 @@ export class Dot3D extends Marker {
         };
 
         const updateDotPos = () => {
+            if (! this.__visible) {
+                return;
+            }
             const p0 = tmpVec4c;
             toClipSpace(this.worldPos, p0);
             math.mulVec3Scalar(p0, 1.0 / p0[3]);
@@ -209,6 +214,8 @@ export class Dot3D extends Marker {
         const onProjMatrix = camera.on("projMatrix", updateDotPos);
         const onCanvasBnd  = scene.canvas.on("boundary", updateDotPos);
         const planesUpdate = scene.on("sectionPlaneUpdated", updateDotPos);
+
+        this._updatePosition = updateDotPos;
 
         this._cleanup = () => {
             camera.off(onViewMatrix);
@@ -240,7 +247,11 @@ export class Dot3D extends Marker {
     }
 
     setVisible(value) {
-        this._dot.setVisible(value);
+        if (this.__visible != value) {
+            this.__visible = value;
+            this._updatePosition();
+            this._dot.setVisible(value);
+        }
     }
 
     destroy() {
@@ -260,6 +271,7 @@ export class Label3D {
         this._end   = math.vec3();
         this._yOff  = 0;
         this._betweenWires = false;
+        this.__visible = true;
 
         const setPosOnWire = (p0, p1, yOff) => {
             p0[0] += p1[0];
@@ -269,6 +281,9 @@ export class Label3D {
         };
 
         this._updatePositions = () => {
+            if (! this.__visible) {
+                return;
+            }
             if (this._betweenWires) {
                 const visibleA = clipSegment(scene, parentElement, this._start, this._mid, tmpVec2a, tmpVec2b);
                 const visibleB = clipSegment(scene, parentElement, this._end,   this._mid, tmpVec2c, tmpVec2d);
@@ -346,7 +361,11 @@ export class Label3D {
     }
 
     setVisible(value) {
-        this._label.setVisible(value);
+        if (this.__visible != value) {
+            this.__visible = value;
+            this._updatePositions();
+            this._label.setVisible(value);
+        }
     }
 
     destroy() {
@@ -362,8 +381,12 @@ export class Wire3D {
         this._wire  = new Wire(parentElement, cfg);
         this._start = math.vec3();
         this._end   = math.vec3();
+        this.__visible = true;
 
         this._updatePositions = () => {
+            if (! this.__visible) {
+                return;
+            }
             const visible = clipSegment(scene, parentElement, this._start, this._end, tmpVec2a, tmpVec2b);
             this._wire.setCulled(! visible);
             if (visible) {
@@ -408,7 +431,11 @@ export class Wire3D {
     }
 
     setVisible(value) {
-        this._wire.setVisible(value);
+        if (this.__visible != value) {
+            this.__visible = value;
+            this._updatePositions();
+            this._wire.setVisible(value);
+        }
     }
 
     destroy() {
