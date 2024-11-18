@@ -289,7 +289,7 @@ export class VBORenderer {
         /**
          * A Vertex Array Object by Layer
          */
-        const vaoCache = new WeakMap();
+        const drawCallCache = new WeakMap();
 
         const gl = scene.canvas.gl;
 
@@ -655,90 +655,6 @@ export class VBORenderer {
             const {project} = camera;
             const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
 
-            if (vaoCache.has(layer)) {
-                gl.bindVertexArray(vaoCache.get(layer));
-            } else {
-                const vao = gl.createVertexArray();
-                gl.bindVertexArray(vao);
-                if (instancing) {
-                    aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
-                    aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
-                    aModelMatrixCol2.bindArrayBuffer(state.modelMatrixCol2Buf);
-
-                    gl.vertexAttribDivisor(aModelMatrixCol0.location, 1);
-                    gl.vertexAttribDivisor(aModelMatrixCol1.location, 1);
-                    gl.vertexAttribDivisor(aModelMatrixCol2.location, 1);
-
-                    if (aModelNormalMatrixCol0) {
-                        aModelNormalMatrixCol0.bindArrayBuffer(state.modelNormalMatrixCol0Buf);
-                        gl.vertexAttribDivisor(aModelNormalMatrixCol0.location, 1);
-                    }
-                    if (aModelNormalMatrixCol1) {
-                        aModelNormalMatrixCol1.bindArrayBuffer(state.modelNormalMatrixCol1Buf);
-                        gl.vertexAttribDivisor(aModelNormalMatrixCol1.location, 1);
-                    }
-                    if (aModelNormalMatrixCol2) {
-                        aModelNormalMatrixCol2.bindArrayBuffer(state.modelNormalMatrixCol2Buf);
-                        gl.vertexAttribDivisor(aModelNormalMatrixCol2.location, 1);
-                    }
-
-                }
-
-                aPosition.bindArrayBuffer(state.positionsBuf);
-
-                if (aUV) {
-                    aUV.bindArrayBuffer(state.uvBuf);
-                }
-
-                if (aNormal) {
-                    aNormal.bindArrayBuffer(state.normalsBuf);
-                }
-
-                if (aMetallicRoughness) {
-                    aMetallicRoughness.bindArrayBuffer(state.metallicRoughnessBuf);
-                    if (instancing) {
-                        gl.vertexAttribDivisor(aMetallicRoughness.location, 1);
-                    }
-                }
-
-                if (aColor) {
-                    aColor.bindArrayBuffer(state.colorsBuf);
-                    if (instancing && state.colorsBuf && (!state.colorsForPointsNotInstancing)) {
-                        gl.vertexAttribDivisor(aColor.location, 1);
-                    }
-                }
-
-                if (aFlags) {
-                    aFlags.bindArrayBuffer(state.flagsBuf);
-                    if (instancing) {
-                        gl.vertexAttribDivisor(aFlags.location, 1);
-                    }
-                }
-
-                if (aOffset) {
-                    aOffset.bindArrayBuffer(state.offsetsBuf);
-                    if (instancing) {
-                        gl.vertexAttribDivisor(aOffset.location, 1);
-                    }
-                }
-
-                if (aPickColor) {
-                    aPickColor.bindArrayBuffer(state.pickColorsBuf);
-                    if (instancing) {
-                        gl.vertexAttribDivisor(aPickColor.location, 1);
-                    }
-                }
-
-                if (edges && state.edgeIndicesBuf) {
-                    state.edgeIndicesBuf.bind();
-                } else {
-                    if (state.indicesBuf) {
-                        state.indicesBuf.bind();
-                    }
-                }
-                vaoCache.set(layer, vao);
-            }
-
             let rtcViewMatrix;
             const rtcOrigin = tempVec3a;
             rtcOrigin.set([0, 0, 0]);
@@ -834,82 +750,144 @@ export class VBORenderer {
 
             setRenderState(frameCtx, layer, renderPass, rtcOrigin);
 
-            if (isSnap) {
-                //=============================================================
-                // TODO: Use drawElements count and offset to draw only one entity
-                //=============================================================
+            if (! drawCallCache.has(layer)) {
+                const vao = gl.createVertexArray();
+                gl.bindVertexArray(vao);
+                if (instancing) {
+                    aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
+                    aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
+                    aModelMatrixCol2.bindArrayBuffer(state.modelMatrixCol2Buf);
 
-                if ((progMode === "snapInitMode") && (primitive !== "points")) {
-                    state.indicesBuf.bind();
-                    const mode = (primitive === "lines") ? gl.LINES : gl.TRIANGLES;
-                    if (instancing) {
-                        gl.drawElementsInstanced(mode, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
-                    } else {
-                        gl.drawElements(mode, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
+                    gl.vertexAttribDivisor(aModelMatrixCol0.location, 1);
+                    gl.vertexAttribDivisor(aModelMatrixCol1.location, 1);
+                    gl.vertexAttribDivisor(aModelMatrixCol2.location, 1);
+
+                    if (aModelNormalMatrixCol0) {
+                        aModelNormalMatrixCol0.bindArrayBuffer(state.modelNormalMatrixCol0Buf);
+                        gl.vertexAttribDivisor(aModelNormalMatrixCol0.location, 1);
                     }
-                    state.indicesBuf.unbind();
-                } else if ((frameCtx.snapMode === "edge") && (primitive !== "points")) {
-                    const indicesBuf = ((primitive !== "lines") && state.edgeIndicesBuf) || state.indicesBuf;
+                    if (aModelNormalMatrixCol1) {
+                        aModelNormalMatrixCol1.bindArrayBuffer(state.modelNormalMatrixCol1Buf);
+                        gl.vertexAttribDivisor(aModelNormalMatrixCol1.location, 1);
+                    }
+                    if (aModelNormalMatrixCol2) {
+                        aModelNormalMatrixCol2.bindArrayBuffer(state.modelNormalMatrixCol2Buf);
+                        gl.vertexAttribDivisor(aModelNormalMatrixCol2.location, 1);
+                    }
+
+                }
+
+                aPosition.bindArrayBuffer(state.positionsBuf);
+
+                if (aUV) {
+                    aUV.bindArrayBuffer(state.uvBuf);
+                }
+
+                if (aNormal) {
+                    aNormal.bindArrayBuffer(state.normalsBuf);
+                }
+
+                if (aMetallicRoughness) {
+                    aMetallicRoughness.bindArrayBuffer(state.metallicRoughnessBuf);
+                    if (instancing) {
+                        gl.vertexAttribDivisor(aMetallicRoughness.location, 1);
+                    }
+                }
+
+                if (aColor) {
+                    aColor.bindArrayBuffer(state.colorsBuf);
+                    if (instancing && state.colorsBuf && (!state.colorsForPointsNotInstancing)) {
+                        gl.vertexAttribDivisor(aColor.location, 1);
+                    }
+                }
+
+                if (aFlags) {
+                    aFlags.bindArrayBuffer(state.flagsBuf);
+                    if (instancing) {
+                        gl.vertexAttribDivisor(aFlags.location, 1);
+                    }
+                }
+
+                if (aOffset) {
+                    aOffset.bindArrayBuffer(state.offsetsBuf);
+                    if (instancing) {
+                        gl.vertexAttribDivisor(aOffset.location, 1);
+                    }
+                }
+
+                if (aPickColor) {
+                    aPickColor.bindArrayBuffer(state.pickColorsBuf);
+                    if (instancing) {
+                        gl.vertexAttribDivisor(aPickColor.location, 1);
+                    }
+                }
+
+                gl.bindVertexArray(null);
+
+                const drawPoints = () => {
+                    if (instancing) {
+                        gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
+                    } else {
+                        gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
+                    }
+                };
+
+                const drawElements = (mode, count, type, offset) => {
+                    if (instancing) {
+                        gl.drawElementsInstanced(mode, count, type, offset, state.numInstances);
+                    } else {
+                        gl.drawElements(mode, count, type, offset);
+                    }
+                };
+
+                const drawElementsBuf = (mode, indicesBuf) => {
                     indicesBuf.bind();
-                    if (instancing) {
-                        gl.drawElementsInstanced(gl.LINES, indicesBuf.numItems, indicesBuf.itemType, 0, state.numInstances);
-                    } else {
-                        gl.drawElements(gl.LINES, indicesBuf.numItems, indicesBuf.itemType, 0);
-                    }
-                    indicesBuf.unbind(); // needed?
-                } else {
-                    if (instancing) {
-                        gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
-                    } else {
-                        gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
-                    }
-                }
+                    drawElements(mode, indicesBuf.numItems, indicesBuf.itemType, 0);
+                    indicesBuf.unbind();
+                };
 
-            } else {                // ! isSnap
-                if (primitive === "lines") {
-                    if (instancing) {
-                        gl.drawElementsInstanced(gl.LINES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
-                    } else {
-                        gl.drawElements(gl.LINES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
-                    }
-                    if (incrementDrawState) {
-                        frameCtx.drawElements++;
-                    }
-                } else if (primitive === "points") {
-                    if (instancing) {
-                        gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
-                    } else {
-                        gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
-                    }
-                    if (incrementDrawState) {
-                        frameCtx.drawElements++;
-                    }
-                } else {
-                    if (instancing) {
-                        if (edges && state.edgeIndicesBuf) {
-                            gl.drawElementsInstanced(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0, state.numInstances);
+                drawCallCache.set(layer, function(frameCtx) {
+                    gl.bindVertexArray(vao);
+
+                    if (isSnap) {
+                        //=============================================================
+                        // TODO: Use drawElements count and offset to draw only one entity
+                        //=============================================================
+
+                        if (primitive === "points") {
+                            drawPoints();
+                        } else if (progMode === "snapInitMode") {
+                            drawElementsBuf((primitive === "lines") ? gl.LINES : gl.TRIANGLES, state.indicesBuf);
                         } else {
-                            gl.drawElementsInstanced(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);
-
-                            if (incrementDrawState) {
-                                frameCtx.drawElements++;
+                            if (frameCtx.snapMode === "edge") {
+                                drawElementsBuf(gl.LINES, (primitive === "lines") ? state.indicesBuf : state.edgeIndicesBuf);
+                            } else {
+                                drawPoints();
                             }
                         }
-                    } else {
-                        if (edges && state.edgeIndicesBuf) {
-                            gl.drawElements(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0);
+                    } else {                // ! isSnap
+                        if (primitive === "points") {
+                            drawPoints();
+                        } else if (primitive === "lines") {
+                            drawElementsBuf(gl.LINES, state.indicesBuf);
                         } else {
-                            gl.drawElements(gl.TRIANGLES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0);
-
-                            if (incrementDrawState) {
-                                frameCtx.drawElements++;
+                            if (edges && state.edgeIndicesBuf) {
+                                drawElementsBuf(gl.LINES, state.edgeIndicesBuf);
+                            } else {
+                                drawElementsBuf(gl.TRIANGLES, state.indicesBuf);
                             }
                         }
                     }
-                }
+
+                    gl.bindVertexArray(null);
+                });
             }
 
-            gl.bindVertexArray(null);
+            drawCallCache.get(layer)(frameCtx);
+
+            if (incrementDrawState) {
+                frameCtx.drawElements++;
+            }
         };
     }
 }
