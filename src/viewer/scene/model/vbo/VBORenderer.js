@@ -205,6 +205,24 @@ export const createSAOSetup = (gl, scene) => {
     };
 };
 
+export const createPickClipTransformSetup = function(gl, renderBufferSize) {
+    return {
+        appendDefinitions: (src) => {
+            src.push("uniform vec2 pickClipPos;");
+            src.push("uniform vec2 drawingBufferSize;");
+        },
+        transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - pickClipPos) * drawingBufferSize / ${renderBufferSize.toFixed(1)} * ${clipPos}.w, ${clipPos}.zw)`,
+        setupInputs: (program) => {
+            const uPickClipPos = program.getLocation("pickClipPos");
+            const uDrawingBufferSize = program.getLocation("drawingBufferSize");
+            return function(frameCtx) {
+                gl.uniform2fv(uPickClipPos, frameCtx.pickClipPos);
+                gl.uniform2f(uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
+            };
+        }
+    };
+};
+
 /**
  * @private
  */
@@ -602,8 +620,6 @@ export class VBORenderer {
         const aMetallicRoughness = program.getAttribute("metallicRoughness");
         const aFlags = program.getAttribute("flags");
         const aPickColor = program.getAttribute("pickColor");
-        const uPickClipPos = program.getLocation("pickClipPos");
-        const uDrawingBufferSize = program.getLocation("drawingBufferSize");
 
         const aModelMatrixCol0 = instancing && program.getAttribute("modelMatrixCol0");
         const aModelMatrixCol1 = instancing && program.getAttribute("modelMatrixCol1");
@@ -850,14 +866,6 @@ export class VBORenderer {
                 }
 
             } else {                // ! isSnap
-                if (uPickClipPos) {
-                    gl.uniform2fv(uPickClipPos, frameCtx.pickClipPos);
-                }
-
-                if (uDrawingBufferSize) {
-                    gl.uniform2f(uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
-                }
-
                 if (primitive === "lines") {
                     if (instancing) {
                         gl.drawElementsInstanced(gl.LINES, state.indicesBuf.numItems, state.indicesBuf.itemType, 0, state.numInstances);

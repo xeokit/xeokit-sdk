@@ -1,4 +1,4 @@
-import {VBORenderer} from "../VBORenderer.js";
+import {VBORenderer, createPickClipTransformSetup} from "../VBORenderer.js";
 
 /**
  * @private
@@ -8,6 +8,7 @@ export class VBOPickDepthRenderer extends VBORenderer {
     constructor(scene, instancing, primitive) {
         const inputs = { };
         const gl = scene.canvas.gl;
+        const clipTransformSetup = createPickClipTransformSetup(gl, 1);
 
         super(scene, instancing, primitive, {
             progMode: "pickDepthMode",
@@ -20,12 +21,11 @@ export class VBOPickDepthRenderer extends VBORenderer {
             // renderPass = PICK
             renderPassFlag: 3,
             appendVertexDefinitions: (src) => {
-                src.push("uniform vec2 pickClipPos;");
-                src.push("uniform vec2 drawingBufferSize;");
                 src.push("out vec4 vViewPosition;");
+                clipTransformSetup.appendDefinitions(src);
             },
             filterIntensityRange: false,
-            transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - pickClipPos) * drawingBufferSize * ${clipPos}.w, ${clipPos}.zw)`,
+            transformClipPos: clipTransformSetup.transformClipPos,
             shadowParameters: null,
             needVertexColor: false,
             needPickColor: false,
@@ -66,10 +66,12 @@ export class VBOPickDepthRenderer extends VBORenderer {
             setupInputs: (program) => {
                 inputs.uPickZNear = program.getLocation("pickZNear");
                 inputs.uPickZFar  = program.getLocation("pickZFar");
+                inputs.setClipTransformState = clipTransformSetup.setupInputs(program);
             },
             setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
                 gl.uniform1f(inputs.uPickZNear, frameCtx.pickZNear);
                 gl.uniform1f(inputs.uPickZFar,  frameCtx.pickZFar);
+                inputs.setClipTransformState(frameCtx);
             }
         });
     }
