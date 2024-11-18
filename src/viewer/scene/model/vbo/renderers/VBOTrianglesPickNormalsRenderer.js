@@ -1,4 +1,4 @@
-import {VBORenderer} from "../VBORenderer.js";
+import {VBORenderer, createPickClipTransformSetup} from "../VBORenderer.js";
 import { math } from "../../../math/math.js";
 
 /**
@@ -7,6 +7,9 @@ import { math } from "../../../math/math.js";
 export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive, isFlat) {
+        const inputs = { };
+        const clipTransformSetup = createPickClipTransformSetup(scene.canvas.gl, 3);
+
         super(scene, instancing, primitive, {
             progMode: isFlat ? "pickNormalsFlatMode" : "pickNormalsMode",
 
@@ -18,14 +21,13 @@ export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
             // renderPass = PICK
             renderPassFlag: 3,
             appendVertexDefinitions: (src) => {
-                src.push("uniform vec2 pickClipPos;");
-                src.push("uniform vec2 drawingBufferSize;");
                 if (! isFlat) {
                     src.push("out vec3 vWorldNormal;");
                 }
+                clipTransformSetup.appendDefinitions(src);
             },
             filterIntensityRange: false,
-            transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - pickClipPos) * drawingBufferSize / 3.0 * ${clipPos}.w, ${clipPos}.zw)`,
+            transformClipPos: clipTransformSetup.transformClipPos,
             shadowParameters: null,
             needVertexColor: false,
             needPickColor: false,
@@ -57,8 +59,8 @@ export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
                                      : "vWorldNormal");
                 src.push(`outNormal = ivec4(${worldNormal} * float(${math.MAX_INT}), 1.0);`);
             },
-            setupInputs: (program) => { },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
+            setupInputs: program => { inputs.setClipTransformState = clipTransformSetup.setupInputs(program); },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { inputs.setClipTransformState(frameCtx); }
         });
     }
 

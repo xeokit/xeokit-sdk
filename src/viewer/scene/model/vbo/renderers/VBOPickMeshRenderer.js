@@ -1,4 +1,4 @@
-import {VBORenderer} from "../VBORenderer.js";
+import {VBORenderer, createPickClipTransformSetup} from "../VBORenderer.js";
 
 /**
  * @private
@@ -6,6 +6,9 @@ import {VBORenderer} from "../VBORenderer.js";
 export class VBOPickMeshRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive) {
+        const inputs = { };
+        const clipTransformSetup = createPickClipTransformSetup(scene.canvas.gl, 1);
+
         super(scene, instancing, primitive, {
             progMode: "pickMeshMode",
 
@@ -17,12 +20,11 @@ export class VBOPickMeshRenderer extends VBORenderer {
             // renderPass = PICK
             renderPassFlag: 3,
             appendVertexDefinitions: (src) => {
-                src.push("uniform vec2 pickClipPos;");
-                src.push("uniform vec2 drawingBufferSize;");
                 src.push("out vec4 vPickColor;");
+                clipTransformSetup.appendDefinitions(src);
             },
             filterIntensityRange: false,
-            transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - pickClipPos) * drawingBufferSize * ${clipPos}.w, ${clipPos}.zw)`,
+            transformClipPos: clipTransformSetup.transformClipPos,
             shadowParameters: null,
             needVertexColor: false,
             needPickColor: true,
@@ -50,8 +52,8 @@ export class VBOPickMeshRenderer extends VBORenderer {
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push("outColor = vPickColor;");
             },
-            setupInputs: (program) => { },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
+            setupInputs: program => { inputs.setClipTransformState = clipTransformSetup.setupInputs(program); },
+            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { inputs.setClipTransformState(frameCtx); }
         });
     }
 
