@@ -121,34 +121,15 @@ export class TrianglesSnapRenderer extends VBORenderer {
 
         this.setSectionPlanesStateUniforms(instancingLayer);
 
-
-        this._aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
-        this._aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
-        this._aModelMatrixCol2.bindArrayBuffer(state.modelMatrixCol2Buf);
-        gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 1);
-        gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 1);
-        gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 1);
-
-        this._aFlags.bindArrayBuffer(state.flagsBuf);
-        gl.vertexAttribDivisor(this._aFlags.location, 1);
-
-        if (frameCtx.snapMode === "edge" ) {
-            if (state.edgeIndicesBuf) {
-                state.edgeIndicesBuf.bind();
-                gl.drawElementsInstanced(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0, state.numInstances);
-                state.edgeIndicesBuf.unbind(); // needed?
-            }
+        if ((frameCtx.snapMode === "edge") && state.edgeIndicesBuf) {
+            state.edgeIndicesBuf.bind();
+            gl.drawElementsInstanced(gl.LINES, state.edgeIndicesBuf.numItems, state.edgeIndicesBuf.itemType, 0, state.numInstances);
+            state.edgeIndicesBuf.unbind(); // needed?
         } else {
             gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
         }
-        // Cleanup
-        gl.vertexAttribDivisor(this._aModelMatrixCol0.location, 0);
-        gl.vertexAttribDivisor(this._aModelMatrixCol1.location, 0);
-        gl.vertexAttribDivisor(this._aModelMatrixCol2.location, 0);
-        gl.vertexAttribDivisor(this._aFlags.location, 0);
-        if (this._aOffset) {
-            gl.vertexAttribDivisor(this._aOffset.location, 0);
-        }
+
+        gl.bindVertexArray(null);
     }
 
     _allocate() {
