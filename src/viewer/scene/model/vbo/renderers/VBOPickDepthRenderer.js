@@ -6,7 +6,6 @@ import {VBORenderer, createPickClipTransformSetup} from "../VBORenderer.js";
 export class VBOPickDepthRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive) {
-        const inputs = { };
         const gl = scene.canvas.gl;
         const clipTransformSetup = createPickClipTransformSetup(gl, 1);
 
@@ -64,14 +63,14 @@ export class VBOPickDepthRenderer extends VBORenderer {
                 src.push("outColor = packDepth(zNormalizedDepth);"); // Must be linear depth
             },
             setupInputs: (program) => {
-                inputs.uPickZNear = program.getLocation("pickZNear");
-                inputs.uPickZFar  = program.getLocation("pickZFar");
-                inputs.setClipTransformState = clipTransformSetup.setupInputs(program);
-            },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
-                gl.uniform1f(inputs.uPickZNear, frameCtx.pickZNear);
-                gl.uniform1f(inputs.uPickZFar,  frameCtx.pickZFar);
-                inputs.setClipTransformState(frameCtx);
+                const uPickZNear = program.getLocation("pickZNear");
+                const uPickZFar  = program.getLocation("pickZFar");
+                const setClipTransformState = clipTransformSetup.setupInputs(program);
+                return (frameCtx, layer, renderPass, rtcOrigin) => {
+                    gl.uniform1f(uPickZNear, frameCtx.pickZNear);
+                    gl.uniform1f(uPickZFar,  frameCtx.pickZFar);
+                    setClipTransformState(frameCtx);
+                };
             }
         });
     }

@@ -7,7 +7,6 @@ import {RENDER_PASSES} from "../../RENDER_PASSES.js";
 export class VBOSilhouetteRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive) {
-        const inputs = { };
         const gl = scene.canvas.gl;
         const defaultSilhouetteColor = new Float32Array([1, 1, 1, 1]);
         const isPoints = primitive === "points";
@@ -83,24 +82,24 @@ export class VBOSilhouetteRenderer extends VBORenderer {
                 }
             },
             setupInputs: (program) => {
-                inputs.silhouetteColor = program.getLocation("silhouetteColor");
-            },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
-                const setSceneMaterial = material => {
-                    const color = material._state.fillColor;
-                    const alpha = material._state.fillAlpha;
-                    gl.uniform4f(inputs.silhouetteColor, color[0], color[1], color[2], alpha);
-                };
+                const silhouetteColor = program.getLocation("silhouetteColor");
+                return (frameCtx, layer, renderPass, rtcOrigin) => {
+                    const setSceneMaterial = material => {
+                        const color = material._state.fillColor;
+                        const alpha = material._state.fillAlpha;
+                        gl.uniform4f(silhouetteColor, color[0], color[1], color[2], alpha);
+                    };
 
-                if (renderPass === RENDER_PASSES.SILHOUETTE_XRAYED) {
-                    setSceneMaterial(scene.xrayMaterial);
-                } else if (renderPass === RENDER_PASSES.SILHOUETTE_HIGHLIGHTED) {
-                    setSceneMaterial(scene.highlightMaterial);
-                } else if (renderPass === RENDER_PASSES.SILHOUETTE_SELECTED) {
-                    setSceneMaterial(scene.selectedMaterial);
-                } else {
-                    gl.uniform4fv(inputs.silhouetteColor, defaultSilhouetteColor);
-                }
+                    if (renderPass === RENDER_PASSES.SILHOUETTE_XRAYED) {
+                        setSceneMaterial(scene.xrayMaterial);
+                    } else if (renderPass === RENDER_PASSES.SILHOUETTE_HIGHLIGHTED) {
+                        setSceneMaterial(scene.highlightMaterial);
+                    } else if (renderPass === RENDER_PASSES.SILHOUETTE_SELECTED) {
+                        setSceneMaterial(scene.selectedMaterial);
+                    } else {
+                        gl.uniform4fv(silhouetteColor, defaultSilhouetteColor);
+                    }
+                };
             }
         });
     }
