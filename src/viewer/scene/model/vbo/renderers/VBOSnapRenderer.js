@@ -65,7 +65,6 @@ export class VBOSnapRenderer extends VBORenderer {
                 }
             },
             slicedColorIfClipping: false,
-            needvWorldPosition: (primitive !== "points") && isSnapInit,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
             vertexCullX: (!isSnapInit) && "2.0",
@@ -73,14 +72,7 @@ export class VBOSnapRenderer extends VBORenderer {
                 src.push("outCoords = ivec4(relativeToOriginPosition.xyz * uCoordinateScaler.xyz, " + (isSnapInit ? "-" : "") + "uLayerNumber);");
 
                 if (isSnapInit) {
-                    if (primitive === "points") {
-                        src.push(`outNormal = ivec4(1.0, 1.0, 1.0, 1.0);`);
-                    } else {
-                        src.push(`vec3 xTangent = dFdx(${vWorldPosition}.xyz);`);
-                        src.push(`vec3 yTangent = dFdy(${vWorldPosition}.xyz);`);
-                        src.push("vec3 worldNormal = normalize(cross(xTangent, yTangent));");
-                        src.push(`outNormal = ivec4(worldNormal * float(${math.MAX_INT}), 1.0);`);
-                    }
+                    src.push(`outNormal = ${(primitive === "points") ? "ivec4(1.0)" : `ivec4(normalize(cross(dFdx(${vWorldPosition}), dFdy(${vWorldPosition}))) * float(${math.MAX_INT}), 1.0)`};`);
                     src.push("outPickColor = uvec4(vPickColor);");
                 }
             },
