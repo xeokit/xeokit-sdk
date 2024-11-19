@@ -29,8 +29,6 @@ export class VBOLinesColorRenderer extends VBORenderer {
             needGl_Position: false,
             needViewPosition: false,
             needViewMatrixNormal: false,
-            needWorldNormal: false,
-            needWorldPosition: false,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vColor = ${color} / 255.0;`);
             },
