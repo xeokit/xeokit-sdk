@@ -42,9 +42,7 @@ export class VBOPointsColorRenderer extends VBORenderer {
             needViewMatrixInFragment: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push("outColor = vColor;");
-            },
-            setupInputs: (program) => { },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
+            }
         });
     }
 

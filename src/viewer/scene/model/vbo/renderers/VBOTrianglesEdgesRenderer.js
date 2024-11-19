@@ -7,7 +7,6 @@ import {RENDER_PASSES} from "../../RENDER_PASSES.js";
 export class VBOTrianglesEdgesRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive, colorUniform) {
-        const inputs = { };
         const gl = scene.canvas.gl;
         const edgesDefaultColor = new Float32Array([0, 0, 0, 1]);
 
@@ -54,26 +53,26 @@ export class VBOTrianglesEdgesRenderer extends VBORenderer {
                 src.push("outColor = vColor;");
             },
             setupInputs: (program) => {
-                inputs.edgeColor = colorUniform && program.getLocation("edgeColor");
-            },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
-                if (colorUniform) {
-                    const setSceneMaterial = material => {
-                        const color = material._state.edgeColor;
-                        const alpha = material._state.edgeAlpha;
-                        gl.uniform4f(inputs.edgeColor, color[0], color[1], color[2], alpha);
-                    };
+                const edgeColor = colorUniform && program.getLocation("edgeColor");
+                return (frameCtx, layer, renderPass, rtcOrigin) => {
+                    if (colorUniform) {
+                        const setSceneMaterial = material => {
+                            const color = material._state.edgeColor;
+                            const alpha = material._state.edgeAlpha;
+                            gl.uniform4f(edgeColor, color[0], color[1], color[2], alpha);
+                        };
 
-                    if (renderPass === RENDER_PASSES.EDGES_XRAYED) {
-                        setSceneMaterial(scene.xrayMaterial);
-                    } else if (renderPass === RENDER_PASSES.EDGES_HIGHLIGHTED) {
-                        setSceneMaterial(scene.highlightMaterial);
-                    } else if (renderPass === RENDER_PASSES.EDGES_SELECTED) {
-                        setSceneMaterial(scene.selectedMaterial);
-                    } else {
-                        gl.uniform4fv(inputs.edgeColor, edgesDefaultColor);
+                        if (renderPass === RENDER_PASSES.EDGES_XRAYED) {
+                            setSceneMaterial(scene.xrayMaterial);
+                        } else if (renderPass === RENDER_PASSES.EDGES_HIGHLIGHTED) {
+                            setSceneMaterial(scene.highlightMaterial);
+                        } else if (renderPass === RENDER_PASSES.EDGES_SELECTED) {
+                            setSceneMaterial(scene.selectedMaterial);
+                        } else {
+                            gl.uniform4fv(edgeColor, edgesDefaultColor);
+                        }
                     }
-                }
+                };
             }
         });
     }
