@@ -243,10 +243,6 @@ export class VBORenderer {
         const filterIntensityRange      = cfg.filterIntensityRange && (primitive === "points") && pointsMaterial.filterIntensity;
         const transformClipPos          = cfg.transformClipPos;
         const shadowParameters          = cfg.shadowParameters;
-        const needVertexColor           = cfg.needVertexColor;
-        const needPickColor             = cfg.needPickColor;
-        const needUV                    = cfg.needUV;
-        const needMetallicRoughness     = cfg.needMetallicRoughness;
         const appendVertexOutputs       = cfg.appendVertexOutputs;
         const appendFragmentDefinitions = cfg.appendFragmentDefinitions;
         const appendFragmentOutputs     = cfg.appendFragmentOutputs;
@@ -330,6 +326,10 @@ export class VBORenderer {
             return src;
         })();
 
+        const colorA             = lazyShaderVariable("aColor");
+        const pickColorA         = lazyShaderVariable("pickColor");
+        const uvA                = lazyShaderVariable("uv");
+        const metallicRoughnessA = lazyShaderVariable("metallicRoughness");
         const viewParams  = {
             viewPosition: "viewPosition",
             viewMatrix:   "viewMatrix",
@@ -338,7 +338,7 @@ export class VBORenderer {
         const worldNormal = lazyShaderVariable("worldNormal");
 
         const vertexOutputs = [ ];
-        appendVertexOutputs(vertexOutputs, needVertexColor && "aColor", needPickColor && "pickColor", needUV && "uv", needMetallicRoughness && "metallicRoughness", "gl_Position", viewParams, worldNormal, "worldPosition");
+        appendVertexOutputs(vertexOutputs, colorA, pickColorA, uvA, metallicRoughnessA, "gl_Position", viewParams, worldNormal, "worldPosition");
 
         const needNormal = viewParams.viewNormal.needed || worldNormal.needed;
 
@@ -401,16 +401,16 @@ export class VBORenderer {
             if (needNormal) {
                 src.push("in vec3 normal;");
             }
-            if (needVertexColor || shadowParameters || filterIntensityRange) {
+            if (colorA.needed || shadowParameters || filterIntensityRange) {
                 src.push("in vec4 aColor;");
             }
-            if (needPickColor) {
+            if (pickColorA.needed) {
                 src.push("in vec4 pickColor;");
             }
-            if (needUV) {
+            if (uvA.needed) {
                 src.push("in vec2 uv;");
             }
-            if (needMetallicRoughness) {
+            if (metallicRoughnessA.needed) {
                 src.push("in vec2 metallicRoughness;");
             }
             src.push("in float flags;");
