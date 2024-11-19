@@ -7,7 +7,6 @@ import {WEBGL_INFO} from "../../../webglInfo.js";
 export class VBOTrianglesColorTextureRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive, withSAO, useAlphaCutoff) {
-        const inputs = { };
         const gl = scene.canvas.gl;
         const lightSetup = createLightSetup(gl, scene._lightsState, false);
         const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
@@ -99,31 +98,26 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
                 }
             },
             setupInputs: (program) => {
-                inputs.uUVDecodeMatrix = program.getLocation("uvDecodeMatrix");
-                inputs.uColorMap = program.getSampler("uColorMap");
-                if (gammaOutput) {
-                    inputs.uGammaFactor = program.getLocation("gammaFactor");
-                }
-                inputs.setLightsRenderState = lightSetup.setupInputs(program);
-                inputs.setSAOState = sao && sao.setupInputs(program);
-                inputs.materialAlphaCutoff = useAlphaCutoff && program.getLocation("materialAlphaCutoff");
-            },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
-                const state = layer._state;
-                gl.uniformMatrix3fv(inputs.uUVDecodeMatrix, false, state.uvDecodeMatrix);
-                const colorTexture = state.textureSet.colorTexture;
-                if (colorTexture) {
-                    inputs.uColorMap.bindTexture(colorTexture.texture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                }
-                if (gammaOutput) {
-                    gl.uniform1f(inputs.uGammaFactor, scene.gammaFactor);
-                }
-                inputs.setLightsRenderState(frameCtx);
-                inputs.setSAOState && inputs.setSAOState(frameCtx);
-                if (inputs.materialAlphaCutoff) {
-                    gl.uniform1f(inputs.materialAlphaCutoff, state.textureSet.alphaCutoff);
-                }
+                const uUVDecodeMatrix      = program.getLocation("uvDecodeMatrix");
+                const uColorMap            = program.getSampler("uColorMap");
+                const uGammaFactor         = gammaOutput && program.getLocation("gammaFactor");
+                const setLightsRenderState = lightSetup.setupInputs(program);
+                const setSAOState          = sao && sao.setupInputs(program);
+                const materialAlphaCutoff  = useAlphaCutoff && program.getLocation("materialAlphaCutoff");
+
+                return (frameCtx, layer, renderPass, rtcOrigin) => {
+                    const state = layer._state;
+                    gl.uniformMatrix3fv(uUVDecodeMatrix, false, state.uvDecodeMatrix);
+                    const colorTexture = state.textureSet.colorTexture;
+                    if (colorTexture) {
+                        uColorMap.bindTexture(colorTexture.texture, frameCtx.textureUnit);
+                        frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+                    }
+                    uGammaFactor && gl.uniform1f(uGammaFactor, scene.gammaFactor);
+                    setLightsRenderState(frameCtx);
+                    setSAOState && setSAOState(frameCtx);
+                    materialAlphaCutoff && gl.uniform1f(materialAlphaCutoff, state.textureSet.alphaCutoff);
+                };
             }
         });
     }

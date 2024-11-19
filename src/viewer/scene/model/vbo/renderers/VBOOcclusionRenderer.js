@@ -43,9 +43,7 @@ export class VBOOcclusionRenderer extends VBORenderer {
             needViewMatrixInFragment: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push("outColor = vec4(0.0, 0.0, 1.0, 1.0); "); // Occluders are blue
-            },
-            setupInputs: (program) => { },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { }
+            }
         });
     }
 

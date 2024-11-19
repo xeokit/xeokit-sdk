@@ -6,7 +6,6 @@ import {VBORenderer, createPickClipTransformSetup} from "../VBORenderer.js";
 export class VBOPickMeshRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive) {
-        const inputs = { };
         const clipTransformSetup = createPickClipTransformSetup(scene.canvas.gl, 1);
 
         super(scene, instancing, primitive, {
@@ -52,8 +51,10 @@ export class VBOPickMeshRenderer extends VBORenderer {
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push("outColor = vPickColor;");
             },
-            setupInputs: program => { inputs.setClipTransformState = clipTransformSetup.setupInputs(program); },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { inputs.setClipTransformState(frameCtx); }
+            setupInputs: program => {
+                const setClipTransformState = clipTransformSetup.setupInputs(program);
+                return (frameCtx, layer, renderPass, rtcOrigin) => setClipTransformState(frameCtx);
+            }
         });
     }
 
