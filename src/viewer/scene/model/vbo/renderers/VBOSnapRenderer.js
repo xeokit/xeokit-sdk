@@ -64,7 +64,6 @@ export class VBOSnapRenderer extends VBORenderer {
                     src.push("out highp ivec4 outCoords;");
                 }
             },
-            slicedColorIfClipping: false,
             needGl_FragCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push("outCoords = ivec4(relativeToOriginPosition.xyz * uCoordinateScaler.xyz, " + (isSnapInit ? "-" : "") + "uLayerNumber);");
