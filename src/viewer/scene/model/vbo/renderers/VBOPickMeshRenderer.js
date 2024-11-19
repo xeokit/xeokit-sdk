@@ -25,10 +25,6 @@ export class VBOPickMeshRenderer extends VBORenderer {
             filterIntensityRange: false,
             transformClipPos: clipTransformSetup.transformClipPos,
             shadowParameters: null,
-            needVertexColor: false,
-            needPickColor: true,
-            needUV: false,
-            needMetallicRoughness: false,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vPickColor = ${pickColor} / 255.0;`);
                 if (primitive === "points") {
