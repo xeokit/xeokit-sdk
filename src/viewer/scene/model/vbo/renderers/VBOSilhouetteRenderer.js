@@ -14,9 +14,7 @@ export class VBOSilhouetteRenderer extends VBORenderer {
         super(scene, instancing, primitive, {
             progMode: "silhouetteMode",
 
-            getHash: () => [ ],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
-            clippingCaps: false,
             // silhouetteFlag = NOT_RENDERED | SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | SILHOUETTE_XRAYED
             // renderPass = SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | SILHOUETTE_XRAYED
             renderPassFlag: 1,
@@ -32,9 +30,6 @@ export class VBOSilhouetteRenderer extends VBORenderer {
                     src.push("out vec4 vColor;");
                 }
             },
-            filterIntensityRange: false,
-            transformClipPos: clipPos => clipPos,
-            shadowParameters: null,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 if (isPoints) {
                     if (instancing) {

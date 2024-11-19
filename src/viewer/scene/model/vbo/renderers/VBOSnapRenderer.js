@@ -14,10 +14,8 @@ export class VBOSnapRenderer extends VBORenderer {
         super(scene, instancing, primitive, {
             progMode: isSnapInit ? "snapInitMode" : "snapMode",
 
-            getHash: () => [ ],
             // Improves occlusion accuracy at distance
             getLogDepth: true && (vFragDepth => (isSnapInit ? `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))` : vFragDepth)),
-            clippingCaps: false,
             // pickFlag = NOT_RENDERED | PICK
             // renderPass = PICK
             renderPassFlag: 3,
@@ -29,9 +27,7 @@ export class VBOSnapRenderer extends VBORenderer {
                     src.push("flat out vec4 vPickColor;");
                 }
             },
-            filterIntensityRange: false,
             transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - snapVectorA) * snapInvVectorAB * ${clipPos}.w, ${clipPos}.zw)`,
-            shadowParameters: null,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`relativeToOriginPosition = ${worldPosition};`);
                 if (isSnapInit) {
