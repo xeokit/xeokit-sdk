@@ -36,7 +36,6 @@ export class VBOTrianglesDepthRenderer extends VBORenderer {
                 src.push("in vec2 vHighPrecisionZW;");
                 src.push("out vec4 outColor;");
             },
-            needGl_FragCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push("outColor = vec4(vec3((1.0 - vHighPrecisionZW[0] / vHighPrecisionZW[1]) / 2.0), 1.0);");
             }
