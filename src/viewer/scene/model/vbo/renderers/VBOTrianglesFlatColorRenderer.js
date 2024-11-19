@@ -14,7 +14,6 @@ export class VBOTrianglesFlatColorRenderer extends VBORenderer {
             progMode: "flatColorMode",
 
             getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao"],
-            respectPointsMaterial: false,
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             clippingCaps: false,
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT

@@ -15,7 +15,6 @@ export class VBOSnapRenderer extends VBORenderer {
             progMode: isSnapInit ? "snapInitMode" : "snapMode",
 
             getHash: () => [ ],
-            respectPointsMaterial: false,
             // Improves occlusion accuracy at distance
             getLogDepth: true && (vFragDepth => (isSnapInit ? `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))` : vFragDepth)),
             clippingCaps: false,
