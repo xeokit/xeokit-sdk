@@ -14,7 +14,6 @@ export class VBOTrianglesColorRenderer extends VBORenderer {
             progMode: "colorMode", incrementDrawState: true,
 
             getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao"],
-            respectPointsMaterial: false,
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))`),
             clippingCaps: false,
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT

@@ -17,7 +17,6 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
             progMode: "colorTextureMode", incrementDrawState: true,
 
             getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao", gammaOutput, useAlphaCutoff ? "alphaCutoffYes" : "alphaCutoffNo"],
-            respectPointsMaterial: false,
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             clippingCaps: false,
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
