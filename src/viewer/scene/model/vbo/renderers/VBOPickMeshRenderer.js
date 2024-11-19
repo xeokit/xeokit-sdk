@@ -11,9 +11,7 @@ export class VBOPickMeshRenderer extends VBORenderer {
         super(scene, instancing, primitive, {
             progMode: "pickMeshMode",
 
-            getHash: () => [ ],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
-            clippingCaps: false,
             // pickFlag = NOT_RENDERED | PICK
             // renderPass = PICK
             renderPassFlag: 3,
@@ -21,9 +19,7 @@ export class VBOPickMeshRenderer extends VBORenderer {
                 src.push("out vec4 vPickColor;");
                 clipTransformSetup.appendDefinitions(src);
             },
-            filterIntensityRange: false,
             transformClipPos: clipTransformSetup.transformClipPos,
-            shadowParameters: null,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vPickColor = ${pickColor} / 255.0;`);
                 if (primitive === "points") {

@@ -13,16 +13,12 @@ export class VBOShadowRenderer extends VBORenderer {
         super(scene, instancing, primitive, {
             progMode: "shadowMode",
 
-            getHash: () => [ ],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
-            clippingCaps: false,
             renderPassFlag: 0,
             appendVertexDefinitions: (src) => {
                 src.push("uniform mat4 shadowProjMatrix;");
                 src.push("uniform mat4 shadowViewMatrix;");
             },
-            filterIntensityRange: false,
-            transformClipPos: clipPos => clipPos,
             shadowParameters: { projMatrix: "shadowProjMatrix", viewMatrix: "shadowViewMatrix" },
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => { },
             appendFragmentDefinitions: (src) => {

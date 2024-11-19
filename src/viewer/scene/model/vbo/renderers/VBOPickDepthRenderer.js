@@ -12,9 +12,7 @@ export class VBOPickDepthRenderer extends VBORenderer {
         super(scene, instancing, primitive, {
             progMode: "pickDepthMode",
 
-            getHash: () => [ ],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
-            clippingCaps: false,
             // pickFlag = NOT_RENDERED | PICK
             // renderPass = PICK
             renderPassFlag: 3,
@@ -22,9 +20,7 @@ export class VBOPickDepthRenderer extends VBORenderer {
                 src.push("out vec4 vViewPosition;");
                 clipTransformSetup.appendDefinitions(src);
             },
-            filterIntensityRange: false,
             transformClipPos: clipTransformSetup.transformClipPos,
-            shadowParameters: null,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vViewPosition = ${view.viewPosition};`);
                 if (primitive === "points") {
