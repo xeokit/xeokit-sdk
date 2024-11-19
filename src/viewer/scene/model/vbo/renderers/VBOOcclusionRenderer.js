@@ -29,8 +29,6 @@ export class VBOOcclusionRenderer extends VBORenderer {
             needUV: false,
             needMetallicRoughness: false,
             needGl_Position: false,
-            needViewPosition: false,
-            needViewMatrixNormal: false,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => { },
             appendFragmentDefinitions: (src) => {
                 src.push("out vec4 outColor;");
