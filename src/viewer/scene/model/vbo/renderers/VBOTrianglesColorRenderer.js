@@ -48,7 +48,6 @@ export class VBOTrianglesColorRenderer extends VBORenderer {
                 src.push("in vec4 vColor;");
                 src.push("out vec4 outColor;");
             },
-            slicedColorIfClipping: true,
             needGl_FragCoord: sao,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push(`vec4 fragColor = ${sliceColorOr("vColor")};`);
