@@ -24,7 +24,6 @@ export class VBOPointsColorRenderer extends VBORenderer {
             needPickColor: false,
             needUV: false,
             needMetallicRoughness: false,
-            needGl_Position: false,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vColor = vec4(${color}.rgb / 255.0, 1.0);`);
             },
