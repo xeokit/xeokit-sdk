@@ -260,7 +260,6 @@ export class VBORenderer {
         const needViewMatrixInFragment  = cfg.needViewMatrixInFragment;
         const appendFragmentOutputs     = cfg.appendFragmentOutputs;
         const setupInputs               = cfg.setupInputs;
-        const setRenderState            = cfg.setRenderState;
 
         const needNormal = needViewMatrixNormal || needWorldNormal;
         const isSnap = (progMode === "snapInitMode") || (progMode === "snapMode");
@@ -635,7 +634,7 @@ export class VBORenderer {
         const uPointSize       = setupPoints && program.getLocation("pointSize");
         const uNearPlaneHeight = setupPoints && pointsMaterial.perspectivePoints && program.getLocation("nearPlaneHeight");
 
-        setupInputs(program);
+        const setInputsState = setupInputs && setupInputs(program);
 
         this.destroy = () => program.destroy();
         this.drawLayer = (frameCtx, layer, renderPass) => {
@@ -748,7 +747,7 @@ export class VBORenderer {
                 gl.uniform1f(uNearPlaneHeight, nearPlaneHeight);
             }
 
-            setRenderState(frameCtx, layer, renderPass, rtcOrigin);
+            setInputsState && setInputsState(frameCtx, layer, renderPass, rtcOrigin);
 
             if (! drawCallCache.has(layer)) {
                 const vao = gl.createVertexArray();
