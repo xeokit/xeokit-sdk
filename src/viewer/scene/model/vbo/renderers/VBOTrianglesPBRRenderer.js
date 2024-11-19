@@ -19,7 +19,6 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
             progMode: "pbrMode", incrementDrawState: true,
 
             getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao", gammaOutput],
-            respectPointsMaterial: false,
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             clippingCaps: scene._sectionPlanesState.clippingCaps && "outColor",
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT

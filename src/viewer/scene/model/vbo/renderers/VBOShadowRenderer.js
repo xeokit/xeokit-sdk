@@ -14,7 +14,6 @@ export class VBOShadowRenderer extends VBORenderer {
             progMode: "shadowMode",
 
             getHash: () => [ ],
-            respectPointsMaterial: true,
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             clippingCaps: false,
             renderPassFlag: 0,
