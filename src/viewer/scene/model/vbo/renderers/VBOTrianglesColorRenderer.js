@@ -15,7 +15,6 @@ export class VBOTrianglesColorRenderer extends VBORenderer {
 
             getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao"],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))`),
-            clippingCaps: false,
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
             // renderPass = COLOR_OPAQUE | COLOR_TRANSPARENT
             renderPassFlag: 0,
@@ -23,9 +22,6 @@ export class VBOTrianglesColorRenderer extends VBORenderer {
                 lightSetup.appendDefinitions(src);
                 src.push("out vec4 vColor;");
             },
-            filterIntensityRange: false,
-            transformClipPos: clipPos => clipPos,
-            shadowParameters: null,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
                 lightSetup.getDirectionalLights(view.viewMatrix, view.viewPosition).forEach(light => {
