@@ -12,9 +12,7 @@ export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
         super(scene, instancing, primitive, {
             progMode: isFlat ? "pickNormalsFlatMode" : "pickNormalsMode",
 
-            getHash: () => [ ],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
-            clippingCaps: false,
             // pickFlag = NOT_RENDERED | PICK
             // renderPass = PICK
             renderPassFlag: 3,
@@ -24,9 +22,7 @@ export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
                 }
                 clipTransformSetup.appendDefinitions(src);
             },
-            filterIntensityRange: false,
             transformClipPos: clipTransformSetup.transformClipPos,
-            shadowParameters: null,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 if (! isFlat) {
                     src.push(`vWorldNormal = ${worldNormal};`);

@@ -9,16 +9,11 @@ export class VBOTrianglesDepthRenderer extends VBORenderer {
         super(scene, instancing, primitive, {
             progMode: "depthMode",
 
-            getHash: () => [ ],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
-            clippingCaps: false,
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
             // renderPass = COLOR_OPAQUE
             renderPassFlag: 0,
             appendVertexDefinitions: (src) => src.push("out vec2 vHighPrecisionZW;"),
-            filterIntensityRange: false,
-            transformClipPos: clipPos => clipPos,
-            shadowParameters: null,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vHighPrecisionZW = ${gl_Position}.zw;`);
             },
