@@ -235,7 +235,6 @@ export class VBORenderer {
         const edges                     = cfg.edges;
         const incrementDrawState        = cfg.incrementDrawState;
 
-        const respectPointsMaterial     = cfg.respectPointsMaterial;
         const getLogDepth               = cfg.getLogDepth;
         const clippingCaps              = cfg.clippingCaps;
         const renderPassFlag            = cfg.renderPassFlag;
@@ -251,7 +250,7 @@ export class VBORenderer {
 
         const isSnap = (progMode === "snapInitMode") || (progMode === "snapMode");
         const testPerspectiveForGl_FragDepth = ((primitive !== "points") && (primitive !== "lines")) || isSnap;
-        const setupPoints = respectPointsMaterial && (primitive === "points");
+        const setupPoints = (primitive === "points") && (! isSnap);
 
         const getHash = () => [ scene._sectionPlanesState.getHash() ].concat(setupPoints ? [ pointsMaterial.hash ] : [ ]).concat(cfg.getHash()).join(";");
         const hash = getHash();
