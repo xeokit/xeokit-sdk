@@ -209,7 +209,6 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                 src.push("out vec4 outColor;");
             },
             slicedColorIfClipping: false,
-            needvWorldPosition: false,
             needGl_FragCoord: sao,
             needViewMatrixInFragment: true,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
