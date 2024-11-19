@@ -256,7 +256,6 @@ export class VBORenderer {
         const appendFragmentDefinitions = cfg.appendFragmentDefinitions;
         const slicedColorIfClipping     = cfg.slicedColorIfClipping;
         const needGl_FragCoord          = cfg.needGl_FragCoord;
-        const needViewMatrixInFragment  = cfg.needViewMatrixInFragment;
         const appendFragmentOutputs     = cfg.appendFragmentOutputs;
         const vertexCullX               = cfg.vertexCullX;
         const setupInputs               = cfg.setupInputs;
@@ -288,9 +287,10 @@ export class VBORenderer {
         };
 
         const vWorldPosition = lazyShaderVariable("vWorldPosition");
+        const fragViewMatrix = lazyShaderVariable("viewMatrix");
 
         const fragmentOutputs = [ ];
-        appendFragmentOutputs(fragmentOutputs, vWorldPosition, needGl_FragCoord && "gl_FragCoord", slicedColorIfClipping && (color => clipping ? `(sliced ? sliceColor : ${color})` : color), needViewMatrixInFragment && "viewMatrix");
+        appendFragmentOutputs(fragmentOutputs, vWorldPosition, needGl_FragCoord && "gl_FragCoord", slicedColorIfClipping && (color => clipping ? `(sliced ? sliceColor : ${color})` : color), fragViewMatrix);
 
         const fragmentClippingLines = (function() {
             const src = [ ];
@@ -575,7 +575,7 @@ export class VBORenderer {
                 }
             }
 
-            if (needViewMatrixInFragment) {
+            if (fragViewMatrix.needed) {
                 addMatricesUniformBlockLines(src);
             }
 
