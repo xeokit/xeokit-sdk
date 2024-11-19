@@ -7,7 +7,6 @@ import {WEBGL_INFO} from "../../../webglInfo.js";
 export class VBOTrianglesPBRRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive, withSAO) {
-        const inputs = { };
         const gl = scene.canvas.gl;
         const lightSetup = createLightSetup(gl, scene._lightsState, true);
         const getIrradiance = lightSetup.getIrradiance;
@@ -275,47 +274,42 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                 }
             },
             setupInputs: (program) => {
-                inputs.uUVDecodeMatrix = program.getLocation("uvDecodeMatrix");
+                const uUVDecodeMatrix      = program.getLocation("uvDecodeMatrix");
 
-                inputs.uColorMap         = program.getSampler("uColorMap");
-                inputs.uMetallicRoughMap = program.getSampler("uMetallicRoughMap");
-                inputs.uEmissiveMap      = program.getSampler("uEmissiveMap");
-                inputs.uNormalMap        = program.getSampler("uNormalMap");
-                inputs.uAOMap = program.getSampler("uAOMap");
+                const uColorMap            = program.getSampler("uColorMap");
+                const uMetallicRoughMap    = program.getSampler("uMetallicRoughMap");
+                const uEmissiveMap         = program.getSampler("uEmissiveMap");
+                const uNormalMap           = program.getSampler("uNormalMap");
+                const uAOMap               = program.getSampler("uAOMap");
 
-                if (gammaOutput) {
-                    inputs.uGammaFactor = program.getLocation("gammaFactor");
-                }
+                const uGammaFactor         = gammaOutput && program.getLocation("gammaFactor");
+                const setLightsRenderState = lightSetup.setupInputs(program);
+                const setSAOState          = sao && sao.setupInputs(program);
 
-                inputs.setLightsRenderState = lightSetup.setupInputs(program);
-                inputs.setSAOState = sao && sao.setupInputs(program);
-            },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
-                const state = layer._state;
-                gl.uniformMatrix3fv(inputs.uUVDecodeMatrix, false, state.uvDecodeMatrix);
+                return (frameCtx, layer, renderPass, rtcOrigin) => {
+                    const state = layer._state;
+                    gl.uniformMatrix3fv(uUVDecodeMatrix, false, state.uvDecodeMatrix);
 
-                const textureSet = state.textureSet;
-                if (textureSet) {
-                    const setSampler = (sampler, texture) => {
-                        if (texture) {
-                            sampler.bindTexture(texture.texture, frameCtx.textureUnit);
-                            frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
-                        }
-                    };
+                    const textureSet = state.textureSet;
+                    if (textureSet) {
+                        const setSampler = (sampler, texture) => {
+                            if (texture) {
+                                sampler.bindTexture(texture.texture, frameCtx.textureUnit);
+                                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+                            }
+                        };
 
-                    setSampler(inputs.uColorMap,         textureSet.colorTexture);
-                    setSampler(inputs.uMetallicRoughMap, textureSet.metallicRoughnessTexture);
-                    setSampler(inputs.uEmissiveMap,      textureSet.emissiveTexture);
-                    setSampler(inputs.uNormalMap,        textureSet.normalsTexture);
-                    setSampler(inputs.uAOMap, textureSet.occlusionTexture);
-                }
+                        setSampler(uColorMap,         textureSet.colorTexture);
+                        setSampler(uMetallicRoughMap, textureSet.metallicRoughnessTexture);
+                        setSampler(uEmissiveMap,      textureSet.emissiveTexture);
+                        setSampler(uNormalMap,        textureSet.normalsTexture);
+                        setSampler(uAOMap,  textureSet.occlusionTexture);
+                    }
 
-                if (gammaOutput) {
-                    gl.uniform1f(inputs.uGammaFactor, scene.gammaFactor);
-                }
-
-                inputs.setLightsRenderState(frameCtx);
-                inputs.setSAOState && inputs.setSAOState(frameCtx);
+                    uGammaFactor && gl.uniform1f(uGammaFactor, scene.gammaFactor);
+                    setLightsRenderState(frameCtx);
+                    setSAOState && setSAOState(frameCtx);
+                };
             }
         });
     }
