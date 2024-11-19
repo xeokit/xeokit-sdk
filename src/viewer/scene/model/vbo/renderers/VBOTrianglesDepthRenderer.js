@@ -24,7 +24,6 @@ export class VBOTrianglesDepthRenderer extends VBORenderer {
             needPickColor: false,
             needUV: false,
             needMetallicRoughness: false,
-            needGl_Position: true,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vHighPrecisionZW = ${gl_Position}.zw;`);
             },
