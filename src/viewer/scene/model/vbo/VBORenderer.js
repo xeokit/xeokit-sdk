@@ -251,7 +251,7 @@ export class VBORenderer {
         const testPerspectiveForGl_FragDepth = ((primitive !== "points") && (primitive !== "lines")) || isSnap;
         const setupPoints = (primitive === "points") && (! isSnap);
 
-        const getHash = () => [ scene._sectionPlanesState.getHash() ].concat(setupPoints ? [ pointsMaterial.hash ] : [ ]).concat(cfg.getHash()).join(";");
+        const getHash = () => [ scene._sectionPlanesState.getHash() ].concat(setupPoints ? [ pointsMaterial.hash ] : [ ]).concat(cfg.getHash ? cfg.getHash() : [ ]).join(";");
         const hash = getHash();
         this.getValid = () => hash === getHash();
 
@@ -337,7 +337,7 @@ export class VBORenderer {
         const worldNormal = lazyShaderVariable("worldNormal");
 
         const vertexOutputs = [ ];
-        appendVertexOutputs(vertexOutputs, colorA, pickColorA, uvA, metallicRoughnessA, "gl_Position", viewParams, worldNormal, "worldPosition");
+        appendVertexOutputs && appendVertexOutputs(vertexOutputs, colorA, pickColorA, uvA, metallicRoughnessA, "gl_Position", viewParams, worldNormal, "worldPosition");
 
         const needNormal = viewParams.viewNormal.needed || worldNormal.needed;
 
@@ -468,7 +468,7 @@ export class VBORenderer {
                 src.push("uniform vec2 intensityRange;");
             }
 
-            appendVertexDefinitions(src);
+            appendVertexDefinitions && appendVertexDefinitions(src);
 
             src.push("void main(void) {");
 
@@ -516,7 +516,7 @@ export class VBORenderer {
                 }
             }
 
-            src.push("gl_Position = " + transformClipPos("clipPos") + ";");
+            src.push("gl_Position = " + (transformClipPos ? transformClipPos("clipPos") : "clipPos") + ";");
 
             if (needNormal) {
                 src.push("vec4 modelNormal = vec4(octDecode(normal.xy), 0.0);");
