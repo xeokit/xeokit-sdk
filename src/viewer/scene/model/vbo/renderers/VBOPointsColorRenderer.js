@@ -36,7 +36,6 @@ export class VBOPointsColorRenderer extends VBORenderer {
                 src.push("in vec4 vColor;");
                 src.push("out vec4 outColor;");
             },
-            slicedColorIfClipping: false,
             needGl_FragCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push("outColor = vColor;");
