@@ -13,9 +13,7 @@ export class VBOTrianglesEdgesRenderer extends VBORenderer {
         super(scene, instancing, primitive, {
             progMode: "edgesMode", edges: true,
 
-            getHash: () => [ ],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
-            clippingCaps: false,
             // edgeFlag = NOT_RENDERED | EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
             // renderPass = EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
             renderPassFlag: 2,
@@ -25,9 +23,6 @@ export class VBOTrianglesEdgesRenderer extends VBORenderer {
                 }
                 src.push("out vec4 vColor;");
             },
-            filterIntensityRange: false,
-            transformClipPos: clipPos => clipPos,
-            shadowParameters: null,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push("vColor = " + (colorUniform ? "edgeColor" : `vec4(${color}.rgb * 0.5, ${color}.a) / 255.0`) + ";");
             },

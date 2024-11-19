@@ -18,7 +18,6 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
 
             getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao", gammaOutput, useAlphaCutoff ? "alphaCutoffYes" : "alphaCutoffNo"],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
-            clippingCaps: false,
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
             // renderPass = COLOR_OPAQUE | COLOR_TRANSPARENT
             renderPassFlag: 0,
@@ -28,9 +27,6 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
                 src.push("out vec2 vUV;");
                 src.push("out vec4 vColor;");
             },
-            filterIntensityRange: false,
-            transformClipPos: clipPos => clipPos,
-            shadowParameters: null,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vViewPosition = ${view.viewPosition};`);
                 src.push(`vUV = (uvDecodeMatrix * vec3(${uv}, 1.0)).xy;`);

@@ -36,9 +36,6 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
                     src.push("out vec3 vWorldNormal;");
                 }
             },
-            filterIntensityRange: false,
-            transformClipPos: clipPos => clipPos,
-            shadowParameters: null,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vViewPosition = ${view.viewPosition};`);
                 src.push(`vViewNormal = ${view.viewNormal};`);
