@@ -10,7 +10,6 @@ export class VBOTrianglesDepthRenderer extends VBORenderer {
             progMode: "depthMode",
 
             getHash: () => [ ],
-            respectPointsMaterial: false,
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             clippingCaps: false,
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT

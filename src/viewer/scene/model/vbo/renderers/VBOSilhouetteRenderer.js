@@ -15,7 +15,6 @@ export class VBOSilhouetteRenderer extends VBORenderer {
             progMode: "silhouetteMode",
 
             getHash: () => [ ],
-            respectPointsMaterial: true,
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             clippingCaps: false,
             // silhouetteFlag = NOT_RENDERED | SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | SILHOUETTE_XRAYED
