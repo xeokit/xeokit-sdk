@@ -10,7 +10,6 @@ export class VBOPointsColorRenderer extends VBORenderer {
             progMode: "colorMode", incrementDrawState: true,
 
             getHash: () => [ ],
-            respectPointsMaterial: true,
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             clippingCaps: false,
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT

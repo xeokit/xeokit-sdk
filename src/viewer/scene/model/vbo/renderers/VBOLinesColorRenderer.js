@@ -10,7 +10,6 @@ export class VBOLinesColorRenderer extends VBORenderer {
             progMode: "colorMode", incrementDrawState: true,
 
             getHash: () => [ ],
-            respectPointsMaterial: false,
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             clippingCaps: false,
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
