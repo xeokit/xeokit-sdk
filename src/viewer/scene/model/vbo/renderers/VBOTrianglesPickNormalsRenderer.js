@@ -33,8 +33,6 @@ export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
             needUV: false,
             needMetallicRoughness: false,
             needGl_Position: false,
-            needViewPosition: false,
-            needViewMatrixNormal: false,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 if (! isFlat) {
                     src.push(`vWorldNormal = ${worldNormal};`);
