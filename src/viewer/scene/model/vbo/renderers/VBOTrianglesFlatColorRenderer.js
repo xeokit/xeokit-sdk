@@ -49,7 +49,6 @@ export class VBOTrianglesFlatColorRenderer extends VBORenderer {
             },
             slicedColorIfClipping: true,
             needGl_FragCoord: sao,
-            needViewMatrixInFragment: true,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push("vec3 viewNormal = normalize(cross(dFdx(vViewPosition.xyz), dFdy(vViewPosition.xyz)));");
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
