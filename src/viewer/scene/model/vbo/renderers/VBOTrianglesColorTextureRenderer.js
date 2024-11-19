@@ -36,7 +36,6 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
             needPickColor: false,
             needUV: true,
             needMetallicRoughness: false,
-            needGl_Position: false,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vViewPosition = ${view.viewPosition};`);
                 src.push(`vUV = (uvDecodeMatrix * vec3(${uv}, 1.0)).xy;`);
