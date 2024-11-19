@@ -40,10 +40,6 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
             filterIntensityRange: false,
             transformClipPos: clipPos => clipPos,
             shadowParameters: null,
-            needVertexColor: true,
-            needPickColor: false,
-            needUV: true,
-            needMetallicRoughness: true,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vViewPosition = ${view.viewPosition};`);
                 src.push(`vViewNormal = ${view.viewNormal};`);
