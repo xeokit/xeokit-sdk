@@ -56,7 +56,6 @@ export class VBOPickDepthRenderer extends VBORenderer {
             },
             slicedColorIfClipping: false,
             needGl_FragCoord: false,
-            needViewMatrixInFragment: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push("float zNormalizedDepth = abs((pickZNear + vViewPosition.z) / (pickZFar - pickZNear));");
                 src.push("outColor = packDepth(zNormalizedDepth);"); // Must be linear depth
