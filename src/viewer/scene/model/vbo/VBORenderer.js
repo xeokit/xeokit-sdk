@@ -254,7 +254,6 @@ export class VBORenderer {
         const needWorldPosition         = cfg.needWorldPosition;
         const appendVertexOutputs       = cfg.appendVertexOutputs;
         const appendFragmentDefinitions = cfg.appendFragmentDefinitions;
-        const needGl_FragCoord          = cfg.needGl_FragCoord;
         const appendFragmentOutputs     = cfg.appendFragmentOutputs;
         const vertexCullX               = cfg.vertexCullX;
         const setupInputs               = cfg.setupInputs;
@@ -298,7 +297,7 @@ export class VBORenderer {
                                 : (color => color));
 
         const fragmentOutputs = [ ];
-        appendFragmentOutputs(fragmentOutputs, vWorldPosition, needGl_FragCoord && "gl_FragCoord", sliceColorOr, fragViewMatrix);
+        appendFragmentOutputs(fragmentOutputs, vWorldPosition, "gl_FragCoord", sliceColorOr, fragViewMatrix);
 
         const fragmentClippingLines = (function() {
             const src = [ ];
