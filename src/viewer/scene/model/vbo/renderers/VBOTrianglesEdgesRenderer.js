@@ -14,7 +14,6 @@ export class VBOTrianglesEdgesRenderer extends VBORenderer {
             progMode: "edgesMode", edges: true,
 
             getHash: () => [ ],
-            respectPointsMaterial: false,
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             clippingCaps: false,
             // edgeFlag = NOT_RENDERED | EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
