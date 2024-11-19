@@ -33,10 +33,6 @@ export class VBOSnapRenderer extends VBORenderer {
             filterIntensityRange: false,
             transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - snapVectorA) * snapInvVectorAB * ${clipPos}.w, ${clipPos}.zw)`,
             shadowParameters: null,
-            needVertexColor: false,
-            needPickColor: isSnapInit,
-            needUV: false,
-            needMetallicRoughness: false,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`relativeToOriginPosition = ${worldPosition};`);
                 if (isSnapInit) {
