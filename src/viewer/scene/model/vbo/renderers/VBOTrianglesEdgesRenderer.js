@@ -33,7 +33,6 @@ export class VBOTrianglesEdgesRenderer extends VBORenderer {
             needPickColor: false,
             needUV: false,
             needMetallicRoughness: false,
-            needGl_Position: false,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push("vColor = " + (colorUniform ? "edgeColor" : `vec4(${color}.rgb * 0.5, ${color}.a) / 255.0`) + ";");
             },
