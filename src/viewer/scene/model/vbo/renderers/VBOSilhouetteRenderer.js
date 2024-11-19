@@ -41,8 +41,6 @@ export class VBOSilhouetteRenderer extends VBORenderer {
             needUV: false,
             needMetallicRoughness: false,
             needGl_Position: false,
-            needViewPosition: false,
-            needViewMatrixNormal: false,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 if (isPoints) {
                     if (instancing) {
