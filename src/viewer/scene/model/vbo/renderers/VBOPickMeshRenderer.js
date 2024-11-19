@@ -12,7 +12,6 @@ export class VBOPickMeshRenderer extends VBORenderer {
             progMode: "pickMeshMode",
 
             getHash: () => [ ],
-            respectPointsMaterial: true,
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             clippingCaps: false,
             // pickFlag = NOT_RENDERED | PICK
