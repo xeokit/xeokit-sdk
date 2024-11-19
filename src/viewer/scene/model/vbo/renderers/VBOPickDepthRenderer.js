@@ -31,8 +31,6 @@ export class VBOPickDepthRenderer extends VBORenderer {
             needUV: false,
             needMetallicRoughness: false,
             needGl_Position: false,
-            needViewPosition: true,
-            needViewMatrixNormal: false,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vViewPosition = ${view.viewPosition};`);
                 if (primitive === "points") {
