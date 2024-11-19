@@ -48,7 +48,6 @@ export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
                 }
                 src.push("out highp ivec4 outNormal;");
             },
-            slicedColorIfClipping: false,
             needGl_FragCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 const worldNormal = (isFlat
