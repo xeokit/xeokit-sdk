@@ -254,7 +254,6 @@ export class VBORenderer {
         const needWorldPosition         = cfg.needWorldPosition;
         const appendVertexOutputs       = cfg.appendVertexOutputs;
         const appendFragmentDefinitions = cfg.appendFragmentDefinitions;
-        const slicedColorIfClipping     = cfg.slicedColorIfClipping;
         const needGl_FragCoord          = cfg.needGl_FragCoord;
         const appendFragmentOutputs     = cfg.appendFragmentOutputs;
         const vertexCullX               = cfg.vertexCullX;
@@ -288,15 +287,24 @@ export class VBORenderer {
 
         const vWorldPosition = lazyShaderVariable("vWorldPosition");
         const fragViewMatrix = lazyShaderVariable("viewMatrix");
+        const sliceColorOr   = (clipping
+                                ? (function() {
+                                    const sliceColorOr = color => {
+                                        sliceColorOr.needed = true;
+                                        return `(sliced ? sliceColor : ${color})`;
+                                    };
+                                    return sliceColorOr;
+                                })()
+                                : (color => color));
 
         const fragmentOutputs = [ ];
-        appendFragmentOutputs(fragmentOutputs, vWorldPosition, needGl_FragCoord && "gl_FragCoord", slicedColorIfClipping && (color => clipping ? `(sliced ? sliceColor : ${color})` : color), fragViewMatrix);
+        appendFragmentOutputs(fragmentOutputs, vWorldPosition, needGl_FragCoord && "gl_FragCoord", sliceColorOr, fragViewMatrix);
 
         const fragmentClippingLines = (function() {
             const src = [ ];
 
             if (clipping) {
-                if (slicedColorIfClipping) {
+                if (sliceColorOr.needed) {
                     src.push("  bool sliced = false;");
                 }
                 src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
@@ -319,9 +327,9 @@ export class VBORenderer {
                     src.push("  return;");
                     src.push("}");
                 } else {
-                    src.push("       if (dist > " + (slicedColorIfClipping ? "sliceThickness" : "0.0") + ") {  discard; }");
+                    src.push("       if (dist > " + (sliceColorOr.needed ? "sliceThickness" : "0.0") + ") {  discard; }");
                 }
-                if (slicedColorIfClipping) {
+                if (sliceColorOr.needed) {
                     src.push("  sliced = dist > 0.0;");
                 }
                 src.push("}");
@@ -569,7 +577,7 @@ export class VBORenderer {
                     src.push("uniform vec3 sectionPlanePos" + i + ";");
                     src.push("uniform vec3 sectionPlaneDir" + i + ";");
                 }
-                if (slicedColorIfClipping) {
+                if (sliceColorOr.needed) {
                     src.push("uniform float sliceThickness;");
                     src.push("uniform vec4 sliceColor;");
                 }
@@ -636,8 +644,8 @@ export class VBORenderer {
                 dir: program.getLocation("sectionPlaneDir" + i)
             });
         }
-        const uSliceThickness = clipping && slicedColorIfClipping && program.getLocation("sliceThickness");
-        const uSliceColor     = clipping && slicedColorIfClipping && program.getLocation("sliceColor");
+        const uSliceThickness = clipping && sliceColorOr.needed && program.getLocation("sliceThickness");
+        const uSliceColor     = clipping && sliceColorOr.needed && program.getLocation("sliceColor");
 
         const aPosition = program.getAttribute("position");
         const aOffset = program.getAttribute("offset");
@@ -745,7 +753,7 @@ export class VBORenderer {
                         }
                     }
                 }
-                const crossSections = slicedColorIfClipping && scene.crossSections;
+                const crossSections = sliceColorOr.needed && scene.crossSections;
                 if (crossSections) {
                     gl.uniform1f(uSliceThickness, crossSections.sliceThickness);
                     gl.uniform4fv(uSliceColor,    crossSections.sliceColor);
