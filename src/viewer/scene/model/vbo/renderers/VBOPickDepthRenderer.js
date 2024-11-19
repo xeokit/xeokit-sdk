@@ -54,7 +54,6 @@ export class VBOPickDepthRenderer extends VBORenderer {
                 src.push("}");
                 src.push("out vec4 outColor;");
             },
-            slicedColorIfClipping: false,
             needGl_FragCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push("float zNormalizedDepth = abs((pickZNear + vViewPosition.z) / (pickZFar - pickZNear));");
