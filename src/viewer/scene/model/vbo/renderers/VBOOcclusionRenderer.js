@@ -38,7 +38,6 @@ export class VBOOcclusionRenderer extends VBORenderer {
                 src.push("out vec4 outColor;");
             },
             slicedColorIfClipping: false,
-            needvWorldPosition: false,
             needGl_FragCoord: false,
             needViewMatrixInFragment: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
