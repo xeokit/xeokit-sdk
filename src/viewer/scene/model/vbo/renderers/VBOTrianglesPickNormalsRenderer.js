@@ -50,7 +50,6 @@ export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
             },
             slicedColorIfClipping: false,
             needGl_FragCoord: false,
-            needViewMatrixInFragment: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 const worldNormal = (isFlat
                                      ? `normalize(cross(dFdx(${vWorldPosition}), dFdy(${vWorldPosition})))`

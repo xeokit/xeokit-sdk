@@ -210,7 +210,6 @@ export class VBOTrianglesPBRRenderer extends VBORenderer {
             },
             slicedColorIfClipping: false,
             needGl_FragCoord: sao,
-            needViewMatrixInFragment: true,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push("IncidentLight  light;");
                 src.push("Material       material;");

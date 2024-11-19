@@ -70,7 +70,6 @@ export class VBOSilhouetteRenderer extends VBORenderer {
             },
             slicedColorIfClipping: (! isPoints) && (primitive !== "lines"),
             needGl_FragCoord: false,
-            needViewMatrixInFragment: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 if (isPoints) {
                     src.push("outColor = " + (instancing ? "vColor" : "silhouetteColor") + ";");
