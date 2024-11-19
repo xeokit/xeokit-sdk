@@ -7,11 +7,6 @@ import {ArrayBuf} from "../../webgl/ArrayBuf.js";
 import {quantizePositions, transformAndOctEncodeNormals} from "../compression.js";
 import {geometryCompressionUtils} from "../../math/geometryCompressionUtils.js";
 
-import { VBOPointsColorRenderer              } from "./renderers/VBOPointsColorRenderer.js";
-
-import { VBOLinesColorRenderer               } from "./renderers/VBOLinesColorRenderer.js";
-
-import { VBOTrianglesColorRenderer           } from "./renderers/VBOTrianglesColorRenderer.js";
 import { VBOTrianglesColorTextureRenderer    } from "./renderers/VBOTrianglesColorTextureRenderer.js";
 import { VBOTrianglesDepthRenderer           } from "./renderers/VBOTrianglesDepthRenderer.js";
 import { VBOTrianglesEdgesRenderer           } from "./renderers/VBOTrianglesEdgesRenderer.js";
@@ -19,6 +14,7 @@ import { VBOTrianglesFlatColorRenderer       } from "./renderers/VBOTrianglesFla
 import { VBOTrianglesPBRRenderer             } from "./renderers/VBOTrianglesPBRRenderer.js";
 import { VBOTrianglesPickNormalsRenderer     } from "./renderers/VBOTrianglesPickNormalsRenderer.js";
 
+import { VBOColorRenderer           } from "./renderers/VBOColorRenderer.js";
 import { VBOOcclusionRenderer       } from "./renderers/VBOOcclusionRenderer.js";
 import { VBOPickDepthRenderer       } from "./renderers/VBOPickDepthRenderer.js";
 import { VBOPickMeshRenderer        } from "./renderers/VBOPickMeshRenderer.js";
@@ -78,7 +74,7 @@ const getRenderers = (function() {
 
             if (primitive === "points") {
                 cache[sceneId] = {
-                    colorRenderer:      lazy(VBOPointsColorRenderer),
+                    colorRenderer:      lazy(VBOColorRenderer, false),
                     occlusionRenderer:  lazy(VBOOcclusionRenderer),
                     pickDepthRenderer:  lazy(VBOPickDepthRenderer),
                     pickMeshRenderer:   lazy(VBOPickMeshRenderer),
@@ -91,15 +87,15 @@ const getRenderers = (function() {
                 };
             } else if (primitive === "lines") {
                 cache[sceneId] = {
-                    colorRenderer:      lazy(VBOLinesColorRenderer),
+                    colorRenderer:      lazy(VBOColorRenderer, false),
                     silhouetteRenderer: lazy(VBOSilhouetteRenderer),
                     snapInitRenderer:   lazy(VBOSnapRenderer, true),
                     snapRenderer:       lazy(VBOSnapRenderer, false)
                 };
             } else {
                 cache[sceneId] = {
-                    colorRenderer:                          lazy(VBOTrianglesColorRenderer, false),
-                    colorRendererWithSAO:                   lazy(VBOTrianglesColorRenderer, true),
+                    colorRenderer:                          lazy(VBOColorRenderer, false),
+                    colorRendererWithSAO:                   lazy(VBOColorRenderer, true),
                     colorTextureRenderer:                   lazy(VBOTrianglesColorTextureRenderer, false, false),
                     colorTextureRendererAlphaCutoff:        lazy(VBOTrianglesColorTextureRenderer, false, true),
                     colorTextureRendererWithSAO:            lazy(VBOTrianglesColorTextureRenderer, true,  false),
