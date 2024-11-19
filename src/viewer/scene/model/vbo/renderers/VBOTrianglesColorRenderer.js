@@ -27,10 +27,6 @@ export class VBOTrianglesColorRenderer extends VBORenderer {
             filterIntensityRange: false,
             transformClipPos: clipPos => clipPos,
             shadowParameters: null,
-            needVertexColor: true,
-            needPickColor: false,
-            needUV: false,
-            needMetallicRoughness: false,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
                 lightSetup.getDirectionalLights(view.viewMatrix, view.viewPosition).forEach(light => {
