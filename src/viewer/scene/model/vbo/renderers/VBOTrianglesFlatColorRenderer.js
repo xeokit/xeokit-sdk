@@ -15,7 +15,6 @@ export class VBOTrianglesFlatColorRenderer extends VBORenderer {
 
             getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao"],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
-            clippingCaps: false,
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
             // renderPass = COLOR_OPAQUE | COLOR_TRANSPARENT
             renderPassFlag: 0,
@@ -23,9 +22,6 @@ export class VBOTrianglesFlatColorRenderer extends VBORenderer {
                 src.push("out vec4 vViewPosition;");
                 src.push("out vec4 vColor;");
             },
-            filterIntensityRange: false,
-            transformClipPos: clipPos => clipPos,
-            shadowParameters: null,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vViewPosition = ${view.viewPosition};`);
                 src.push(`vColor = ${color} / 255.0;`);
