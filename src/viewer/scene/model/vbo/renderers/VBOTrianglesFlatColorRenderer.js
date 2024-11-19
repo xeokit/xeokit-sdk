@@ -34,8 +34,6 @@ export class VBOTrianglesFlatColorRenderer extends VBORenderer {
             needGl_Position: false,
             needViewPosition: true,
             needViewMatrixNormal: false,
-            needWorldNormal: false,
-            needWorldPosition: false,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vViewPosition = ${view.viewPosition};`);
                 src.push(`vColor = ${color} / 255.0;`);
