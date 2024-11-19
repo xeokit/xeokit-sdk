@@ -32,8 +32,6 @@ export class VBOShadowRenderer extends VBORenderer {
             needGl_Position: false,
             needViewPosition: false,
             needViewMatrixNormal: false,
-            needWorldNormal: false,
-            needWorldPosition: false,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => { },
             appendFragmentDefinitions: (src) => {
                 src.push("vec4 encodeFloat( const in float v ) {");
