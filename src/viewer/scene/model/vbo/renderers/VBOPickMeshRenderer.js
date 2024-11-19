@@ -44,7 +44,6 @@ export class VBOPickMeshRenderer extends VBORenderer {
                 src.push("in vec4 vPickColor;");
                 src.push("out vec4 outColor;");
             },
-            slicedColorIfClipping: false,
             needGl_FragCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push("outColor = vPickColor;");

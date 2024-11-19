@@ -47,7 +47,6 @@ export class VBOTrianglesFlatColorRenderer extends VBORenderer {
                 src.push("in vec4 vColor;");
                 src.push("out vec4 outColor;");
             },
-            slicedColorIfClipping: true,
             needGl_FragCoord: sao,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push("vec3 viewNormal = normalize(cross(dFdx(vViewPosition.xyz), dFdy(vViewPosition.xyz)));");
