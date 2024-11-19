@@ -25,10 +25,6 @@ export class VBOShadowRenderer extends VBORenderer {
             filterIntensityRange: false,
             transformClipPos: clipPos => clipPos,
             shadowParameters: { projMatrix: "shadowProjMatrix", viewMatrix: "shadowViewMatrix" },
-            needVertexColor: false,
-            needPickColor: false,
-            needUV: false,
-            needMetallicRoughness: false,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => { },
             appendFragmentDefinitions: (src) => {
                 src.push("vec4 encodeFloat( const in float v ) {");
