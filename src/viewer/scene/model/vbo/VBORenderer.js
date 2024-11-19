@@ -248,8 +248,6 @@ export class VBORenderer {
         const needUV                    = cfg.needUV;
         const needMetallicRoughness     = cfg.needMetallicRoughness;
         const needGl_Position           = cfg.needGl_Position;
-        const needViewPosition          = cfg.needViewPosition;
-        const needViewMatrixNormal      = cfg.needViewMatrixNormal;
         const appendVertexOutputs       = cfg.appendVertexOutputs;
         const appendFragmentDefinitions = cfg.appendFragmentDefinitions;
         const appendFragmentOutputs     = cfg.appendFragmentOutputs;
@@ -333,12 +331,17 @@ export class VBORenderer {
             return src;
         })();
 
+        const viewParams  = {
+            viewPosition: "viewPosition",
+            viewMatrix:   "viewMatrix",
+            viewNormal:   lazyShaderVariable("viewNormal")
+        };
         const worldNormal = lazyShaderVariable("worldNormal");
 
         const vertexOutputs = [ ];
-        appendVertexOutputs(vertexOutputs, needVertexColor && "aColor", needPickColor && "pickColor", needUV && "uv", needMetallicRoughness && "metallicRoughness", needGl_Position && "gl_Position", (needViewPosition || needViewMatrixNormal) && {viewPosition: needViewPosition && "viewPosition", viewMatrix: needViewMatrixNormal && "viewMatrix", viewNormal: needViewMatrixNormal && "viewNormal"}, worldNormal, "worldPosition");
+        appendVertexOutputs(vertexOutputs, needVertexColor && "aColor", needPickColor && "pickColor", needUV && "uv", needMetallicRoughness && "metallicRoughness", needGl_Position && "gl_Position", viewParams, worldNormal, "worldPosition");
 
-        const needNormal = needViewMatrixNormal || worldNormal.needed;
+        const needNormal = viewParams.viewNormal.needed || worldNormal.needed;
 
 
         /**
@@ -523,7 +526,7 @@ export class VBORenderer {
                     src.push("modelNormal = vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
                 }
                 src.push(`vec3 ${worldNormal} = (worldNormalMatrix * modelNormal).xyz;`);
-                if (needViewMatrixNormal) {
+                if (viewParams.viewNormal.needed) {
                     src.push(`vec3 viewNormal = normalize((viewNormalMatrix * vec4(${worldNormal}, 0.0)).xyz);`);
                 }
             }
