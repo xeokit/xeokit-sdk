@@ -247,7 +247,6 @@ export class VBORenderer {
         const needPickColor             = cfg.needPickColor;
         const needUV                    = cfg.needUV;
         const needMetallicRoughness     = cfg.needMetallicRoughness;
-        const needGl_Position           = cfg.needGl_Position;
         const appendVertexOutputs       = cfg.appendVertexOutputs;
         const appendFragmentDefinitions = cfg.appendFragmentDefinitions;
         const appendFragmentOutputs     = cfg.appendFragmentOutputs;
@@ -339,7 +338,7 @@ export class VBORenderer {
         const worldNormal = lazyShaderVariable("worldNormal");
 
         const vertexOutputs = [ ];
-        appendVertexOutputs(vertexOutputs, needVertexColor && "aColor", needPickColor && "pickColor", needUV && "uv", needMetallicRoughness && "metallicRoughness", needGl_Position && "gl_Position", viewParams, worldNormal, "worldPosition");
+        appendVertexOutputs(vertexOutputs, needVertexColor && "aColor", needPickColor && "pickColor", needUV && "uv", needMetallicRoughness && "metallicRoughness", "gl_Position", viewParams, worldNormal, "worldPosition");
 
         const needNormal = viewParams.viewNormal.needed || worldNormal.needed;
 
