@@ -36,10 +36,6 @@ export class VBOSilhouetteRenderer extends VBORenderer {
             filterIntensityRange: false,
             transformClipPos: clipPos => clipPos,
             shadowParameters: null,
-            needVertexColor: (! isPoints) && (primitive !== "lines"),
-            needPickColor: false,
-            needUV: false,
-            needMetallicRoughness: false,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 if (isPoints) {
                     if (instancing) {
