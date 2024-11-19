@@ -6,7 +6,6 @@ import {VBORenderer, createLightSetup, createSAOSetup} from "../VBORenderer.js";
 export class VBOTrianglesColorRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive, withSAO) {
-        const inputs = { };
         const gl = scene.canvas.gl;
         const lightSetup = createLightSetup(gl, scene._lightsState, false);
         const sao = withSAO && createSAOSetup(gl, scene);
@@ -58,12 +57,12 @@ export class VBOTrianglesColorRenderer extends VBORenderer {
                 src.push("outColor = " + (sao ? ("vec4(fragColor.rgb * " + sao.getAmbient(gl_FragCoord) + ", fragColor.a)") : "fragColor") + ";");
             },
             setupInputs: (program) => {
-                inputs.setLightsRenderState = lightSetup.setupInputs(program);
-                inputs.setSAOState = sao && sao.setupInputs(program);
-            },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
-                inputs.setLightsRenderState(frameCtx);
-                inputs.setSAOState && inputs.setSAOState(frameCtx);
+                const setLightsRenderState = lightSetup.setupInputs(program);
+                const setSAOState = sao && sao.setupInputs(program);
+                return (frameCtx, layer, renderPass, rtcOrigin) => {
+                    setLightsRenderState(frameCtx);
+                    setSAOState && setSAOState(frameCtx);
+                };
             }
         });
     }
