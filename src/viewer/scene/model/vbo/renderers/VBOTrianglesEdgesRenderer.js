@@ -47,7 +47,6 @@ export class VBOTrianglesEdgesRenderer extends VBORenderer {
             },
             slicedColorIfClipping: false,
             needGl_FragCoord: false,
-            needViewMatrixInFragment: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push("outColor = vColor;");
             },
