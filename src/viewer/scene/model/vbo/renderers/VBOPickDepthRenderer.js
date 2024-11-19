@@ -13,7 +13,6 @@ export class VBOPickDepthRenderer extends VBORenderer {
             progMode: "pickDepthMode",
 
             getHash: () => [ ],
-            respectPointsMaterial: true,
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             clippingCaps: false,
             // pickFlag = NOT_RENDERED | PICK

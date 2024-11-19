@@ -10,7 +10,6 @@ export class VBOOcclusionRenderer extends VBORenderer {
             progMode: "occlusionMode",
 
             getHash: () => [ ],
-            respectPointsMaterial: true,
             // Logarithmic depth buffer involves an accuracy tradeoff, sacrificing
             // accuracy at close range to improve accuracy at long range. This can
             // mess up accuracy for occlusion tests, so we'll disable for now.
