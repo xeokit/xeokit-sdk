@@ -250,15 +250,12 @@ export class VBORenderer {
         const needGl_Position           = cfg.needGl_Position;
         const needViewPosition          = cfg.needViewPosition;
         const needViewMatrixNormal      = cfg.needViewMatrixNormal;
-        const needWorldNormal           = cfg.needWorldNormal;
-        const needWorldPosition         = cfg.needWorldPosition;
         const appendVertexOutputs       = cfg.appendVertexOutputs;
         const appendFragmentDefinitions = cfg.appendFragmentDefinitions;
         const appendFragmentOutputs     = cfg.appendFragmentOutputs;
         const vertexCullX               = cfg.vertexCullX;
         const setupInputs               = cfg.setupInputs;
 
-        const needNormal = needViewMatrixNormal || needWorldNormal;
         const isSnap = (progMode === "snapInitMode") || (progMode === "snapMode");
         const testPerspectiveForGl_FragDepth = ((primitive !== "points") && (primitive !== "lines")) || isSnap;
         const setupPoints = respectPointsMaterial && (primitive === "points");
@@ -337,8 +334,12 @@ export class VBORenderer {
             return src;
         })();
 
+        const worldNormal = lazyShaderVariable("worldNormal");
+
         const vertexOutputs = [ ];
-        appendVertexOutputs(vertexOutputs, needVertexColor && "aColor", needPickColor && "pickColor", needUV && "uv", needMetallicRoughness && "metallicRoughness", needGl_Position && "gl_Position", (needViewPosition || needViewMatrixNormal) && {viewPosition: needViewPosition && "viewPosition", viewMatrix: needViewMatrixNormal && "viewMatrix", viewNormal: needViewMatrixNormal && "viewNormal"}, needWorldNormal && "worldNormal", needWorldPosition && "worldPosition");
+        appendVertexOutputs(vertexOutputs, needVertexColor && "aColor", needPickColor && "pickColor", needUV && "uv", needMetallicRoughness && "metallicRoughness", needGl_Position && "gl_Position", (needViewPosition || needViewMatrixNormal) && {viewPosition: needViewPosition && "viewPosition", viewMatrix: needViewMatrixNormal && "viewMatrix", viewNormal: needViewMatrixNormal && "viewNormal"}, worldNormal, "worldPosition");
+
+        const needNormal = needViewMatrixNormal || worldNormal.needed;
 
 
         /**
@@ -486,15 +487,16 @@ export class VBORenderer {
                 src.push("}");
             }
             if (instancing) {
-                src.push("vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0);");
-                src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
+                src.push("vec4 worldPosition4 = positionsDecodeMatrix * vec4(position, 1.0);");
+                src.push("worldPosition4 = worldMatrix * vec4(dot(worldPosition4, modelMatrixCol0), dot(worldPosition4, modelMatrixCol1), dot(worldPosition4, modelMatrixCol2), 1.0);");
             } else {
-                src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0));");
+                src.push("vec4 worldPosition4 = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0));");
             }
             if (scene.entityOffsetsEnabled) {
-                src.push("worldPosition.xyz = worldPosition.xyz + offset;");
+                src.push("worldPosition4.xyz = worldPosition4.xyz + offset;");
             }
-            src.push("vec4 viewPosition = " + (shadowParameters ? shadowParameters.viewMatrix : "viewMatrix") + " * worldPosition;");
+            src.push("vec3 worldPosition = worldPosition4.xyz;");
+            src.push("vec4 viewPosition = " + (shadowParameters ? shadowParameters.viewMatrix : "viewMatrix") + " * worldPosition4;");
 
             src.push("vec4 clipPos = " + (shadowParameters ? shadowParameters.projMatrix : "projMatrix") + " * viewPosition;");
             if (getLogDepth) { // && (! shadowParameters)) { // see comment above
@@ -505,7 +507,7 @@ export class VBORenderer {
             }
 
             if (vWorldPosition.needed) {
-                src.push(`${vWorldPosition} = worldPosition.xyz;`);
+                src.push(`${vWorldPosition} = worldPosition;`);
             }
             if (clipping) {
                 src.push("vFlags = flags;");
@@ -517,14 +519,13 @@ export class VBORenderer {
             src.push("gl_Position = " + transformClipPos("clipPos") + ";");
 
             if (needNormal) {
+                src.push("vec4 modelNormal = vec4(octDecode(normal.xy), 0.0);");
                 if (instancing) {
-                    src.push("vec4 modelNormal = vec4(octDecode(normal.xy), 0.0);");
-                    src.push("vec4 worldNormal = worldNormalMatrix * vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
-                } else {
-                    src.push("vec4 worldNormal = worldNormalMatrix * vec4(octDecode(normal.xy), 0.0);");
+                    src.push("modelNormal = vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
                 }
+                src.push(`vec3 ${worldNormal} = (worldNormalMatrix * modelNormal).xyz;`);
                 if (needViewMatrixNormal) {
-                    src.push("vec3 viewNormal = normalize((viewNormalMatrix * worldNormal).xyz);");
+                    src.push(`vec3 viewNormal = normalize((viewNormalMatrix * vec4(${worldNormal}, 0.0)).xyz);`);
                 }
             }
 
