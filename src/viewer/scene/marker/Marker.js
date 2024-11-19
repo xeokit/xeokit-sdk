@@ -212,7 +212,7 @@ class Marker extends Component {
         }
         this._entity = entity;
         if (this._entity) {
-            if (this._entity instanceof SceneModelEntity) {
+            if (this._entity.isSceneModelEntity) {
                 this._onEntityModelDestroyed = this._entity.model.on("destroyed", () => { // SceneModelEntity does not fire events, and cannot exist beyond its VBOSceneModel
                     this._entity = null; // Marker now may become visible, if it was synched to invisible Entity
                     this._onEntityModelDestroyed = null;

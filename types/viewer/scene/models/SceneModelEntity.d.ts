@@ -411,6 +411,12 @@ export declare abstract class SceneModelEntity implements Entity {
      */
     meshes : SceneModelMesh[];
 
+
+    /**
+     * Identifies if it's a SceneModelEntity
+     */
+    isSceneModelEntity: boolean;
+
     /**
      * Destroys this SceneModelEntity.
      */

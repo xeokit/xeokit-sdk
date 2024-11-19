@@ -35,6 +35,11 @@ export class SceneModelEntity {
         this.model = model;
 
         /**
+         * Identifies if it's a SceneModelEntity
+         */
+        this.isSceneModelEntity = true;
+
+        /**
          * The {@link SceneModelMesh}es belonging to this SceneModelEntity.
          *
          * * These are created with {@link SceneModel#createMesh} and registered in {@ilnk SceneModel#meshes}
