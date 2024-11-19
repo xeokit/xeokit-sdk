@@ -47,7 +47,6 @@ export class VBOShadowRenderer extends VBORenderer {
             },
             slicedColorIfClipping: false,
             needGl_FragCoord: true,
-            needViewMatrixInFragment: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push(`outColor = encodeFloat(${gl_FragCoord}.z);`);
             },
