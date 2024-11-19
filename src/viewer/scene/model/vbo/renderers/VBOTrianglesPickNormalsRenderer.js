@@ -28,10 +28,6 @@ export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
             filterIntensityRange: false,
             transformClipPos: clipTransformSetup.transformClipPos,
             shadowParameters: null,
-            needVertexColor: false,
-            needPickColor: false,
-            needUV: false,
-            needMetallicRoughness: false,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 if (! isFlat) {
                     src.push(`vWorldNormal = ${worldNormal};`);
