@@ -13,7 +13,6 @@ export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
             progMode: isFlat ? "pickNormalsFlatMode" : "pickNormalsMode",
 
             getHash: () => [ ],
-            respectPointsMaterial: false,
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             clippingCaps: false,
             // pickFlag = NOT_RENDERED | PICK
