@@ -7,7 +7,6 @@ import { math } from "../../../math/math.js";
 export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive, isFlat) {
-        const inputs = { };
         const clipTransformSetup = createPickClipTransformSetup(scene.canvas.gl, 3);
 
         super(scene, instancing, primitive, {
@@ -59,8 +58,10 @@ export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
                                      : "vWorldNormal");
                 src.push(`outNormal = ivec4(${worldNormal} * float(${math.MAX_INT}), 1.0);`);
             },
-            setupInputs: program => { inputs.setClipTransformState = clipTransformSetup.setupInputs(program); },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { inputs.setClipTransformState(frameCtx); }
+            setupInputs: program => {
+                const setClipTransformState = clipTransformSetup.setupInputs(program);
+                return (frameCtx, layer, renderPass, rtcOrigin) => setClipTransformState(frameCtx);
+            }
         });
     }
 
