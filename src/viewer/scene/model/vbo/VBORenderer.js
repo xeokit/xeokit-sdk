@@ -255,7 +255,6 @@ export class VBORenderer {
         const appendVertexOutputs       = cfg.appendVertexOutputs;
         const appendFragmentDefinitions = cfg.appendFragmentDefinitions;
         const slicedColorIfClipping     = cfg.slicedColorIfClipping;
-        const needvWorldPosition        = cfg.needvWorldPosition;
         const needGl_FragCoord          = cfg.needGl_FragCoord;
         const needViewMatrixInFragment  = cfg.needViewMatrixInFragment;
         const appendFragmentOutputs     = cfg.appendFragmentOutputs;
@@ -269,6 +268,70 @@ export class VBORenderer {
         const getHash = () => [ scene._sectionPlanesState.getHash() ].concat(setupPoints ? [ pointsMaterial.hash ] : [ ]).concat(cfg.getHash()).join(";");
         const hash = getHash();
         this.getValid = () => hash === getHash();
+
+        const gl = scene.canvas.gl;
+
+        const sectionPlanesState = scene._sectionPlanesState;
+        const numAllocatedSectionPlanes = sectionPlanesState.getNumAllocatedSectionPlanes();
+        const clipping = numAllocatedSectionPlanes > 0;
+
+
+        const lazyShaderVariable = function(name) {
+            const variable = {
+                toString: () => {
+                    variable.needed = true;
+                    return name;
+                }
+            };
+            return variable;
+        };
+
+        const vWorldPosition = lazyShaderVariable("vWorldPosition");
+
+        const fragmentOutputs = [ ];
+        appendFragmentOutputs(fragmentOutputs, vWorldPosition, needGl_FragCoord && "gl_FragCoord", slicedColorIfClipping && (color => clipping ? `(sliced ? sliceColor : ${color})` : color), needViewMatrixInFragment && "viewMatrix");
+
+        const fragmentClippingLines = (function() {
+            const src = [ ];
+
+            if (clipping) {
+                if (slicedColorIfClipping) {
+                    src.push("  bool sliced = false;");
+                }
+                src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
+                src.push("  if (clippable) {");
+                src.push("      float dist = 0.0;");
+                for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
+                    src.push("      if (sectionPlaneActive" + i + ") {");
+                    src.push(`          dist += clamp(dot(-sectionPlaneDir${i}.xyz, ${vWorldPosition} - sectionPlanePos${i}.xyz), 0.0, 1000.0);`);
+                    src.push("      }");
+                }
+                if (clippingCaps) {
+                    src.push("  if (dist > (0.002 * vClipPosition.w)) {");
+                    src.push("      discard;");
+                    src.push("  }");
+                    src.push("  if (dist > 0.0) { ");
+                    src.push("      " + clippingCaps + " = vec4(1.0, 0.0, 0.0, 1.0);");
+                    if (getLogDepth) {
+                        src.push("  gl_FragDepth = log2( " + getLogDepth("vFragDepth") + " ) * logDepthBufFC * 0.5;");
+                    }
+                    src.push("  return;");
+                    src.push("}");
+                } else {
+                    src.push("       if (dist > " + (slicedColorIfClipping ? "sliceThickness" : "0.0") + ") {  discard; }");
+                }
+                if (slicedColorIfClipping) {
+                    src.push("  sliced = dist > 0.0;");
+                }
+                src.push("}");
+            }
+
+            return src;
+        })();
+
+        const vertexOutputs = [ ];
+        appendVertexOutputs(vertexOutputs, needVertexColor && "aColor", needPickColor && "pickColor", needUV && "uv", needMetallicRoughness && "metallicRoughness", needGl_Position && "gl_Position", (needViewPosition || needViewMatrixNormal) && {viewPosition: needViewPosition && "viewPosition", viewMatrix: needViewMatrixNormal && "viewMatrix", viewNormal: needViewMatrixNormal && "viewNormal"}, needWorldNormal && "worldNormal", needWorldPosition && "worldPosition");
+
 
         /**
          * Matrices Uniform Block Buffer
@@ -289,12 +352,6 @@ export class VBORenderer {
          * A Vertex Array Object by Layer
          */
         const drawCallCache = new WeakMap();
-
-        const gl = scene.canvas.gl;
-
-        const sectionPlanesState = scene._sectionPlanesState;
-        const numAllocatedSectionPlanes = sectionPlanesState.getNumAllocatedSectionPlanes();
-        const clipping = numAllocatedSectionPlanes > 0;
 
         const addMatricesUniformBlockLines = (src) => {
             src.push("uniform Matrices {");
@@ -371,8 +428,8 @@ export class VBORenderer {
                 }
             }
 
-            if (needvWorldPosition || clipping) {
-                src.push("out " + (needvWorldPosition ? "highp " : "") + "vec4 vWorldPosition;");
+            if (vWorldPosition.needed) {
+                src.push(`out highp vec3 ${vWorldPosition};`);
             }
             if (clipping) {
                 src.push("out float vFlags;");
@@ -439,8 +496,8 @@ export class VBORenderer {
                 }
             }
 
-            if (needvWorldPosition || clipping) {
-                src.push("vWorldPosition = worldPosition;");
+            if (vWorldPosition.needed) {
+                src.push(`${vWorldPosition} = worldPosition.xyz;`);
             }
             if (clipping) {
                 src.push("vFlags = flags;");
@@ -473,7 +530,7 @@ export class VBORenderer {
                 }
             }
 
-            appendVertexOutputs(src, needVertexColor && "aColor", needPickColor && "pickColor", needUV && "uv", needMetallicRoughness && "metallicRoughness", needGl_Position && "gl_Position", (needViewPosition || needViewMatrixNormal) && {viewPosition: needViewPosition && "viewPosition", viewMatrix: needViewMatrixNormal && "viewMatrix", viewNormal: needViewMatrixNormal && "viewNormal"}, needWorldNormal && "worldNormal", needWorldPosition && "worldPosition");
+            vertexOutputs.forEach(line => src.push(line));
 
             src.push("}");
             src.push("}");
@@ -498,8 +555,8 @@ export class VBORenderer {
                 }
             }
 
-            if (needvWorldPosition || clipping) {
-                src.push("in " + (needvWorldPosition ? "highp " : "") + "vec4 vWorldPosition;");
+            if (vWorldPosition.needed) {
+                src.push(`in highp vec3 ${vWorldPosition};`);
             }
             if (clipping) {
                 src.push("in float vFlags;");
@@ -533,43 +590,13 @@ export class VBORenderer {
                 src.push("  }");
             }
 
-            if (clipping) {
-                if (slicedColorIfClipping) {
-                    src.push("  bool sliced = false;");
-                }
-                src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
-                src.push("  if (clippable) {");
-                src.push("      float dist = 0.0;");
-                for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
-                    src.push("      if (sectionPlaneActive" + i + ") {");
-                    src.push("          dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
-                    src.push("      }");
-                }
-                if (clippingCaps) {
-                    src.push("  if (dist > (0.002 * vClipPosition.w)) {");
-                    src.push("      discard;");
-                    src.push("  }");
-                    src.push("  if (dist > 0.0) { ");
-                    src.push("      " + clippingCaps + " = vec4(1.0, 0.0, 0.0, 1.0);");
-                    if (getLogDepth) {
-                        src.push("  gl_FragDepth = log2( " + getLogDepth("vFragDepth") + " ) * logDepthBufFC * 0.5;");
-                    }
-                    src.push("  return;");
-                    src.push("}");
-                } else {
-                    src.push("       if (dist > " + (slicedColorIfClipping ? "sliceThickness" : "0.0") + ") {  discard; }");
-                }
-                if (slicedColorIfClipping) {
-                    src.push("  sliced = dist > 0.0;");
-                }
-                src.push("}");
-            }
+            fragmentClippingLines.forEach(line => src.push(line));
 
             if (getLogDepth) {
                 src.push("gl_FragDepth = " + (testPerspectiveForGl_FragDepth ? "isPerspective == 0.0 ? gl_FragCoord.z : " : "") + "log2( " + getLogDepth("vFragDepth") + " ) * logDepthBufFC * 0.5;");
             }
 
-            appendFragmentOutputs(src, needvWorldPosition && "vWorldPosition", needGl_FragCoord && "gl_FragCoord", slicedColorIfClipping && (color => clipping ? `(sliced ? sliceColor : ${color})` : color), needViewMatrixInFragment && "viewMatrix");
+            fragmentOutputs.forEach(line => src.push(line));
 
             src.push("}");
             return src;
