@@ -63,7 +63,6 @@ window.printDataTextureRamStats = function () {
 
 import {DTXTrianglesColorRenderer}           from "./renderers/DTXTrianglesColorRenderer.js";
 import {DTXTrianglesDepthRenderer}           from "./renderers/DTXTrianglesDepthRenderer.js";
-import {DTXTrianglesEdgesColorRenderer}      from "./renderers/DTXTrianglesEdgesColorRenderer.js";
 import {DTXTrianglesEdgesRenderer}           from "./renderers/DTXTrianglesEdgesRenderer.js";
 import {DTXTrianglesOcclusionRenderer}       from "./renderers/DTXTrianglesOcclusionRenderer.js";
 import {DTXTrianglesPickDepthRenderer}       from "./renderers/DTXTrianglesPickDepthRenderer.js";
@@ -126,8 +125,8 @@ export const getRenderers = (function() {
                 colorRenderer:           lazy(s => new DTXTrianglesColorRenderer(s, false)),
                 colorRendererWithSAO:    lazy(s => new DTXTrianglesColorRenderer(s, true)),
                 depthRenderer:           lazy(s => new DTXTrianglesDepthRenderer(s)),
-                edgesColorRenderer:      lazy(s => new DTXTrianglesEdgesColorRenderer(s)),
-                edgesRenderer:           lazy(s => new DTXTrianglesEdgesRenderer(s)),
+                edgesColorRenderer:      lazy(s => new DTXTrianglesEdgesRenderer(s, false)),
+                edgesRenderer:           lazy(s => new DTXTrianglesEdgesRenderer(s, true)),
                 occlusionRenderer:       lazy(s => new DTXTrianglesOcclusionRenderer(s)),
                 pickDepthRenderer:       eager(s => new DTXTrianglesPickDepthRenderer(s)),
                 pickMeshRenderer:        eager(s => new DTXTrianglesPickMeshRenderer(s)),
