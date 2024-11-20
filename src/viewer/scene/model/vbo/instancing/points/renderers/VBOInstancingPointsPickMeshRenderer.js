@@ -86,6 +86,7 @@ export class VBOInstancingPointsPickMeshRenderer extends VBOInstancingPointsRend
         } else {
             src.push("gl_PointSize = pointSize;");
         }
+        src.push("gl_PointSize += 10.0;");
         src.push("}");
         src.push("}");
         return src;
