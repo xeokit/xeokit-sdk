@@ -119,7 +119,8 @@ class TouchPanRotateAndDollyHandler {
 
         canvas.addEventListener("touchend", this._canvasTouchEndHandler = () => {
             if (pivotController.getPivoting()) {
-                pivotController.endPivot()
+                pivotController.endPivot();
+                pivotController.hidePivot();
             }
             firstDragDeltaX = 0;
             firstDragDeltaY = 0;
