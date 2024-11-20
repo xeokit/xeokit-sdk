@@ -22,14 +22,12 @@ export class VBOSnapRenderer extends VBORenderer {
             appendVertexDefinitions: (src) => {
                 src.push("uniform vec2 snapVectorA;");
                 src.push("uniform vec2 snapInvVectorAB;");
-                src.push("out highp vec3 relativeToOriginPosition;");
                 if (isSnapInit) {
                     src.push("flat out vec4 vPickColor;");
                 }
             },
             transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - snapVectorA) * snapInvVectorAB * ${clipPos}.w, ${clipPos}.zw)`,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
-                src.push(`relativeToOriginPosition = ${worldPosition};`);
                 if (isSnapInit) {
                     src.push(`vPickColor = ${pickColor};`);
                 }
@@ -40,7 +38,6 @@ export class VBOSnapRenderer extends VBORenderer {
             appendFragmentDefinitions: (src) => {
                 src.push("uniform int uLayerNumber;");
                 src.push("uniform vec3 uCoordinateScaler;");
-                src.push("in highp vec3 relativeToOriginPosition;");
                 if (isSnapInit) {
                     src.push("flat in vec4 vPickColor;");
                     src.push("layout(location = 0) out highp ivec4 outCoords;");
@@ -52,7 +49,7 @@ export class VBOSnapRenderer extends VBORenderer {
             },
             vertexCullX: (!isSnapInit) && "2.0",
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
-                src.push("outCoords = ivec4(relativeToOriginPosition.xyz * uCoordinateScaler.xyz, " + (isSnapInit ? "-" : "") + "uLayerNumber);");
+                src.push(`outCoords = ivec4(${vWorldPosition} * uCoordinateScaler.xyz, ${isSnapInit ? "-" : ""}uLayerNumber);`);
 
                 if (isSnapInit) {
                     src.push(`outNormal = ${(primitive === "points") ? "ivec4(1.0)" : `ivec4(normalize(cross(dFdx(${vWorldPosition}), dFdy(${vWorldPosition}))) * float(${math.MAX_INT}), 1.0)`};`);
