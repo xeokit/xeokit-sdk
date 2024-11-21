@@ -13,7 +13,7 @@ export class DTXTrianglesPickNormalsFlatRenderer {
 
         const gl = scene.canvas.gl;
 
-        const drawable = new DTXTrianglesDrawable("DTXTrianglesPickNormalsFlatRenderer", scene, true, {
+        const drawable = new DTXTrianglesDrawable("DTXTrianglesPickNormalsFlatRenderer", scene, {
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             getViewParams: (frameCtx, camera) => ({
                 viewMatrix: frameCtx.pickViewMatrix || camera.viewMatrix,
