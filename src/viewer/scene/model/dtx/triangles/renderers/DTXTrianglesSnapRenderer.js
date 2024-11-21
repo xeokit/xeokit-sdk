@@ -37,9 +37,6 @@ export class DTXTrianglesSnapRenderer {
                 }
             },
             transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - snapVectorA) * snapInvVectorAB * ${clipPos}.w, ${clipPos}.zw)`,
-            needVertexColor: false,
-            needPickColor: isSnapInit,
-            needGl_Position: false,
             needViewMatrixPositionNormal: false,
             appendVertexOutputs: (src, color, pickColor, gl_Position, view) => {
                 if (isSnapInit) {
@@ -60,12 +57,10 @@ export class DTXTrianglesSnapRenderer {
                     src.push("out highp ivec4 outCoords;");
                 }
             },
-            needvWorldPosition: true,
-            needGl_FragCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => {
-                src.push(`outCoords = ivec4(${vWorldPosition}.xyz * uCoordinateScaler.xyz, ${isSnapInit ? "-" : ""}uLayerNumber);`);
+                src.push(`outCoords = ivec4(${vWorldPosition} * uCoordinateScaler.xyz, ${isSnapInit ? "-" : ""}uLayerNumber);`);
                 if (isSnapInit) {
-                    src.push(`vec3 worldNormal = normalize(cross(dFdx(${vWorldPosition}.xyz), dFdy(${vWorldPosition}.xyz)));`);
+                    src.push(`vec3 worldNormal = normalize(cross(dFdx(${vWorldPosition}), dFdy(${vWorldPosition})));`);
                     src.push(`outNormal = ivec4(worldNormal * float(${math.MAX_INT}), 1.0);`);
                     src.push("outPickColor = uvec4(vPickColor);");
                 }

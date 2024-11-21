@@ -26,20 +26,60 @@ export class DTXTrianglesDrawable {
         const cullOnAlphaZero              = cfg.cullOnAlphaZero;
         const appendVertexDefinitions      = cfg.appendVertexDefinitions;
         const transformClipPos             = cfg.transformClipPos;
-        const needVertexColor              = cfg.needVertexColor;
-        const needPickColor                = cfg.needPickColor;
-        const needGl_Position              = cfg.needGl_Position;
         const needViewMatrixPositionNormal = cfg.needViewMatrixPositionNormal;
         const appendVertexOutputs          = cfg.appendVertexOutputs;
         const appendFragmentDefinitions    = cfg.appendFragmentDefinitions;
-        const needvWorldPosition           = cfg.needvWorldPosition;
-        const needGl_FragCoord             = cfg.needGl_FragCoord;
         const appendFragmentOutputs        = cfg.appendFragmentOutputs;
         const setupInputs                  = cfg.setupInputs;
         const getGlMode                    = cfg.getGlMode;
 
+
+        const sectionPlanesState = scene._sectionPlanesState;
+        const numAllocatedSectionPlanes = sectionPlanesState.getNumAllocatedSectionPlanes();
+        const clipping = numAllocatedSectionPlanes > 0;
+
+        const lazyShaderVariable = function(name) {
+            const variable = {
+                toString: () => {
+                    variable.needed = true;
+                    return name;
+                }
+            };
+            return variable;
+        };
+
+        const vWorldPosition = lazyShaderVariable("vWorldPosition");
+
+        const fragmentOutputs = [ ];
+        appendFragmentOutputs(fragmentOutputs, vWorldPosition, "gl_FragCoord");
+
+        const fragmentClippingLines = (function() {
+            const src = [ ];
+
+            if (clipping) {
+                src.push("  bool clippable = vFlags2 > 0u;");
+                src.push("  if (clippable) {");
+                src.push("      float dist = 0.0;");
+                for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
+                    src.push("      if (sectionPlaneActive" + i + ") {");
+                    src.push(`          dist += clamp(dot(-sectionPlaneDir${i}.xyz, ${vWorldPosition} - sectionPlanePos${i}.xyz), 0.0, 1000.0);`);
+                    src.push("      }");
+                }
+                src.push("      if (dist > 0.0) { discard; }");
+                src.push("  }");
+            }
+
+            return src;
+        })();
+
+        const colorA             = lazyShaderVariable("color");
+        const pickColorA         = lazyShaderVariable("pickColor");
+
+        const vertexOutputs = [ ];
+        appendVertexOutputs(vertexOutputs, colorA, pickColorA, "gl_Position", needViewMatrixPositionNormal && isTriangle && {viewMatrix: "viewMatrix", viewPosition: "viewPosition", viewNormal: "viewNormal"});
+
+
         const buildVertexShader = () => {
-            const clipping = scene._sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
             const src = [];
             src.push("#version 300 es");
             src.push("// " + programName + " vertex shader");
@@ -79,8 +119,8 @@ export class DTXTrianglesDrawable {
                 src.push("out float isPerspective;");
             }
 
-            if (needvWorldPosition || clipping) {
-                src.push("out " + (needvWorldPosition ? "highp " : "") + "vec4 vWorldPosition;");
+            if (vWorldPosition.needed || clipping) {
+                src.push("out " + (vWorldPosition.needed ? "highp " : "") + "vec3 vWorldPosition;");
             }
             if (clipping) {
                 src.push("flat out uint vFlags2;");
@@ -109,7 +149,7 @@ export class DTXTrianglesDrawable {
             src.push("   return;"); // Cull vertex
             src.push("}");
 
-            if (cullOnAlphaZero || needVertexColor) {
+            if (cullOnAlphaZero || colorA.needed) {
                 src.push("uvec4 color = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);");
             }
             if (cullOnAlphaZero) {
@@ -178,8 +218,8 @@ export class DTXTrianglesDrawable {
             src.push("vec4 worldPosition = sceneModelMatrix * (objectDecodeAndInstanceMatrix * vec4(position, 1.0));");
             src.push("vec4 viewPosition = viewMatrix * worldPosition;");
 
-            if (needvWorldPosition || clipping) {
-                src.push("vWorldPosition = worldPosition;");
+            if (vWorldPosition.needed || clipping) {
+                src.push("vWorldPosition = worldPosition.xyz;");
             }
             if (clipping) {
                 src.push("vFlags2 = flags2.r;");
@@ -193,11 +233,12 @@ export class DTXTrianglesDrawable {
 
             src.push("gl_Position = " + transformClipPos("clipPos") + ";");
 
-            if (needPickColor) {
+            if (pickColorA.needed) {
                 // TODO: Normalize color "/ 255.0"?
                 src.push("vec4 pickColor = vec4(texelFetch(uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0));");
             }
-            appendVertexOutputs(src, needVertexColor && "color", needPickColor && "pickColor", needGl_Position && "gl_Position", needViewMatrixPositionNormal && isTriangle && {viewMatrix: "viewMatrix", viewPosition: "viewPosition", viewNormal: "viewNormal"});
+
+            vertexOutputs.forEach(line => src.push(line));
 
             src.push("  }");
             src.push("}");
@@ -205,8 +246,6 @@ export class DTXTrianglesDrawable {
         };
 
         const buildFragmentShader = () => {
-            const sectionPlanesState = scene._sectionPlanesState;
-            const clipping = sectionPlanesState.getNumAllocatedSectionPlanes() > 0;
             const src = [];
             src.push('#version 300 es');
             src.push("// " + programName + " fragment shader");
@@ -224,12 +263,12 @@ export class DTXTrianglesDrawable {
                 src.push("in float vFragDepth;");
             }
 
-            if (needvWorldPosition || clipping) {
-                src.push("in " + (needvWorldPosition ? "highp " : "") + "vec4 vWorldPosition;");
+            if (vWorldPosition.needed || clipping) {
+                src.push("in " + (vWorldPosition.needed ? "highp " : "") + "vec3 vWorldPosition;");
             }
             if (clipping) {
                 src.push("flat in uint vFlags2;");
-                for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
+                for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
                     src.push("uniform bool sectionPlaneActive" + i + ";");
                     src.push("uniform vec3 sectionPlanePos" + i + ";");
                     src.push("uniform vec3 sectionPlaneDir" + i + ";");
@@ -239,24 +278,14 @@ export class DTXTrianglesDrawable {
             appendFragmentDefinitions(src);
 
             src.push("void main(void) {");
-            if (clipping) {
-                src.push("  bool clippable = vFlags2 > 0u;");
-                src.push("  if (clippable) {");
-                src.push("      float dist = 0.0;");
-                for (let i = 0, len = sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
-                    src.push("      if (sectionPlaneActive" + i + ") {");
-                    src.push("          dist += clamp(dot(-sectionPlaneDir" + i + ".xyz, vWorldPosition.xyz - sectionPlanePos" + i + ".xyz), 0.0, 1000.0);");
-                    src.push("      }");
-                }
-                src.push("      if (dist > 0.0) { discard; }");
-                src.push("  }");
-            }
+
+            fragmentClippingLines.forEach(line => src.push(line));
 
             if (getLogDepth) {
                 src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( " + getLogDepth("vFragDepth") + " ) * logDepthBufFC * 0.5;");
             }
 
-            appendFragmentOutputs(src, needvWorldPosition && "vWorldPosition", needGl_FragCoord && "gl_FragCoord");
+            fragmentOutputs.forEach(line => src.push(line));
 
             src.push("}");
             return src;
@@ -283,7 +312,7 @@ export class DTXTrianglesDrawable {
         const uCameraEyeRtc = isTriangle && program.getLocation("uCameraEyeRtc");
 
         const uSectionPlanes = [];
-        for (let i = 0, len = scene._sectionPlanesState.getNumAllocatedSectionPlanes(); i < len; i++) {
+        for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
             uSectionPlanes.push({
                 active: program.getLocation("sectionPlaneActive" + i),
                 pos:    program.getLocation("sectionPlanePos" + i),
@@ -346,10 +375,9 @@ export class DTXTrianglesDrawable {
                 gl.uniform1f(uLogDepthBufFC, logDepthBufFC);
             }
 
-            const numAllocatedSectionPlanes = scene._sectionPlanesState.getNumAllocatedSectionPlanes();
-            const numSectionPlanes = scene._sectionPlanesState.sectionPlanes.length;
-            if (numAllocatedSectionPlanes > 0) {
-                const sectionPlanes = scene._sectionPlanesState.sectionPlanes;
+            if (clipping) {
+                const sectionPlanes = sectionPlanesState.sectionPlanes;
+                const numSectionPlanes = sectionPlanes.length;
                 const baseIndex = layer.layerIndex * numSectionPlanes;
                 const renderFlags = model.renderFlags;
                 for (let sectionPlaneIndex = 0; sectionPlaneIndex < numAllocatedSectionPlanes; sectionPlaneIndex++) {
