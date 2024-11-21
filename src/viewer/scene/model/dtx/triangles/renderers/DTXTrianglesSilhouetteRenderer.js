@@ -32,9 +32,6 @@ export class DTXTrianglesSilhouetteRenderer {
             appendVertexDefinitions: (src) => src.push("out float vAlpha;"),
             // divide by w to get into NDC, and after transformation multiply by w to get back into clip space
             transformClipPos: clipPos => clipPos,
-            needVertexColor: true,
-            needPickColor: false,
-            needGl_Position: false,
             needViewMatrixPositionNormal: false,
             appendVertexOutputs: (src, color, pickColor, gl_Position, view) => src.push(`vAlpha = float(${color}.a) / 255.0;`),
             appendFragmentDefinitions: (src) => {
@@ -42,8 +39,6 @@ export class DTXTrianglesSilhouetteRenderer {
                 src.push("uniform vec4 color;");
                 src.push("out vec4 outColor;");
             },
-            needvWorldPosition: false,
-            needGl_FragCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => src.push("outColor = vec4(color.rgb, min(color.a, vAlpha));"),
             setupInputs: (program) => {
                 const uColor = program.getLocation("color");
