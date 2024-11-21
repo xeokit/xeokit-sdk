@@ -69,7 +69,6 @@ import {DTXTrianglesPickDepthRenderer}       from "./renderers/DTXTrianglesPickD
 import {DTXTrianglesPickMeshRenderer}        from "./renderers/DTXTrianglesPickMeshRenderer.js";
 import {DTXTrianglesPickNormalsFlatRenderer} from "./renderers/DTXTrianglesPickNormalsFlatRenderer.js";
 import {DTXTrianglesSilhouetteRenderer}      from "./renderers/DTXTrianglesSilhouetteRenderer.js";
-import {DTXTrianglesSnapInitRenderer}        from "./renderers/DTXTrianglesSnapInitRenderer.js";
 import {DTXTrianglesSnapRenderer}            from "./renderers/DTXTrianglesSnapRenderer.js";
 
 export const getRenderers = (function() {
@@ -132,8 +131,8 @@ export const getRenderers = (function() {
                 pickMeshRenderer:        eager(s => new DTXTrianglesPickMeshRenderer(s)),
                 pickNormalsFlatRenderer: eager(s => new DTXTrianglesPickNormalsFlatRenderer(s)),
                 silhouetteRenderer:      eager(s => new DTXTrianglesSilhouetteRenderer(s)),
-                snapInitRenderer:        eager(s => new DTXTrianglesSnapInitRenderer(s)),
-                snapRenderer:            eager(s => new DTXTrianglesSnapRenderer(s)),
+                snapInitRenderer:        eager(s => new DTXTrianglesSnapRenderer(s, true)),
+                snapRenderer:            eager(s => new DTXTrianglesSnapRenderer(s, false)),
             };
 
             const compile = () => Object.values(cache[sceneId]).forEach(r => r && r.revalidate(false));
