@@ -30,12 +30,10 @@ export class DTXTrianglesColorRenderer {
             // flags.x = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
             // renderPass = COLOR_OPAQUE
             renderPassFlag: 0,
-            cullOnAlphaZero: true,
             appendVertexDefinitions: (src) => {
                 lightSetup.appendDefinitions(src);
                 src.push("out vec4 vColor;");
             },
-            transformClipPos: clipPos => clipPos,
             appendVertexOutputs: (src, color, pickColor, gl_Position, view) => {
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
                 lightSetup.getDirectionalLights(view.viewMatrix, view.viewPosition).forEach(light => {
@@ -58,8 +56,7 @@ export class DTXTrianglesColorRenderer {
                     setLightsRenderState(frameCtx);
                     setSAORenderState && setSAORenderState(frameCtx, 10);
                 };
-            },
-            getGlMode: (frameCtx) => gl.TRIANGLES
+            }
         });
     }
 }

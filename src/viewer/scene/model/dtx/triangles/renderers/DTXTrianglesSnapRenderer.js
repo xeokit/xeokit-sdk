@@ -16,7 +16,6 @@ export class DTXTrianglesSnapRenderer {
         const gl = scene.canvas.gl;
 
         const drawable = new DTXTrianglesDrawable(isSnapInit ? "DTXTrianglesSnapInitRenderer" : "DTXTrianglesSnapRenderer", scene, isSnapInit, {
-            getHash: () => [ ],
             // Improves occlusion accuracy at distance
             getLogDepth: true && (vFragDepth => (isSnapInit ? `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))` : vFragDepth)),
             getViewParams: (frameCtx, camera) => ({
@@ -28,7 +27,7 @@ export class DTXTrianglesSnapRenderer {
             // flags.w = NOT_RENDERED | PICK
             // renderPass = PICK
             renderPassFlag: 3,
-            cullOnAlphaZero: isSnapInit,
+            dontCullOnAlphaZero: !isSnapInit,
             appendVertexDefinitions: (src) => {
                 src.push("uniform vec2 snapVectorA;");
                 src.push("uniform vec2 snapInvVectorAB;");
@@ -88,7 +87,7 @@ export class DTXTrianglesSnapRenderer {
                     gl.uniform3fv(uCoordinateScaler, coordinateScaler);
                 };
             },
-            getGlMode: (frameCtx) => isSnapInit ? gl.TRIANGLES : ((frameCtx.snapMode === "edge") ? gl.LINES : gl.POINTS)
+            getGlMode: (!isSnapInit) && ((frameCtx) => (frameCtx.snapMode === "edge") ? gl.LINES : gl.POINTS)
         });
     }
 }
