@@ -17,7 +17,6 @@ export class DTXTrianglesSilhouetteRenderer {
         const gl = scene.canvas.gl;
 
         const drawable = new DTXTrianglesDrawable("DTXTrianglesSilhouetteRenderer", scene, true, {
-            getHash: () => [ ],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             getViewParams: (frameCtx, camera) => ({
                 viewMatrix: camera.viewMatrix,
@@ -28,10 +27,7 @@ export class DTXTrianglesSilhouetteRenderer {
             // flags.y = NOT_RENDERED | SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | SILHOUETTE_XRAYED
             // renderPass = SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | | SILHOUETTE_XRAYED
             renderPassFlag: 1,
-            cullOnAlphaZero: true,
             appendVertexDefinitions: (src) => src.push("out float vAlpha;"),
-            // divide by w to get into NDC, and after transformation multiply by w to get back into clip space
-            transformClipPos: clipPos => clipPos,
             appendVertexOutputs: (src, color, pickColor, gl_Position, view) => src.push(`vAlpha = float(${color}.a) / 255.0;`),
             appendFragmentDefinitions: (src) => {
                 src.push("in float vAlpha;");
@@ -58,8 +54,7 @@ export class DTXTrianglesSilhouetteRenderer {
                         gl.uniform4fv(uColor, defaultColor);
                     }
                 };
-            },
-            getGlMode: (frameCtx) => gl.TRIANGLES
+            }
         });
     }
 }

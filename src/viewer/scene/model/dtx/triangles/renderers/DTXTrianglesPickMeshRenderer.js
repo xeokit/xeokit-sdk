@@ -14,7 +14,6 @@ export class DTXTrianglesPickMeshRenderer {
         const gl = scene.canvas.gl;
 
         const drawable = new DTXTrianglesDrawable("DTXTrianglesPickMeshRenderer", scene, true, {
-            getHash: () => [ ],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             getViewParams: (frameCtx, camera) => ({
                 viewMatrix: frameCtx.pickViewMatrix || camera.viewMatrix,
@@ -25,7 +24,7 @@ export class DTXTrianglesPickMeshRenderer {
             // flags.w = NOT_RENDERED | PICK
             // renderPass = PICK
             renderPassFlag: 3,
-            cullOnAlphaZero: false,
+            dontCullOnAlphaZero: true,
             appendVertexDefinitions: (src) => {
                 src.push("uniform vec2 pickClipPos;");
                 src.push("uniform vec2 drawingBufferSize;");
@@ -46,8 +45,7 @@ export class DTXTrianglesPickMeshRenderer {
                     gl.uniform2fv(uPickClipPos, frameCtx.pickClipPos);
                     gl.uniform2f(uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
                 };
-            },
-            getGlMode: (frameCtx) => gl.TRIANGLES
+            }
         });
     }
 }

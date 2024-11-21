@@ -14,7 +14,7 @@ export class DTXTrianglesDrawable {
 
     constructor(programName, scene, isTriangle, cfg) {
 
-        const getHash = () => [ scene._sectionPlanesState.getHash() ].concat(cfg.getHash()).join(";");
+        const getHash = () => [ scene._sectionPlanesState.getHash() ].concat(cfg.getHash ? cfg.getHash() : [ ]).join(";");
         const hash = getHash();
         this.getValid = () => hash === getHash();
 
@@ -23,7 +23,7 @@ export class DTXTrianglesDrawable {
         const getLogDepth                  = cfg.getLogDepth;
         const getViewParams                = cfg.getViewParams;
         const renderPassFlag               = cfg.renderPassFlag;
-        const cullOnAlphaZero              = cfg.cullOnAlphaZero;
+        const cullOnAlphaZero              = !cfg.dontCullOnAlphaZero;
         const appendVertexDefinitions      = cfg.appendVertexDefinitions;
         const transformClipPos             = cfg.transformClipPos;
         const appendVertexOutputs          = cfg.appendVertexOutputs;
@@ -80,7 +80,7 @@ export class DTXTrianglesDrawable {
         };
 
         const vertexOutputs = [ ];
-        appendVertexOutputs(vertexOutputs, colorA, pickColorA, "gl_Position", viewParams);
+        appendVertexOutputs && appendVertexOutputs(vertexOutputs, colorA, pickColorA, "gl_Position", viewParams);
 
 
         const buildVertexShader = () => {
@@ -130,7 +130,7 @@ export class DTXTrianglesDrawable {
                 src.push("flat out uint vFlags2;");
             }
 
-            appendVertexDefinitions(src);
+            appendVertexDefinitions && appendVertexDefinitions(src);
 
             src.push("void main(void) {");
 
@@ -235,7 +235,7 @@ export class DTXTrianglesDrawable {
                 src.push(`isPerspective = float (${isPerspectiveMatrix("projMatrix")});`);
             }
 
-            src.push("gl_Position = " + transformClipPos("clipPos") + ";");
+            src.push("gl_Position = " + (transformClipPos ? transformClipPos("clipPos") : "clipPos") + ";");
 
             if (pickColorA.needed) {
                 // TODO: Normalize color "/ 255.0"?
@@ -415,7 +415,7 @@ export class DTXTrianglesDrawable {
                 uTexturePerObjectMatrix,
                 uTexturePerPrimitiveIdPortionIds,
                 uTexturePerPrimitiveIdIndices,
-                getGlMode(frameCtx));
+                getGlMode ? getGlMode(frameCtx) : gl.TRIANGLES);
 
             frameCtx.drawElements++;
         };
