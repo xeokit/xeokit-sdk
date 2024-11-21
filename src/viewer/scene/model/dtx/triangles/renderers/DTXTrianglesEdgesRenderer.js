@@ -35,7 +35,6 @@ export class DTXTrianglesEdgesRenderer {
                 }
             },
             transformClipPos: clipPos => clipPos,
-            needViewMatrixPositionNormal: false,
             appendVertexOutputs: (src, color, pickColor, gl_Position, view) => {
                 if (! colorUniform) {
                     src.push(`vColor = vec4(vec3(${color}.rgb) * 0.5, float(${color}.a)) / 255.0;`);
