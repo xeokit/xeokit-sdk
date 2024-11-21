@@ -32,7 +32,6 @@ export class DTXTrianglesPickNormalsFlatRenderer {
             },
             // divide by w to get into NDC, and after transformation multiply by w to get back into clip space
             transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - pickClipPos) * drawingBufferSize / 3.0 * ${clipPos}.w, ${clipPos}.zw)`,
-            needViewMatrixPositionNormal: false,
             appendVertexOutputs: (src, color, pickColor, gl_Position, view) => { },
             appendFragmentDefinitions: (src) => src.push("out highp ivec4 outNormal;"),
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => {

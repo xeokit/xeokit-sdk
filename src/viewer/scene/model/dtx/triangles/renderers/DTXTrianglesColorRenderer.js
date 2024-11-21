@@ -36,7 +36,6 @@ export class DTXTrianglesColorRenderer {
                 src.push("out vec4 vColor;");
             },
             transformClipPos: clipPos => clipPos,
-            needViewMatrixPositionNormal: true,
             appendVertexOutputs: (src, color, pickColor, gl_Position, view) => {
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
                 lightSetup.getDirectionalLights(view.viewMatrix, view.viewPosition).forEach(light => {
