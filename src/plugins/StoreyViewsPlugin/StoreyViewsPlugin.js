@@ -308,6 +308,43 @@ class StoreyViewsPlugin extends Plugin {
                 this.modelStoreys[modelId][storeyId] = storey;
             }
         }
+        this._clipBoundingBoxes();
+    }
+
+    _clipBoundingBoxes() {
+        const storeysList = this.storeysList;
+        const metaScene = this.viewer.metaScene;
+        const camera = this.viewer.camera;
+        const worldUp = camera.worldUp;
+        const xUp = worldUp[0] > worldUp[1] && worldUp[0] > worldUp[2];
+        const yUp = !xUp && worldUp[1] > worldUp[0] && worldUp[1] > worldUp[2];
+        const zUp = !xUp && !yUp && worldUp[2] > worldUp[0] && worldUp[2] > worldUp[1];
+
+        let bbIndex;
+
+        if(xUp) bbIndex = 0;
+        else if(yUp) bbIndex = 1;
+        else bbIndex = 2;
+        
+        for (let i = 0, len = storeysList.length; i < len; i++) {
+
+            const storeyMetaObjectCur = metaScene.metaObjects[storeysList[i].storeyId];
+            const elevationCur = storeyMetaObjectCur.attributes.elevation;
+
+            if(isNaN(elevationCur)) return;
+
+            const bb = storeysList[i].storeyAABB;
+            bb[bbIndex] = Math.max(bb[1], parseFloat(elevationCur) / 1000);
+
+            if (i > 0) {
+                const storeyMetaObjectNext = metaScene.metaObjects[storeysList[i - 1].storeyId];
+                const elevationNext = storeyMetaObjectNext.attributes.elevation;
+                bb[4] = Math.min(bb[bbIndex + 3], parseFloat(elevationNext) / 1000);
+            }
+
+            this.storeys[storeysList[i].storeyId].storeyAABB = bb;
+        }
+
     }
 
     _deregisterModelStoreys(modelId) {
