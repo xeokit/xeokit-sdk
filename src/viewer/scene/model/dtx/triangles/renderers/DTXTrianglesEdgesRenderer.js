@@ -17,7 +17,6 @@ export class DTXTrianglesEdgesRenderer {
         const gl = scene.canvas.gl;
 
         const drawable = new DTXTrianglesDrawable(colorUniform ? "DTXTrianglesEdgesRenderer" : "DTXTrianglesEdgesColorRenderer", scene, false, {
-            getHash: () => [ ],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             getViewParams: (frameCtx, camera) => ({
                 viewMatrix: camera.viewMatrix,
@@ -28,13 +27,11 @@ export class DTXTrianglesEdgesRenderer {
             // flags.z = NOT_RENDERED | EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
             // renderPass = EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
             renderPassFlag: 2,
-            cullOnAlphaZero: true,
             appendVertexDefinitions: (src) => {
                 if (! colorUniform) {
                     src.push("out vec4 vColor;");
                 }
             },
-            transformClipPos: clipPos => clipPos,
             appendVertexOutputs: (src, color, pickColor, gl_Position, view) => {
                 if (! colorUniform) {
                     src.push(`vColor = vec4(vec3(${color}.rgb) * 0.5, float(${color}.a)) / 255.0;`);
