@@ -29,17 +29,12 @@ export class DTXTrianglesDepthRenderer {
             appendVertexDefinitions: (src) => src.push("out highp vec2 vHighPrecisionZW;"),
             // divide by w to get into NDC, and after transformation multiply by w to get back into clip space
             transformClipPos: clipPos => clipPos,
-            needVertexColor: false,
-            needPickColor: false,
-            needGl_Position: true,
             needViewMatrixPositionNormal: false,
             appendVertexOutputs: (src, color, pickColor, gl_Position, view) => src.push(`vHighPrecisionZW = ${gl_Position}.zw;`),
             appendFragmentDefinitions: (src) => {
                 src.push("in highp vec2 vHighPrecisionZW;");
                 src.push("out vec4 outColor;");
             },
-            needvWorldPosition: false,
-            needGl_FragCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => src.push("outColor = vec4(vec3((1.0 - vHighPrecisionZW[0] / vHighPrecisionZW[1]) / 2.0), 1.0);"),
             getGlMode: (frameCtx) => gl.TRIANGLES
         });
