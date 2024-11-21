@@ -33,9 +33,6 @@ export class DTXTrianglesPickDepthRenderer {
             },
             // divide by w to get into NDC, and after transformation multiply by w to get back into clip space
             transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - pickClipPos) * drawingBufferSize * ${clipPos}.w, ${clipPos}.zw)`,
-            needVertexColor: false,
-            needPickColor: false,
-            needGl_Position: false,
             needViewMatrixPositionNormal: true,
             appendVertexOutputs: (src, color, pickColor, gl_Position, view) => src.push(`vViewPosition = ${view.viewPosition};`),
             appendFragmentDefinitions: (src) => {
@@ -51,8 +48,6 @@ export class DTXTrianglesPickDepthRenderer {
                 src.push("}");
                 src.push("out vec4 outPackedDepth;");
             },
-            needvWorldPosition: false,
-            needGl_FragCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => {
                 src.push("    float zNormalizedDepth = abs((pickZNear + vViewPosition.z) / (pickZFar - pickZNear));");
                 src.push("    outPackedDepth = packDepth(zNormalizedDepth);");  // Must be linear depth
