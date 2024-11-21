@@ -37,7 +37,6 @@ export class DTXTrianglesSnapRenderer {
                 }
             },
             transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - snapVectorA) * snapInvVectorAB * ${clipPos}.w, ${clipPos}.zw)`,
-            needViewMatrixPositionNormal: false,
             appendVertexOutputs: (src, color, pickColor, gl_Position, view) => {
                 if (isSnapInit) {
                     src.push(`vPickColor = ${pickColor};`);

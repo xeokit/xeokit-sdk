@@ -26,7 +26,6 @@ export class DTXTrianglesDrawable {
         const cullOnAlphaZero              = cfg.cullOnAlphaZero;
         const appendVertexDefinitions      = cfg.appendVertexDefinitions;
         const transformClipPos             = cfg.transformClipPos;
-        const needViewMatrixPositionNormal = cfg.needViewMatrixPositionNormal;
         const appendVertexOutputs          = cfg.appendVertexOutputs;
         const appendFragmentDefinitions    = cfg.appendFragmentDefinitions;
         const appendFragmentOutputs        = cfg.appendFragmentOutputs;
@@ -74,9 +73,14 @@ export class DTXTrianglesDrawable {
 
         const colorA             = lazyShaderVariable("color");
         const pickColorA         = lazyShaderVariable("pickColor");
+        const viewParams = {
+            viewPosition: "viewPosition",
+            viewMatrix:   "viewMatrix",
+            viewNormal:   lazyShaderVariable("viewNormal")
+        };
 
         const vertexOutputs = [ ];
-        appendVertexOutputs(vertexOutputs, colorA, pickColorA, "gl_Position", needViewMatrixPositionNormal && isTriangle && {viewMatrix: "viewMatrix", viewPosition: "viewPosition", viewNormal: "viewNormal"});
+        appendVertexOutputs(vertexOutputs, colorA, pickColorA, "gl_Position", viewParams);
 
 
         const buildVertexShader = () => {
@@ -184,7 +188,7 @@ export class DTXTrianglesDrawable {
                 src.push("  vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.b, indexPositionV.b), 0)));");
                 src.push("vec3 normal = normalize(cross(positions[2] - positions[0], positions[1] - positions[0]));");
                 src.push("vec3 position = positions[gl_VertexID % 3];");
-                if (needViewMatrixPositionNormal) {
+                if (viewParams.viewNormal.needed) {
                     src.push("vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);");
                 }
                 // when the geometry is not solid, if needed, flip the triangle winding
@@ -193,17 +197,17 @@ export class DTXTrianglesDrawable {
                 src.push("      vec3 uCameraEyeRtcInQuantizedSpace = (inverse(sceneModelMatrix * objectDecodeAndInstanceMatrix) * vec4(uCameraEyeRtc, 1)).xyz;");
                 src.push("      if (dot(position.xyz - uCameraEyeRtcInQuantizedSpace, normal) < 0.0) {");
                 src.push("          position = positions[2 - (gl_VertexID % 3)];");
-                if (needViewMatrixPositionNormal) {
+                if (viewParams.viewNormal.needed) {
                     src.push("          viewNormal = -viewNormal;");
                 }
                 src.push("      }");
                 src.push("  } else {");
-                if (!needViewMatrixPositionNormal) {
+                if (!viewParams.viewNormal.needed) {
                     src.push("      vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);");
                 }
                 src.push("      if (viewNormal.z < 0.0) {");
                 src.push("          position = positions[2 - (gl_VertexID % 3)];");
-                if (needViewMatrixPositionNormal) {
+                if (viewParams.viewNormal.needed) {
                     src.push("          viewNormal = -viewNormal;");
                 }
                 src.push("      }");
