@@ -11,7 +11,6 @@ export class DTXTrianglesPickDepthRenderer {
         this.drawLayer = (frameCtx, layer, renderPass) => drawable.drawLayer(frameCtx, layer, renderPass);
         this.destroy   = () => drawable.destroy();
 
-        const inputs = { };
         const gl = scene.canvas.gl;
 
         const drawable = new DTXTrianglesDrawable("DTXTrianglesPickDepthRenderer", scene, true, {
@@ -60,16 +59,16 @@ export class DTXTrianglesPickDepthRenderer {
                 // TRY: src.push("    outPackedDepth = vec4(zNormalizedDepth, fract(zNormalizedDepth * vec3(256.0, 256.0*256.0, 256.0*256.0*256.0)));");
             },
             setupInputs: (program) => {
-                inputs.uPickClipPos = program.getLocation("pickClipPos");
-                inputs.uDrawingBufferSize = program.getLocation("drawingBufferSize");
-                inputs.uPickZNear = program.getLocation("pickZNear");
-                inputs.uPickZFar = program.getLocation("pickZFar");
-            },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
-                gl.uniform2fv(inputs.uPickClipPos, frameCtx.pickClipPos);
-                gl.uniform2f(inputs.uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
-                gl.uniform1f(inputs.uPickZNear, frameCtx.pickZNear);
-                gl.uniform1f(inputs.uPickZFar, frameCtx.pickZFar);
+                const uPickClipPos = program.getLocation("pickClipPos");
+                const uDrawingBufferSize = program.getLocation("drawingBufferSize");
+                const uPickZNear = program.getLocation("pickZNear");
+                const uPickZFar = program.getLocation("pickZFar");
+                return (frameCtx, layer, renderPass, rtcOrigin) => {
+                    gl.uniform2fv(uPickClipPos, frameCtx.pickClipPos);
+                    gl.uniform2f(uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
+                    gl.uniform1f(uPickZNear, frameCtx.pickZNear);
+                    gl.uniform1f(uPickZFar, frameCtx.pickZFar);
+                };
             },
             getGlMode: (frameCtx) => gl.TRIANGLES
         });

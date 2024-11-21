@@ -14,7 +14,6 @@ export class DTXTrianglesEdgesRenderer {
         this.drawLayer = (frameCtx, layer, renderPass) => drawable.drawLayer(frameCtx, layer, renderPass);
         this.destroy   = () => drawable.destroy();
 
-        const inputs = { };
         const gl = scene.canvas.gl;
 
         const drawable = new DTXTrianglesDrawable(colorUniform ? "DTXTrianglesEdgesRenderer" : "DTXTrianglesEdgesColorRenderer", scene, false, {
@@ -57,27 +56,26 @@ export class DTXTrianglesEdgesRenderer {
             needGl_FragCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => src.push("outColor = " + (colorUniform ? "edgeColor" : "vColor") + ";"),
             setupInputs: (program) => {
-                this._uEdgeColor = colorUniform && program.getLocation("edgeColor");
-            },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
-                if (colorUniform) {
-                    const edgeColor = this._uEdgeColor;
-                    const setSceneMaterial = material => {
-                        const color = material._state.edgeColor;
-                        const alpha = material._state.edgeAlpha;
-                        gl.uniform4f(edgeColor, color[0], color[1], color[2], alpha);
-                    };
+                const edgeColor = colorUniform && program.getLocation("edgeColor");
+                return (frameCtx, layer, renderPass, rtcOrigin) => {
+                    if (colorUniform) {
+                        const setSceneMaterial = material => {
+                            const color = material._state.edgeColor;
+                            const alpha = material._state.edgeAlpha;
+                            gl.uniform4f(edgeColor, color[0], color[1], color[2], alpha);
+                        };
 
-                    if (renderPass === RENDER_PASSES.EDGES_XRAYED) {
-                        setSceneMaterial(scene.xrayMaterial);
-                    } else if (renderPass === RENDER_PASSES.EDGES_HIGHLIGHTED) {
-                        setSceneMaterial(scene.highlightMaterial);
-                    } else if (renderPass === RENDER_PASSES.EDGES_SELECTED) {
-                        setSceneMaterial(scene.selectedMaterial);
-                    } else {
-                        gl.uniform4fv(edgeColor, edgesDefaultColor);
+                        if (renderPass === RENDER_PASSES.EDGES_XRAYED) {
+                            setSceneMaterial(scene.xrayMaterial);
+                        } else if (renderPass === RENDER_PASSES.EDGES_HIGHLIGHTED) {
+                            setSceneMaterial(scene.highlightMaterial);
+                        } else if (renderPass === RENDER_PASSES.EDGES_SELECTED) {
+                            setSceneMaterial(scene.selectedMaterial);
+                        } else {
+                            gl.uniform4fv(edgeColor, edgesDefaultColor);
+                        }
                     }
-                }
+                };
             },
             getGlMode: (frameCtx) => gl.LINES
         });

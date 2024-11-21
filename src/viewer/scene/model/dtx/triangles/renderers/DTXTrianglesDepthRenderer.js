@@ -41,8 +41,6 @@ export class DTXTrianglesDepthRenderer {
             needvWorldPosition: false,
             needGl_FragCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => src.push("outColor = vec4(vec3((1.0 - vHighPrecisionZW[0] / vHighPrecisionZW[1]) / 2.0), 1.0);"),
-            setupInputs: (program) => { },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { },
             getGlMode: (frameCtx) => gl.TRIANGLES
         });
     }
