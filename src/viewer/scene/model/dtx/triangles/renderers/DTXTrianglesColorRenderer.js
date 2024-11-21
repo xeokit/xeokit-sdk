@@ -14,7 +14,6 @@ export class DTXTrianglesColorRenderer {
         this.drawLayer = (frameCtx, layer, renderPass) => drawable.drawLayer(frameCtx, layer, renderPass);
         this.destroy   = () => drawable.destroy();
 
-        const inputs = { };
         const gl = scene.canvas.gl;
         const lightSetup = createLightSetup(gl, scene._lightsState, false); // WARNING: Changing `useMaps' to `true' might have unexpected consequences while binding textures, as the DTX texture binding mechanism doesn't rely on `frameCtx.textureUnit` the way VBO does (see setSAORenderState)
         const sao = withSAO && createSAOSetup(gl, scene);
@@ -59,12 +58,12 @@ export class DTXTrianglesColorRenderer {
                 src.push("outColor = " + (sao ? ("vec4(vColor.rgb * " + sao.getAmbient(gl_FragCoord) + ", vColor.a)") : "vColor") + ";");
             },
             setupInputs: (program) => {
-                inputs.setLightsRenderState = lightSetup.setupInputs(program);
-                inputs.setSAORenderState    = sao && sao.setupInputs(program);
-            },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
-                inputs.setLightsRenderState(frameCtx);
-                inputs.setSAORenderState && inputs.setSAORenderState(frameCtx, 10);
+                const setLightsRenderState = lightSetup.setupInputs(program);
+                const setSAORenderState    = sao && sao.setupInputs(program);
+                return (frameCtx, layer, renderPass, rtcOrigin) => {
+                    setLightsRenderState(frameCtx);
+                    setSAORenderState && setSAORenderState(frameCtx, 10);
+                };
             },
             getGlMode: (frameCtx) => gl.TRIANGLES
         });
