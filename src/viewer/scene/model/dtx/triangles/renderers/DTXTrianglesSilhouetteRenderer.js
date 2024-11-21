@@ -16,7 +16,7 @@ export class DTXTrianglesSilhouetteRenderer {
 
         const gl = scene.canvas.gl;
 
-        const drawable = new DTXTrianglesDrawable("DTXTrianglesSilhouetteRenderer", scene, true, {
+        const drawable = new DTXTrianglesDrawable("DTXTrianglesSilhouetteRenderer", scene, {
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             getViewParams: (frameCtx, camera) => ({
                 viewMatrix: camera.viewMatrix,
