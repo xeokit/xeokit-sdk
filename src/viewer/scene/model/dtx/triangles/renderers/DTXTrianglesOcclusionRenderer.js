@@ -13,7 +13,7 @@ export class DTXTrianglesOcclusionRenderer {
 
         const gl = scene.canvas.gl;
 
-        const drawable = new DTXTrianglesDrawable("DTXTrianglesOcclusionRenderer", scene, true, {
+        const drawable = new DTXTrianglesDrawable("DTXTrianglesOcclusionRenderer", scene, {
             // Logarithmic depth buffer involves an accuracy tradeoff, sacrificing
             // accuracy at close range to improve accuracy at long range. This can
             // mess up accuracy for occlusion tests, so we'll disable for now.
