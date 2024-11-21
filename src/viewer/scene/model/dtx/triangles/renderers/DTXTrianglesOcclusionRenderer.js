@@ -14,7 +14,6 @@ export class DTXTrianglesOcclusionRenderer {
         const gl = scene.canvas.gl;
 
         const drawable = new DTXTrianglesDrawable("DTXTrianglesOcclusionRenderer", scene, true, {
-            getHash: () => [ ],
             // Logarithmic depth buffer involves an accuracy tradeoff, sacrificing
             // accuracy at close range to improve accuracy at long range. This can
             // mess up accuracy for occlusion tests, so we'll disable for now.
@@ -28,14 +27,8 @@ export class DTXTrianglesOcclusionRenderer {
             // flags.x = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
             // renderPass = COLOR_OPAQUE
             renderPassFlag: 0,
-            cullOnAlphaZero: true,
-            appendVertexDefinitions: (src) => { },
-            // divide by w to get into NDC, and after transformation multiply by w to get back into clip space
-            transformClipPos: clipPos => clipPos,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view) => { },
             appendFragmentDefinitions: (src) => src.push("out vec4 outColor;"),
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => src.push("outColor = vec4(0.0, 0.0, 1.0, 1.0);"), // Occluders are blue
-            getGlMode: (frameCtx) => gl.TRIANGLES
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => src.push("outColor = vec4(0.0, 0.0, 1.0, 1.0);") // Occluders are blue
         });
     }
 }
