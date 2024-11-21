@@ -35,9 +35,6 @@ export class DTXTrianglesEdgesRenderer {
                 }
             },
             transformClipPos: clipPos => clipPos,
-            needVertexColor: ! colorUniform,
-            needPickColor: false,
-            needGl_Position: false,
             needViewMatrixPositionNormal: false,
             appendVertexOutputs: (src, color, pickColor, gl_Position, view) => {
                 if (! colorUniform) {
@@ -52,8 +49,6 @@ export class DTXTrianglesEdgesRenderer {
                 }
                 src.push("out vec4 outColor;");
             },
-            needvWorldPosition: false,
-            needGl_FragCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => src.push("outColor = " + (colorUniform ? "edgeColor" : "vColor") + ";"),
             setupInputs: (program) => {
                 const edgeColor = colorUniform && program.getLocation("edgeColor");
