@@ -11,7 +11,6 @@ export class DTXTrianglesOcclusionRenderer {
         this.drawLayer = (frameCtx, layer, renderPass) => drawable.drawLayer(frameCtx, layer, renderPass);
         this.destroy   = () => drawable.destroy();
 
-        const inputs = { };
         const gl = scene.canvas.gl;
 
         const drawable = new DTXTrianglesDrawable("DTXTrianglesOcclusionRenderer", scene, true, {
@@ -42,8 +41,6 @@ export class DTXTrianglesOcclusionRenderer {
             needvWorldPosition: false,
             needGl_FragCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => src.push("outColor = vec4(0.0, 0.0, 1.0, 1.0);"), // Occluders are blue
-            setupInputs: (program) => { },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => { },
             getGlMode: (frameCtx) => gl.TRIANGLES
         });
     }
