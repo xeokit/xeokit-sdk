@@ -8,7 +8,7 @@ const tempVec3c = math.vec3();
  */
 export class DTXTrianglesSnapRenderer {
 
-    constructor(scene) {
+    constructor(scene, isSnapInit) {
         this.getValid  = () => drawable.getValid();
         this.drawLayer = (frameCtx, layer, renderPass) => drawable.drawLayer(frameCtx, layer, renderPass);
         this.destroy   = () => drawable.destroy();
@@ -16,10 +16,10 @@ export class DTXTrianglesSnapRenderer {
         const inputs = { };
         const gl = scene.canvas.gl;
 
-        const drawable = new DTXTrianglesDrawable("DTXTrianglesSnapRenderer", scene, false, {
+        const drawable = new DTXTrianglesDrawable(isSnapInit ? "DTXTrianglesSnapInitRenderer" : "DTXTrianglesSnapRenderer", scene, isSnapInit, {
             getHash: () => [ ],
             // Improves occlusion accuracy at distance
-            getLogDepth: true && (vFragDepth => vFragDepth),
+            getLogDepth: true && (vFragDepth => (isSnapInit ? `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))` : vFragDepth)),
             getViewParams: (frameCtx, camera) => ({
                 viewMatrix: frameCtx.pickViewMatrix || camera.viewMatrix,
                 projMatrix: frameCtx.pickProjMatrix || camera.projMatrix,
@@ -29,26 +29,48 @@ export class DTXTrianglesSnapRenderer {
             // flags.w = NOT_RENDERED | PICK
             // renderPass = PICK
             renderPassFlag: 3,
-            cullOnAlphaZero: false,
+            cullOnAlphaZero: isSnapInit,
             appendVertexDefinitions: (src) => {
                 src.push("uniform vec2 snapVectorA;");
                 src.push("uniform vec2 snapInvVectorAB;");
+                if (isSnapInit) {
+                    src.push("flat out vec4 vPickColor;");
+                }
             },
-            // divide by w to get into NDC, and after transformation multiply by w to get back into clip space
             transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - snapVectorA) * snapInvVectorAB * ${clipPos}.w, ${clipPos}.zw)`,
             needVertexColor: false,
-            needPickColor: false,
+            needPickColor: isSnapInit,
             needGl_Position: false,
             needViewMatrixPositionNormal: false,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view) => src.push("gl_PointSize = 1.0;"), // Windows needs this?
+            appendVertexOutputs: (src, color, pickColor, gl_Position, view) => {
+                if (isSnapInit) {
+                    src.push(`vPickColor = ${pickColor};`);
+                } else {
+                    src.push("gl_PointSize = 1.0;"); // Windows needs this?
+                }
+            },
             appendFragmentDefinitions: (src) => {
                 src.push("uniform int uLayerNumber;");
                 src.push("uniform vec3 uCoordinateScaler;");
-                src.push("out highp ivec4 outCoords;");
+                if (isSnapInit) {
+                    src.push("flat in vec4 vPickColor;");
+                    src.push("layout(location = 0) out highp ivec4 outCoords;");
+                    src.push("layout(location = 1) out highp ivec4 outNormal;");
+                    src.push("layout(location = 2) out lowp uvec4 outPickColor;");
+                } else {
+                    src.push("out highp ivec4 outCoords;");
+                }
             },
             needvWorldPosition: true,
             needGl_FragCoord: false,
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => src.push(`outCoords = ivec4(${vWorldPosition}.xyz * uCoordinateScaler.xyz, uLayerNumber);`),
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => {
+                src.push(`outCoords = ivec4(${vWorldPosition}.xyz * uCoordinateScaler.xyz, ${isSnapInit ? "-" : ""}uLayerNumber);`);
+                if (isSnapInit) {
+                    src.push(`vec3 worldNormal = normalize(cross(dFdx(${vWorldPosition}.xyz), dFdy(${vWorldPosition}.xyz)));`);
+                    src.push(`outNormal = ivec4(worldNormal * float(${math.MAX_INT}), 1.0);`);
+                    src.push("outPickColor = uvec4(vPickColor);");
+                }
+            },
             setupInputs: (program) => {
                 inputs.uSnapVectorA = program.getLocation("snapVectorA");
                 inputs.uSnapInvVectorAB = program.getLocation("snapInvVectorAB");
@@ -72,7 +94,7 @@ export class DTXTrianglesSnapRenderer {
                 gl.uniform1i(inputs.uLayerNumber, frameCtx.snapPickLayerNumber);
                 gl.uniform3fv(inputs.uCoordinateScaler, coordinateScaler);
             },
-            getGlMode: (frameCtx) => (frameCtx.snapMode === "edge") ? gl.LINES : gl.POINTS
+            getGlMode: (frameCtx) => isSnapInit ? gl.TRIANGLES : ((frameCtx.snapMode === "edge") ? gl.LINES : gl.POINTS)
         });
     }
 }
