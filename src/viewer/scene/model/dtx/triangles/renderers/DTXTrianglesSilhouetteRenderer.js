@@ -32,7 +32,6 @@ export class DTXTrianglesSilhouetteRenderer {
             appendVertexDefinitions: (src) => src.push("out float vAlpha;"),
             // divide by w to get into NDC, and after transformation multiply by w to get back into clip space
             transformClipPos: clipPos => clipPos,
-            needViewMatrixPositionNormal: false,
             appendVertexOutputs: (src, color, pickColor, gl_Position, view) => src.push(`vAlpha = float(${color}.a) / 255.0;`),
             appendFragmentDefinitions: (src) => {
                 src.push("in float vAlpha;");
