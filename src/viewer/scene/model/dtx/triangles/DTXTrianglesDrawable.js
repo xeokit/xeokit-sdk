@@ -36,7 +36,6 @@ export class DTXTrianglesDrawable {
         const needGl_FragCoord             = cfg.needGl_FragCoord;
         const appendFragmentOutputs        = cfg.appendFragmentOutputs;
         const setupInputs                  = cfg.setupInputs;
-        const setRenderState               = cfg.setRenderState;
         const getGlMode                    = cfg.getGlMode;
 
         const buildVertexShader = () => {
@@ -301,7 +300,7 @@ export class DTXTrianglesDrawable {
         const uTexturePerPrimitiveIdPortionIds = "uTexturePerPrimitiveIdPortionIds";
         const uTexturePerPrimitiveIdIndices = "uTexturePerPrimitiveIdIndices";
 
-        setupInputs(program);
+        const setInputsState = setupInputs && setupInputs(program);
 
         this.destroy = () => program.destroy();
         this.drawLayer = (frameCtx, layer, renderPass) => {
@@ -340,7 +339,7 @@ export class DTXTrianglesDrawable {
                 gl.uniform3fv(uCameraEyeRtc, math.subVec3(viewParams.eye, rtcOrigin, tempVec3b));
             }
 
-            setRenderState(frameCtx, layer, renderPass, rtcOrigin);
+            setInputsState && setInputsState(frameCtx, layer, renderPass, rtcOrigin);
 
             if (getLogDepth) {
                 const logDepthBufFC = 2.0 / (Math.log(viewParams.far + 1.0) / Math.LN2);
