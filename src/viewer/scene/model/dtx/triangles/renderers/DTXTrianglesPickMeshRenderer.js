@@ -13,7 +13,7 @@ export class DTXTrianglesPickMeshRenderer {
 
         const gl = scene.canvas.gl;
 
-        const drawable = new DTXTrianglesDrawable("DTXTrianglesPickMeshRenderer", scene, true, {
+        const drawable = new DTXTrianglesDrawable("DTXTrianglesPickMeshRenderer", scene, {
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             getViewParams: (frameCtx, camera) => ({
                 viewMatrix: frameCtx.pickViewMatrix || camera.viewMatrix,
