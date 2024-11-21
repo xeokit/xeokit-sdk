@@ -186,7 +186,7 @@ export const createSAOSetup = (gl, scene) => {
             const uOcclusionTexture = program.getSampler("uOcclusionTexture");
             const uSAOParams        = program.getLocation("uSAOParams");
 
-            return function(frameCtx) {
+            return function(frameCtx, textureUnit = undefined) {
                 const sao = scene.sao;
                 if (sao.possible) {
                     const viewportWidth = gl.drawingBufferWidth;
@@ -196,9 +196,11 @@ export const createSAOSetup = (gl, scene) => {
                     tempVec4[2] = sao.blendCutoff;
                     tempVec4[3] = sao.blendFactor;
                     gl.uniform4fv(uSAOParams, tempVec4);
-                    uOcclusionTexture.bindTexture(frameCtx.occlusionTexture, frameCtx.textureUnit);
-                    frameCtx.textureUnit = (frameCtx.textureUnit + 1) % WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
-                    frameCtx.bindTexture++;
+                    uOcclusionTexture.bindTexture(frameCtx.occlusionTexture, textureUnit ?? frameCtx.textureUnit);
+                    if (textureUnit === undefined) {
+                        frameCtx.textureUnit = (frameCtx.textureUnit + 1) % WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
+                        frameCtx.bindTexture++;
+                    }
                 }
             };
         }
