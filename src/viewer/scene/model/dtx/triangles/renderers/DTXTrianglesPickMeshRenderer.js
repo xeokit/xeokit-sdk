@@ -33,7 +33,6 @@ export class DTXTrianglesPickMeshRenderer {
             },
             // divide by w to get into NDC, and after transformation multiply by w to get back into clip space
             transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - pickClipPos) * drawingBufferSize * ${clipPos}.w, ${clipPos}.zw)`,
-            needViewMatrixPositionNormal: false,
             appendVertexOutputs: (src, color, pickColor, gl_Position, view) => src.push(`vPickColor = ${pickColor} / 255.0;`),
             appendFragmentDefinitions: (src) => {
                 src.push("in vec4 vPickColor;");
