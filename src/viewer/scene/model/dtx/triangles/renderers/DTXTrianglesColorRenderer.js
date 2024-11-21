@@ -18,7 +18,7 @@ export class DTXTrianglesColorRenderer {
         const lightSetup = createLightSetup(gl, scene._lightsState, false); // WARNING: Changing `useMaps' to `true' might have unexpected consequences while binding textures, as the DTX texture binding mechanism doesn't rely on `frameCtx.textureUnit` the way VBO does (see setSAORenderState)
         const sao = withSAO && createSAOSetup(gl, scene);
 
-        const drawable = new DTXTrianglesDrawable("DTXTrianglesColorRenderer", scene, true, {
+        const drawable = new DTXTrianglesDrawable("DTXTrianglesColorRenderer", scene, {
             getHash: () => [lightSetup.getHash(), (sao ? "sao" : "nosao")],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             getViewParams: (frameCtx, camera) => ({

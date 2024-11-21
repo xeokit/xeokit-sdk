@@ -13,7 +13,7 @@ export class DTXTrianglesDepthRenderer {
 
         const gl = scene.canvas.gl;
 
-        const drawable = new DTXTrianglesDrawable("DTXTrianglesDepthRenderer", scene, true, {
+        const drawable = new DTXTrianglesDrawable("DTXTrianglesDepthRenderer", scene, {
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             getViewParams: (frameCtx, camera) => ({
                 viewMatrix: camera.viewMatrix,
