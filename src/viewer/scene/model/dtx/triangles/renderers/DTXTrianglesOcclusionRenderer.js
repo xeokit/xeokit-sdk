@@ -32,14 +32,9 @@ export class DTXTrianglesOcclusionRenderer {
             appendVertexDefinitions: (src) => { },
             // divide by w to get into NDC, and after transformation multiply by w to get back into clip space
             transformClipPos: clipPos => clipPos,
-            needVertexColor: false,
-            needPickColor: false,
-            needGl_Position: false,
             needViewMatrixPositionNormal: false,
             appendVertexOutputs: (src, color, pickColor, gl_Position, view) => { },
             appendFragmentDefinitions: (src) => src.push("out vec4 outColor;"),
-            needvWorldPosition: false,
-            needGl_FragCoord: false,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => src.push("outColor = vec4(0.0, 0.0, 1.0, 1.0);"), // Occluders are blue
             getGlMode: (frameCtx) => gl.TRIANGLES
         });

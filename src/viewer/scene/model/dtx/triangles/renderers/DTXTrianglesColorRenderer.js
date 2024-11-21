@@ -36,9 +36,6 @@ export class DTXTrianglesColorRenderer {
                 src.push("out vec4 vColor;");
             },
             transformClipPos: clipPos => clipPos,
-            needVertexColor: true,
-            needPickColor: false,
-            needGl_Position: false,
             needViewMatrixPositionNormal: true,
             appendVertexOutputs: (src, color, pickColor, gl_Position, view) => {
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
@@ -52,8 +49,6 @@ export class DTXTrianglesColorRenderer {
                 sao && sao.appendDefinitions(src);
                 src.push("out vec4 outColor;");
             },
-            needvWorldPosition: false,
-            needGl_FragCoord: sao,
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => {
                 src.push("outColor = " + (sao ? ("vec4(vColor.rgb * " + sao.getAmbient(gl_FragCoord) + ", vColor.a)") : "vColor") + ";");
             },
