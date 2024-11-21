@@ -11,7 +11,6 @@ export class DTXTrianglesPickNormalsFlatRenderer {
         this.drawLayer = (frameCtx, layer, renderPass) => drawable.drawLayer(frameCtx, layer, renderPass);
         this.destroy   = () => drawable.destroy();
 
-        const inputs = { };
         const gl = scene.canvas.gl;
 
         const drawable = new DTXTrianglesDrawable("DTXTrianglesPickNormalsFlatRenderer", scene, true, {
@@ -47,12 +46,12 @@ export class DTXTrianglesPickNormalsFlatRenderer {
                 src.push(`outNormal = ivec4(worldNormal * float(${math.MAX_INT}), 1.0);`);
             },
             setupInputs: (program) => {
-                inputs.uPickClipPos = program.getLocation("pickClipPos");
-                inputs.uDrawingBufferSize = program.getLocation("drawingBufferSize");
-            },
-            setRenderState: (frameCtx, layer, renderPass, rtcOrigin) => {
-                gl.uniform2fv(inputs.uPickClipPos, frameCtx.pickClipPos);
-                gl.uniform2f(inputs.uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
+                const uPickClipPos = program.getLocation("pickClipPos");
+                const uDrawingBufferSize = program.getLocation("drawingBufferSize");
+                return (frameCtx, layer, renderPass, rtcOrigin) => {
+                    gl.uniform2fv(uPickClipPos, frameCtx.pickClipPos);
+                    gl.uniform2f(uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
+                };
             },
             getGlMode: (frameCtx) => gl.TRIANGLES
         });
