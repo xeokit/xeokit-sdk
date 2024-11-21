@@ -16,7 +16,7 @@ export class DTXTrianglesEdgesRenderer {
 
         const gl = scene.canvas.gl;
 
-        const drawable = new DTXTrianglesDrawable(colorUniform ? "DTXTrianglesEdgesRenderer" : "DTXTrianglesEdgesColorRenderer", scene, false, {
+        const drawable = new DTXTrianglesDrawable(colorUniform ? "DTXTrianglesEdgesRenderer" : "DTXTrianglesEdgesColorRenderer", scene, {
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             getViewParams: (frameCtx, camera) => ({
                 viewMatrix: camera.viewMatrix,
