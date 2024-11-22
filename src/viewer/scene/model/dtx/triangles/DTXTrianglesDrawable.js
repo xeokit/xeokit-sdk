@@ -12,7 +12,7 @@ const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
  */
 export class DTXTrianglesDrawable {
 
-    constructor(programName, scene, cfg) {
+    constructor(scene, cfg) {
 
         const getHash = () => [ scene._sectionPlanesState.getHash() ].concat(cfg.getHash ? cfg.getHash() : [ ]).join(";");
         const hash = getHash();
@@ -20,6 +20,7 @@ export class DTXTrianglesDrawable {
 
         const gl = scene.canvas.gl;
 
+        const programName                  = cfg.programName;
         const getLogDepth                  = cfg.getLogDepth;
         const getViewParams                = cfg.getViewParams;
         const renderPassFlag               = cfg.renderPassFlag;
