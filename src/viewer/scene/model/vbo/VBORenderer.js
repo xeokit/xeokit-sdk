@@ -233,7 +233,8 @@ export class VBORenderer {
 
         const pointsMaterial = scene.pointsMaterial;
 
-        const progMode                  = cfg.progMode;
+        const programName               = cfg.programName;
+        const snapParameters            = cfg.snapParameters;
         const edges                     = cfg.edges;
         const incrementDrawState        = cfg.incrementDrawState;
 
@@ -250,9 +251,8 @@ export class VBORenderer {
         const vertexCullX               = cfg.vertexCullX;
         const setupInputs               = cfg.setupInputs;
 
-        const isSnap = (progMode === "snapInitMode") || (progMode === "snapMode");
-        const testPerspectiveForGl_FragDepth = ((primitive !== "points") && (primitive !== "lines")) || isSnap;
-        const setupPoints = (primitive === "points") && (! isSnap);
+        const testPerspectiveForGl_FragDepth = ((primitive !== "points") && (primitive !== "lines")) || snapParameters;
+        const setupPoints = (primitive === "points") && (! snapParameters);
 
         const getHash = () => [ scene._sectionPlanesState.getHash() ].concat(setupPoints ? [ pointsMaterial.hash ] : [ ]).concat(cfg.getHash ? cfg.getHash() : [ ]).join(";");
         const hash = getHash();
@@ -616,7 +616,7 @@ export class VBORenderer {
 
         const preamble = (type, src) => [
             "#version 300 es",
-            "// " + primitive + " " + (instancing ? "instancing" : "batching") + " " + progMode + " " + type + " shader"
+            "// " + primitive + " " + (instancing ? "instancing" : "batching") + " " + programName + " " + type + " shader"
         ].concat(src);
 
         const program = new Program(gl, {
@@ -887,14 +887,14 @@ export class VBORenderer {
                 drawCallCache.set(layer, function(frameCtx) {
                     gl.bindVertexArray(vao);
 
-                    if (isSnap) {
+                    if (snapParameters) {
                         //=============================================================
                         // TODO: Use drawElements count and offset to draw only one entity
                         //=============================================================
 
                         if (primitive === "points") {
                             drawPoints();
-                        } else if (progMode === "snapInitMode") {
+                        } else if (snapParameters.isSnapInit) {
                             drawElementsBuf((primitive === "lines") ? gl.LINES : gl.TRIANGLES, state.indicesBuf);
                         } else {
                             if (frameCtx.snapMode === "edge") {
@@ -903,7 +903,7 @@ export class VBORenderer {
                                 drawPoints();
                             }
                         }
-                    } else {                // ! isSnap
+                    } else {                // ! snapParameters
                         if (primitive === "points") {
                             drawPoints();
                         } else if (primitive === "lines") {

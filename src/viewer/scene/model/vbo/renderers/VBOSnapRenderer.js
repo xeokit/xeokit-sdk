@@ -12,7 +12,8 @@ export class VBOSnapRenderer extends VBORenderer {
         const gl = scene.canvas.gl;
 
         super(scene, instancing, primitive, {
-            progMode: isSnapInit ? "snapInitMode" : "snapMode",
+            programName: isSnapInit ? "SnapInitRenderer" : "SnapRenderer",
+            snapParameters: { isSnapInit: isSnapInit },
 
             // Improves occlusion accuracy at distance
             getLogDepth: true && (vFragDepth => (isSnapInit ? `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))` : vFragDepth)),
