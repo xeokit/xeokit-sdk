@@ -1,6 +1,4 @@
-import {math} from "../../../../math/math.js";
-
-export const DTXTrianglesPickMeshRenderer = function(scene) {
+export const DTXTrianglesPickMeshRenderer = function(scene, clipTransformSetup) {
         const gl = scene.canvas.gl;
         return {
             programName: "PickMesh",
@@ -16,12 +14,10 @@ export const DTXTrianglesPickMeshRenderer = function(scene) {
             renderPassFlag: 3,
             dontCullOnAlphaZero: true,
             appendVertexDefinitions: (src) => {
-                src.push("uniform vec2 pickClipPos;");
-                src.push("uniform vec2 drawingBufferSize;");
                 src.push("out vec4 vPickColor;");
+                clipTransformSetup.appendDefinitions(src);
             },
-            // divide by w to get into NDC, and after transformation multiply by w to get back into clip space
-            transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - pickClipPos) * drawingBufferSize * ${clipPos}.w, ${clipPos}.zw)`,
+            transformClipPos: clipTransformSetup.transformClipPos,
             appendVertexOutputs: (src, color, pickColor, gl_Position, view) => src.push(`vPickColor = ${pickColor} / 255.0;`),
             appendFragmentDefinitions: (src) => {
                 src.push("in vec4 vPickColor;");
@@ -29,11 +25,9 @@ export const DTXTrianglesPickMeshRenderer = function(scene) {
             },
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => src.push("outPickColor = vPickColor;"),
             setupInputs: (program) => {
-                const uPickClipPos = program.getLocation("pickClipPos");
-                const uDrawingBufferSize = program.getLocation("drawingBufferSize");
+                const setClipTransformState = clipTransformSetup.setupInputs(program);
                 return (frameCtx, layer, renderPass, rtcOrigin) => {
-                    gl.uniform2fv(uPickClipPos, frameCtx.pickClipPos);
-                    gl.uniform2f(uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
+                    setClipTransformState(frameCtx);
                 };
             }
         };

@@ -1,8 +1,7 @@
 import {math} from "../../../../math/math.js";
 const tempVec3c = math.vec3();
 
-export const DTXTrianglesSnapRenderer = function(scene, isSnapInit) {
-        const gl = scene.canvas.gl;
+export const DTXTrianglesSnapRenderer = function(gl, isSnapInit) {
         return {
             programName: isSnapInit ? "SnapInit" : "Snap",
             // Improves occlusion accuracy at distance

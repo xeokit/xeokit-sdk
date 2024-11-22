@@ -1,7 +1,6 @@
 import {math} from "../../../../math/math.js";
 
-export const DTXTrianglesPickNormalsFlatRenderer = function(scene) {
-        const gl = scene.canvas.gl;
+export const DTXTrianglesPickNormalsFlatRenderer = function(scene, clipTransformSetup) {
         return {
             programName: "PickNormalsFlat",
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
@@ -15,11 +14,9 @@ export const DTXTrianglesPickNormalsFlatRenderer = function(scene) {
             // renderPass = PICK
             renderPassFlag: 3,
             appendVertexDefinitions: (src) => {
-                src.push("uniform vec2 pickClipPos;");
-                src.push("uniform vec2 drawingBufferSize;");
+                clipTransformSetup.appendDefinitions(src);
             },
-            // divide by w to get into NDC, and after transformation multiply by w to get back into clip space
-            transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - pickClipPos) * drawingBufferSize / 3.0 * ${clipPos}.w, ${clipPos}.zw)`,
+            transformClipPos: clipTransformSetup.transformClipPos,
             appendFragmentDefinitions: (src) => src.push("out highp ivec4 outNormal;"),
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => {
                 // normalize(cross(xTangent, yTangent))
@@ -27,12 +24,8 @@ export const DTXTrianglesPickNormalsFlatRenderer = function(scene) {
                 src.push(`outNormal = ivec4(worldNormal * float(${math.MAX_INT}), 1.0);`);
             },
             setupInputs: (program) => {
-                const uPickClipPos = program.getLocation("pickClipPos");
-                const uDrawingBufferSize = program.getLocation("drawingBufferSize");
-                return (frameCtx, layer, renderPass, rtcOrigin) => {
-                    gl.uniform2fv(uPickClipPos, frameCtx.pickClipPos);
-                    gl.uniform2f(uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
-                };
+                const setClipTransformState = clipTransformSetup.setupInputs(program);
+                return (frameCtx, layer, renderPass, rtcOrigin) => setClipTransformState(frameCtx);
             }
         };
 };
