@@ -1,8 +1,4 @@
-import {createPickClipTransformSetup} from "../VBORenderer.js";
-
-export const VBOPickMeshRenderer = function(scene, instancing, primitive) {
-        const clipTransformSetup = createPickClipTransformSetup(scene.canvas.gl, 1);
-
+export const VBOPickMeshRenderer = function(scene, clipTransformSetup, isPoints) {
         return {
             programName: "PickMesh",
 
@@ -17,7 +13,7 @@ export const VBOPickMeshRenderer = function(scene, instancing, primitive) {
             transformClipPos: clipTransformSetup.transformClipPos,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vPickColor = ${pickColor} / 255.0;`);
-                if (primitive === "points") {
+                if (isPoints) {
                     src.push("gl_PointSize += 10.0;");
                 }
             },
