@@ -10,7 +10,7 @@ export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
         const clipTransformSetup = createPickClipTransformSetup(scene.canvas.gl, 3);
 
         super(scene, instancing, primitive, {
-            progMode: isFlat ? "pickNormalsFlatMode" : "pickNormalsMode",
+            programName: isFlat ? "PickNormalsFlat" : "PickNormals",
 
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             // pickFlag = NOT_RENDERED | PICK
