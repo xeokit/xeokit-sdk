@@ -67,7 +67,7 @@ export class TrianglesSilhouetteRenderer extends TrianglesBatchingRenderer {
             src.push("vWorldPosition = worldPosition;");
             src.push("vFlags = flags;");
         }
-        src.push("vColor = vec4(silhouetteColor.r, silhouetteColor.g, silhouetteColor.b, min(silhouetteColor.a, color.a ));");
+        src.push("vColor = vec4(silhouetteColor.r, silhouetteColor.g, silhouetteColor.b, min(silhouetteColor.a, float(color.a) / 255.0));");
         src.push("vec4 clipPos = projMatrix * viewPosition;");
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
