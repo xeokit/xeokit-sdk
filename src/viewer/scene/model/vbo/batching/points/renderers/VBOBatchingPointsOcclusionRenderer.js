@@ -1,6 +1,12 @@
 import {VBOBatchingPointsRenderer} from "../VBOBatchingPointsRenderer.js";
 
 
+// Logarithmic depth buffer involves an accuracy tradeoff, sacrificing
+// accuracy at close range to improve accuracy at long range. This can
+// mess up accuracy for occlusion tests, so we'll disable for now.
+
+const ENABLE_LOG_DEPTH_BUF = false;
+
 /**
  * @private
  */
@@ -30,7 +36,7 @@ class VBOBatchingPointsOcclusionRenderer extends VBOBatchingPointsRenderer {
             src.push("uniform float nearPlaneHeight;");
         }
 
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (ENABLE_LOG_DEPTH_BUF && scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
             src.push("out float vFragDepth;");
         }
@@ -60,7 +66,7 @@ class VBOBatchingPointsOcclusionRenderer extends VBOBatchingPointsRenderer {
             src.push("      vFlags = flags;");
         }
         src.push("vec4 clipPos = projMatrix * viewPosition;");
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (ENABLE_LOG_DEPTH_BUF && scene.logarithmicDepthBufferEnabled) {
             src.push("vFragDepth = 1.0 + clipPos.w;");
         }
         src.push("  gl_Position = clipPos;");
@@ -90,7 +96,7 @@ class VBOBatchingPointsOcclusionRenderer extends VBOBatchingPointsRenderer {
         src.push("precision mediump float;");
         src.push("precision mediump int;");
         src.push("#endif");
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (ENABLE_LOG_DEPTH_BUF && scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
             src.push("in float vFragDepth;");
         }
@@ -124,7 +130,7 @@ class VBOBatchingPointsOcclusionRenderer extends VBOBatchingPointsRenderer {
             src.push("      if (dist > 0.0) { discard; }");
             src.push("  }");
         }
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (ENABLE_LOG_DEPTH_BUF && scene.logarithmicDepthBufferEnabled) {
             src.push("gl_FragDepth = log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
         src.push("   outColor = vec4(0.0, 0.0, 1.0, 1.0); "); // Occluders are blue
