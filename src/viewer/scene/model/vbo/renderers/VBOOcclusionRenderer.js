@@ -1,12 +1,5 @@
-import {VBORenderer} from "../VBORenderer.js";
-
-/**
- * @private
- */
-export class VBOOcclusionRenderer extends VBORenderer {
-
-    constructor(scene, instancing, primitive) {
-        super(scene, instancing, primitive, {
+export const VBOOcclusionRenderer = function(scene, instancing, primitive) {
+        return {
             programName: "Occlusion",
 
             // Logarithmic depth buffer involves an accuracy tradeoff, sacrificing
@@ -21,7 +14,5 @@ export class VBOOcclusionRenderer extends VBORenderer {
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push("outColor = vec4(0.0, 0.0, 1.0, 1.0); "); // Occluders are blue
             }
-        });
-    }
-
-}
+        };
+};

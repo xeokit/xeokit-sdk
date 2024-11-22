@@ -7,6 +7,8 @@ import {ArrayBuf} from "../../webgl/ArrayBuf.js";
 import {quantizePositions, transformAndOctEncodeNormals} from "../compression.js";
 import {geometryCompressionUtils} from "../../math/geometryCompressionUtils.js";
 
+import {VBORenderer} from "./VBORenderer.js";
+
 import { VBOTrianglesColorTextureRenderer    } from "./renderers/VBOTrianglesColorTextureRenderer.js";
 import { VBOTrianglesDepthRenderer           } from "./renderers/VBOTrianglesDepthRenderer.js";
 import { VBOTrianglesEdgesRenderer           } from "./renderers/VBOTrianglesEdgesRenderer.js";
@@ -39,27 +41,29 @@ const getRenderers = (function() {
         const sceneId = scene.id;
         if (! (sceneId in cache)) {
 
+            const createRenderer = (createProgramSetup) => new VBORenderer(scene, instancing, primitive, createProgramSetup());
+
             // Pre-initialize certain renderers that would otherwise be lazy-initialised on user interaction,
             // such as picking or emphasis, so that there is no delay when user first begins interacting with the viewer.
-            const eager = function(klass, ...args) {
-                let renderer = new klass(scene, instancing, primitive, ...args);
+            const eager = function(createProgramSetup) {
+                let renderer = createRenderer(createProgramSetup);
                 return {
                     drawLayer: (frameCtx, layer, renderPass) => renderer.drawLayer(frameCtx, layer, renderPass),
                     revalidate: force => {
                         if (force || (! renderer.getValid())) {
                             renderer.destroy();
-                            renderer = new klass(scene, instancing, primitive, ...args);
+                            renderer = createRenderer(createProgramSetup);
                         }
                     }
                 };
             };
 
-            const lazy = function(klass, ...args) {
+            const lazy = function(createProgramSetup) {
                 let renderer = null;
                 return {
                     drawLayer: (frameCtx, layer, renderPass) => {
                         if (! renderer) {
-                            renderer = new klass(scene, instancing, primitive, ...args);
+                            renderer = createRenderer(createProgramSetup);
                         }
                         renderer.drawLayer(frameCtx, layer, renderPass);
                     },
@@ -74,48 +78,48 @@ const getRenderers = (function() {
 
             if (primitive === "points") {
                 cache[sceneId] = {
-                    colorRenderer:      lazy(VBOColorRenderer, false),
-                    occlusionRenderer:  lazy(VBOOcclusionRenderer),
-                    pickDepthRenderer:  lazy(VBOPickDepthRenderer),
-                    pickMeshRenderer:   lazy(VBOPickMeshRenderer),
+                    colorRenderer:      lazy(() => VBOColorRenderer(scene, instancing, primitive, false)),
+                    occlusionRenderer:  lazy(() => VBOOcclusionRenderer(scene, instancing, primitive)),
+                    pickDepthRenderer:  lazy(() => VBOPickDepthRenderer(scene, instancing, primitive)),
+                    pickMeshRenderer:   lazy(() => VBOPickMeshRenderer(scene, instancing, primitive)),
                     // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
                     // but never used (and probably not maintained), as opposed to VBOInstancingPointsShadowRenderer in the same commit
-                    shadowRenderer:     instancing && lazy(VBOShadowRenderer),
-                    silhouetteRenderer: lazy(VBOSilhouetteRenderer),
-                    snapInitRenderer:   lazy(VBOSnapRenderer, true),
-                    snapRenderer:       lazy(VBOSnapRenderer, false)
+                    shadowRenderer:     instancing && lazy(() => VBOShadowRenderer(scene, instancing, primitive)),
+                    silhouetteRenderer: lazy(() => VBOSilhouetteRenderer(scene, instancing, primitive)),
+                    snapInitRenderer:   lazy(() => VBOSnapRenderer(scene, instancing, primitive, true)),
+                    snapRenderer:       lazy(() => VBOSnapRenderer(scene, instancing, primitive, false))
                 };
             } else if (primitive === "lines") {
                 cache[sceneId] = {
-                    colorRenderer:      lazy(VBOColorRenderer, false),
-                    silhouetteRenderer: lazy(VBOSilhouetteRenderer),
-                    snapInitRenderer:   lazy(VBOSnapRenderer, true),
-                    snapRenderer:       lazy(VBOSnapRenderer, false)
+                    colorRenderer:      lazy(() => VBOColorRenderer(scene, instancing, primitive, false)),
+                    silhouetteRenderer: lazy(() => VBOSilhouetteRenderer(scene, instancing, primitive)),
+                    snapInitRenderer:   lazy(() => VBOSnapRenderer(scene, instancing, primitive, true)),
+                    snapRenderer:       lazy(() => VBOSnapRenderer(scene, instancing, primitive, false))
                 };
             } else {
                 cache[sceneId] = {
-                    colorRenderer:                          lazy(VBOColorRenderer, false),
-                    colorRendererWithSAO:                   lazy(VBOColorRenderer, true),
-                    colorTextureRenderer:                   lazy(VBOTrianglesColorTextureRenderer, false, false),
-                    colorTextureRendererAlphaCutoff:        lazy(VBOTrianglesColorTextureRenderer, false, true),
-                    colorTextureRendererWithSAO:            lazy(VBOTrianglesColorTextureRenderer, true,  false),
-                    colorTextureRendererWithSAOAlphaCutoff: lazy(VBOTrianglesColorTextureRenderer, true,  true),
-                    depthRenderer:                          lazy(VBOTrianglesDepthRenderer),
-                    edgesColorRenderer:                     lazy(VBOTrianglesEdgesRenderer, false),
-                    edgesRenderer:                          lazy(VBOTrianglesEdgesRenderer, true),
-                    flatColorRenderer:                      lazy(VBOTrianglesFlatColorRenderer, false),
-                    flatColorRendererWithSAO:               lazy(VBOTrianglesFlatColorRenderer, true),
-                    occlusionRenderer:                      lazy(VBOOcclusionRenderer),
-                    pbrRenderer:                            lazy(VBOTrianglesPBRRenderer, false),
-                    pbrRendererWithSAO:                     lazy(VBOTrianglesPBRRenderer, true),
-                    pickDepthRenderer:                      eager(VBOPickDepthRenderer),
-                    pickMeshRenderer:                       eager(VBOPickMeshRenderer),
-                    pickNormalsFlatRenderer:                lazy(VBOTrianglesPickNormalsRenderer, true),
-                    pickNormalsRenderer:                    lazy(VBOTrianglesPickNormalsRenderer, false),
-                    shadowRenderer:                         lazy(VBOShadowRenderer),
-                    silhouetteRenderer:                     eager(VBOSilhouetteRenderer),
-                    snapInitRenderer:                       eager(VBOSnapRenderer, true),
-                    snapRenderer:                           eager(VBOSnapRenderer, false)
+                    colorRenderer:                          lazy(() => VBOColorRenderer(scene, instancing, primitive, false)),
+                    colorRendererWithSAO:                   lazy(() => VBOColorRenderer(scene, instancing, primitive, true)),
+                    colorTextureRenderer:                   lazy(() => VBOTrianglesColorTextureRenderer(scene, instancing, primitive, false, false)),
+                    colorTextureRendererAlphaCutoff:        lazy(() => VBOTrianglesColorTextureRenderer(scene, instancing, primitive, false, true)),
+                    colorTextureRendererWithSAO:            lazy(() => VBOTrianglesColorTextureRenderer(scene, instancing, primitive, true,  false)),
+                    colorTextureRendererWithSAOAlphaCutoff: lazy(() => VBOTrianglesColorTextureRenderer(scene, instancing, primitive, true,  true)),
+                    depthRenderer:                          lazy(() => VBOTrianglesDepthRenderer(scene, instancing, primitive)),
+                    edgesColorRenderer:                     lazy(() => VBOTrianglesEdgesRenderer(scene, instancing, primitive, false)),
+                    edgesRenderer:                          lazy(() => VBOTrianglesEdgesRenderer(scene, instancing, primitive, true)),
+                    flatColorRenderer:                      lazy(() => VBOTrianglesFlatColorRenderer(scene, instancing, primitive, false)),
+                    flatColorRendererWithSAO:               lazy(() => VBOTrianglesFlatColorRenderer(scene, instancing, primitive, true)),
+                    occlusionRenderer:                      lazy(() => VBOOcclusionRenderer(scene, instancing, primitive)),
+                    pbrRenderer:                            lazy(() => VBOTrianglesPBRRenderer(scene, instancing, primitive, false)),
+                    pbrRendererWithSAO:                     lazy(() => VBOTrianglesPBRRenderer(scene, instancing, primitive, true)),
+                    pickDepthRenderer:                      eager(() => VBOPickDepthRenderer(scene, instancing, primitive)),
+                    pickMeshRenderer:                       eager(() => VBOPickMeshRenderer(scene, instancing, primitive)),
+                    pickNormalsFlatRenderer:                lazy(() => VBOTrianglesPickNormalsRenderer(scene, instancing, primitive, true)),
+                    pickNormalsRenderer:                    lazy(() => VBOTrianglesPickNormalsRenderer(scene, instancing, primitive, false)),
+                    shadowRenderer:                         lazy(() => VBOShadowRenderer(scene, instancing, primitive)),
+                    silhouetteRenderer:                     eager(() => VBOSilhouetteRenderer(scene, instancing, primitive)),
+                    snapInitRenderer:                       eager(() => VBOSnapRenderer(scene, instancing, primitive, true)),
+                    snapRenderer:                           eager(() => VBOSnapRenderer(scene, instancing, primitive, false))
                 };
             }
 
