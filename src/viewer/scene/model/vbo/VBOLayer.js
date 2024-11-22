@@ -98,14 +98,14 @@ const getRenderers = (function() {
                     // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
                     // but never used (and probably not maintained), as opposed to VBOInstancingPointsShadowRenderer in the same commit
                     shadowRenderer:     instancing && lazy(() => VBOShadowRenderer(scene)),
-                    silhouetteRenderer: lazy(() => VBOSilhouetteRenderer(scene, instancing, primitive)),
+                    silhouetteRenderer: lazy(() => VBOSilhouetteRenderer(scene, instancing, true)),
                     snapInitRenderer:   lazy(() => makeSnapProgram(true,  true)),
                     snapRenderer:       lazy(() => makeSnapProgram(false, true))
                 };
             } else if (primitive === "lines") {
                 cache[sceneId] = {
                     colorRenderer:      lazy(() => makeColorProgram(false, false)),
-                    silhouetteRenderer: lazy(() => VBOSilhouetteRenderer(scene, instancing, primitive)),
+                    silhouetteRenderer: lazy(() => VBOSilhouetteRenderer(scene, instancing, true)),
                     snapInitRenderer:   lazy(() => makeSnapProgram(true,  false)),
                     snapRenderer:       lazy(() => makeSnapProgram(false, false))
                 };
@@ -130,7 +130,7 @@ const getRenderers = (function() {
                     pickNormalsFlatRenderer:                lazy(() => makePickNormalsProgram(true)),
                     pickNormalsRenderer:                    lazy(() => makePickNormalsProgram(false)),
                     shadowRenderer:                         lazy(() => VBOShadowRenderer(scene)),
-                    silhouetteRenderer:                     eager(() => VBOSilhouetteRenderer(scene, instancing, primitive)),
+                    silhouetteRenderer:                     eager(() => VBOSilhouetteRenderer(scene, instancing, false)),
                     snapInitRenderer:                       eager(() => makeSnapProgram(true,  false)),
                     snapRenderer:                           eager(() => makeSnapProgram(false, false))
                 };
