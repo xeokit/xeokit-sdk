@@ -1,22 +1,12 @@
-import {DTXTrianglesDrawable} from "../DTXTrianglesDrawable.js";
 import {math} from "../../../../math/math.js";
 import {RENDER_PASSES} from "../../../RENDER_PASSES.js";
 
 const defaultColor = new Float32Array([1, 1, 1]);
 
-/**
- * @private
- */
-export class DTXTrianglesSilhouetteRenderer {
-
-    constructor(scene) {
-        this.getValid  = () => drawable.getValid();
-        this.drawLayer = (frameCtx, layer, renderPass) => drawable.drawLayer(frameCtx, layer, renderPass);
-        this.destroy   = () => drawable.destroy();
-
+export const DTXTrianglesSilhouetteRenderer = function(scene) {
         const gl = scene.canvas.gl;
-
-        const drawable = new DTXTrianglesDrawable("DTXTrianglesSilhouetteRenderer", scene, {
+        return {
+            programName: "Silhouette",
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             getViewParams: (frameCtx, camera) => ({
                 viewMatrix: camera.viewMatrix,
@@ -55,6 +45,5 @@ export class DTXTrianglesSilhouetteRenderer {
                     }
                 };
             }
-        });
-    }
-}
+        };
+};
