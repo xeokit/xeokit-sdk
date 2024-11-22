@@ -1,17 +1,11 @@
-import {VBORenderer} from "../VBORenderer.js";
 import {RENDER_PASSES} from "../../RENDER_PASSES.js";
 
-/**
- * @private
- */
-export class VBOSilhouetteRenderer extends VBORenderer {
-
-    constructor(scene, instancing, primitive) {
+export const VBOSilhouetteRenderer = function(scene, instancing, primitive) {
         const gl = scene.canvas.gl;
         const defaultSilhouetteColor = new Float32Array([1, 1, 1, 1]);
         const isPoints = primitive === "points";
 
-        super(scene, instancing, primitive, {
+        return {
             programName: "Silhouette",
 
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
@@ -82,7 +76,5 @@ export class VBOSilhouetteRenderer extends VBORenderer {
                     }
                 };
             }
-        });
-    }
-
-}
+        };
+};

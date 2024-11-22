@@ -1,15 +1,10 @@
-import {VBORenderer, createPickClipTransformSetup} from "../VBORenderer.js";
+import {createPickClipTransformSetup} from "../VBORenderer.js";
 
-/**
- * @private
- */
-export class VBOPickDepthRenderer extends VBORenderer {
-
-    constructor(scene, instancing, primitive) {
+export const VBOPickDepthRenderer = function(scene, instancing, primitive) {
         const gl = scene.canvas.gl;
         const clipTransformSetup = createPickClipTransformSetup(gl, 1);
 
-        super(scene, instancing, primitive, {
+        return {
             programName: "PickDepth",
 
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
@@ -54,7 +49,5 @@ export class VBOPickDepthRenderer extends VBORenderer {
                     setClipTransformState(frameCtx);
                 };
             }
-        });
-    }
-
-}
+        };
+};
