@@ -1,21 +1,10 @@
-import {DTXTrianglesDrawable} from "../DTXTrianglesDrawable.js";
 import {math} from "../../../../math/math.js";
-
 const tempVec3c = math.vec3();
 
-/**
- * @private
- */
-export class DTXTrianglesSnapRenderer {
-
-    constructor(scene, isSnapInit) {
-        this.getValid  = () => drawable.getValid();
-        this.drawLayer = (frameCtx, layer, renderPass) => drawable.drawLayer(frameCtx, layer, renderPass);
-        this.destroy   = () => drawable.destroy();
-
+export const DTXTrianglesSnapRenderer = function(scene, isSnapInit) {
         const gl = scene.canvas.gl;
-
-        const drawable = new DTXTrianglesDrawable(isSnapInit ? "DTXTrianglesSnapInitRenderer" : "DTXTrianglesSnapRenderer", scene, {
+        return {
+            programName: isSnapInit ? "SnapInit" : "Snap",
             // Improves occlusion accuracy at distance
             getLogDepth: true && (vFragDepth => (isSnapInit ? `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))` : vFragDepth)),
             getViewParams: (frameCtx, camera) => ({
@@ -88,6 +77,5 @@ export class DTXTrianglesSnapRenderer {
                 };
             },
             getGlMode: (!isSnapInit) && ((frameCtx) => (frameCtx.snapMode === "edge") ? gl.LINES : gl.POINTS)
-        });
-    }
-}
+        };
+};
