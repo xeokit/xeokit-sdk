@@ -1,6 +1,6 @@
 import {RENDER_PASSES} from "../../RENDER_PASSES.js";
 
-export const VBOTrianglesEdgesRenderer = function(scene, instancing, primitive, colorUniform) {
+export const VBOTrianglesEdgesRenderer = function(scene, colorUniform) {
         const gl = scene.canvas.gl;
         const edgesDefaultColor = new Float32Array([0, 0, 0, 1]);
 
