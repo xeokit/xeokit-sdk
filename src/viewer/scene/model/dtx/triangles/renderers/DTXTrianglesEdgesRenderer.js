@@ -1,6 +1,4 @@
-import {math} from "../../../../math/math.js";
 import {RENDER_PASSES} from "../../../RENDER_PASSES.js";
-
 const edgesDefaultColor = new Float32Array([0, 0, 0, 1]);
 
 export const DTXTrianglesEdgesRenderer = function(scene, colorUniform) {
