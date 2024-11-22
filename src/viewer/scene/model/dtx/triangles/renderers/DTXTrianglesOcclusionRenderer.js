@@ -1,13 +1,10 @@
-import {math} from "../../../../math/math.js";
-
-export const DTXTrianglesOcclusionRenderer = function(scene) {
-        const gl = scene.canvas.gl;
+export const DTXTrianglesOcclusionRenderer = function(logarithmicDepthBufferEnabled) {
         return {
             programName: "Occlusion",
             // Logarithmic depth buffer involves an accuracy tradeoff, sacrificing
             // accuracy at close range to improve accuracy at long range. This can
             // mess up accuracy for occlusion tests, so we'll disable for now.
-            getLogDepth: false && scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
+            getLogDepth: false && logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             getViewParams: (frameCtx, camera) => ({
                 viewMatrix: camera.viewMatrix,
                 projMatrix: camera.projMatrix,
