@@ -1,16 +1,11 @@
-import {VBORenderer, createLightSetup, createSAOSetup} from "../VBORenderer.js";
+import {createLightSetup, createSAOSetup} from "../VBORenderer.js";
 
-/**
- * @private
- */
-export class VBOTrianglesFlatColorRenderer extends VBORenderer {
-
-    constructor(scene, instancing, primitive, withSAO) {
+export const VBOTrianglesFlatColorRenderer = function(scene, instancing, primitive, withSAO) {
         const gl = scene.canvas.gl;
         const lightSetup = createLightSetup(gl, scene._lightsState, false);
         const sao = withSAO && createSAOSetup(gl, scene);
 
-        super(scene, instancing, primitive, {
+        return {
             programName: "FlatColor",
 
             getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao"],
@@ -51,7 +46,5 @@ export class VBOTrianglesFlatColorRenderer extends VBORenderer {
                     setSAOState && setSAOState(frameCtx);
                 };
             }
-        });
-    }
-
-}
+        };
+};
