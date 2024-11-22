@@ -1,19 +1,9 @@
-import {DTXTrianglesDrawable} from "../DTXTrianglesDrawable.js";
 import {math} from "../../../../math/math.js";
 
-/**
- * @private
- */
-export class DTXTrianglesPickNormalsFlatRenderer {
-
-    constructor(scene) {
-        this.getValid  = () => drawable.getValid();
-        this.drawLayer = (frameCtx, layer, renderPass) => drawable.drawLayer(frameCtx, layer, renderPass);
-        this.destroy   = () => drawable.destroy();
-
+export const DTXTrianglesPickNormalsFlatRenderer = function(scene) {
         const gl = scene.canvas.gl;
-
-        const drawable = new DTXTrianglesDrawable("DTXTrianglesPickNormalsFlatRenderer", scene, {
+        return {
+            programName: "PickNormalsFlat",
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             getViewParams: (frameCtx, camera) => ({
                 viewMatrix: frameCtx.pickViewMatrix || camera.viewMatrix,
@@ -44,6 +34,5 @@ export class DTXTrianglesPickNormalsFlatRenderer {
                     gl.uniform2f(uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
                 };
             }
-        });
-    }
-}
+        };
+};

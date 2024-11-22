@@ -1,5 +1,6 @@
 import {ENTITY_FLAGS} from "../../ENTITY_FLAGS.js";
 import {RENDER_PASSES} from "../../RENDER_PASSES.js";
+import {DTXTrianglesDrawable} from "./DTXTrianglesDrawable.js";
 
 import {math} from "../../../math/math.js";
 import {RenderState} from "../../../webgl/RenderState.js";
@@ -87,27 +88,29 @@ export const getRenderers = (function() {
         const sceneId = scene.id;
         if (! (sceneId in cache)) {
 
+            const createRenderer = (createProgramSetup) => new DTXTrianglesDrawable(scene, createProgramSetup());
+
             // Pre-initialize certain renderers that would otherwise be lazy-initialised on user interaction,
             // such as picking or emphasis, so that there is no delay when user first begins interacting with the viewer.
-            const eager = function(instantiate) {
-                let renderer = instantiate(scene);
+            const eager = function(createProgramSetup) {
+                let renderer = createRenderer(createProgramSetup);
                 return {
                     drawLayer: (frameCtx, layer, renderPass) => renderer.drawLayer(frameCtx, layer, renderPass),
                     revalidate: force => {
                         if (force || (! renderer.getValid())) {
                             renderer.destroy();
-                            renderer = instantiate(scene);
+                            renderer = createRenderer(createProgramSetup);
                         }
                     }
                 };
             };
 
-            const lazy = function(instantiate) {
+            const lazy = function(createProgramSetup) {
                 let renderer = null;
                 return {
                     drawLayer: (frameCtx, layer, renderPass) => {
                         if (! renderer) {
-                            renderer = instantiate(scene);
+                            renderer = createRenderer(createProgramSetup);
                         }
                         renderer.drawLayer(frameCtx, layer, renderPass);
                     },
@@ -121,18 +124,18 @@ export const getRenderers = (function() {
             };
 
             cache[sceneId] = {
-                colorRenderer:           lazy(s => new DTXTrianglesColorRenderer(s, false)),
-                colorRendererWithSAO:    lazy(s => new DTXTrianglesColorRenderer(s, true)),
-                depthRenderer:           lazy(s => new DTXTrianglesDepthRenderer(s)),
-                edgesColorRenderer:      lazy(s => new DTXTrianglesEdgesRenderer(s, false)),
-                edgesRenderer:           lazy(s => new DTXTrianglesEdgesRenderer(s, true)),
-                occlusionRenderer:       lazy(s => new DTXTrianglesOcclusionRenderer(s)),
-                pickDepthRenderer:       eager(s => new DTXTrianglesPickDepthRenderer(s)),
-                pickMeshRenderer:        eager(s => new DTXTrianglesPickMeshRenderer(s)),
-                pickNormalsFlatRenderer: eager(s => new DTXTrianglesPickNormalsFlatRenderer(s)),
-                silhouetteRenderer:      eager(s => new DTXTrianglesSilhouetteRenderer(s)),
-                snapInitRenderer:        eager(s => new DTXTrianglesSnapRenderer(s, true)),
-                snapRenderer:            eager(s => new DTXTrianglesSnapRenderer(s, false)),
+                colorRenderer:           lazy(() => DTXTrianglesColorRenderer(scene, false)),
+                colorRendererWithSAO:    lazy(() => DTXTrianglesColorRenderer(scene, true)),
+                depthRenderer:           lazy(() => DTXTrianglesDepthRenderer(scene)),
+                edgesColorRenderer:      lazy(() => DTXTrianglesEdgesRenderer(scene, false)),
+                edgesRenderer:           lazy(() => DTXTrianglesEdgesRenderer(scene, true)),
+                occlusionRenderer:       lazy(() => DTXTrianglesOcclusionRenderer(scene)),
+                pickDepthRenderer:       eager(() => DTXTrianglesPickDepthRenderer(scene)),
+                pickMeshRenderer:        eager(() => DTXTrianglesPickMeshRenderer(scene)),
+                pickNormalsFlatRenderer: eager(() => DTXTrianglesPickNormalsFlatRenderer(scene)),
+                silhouetteRenderer:      eager(() => DTXTrianglesSilhouetteRenderer(scene)),
+                snapInitRenderer:        eager(() => DTXTrianglesSnapRenderer(scene, true)),
+                snapRenderer:            eager(() => DTXTrianglesSnapRenderer(scene, false)),
             };
 
             const compile = () => Object.values(cache[sceneId]).forEach(r => r && r.revalidate(false));
