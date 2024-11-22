@@ -9,7 +9,7 @@ export class VBOPickMeshRenderer extends VBORenderer {
         const clipTransformSetup = createPickClipTransformSetup(scene.canvas.gl, 1);
 
         super(scene, instancing, primitive, {
-            progMode: "pickMeshMode",
+            programName: "PickMesh",
 
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             // pickFlag = NOT_RENDERED | PICK

@@ -7,7 +7,7 @@ export class VBOOcclusionRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive) {
         super(scene, instancing, primitive, {
-            progMode: "occlusionMode",
+            programName: "Occlusion",
 
             // Logarithmic depth buffer involves an accuracy tradeoff, sacrificing
             // accuracy at close range to improve accuracy at long range. This can
