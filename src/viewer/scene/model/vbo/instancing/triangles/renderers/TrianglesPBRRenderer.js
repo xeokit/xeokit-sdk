@@ -273,7 +273,7 @@ export class TrianglesPBRRenderer extends TrianglesInstancingRenderer {
         src.push("vec3 perturbNormal2Arb( vec3 eye_pos, vec3 surf_norm, vec2 uv ) {");
         src.push("       vec3 texel = texture( uNormalMap, uv ).xyz;");
         src.push("       if (texel.r == 0.0 && texel.g == 0.0 && texel.b == 0.0) {");
-        src.push("              return normalize(surf_norm );");
+        src.push("              return surf_norm;");
         src.push("       }");
         src.push("      vec3 q0 = vec3( dFdx( eye_pos.x ), dFdx( eye_pos.y ), dFdx( eye_pos.z ) );");
         src.push("      vec3 q1 = vec3( dFdy( eye_pos.x ), dFdy( eye_pos.y ), dFdy( eye_pos.z ) );");
