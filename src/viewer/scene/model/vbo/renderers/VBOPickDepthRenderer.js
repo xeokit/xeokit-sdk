@@ -10,7 +10,7 @@ export class VBOPickDepthRenderer extends VBORenderer {
         const clipTransformSetup = createPickClipTransformSetup(gl, 1);
 
         super(scene, instancing, primitive, {
-            progMode: "pickDepthMode",
+            programName: "PickDepth",
 
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             // pickFlag = NOT_RENDERED | PICK
