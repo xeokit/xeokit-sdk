@@ -1,15 +1,10 @@
-import {VBORenderer, createPickClipTransformSetup} from "../VBORenderer.js";
+import {createPickClipTransformSetup} from "../VBORenderer.js";
 import { math } from "../../../math/math.js";
 
-/**
- * @private
- */
-export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
-
-    constructor(scene, instancing, primitive, isFlat) {
+export const VBOTrianglesPickNormalsRenderer = function(scene, instancing, primitive, isFlat) {
         const clipTransformSetup = createPickClipTransformSetup(scene.canvas.gl, 3);
 
-        super(scene, instancing, primitive, {
+        return {
             programName: isFlat ? "PickNormalsFlat" : "PickNormals",
 
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
@@ -44,7 +39,5 @@ export class VBOTrianglesPickNormalsRenderer extends VBORenderer {
                 const setClipTransformState = clipTransformSetup.setupInputs(program);
                 return (frameCtx, layer, renderPass, rtcOrigin) => setClipTransformState(frameCtx);
             }
-        });
-    }
-
-}
+        };
+};

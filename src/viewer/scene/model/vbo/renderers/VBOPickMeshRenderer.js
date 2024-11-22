@@ -1,14 +1,9 @@
-import {VBORenderer, createPickClipTransformSetup} from "../VBORenderer.js";
+import {createPickClipTransformSetup} from "../VBORenderer.js";
 
-/**
- * @private
- */
-export class VBOPickMeshRenderer extends VBORenderer {
-
-    constructor(scene, instancing, primitive) {
+export const VBOPickMeshRenderer = function(scene, instancing, primitive) {
         const clipTransformSetup = createPickClipTransformSetup(scene.canvas.gl, 1);
 
-        super(scene, instancing, primitive, {
+        return {
             programName: "PickMesh",
 
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
@@ -37,7 +32,5 @@ export class VBOPickMeshRenderer extends VBORenderer {
                 const setClipTransformState = clipTransformSetup.setupInputs(program);
                 return (frameCtx, layer, renderPass, rtcOrigin) => setClipTransformState(frameCtx);
             }
-        });
-    }
-
-}
+        };
+};
