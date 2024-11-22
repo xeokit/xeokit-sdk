@@ -14,7 +14,8 @@ export class VBOTrianglesColorTextureRenderer extends VBORenderer {
         const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
 
         super(scene, instancing, primitive, {
-            progMode: "colorTextureMode", incrementDrawState: true,
+            programName: "ColorTexture",
+            incrementDrawState: true,
 
             getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao", gammaOutput, useAlphaCutoff ? "alphaCutoffYes" : "alphaCutoffNo"],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),

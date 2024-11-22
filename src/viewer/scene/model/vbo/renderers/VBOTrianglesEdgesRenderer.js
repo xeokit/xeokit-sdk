@@ -11,7 +11,8 @@ export class VBOTrianglesEdgesRenderer extends VBORenderer {
         const edgesDefaultColor = new Float32Array([0, 0, 0, 1]);
 
         super(scene, instancing, primitive, {
-            progMode: "edgesMode", edges: true,
+            programName: "Edges",
+            edges: true,
 
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             // edgeFlag = NOT_RENDERED | EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
