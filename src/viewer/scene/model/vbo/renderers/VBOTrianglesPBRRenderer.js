@@ -1,13 +1,9 @@
-import {createLightSetup, createSAOSetup} from "../VBORenderer.js";
 import {WEBGL_INFO} from "../../../webglInfo.js";
 
-export const VBOTrianglesPBRRenderer = function(scene, instancing, primitive, withSAO) {
+export const VBOTrianglesPBRRenderer = function(scene, lightSetup, sao) {
         const gl = scene.canvas.gl;
-        const lightSetup = createLightSetup(gl, scene._lightsState, true);
         const getIrradiance = lightSetup.getIrradiance;
         const getReflectionRadiance = lightSetup.getReflectionRadiance;
-        const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
-        const sao = withSAO && createSAOSetup(gl, scene);
         const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
 
         return {
@@ -274,7 +270,7 @@ export const VBOTrianglesPBRRenderer = function(scene, instancing, primitive, wi
                         const setSampler = (sampler, texture) => {
                             if (texture) {
                                 sampler.bindTexture(texture.texture, frameCtx.textureUnit);
-                                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
+                                frameCtx.textureUnit = (frameCtx.textureUnit + 1) % WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
                             }
                         };
 
