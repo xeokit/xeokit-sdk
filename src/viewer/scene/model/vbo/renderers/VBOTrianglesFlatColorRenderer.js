@@ -1,15 +1,9 @@
-import {createLightSetup, createSAOSetup} from "../VBORenderer.js";
-
-export const VBOTrianglesFlatColorRenderer = function(scene, instancing, primitive, withSAO) {
-        const gl = scene.canvas.gl;
-        const lightSetup = createLightSetup(gl, scene._lightsState, false);
-        const sao = withSAO && createSAOSetup(gl, scene);
-
+export const VBOTrianglesFlatColorRenderer = function(logarithmicDepthBufferEnabled, lightSetup, sao) {
         return {
             programName: "FlatColor",
 
             getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao"],
-            getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
+            getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
             // renderPass = COLOR_OPAQUE | COLOR_TRANSPARENT
             renderPassFlag: 0,
