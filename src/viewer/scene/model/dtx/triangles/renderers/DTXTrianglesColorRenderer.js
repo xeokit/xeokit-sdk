@@ -1,16 +1,8 @@
-import {createLightSetup, createSAOSetup} from "../../../vbo/VBORenderer.js";
-import {math} from "../../../../math/math.js";
-const tempVec4a = math.vec4();
-
-export const DTXTrianglesColorRenderer = function(scene, withSAO) {
-        const gl = scene.canvas.gl;
-        const lightSetup = createLightSetup(gl, scene._lightsState, false); // WARNING: Changing `useMaps' to `true' might have unexpected consequences while binding textures, as the DTX texture binding mechanism doesn't rely on `frameCtx.textureUnit` the way VBO does (see setSAORenderState)
-        const sao = withSAO && createSAOSetup(gl, scene);
-
+export const DTXTrianglesColorRenderer = function(logarithmicDepthBufferEnabled, lightSetup, sao) {
         return {
             programName: "Color",
             getHash: () => [lightSetup.getHash(), (sao ? "sao" : "nosao")],
-            getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
+            getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             getViewParams: (frameCtx, camera) => ({
                 viewMatrix: camera.viewMatrix,
                 projMatrix: camera.projMatrix,
