@@ -174,6 +174,7 @@ export class TrianglesPBRRenderer extends TrianglesInstancingRenderer {
         src.push("uniform sampler2D uMetallicRoughMap;");
         src.push("uniform sampler2D uEmissiveMap;");
         src.push("uniform sampler2D uNormalMap;");
+        src.push("uniform sampler2D uAOMap;");
 
         if (this._withSAO) {
             src.push("uniform sampler2D uOcclusionTexture;");
@@ -527,6 +528,7 @@ export class TrianglesPBRRenderer extends TrianglesInstancingRenderer {
         }
 
         src.push("vec3 emissiveColor = sRGBToLinear(texture(uEmissiveMap, vUV)).rgb;"); // TODO: correct gamma function
+        src.push("float aoFactor = texture(uAOMap, vUV).r;");
 
         src.push("vec3 outgoingLight = (lightAmbient.rgb * lightAmbient.a * baseColor * opacity * rgb) + (reflectedLight.diffuse) + (reflectedLight.specular) + emissiveColor;");
         src.push("vec4 fragColor;");
@@ -540,7 +542,7 @@ export class TrianglesPBRRenderer extends TrianglesInstancingRenderer {
             src.push("   float blendFactor       = uSAOParams[3];");
             src.push("   vec2 uv                 = vec2(gl_FragCoord.x / viewportWidth, gl_FragCoord.y / viewportHeight);");
             src.push("   float ambient           = smoothstep(blendCutoff, 1.0, unpackRGBToFloat(texture(uOcclusionTexture, uv))) * blendFactor;");
-            src.push("   fragColor            = vec4(outgoingLight.rgb * ambient, opacity);");
+            src.push("   fragColor               = vec4(outgoingLight.rgb * ambient * aoFactor, opacity);");
         } else {
             src.push("   fragColor            = vec4(outgoingLight.rgb, opacity);");
         }
