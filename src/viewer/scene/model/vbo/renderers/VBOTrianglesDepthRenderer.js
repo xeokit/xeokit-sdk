@@ -1,12 +1,5 @@
-import {VBORenderer} from "../VBORenderer.js";
-
-/**
- * @private
- */
-export class VBOTrianglesDepthRenderer extends VBORenderer {
-
-    constructor(scene, instancing, primitive) {
-        super(scene, instancing, primitive, {
+export const VBOTrianglesDepthRenderer = function(scene, instancing, primitive) {
+        return {
             programName: "Depth",
 
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
@@ -24,7 +17,5 @@ export class VBOTrianglesDepthRenderer extends VBORenderer {
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push("outColor = vec4(vec3((1.0 - vHighPrecisionZW[0] / vHighPrecisionZW[1]) / 2.0), 1.0);");
             }
-        });
-    }
-
-}
+        };
+};
