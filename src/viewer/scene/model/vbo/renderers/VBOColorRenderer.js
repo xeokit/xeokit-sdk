@@ -1,16 +1,11 @@
-import {VBORenderer, createLightSetup, createSAOSetup} from "../VBORenderer.js";
+import {createLightSetup, createSAOSetup} from "../VBORenderer.js";
 
-/**
- * @private
- */
-export class VBOColorRenderer extends VBORenderer {
-
-    constructor(scene, instancing, primitive, withSAO) {
+export const VBOColorRenderer = function(scene, instancing, primitive, withSAO) {
         const gl = scene.canvas.gl;
         const lightSetup = (primitive !== "points") && (primitive !== "lines") && createLightSetup(gl, scene._lightsState, false);
         const sao = withSAO && createSAOSetup(gl, scene);
 
-        super(scene, instancing, primitive, {
+        return {
             programName: "Color",
             incrementDrawState: true,
 
@@ -57,7 +52,5 @@ export class VBOColorRenderer extends VBORenderer {
                     setSAOState && setSAOState(frameCtx);
                 };
             }
-        });
-    }
-
-}
+        };
+};

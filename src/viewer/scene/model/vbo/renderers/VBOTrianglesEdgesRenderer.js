@@ -1,16 +1,10 @@
-import {VBORenderer} from "../VBORenderer.js";
 import {RENDER_PASSES} from "../../RENDER_PASSES.js";
 
-/**
- * @private
- */
-export class VBOTrianglesEdgesRenderer extends VBORenderer {
-
-    constructor(scene, instancing, primitive, colorUniform) {
+export const VBOTrianglesEdgesRenderer = function(scene, instancing, primitive, colorUniform) {
         const gl = scene.canvas.gl;
         const edgesDefaultColor = new Float32Array([0, 0, 0, 1]);
 
-        super(scene, instancing, primitive, {
+        return {
             programName: "Edges",
             edges: true,
 
@@ -56,7 +50,5 @@ export class VBOTrianglesEdgesRenderer extends VBORenderer {
                     }
                 };
             }
-        });
-    }
-
-}
+        };
+};
