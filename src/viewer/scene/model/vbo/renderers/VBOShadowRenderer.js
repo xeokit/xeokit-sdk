@@ -11,7 +11,7 @@ export class VBOShadowRenderer extends VBORenderer {
         const gl = scene.canvas.gl;
 
         super(scene, instancing, primitive, {
-            progMode: "shadowMode",
+            programName: "Shadow",
 
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             renderPassFlag: 0,
