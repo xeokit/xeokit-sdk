@@ -1,8 +1,7 @@
-export const VBOShadowRenderer = function(scene, instancing, primitive) {
+export const VBOShadowRenderer = function(scene) {
         // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
         // but never used (and probably not maintained), as opposed to VBOInstancingPointsShadowRenderer in the same commit
         const gl = scene.canvas.gl;
-
         return {
             programName: "Shadow",
 

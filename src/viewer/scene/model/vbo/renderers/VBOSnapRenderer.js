@@ -1,9 +1,7 @@
 import {math} from "../../../math/math.js";
 const tempVec3c = math.vec3();
 
-export const VBOSnapRenderer = function(scene, instancing, primitive, isSnapInit) {
-        const gl = scene.canvas.gl;
-
+export const VBOSnapRenderer = function(gl, isSnapInit, isPoints) {
         return {
             programName: isSnapInit ? "SnapInitRenderer" : "SnapRenderer",
             snapParameters: { isSnapInit: isSnapInit },
@@ -25,7 +23,7 @@ export const VBOSnapRenderer = function(scene, instancing, primitive, isSnapInit
                 if (isSnapInit) {
                     src.push(`vPickColor = ${pickColor};`);
                 }
-                if ((primitive === "points") || (!isSnapInit)) {
+                if (isPoints || (!isSnapInit)) {
                     src.push("gl_PointSize = 1.0;"); // Windows needs this?
                 }
             },
@@ -46,7 +44,7 @@ export const VBOSnapRenderer = function(scene, instancing, primitive, isSnapInit
                 src.push(`outCoords = ivec4(${vWorldPosition} * uCoordinateScaler.xyz, ${isSnapInit ? "-" : ""}uLayerNumber);`);
 
                 if (isSnapInit) {
-                    src.push(`outNormal = ${(primitive === "points") ? "ivec4(1.0)" : `ivec4(normalize(cross(dFdx(${vWorldPosition}), dFdy(${vWorldPosition}))) * float(${math.MAX_INT}), 1.0)`};`);
+                    src.push(`outNormal = ${isPoints ? "ivec4(1.0)" : `ivec4(normalize(cross(dFdx(${vWorldPosition}), dFdy(${vWorldPosition}))) * float(${math.MAX_INT}), 1.0)`};`);
                     src.push("outPickColor = uvec4(vPickColor);");
                 }
             },
