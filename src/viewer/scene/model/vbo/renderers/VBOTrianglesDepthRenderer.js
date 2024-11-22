@@ -1,8 +1,8 @@
-export const VBOTrianglesDepthRenderer = function(scene, instancing, primitive) {
+export const VBOTrianglesDepthRenderer = function(logarithmicDepthBufferEnabled) {
         return {
             programName: "Depth",
 
-            getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
+            getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
             // renderPass = COLOR_OPAQUE
             renderPassFlag: 0,

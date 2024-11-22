@@ -1,12 +1,8 @@
-import {createLightSetup, createSAOSetup} from "../VBORenderer.js";
 import {WEBGL_INFO} from "../../../webglInfo.js";
 
-export const VBOTrianglesColorTextureRenderer = function(scene, instancing, primitive, withSAO, useAlphaCutoff) {
+export const VBOTrianglesColorTextureRenderer = function(scene, lightSetup, sao, useAlphaCutoff, gammaOutput) {
         const gl = scene.canvas.gl;
-        const lightSetup = createLightSetup(gl, scene._lightsState, false);
         const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
-        const sao = withSAO && createSAOSetup(gl, scene);
-        const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
 
         return {
             programName: "ColorTexture",

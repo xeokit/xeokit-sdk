@@ -1,11 +1,11 @@
-export const VBOOcclusionRenderer = function(scene, instancing, primitive) {
+export const VBOOcclusionRenderer = function(logarithmicDepthBufferEnabled) {
         return {
             programName: "Occlusion",
 
             // Logarithmic depth buffer involves an accuracy tradeoff, sacrificing
             // accuracy at close range to improve accuracy at long range. This can
             // mess up accuracy for occlusion tests, so we'll disable for now.
-            getLogDepth: false && scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
+            getLogDepth: false && logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
             // renderPass = COLOR_OPAQUE // instancing had also COLOR_TRANSPARENT
             // Only opaque objects can be occluders
