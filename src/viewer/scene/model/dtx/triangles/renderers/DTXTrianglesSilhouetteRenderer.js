@@ -305,6 +305,8 @@ export class DTXTrianglesSilhouetteRenderer {
             src.push("flat out uint vFlags2;");
         }
 
+        src.push("out float vAlpha;");
+
         src.push("void main(void) {");
 
         // constants
@@ -355,6 +357,16 @@ export class DTXTrianglesSilhouetteRenderer {
         src.push("positions[0] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.r, indexPositionV.r), 0));")
         src.push("positions[1] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.g, indexPositionV.g), 0));")
         src.push("positions[2] = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.b, indexPositionV.b), 0));")
+
+        // get color
+        src.push("uvec4 color = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);");
+
+        src.push(`if (color.a == 0u) {`);
+        src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
+        src.push("   return;");
+        src.push("};");
+
+        src.push("vAlpha = float(color.a) / 255.0;");
 
         // get normal
         src.push("vec3 normal = normalize(cross(positions[2] - positions[0], positions[1] - positions[0]));");
@@ -427,6 +439,7 @@ export class DTXTrianglesSilhouetteRenderer {
                 src.push("uniform vec3 sectionPlaneDir" + i + ";");
             }
         }
+        src.push("in float vAlpha;");
         src.push("uniform vec4 color;");
         src.push("out vec4 outColor;");
         src.push("void main(void) {");
@@ -447,7 +460,7 @@ export class DTXTrianglesSilhouetteRenderer {
         if (scene.logarithmicDepthBufferEnabled) {
             src.push("    gl_FragDepth = isPerspective == 0.0 ? gl_FragCoord.z : log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
-        src.push("    outColor = color;");
+        src.push("    outColor = vec4(color.rgb, min(color.a, vAlpha));");
         src.push("}");
         return src;
     }
