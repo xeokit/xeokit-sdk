@@ -1,10 +1,4 @@
-import {createLightSetup, createSAOSetup} from "../VBORenderer.js";
-
-export const VBOColorRenderer = function(scene, instancing, primitive, withSAO) {
-        const gl = scene.canvas.gl;
-        const lightSetup = (primitive !== "points") && (primitive !== "lines") && createLightSetup(gl, scene._lightsState, false);
-        const sao = withSAO && createSAOSetup(gl, scene);
-
+export const VBOColorRenderer = function(scene, primitive, lightSetup, sao) {
         return {
             programName: "Color",
             incrementDrawState: true,
