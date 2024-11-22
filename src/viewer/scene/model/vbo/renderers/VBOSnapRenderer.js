@@ -1,17 +1,10 @@
-import {VBORenderer} from "../VBORenderer.js";
 import {math} from "../../../math/math.js";
-
 const tempVec3c = math.vec3();
 
-/**
- * @private
- */
-export class VBOSnapRenderer extends VBORenderer {
-
-    constructor(scene, instancing, primitive, isSnapInit) {
+export const VBOSnapRenderer = function(scene, instancing, primitive, isSnapInit) {
         const gl = scene.canvas.gl;
 
-        super(scene, instancing, primitive, {
+        return {
             programName: isSnapInit ? "SnapInitRenderer" : "SnapRenderer",
             snapParameters: { isSnapInit: isSnapInit },
 
@@ -81,7 +74,5 @@ export class VBOSnapRenderer extends VBORenderer {
                     gl.uniform3fv(uCoordinateScaler, coordinateScaler);
                 };
             }
-        });
-    }
-
-}
+        };
+};
