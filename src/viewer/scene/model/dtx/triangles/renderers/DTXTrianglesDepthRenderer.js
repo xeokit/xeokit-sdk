@@ -1,10 +1,7 @@
-import {math} from "../../../../math/math.js";
-
-export const DTXTrianglesDepthRenderer = function(scene) {
-        const gl = scene.canvas.gl;
+export const DTXTrianglesDepthRenderer = function(logarithmicDepthBufferEnabled) {
         return {
             programName: "Depth",
-            getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
+            getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             getViewParams: (frameCtx, camera) => ({
                 viewMatrix: camera.viewMatrix,
                 projMatrix: camera.projMatrix,
