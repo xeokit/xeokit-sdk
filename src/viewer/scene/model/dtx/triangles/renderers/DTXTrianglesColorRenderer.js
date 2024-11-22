@@ -1,24 +1,14 @@
-import {DTXTrianglesDrawable} from "../DTXTrianglesDrawable.js";
 import {createLightSetup, createSAOSetup} from "../../../vbo/VBORenderer.js";
 import {math} from "../../../../math/math.js";
-
 const tempVec4a = math.vec4();
 
-/**
- * @private
- */
-export class DTXTrianglesColorRenderer {
-
-    constructor(scene, withSAO) {
-        this.getValid  = () => drawable.getValid();
-        this.drawLayer = (frameCtx, layer, renderPass) => drawable.drawLayer(frameCtx, layer, renderPass);
-        this.destroy   = () => drawable.destroy();
-
+export const DTXTrianglesColorRenderer = function(scene, withSAO) {
         const gl = scene.canvas.gl;
         const lightSetup = createLightSetup(gl, scene._lightsState, false); // WARNING: Changing `useMaps' to `true' might have unexpected consequences while binding textures, as the DTX texture binding mechanism doesn't rely on `frameCtx.textureUnit` the way VBO does (see setSAORenderState)
         const sao = withSAO && createSAOSetup(gl, scene);
 
-        const drawable = new DTXTrianglesDrawable("DTXTrianglesColorRenderer", scene, {
+        return {
+            programName: "Color",
             getHash: () => [lightSetup.getHash(), (sao ? "sao" : "nosao")],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             getViewParams: (frameCtx, camera) => ({
@@ -57,6 +47,5 @@ export class DTXTrianglesColorRenderer {
                     setSAORenderState && setSAORenderState(frameCtx, 10);
                 };
             }
-        });
-    }
-}
+        };
+};
