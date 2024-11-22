@@ -1,19 +1,9 @@
-import {DTXTrianglesDrawable} from "../DTXTrianglesDrawable.js";
 import {math} from "../../../../math/math.js";
 
-/**
- * @private
- */
-export class DTXTrianglesPickDepthRenderer {
-
-    constructor(scene) {
-        this.getValid  = () => drawable.getValid();
-        this.drawLayer = (frameCtx, layer, renderPass) => drawable.drawLayer(frameCtx, layer, renderPass);
-        this.destroy   = () => drawable.destroy();
-
+export const DTXTrianglesPickDepthRenderer = function(scene) {
         const gl = scene.canvas.gl;
-
-        const drawable = new DTXTrianglesDrawable("DTXTrianglesPickDepthRenderer", scene, {
+        return {
+            programName: "PickDepth",
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             getViewParams: (frameCtx, camera) => ({
                 viewMatrix: frameCtx.pickViewMatrix || camera.viewMatrix,
@@ -62,6 +52,5 @@ export class DTXTrianglesPickDepthRenderer {
                     gl.uniform1f(uPickZFar, frameCtx.pickZFar);
                 };
             }
-        });
-    }
-}
+        };
+};
