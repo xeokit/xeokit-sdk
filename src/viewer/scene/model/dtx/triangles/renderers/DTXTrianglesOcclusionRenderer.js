@@ -1,19 +1,9 @@
-import {DTXTrianglesDrawable} from "../DTXTrianglesDrawable.js";
 import {math} from "../../../../math/math.js";
 
-/**
- * @private
- */
-export class DTXTrianglesOcclusionRenderer {
-
-    constructor(scene) {
-        this.getValid  = () => drawable.getValid();
-        this.drawLayer = (frameCtx, layer, renderPass) => drawable.drawLayer(frameCtx, layer, renderPass);
-        this.destroy   = () => drawable.destroy();
-
+export const DTXTrianglesOcclusionRenderer = function(scene) {
         const gl = scene.canvas.gl;
-
-        const drawable = new DTXTrianglesDrawable("DTXTrianglesOcclusionRenderer", scene, {
+        return {
+            programName: "Occlusion",
             // Logarithmic depth buffer involves an accuracy tradeoff, sacrificing
             // accuracy at close range to improve accuracy at long range. This can
             // mess up accuracy for occlusion tests, so we'll disable for now.
@@ -29,6 +19,5 @@ export class DTXTrianglesOcclusionRenderer {
             renderPassFlag: 0,
             appendFragmentDefinitions: (src) => src.push("out vec4 outColor;"),
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => src.push("outColor = vec4(0.0, 0.0, 1.0, 1.0);") // Occluders are blue
-        });
-    }
-}
+        };
+};
