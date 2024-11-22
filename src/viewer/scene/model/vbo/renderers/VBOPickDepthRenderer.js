@@ -1,9 +1,5 @@
-import {createPickClipTransformSetup} from "../VBORenderer.js";
-
-export const VBOPickDepthRenderer = function(scene, instancing, primitive) {
+export const VBOPickDepthRenderer = function(scene, clipTransformSetup, isPoints) {
         const gl = scene.canvas.gl;
-        const clipTransformSetup = createPickClipTransformSetup(gl, 1);
-
         return {
             programName: "PickDepth",
 
@@ -18,7 +14,7 @@ export const VBOPickDepthRenderer = function(scene, instancing, primitive) {
             transformClipPos: clipTransformSetup.transformClipPos,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 src.push(`vViewPosition = ${view.viewPosition};`);
-                if (primitive === "points") {
+                if (isPoints) {
                     src.push("gl_PointSize += 10.0;");
                 }
             },
