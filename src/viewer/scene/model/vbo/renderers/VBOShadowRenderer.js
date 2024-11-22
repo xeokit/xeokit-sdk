@@ -1,16 +1,9 @@
-import {VBORenderer} from "../VBORenderer.js";
-
-/**
- * @private
- */
-export class VBOShadowRenderer extends VBORenderer {
-
-    constructor(scene, instancing, primitive) {
+export const VBOShadowRenderer = function(scene, instancing, primitive) {
         // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
         // but never used (and probably not maintained), as opposed to VBOInstancingPointsShadowRenderer in the same commit
         const gl = scene.canvas.gl;
 
-        super(scene, instancing, primitive, {
+        return {
             programName: "Shadow",
 
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
@@ -42,7 +35,5 @@ export class VBOShadowRenderer extends VBORenderer {
                     gl.uniformMatrix4fv(uShadowViewMatrix, false, frameCtx.shadowViewMatrix); // Not tested
                 };
             }
-        });
-    }
-
-}
+        };
+};
