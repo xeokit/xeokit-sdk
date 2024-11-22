@@ -1,9 +1,8 @@
 import {RENDER_PASSES} from "../../RENDER_PASSES.js";
 
-export const VBOSilhouetteRenderer = function(scene, instancing, primitive) {
+export const VBOSilhouetteRenderer = function(scene, instancing, isPointsOrLines) {
         const gl = scene.canvas.gl;
         const defaultSilhouetteColor = new Float32Array([1, 1, 1, 1]);
-        const isPoints = primitive === "points";
 
         return {
             programName: "Silhouette",
@@ -12,35 +11,15 @@ export const VBOSilhouetteRenderer = function(scene, instancing, primitive) {
             // silhouetteFlag = NOT_RENDERED | SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | SILHOUETTE_XRAYED
             // renderPass = SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | SILHOUETTE_XRAYED
             renderPassFlag: 1,
-            appendVertexDefinitions: (src) => {
-                if (isPoints) {
-                    // likely something wrong here that instancing differs from batching, as the mode seems to rely on silhouetteColor instead
-                    if (instancing) {
-                        src.push("uniform vec4 silhouetteColor;");
-                        src.push("out vec4 vColor;");
-                    }
-                } else if (primitive !== "lines") {
-                    src.push("uniform vec4 silhouetteColor;");
-                    src.push("out vec4 vColor;");
-                }
-            },
-            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
-                if (isPoints) {
-                    if (instancing) {
-                        src.push(`vColor = silhouetteColor;`);
-                    }
-                } else if (primitive !== "lines") {
-                    src.push(`vColor = vec4(silhouetteColor.rgb, min(silhouetteColor.a, ${color}.a / 255.0));`);
-                }
-            },
+            appendVertexDefinitions: (! isPointsOrLines) && ((src) => {
+                src.push("uniform vec4 silhouetteColor;");
+                src.push("out vec4 vColor;");
+            }),
+            appendVertexOutputs: (! isPointsOrLines) && ((src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
+                src.push(`vColor = vec4(silhouetteColor.rgb, min(silhouetteColor.a, ${color}.a / 255.0));`);
+            }),
             appendFragmentDefinitions: (src) => {
-                if (isPoints) {
-                    if (instancing) {
-                        src.push("in vec4 vColor;");
-                    } else {
-                        src.push("uniform vec4 silhouetteColor;");
-                    }
-                } else if (primitive === "lines") {
+                if (isPointsOrLines) {
                     src.push("uniform vec4 silhouetteColor;");
                 } else {
                     src.push("in vec4 vColor;");
@@ -48,9 +27,7 @@ export const VBOSilhouetteRenderer = function(scene, instancing, primitive) {
                 src.push("out vec4 outColor;");
             },
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
-                if (isPoints) {
-                    src.push("outColor = " + (instancing ? "vColor" : "silhouetteColor") + ";");
-                } else if (primitive === "lines") {
+                if (isPointsOrLines) {
                     src.push("outColor = silhouetteColor;");
                 } else {
                     src.push(`outColor = ${sliceColorOr("vColor")};`);
