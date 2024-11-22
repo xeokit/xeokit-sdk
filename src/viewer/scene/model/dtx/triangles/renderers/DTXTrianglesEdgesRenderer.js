@@ -1,22 +1,12 @@
-import {DTXTrianglesDrawable} from "../DTXTrianglesDrawable.js";
 import {math} from "../../../../math/math.js";
 import {RENDER_PASSES} from "../../../RENDER_PASSES.js";
 
 const edgesDefaultColor = new Float32Array([0, 0, 0, 1]);
 
-/**
- * @private
- */
-export class DTXTrianglesEdgesRenderer {
-
-    constructor(scene, colorUniform) {
-        this.getValid  = () => drawable.getValid();
-        this.drawLayer = (frameCtx, layer, renderPass) => drawable.drawLayer(frameCtx, layer, renderPass);
-        this.destroy   = () => drawable.destroy();
-
+export const DTXTrianglesEdgesRenderer = function(scene, colorUniform) {
         const gl = scene.canvas.gl;
-
-        const drawable = new DTXTrianglesDrawable(colorUniform ? "DTXTrianglesEdgesRenderer" : "DTXTrianglesEdgesColorRenderer", scene, {
+        return {
+            programName: colorUniform ? "Edges" : "EdgesColor",
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             getViewParams: (frameCtx, camera) => ({
                 viewMatrix: camera.viewMatrix,
@@ -69,6 +59,5 @@ export class DTXTrianglesEdgesRenderer {
                 };
             },
             getGlMode: (frameCtx) => gl.LINES
-        });
-    }
-}
+        };
+};
