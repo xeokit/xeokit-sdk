@@ -1,5 +1,11 @@
 import {VBOInstancingPointsRenderer} from "./VBOInstancingPointsRenderer.js";
 
+// Logarithmic depth buffer involves an accuracy tradeoff, sacrificing
+// accuracy at close range to improve accuracy at long range. This can
+// mess up accuracy for occlusion tests, so we'll disable for now.
+
+const ENABLE_LOG_DEPTH_BUF = false;
+
 /**
  * @private
  */
@@ -40,7 +46,7 @@ export class VBOInstancingPointsOcclusionRenderer extends VBOInstancingPointsRen
             src.push("uniform float nearPlaneHeight;");
         }
 
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (ENABLE_LOG_DEPTH_BUF && scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
             src.push("out float vFragDepth;");
         }
@@ -74,7 +80,7 @@ export class VBOInstancingPointsOcclusionRenderer extends VBOInstancingPointsRen
 
         src.push("vec4 clipPos = projMatrix * viewPosition;");
 
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (ENABLE_LOG_DEPTH_BUF && scene.logarithmicDepthBufferEnabled) {
            src.push("vFragDepth = 1.0 + clipPos.w;");
         }
 
@@ -105,7 +111,7 @@ export class VBOInstancingPointsOcclusionRenderer extends VBOInstancingPointsRen
         src.push("precision mediump float;");
         src.push("precision mediump int;");
         src.push("#endif");
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (ENABLE_LOG_DEPTH_BUF && scene.logarithmicDepthBufferEnabled) {
             src.push("uniform float logDepthBufFC;");
             src.push("in float vFragDepth;");
         }
@@ -140,7 +146,7 @@ export class VBOInstancingPointsOcclusionRenderer extends VBOInstancingPointsRen
             src.push("}");
         }
         src.push("   outColor = vec4(0.0, 0.0, 1.0, 1.0); "); // Occluders are blue
-        if (scene.logarithmicDepthBufferEnabled) {
+        if (ENABLE_LOG_DEPTH_BUF && scene.logarithmicDepthBufferEnabled) {
             src.push("gl_FragDepth = log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
         src.push("}");
