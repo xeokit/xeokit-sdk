@@ -279,7 +279,7 @@ export class DTXTrianglesPickNormalsFlatRenderer {
 
         src.push("vec4 remapClipPos(vec4 clipPos) {");
         src.push("    clipPos.xy /= clipPos.w;")
-        src.push(`    clipPos.xy = (clipPos.xy - pickClipPos) * drawingBufferSize;`);
+        src.push(`    clipPos.xy = (clipPos.xy - pickClipPos) * drawingBufferSize / 3.0;`);
         src.push("    clipPos.xy *= clipPos.w;")
         src.push("    return clipPos;")
         src.push("}");
