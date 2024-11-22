@@ -7,7 +7,7 @@ export class VBOTrianglesDepthRenderer extends VBORenderer {
 
     constructor(scene, instancing, primitive) {
         super(scene, instancing, primitive, {
-            progMode: "depthMode",
+            programName: "Depth",
 
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT

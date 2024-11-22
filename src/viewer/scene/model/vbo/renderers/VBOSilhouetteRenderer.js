@@ -12,7 +12,7 @@ export class VBOSilhouetteRenderer extends VBORenderer {
         const isPoints = primitive === "points";
 
         super(scene, instancing, primitive, {
-            progMode: "silhouetteMode",
+            programName: "Silhouette",
 
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             // silhouetteFlag = NOT_RENDERED | SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | SILHOUETTE_XRAYED
