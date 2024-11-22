@@ -11,7 +11,7 @@ export class VBOTrianglesFlatColorRenderer extends VBORenderer {
         const sao = withSAO && createSAOSetup(gl, scene);
 
         super(scene, instancing, primitive, {
-            progMode: "flatColorMode",
+            programName: "FlatColor",
 
             getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao"],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
