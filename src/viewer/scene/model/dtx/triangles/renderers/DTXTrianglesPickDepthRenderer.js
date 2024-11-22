@@ -1,6 +1,4 @@
-import {math} from "../../../../math/math.js";
-
-export const DTXTrianglesPickDepthRenderer = function(scene) {
+export const DTXTrianglesPickDepthRenderer = function(scene, clipTransformSetup) {
         const gl = scene.canvas.gl;
         return {
             programName: "PickDepth",
@@ -15,12 +13,10 @@ export const DTXTrianglesPickDepthRenderer = function(scene) {
             // renderPass = PICK
             renderPassFlag: 3,
             appendVertexDefinitions: (src) => {
-                src.push("uniform vec2 pickClipPos;");
-                src.push("uniform vec2 drawingBufferSize;");
                 src.push("out vec4 vViewPosition;");
+                clipTransformSetup.appendDefinitions(src);
             },
-            // divide by w to get into NDC, and after transformation multiply by w to get back into clip space
-            transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - pickClipPos) * drawingBufferSize * ${clipPos}.w, ${clipPos}.zw)`,
+            transformClipPos: clipTransformSetup.transformClipPos,
             appendVertexOutputs: (src, color, pickColor, gl_Position, view) => src.push(`vViewPosition = ${view.viewPosition};`),
             appendFragmentDefinitions: (src) => {
                 src.push("uniform float pickZNear;");
@@ -41,15 +37,13 @@ export const DTXTrianglesPickDepthRenderer = function(scene) {
                 // TRY: src.push("    outPackedDepth = vec4(zNormalizedDepth, fract(zNormalizedDepth * vec3(256.0, 256.0*256.0, 256.0*256.0*256.0)));");
             },
             setupInputs: (program) => {
-                const uPickClipPos = program.getLocation("pickClipPos");
-                const uDrawingBufferSize = program.getLocation("drawingBufferSize");
                 const uPickZNear = program.getLocation("pickZNear");
                 const uPickZFar = program.getLocation("pickZFar");
+                const setClipTransformState = clipTransformSetup.setupInputs(program);
                 return (frameCtx, layer, renderPass, rtcOrigin) => {
-                    gl.uniform2fv(uPickClipPos, frameCtx.pickClipPos);
-                    gl.uniform2f(uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
                     gl.uniform1f(uPickZNear, frameCtx.pickZNear);
                     gl.uniform1f(uPickZFar, frameCtx.pickZFar);
+                    setClipTransformState(frameCtx);
                 };
             }
         };

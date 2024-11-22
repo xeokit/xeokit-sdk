@@ -1,6 +1,7 @@
 import {ENTITY_FLAGS} from "../../ENTITY_FLAGS.js";
 import {RENDER_PASSES} from "../../RENDER_PASSES.js";
 import {DTXTrianglesDrawable} from "./DTXTrianglesDrawable.js";
+import {createLightSetup, createSAOSetup, createPickClipTransformSetup} from "../../vbo/VBORenderer.js";
 
 import {math} from "../../../math/math.js";
 import {RenderState} from "../../../webgl/RenderState.js";
@@ -123,19 +124,26 @@ export const getRenderers = (function() {
                 };
             };
 
+            const gl = scene.canvas.gl;
+
+            const makeColorProgram = (withSAO) => DTXTrianglesColorRenderer(
+                scene.logarithmicDepthBufferEnabled,
+                createLightSetup(gl, scene._lightsState, false), // WARNING: Changing `useMaps' to `true' might have unexpected consequences while binding textures, as the DTX texture binding mechanism doesn't rely on `frameCtx.textureUnit` the way VBO does (see setSAORenderState)
+                withSAO && createSAOSetup(gl, scene));
+
             cache[sceneId] = {
-                colorRenderer:           lazy(() => DTXTrianglesColorRenderer(scene, false)),
-                colorRendererWithSAO:    lazy(() => DTXTrianglesColorRenderer(scene, true)),
-                depthRenderer:           lazy(() => DTXTrianglesDepthRenderer(scene)),
+                colorRenderer:           lazy(() => makeColorProgram(false)),
+                colorRendererWithSAO:    lazy(() => makeColorProgram(true)),
+                depthRenderer:           lazy(() => DTXTrianglesDepthRenderer(scene.logarithmicDepthBufferEnabled)),
                 edgesColorRenderer:      lazy(() => DTXTrianglesEdgesRenderer(scene, false)),
                 edgesRenderer:           lazy(() => DTXTrianglesEdgesRenderer(scene, true)),
-                occlusionRenderer:       lazy(() => DTXTrianglesOcclusionRenderer(scene)),
-                pickDepthRenderer:       eager(() => DTXTrianglesPickDepthRenderer(scene)),
-                pickMeshRenderer:        eager(() => DTXTrianglesPickMeshRenderer(scene)),
-                pickNormalsFlatRenderer: eager(() => DTXTrianglesPickNormalsFlatRenderer(scene)),
+                occlusionRenderer:       lazy(() => DTXTrianglesOcclusionRenderer(scene.logarithmicDepthBufferEnabled)),
+                pickDepthRenderer:       eager(() => DTXTrianglesPickDepthRenderer(scene, createPickClipTransformSetup(gl, 1))),
+                pickMeshRenderer:        eager(() => DTXTrianglesPickMeshRenderer(scene, createPickClipTransformSetup(gl, 1))),
+                pickNormalsFlatRenderer: eager(() => DTXTrianglesPickNormalsFlatRenderer(scene, createPickClipTransformSetup(gl, 3))),
                 silhouetteRenderer:      eager(() => DTXTrianglesSilhouetteRenderer(scene)),
-                snapInitRenderer:        eager(() => DTXTrianglesSnapRenderer(scene, true)),
-                snapRenderer:            eager(() => DTXTrianglesSnapRenderer(scene, false)),
+                snapInitRenderer:        eager(() => DTXTrianglesSnapRenderer(gl, true)),
+                snapRenderer:            eager(() => DTXTrianglesSnapRenderer(gl, false)),
             };
 
             const compile = () => Object.values(cache[sceneId]).forEach(r => r && r.revalidate(false));
