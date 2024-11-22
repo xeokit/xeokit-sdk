@@ -65,6 +65,10 @@ export class TrianglesShadowRenderer extends TrianglesBatchingRenderer {
         src.push("precision mediump float;");
         src.push("precision mediump int;");
         src.push("#endif");
+        if (scene.logarithmicDepthBufferEnabled) {
+            src.push("uniform float logDepthBufFC;");
+            src.push("in float vFragDepth;");
+        }
         if (clipping) {
             src.push("in vec4 vWorldPosition;");
             src.push("in float vFlags;");
@@ -94,6 +98,9 @@ export class TrianglesShadowRenderer extends TrianglesBatchingRenderer {
             }
             src.push("      if (dist > 0.0) { discard; }");
             src.push("  }");
+        }
+        if (scene.logarithmicDepthBufferEnabled) {
+            src.push("gl_FragDepth = log2( vFragDepth ) * logDepthBufFC * 0.5;");
         }
         src.push("    outColor = encodeFloat( gl_FragCoord.z); ");
         src.push("}");
