@@ -11,7 +11,8 @@ export class VBOColorRenderer extends VBORenderer {
         const sao = withSAO && createSAOSetup(gl, scene);
 
         super(scene, instancing, primitive, {
-            progMode: "colorMode", incrementDrawState: true,
+            programName: "Color",
+            incrementDrawState: true,
 
             getHash: () => [lightSetup ? lightSetup.getHash() : "-", sao ? "sao" : "nosao"],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => ((primitive !== "points") && (primitive !== "lines")) ? `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))` : vFragDepth),
