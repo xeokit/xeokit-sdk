@@ -4,7 +4,6 @@ const tempVec3c = math.vec3();
 export const VBOSnapRenderer = function(gl, isSnapInit, isPoints) {
         return {
             programName: isSnapInit ? "SnapInitRenderer" : "SnapRenderer",
-            snapParameters: { isSnapInit: isSnapInit },
 
             // Improves occlusion accuracy at distance
             getLogDepth: true && (vFragDepth => (isSnapInit ? `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))` : vFragDepth)),
@@ -22,9 +21,6 @@ export const VBOSnapRenderer = function(gl, isSnapInit, isPoints) {
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 if (isSnapInit) {
                     src.push(`vPickColor = ${pickColor};`);
-                }
-                if (isPoints || (!isSnapInit)) {
-                    src.push("gl_PointSize = 1.0;"); // Windows needs this?
                 }
             },
             appendFragmentDefinitions: (src) => {
