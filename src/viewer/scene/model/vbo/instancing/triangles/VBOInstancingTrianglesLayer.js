@@ -101,9 +101,6 @@ export class VBOInstancingTrianglesLayer {
         this._offsets = [];
 
         // Modeling matrix per instance, array for each column
-
-        this._modelMatrix = [];
-
         this._modelMatrixCol0 = [];
         this._modelMatrixCol1 = [];
         this._modelMatrixCol2 = [];
