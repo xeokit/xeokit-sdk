@@ -41,18 +41,18 @@ const getRenderers = (function() {
         const sceneId = scene.id;
         if (! (sceneId in cache)) {
 
-            const createRenderer = (createProgramSetup) => new VBORenderer(scene, instancing, primitive, createProgramSetup());
+            const createRenderer = (programSetup, subGeometry) => new VBORenderer(scene, instancing, primitive, programSetup, subGeometry);
 
             // Pre-initialize certain renderers that would otherwise be lazy-initialised on user interaction,
             // such as picking or emphasis, so that there is no delay when user first begins interacting with the viewer.
             const eager = function(createProgramSetup) {
-                let renderer = createRenderer(createProgramSetup);
+                let renderer = createProgramSetup(createRenderer);
                 return {
                     drawLayer: (frameCtx, layer, renderPass) => renderer.drawLayer(frameCtx, layer, renderPass),
                     revalidate: force => {
                         if (force || (! renderer.getValid())) {
                             renderer.destroy();
-                            renderer = createRenderer(createProgramSetup);
+                            renderer = createProgramSetup(createRenderer);
                         }
                     }
                 };
@@ -63,7 +63,7 @@ const getRenderers = (function() {
                 return {
                     drawLayer: (frameCtx, layer, renderPass) => {
                         if (! renderer) {
-                            renderer = createRenderer(createProgramSetup);
+                            renderer = createProgramSetup(createRenderer);
                         }
                         renderer.drawLayer(frameCtx, layer, renderPass);
                     },
@@ -91,48 +91,50 @@ const getRenderers = (function() {
 
             if (primitive === "points") {
                 cache[sceneId] = {
-                    colorRenderer:      lazy(() => makeColorProgram(false, false)),
-                    occlusionRenderer:  lazy(() => VBOOcclusionRenderer(scene.logarithmicDepthBufferEnabled)),
-                    pickDepthRenderer:  lazy(() => makePickDepthProgram(true)),
-                    pickMeshRenderer:   lazy(() => makePickMeshProgram(true)),
+                    colorRenderer:      lazy((c) => c(makeColorProgram(false, false))),
+                    occlusionRenderer:  lazy((c) => c(VBOOcclusionRenderer(scene.logarithmicDepthBufferEnabled))),
+                    pickDepthRenderer:  lazy((c) => c(makePickDepthProgram(true))),
+                    pickMeshRenderer:   lazy((c) => c(makePickMeshProgram(true))),
                     // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
                     // but never used (and probably not maintained), as opposed to VBOInstancingPointsShadowRenderer in the same commit
-                    shadowRenderer:     instancing && lazy(() => VBOShadowRenderer(scene)),
-                    silhouetteRenderer: lazy(() => VBOSilhouetteRenderer(scene, instancing, true)),
-                    snapInitRenderer:   lazy(() => makeSnapProgram(true,  true)),
-                    snapRenderer:       lazy(() => makeSnapProgram(false, true))
+                    shadowRenderer:     instancing && lazy((c) => c(VBOShadowRenderer(scene))),
+                    silhouetteRenderer: lazy((c) => c(VBOSilhouetteRenderer(scene, instancing, true))),
+                    snapInitRenderer:   lazy((c) => c(makeSnapProgram(true,  true))),
+                    snapVertexRenderer: lazy((c) => c(makeSnapProgram(false, true), { vertices: true }))
                 };
             } else if (primitive === "lines") {
                 cache[sceneId] = {
-                    colorRenderer:      lazy(() => makeColorProgram(false, false)),
-                    silhouetteRenderer: lazy(() => VBOSilhouetteRenderer(scene, instancing, true)),
-                    snapInitRenderer:   lazy(() => makeSnapProgram(true,  false)),
-                    snapRenderer:       lazy(() => makeSnapProgram(false, false))
+                    colorRenderer:      lazy((c) => c(makeColorProgram(false, false))),
+                    silhouetteRenderer: lazy((c) => c(VBOSilhouetteRenderer(scene, instancing, true))),
+                    snapInitRenderer:   lazy((c) => c(makeSnapProgram(true,  false))),
+                    snapEdgeRenderer:   lazy((c) => c(makeSnapProgram(false, false), { vertices: false })),
+                    snapVertexRenderer: lazy((c) => c(makeSnapProgram(false, false), { vertices: true }))
                 };
             } else {
                 cache[sceneId] = {
-                    colorRenderer:                          lazy(() => makeColorProgram(true, false)),
-                    colorRendererWithSAO:                   lazy(() => makeColorProgram(true, true)),
-                    colorTextureRenderer:                   lazy(() => makeColorTextureProgram(false, false)),
-                    colorTextureRendererAlphaCutoff:        lazy(() => makeColorTextureProgram(false, true)),
-                    colorTextureRendererWithSAO:            lazy(() => makeColorTextureProgram(true,  false)),
-                    colorTextureRendererWithSAOAlphaCutoff: lazy(() => makeColorTextureProgram(true,  true)),
-                    depthRenderer:                          lazy(() => VBOTrianglesDepthRenderer(scene.logarithmicDepthBufferEnabled)),
-                    edgesColorRenderer:                     lazy(() => VBOTrianglesEdgesRenderer(scene, false)),
-                    edgesRenderer:                          lazy(() => VBOTrianglesEdgesRenderer(scene, true)),
-                    flatColorRenderer:                      lazy(() => makeFlatColorProgram(false)),
-                    flatColorRendererWithSAO:               lazy(() => makeFlatColorProgram(true)),
-                    occlusionRenderer:                      lazy(() => VBOOcclusionRenderer(scene.logarithmicDepthBufferEnabled)),
-                    pbrRenderer:                            lazy(() => makePBRProgram(false)),
-                    pbrRendererWithSAO:                     lazy(() => makePBRProgram(true)),
-                    pickDepthRenderer:                      eager(() => makePickDepthProgram(false)),
-                    pickMeshRenderer:                       eager(() => makePickMeshProgram(false)),
-                    pickNormalsFlatRenderer:                lazy(() => makePickNormalsProgram(true)),
-                    pickNormalsRenderer:                    lazy(() => makePickNormalsProgram(false)),
-                    shadowRenderer:                         lazy(() => VBOShadowRenderer(scene)),
-                    silhouetteRenderer:                     eager(() => VBOSilhouetteRenderer(scene, instancing, false)),
-                    snapInitRenderer:                       eager(() => makeSnapProgram(true,  false)),
-                    snapRenderer:                           eager(() => makeSnapProgram(false, false))
+                    colorRenderer:                          lazy((c) => c(makeColorProgram(true, false))),
+                    colorRendererWithSAO:                   lazy((c) => c(makeColorProgram(true, true))),
+                    colorTextureRenderer:                   lazy((c) => c(makeColorTextureProgram(false, false))),
+                    colorTextureRendererAlphaCutoff:        lazy((c) => c(makeColorTextureProgram(false, true))),
+                    colorTextureRendererWithSAO:            lazy((c) => c(makeColorTextureProgram(true,  false))),
+                    colorTextureRendererWithSAOAlphaCutoff: lazy((c) => c(makeColorTextureProgram(true,  true))),
+                    depthRenderer:                          lazy((c) => c(VBOTrianglesDepthRenderer(scene.logarithmicDepthBufferEnabled))),
+                    edgesColorRenderer:                     lazy((c) => c(VBOTrianglesEdgesRenderer(scene, false), { vertices: false })),
+                    edgesRenderer:                          lazy((c) => c(VBOTrianglesEdgesRenderer(scene, true),  { vertices: false })),
+                    flatColorRenderer:                      lazy((c) => c(makeFlatColorProgram(false))),
+                    flatColorRendererWithSAO:               lazy((c) => c(makeFlatColorProgram(true))),
+                    occlusionRenderer:                      lazy((c) => c(VBOOcclusionRenderer(scene.logarithmicDepthBufferEnabled))),
+                    pbrRenderer:                            lazy((c) => c(makePBRProgram(false))),
+                    pbrRendererWithSAO:                     lazy((c) => c(makePBRProgram(true))),
+                    pickDepthRenderer:                      eager((c) => c(makePickDepthProgram(false))),
+                    pickMeshRenderer:                       eager((c) => c(makePickMeshProgram(false))),
+                    pickNormalsFlatRenderer:                lazy((c) => c(makePickNormalsProgram(true))),
+                    pickNormalsRenderer:                    lazy((c) => c(makePickNormalsProgram(false))),
+                    shadowRenderer:                         lazy((c) => c(VBOShadowRenderer(scene))),
+                    silhouetteRenderer:                     eager((c) => c(VBOSilhouetteRenderer(scene, instancing, false))),
+                    snapInitRenderer:                       eager((c) => c(makeSnapProgram(true,  false))),
+                    snapEdgeRenderer:                       eager((c) => c(makeSnapProgram(false, false), { vertices: false })),
+                    snapVertexRenderer:                     eager((c) => c(makeSnapProgram(false, false), { vertices: true }))
                 };
             }
 
@@ -1251,7 +1253,10 @@ export class VBOLayer {
     }
 
     drawSnap(renderFlags, frameCtx) {
-        this.__drawLayer(renderFlags, frameCtx, this._renderers.snapRenderer, RENDER_PASSES.PICK);
+        const snapRenderer = (frameCtx.snapMode === "edge") ? this._renderers.snapEdgeRenderer : this._renderers.snapVertexRenderer;
+        if (snapRenderer) {
+            this.__drawLayer(renderFlags, frameCtx, snapRenderer, RENDER_PASSES.PICK);
+        }
     }
 
 
