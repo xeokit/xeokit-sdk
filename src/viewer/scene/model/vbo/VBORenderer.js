@@ -254,9 +254,6 @@ export class VBORenderer {
         this._uAOMap = "uAOMap";
 
         if (this._instancing) {
-
-            this._aModelMatrix = program.getAttribute("modelMatrix");
-
             this._aModelMatrixCol0 = program.getAttribute("modelMatrixCol0");
             this._aModelMatrixCol1 = program.getAttribute("modelMatrixCol1");
             this._aModelMatrixCol2 = program.getAttribute("modelMatrixCol2");
