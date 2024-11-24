@@ -789,74 +789,31 @@ export class VBORenderer {
             if (! drawCallCache.has(layer)) {
                 const vao = gl.createVertexArray();
                 gl.bindVertexArray(vao);
+
+                const bindAttribute = (a, b, setDivisor) => {
+                    a.bindArrayBuffer(b);
+                    if (setDivisor) {
+                        gl.vertexAttribDivisor(a.location, 1);
+                    }
+                };
+
                 if (instancing) {
-                    aModelMatrixCol0.bindArrayBuffer(state.modelMatrixCol0Buf);
-                    aModelMatrixCol1.bindArrayBuffer(state.modelMatrixCol1Buf);
-                    aModelMatrixCol2.bindArrayBuffer(state.modelMatrixCol2Buf);
-
-                    gl.vertexAttribDivisor(aModelMatrixCol0.location, 1);
-                    gl.vertexAttribDivisor(aModelMatrixCol1.location, 1);
-                    gl.vertexAttribDivisor(aModelMatrixCol2.location, 1);
-
-                    if (aModelNormalMatrixCol0) {
-                        aModelNormalMatrixCol0.bindArrayBuffer(state.modelNormalMatrixCol0Buf);
-                        gl.vertexAttribDivisor(aModelNormalMatrixCol0.location, 1);
-                    }
-                    if (aModelNormalMatrixCol1) {
-                        aModelNormalMatrixCol1.bindArrayBuffer(state.modelNormalMatrixCol1Buf);
-                        gl.vertexAttribDivisor(aModelNormalMatrixCol1.location, 1);
-                    }
-                    if (aModelNormalMatrixCol2) {
-                        aModelNormalMatrixCol2.bindArrayBuffer(state.modelNormalMatrixCol2Buf);
-                        gl.vertexAttribDivisor(aModelNormalMatrixCol2.location, 1);
-                    }
-
+                    bindAttribute(aModelMatrixCol0, state.modelMatrixCol0Buf, true);
+                    bindAttribute(aModelMatrixCol1, state.modelMatrixCol1Buf, true);
+                    bindAttribute(aModelMatrixCol2, state.modelMatrixCol2Buf, true);
+                    aModelNormalMatrixCol0 && bindAttribute(aModelNormalMatrixCol0, state.modelNormalMatrixCol0Buf, true);
+                    aModelNormalMatrixCol1 && bindAttribute(aModelNormalMatrixCol1, state.modelNormalMatrixCol1Buf, true);
+                    aModelNormalMatrixCol2 && bindAttribute(aModelNormalMatrixCol2, state.modelNormalMatrixCol2Buf, true);
                 }
 
-                aPosition.bindArrayBuffer(state.positionsBuf);
-
-                if (aUV) {
-                    aUV.bindArrayBuffer(state.uvBuf);
-                }
-
-                if (aNormal) {
-                    aNormal.bindArrayBuffer(state.normalsBuf);
-                }
-
-                if (aMetallicRoughness) {
-                    aMetallicRoughness.bindArrayBuffer(state.metallicRoughnessBuf);
-                    if (instancing) {
-                        gl.vertexAttribDivisor(aMetallicRoughness.location, 1);
-                    }
-                }
-
-                if (aColor) {
-                    aColor.bindArrayBuffer(state.colorsBuf);
-                    if (instancing && state.colorsBuf && (!state.colorsForPointsNotInstancing)) {
-                        gl.vertexAttribDivisor(aColor.location, 1);
-                    }
-                }
-
-                if (aFlags) {
-                    aFlags.bindArrayBuffer(state.flagsBuf);
-                    if (instancing) {
-                        gl.vertexAttribDivisor(aFlags.location, 1);
-                    }
-                }
-
-                if (aOffset) {
-                    aOffset.bindArrayBuffer(state.offsetsBuf);
-                    if (instancing) {
-                        gl.vertexAttribDivisor(aOffset.location, 1);
-                    }
-                }
-
-                if (aPickColor) {
-                    aPickColor.bindArrayBuffer(state.pickColorsBuf);
-                    if (instancing) {
-                        gl.vertexAttribDivisor(aPickColor.location, 1);
-                    }
-                }
+                bindAttribute(aPosition, state.positionsBuf);
+                aUV                && bindAttribute(aUV,                state.uvBuf);
+                aNormal            && bindAttribute(aNormal,            state.normalsBuf);
+                aMetallicRoughness && bindAttribute(aMetallicRoughness, state.metallicRoughnessBuf, instancing);
+                aColor             && bindAttribute(aColor,             state.colorsBuf,            instancing && state.colorsBuf && (!state.colorsForPointsNotInstancing));
+                aFlags             && bindAttribute(aFlags,             state.flagsBuf,             instancing);
+                aOffset            && bindAttribute(aOffset,            state.offsetsBuf,           instancing);
+                aPickColor         && bindAttribute(aPickColor,         state.pickColorsBuf,        instancing);
 
                 gl.bindVertexArray(null);
 
