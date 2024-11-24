@@ -869,50 +869,39 @@ export class VBORenderer {
                     }
                 };
 
-                const drawElements = (mode, count, type, offset) => {
+                const drawElements = (mode, indicesBuf) => {
+                    indicesBuf.bind();
+                    const count  = indicesBuf.numItems;
+                    const type   = indicesBuf.itemType;
+                    const offset = 0;
                     if (instancing) {
                         gl.drawElementsInstanced(mode, count, type, offset, state.numInstances);
                     } else {
                         gl.drawElements(mode, count, type, offset);
                     }
-                };
-
-                const drawElementsBuf = (mode, indicesBuf) => {
-                    indicesBuf.bind();
-                    drawElements(mode, indicesBuf.numItems, indicesBuf.itemType, 0);
                     indicesBuf.unbind();
                 };
 
                 drawCallCache.set(layer, function(frameCtx) {
                     gl.bindVertexArray(vao);
 
-                    if (snapParameters) {
-                        //=============================================================
-                        // TODO: Use drawElements count and offset to draw only one entity
-                        //=============================================================
+                    // TODO: Use drawElements count and offset to draw only one entity
 
-                        if (primitive === "points") {
+                    if (primitive === "points") {
+                        drawPoints();
+                    } else if (primitive === "lines") {
+                        if (snapParameters && (!snapParameters.isSnapInit) && (frameCtx.snapMode !== "edge")) {
                             drawPoints();
-                        } else if (snapParameters.isSnapInit) {
-                            drawElementsBuf((primitive === "lines") ? gl.LINES : gl.TRIANGLES, state.indicesBuf);
                         } else {
-                            if (frameCtx.snapMode === "edge") {
-                                drawElementsBuf(gl.LINES, (primitive === "lines") ? state.indicesBuf : state.edgeIndicesBuf);
-                            } else {
-                                drawPoints();
-                            }
+                            drawElements(gl.LINES, state.indicesBuf);
                         }
-                    } else {                // ! snapParameters
-                        if (primitive === "points") {
+                    } else {    // triangles
+                        if (snapParameters && (!snapParameters.isSnapInit) && (frameCtx.snapMode !== "edge")) {
                             drawPoints();
-                        } else if (primitive === "lines") {
-                            drawElementsBuf(gl.LINES, state.indicesBuf);
+                        } else if (((snapParameters && (!snapParameters.isSnapInit) && (frameCtx.snapMode === "edge")) || edges) && state.edgeIndicesBuf) {
+                            drawElements(gl.LINES, state.edgeIndicesBuf);
                         } else {
-                            if (edges && state.edgeIndicesBuf) {
-                                drawElementsBuf(gl.LINES, state.edgeIndicesBuf);
-                            } else {
-                                drawElementsBuf(gl.TRIANGLES, state.indicesBuf);
-                            }
+                            drawElements(gl.TRIANGLES, state.indicesBuf);
                         }
                     }
 
