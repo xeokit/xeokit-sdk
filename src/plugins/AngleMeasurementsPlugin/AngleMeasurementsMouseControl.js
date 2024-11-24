@@ -335,7 +335,7 @@ export class AngleMeasurementsMouseControl extends AngleMeasurementsControl {
                 mouseHovering = false;
                 if (pointerLens) {
                     pointerLens.visible = true;
-                    pointerLens.pointerPos = event.canvasPos;
+                    pointerLens.canvasPos = event.canvasPos;
                     pointerLens.snappedCanvasPos = event.snappedCanvasPos || event.canvasPos;
                     pointerLens.snapped = false;
                 }
