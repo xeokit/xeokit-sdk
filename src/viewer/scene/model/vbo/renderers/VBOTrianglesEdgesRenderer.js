@@ -6,7 +6,6 @@ export const VBOTrianglesEdgesRenderer = function(scene, colorUniform) {
 
         return {
             programName: "Edges",
-            edges: true,
 
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
             // edgeFlag = NOT_RENDERED | EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
