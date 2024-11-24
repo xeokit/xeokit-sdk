@@ -816,52 +816,55 @@ export class VBORenderer {
                 aOffset            && bindAttribute(aOffset,            state.offsetsBuf,           instancing);
                 aPickColor         && bindAttribute(aPickColor,         state.pickColorsBuf,        instancing);
 
-                gl.bindVertexArray(null);
-
-                const drawPoints = () => {
-                    if (instancing) {
-                        gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
-                    } else {
-                        gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
-                    }
-                };
-
-                const drawElements = (mode, indicesBuf) => {
-                    indicesBuf.bind();
-                    const count  = indicesBuf.numItems;
-                    const type   = indicesBuf.itemType;
-                    const offset = 0;
-                    if (instancing) {
-                        gl.drawElementsInstanced(mode, count, type, offset, state.numInstances);
-                    } else {
-                        gl.drawElements(mode, count, type, offset);
-                    }
-                    indicesBuf.unbind();
-                };
-
-                drawCallCache.set(layer, function(frameCtx) {
-                    gl.bindVertexArray(vao);
-
+                const drawer = (function() {
                     // TODO: Use drawElements count and offset to draw only one entity
 
+                    const drawPoints = () => {
+                        if (instancing) {
+                            gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
+                        } else {
+                            gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
+                        }
+                    };
+
+                    const elementsDrawer = (mode, indicesBuf) => {
+                        indicesBuf.bind();
+                        return function() {
+                            const count  = indicesBuf.numItems;
+                            const type   = indicesBuf.itemType;
+                            const offset = 0;
+                            if (instancing) {
+                                gl.drawElementsInstanced(mode, count, type, offset, state.numInstances);
+                            } else {
+                                gl.drawElements(mode, count, type, offset);
+                            }
+                        };
+                    };
+
                     if (primitive === "points") {
-                        drawPoints();
+                        return drawPoints;
                     } else if (primitive === "lines") {
                         if (subGeometry && subGeometry.vertices) {
-                            drawPoints();
+                            return drawPoints;
                         } else {
-                            drawElements(gl.LINES, state.indicesBuf);
+                            return elementsDrawer(gl.LINES, state.indicesBuf);
                         }
                     } else {    // triangles
                         if (subGeometry && subGeometry.vertices) {
-                            drawPoints();
+                            return drawPoints;
                         } else if (subGeometry && state.edgeIndicesBuf) {
-                            drawElements(gl.LINES, state.edgeIndicesBuf);
+                            return elementsDrawer(gl.LINES, state.edgeIndicesBuf);
                         } else {
-                            drawElements(gl.TRIANGLES, state.indicesBuf);
+                            return elementsDrawer(gl.TRIANGLES, state.indicesBuf);
                         }
                     }
+                })();
 
+                gl.bindVertexArray(null);
+
+                drawCallCache.set(layer, function(frameCtx) {
+                    gl.bindVertexArray(vao);
+                    drawer();
                     gl.bindVertexArray(null);
                 });
             }
