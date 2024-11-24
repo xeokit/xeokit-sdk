@@ -229,15 +229,12 @@ export const createPickClipTransformSetup = function(gl, renderBufferSize) {
  * @private
  */
 export class VBORenderer {
-    constructor(scene, instancing, primitive, cfg) {
+    constructor(scene, instancing, primitive, cfg, subGeometry) {
 
         const pointsMaterial = scene.pointsMaterial;
 
         const programName               = cfg.programName;
-        const snapParameters            = cfg.snapParameters;
-        const edges                     = cfg.edges;
         const incrementDrawState        = cfg.incrementDrawState;
-
         const getLogDepth               = cfg.getLogDepth;
         const clippingCaps              = cfg.clippingCaps;
         const renderPassFlag            = cfg.renderPassFlag;
@@ -251,8 +248,8 @@ export class VBORenderer {
         const vertexCullX               = cfg.vertexCullX;
         const setupInputs               = cfg.setupInputs;
 
-        const testPerspectiveForGl_FragDepth = ((primitive !== "points") && (primitive !== "lines")) || snapParameters;
-        const setupPoints = (primitive === "points") && (! snapParameters);
+        const testPerspectiveForGl_FragDepth = ((primitive !== "points") && (primitive !== "lines")) || subGeometry;
+        const setupPoints = (primitive === "points") && (! subGeometry);
 
         const getHash = () => [ scene._sectionPlanesState.getHash() ].concat(setupPoints ? [ pointsMaterial.hash ] : [ ]).concat(cfg.getHash ? cfg.getHash() : [ ]).join(";");
         const hash = getHash();
@@ -540,6 +537,8 @@ export class VBORenderer {
                 } else {
                     src.push("gl_PointSize = pointSize;");
                 }
+            } else if (subGeometry && subGeometry.vertices) {
+                src.push("gl_PointSize = 1.0;");
             }
 
             vertexOutputs.forEach(line => src.push(line));
@@ -891,15 +890,15 @@ export class VBORenderer {
                     if (primitive === "points") {
                         drawPoints();
                     } else if (primitive === "lines") {
-                        if (snapParameters && (!snapParameters.isSnapInit) && (frameCtx.snapMode !== "edge")) {
+                        if (subGeometry && subGeometry.vertices) {
                             drawPoints();
                         } else {
                             drawElements(gl.LINES, state.indicesBuf);
                         }
                     } else {    // triangles
-                        if (snapParameters && (!snapParameters.isSnapInit) && (frameCtx.snapMode !== "edge")) {
+                        if (subGeometry && subGeometry.vertices) {
                             drawPoints();
-                        } else if (((snapParameters && (!snapParameters.isSnapInit) && (frameCtx.snapMode === "edge")) || edges) && state.edgeIndicesBuf) {
+                        } else if (subGeometry && state.edgeIndicesBuf) {
                             drawElements(gl.LINES, state.edgeIndicesBuf);
                         } else {
                             drawElements(gl.TRIANGLES, state.indicesBuf);
