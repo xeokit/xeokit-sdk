@@ -51,7 +51,7 @@ export class DTXTrianglesDrawable {
         const vWorldPosition = lazyShaderVariable("vWorldPosition");
 
         const fragmentOutputs = [ ];
-        appendFragmentOutputs(fragmentOutputs, vWorldPosition, "gl_FragCoord");
+        appendFragmentOutputs(fragmentOutputs, vWorldPosition, "gl_FragCoord", null, null);
 
         const fragmentClippingLines = (function() {
             const src = [ ];
@@ -81,7 +81,7 @@ export class DTXTrianglesDrawable {
         };
 
         const vertexOutputs = [ ];
-        appendVertexOutputs && appendVertexOutputs(vertexOutputs, colorA, pickColorA, "gl_Position", viewParams);
+        appendVertexOutputs && appendVertexOutputs(vertexOutputs, colorA, pickColorA, null, null, "gl_Position", viewParams, null, null);
 
 
         const buildVertexShader = () => {
