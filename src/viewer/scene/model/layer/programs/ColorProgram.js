@@ -1,18 +1,13 @@
-export const VBOColorRenderer = function(scene, primitive, lightSetup, sao) {
+export const ColorProgram = function(logarithmicDepthBufferEnabled, lightSetup, sao, primitive, saoTextureUnit = undefined) {
         return {
             programName: "Color",
-            incrementDrawState: true,
-
             getHash: () => [lightSetup ? lightSetup.getHash() : "-", sao ? "sao" : "nosao"],
-            getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => ((primitive !== "points") && (primitive !== "lines")) ? `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))` : vFragDepth),
-            // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
-            // renderPass = COLOR_OPAQUE | COLOR_TRANSPARENT
-            renderPassFlag: 0,
+            getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => ((primitive !== "points") && (primitive !== "lines")) ? `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))` : vFragDepth),
+            renderPassFlag: 0,  // COLOR_OPAQUE | COLOR_TRANSPARENT
             appendVertexDefinitions: (src) => {
                 lightSetup && lightSetup.appendDefinitions(src);
                 src.push("out vec4 vColor;");
             },
-            filterIntensityRange: true,
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 const vColor = (primitive === "points") ? `vec4(${color}.rgb / 255.0, 1.0)` : `${color} / 255.0`;
                 if (lightSetup) {
@@ -40,11 +35,21 @@ export const VBOColorRenderer = function(scene, primitive, lightSetup, sao) {
             },
             setupInputs: (program) => {
                 const setLightsRenderState = lightSetup && lightSetup.setupInputs(program);
-                const setSAOState = sao && sao.setupInputs(program);
+                const setSAORenderState = sao && sao.setupInputs(program);
                 return (frameCtx, layer, renderPass, rtcOrigin) => {
                     setLightsRenderState && setLightsRenderState(frameCtx);
-                    setSAOState && setSAOState(frameCtx);
+                    setSAORenderState && setSAORenderState(frameCtx, saoTextureUnit);
                 };
-            }
+            },
+
+            filterIntensityRange: true,
+            incrementDrawState: true,
+
+            getViewParams: (frameCtx, camera) => ({
+                viewMatrix: camera.viewMatrix,
+                projMatrix: camera.projMatrix,
+                eye: camera.eye,
+                far: camera.project.far
+            })
         };
 };

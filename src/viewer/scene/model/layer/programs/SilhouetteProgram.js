@@ -1,45 +1,40 @@
 import {RENDER_PASSES} from "../../RENDER_PASSES.js";
+const defaultSilhouetteColor = new Float32Array([1, 1, 1, 1]);
 
-export const VBOSilhouetteRenderer = function(scene, instancing, isPointsOrLines) {
+export const SilhouetteProgram = function(scene, isPointsOrLines) {
         const gl = scene.canvas.gl;
-        const defaultSilhouetteColor = new Float32Array([1, 1, 1, 1]);
-
         return {
             programName: "Silhouette",
-
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
-            // silhouetteFlag = NOT_RENDERED | SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | SILHOUETTE_XRAYED
-            // renderPass = SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | SILHOUETTE_XRAYED
-            renderPassFlag: 1,
+            renderPassFlag: 1,  // SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | SILHOUETTE_XRAYED
             appendVertexDefinitions: (! isPointsOrLines) && ((src) => {
-                src.push("uniform vec4 silhouetteColor;");
-                src.push("out vec4 vColor;");
+                src.push("out float vAlpha;");
             }),
             appendVertexOutputs: (! isPointsOrLines) && ((src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
-                src.push(`vColor = vec4(silhouetteColor.rgb, min(silhouetteColor.a, ${color}.a / 255.0));`);
+                src.push(`vAlpha = ${color}.a / 255.0;`);
             }),
             appendFragmentDefinitions: (src) => {
-                if (isPointsOrLines) {
-                    src.push("uniform vec4 silhouetteColor;");
-                } else {
-                    src.push("in vec4 vColor;");
+                if (! isPointsOrLines) {
+                    src.push("in float vAlpha;");
                 }
+                src.push("uniform vec4 silhouetteColor;");
                 src.push("out vec4 outColor;");
             },
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 if (isPointsOrLines) {
                     src.push("outColor = silhouetteColor;");
                 } else {
-                    src.push(`outColor = ${sliceColorOr("vColor")};`);
+                    src.push("vec4 fragColor = vec4(silhouetteColor.rgb, min(silhouetteColor.a, vAlpha));");
+                    src.push(`outColor = ${sliceColorOr("fragColor")};`);
                 }
             },
             setupInputs: (program) => {
                 const silhouetteColor = program.getLocation("silhouetteColor");
                 return (frameCtx, layer, renderPass, rtcOrigin) => {
                     const setSceneMaterial = material => {
-                        const color = material._state.fillColor;
-                        const alpha = material._state.fillAlpha;
-                        gl.uniform4f(silhouetteColor, color[0], color[1], color[2], alpha);
+                        const fillColor = material._state.fillColor;
+                        const fillAlpha = material._state.fillAlpha;
+                        gl.uniform4f(silhouetteColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
                     };
 
                     if (renderPass === RENDER_PASSES.SILHOUETTE_XRAYED) {
@@ -52,6 +47,13 @@ export const VBOSilhouetteRenderer = function(scene, instancing, isPointsOrLines
                         gl.uniform4fv(silhouetteColor, defaultSilhouetteColor);
                     }
                 };
-            }
+            },
+
+            getViewParams: (frameCtx, camera) => ({
+                viewMatrix: camera.viewMatrix,
+                projMatrix: camera.projMatrix,
+                eye: camera.eye,
+                far: camera.project.far
+            })
         };
 };
