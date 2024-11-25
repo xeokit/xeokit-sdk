@@ -51,7 +51,7 @@ export class DTXTrianglesDrawable {
         const vWorldPosition = lazyShaderVariable("vWorldPosition");
 
         const fragmentOutputs = [ ];
-        appendFragmentOutputs(fragmentOutputs, vWorldPosition, "gl_FragCoord", null, null);
+        appendFragmentOutputs(fragmentOutputs, vWorldPosition, "gl_FragCoord", v => v, null); // TODO: should DTX handle sliceColorOr?
 
         const fragmentClippingLines = (function() {
             const src = [ ];
