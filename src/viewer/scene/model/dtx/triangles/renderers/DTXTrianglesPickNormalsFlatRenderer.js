@@ -18,7 +18,7 @@ export const DTXTrianglesPickNormalsFlatRenderer = function(scene, clipTransform
             },
             transformClipPos: clipTransformSetup.transformClipPos,
             appendFragmentDefinitions: (src) => src.push("out highp ivec4 outNormal;"),
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => {
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 // normalize(cross(xTangent, yTangent))
                 src.push(`vec3 worldNormal = normalize(cross(dFdx(${vWorldPosition}), dFdy(${vWorldPosition})));`);
                 src.push(`outNormal = ivec4(worldNormal * float(${math.MAX_INT}), 1.0);`);

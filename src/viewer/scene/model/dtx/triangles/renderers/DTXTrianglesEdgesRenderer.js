@@ -20,7 +20,7 @@ export const DTXTrianglesEdgesRenderer = function(scene, colorUniform) {
                     src.push("out vec4 vColor;");
                 }
             },
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view) => {
+            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 if (! colorUniform) {
                     src.push(`vColor = vec4(vec3(${color}.rgb) * 0.5, float(${color}.a)) / 255.0;`);
                 }
@@ -33,7 +33,7 @@ export const DTXTrianglesEdgesRenderer = function(scene, colorUniform) {
                 }
                 src.push("out vec4 outColor;");
             },
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => src.push("outColor = " + (colorUniform ? "edgeColor" : "vColor") + ";"),
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => src.push("outColor = " + (colorUniform ? "edgeColor" : "vColor") + ";"),
             setupInputs: (program) => {
                 const edgeColor = colorUniform && program.getLocation("edgeColor");
                 return (frameCtx, layer, renderPass, rtcOrigin) => {
