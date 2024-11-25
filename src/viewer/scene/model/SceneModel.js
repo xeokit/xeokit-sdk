@@ -3372,8 +3372,6 @@ export class SceneModel extends Component {
     drawPickDepths           (frameCtx) { this._withEachVisibleLayer(true,  layer => layer.drawPickDepths           (this.renderFlags, frameCtx)); }
     drawPickNormals          (frameCtx) { this._withEachVisibleLayer(true,  layer => layer.drawPickNormals          (this.renderFlags, frameCtx)); }
 
-    setPickMatrices(pickViewMatrix, pickProjMatrix) { this._withEachVisibleLayer(true,  layer => layer.setPickMatrices && layer.setPickMatrices(pickViewMatrix, pickProjMatrix)); }
-
     _drawSnapEachVisibleLayer(frameCtx, isSnapInit) {
         this._withEachVisibleLayer(
             true,
