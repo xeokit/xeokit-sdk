@@ -18,12 +18,12 @@ export const DTXTrianglesPickMeshRenderer = function(scene, clipTransformSetup) 
                 clipTransformSetup.appendDefinitions(src);
             },
             transformClipPos: clipTransformSetup.transformClipPos,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view) => src.push(`vPickColor = ${pickColor} / 255.0;`),
+            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => src.push(`vPickColor = ${pickColor} / 255.0;`),
             appendFragmentDefinitions: (src) => {
                 src.push("in vec4 vPickColor;");
                 src.push("out vec4 outPickColor;");
             },
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => src.push("outPickColor = vPickColor;"),
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => src.push("outPickColor = vPickColor;"),
             setupInputs: (program) => {
                 const setClipTransformState = clipTransformSetup.setupInputs(program);
                 return (frameCtx, layer, renderPass, rtcOrigin) => {
