@@ -24,7 +24,7 @@ export const DTXTrianglesSnapRenderer = function(gl, isSnapInit) {
                 }
             },
             transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - snapVectorA) * snapInvVectorAB * ${clipPos}.w, ${clipPos}.zw)`,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view) => {
+            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 if (isSnapInit) {
                     src.push(`vPickColor = ${pickColor};`);
                 } else {
@@ -43,7 +43,7 @@ export const DTXTrianglesSnapRenderer = function(gl, isSnapInit) {
                     src.push("out highp ivec4 outCoords;");
                 }
             },
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => {
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push(`outCoords = ivec4(${vWorldPosition} * uCoordinateScaler.xyz, ${isSnapInit ? "-" : ""}uLayerNumber);`);
                 if (isSnapInit) {
                     src.push(`vec3 worldNormal = normalize(cross(dFdx(${vWorldPosition}), dFdy(${vWorldPosition})));`);
