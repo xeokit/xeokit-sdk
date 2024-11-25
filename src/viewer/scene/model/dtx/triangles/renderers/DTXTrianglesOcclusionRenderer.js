@@ -15,6 +15,6 @@ export const DTXTrianglesOcclusionRenderer = function(logarithmicDepthBufferEnab
             // renderPass = COLOR_OPAQUE
             renderPassFlag: 0,
             appendFragmentDefinitions: (src) => src.push("out vec4 outColor;"),
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => src.push("outColor = vec4(0.0, 0.0, 1.0, 1.0);") // Occluders are blue
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => src.push("outColor = vec4(0.0, 0.0, 1.0, 1.0);") // Occluders are blue
         };
 };
