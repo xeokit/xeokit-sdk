@@ -89,18 +89,18 @@ export const getRenderers = (function() {
         const sceneId = scene.id;
         if (! (sceneId in cache)) {
 
-            const createRenderer = (createProgramSetup) => new DTXTrianglesDrawable(scene, createProgramSetup());
+            const createRenderer = (programSetup, subGeometry) => new DTXTrianglesDrawable(scene, programSetup, subGeometry);
 
             // Pre-initialize certain renderers that would otherwise be lazy-initialised on user interaction,
             // such as picking or emphasis, so that there is no delay when user first begins interacting with the viewer.
             const eager = function(createProgramSetup) {
-                let renderer = createRenderer(createProgramSetup);
+                let renderer = createProgramSetup(createRenderer);
                 return {
                     drawLayer: (frameCtx, layer, renderPass) => renderer.drawLayer(frameCtx, layer, renderPass),
                     revalidate: force => {
                         if (force || (! renderer.getValid())) {
                             renderer.destroy();
-                            renderer = createRenderer(createProgramSetup);
+                            renderer = createProgramSetup(createRenderer);
                         }
                     }
                 };
@@ -111,7 +111,7 @@ export const getRenderers = (function() {
                 return {
                     drawLayer: (frameCtx, layer, renderPass) => {
                         if (! renderer) {
-                            renderer = createRenderer(createProgramSetup);
+                            renderer = createProgramSetup(createRenderer);
                         }
                         renderer.drawLayer(frameCtx, layer, renderPass);
                     },
@@ -132,18 +132,19 @@ export const getRenderers = (function() {
                 withSAO && createSAOSetup(gl, scene));
 
             cache[sceneId] = {
-                colorRenderer:           lazy(() => makeColorProgram(false)),
-                colorRendererWithSAO:    lazy(() => makeColorProgram(true)),
-                depthRenderer:           lazy(() => DTXTrianglesDepthRenderer(scene.logarithmicDepthBufferEnabled)),
-                edgesColorRenderer:      lazy(() => DTXTrianglesEdgesRenderer(scene, false)),
-                edgesRenderer:           lazy(() => DTXTrianglesEdgesRenderer(scene, true)),
-                occlusionRenderer:       lazy(() => DTXTrianglesOcclusionRenderer(scene.logarithmicDepthBufferEnabled)),
-                pickDepthRenderer:       eager(() => DTXTrianglesPickDepthRenderer(scene, createPickClipTransformSetup(gl, 1))),
-                pickMeshRenderer:        eager(() => DTXTrianglesPickMeshRenderer(scene, createPickClipTransformSetup(gl, 1))),
-                pickNormalsFlatRenderer: eager(() => DTXTrianglesPickNormalsFlatRenderer(scene, createPickClipTransformSetup(gl, 3))),
-                silhouetteRenderer:      eager(() => DTXTrianglesSilhouetteRenderer(scene)),
-                snapInitRenderer:        eager(() => DTXTrianglesSnapRenderer(gl, true)),
-                snapRenderer:            eager(() => DTXTrianglesSnapRenderer(gl, false)),
+                colorRenderer:           lazy((c) => c(makeColorProgram(false))),
+                colorRendererWithSAO:    lazy((c) => c(makeColorProgram(true))),
+                depthRenderer:           lazy((c) => c(DTXTrianglesDepthRenderer(scene.logarithmicDepthBufferEnabled))),
+                edgesColorRenderer:      lazy((c) => c(DTXTrianglesEdgesRenderer(scene, false), { vertices: false })),
+                edgesRenderer:           lazy((c) => c(DTXTrianglesEdgesRenderer(scene, true),  { vertices: false })),
+                occlusionRenderer:       lazy((c) => c(DTXTrianglesOcclusionRenderer(scene.logarithmicDepthBufferEnabled))),
+                pickDepthRenderer:       eager((c) => c(DTXTrianglesPickDepthRenderer(scene, createPickClipTransformSetup(gl, 1)))),
+                pickMeshRenderer:        eager((c) => c(DTXTrianglesPickMeshRenderer(scene, createPickClipTransformSetup(gl, 1)))),
+                pickNormalsFlatRenderer: eager((c) => c(DTXTrianglesPickNormalsFlatRenderer(scene, createPickClipTransformSetup(gl, 3)))),
+                silhouetteRenderer:      eager((c) => c(DTXTrianglesSilhouetteRenderer(scene))),
+                snapInitRenderer:        eager((c) => c(DTXTrianglesSnapRenderer(gl, true))),
+                snapEdgeRenderer:        eager((c) => c(DTXTrianglesSnapRenderer(gl, false), { vertices: false })),
+                snapVertexRenderer:      eager((c) => c(DTXTrianglesSnapRenderer(gl, false), { vertices: true })),
             };
 
             const compile = () => Object.values(cache[sceneId]).forEach(r => r && r.revalidate(false));
@@ -1588,8 +1589,9 @@ export class DTXTrianglesLayer {
             return;
         }
         this._updateBackfaceCull(renderFlags, frameCtx);
-        if (this._renderers.snapRenderer) {
-            this._renderers.snapRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
+        const snapRenderer = (frameCtx.snapMode === "edge") ? this._renderers.snapEdgeRenderer : this._renderers.snapVertexRenderer;
+        if (snapRenderer) {
+            snapRenderer.drawLayer(frameCtx, this, RENDER_PASSES.PICK);
         }
     }
 
