@@ -1,13 +1,10 @@
-import { math } from "../../../math/math.js";
+import {math} from "../../../math/math.js";
 
-export const VBOTrianglesPickNormalsRenderer = function(logarithmicDepthBufferEnabled, clipTransformSetup, isFlat) {
+export const PickNormalsProgram = function(logarithmicDepthBufferEnabled, clipTransformSetup, isFlat) {
         return {
             programName: isFlat ? "PickNormalsFlat" : "PickNormals",
-
             getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
-            // pickFlag = NOT_RENDERED | PICK
-            // renderPass = PICK
-            renderPassFlag: 3,
+            renderPassFlag: 3,  // PICK
             appendVertexDefinitions: (src) => {
                 if (! isFlat) {
                     src.push("out vec3 vWorldNormal;");
@@ -32,9 +29,16 @@ export const VBOTrianglesPickNormalsRenderer = function(logarithmicDepthBufferEn
                                      : "vWorldNormal");
                 src.push(`outNormal = ivec4(${worldNormal} * float(${math.MAX_INT}), 1.0);`);
             },
-            setupInputs: program => {
+            setupInputs: (program) => {
                 const setClipTransformState = clipTransformSetup.setupInputs(program);
                 return (frameCtx, layer, renderPass, rtcOrigin) => setClipTransformState(frameCtx);
-            }
+            },
+
+            getViewParams: (frameCtx, camera) => ({
+                viewMatrix: frameCtx.pickViewMatrix || camera.viewMatrix,
+                projMatrix: frameCtx.pickProjMatrix || camera.projMatrix,
+                eye: frameCtx.pickOrigin || camera.eye,
+                far: frameCtx.pickProjMatrix ? frameCtx.pickZFar : camera.project.far
+            })
         };
 };

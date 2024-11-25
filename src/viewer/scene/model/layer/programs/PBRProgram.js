@@ -1,21 +1,15 @@
 import {WEBGL_INFO} from "../../../webglInfo.js";
 
-export const VBOTrianglesPBRRenderer = function(scene, lightSetup, sao) {
+export const PBRProgram = function(scene, lightSetup, sao) {
         const gl = scene.canvas.gl;
         const getIrradiance = lightSetup.getIrradiance;
         const getReflectionRadiance = lightSetup.getReflectionRadiance;
         const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
-
         return {
             programName: "PBR",
-            incrementDrawState: true,
-
             getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao", gammaOutput],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
-            clippingCaps: scene._sectionPlanesState.clippingCaps && "outColor",
-            // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
-            // renderPass = COLOR_OPAQUE | COLOR_TRANSPARENT
-            renderPassFlag: 0,
+            renderPassFlag: 0,      // COLOR_OPAQUE | COLOR_TRANSPARENT
             appendVertexDefinitions: (src) => {
                 src.push("uniform mat3 uvDecodeMatrix;");
                 src.push("out vec4 vViewPosition;");
@@ -285,6 +279,9 @@ export const VBOTrianglesPBRRenderer = function(scene, lightSetup, sao) {
                     setLightsRenderState(frameCtx);
                     setSAOState && setSAOState(frameCtx);
                 };
-            }
+            },
+
+            clippingCaps: scene._sectionPlanesState.clippingCaps && "outColor",
+            incrementDrawState: true
         };
 };

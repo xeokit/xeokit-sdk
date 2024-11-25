@@ -1,15 +1,12 @@
 import {math} from "../../../math/math.js";
 const tempVec3c = math.vec3();
 
-export const VBOSnapRenderer = function(gl, isSnapInit, isPoints) {
+export const SnapProgram = function(gl, isSnapInit, isPoints) {
         return {
-            programName: isSnapInit ? "SnapInitRenderer" : "SnapRenderer",
-
+            programName: isSnapInit ? "SnapInit" : "Snap",
             // Improves occlusion accuracy at distance
             getLogDepth: true && (vFragDepth => (isSnapInit ? `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))` : vFragDepth)),
-            // pickFlag = NOT_RENDERED | PICK
-            // renderPass = PICK
-            renderPassFlag: 3,
+            renderPassFlag: 3,  // PICK
             appendVertexDefinitions: (src) => {
                 src.push("uniform vec2 snapVectorA;");
                 src.push("uniform vec2 snapInvVectorAB;");
@@ -21,6 +18,8 @@ export const VBOSnapRenderer = function(gl, isSnapInit, isPoints) {
             appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
                 if (isSnapInit) {
                     src.push(`vPickColor = ${pickColor};`);
+                } else {
+                    src.push("gl_PointSize = 1.0;"); // Windows needs this?
                 }
             },
             appendFragmentDefinitions: (src) => {
@@ -38,7 +37,6 @@ export const VBOSnapRenderer = function(gl, isSnapInit, isPoints) {
             vertexCullX: (!isSnapInit) && "2.0",
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push(`outCoords = ivec4(${vWorldPosition} * uCoordinateScaler.xyz, ${isSnapInit ? "-" : ""}uLayerNumber);`);
-
                 if (isSnapInit) {
                     src.push(`outNormal = ${isPoints ? "ivec4(1.0)" : `ivec4(normalize(cross(dFdx(${vWorldPosition}), dFdy(${vWorldPosition}))) * float(${math.MAX_INT}), 1.0)`};`);
                     src.push("outPickColor = uvec4(vPickColor);");
@@ -68,6 +66,14 @@ export const VBOSnapRenderer = function(gl, isSnapInit, isPoints) {
                     gl.uniform1i(uLayerNumber,       frameCtx.snapPickLayerNumber);
                     gl.uniform3fv(uCoordinateScaler, coordinateScaler);
                 };
-            }
+            },
+
+            dontCullOnAlphaZero: !isSnapInit,
+            getViewParams: (frameCtx, camera) => ({
+                viewMatrix: frameCtx.pickViewMatrix || camera.viewMatrix,
+                projMatrix: frameCtx.pickProjMatrix || camera.projMatrix,
+                eye: frameCtx.pickOrigin || camera.eye,
+                far: frameCtx.pickProjMatrix ? frameCtx.pickZFar : camera.project.far
+            })
         };
 };
