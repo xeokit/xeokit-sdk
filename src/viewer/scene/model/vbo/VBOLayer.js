@@ -9,21 +9,19 @@ import {geometryCompressionUtils} from "../../math/geometryCompressionUtils.js";
 
 import {VBORenderer, createLightSetup, createSAOSetup, createPickClipTransformSetup} from "./VBORenderer.js";
 
-import { VBOTrianglesColorTextureRenderer    } from "./renderers/VBOTrianglesColorTextureRenderer.js";
-import { VBOTrianglesDepthRenderer           } from "./renderers/VBOTrianglesDepthRenderer.js";
-import { VBOTrianglesEdgesRenderer           } from "./renderers/VBOTrianglesEdgesRenderer.js";
-import { VBOTrianglesFlatColorRenderer       } from "./renderers/VBOTrianglesFlatColorRenderer.js";
-import { VBOTrianglesPBRRenderer             } from "./renderers/VBOTrianglesPBRRenderer.js";
-import { VBOTrianglesPickNormalsRenderer     } from "./renderers/VBOTrianglesPickNormalsRenderer.js";
-
-import { VBOColorRenderer           } from "./renderers/VBOColorRenderer.js";
-import { VBOOcclusionRenderer       } from "./renderers/VBOOcclusionRenderer.js";
-import { VBOPickDepthRenderer       } from "./renderers/VBOPickDepthRenderer.js";
-import { VBOPickMeshRenderer        } from "./renderers/VBOPickMeshRenderer.js";
-import { VBOShadowRenderer          } from "./renderers/VBOShadowRenderer.js";
-import { VBOSilhouetteRenderer      } from "./renderers/VBOSilhouetteRenderer.js";
-import { VBOSnapRenderer            } from "./renderers/VBOSnapRenderer.js";
-
+import { ColorProgram        } from "../layer/programs/ColorProgram.js";
+import { ColorTextureProgram } from "../layer/programs/ColorTextureProgram.js";
+import { DepthProgram        } from "../layer/programs/DepthProgram.js";
+import { EdgesProgram        } from "../layer/programs/EdgesProgram.js";
+import { FlatColorProgram    } from "../layer/programs/FlatColorProgram.js";
+import { OcclusionProgram    } from "../layer/programs/OcclusionProgram.js";
+import { PBRProgram          } from "../layer/programs/PBRProgram.js";
+import { PickDepthProgram    } from "../layer/programs/PickDepthProgram.js";
+import { PickMeshProgram     } from "../layer/programs/PickMeshProgram.js";
+import { PickNormalsProgram  } from "../layer/programs/PickNormalsProgram.js";
+import { ShadowProgram       } from "../layer/programs/ShadowProgram.js";
+import { SilhouetteProgram   } from "../layer/programs/SilhouetteProgram.js";
+import { SnapProgram         } from "../layer/programs/SnapProgram.js";
 
 const getRenderers = (function() {
     const cachedRenderers = { };
@@ -78,34 +76,34 @@ const getRenderers = (function() {
 
             const gl = scene.canvas.gl;
 
-            const makeColorProgram = (withLights, withSAO) => VBOColorRenderer(scene, primitive, withLights && createLightSetup(gl, scene._lightsState, false), withSAO && createSAOSetup(gl, scene));
-            const makeColorTextureProgram = (withSAO, useAlphaCutoff) => VBOTrianglesColorTextureRenderer(scene, createLightSetup(gl, scene._lightsState), withSAO && createSAOSetup(gl, scene), useAlphaCutoff, scene.gammaOutput); // If gammaOutput set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
-            const makeFlatColorProgram = (withSAO) => VBOTrianglesFlatColorRenderer(scene.logarithmicDepthBufferEnabled, createLightSetup(gl, scene._lightsState, false), withSAO && createSAOSetup(gl, scene));
-            const makePBRProgram = (withSAO) => VBOTrianglesPBRRenderer(scene, createLightSetup(gl, scene._lightsState, true), withSAO && createSAOSetup(gl, scene));
+            const makeColorProgram = (withLights, withSAO) => ColorProgram(scene.logarithmicDepthBufferEnabled, withLights && createLightSetup(gl, scene._lightsState, false), withSAO && createSAOSetup(gl, scene), primitive, undefined);
+            const makeColorTextureProgram = (withSAO, useAlphaCutoff) => ColorTextureProgram(scene, createLightSetup(gl, scene._lightsState), withSAO && createSAOSetup(gl, scene), useAlphaCutoff, scene.gammaOutput); // If gammaOutput set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
+            const makeFlatColorProgram = (withSAO) => FlatColorProgram(scene.logarithmicDepthBufferEnabled, createLightSetup(gl, scene._lightsState, false), withSAO && createSAOSetup(gl, scene));
+            const makePBRProgram = (withSAO) => PBRProgram(scene, createLightSetup(gl, scene._lightsState, true), withSAO && createSAOSetup(gl, scene));
 
-            const makePickDepthProgram   = (isPoints) => VBOPickDepthRenderer(scene, createPickClipTransformSetup(gl, 1), isPoints);
-            const makePickMeshProgram    = (isPoints) => VBOPickMeshRenderer(scene, createPickClipTransformSetup(gl, 1), isPoints);
-            const makePickNormalsProgram = (isFlat)   => VBOTrianglesPickNormalsRenderer(scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(gl, 3), isFlat);
+            const makePickDepthProgram   = (isPoints) => PickDepthProgram(scene, createPickClipTransformSetup(gl, 1), isPoints);
+            const makePickMeshProgram    = (isPoints) => PickMeshProgram(scene, createPickClipTransformSetup(gl, 1), isPoints);
+            const makePickNormalsProgram = (isFlat)   => PickNormalsProgram(scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(gl, 3), isFlat);
 
-            const makeSnapProgram = (isSnapInit, isPoints) => VBOSnapRenderer(gl, isSnapInit, isPoints);
+            const makeSnapProgram = (isSnapInit, isPoints) => SnapProgram(gl, isSnapInit, isPoints);
 
             if (primitive === "points") {
                 cache[sceneId] = {
                     colorRenderer:      lazy((c) => c(makeColorProgram(false, false))),
-                    occlusionRenderer:  lazy((c) => c(VBOOcclusionRenderer(scene.logarithmicDepthBufferEnabled))),
+                    occlusionRenderer:  lazy((c) => c(OcclusionProgram(scene.logarithmicDepthBufferEnabled))),
                     pickDepthRenderer:  lazy((c) => c(makePickDepthProgram(true))),
                     pickMeshRenderer:   lazy((c) => c(makePickMeshProgram(true))),
                     // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
                     // but never used (and probably not maintained), as opposed to VBOInstancingPointsShadowRenderer in the same commit
-                    shadowRenderer:     instancing && lazy((c) => c(VBOShadowRenderer(scene))),
-                    silhouetteRenderer: lazy((c) => c(VBOSilhouetteRenderer(scene, instancing, true))),
+                    shadowRenderer:     instancing && lazy((c) => c(ShadowProgram(scene))),
+                    silhouetteRenderer: lazy((c) => c(SilhouetteProgram(scene, true))),
                     snapInitRenderer:   lazy((c) => c(makeSnapProgram(true,  true))),
                     snapVertexRenderer: lazy((c) => c(makeSnapProgram(false, true), { vertices: true }))
                 };
             } else if (primitive === "lines") {
                 cache[sceneId] = {
                     colorRenderer:      lazy((c) => c(makeColorProgram(false, false))),
-                    silhouetteRenderer: lazy((c) => c(VBOSilhouetteRenderer(scene, instancing, true))),
+                    silhouetteRenderer: lazy((c) => c(SilhouetteProgram(scene, true))),
                     snapInitRenderer:   lazy((c) => c(makeSnapProgram(true,  false))),
                     snapEdgeRenderer:   lazy((c) => c(makeSnapProgram(false, false), { vertices: false })),
                     snapVertexRenderer: lazy((c) => c(makeSnapProgram(false, false), { vertices: true }))
@@ -118,20 +116,20 @@ const getRenderers = (function() {
                     colorTextureRendererAlphaCutoff:        lazy((c) => c(makeColorTextureProgram(false, true))),
                     colorTextureRendererWithSAO:            lazy((c) => c(makeColorTextureProgram(true,  false))),
                     colorTextureRendererWithSAOAlphaCutoff: lazy((c) => c(makeColorTextureProgram(true,  true))),
-                    depthRenderer:                          lazy((c) => c(VBOTrianglesDepthRenderer(scene.logarithmicDepthBufferEnabled))),
-                    edgesColorRenderer:                     lazy((c) => c(VBOTrianglesEdgesRenderer(scene, false), { vertices: false })),
-                    edgesRenderer:                          lazy((c) => c(VBOTrianglesEdgesRenderer(scene, true),  { vertices: false })),
+                    depthRenderer:                          lazy((c) => c(DepthProgram(scene.logarithmicDepthBufferEnabled))),
+                    edgesColorRenderer:                     lazy((c) => c(EdgesProgram(scene, false), { vertices: false })),
+                    edgesRenderer:                          lazy((c) => c(EdgesProgram(scene, true),  { vertices: false })),
                     flatColorRenderer:                      lazy((c) => c(makeFlatColorProgram(false))),
                     flatColorRendererWithSAO:               lazy((c) => c(makeFlatColorProgram(true))),
-                    occlusionRenderer:                      lazy((c) => c(VBOOcclusionRenderer(scene.logarithmicDepthBufferEnabled))),
+                    occlusionRenderer:                      lazy((c) => c(OcclusionProgram(scene.logarithmicDepthBufferEnabled))),
                     pbrRenderer:                            lazy((c) => c(makePBRProgram(false))),
                     pbrRendererWithSAO:                     lazy((c) => c(makePBRProgram(true))),
                     pickDepthRenderer:                      eager((c) => c(makePickDepthProgram(false))),
                     pickMeshRenderer:                       eager((c) => c(makePickMeshProgram(false))),
                     pickNormalsFlatRenderer:                lazy((c) => c(makePickNormalsProgram(true))),
                     pickNormalsRenderer:                    lazy((c) => c(makePickNormalsProgram(false))),
-                    shadowRenderer:                         lazy((c) => c(VBOShadowRenderer(scene))),
-                    silhouetteRenderer:                     eager((c) => c(VBOSilhouetteRenderer(scene, instancing, false))),
+                    shadowRenderer:                         lazy((c) => c(ShadowProgram(scene))),
+                    silhouetteRenderer:                     eager((c) => c(SilhouetteProgram(scene, false))),
                     snapInitRenderer:                       eager((c) => c(makeSnapProgram(true,  false))),
                     snapEdgeRenderer:                       eager((c) => c(makeSnapProgram(false, false), { vertices: false })),
                     snapVertexRenderer:                     eager((c) => c(makeSnapProgram(false, false), { vertices: true }))
