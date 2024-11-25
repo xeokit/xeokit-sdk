@@ -16,7 +16,7 @@ export const DTXTrianglesSilhouetteRenderer = function(scene) {
             // renderPass = SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | | SILHOUETTE_XRAYED
             renderPassFlag: 1,
             appendVertexDefinitions: (src) => src.push("out float vAlpha;"),
-            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => src.push(`vAlpha = float(${color}.a) / 255.0;`),
+            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => src.push(`vAlpha = ${color}.a / 255.0;`),
             appendFragmentDefinitions: (src) => {
                 src.push("in float vAlpha;");
                 src.push("uniform vec4 color;");
