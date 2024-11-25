@@ -12,7 +12,7 @@ const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
  */
 export class DTXTrianglesDrawable {
 
-    constructor(scene, cfg) {
+    constructor(scene, cfg, subGeometry) {
 
         const getHash = () => [ scene._sectionPlanesState.getHash() ].concat(cfg.getHash ? cfg.getHash() : [ ]).join(";");
         const hash = getHash();
@@ -31,8 +31,7 @@ export class DTXTrianglesDrawable {
         const appendFragmentDefinitions    = cfg.appendFragmentDefinitions;
         const appendFragmentOutputs        = cfg.appendFragmentOutputs;
         const setupInputs                  = cfg.setupInputs;
-        const getGlMode                    = cfg.getGlMode;
-        const isTriangle = ! getGlMode;
+        const isTriangle = ! subGeometry;
 
 
         const sectionPlanesState = scene._sectionPlanesState;
@@ -409,7 +408,7 @@ export class DTXTrianglesDrawable {
                 }
             }
 
-            (isTriangle ? layer.drawTriangles : layer.drawEdges)(
+            (subGeometry ? layer.drawEdges : layer.drawTriangles)(
                 program,
                 uTexturePerObjectPositionsDecodeMatrix,
                 uTexturePerVertexIdCoordinates,
@@ -417,7 +416,7 @@ export class DTXTrianglesDrawable {
                 uTexturePerObjectMatrix,
                 uTexturePerPrimitiveIdPortionIds,
                 uTexturePerPrimitiveIdIndices,
-                getGlMode ? getGlMode(frameCtx) : gl.TRIANGLES);
+                subGeometry ? (subGeometry.vertices ? gl.POINTS : gl.LINES) : gl.TRIANGLES);
 
             frameCtx.drawElements++;
         };

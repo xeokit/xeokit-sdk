@@ -74,7 +74,6 @@ export const DTXTrianglesSnapRenderer = function(gl, isSnapInit) {
                     gl.uniform1i(uLayerNumber, frameCtx.snapPickLayerNumber);
                     gl.uniform3fv(uCoordinateScaler, coordinateScaler);
                 };
-            },
-            getGlMode: (!isSnapInit) && ((frameCtx) => (frameCtx.snapMode === "edge") ? gl.LINES : gl.POINTS)
+            }
         };
 };
