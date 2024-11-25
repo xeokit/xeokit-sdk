@@ -17,7 +17,7 @@ export const DTXTrianglesPickDepthRenderer = function(scene, clipTransformSetup)
                 clipTransformSetup.appendDefinitions(src);
             },
             transformClipPos: clipTransformSetup.transformClipPos,
-            appendVertexOutputs: (src, color, pickColor, gl_Position, view) => src.push(`vViewPosition = ${view.viewPosition};`),
+            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => src.push(`vViewPosition = ${view.viewPosition};`),
             appendFragmentDefinitions: (src) => {
                 src.push("uniform float pickZNear;");
                 src.push("uniform float pickZFar;");
@@ -31,7 +31,7 @@ export const DTXTrianglesPickDepthRenderer = function(scene, clipTransformSetup)
                 src.push("}");
                 src.push("out vec4 outPackedDepth;");
             },
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord) => {
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push("    float zNormalizedDepth = abs((pickZNear + vViewPosition.z) / (pickZFar - pickZNear));");
                 src.push("    outPackedDepth = packDepth(zNormalizedDepth);");  // Must be linear depth
                 // TRY: src.push("    outPackedDepth = vec4(zNormalizedDepth, fract(zNormalizedDepth * vec3(256.0, 256.0*256.0, 256.0*256.0*256.0)));");
