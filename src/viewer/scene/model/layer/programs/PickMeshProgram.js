@@ -1,11 +1,9 @@
-export const VBOPickMeshRenderer = function(scene, clipTransformSetup, isPoints) {
+export const PickMeshProgram = function(scene, clipTransformSetup, isPoints) {
+        const gl = scene.canvas.gl;
         return {
             programName: "PickMesh",
-
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
-            // pickFlag = NOT_RENDERED | PICK
-            // renderPass = PICK
-            renderPassFlag: 3,
+            renderPassFlag: 3,  // PICK
             appendVertexDefinitions: (src) => {
                 src.push("out vec4 vPickColor;");
                 clipTransformSetup.appendDefinitions(src);
@@ -19,14 +17,22 @@ export const VBOPickMeshRenderer = function(scene, clipTransformSetup, isPoints)
             },
             appendFragmentDefinitions: (src) => {
                 src.push("in vec4 vPickColor;");
-                src.push("out vec4 outColor;");
+                src.push("out vec4 outPickColor;");
             },
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
-                src.push("outColor = vPickColor;");
+                src.push("outPickColor = vPickColor;");
             },
-            setupInputs: program => {
+            setupInputs: (program) => {
                 const setClipTransformState = clipTransformSetup.setupInputs(program);
                 return (frameCtx, layer, renderPass, rtcOrigin) => setClipTransformState(frameCtx);
-            }
+            },
+
+            dontCullOnAlphaZero: true, // should be false?
+            getViewParams: (frameCtx, camera) => ({
+                viewMatrix: frameCtx.pickViewMatrix || camera.viewMatrix,
+                projMatrix: frameCtx.pickProjMatrix || camera.projMatrix,
+                eye: frameCtx.pickOrigin || camera.eye,
+                far: frameCtx.pickProjMatrix ? frameCtx.pickZFar : camera.project.far
+            })
         };
 };

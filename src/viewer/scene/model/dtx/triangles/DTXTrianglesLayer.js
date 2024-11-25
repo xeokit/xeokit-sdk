@@ -63,20 +63,20 @@ window.printDataTextureRamStats = function () {
     console.log(JSON.stringify({percentualRamUsage: percentualRamStats}, null, 4));
 };
 
-import {DTXTrianglesColorRenderer}           from "./renderers/DTXTrianglesColorRenderer.js";
-import {DTXTrianglesDepthRenderer}           from "./renderers/DTXTrianglesDepthRenderer.js";
-import {DTXTrianglesEdgesRenderer}           from "./renderers/DTXTrianglesEdgesRenderer.js";
-import {DTXTrianglesOcclusionRenderer}       from "./renderers/DTXTrianglesOcclusionRenderer.js";
-import {DTXTrianglesPickDepthRenderer}       from "./renderers/DTXTrianglesPickDepthRenderer.js";
-import {DTXTrianglesPickMeshRenderer}        from "./renderers/DTXTrianglesPickMeshRenderer.js";
-import {DTXTrianglesPickNormalsFlatRenderer} from "./renderers/DTXTrianglesPickNormalsFlatRenderer.js";
-import {DTXTrianglesSilhouetteRenderer}      from "./renderers/DTXTrianglesSilhouetteRenderer.js";
-import {DTXTrianglesSnapRenderer}            from "./renderers/DTXTrianglesSnapRenderer.js";
+import {ColorProgram}       from "../../layer/programs/ColorProgram.js";
+import {DepthProgram}       from "../../layer/programs/DepthProgram.js";
+import {EdgesProgram}       from "../../layer/programs/EdgesProgram.js";
+import {OcclusionProgram}   from "../../layer/programs/OcclusionProgram.js";
+import {PickDepthProgram}   from "../../layer/programs/PickDepthProgram.js";
+import {PickMeshProgram}    from "../../layer/programs/PickMeshProgram.js";
+import {PickNormalsProgram} from "../../layer/programs/PickNormalsProgram.js";
+import {SilhouetteProgram}  from "../../layer/programs/SilhouetteProgram.js";
+import {SnapProgram}        from "../../layer/programs/SnapProgram.js";
 
 export const getRenderers = (function() {
     const cachedRenderers = { };
 
-    return function(scene) {
+    return function(scene, primitive) {
         const batchInstKey = "dtx";
         if (! (batchInstKey in cachedRenderers)) {
             cachedRenderers[batchInstKey] = { };
@@ -126,25 +126,27 @@ export const getRenderers = (function() {
 
             const gl = scene.canvas.gl;
 
-            const makeColorProgram = (withSAO) => DTXTrianglesColorRenderer(
+            const makeColorProgram = (withSAO) => ColorProgram(
                 scene.logarithmicDepthBufferEnabled,
                 createLightSetup(gl, scene._lightsState, false), // WARNING: Changing `useMaps' to `true' might have unexpected consequences while binding textures, as the DTX texture binding mechanism doesn't rely on `frameCtx.textureUnit` the way VBO does (see setSAORenderState)
-                withSAO && createSAOSetup(gl, scene));
+                withSAO && createSAOSetup(gl, scene),
+                primitive,
+                10);
 
             cache[sceneId] = {
                 colorRenderer:           lazy((c) => c(makeColorProgram(false))),
                 colorRendererWithSAO:    lazy((c) => c(makeColorProgram(true))),
-                depthRenderer:           lazy((c) => c(DTXTrianglesDepthRenderer(scene.logarithmicDepthBufferEnabled))),
-                edgesColorRenderer:      lazy((c) => c(DTXTrianglesEdgesRenderer(scene, false), { vertices: false })),
-                edgesRenderer:           lazy((c) => c(DTXTrianglesEdgesRenderer(scene, true),  { vertices: false })),
-                occlusionRenderer:       lazy((c) => c(DTXTrianglesOcclusionRenderer(scene.logarithmicDepthBufferEnabled))),
-                pickDepthRenderer:       eager((c) => c(DTXTrianglesPickDepthRenderer(scene, createPickClipTransformSetup(gl, 1)))),
-                pickMeshRenderer:        eager((c) => c(DTXTrianglesPickMeshRenderer(scene, createPickClipTransformSetup(gl, 1)))),
-                pickNormalsFlatRenderer: eager((c) => c(DTXTrianglesPickNormalsFlatRenderer(scene, createPickClipTransformSetup(gl, 3)))),
-                silhouetteRenderer:      eager((c) => c(DTXTrianglesSilhouetteRenderer(scene))),
-                snapInitRenderer:        eager((c) => c(DTXTrianglesSnapRenderer(gl, true))),
-                snapEdgeRenderer:        eager((c) => c(DTXTrianglesSnapRenderer(gl, false), { vertices: false })),
-                snapVertexRenderer:      eager((c) => c(DTXTrianglesSnapRenderer(gl, false), { vertices: true })),
+                depthRenderer:           lazy((c) => c(DepthProgram(scene.logarithmicDepthBufferEnabled))),
+                edgesColorRenderer:      lazy((c) => c(EdgesProgram(scene, false), { vertices: false })),
+                edgesRenderer:           lazy((c) => c(EdgesProgram(scene, true),  { vertices: false })),
+                occlusionRenderer:       lazy((c) => c(OcclusionProgram(scene.logarithmicDepthBufferEnabled))),
+                pickDepthRenderer:       eager((c) => c(PickDepthProgram(scene, createPickClipTransformSetup(gl, 1)))),
+                pickMeshRenderer:        eager((c) => c(PickMeshProgram(scene, createPickClipTransformSetup(gl, 1)))),
+                pickNormalsFlatRenderer: eager((c) => c(PickNormalsProgram(scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(gl, 3), true))),
+                silhouetteRenderer:      eager((c) => c(SilhouetteProgram(scene, false))),
+                snapInitRenderer:        eager((c) => c(SnapProgram(gl, true,  false))),
+                snapEdgeRenderer:        eager((c) => c(SnapProgram(gl, false, false), { vertices: false })),
+                snapVertexRenderer:      eager((c) => c(SnapProgram(gl, false, false), { vertices: true })),
             };
 
             const compile = () => Object.values(cache[sceneId]).forEach(r => r && r.revalidate(false));
@@ -210,7 +212,7 @@ export class DTXTrianglesLayer {
         this.sortId = `TriDTX-${this._layerNumber}`; // State sorting key.
         this.layerIndex = cfg.layerIndex; // Index of this TrianglesDataTextureLayer in {@link SceneModel#_layerList}.
 
-        this._renderers = getRenderers(model.scene);
+        this._renderers = getRenderers(model.scene, cfg.primitive);
         this.model = model;
         const gl = model.scene.canvas.gl;
         this._buffer = {
