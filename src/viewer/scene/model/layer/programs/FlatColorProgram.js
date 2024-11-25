@@ -1,12 +1,9 @@
-export const VBOTrianglesFlatColorRenderer = function(logarithmicDepthBufferEnabled, lightSetup, sao) {
+export const FlatColorProgram = function(logarithmicDepthBufferEnabled, lightSetup, sao) {
         return {
             programName: "FlatColor",
-
             getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao"],
             getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
-            // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
-            // renderPass = COLOR_OPAQUE | COLOR_TRANSPARENT
-            renderPassFlag: 0,
+            renderPassFlag: 0,      // COLOR_OPAQUE | COLOR_TRANSPARENT
             appendVertexDefinitions: (src) => {
                 src.push("out vec4 vViewPosition;");
                 src.push("out vec4 vColor;");
