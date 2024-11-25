@@ -1,21 +1,12 @@
-import {math} from "../../../../math/math.js";
+import {math} from "../../../math/math.js";
 const tempVec3c = math.vec3();
 
-export const DTXTrianglesSnapRenderer = function(gl, isSnapInit) {
+export const SnapProgram = function(gl, isSnapInit, isPoints) {
         return {
             programName: isSnapInit ? "SnapInit" : "Snap",
             // Improves occlusion accuracy at distance
             getLogDepth: true && (vFragDepth => (isSnapInit ? `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))` : vFragDepth)),
-            getViewParams: (frameCtx, camera) => ({
-                viewMatrix: frameCtx.pickViewMatrix || camera.viewMatrix,
-                projMatrix: frameCtx.pickProjMatrix || camera.projMatrix,
-                eye: frameCtx.pickOrigin || camera.eye,
-                far: frameCtx.pickProjMatrix ? frameCtx.pickZFar : camera.project.far
-            }),
-            // flags.w = NOT_RENDERED | PICK
-            // renderPass = PICK
-            renderPassFlag: 3,
-            dontCullOnAlphaZero: !isSnapInit,
+            renderPassFlag: 3,  // PICK
             appendVertexDefinitions: (src) => {
                 src.push("uniform vec2 snapVectorA;");
                 src.push("uniform vec2 snapInvVectorAB;");
@@ -46,15 +37,14 @@ export const DTXTrianglesSnapRenderer = function(gl, isSnapInit) {
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
                 src.push(`outCoords = ivec4(${vWorldPosition} * uCoordinateScaler.xyz, ${isSnapInit ? "-" : ""}uLayerNumber);`);
                 if (isSnapInit) {
-                    src.push(`vec3 worldNormal = normalize(cross(dFdx(${vWorldPosition}), dFdy(${vWorldPosition})));`);
-                    src.push(`outNormal = ivec4(worldNormal * float(${math.MAX_INT}), 1.0);`);
+                    src.push(`outNormal = ${isPoints ? "ivec4(1.0)" : `ivec4(normalize(cross(dFdx(${vWorldPosition}), dFdy(${vWorldPosition}))) * float(${math.MAX_INT}), 1.0)`};`);
                     src.push("outPickColor = uvec4(vPickColor);");
                 }
             },
             setupInputs: (program) => {
-                const uSnapVectorA = program.getLocation("snapVectorA");
-                const uSnapInvVectorAB = program.getLocation("snapInvVectorAB");
-                const uLayerNumber = program.getLocation("uLayerNumber");
+                const uSnapVectorA      = program.getLocation("snapVectorA");
+                const uSnapInvVectorAB  = program.getLocation("snapInvVectorAB");
+                const uLayerNumber      = program.getLocation("uLayerNumber");
                 const uCoordinateScaler = program.getLocation("uCoordinateScaler");
 
                 return (frameCtx, layer, renderPass, rtcOrigin) => {
@@ -69,11 +59,20 @@ export const DTXTrianglesSnapRenderer = function(gl, isSnapInit) {
                     frameCtx.snapPickOrigin[0] = rtcOrigin[0];
                     frameCtx.snapPickOrigin[1] = rtcOrigin[1];
                     frameCtx.snapPickOrigin[2] = rtcOrigin[2];
-                    gl.uniform2fv(uSnapVectorA, frameCtx.snapVectorA);
-                    gl.uniform2fv(uSnapInvVectorAB, frameCtx.snapInvVectorAB);
-                    gl.uniform1i(uLayerNumber, frameCtx.snapPickLayerNumber);
+
+                    gl.uniform2fv(uSnapVectorA,      frameCtx.snapVectorA);
+                    gl.uniform2fv(uSnapInvVectorAB,  frameCtx.snapInvVectorAB);
+                    gl.uniform1i(uLayerNumber,       frameCtx.snapPickLayerNumber);
                     gl.uniform3fv(uCoordinateScaler, coordinateScaler);
                 };
-            }
+            },
+
+            dontCullOnAlphaZero: !isSnapInit,
+            getViewParams: (frameCtx, camera) => ({
+                viewMatrix: frameCtx.pickViewMatrix || camera.viewMatrix,
+                projMatrix: frameCtx.pickProjMatrix || camera.projMatrix,
+                eye: frameCtx.pickOrigin || camera.eye,
+                far: frameCtx.pickProjMatrix ? frameCtx.pickZFar : camera.project.far
+            })
         };
 };
