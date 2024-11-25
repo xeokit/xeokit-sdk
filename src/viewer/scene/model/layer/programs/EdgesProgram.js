@@ -1,20 +1,12 @@
-import {RENDER_PASSES} from "../../../RENDER_PASSES.js";
+import {RENDER_PASSES} from "../../RENDER_PASSES.js";
 const edgesDefaultColor = new Float32Array([0, 0, 0, 1]);
 
-export const DTXTrianglesEdgesRenderer = function(scene, colorUniform) {
+export const EdgesProgram = function(scene, colorUniform) {
         const gl = scene.canvas.gl;
         return {
             programName: colorUniform ? "Edges" : "EdgesColor",
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
-            getViewParams: (frameCtx, camera) => ({
-                viewMatrix: camera.viewMatrix,
-                projMatrix: camera.projMatrix,
-                eye: camera.eye,
-                far: camera.project.far
-            }),
-            // flags.z = NOT_RENDERED | EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
-            // renderPass = EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
-            renderPassFlag: 2,
+            renderPassFlag: 2,  // EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
             appendVertexDefinitions: (src) => {
                 if (! colorUniform) {
                     src.push("out vec4 vColor;");
@@ -33,7 +25,9 @@ export const DTXTrianglesEdgesRenderer = function(scene, colorUniform) {
                 }
                 src.push("out vec4 outColor;");
             },
-            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => src.push("outColor = " + (colorUniform ? "edgeColor" : "vColor") + ";"),
+            appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
+                src.push("outColor = " + (colorUniform ? "edgeColor" : "vColor") + ";");
+            },
             setupInputs: (program) => {
                 const edgeColor = colorUniform && program.getLocation("edgeColor");
                 return (frameCtx, layer, renderPass, rtcOrigin) => {
@@ -55,6 +49,13 @@ export const DTXTrianglesEdgesRenderer = function(scene, colorUniform) {
                         }
                     }
                 };
-            }
+            },
+
+            getViewParams: (frameCtx, camera) => ({
+                viewMatrix: camera.viewMatrix,
+                projMatrix: camera.projMatrix,
+                eye: camera.eye,
+                far: camera.project.far
+            })
         };
 };

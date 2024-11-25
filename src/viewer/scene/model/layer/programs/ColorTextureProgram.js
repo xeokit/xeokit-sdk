@@ -1,18 +1,13 @@
 import {WEBGL_INFO} from "../../../webglInfo.js";
 
-export const VBOTrianglesColorTextureRenderer = function(scene, lightSetup, sao, useAlphaCutoff, gammaOutput) {
+export const ColorTextureProgram = function(scene, lightSetup, sao, useAlphaCutoff, gammaOutput) {
         const gl = scene.canvas.gl;
         const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
-
         return {
             programName: "ColorTexture",
-            incrementDrawState: true,
-
             getHash: () => [lightSetup.getHash(), sao ? "sao" : "nosao", gammaOutput, useAlphaCutoff ? "alphaCutoffYes" : "alphaCutoffNo"],
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
-            // colorFlag = NOT_RENDERED | COLOR_OPAQUE | COLOR_TRANSPARENT
-            // renderPass = COLOR_OPAQUE | COLOR_TRANSPARENT
-            renderPassFlag: 0,
+            renderPassFlag: 0,      // COLOR_OPAQUE | COLOR_TRANSPARENT
             appendVertexDefinitions: (src) => {
                 src.push("uniform mat3 uvDecodeMatrix;");
                 src.push("out vec4 vViewPosition;");
@@ -92,6 +87,8 @@ export const VBOTrianglesColorTextureRenderer = function(scene, lightSetup, sao,
                     setSAOState && setSAOState(frameCtx);
                     materialAlphaCutoff && gl.uniform1f(materialAlphaCutoff, state.textureSet.alphaCutoff);
                 };
-            }
+            },
+
+            incrementDrawState: true
         };
 };
