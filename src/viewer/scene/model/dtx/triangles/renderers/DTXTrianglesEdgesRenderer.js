@@ -55,7 +55,6 @@ export const DTXTrianglesEdgesRenderer = function(scene, colorUniform) {
                         }
                     }
                 };
-            },
-            getGlMode: (frameCtx) => gl.LINES
+            }
         };
 };
