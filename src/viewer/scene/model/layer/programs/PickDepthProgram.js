@@ -1,23 +1,20 @@
-export const DTXTrianglesPickDepthRenderer = function(scene, clipTransformSetup) {
+export const PickDepthProgram = function(scene, clipTransformSetup, isPoints) {
         const gl = scene.canvas.gl;
         return {
             programName: "PickDepth",
             getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
-            getViewParams: (frameCtx, camera) => ({
-                viewMatrix: frameCtx.pickViewMatrix || camera.viewMatrix,
-                projMatrix: frameCtx.pickProjMatrix || camera.projMatrix,
-                eye: frameCtx.pickOrigin || camera.eye,
-                far: frameCtx.pickProjMatrix ? frameCtx.pickZFar : camera.project.far
-            }),
-            // flags.w = NOT_RENDERED | PICK
-            // renderPass = PICK
-            renderPassFlag: 3,
+            renderPassFlag: 3,  // PICK
             appendVertexDefinitions: (src) => {
                 src.push("out vec4 vViewPosition;");
                 clipTransformSetup.appendDefinitions(src);
             },
             transformClipPos: clipTransformSetup.transformClipPos,
-            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => src.push(`vViewPosition = ${view.viewPosition};`),
+            appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
+                src.push(`vViewPosition = ${view.viewPosition};`);
+                if (isPoints) {
+                    src.push("gl_PointSize += 10.0;");
+                }
+            },
             appendFragmentDefinitions: (src) => {
                 src.push("uniform float pickZNear;");
                 src.push("uniform float pickZFar;");
@@ -32,19 +29,26 @@ export const DTXTrianglesPickDepthRenderer = function(scene, clipTransformSetup)
                 src.push("out vec4 outPackedDepth;");
             },
             appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
-                src.push("    float zNormalizedDepth = abs((pickZNear + vViewPosition.z) / (pickZFar - pickZNear));");
-                src.push("    outPackedDepth = packDepth(zNormalizedDepth);");  // Must be linear depth
-                // TRY: src.push("    outPackedDepth = vec4(zNormalizedDepth, fract(zNormalizedDepth * vec3(256.0, 256.0*256.0, 256.0*256.0*256.0)));");
+                src.push("float zNormalizedDepth = abs((pickZNear + vViewPosition.z) / (pickZFar - pickZNear));");
+                src.push("outPackedDepth = packDepth(zNormalizedDepth);"); // Must be linear depth
+                // try: src.push("    outPackedDepth = vec4(zNormalizedDepth, fract(zNormalizedDepth * vec3(256.0, 256.0*256.0, 256.0*256.0*256.0)));");
             },
             setupInputs: (program) => {
                 const uPickZNear = program.getLocation("pickZNear");
-                const uPickZFar = program.getLocation("pickZFar");
+                const uPickZFar  = program.getLocation("pickZFar");
                 const setClipTransformState = clipTransformSetup.setupInputs(program);
                 return (frameCtx, layer, renderPass, rtcOrigin) => {
                     gl.uniform1f(uPickZNear, frameCtx.pickZNear);
-                    gl.uniform1f(uPickZFar, frameCtx.pickZFar);
+                    gl.uniform1f(uPickZFar,  frameCtx.pickZFar);
                     setClipTransformState(frameCtx);
                 };
-            }
+            },
+
+            getViewParams: (frameCtx, camera) => ({
+                viewMatrix: frameCtx.pickViewMatrix || camera.viewMatrix,
+                projMatrix: frameCtx.pickProjMatrix || camera.projMatrix,
+                eye: frameCtx.pickOrigin || camera.eye,
+                far: frameCtx.pickProjMatrix ? frameCtx.pickZFar : camera.project.far
+            })
         };
 };
