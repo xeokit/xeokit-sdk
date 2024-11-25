@@ -72,7 +72,7 @@ export class DTXTrianglesDrawable {
             return src;
         })();
 
-        const colorA             = lazyShaderVariable("color");
+        const colorA             = lazyShaderVariable("aColor");
         const pickColorA         = lazyShaderVariable("pickColor");
         const viewParams = {
             viewPosition: "viewPosition",
@@ -162,6 +162,9 @@ export class DTXTrianglesDrawable {
                 src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
                 src.push("   return;");
                 src.push("}");
+            }
+            if (colorA.needed) {
+                src.push("vec4 aColor = vec4(color);");
             }
 
             src.push("{");
