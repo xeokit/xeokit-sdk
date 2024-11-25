@@ -84,15 +84,9 @@ export class DTXTrianglesPickDepthRenderer {
             rtcCameraEye[0] = eye[0] - rtcOrigin[0];
             rtcCameraEye[1] = eye[1] - rtcOrigin[1];
             rtcCameraEye[2] = eye[2] - rtcOrigin[2];
-            frameCtx.snapPickOrigin[0] = rtcOrigin[0];
-            frameCtx.snapPickOrigin[1] = rtcOrigin[1];
-            frameCtx.snapPickOrigin[2] = rtcOrigin[2];
         } else {
             rtcViewMatrix = viewMatrix;
             rtcCameraEye = eye;
-            frameCtx.snapPickOrigin[0] = 0;
-            frameCtx.snapPickOrigin[1] = 0;
-            frameCtx.snapPickOrigin[2] = 0;
         }
 
         gl.uniform3fv(this._uCameraEyeRtc, rtcCameraEye);
