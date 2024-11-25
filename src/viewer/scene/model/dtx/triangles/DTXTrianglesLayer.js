@@ -1312,13 +1312,6 @@ export class DTXTrianglesLayer {
 
     //---- PICKING ----------------------------------------------------------------------------------------------------
 
-    setPickMatrices(pickViewMatrix, pickProjMatrix) {
-        // if (this._numVisibleLayerPortions === 0) {
-        //     return;
-        // }
-        // this._dtxState.texturePickCameraMatrices.updateViewMatrix(pickViewMatrix, pickProjMatrix);
-    }
-
     drawPickMesh(renderFlags, frameCtx) {
         if (this._numVisibleLayerPortions === 0) {
             return;
