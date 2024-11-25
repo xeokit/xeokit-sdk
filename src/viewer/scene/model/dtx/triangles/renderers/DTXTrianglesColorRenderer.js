@@ -21,7 +21,7 @@ export const DTXTrianglesColorRenderer = function(logarithmicDepthBufferEnabled,
                 lightSetup.getDirectionalLights(view.viewMatrix, view.viewPosition).forEach(light => {
                     src.push(`reflectedColor += max(dot(-${view.viewNormal}, ${light.direction}), 0.0) * ${light.color};`);
                 });
-                src.push(`vColor = vec4(${lightSetup.getAmbientColor()} + reflectedColor, 1) * vec4(${color}) / 255.0;`);
+                src.push(`vColor = vec4(${lightSetup.getAmbientColor()} + reflectedColor, 1) * ${color} / 255.0;`);
             },
             appendFragmentDefinitions: (src) => {
                 src.push("in vec4 vColor;");
