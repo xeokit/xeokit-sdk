@@ -9,14 +9,13 @@ export const ColorTextureProgram = function(scene, lightSetup, sao, useAlphaCuto
         getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 0,      // COLOR_OPAQUE | COLOR_TRANSPARENT
         appendVertexDefinitions: (src) => {
-            src.push("uniform mat3 uvDecodeMatrix;");
             src.push("out vec4 vViewPosition;");
             src.push("out vec2 vUV;");
             src.push("out vec4 vColor;");
         },
         appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
             src.push(`vViewPosition = ${view.viewPosition};`);
-            src.push(`vUV = (uvDecodeMatrix * vec3(${uv}, 1.0)).xy;`);
+            src.push(`vUV = ${uv};`);
             src.push(`vColor = vec4(${color}) / 255.0;`);
         },
         appendFragmentDefinitions: (src) => {
@@ -67,7 +66,6 @@ export const ColorTextureProgram = function(scene, lightSetup, sao, useAlphaCuto
             }
         },
         setupInputs: (program) => {
-            const uUVDecodeMatrix      = program.getLocation("uvDecodeMatrix");
             const uColorMap            = program.getSampler("uColorMap");
             const uGammaFactor         = gammaOutput && program.getLocation("gammaFactor");
             const setLightsRenderState = lightSetup.setupInputs(program);
@@ -75,9 +73,8 @@ export const ColorTextureProgram = function(scene, lightSetup, sao, useAlphaCuto
             const materialAlphaCutoff  = useAlphaCutoff && program.getLocation("materialAlphaCutoff");
 
             return (frameCtx, layer) => {
-                const state = layer._state;
-                gl.uniformMatrix3fv(uUVDecodeMatrix, false, state.uvDecodeMatrix);
-                const colorTexture = state.textureSet.colorTexture;
+                const textureSet = layer._state.textureSet;
+                const colorTexture = textureSet.colorTexture;
                 if (colorTexture) {
                     uColorMap.bindTexture(colorTexture.texture, frameCtx.textureUnit);
                     frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
@@ -85,7 +82,7 @@ export const ColorTextureProgram = function(scene, lightSetup, sao, useAlphaCuto
                 uGammaFactor && gl.uniform1f(uGammaFactor, scene.gammaFactor);
                 setLightsRenderState(frameCtx);
                 setSAOState && setSAOState(frameCtx);
-                materialAlphaCutoff && gl.uniform1f(materialAlphaCutoff, state.textureSet.alphaCutoff);
+                materialAlphaCutoff && gl.uniform1f(materialAlphaCutoff, textureSet.alphaCutoff);
             };
         },
 
