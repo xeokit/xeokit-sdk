@@ -1,7 +1,7 @@
 import {ENTITY_FLAGS} from "../../ENTITY_FLAGS.js";
 import {RENDER_PASSES} from "../../RENDER_PASSES.js";
 import {DTXTrianglesDrawable} from "./DTXTrianglesDrawable.js";
-import {createLightSetup, createSAOSetup, createPickClipTransformSetup} from "../../vbo/VBORenderer.js";
+import {createLightSetup, createSAOSetup, createPickClipTransformSetup} from "../../layer/Layer.js";
 
 import {math} from "../../../math/math.js";
 import {RenderState} from "../../../webgl/RenderState.js";
