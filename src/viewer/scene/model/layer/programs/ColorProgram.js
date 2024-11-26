@@ -36,7 +36,7 @@ export const ColorProgram = function(logarithmicDepthBufferEnabled, lightSetup, 
         setupInputs: (program) => {
             const setLightsRenderState = lightSetup && lightSetup.setupInputs(program);
             const setSAORenderState = sao && sao.setupInputs(program);
-            return (frameCtx, layer, renderPass, rtcOrigin) => {
+            return (frameCtx, layer, rtcOrigin) => {
                 setLightsRenderState && setLightsRenderState(frameCtx);
                 setSAORenderState && setSAORenderState(frameCtx, saoTextureUnit);
             };
