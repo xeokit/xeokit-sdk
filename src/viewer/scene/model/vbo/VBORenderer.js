@@ -133,36 +133,19 @@ export class VBORenderer {
          */
         const drawCallCache = new WeakMap();
 
-        const addMatricesUniformBlockLines = (src) => {
-            src.push("uniform Matrices {");
-            src.push("    mat4 worldMatrix;");
-            src.push("    mat4 viewMatrix;");
-            src.push("    mat4 projMatrix;");
-            src.push("    mat4 positionsDecodeMatrix;");
-            if (needNormal) {
-                src.push("    mat4 worldNormalMatrix;");
-                src.push("    mat4 viewNormalMatrix;");
-            }
-            src.push("};");
-            return src;
-        };
+        const matricesUniformBlockLines = [
+            "uniform Matrices {",
+            "    mat4 worldMatrix;",
+            "    mat4 viewMatrix;",
+            "    mat4 projMatrix;",
+            "    mat4 positionsDecodeMatrix;"
+        ].concat(needNormal ? [
+            "    mat4 worldNormalMatrix;",
+            "    mat4 viewNormalMatrix;",
+        ] : [ ]).concat([ "};" ]);
 
         const buildVertexShader = () => {
             const src = [];
-
-            src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
-            src.push("precision highp float;");
-            src.push("precision highp int;");
-            src.push("precision highp usampler2D;");
-            src.push("precision highp isampler2D;");
-            src.push("precision highp sampler2D;");
-            src.push("#else");
-            src.push("precision mediump float;");
-            src.push("precision mediump int;");
-            src.push("precision mediump usampler2D;");
-            src.push("precision mediump isampler2D;");
-            src.push("precision mediump sampler2D;");
-            src.push("#endif");
 
             if (! isShadowProgram) {
                 src.push("uniform int renderPass;");
@@ -200,7 +183,7 @@ export class VBORenderer {
                 }
             }
 
-            addMatricesUniformBlockLines(src);
+            matricesUniformBlockLines.forEach(line => src.push(line));
 
             if (getLogDepth) { // && (! isShadowProgram)) { // likely shouldn't be testing isShadowProgram, perhaps an earlier overlook
                 src.push("out float vFragDepth;");
@@ -326,13 +309,6 @@ export class VBORenderer {
 
         const buildFragmentShader = () => {
             const src = [];
-            src.push("#ifdef GL_FRAGMENT_PRECISION_HIGH");
-            src.push("precision highp float;");
-            src.push("precision highp int;");
-            src.push("#else");
-            src.push("precision mediump float;");
-            src.push("precision mediump int;");
-            src.push("#endif");
 
             if (getLogDepth) {
                 src.push("uniform float logDepthBufFC;");
@@ -358,7 +334,7 @@ export class VBORenderer {
             }
 
             if (fragViewMatrix.needed) {
-                addMatricesUniformBlockLines(src);
+                matricesUniformBlockLines.forEach(line => src.push(line));
             }
 
             appendFragmentDefinitions(src);
@@ -387,7 +363,20 @@ export class VBORenderer {
 
         const preamble = (type, src) => [
             "#version 300 es",
-            "// " + primitive + " " + (instancing ? "instancing" : "batching") + " " + programName + " " + type + " shader"
+            "// " + primitive + " " + (instancing ? "instancing" : "batching") + " " + programName + " " + type + " shader",
+            "#ifdef GL_FRAGMENT_PRECISION_HIGH",
+            "precision highp float;",
+            "precision highp int;",
+            "precision highp usampler2D;",
+            "precision highp isampler2D;",
+            "precision highp sampler2D;",
+            "#else",
+            "precision mediump float;",
+            "precision mediump int;",
+            "precision mediump usampler2D;",
+            "precision mediump isampler2D;",
+            "precision mediump sampler2D;",
+            "#endif",
         ].concat(src);
 
         const program = new Program(gl, {
