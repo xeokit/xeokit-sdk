@@ -47,7 +47,7 @@ export const SnapProgram = function(gl, isSnapInit, isPoints) {
             const uLayerNumber      = program.getLocation("uLayerNumber");
             const uCoordinateScaler = program.getLocation("uCoordinateScaler");
 
-            return (frameCtx, layer, renderPass, rtcOrigin) => {
+            return (frameCtx, layer, rtcOrigin) => {
                 const aabb = layer.aabb; // Per-layer AABB for best RTC accuracy
                 const coordinateScaler = tempVec3c;
                 coordinateScaler[0] = math.safeInv(aabb[3] - aabb[0]) * math.MAX_INT;

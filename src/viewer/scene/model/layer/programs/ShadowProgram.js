@@ -27,7 +27,7 @@ export const ShadowProgram = function(scene) {
         setupInputs: (program) => {
             const uShadowProjMatrix = program.getLocation("shadowProjMatrix");
             const uShadowViewMatrix = program.getLocation("shadowViewMatrix");
-            return (frameCtx, layer, renderPass, rtcOrigin) => {
+            return (frameCtx, layer, rtcOrigin) => {
                 gl.uniformMatrix4fv(uShadowProjMatrix, false, frameCtx.shadowProjMatrix); // Not tested
                 gl.uniformMatrix4fv(uShadowViewMatrix, false, frameCtx.shadowViewMatrix); // Not tested
             };
