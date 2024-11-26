@@ -27,7 +27,7 @@ export const SilhouetteProgram = function(scene, isPointsOrLines) {
         },
         setupInputs: (program) => {
             const silhouetteColor = program.getLocation("silhouetteColor");
-            return (frameCtx, layer, renderPass, rtcOrigin) => gl.uniform4fv(silhouetteColor, frameCtx.programColor);
+            return (frameCtx, layer, rtcOrigin) => gl.uniform4fv(silhouetteColor, frameCtx.programColor);
         },
 
         getViewParams: (frameCtx, camera) => ({
