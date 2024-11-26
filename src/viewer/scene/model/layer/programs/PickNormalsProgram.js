@@ -31,7 +31,7 @@ export const PickNormalsProgram = function(logarithmicDepthBufferEnabled, clipTr
         },
         setupInputs: (program) => {
             const setClipTransformState = clipTransformSetup.setupInputs(program);
-            return (frameCtx, layer) => setClipTransformState(frameCtx);
+            return (frameCtx, textureSet) => setClipTransformState(frameCtx);
         },
 
         getViewParams: (frameCtx, camera) => ({
