@@ -74,7 +74,7 @@ export const ColorTextureProgram = function(scene, lightSetup, sao, useAlphaCuto
             const setSAOState          = sao && sao.setupInputs(program);
             const materialAlphaCutoff  = useAlphaCutoff && program.getLocation("materialAlphaCutoff");
 
-            return (frameCtx, layer, renderPass, rtcOrigin) => {
+            return (frameCtx, layer, rtcOrigin) => {
                 const state = layer._state;
                 gl.uniformMatrix3fv(uUVDecodeMatrix, false, state.uvDecodeMatrix);
                 const colorTexture = state.textureSet.colorTexture;
