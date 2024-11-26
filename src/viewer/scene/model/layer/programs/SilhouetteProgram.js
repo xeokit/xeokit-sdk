@@ -1,6 +1,3 @@
-import {RENDER_PASSES} from "../../RENDER_PASSES.js";
-const defaultSilhouetteColor = new Float32Array([1, 1, 1, 1]);
-
 export const SilhouetteProgram = function(scene, isPointsOrLines) {
     const gl = scene.canvas.gl;
     return {
@@ -30,23 +27,7 @@ export const SilhouetteProgram = function(scene, isPointsOrLines) {
         },
         setupInputs: (program) => {
             const silhouetteColor = program.getLocation("silhouetteColor");
-            return (frameCtx, layer, renderPass, rtcOrigin) => {
-                const setSceneMaterial = material => {
-                    const fillColor = material._state.fillColor;
-                    const fillAlpha = material._state.fillAlpha;
-                    gl.uniform4f(silhouetteColor, fillColor[0], fillColor[1], fillColor[2], fillAlpha);
-                };
-
-                if (renderPass === RENDER_PASSES.SILHOUETTE_XRAYED) {
-                    setSceneMaterial(scene.xrayMaterial);
-                } else if (renderPass === RENDER_PASSES.SILHOUETTE_HIGHLIGHTED) {
-                    setSceneMaterial(scene.highlightMaterial);
-                } else if (renderPass === RENDER_PASSES.SILHOUETTE_SELECTED) {
-                    setSceneMaterial(scene.selectedMaterial);
-                } else {
-                    gl.uniform4fv(silhouetteColor, defaultSilhouetteColor);
-                }
-            };
+            return (frameCtx, layer, renderPass, rtcOrigin) => gl.uniform4fv(silhouetteColor, frameCtx.programColor);
         },
 
         getViewParams: (frameCtx, camera) => ({
