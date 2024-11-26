@@ -1,5 +1,4 @@
 import {math} from "../../../math/math.js";
-const tempVec3c = math.vec3();
 
 export const SnapProgram = function(gl, isSnapInit, isPoints) {
     return {
@@ -47,24 +46,11 @@ export const SnapProgram = function(gl, isSnapInit, isPoints) {
             const uSnapInvVectorAB  = program.getLocation("snapInvVectorAB");
             const uLayerNumber      = program.getLocation("uLayerNumber");
             const uCoordinateScaler = program.getLocation("uCoordinateScaler");
-
-            return (frameCtx, layer, rtcOrigin) => {
-                const aabb = layer.aabb; // Per-layer AABB for best RTC accuracy
-                const coordinateScaler = tempVec3c;
-                coordinateScaler[0] = math.safeInv(aabb[3] - aabb[0]) * math.MAX_INT;
-                coordinateScaler[1] = math.safeInv(aabb[4] - aabb[1]) * math.MAX_INT;
-                coordinateScaler[2] = math.safeInv(aabb[5] - aabb[2]) * math.MAX_INT;
-                frameCtx.snapPickCoordinateScale[0] = math.safeInv(coordinateScaler[0]);
-                frameCtx.snapPickCoordinateScale[1] = math.safeInv(coordinateScaler[1]);
-                frameCtx.snapPickCoordinateScale[2] = math.safeInv(coordinateScaler[2]);
-                frameCtx.snapPickOrigin[0] = rtcOrigin[0];
-                frameCtx.snapPickOrigin[1] = rtcOrigin[1];
-                frameCtx.snapPickOrigin[2] = rtcOrigin[2];
-
+            return (frameCtx, layer) => {
                 gl.uniform2fv(uSnapVectorA,      frameCtx.snapVectorA);
                 gl.uniform2fv(uSnapInvVectorAB,  frameCtx.snapInvVectorAB);
                 gl.uniform1i(uLayerNumber,       frameCtx.snapPickLayerNumber);
-                gl.uniform3fv(uCoordinateScaler, coordinateScaler);
+                gl.uniform3fv(uCoordinateScaler, frameCtx.snapPickCoordinateScale);
             };
         },
 

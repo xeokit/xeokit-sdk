@@ -37,7 +37,7 @@ export const PickDepthProgram = function(scene, clipTransformSetup, isPoints) {
             const uPickZNear = program.getLocation("pickZNear");
             const uPickZFar  = program.getLocation("pickZFar");
             const setClipTransformState = clipTransformSetup.setupInputs(program);
-            return (frameCtx, layer, rtcOrigin) => {
+            return (frameCtx, layer) => {
                 gl.uniform1f(uPickZNear, frameCtx.pickZNear);
                 gl.uniform1f(uPickZFar,  frameCtx.pickZFar);
                 setClipTransformState(frameCtx);

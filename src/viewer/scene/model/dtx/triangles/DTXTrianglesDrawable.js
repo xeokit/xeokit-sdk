@@ -376,7 +376,13 @@ export class DTXTrianglesDrawable {
                 gl.uniform3fv(uCameraEyeRtc, math.subVec3(viewParams.eye, rtcOrigin, tempVec3b));
             }
 
-            setInputsState && setInputsState(frameCtx, layer, rtcOrigin);
+            setInputsState && setInputsState(frameCtx, layer);
+
+            if (frameCtx.snapPickOrigin) {
+                frameCtx.snapPickOrigin[0] = rtcOrigin[0];
+                frameCtx.snapPickOrigin[1] = rtcOrigin[1];
+                frameCtx.snapPickOrigin[2] = rtcOrigin[2];
+            }
 
             if (getLogDepth) {
                 const logDepthBufFC = 2.0 / (Math.log(viewParams.far + 1.0) / Math.LN2);
