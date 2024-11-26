@@ -32,7 +32,7 @@ export const FlatColorProgram = function(logarithmicDepthBufferEnabled, lightSet
         setupInputs: (program) => {
             const setLightsRenderState = lightSetup.setupInputs(program);
             const setSAOState = sao && sao.setupInputs(program);
-            return (frameCtx, layer, rtcOrigin) => {
+            return (frameCtx, layer) => {
                 setLightsRenderState(frameCtx);
                 setSAOState && setSAOState(frameCtx);
             };
