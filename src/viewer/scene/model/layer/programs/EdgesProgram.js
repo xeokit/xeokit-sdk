@@ -1,6 +1,3 @@
-import {RENDER_PASSES} from "../../RENDER_PASSES.js";
-const edgesDefaultColor = new Float32Array([0, 0, 0, 1]);
-
 export const EdgesProgram = function(scene, colorUniform) {
     const gl = scene.canvas.gl;
     return {
@@ -28,28 +25,10 @@ export const EdgesProgram = function(scene, colorUniform) {
         appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
             src.push("outColor = " + (colorUniform ? "edgeColor" : "vColor") + ";");
         },
-        setupInputs: (program) => {
-            const edgeColor = colorUniform && program.getLocation("edgeColor");
-            return (frameCtx, layer, renderPass, rtcOrigin) => {
-                if (colorUniform) {
-                    const setSceneMaterial = material => {
-                        const color = material._state.edgeColor;
-                        const alpha = material._state.edgeAlpha;
-                        gl.uniform4f(edgeColor, color[0], color[1], color[2], alpha);
-                    };
-
-                    if (renderPass === RENDER_PASSES.EDGES_XRAYED) {
-                        setSceneMaterial(scene.xrayMaterial);
-                    } else if (renderPass === RENDER_PASSES.EDGES_HIGHLIGHTED) {
-                        setSceneMaterial(scene.highlightMaterial);
-                    } else if (renderPass === RENDER_PASSES.EDGES_SELECTED) {
-                        setSceneMaterial(scene.selectedMaterial);
-                    } else {
-                        gl.uniform4fv(edgeColor, edgesDefaultColor);
-                    }
-                }
-            };
-        },
+        setupInputs: colorUniform && ((program) => {
+            const edgeColor = program.getLocation("edgeColor");
+            return (frameCtx, layer, renderPass, rtcOrigin) => gl.uniform4fv(edgeColor, frameCtx.programColor);
+        }),
 
         getViewParams: (frameCtx, camera) => ({
             viewMatrix: camera.viewMatrix,
