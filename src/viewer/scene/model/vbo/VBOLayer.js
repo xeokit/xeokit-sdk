@@ -7,7 +7,8 @@ import {ArrayBuf} from "../../webgl/ArrayBuf.js";
 import {quantizePositions, transformAndOctEncodeNormals} from "../compression.js";
 import {geometryCompressionUtils} from "../../math/geometryCompressionUtils.js";
 
-import {VBORenderer, createLightSetup, createSAOSetup, createPickClipTransformSetup} from "./VBORenderer.js";
+import {VBORenderer} from "./VBORenderer.js";
+import {createLightSetup, createSAOSetup, createPickClipTransformSetup} from "../layer/Layer.js";
 
 import { ColorProgram        } from "../layer/programs/ColorProgram.js";
 import { ColorTextureProgram } from "../layer/programs/ColorTextureProgram.js";
