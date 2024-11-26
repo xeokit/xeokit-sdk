@@ -24,7 +24,7 @@ export const PickMeshProgram = function(scene, clipTransformSetup, isPoints) {
         },
         setupInputs: (program) => {
             const setClipTransformState = clipTransformSetup.setupInputs(program);
-            return (frameCtx, layer, renderPass, rtcOrigin) => setClipTransformState(frameCtx);
+            return (frameCtx, layer, rtcOrigin) => setClipTransformState(frameCtx);
         },
 
         dontCullOnAlphaZero: true, // should be false?

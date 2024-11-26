@@ -785,7 +785,7 @@ export class VBORenderer {
                 gl.uniform1f(uNearPlaneHeight, nearPlaneHeight);
             }
 
-            setInputsState && setInputsState(frameCtx, layer, renderPass, rtcOrigin);
+            setInputsState && setInputsState(frameCtx, layer, rtcOrigin);
 
             if (! drawCallCache.has(layer)) {
                 const vao = gl.createVertexArray();
