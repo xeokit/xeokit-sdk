@@ -153,6 +153,7 @@ const tempFloat32Vec4 = new Float32Array(4);
 const tempVec3fa = new Float32Array(3);
 const tempMat4 = math.mat4();
 const tempVec4a = math.vec4([0, 0, 0, 1]);
+const tempVec4b = math.vec4();
 
 const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
@@ -1082,6 +1083,14 @@ export class VBOLayer {
     }
 
 
+    __setVec4FromMaterialColorAlpha(color, alpha, dst) {
+        dst[0] = color[0];
+        dst[1] = color[1];
+        dst[2] = color[2];
+        dst[3] = alpha;
+        return dst;
+    }
+
     __drawLayer(renderFlags, frameCtx, renderer, pass) {
         if ((this._numCulledLayerPortions < this._portions.length) && (this._numVisibleLayerPortions > 0)) {
             const backfacePasses = (this.primitive !== "points") && (this.primitive !== "lines") && [
@@ -1207,18 +1216,24 @@ export class VBOLayer {
 
     drawEdgesHighlighted(renderFlags, frameCtx) {
         if (this._hasEdges && (this._numHighlightedLayerPortions > 0)) {
+            const mat = this.model.scene.highlightMaterial;
+            frameCtx.programColor = this.__setVec4FromMaterialColorAlpha(mat.edgeColor, mat.edgeAlpha, tempVec4b);
             this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesRenderer, RENDER_PASSES.EDGES_HIGHLIGHTED);
         }
     }
 
     drawEdgesSelected(renderFlags, frameCtx) {
         if (this._hasEdges && (this._numSelectedLayerPortions > 0)) {
+            const mat = this.model.scene.selectedMaterial;
+            frameCtx.programColor = this.__setVec4FromMaterialColorAlpha(mat.edgeColor, mat.edgeAlpha, tempVec4b);
             this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesRenderer, RENDER_PASSES.EDGES_SELECTED);
         }
     }
 
     drawEdgesXRayed(renderFlags, frameCtx) {
         if (this._hasEdges && (this._numXRayedLayerPortions > 0)) {
+            const mat = this.model.scene.xrayMaterial;
+            frameCtx.programColor = this.__setVec4FromMaterialColorAlpha(mat.edgeColor, mat.edgeAlpha, tempVec4b);
             this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesRenderer, RENDER_PASSES.EDGES_XRAYED);
         }
     }
