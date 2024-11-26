@@ -3377,7 +3377,12 @@ export class SceneModel extends Component {
             true,
             layer => {
                 frameCtx.snapPickOrigin = [0, 0, 0];
-                frameCtx.snapPickCoordinateScale = [1, 1, 1];
+                const aabb = layer.aabb; // Per-layer AABB for best RTC accuracy
+                frameCtx.snapPickCoordinateScale = [
+                    math.safeInv(aabb[3] - aabb[0]) * math.MAX_INT,
+                    math.safeInv(aabb[4] - aabb[1]) * math.MAX_INT,
+                    math.safeInv(aabb[5] - aabb[2]) * math.MAX_INT
+                ];
                 frameCtx.snapPickLayerNumber++;
                 if (isSnapInit) {
                     layer.drawSnapInit(this.renderFlags, frameCtx);
@@ -3386,7 +3391,11 @@ export class SceneModel extends Component {
                 }
                 frameCtx.snapPickLayerParams[frameCtx.snapPickLayerNumber] = {
                     origin: frameCtx.snapPickOrigin.slice(),
-                    coordinateScale: frameCtx.snapPickCoordinateScale.slice(),
+                    coordinateScale: [
+                        math.safeInv(frameCtx.snapPickCoordinateScale[0]),
+                        math.safeInv(frameCtx.snapPickCoordinateScale[1]),
+                        math.safeInv(frameCtx.snapPickCoordinateScale[2])
+                    ]
                 };
             });
     }
