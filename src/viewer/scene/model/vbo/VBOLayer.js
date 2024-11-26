@@ -95,7 +95,7 @@ const getRenderers = (function() {
                     pickMeshRenderer:   lazy((c) => c(makePickMeshProgram(true))),
                     // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
                     // but never used (and probably not maintained), as opposed to VBOInstancingPointsShadowRenderer in the same commit
-                    shadowRenderer:     instancing && lazy((c) => c(ShadowProgram(scene))),
+                    shadowRenderer:     instancing && lazy((c) => c(ShadowProgram(scene.logarithmicDepthBufferEnabled))),
                     silhouetteRenderer: lazy((c) => c(SilhouetteProgram(scene, true))),
                     snapInitRenderer:   lazy((c) => c(makeSnapProgram(true,  true))),
                     snapVertexRenderer: lazy((c) => c(makeSnapProgram(false, true), { vertices: true }))
