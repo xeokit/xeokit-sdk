@@ -255,7 +255,7 @@ export const PBRProgram = function(scene, lightSetup, sao) {
             const setLightsRenderState = lightSetup.setupInputs(program);
             const setSAOState          = sao && sao.setupInputs(program);
 
-            return (frameCtx, layer, rtcOrigin) => {
+            return (frameCtx, layer) => {
                 const state = layer._state;
                 gl.uniformMatrix3fv(uUVDecodeMatrix, false, state.uvDecodeMatrix);
 
