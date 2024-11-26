@@ -784,7 +784,13 @@ export class VBORenderer {
                 gl.uniform1f(uNearPlaneHeight, nearPlaneHeight);
             }
 
-            setInputsState && setInputsState(frameCtx, layer, rtcOrigin);
+            setInputsState && setInputsState(frameCtx, layer);
+
+            if (frameCtx.snapPickOrigin) {
+                frameCtx.snapPickOrigin[0] = rtcOrigin[0];
+                frameCtx.snapPickOrigin[1] = rtcOrigin[1];
+                frameCtx.snapPickOrigin[2] = rtcOrigin[2];
+            }
 
             if (! drawCallCache.has(layer)) {
                 const vao = gl.createVertexArray();
