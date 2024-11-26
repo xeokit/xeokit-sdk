@@ -45,7 +45,7 @@ export const SnapProgram = function(gl, isSnapInit, isPoints) {
             const uSnapInvVectorAB  = program.getLocation("snapInvVectorAB");
             const uLayerNumber      = program.getLocation("uLayerNumber");
             const uCoordinateScaler = program.getLocation("uCoordinateScaler");
-            return (frameCtx, layer) => {
+            return (frameCtx, textureSet) => {
                 gl.uniform2fv(uSnapVectorA,      frameCtx.snapVectorA);
                 gl.uniform2fv(uSnapInvVectorAB,  frameCtx.snapInvVectorAB);
                 gl.uniform1i(uLayerNumber,       frameCtx.snapPickLayerNumber);
