@@ -241,7 +241,7 @@ export class VBORenderer {
         const appendVertexDefinitions   = cfg.appendVertexDefinitions;
         const filterIntensityRange      = cfg.filterIntensityRange && (primitive === "points") && pointsMaterial.filterIntensity;
         const transformClipPos          = cfg.transformClipPos;
-        const shadowParameters          = cfg.shadowParameters;
+        const isShadowProgram           = cfg.isShadowProgram;
         const appendVertexOutputs       = cfg.appendVertexOutputs;
         const appendFragmentDefinitions = cfg.appendFragmentDefinitions;
         const appendFragmentOutputs     = cfg.appendFragmentOutputs;
@@ -392,14 +392,14 @@ export class VBORenderer {
             src.push("precision mediump sampler2D;");
             src.push("#endif");
 
-            if (! shadowParameters) {
+            if (! isShadowProgram) {
                 src.push("uniform int renderPass;");
             }
             src.push("in vec3 position;");
             if (needNormal) {
                 src.push("in vec3 normal;");
             }
-            if (colorA.needed || shadowParameters || filterIntensityRange) {
+            if (colorA.needed || isShadowProgram || filterIntensityRange) {
                 src.push("in vec4 aColor;");
             }
             if (pickColorA.needed) {
@@ -430,7 +430,7 @@ export class VBORenderer {
 
             addMatricesUniformBlockLines(src);
 
-            if (getLogDepth) { // && (! shadowParameters)) { // likely shouldn't be testing shadowParameters, perhaps an earlier overlook
+            if (getLogDepth) { // && (! isShadowProgram)) { // likely shouldn't be testing isShadowProgram, perhaps an earlier overlook
                 src.push("out float vFragDepth;");
                 if (testPerspectiveForGl_FragDepth) {
                     src.push("out float isPerspective;");
@@ -472,7 +472,7 @@ export class VBORenderer {
 
             src.push("void main(void) {");
 
-            if (shadowParameters) {
+            if (isShadowProgram) {
                 src.push(`if (((int(flags) >> ${renderPassFlag * 4} & 0xF) <= 0) || ((float(aColor.a) / 255.0) < 1.0)) {`);
             } else {
                 src.push(`if ((int(flags) >> ${renderPassFlag * 4} & 0xF) != renderPass) {`);
@@ -496,10 +496,10 @@ export class VBORenderer {
                 src.push("worldPosition4.xyz = worldPosition4.xyz + offset;");
             }
             src.push("vec3 worldPosition = worldPosition4.xyz;");
-            src.push("vec4 viewPosition = " + (shadowParameters ? shadowParameters.viewMatrix : "viewMatrix") + " * worldPosition4;");
+            src.push("vec4 viewPosition = viewMatrix * worldPosition4;");
 
-            src.push("vec4 clipPos = " + (shadowParameters ? shadowParameters.projMatrix : "projMatrix") + " * viewPosition;");
-            if (getLogDepth) { // && (! shadowParameters)) { // see comment above
+            src.push("vec4 clipPos = projMatrix * viewPosition;");
+            if (getLogDepth) { // && (! isShadowProgram)) { // see comment above
                 src.push("vFragDepth = 1.0 + clipPos.w;");
                 if (testPerspectiveForGl_FragDepth) {
                     src.push(`isPerspective = float (${isPerspectiveMatrix("projMatrix")});`);
@@ -635,7 +635,7 @@ export class VBORenderer {
             return;
         }
 
-        const uRenderPass = (! shadowParameters) && program.getLocation("renderPass");
+        const uRenderPass = (! isShadowProgram) && program.getLocation("renderPass");
 
         gl.uniformBlockBinding(
             program.handle,
@@ -696,7 +696,7 @@ export class VBORenderer {
             const {position, rotationMatrix} = model;
             const {camera} = model.scene;
             const {project} = camera;
-            const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
+            const viewMatrix = (isShadowProgram && frameCtx.shadowViewMatrix) || frameCtx.pickViewMatrix || camera.viewMatrix;
 
             let rtcViewMatrix;
             const rtcOrigin = tempVec3a;
@@ -718,7 +718,7 @@ export class VBORenderer {
             const mat4Size = 4 * 4;
             matricesUniformBlockBufferData.set(rotationMatrix, 0);
             matricesUniformBlockBufferData.set(rtcViewMatrix, offset += mat4Size);
-            matricesUniformBlockBufferData.set(frameCtx.pickProjMatrix || project.matrix, offset += mat4Size);
+            matricesUniformBlockBufferData.set((isShadowProgram && frameCtx.shadowProjMatrix) || frameCtx.pickProjMatrix || project.matrix, offset += mat4Size);
             matricesUniformBlockBufferData.set(positionsDecodeMatrix, offset += mat4Size);
             if (needNormal) {
                 matricesUniformBlockBufferData.set(model.worldNormalMatrix, offset += mat4Size);
@@ -768,7 +768,7 @@ export class VBORenderer {
                 }
             }
 
-            if (! shadowParameters) {
+            if (uRenderPass) {
                 gl.uniform1i(uRenderPass, renderPass);
             }
 
