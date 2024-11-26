@@ -326,7 +326,7 @@ export class VBORenderer {
 
         const colorA             = lazyShaderVariable("aColor");
         const pickColorA         = lazyShaderVariable("pickColor");
-        const uvA                = lazyShaderVariable("uv");
+        const uvA                = lazyShaderVariable("aUv");
         const metallicRoughnessA = lazyShaderVariable("metallicRoughness");
         const viewParams  = {
             viewPosition: "viewPosition",
@@ -407,6 +407,7 @@ export class VBORenderer {
             }
             if (uvA.needed) {
                 src.push("in vec2 uv;");
+                src.push("uniform mat3 uvDecodeMatrix;");
             }
             if (metallicRoughnessA.needed) {
                 src.push("in vec2 metallicRoughness;");
@@ -540,6 +541,10 @@ export class VBORenderer {
                 src.push("gl_PointSize = 1.0;");
             }
 
+            if (uvA.needed) {
+                src.push(`vec2 ${uvA} = (uvDecodeMatrix * vec3(uv, 1.0)).xy;`);
+            }
+
             vertexOutputs.forEach(line => src.push(line));
 
             src.push("}");
@@ -664,6 +669,8 @@ export class VBORenderer {
         const aModelNormalMatrixCol1 = instancing && program.getAttribute("modelNormalMatrixCol1");
         const aModelNormalMatrixCol2 = instancing && program.getAttribute("modelNormalMatrixCol2");
 
+        const uUVDecodeMatrix = uvA.needed && program.getLocation("uvDecodeMatrix");
+
         const uLogDepthBufFC = getLogDepth && program.getLocation("logDepthBufFC");
 
         const uIntensityRange = filterIntensityRange && program.getLocation("intensityRange");
@@ -763,6 +770,10 @@ export class VBORenderer {
 
             if (! shadowParameters) {
                 gl.uniform1i(uRenderPass, renderPass);
+            }
+
+            if (uUVDecodeMatrix) {
+                gl.uniformMatrix3fv(uUVDecodeMatrix, false, state.uvDecodeMatrix);
             }
 
             if (uLogDepthBufFC) {
