@@ -1,10 +1,8 @@
-import {createRTCViewMat, getPlaneRTCPos} from "../../math/rtcCoords.js";
-import {math} from "../../math/math.js";
+import {createClippingSetup} from "../layer/Layer.js";
+import {createRTCViewMat, math} from "../../math/index.js";
 import {Program} from "../../webgl/Program.js";
 
 const tempVec3a = math.vec3();
-const tempVec3b = math.vec3();
-const tempVec3c = math.vec3();
 const tempMat4a = math.mat4();
 
 const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
@@ -34,16 +32,14 @@ export class VBORenderer {
         const testPerspectiveForGl_FragDepth = ((primitive !== "points") && (primitive !== "lines")) || subGeometry;
         const setupPoints = (primitive === "points") && (! subGeometry);
 
-        const getHash = () => [ scene._sectionPlanesState.getHash() ].concat(setupPoints ? [ pointsMaterial.hash ] : [ ]).concat(cfg.getHash ? cfg.getHash() : [ ]).join(";");
+        const sectionPlanesState = scene._sectionPlanesState;
+
+        const getHash = () => [ sectionPlanesState.getHash() ].concat(setupPoints ? [ pointsMaterial.hash ] : [ ]).concat(cfg.getHash ? cfg.getHash() : [ ]).join(";");
         const hash = getHash();
         this.getValid = () => hash === getHash();
 
         const gl = scene.canvas.gl;
-
-        const sectionPlanesState = scene._sectionPlanesState;
-        const numAllocatedSectionPlanes = sectionPlanesState.getNumAllocatedSectionPlanes();
-        const clipping = numAllocatedSectionPlanes > 0;
-
+        const clipping = createClippingSetup(gl, sectionPlanesState);
 
         const lazyShaderVariable = function(name) {
             const variable = {
@@ -77,27 +73,19 @@ export class VBORenderer {
                 if (sliceColorOr.needed) {
                     src.push("  bool sliced = false;");
                 }
-                src.push("  bool clippable = (int(vFlags) >> 16 & 0xF) == 1;");
-                src.push("  if (clippable) {");
-                src.push("      float dist = 0.0;");
-                for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
-                    src.push("      if (sectionPlaneActive" + i + ") {");
-                    src.push(`          dist += clamp(dot(-sectionPlaneDir${i}.xyz, ${vWorldPosition} - sectionPlanePos${i}.xyz), 0.0, 1000.0);`);
-                    src.push("      }");
-                }
+                src.push("  if (vClippable > 0.0) {");
+                src.push("      float dist = " + clipping.getDistance(vWorldPosition) + ";");
                 if (clippingCaps) {
-                    src.push("  if (dist > (0.002 * vClipPosition.w)) {");
-                    src.push("      discard;");
-                    src.push("  }");
+                    src.push("  if (dist > (0.002 * vClipPositionW)) { discard; }");
                     src.push("  if (dist > 0.0) { ");
                     src.push("      " + clippingCaps + " = vec4(1.0, 0.0, 0.0, 1.0);");
                     if (getLogDepth) {
                         src.push("  gl_FragDepth = log2( " + getLogDepth("vFragDepth") + " ) * logDepthBufFC * 0.5;");
                     }
                     src.push("  return;");
-                    src.push("}");
+                    src.push("  }");
                 } else {
-                    src.push("       if (dist > " + (sliceColorOr.needed ? "sliceThickness" : "0.0") + ") {  discard; }");
+                    src.push("  if (dist > " + (sliceColorOr.needed ? "sliceThickness" : "0.0") + ") {  discard; }");
                 }
                 if (sliceColorOr.needed) {
                     src.push("  sliced = dist > 0.0;");
@@ -225,9 +213,9 @@ export class VBORenderer {
                 src.push(`out highp vec3 ${vWorldPosition};`);
             }
             if (clipping) {
-                src.push("out float vFlags;");
+                src.push("out float vClippable;");
                 if (clippingCaps) {
-                    src.push("out vec4 vClipPosition;");
+                    src.push("out float vClipPositionW;");
                 }
             }
 
@@ -294,9 +282,9 @@ export class VBORenderer {
                 src.push(`${vWorldPosition} = worldPosition;`);
             }
             if (clipping) {
-                src.push("vFlags = flags;");
+                src.push("vClippable = ((int(flags) >> 16 & 0xF) == 1) ? 1.0 : 0.0;");
                 if (clippingCaps) {
-                    src.push("vClipPosition = clipPos;");
+                    src.push("vClipPositionW = clipPos.w;");
                 }
             }
 
@@ -358,15 +346,11 @@ export class VBORenderer {
                 src.push(`in highp vec3 ${vWorldPosition};`);
             }
             if (clipping) {
-                src.push("in float vFlags;");
+                src.push("in float vClippable;");
                 if (clippingCaps) {
-                    src.push("in vec4 vClipPosition;");
+                    src.push("in float vClipPositionW;");
                 }
-                for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
-                    src.push("uniform bool sectionPlaneActive" + i + ";");
-                    src.push("uniform vec3 sectionPlanePos" + i + ";");
-                    src.push("uniform vec3 sectionPlaneDir" + i + ";");
-                }
+                clipping.appendDefinitions(src);
                 if (sliceColorOr.needed) {
                     src.push("uniform float sliceThickness;");
                     src.push("uniform vec4 sliceColor;");
@@ -426,16 +410,9 @@ export class VBORenderer {
             gl.getUniformBlockIndex(program.handle, "Matrices"),
             matricesUniformBlockBufferBindingPoint);
 
-        const uSectionPlanes = [];
-        for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
-            uSectionPlanes.push({
-                active: program.getLocation("sectionPlaneActive" + i),
-                pos: program.getLocation("sectionPlanePos" + i),
-                dir: program.getLocation("sectionPlaneDir" + i)
-            });
-        }
-        const uSliceThickness = clipping && sliceColorOr.needed && program.getLocation("sliceThickness");
-        const uSliceColor     = clipping && sliceColorOr.needed && program.getLocation("sliceColor");
+        const setClippingState = clipping && clipping.setupInputs(program);
+        const uSliceThickness = sliceColorOr.needed && program.getLocation("sliceThickness");
+        const uSliceColor     = sliceColorOr.needed && program.getLocation("sliceColor");
 
         const aPosition = program.getAttribute("position");
         const aOffset = program.getAttribute("offset");
@@ -518,33 +495,8 @@ export class VBORenderer {
                 matricesUniformBlockBuffer);
 
 
-            if (clipping) {
-                const sectionPlanes = sectionPlanesState.sectionPlanes;
-                const numSectionPlanes = sectionPlanes.length;
-                const baseIndex = layer.layerIndex * numSectionPlanes;
-                const renderFlags = model.renderFlags;
-                for (let sectionPlaneIndex = 0; sectionPlaneIndex < numAllocatedSectionPlanes; sectionPlaneIndex++) {
-                    const sectionPlaneUniforms = uSectionPlanes[sectionPlaneIndex];
-                    if (sectionPlaneUniforms) {
-                        if (sectionPlaneIndex < numSectionPlanes) {
-                            const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                            gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                            if (active) {
-                                const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                                const origin = layer._state.origin;
-                                if (origin) {
-                                    const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3b, model.matrix);
-                                    gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
-                                } else {
-                                    gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-                                }
-                                gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
-                            }
-                        } else {
-                            gl.uniform1i(sectionPlaneUniforms.active, 0);
-                        }
-                    }
-                }
+            if (setClippingState) {
+                setClippingState(layer);
                 const crossSections = sliceColorOr.needed && scene.crossSections;
                 if (crossSections) {
                     gl.uniform1f(uSliceThickness, crossSections.sliceThickness);
