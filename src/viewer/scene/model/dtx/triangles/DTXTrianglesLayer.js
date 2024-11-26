@@ -1466,18 +1466,24 @@ export class DTXTrianglesLayer {
 
     drawSilhouetteXRayed(renderFlags, frameCtx) {
         if (this._numXRayedLayerPortions > 0) {
+            const mat = this.model.scene.xrayMaterial;
+            frameCtx.programColor = this.__setVec4FromMaterialColorAlpha(mat.fillColor, mat.fillAlpha, tempVec4b);
             this.__drawSilhouette(renderFlags, frameCtx, RENDER_PASSES.SILHOUETTE_XRAYED);
         }
     }
 
     drawSilhouetteHighlighted(renderFlags, frameCtx) {
         if (this._numHighlightedLayerPortions > 0) {
+            const mat = this.model.scene.highlightMaterial;
+            frameCtx.programColor = this.__setVec4FromMaterialColorAlpha(mat.fillColor, mat.fillAlpha, tempVec4b);
             this.__drawSilhouette(renderFlags, frameCtx, RENDER_PASSES.SILHOUETTE_HIGHLIGHTED);
         }
     }
 
     drawSilhouetteSelected(renderFlags, frameCtx) {
         if (this._numSelectedLayerPortions > 0) {
+            const mat = this.model.scene.selectedMaterial;
+            frameCtx.programColor = this.__setVec4FromMaterialColorAlpha(mat.fillColor, mat.fillAlpha, tempVec4b);
             this.__drawSilhouette(renderFlags, frameCtx, RENDER_PASSES.SILHOUETTE_SELECTED);
         }
     }
