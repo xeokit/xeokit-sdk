@@ -795,7 +795,7 @@ export class VBORenderer {
                 gl.uniform1f(uNearPlaneHeight, nearPlaneHeight);
             }
 
-            setInputsState && setInputsState(frameCtx, layer);
+            setInputsState && setInputsState(frameCtx, state.textureSet);
 
             if (frameCtx.snapPickOrigin) {
                 frameCtx.snapPickOrigin[0] = rtcOrigin[0];

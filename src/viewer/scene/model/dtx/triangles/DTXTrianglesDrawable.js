@@ -376,7 +376,7 @@ export class DTXTrianglesDrawable {
                 gl.uniform3fv(uCameraEyeRtc, math.subVec3(viewParams.eye, rtcOrigin, tempVec3b));
             }
 
-            setInputsState && setInputsState(frameCtx, layer);
+            setInputsState && setInputsState(frameCtx, null);
 
             if (frameCtx.snapPickOrigin) {
                 frameCtx.snapPickOrigin[0] = rtcOrigin[0];
