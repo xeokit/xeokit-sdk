@@ -11,7 +11,6 @@ export const PBRProgram = function(scene, lightSetup, sao) {
         getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 0,      // COLOR_OPAQUE | COLOR_TRANSPARENT
         appendVertexDefinitions: (src) => {
-            src.push("uniform mat3 uvDecodeMatrix;");
             src.push("out vec4 vViewPosition;");
             src.push("out vec3 vViewNormal;");
             src.push("out vec4 vColor;");
@@ -26,7 +25,7 @@ export const PBRProgram = function(scene, lightSetup, sao) {
             src.push(`vViewPosition = ${view.viewPosition};`);
             src.push(`vViewNormal = ${view.viewNormal};`);
             src.push(`vColor = ${color};`);
-            src.push(`vUV = (uvDecodeMatrix * vec3(${uv}, 1.0)).xy;`);
+            src.push(`vUV = ${uv};`);
             src.push(`vMetallicRoughness = ${metallicRoughness};`);
 
             if (getIrradiance) {
@@ -243,8 +242,6 @@ export const PBRProgram = function(scene, lightSetup, sao) {
             }
         },
         setupInputs: (program) => {
-            const uUVDecodeMatrix      = program.getLocation("uvDecodeMatrix");
-
             const uColorMap            = program.getSampler("uColorMap");
             const uMetallicRoughMap    = program.getSampler("uMetallicRoughMap");
             const uEmissiveMap         = program.getSampler("uEmissiveMap");
@@ -256,10 +253,7 @@ export const PBRProgram = function(scene, lightSetup, sao) {
             const setSAOState          = sao && sao.setupInputs(program);
 
             return (frameCtx, layer) => {
-                const state = layer._state;
-                gl.uniformMatrix3fv(uUVDecodeMatrix, false, state.uvDecodeMatrix);
-
-                const textureSet = state.textureSet;
+                const textureSet = layer._state.textureSet;
                 if (textureSet) {
                     const setSampler = (sampler, texture) => {
                         if (texture) {
