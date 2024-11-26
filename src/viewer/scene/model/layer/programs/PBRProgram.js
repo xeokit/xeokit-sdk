@@ -252,8 +252,7 @@ export const PBRProgram = function(scene, lightSetup, sao) {
             const setLightsRenderState = lightSetup.setupInputs(program);
             const setSAOState          = sao && sao.setupInputs(program);
 
-            return (frameCtx, layer) => {
-                const textureSet = layer._state.textureSet;
+            return (frameCtx, textureSet) => {
                 if (textureSet) {
                     const setSampler = (sampler, texture) => {
                         if (texture) {

@@ -27,7 +27,7 @@ export const EdgesProgram = function(scene, colorUniform) {
         },
         setupInputs: colorUniform && ((program) => {
             const edgeColor = program.getLocation("edgeColor");
-            return (frameCtx, layer) => gl.uniform4fv(edgeColor, frameCtx.programColor);
+            return (frameCtx, textureSet) => gl.uniform4fv(edgeColor, frameCtx.programColor);
         }),
 
         getViewParams: (frameCtx, camera) => ({
