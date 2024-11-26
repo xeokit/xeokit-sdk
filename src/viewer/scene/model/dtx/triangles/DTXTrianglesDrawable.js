@@ -1,4 +1,5 @@
-import {createRTCViewMat, getPlaneRTCPos, math} from "../../../math/index.js";
+import {createClippingSetup} from "../../layer/Layer.js";
+import {createRTCViewMat, math} from "../../../math/index.js";
 import {Program} from "../../../webgl/Program.js";
 
 const tempVec3a = math.vec3();
@@ -13,12 +14,14 @@ const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
 export class DTXTrianglesDrawable {
 
     constructor(scene, cfg, subGeometry) {
+        const sectionPlanesState = scene._sectionPlanesState;
 
-        const getHash = () => [ scene._sectionPlanesState.getHash() ].concat(cfg.getHash ? cfg.getHash() : [ ]).join(";");
+        const getHash = () => [ sectionPlanesState.getHash() ].concat(cfg.getHash ? cfg.getHash() : [ ]).join(";");
         const hash = getHash();
         this.getValid = () => hash === getHash();
 
         const gl = scene.canvas.gl;
+        const clipping = createClippingSetup(gl, sectionPlanesState);
 
         const programName                  = cfg.programName;
         const getLogDepth                  = cfg.getLogDepth;
@@ -32,11 +35,6 @@ export class DTXTrianglesDrawable {
         const appendFragmentOutputs        = cfg.appendFragmentOutputs;
         const setupInputs                  = cfg.setupInputs;
         const isTriangle = ! subGeometry;
-
-
-        const sectionPlanesState = scene._sectionPlanesState;
-        const numAllocatedSectionPlanes = sectionPlanesState.getNumAllocatedSectionPlanes();
-        const clipping = numAllocatedSectionPlanes > 0;
 
         const lazyShaderVariable = function(name) {
             const variable = {
@@ -55,20 +53,12 @@ export class DTXTrianglesDrawable {
 
         const fragmentClippingLines = (function() {
             const src = [ ];
-
             if (clipping) {
-                src.push("  bool clippable = vFlags2 > 0u;");
-                src.push("  if (clippable) {");
-                src.push("      float dist = 0.0;");
-                for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
-                    src.push("      if (sectionPlaneActive" + i + ") {");
-                    src.push(`          dist += clamp(dot(-sectionPlaneDir${i}.xyz, ${vWorldPosition} - sectionPlanePos${i}.xyz), 0.0, 1000.0);`);
-                    src.push("      }");
-                }
+                src.push("  if (vClippable > 0.0) {");
+                src.push("      float dist = " + clipping.getDistance(vWorldPosition) + ";");
                 src.push("      if (dist > 0.0) { discard; }");
                 src.push("  }");
             }
-
             return src;
         })();
 
@@ -124,11 +114,11 @@ export class DTXTrianglesDrawable {
                 src.push("out float isPerspective;");
             }
 
-            if (vWorldPosition.needed || clipping) {
-                src.push("out " + (vWorldPosition.needed ? "highp " : "") + "vec3 vWorldPosition;");
+            if (vWorldPosition.needed) {
+                src.push(`out highp vec3 ${vWorldPosition};`);
             }
             if (clipping) {
-                src.push("flat out uint vFlags2;");
+                src.push("flat out float vClippable;");
             }
 
             appendVertexDefinitions && appendVertexDefinitions(src);
@@ -226,11 +216,11 @@ export class DTXTrianglesDrawable {
             src.push("vec4 worldPosition = sceneModelMatrix * (objectDecodeAndInstanceMatrix * vec4(position, 1.0));");
             src.push("vec4 viewPosition = viewMatrix * worldPosition;");
 
-            if (vWorldPosition.needed || clipping) {
-                src.push("vWorldPosition = worldPosition.xyz;");
+            if (vWorldPosition.needed) {
+                src.push(`${vWorldPosition} = worldPosition.xyz;`);
             }
             if (clipping) {
-                src.push("vFlags2 = flags2.r;");
+                src.push("vClippable = float(flags2.r);");
             }
 
             src.push("vec4 clipPos = projMatrix * viewPosition;");
@@ -271,16 +261,12 @@ export class DTXTrianglesDrawable {
                 src.push("in float vFragDepth;");
             }
 
-            if (vWorldPosition.needed || clipping) {
-                src.push("in " + (vWorldPosition.needed ? "highp " : "") + "vec3 vWorldPosition;");
+            if (vWorldPosition.needed) {
+                src.push(`in highp vec3 ${vWorldPosition};`);
             }
             if (clipping) {
-                src.push("flat in uint vFlags2;");
-                for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
-                    src.push("uniform bool sectionPlaneActive" + i + ";");
-                    src.push("uniform vec3 sectionPlanePos" + i + ";");
-                    src.push("uniform vec3 sectionPlaneDir" + i + ";");
-                }
+                src.push("flat in float vClippable;");
+                clipping.appendDefinitions(src);
             }
 
             appendFragmentDefinitions(src);
@@ -319,14 +305,7 @@ export class DTXTrianglesDrawable {
         const uProjMatrix = program.getLocation("projMatrix");
         const uCameraEyeRtc = isTriangle && program.getLocation("uCameraEyeRtc");
 
-        const uSectionPlanes = [];
-        for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
-            uSectionPlanes.push({
-                active: program.getLocation("sectionPlaneActive" + i),
-                pos:    program.getLocation("sectionPlanePos" + i),
-                dir:    program.getLocation("sectionPlaneDir" + i)
-            });
-        }
+        const setClippingState = clipping && clipping.setupInputs(program);
 
         const uLogDepthBufFC = getLogDepth && program.getLocation("logDepthBufFC");
 
@@ -347,7 +326,6 @@ export class DTXTrianglesDrawable {
             }
 
             const model = layer.model;
-            const state = layer._state;
             const origin = layer._state.origin;
             const {position, rotationMatrix} = model;
             const viewParams = getViewParams(frameCtx, scene.camera);
@@ -389,33 +367,7 @@ export class DTXTrianglesDrawable {
                 gl.uniform1f(uLogDepthBufFC, logDepthBufFC);
             }
 
-            if (clipping) {
-                const sectionPlanes = sectionPlanesState.sectionPlanes;
-                const numSectionPlanes = sectionPlanes.length;
-                const baseIndex = layer.layerIndex * numSectionPlanes;
-                const renderFlags = model.renderFlags;
-                for (let sectionPlaneIndex = 0; sectionPlaneIndex < numAllocatedSectionPlanes; sectionPlaneIndex++) {
-                    const sectionPlaneUniforms = uSectionPlanes[sectionPlaneIndex];
-                    if (sectionPlaneUniforms) {
-                        if (sectionPlaneIndex < numSectionPlanes) {
-                            const active = renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                            gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
-                            if (active) {
-                                const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                                if (origin) {
-                                    const rtcSectionPlanePos = getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3b, model.matrix);
-                                    gl.uniform3fv(sectionPlaneUniforms.pos, rtcSectionPlanePos);
-                                } else {
-                                    gl.uniform3fv(sectionPlaneUniforms.pos, sectionPlane.pos);
-                                }
-                                gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
-                            }
-                        } else {
-                            gl.uniform1i(sectionPlaneUniforms.active, 0);
-                        }
-                    }
-                }
-            }
+            setClippingState && setClippingState(layer);
 
             (subGeometry ? layer.drawEdges : layer.drawTriangles)(
                 program,
