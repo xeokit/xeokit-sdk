@@ -72,8 +72,7 @@ export const ColorTextureProgram = function(scene, lightSetup, sao, useAlphaCuto
             const setSAOState          = sao && sao.setupInputs(program);
             const materialAlphaCutoff  = useAlphaCutoff && program.getLocation("materialAlphaCutoff");
 
-            return (frameCtx, layer) => {
-                const textureSet = layer._state.textureSet;
+            return (frameCtx, textureSet) => {
                 const colorTexture = textureSet.colorTexture;
                 if (colorTexture) {
                     uColorMap.bindTexture(colorTexture.texture, frameCtx.textureUnit);
