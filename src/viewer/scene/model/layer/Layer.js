@@ -1,8 +1,63 @@
-import {math} from "../../math/math.js";
+import {getPlaneRTCPos, math} from "../../math/index.js";
 import {LinearEncoding, sRGBEncoding} from "../../constants/constants.js";
 import {WEBGL_INFO} from "../../webglInfo.js";
 
+const tempVec3 = math.vec3();
 const tempVec4 = math.vec4();
+
+const iota = function(n) {
+    const ret = [ ];
+    for (let i = 0; i < n; ++i) ret.push(i);
+    return ret;
+};
+
+export const createClippingSetup = function(gl, sectionPlanesState) {
+    const numAllocatedSectionPlanes = sectionPlanesState.getNumAllocatedSectionPlanes();
+
+    return (numAllocatedSectionPlanes > 0) && {
+        getHash: () => sectionPlanesState.getHash(),
+        appendDefinitions: (src) => {
+            for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
+                src.push("uniform bool sectionPlaneActive" + i + ";");
+                src.push("uniform vec3 sectionPlanePos" + i + ";");
+                src.push("uniform vec3 sectionPlaneDir" + i + ";");
+            }
+        },
+        getDistance: (worldPosition) => {
+            return iota(numAllocatedSectionPlanes).map(i => `(sectionPlaneActive${i} ? clamp(dot(-sectionPlaneDir${i}.xyz, ${worldPosition} - sectionPlanePos${i}.xyz), 0.0, 1000.0) : 0.0)`).join(" + ");
+        },
+        setupInputs: (program) => {
+            const uSectionPlanes = iota(numAllocatedSectionPlanes).map(i => ({
+                active: program.getLocation("sectionPlaneActive" + i),
+                pos:    program.getLocation("sectionPlanePos" + i),
+                dir:    program.getLocation("sectionPlaneDir" + i)
+            }));
+            return (layer) => {
+                const origin = layer._state.origin;
+                const model = layer.model;
+                const sectionPlanes = sectionPlanesState.sectionPlanes;
+                const numSectionPlanes = sectionPlanes.length;
+                const baseIndex = layer.layerIndex * numSectionPlanes;
+                const renderFlags = model.renderFlags;
+                for (let sectionPlaneIndex = 0; sectionPlaneIndex < numAllocatedSectionPlanes; sectionPlaneIndex++) {
+                    const sectionPlaneUniforms = uSectionPlanes[sectionPlaneIndex];
+                    if (sectionPlaneUniforms) {
+                        const active = (sectionPlaneIndex < numSectionPlanes) && renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
+                        gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                        if (active) {
+                            const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                            gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
+                            gl.uniform3fv(sectionPlaneUniforms.pos,
+                                          (origin
+                                           ? getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3, model.matrix)
+                                           : sectionPlane.pos));
+                        }
+                    }
+                }
+            };
+        }
+    };
+};
 
 export const createLightSetup = function(gl, lightsState, useMaps) {
     const TEXTURE_DECODE_FUNCS = {
