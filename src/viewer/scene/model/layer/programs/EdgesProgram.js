@@ -28,13 +28,6 @@ export const EdgesProgram = function(scene, colorUniform) {
         setupInputs: colorUniform && ((program) => {
             const edgeColor = program.getLocation("edgeColor");
             return (frameCtx, textureSet) => gl.uniform4fv(edgeColor, frameCtx.programColor);
-        }),
-
-        getViewParams: (frameCtx, camera) => ({
-            viewMatrix: camera.viewMatrix,
-            projMatrix: camera.projMatrix,
-            eye: camera.eye,
-            far: camera.project.far
         })
     };
 };
