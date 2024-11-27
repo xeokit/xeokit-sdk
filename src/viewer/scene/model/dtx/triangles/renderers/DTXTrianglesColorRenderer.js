@@ -100,7 +100,7 @@ export class DTXTrianglesColorRenderer {
         gl.uniform1i(this._uRenderPass, renderPass);
 
         if (scene.logarithmicDepthBufferEnabled) {
-            const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2);
+            const logDepthBufFC = 2.0 / (Math.log(camera.project.far + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
 
