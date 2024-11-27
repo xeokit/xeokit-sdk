@@ -4,6 +4,7 @@ export const PickMeshProgram = function(scene, clipTransformSetup, isPoints) {
         programName: "PickMesh",
         getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 3,  // PICK
+        usePickParams: true,
         appendVertexDefinitions: (src) => {
             src.push("out vec4 vPickColor;");
             clipTransformSetup.appendDefinitions(src);
@@ -27,12 +28,6 @@ export const PickMeshProgram = function(scene, clipTransformSetup, isPoints) {
             return (frameCtx, textureSet) => setClipTransformState(frameCtx);
         },
 
-        dontCullOnAlphaZero: true, // should be false?
-        getViewParams: (frameCtx, camera) => ({
-            viewMatrix: frameCtx.pickViewMatrix || camera.viewMatrix,
-            projMatrix: frameCtx.pickProjMatrix || camera.projMatrix,
-            eye: frameCtx.pickOrigin || camera.eye,
-            far: frameCtx.pickProjMatrix ? frameCtx.pickZFar : camera.project.far
-        })
+        dontCullOnAlphaZero: true // should be false?
     };
 };
