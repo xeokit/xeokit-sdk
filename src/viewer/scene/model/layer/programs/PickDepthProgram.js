@@ -4,6 +4,7 @@ export const PickDepthProgram = function(scene, clipTransformSetup, isPoints) {
         programName: "PickDepth",
         getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 3,  // PICK
+        usePickParams: true,
         appendVertexDefinitions: (src) => {
             src.push("out vec4 vViewPosition;");
             clipTransformSetup.appendDefinitions(src);
@@ -42,13 +43,6 @@ export const PickDepthProgram = function(scene, clipTransformSetup, isPoints) {
                 gl.uniform1f(uPickZFar,  frameCtx.pickZFar);
                 setClipTransformState(frameCtx);
             };
-        },
-
-        getViewParams: (frameCtx, camera) => ({
-            viewMatrix: frameCtx.pickViewMatrix || camera.viewMatrix,
-            projMatrix: frameCtx.pickProjMatrix || camera.projMatrix,
-            eye: frameCtx.pickOrigin || camera.eye,
-            far: frameCtx.pickProjMatrix ? frameCtx.pickZFar : camera.project.far
-        })
+        }
     };
 };

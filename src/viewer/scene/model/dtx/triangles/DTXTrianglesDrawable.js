@@ -25,8 +25,8 @@ export class DTXTrianglesDrawable {
 
         const programName                  = cfg.programName;
         const getLogDepth                  = cfg.getLogDepth;
-        const getViewParams                = cfg.getViewParams;
         const renderPassFlag               = cfg.renderPassFlag;
+        const usePickParams                = cfg.usePickParams;
         const cullOnAlphaZero              = !cfg.dontCullOnAlphaZero;
         const appendVertexDefinitions      = cfg.appendVertexDefinitions;
         const transformClipPos             = cfg.transformClipPos;
@@ -328,7 +328,12 @@ export class DTXTrianglesDrawable {
             const model = layer.model;
             const origin = layer._state.origin;
             const {position, rotationMatrix} = model;
-            const viewParams = getViewParams(frameCtx, scene.camera);
+
+            const camera = scene.camera;
+            const viewMatrix = (usePickParams && frameCtx.pickViewMatrix) || camera.viewMatrix;
+            const projMatrix = (usePickParams && frameCtx.pickProjMatrix) || camera.projMatrix;
+            const eye        = (usePickParams && frameCtx.pickOrigin)     || camera.eye;
+            const far        = (usePickParams && frameCtx.pickProjMatrix) ? frameCtx.pickZFar : camera.project.far;
 
             let rtcViewMatrix;
             const rtcOrigin = tempVec3a;
@@ -341,17 +346,17 @@ export class DTXTrianglesDrawable {
                     math.transformPoint3(rotationMatrix, origin, rtcOrigin);
                 }
                 math.addVec3(rtcOrigin, position, rtcOrigin);
-                rtcViewMatrix = createRTCViewMat(viewParams.viewMatrix, rtcOrigin, tempMat4a);
+                rtcViewMatrix = createRTCViewMat(viewMatrix, rtcOrigin, tempMat4a);
             } else {
-                rtcViewMatrix = viewParams.viewMatrix;
+                rtcViewMatrix = viewMatrix;
             }
 
             gl.uniformMatrix4fv(uSceneModelMatrix, false, rotationMatrix);
             gl.uniformMatrix4fv(uViewMatrix, false, rtcViewMatrix);
-            gl.uniformMatrix4fv(uProjMatrix, false, viewParams.projMatrix);
+            gl.uniformMatrix4fv(uProjMatrix, false, projMatrix);
             gl.uniform1i(uRenderPass, renderPass);
             if (isTriangle) {
-                gl.uniform3fv(uCameraEyeRtc, math.subVec3(viewParams.eye, rtcOrigin, tempVec3b));
+                gl.uniform3fv(uCameraEyeRtc, math.subVec3(eye, rtcOrigin, tempVec3b));
             }
 
             setInputsState && setInputsState(frameCtx, null);
@@ -363,7 +368,7 @@ export class DTXTrianglesDrawable {
             }
 
             if (getLogDepth) {
-                const logDepthBufFC = 2.0 / (Math.log(viewParams.far + 1.0) / Math.LN2);
+                const logDepthBufFC = 2.0 / (Math.log(far + 1.0) / Math.LN2);
                 gl.uniform1f(uLogDepthBufFC, logDepthBufFC);
             }
 
