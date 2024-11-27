@@ -5,6 +5,7 @@ export const PickNormalsProgram = function(logarithmicDepthBufferEnabled, clipTr
         programName: isFlat ? "PickNormalsFlat" : "PickNormals",
         getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 3,  // PICK
+        usePickParams: true,
         appendVertexDefinitions: (src) => {
             if (! isFlat) {
                 src.push("out vec3 vWorldNormal;");
@@ -32,13 +33,6 @@ export const PickNormalsProgram = function(logarithmicDepthBufferEnabled, clipTr
         setupInputs: (program) => {
             const setClipTransformState = clipTransformSetup.setupInputs(program);
             return (frameCtx, textureSet) => setClipTransformState(frameCtx);
-        },
-
-        getViewParams: (frameCtx, camera) => ({
-            viewMatrix: frameCtx.pickViewMatrix || camera.viewMatrix,
-            projMatrix: frameCtx.pickProjMatrix || camera.projMatrix,
-            eye: frameCtx.pickOrigin || camera.eye,
-            far: frameCtx.pickProjMatrix ? frameCtx.pickZFar : camera.project.far
-        })
+        }
     };
 };
