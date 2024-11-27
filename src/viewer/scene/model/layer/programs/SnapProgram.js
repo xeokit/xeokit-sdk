@@ -6,6 +6,7 @@ export const SnapProgram = function(gl, isSnapInit, isPoints) {
         // Improves occlusion accuracy at distance
         getLogDepth: true && (vFragDepth => (isSnapInit ? `${vFragDepth} + length(vec2(dFdx(${vFragDepth}), dFdy(${vFragDepth})))` : vFragDepth)),
         renderPassFlag: 3,  // PICK
+        usePickParams: true,
         appendVertexDefinitions: (src) => {
             src.push("uniform vec2 snapVectorA;");
             src.push("uniform vec2 snapInvVectorAB;");
@@ -54,12 +55,6 @@ export const SnapProgram = function(gl, isSnapInit, isPoints) {
             };
         },
 
-        dontCullOnAlphaZero: !isSnapInit,
-        getViewParams: (frameCtx, camera) => ({
-            viewMatrix: frameCtx.pickViewMatrix || camera.viewMatrix,
-            projMatrix: frameCtx.pickProjMatrix || camera.projMatrix,
-            eye: frameCtx.pickOrigin || camera.eye,
-            far: frameCtx.pickProjMatrix ? frameCtx.pickZFar : camera.project.far
-        })
+        dontCullOnAlphaZero: !isSnapInit
     };
 };
