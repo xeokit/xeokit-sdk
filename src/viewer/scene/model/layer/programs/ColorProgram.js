@@ -43,13 +43,6 @@ export const ColorProgram = function(logarithmicDepthBufferEnabled, lightSetup, 
         },
 
         filterIntensityRange: true,
-        incrementDrawState: true,
-
-        getViewParams: (frameCtx, camera) => ({
-            viewMatrix: camera.viewMatrix,
-            projMatrix: camera.projMatrix,
-            eye: camera.eye,
-            far: camera.project.far
-        })
+        incrementDrawState: true
     };
 };
