@@ -20,6 +20,7 @@ export class VBORenderer {
         const getLogDepth               = cfg.getLogDepth;
         const clippingCaps              = cfg.clippingCaps;
         const renderPassFlag            = cfg.renderPassFlag;
+        const usePickParams             = cfg.usePickParams;
         const appendVertexDefinitions   = cfg.appendVertexDefinitions;
         const filterIntensityRange      = cfg.filterIntensityRange && (primitive === "points") && pointsMaterial.filterIntensity;
         const transformClipPos          = cfg.transformClipPos;
@@ -446,7 +447,9 @@ export class VBORenderer {
             const {position, rotationMatrix} = model;
             const {camera} = model.scene;
             const {project} = camera;
-            const viewMatrix = (isShadowProgram && frameCtx.shadowViewMatrix) || frameCtx.pickViewMatrix || camera.viewMatrix;
+            const viewMatrix = (isShadowProgram && frameCtx.shadowViewMatrix) || (usePickParams && frameCtx.pickViewMatrix) || camera.viewMatrix;
+            const projMatrix = (isShadowProgram && frameCtx.shadowProjMatrix) || (usePickParams && frameCtx.pickProjMatrix) || camera.projMatrix;
+            const far        = (usePickParams && frameCtx.pickProjMatrix) ? frameCtx.pickZFar : camera.project.far;
 
             let rtcViewMatrix;
             const rtcOrigin = tempVec3a;
@@ -468,7 +471,7 @@ export class VBORenderer {
             const mat4Size = 4 * 4;
             matricesUniformBlockBufferData.set(rotationMatrix, 0);
             matricesUniformBlockBufferData.set(rtcViewMatrix, offset += mat4Size);
-            matricesUniformBlockBufferData.set((isShadowProgram && frameCtx.shadowProjMatrix) || frameCtx.pickProjMatrix || project.matrix, offset += mat4Size);
+            matricesUniformBlockBufferData.set(projMatrix, offset += mat4Size);
             matricesUniformBlockBufferData.set(positionsDecodeMatrix, offset += mat4Size);
             if (needNormal) {
                 matricesUniformBlockBufferData.set(model.worldNormalMatrix, offset += mat4Size);
@@ -502,7 +505,7 @@ export class VBORenderer {
             }
 
             if (uLogDepthBufFC) {
-                gl.uniform1f(uLogDepthBufFC, 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2)); // TODO: Far from pick project matrix?
+                gl.uniform1f(uLogDepthBufFC, 2.0 / (Math.log(far + 1.0) / Math.LN2));
             }
 
             if (uIntensityRange) {
