@@ -54,6 +54,9 @@ export class DTXTrianglesSnapRenderer {
         const {position, rotationMatrix} = model;
         const aabb = dataTextureLayer.aabb; // Per-layer AABB for best RTC accuracy
         const viewMatrix = frameCtx.pickViewMatrix || camera.viewMatrix;
+        const projMatrix = frameCtx.pickProjMatrix || camera.projMatrix;
+        const eye = frameCtx.pickOrigin || camera.eye;
+        const far = frameCtx.pickProjMatrix ? frameCtx.pickZFar : camera.project.far;
 
         const coordinateScaler = tempVec3a;
         coordinateScaler[0] = math.safeInv(aabb[3] - aabb[0]) * math.MAX_INT;
@@ -94,15 +97,15 @@ export class DTXTrianglesSnapRenderer {
             rtcOrigin[2] += position[2];
             rtcViewMatrix = createRTCViewMat(viewMatrix, rtcOrigin, tempMat4a);
             rtcCameraEye = tempVec3d;
-            rtcCameraEye[0] = camera.eye[0] - rtcOrigin[0];
-            rtcCameraEye[1] = camera.eye[1] - rtcOrigin[1];
-            rtcCameraEye[2] = camera.eye[2] - rtcOrigin[2];
+            rtcCameraEye[0] = eye[0] - rtcOrigin[0];
+            rtcCameraEye[1] = eye[1] - rtcOrigin[1];
+            rtcCameraEye[2] = eye[2] - rtcOrigin[2];
             frameCtx.snapPickOrigin[0] = rtcOrigin[0];
             frameCtx.snapPickOrigin[1] = rtcOrigin[1];
             frameCtx.snapPickOrigin[2] = rtcOrigin[2];
         } else {
             rtcViewMatrix = viewMatrix;
-            rtcCameraEye = camera.eye;
+            rtcCameraEye = eye;
             frameCtx.snapPickOrigin[0] = 0;
             frameCtx.snapPickOrigin[1] = 0;
             frameCtx.snapPickOrigin[2] = 0;
@@ -117,9 +120,9 @@ export class DTXTrianglesSnapRenderer {
         gl.uniform1i(this._uPickInvisible, frameCtx.pickInvisible);
         gl.uniformMatrix4fv(this._uSceneModelMatrix, false, rotationMatrix);
         gl.uniformMatrix4fv(this._uViewMatrix, false, rtcViewMatrix);
-        gl.uniformMatrix4fv(this._uProjMatrix, false, camera.projMatrix);
+        gl.uniformMatrix4fv(this._uProjMatrix, false, projMatrix);
         if (SNAPPING_LOG_DEPTH_BUF_ENABLED) {
-            const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2);
+            const logDepthBufFC = 2.0 / (Math.log(far + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
         const numAllocatedSectionPlanes = scene._sectionPlanesState.getNumAllocatedSectionPlanes();
