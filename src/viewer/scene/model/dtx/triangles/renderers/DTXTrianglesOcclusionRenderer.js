@@ -102,7 +102,7 @@ export class DTXTrianglesOcclusionRenderer {
         gl.uniformMatrix4fv(this._uProjMatrix, false, camera.projMatrix);
 
         if (ENABLE_LOG_DEPTH_BUF && scene.logarithmicDepthBufferEnabled) {
-            const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2); // TODO: Far from pick project objectInstanceMatrix?
+            const logDepthBufFC = 2.0 / (Math.log(camera.project.far + 1.0) / Math.LN2); // TODO: Far from pick project objectInstanceMatrix?
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
 
