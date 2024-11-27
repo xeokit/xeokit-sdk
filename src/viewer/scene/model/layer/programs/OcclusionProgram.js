@@ -9,13 +9,6 @@ export const OcclusionProgram = function(logarithmicDepthBufferEnabled) {
         appendFragmentDefinitions: (src) => src.push("out vec4 outColor;"),
         appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
             src.push("outColor = vec4(0.0, 0.0, 1.0, 1.0);"); // Occluders are blue
-        },
-
-        getViewParams: (frameCtx, camera) => ({
-            viewMatrix: camera.viewMatrix,
-            projMatrix: camera.projMatrix,
-            eye: camera.eye,
-            far: camera.project.far
-        })
+        }
     };
 };
