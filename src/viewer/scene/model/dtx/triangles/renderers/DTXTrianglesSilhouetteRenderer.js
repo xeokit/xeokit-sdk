@@ -120,7 +120,7 @@ export class DTXTrianglesSilhouetteRenderer {
             gl.uniform4fv(this._uColor, defaultColor);
         }
         if (scene.logarithmicDepthBufferEnabled) {
-            const logDepthBufFC = 2.0 / (Math.log(frameCtx.pickZFar + 1.0) / Math.LN2);
+            const logDepthBufFC = 2.0 / (Math.log(camera.project.far + 1.0) / Math.LN2);
             gl.uniform1f(this._uLogDepthBufFC, logDepthBufFC);
         }
         const numAllocatedSectionPlanes = scene._sectionPlanesState.getNumAllocatedSectionPlanes();
