@@ -163,12 +163,12 @@ class Dot {
         this._x = x;
         this._y = y;
         var dotStyle = this._dot.style;
-        dotStyle["left"] = (Math.round(x) - 4) + 'px';
-        dotStyle["top"] = (Math.round(y) - 4) + 'px';
+        dotStyle["left"] = (Math.round(x) - 6) + 'px';
+        dotStyle["top"] = (Math.round(y) - 6) + 'px';
 
         var dotClickableStyle = this._dotClickable.style;
-        dotClickableStyle["left"] = (Math.round(x) - 9) + 'px';
-        dotClickableStyle["top"] = (Math.round(y) - 9) + 'px';
+        dotClickableStyle["left"] = (Math.round(x) - 14) + 'px';
+        dotClickableStyle["top"] = (Math.round(y) - 14) + 'px';
     }
 
     setFillColor(color) {
@@ -183,12 +183,16 @@ class Dot {
         this._dot.style.opacity = opacity;
     }
 
+    _updateVisibility() {
+        this._dot.style.visibility = this._dotClickable.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
+    }
+
     setVisible(visible) {
         if (this._visible === visible) {
             return;
         }
         this._visible = !!visible;
-        this._dot.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
+        this._updateVisibility();
     }
 
     setCulled(culled) {
@@ -196,7 +200,7 @@ class Dot {
             return;
         }
         this._culled = !!culled;
-        this._dot.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
+        this._updateVisibility();
     }
 
     setClickable(clickable) {

@@ -2,12 +2,10 @@ import {Plugin} from "../../viewer/Plugin.js";
 import {Component} from "../../viewer/scene/Component.js";
 import {buildBoxGeometry} from "../../viewer/scene/geometry/builders/buildBoxGeometry.js";
 import {ReadableGeometry} from "../../viewer/scene/geometry/ReadableGeometry.js";
-import {Marker} from "../../viewer/scene/marker/Marker.js";
 import {PhongMaterial} from "../../viewer/scene/materials/PhongMaterial.js";
 import {math} from "../../viewer/scene/math/math.js";
 import {Mesh} from "../../viewer/scene/mesh/Mesh.js";
-import {Dot} from "../lib/html/Dot.js";
-import {activateDraggableDots, Dot3D, touchPointSelector, transformToNode} from "../../../src/plugins/lib/ui/index.js";
+import {activateDraggableDots, Dot3D, Wire3D, touchPointSelector, transformToNode} from "../../../src/plugins/lib/ui/index.js";
 
 const hex2rgb = function(color) {
     const rgb = idx => parseInt(color.substr(idx + 1, 2), 16) / 255;
@@ -118,107 +116,45 @@ const triangulateEarClipping = function(planeCoords) {
 };
 
 const marker3D = function(scene, color) {
-    const canvas = scene.canvas.canvas;
-
-    const markerParent = canvas.parentNode;
-    const markerDiv = document.createElement("div");
-    markerParent.insertBefore(markerDiv, canvas);
-
-    let size = 5;
-    markerDiv.style.background = color;
-    markerDiv.style.border = "2px solid white";
-    markerDiv.style.margin = "0 0";
-    markerDiv.style.zIndex = "100";
-    markerDiv.style.position = "absolute";
-    markerDiv.style.pointerEvents = "none";
-    markerDiv.style.display = "none";
-
-    const marker = new Marker(scene, {});
-
-    const px = x => x + "px";
-    const update = function() {
-        const pos = marker.canvasPos.slice();
-        transformToNode(canvas, markerParent, pos);
-        markerDiv.style.left = px(pos[0] - 3 - size / 2);
-        markerDiv.style.top  = px(pos[1] - 3 - size / 2);
-        markerDiv.style.borderRadius = px(size * 2);
-        markerDiv.style.width  = px(size);
-        markerDiv.style.height = px(size);
-    };
-    const onViewMatrix = scene.camera.on("viewMatrix", update);
-    const onProjMatrix = scene.camera.on("projMatrix", update);
+    const marker = new Dot3D(scene, {}, scene.canvas.canvas.parentNode, {
+        borderColor: "white",
+        fillColor: color,
+        zIndex: 100
+    });
 
     return {
         update: function(worldPos) {
             if (worldPos)
             {
                 marker.worldPos = worldPos;
-                update();
             }
-            markerDiv.style.display = worldPos ? "" : "none";
+            marker.setVisible(!!worldPos);
         },
 
-        setHighlighted: function(h) {
-            size = h ? 10 : 5;
-            update();
-        },
-
-        getCanvasPos: () => marker.canvasPos,
-
-        getWorldPos: () => marker.worldPos,
-
-        destroy: function() {
-            markerDiv.parentNode.removeChild(markerDiv);
-            scene.camera.off(onViewMatrix);
-            scene.camera.off(onProjMatrix);
-            marker.destroy();
-        }
+        setHighlighted: h => marker.setHighlighted(h),
+        getCanvasPos:  () => marker.canvasPos,
+        getWorldPos:   () => marker.worldPos,
+        destroy:       () => marker.destroy()
     };
 };
 
-import {Wire} from "../lib/html/Wire.js";
-
 const wire3D = function(scene, color, startWorldPos) {
-    const canvas = scene.canvas.canvas;
-
-    const startMarker = new Marker(scene, {});
-    startMarker.worldPos = startWorldPos;
-    const endMarker = new Marker(scene, {});
-    const wireParent = canvas.ownerDocument.body;
-    const wire = new Wire(wireParent, {
+    const wire = new Wire3D(scene, scene.canvas.canvas.ownerDocument.body, {
         color: color,
         thickness: 1,
         thicknessClickable: 6
     });
     wire.setVisible(false);
-
-    const updatePos = function() {
-        const p0 = startMarker.canvasPos.slice();
-        const p1 = endMarker.canvasPos.slice();
-        transformToNode(canvas, wireParent, p0);
-        transformToNode(canvas, wireParent, p1);
-        wire.setStartAndEnd(p0[0], p0[1], p1[0], p1[1]);
-    };
-    const onViewMatrix = scene.camera.on("viewMatrix", updatePos);
-    const onProjMatrix = scene.camera.on("projMatrix", updatePos);
-
     return {
-        update: function(endWorldPos) {
+        update: endWorldPos => {
             if (endWorldPos)
             {
-                endMarker.worldPos = endWorldPos;
-                updatePos();
+                wire.setEnds(startWorldPos, endWorldPos);
             }
             wire.setVisible(!!endWorldPos);
         },
 
-        destroy: function() {
-            scene.camera.off(onViewMatrix);
-            scene.camera.off(onProjMatrix);
-            startMarker.destroy();
-            endMarker.destroy();
-            wire.destroy();
-        }
+        destroy: () => wire.destroy()
     };
 };
 

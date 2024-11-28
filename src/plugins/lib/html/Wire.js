@@ -174,21 +174,21 @@ class Wire {
         wireStyle["width"] = Math.round(length) + 'px';
         wireStyle["left"] = Math.round(this._x1) + 'px';
         wireStyle["top"] = Math.round(this._y1) + 'px';
-        wireStyle['-webkit-transform'] = 'rotate(' + angle + 'deg)';
-        wireStyle['-moz-transform'] = 'rotate(' + angle + 'deg)';
-        wireStyle['-ms-transform'] = 'rotate(' + angle + 'deg)';
-        wireStyle['-o-transform'] = 'rotate(' + angle + 'deg)';
-        wireStyle['transform'] = 'rotate(' + angle + 'deg)';
+        wireStyle['-webkit-transform'] =
+            wireStyle['-moz-transform'] =
+            wireStyle['-ms-transform'] =
+            wireStyle['-o-transform'] =
+            wireStyle['transform'] = 'rotate(' + angle + 'deg) translate(-' + this._thickness + 'px, -' + this._thickness + 'px)';
 
         var wireClickableStyle = this._wireClickable.style;
         wireClickableStyle["width"] = Math.round(length) + 'px';
         wireClickableStyle["left"] = Math.round(this._x1) + 'px';
         wireClickableStyle["top"] = Math.round(this._y1) + 'px';
-        wireClickableStyle['-webkit-transform'] = 'rotate(' + angle + 'deg)';
-        wireClickableStyle['-moz-transform'] = 'rotate(' + angle + 'deg)';
-        wireClickableStyle['-ms-transform'] = 'rotate(' + angle + 'deg)';
-        wireClickableStyle['-o-transform'] = 'rotate(' + angle + 'deg)';
-        wireClickableStyle['transform'] = 'rotate(' + angle + 'deg)';
+        wireClickableStyle['-webkit-transform'] =
+            wireClickableStyle['-moz-transform'] =
+            wireClickableStyle['-ms-transform'] =
+            wireClickableStyle['-o-transform'] =
+            wireClickableStyle['transform'] = 'rotate(' + angle + 'deg) translate(-' + this._thicknessClickable + 'px, -' + this._thicknessClickable + 'px)';
     }
 
     setStartAndEnd(x1, y1, x2, y2) {
@@ -208,12 +208,16 @@ class Wire {
         this._wire.style.opacity = opacity;
     }
 
+    _updateVisibility() {
+        this._wire.style.visibility = this._wireClickable.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
+    }
+
     setVisible(visible) {
         if (this._visible === visible) {
             return;
         }
         this._visible = !!visible;
-        this._wire.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
+        this._updateVisibility();
     }
 
     setCulled(culled) {
@@ -221,7 +225,7 @@ class Wire {
             return;
         }
         this._culled = !!culled;
-        this._wire.style.visibility = this._visible && !this._culled ? "visible" : "hidden";
+        this._updateVisibility();
     }
 
     setClickable(clickable) {
