@@ -1019,6 +1019,45 @@ export class VBOLayer extends Layer {
         }
     }
 
+    setMatrix(portionId, matrix) {
+        if (! this._state.modelMatrixCol0Buf) {
+            return;
+        }
+
+        ////////////////////////////////////////
+        // TODO: Update portion matrix
+        ////////////////////////////////////////
+
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+
+        const offset = portionId * 4;
+
+        tempFloat32Vec4[0] = matrix[0];
+        tempFloat32Vec4[1] = matrix[4];
+        tempFloat32Vec4[2] = matrix[8];
+        tempFloat32Vec4[3] = matrix[12];
+
+        this._state.modelMatrixCol0Buf.setData(tempFloat32Vec4, offset);
+
+        tempFloat32Vec4[0] = matrix[1];
+        tempFloat32Vec4[1] = matrix[5];
+        tempFloat32Vec4[2] = matrix[9];
+        tempFloat32Vec4[3] = matrix[13];
+
+        this._state.modelMatrixCol1Buf.setData(tempFloat32Vec4, offset);
+
+        tempFloat32Vec4[0] = matrix[2];
+        tempFloat32Vec4[1] = matrix[6];
+        tempFloat32Vec4[2] = matrix[10];
+        tempFloat32Vec4[3] = matrix[14];
+
+        this._state.modelMatrixCol2Buf.setData(tempFloat32Vec4, offset);
+    }
+
+    //------------------------------------------------------------------------------------------------
+
     getEachVertex(portionId, callback) {
         const portion = this._portions[portionId];
         if (!portion) {
@@ -1069,45 +1108,6 @@ export class VBOLayer extends Layer {
             portion.retainedGeometry.indices.forEach(i => callback(i));
         }
     }
-
-    setMatrix(portionId, matrix) {
-        if (! this._state.modelMatrixCol0Buf) {
-            return;
-        }
-
-        ////////////////////////////////////////
-        // TODO: Update portion matrix
-        ////////////////////////////////////////
-
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-
-        const offset = portionId * 4;
-
-        tempFloat32Vec4[0] = matrix[0];
-        tempFloat32Vec4[1] = matrix[4];
-        tempFloat32Vec4[2] = matrix[8];
-        tempFloat32Vec4[3] = matrix[12];
-
-        this._state.modelMatrixCol0Buf.setData(tempFloat32Vec4, offset);
-
-        tempFloat32Vec4[0] = matrix[1];
-        tempFloat32Vec4[1] = matrix[5];
-        tempFloat32Vec4[2] = matrix[9];
-        tempFloat32Vec4[3] = matrix[13];
-
-        this._state.modelMatrixCol1Buf.setData(tempFloat32Vec4, offset);
-
-        tempFloat32Vec4[0] = matrix[2];
-        tempFloat32Vec4[1] = matrix[6];
-        tempFloat32Vec4[2] = matrix[10];
-        tempFloat32Vec4[3] = matrix[14];
-
-        this._state.modelMatrixCol2Buf.setData(tempFloat32Vec4, offset);
-    }
-
-    //------------------------------------------------------------------------------------------------
 
     precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) {
         const portion = this._portions[portionId];
