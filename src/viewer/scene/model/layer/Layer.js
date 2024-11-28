@@ -1,4 +1,5 @@
 import {getPlaneRTCPos, math} from "../../math/index.js";
+import {ENTITY_FLAGS} from "../ENTITY_FLAGS.js";
 import {LinearEncoding, sRGBEncoding} from "../../constants/constants.js";
 import {RENDER_PASSES} from "../RENDER_PASSES.js";
 import {WEBGL_INFO} from "../../webglInfo.js";
@@ -465,4 +466,69 @@ export class Layer {
             this.__drawLayer(renderFlags, frameCtx, renderer, RENDER_PASSES.COLOR_OPAQUE);
         }
     }
+
+
+    _getColSilhEdgePickFlags(flags, transparent, dst) {
+
+        const visible = !!(flags & ENTITY_FLAGS.VISIBLE);
+        const xrayed = !!(flags & ENTITY_FLAGS.XRAYED);
+        const highlighted = !!(flags & ENTITY_FLAGS.HIGHLIGHTED);
+        const selected = !!(flags & ENTITY_FLAGS.SELECTED);
+        const edges = !!(this._hasEdges && flags & ENTITY_FLAGS.EDGES);
+        const pickable = !!(flags & ENTITY_FLAGS.PICKABLE);
+        const culled = !!(flags & ENTITY_FLAGS.CULLED);
+
+        let colorFlag;
+        if (!visible || culled || xrayed
+            || (highlighted && !this.model.scene.highlightMaterial.glowThrough)
+            || (selected && !this.model.scene.selectedMaterial.glowThrough)) {
+            colorFlag = RENDER_PASSES.NOT_RENDERED;
+        } else {
+            if (transparent) {
+                colorFlag = RENDER_PASSES.COLOR_TRANSPARENT;
+            } else {
+                colorFlag = RENDER_PASSES.COLOR_OPAQUE;
+            }
+        }
+
+        let silhouetteFlag;
+        if (!visible || culled) {
+            silhouetteFlag = RENDER_PASSES.NOT_RENDERED;
+        } else if (selected) {
+            silhouetteFlag = RENDER_PASSES.SILHOUETTE_SELECTED;
+        } else if (highlighted) {
+            silhouetteFlag = RENDER_PASSES.SILHOUETTE_HIGHLIGHTED;
+        } else if (xrayed) {
+            silhouetteFlag = RENDER_PASSES.SILHOUETTE_XRAYED;
+        } else {
+            silhouetteFlag = RENDER_PASSES.NOT_RENDERED;
+        }
+
+        let edgeFlag = 0;
+        if ((!this._hasEdges) || (!visible) || culled) {
+            edgeFlag = RENDER_PASSES.NOT_RENDERED;
+        } else if (selected) {
+            edgeFlag = RENDER_PASSES.EDGES_SELECTED;
+        } else if (highlighted) {
+            edgeFlag = RENDER_PASSES.EDGES_HIGHLIGHTED;
+        } else if (xrayed) {
+            edgeFlag = RENDER_PASSES.EDGES_XRAYED;
+        } else if (edges) {
+            if (transparent) {
+                edgeFlag = RENDER_PASSES.EDGES_COLOR_TRANSPARENT;
+            } else {
+                edgeFlag = RENDER_PASSES.EDGES_COLOR_OPAQUE;
+            }
+        } else {
+            edgeFlag = RENDER_PASSES.NOT_RENDERED;
+        }
+
+        const pickFlag = (visible && !culled && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
+
+        dst[0] = colorFlag;
+        dst[1] = silhouetteFlag;
+        dst[2] = edgeFlag;
+        dst[3] = pickFlag;
+    }
+
 }
