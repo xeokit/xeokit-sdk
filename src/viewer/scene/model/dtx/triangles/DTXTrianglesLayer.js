@@ -134,8 +134,10 @@ export const getRenderers = (function() {
                 10);
 
             cache[sceneId] = {
-                colorRenderer:           lazy((c) => c(makeColorProgram(false))),
-                colorRendererWithSAO:    lazy((c) => c(makeColorProgram(true))),
+                colorRenderers: {
+                    "sao-": { "vertex": { "flat-": lazy((c) => c(makeColorProgram(false))) } },
+                    "sao+": { "vertex": { "flat-": lazy((c) => c(makeColorProgram(true))) } }
+                },
                 depthRenderer:           lazy((c) => c(DepthProgram(scene.logarithmicDepthBufferEnabled))),
                 edgesRenderers: {
                     uniform: lazy((c) => c(EdgesProgram(scene, true),  { vertices: false })),
@@ -226,6 +228,18 @@ export class DTXTrianglesLayer {
 
         this._renderers = getRenderers(model.scene, cfg.primitive);
         this.model = model;
+        this._edgesColorOpaqueAllowed = () => {
+            if (this.model.scene.logarithmicDepthBufferEnabled) {
+                if (!this.model.scene._loggedWarning) {
+                    console.log("Edge enhancement for SceneModel data texture layers currently disabled with logarithmic depth buffer");
+                    this.model.scene._loggedWarning = true;
+                }
+                return false;
+            } else {
+                return true;
+            }
+        };
+
         const gl = model.scene.canvas.gl;
         this._buffer = {
             positionsCompressed: [],
@@ -974,6 +988,7 @@ export class DTXTrianglesLayer {
             }
             this._numUpdatesInFrame = 0;
         });
+        this._surfaceHasNormals = true;
     }
 
     initFlags(portionId, flags, meshTransparent) {
@@ -1410,7 +1425,7 @@ export class DTXTrianglesLayer {
 
     __drawLayer(renderFlags, frameCtx, renderer, pass) {
         if ((this._numCulledLayerPortions < this._portions.length) && (this._numVisibleLayerPortions > 0)) {
-            const backfacePasses = [
+            const backfacePasses = (this.primitive !== "points") && (this.primitive !== "lines") && [
                 RENDER_PASSES.COLOR_OPAQUE,
                 RENDER_PASSES.COLOR_TRANSPARENT,
                 RENDER_PASSES.PICK,
@@ -1441,9 +1456,13 @@ export class DTXTrianglesLayer {
         if ((renderOpaque ? (this._numTransparentLayerPortions < this._portions.length) : (this._numTransparentLayerPortions > 0))
             &&
             (this._numXRayedLayerPortions < this._portions.length)) {
-            const renderer = ((renderOpaque && frameCtx.withSAO && this.model.saoEnabled)
-                              ? this._renderers.colorRendererWithSAO
-                              : this._renderers.colorRenderer);
+
+            const saoRenderer = (renderOpaque && frameCtx.withSAO && this.model.saoEnabled && this._renderers.colorRenderers["sao+"]) || this._renderers.colorRenderers["sao-"];
+            const renderer = ((saoRenderer["PBR"] && frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported)
+                              ? saoRenderer["PBR"]
+                              : ((saoRenderer["texture"] && frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported)
+                                 ? saoRenderer["texture"][(this._state.textureSet && (typeof(this._state.textureSet.alphaCutoff) === "number")) ? "alphaCutoff+" : "alphaCutoff-"]
+                                 : saoRenderer["vertex"][((this.primitive === "points") || (this.primitive === "lines") || this._surfaceHasNormals) ? "flat-" : "flat+"]));
             const pass = renderOpaque ? RENDER_PASSES.COLOR_OPAQUE : RENDER_PASSES.COLOR_TRANSPARENT;
             this.__drawLayer(renderFlags, frameCtx, renderer, pass);
         }
@@ -1461,8 +1480,9 @@ export class DTXTrianglesLayer {
 
     drawDepth(renderFlags, frameCtx) {
         // Assume whatever post-effect uses depth (eg SAO) does not apply to transparent objects
-        if ((this._numTransparentLayerPortions < this._portions.length) && (this._numXRayedLayerPortions < this._portions.length)) {
-            this.__drawLayer(renderFlags, frameCtx, this._renderers.depthRenderer, RENDER_PASSES.COLOR_OPAQUE);
+        const renderer = this._renderers.depthRenderer;
+        if (renderer && (this._numTransparentLayerPortions < this._portions.length) && (this._numXRayedLayerPortions < this._portions.length)) {
+            this.__drawLayer(renderFlags, frameCtx, renderer, RENDER_PASSES.COLOR_OPAQUE);
         }
     }
 
@@ -1506,12 +1526,7 @@ export class DTXTrianglesLayer {
     }
 
     drawEdgesColorOpaque(renderFlags, frameCtx) {
-        if (this.model.scene.logarithmicDepthBufferEnabled) {
-            if (!this.model.scene._loggedWarning) {
-                console.log("Edge enhancement for SceneModel data texture layers currently disabled with logarithmic depth buffer");
-                this.model.scene._loggedWarning = true;
-            }
-        } else {
+        if (this._edgesColorOpaqueAllowed()) {
             this.__drawVertexEdges(renderFlags, frameCtx, RENDER_PASSES.EDGES_COLOR_OPAQUE);
         }
     }
@@ -1550,34 +1565,48 @@ export class DTXTrianglesLayer {
 
     //---- PICKING ----------------------------------------------------------------------------------------------------
 
+    __drawPick(renderFlags, frameCtx, renderer) {
+        if (renderer) {
+            this.__drawLayer(renderFlags, frameCtx, renderer, RENDER_PASSES.PICK);
+        }
+    }
+
     drawPickMesh(renderFlags, frameCtx) {
-        this.__drawLayer(renderFlags, frameCtx, this._renderers.pickMeshRenderer, RENDER_PASSES.PICK);
+        this.__drawPick(renderFlags, frameCtx, this._renderers.pickMeshRenderer);
     }
 
     drawPickDepths(renderFlags, frameCtx) {
-        this.__drawLayer(renderFlags, frameCtx, this._renderers.pickDepthRenderer, RENDER_PASSES.PICK);
+        this.__drawPick(renderFlags, frameCtx, this._renderers.pickDepthRenderer);
     }
 
     drawPickNormals(renderFlags, frameCtx) {
-        this.__drawLayer(renderFlags, frameCtx, this._renderers.pickNormalsFlatRenderer, RENDER_PASSES.PICK);
+        const renderer = (false // TODO for VBO: this._state.normalsBuf
+                          ? this._renderers.pickNormalsRenderer
+                          : this._renderers.pickNormalsFlatRenderer);
+        this.__drawPick(renderFlags, frameCtx, renderer);
     }
 
     drawSnapInit(renderFlags, frameCtx) {
-        this.__drawLayer(renderFlags, frameCtx, this._renderers.snapInitRenderer, RENDER_PASSES.PICK);
+        this.__drawPick(renderFlags, frameCtx, this._renderers.snapInitRenderer);
     }
 
     drawSnap(renderFlags, frameCtx) {
-        const snapRenderer = (frameCtx.snapMode === "edge") ? this._renderers.snapEdgeRenderer : this._renderers.snapVertexRenderer;
-        this.__drawLayer(renderFlags, frameCtx, snapRenderer, RENDER_PASSES.PICK);
+        this.__drawPick(renderFlags, frameCtx, (frameCtx.snapMode === "edge") ? this._renderers.snapEdgeRenderer : this._renderers.snapVertexRenderer);
     }
 
 
     drawOcclusion(renderFlags, frameCtx) {
-        this.__drawLayer(renderFlags, frameCtx, this._renderers.occlusionRenderer, RENDER_PASSES.COLOR_OPAQUE);
+        const renderer = this._renderers.occlusionRenderer;
+        if (renderer) {
+            this.__drawLayer(renderFlags, frameCtx, renderer, RENDER_PASSES.COLOR_OPAQUE);
+        }
     }
 
     drawShadow(renderFlags, frameCtx) {
-        this.__drawLayer(renderFlags, frameCtx, this._renderers.shadowRenderer, RENDER_PASSES.COLOR_OPAQUE);
+        const renderer = this._renderers.shadowRenderer;
+        if (renderer) {
+            this.__drawLayer(renderFlags, frameCtx, renderer, RENDER_PASSES.COLOR_OPAQUE);
+        }
     }
 
     //------------------------------------------------------------------------------------------------
