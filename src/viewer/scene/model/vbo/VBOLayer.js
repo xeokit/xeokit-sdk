@@ -713,52 +713,8 @@ export class VBOLayer extends Layer {
         this._finalized = true;
     }
 
-    setClippable(portionId, flags) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-        if (flags & ENTITY_FLAGS.CLIPPABLE) {
-            this._numClippableLayerPortions++;
-            this.model.numClippableLayerPortions++;
-        } else {
-            this._numClippableLayerPortions--;
-            this.model.numClippableLayerPortions--;
-        }
+    _setClippableFlags(portionId, flags) {
         this._setFlags(portionId, flags);
-    }
-
-    setCulled(portionId, flags, transparent) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-        if (flags & ENTITY_FLAGS.CULLED) {
-            this._numCulledLayerPortions++;
-            this.model.numCulledLayerPortions++;
-        } else {
-            this._numCulledLayerPortions--;
-            this.model.numCulledLayerPortions--;
-        }
-        this._setFlags(portionId, flags, transparent);
-    }
-
-    setCollidable(portionId, flags) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-    }
-
-    setPickable(portionId, flags, transparent) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-        if (flags & ENTITY_FLAGS.PICKABLE) {
-            this._numPickableLayerPortions++;
-            this.model.numPickableLayerPortions++;
-        } else {
-            this._numPickableLayerPortions--;
-            this.model.numPickableLayerPortions--;
-        }
-        this._setFlags(portionId, flags, transparent);
     }
 
     setColor(portionId, color) { // RGBA color is normalized as ints
@@ -772,17 +728,6 @@ export class VBOLayer extends Layer {
             fillArray(tempArray, color.slice(0, 4));
             this._state.colorsBuf.setData(tempArray, portion.portionBase * 4);
         }
-    }
-
-    setTransparent(portionId, flags, transparent) {
-        if (transparent) {
-            this._numTransparentLayerPortions++;
-            this.model.numTransparentLayerPortions++;
-        } else {
-            this._numTransparentLayerPortions--;
-            this.model.numTransparentLayerPortions--;
-        }
-        this._setFlags(portionId, flags, transparent);
     }
 
     /**
