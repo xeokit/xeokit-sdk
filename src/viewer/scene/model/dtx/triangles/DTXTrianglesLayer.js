@@ -995,20 +995,6 @@ export class DTXTrianglesLayer extends Layer {
         this._surfaceHasNormals = true;
     }
 
-    setClippable(portionId, flags) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-        if (flags & ENTITY_FLAGS.CLIPPABLE) {
-            this._numClippableLayerPortions++;
-            this.model.numClippableLayerPortions++;
-        } else {
-            this._numClippableLayerPortions--;
-            this.model.numClippableLayerPortions--;
-        }
-        this._setFlags2(portionId, flags);
-    }
-
     /**
      * This will _start_ a "set-flags transaction".
      *
@@ -1042,44 +1028,21 @@ export class DTXTrianglesLayer extends Layer {
         }
     }
 
-    setCulled(portionId, flags, transparent) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-        if (flags & ENTITY_FLAGS.CULLED) {
-            this._numCulledLayerPortions += this._portionToSubPortionsMap[portionId].length;
-            this.model.numCulledLayerPortions++;
-        } else {
-            this._numCulledLayerPortions -= this._portionToSubPortionsMap[portionId].length;
-            this.model.numCulledLayerPortions--;
-        }
-        this._setFlags(portionId, flags, transparent);
-    }
-
-    setCollidable(portionId, flags) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-    }
-
-    setPickable(portionId, flags, transparent) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-        if (flags & ENTITY_FLAGS.PICKABLE) {
-            this._numPickableLayerPortions++;
-            this.model.numPickableLayerPortions++;
-        } else {
-            this._numPickableLayerPortions--;
-            this.model.numPickableLayerPortions--;
-        }
-        this._setFlags(portionId, flags, transparent);
+    _setClippableFlags(portionId, flags) {
+        this._setFlags2(portionId, flags);
     }
 
     setColor(portionId, color) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
         const subPortionIds = this._portionToSubPortionsMap[portionId];
         for (let i = 0, len = subPortionIds.length; i < len; i++) {
-            this._subPortionSetColor(subPortionIds[i], color);
+            tempUint8Array4[0] = color[0];
+            tempUint8Array4[1] = color[1];
+            tempUint8Array4[2] = color[2];
+            tempUint8Array4[3] = color[3];
+            this._setPortionColorsAndFlags(subPortionIds[i], 0, tempUint8Array4, false);
         }
     }
 
@@ -1091,30 +1054,6 @@ export class DTXTrianglesLayer extends Layer {
             this._beginDeferredFlags(); // Subsequent flags updates now deferred
         }
         this._state.textureState.texturePerObjectColorsAndFlagsData.setData(data, subPortionId, offset, !defer);
-    }
-
-    _subPortionSetColor(subPortionId, color) {
-        if (!this._finalized) {
-            throw "Not finalized";
-        }
-
-        tempUint8Array4 [0] = color[0];
-        tempUint8Array4 [1] = color[1];
-        tempUint8Array4 [2] = color[2];
-        tempUint8Array4 [3] = color[3];
-
-        this._setPortionColorsAndFlags(subPortionId, 0, tempUint8Array4, false);
-    }
-
-    setTransparent(portionId, flags, transparent) {
-        if (transparent) {
-            this._numTransparentLayerPortions++;
-            this.model.numTransparentLayerPortions++;
-        } else {
-            this._numTransparentLayerPortions--;
-            this.model.numTransparentLayerPortions--;
-        }
-        this._setFlags(portionId, flags, transparent);
     }
 
     _setFlags(portionId, flags, transparent, deferred = false) {
