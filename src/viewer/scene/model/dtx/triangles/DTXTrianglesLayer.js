@@ -1361,6 +1361,8 @@ export class DTXTrianglesLayer extends Layer {
         this._state.textureState.texturePerObjectInstanceMatricesData.setData(tempMat4a, subPortionId, 0, !defer);
     }
 
+    //------------------------------------------------------------------------------------------------
+
     getEachVertex(portionId, callback) {
         if (!this.model.scene.readableGeometryEnabled) {
             return;
@@ -1415,8 +1417,6 @@ export class DTXTrianglesLayer extends Layer {
             }
         }
     }
-
-    //------------------------------------------------------------------------------------------------
 
     destroy() {
         if (this._destroyed) {
