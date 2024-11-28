@@ -119,8 +119,10 @@ const getRenderers = (function() {
                     colorTextureRendererWithSAO:            lazy((c) => c(makeColorTextureProgram(true,  false))),
                     colorTextureRendererWithSAOAlphaCutoff: lazy((c) => c(makeColorTextureProgram(true,  true))),
                     depthRenderer:                          lazy((c) => c(DepthProgram(scene.logarithmicDepthBufferEnabled))),
-                    edgesColorRenderer:                     lazy((c) => c(EdgesProgram(scene, false), { vertices: false })),
-                    edgesRenderer:                          lazy((c) => c(EdgesProgram(scene, true),  { vertices: false })),
+                    edgesRenderers: {
+                        uniform: lazy((c) => c(EdgesProgram(scene, true),  { vertices: false })),
+                        vertex:  lazy((c) => c(EdgesProgram(scene, false), { vertices: false }))
+                    },
                     flatColorRenderer:                      lazy((c) => c(makeFlatColorProgram(false))),
                     flatColorRendererWithSAO:               lazy((c) => c(makeFlatColorProgram(true))),
                     occlusionRenderer:                      lazy((c) => c(OcclusionProgram(scene.logarithmicDepthBufferEnabled))),
@@ -138,11 +140,20 @@ const getRenderers = (function() {
                 };
             }
 
-            const compile = () => Object.values(cache[sceneId]).forEach(r => r && r.revalidate(false));
+            const revalidateAll = force => {
+                (function rec(obj) {
+                    if (obj.revalidate) {
+                        obj.revalidate(force);
+                    } else {
+                        Object.values(obj).forEach(v => v && rec(v));
+                    }
+                })(cache[sceneId]);
+            };
+            const compile = () => revalidateAll(false);
             compile();
             scene.on("compile", compile);
             scene.on("destroyed", () => {
-                Object.values(cache[sceneId]).forEach(r => r && r.revalidate(true));
+                revalidateAll(true);
                 delete cache[sceneId];
             });
         }
@@ -243,7 +254,7 @@ export class VBOLayer {
 
         this._renderers = getRenderers(cfg.model.scene, instancing, this.primitive);
 
-        this._hasEdges = (this.primitive !== "points") && (this.primitive !== "lines");
+        this._hasEdges = this._renderers.edgesRenderers;
 
         this._instancing = instancing;
 
@@ -1205,39 +1216,46 @@ export class VBOLayer {
 
     // ---------------------- EDGES RENDERING -----------------------------------
 
-    drawEdgesColorOpaque(renderFlags, frameCtx) {
-        if (this._hasEdges && (this._numEdgesLayerPortions > 0)) {
-            this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesColorRenderer, RENDER_PASSES.EDGES_COLOR_OPAQUE);
+    __drawVertexEdges(renderFlags, frameCtx, renderPass) {
+        const renderer = this._renderers.edgesRenderers && this._renderers.edgesRenderers.vertex;
+        if (renderer && (this._numEdgesLayerPortions > 0)) {
+            this.__drawLayer(renderFlags, frameCtx, renderer, renderPass);
         }
     }
 
+    drawEdgesColorOpaque(renderFlags, frameCtx) {
+        this.__drawVertexEdges(renderFlags, frameCtx, RENDER_PASSES.EDGES_COLOR_OPAQUE);
+    }
+
     drawEdgesColorTransparent(renderFlags, frameCtx) {
-        if (this._hasEdges && (this._numEdgesLayerPortions > 0) && (this._numTransparentLayerPortions > 0)) {
-            this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesColorRenderer, RENDER_PASSES.EDGES_COLOR_TRANSPARENT);
+        if (this._numTransparentLayerPortions > 0) {
+            this.__drawVertexEdges(renderFlags, frameCtx, RENDER_PASSES.EDGES_COLOR_TRANSPARENT);
+        }
+    }
+
+    __drawUniformEdges(renderFlags, frameCtx, material, renderPass) {
+        const renderer = this._renderers.edgesRenderers && this._renderers.edgesRenderers.uniform;
+        if (renderer) {
+            frameCtx.programColor = this.__setVec4FromMaterialColorAlpha(material.edgeColor, material.edgeAlpha, tempVec4b);
+            this.__drawLayer(renderFlags, frameCtx, renderer, renderPass);
         }
     }
 
     drawEdgesHighlighted(renderFlags, frameCtx) {
-        if (this._hasEdges && (this._numHighlightedLayerPortions > 0)) {
-            const mat = this.model.scene.highlightMaterial;
-            frameCtx.programColor = this.__setVec4FromMaterialColorAlpha(mat.edgeColor, mat.edgeAlpha, tempVec4b);
-            this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesRenderer, RENDER_PASSES.EDGES_HIGHLIGHTED);
+        if (this._numHighlightedLayerPortions > 0) {
+            this.__drawUniformEdges(renderFlags, frameCtx, this.model.scene.highlightMaterial, RENDER_PASSES.EDGES_HIGHLIGHTED);
         }
     }
 
     drawEdgesSelected(renderFlags, frameCtx) {
-        if (this._hasEdges && (this._numSelectedLayerPortions > 0)) {
-            const mat = this.model.scene.selectedMaterial;
-            frameCtx.programColor = this.__setVec4FromMaterialColorAlpha(mat.edgeColor, mat.edgeAlpha, tempVec4b);
-            this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesRenderer, RENDER_PASSES.EDGES_SELECTED);
+        if (this._numSelectedLayerPortions > 0) {
+            this.__drawUniformEdges(renderFlags, frameCtx, this.model.scene.selectedMaterial, RENDER_PASSES.EDGES_SELECTED);
         }
     }
 
     drawEdgesXRayed(renderFlags, frameCtx) {
-        if (this._hasEdges && (this._numXRayedLayerPortions > 0)) {
-            const mat = this.model.scene.xrayMaterial;
-            frameCtx.programColor = this.__setVec4FromMaterialColorAlpha(mat.edgeColor, mat.edgeAlpha, tempVec4b);
-            this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesRenderer, RENDER_PASSES.EDGES_XRAYED);
+        if (this._numXRayedLayerPortions > 0) {
+            this.__drawUniformEdges(renderFlags, frameCtx, this.model.scene.xrayMaterial, RENDER_PASSES.EDGES_XRAYED);
         }
     }
 
