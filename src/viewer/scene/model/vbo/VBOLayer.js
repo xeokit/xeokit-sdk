@@ -77,10 +77,7 @@ const getRenderers = (function() {
 
             const gl = scene.canvas.gl;
 
-            const makeColorProgram = (withLights, withSAO) => ColorProgram(scene.logarithmicDepthBufferEnabled, withLights && createLightSetup(gl, scene._lightsState, false), withSAO && createSAOSetup(gl, scene), primitive, undefined);
-            const makeColorTextureProgram = (withSAO, useAlphaCutoff) => ColorTextureProgram(scene, createLightSetup(gl, scene._lightsState), withSAO && createSAOSetup(gl, scene), useAlphaCutoff, scene.gammaOutput); // If gammaOutput set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
-            const makeFlatColorProgram = (withSAO) => FlatColorProgram(scene.logarithmicDepthBufferEnabled, createLightSetup(gl, scene._lightsState, false), withSAO && createSAOSetup(gl, scene));
-            const makePBRProgram = (withSAO) => PBRProgram(scene, createLightSetup(gl, scene._lightsState, true), withSAO && createSAOSetup(gl, scene));
+            const makeColorProgram = (lights, sao) => ColorProgram(scene.logarithmicDepthBufferEnabled, lights, sao, primitive, undefined);
 
             const makePickDepthProgram   = (isPoints) => PickDepthProgram(scene, createPickClipTransformSetup(gl, 1), isPoints);
             const makePickMeshProgram    = (isPoints) => PickMeshProgram(scene, createPickClipTransformSetup(gl, 1), isPoints);
@@ -90,7 +87,7 @@ const getRenderers = (function() {
 
             if (primitive === "points") {
                 cache[sceneId] = {
-                    colorRenderer:      lazy((c) => c(makeColorProgram(false, false))),
+                    colorRenderers:     { "sao-": { "vertex": { "flat-": lazy((c) => c(makeColorProgram(null, null))) } } },
                     occlusionRenderer:  lazy((c) => c(OcclusionProgram(scene.logarithmicDepthBufferEnabled))),
                     pickDepthRenderer:  lazy((c) => c(makePickDepthProgram(true))),
                     pickMeshRenderer:   lazy((c) => c(makePickMeshProgram(true))),
@@ -104,7 +101,7 @@ const getRenderers = (function() {
                 };
             } else if (primitive === "lines") {
                 cache[sceneId] = {
-                    colorRenderer:      lazy((c) => c(makeColorProgram(false, false))),
+                    colorRenderers:     { "sao-": { "vertex": { "flat-": lazy((c) => c(makeColorProgram(null, null))) } } },
                     silhouetteRenderer: lazy((c) => c(SilhouetteProgram(scene, true))),
                     snapInitRenderer:   lazy((c) => c(makeSnapProgram(true,  false))),
                     snapEdgeRenderer:   lazy((c) => c(makeSnapProgram(false, false), { vertices: false })),
@@ -112,22 +109,33 @@ const getRenderers = (function() {
                 };
             } else {
                 cache[sceneId] = {
-                    colorRenderer:                          lazy((c) => c(makeColorProgram(true, false))),
-                    colorRendererWithSAO:                   lazy((c) => c(makeColorProgram(true, true))),
-                    colorTextureRenderer:                   lazy((c) => c(makeColorTextureProgram(false, false))),
-                    colorTextureRendererAlphaCutoff:        lazy((c) => c(makeColorTextureProgram(false, true))),
-                    colorTextureRendererWithSAO:            lazy((c) => c(makeColorTextureProgram(true,  false))),
-                    colorTextureRendererWithSAOAlphaCutoff: lazy((c) => c(makeColorTextureProgram(true,  true))),
+                    colorRenderers: (function() {
+                        const lights = createLightSetup(gl, scene._lightsState, false, false);
+                        const saoRenderers = function(sao) {
+                            const makeColorTextureProgram = (useAlphaCutoff) => ColorTextureProgram(scene, lights, sao, useAlphaCutoff, scene.gammaOutput); // If gammaOutput set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
+                            return {
+                                "PBR": lazy((c) => c(PBRProgram(scene, createLightSetup(gl, scene._lightsState, true), sao))),
+                                "texture": {
+                                    "alphaCutoff-": lazy((c) => c(makeColorTextureProgram(false))),
+                                    "alphaCutoff+": lazy((c) => c(makeColorTextureProgram(true)))
+                                },
+                                "vertex": {
+                                    "flat-": lazy((c) => c(makeColorProgram(lights, sao))),
+                                    "flat+": lazy((c) => c(FlatColorProgram(scene.logarithmicDepthBufferEnabled, lights, sao)))
+                                }
+                            };
+                        };
+                        return {
+                            "sao-": saoRenderers(null),
+                            "sao+": saoRenderers(createSAOSetup(gl, scene))
+                        };
+                    })(),
                     depthRenderer:                          lazy((c) => c(DepthProgram(scene.logarithmicDepthBufferEnabled))),
                     edgesRenderers: {
                         uniform: lazy((c) => c(EdgesProgram(scene, true),  { vertices: false })),
                         vertex:  lazy((c) => c(EdgesProgram(scene, false), { vertices: false }))
                     },
-                    flatColorRenderer:                      lazy((c) => c(makeFlatColorProgram(false))),
-                    flatColorRendererWithSAO:               lazy((c) => c(makeFlatColorProgram(true))),
                     occlusionRenderer:                      lazy((c) => c(OcclusionProgram(scene.logarithmicDepthBufferEnabled))),
-                    pbrRenderer:                            lazy((c) => c(makePBRProgram(false))),
-                    pbrRendererWithSAO:                     lazy((c) => c(makePBRProgram(true))),
                     pickDepthRenderer:                      eager((c) => c(makePickDepthProgram(false))),
                     pickMeshRenderer:                       eager((c) => c(makePickMeshProgram(false))),
                     pickNormalsFlatRenderer:                lazy((c) => c(makePickNormalsProgram(true))),
@@ -255,6 +263,7 @@ export class VBOLayer {
         this._renderers = getRenderers(cfg.model.scene, instancing, this.primitive);
 
         this._hasEdges = this._renderers.edgesRenderers;
+        this._edgesColorOpaqueAllowed = () => true;
 
         this._instancing = instancing;
 
@@ -694,6 +703,7 @@ export class VBOLayer {
             && !!textureSet
             && !!textureSet.colorTexture;
 
+        this._surfaceHasNormals = !!state.normalsBuf;
         state.geometry = null;
         this._buffer = null;
         this._finalized = true;
@@ -1137,30 +1147,13 @@ export class VBOLayer {
         if ((renderOpaque ? (this._numTransparentLayerPortions < this._portions.length) : (this._numTransparentLayerPortions > 0))
             &&
             (this._numXRayedLayerPortions < this._portions.length)) {
-            const usePBR = frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported;
-            const useColorTexture = frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported;
-            const useAlphaCutoff = this._state.textureSet && (typeof(this._state.textureSet.alphaCutoff) === "number");
-            const renderer = (((this.primitive === "points") || (this.primitive === "lines"))
-                              ? this._renderers.colorRenderer
-                              : ((renderOpaque && frameCtx.withSAO && this.model.saoEnabled)
-                                 ? (usePBR
-                                    ? this._renderers.pbrRendererWithSAO
-                                    : (useColorTexture
-                                       ? (useAlphaCutoff
-                                          ? this._renderers.colorTextureRendererWithSAOAlphaCutoff
-                                          : this._renderers.colorTextureRendererWithSAO)
-                                       : (this._state.normalsBuf
-                                          ? this._renderers.colorRendererWithSAO
-                                          : this._renderers.flatColorRendererWithSAO)))
-                                 : (usePBR
-                                    ? this._renderers.pbrRenderer
-                                    : (useColorTexture
-                                       ? (useAlphaCutoff
-                                          ? this._renderers.colorTextureRendererAlphaCutoff
-                                          : this._renderers.colorTextureRenderer)
-                                       : (this._state.normalsBuf
-                                          ? this._renderers.colorRenderer
-                                          : this._renderers.flatColorRenderer)))));
+
+            const saoRenderer = (renderOpaque && frameCtx.withSAO && this.model.saoEnabled && this._renderers.colorRenderers["sao+"]) || this._renderers.colorRenderers["sao-"];
+            const renderer = ((saoRenderer["PBR"] && frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported)
+                              ? saoRenderer["PBR"]
+                              : ((saoRenderer["texture"] && frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported)
+                                 ? saoRenderer["texture"][(this._state.textureSet && (typeof(this._state.textureSet.alphaCutoff) === "number")) ? "alphaCutoff+" : "alphaCutoff-"]
+                                 : saoRenderer["vertex"][((this.primitive === "points") || (this.primitive === "lines") || this._surfaceHasNormals) ? "flat-" : "flat+"]));
             const pass = renderOpaque ? RENDER_PASSES.COLOR_OPAQUE : RENDER_PASSES.COLOR_TRANSPARENT;
             this.__drawLayer(renderFlags, frameCtx, renderer, pass);
         }
@@ -1224,7 +1217,9 @@ export class VBOLayer {
     }
 
     drawEdgesColorOpaque(renderFlags, frameCtx) {
-        this.__drawVertexEdges(renderFlags, frameCtx, RENDER_PASSES.EDGES_COLOR_OPAQUE);
+        if (this._edgesColorOpaqueAllowed()) {
+            this.__drawVertexEdges(renderFlags, frameCtx, RENDER_PASSES.EDGES_COLOR_OPAQUE);
+        }
     }
 
     drawEdgesColorTransparent(renderFlags, frameCtx) {
@@ -1261,36 +1256,33 @@ export class VBOLayer {
 
     //---- PICKING ----------------------------------------------------------------------------------------------------
 
-    drawPickMesh(renderFlags, frameCtx) {
-        if (this._state.pickColorsBuf) {
-            this.__drawLayer(renderFlags, frameCtx, this._renderers.pickMeshRenderer, RENDER_PASSES.PICK);
-        }
-    }
-
-    drawPickDepths(renderFlags, frameCtx) {
-        if (this._state.pickColorsBuf) {
-            this.__drawLayer(renderFlags, frameCtx, this._renderers.pickDepthRenderer, RENDER_PASSES.PICK);
-        }
-    }
-
-    drawPickNormals(renderFlags, frameCtx) {
-        const renderer = (false // TODO: this._state.normalsBuf
-                          ? this._renderers.pickNormalsRenderer
-                          : this._renderers.pickNormalsFlatRenderer);
-        if (renderer && this._state.pickColorsBuf) {
+    __drawPick(renderFlags, frameCtx, renderer) {
+        if (renderer) {
             this.__drawLayer(renderFlags, frameCtx, renderer, RENDER_PASSES.PICK);
         }
     }
 
+    drawPickMesh(renderFlags, frameCtx) {
+        this.__drawPick(renderFlags, frameCtx, this._renderers.pickMeshRenderer);
+    }
+
+    drawPickDepths(renderFlags, frameCtx) {
+        this.__drawPick(renderFlags, frameCtx, this._renderers.pickDepthRenderer);
+    }
+
+    drawPickNormals(renderFlags, frameCtx) {
+        const renderer = (false // TODO for VBO: this._state.normalsBuf
+                          ? this._renderers.pickNormalsRenderer
+                          : this._renderers.pickNormalsFlatRenderer);
+        this.__drawPick(renderFlags, frameCtx, renderer);
+    }
+
     drawSnapInit(renderFlags, frameCtx) {
-        this.__drawLayer(renderFlags, frameCtx, this._renderers.snapInitRenderer, RENDER_PASSES.PICK);
+        this.__drawPick(renderFlags, frameCtx, this._renderers.snapInitRenderer);
     }
 
     drawSnap(renderFlags, frameCtx) {
-        const snapRenderer = (frameCtx.snapMode === "edge") ? this._renderers.snapEdgeRenderer : this._renderers.snapVertexRenderer;
-        if (snapRenderer) {
-            this.__drawLayer(renderFlags, frameCtx, snapRenderer, RENDER_PASSES.PICK);
-        }
+        this.__drawPick(renderFlags, frameCtx, (frameCtx.snapMode === "edge") ? this._renderers.snapEdgeRenderer : this._renderers.snapVertexRenderer);
     }
 
 
