@@ -137,8 +137,10 @@ export const getRenderers = (function() {
                 colorRenderer:           lazy((c) => c(makeColorProgram(false))),
                 colorRendererWithSAO:    lazy((c) => c(makeColorProgram(true))),
                 depthRenderer:           lazy((c) => c(DepthProgram(scene.logarithmicDepthBufferEnabled))),
-                edgesColorRenderer:      lazy((c) => c(EdgesProgram(scene, false), { vertices: false })),
-                edgesRenderer:           lazy((c) => c(EdgesProgram(scene, true),  { vertices: false })),
+                edgesRenderers: {
+                    uniform: lazy((c) => c(EdgesProgram(scene, true),  { vertices: false })),
+                    vertex:  lazy((c) => c(EdgesProgram(scene, false), { vertices: false }))
+                },
                 occlusionRenderer:       lazy((c) => c(OcclusionProgram(scene.logarithmicDepthBufferEnabled))),
                 pickDepthRenderer:       eager((c) => c(PickDepthProgram(scene, createPickClipTransformSetup(gl, 1)))),
                 pickMeshRenderer:        eager((c) => c(PickMeshProgram(scene, createPickClipTransformSetup(gl, 1)))),
@@ -149,11 +151,20 @@ export const getRenderers = (function() {
                 snapVertexRenderer:      eager((c) => c(SnapProgram(gl, false, false), { vertices: true })),
             };
 
-            const compile = () => Object.values(cache[sceneId]).forEach(r => r && r.revalidate(false));
+            const revalidateAll = force => {
+                (function rec(obj) {
+                    if (obj.revalidate) {
+                        obj.revalidate(force);
+                    } else {
+                        Object.values(obj).forEach(v => v && rec(v));
+                    }
+                })(cache[sceneId]);
+            };
+            const compile = () => revalidateAll(false);
             compile();
             scene.on("compile", compile);
             scene.on("destroyed", () => {
-                Object.values(cache[sceneId]).forEach(r => r && r.revalidate(true));
+                revalidateAll(true);
                 delete cache[sceneId];
             });
         }
@@ -1487,44 +1498,53 @@ export class DTXTrianglesLayer {
 
     // ---------------------- EDGES RENDERING -----------------------------------
 
+    __drawVertexEdges(renderFlags, frameCtx, renderPass) {
+        const renderer = this._renderers.edgesRenderers && this._renderers.edgesRenderers.vertex;
+        if (renderer && (this._numEdgesLayerPortions > 0)) {
+            this.__drawLayer(renderFlags, frameCtx, renderer, renderPass);
+        }
+    }
+
     drawEdgesColorOpaque(renderFlags, frameCtx) {
         if (this.model.scene.logarithmicDepthBufferEnabled) {
             if (!this.model.scene._loggedWarning) {
                 console.log("Edge enhancement for SceneModel data texture layers currently disabled with logarithmic depth buffer");
                 this.model.scene._loggedWarning = true;
             }
-        } else if (this._numEdgesLayerPortions > 0) {
-            this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesColorRenderer, RENDER_PASSES.EDGES_COLOR_OPAQUE);
+        } else {
+            this.__drawVertexEdges(renderFlags, frameCtx, RENDER_PASSES.EDGES_COLOR_OPAQUE);
         }
     }
 
     drawEdgesColorTransparent(renderFlags, frameCtx) {
-        if ((this._numEdgesLayerPortions > 0) && (this._numTransparentLayerPortions > 0)) {
-            this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesColorRenderer, RENDER_PASSES.EDGES_COLOR_TRANSPARENT);
+        if (this._numTransparentLayerPortions > 0) {
+            this.__drawVertexEdges(renderFlags, frameCtx, RENDER_PASSES.EDGES_COLOR_TRANSPARENT);
+        }
+    }
+
+    __drawUniformEdges(renderFlags, frameCtx, material, renderPass) {
+        const renderer = this._renderers.edgesRenderers && this._renderers.edgesRenderers.uniform;
+        if (renderer) {
+            frameCtx.programColor = this.__setVec4FromMaterialColorAlpha(material.edgeColor, material.edgeAlpha, tempVec4b);
+            this.__drawLayer(renderFlags, frameCtx, renderer, renderPass);
         }
     }
 
     drawEdgesHighlighted(renderFlags, frameCtx) {
         if (this._numHighlightedLayerPortions > 0) {
-            const mat = this.model.scene.highlightMaterial;
-            frameCtx.programColor = this.__setVec4FromMaterialColorAlpha(mat.edgeColor, mat.edgeAlpha, tempVec4b);
-            this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesRenderer, RENDER_PASSES.EDGES_HIGHLIGHTED);
+            this.__drawUniformEdges(this.model.scene.highlightMaterial, RENDER_PASSES.EDGES_HIGHLIGHTED);
         }
     }
 
     drawEdgesSelected(renderFlags, frameCtx) {
         if (this._numSelectedLayerPortions > 0) {
-            const mat = this.model.scene.selectedMaterial;
-            frameCtx.programColor = this.__setVec4FromMaterialColorAlpha(mat.edgeColor, mat.edgeAlpha, tempVec4b);
-            this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesRenderer, RENDER_PASSES.EDGES_SELECTED);
+            this.__drawUniformEdges(this.model.scene.selectedMaterial, RENDER_PASSES.EDGES_SELECTED);
         }
     }
 
     drawEdgesXRayed(renderFlags, frameCtx) {
         if (this._numXRayedLayerPortions > 0) {
-            const mat = this.model.scene.xrayMaterial;
-            frameCtx.programColor = this.__setVec4FromMaterialColorAlpha(mat.edgeColor, mat.edgeAlpha, tempVec4b);
-            this.__drawLayer(renderFlags, frameCtx, this._renderers.edgesRenderer, RENDER_PASSES.EDGES_XRAYED);
+            this.__drawUniformEdges(this.model.scene.xrayMaterial, RENDER_PASSES.EDGES_XRAYED);
         }
     }
 
