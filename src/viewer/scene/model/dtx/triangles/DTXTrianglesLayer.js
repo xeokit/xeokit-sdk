@@ -229,6 +229,7 @@ export class DTXTrianglesLayer extends Layer {
         this.layerIndex = cfg.layerIndex; // Index of this TrianglesDataTextureLayer in {@link SceneModel#_layerList}.
 
         this._renderers = getRenderers(model.scene, cfg.primitive);
+        this._hasEdges = this._renderers.edgesRenderers;
         this.model = model;
         this._edgesColorOpaqueAllowed = () => {
             if (this.model.scene.logarithmicDepthBufferEnabled) {
@@ -241,6 +242,7 @@ export class DTXTrianglesLayer extends Layer {
                 return true;
             }
         };
+        this._instancing = false;
 
         const gl = model.scene.canvas.gl;
         this._buffer = {
@@ -993,7 +995,7 @@ export class DTXTrianglesLayer extends Layer {
         this._surfaceHasNormals = true;
     }
 
-    initFlags(portionId, flags, meshTransparent) {
+    initFlags(portionId, flags, transparent) {
         if (flags & ENTITY_FLAGS.VISIBLE) {
             this._numVisibleLayerPortions++;
             this.model.numVisibleLayerPortions++;
@@ -1014,7 +1016,7 @@ export class DTXTrianglesLayer extends Layer {
             this._numClippableLayerPortions++;
             this.model.numClippableLayerPortions++;
         }
-        if (flags & ENTITY_FLAGS.EDGES) {
+        if (this._hasEdges && flags & ENTITY_FLAGS.EDGES) {
             this._numEdgesLayerPortions++;
             this.model.numEdgesLayerPortions++;
         }
@@ -1026,12 +1028,12 @@ export class DTXTrianglesLayer extends Layer {
             this._numCulledLayerPortions++;
             this.model.numCulledLayerPortions++;
         }
-        if (meshTransparent) {
+        if (transparent) {
             this._numTransparentLayerPortions++;
             this.model.numTransparentLayerPortions++;
         }
-        const deferred = true;
-        this._setFlags(portionId, flags, meshTransparent, deferred);
+        const deferred = (this.primitive !== "points") && (! this._instancing);
+        this._setFlags(portionId, flags, transparent, deferred);
         this._setFlags2(portionId, flags, deferred);
     }
 
@@ -1099,14 +1101,16 @@ export class DTXTrianglesLayer extends Layer {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        if (flags & ENTITY_FLAGS.EDGES) {
-            this._numEdgesLayerPortions++;
-            this.model.numEdgesLayerPortions++;
-        } else {
-            this._numEdgesLayerPortions--;
-            this.model.numEdgesLayerPortions--;
+        if (this._hasEdges) {
+            if (flags & ENTITY_FLAGS.EDGES) {
+                this._numEdgesLayerPortions++;
+                this.model.numEdgesLayerPortions++;
+            } else {
+                this._numEdgesLayerPortions--;
+                this.model.numEdgesLayerPortions--;
+            }
+            this._setFlags(portionId, flags, transparent);
         }
-        this._setFlags(portionId, flags, transparent);
     }
 
     setClippable(portionId, flags) {
@@ -1232,85 +1236,16 @@ export class DTXTrianglesLayer extends Layer {
     }
 
     _setFlags(portionId, flags, transparent, deferred = false) {
-        const subPortionIds = this._portionToSubPortionsMap[portionId];
-        for (let i = 0, len = subPortionIds.length; i < len; i++) {
-            this._subPortionSetFlags(subPortionIds[i], flags, transparent, deferred);
-        }
-    }
-
-    _subPortionSetFlags(subPortionId, flags, transparent, deferred = false) {
         if (!this._finalized) {
             throw "Not finalized";
         }
 
-        const visible = !!(flags & ENTITY_FLAGS.VISIBLE);
-        const xrayed = !!(flags & ENTITY_FLAGS.XRAYED);
-        const highlighted = !!(flags & ENTITY_FLAGS.HIGHLIGHTED);
-        const selected = !!(flags & ENTITY_FLAGS.SELECTED);
-        const edges = !!(flags & ENTITY_FLAGS.EDGES);
-        const pickable = !!(flags & ENTITY_FLAGS.PICKABLE);
-        const culled = !!(flags & ENTITY_FLAGS.CULLED);
+        this._getColSilhEdgePickFlags(flags, transparent, tempUint8Array4);
 
-        // Color
-
-        let f0;
-        if (!visible || culled || xrayed
-            || (highlighted && !this.model.scene.highlightMaterial.glowThrough)
-            || (selected && !this.model.scene.selectedMaterial.glowThrough)) {
-            f0 = RENDER_PASSES.NOT_RENDERED;
-        } else {
-            if (transparent) {
-                f0 = RENDER_PASSES.COLOR_TRANSPARENT;
-            } else {
-                f0 = RENDER_PASSES.COLOR_OPAQUE;
-            }
+        const subPortionIds = this._portionToSubPortionsMap[portionId];
+        for (let i = 0, len = subPortionIds.length; i < len; i++) {
+            this._setPortionColorsAndFlags(subPortionIds[i], 2, tempUint8Array4, deferred);
         }
-
-        // Silhouette
-
-        let f1;
-        if (!visible || culled) {
-            f1 = RENDER_PASSES.NOT_RENDERED;
-        } else if (selected) {
-            f1 = RENDER_PASSES.SILHOUETTE_SELECTED;
-        } else if (highlighted) {
-            f1 = RENDER_PASSES.SILHOUETTE_HIGHLIGHTED;
-        } else if (xrayed) {
-            f1 = RENDER_PASSES.SILHOUETTE_XRAYED;
-        } else {
-            f1 = RENDER_PASSES.NOT_RENDERED;
-        }
-
-        // Edges
-
-        let f2 = 0;
-        if (!visible || culled) {
-            f2 = RENDER_PASSES.NOT_RENDERED;
-        } else if (selected) {
-            f2 = RENDER_PASSES.EDGES_SELECTED;
-        } else if (highlighted) {
-            f2 = RENDER_PASSES.EDGES_HIGHLIGHTED;
-        } else if (xrayed) {
-            f2 = RENDER_PASSES.EDGES_XRAYED;
-        } else if (edges) {
-            if (transparent) {
-                f2 = RENDER_PASSES.EDGES_COLOR_TRANSPARENT;
-            } else {
-                f2 = RENDER_PASSES.EDGES_COLOR_OPAQUE;
-            }
-        } else {
-            f2 = RENDER_PASSES.NOT_RENDERED;
-        }
-
-        // Pick
-
-        let f3 = (visible && (!culled) && pickable) ? RENDER_PASSES.PICK : RENDER_PASSES.NOT_RENDERED;
-        tempUint8Array4 [0] = f0;
-        tempUint8Array4 [1] = f1;
-        tempUint8Array4 [2] = f2;
-        tempUint8Array4 [3] = f3;
-
-        this._setPortionColorsAndFlags(subPortionId, 2, tempUint8Array4, deferred);
     }
 
     _setDeferredFlags() {
@@ -1341,24 +1276,21 @@ export class DTXTrianglesLayer extends Layer {
     }
 
     setMatrix(portionId, matrix) {
-        const subPortionIds = this._portionToSubPortionsMap[portionId];
-        for (let i = 0, len = subPortionIds.length; i < len; i++) {
-            this._subPortionSetMatrix(subPortionIds[i], matrix);
-        }
-    }
-
-    _subPortionSetMatrix(subPortionId, matrix) {
         if (!this._finalized) {
             throw "Not finalized";
         }
-        const defer = this._deferredSetFlagsActive;
-        if (defer) {
-            this._deferredSetFlagsDirty = true;
-        } else if (++this._numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
-            this._beginDeferredFlags(); // Subsequent flags updates now deferred
+
+        const subPortionIds = this._portionToSubPortionsMap[portionId];
+        for (let i = 0, len = subPortionIds.length; i < len; i++) {
+            const defer = this._deferredSetFlagsActive;
+            if (defer) {
+                this._deferredSetFlagsDirty = true;
+            } else if (++this._numUpdatesInFrame >= MAX_OBJECT_UPDATES_IN_FRAME_WITHOUT_BATCHED_UPDATE) {
+                this._beginDeferredFlags(); // Subsequent flags updates now deferred
+            }
+            tempMat4a.set(matrix);
+            this._state.textureState.texturePerObjectInstanceMatricesData.setData(tempMat4a, subPortionIds[i], 0, !defer);
         }
-        tempMat4a.set(matrix);
-        this._state.textureState.texturePerObjectInstanceMatricesData.setData(tempMat4a, subPortionId, 0, !defer);
     }
 
     //------------------------------------------------------------------------------------------------
