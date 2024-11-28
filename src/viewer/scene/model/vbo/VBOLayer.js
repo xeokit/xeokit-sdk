@@ -96,7 +96,8 @@ const getRenderers = (function() {
                     pickMeshRenderer:   lazy((c) => c(makePickMeshProgram(true))),
                     // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
                     // but never used (and probably not maintained), as opposed to VBOInstancingPointsShadowRenderer in the same commit
-                    shadowRenderer:     instancing && lazy((c) => c(ShadowProgram(scene.logarithmicDepthBufferEnabled))),
+                    // drawShadow has been nop in VBO point layers
+                    // shadowRenderer:     instancing && lazy((c) => c(ShadowProgram(scene.logarithmicDepthBufferEnabled))),
                     silhouetteRenderer: lazy((c) => c(SilhouetteProgram(scene, true))),
                     snapInitRenderer:   lazy((c) => c(makeSnapProgram(true,  true))),
                     snapVertexRenderer: lazy((c) => c(makeSnapProgram(false, true), { vertices: true }))
@@ -1164,17 +1165,12 @@ export class VBOLayer {
 
     // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
 
-    __drawPost(renderFlags, frameCtx, renderer) {
-        // Assume whatever post-effect uses depth or normals (eg SAO) does not apply to transparent objects
-        if ((this.primitive !== "points") && (this.primitive !== "lines")
-            &&
-            (this._numTransparentLayerPortions < this._portions.length) && (this._numXRayedLayerPortions < this._portions.length)) {
+    drawDepth(renderFlags, frameCtx) {
+        // Assume whatever post-effect uses depth (eg SAO) does not apply to transparent objects
+        const renderer = this._renderers.depthRenderer;
+        if (renderer && (this._numTransparentLayerPortions < this._portions.length) && (this._numXRayedLayerPortions < this._portions.length)) {
             this.__drawLayer(renderFlags, frameCtx, renderer, RENDER_PASSES.COLOR_OPAQUE);
         }
-    }
-
-    drawDepth(renderFlags, frameCtx) {
-        this.__drawPost(renderFlags, frameCtx, this._renderers.depthRenderer);
     }
 
     // ---------------------- SILHOUETTE RENDERING -----------------------------------
@@ -1260,10 +1256,10 @@ export class VBOLayer {
     }
 
     drawPickNormals(renderFlags, frameCtx) {
-        if (this._state.pickColorsBuf && (this.primitive !== "points") && (this.primitive !== "lines")) {
-            const renderer = (false // TODO: this._state.normalsBuf
-                              ? this._renderers.pickNormalsRenderer
-                              : this._renderers.pickNormalsFlatRenderer);
+        const renderer = (false // TODO: this._state.normalsBuf
+                          ? this._renderers.pickNormalsRenderer
+                          : this._renderers.pickNormalsFlatRenderer);
+        if (renderer && this._state.pickColorsBuf) {
             this.__drawLayer(renderFlags, frameCtx, renderer, RENDER_PASSES.PICK);
         }
     }
@@ -1281,14 +1277,16 @@ export class VBOLayer {
 
 
     drawOcclusion(renderFlags, frameCtx) {
-        if (this.primitive !== "lines") {
-            this.__drawLayer(renderFlags, frameCtx, this._renderers.occlusionRenderer, RENDER_PASSES.COLOR_OPAQUE);
+        const renderer = this._renderers.occlusionRenderer;
+        if (renderer) {
+            this.__drawLayer(renderFlags, frameCtx, renderer, RENDER_PASSES.COLOR_OPAQUE);
         }
     }
 
     drawShadow(renderFlags, frameCtx) {
-        if ((this.primitive !== "points") && (this.primitive !== "lines")) {
-            this.__drawLayer(renderFlags, frameCtx, this._renderers.shadowRenderer, RENDER_PASSES.COLOR_OPAQUE);
+        const renderer = this._renderers.shadowRenderer;
+        if (renderer) {
+            this.__drawLayer(renderFlags, frameCtx, renderer, RENDER_PASSES.COLOR_OPAQUE);
         }
     }
 
