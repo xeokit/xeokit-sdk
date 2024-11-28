@@ -1,5 +1,6 @@
 import {getPlaneRTCPos, math} from "../../math/index.js";
 import {LinearEncoding, sRGBEncoding} from "../../constants/constants.js";
+import {RENDER_PASSES} from "../RENDER_PASSES.js";
 import {WEBGL_INFO} from "../../webglInfo.js";
 
 const tempVec3 = math.vec3();
@@ -269,3 +270,199 @@ export const createSAOSetup = (gl, scene) => {
         }
     };
 };
+
+export class Layer {
+    __drawLayer(renderFlags, frameCtx, renderer, pass) {
+        if ((this._numCulledLayerPortions < this._portions.length) && (this._numVisibleLayerPortions > 0)) {
+            const backfacePasses = (this.primitive !== "points") && (this.primitive !== "lines") && [
+                RENDER_PASSES.COLOR_OPAQUE,
+                RENDER_PASSES.COLOR_TRANSPARENT,
+                RENDER_PASSES.PICK,
+                RENDER_PASSES.SILHOUETTE_HIGHLIGHTED,
+                RENDER_PASSES.SILHOUETTE_SELECTED,
+                RENDER_PASSES.SILHOUETTE_XRAYED,
+            ];
+            if (backfacePasses && backfacePasses.includes(pass)) {
+                // _updateBackfaceCull
+                const backfaces = true; // See XCD-230
+                if (frameCtx.backfaces !== backfaces) {
+                    const gl = frameCtx.gl;
+                    if (backfaces) {
+                        gl.disable(gl.CULL_FACE);
+                    } else {
+                        gl.enable(gl.CULL_FACE);
+                    }
+                    frameCtx.backfaces = backfaces;
+                }
+            }
+            renderer.drawLayer(frameCtx, this, pass);
+        }
+    }
+
+    __setVec4FromMaterialColorAlpha(color, alpha, dst) {
+        dst[0] = color[0];
+        dst[1] = color[1];
+        dst[2] = color[2];
+        dst[3] = alpha;
+        return dst;
+    }
+
+    // ---------------------- COLOR RENDERING -----------------------------------
+
+    __drawColor(renderFlags, frameCtx, renderOpaque) {
+        if ((renderOpaque ? (this._numTransparentLayerPortions < this._portions.length) : (this._numTransparentLayerPortions > 0))
+            &&
+            (this._numXRayedLayerPortions < this._portions.length)) {
+
+            const saoRenderer = (renderOpaque && frameCtx.withSAO && this.model.saoEnabled && this._renderers.colorRenderers["sao+"]) || this._renderers.colorRenderers["sao-"];
+            const renderer = ((saoRenderer["PBR"] && frameCtx.pbrEnabled && this.model.pbrEnabled && this._state.pbrSupported)
+                              ? saoRenderer["PBR"]
+                              : ((saoRenderer["texture"] && frameCtx.colorTextureEnabled && this.model.colorTextureEnabled && this._state.colorTextureSupported)
+                                 ? saoRenderer["texture"][(this._state.textureSet && (typeof(this._state.textureSet.alphaCutoff) === "number")) ? "alphaCutoff+" : "alphaCutoff-"]
+                                 : saoRenderer["vertex"][((this.primitive === "points") || (this.primitive === "lines") || this._surfaceHasNormals) ? "flat-" : "flat+"]));
+            const pass = renderOpaque ? RENDER_PASSES.COLOR_OPAQUE : RENDER_PASSES.COLOR_TRANSPARENT;
+            this.__drawLayer(renderFlags, frameCtx, renderer, pass);
+        }
+    }
+
+    drawColorOpaque(renderFlags, frameCtx) {
+        this.__drawColor(renderFlags, frameCtx, true);
+    }
+
+    drawColorTransparent(renderFlags, frameCtx) {
+        this.__drawColor(renderFlags, frameCtx, false);
+    }
+
+    // ---------------------- RENDERING SAO POST EFFECT TARGETS --------------
+
+    drawDepth(renderFlags, frameCtx) {
+        // Assume whatever post-effect uses depth (eg SAO) does not apply to transparent objects
+        const renderer = this._renderers.depthRenderer;
+        if (renderer && (this._numTransparentLayerPortions < this._portions.length) && (this._numXRayedLayerPortions < this._portions.length)) {
+            this.__drawLayer(renderFlags, frameCtx, renderer, RENDER_PASSES.COLOR_OPAQUE);
+        }
+    }
+
+    // ---------------------- SILHOUETTE RENDERING -----------------------------------
+
+    __drawSilhouette(renderFlags, frameCtx, renderPass) {
+        this.__drawLayer(renderFlags, frameCtx, this._renderers.silhouetteRenderer, renderPass);
+    }
+
+    drawSilhouetteXRayed(renderFlags, frameCtx) {
+        if (this._numXRayedLayerPortions > 0) {
+            const mat = this.model.scene.xrayMaterial;
+            frameCtx.programColor = this.__setVec4FromMaterialColorAlpha(mat.fillColor, mat.fillAlpha, tempVec4);
+            this.__drawSilhouette(renderFlags, frameCtx, RENDER_PASSES.SILHOUETTE_XRAYED);
+        }
+    }
+
+    drawSilhouetteHighlighted(renderFlags, frameCtx) {
+        if (this._numHighlightedLayerPortions > 0) {
+            const mat = this.model.scene.highlightMaterial;
+            frameCtx.programColor = this.__setVec4FromMaterialColorAlpha(mat.fillColor, mat.fillAlpha, tempVec4);
+            this.__drawSilhouette(renderFlags, frameCtx, RENDER_PASSES.SILHOUETTE_HIGHLIGHTED);
+        }
+    }
+
+    drawSilhouetteSelected(renderFlags, frameCtx) {
+        if (this._numSelectedLayerPortions > 0) {
+            const mat = this.model.scene.selectedMaterial;
+            frameCtx.programColor = this.__setVec4FromMaterialColorAlpha(mat.fillColor, mat.fillAlpha, tempVec4);
+            this.__drawSilhouette(renderFlags, frameCtx, RENDER_PASSES.SILHOUETTE_SELECTED);
+        }
+    }
+
+    // ---------------------- EDGES RENDERING -----------------------------------
+
+    __drawVertexEdges(renderFlags, frameCtx, renderPass) {
+        const renderer = this._renderers.edgesRenderers && this._renderers.edgesRenderers.vertex;
+        if (renderer && (this._numEdgesLayerPortions > 0)) {
+            this.__drawLayer(renderFlags, frameCtx, renderer, renderPass);
+        }
+    }
+
+    drawEdgesColorOpaque(renderFlags, frameCtx) {
+        if (this._edgesColorOpaqueAllowed()) {
+            this.__drawVertexEdges(renderFlags, frameCtx, RENDER_PASSES.EDGES_COLOR_OPAQUE);
+        }
+    }
+
+    drawEdgesColorTransparent(renderFlags, frameCtx) {
+        if (this._numTransparentLayerPortions > 0) {
+            this.__drawVertexEdges(renderFlags, frameCtx, RENDER_PASSES.EDGES_COLOR_TRANSPARENT);
+        }
+    }
+
+    __drawUniformEdges(renderFlags, frameCtx, material, renderPass) {
+        const renderer = this._renderers.edgesRenderers && this._renderers.edgesRenderers.uniform;
+        if (renderer) {
+            frameCtx.programColor = this.__setVec4FromMaterialColorAlpha(material.edgeColor, material.edgeAlpha, tempVec4);
+            this.__drawLayer(renderFlags, frameCtx, renderer, renderPass);
+        }
+    }
+
+    drawEdgesHighlighted(renderFlags, frameCtx) {
+        if (this._numHighlightedLayerPortions > 0) {
+            this.__drawUniformEdges(renderFlags, frameCtx, this.model.scene.highlightMaterial, RENDER_PASSES.EDGES_HIGHLIGHTED);
+        }
+    }
+
+    drawEdgesSelected(renderFlags, frameCtx) {
+        if (this._numSelectedLayerPortions > 0) {
+            this.__drawUniformEdges(renderFlags, frameCtx, this.model.scene.selectedMaterial, RENDER_PASSES.EDGES_SELECTED);
+        }
+    }
+
+    drawEdgesXRayed(renderFlags, frameCtx) {
+        if (this._numXRayedLayerPortions > 0) {
+            this.__drawUniformEdges(renderFlags, frameCtx, this.model.scene.xrayMaterial, RENDER_PASSES.EDGES_XRAYED);
+        }
+    }
+
+    //---- PICKING ----------------------------------------------------------------------------------------------------
+
+    __drawPick(renderFlags, frameCtx, renderer) {
+        if (renderer) {
+            this.__drawLayer(renderFlags, frameCtx, renderer, RENDER_PASSES.PICK);
+        }
+    }
+
+    drawPickMesh(renderFlags, frameCtx) {
+        this.__drawPick(renderFlags, frameCtx, this._renderers.pickMeshRenderer);
+    }
+
+    drawPickDepths(renderFlags, frameCtx) {
+        this.__drawPick(renderFlags, frameCtx, this._renderers.pickDepthRenderer);
+    }
+
+    drawPickNormals(renderFlags, frameCtx) {
+        const renderer = (false // TODO for VBO: this._state.normalsBuf
+                          ? this._renderers.pickNormalsRenderer
+                          : this._renderers.pickNormalsFlatRenderer);
+        this.__drawPick(renderFlags, frameCtx, renderer);
+    }
+
+    drawSnapInit(renderFlags, frameCtx) {
+        this.__drawPick(renderFlags, frameCtx, this._renderers.snapInitRenderer);
+    }
+
+    drawSnap(renderFlags, frameCtx) {
+        this.__drawPick(renderFlags, frameCtx, (frameCtx.snapMode === "edge") ? this._renderers.snapEdgeRenderer : this._renderers.snapVertexRenderer);
+    }
+
+
+    drawOcclusion(renderFlags, frameCtx) {
+        const renderer = this._renderers.occlusionRenderer;
+        if (renderer) {
+            this.__drawLayer(renderFlags, frameCtx, renderer, RENDER_PASSES.COLOR_OPAQUE);
+        }
+    }
+
+    drawShadow(renderFlags, frameCtx) {
+        const renderer = this._renderers.shadowRenderer;
+        if (renderer) {
+            this.__drawLayer(renderFlags, frameCtx, renderer, RENDER_PASSES.COLOR_OPAQUE);
+        }
+    }
+}
