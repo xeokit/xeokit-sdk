@@ -586,6 +586,65 @@ export class Layer {
         }
     }
 
+    setClippable(portionId, flags) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        if (flags & ENTITY_FLAGS.CLIPPABLE) {
+            this._numClippableLayerPortions++;
+            this.model.numClippableLayerPortions++;
+        } else {
+            this._numClippableLayerPortions--;
+            this.model.numClippableLayerPortions--;
+        }
+        this._setClippableFlags(portionId, flags);
+    }
+
+    setCulled(portionId, flags, transparent) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        if (flags & ENTITY_FLAGS.CULLED) {
+            this._numCulledLayerPortions++;
+            this.model.numCulledLayerPortions++;
+        } else {
+            this._numCulledLayerPortions--;
+            this.model.numCulledLayerPortions--;
+        }
+        this._setFlags(portionId, flags, transparent);
+    }
+
+    setCollidable(portionId, flags) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+    }
+
+    setPickable(portionId, flags, transparent) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        if (flags & ENTITY_FLAGS.PICKABLE) {
+            this._numPickableLayerPortions++;
+            this.model.numPickableLayerPortions++;
+        } else {
+            this._numPickableLayerPortions--;
+            this.model.numPickableLayerPortions--;
+        }
+        this._setFlags(portionId, flags, transparent);
+    }
+
+    setTransparent(portionId, flags, transparent) {
+        if (transparent) {
+            this._numTransparentLayerPortions++;
+            this.model.numTransparentLayerPortions++;
+        } else {
+            this._numTransparentLayerPortions--;
+            this.model.numTransparentLayerPortions--;
+        }
+        this._setFlags(portionId, flags, transparent);
+    }
+
     _getColSilhEdgePickFlags(flags, transparent, dst) {
 
         const visible = !!(flags & ENTITY_FLAGS.VISIBLE);
