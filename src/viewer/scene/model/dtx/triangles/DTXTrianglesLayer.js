@@ -621,7 +621,6 @@ export class DTXTrianglesLayer {
 
     flushInitFlags() {
         this._setDeferredFlags();
-        this._setDeferredFlags2();
     }
 
     setVisible(portionId, flags, transparent) {
@@ -1004,9 +1003,6 @@ export class DTXTrianglesLayer {
             tempUint8Array4
         );
         // gl.bindTexture (gl.TEXTURE_2D, null);
-    }
-
-    _setDeferredFlags2() {
     }
 
     setOffset(portionId, offset) {
