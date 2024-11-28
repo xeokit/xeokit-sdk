@@ -573,10 +573,6 @@ export class DTXTrianglesLayer {
         });
     }
 
-    isEmpty() {
-        return this._numPortions === 0;
-    }
-
     initFlags(portionId, flags, meshTransparent) {
         if (flags & ENTITY_FLAGS.VISIBLE) {
             this._numVisibleLayerPortions++;
