@@ -468,6 +468,124 @@ export class Layer {
     }
 
 
+    initFlags(portionId, flags, transparent) {
+        if (flags & ENTITY_FLAGS.VISIBLE) {
+            this._numVisibleLayerPortions++;
+            this.model.numVisibleLayerPortions++;
+        }
+        if (flags & ENTITY_FLAGS.HIGHLIGHTED) {
+            this._numHighlightedLayerPortions++;
+            this.model.numHighlightedLayerPortions++;
+        }
+        if (flags & ENTITY_FLAGS.XRAYED) {
+            this._numXRayedLayerPortions++;
+            this.model.numXRayedLayerPortions++;
+        }
+        if (flags & ENTITY_FLAGS.SELECTED) {
+            this._numSelectedLayerPortions++;
+            this.model.numSelectedLayerPortions++;
+        }
+        if (flags & ENTITY_FLAGS.CLIPPABLE) {
+            this._numClippableLayerPortions++;
+            this.model.numClippableLayerPortions++;
+        }
+        if (this._hasEdges && flags & ENTITY_FLAGS.EDGES) {
+            this._numEdgesLayerPortions++;
+            this.model.numEdgesLayerPortions++;
+        }
+        if (flags & ENTITY_FLAGS.PICKABLE) {
+            this._numPickableLayerPortions++;
+            this.model.numPickableLayerPortions++;
+        }
+        if (flags & ENTITY_FLAGS.CULLED) {
+            this._numCulledLayerPortions++;
+            this.model.numCulledLayerPortions++;
+        }
+        if (transparent) {
+            this._numTransparentLayerPortions++;
+            this.model.numTransparentLayerPortions++;
+        }
+        const deferred = (this.primitive !== "points") && (! this._instancing);
+        this._setFlags(portionId, flags, transparent, deferred);
+        this._setFlags2(portionId, flags, deferred);
+    }
+
+    flushInitFlags() {
+        this._setDeferredFlags();
+    }
+
+    setVisible(portionId, flags, transparent) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        if (flags & ENTITY_FLAGS.VISIBLE) {
+            this._numVisibleLayerPortions++;
+            this.model.numVisibleLayerPortions++;
+        } else {
+            this._numVisibleLayerPortions--;
+            this.model.numVisibleLayerPortions--;
+        }
+        this._setFlags(portionId, flags, transparent);
+    }
+
+    setHighlighted(portionId, flags, transparent) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        if (flags & ENTITY_FLAGS.HIGHLIGHTED) {
+            this._numHighlightedLayerPortions++;
+            this.model.numHighlightedLayerPortions++;
+        } else {
+            this._numHighlightedLayerPortions--;
+            this.model.numHighlightedLayerPortions--;
+        }
+        this._setFlags(portionId, flags, transparent);
+    }
+
+    setXRayed(portionId, flags, transparent) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        if (flags & ENTITY_FLAGS.XRAYED) {
+            this._numXRayedLayerPortions++;
+            this.model.numXRayedLayerPortions++;
+        } else {
+            this._numXRayedLayerPortions--;
+            this.model.numXRayedLayerPortions--;
+        }
+        this._setFlags(portionId, flags, transparent);
+    }
+
+    setSelected(portionId, flags, transparent) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        if (flags & ENTITY_FLAGS.SELECTED) {
+            this._numSelectedLayerPortions++;
+            this.model.numSelectedLayerPortions++;
+        } else {
+            this._numSelectedLayerPortions--;
+            this.model.numSelectedLayerPortions--;
+        }
+        this._setFlags(portionId, flags, transparent);
+    }
+
+    setEdges(portionId, flags, transparent) {
+        if (!this._finalized) {
+            throw "Not finalized";
+        }
+        if (this._hasEdges) {
+            if (flags & ENTITY_FLAGS.EDGES) {
+                this._numEdgesLayerPortions++;
+                this.model.numEdgesLayerPortions++;
+            } else {
+                this._numEdgesLayerPortions--;
+                this.model.numEdgesLayerPortions--;
+            }
+            this._setFlags(portionId, flags, transparent);
+        }
+    }
+
     _getColSilhEdgePickFlags(flags, transparent, dst) {
 
         const visible = !!(flags & ENTITY_FLAGS.VISIBLE);
