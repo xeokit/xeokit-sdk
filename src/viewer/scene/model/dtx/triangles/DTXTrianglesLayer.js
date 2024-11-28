@@ -270,7 +270,6 @@ export class DTXTrianglesLayer {
             numVertices: 0,
         });
 
-        this._numPortions = 0;        // These counts are used to avoid unnecessary render passes
         this._numVisibleLayerPortions = 0;
         this._numTransparentLayerPortions = 0;
         this._numXRayedLayerPortions = 0;
@@ -281,7 +280,7 @@ export class DTXTrianglesLayer {
         this._numPickableLayerPortions = 0;
         this._numCulledLayerPortions = 0;
 
-        this._subPortions = [];
+        this._portions = []; // These counts are used to avoid unnecessary render passes
 
         if (this.model.scene.readableGeometryEnabled) {
             this._subPortionReadableGeometries = {};
@@ -346,10 +345,10 @@ export class DTXTrianglesLayer {
             throw "Already finalized";
         }
         const numNewPortions = portionCfg.buckets.length;
-        if ((this._numPortions + numNewPortions) > MAX_NUMBER_OF_OBJECTS_IN_LAYER) {
+        if ((this._portions.length + numNewPortions) > MAX_NUMBER_OF_OBJECTS_IN_LAYER) {
             dataTextureRamStats.cannotCreatePortion.because10BitsObjectId++;
         }
-        let retVal = (this._numPortions + numNewPortions) <= MAX_NUMBER_OF_OBJECTS_IN_LAYER;
+        let retVal = (this._portions.length + numNewPortions) <= MAX_NUMBER_OF_OBJECTS_IN_LAYER;
         const bucketIndex = 0; // TODO: Is this a bug?
         const bucketGeometryId = portionCfg.geometryId !== undefined && portionCfg.geometryId !== null
             ? `${portionCfg.geometryId}#${bucketIndex}`
@@ -573,7 +572,7 @@ export class DTXTrianglesLayer {
             buffer.perObjectEdgeIndexBaseOffsets.push(currentNumEdgeIndices / 2 - bucketGeometry.edgeIndicesBase);
         }
 
-        const subPortionId = this._subPortions.length;
+        const subPortionId = this._portions.length;
         if (bucketGeometry.numTriangles > 0) {
             let numIndices = bucketGeometry.numTriangles * 3;
             let indicesPortionIdBuffer;
@@ -620,7 +619,7 @@ export class DTXTrianglesLayer {
 
         //   buffer.perObjectOffsets.push([0, 0, 0]);
 
-        this._subPortions.push({
+        this._portions.push({
             // vertsBase: vertsIndex,
             numVertices: bucketGeometry.numTriangles
         });
@@ -633,8 +632,6 @@ export class DTXTrianglesLayer {
                 meshMatrix: portionCfg.meshMatrix
             };
         }
-
-        this._numPortions++;
 
         dataTextureRamStats.numberOfPortions++;
 
@@ -1401,7 +1398,7 @@ export class DTXTrianglesLayer {
     }
 
     __drawLayer(renderFlags, frameCtx, renderer, pass) {
-        if ((this._numCulledLayerPortions < this._numPortions) && (this._numVisibleLayerPortions > 0)) {
+        if ((this._numCulledLayerPortions < this._portions.length) && (this._numVisibleLayerPortions > 0)) {
             const backfacePasses = [
                 RENDER_PASSES.COLOR_OPAQUE,
                 RENDER_PASSES.COLOR_TRANSPARENT,
@@ -1430,9 +1427,9 @@ export class DTXTrianglesLayer {
     // ---------------------- COLOR RENDERING -----------------------------------
 
     __drawColor(renderFlags, frameCtx, renderOpaque) {
-        if ((renderOpaque ? (this._numTransparentLayerPortions < this._numPortions) : (this._numTransparentLayerPortions > 0))
+        if ((renderOpaque ? (this._numTransparentLayerPortions < this._portions.length) : (this._numTransparentLayerPortions > 0))
             &&
-            (this._numXRayedLayerPortions < this._numPortions)) {
+            (this._numXRayedLayerPortions < this._portions.length)) {
             const renderer = ((renderOpaque && frameCtx.withSAO && this.model.saoEnabled)
                               ? this._renderers.colorRendererWithSAO
                               : this._renderers.colorRenderer);
@@ -1453,7 +1450,7 @@ export class DTXTrianglesLayer {
 
     drawDepth(renderFlags, frameCtx) {
         // Assume whatever post-effect uses depth (eg SAO) does not apply to transparent objects
-        if ((this._numTransparentLayerPortions < this._numPortions) && (this._numXRayedLayerPortions < this._numPortions)) {
+        if ((this._numTransparentLayerPortions < this._portions.length) && (this._numXRayedLayerPortions < this._portions.length)) {
             this.__drawLayer(renderFlags, frameCtx, this._renderers.depthRenderer, RENDER_PASSES.COLOR_OPAQUE);
         }
     }
