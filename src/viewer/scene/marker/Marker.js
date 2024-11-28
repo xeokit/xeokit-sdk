@@ -191,25 +191,10 @@ class Marker extends Component {
      * @type {Entity}
      */
     set entity(entity) {
-        if (this._entity) {
-            if (this._entity === entity) {
-                return;
-            }
-            if (this._onEntityDestroyed !== null) {
-                if (this._entity.model) {
-                    this._entity.model.off(this._onEntityDestroyed);
-                } else {
-                    this._entity.off(this._onEntityDestroyed);
-                }
-                this._onEntityDestroyed = null;
-            }
-            if (this._onEntityModelDestroyed !== null) {
-                if (this._entity.model) {
-                    this._entity.model.off(this._onEntityModelDestroyed);
-                }
-                this._onEntityModelDestroyed = null;
-            }
+        if (this._entity === entity) {
+            return;
         }
+        this._cleanupDestroyedHandlers();
         this._entity = entity;
         if (this._entity) {
             if (this._entity.isSceneModelEntity) {
@@ -374,16 +359,28 @@ class Marker extends Component {
         this.fire("destroyed", true);
         this.scene.camera.off(this._onCameraViewMatrix);
         this.scene.camera.off(this._onCameraProjMatrix);
-        if (this._entity) {
-            if (this._onEntityDestroyed !== null) {
-                this._entity.model.off(this._onEntityDestroyed);
-            }
-            if (this._onEntityModelDestroyed !== null) {
-                this._entity.model.off(this._onEntityModelDestroyed);
-            }
-        }
+        this._cleanupDestroyedHandlers();
         this._renderer.removeMarker(this);
         super.destroy();
+    }
+
+    _cleanupDestroyedHandlers() {
+        if (this._entity) {
+            if (this._onEntityDestroyed !== null) {
+                if (this._entity.model) {
+                    this._entity.model.off(this._onEntityDestroyed);
+                } else {
+                    this._entity.off(this._onEntityDestroyed);
+                }
+                this._onEntityDestroyed = null;
+            }
+            if (this._onEntityModelDestroyed !== null) {
+                if (this._entity.model) {
+                    this._entity.model.off(this._onEntityModelDestroyed);
+                }
+                this._onEntityModelDestroyed = null;
+            }
+        }
     }
 }
 
