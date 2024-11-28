@@ -893,7 +893,7 @@ export class VBOInstancingTrianglesLayer {
     }
 
     drawEdgesColorTransparent(renderFlags, frameCtx) {
-        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0) {
+        if (this._numCulledLayerPortions === this._numPortions || this._numVisibleLayerPortions === 0 || this._numEdgesLayerPortions === 0 || this._numTransparentLayerPortions === 0) {
             return;
         }
         if (this._renderers.edgesColorRenderer) {
