@@ -76,9 +76,13 @@ export class DTXTrianglesDrawable {
                     if (isTriangle) {
                         src.push("uniform vec3 uCameraEyeRtc;");
                     }
+
+                    if (filterIntensityRange) {
+                        src.push("uniform vec2 intensityRange;");
+                    }
                 },
 
-                appendVertexData: (src) => {
+                appendVertexData: (src, afterFlagsColorLines) => {
                     // constants
                     src.push("int primitiveIndex = gl_VertexID / " + (isTriangle ? 3 : 2) + ";");
 
@@ -93,23 +97,11 @@ export class DTXTrianglesDrawable {
                     src.push("uvec4 flags = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);");
                     src.push("uvec4 flags2 = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);");
 
-                    src.push("if (int(flags[" + renderPassFlag + "]) != renderPass) {");
-                    src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
-                    src.push("   return;"); // Cull vertex
-                    src.push("}");
-
-                    if (colorA.needed || isShadowProgram || cullOnAlphaZero) {
-                        src.push("uvec4 color = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0);");
-                    }
-                    if (cullOnAlphaZero) {
-                        src.push(`if (color.a == 0u) {`);
-                        src.push("   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);"); // Cull vertex
-                        src.push("   return;");
-                        src.push("}");
-                    }
                     if (colorA.needed) {
-                        src.push("vec4 aColor = vec4(color);");
+                        src.push(`vec4 ${colorA} = vec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0));`);
                     }
+
+                    afterFlagsColorLines.forEach(line => src.push(line));
 
                     src.push("mat4 objectInstanceMatrix = mat4 (texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uTexturePerObjectMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));");
                     src.push("mat4 objectDecodeAndInstanceMatrix = objectInstanceMatrix * mat4 (texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+0, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+1, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+2, objectIndexCoords.y), 0), texelFetch (uObjectPerObjectPositionsDecodeMatrix, ivec2(objectIndexCoords.x*4+3, objectIndexCoords.y), 0));");
@@ -263,6 +255,36 @@ export class DTXTrianglesDrawable {
         const vertexOutputs = [ ];
         appendVertexOutputs && appendVertexOutputs(vertexOutputs, colorA, pickColorA, uvA, metallicRoughnessA, "gl_Position", viewParams, worldNormal, worldPosition);
 
+        const flag = `int(flags[${renderPassFlag}])`;
+        const flagTest = (isShadowProgram
+                          ? `(${flag} <= 0) || ((float(${colorA}.a) / 255.0) < 1.0)`
+                          : `${flag} != renderPass`);
+
+        const afterFlagsColorLines = [
+            `if (${flagTest}) {`,
+            "   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);", // Cull vertex
+            "   return;",
+            "}"
+        ].concat(
+            cullOnAlphaZero
+                ? [
+                    `if (${colorA}.a == 0.0) {`,
+                    "   gl_Position = vec4(3.0, 3.0, 3.0, 1.0);", // Cull vertex
+                    "   return;",
+                    "}"
+                ]
+                : [ ]
+        ).concat(
+            filterIntensityRange
+                ? [
+                    `float intensity = ${colorA}.a / 255.0;`,
+                    "if ((intensity < intensityRange[0]) || (intensity > intensityRange[1])) {",
+                    "   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);", // Cull vertex
+                    "   return;",
+                    "}"
+                ]
+                : [ ]);
+
         const buildVertexShader = () => {
             const src = [];
 
@@ -301,7 +323,7 @@ export class DTXTrianglesDrawable {
 
             src.push("void main(void) {");
 
-            geometry.appendVertexData(src);
+            geometry.appendVertexData(src, afterFlagsColorLines);
 
             src.push("vec4 viewPosition = viewMatrix * worldPosition;");
 
