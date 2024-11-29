@@ -3371,37 +3371,10 @@ export class SceneModel extends Component {
     drawPickMesh             (frameCtx) { this._withEachVisibleLayer(true,  layer => layer.drawPickMesh             (this.renderFlags, frameCtx)); }
     drawPickDepths           (frameCtx) { this._withEachVisibleLayer(true,  layer => layer.drawPickDepths           (this.renderFlags, frameCtx)); }
     drawPickNormals          (frameCtx) { this._withEachVisibleLayer(true,  layer => layer.drawPickNormals          (this.renderFlags, frameCtx)); }
+    _drawSnap    (frameCtx, isSnapInit) { this._withEachVisibleLayer(true,  layer => layer.drawSnap                 (this.renderFlags, frameCtx, isSnapInit)); }
 
-    _drawSnapEachVisibleLayer(frameCtx, isSnapInit) {
-        this._withEachVisibleLayer(
-            true,
-            layer => {
-                frameCtx.snapPickOrigin = [0, 0, 0];
-                const aabb = layer.aabb; // Per-layer AABB for best RTC accuracy
-                frameCtx.snapPickCoordinateScale = [
-                    math.safeInv(aabb[3] - aabb[0]) * math.MAX_INT,
-                    math.safeInv(aabb[4] - aabb[1]) * math.MAX_INT,
-                    math.safeInv(aabb[5] - aabb[2]) * math.MAX_INT
-                ];
-                frameCtx.snapPickLayerNumber++;
-                if (isSnapInit) {
-                    layer.drawSnapInit(this.renderFlags, frameCtx);
-                } else {
-                    layer.drawSnap(this.renderFlags, frameCtx);
-                }
-                frameCtx.snapPickLayerParams[frameCtx.snapPickLayerNumber] = {
-                    origin: frameCtx.snapPickOrigin.slice(),
-                    coordinateScale: [
-                        math.safeInv(frameCtx.snapPickCoordinateScale[0]),
-                        math.safeInv(frameCtx.snapPickCoordinateScale[1]),
-                        math.safeInv(frameCtx.snapPickCoordinateScale[2])
-                    ]
-                };
-            });
-    }
-
-    drawSnapInit(frameCtx) { this._drawSnapEachVisibleLayer(frameCtx, true ); }
-    drawSnap(frameCtx)     { this._drawSnapEachVisibleLayer(frameCtx, false); }
+    drawSnapInit(frameCtx) { this._drawSnap(frameCtx, true ); }
+    drawSnap    (frameCtx) { this._drawSnap(frameCtx, false); }
 
     /**
      * Destroys this SceneModel.
