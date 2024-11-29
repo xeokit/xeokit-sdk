@@ -7,8 +7,9 @@ import {ArrayBuf} from "../../webgl/ArrayBuf.js";
 import {quantizePositions, transformAndOctEncodeNormals} from "../compression.js";
 import {geometryCompressionUtils} from "../../math/geometryCompressionUtils.js";
 
-import {VBORenderer} from "./VBORenderer.js";
+import {makeVBORenderingAttributes} from "./VBORenderer.js";
 import {createLightSetup, createSAOSetup, createPickClipTransformSetup, Layer} from "../layer/Layer.js";
+import {LayerRenderer} from "../layer/LayerRenderer.js";
 
 import { ColorProgram        } from "../layer/programs/ColorProgram.js";
 import { ColorTextureProgram } from "../layer/programs/ColorTextureProgram.js";
@@ -40,7 +41,14 @@ const getRenderers = (function() {
         const sceneId = scene.id;
         if (! (sceneId in cache)) {
 
-            const createRenderer = (programSetup, subGeometry) => new VBORenderer(scene, instancing, primitive, programSetup, subGeometry);
+            const createRenderer = (programSetup, subGeometry) => {
+                return new LayerRenderer(
+                    scene,
+                    primitive,
+                    programSetup,
+                    subGeometry,
+                    makeVBORenderingAttributes(scene, instancing, primitive, subGeometry));
+            };
 
             // Pre-initialize certain renderers that would otherwise be lazy-initialised on user interaction,
             // such as picking or emphasis, so that there is no delay when user first begins interacting with the viewer.
