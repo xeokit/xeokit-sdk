@@ -10,7 +10,7 @@ export const FlatColorProgram = function(logarithmicDepthBufferEnabled, lightSet
         },
         appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
             src.push(`vViewPosition = ${view.viewPosition};`);
-            src.push(`vColor = ${color} / 255.0;`);
+            src.push(`vColor = ${color};`);
         },
         appendFragmentDefinitions: (src) => {
             lightSetup.appendDefinitions(src);
