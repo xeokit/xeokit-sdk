@@ -278,8 +278,10 @@ export class Layer {
         this._meshes = [];
         // The axis-aligned World-space boundary of this Layer's positions.
         this._aabb = math.collapseAABB3();
-        this.aabbDirty = true;
+        this._aabbDirty = true;
     }
+
+    aabbChanged() { this._aabbDirty = true; }
 
     __drawLayer(renderFlags, frameCtx, renderer, pass) {
         if ((this._numCulledLayerPortions < this._portions.length) && (this._numVisibleLayerPortions > 0)) {
@@ -455,10 +457,10 @@ export class Layer {
     drawSnap(renderFlags, frameCtx, isSnapInit) {
         frameCtx.snapPickOrigin = [0, 0, 0];
 
-        if (this.aabbDirty) { // Per-layer AABB for best RTC accuracy
+        if (this._aabbDirty) { // Per-layer AABB for best RTC accuracy
             math.collapseAABB3(this._aabb);
             this._meshes.forEach(m => math.expandAABB3(this._aabb, m.aabb));
-            this.aabbDirty = false;
+            this._aabbDirty = false;
         }
 
         const aabb = this._aabb;
