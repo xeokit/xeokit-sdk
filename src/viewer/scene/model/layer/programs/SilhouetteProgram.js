@@ -8,7 +8,7 @@ export const SilhouetteProgram = function(scene, isPointsOrLines) {
             src.push("out float vAlpha;");
         }),
         appendVertexOutputs: (! isPointsOrLines) && ((src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
-            src.push(`vAlpha = ${color}.a / 255.0;`);
+            src.push(`vAlpha = ${color}.a;`);
         }),
         appendFragmentDefinitions: (src) => {
             if (! isPointsOrLines) {

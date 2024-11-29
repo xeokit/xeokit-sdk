@@ -16,7 +16,7 @@ export const ColorTextureProgram = function(scene, lightSetup, sao, useAlphaCuto
         appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
             src.push(`vViewPosition = ${view.viewPosition};`);
             src.push(`vUV = ${uv};`);
-            src.push(`vColor = vec4(${color}) / 255.0;`);
+            src.push(`vColor = ${color};`);
         },
         appendFragmentDefinitions: (src) => {
             src.push("uniform sampler2D uColorMap;");

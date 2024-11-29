@@ -11,7 +11,7 @@ export const EdgesProgram = function(scene, colorUniform) {
         },
         appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
             if (! colorUniform) {
-                src.push(`vColor = vec4(${color}.rgb * 0.5, ${color}.a) / 255.0;`);
+                src.push(`vColor = vec4(${color}.rgb * 0.5, ${color}.a);`);
             }
         },
         appendFragmentDefinitions: (src) => {
