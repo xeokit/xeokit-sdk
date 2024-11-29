@@ -16,6 +16,7 @@ export class DTXTrianglesDrawable {
     constructor(scene, primitive, cfg, subGeometry) {
 
         const methodName = "DTX";
+        const sliceColorEnabled = false;
 
         const pointsMaterial = scene.pointsMaterial;
 
@@ -58,8 +59,24 @@ export class DTXTrianglesDrawable {
         };
 
         const geometry = (function() {
+            const params = {
+                colorA:             lazyShaderVariable("colorA"),
+                pickColorA:         lazyShaderVariable("pickColor"),
+                uvA:                null,
+                metallicRoughnessA: null,
+                viewMatrix:         "viewMatrix",
+                viewNormal:         lazyShaderVariable("viewNormal"),
+                worldNormal:        null,
+                worldPosition:      "worldPosition",
+                getFlag:            renderPassFlag => `int(flags[${renderPassFlag}])`,
+                fragViewMatrix:     null
+            };
+
             const isTriangle = ! subGeometry;
+
             return {
+                parameters: params,
+
                 getClippable: () => "float(flags2.r)",
 
                 appendVertexDefinitions: (src) => {
@@ -75,10 +92,6 @@ export class DTXTrianglesDrawable {
                     src.push("uniform mediump usampler2D uTexturePerPrimitiveIdPortionIds;");
                     if (isTriangle) {
                         src.push("uniform vec3 uCameraEyeRtc;");
-                    }
-
-                    if (filterIntensityRange) {
-                        src.push("uniform vec2 intensityRange;");
                     }
                 },
 
@@ -97,8 +110,8 @@ export class DTXTrianglesDrawable {
                     src.push("uvec4 flags = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+2, objectIndexCoords.y), 0);");
                     src.push("uvec4 flags2 = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);");
 
-                    if (colorA.needed) {
-                        src.push(`vec4 ${colorA} = vec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0)) / 255.0;`);
+                    if (params.colorA.needed) {
+                        src.push(`vec4 ${params.colorA} = vec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0)) / 255.0;`);
                     }
 
                     afterFlagsColorLines.forEach(line => src.push(line));
@@ -126,7 +139,7 @@ export class DTXTrianglesDrawable {
                         src.push("  vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH.b, indexPositionV.b), 0)));");
                         src.push("vec3 normal = normalize(cross(positions[2] - positions[0], positions[1] - positions[0]));");
                         src.push("vec3 position = positions[gl_VertexID % 3];");
-                        if (viewParams.viewNormal.needed) {
+                        if (params.viewNormal.needed) {
                             src.push("vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);");
                         }
                         // when the geometry is not solid, if needed, flip the triangle winding
@@ -135,17 +148,17 @@ export class DTXTrianglesDrawable {
                         src.push("      vec3 uCameraEyeRtcInQuantizedSpace = (inverse(sceneModelMatrix * objectDecodeAndInstanceMatrix) * vec4(uCameraEyeRtc, 1)).xyz;");
                         src.push("      if (dot(position.xyz - uCameraEyeRtcInQuantizedSpace, normal) < 0.0) {");
                         src.push("          position = positions[2 - (gl_VertexID % 3)];");
-                        if (viewParams.viewNormal.needed) {
+                        if (params.viewNormal.needed) {
                             src.push("          viewNormal = -viewNormal;");
                         }
                         src.push("      }");
                         src.push("  } else {");
-                        if (!viewParams.viewNormal.needed) {
+                        if (!params.viewNormal.needed) {
                             src.push("      vec3 viewNormal = -normalize((transpose(inverse(viewMatrix*objectDecodeAndInstanceMatrix)) * vec4(normal,1)).xyz);");
                         }
                         src.push("      if (viewNormal.z < 0.0) {");
                         src.push("          position = positions[2 - (gl_VertexID % 3)];");
-                        if (viewParams.viewNormal.needed) {
+                        if (params.viewNormal.needed) {
                             src.push("          viewNormal = -viewNormal;");
                         }
                         src.push("      }");
@@ -157,7 +170,7 @@ export class DTXTrianglesDrawable {
                         src.push("vec3 position = vec3(texelFetch(uTexturePerVertexIdCoordinates, ivec2(indexPositionH, indexPositionV), 0));");
                     }
 
-                    if (pickColorA.needed) {
+                    if (params.pickColorA.needed) {
                         // TODO: Normalize color "/ 255.0"?
                         src.push("vec4 pickColor = vec4(texelFetch(uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+1, objectIndexCoords.y), 0));");
                     }
@@ -180,12 +193,11 @@ export class DTXTrianglesDrawable {
                     const uTexturePerPrimitiveIdPortionIds = "uTexturePerPrimitiveIdPortionIds";
                     const uTexturePerPrimitiveIdIndices = "uTexturePerPrimitiveIdIndices";
 
-                    return function(frameCtx, layer, sceneModelMat, viewMatrix, projMatrix, rtcOrigin) {
+                    return function(frameCtx, layer, sceneModelMat, viewMatrix, projMatrix, rtcOrigin, eye) {
                         gl.uniformMatrix4fv(uSceneModelMatrix, false, sceneModelMat);
                         gl.uniformMatrix4fv(uViewMatrix,       false, viewMatrix);
                         gl.uniformMatrix4fv(uProjMatrix,       false, projMatrix);
                         if (isTriangle) {
-                            const eye = (usePickParams && frameCtx.pickOrigin) || scene.camera.eye;
                             gl.uniform3fv(uCameraEyeRtc, math.subVec3(eye, rtcOrigin, tempVec3b));
                         }
 
@@ -204,11 +216,20 @@ export class DTXTrianglesDrawable {
         })();
 
         const vWorldPosition = lazyShaderVariable("vWorldPosition");
-        const fragViewMatrix = null;
-        const sliceColorOr = color => color; // TODO: should DTX handle sliceColorOr?
+        const sliceColorOr   = ((sliceColorEnabled && clipping)
+                                ? (function() {
+                                    const sliceColorOr = color => {
+                                        sliceColorOr.needed = true;
+                                        return `(sliced ? sliceColor : ${color})`;
+                                    };
+                                    return sliceColorOr;
+                                })()
+                                : (color => color));
+
+        const geoParams = geometry.parameters;
 
         const fragmentOutputs = [ ];
-        appendFragmentOutputs(fragmentOutputs, vWorldPosition, "gl_FragCoord", sliceColorOr, fragViewMatrix);
+        appendFragmentOutputs(fragmentOutputs, vWorldPosition, "gl_FragCoord", sliceColorOr, geoParams.fragViewMatrix);
 
         const fragmentClippingLines = (function() {
             const src = [ ];
@@ -240,25 +261,20 @@ export class DTXTrianglesDrawable {
             return src;
         })();
 
-        const colorA             = lazyShaderVariable("colorA");
-        const pickColorA         = lazyShaderVariable("pickColor");
-        const uvA                = null;
-        const metallicRoughnessA = null;
+        const colorA = geoParams.colorA;
         const viewParams = {
             viewPosition: "viewPosition",
-            viewMatrix:   "viewMatrix",
-            viewNormal:   lazyShaderVariable("viewNormal")
+            viewMatrix:   geoParams.viewMatrix,
+            viewNormal:   geoParams.viewNormal
         };
-        const worldNormal = null;
-        const worldPosition = null;
+        const worldPosition = geoParams.worldPosition;
 
         const vertexOutputs = [ ];
-        appendVertexOutputs && appendVertexOutputs(vertexOutputs, colorA, pickColorA, uvA, metallicRoughnessA, "gl_Position", viewParams, worldNormal, worldPosition);
+        appendVertexOutputs && appendVertexOutputs(vertexOutputs, colorA, geoParams.pickColorA, geoParams.uvA, geoParams.metallicRoughnessA, "gl_Position", viewParams, geoParams.worldNormal, worldPosition); // worldPosition not used by appendVertexOutputs?
 
-        const flag = `int(flags[${renderPassFlag}])`;
         const flagTest = (isShadowProgram
-                          ? `(${flag} <= 0) || (${colorA}.a < 1.0)`
-                          : `${flag} != renderPass`);
+                          ? `(${geoParams.getFlag(renderPassFlag)} <= 0) || (${colorA}.a < 1.0)`
+                          : `${geoParams.getFlag(renderPassFlag)} != renderPass`);
 
         const afterFlagsColorLines = [
             `if (${flagTest}) {`,
@@ -316,6 +332,10 @@ export class DTXTrianglesDrawable {
                 }
             }
 
+            if (filterIntensityRange) {
+                src.push("uniform vec2 intensityRange;");
+            }
+
             appendVertexDefinitions && appendVertexDefinitions(src);
 
             geometry.appendVertexDefinitions(src);
@@ -324,7 +344,7 @@ export class DTXTrianglesDrawable {
 
             geometry.appendVertexData(src, afterFlagsColorLines);
 
-            src.push("vec4 viewPosition = viewMatrix * worldPosition;");
+            src.push(`vec4 viewPosition = ${viewParams.viewMatrix} * ${worldPosition};`);
 
             src.push("vec4 clipPos = projMatrix * viewPosition;");
             if (getLogDepth) {
@@ -335,7 +355,7 @@ export class DTXTrianglesDrawable {
             }
 
             if (vWorldPosition.needed) {
-                src.push(`${vWorldPosition} = worldPosition.xyz;`);
+                src.push(`${vWorldPosition} = ${worldPosition}.xyz;`);
             }
             if (clipping) {
                 src.push(`vClippable = ${geometry.getClippable()};`);
@@ -460,6 +480,7 @@ export class DTXTrianglesDrawable {
             pointSize:       program.getLocation("pointSize"),
             nearPlaneHeight: pointsMaterial.perspectivePoints && program.getLocation("nearPlaneHeight")
         };
+        const uIntensityRange = filterIntensityRange && program.getLocation("intensityRange");
 
         const setInputsState = setupInputs && setupInputs(program);
 
@@ -473,8 +494,6 @@ export class DTXTrianglesDrawable {
             if (uRenderPass) {
                 gl.uniform1i(uRenderPass, renderPass);
             }
-
-            setInputsState && setInputsState(frameCtx, layer._state.textureSet);
 
             if (setClippingState) {
                 setClippingState(layer);
@@ -495,6 +514,12 @@ export class DTXTrianglesDrawable {
                 }
             }
 
+            if (uIntensityRange) {
+                gl.uniform2f(uIntensityRange, pointsMaterial.minIntensity, pointsMaterial.maxIntensity);
+            }
+
+            setInputsState && setInputsState(frameCtx, layer._state.textureSet);
+
             const model = layer.model;
             const origin = layer._state.origin;
             const {position, rotationMatrix} = model;
@@ -502,6 +527,7 @@ export class DTXTrianglesDrawable {
             const camera = scene.camera;
             const viewMatrix = (isShadowProgram && frameCtx.shadowViewMatrix) || (usePickParams && frameCtx.pickViewMatrix) || camera.viewMatrix;
             const projMatrix = (isShadowProgram && frameCtx.shadowProjMatrix) || (usePickParams && frameCtx.pickProjMatrix) || camera.projMatrix;
+            const eye        = (usePickParams && frameCtx.pickOrigin) || scene.camera.eye;
             const far        = (usePickParams && frameCtx.pickProjMatrix) ? frameCtx.pickZFar : camera.project.far;
 
             if (uLogDepthBufFC) {
@@ -530,7 +556,7 @@ export class DTXTrianglesDrawable {
                 frameCtx.snapPickOrigin[2] = rtcOrigin[2];
             }
 
-            drawCall(frameCtx, layer, rotationMatrix, rtcViewMatrix, projMatrix, rtcOrigin);
+            drawCall(frameCtx, layer, rotationMatrix, rtcViewMatrix, projMatrix, rtcOrigin, eye);
 
             if (incrementDrawState) {
                 frameCtx.drawElements++;
