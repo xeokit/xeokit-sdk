@@ -835,19 +835,18 @@ export class VBOLayer extends Layer {
             return;
         }
         const state = this._state;
-        const positions = retainedGeometry.quantizedPositions;
-        const sceneModelMatrix = this.model.matrix;
-        const origin = math.vec4();
+        const origin = tempVec4b;
         if (state.origin) {
             origin.set(state.origin, 0);
+        } else {
+            origin[0] = origin[1] = origin[2] = 0;
         }
         origin[3] = 1;
+        const sceneModelMatrix = this.model.matrix;
         math.mulMat4v4(sceneModelMatrix, origin, origin);
-        const offsetX = origin[0];
-        const offsetY = origin[1];
-        const offsetZ = origin[2];
-        const worldPos = tempVec4a;
+        const positions = retainedGeometry.quantizedPositions;
         const positionsDecodeMatrix = state.positionsDecodeMatrix;
+        const worldPos = tempVec4a;
         for (let i = 0, len = positions.length; i < len; i += 3) {
             worldPos[0] = positions[i];
             worldPos[1] = positions[i + 1];
@@ -858,9 +857,7 @@ export class VBOLayer extends Layer {
             }
             worldPos[3] = 1;
             math.mulMat4v4(sceneModelMatrix, worldPos, worldPos);
-            worldPos[0] += offsetX;
-            worldPos[1] += offsetY;
-            worldPos[2] += offsetZ;
+            math.addVec3(origin, worldPos, worldPos);
             callback(worldPos);
         }
     }
