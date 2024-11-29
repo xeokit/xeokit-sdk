@@ -563,8 +563,6 @@ export class VBORenderer {
 
         this.destroy = () => program.destroy();
         this.drawLayer = (frameCtx, layer, renderPass) => {
-            frameCtx.textureUnit = 0; // WIP Maybe only for (! snap)?
-
             if (frameCtx.lastProgramId !== program.id) {
                 frameCtx.lastProgramId = program.id;
                 program.bind();
