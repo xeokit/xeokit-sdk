@@ -311,9 +311,7 @@ export class DTXTrianglesLayer extends Layer {
 
         this._portions = []; // These counts are used to avoid unnecessary render passes
 
-        if (this.model.scene.readableGeometryEnabled) {
-            this._subPortionReadableGeometries = {};
-        }
+        this._subPortionReadableGeometries = this.model.scene.readableGeometryEnabled && {};
 
         /**
          * Due to `index rebucketting` process in ```prepareMeshGeometry``` function, it's possible that a single
@@ -634,7 +632,7 @@ export class DTXTrianglesLayer extends Layer {
             numVertices: bucketGeometry.numTriangles
         });
 
-        if (this.model.scene.readableGeometryEnabled) {
+        if (this._subPortionReadableGeometries) {
             this._subPortionReadableGeometries[subPortionId] = {
                 indices: bucket.indices,
                 positionsCompressed: bucket.positionsCompressed,
@@ -1054,23 +1052,18 @@ export class DTXTrianglesLayer extends Layer {
     }
 
     _setFlags2(portionId, flags, deferred = false) {
-        const subPortionIds = this._portionToSubPortionsMap[portionId];
-        for (let i = 0, len = subPortionIds.length; i < len; i++) {
-            this._subPortionSetFlags2(subPortionIds[i], flags, deferred);
-        }
-    }
-
-    _subPortionSetFlags2(subPortionId, flags, deferred = false) {
         if (!this._finalized) {
             throw "Not finalized";
         }
 
-        tempUint8Array4 [0] = (flags & ENTITY_FLAGS.CLIPPABLE) ? 255 : 0;
-        tempUint8Array4 [1] = 0;
-        tempUint8Array4 [2] = 1;
-        tempUint8Array4 [3] = 2;
-
-        this._setPortionColorsAndFlags(subPortionId, 3, tempUint8Array4, deferred);
+        const subPortionIds = this._portionToSubPortionsMap[portionId];
+        for (let i = 0, len = subPortionIds.length; i < len; i++) {
+            tempUint8Array4[0] = (flags & ENTITY_FLAGS.CLIPPABLE) ? 255 : 0;
+            tempUint8Array4[1] = 0;
+            tempUint8Array4[2] = 1;
+            tempUint8Array4[3] = 2;
+            this._setPortionColorsAndFlags(subPortionIds[i], 3, tempUint8Array4, deferred);
+        }
     }
 
     setOffset(portionId, offset) {
@@ -1098,58 +1091,42 @@ export class DTXTrianglesLayer extends Layer {
     //------------------------------------------------------------------------------------------------
 
     getEachVertex(portionId, callback) {
-        if (!this.model.scene.readableGeometryEnabled) {
-            return;
-        }
-        const state = this._state;
         const subPortionIds = this._portionToSubPortionsMap[portionId];
         if (!subPortionIds) {
             this.model.error("portion not found: " + portionId);
-            return;
-        }
-        for (let i = 0, len = subPortionIds.length; i < len; i++) {
-            const subPortionId = subPortionIds[i];
-            const subPortionReadableGeometry = this._subPortionReadableGeometries[subPortionId];
-            const positions = subPortionReadableGeometry.positionsCompressed;
-            const positionsDecodeMatrix = subPortionReadableGeometry.positionsDecodeMatrix;
-            const meshMatrix = subPortionReadableGeometry.meshMatrix;
-            const origin = state.origin;
-            const offsetX = origin[0] ;
-            const offsetY = origin[1] ;
-            const offsetZ = origin[2] ;
-            const worldPos = tempVec4a;
-            for (let i = 0, len = positions.length; i < len; i += 3) {
-                worldPos[0] = positions[i];
-                worldPos[1] = positions[i + 1];
-                worldPos[2] = positions[i + 2];
-                worldPos[3] = 1.0;
-                math.decompressPosition(worldPos, positionsDecodeMatrix);
-                math.mulMat4v4(this.model.worldMatrix, worldPos, worldPos);
-                worldPos[0] += offsetX;
-                worldPos[1] += offsetY;
-                worldPos[2] += offsetZ;
-                callback(worldPos);
+        } else if (this._subPortionReadableGeometries) {
+            for (let i = 0, len = subPortionIds.length; i < len; i++) {
+                const subPortionReadableGeometry = this._subPortionReadableGeometries[subPortionIds[i]];
+                const positions = subPortionReadableGeometry.positionsCompressed;
+                const positionsDecodeMatrix = subPortionReadableGeometry.positionsDecodeMatrix;
+                const worldPos = tempVec4a;
+                for (let i = 0, len = positions.length; i < len; i += 3) {
+                    worldPos[0] = positions[i];
+                    worldPos[1] = positions[i + 1];
+                    worldPos[2] = positions[i + 2];
+                    worldPos[3] = 1.0;
+                    math.decompressPosition(worldPos, positionsDecodeMatrix);
+                    math.mulMat4v4(this.model.worldMatrix, worldPos, worldPos);
+                    math.transformPoint4(this.model.worldMatrix, worldPos, worldPos);
+                    math.addVec3(this._state.origin, worldPos, worldPos);
+                    callback(worldPos);
+                }
             }
         }
     }
 
     getEachIndex(portionId, callback) {
-        if (!this.model.scene.readableGeometryEnabled) {
-            return;
-        }
         const subPortionIds = this._portionToSubPortionsMap[portionId];
         if (!subPortionIds) {
             this.model.error("portion not found: " + portionId);
-            return;
+        } else if (this._subPortionReadableGeometries) {
+            subPortionIds.forEach(
+                subPortionId => this._subPortionReadableGeometries[subPortionId].indices.forEach(i => callback(i)));
         }
-        for (let i = 0, len = subPortionIds.length; i < len; i++) {
-            const subPortionId = subPortionIds[i];
-            const subPortionReadableGeometry = this._subPortionReadableGeometries[subPortionId];
-            const indices = subPortionReadableGeometry.indices;
-            for (let i = 0, len = indices.length; i < len; i++) {
-                callback(indices[i]);
-            }
-        }
+    }
+
+    precisionRayPickSurface(portionId, worldRayOrigin, worldRayDir, worldSurfacePos, worldNormal) {
+        return false;
     }
 
     destroy() {
