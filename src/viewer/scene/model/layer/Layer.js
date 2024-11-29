@@ -306,6 +306,7 @@ export class Layer {
                     frameCtx.backfaces = backfaces;
                 }
             }
+            frameCtx.textureUnit = 0; // WIP Maybe only for (! snap)?
             renderer.drawLayer(frameCtx, this, pass);
         }
     }
