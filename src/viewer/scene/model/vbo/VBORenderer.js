@@ -23,6 +23,7 @@ export class VBORenderer {
         const clippingCaps              = cfg.clippingCaps;
         const renderPassFlag            = cfg.renderPassFlag;
         const usePickParams             = cfg.usePickParams;
+        const cullOnAlphaZero           = false && !cfg.dontCullOnAlphaZero;
         const appendVertexDefinitions   = cfg.appendVertexDefinitions;
         const filterIntensityRange      = cfg.filterIntensityRange && (primitive === "points") && pointsMaterial.filterIntensity;
         const transformClipPos          = cfg.transformClipPos;
@@ -96,8 +97,8 @@ export class VBORenderer {
                     if (needNormal()) {
                         src.push("in vec3 normal;");
                     }
-                    if (colorA.needed || isShadowProgram || filterIntensityRange) {
-                        src.push("in vec4 aColor;");
+                    if (colorA.needed) {
+                        src.push(`in vec4 ${colorA};`);
                     }
                     if (pickColorA.needed) {
                         src.push("in vec4 pickColor;");
@@ -142,23 +143,8 @@ export class VBORenderer {
                     }
                 },
 
-                appendVertexData: (src) => {
-                    const flag = `(int(flags) >> ${renderPassFlag * 4} & 0xF)`;
-                    const flagTest = (isShadowProgram
-                                      ? `(${flag} <= 0) || ((float(aColor.a) / 255.0) < 1.0)`
-                                      : `${flag} != renderPass`);
-                    src.push(`if (${flagTest}) {`);
-                    src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
-                    src.push("   return;");
-                    src.push("}");
-
-                    if (filterIntensityRange) {
-                        src.push("float intensity = float(aColor.a) / 255.0;");
-                        src.push("if ((intensity < intensityRange[0]) || (intensity > intensityRange[1])) {");
-                        src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
-                        src.push("   return;");
-                        src.push("}");
-                    }
+                appendVertexData: (src, afterFlagsColorLines) => {
+                    afterFlagsColorLines.forEach(line => src.push(line));
 
                     if (needNormal()) {
                         src.push("vec4 modelNormal = vec4(octDecode(normal.xy), 0.0);");
@@ -395,6 +381,36 @@ export class VBORenderer {
         const vertexOutputs = [ ];
         appendVertexOutputs && appendVertexOutputs(vertexOutputs, colorA, pickColorA, uvA, metallicRoughnessA, "gl_Position", viewParams, worldNormal, worldPosition);
 
+        const flag = `(int(flags) >> ${renderPassFlag * 4} & 0xF)`;
+        const flagTest = (isShadowProgram
+                          ? `(${flag} <= 0) || ((float(${colorA}.a) / 255.0) < 1.0)`
+                          : `${flag} != renderPass`);
+
+        const afterFlagsColorLines = [
+            `if (${flagTest}) {`,
+            "   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);", // Cull vertex
+            "   return;",
+            "}"
+        ].concat(
+            cullOnAlphaZero
+                ? [
+                    `if (${colorA}.a == 0.0) {`,
+                    "   gl_Position = vec4(0.0, 0.0, 0.0, 1.0);", // Cull vertex
+                    "   return;",
+                    "}"
+                ]
+                : [ ]
+        ).concat(
+            filterIntensityRange
+                ? [
+                    `float intensity = ${colorA}.a / 255.0;`,
+                    "if ((intensity < intensityRange[0]) || (intensity > intensityRange[1])) {",
+                    "   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);", // Cull vertex
+                    "   return;",
+                    "}"
+                ]
+                : [ ]);
+
         const buildVertexShader = () => {
             const src = [];
 
@@ -433,7 +449,7 @@ export class VBORenderer {
 
             src.push("void main(void) {");
 
-            geometry.appendVertexData(src);
+            geometry.appendVertexData(src, afterFlagsColorLines);
 
             src.push("vec4 viewPosition = viewMatrix * worldPosition;");
 
