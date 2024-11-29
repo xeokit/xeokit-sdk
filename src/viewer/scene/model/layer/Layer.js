@@ -13,6 +13,8 @@ const iota = function(n) {
     return ret;
 };
 
+export const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
+
 export const createClippingSetup = function(gl, sectionPlanesState) {
     const numAllocatedSectionPlanes = sectionPlanesState.getNumAllocatedSectionPlanes();
 
