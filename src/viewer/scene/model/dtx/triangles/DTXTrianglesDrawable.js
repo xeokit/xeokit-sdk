@@ -98,7 +98,7 @@ export class DTXTrianglesDrawable {
                     src.push("uvec4 flags2 = texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+3, objectIndexCoords.y), 0);");
 
                     if (colorA.needed) {
-                        src.push(`vec4 ${colorA} = vec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0));`);
+                        src.push(`vec4 ${colorA} = vec4(texelFetch (uObjectPerObjectColorsAndFlags, ivec2(objectIndexCoords.x*8+0, objectIndexCoords.y), 0)) / 255.0;`);
                     }
 
                     afterFlagsColorLines.forEach(line => src.push(line));
@@ -240,7 +240,7 @@ export class DTXTrianglesDrawable {
             return src;
         })();
 
-        const colorA             = lazyShaderVariable("aColor");
+        const colorA             = lazyShaderVariable("colorA");
         const pickColorA         = lazyShaderVariable("pickColor");
         const uvA                = null;
         const metallicRoughnessA = null;
@@ -257,7 +257,7 @@ export class DTXTrianglesDrawable {
 
         const flag = `int(flags[${renderPassFlag}])`;
         const flagTest = (isShadowProgram
-                          ? `(${flag} <= 0) || ((float(${colorA}.a) / 255.0) < 1.0)`
+                          ? `(${flag} <= 0) || (${colorA}.a < 1.0)`
                           : `${flag} != renderPass`);
 
         const afterFlagsColorLines = [
@@ -277,8 +277,7 @@ export class DTXTrianglesDrawable {
         ).concat(
             filterIntensityRange
                 ? [
-                    `float intensity = ${colorA}.a / 255.0;`,
-                    "if ((intensity < intensityRange[0]) || (intensity > intensityRange[1])) {",
+                    `if ((${colorA}.a < intensityRange[0]) || (${colorA}.a > intensityRange[1])) {`,
                     "   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);", // Cull vertex
                     "   return;",
                     "}"

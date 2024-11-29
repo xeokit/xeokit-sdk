@@ -9,7 +9,7 @@ export const ColorProgram = function(logarithmicDepthBufferEnabled, lightSetup, 
             src.push("out vec4 vColor;");
         },
         appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
-            const vColor = (primitive === "points") ? `vec4(${color}.rgb / 255.0, 1.0)` : `${color} / 255.0`;
+            const vColor = (primitive === "points") ? `vec4(${color}.rgb, 1.0)` : `${color}`;
             if (lightSetup) {
                 src.push("vec3 reflectedColor = vec3(0.0, 0.0, 0.0);");
                 lightSetup.getDirectionalLights(view.viewMatrix, view.viewPosition).forEach(light => {
