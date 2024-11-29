@@ -151,6 +151,27 @@ export class VBORenderer {
             if (! isShadowProgram) {
                 src.push("uniform int renderPass;");
             }
+
+            if (getLogDepth) {
+                src.push("out float vFragDepth;");
+                if (testPerspectiveForGl_FragDepth) {
+                    src.push("out float isPerspective;");
+                }
+            }
+
+            if (clipping) {
+                src.push("out float vClippable;");
+                if (clippingCaps) {
+                    src.push("out float vClipPositionW;");
+                }
+            }
+
+            if (vWorldPosition.needed) {
+                src.push(`out highp vec3 ${vWorldPosition};`);
+            }
+
+            appendVertexDefinitions && appendVertexDefinitions(src);
+
             src.push("in vec3 position;");
             if (needNormal) {
                 src.push("in vec3 normal;");
@@ -186,23 +207,6 @@ export class VBORenderer {
 
             matricesUniformBlockLines.forEach(line => src.push(line));
 
-            if (getLogDepth) { // && (! isShadowProgram)) { // likely shouldn't be testing isShadowProgram, perhaps an earlier overlook
-                src.push("out float vFragDepth;");
-                if (testPerspectiveForGl_FragDepth) {
-                    src.push("out float isPerspective;");
-                }
-            }
-
-            if (vWorldPosition.needed) {
-                src.push(`out highp vec3 ${vWorldPosition};`);
-            }
-            if (clipping) {
-                src.push("out float vClippable;");
-                if (clippingCaps) {
-                    src.push("out float vClipPositionW;");
-                }
-            }
-
             if (needNormal) {
                 src.push("vec3 octDecode(vec2 oct) {");
                 src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
@@ -223,8 +227,6 @@ export class VBORenderer {
             if (filterIntensityRange) {
                 src.push("uniform vec2 intensityRange;");
             }
-
-            appendVertexDefinitions && appendVertexDefinitions(src);
 
             src.push("void main(void) {");
 
@@ -362,7 +364,161 @@ export class VBORenderer {
             return src;
         };
 
-        const preamble = (type, src) => [
+        const makeDrawCall = function(program) {
+            gl.uniformBlockBinding(
+                program.handle,
+                gl.getUniformBlockIndex(program.handle, "Matrices"),
+                matricesUniformBlockBufferBindingPoint);
+
+            const aPosition = program.getAttribute("position");
+            const aOffset = program.getAttribute("offset");
+            const aNormal = program.getAttribute("normal");
+            const aUV = program.getAttribute("uv");
+            const aColor = program.getAttribute("aColor");
+            const aMetallicRoughness = program.getAttribute("metallicRoughness");
+            const aFlags = program.getAttribute("flags");
+            const aPickColor = program.getAttribute("pickColor");
+
+            const aModelMatrixCol0 = instancing && program.getAttribute("modelMatrixCol0");
+            const aModelMatrixCol1 = instancing && program.getAttribute("modelMatrixCol1");
+            const aModelMatrixCol2 = instancing && program.getAttribute("modelMatrixCol2");
+            const aModelNormalMatrixCol0 = instancing && program.getAttribute("modelNormalMatrixCol0");
+            const aModelNormalMatrixCol1 = instancing && program.getAttribute("modelNormalMatrixCol1");
+            const aModelNormalMatrixCol2 = instancing && program.getAttribute("modelNormalMatrixCol2");
+
+            const uUVDecodeMatrix = uvA.needed && program.getLocation("uvDecodeMatrix");
+            const uIntensityRange = filterIntensityRange && program.getLocation("intensityRange");
+            const uPointSize       = setupPoints && program.getLocation("pointSize");
+            const uNearPlaneHeight = setupPoints && pointsMaterial.perspectivePoints && program.getLocation("nearPlaneHeight");
+
+            return function(frameCtx, layer, sceneModelMat, viewMatrix, projMatrix, rtcOrigin) {
+                const state = layer._state;
+                let offset = 0;
+                const mat4Size = 4 * 4;
+                matricesUniformBlockBufferData.set(sceneModelMat, 0);
+                matricesUniformBlockBufferData.set(viewMatrix, offset += mat4Size);
+                matricesUniformBlockBufferData.set(projMatrix, offset += mat4Size);
+                matricesUniformBlockBufferData.set(state.positionsDecodeMatrix, offset += mat4Size);
+                if (needNormal) {
+                    matricesUniformBlockBufferData.set(layer.model.worldNormalMatrix, offset += mat4Size);
+                    matricesUniformBlockBufferData.set(scene.camera.viewNormalMatrix, offset += mat4Size);
+                }
+
+                gl.bindBuffer(gl.UNIFORM_BUFFER, matricesUniformBlockBuffer);
+                gl.bufferData(gl.UNIFORM_BUFFER, matricesUniformBlockBufferData, gl.DYNAMIC_DRAW);
+
+                gl.bindBufferBase(
+                    gl.UNIFORM_BUFFER,
+                    matricesUniformBlockBufferBindingPoint,
+                    matricesUniformBlockBuffer);
+
+
+                if (uUVDecodeMatrix) {
+                    gl.uniformMatrix3fv(uUVDecodeMatrix, false, state.uvDecodeMatrix);
+                }
+
+                if (uIntensityRange) {
+                    gl.uniform2f(uIntensityRange, pointsMaterial.minIntensity, pointsMaterial.maxIntensity);
+                }
+
+                if (uPointSize) {
+                    gl.uniform1f(uPointSize, pointsMaterial.pointSize);
+                }
+
+                if (uNearPlaneHeight) {
+                    const nearPlaneHeight = (scene.camera.projection === "ortho") ?
+                          1.0
+                          : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0)));
+                    gl.uniform1f(uNearPlaneHeight, nearPlaneHeight);
+                }
+
+                if (! drawCallCache.has(layer)) {
+                    const vao = gl.createVertexArray();
+                    gl.bindVertexArray(vao);
+
+                    const bindAttribute = (a, b, setDivisor) => {
+                        a.bindArrayBuffer(b);
+                        if (setDivisor) {
+                            gl.vertexAttribDivisor(a.location, 1);
+                        }
+                    };
+
+                    if (instancing) {
+                        bindAttribute(aModelMatrixCol0, state.modelMatrixCol0Buf, true);
+                        bindAttribute(aModelMatrixCol1, state.modelMatrixCol1Buf, true);
+                        bindAttribute(aModelMatrixCol2, state.modelMatrixCol2Buf, true);
+                        aModelNormalMatrixCol0 && bindAttribute(aModelNormalMatrixCol0, state.modelNormalMatrixCol0Buf, true);
+                        aModelNormalMatrixCol1 && bindAttribute(aModelNormalMatrixCol1, state.modelNormalMatrixCol1Buf, true);
+                        aModelNormalMatrixCol2 && bindAttribute(aModelNormalMatrixCol2, state.modelNormalMatrixCol2Buf, true);
+                    }
+
+                    bindAttribute(aPosition, state.positionsBuf);
+                    aUV                && bindAttribute(aUV,                state.uvBuf);
+                    aNormal            && bindAttribute(aNormal,            state.normalsBuf);
+                    aMetallicRoughness && bindAttribute(aMetallicRoughness, state.metallicRoughnessBuf, instancing);
+                    aColor             && bindAttribute(aColor,             state.colorsBuf,            instancing && state.colorsBuf && (!state.colorsForPointsNotInstancing));
+                    aFlags             && bindAttribute(aFlags,             state.flagsBuf,             instancing);
+                    aOffset            && bindAttribute(aOffset,            state.offsetsBuf,           instancing);
+                    aPickColor         && bindAttribute(aPickColor,         state.pickColorsBuf,        instancing);
+
+                    const drawer = (function() {
+                        // TODO: Use drawElements count and offset to draw only one entity
+
+                        const drawPoints = () => {
+                            if (instancing) {
+                                gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
+                            } else {
+                                gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
+                            }
+                        };
+
+                        const elementsDrawer = (mode, indicesBuf) => {
+                            indicesBuf.bind();
+                            return function() {
+                                const count  = indicesBuf.numItems;
+                                const type   = indicesBuf.itemType;
+                                const offset = 0;
+                                if (instancing) {
+                                    gl.drawElementsInstanced(mode, count, type, offset, state.numInstances);
+                                } else {
+                                    gl.drawElements(mode, count, type, offset);
+                                }
+                            };
+                        };
+
+                        if (primitive === "points") {
+                            return drawPoints;
+                        } else if (primitive === "lines") {
+                            if (subGeometry && subGeometry.vertices) {
+                                return drawPoints;
+                            } else {
+                                return elementsDrawer(gl.LINES, state.indicesBuf);
+                            }
+                        } else {    // triangles
+                            if (subGeometry && subGeometry.vertices) {
+                                return drawPoints;
+                            } else if (subGeometry && state.edgeIndicesBuf) {
+                                return elementsDrawer(gl.LINES, state.edgeIndicesBuf);
+                            } else {
+                                return elementsDrawer(gl.TRIANGLES, state.indicesBuf);
+                            }
+                        }
+                    })();
+
+                    gl.bindVertexArray(null);
+
+                    drawCallCache.set(layer, function(frameCtx) {
+                        gl.bindVertexArray(vao);
+                        drawer();
+                        gl.bindVertexArray(null);
+                    });
+                }
+
+                drawCallCache.get(layer)(frameCtx);
+            };
+        };
+
+        const preamble = (type) => [
             "#version 300 es",
             "// " + primitive + " " + (instancing ? "instancing" : "batching") + " " + programName + " " + type + " shader",
             "#ifdef GL_FRAGMENT_PRECISION_HIGH",
@@ -378,11 +534,11 @@ export class VBORenderer {
             "precision mediump isampler2D;",
             "precision mediump sampler2D;",
             "#endif",
-        ].concat(src);
+        ];
 
         const program = new Program(gl, {
-            vertex:   preamble("vertex",   buildVertexShader()),
-            fragment: preamble("fragment", buildFragmentShader())
+            vertex:   preamble("vertex"  ).concat(buildVertexShader()),
+            fragment: preamble("fragment").concat(buildFragmentShader())
         });
 
         const errors = program.errors;
@@ -393,63 +549,54 @@ export class VBORenderer {
             return;
         }
 
+        const drawCall = makeDrawCall(program);
+
         const uRenderPass = (! isShadowProgram) && program.getLocation("renderPass");
-
-        gl.uniformBlockBinding(
-            program.handle,
-            gl.getUniformBlockIndex(program.handle, "Matrices"),
-            matricesUniformBlockBufferBindingPoint);
-
-        const setClippingState = clipping && clipping.setupInputs(program);
-        const uSliceThickness = sliceColorOr.needed && program.getLocation("sliceThickness");
-        const uSliceColor     = sliceColorOr.needed && program.getLocation("sliceColor");
-
-        const aPosition = program.getAttribute("position");
-        const aOffset = program.getAttribute("offset");
-        const aNormal = program.getAttribute("normal");
-        const aUV = program.getAttribute("uv");
-        const aColor = program.getAttribute("aColor");
-        const aMetallicRoughness = program.getAttribute("metallicRoughness");
-        const aFlags = program.getAttribute("flags");
-        const aPickColor = program.getAttribute("pickColor");
-
-        const aModelMatrixCol0 = instancing && program.getAttribute("modelMatrixCol0");
-        const aModelMatrixCol1 = instancing && program.getAttribute("modelMatrixCol1");
-        const aModelMatrixCol2 = instancing && program.getAttribute("modelMatrixCol2");
-        const aModelNormalMatrixCol0 = instancing && program.getAttribute("modelNormalMatrixCol0");
-        const aModelNormalMatrixCol1 = instancing && program.getAttribute("modelNormalMatrixCol1");
-        const aModelNormalMatrixCol2 = instancing && program.getAttribute("modelNormalMatrixCol2");
-
-        const uUVDecodeMatrix = uvA.needed && program.getLocation("uvDecodeMatrix");
-
         const uLogDepthBufFC = getLogDepth && program.getLocation("logDepthBufFC");
-
-        const uIntensityRange = filterIntensityRange && program.getLocation("intensityRange");
-
-        const uPointSize       = setupPoints && program.getLocation("pointSize");
-        const uNearPlaneHeight = setupPoints && pointsMaterial.perspectivePoints && program.getLocation("nearPlaneHeight");
+        const setClippingState = clipping && clipping.setupInputs(program);
+        const uSlice = sliceColorOr.needed && {
+            thickness: program.getLocation("sliceThickness"),
+            color:     program.getLocation("sliceColor")
+        };
 
         const setInputsState = setupInputs && setupInputs(program);
 
         this.destroy = () => program.destroy();
         this.drawLayer = (frameCtx, layer, renderPass) => {
+            frameCtx.textureUnit = 0; // WIP Maybe only for (! snap)?
+
             if (frameCtx.lastProgramId !== program.id) {
                 frameCtx.lastProgramId = program.id;
                 program.bind();
             }
 
-            frameCtx.textureUnit = 0;
+            if (uRenderPass) {
+                gl.uniform1i(uRenderPass, renderPass);
+            }
+
+            setInputsState && setInputsState(frameCtx, layer._state.textureSet);
+
+            if (setClippingState) {
+                setClippingState(layer);
+                const crossSections = uSlice && scene.crossSections;
+                if (crossSections) {
+                    gl.uniform1f(uSlice.thickness, crossSections.sliceThickness);
+                    gl.uniform4fv(uSlice.color,    crossSections.sliceColor);
+                }
+            }
 
             const model = layer.model;
-            const state = layer._state;
-            const origin = state.origin;
-            const positionsDecodeMatrix = state.positionsDecodeMatrix;
+            const origin = layer._state.origin;
             const {position, rotationMatrix} = model;
-            const {camera} = model.scene;
-            const {project} = camera;
+
+            const camera = scene.camera;
             const viewMatrix = (isShadowProgram && frameCtx.shadowViewMatrix) || (usePickParams && frameCtx.pickViewMatrix) || camera.viewMatrix;
             const projMatrix = (isShadowProgram && frameCtx.shadowProjMatrix) || (usePickParams && frameCtx.pickProjMatrix) || camera.projMatrix;
             const far        = (usePickParams && frameCtx.pickProjMatrix) ? frameCtx.pickZFar : camera.project.far;
+
+            if (uLogDepthBufFC) {
+                gl.uniform1f(uLogDepthBufFC, 2.0 / (Math.log(far + 1.0) / Math.LN2));
+            }
 
             let rtcViewMatrix;
             const rtcOrigin = tempVec3a;
@@ -467,153 +614,13 @@ export class VBORenderer {
                 rtcViewMatrix = viewMatrix;
             }
 
-            let offset = 0;
-            const mat4Size = 4 * 4;
-            matricesUniformBlockBufferData.set(rotationMatrix, 0);
-            matricesUniformBlockBufferData.set(rtcViewMatrix, offset += mat4Size);
-            matricesUniformBlockBufferData.set(projMatrix, offset += mat4Size);
-            matricesUniformBlockBufferData.set(positionsDecodeMatrix, offset += mat4Size);
-            if (needNormal) {
-                matricesUniformBlockBufferData.set(model.worldNormalMatrix, offset += mat4Size);
-                matricesUniformBlockBufferData.set(camera.viewNormalMatrix, offset += mat4Size);
-            }
-
-            gl.bindBuffer(gl.UNIFORM_BUFFER, matricesUniformBlockBuffer);
-            gl.bufferData(gl.UNIFORM_BUFFER, matricesUniformBlockBufferData, gl.DYNAMIC_DRAW);
-
-            gl.bindBufferBase(
-                gl.UNIFORM_BUFFER,
-                matricesUniformBlockBufferBindingPoint,
-                matricesUniformBlockBuffer);
-
-
-            if (setClippingState) {
-                setClippingState(layer);
-                const crossSections = sliceColorOr.needed && scene.crossSections;
-                if (crossSections) {
-                    gl.uniform1f(uSliceThickness, crossSections.sliceThickness);
-                    gl.uniform4fv(uSliceColor,    crossSections.sliceColor);
-                }
-            }
-
-            if (uRenderPass) {
-                gl.uniform1i(uRenderPass, renderPass);
-            }
-
-            if (uUVDecodeMatrix) {
-                gl.uniformMatrix3fv(uUVDecodeMatrix, false, state.uvDecodeMatrix);
-            }
-
-            if (uLogDepthBufFC) {
-                gl.uniform1f(uLogDepthBufFC, 2.0 / (Math.log(far + 1.0) / Math.LN2));
-            }
-
-            if (uIntensityRange) {
-                gl.uniform2f(uIntensityRange, pointsMaterial.minIntensity, pointsMaterial.maxIntensity);
-            }
-
-            if (uPointSize) {
-                gl.uniform1f(uPointSize, pointsMaterial.pointSize);
-            }
-
-            if (uNearPlaneHeight) {
-                const nearPlaneHeight = (scene.camera.projection === "ortho") ?
-                      1.0
-                      : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0)));
-                gl.uniform1f(uNearPlaneHeight, nearPlaneHeight);
-            }
-
-            setInputsState && setInputsState(frameCtx, state.textureSet);
-
             if (frameCtx.snapPickOrigin) {
                 frameCtx.snapPickOrigin[0] = rtcOrigin[0];
                 frameCtx.snapPickOrigin[1] = rtcOrigin[1];
                 frameCtx.snapPickOrigin[2] = rtcOrigin[2];
             }
 
-            if (! drawCallCache.has(layer)) {
-                const vao = gl.createVertexArray();
-                gl.bindVertexArray(vao);
-
-                const bindAttribute = (a, b, setDivisor) => {
-                    a.bindArrayBuffer(b);
-                    if (setDivisor) {
-                        gl.vertexAttribDivisor(a.location, 1);
-                    }
-                };
-
-                if (instancing) {
-                    bindAttribute(aModelMatrixCol0, state.modelMatrixCol0Buf, true);
-                    bindAttribute(aModelMatrixCol1, state.modelMatrixCol1Buf, true);
-                    bindAttribute(aModelMatrixCol2, state.modelMatrixCol2Buf, true);
-                    aModelNormalMatrixCol0 && bindAttribute(aModelNormalMatrixCol0, state.modelNormalMatrixCol0Buf, true);
-                    aModelNormalMatrixCol1 && bindAttribute(aModelNormalMatrixCol1, state.modelNormalMatrixCol1Buf, true);
-                    aModelNormalMatrixCol2 && bindAttribute(aModelNormalMatrixCol2, state.modelNormalMatrixCol2Buf, true);
-                }
-
-                bindAttribute(aPosition, state.positionsBuf);
-                aUV                && bindAttribute(aUV,                state.uvBuf);
-                aNormal            && bindAttribute(aNormal,            state.normalsBuf);
-                aMetallicRoughness && bindAttribute(aMetallicRoughness, state.metallicRoughnessBuf, instancing);
-                aColor             && bindAttribute(aColor,             state.colorsBuf,            instancing && state.colorsBuf && (!state.colorsForPointsNotInstancing));
-                aFlags             && bindAttribute(aFlags,             state.flagsBuf,             instancing);
-                aOffset            && bindAttribute(aOffset,            state.offsetsBuf,           instancing);
-                aPickColor         && bindAttribute(aPickColor,         state.pickColorsBuf,        instancing);
-
-                const drawer = (function() {
-                    // TODO: Use drawElements count and offset to draw only one entity
-
-                    const drawPoints = () => {
-                        if (instancing) {
-                            gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
-                        } else {
-                            gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
-                        }
-                    };
-
-                    const elementsDrawer = (mode, indicesBuf) => {
-                        indicesBuf.bind();
-                        return function() {
-                            const count  = indicesBuf.numItems;
-                            const type   = indicesBuf.itemType;
-                            const offset = 0;
-                            if (instancing) {
-                                gl.drawElementsInstanced(mode, count, type, offset, state.numInstances);
-                            } else {
-                                gl.drawElements(mode, count, type, offset);
-                            }
-                        };
-                    };
-
-                    if (primitive === "points") {
-                        return drawPoints;
-                    } else if (primitive === "lines") {
-                        if (subGeometry && subGeometry.vertices) {
-                            return drawPoints;
-                        } else {
-                            return elementsDrawer(gl.LINES, state.indicesBuf);
-                        }
-                    } else {    // triangles
-                        if (subGeometry && subGeometry.vertices) {
-                            return drawPoints;
-                        } else if (subGeometry && state.edgeIndicesBuf) {
-                            return elementsDrawer(gl.LINES, state.edgeIndicesBuf);
-                        } else {
-                            return elementsDrawer(gl.TRIANGLES, state.indicesBuf);
-                        }
-                    }
-                })();
-
-                gl.bindVertexArray(null);
-
-                drawCallCache.set(layer, function(frameCtx) {
-                    gl.bindVertexArray(vao);
-                    drawer();
-                    gl.bindVertexArray(null);
-                });
-            }
-
-            drawCallCache.get(layer)(frameCtx);
+            drawCall(frameCtx, layer, rotationMatrix, rtcViewMatrix, projMatrix, rtcOrigin);
 
             if (incrementDrawState) {
                 frameCtx.drawElements++;
