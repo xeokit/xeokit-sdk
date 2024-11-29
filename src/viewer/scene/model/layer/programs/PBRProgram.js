@@ -186,8 +186,8 @@ export const PBRProgram = function(scene, lightSetup, sao) {
             src.push("Geometry       geometry;");
             src.push("ReflectedLight reflectedLight = ReflectedLight(vec3(0.0,0.0,0.0), vec3(0.0,0.0,0.0));");
 
-            src.push("vec3 rgb = (vec3(float(vColor.r) / 255.0, float(vColor.g) / 255.0, float(vColor.b) / 255.0));");
-            src.push("float opacity = float(vColor.a) / 255.0;");
+            src.push("vec3 rgb = vColor.rgb;");
+            src.push("float opacity = vColor.a;");
 
             src.push("vec3  baseColor = rgb;");
             src.push("float specularF0 = 1.0;");
