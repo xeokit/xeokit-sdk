@@ -18,8 +18,6 @@ export const SnapProgram = function(gl, isSnapInit, isPoints) {
         appendVertexOutputs: (src, color, pickColor, uv, metallicRoughness, gl_Position, view, worldNormal, worldPosition) => {
             if (isSnapInit) {
                 src.push(`vPickColor = ${pickColor};`);
-            } else {
-                src.push("gl_PointSize = 1.0;"); // Windows needs this?
             }
         },
         appendFragmentDefinitions: (src) => {

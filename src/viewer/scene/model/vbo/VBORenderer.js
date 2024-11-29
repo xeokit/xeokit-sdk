@@ -13,6 +13,8 @@ const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
 export class VBORenderer {
     constructor(scene, instancing, primitive, cfg, subGeometry) {
 
+        const methodName = instancing ? "instancing" : "batching";
+
         const pointsMaterial = scene.pointsMaterial;
 
         const programName               = cfg.programName;
@@ -51,6 +53,287 @@ export class VBORenderer {
             };
             return variable;
         };
+
+        const geometry = (function() {
+            /**
+             * Matrices Uniform Block Buffer
+             *
+             * In shaders, matrices in the Matrices Uniform Block MUST be set in this order:
+             *  - worldMatrix
+             *  - viewMatrix
+             *  - projMatrix
+             *  - positionsDecodeMatrix
+             *  - worldNormalMatrix
+             *  - viewNormalMatrix
+             */
+            const matricesUniformBlockBufferBindingPoint = 0;
+            const matricesUniformBlockBuffer = scene.canvas.gl.createBuffer();
+            const matricesUniformBlockBufferData = new Float32Array(4 * 4 * 6); // there is 6 mat4
+
+            /**
+             * A Vertex Array Object by Layer
+             */
+            const drawCallCache = new WeakMap();
+
+            const needNormal = () => (viewParams.viewNormal.needed || worldNormal.needed);
+
+            const matricesUniformBlockLines = () => [
+                "uniform Matrices {",
+                "    mat4 worldMatrix;",
+                "    mat4 viewMatrix;",
+                "    mat4 projMatrix;",
+                "    mat4 positionsDecodeMatrix;"
+            ].concat(needNormal() ? [
+                "    mat4 worldNormalMatrix;",
+                "    mat4 viewNormalMatrix;",
+            ] : [ ]).concat([ "};" ]);
+
+            return {
+                getClippable: () => "((int(flags) >> 16 & 0xF) == 1) ? 1.0 : 0.0",
+
+                appendVertexDefinitions: (src) => {
+                    src.push("in vec3 position;");
+                    if (needNormal()) {
+                        src.push("in vec3 normal;");
+                    }
+                    if (colorA.needed || isShadowProgram || filterIntensityRange) {
+                        src.push("in vec4 aColor;");
+                    }
+                    if (pickColorA.needed) {
+                        src.push("in vec4 pickColor;");
+                    }
+                    if (uvA.needed) {
+                        src.push("in vec2 uv;");
+                        src.push("uniform mat3 uvDecodeMatrix;");
+                    }
+                    if (metallicRoughnessA.needed) {
+                        src.push("in vec2 metallicRoughness;");
+                    }
+                    src.push("in float flags;");
+                    if (scene.entityOffsetsEnabled) {
+                        src.push("in vec3 offset;");
+                    }
+
+                    if (instancing) {
+                        src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
+                        src.push("in vec4 modelMatrixCol1;");
+                        src.push("in vec4 modelMatrixCol2;");
+                        if (needNormal()) {
+                            src.push("in vec4 modelNormalMatrixCol0;");
+                            src.push("in vec4 modelNormalMatrixCol1;");
+                            src.push("in vec4 modelNormalMatrixCol2;");
+                        }
+                    }
+
+                    matricesUniformBlockLines().forEach(line => src.push(line));
+
+                    if (needNormal()) {
+                        src.push("vec3 octDecode(vec2 oct) {");
+                        src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
+                        src.push("    if (v.z < 0.0) {");
+                        src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
+                        src.push("    }");
+                        src.push("    return normalize(v);");
+                        src.push("}");
+                    }
+
+                    if (filterIntensityRange) {
+                        src.push("uniform vec2 intensityRange;");
+                    }
+                },
+
+                appendVertexData: (src) => {
+                    const flag = `(int(flags) >> ${renderPassFlag * 4} & 0xF)`;
+                    const flagTest = (isShadowProgram
+                                      ? `(${flag} <= 0) || ((float(aColor.a) / 255.0) < 1.0)`
+                                      : `${flag} != renderPass`);
+                    src.push(`if (${flagTest}) {`);
+                    src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
+                    src.push("   return;");
+                    src.push("}");
+
+                    if (filterIntensityRange) {
+                        src.push("float intensity = float(aColor.a) / 255.0;");
+                        src.push("if ((intensity < intensityRange[0]) || (intensity > intensityRange[1])) {");
+                        src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
+                        src.push("   return;");
+                        src.push("}");
+                    }
+
+                    if (needNormal()) {
+                        src.push("vec4 modelNormal = vec4(octDecode(normal.xy), 0.0);");
+                        if (instancing) {
+                            src.push("modelNormal = vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
+                        }
+                        src.push(`vec3 ${worldNormal} = (worldNormalMatrix * modelNormal).xyz;`);
+                        if (viewParams.viewNormal.needed) {
+                            src.push(`vec3 viewNormal = normalize((viewNormalMatrix * vec4(${worldNormal}, 0.0)).xyz);`);
+                        }
+                    }
+
+                    if (uvA.needed) {
+                        src.push(`vec2 ${uvA} = (uvDecodeMatrix * vec3(uv, 1.0)).xy;`);
+                    }
+
+                    if (instancing) {
+                        src.push("vec4 worldPosition = positionsDecodeMatrix * vec4(position, 1.0);");
+                        src.push("worldPosition = worldMatrix * vec4(dot(worldPosition, modelMatrixCol0), dot(worldPosition, modelMatrixCol1), dot(worldPosition, modelMatrixCol2), 1.0);");
+                    } else {
+                        src.push("vec4 worldPosition = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0));");
+                    }
+                    if (scene.entityOffsetsEnabled) {
+                        src.push("worldPosition.xyz = worldPosition.xyz + offset;");
+                    }
+                },
+
+                appendFragmentDefinitions: (src) => {
+                    if (fragViewMatrix && fragViewMatrix.needed) {
+                        matricesUniformBlockLines().forEach(line => src.push(line));
+                    }
+                },
+
+                makeDrawCall: function(program) {
+                    gl.uniformBlockBinding(
+                        program.handle,
+                        gl.getUniformBlockIndex(program.handle, "Matrices"),
+                        matricesUniformBlockBufferBindingPoint);
+
+                    const aPosition = program.getAttribute("position");
+                    const aOffset = program.getAttribute("offset");
+                    const aNormal = program.getAttribute("normal");
+                    const aUV = program.getAttribute("uv");
+                    const aColor = program.getAttribute("aColor");
+                    const aMetallicRoughness = program.getAttribute("metallicRoughness");
+                    const aFlags = program.getAttribute("flags");
+                    const aPickColor = program.getAttribute("pickColor");
+
+                    const aModelMatrixCol0 = instancing && program.getAttribute("modelMatrixCol0");
+                    const aModelMatrixCol1 = instancing && program.getAttribute("modelMatrixCol1");
+                    const aModelMatrixCol2 = instancing && program.getAttribute("modelMatrixCol2");
+                    const aModelNormalMatrixCol0 = instancing && program.getAttribute("modelNormalMatrixCol0");
+                    const aModelNormalMatrixCol1 = instancing && program.getAttribute("modelNormalMatrixCol1");
+                    const aModelNormalMatrixCol2 = instancing && program.getAttribute("modelNormalMatrixCol2");
+
+                    const uUVDecodeMatrix = uvA.needed && program.getLocation("uvDecodeMatrix");
+                    const uIntensityRange = filterIntensityRange && program.getLocation("intensityRange");
+
+                    return function(frameCtx, layer, sceneModelMat, viewMatrix, projMatrix, rtcOrigin) {
+                        const state = layer._state;
+                        let offset = 0;
+                        const mat4Size = 4 * 4;
+                        matricesUniformBlockBufferData.set(sceneModelMat, 0);
+                        matricesUniformBlockBufferData.set(viewMatrix, offset += mat4Size);
+                        matricesUniformBlockBufferData.set(projMatrix, offset += mat4Size);
+                        matricesUniformBlockBufferData.set(state.positionsDecodeMatrix, offset += mat4Size);
+                        if (needNormal()) {
+                            matricesUniformBlockBufferData.set(layer.model.worldNormalMatrix, offset += mat4Size);
+                            matricesUniformBlockBufferData.set(scene.camera.viewNormalMatrix, offset += mat4Size);
+                        }
+
+                        gl.bindBuffer(gl.UNIFORM_BUFFER, matricesUniformBlockBuffer);
+                        gl.bufferData(gl.UNIFORM_BUFFER, matricesUniformBlockBufferData, gl.DYNAMIC_DRAW);
+
+                        gl.bindBufferBase(
+                            gl.UNIFORM_BUFFER,
+                            matricesUniformBlockBufferBindingPoint,
+                            matricesUniformBlockBuffer);
+
+
+                        if (uUVDecodeMatrix) {
+                            gl.uniformMatrix3fv(uUVDecodeMatrix, false, state.uvDecodeMatrix);
+                        }
+
+                        if (uIntensityRange) {
+                            gl.uniform2f(uIntensityRange, pointsMaterial.minIntensity, pointsMaterial.maxIntensity);
+                        }
+
+                        if (! drawCallCache.has(layer)) {
+                            const vao = gl.createVertexArray();
+                            gl.bindVertexArray(vao);
+
+                            const bindAttribute = (a, b, setDivisor) => {
+                                a.bindArrayBuffer(b);
+                                if (setDivisor) {
+                                    gl.vertexAttribDivisor(a.location, 1);
+                                }
+                            };
+
+                            if (instancing) {
+                                bindAttribute(aModelMatrixCol0, state.modelMatrixCol0Buf, true);
+                                bindAttribute(aModelMatrixCol1, state.modelMatrixCol1Buf, true);
+                                bindAttribute(aModelMatrixCol2, state.modelMatrixCol2Buf, true);
+                                aModelNormalMatrixCol0 && bindAttribute(aModelNormalMatrixCol0, state.modelNormalMatrixCol0Buf, true);
+                                aModelNormalMatrixCol1 && bindAttribute(aModelNormalMatrixCol1, state.modelNormalMatrixCol1Buf, true);
+                                aModelNormalMatrixCol2 && bindAttribute(aModelNormalMatrixCol2, state.modelNormalMatrixCol2Buf, true);
+                            }
+
+                            bindAttribute(aPosition, state.positionsBuf);
+                            aUV                && bindAttribute(aUV,                state.uvBuf);
+                            aNormal            && bindAttribute(aNormal,            state.normalsBuf);
+                            aMetallicRoughness && bindAttribute(aMetallicRoughness, state.metallicRoughnessBuf, instancing);
+                            aColor             && bindAttribute(aColor,             state.colorsBuf,            instancing && state.colorsBuf && (!state.colorsForPointsNotInstancing));
+                            aFlags             && bindAttribute(aFlags,             state.flagsBuf,             instancing);
+                            aOffset            && bindAttribute(aOffset,            state.offsetsBuf,           instancing);
+                            aPickColor         && bindAttribute(aPickColor,         state.pickColorsBuf,        instancing);
+
+                            const drawer = (function() {
+                                // TODO: Use drawElements count and offset to draw only one entity
+
+                                const drawPoints = () => {
+                                    if (instancing) {
+                                        gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
+                                    } else {
+                                        gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
+                                    }
+                                };
+
+                                const elementsDrawer = (mode, indicesBuf) => {
+                                    indicesBuf.bind();
+                                    return function() {
+                                        const count  = indicesBuf.numItems;
+                                        const type   = indicesBuf.itemType;
+                                        const offset = 0;
+                                        if (instancing) {
+                                            gl.drawElementsInstanced(mode, count, type, offset, state.numInstances);
+                                        } else {
+                                            gl.drawElements(mode, count, type, offset);
+                                        }
+                                    };
+                                };
+
+                                if (primitive === "points") {
+                                    return drawPoints;
+                                } else if (primitive === "lines") {
+                                    if (subGeometry && subGeometry.vertices) {
+                                        return drawPoints;
+                                    } else {
+                                        return elementsDrawer(gl.LINES, state.indicesBuf);
+                                    }
+                                } else {    // triangles
+                                    if (subGeometry && subGeometry.vertices) {
+                                        return drawPoints;
+                                    } else if (subGeometry) {
+                                        return elementsDrawer(gl.LINES, state.edgeIndicesBuf);
+                                    } else {
+                                        return elementsDrawer(gl.TRIANGLES, state.indicesBuf);
+                                    }
+                                }
+                            })();
+
+                            gl.bindVertexArray(null);
+
+                            drawCallCache.set(layer, function(frameCtx) {
+                                gl.bindVertexArray(vao);
+                                drawer();
+                                gl.bindVertexArray(null);
+                            });
+                        }
+
+                        drawCallCache.get(layer)(frameCtx);
+                    };
+                }
+            };
+        })();
 
         const vWorldPosition = lazyShaderVariable("vWorldPosition");
         const fragViewMatrix = lazyShaderVariable("viewMatrix");
@@ -107,43 +390,10 @@ export class VBORenderer {
             viewNormal:   lazyShaderVariable("viewNormal")
         };
         const worldNormal = lazyShaderVariable("worldNormal");
+        const worldPosition = "worldPosition";
 
         const vertexOutputs = [ ];
-        appendVertexOutputs && appendVertexOutputs(vertexOutputs, colorA, pickColorA, uvA, metallicRoughnessA, "gl_Position", viewParams, worldNormal, "worldPosition");
-
-        const needNormal = viewParams.viewNormal.needed || worldNormal.needed;
-
-
-        /**
-         * Matrices Uniform Block Buffer
-         *
-         * In shaders, matrices in the Matrices Uniform Block MUST be set in this order:
-         *  - worldMatrix
-         *  - viewMatrix
-         *  - projMatrix
-         *  - positionsDecodeMatrix
-         *  - worldNormalMatrix
-         *  - viewNormalMatrix
-         */
-        const matricesUniformBlockBufferBindingPoint = 0;
-        const matricesUniformBlockBuffer = scene.canvas.gl.createBuffer();
-        const matricesUniformBlockBufferData = new Float32Array(4 * 4 * 6); // there is 6 mat4
-
-        /**
-         * A Vertex Array Object by Layer
-         */
-        const drawCallCache = new WeakMap();
-
-        const matricesUniformBlockLines = [
-            "uniform Matrices {",
-            "    mat4 worldMatrix;",
-            "    mat4 viewMatrix;",
-            "    mat4 projMatrix;",
-            "    mat4 positionsDecodeMatrix;"
-        ].concat(needNormal ? [
-            "    mat4 worldNormalMatrix;",
-            "    mat4 viewNormalMatrix;",
-        ] : [ ]).concat([ "};" ]);
+        appendVertexOutputs && appendVertexOutputs(vertexOutputs, colorA, pickColorA, uvA, metallicRoughnessA, "gl_Position", viewParams, worldNormal, worldPosition);
 
         const buildVertexShader = () => {
             const src = [];
@@ -170,53 +420,6 @@ export class VBORenderer {
                 src.push(`out highp vec3 ${vWorldPosition};`);
             }
 
-            appendVertexDefinitions && appendVertexDefinitions(src);
-
-            src.push("in vec3 position;");
-            if (needNormal) {
-                src.push("in vec3 normal;");
-            }
-            if (colorA.needed || isShadowProgram || filterIntensityRange) {
-                src.push("in vec4 aColor;");
-            }
-            if (pickColorA.needed) {
-                src.push("in vec4 pickColor;");
-            }
-            if (uvA.needed) {
-                src.push("in vec2 uv;");
-                src.push("uniform mat3 uvDecodeMatrix;");
-            }
-            if (metallicRoughnessA.needed) {
-                src.push("in vec2 metallicRoughness;");
-            }
-            src.push("in float flags;");
-            if (scene.entityOffsetsEnabled) {
-                src.push("in vec3 offset;");
-            }
-
-            if (instancing) {
-                src.push("in vec4 modelMatrixCol0;"); // Modeling matrix
-                src.push("in vec4 modelMatrixCol1;");
-                src.push("in vec4 modelMatrixCol2;");
-                if (needNormal) {
-                    src.push("in vec4 modelNormalMatrixCol0;");
-                    src.push("in vec4 modelNormalMatrixCol1;");
-                    src.push("in vec4 modelNormalMatrixCol2;");
-                }
-            }
-
-            matricesUniformBlockLines.forEach(line => src.push(line));
-
-            if (needNormal) {
-                src.push("vec3 octDecode(vec2 oct) {");
-                src.push("    vec3 v = vec3(oct.xy, 1.0 - abs(oct.x) - abs(oct.y));");
-                src.push("    if (v.z < 0.0) {");
-                src.push("        v.xy = (1.0 - abs(v.yx)) * vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);");
-                src.push("    }");
-                src.push("    return normalize(v);");
-                src.push("}");
-            }
-
             if (setupPoints) {
                 src.push("uniform float pointSize;");
                 if (pointsMaterial.perspectivePoints) {
@@ -224,40 +427,18 @@ export class VBORenderer {
                 }
             }
 
-            if (filterIntensityRange) {
-                src.push("uniform vec2 intensityRange;");
-            }
+            appendVertexDefinitions && appendVertexDefinitions(src);
+
+            geometry.appendVertexDefinitions(src);
 
             src.push("void main(void) {");
 
-            if (isShadowProgram) {
-                src.push(`if (((int(flags) >> ${renderPassFlag * 4} & 0xF) <= 0) || ((float(aColor.a) / 255.0) < 1.0)) {`);
-            } else {
-                src.push(`if ((int(flags) >> ${renderPassFlag * 4} & 0xF) != renderPass) {`);
-            }
-            src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
-            src.push("} else {");
-            if (filterIntensityRange) {
-                src.push("float intensity = float(aColor.a) / 255.0;");
-                src.push("if ((intensity < intensityRange[0]) || (intensity > intensityRange[1])) {");
-                src.push("   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);"); // Cull vertex
-                src.push("   return;");
-                src.push("}");
-            }
-            if (instancing) {
-                src.push("vec4 worldPosition4 = positionsDecodeMatrix * vec4(position, 1.0);");
-                src.push("worldPosition4 = worldMatrix * vec4(dot(worldPosition4, modelMatrixCol0), dot(worldPosition4, modelMatrixCol1), dot(worldPosition4, modelMatrixCol2), 1.0);");
-            } else {
-                src.push("vec4 worldPosition4 = worldMatrix * (positionsDecodeMatrix * vec4(position, 1.0));");
-            }
-            if (scene.entityOffsetsEnabled) {
-                src.push("worldPosition4.xyz = worldPosition4.xyz + offset;");
-            }
-            src.push("vec3 worldPosition = worldPosition4.xyz;");
-            src.push("vec4 viewPosition = viewMatrix * worldPosition4;");
+            geometry.appendVertexData(src);
+
+            src.push("vec4 viewPosition = viewMatrix * worldPosition;");
 
             src.push("vec4 clipPos = projMatrix * viewPosition;");
-            if (getLogDepth) { // && (! isShadowProgram)) { // see comment above
+            if (getLogDepth) {
                 src.push("vFragDepth = 1.0 + clipPos.w;");
                 if (testPerspectiveForGl_FragDepth) {
                     src.push(`isPerspective = float (${isPerspectiveMatrix("projMatrix")});`);
@@ -265,27 +446,16 @@ export class VBORenderer {
             }
 
             if (vWorldPosition.needed) {
-                src.push(`${vWorldPosition} = worldPosition;`);
+                src.push(`${vWorldPosition} = worldPosition.xyz;`);
             }
             if (clipping) {
-                src.push("vClippable = ((int(flags) >> 16 & 0xF) == 1) ? 1.0 : 0.0;");
+                src.push(`vClippable = ${geometry.getClippable()};`);
                 if (clippingCaps) {
                     src.push("vClipPositionW = clipPos.w;");
                 }
             }
 
             src.push("gl_Position = " + (transformClipPos ? transformClipPos("clipPos") : "clipPos") + ";");
-
-            if (needNormal) {
-                src.push("vec4 modelNormal = vec4(octDecode(normal.xy), 0.0);");
-                if (instancing) {
-                    src.push("modelNormal = vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
-                }
-                src.push(`vec3 ${worldNormal} = (worldNormalMatrix * modelNormal).xyz;`);
-                if (viewParams.viewNormal.needed) {
-                    src.push(`vec3 viewNormal = normalize((viewNormalMatrix * vec4(${worldNormal}, 0.0)).xyz);`);
-                }
-            }
 
             if (setupPoints) {
                 if (pointsMaterial.perspectivePoints) {
@@ -299,13 +469,8 @@ export class VBORenderer {
                 src.push("gl_PointSize = 1.0;");
             }
 
-            if (uvA.needed) {
-                src.push(`vec2 ${uvA} = (uvDecodeMatrix * vec3(uv, 1.0)).xy;`);
-            }
-
             vertexOutputs.forEach(line => src.push(line));
 
-            src.push("}");
             src.push("}");
             return src;
         };
@@ -336,9 +501,7 @@ export class VBORenderer {
                 }
             }
 
-            if (fragViewMatrix.needed) {
-                matricesUniformBlockLines.forEach(line => src.push(line));
-            }
+            geometry.appendFragmentDefinitions(src);
 
             appendFragmentDefinitions(src);
 
@@ -364,163 +527,9 @@ export class VBORenderer {
             return src;
         };
 
-        const makeDrawCall = function(program) {
-            gl.uniformBlockBinding(
-                program.handle,
-                gl.getUniformBlockIndex(program.handle, "Matrices"),
-                matricesUniformBlockBufferBindingPoint);
-
-            const aPosition = program.getAttribute("position");
-            const aOffset = program.getAttribute("offset");
-            const aNormal = program.getAttribute("normal");
-            const aUV = program.getAttribute("uv");
-            const aColor = program.getAttribute("aColor");
-            const aMetallicRoughness = program.getAttribute("metallicRoughness");
-            const aFlags = program.getAttribute("flags");
-            const aPickColor = program.getAttribute("pickColor");
-
-            const aModelMatrixCol0 = instancing && program.getAttribute("modelMatrixCol0");
-            const aModelMatrixCol1 = instancing && program.getAttribute("modelMatrixCol1");
-            const aModelMatrixCol2 = instancing && program.getAttribute("modelMatrixCol2");
-            const aModelNormalMatrixCol0 = instancing && program.getAttribute("modelNormalMatrixCol0");
-            const aModelNormalMatrixCol1 = instancing && program.getAttribute("modelNormalMatrixCol1");
-            const aModelNormalMatrixCol2 = instancing && program.getAttribute("modelNormalMatrixCol2");
-
-            const uUVDecodeMatrix = uvA.needed && program.getLocation("uvDecodeMatrix");
-            const uIntensityRange = filterIntensityRange && program.getLocation("intensityRange");
-            const uPointSize       = setupPoints && program.getLocation("pointSize");
-            const uNearPlaneHeight = setupPoints && pointsMaterial.perspectivePoints && program.getLocation("nearPlaneHeight");
-
-            return function(frameCtx, layer, sceneModelMat, viewMatrix, projMatrix, rtcOrigin) {
-                const state = layer._state;
-                let offset = 0;
-                const mat4Size = 4 * 4;
-                matricesUniformBlockBufferData.set(sceneModelMat, 0);
-                matricesUniformBlockBufferData.set(viewMatrix, offset += mat4Size);
-                matricesUniformBlockBufferData.set(projMatrix, offset += mat4Size);
-                matricesUniformBlockBufferData.set(state.positionsDecodeMatrix, offset += mat4Size);
-                if (needNormal) {
-                    matricesUniformBlockBufferData.set(layer.model.worldNormalMatrix, offset += mat4Size);
-                    matricesUniformBlockBufferData.set(scene.camera.viewNormalMatrix, offset += mat4Size);
-                }
-
-                gl.bindBuffer(gl.UNIFORM_BUFFER, matricesUniformBlockBuffer);
-                gl.bufferData(gl.UNIFORM_BUFFER, matricesUniformBlockBufferData, gl.DYNAMIC_DRAW);
-
-                gl.bindBufferBase(
-                    gl.UNIFORM_BUFFER,
-                    matricesUniformBlockBufferBindingPoint,
-                    matricesUniformBlockBuffer);
-
-
-                if (uUVDecodeMatrix) {
-                    gl.uniformMatrix3fv(uUVDecodeMatrix, false, state.uvDecodeMatrix);
-                }
-
-                if (uIntensityRange) {
-                    gl.uniform2f(uIntensityRange, pointsMaterial.minIntensity, pointsMaterial.maxIntensity);
-                }
-
-                if (uPointSize) {
-                    gl.uniform1f(uPointSize, pointsMaterial.pointSize);
-                }
-
-                if (uNearPlaneHeight) {
-                    const nearPlaneHeight = (scene.camera.projection === "ortho") ?
-                          1.0
-                          : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0)));
-                    gl.uniform1f(uNearPlaneHeight, nearPlaneHeight);
-                }
-
-                if (! drawCallCache.has(layer)) {
-                    const vao = gl.createVertexArray();
-                    gl.bindVertexArray(vao);
-
-                    const bindAttribute = (a, b, setDivisor) => {
-                        a.bindArrayBuffer(b);
-                        if (setDivisor) {
-                            gl.vertexAttribDivisor(a.location, 1);
-                        }
-                    };
-
-                    if (instancing) {
-                        bindAttribute(aModelMatrixCol0, state.modelMatrixCol0Buf, true);
-                        bindAttribute(aModelMatrixCol1, state.modelMatrixCol1Buf, true);
-                        bindAttribute(aModelMatrixCol2, state.modelMatrixCol2Buf, true);
-                        aModelNormalMatrixCol0 && bindAttribute(aModelNormalMatrixCol0, state.modelNormalMatrixCol0Buf, true);
-                        aModelNormalMatrixCol1 && bindAttribute(aModelNormalMatrixCol1, state.modelNormalMatrixCol1Buf, true);
-                        aModelNormalMatrixCol2 && bindAttribute(aModelNormalMatrixCol2, state.modelNormalMatrixCol2Buf, true);
-                    }
-
-                    bindAttribute(aPosition, state.positionsBuf);
-                    aUV                && bindAttribute(aUV,                state.uvBuf);
-                    aNormal            && bindAttribute(aNormal,            state.normalsBuf);
-                    aMetallicRoughness && bindAttribute(aMetallicRoughness, state.metallicRoughnessBuf, instancing);
-                    aColor             && bindAttribute(aColor,             state.colorsBuf,            instancing && state.colorsBuf && (!state.colorsForPointsNotInstancing));
-                    aFlags             && bindAttribute(aFlags,             state.flagsBuf,             instancing);
-                    aOffset            && bindAttribute(aOffset,            state.offsetsBuf,           instancing);
-                    aPickColor         && bindAttribute(aPickColor,         state.pickColorsBuf,        instancing);
-
-                    const drawer = (function() {
-                        // TODO: Use drawElements count and offset to draw only one entity
-
-                        const drawPoints = () => {
-                            if (instancing) {
-                                gl.drawArraysInstanced(gl.POINTS, 0, state.positionsBuf.numItems, state.numInstances);
-                            } else {
-                                gl.drawArrays(gl.POINTS, 0, state.positionsBuf.numItems);
-                            }
-                        };
-
-                        const elementsDrawer = (mode, indicesBuf) => {
-                            indicesBuf.bind();
-                            return function() {
-                                const count  = indicesBuf.numItems;
-                                const type   = indicesBuf.itemType;
-                                const offset = 0;
-                                if (instancing) {
-                                    gl.drawElementsInstanced(mode, count, type, offset, state.numInstances);
-                                } else {
-                                    gl.drawElements(mode, count, type, offset);
-                                }
-                            };
-                        };
-
-                        if (primitive === "points") {
-                            return drawPoints;
-                        } else if (primitive === "lines") {
-                            if (subGeometry && subGeometry.vertices) {
-                                return drawPoints;
-                            } else {
-                                return elementsDrawer(gl.LINES, state.indicesBuf);
-                            }
-                        } else {    // triangles
-                            if (subGeometry && subGeometry.vertices) {
-                                return drawPoints;
-                            } else if (subGeometry && state.edgeIndicesBuf) {
-                                return elementsDrawer(gl.LINES, state.edgeIndicesBuf);
-                            } else {
-                                return elementsDrawer(gl.TRIANGLES, state.indicesBuf);
-                            }
-                        }
-                    })();
-
-                    gl.bindVertexArray(null);
-
-                    drawCallCache.set(layer, function(frameCtx) {
-                        gl.bindVertexArray(vao);
-                        drawer();
-                        gl.bindVertexArray(null);
-                    });
-                }
-
-                drawCallCache.get(layer)(frameCtx);
-            };
-        };
-
         const preamble = (type) => [
             "#version 300 es",
-            "// " + primitive + " " + (instancing ? "instancing" : "batching") + " " + programName + " " + type + " shader",
+            "// " + primitive + " " + methodName + " " + programName + " " + type + " shader",
             "#ifdef GL_FRAGMENT_PRECISION_HIGH",
             "precision highp float;",
             "precision highp int;",
@@ -549,7 +558,7 @@ export class VBORenderer {
             return;
         }
 
-        const drawCall = makeDrawCall(program);
+        const drawCall = geometry.makeDrawCall(program);
 
         const uRenderPass = (! isShadowProgram) && program.getLocation("renderPass");
         const uLogDepthBufFC = getLogDepth && program.getLocation("logDepthBufFC");
@@ -557,6 +566,10 @@ export class VBORenderer {
         const uSlice = sliceColorOr.needed && {
             thickness: program.getLocation("sliceThickness"),
             color:     program.getLocation("sliceColor")
+        };
+        const uPoint = setupPoints && {
+            pointSize:       program.getLocation("pointSize"),
+            nearPlaneHeight: pointsMaterial.perspectivePoints && program.getLocation("nearPlaneHeight")
         };
 
         const setInputsState = setupInputs && setupInputs(program);
@@ -580,6 +593,16 @@ export class VBORenderer {
                 if (crossSections) {
                     gl.uniform1f(uSlice.thickness, crossSections.sliceThickness);
                     gl.uniform4fv(uSlice.color,    crossSections.sliceColor);
+                }
+            }
+
+            if (uPoint) {
+                gl.uniform1f(uPoint.pointSize, pointsMaterial.pointSize);
+                if (uPoint.nearPlaneHeight) {
+                    const nearPlaneHeight = (scene.camera.projection === "ortho") ?
+                          1.0
+                          : (gl.drawingBufferHeight / (2 * Math.tan(0.5 * scene.camera.perspective.fov * Math.PI / 180.0)));
+                    gl.uniform1f(uPoint.nearPlaneHeight, nearPlaneHeight);
                 }
             }
 
