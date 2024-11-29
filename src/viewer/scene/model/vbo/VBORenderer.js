@@ -98,7 +98,7 @@ export class VBORenderer {
                         src.push("in vec3 normal;");
                     }
                     if (colorA.needed) {
-                        src.push(`in vec4 ${colorA};`);
+                        src.push(`in vec4 colorA255;`);
                     }
                     if (pickColorA.needed) {
                         src.push("in vec4 pickColor;");
@@ -144,6 +144,11 @@ export class VBORenderer {
                 },
 
                 appendVertexData: (src, afterFlagsColorLines) => {
+
+                    if (colorA.needed) {
+                        src.push(`vec4 ${colorA} = colorA255 / 255.0;`);
+                    }
+
                     afterFlagsColorLines.forEach(line => src.push(line));
 
                     if (needNormal()) {
@@ -188,7 +193,7 @@ export class VBORenderer {
                     const aOffset = program.getAttribute("offset");
                     const aNormal = program.getAttribute("normal");
                     const aUV = program.getAttribute("uv");
-                    const aColor = program.getAttribute("aColor");
+                    const aColor = colorA.needed && program.getAttribute("colorA255");
                     const aMetallicRoughness = program.getAttribute("metallicRoughness");
                     const aFlags = program.getAttribute("flags");
                     const aPickColor = program.getAttribute("pickColor");
@@ -366,7 +371,7 @@ export class VBORenderer {
             return src;
         })();
 
-        const colorA             = lazyShaderVariable("aColor");
+        const colorA             = lazyShaderVariable("colorA");
         const pickColorA         = lazyShaderVariable("pickColor");
         const uvA                = lazyShaderVariable("aUv");
         const metallicRoughnessA = lazyShaderVariable("metallicRoughness");
@@ -383,7 +388,7 @@ export class VBORenderer {
 
         const flag = `(int(flags) >> ${renderPassFlag * 4} & 0xF)`;
         const flagTest = (isShadowProgram
-                          ? `(${flag} <= 0) || ((float(${colorA}.a) / 255.0) < 1.0)`
+                          ? `(${flag} <= 0) || (${colorA}.a < 1.0)`
                           : `${flag} != renderPass`);
 
         const afterFlagsColorLines = [
@@ -403,8 +408,7 @@ export class VBORenderer {
         ).concat(
             filterIntensityRange
                 ? [
-                    `float intensity = ${colorA}.a / 255.0;`,
-                    "if ((intensity < intensityRange[0]) || (intensity > intensityRange[1])) {",
+                    `if ((${colorA}.a < intensityRange[0]) || (${colorA}.a > intensityRange[1])) {`,
                     "   gl_Position = vec4(0.0, 0.0, 0.0, 0.0);", // Cull vertex
                     "   return;",
                     "}"
