@@ -89,7 +89,7 @@ export const getRenderers = (function() {
         const sceneId = scene.id;
         if (! (sceneId in cache)) {
 
-            const createRenderer = (programSetup, subGeometry) => new DTXTrianglesDrawable(scene, programSetup, subGeometry);
+            const createRenderer = (programSetup, subGeometry) => new DTXTrianglesDrawable(scene, primitive, programSetup, subGeometry);
 
             // Pre-initialize certain renderers that would otherwise be lazy-initialised on user interaction,
             // such as picking or emphasis, so that there is no delay when user first begins interacting with the viewer.
