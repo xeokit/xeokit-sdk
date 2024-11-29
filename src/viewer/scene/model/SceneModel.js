@@ -2,7 +2,6 @@ import {Component} from "../Component.js";
 import {math} from "../math/math.js";
 import {buildEdgeIndices} from '../math/buildEdgeIndices.js';
 import {SceneModelMesh} from './SceneModelMesh.js';
-import {getScratchMemory, putScratchMemory} from "./vbo/ScratchMemory.js";
 import {VBOLayer} from './vbo/VBOLayer.js';
 import {DTXTrianglesLayer} from "./dtx/triangles/DTXTrianglesLayer.js";
 import {ENTITY_FLAGS} from './ENTITY_FLAGS.js';
@@ -1132,7 +1131,6 @@ export class SceneModel extends Component {
         this._enableVertexWelding = false; // Not needed for most objects, and very expensive, so disabled
         this._enableIndexBucketing = false; // Until fixed: https://github.com/xeokit/xeokit-sdk/issues/1204
 
-        this._scratchMemory = getScratchMemory();
         this._textureTranscoder = cfg.textureTranscoder || getKTX2TextureTranscoder(this.scene.viewer);
 
         this._maxGeometryBatchSize = cfg.maxGeometryBatchSize ?? 5000000;
@@ -3017,7 +3015,6 @@ export class SceneModel extends Component {
                 primitive: primitive,
                 origin: origin,
                 textureSet: cfg.textureSet,
-                scratchMemory: this._scratchMemory,
                 layerIndex: 0,
                 ...(instancing ? {
                     geometry: geometry,
@@ -3405,7 +3402,6 @@ export class SceneModel extends Component {
         if (this._isModel) {
             this.scene._deregisterModel(this);
         }
-        putScratchMemory();
         super.destroy();
     }
 }

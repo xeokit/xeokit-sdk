@@ -198,6 +198,34 @@ const fillArray = function(dst, src) {
     }
 };
 
+const scratchMemory = (function() {
+    /**
+     * Provides scratch memory for methods like TrianglesBatchingLayer setFlags() and setColors(),
+     * so they don't need to allocate temporary arrays that need garbage collection.
+     */
+    let cnt = 0;
+    const arrays = new Map();
+    return {
+        acquire: () => cnt++,
+        release: () => {
+            cnt--;
+            if (cnt === 0) {
+                arrays.clear();
+            }
+        },
+        getTypeArray: function(type, len) {
+            if (! arrays.has(type)) {
+                arrays.set(type, { });
+            }
+            const typeArrays = arrays.get(type);
+            if (! (len in typeArrays)) {
+                typeArrays[len] = new type(len);
+            }
+            return typeArrays[len];
+        }
+    };
+})();
+
 /**
  * @private
  */
@@ -208,7 +236,6 @@ export class VBOLayer extends Layer {
      * @param cfg.model
      * @param cfg.origin
      * @param cfg.layerIndex
-     * @param cfg.scratchMemory
      * @param cfg.textureSet
      * @param cfg.primitive
      *
@@ -341,7 +368,6 @@ export class VBOLayer extends Layer {
                     edgeIndices:           attribute(), // used for triangulated
                 })
         };
-        this._scratchMemory = cfg.scratchMemory;
 
         const positionsDecodeMatrix = instancing ? cfg.geometry.positionsDecodeMatrix : cfg.positionsDecodeMatrix;
 
@@ -393,6 +419,7 @@ export class VBOLayer extends Layer {
         this._modelAABB = (! instancing) && math.collapseAABB3(); // Model-space AABB
         this._portions = [];
         this._finalized = false;
+        scratchMemory.acquire();
     }
 
     /**
@@ -709,7 +736,7 @@ export class VBOLayer extends Layer {
         }
         if (this._state.colorsBuf) {
             const portion = this._portions[portionId];
-            const tempArray = this._scratchMemory.getUInt8Array(portion.portionSize * 4);
+            const tempArray = scratchMemory.getTypeArray(Uint8Array, portion.portionSize * 4);
             // alpha used to be unset for points, so effectively random (from last use)
             fillArray(tempArray, color.slice(0, 4));
             this._state.colorsBuf.setData(tempArray, portion.portionBase * 4);
@@ -748,7 +775,7 @@ export class VBOLayer extends Layer {
             }
             fillArray(this._deferredFlagValues.subarray(firstFlag, firstFlag + lenFlags), tempFloat32);
         } else if (this._state.flagsBuf) {
-            const tempArray = this._scratchMemory.getFloat32Array(lenFlags);
+            const tempArray = scratchMemory.getTypeArray(Float32Array, lenFlags);
             fillArray(tempArray, tempFloat32);
             this._state.flagsBuf.setData(tempArray, firstFlag);
         }
@@ -775,7 +802,7 @@ export class VBOLayer extends Layer {
         const portion = this._portions[portionId];
         if (this._state.offsetsBuf) {
             tempVec3fa.set(offset);
-            const tempArray = this._scratchMemory.getFloat32Array(portion.portionSize * 3);
+            const tempArray = scratchMemory.getTypeArray(Float32Array, portion.portionSize * 3);
             fillArray(tempArray, tempVec3fa);
             this._state.offsetsBuf.setData(tempArray, portion.portionBase * 3);
         }
@@ -987,6 +1014,8 @@ export class VBOLayer extends Layer {
     }
 
     destroy() {
+        scratchMemory.release();
+
         const state = this._state;
         if (state.positionsBuf) {
             state.positionsBuf.destroy();
