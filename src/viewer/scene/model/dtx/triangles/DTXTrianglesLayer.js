@@ -1,7 +1,8 @@
 import {ENTITY_FLAGS} from "../../ENTITY_FLAGS.js";
 import {RENDER_PASSES} from "../../RENDER_PASSES.js";
-import {DTXTrianglesDrawable} from "./DTXTrianglesDrawable.js";
+import {makeDTXRenderingAttributes} from "./DTXTrianglesDrawable.js";
 import {createLightSetup, createSAOSetup, createPickClipTransformSetup, Layer} from "../../layer/Layer.js";
+import {LayerRenderer} from "../../layer/LayerRenderer.js";
 
 import {math} from "../../../math/math.js";
 import {RenderState} from "../../../webgl/RenderState.js";
@@ -89,7 +90,14 @@ export const getRenderers = (function() {
         const sceneId = scene.id;
         if (! (sceneId in cache)) {
 
-            const createRenderer = (programSetup, subGeometry) => new DTXTrianglesDrawable(scene, primitive, programSetup, subGeometry);
+            const createRenderer = (programSetup, subGeometry) => {
+                return new LayerRenderer(
+                    scene,
+                    primitive,
+                    programSetup,
+                    subGeometry,
+                    makeDTXRenderingAttributes(scene, primitive, subGeometry));
+            };
 
             // Pre-initialize certain renderers that would otherwise be lazy-initialised on user interaction,
             // such as picking or emphasis, so that there is no delay when user first begins interacting with the viewer.
