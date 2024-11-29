@@ -273,6 +273,25 @@ export const createSAOSetup = (gl, scene) => {
 };
 
 export class Layer {
+
+    constructor() {
+        this._meshes = [];
+        // The axis-aligned World-space boundary of this Layer's positions.
+        this._aabb = math.collapseAABB3();
+        this.aabbDirty = true;
+    }
+
+    get aabb() {
+        if (this.aabbDirty) {
+            math.collapseAABB3(this._aabb);
+            for (let i = 0, len = this._meshes.length; i < len; i++) {
+                math.expandAABB3(this._aabb, this._meshes[i].aabb);
+            }
+            this.aabbDirty = false;
+        }
+        return this._aabb;
+    }
+
     __drawLayer(renderFlags, frameCtx, renderer, pass) {
         if ((this._numCulledLayerPortions < this._portions.length) && (this._numVisibleLayerPortions > 0)) {
             const backfacePasses = (this.primitive !== "points") && (this.primitive !== "lines") && [
