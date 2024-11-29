@@ -14,6 +14,7 @@ export class VBORenderer {
     constructor(scene, instancing, primitive, cfg, subGeometry) {
 
         const methodName = instancing ? "instancing" : "batching";
+        const sliceColorEnabled = true;
 
         const pointsMaterial = scene.pointsMaterial;
 
@@ -57,6 +58,19 @@ export class VBORenderer {
         };
 
         const geometry = (function() {
+            const params = {
+                colorA:             lazyShaderVariable("colorA"),
+                pickColorA:         lazyShaderVariable("pickColor"),
+                uvA:                lazyShaderVariable("aUv"),
+                metallicRoughnessA: lazyShaderVariable("metallicRoughness"),
+                viewMatrix:         "viewMatrix",
+                viewNormal:         lazyShaderVariable("viewNormal"),
+                worldNormal:        lazyShaderVariable("worldNormal"),
+                worldPosition:      "worldPosition",
+                getFlag:            renderPassFlag => `(int(flags) >> ${renderPassFlag * 4} & 0xF)`,
+                fragViewMatrix:     lazyShaderVariable("viewMatrix")
+            };
+
             /**
              * Matrices Uniform Block Buffer
              *
@@ -77,7 +91,7 @@ export class VBORenderer {
              */
             const drawCallCache = new WeakMap();
 
-            const needNormal = () => (viewParams.viewNormal.needed || worldNormal.needed);
+            const needNormal = () => (params.viewNormal.needed || params.worldNormal.needed);
 
             const matricesUniformBlockLines = () => [
                 "uniform Matrices {",
@@ -91,6 +105,8 @@ export class VBORenderer {
             ] : [ ]).concat([ "};" ]);
 
             return {
+                parameters: params,
+
                 getClippable: () => "((int(flags) >> 16 & 0xF) == 1) ? 1.0 : 0.0",
 
                 appendVertexDefinitions: (src) => {
@@ -98,17 +114,17 @@ export class VBORenderer {
                     if (needNormal()) {
                         src.push("in vec3 normal;");
                     }
-                    if (colorA.needed) {
+                    if (params.colorA.needed) {
                         src.push(`in vec4 colorA255;`);
                     }
-                    if (pickColorA.needed) {
+                    if (params.pickColorA.needed) {
                         src.push("in vec4 pickColor;");
                     }
-                    if (uvA.needed) {
+                    if (params.uvA.needed) {
                         src.push("in vec2 uv;");
                         src.push("uniform mat3 uvDecodeMatrix;");
                     }
-                    if (metallicRoughnessA.needed) {
+                    if (params.metallicRoughnessA.needed) {
                         src.push("in vec2 metallicRoughness;");
                     }
                     src.push("in float flags;");
@@ -138,16 +154,12 @@ export class VBORenderer {
                         src.push("    return normalize(v);");
                         src.push("}");
                     }
-
-                    if (filterIntensityRange) {
-                        src.push("uniform vec2 intensityRange;");
-                    }
                 },
 
                 appendVertexData: (src, afterFlagsColorLines) => {
 
-                    if (colorA.needed) {
-                        src.push(`vec4 ${colorA} = colorA255 / 255.0;`);
+                    if (params.colorA.needed) {
+                        src.push(`vec4 ${params.colorA} = colorA255 / 255.0;`);
                     }
 
                     afterFlagsColorLines.forEach(line => src.push(line));
@@ -157,14 +169,14 @@ export class VBORenderer {
                         if (instancing) {
                             src.push("modelNormal = vec4(dot(modelNormal, modelNormalMatrixCol0), dot(modelNormal, modelNormalMatrixCol1), dot(modelNormal, modelNormalMatrixCol2), 0.0);");
                         }
-                        src.push(`vec3 ${worldNormal} = (worldNormalMatrix * modelNormal).xyz;`);
-                        if (viewParams.viewNormal.needed) {
-                            src.push(`vec3 viewNormal = normalize((viewNormalMatrix * vec4(${worldNormal}, 0.0)).xyz);`);
+                        src.push(`vec3 ${params.worldNormal} = (worldNormalMatrix * modelNormal).xyz;`);
+                        if (params.viewNormal.needed) {
+                            src.push(`vec3 viewNormal = normalize((viewNormalMatrix * vec4(${params.worldNormal}, 0.0)).xyz);`);
                         }
                     }
 
-                    if (uvA.needed) {
-                        src.push(`vec2 ${uvA} = (uvDecodeMatrix * vec3(uv, 1.0)).xy;`);
+                    if (params.uvA.needed) {
+                        src.push(`vec2 ${params.uvA} = (uvDecodeMatrix * vec3(uv, 1.0)).xy;`);
                     }
 
                     if (instancing) {
@@ -179,7 +191,7 @@ export class VBORenderer {
                 },
 
                 appendFragmentDefinitions: (src) => {
-                    if (fragViewMatrix && fragViewMatrix.needed) {
+                    if (params.fragViewMatrix.needed) {
                         matricesUniformBlockLines().forEach(line => src.push(line));
                     }
                 },
@@ -194,7 +206,7 @@ export class VBORenderer {
                     const aOffset = program.getAttribute("offset");
                     const aNormal = program.getAttribute("normal");
                     const aUV = program.getAttribute("uv");
-                    const aColor = colorA.needed && program.getAttribute("colorA255");
+                    const aColor = params.colorA.needed && program.getAttribute("colorA255");
                     const aMetallicRoughness = program.getAttribute("metallicRoughness");
                     const aFlags = program.getAttribute("flags");
                     const aPickColor = program.getAttribute("pickColor");
@@ -206,10 +218,9 @@ export class VBORenderer {
                     const aModelNormalMatrixCol1 = instancing && program.getAttribute("modelNormalMatrixCol1");
                     const aModelNormalMatrixCol2 = instancing && program.getAttribute("modelNormalMatrixCol2");
 
-                    const uUVDecodeMatrix = uvA.needed && program.getLocation("uvDecodeMatrix");
-                    const uIntensityRange = filterIntensityRange && program.getLocation("intensityRange");
+                    const uUVDecodeMatrix = params.uvA.needed && program.getLocation("uvDecodeMatrix");
 
-                    return function(frameCtx, layer, sceneModelMat, viewMatrix, projMatrix, rtcOrigin) {
+                    return function(frameCtx, layer, sceneModelMat, viewMatrix, projMatrix, rtcOrigin, eye) {
                         const state = layer._state;
                         let offset = 0;
                         const mat4Size = 4 * 4;
@@ -233,10 +244,6 @@ export class VBORenderer {
 
                         if (uUVDecodeMatrix) {
                             gl.uniformMatrix3fv(uUVDecodeMatrix, false, state.uvDecodeMatrix);
-                        }
-
-                        if (uIntensityRange) {
-                            gl.uniform2f(uIntensityRange, pointsMaterial.minIntensity, pointsMaterial.maxIntensity);
                         }
 
                         if (! drawCallCache.has(layer)) {
@@ -328,8 +335,7 @@ export class VBORenderer {
         })();
 
         const vWorldPosition = lazyShaderVariable("vWorldPosition");
-        const fragViewMatrix = lazyShaderVariable("viewMatrix");
-        const sliceColorOr   = (clipping
+        const sliceColorOr   = ((sliceColorEnabled && clipping)
                                 ? (function() {
                                     const sliceColorOr = color => {
                                         sliceColorOr.needed = true;
@@ -339,8 +345,10 @@ export class VBORenderer {
                                 })()
                                 : (color => color));
 
+        const geoParams = geometry.parameters;
+
         const fragmentOutputs = [ ];
-        appendFragmentOutputs(fragmentOutputs, vWorldPosition, "gl_FragCoord", sliceColorOr, fragViewMatrix);
+        appendFragmentOutputs(fragmentOutputs, vWorldPosition, "gl_FragCoord", sliceColorOr, geoParams.fragViewMatrix);
 
         const fragmentClippingLines = (function() {
             const src = [ ];
@@ -372,25 +380,20 @@ export class VBORenderer {
             return src;
         })();
 
-        const colorA             = lazyShaderVariable("colorA");
-        const pickColorA         = lazyShaderVariable("pickColor");
-        const uvA                = lazyShaderVariable("aUv");
-        const metallicRoughnessA = lazyShaderVariable("metallicRoughness");
-        const viewParams  = {
+        const colorA = geoParams.colorA;
+        const viewParams = {
             viewPosition: "viewPosition",
-            viewMatrix:   "viewMatrix",
-            viewNormal:   lazyShaderVariable("viewNormal")
+            viewMatrix:   geoParams.viewMatrix,
+            viewNormal:   geoParams.viewNormal
         };
-        const worldNormal = lazyShaderVariable("worldNormal");
-        const worldPosition = "worldPosition";
+        const worldPosition = geoParams.worldPosition;
 
         const vertexOutputs = [ ];
-        appendVertexOutputs && appendVertexOutputs(vertexOutputs, colorA, pickColorA, uvA, metallicRoughnessA, "gl_Position", viewParams, worldNormal, worldPosition);
+        appendVertexOutputs && appendVertexOutputs(vertexOutputs, colorA, geoParams.pickColorA, geoParams.uvA, geoParams.metallicRoughnessA, "gl_Position", viewParams, geoParams.worldNormal, worldPosition); // worldPosition not used by appendVertexOutputs?
 
-        const flag = `(int(flags) >> ${renderPassFlag * 4} & 0xF)`;
         const flagTest = (isShadowProgram
-                          ? `(${flag} <= 0) || (${colorA}.a < 1.0)`
-                          : `${flag} != renderPass`);
+                          ? `(${geoParams.getFlag(renderPassFlag)} <= 0) || (${colorA}.a < 1.0)`
+                          : `${geoParams.getFlag(renderPassFlag)} != renderPass`);
 
         const afterFlagsColorLines = [
             `if (${flagTest}) {`,
@@ -448,6 +451,10 @@ export class VBORenderer {
                 }
             }
 
+            if (filterIntensityRange) {
+                src.push("uniform vec2 intensityRange;");
+            }
+
             appendVertexDefinitions && appendVertexDefinitions(src);
 
             geometry.appendVertexDefinitions(src);
@@ -456,7 +463,7 @@ export class VBORenderer {
 
             geometry.appendVertexData(src, afterFlagsColorLines);
 
-            src.push("vec4 viewPosition = viewMatrix * worldPosition;");
+            src.push(`vec4 viewPosition = ${viewParams.viewMatrix} * ${worldPosition};`);
 
             src.push("vec4 clipPos = projMatrix * viewPosition;");
             if (getLogDepth) {
@@ -467,7 +474,7 @@ export class VBORenderer {
             }
 
             if (vWorldPosition.needed) {
-                src.push(`${vWorldPosition} = worldPosition.xyz;`);
+                src.push(`${vWorldPosition} = ${worldPosition}.xyz;`);
             }
             if (clipping) {
                 src.push(`vClippable = ${geometry.getClippable()};`);
@@ -592,6 +599,7 @@ export class VBORenderer {
             pointSize:       program.getLocation("pointSize"),
             nearPlaneHeight: pointsMaterial.perspectivePoints && program.getLocation("nearPlaneHeight")
         };
+        const uIntensityRange = filterIntensityRange && program.getLocation("intensityRange");
 
         const setInputsState = setupInputs && setupInputs(program);
 
@@ -605,8 +613,6 @@ export class VBORenderer {
             if (uRenderPass) {
                 gl.uniform1i(uRenderPass, renderPass);
             }
-
-            setInputsState && setInputsState(frameCtx, layer._state.textureSet);
 
             if (setClippingState) {
                 setClippingState(layer);
@@ -627,6 +633,12 @@ export class VBORenderer {
                 }
             }
 
+            if (uIntensityRange) {
+                gl.uniform2f(uIntensityRange, pointsMaterial.minIntensity, pointsMaterial.maxIntensity);
+            }
+
+            setInputsState && setInputsState(frameCtx, layer._state.textureSet);
+
             const model = layer.model;
             const origin = layer._state.origin;
             const {position, rotationMatrix} = model;
@@ -634,6 +646,7 @@ export class VBORenderer {
             const camera = scene.camera;
             const viewMatrix = (isShadowProgram && frameCtx.shadowViewMatrix) || (usePickParams && frameCtx.pickViewMatrix) || camera.viewMatrix;
             const projMatrix = (isShadowProgram && frameCtx.shadowProjMatrix) || (usePickParams && frameCtx.pickProjMatrix) || camera.projMatrix;
+            const eye        = (usePickParams && frameCtx.pickOrigin) || scene.camera.eye;
             const far        = (usePickParams && frameCtx.pickProjMatrix) ? frameCtx.pickZFar : camera.project.far;
 
             if (uLogDepthBufFC) {
@@ -662,7 +675,7 @@ export class VBORenderer {
                 frameCtx.snapPickOrigin[2] = rtcOrigin[2];
             }
 
-            drawCall(frameCtx, layer, rotationMatrix, rtcViewMatrix, projMatrix, rtcOrigin);
+            drawCall(frameCtx, layer, rotationMatrix, rtcViewMatrix, projMatrix, rtcOrigin, eye);
 
             if (incrementDrawState) {
                 frameCtx.drawElements++;
