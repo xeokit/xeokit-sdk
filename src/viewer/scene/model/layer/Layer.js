@@ -281,17 +281,6 @@ export class Layer {
         this.aabbDirty = true;
     }
 
-    get aabb() {
-        if (this.aabbDirty) {
-            math.collapseAABB3(this._aabb);
-            for (let i = 0, len = this._meshes.length; i < len; i++) {
-                math.expandAABB3(this._aabb, this._meshes[i].aabb);
-            }
-            this.aabbDirty = false;
-        }
-        return this._aabb;
-    }
-
     __drawLayer(renderFlags, frameCtx, renderer, pass) {
         if ((this._numCulledLayerPortions < this._portions.length) && (this._numVisibleLayerPortions > 0)) {
             const backfacePasses = (this.primitive !== "points") && (this.primitive !== "lines") && [
@@ -463,12 +452,34 @@ export class Layer {
         this.__drawPick(renderFlags, frameCtx, renderer);
     }
 
-    drawSnapInit(renderFlags, frameCtx) {
-        this.__drawPick(renderFlags, frameCtx, this._renderers.snapInitRenderer);
-    }
+    drawSnap(renderFlags, frameCtx, isSnapInit) {
+        frameCtx.snapPickOrigin = [0, 0, 0];
 
-    drawSnap(renderFlags, frameCtx) {
-        this.__drawPick(renderFlags, frameCtx, (frameCtx.snapMode === "edge") ? this._renderers.snapEdgeRenderer : this._renderers.snapVertexRenderer);
+        if (this.aabbDirty) { // Per-layer AABB for best RTC accuracy
+            math.collapseAABB3(this._aabb);
+            this._meshes.forEach(m => math.expandAABB3(this._aabb, m.aabb));
+            this.aabbDirty = false;
+        }
+
+        const aabb = this._aabb;
+        frameCtx.snapPickCoordinateScale = [
+            math.safeInv(aabb[3] - aabb[0]) * math.MAX_INT,
+            math.safeInv(aabb[4] - aabb[1]) * math.MAX_INT,
+            math.safeInv(aabb[5] - aabb[2]) * math.MAX_INT
+        ];
+        frameCtx.snapPickLayerNumber++;
+
+        const renderer = isSnapInit ? this._renderers.snapInitRenderer : ((frameCtx.snapMode === "edge") ? this._renderers.snapEdgeRenderer : this._renderers.snapVertexRenderer);
+        this.__drawPick(renderFlags, frameCtx, renderer);
+
+        frameCtx.snapPickLayerParams[frameCtx.snapPickLayerNumber] = {
+            origin: frameCtx.snapPickOrigin.slice(),
+            coordinateScale: [
+                math.safeInv(frameCtx.snapPickCoordinateScale[0]),
+                math.safeInv(frameCtx.snapPickCoordinateScale[1]),
+                math.safeInv(frameCtx.snapPickCoordinateScale[2])
+            ]
+        };
     }
 
 
