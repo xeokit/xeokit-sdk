@@ -331,14 +331,6 @@ export class DTXTrianglesLayer extends Layer {
 
         this._bucketGeometries = {};
 
-        this._meshes = [];
-
-        /**
-         * The axis-aligned World-space boundary of this TrianglesDataTextureLayer's positions.
-         */
-        this._aabb = math.collapseAABB3();
-        this.aabbDirty = true;
-
         /**
          * The number of updates in the current frame;
          */
@@ -350,17 +342,6 @@ export class DTXTrianglesLayer extends Layer {
         this.primitive = cfg.primitive;
 
         this._finalized = false;
-    }
-
-    get aabb() {
-        if (this.aabbDirty) {
-            math.collapseAABB3(this._aabb);
-            for (let i = 0, len = this._meshes.length; i < len; i++) {
-                math.expandAABB3(this._aabb, this._meshes[i].aabb);
-            }
-            this.aabbDirty = false;
-        }
-        return this._aabb;
     }
 
     /**
