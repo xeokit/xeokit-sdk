@@ -160,7 +160,7 @@ export class VBORenderer {
             }
 
             if (clipping) {
-                src.push("out float vClippable;");
+                src.push("flat out float vClippable;");
                 if (clippingCaps) {
                     src.push("out float vClipPositionW;");
                 }
@@ -325,7 +325,7 @@ export class VBORenderer {
                 src.push(`in highp vec3 ${vWorldPosition};`);
             }
             if (clipping) {
-                src.push("in float vClippable;");
+                src.push("flat in float vClippable;");
                 if (clippingCaps) {
                     src.push("in float vClipPositionW;");
                 }
