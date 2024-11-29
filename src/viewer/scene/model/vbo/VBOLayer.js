@@ -392,21 +392,7 @@ export class VBOLayer extends Layer {
 
         this._modelAABB = (! instancing) && math.collapseAABB3(); // Model-space AABB
         this._portions = [];
-        this._meshes = [];
-        this._aabb = math.collapseAABB3();
-        this.aabbDirty = true;
         this._finalized = false;
-    }
-
-    get aabb() {
-        if (this.aabbDirty) {
-            math.collapseAABB3(this._aabb);
-            for (let i = 0, len = this._meshes.length; i < len; i++) {
-                math.expandAABB3(this._aabb, this._meshes[i].aabb);
-            }
-            this.aabbDirty = false;
-        }
-        return this._aabb;
     }
 
     /**
