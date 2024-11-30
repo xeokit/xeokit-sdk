@@ -1,4 +1,4 @@
-export const ColorProgram = function(logarithmicDepthBufferEnabled, lightSetup, sao, primitive, saoTextureUnit = undefined) {
+export const ColorProgram = function(logarithmicDepthBufferEnabled, lightSetup, sao, primitive) {
     return {
         programName: "Color",
         getHash: () => [lightSetup ? lightSetup.getHash() : "-", sao ? "sao" : "nosao"],
@@ -38,7 +38,7 @@ export const ColorProgram = function(logarithmicDepthBufferEnabled, lightSetup, 
             const setSAORenderState = sao && sao.setupInputs(program);
             return (frameCtx, textureSet) => {
                 setLightsRenderState && setLightsRenderState(frameCtx);
-                setSAORenderState && setSAORenderState(frameCtx, saoTextureUnit);
+                setSAORenderState && setSAORenderState(frameCtx);
             };
         },
 
