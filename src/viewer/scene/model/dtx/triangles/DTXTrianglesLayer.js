@@ -137,9 +137,8 @@ export const getRenderers = (function() {
             const makeColorProgram = (withSAO) => ColorProgram(
                 scene.logarithmicDepthBufferEnabled,
                 createLightSetup(gl, scene._lightsState, false), // WARNING: Changing `useMaps' to `true' might have unexpected consequences while binding textures, as the DTX texture binding mechanism doesn't rely on `frameCtx.textureUnit` the way VBO does (see setSAORenderState)
-                withSAO && createSAOSetup(gl, scene),
-                primitive,
-                10);
+                withSAO && createSAOSetup(gl, scene, 10),
+                primitive);
 
             cache[sceneId] = {
                 colorRenderers: {
