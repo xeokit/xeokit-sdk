@@ -1,8 +1,9 @@
+import {LinearEncoding, sRGBEncoding} from "../../../../../constants/constants.js";
 import {TrianglesBatchingRenderer} from "./TrianglesBatchingRenderer.js";
 
-// const TEXTURE_DECODE_FUNCS = {};
-// TEXTURE_DECODE_FUNCS[LinearEncoding] = "linearToLinear";
-// TEXTURE_DECODE_FUNCS[sRGBEncoding] = "sRGBToLinear";
+const TEXTURE_DECODE_FUNCS = {};
+TEXTURE_DECODE_FUNCS[LinearEncoding] = "linearToLinear";
+TEXTURE_DECODE_FUNCS[sRGBEncoding] = "sRGBToLinear";
 
 /**
  * @private
@@ -338,7 +339,7 @@ export class TrianglesPBRRenderer extends TrianglesBatchingRenderer {
         if (lightsState.reflectionMaps.length > 0) {
             src.push("vec3 getLightProbeIndirectRadiance(const in vec3 reflectVec, const in float blinnShininessExponent, const in int maxMIPLevel) {");
             src.push("   float mipLevel = 0.5 * getSpecularMIPLevel(blinnShininessExponent, maxMIPLevel);"); //TODO: a random factor - fix this
-            src.push("   vec3 envMapColor = sRGBToLinear(texture(reflectionMap, reflectVec, mipLevel)).rgb;");
+            src.push("   vec3 envMapColor = " + TEXTURE_DECODE_FUNCS[lightsState.reflectionMaps[0].encoding] + "(texture(reflectionMap, reflectVec, mipLevel)).rgb;");
             src.push("  return envMapColor;");
             src.push("}");
         }
@@ -396,7 +397,7 @@ export class TrianglesPBRRenderer extends TrianglesBatchingRenderer {
         if (lightsState.lightMaps.length > 0 || lightsState.reflectionMaps.length > 0) {
             src.push("void computePBRLightMapping(const in Geometry geometry, const in Material material, inout ReflectedLight reflectedLight) {");
             if (lightsState.lightMaps.length > 0) {
-                src.push("   vec3 irradiance = sRGBToLinear(texture(lightMap, geometry.worldNormal)).rgb;");
+                src.push("   vec3 irradiance = " + TEXTURE_DECODE_FUNCS[lightsState.lightMaps[0].encoding] + "(texture(lightMap, geometry.worldNormal)).rgb;");
                 src.push("   irradiance *= PI;");
                 src.push("   vec3 diffuseBRDFContrib = (RECIPROCAL_PI * material.diffuseColor);");
                 src.push("   reflectedLight.diffuse +=  irradiance * diffuseBRDFContrib;");
