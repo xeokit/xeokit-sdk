@@ -85,7 +85,7 @@ const getRenderers = (function() {
 
             const gl = scene.canvas.gl;
 
-            const makeColorProgram = (lights, sao) => ColorProgram(scene.logarithmicDepthBufferEnabled, lights, sao, primitive, undefined);
+            const makeColorProgram = (lights, sao) => ColorProgram(scene.logarithmicDepthBufferEnabled, lights, sao, primitive);
 
             const makePickDepthProgram   = (isPoints) => PickDepthProgram(scene, createPickClipTransformSetup(gl, 1), isPoints);
             const makePickMeshProgram    = (isPoints) => PickMeshProgram(scene, createPickClipTransformSetup(gl, 1), isPoints);
