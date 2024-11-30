@@ -228,7 +228,7 @@ export const createPickClipTransformSetup = function(gl, renderBufferSize) {
     };
 };
 
-export const createSAOSetup = (gl, scene) => {
+export const createSAOSetup = (gl, scene, textureUnit = undefined) => {
     return {
         appendDefinitions: (src) => {
             src.push("uniform sampler2D uOcclusionTexture;");
@@ -253,7 +253,7 @@ export const createSAOSetup = (gl, scene) => {
             const uOcclusionTexture = program.getSampler("uOcclusionTexture");
             const uSAOParams        = program.getLocation("uSAOParams");
 
-            return function(frameCtx, textureUnit = undefined) {
+            return function(frameCtx) {
                 const sao = scene.sao;
                 if (sao.possible) {
                     const viewportWidth = gl.drawingBufferWidth;
