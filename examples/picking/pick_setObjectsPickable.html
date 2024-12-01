@@ -50,6 +50,8 @@
     viewer.camera.look = [4.400, 3.724, 8.899];
     viewer.camera.up = [-0.018, 0.999, 0.039];
 
+    viewer.cameraControl.doublePickFlyTo = false;
+
     //----------------------------------------------------------------------------------------------------------------------
     // Create a xeokit loader plugin, load a model, fit to view
     //----------------------------------------------------------------------------------------------------------------------
@@ -64,16 +66,16 @@
     });
 
     //------------------------------------------------------------------------------------------------------------------
-    // Set all objects un-pickable and grey, except for the slab in front of the door, which we'll set pickable and blue
+    // Set all objects un-pickable and grey, except for the one wall in front of camera, which we'll set pickable and blue
     //------------------------------------------------------------------------------------------------------------------
 
     sceneModel.on("loaded", () => {
 
         viewer.scene.setObjectsColorized(viewer.scene.objectIds, [0.4, 0.4, 0.4]);
 
-        viewer.scene.setObjectsColorized(["1CZILmCaHETO8tf3SgGEXu"], [0, 0, 1]);
+        viewer.scene.setObjectsColorized(["2O2Fr$t4X7Zf8NOew3FLOH"], [0, 0, 1]);
 
-        viewer.scene.setObjectsPickable(["1CZILmCaHETO8tf3SgGEXu"], true);
+        viewer.scene.setObjectsPickable(["2O2Fr$t4X7Zf8NOew3FLOH"], true);
     });
 
     //------------------------------------------------------------------------------------------------------------------
