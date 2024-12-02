@@ -334,12 +334,12 @@ class StoreyViewsPlugin extends Plugin {
             if(isNaN(elevationCur)) return;
 
             const bb = storeysList[i].storeyAABB;
-            bb[bbIndex] = Math.max(bb[1], parseFloat(elevationCur) / 1000);
+            bb[bbIndex] = Math.max(bb[1], parseFloat(elevationCur));
 
             if (i > 0) {
                 const storeyMetaObjectNext = metaScene.metaObjects[storeysList[i - 1].storeyId];
                 const elevationNext = storeyMetaObjectNext.attributes.elevation;
-                bb[4] = Math.min(bb[bbIndex + 3], parseFloat(elevationNext) / 1000);
+                bb[4] = Math.min(bb[bbIndex + 3], parseFloat(elevationNext));
             }
 
             this.storeys[storeysList[i].storeyId].storeyAABB = bb;
