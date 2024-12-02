@@ -226,6 +226,13 @@
     import {Viewer, XKTLoaderPlugin, ContextMenu, TreeViewPlugin} from "../../dist/xeokit-sdk.min.es.js";
 
     //------------------------------------------------------------------------------------------------------------------
+    // Helping variables
+    //------------------------------------------------------------------------------------------------------------------
+
+    let longPressTimer, startX, startY;
+    const MOVE_THRESHOLD = 3;
+
+    //------------------------------------------------------------------------------------------------------------------
     // Create a Viewer, arrange the camera
     //------------------------------------------------------------------------------------------------------------------
 
@@ -781,7 +788,7 @@
         return canvasPos;
     };
 
-    viewer.scene.canvas.canvas.addEventListener('contextmenu', (event) => {
+    function handleContextMenu(event) {
         const canvasPos = getCanvasPosFromEvent(event);
         const hit = viewer.scene.pick({
             canvasPos
@@ -800,7 +807,34 @@
             canvasContextMenu.show(event.pageX, event.pageY);
         }
         event.preventDefault();
-    });
+    }
+
+    if(!os.isTouchDevice()){
+        viewer.scene.canvas.canvas.addEventListener('contextmenu', handleContextMenu);
+    }
+    else {
+        viewer.scene.canvas.canvas.addEventListener('touchstart', (event) => {
+            const touch = event.touches[0];
+            startX = touch.clientX;
+            startY = touch.clientY;
+            longPressTimer = setTimeout(() => {
+                handleContextMenu(event.touches[0]);
+            }, 500);
+        })
+
+        viewer.scene.canvas.canvas.addEventListener('touchend', () => {
+            clearTimeout(longPressTimer);
+        })
+
+        viewer.scene.canvas.canvas.addEventListener('touchmove', () => {
+            const touch = event.touches[0];
+            const deltaX = Math.abs(touch.clientX - startX);
+            const deltaY = Math.abs(touch.clientY - startY);
+
+            if(deltaX > MOVE_THRESHOLD || deltaY > MOVE_THRESHOLD)
+                clearTimeout(longPressTimer);
+        })
+    }
 
     //----------------------------------------------------------------------------------------------------------------------
     // Load a model

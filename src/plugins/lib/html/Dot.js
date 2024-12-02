@@ -1,4 +1,4 @@
-import { os } from "../../../viewer/utils/os.js";
+import { addContextMenuListener } from "./MenuEvent.js";
 /** @private */
 class Dot {
 
@@ -116,41 +116,10 @@ class Dot {
         }
 
         if (cfg.onContextMenu) {
-            if(os.isIphoneSafari()){
-                dotClickable.addEventListener('touchstart', (event) => {
-                    event.preventDefault();
-                    if(this._timeout){
-                        clearTimeout(this._timeout);
-                        this._timeout = null;
-                    }
-                    this._timeout = setTimeout(() => {
-                        event.clientX = event.touches[0].clientX;
-                        event.clientY = event.touches[0].clientY;
-                        cfg.onContextMenu(event, this);
-                        clearTimeout(this._timeout);
-                        this._timeout = null;
-                    }, 500);
-                })
-
-                dotClickable.addEventListener('touchend', (event) => {
-                    event.preventDefault();
-                    //stops short touches from calling the timeout
-                    if(this._timeout) {
-                        clearTimeout(this._timeout);
-                        this._timeout = null;
-                    }
-                } )
-
+            const contextMenuCallback = (event) => {
+                cfg.onContextMenu(event, this);
             }
-            else {
-                dotClickable.addEventListener('contextmenu', (event) => {
-                    console.log(event);
-                    cfg.onContextMenu(event, this);
-                    event.preventDefault();
-                    event.stopPropagation();
-                    console.log("Label context menu")
-                });
-            }
+            addContextMenuListener(dotClickable, contextMenuCallback);
             
         }
 

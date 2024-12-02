@@ -5,7 +5,14 @@ const os = {
         const isSafari = /Safari/i.test(userAgent) && !/Chrome/i.test(userAgent);
 
         return isIphone && isSafari;
+    },
+    isTouchDevice() {
+        return (
+            'ontouchstart' in window || //works for most devices
+            navigator.maxTouchPoints > 0 || //works for modern touch devices
+            navigator.mxMaxTouchPoints > 0 //works for older microsoft touch devices
+        )
     }
 };
 
-export {os};
+export { os };

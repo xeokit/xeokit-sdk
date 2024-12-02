@@ -1,6 +1,7 @@
 import {math} from '../../viewer/scene/math/math.js';
 import {Marker} from "../../viewer/scene/marker/Marker.js";
 import {utils} from "../../viewer/scene/utils.js";
+import { addContextMenuListener } from '../lib/html/MenuEvent.js';
 
 const tempVec3a = math.vec3();
 const tempVec3b = math.vec3();
@@ -45,9 +46,10 @@ class Annotation extends Marker {
             this._marker.addEventListener("click", this._onMouseClickedExternalMarker = () => {
                 this.plugin.fire("markerClicked", this);
             });
-            this._marker.addEventListener("contextmenu", this._onContextMenuExtenalMarker = () => {
+            this._onContextMenuExtenalMarker = () => {
                 this.plugin.fire("contextmenu", this);
-            });
+            }
+            this._onContextMenuExtenalMarkerRemover = addContextMenuListener(this._markerHTML, this._onContextMenuExtenalMarker);
             this._marker.addEventListener("mouseenter", this._onMouseEnterExternalMarker = () => {
                 this.plugin.fire("markerMouseEnter", this);
             });
@@ -168,10 +170,10 @@ class Annotation extends Marker {
             this._marker.addEventListener("click", () => {
                 this.plugin.fire("markerClicked", this);
             });
-            this._marker.addEventListener("contextmenu", e => {
+            addContextMenuListener(this._marker, e => {
                 e.preventDefault();
                 this.plugin.fire("contextmenu", this);
-            });
+            })
             this._marker.addEventListener("mouseenter", () => {
                 this.plugin.fire("markerMouseEnter", this);
             });
@@ -418,7 +420,7 @@ class Annotation extends Marker {
                 this._marker = null;
             } else {
                 this._marker.removeEventListener("click", this._onMouseClickedExternalMarker);
-                this._marker.removeEventListener("contextmenu", this._onContextMenuExtenalMarker);
+                this._onContextMenuExtenalMarkerRemover();
                 this._marker.removeEventListener("mouseenter", this._onMouseEnterExternalMarker);
                 this._marker.removeEventListener("mouseleave", this._onMouseLeaveExternalMarker);
                 this._marker = null;

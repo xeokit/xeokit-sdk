@@ -1,3 +1,4 @@
+import { addContextMenuListener } from "../lib/html/MenuEvent.js";
 /**
  * @desc A {@link TreeViewPlugin} render class.
  * 
@@ -49,7 +50,7 @@ export class RenderService {
     nodeElement.appendChild(span);
 
     if (contextmenuHandler) {
-      span.oncontextmenu = contextmenuHandler;
+      addContextMenuListener(span, contextmenuHandler)
     }
 
     if (titleClickHandler) {
