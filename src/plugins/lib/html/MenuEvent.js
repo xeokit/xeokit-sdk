@@ -53,8 +53,7 @@ export function addContextMenuListener(elem, callback) {
         event.preventDefault();
         event.stopPropagation();
     };
-
-    console.log('adding context menu listener');
+    
     if (os.isIphoneSafari()) {
         elem.addEventListener('touchstart', touchStartHandler);
         elem.addEventListener('touchmove', touchMoveHandler);
