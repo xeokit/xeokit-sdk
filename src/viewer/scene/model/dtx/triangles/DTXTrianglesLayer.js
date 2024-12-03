@@ -74,19 +74,18 @@ import {PickNormalsProgram} from "../../layer/programs/PickNormalsProgram.js";
 import {SilhouetteProgram}  from "../../layer/programs/SilhouetteProgram.js";
 import {SnapProgram}        from "../../layer/programs/SnapProgram.js";
 
-export const getRenderers = (function() {
+const getRenderers = (function() {
     const cachedRenderers = { };
 
-    return function(scene, primitive) {
-        const batchInstKey = "dtx";
-        if (! (batchInstKey in cachedRenderers)) {
-            cachedRenderers[batchInstKey] = { };
+    return function(scene, cacheKey, primitive, isVBO, makeRenderingAttributes) {
+        if (! (cacheKey in cachedRenderers)) {
+            cachedRenderers[cacheKey] = { };
         }
-        const primKey = "triangles";
-        if (! (primKey in cachedRenderers[batchInstKey])) {
-            cachedRenderers[batchInstKey][primKey] = { };
+        const primKey = ((primitive === "points") || (primitive === "lines")) ? primitive : "triangles";
+        if (! (primKey in cachedRenderers[cacheKey])) {
+            cachedRenderers[cacheKey][primKey] = { };
         }
-        const cache = cachedRenderers[batchInstKey][primKey];
+        const cache = cachedRenderers[cacheKey][primKey];
         const sceneId = scene.id;
         if (! (sceneId in cache)) {
 
@@ -96,7 +95,7 @@ export const getRenderers = (function() {
                     primitive,
                     programSetup,
                     subGeometry,
-                    makeDTXRenderingAttributes(scene, primitive, subGeometry));
+                    makeRenderingAttributes(subGeometry));
             };
 
             // Pre-initialize certain renderers that would otherwise be lazy-initialised on user interaction,
@@ -134,31 +133,79 @@ export const getRenderers = (function() {
 
             const gl = scene.canvas.gl;
 
-            const makeColorProgram = (withSAO) => ColorProgram(
-                scene.logarithmicDepthBufferEnabled,
-                createLightSetup(gl, scene._lightsState, false), // WARNING: Changing `useMaps' to `true' might have unexpected consequences while binding textures, as the DTX texture binding mechanism doesn't rely on `frameCtx.textureUnit` the way VBO does (see setSAORenderState)
-                withSAO && createSAOSetup(gl, scene, 10),
-                primitive);
+            const makeColorProgram = (lights, sao) => ColorProgram(scene.logarithmicDepthBufferEnabled, lights, sao, primitive);
 
-            cache[sceneId] = {
-                colorRenderers: {
-                    "sao-": { "vertex": { "flat-": lazy((c) => c(makeColorProgram(false))) } },
-                    "sao+": { "vertex": { "flat-": lazy((c) => c(makeColorProgram(true))) } }
-                },
-                depthRenderer:           lazy((c) => c(DepthProgram(scene.logarithmicDepthBufferEnabled))),
-                edgesRenderers: {
-                    uniform: lazy((c) => c(EdgesProgram(scene, true),  { vertices: false })),
-                    vertex:  lazy((c) => c(EdgesProgram(scene, false), { vertices: false }))
-                },
-                occlusionRenderer:       lazy((c) => c(OcclusionProgram(scene.logarithmicDepthBufferEnabled))),
-                pickDepthRenderer:       eager((c) => c(PickDepthProgram(scene, createPickClipTransformSetup(gl, 1)))),
-                pickMeshRenderer:        eager((c) => c(PickMeshProgram(scene, createPickClipTransformSetup(gl, 1)))),
-                pickNormalsFlatRenderer: eager((c) => c(PickNormalsProgram(scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(gl, 3), true))),
-                silhouetteRenderer:      eager((c) => c(SilhouetteProgram(scene, false))),
-                snapInitRenderer:        eager((c) => c(SnapProgram(gl, true,  false))),
-                snapEdgeRenderer:        eager((c) => c(SnapProgram(gl, false, false), { vertices: false })),
-                snapVertexRenderer:      eager((c) => c(SnapProgram(gl, false, false), { vertices: true })),
-            };
+            const makePickDepthProgram   = (isPoints) => PickDepthProgram(scene, createPickClipTransformSetup(gl, 1), isPoints);
+            const makePickMeshProgram    = (isPoints) => PickMeshProgram(scene, createPickClipTransformSetup(gl, 1), isPoints);
+            const makePickNormalsProgram = (isFlat)   => PickNormalsProgram(scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(gl, 3), isFlat);
+
+            const makeSnapProgram = (isSnapInit, isPoints) => SnapProgram(gl, isSnapInit, isPoints);
+
+            if (primitive === "points") {
+                cache[sceneId] = {
+                    colorRenderers:     { "sao-": { "vertex": { "flat-": lazy((c) => c(makeColorProgram(null, null))) } } },
+                    occlusionRenderer:  lazy((c) => c(OcclusionProgram(scene.logarithmicDepthBufferEnabled))),
+                    pickDepthRenderer:  lazy((c) => c(makePickDepthProgram(true))),
+                    pickMeshRenderer:   lazy((c) => c(makePickMeshProgram(true))),
+                    // VBOBatchingPointsShadowRenderer has been implemented by 14e973df6268369b00baef60e468939e062ac320,
+                    // but never used (and probably not maintained), as opposed to VBOInstancingPointsShadowRenderer in the same commit
+                    // drawShadow has been nop in VBO point layers
+                    // shadowRenderer:     instancing && lazy((c) => c(ShadowProgram(scene.logarithmicDepthBufferEnabled))),
+                    silhouetteRenderer: lazy((c) => c(SilhouetteProgram(scene, true))),
+                    snapInitRenderer:   lazy((c) => c(makeSnapProgram(true,  true))),
+                    snapVertexRenderer: lazy((c) => c(makeSnapProgram(false, true), { vertices: true }))
+                };
+            } else if (primitive === "lines") {
+                cache[sceneId] = {
+                    colorRenderers:     { "sao-": { "vertex": { "flat-": lazy((c) => c(makeColorProgram(null, null))) } } },
+                    silhouetteRenderer: lazy((c) => c(SilhouetteProgram(scene, true))),
+                    snapInitRenderer:   lazy((c) => c(makeSnapProgram(true,  false))),
+                    snapEdgeRenderer:   lazy((c) => c(makeSnapProgram(false, false), { vertices: false })),
+                    snapVertexRenderer: lazy((c) => c(makeSnapProgram(false, false), { vertices: true }))
+                };
+            } else {
+                cache[sceneId] = {
+                    colorRenderers: (function() {
+                        // WARNING: Changing `useMaps' to `true' for DTX might have unexpected consequences while binding textures, as the DTX texture binding mechanism doesn't rely on `frameCtx.textureUnit` the way VBO does (see setSAORenderState);
+                        const lights = createLightSetup(gl, scene._lightsState, false, false);
+                        const saoRenderers = function(sao) {
+                            const makeColorTextureProgram = (useAlphaCutoff) => ColorTextureProgram(scene, lights, sao, useAlphaCutoff, scene.gammaOutput); // If gammaOutput set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
+                            return (isVBO
+                                    ? {
+                                        "PBR": lazy((c) => c(PBRProgram(scene, createLightSetup(gl, scene._lightsState, true), sao))),
+                                        "texture": {
+                                            "alphaCutoff-": lazy((c) => c(makeColorTextureProgram(false))),
+                                            "alphaCutoff+": lazy((c) => c(makeColorTextureProgram(true)))
+                                        },
+                                        "vertex": {
+                                            "flat-": lazy((c) => c(makeColorProgram(lights, sao))),
+                                            "flat+": lazy((c) => c(FlatColorProgram(scene.logarithmicDepthBufferEnabled, lights, sao)))
+                                        }
+                                    }
+                                    : { "vertex": { "flat-": lazy((c) => c(makeColorProgram(lights, sao))) } });
+                        };
+                        return {
+                            "sao-": saoRenderers(null),
+                            "sao+": saoRenderers(createSAOSetup(gl, scene, isVBO ? undefined : 10))
+                        };
+                    })(),
+                    depthRenderer:           lazy((c) => c(DepthProgram(scene.logarithmicDepthBufferEnabled))),
+                    edgesRenderers: {
+                        uniform: lazy((c) => c(EdgesProgram(scene, true),  { vertices: false })),
+                        vertex:  lazy((c) => c(EdgesProgram(scene, false), { vertices: false }))
+                    },
+                    occlusionRenderer:       lazy((c) => c(OcclusionProgram(scene.logarithmicDepthBufferEnabled))),
+                    pickDepthRenderer:       eager((c) => c(makePickDepthProgram(false))),
+                    pickMeshRenderer:        eager((c) => c(makePickMeshProgram(false))),
+                    pickNormalsFlatRenderer: eager((c) => c(makePickNormalsProgram(true))),
+                    pickNormalsRenderer:     isVBO && eager((c) => c(makePickNormalsProgram(false))),
+                    shadowRenderer:          isVBO && lazy((c) => c(ShadowProgram(scene))),
+                    silhouetteRenderer:      eager((c) => c(SilhouetteProgram(scene, false))),
+                    snapInitRenderer:        eager((c) => c(makeSnapProgram(true,  false))),
+                    snapEdgeRenderer:        eager((c) => c(makeSnapProgram(false, false), { vertices: false })),
+                    snapVertexRenderer:      eager((c) => c(makeSnapProgram(false, false), { vertices: true }))
+                };
+            }
 
             const revalidateAll = force => {
                 (function rec(obj) {
@@ -235,7 +282,8 @@ export class DTXTrianglesLayer extends Layer {
         this.sortId = `TriDTX-${this._layerNumber}`; // State sorting key.
         this.layerIndex = cfg.layerIndex; // Index of this TrianglesDataTextureLayer in {@link SceneModel#_layerList}.
 
-        this._renderers = getRenderers(model.scene, cfg.primitive);
+        this._renderers = getRenderers(model.scene, "dtx", cfg.primitive, false,
+                                       subGeometry => makeDTXRenderingAttributes(model.scene.canvas.gl, subGeometry));
         this._hasEdges = this._renderers.edgesRenderers;
         this.model = model;
         this._edgesColorOpaqueAllowed = () => {
