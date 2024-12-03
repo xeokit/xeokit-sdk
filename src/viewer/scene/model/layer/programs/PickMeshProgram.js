@@ -1,8 +1,7 @@
-export const PickMeshProgram = function(scene, clipTransformSetup, isPoints) {
-    const gl = scene.canvas.gl;
+export const PickMeshProgram = function(logarithmicDepthBufferEnabled, clipTransformSetup, isPoints) {
     return {
         programName: "PickMesh",
-        getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
+        getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 3,  // PICK
         usePickParams: true,
         appendVertexDefinitions: (src) => {
@@ -23,8 +22,8 @@ export const PickMeshProgram = function(scene, clipTransformSetup, isPoints) {
         appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
             src.push("outPickColor = vPickColor;");
         },
-        setupInputs: (program) => {
-            const setClipTransformState = clipTransformSetup.setupInputs(program);
+        setupInputs: (getUniformSetter) => {
+            const setClipTransformState = clipTransformSetup.setupInputs(getUniformSetter);
             return (frameCtx, textureSet) => setClipTransformState(frameCtx);
         },
 
