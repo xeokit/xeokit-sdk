@@ -232,6 +232,7 @@ class MetaModel {
                     this.rootMetaObjects.push(metaObject);
                     metaScene.rootMetaObjects[id] = metaObject;
                 }
+                metaObject.metaModels.push(this);
             }
         }
     }

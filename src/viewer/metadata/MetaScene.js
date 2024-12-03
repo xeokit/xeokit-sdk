@@ -1,7 +1,6 @@
 import {MetaModel} from "./MetaModel.js";
 import {MetaObject} from "./MetaObject.js";
 import {PropertySet} from "./PropertySet.js";
-import {math} from "../scene/math/math.js";
 
 /**
  * @desc Metadata corresponding to a {@link Scene}.
@@ -188,13 +187,14 @@ class MetaScene {
         if (metaModel.metaObjects) {
             for (let i = 0, len = metaModel.metaObjects.length; i < len; i++) {
                 const metaObject = metaModel.metaObjects[i];
-                const type = metaObject.type;
                 const id = metaObject.id;
-                if (metaObject.metaModels.length === 1&& metaObject.metaModels[0].id === metaModelId) { // MetaObject owned only by this model, delete
+                if (metaObject.metaModels.length === 1 && metaObject.metaModels[0].id === metaModelId) { // MetaObject owned only by this model, delete
                     delete this.metaObjects[id];
                     if (!metaObject.parent) {
                         delete this.rootMetaObjects[id];
                     }
+                } else {
+                    metaObject.metaModels = metaObject.metaModels.filter(metaModel => metaModel.id !== metaModelId);
                 }
             }
         }
