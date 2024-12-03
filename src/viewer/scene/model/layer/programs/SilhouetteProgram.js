@@ -1,8 +1,7 @@
-export const SilhouetteProgram = function(scene, isPointsOrLines) {
-    const gl = scene.canvas.gl;
+export const SilhouetteProgram = function(logarithmicDepthBufferEnabled, isPointsOrLines) {
     return {
         programName: "Silhouette",
-        getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
+        getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 1,  // SILHOUETTE_HIGHLIGHTED | SILHOUETTE_SELECTED | SILHOUETTE_XRAYED
         appendVertexDefinitions: (! isPointsOrLines) && ((src) => {
             src.push("out float vAlpha;");
@@ -25,9 +24,9 @@ export const SilhouetteProgram = function(scene, isPointsOrLines) {
                 src.push(`outColor = ${sliceColorOr("fragColor")};`);
             }
         },
-        setupInputs: (program) => {
-            const silhouetteColor = program.getLocation("silhouetteColor");
-            return (frameCtx, textureSet) => gl.uniform4fv(silhouetteColor, frameCtx.programColor);
+        setupInputs: (getUniformSetter) => {
+            const silhouetteColor = getUniformSetter("silhouetteColor");
+            return (frameCtx, textureSet) => silhouetteColor(frameCtx.programColor);
         }
     };
 };

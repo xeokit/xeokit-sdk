@@ -1,6 +1,6 @@
 import {math} from "../../../math/math.js";
 
-export const SnapProgram = function(gl, isSnapInit, isPoints) {
+export const SnapProgram = function(isSnapInit, isPoints) {
     return {
         programName: isSnapInit ? "SnapInit" : "Snap",
         // Improves occlusion accuracy at distance
@@ -40,16 +40,16 @@ export const SnapProgram = function(gl, isSnapInit, isPoints) {
                 src.push("outPickColor = uvec4(vPickColor);");
             }
         },
-        setupInputs: (program) => {
-            const uSnapVectorA      = program.getLocation("snapVectorA");
-            const uSnapInvVectorAB  = program.getLocation("snapInvVectorAB");
-            const uLayerNumber      = program.getLocation("uLayerNumber");
-            const uCoordinateScaler = program.getLocation("uCoordinateScaler");
+        setupInputs: (getUniformSetter) => {
+            const uSnapVectorA      = getUniformSetter("snapVectorA");
+            const uSnapInvVectorAB  = getUniformSetter("snapInvVectorAB");
+            const uLayerNumber      = getUniformSetter("uLayerNumber");
+            const uCoordinateScaler = getUniformSetter("uCoordinateScaler");
             return (frameCtx, textureSet) => {
-                gl.uniform2fv(uSnapVectorA,      frameCtx.snapVectorA);
-                gl.uniform2fv(uSnapInvVectorAB,  frameCtx.snapInvVectorAB);
-                gl.uniform1i(uLayerNumber,       frameCtx.snapPickLayerNumber);
-                gl.uniform3fv(uCoordinateScaler, frameCtx.snapPickCoordinateScale);
+                uSnapVectorA(frameCtx.snapVectorA);
+                uSnapInvVectorAB(frameCtx.snapInvVectorAB);
+                uLayerNumber(frameCtx.snapPickLayerNumber);
+                uCoordinateScaler(frameCtx.snapPickCoordinateScale);
             };
         },
 

@@ -30,8 +30,8 @@ export const PickNormalsProgram = function(logarithmicDepthBufferEnabled, clipTr
                                  : "vWorldNormal");
             src.push(`outNormal = ivec4(${worldNormal} * float(${math.MAX_INT}), 1.0);`);
         },
-        setupInputs: (program) => {
-            const setClipTransformState = clipTransformSetup.setupInputs(program);
+        setupInputs: (getUniformSetter) => {
+            const setClipTransformState = clipTransformSetup.setupInputs(getUniformSetter);
             return (frameCtx, textureSet) => setClipTransformState(frameCtx);
         }
     };
