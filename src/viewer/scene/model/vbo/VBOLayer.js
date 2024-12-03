@@ -28,16 +28,15 @@ import { SnapProgram         } from "../layer/programs/SnapProgram.js";
 const getRenderers = (function() {
     const cachedRenderers = { };
 
-    return function(scene, instancing, primitive) {
-        const batchInstKey = instancing ? "instancing" : "batching";
-        if (! (batchInstKey in cachedRenderers)) {
-            cachedRenderers[batchInstKey] = { };
+    return function(scene, cacheKey, primitive, isVBO, makeRenderingAttributes) {
+        if (! (cacheKey in cachedRenderers)) {
+            cachedRenderers[cacheKey] = { };
         }
         const primKey = ((primitive === "points") || (primitive === "lines")) ? primitive : "triangles";
-        if (! (primKey in cachedRenderers[batchInstKey])) {
-            cachedRenderers[batchInstKey][primKey] = { };
+        if (! (primKey in cachedRenderers[cacheKey])) {
+            cachedRenderers[cacheKey][primKey] = { };
         }
-        const cache = cachedRenderers[batchInstKey][primKey];
+        const cache = cachedRenderers[cacheKey][primKey];
         const sceneId = scene.id;
         if (! (sceneId in cache)) {
 
@@ -47,7 +46,7 @@ const getRenderers = (function() {
                     primitive,
                     programSetup,
                     subGeometry,
-                    makeVBORenderingAttributes(scene, instancing, primitive, subGeometry));
+                    makeRenderingAttributes(subGeometry));
             };
 
             // Pre-initialize certain renderers that would otherwise be lazy-initialised on user interaction,
@@ -118,41 +117,44 @@ const getRenderers = (function() {
             } else {
                 cache[sceneId] = {
                     colorRenderers: (function() {
+                        // WARNING: Changing `useMaps' to `true' for DTX might have unexpected consequences while binding textures, as the DTX texture binding mechanism doesn't rely on `frameCtx.textureUnit` the way VBO does (see setSAORenderState);
                         const lights = createLightSetup(gl, scene._lightsState, false, false);
                         const saoRenderers = function(sao) {
                             const makeColorTextureProgram = (useAlphaCutoff) => ColorTextureProgram(scene, lights, sao, useAlphaCutoff, scene.gammaOutput); // If gammaOutput set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
-                            return {
-                                "PBR": lazy((c) => c(PBRProgram(scene, createLightSetup(gl, scene._lightsState, true), sao))),
-                                "texture": {
-                                    "alphaCutoff-": lazy((c) => c(makeColorTextureProgram(false))),
-                                    "alphaCutoff+": lazy((c) => c(makeColorTextureProgram(true)))
-                                },
-                                "vertex": {
-                                    "flat-": lazy((c) => c(makeColorProgram(lights, sao))),
-                                    "flat+": lazy((c) => c(FlatColorProgram(scene.logarithmicDepthBufferEnabled, lights, sao)))
-                                }
-                            };
+                            return (isVBO
+                                    ? {
+                                        "PBR": lazy((c) => c(PBRProgram(scene, createLightSetup(gl, scene._lightsState, true), sao))),
+                                        "texture": {
+                                            "alphaCutoff-": lazy((c) => c(makeColorTextureProgram(false))),
+                                            "alphaCutoff+": lazy((c) => c(makeColorTextureProgram(true)))
+                                        },
+                                        "vertex": {
+                                            "flat-": lazy((c) => c(makeColorProgram(lights, sao))),
+                                            "flat+": lazy((c) => c(FlatColorProgram(scene.logarithmicDepthBufferEnabled, lights, sao)))
+                                        }
+                                    }
+                                    : { "vertex": { "flat-": lazy((c) => c(makeColorProgram(lights, sao))) } });
                         };
                         return {
                             "sao-": saoRenderers(null),
-                            "sao+": saoRenderers(createSAOSetup(gl, scene))
+                            "sao+": saoRenderers(createSAOSetup(gl, scene, isVBO ? undefined : 10))
                         };
                     })(),
-                    depthRenderer:                          lazy((c) => c(DepthProgram(scene.logarithmicDepthBufferEnabled))),
+                    depthRenderer:           lazy((c) => c(DepthProgram(scene.logarithmicDepthBufferEnabled))),
                     edgesRenderers: {
                         uniform: lazy((c) => c(EdgesProgram(scene, true),  { vertices: false })),
                         vertex:  lazy((c) => c(EdgesProgram(scene, false), { vertices: false }))
                     },
-                    occlusionRenderer:                      lazy((c) => c(OcclusionProgram(scene.logarithmicDepthBufferEnabled))),
-                    pickDepthRenderer:                      eager((c) => c(makePickDepthProgram(false))),
-                    pickMeshRenderer:                       eager((c) => c(makePickMeshProgram(false))),
-                    pickNormalsFlatRenderer:                lazy((c) => c(makePickNormalsProgram(true))),
-                    pickNormalsRenderer:                    lazy((c) => c(makePickNormalsProgram(false))),
-                    shadowRenderer:                         lazy((c) => c(ShadowProgram(scene))),
-                    silhouetteRenderer:                     eager((c) => c(SilhouetteProgram(scene, false))),
-                    snapInitRenderer:                       eager((c) => c(makeSnapProgram(true,  false))),
-                    snapEdgeRenderer:                       eager((c) => c(makeSnapProgram(false, false), { vertices: false })),
-                    snapVertexRenderer:                     eager((c) => c(makeSnapProgram(false, false), { vertices: true }))
+                    occlusionRenderer:       lazy((c) => c(OcclusionProgram(scene.logarithmicDepthBufferEnabled))),
+                    pickDepthRenderer:       eager((c) => c(makePickDepthProgram(false))),
+                    pickMeshRenderer:        eager((c) => c(makePickMeshProgram(false))),
+                    pickNormalsFlatRenderer: eager((c) => c(makePickNormalsProgram(true))),
+                    pickNormalsRenderer:     isVBO && eager((c) => c(makePickNormalsProgram(false))),
+                    shadowRenderer:          isVBO && lazy((c) => c(ShadowProgram(scene))),
+                    silhouetteRenderer:      eager((c) => c(SilhouetteProgram(scene, false))),
+                    snapInitRenderer:        eager((c) => c(makeSnapProgram(true,  false))),
+                    snapEdgeRenderer:        eager((c) => c(makeSnapProgram(false, false), { vertices: false })),
+                    snapVertexRenderer:      eager((c) => c(makeSnapProgram(false, false), { vertices: true }))
                 };
             }
 
@@ -299,7 +301,9 @@ export class VBOLayer extends Layer {
                                  (cfg.textureSet && cfg.textureSet.metallicRoughnessTexture ? "-metallicRoughnessTexture" : ""))))
                         : ""));
 
-        this._renderers = getRenderers(cfg.model.scene, instancing, this.primitive);
+        const scene = cfg.model.scene;
+        this._renderers = getRenderers(scene, instancing ? "instancing" : "batching", this.primitive, true,
+                                       subGeometry => makeVBORenderingAttributes(scene, instancing, this.primitive, subGeometry));
 
         this._hasEdges = this._renderers.edgesRenderers;
         this._edgesColorOpaqueAllowed = () => true;
