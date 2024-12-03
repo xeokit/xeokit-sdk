@@ -1,7 +1,6 @@
 import {WEBGL_INFO} from "../../../webglInfo.js";
 
 export const ColorTextureProgram = function(scene, lightSetup, sao, useAlphaCutoff, gammaOutput) {
-    const gl = scene.canvas.gl;
     const maxTextureUnits = WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
     return {
         programName: "ColorTexture",
@@ -65,23 +64,23 @@ export const ColorTextureProgram = function(scene, lightSetup, sao, useAlphaCuto
                 src.push("outColor = linearToGamma(outColor, gammaFactor);");
             }
         },
-        setupInputs: (program) => {
-            const uColorMap            = program.getSampler("uColorMap");
-            const uGammaFactor         = gammaOutput && program.getLocation("gammaFactor");
-            const setLightsRenderState = lightSetup.setupInputs(program);
-            const setSAOState          = sao && sao.setupInputs(program);
-            const materialAlphaCutoff  = useAlphaCutoff && program.getLocation("materialAlphaCutoff");
+        setupInputs: (getUniformSetter) => {
+            const uColorMap            = getUniformSetter("uColorMap");
+            const uGammaFactor         = gammaOutput && getUniformSetter("gammaFactor");
+            const setLightsRenderState = lightSetup.setupInputs(getUniformSetter);
+            const setSAOState          = sao && sao.setupInputs(getUniformSetter);
+            const materialAlphaCutoff  = useAlphaCutoff && getUniformSetter("materialAlphaCutoff");
 
             return (frameCtx, textureSet) => {
                 const colorTexture = textureSet.colorTexture;
                 if (colorTexture) {
-                    uColorMap.bindTexture(colorTexture.texture, frameCtx.textureUnit);
+                    uColorMap(colorTexture.texture, frameCtx.textureUnit);
                     frameCtx.textureUnit = (frameCtx.textureUnit + 1) % maxTextureUnits;
                 }
-                uGammaFactor && gl.uniform1f(uGammaFactor, scene.gammaFactor);
+                uGammaFactor && uGammaFactor(scene.gammaFactor);
                 setLightsRenderState(frameCtx);
                 setSAOState && setSAOState(frameCtx);
-                materialAlphaCutoff && gl.uniform1f(materialAlphaCutoff, textureSet.alphaCutoff);
+                materialAlphaCutoff && materialAlphaCutoff(textureSet.alphaCutoff);
             };
         },
 
