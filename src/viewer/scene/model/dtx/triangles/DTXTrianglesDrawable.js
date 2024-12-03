@@ -2,8 +2,7 @@ import {math} from "../../../math/index.js";
 import {isPerspectiveMatrix} from "../../layer/Layer.js";
 const tempVec3 = math.vec3();
 
-export const makeDTXRenderingAttributes = function(scene, primitive, subGeometry) {
-    const gl = scene.canvas.gl;
+export const makeDTXRenderingAttributes = function(gl, subGeometry) {
     const lazyShaderVariable = function(name) {
         const variable = {
             toString: () => {
