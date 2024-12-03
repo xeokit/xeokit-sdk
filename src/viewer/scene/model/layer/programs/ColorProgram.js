@@ -33,9 +33,9 @@ export const ColorProgram = function(logarithmicDepthBufferEnabled, lightSetup, 
                 src.push("outColor = " + (sao ? ("vec4(fragColor.rgb * " + sao.getAmbient(gl_FragCoord) + ", fragColor.a)") : "fragColor") + ";");
             }
         },
-        setupInputs: (program) => {
-            const setLightsRenderState = lightSetup && lightSetup.setupInputs(program);
-            const setSAORenderState = sao && sao.setupInputs(program);
+        setupInputs: (getUniformSetter) => {
+            const setLightsRenderState = lightSetup && lightSetup.setupInputs(getUniformSetter);
+            const setSAORenderState = sao && sao.setupInputs(getUniformSetter);
             return (frameCtx, textureSet) => {
                 setLightsRenderState && setLightsRenderState(frameCtx);
                 setSAORenderState && setSAORenderState(frameCtx);

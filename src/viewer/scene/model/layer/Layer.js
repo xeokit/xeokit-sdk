@@ -19,6 +19,7 @@ import { ShadowProgram       } from "./programs/ShadowProgram.js";
 import { SilhouetteProgram   } from "./programs/SilhouetteProgram.js";
 import { SnapProgram         } from "./programs/SnapProgram.js";
 
+const tempVec2 = math.vec2();
 const tempVec3 = math.vec3();
 const tempVec4 = math.vec4();
 
@@ -54,7 +55,7 @@ const iota = function(n) {
 
 export const isPerspectiveMatrix = (m) => `(${m}[2][3] == - 1.0)`;
 
-export const createClippingSetup = function(gl, sectionPlanesState) {
+export const createClippingSetup = function(sectionPlanesState) {
     const numAllocatedSectionPlanes = sectionPlanesState.getNumAllocatedSectionPlanes();
 
     return (numAllocatedSectionPlanes > 0) && {
@@ -69,11 +70,11 @@ export const createClippingSetup = function(gl, sectionPlanesState) {
         getDistance: (worldPosition) => {
             return iota(numAllocatedSectionPlanes).map(i => `(sectionPlaneActive${i} ? clamp(dot(-sectionPlaneDir${i}.xyz, ${worldPosition} - sectionPlanePos${i}.xyz), 0.0, 1000.0) : 0.0)`).join(" + ");
         },
-        setupInputs: (program) => {
+        setupInputs: (getUniformSetter) => {
             const uSectionPlanes = iota(numAllocatedSectionPlanes).map(i => ({
-                active: program.getLocation("sectionPlaneActive" + i),
-                pos:    program.getLocation("sectionPlanePos" + i),
-                dir:    program.getLocation("sectionPlaneDir" + i)
+                active: getUniformSetter("sectionPlaneActive" + i),
+                pos:    getUniformSetter("sectionPlanePos" + i),
+                dir:    getUniformSetter("sectionPlaneDir" + i)
             }));
             return (layer) => {
                 const origin = layer._state.origin;
@@ -86,14 +87,14 @@ export const createClippingSetup = function(gl, sectionPlanesState) {
                     const sectionPlaneUniforms = uSectionPlanes[sectionPlaneIndex];
                     if (sectionPlaneUniforms) {
                         const active = (sectionPlaneIndex < numSectionPlanes) && renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
-                        gl.uniform1i(sectionPlaneUniforms.active, active ? 1 : 0);
+                        sectionPlaneUniforms.active(active ? 1 : 0);
                         if (active) {
                             const sectionPlane = sectionPlanes[sectionPlaneIndex];
-                            gl.uniform3fv(sectionPlaneUniforms.dir, sectionPlane.dir);
-                            gl.uniform3fv(sectionPlaneUniforms.pos,
-                                          (origin
-                                           ? getPlaneRTCPos(sectionPlane.dist, sectionPlane.dir, origin, tempVec3, model.matrix)
-                                           : sectionPlane.pos));
+                            sectionPlaneUniforms.dir(sectionPlane.dir);
+                            sectionPlaneUniforms.pos(origin
+                                                     ? getPlaneRTCPos(
+                                                         sectionPlane.dist, sectionPlane.dir, origin, tempVec3, model.matrix)
+                                                     : sectionPlane.pos);
                         }
                     }
                 }
@@ -102,7 +103,7 @@ export const createClippingSetup = function(gl, sectionPlanesState) {
     };
 };
 
-const createLightSetup = function(gl, lightsState, useMaps) {
+const createLightSetup = function(lightsState, useMaps) {
     const TEXTURE_DECODE_FUNCS = {
         [LinearEncoding]: value => value,
         [sRGBEncoding]:   value => `sRGBToLinear(${value})`
@@ -182,61 +183,59 @@ const createLightSetup = function(gl, lightsState, useMaps) {
             const decode = TEXTURE_DECODE_FUNCS[reflectionMap.encoding];
             return `${decode(`texture(reflectionMap, ${reflectVec}, 0.5 * ${specularMIPLevel})`)}.rgb`; //TODO: a random factor - fix this
         }),
-        setupInputs: (program) => {
-            const uLightAmbient = program.getLocation("lightAmbient");
+        setupInputs: (getUniformSetter) => {
+            const uLightAmbient = getUniformSetter("lightAmbient");
             const uLightColor = [];
             const uLightDir = [];
             const uLightPos = [];
-            const uLightAttenuation = [];
 
             for (let i = 0, len = lights.length; i < len; i++) {
                 const light = lights[i];
                 switch (light.type) {
                 case "dir":
-                    uLightColor[i] = program.getLocation("lightColor" + i);
+                    uLightColor[i] = getUniformSetter("lightColor" + i);
                     uLightPos[i] = null;
-                    uLightDir[i] = program.getLocation("lightDir" + i);
+                    uLightDir[i] = getUniformSetter("lightDir" + i);
                     break;
                 case "point":
-                    uLightColor[i] = program.getLocation("lightColor" + i);
-                    uLightPos[i] = program.getLocation("lightPos" + i);
+                    uLightColor[i] = getUniformSetter("lightColor" + i);
+                    uLightPos[i] = getUniformSetter("lightPos" + i);
                     uLightDir[i] = null;
-                    uLightAttenuation[i] = program.getLocation("lightAttenuation" + i);
                     break;
                 case "spot":
-                    uLightColor[i] = program.getLocation("lightColor" + i);
-                    uLightPos[i] = program.getLocation("lightPos" + i);
-                    uLightDir[i] = program.getLocation("lightDir" + i);
-                    uLightAttenuation[i] = program.getLocation("lightAttenuation" + i);
+                    uLightColor[i] = getUniformSetter("lightColor" + i);
+                    uLightPos[i] = getUniformSetter("lightPos" + i);
+                    uLightDir[i] = getUniformSetter("lightDir" + i);
                     break;
                 }
             }
 
-            const uLightMap      = useMaps && lightMap      && program.getSampler("lightMap");
-            const uReflectionMap = useMaps && reflectionMap && program.getSampler("reflectionMap");
+            const uLightMap      = useMaps && lightMap      && getUniformSetter("lightMap");
+            const uReflectionMap = useMaps && reflectionMap && getUniformSetter("reflectionMap");
 
             return function(frameCtx) {
-                gl.uniform4fv(uLightAmbient, lightsState.getAmbientColorAndIntensity());
+                uLightAmbient(lightsState.getAmbientColorAndIntensity());
 
                 for (let i = 0, len = lights.length; i < len; i++) {
                     const light = lights[i];
                     if (uLightColor[i]) {
-                        gl.uniform4f(uLightColor[i], light.color[0], light.color[1], light.color[2], light.intensity);
+                        tempVec4[0] = light.color[0];
+                        tempVec4[1] = light.color[1];
+                        tempVec4[2] = light.color[2];
+                        tempVec4[3] = light.intensity;
+                        uLightColor[i](tempVec4);
                     }
                     if (uLightPos[i]) {
-                        gl.uniform3fv(uLightPos[i], light.pos);
-                        if (uLightAttenuation[i]) {
-                            gl.uniform1f(uLightAttenuation[i], light.attenuation);
-                        }
+                        uLightPos[i](light.pos);
                     }
                     if (uLightDir[i]) {
-                        gl.uniform3fv(uLightDir[i], light.dir);
+                        uLightDir[i](light.dir);
                     }
                 }
 
                 const setSampler = (sampler, texture) => {
                     if (sampler && texture.texture) {
-                        sampler.bindTexture(texture.texture, frameCtx.textureUnit);
+                        sampler(texture.texture, frameCtx.textureUnit);
                         frameCtx.textureUnit = (frameCtx.textureUnit + 1) % WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
                         frameCtx.bindTexture++;
                     }
@@ -256,12 +255,14 @@ const createPickClipTransformSetup = function(gl, renderBufferSize) {
             src.push("uniform vec2 drawingBufferSize;");
         },
         transformClipPos: clipPos => `vec4((${clipPos}.xy / ${clipPos}.w - pickClipPos) * drawingBufferSize / ${renderBufferSize.toFixed(1)} * ${clipPos}.w, ${clipPos}.zw)`,
-        setupInputs: (program) => {
-            const uPickClipPos = program.getLocation("pickClipPos");
-            const uDrawingBufferSize = program.getLocation("drawingBufferSize");
+        setupInputs: (getUniformSetter) => {
+            const uPickClipPos = getUniformSetter("pickClipPos");
+            const uDrawingBufferSize = getUniformSetter("drawingBufferSize");
             return function(frameCtx) {
-                gl.uniform2fv(uPickClipPos, frameCtx.pickClipPos);
-                gl.uniform2f(uDrawingBufferSize, gl.drawingBufferWidth, gl.drawingBufferHeight);
+                uPickClipPos(frameCtx.pickClipPos);
+                tempVec2[0] = gl.drawingBufferWidth;
+                tempVec2[1] = gl.drawingBufferHeight;
+                uDrawingBufferSize(tempVec2);
             };
         }
     };
@@ -288,21 +289,19 @@ const createSAOSetup = (gl, scene, textureUnit = undefined) => {
             const blendFactor = "uSAOParams.w";
             return `(smoothstep(${blendCutoff}, 1.0, unpackRGBToFloat(texture(uOcclusionTexture, ${uv}))) * ${blendFactor})`;
         },
-        setupInputs: (program) => {
-            const uOcclusionTexture = program.getSampler("uOcclusionTexture");
-            const uSAOParams        = program.getLocation("uSAOParams");
+        setupInputs: (getUniformSetter) => {
+            const uOcclusionTexture = getUniformSetter("uOcclusionTexture");
+            const uSAOParams        = getUniformSetter("uSAOParams");
 
             return function(frameCtx) {
                 const sao = scene.sao;
                 if (sao.possible) {
-                    const viewportWidth = gl.drawingBufferWidth;
-                    const viewportHeight = gl.drawingBufferHeight;
-                    tempVec4[0] = viewportWidth;
-                    tempVec4[1] = viewportHeight;
+                    tempVec4[0] = gl.drawingBufferWidth;  // viewportWidth
+                    tempVec4[1] = gl.drawingBufferHeight; // viewportHeight
                     tempVec4[2] = sao.blendCutoff;
                     tempVec4[3] = sao.blendFactor;
-                    gl.uniform4fv(uSAOParams, tempVec4);
-                    uOcclusionTexture.bindTexture(frameCtx.occlusionTexture, textureUnit ?? frameCtx.textureUnit);
+                    uSAOParams(tempVec4);
+                    uOcclusionTexture(frameCtx.occlusionTexture, textureUnit ?? frameCtx.textureUnit);
                     if (textureUnit === undefined) {
                         frameCtx.textureUnit = (frameCtx.textureUnit + 1) % WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
                         frameCtx.bindTexture++;
@@ -374,11 +373,11 @@ export const getRenderers = (function() {
 
             const makeColorProgram = (lights, sao) => ColorProgram(scene.logarithmicDepthBufferEnabled, lights, sao, primitive);
 
-            const makePickDepthProgram   = (isPoints) => PickDepthProgram(scene, createPickClipTransformSetup(gl, 1), isPoints);
-            const makePickMeshProgram    = (isPoints) => PickMeshProgram(scene, createPickClipTransformSetup(gl, 1), isPoints);
+            const makePickDepthProgram   = (isPoints) => PickDepthProgram(scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(gl, 1), isPoints);
+            const makePickMeshProgram    = (isPoints) => PickMeshProgram(scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(gl, 1), isPoints);
             const makePickNormalsProgram = (isFlat)   => PickNormalsProgram(scene.logarithmicDepthBufferEnabled, createPickClipTransformSetup(gl, 3), isFlat);
 
-            const makeSnapProgram = (isSnapInit, isPoints) => SnapProgram(gl, isSnapInit, isPoints);
+            const makeSnapProgram = (isSnapInit, isPoints) => SnapProgram(isSnapInit, isPoints);
 
             if (primitive === "points") {
                 cache[sceneId] = {
@@ -390,14 +389,14 @@ export const getRenderers = (function() {
                     // but never used (and probably not maintained), as opposed to VBOInstancingPointsShadowRenderer in the same commit
                     // drawShadow has been nop in VBO point layers
                     // shadowRenderer:     instancing && lazy((c) => c(ShadowProgram(scene.logarithmicDepthBufferEnabled))),
-                    silhouetteRenderer: lazy((c) => c(SilhouetteProgram(scene, true))),
+                    silhouetteRenderer: lazy((c) => c(SilhouetteProgram(scene.logarithmicDepthBufferEnabled, true))),
                     snapInitRenderer:   lazy((c) => c(makeSnapProgram(true,  true))),
                     snapVertexRenderer: lazy((c) => c(makeSnapProgram(false, true), { vertices: true }))
                 };
             } else if (primitive === "lines") {
                 cache[sceneId] = {
                     colorRenderers:     { "sao-": { "vertex": { "flat-": lazy((c) => c(makeColorProgram(null, null))) } } },
-                    silhouetteRenderer: lazy((c) => c(SilhouetteProgram(scene, true))),
+                    silhouetteRenderer: lazy((c) => c(SilhouetteProgram(scene.logarithmicDepthBufferEnabled, true))),
                     snapInitRenderer:   lazy((c) => c(makeSnapProgram(true,  false))),
                     snapEdgeRenderer:   lazy((c) => c(makeSnapProgram(false, false), { vertices: false })),
                     snapVertexRenderer: lazy((c) => c(makeSnapProgram(false, false), { vertices: true }))
@@ -406,12 +405,12 @@ export const getRenderers = (function() {
                 cache[sceneId] = {
                     colorRenderers: (function() {
                         // WARNING: Changing `useMaps' to `true' for DTX might have unexpected consequences while binding textures, as the DTX texture binding mechanism doesn't rely on `frameCtx.textureUnit` the way VBO does (see setSAORenderState);
-                        const lights = createLightSetup(gl, scene._lightsState, false, false);
+                        const lights = createLightSetup(scene._lightsState, false);
                         const saoRenderers = function(sao) {
                             const makeColorTextureProgram = (useAlphaCutoff) => ColorTextureProgram(scene, lights, sao, useAlphaCutoff, scene.gammaOutput); // If gammaOutput set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
                             return (isVBO
                                     ? {
-                                        "PBR": lazy((c) => c(PBRProgram(scene, createLightSetup(gl, scene._lightsState, true), sao))),
+                                        "PBR": lazy((c) => c(PBRProgram(scene, createLightSetup(scene._lightsState, true), sao))),
                                         "texture": {
                                             "alphaCutoff-": lazy((c) => c(makeColorTextureProgram(false))),
                                             "alphaCutoff+": lazy((c) => c(makeColorTextureProgram(true)))
@@ -430,8 +429,8 @@ export const getRenderers = (function() {
                     })(),
                     depthRenderer:           lazy((c) => c(DepthProgram(scene.logarithmicDepthBufferEnabled))),
                     edgesRenderers: {
-                        uniform: lazy((c) => c(EdgesProgram(scene, true),  { vertices: false })),
-                        vertex:  lazy((c) => c(EdgesProgram(scene, false), { vertices: false }))
+                        uniform: lazy((c) => c(EdgesProgram(scene.logarithmicDepthBufferEnabled, true),  { vertices: false })),
+                        vertex:  lazy((c) => c(EdgesProgram(scene.logarithmicDepthBufferEnabled, false), { vertices: false }))
                     },
                     occlusionRenderer:       lazy((c) => c(OcclusionProgram(scene.logarithmicDepthBufferEnabled))),
                     pickDepthRenderer:       eager((c) => c(makePickDepthProgram(false))),
@@ -439,7 +438,7 @@ export const getRenderers = (function() {
                     pickNormalsFlatRenderer: eager((c) => c(makePickNormalsProgram(true))),
                     pickNormalsRenderer:     isVBO && eager((c) => c(makePickNormalsProgram(false))),
                     shadowRenderer:          isVBO && lazy((c) => c(ShadowProgram(scene))),
-                    silhouetteRenderer:      eager((c) => c(SilhouetteProgram(scene, false))),
+                    silhouetteRenderer:      eager((c) => c(SilhouetteProgram(scene.logarithmicDepthBufferEnabled, false))),
                     snapInitRenderer:        eager((c) => c(makeSnapProgram(true,  false))),
                     snapEdgeRenderer:        eager((c) => c(makeSnapProgram(false, false), { vertices: false })),
                     snapVertexRenderer:      eager((c) => c(makeSnapProgram(false, false), { vertices: true }))

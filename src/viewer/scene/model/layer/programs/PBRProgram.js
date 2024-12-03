@@ -1,7 +1,6 @@
 import {WEBGL_INFO} from "../../../webglInfo.js";
 
 export const PBRProgram = function(scene, lightSetup, sao) {
-    const gl = scene.canvas.gl;
     const getIrradiance = lightSetup.getIrradiance;
     const getReflectionRadiance = lightSetup.getReflectionRadiance;
     const gammaOutput = scene.gammaOutput; // If set, then it expects that all textures and colors need to be outputted in premultiplied gamma. Default is false.
@@ -241,22 +240,22 @@ export const PBRProgram = function(scene, lightSetup, sao) {
                 src.push("outColor = linearToGamma(outColor);");
             }
         },
-        setupInputs: (program) => {
-            const uColorMap            = program.getSampler("uColorMap");
-            const uMetallicRoughMap    = program.getSampler("uMetallicRoughMap");
-            const uEmissiveMap         = program.getSampler("uEmissiveMap");
-            const uNormalMap           = program.getSampler("uNormalMap");
-            const uAOMap               = program.getSampler("uAOMap");
+        setupInputs: (getUniformSetter) => {
+            const uColorMap            = getUniformSetter("uColorMap");
+            const uMetallicRoughMap    = getUniformSetter("uMetallicRoughMap");
+            const uEmissiveMap         = getUniformSetter("uEmissiveMap");
+            const uNormalMap           = getUniformSetter("uNormalMap");
+            const uAOMap               = getUniformSetter("uAOMap");
 
-            const uGammaFactor         = gammaOutput && program.getLocation("gammaFactor");
-            const setLightsRenderState = lightSetup.setupInputs(program);
-            const setSAOState          = sao && sao.setupInputs(program);
+            const uGammaFactor         = gammaOutput && getUniformSetter("gammaFactor");
+            const setLightsRenderState = lightSetup.setupInputs(getUniformSetter);
+            const setSAOState          = sao && sao.setupInputs(getUniformSetter);
 
             return (frameCtx, textureSet) => {
                 if (textureSet) {
                     const setSampler = (sampler, texture) => {
                         if (texture) {
-                            sampler.bindTexture(texture.texture, frameCtx.textureUnit);
+                            sampler(texture.texture, frameCtx.textureUnit);
                             frameCtx.textureUnit = (frameCtx.textureUnit + 1) % WEBGL_INFO.MAX_TEXTURE_IMAGE_UNITS;
                         }
                     };
@@ -268,7 +267,7 @@ export const PBRProgram = function(scene, lightSetup, sao) {
                     setSampler(uAOMap,  textureSet.occlusionTexture);
                 }
 
-                uGammaFactor && gl.uniform1f(uGammaFactor, scene.gammaFactor);
+                uGammaFactor && uGammaFactor(scene.gammaFactor);
                 setLightsRenderState(frameCtx);
                 setSAOState && setSAOState(frameCtx);
             };
