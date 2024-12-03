@@ -1,8 +1,7 @@
-export const EdgesProgram = function(scene, colorUniform) {
-    const gl = scene.canvas.gl;
+export const EdgesProgram = function(logarithmicDepthBufferEnabled, colorUniform) {
     return {
         programName: colorUniform ? "Edges" : "EdgesColor",
-        getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
+        getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 2,  // EDGES_COLOR_OPAQUE | EDGES_COLOR_TRANSPARENT | EDGES_HIGHLIGHTED | EDGES_XRAYED | EDGES_SELECTED
         appendVertexDefinitions: (src) => {
             if (! colorUniform) {
@@ -25,9 +24,9 @@ export const EdgesProgram = function(scene, colorUniform) {
         appendFragmentOutputs: (src, vWorldPosition, gl_FragCoord, sliceColorOr, viewMatrix) => {
             src.push("outColor = " + (colorUniform ? "edgeColor" : "vColor") + ";");
         },
-        setupInputs: colorUniform && ((program) => {
-            const edgeColor = program.getLocation("edgeColor");
-            return (frameCtx, textureSet) => gl.uniform4fv(edgeColor, frameCtx.programColor);
+        setupInputs: colorUniform && ((getUniformSetter) => {
+            const edgeColor = getUniformSetter("edgeColor");
+            return (frameCtx, textureSet) => edgeColor(frameCtx.programColor);
         })
     };
 };
