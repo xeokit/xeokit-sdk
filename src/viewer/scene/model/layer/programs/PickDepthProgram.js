@@ -1,8 +1,7 @@
-export const PickDepthProgram = function(scene, clipTransformSetup, isPoints) {
-    const gl = scene.canvas.gl;
+export const PickDepthProgram = function(logarithmicDepthBufferEnabled, clipTransformSetup, isPoints) {
     return {
         programName: "PickDepth",
-        getLogDepth: scene.logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
+        getLogDepth: logarithmicDepthBufferEnabled && (vFragDepth => vFragDepth),
         renderPassFlag: 3,  // PICK
         usePickParams: true,
         appendVertexDefinitions: (src) => {
@@ -34,13 +33,13 @@ export const PickDepthProgram = function(scene, clipTransformSetup, isPoints) {
             src.push("outPackedDepth = packDepth(zNormalizedDepth);"); // Must be linear depth
             // try: src.push("    outPackedDepth = vec4(zNormalizedDepth, fract(zNormalizedDepth * vec3(256.0, 256.0*256.0, 256.0*256.0*256.0)));");
         },
-        setupInputs: (program) => {
-            const uPickZNear = program.getLocation("pickZNear");
-            const uPickZFar  = program.getLocation("pickZFar");
-            const setClipTransformState = clipTransformSetup.setupInputs(program);
+        setupInputs: (getUniformSetter) => {
+            const uPickZNear = getUniformSetter("pickZNear");
+            const uPickZFar  = getUniformSetter("pickZFar");
+            const setClipTransformState = clipTransformSetup.setupInputs(getUniformSetter);
             return (frameCtx, textureSet) => {
-                gl.uniform1f(uPickZNear, frameCtx.pickZNear);
-                gl.uniform1f(uPickZFar,  frameCtx.pickZFar);
+                uPickZNear(frameCtx.pickZNear);
+                uPickZFar(frameCtx.pickZFar);
                 setClipTransformState(frameCtx);
             };
         }
