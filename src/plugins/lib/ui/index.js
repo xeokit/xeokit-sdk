@@ -14,6 +14,7 @@ const tmpVec4a = math.vec4();
 const tmpVec4b = math.vec4();
 const tmpVec4c = math.vec4();
 const tmpVec4d = math.vec4();
+const tmpMat4  = math.mat4();
 
 const nop = () => { };
 
@@ -25,6 +26,15 @@ export function transformToNode(from, to, vec) {
 };
 
 const toClipSpace = (camera, worldPos, p) => {
+    // The reason the projMatrix is explicitely fetched as below is a complex callback chain
+    // leading from a boundary update to a viewMatrix and projMatrix updates, which change their values
+    // in the mid of the toClipSpace, leading to incorrect values.
+    // The fetch ensures that matrix values are stabilized before used to transform worldPos to p.
+    // Better solution would be to ensure that no mutually-triggered callbacks
+    // (like boundary => view/projMatrix in this situation) ever happen, so user code can rely
+    // on a callback running in a stable context.
+    tmpMat4.set(camera.viewMatrix);
+    tmpMat4.set(camera.projMatrix);
     // to homogeneous coords
     p.set(worldPos);
     p[3] = 1;
