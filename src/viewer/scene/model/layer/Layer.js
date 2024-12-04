@@ -268,7 +268,7 @@ const createPickClipTransformSetup = function(gl, renderBufferSize) {
     };
 };
 
-const createSAOSetup = (gl, scene, textureUnit = undefined) => {
+const createSAOSetup = (gl, sceneSAO, textureUnit = undefined) => {
     return {
         appendDefinitions: (src) => {
             src.push("uniform sampler2D uOcclusionTexture;");
@@ -294,7 +294,7 @@ const createSAOSetup = (gl, scene, textureUnit = undefined) => {
             const uSAOParams        = getUniformSetter("uSAOParams");
 
             return function(frameCtx) {
-                const sao = scene.sao;
+                const sao = sceneSAO;
                 if (sao.possible) {
                     tempVec4[0] = gl.drawingBufferWidth;  // viewportWidth
                     tempVec4[1] = gl.drawingBufferHeight; // viewportHeight
@@ -424,7 +424,7 @@ export const getRenderers = (function() {
                         };
                         return {
                             "sao-": saoRenderers(null),
-                            "sao+": saoRenderers(createSAOSetup(gl, scene, isVBO ? undefined : 10))
+                            "sao+": saoRenderers(createSAOSetup(gl, scene.sao, isVBO ? undefined : 10))
                         };
                     })(),
                     depthRenderer:           lazy((c) => c(DepthProgram(scene.logarithmicDepthBufferEnabled))),
