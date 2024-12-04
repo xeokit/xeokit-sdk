@@ -1,10 +1,64 @@
-import {createClippingSetup, isPerspectiveMatrix} from "./Layer.js";
-import {createRTCViewMat, math} from "../../math/index.js";
+import {isPerspectiveMatrix} from "./Layer.js";
+import {createRTCViewMat, getPlaneRTCPos, math} from "../../math/index.js";
 import {Program} from "../../webgl/Program.js";
 
 const tempVec2 = math.vec2();
 const tempVec3 = math.vec3();
 const tempMat4 = math.mat4();
+
+const iota = function(n) {
+    const ret = [ ];
+    for (let i = 0; i < n; ++i) ret.push(i);
+    return ret;
+};
+
+const createClippingSetup = function(sectionPlanesState) {
+    const numAllocatedSectionPlanes = sectionPlanesState.getNumAllocatedSectionPlanes();
+
+    return (numAllocatedSectionPlanes > 0) && {
+        getHash: () => sectionPlanesState.getHash(),
+        appendDefinitions: (src) => {
+            for (let i = 0, len = numAllocatedSectionPlanes; i < len; i++) {
+                src.push("uniform bool sectionPlaneActive" + i + ";");
+                src.push("uniform vec3 sectionPlanePos" + i + ";");
+                src.push("uniform vec3 sectionPlaneDir" + i + ";");
+            }
+        },
+        getDistance: (worldPosition) => {
+            return iota(numAllocatedSectionPlanes).map(i => `(sectionPlaneActive${i} ? clamp(dot(-sectionPlaneDir${i}.xyz, ${worldPosition} - sectionPlanePos${i}.xyz), 0.0, 1000.0) : 0.0)`).join(" + ");
+        },
+        setupInputs: (getUniformSetter) => {
+            const uSectionPlanes = iota(numAllocatedSectionPlanes).map(i => ({
+                active: getUniformSetter("sectionPlaneActive" + i),
+                pos:    getUniformSetter("sectionPlanePos" + i),
+                dir:    getUniformSetter("sectionPlaneDir" + i)
+            }));
+            return (layer) => {
+                const origin = layer._state.origin;
+                const model = layer.model;
+                const sectionPlanes = sectionPlanesState.sectionPlanes;
+                const numSectionPlanes = sectionPlanes.length;
+                const baseIndex = layer.layerIndex * numSectionPlanes;
+                const renderFlags = model.renderFlags;
+                for (let sectionPlaneIndex = 0; sectionPlaneIndex < numAllocatedSectionPlanes; sectionPlaneIndex++) {
+                    const sectionPlaneUniforms = uSectionPlanes[sectionPlaneIndex];
+                    if (sectionPlaneUniforms) {
+                        const active = (sectionPlaneIndex < numSectionPlanes) && renderFlags.sectionPlanesActivePerLayer[baseIndex + sectionPlaneIndex];
+                        sectionPlaneUniforms.active(active ? 1 : 0);
+                        if (active) {
+                            const sectionPlane = sectionPlanes[sectionPlaneIndex];
+                            sectionPlaneUniforms.dir(sectionPlane.dir);
+                            sectionPlaneUniforms.pos(origin
+                                                     ? getPlaneRTCPos(
+                                                         sectionPlane.dist, sectionPlane.dir, origin, tempVec3, model.matrix)
+                                                     : sectionPlane.pos);
+                        }
+                    }
+                }
+            };
+        }
+    };
+};
 
 export class LayerRenderer {
 
