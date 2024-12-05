@@ -334,7 +334,6 @@ export class DTXTrianglesLayer extends Layer {
             const alignedEdgeIndicesLen = Math.ceil((bucket.edgeIndices.length / 2) / INDICES_EDGE_INDICES_ALIGNEMENT_SIZE) * INDICES_EDGE_INDICES_ALIGNEMENT_SIZE * 2;
             dataTextureRamStats.overheadSizeAlignementEdgeIndices += 2 * (alignedEdgeIndicesLen - bucket.edgeIndices.length);
             const alignedEdgeIndices = new Uint32Array(alignedEdgeIndicesLen);
-            alignedEdgeIndices.fill(0);
             alignedEdgeIndices.set(bucket.edgeIndices);
             bucket.edgeIndices = alignedEdgeIndices;
         }
