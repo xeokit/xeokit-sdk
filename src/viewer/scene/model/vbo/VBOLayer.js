@@ -74,7 +74,6 @@ export class VBOLayer extends Layer {
      * @param cfg
      * @param cfg.model
      * @param cfg.origin
-     * @param cfg.layerIndex
      * @param cfg.textureSet
      * @param cfg.primitive
      *
@@ -95,12 +94,6 @@ export class VBOLayer extends Layer {
          * @type {VBOSceneModel}
          */
         this.model = cfg.model;
-
-        /**
-         * Index of this Layer in {@link VBOSceneModel#_layerList}.
-         * @type {Number}
-         */
-        this.layerIndex = cfg.layerIndex;
 
         /**
          * The type of primitives in this layer.
@@ -243,19 +236,6 @@ export class VBOLayer extends Layer {
                     uvDecodeMatrix: cfg.uvDecodeMatrix && math.mat3(cfg.uvDecodeMatrix),
                 })
         });
-
-        // These counts are used to avoid unnecessary render passes
-        this._numVisibleLayerPortions = 0;
-        this._numTransparentLayerPortions = 0;
-        this._numXRayedLayerPortions = 0;
-        this._numSelectedLayerPortions = 0;
-        this._numHighlightedLayerPortions = 0;
-        this._numClippableLayerPortions = 0;
-        if (this._hasEdges) {
-            this._numEdgesLayerPortions = 0;
-        }
-        this._numPickableLayerPortions = 0;
-        this._numCulledLayerPortions = 0;
 
         this._modelAABB = (! instancing) && math.collapseAABB3(); // Model-space AABB
         this._portions = [];
