@@ -345,8 +345,6 @@ export class DTXTrianglesLayer extends Layer {
      * @param portionCfg.indices  Flat int indices array.
      * @param [portionCfg.edgeIndices] Flat int edges indices array.
      * @param portionCfg.color Quantized RGB color [0..255,0..255,0..255,0..255]
-     * @param portionCfg.metallic Metalness factor [0..255]
-     * @param portionCfg.roughness Roughness factor [0..255]
      * @param portionCfg.opacity Opacity [0..255]
      * @param [portionCfg.meshMatrix] Flat float 4x4 matrix - transforms the portion within the coordinate system that's local to the SceneModel
      * @param portionCfg.worldAABB Flat float AABB World-space AABB
@@ -418,44 +416,31 @@ export class DTXTrianglesLayer extends Layer {
 
     _createSubPortion(portionCfg, bucketGeometry, bucket, subPortionAABB) {
 
-        const color = portionCfg.color;
-        const metallic = portionCfg.metallic;
-        const roughness = portionCfg.roughness;
-        const colors = portionCfg.colors;
-        const opacity = portionCfg.opacity;
-        const meshMatrix = portionCfg.meshMatrix;
-        const pickColor = portionCfg.pickColor;
         const buffer = this._buffer;
-
         buffer.perObjectPositionsDecodeMatrices.push(portionCfg.positionsDecodeMatrix);
-        buffer.perObjectInstancePositioningMatrices.push(meshMatrix || DEFAULT_MATRIX);
-
+        buffer.perObjectInstancePositioningMatrices.push(portionCfg.meshMatrix || DEFAULT_MATRIX);
         buffer.perObjectSolid.push(!!portionCfg.solid);
+        buffer.perObjectPickColors.push(portionCfg.pickColor);
+        buffer.perObjectVertexBases.push(bucketGeometry.vertexBase);
 
+        const colors = portionCfg.colors;
+        const color  = portionCfg.color;
         if (colors) {
             buffer.perObjectColors.push([colors[0] * 255, colors[1] * 255, colors[2] * 255, 255]);
         } else if (color) { // Color is pre-quantized by SceneModel
-            buffer.perObjectColors.push([color[0], color[1], color[2], opacity]);
+            buffer.perObjectColors.push([color[0], color[1], color[2], portionCfg.opacity]);
         }
 
-        buffer.perObjectPickColors.push(pickColor);
-        buffer.perObjectVertexBases.push(bucketGeometry.vertexBase);
-
         const subPortionId = this._portions.length;
-        bucketGeometry.geometryData.accumulateSubPortionId(subPortionId);
+        this._portions.push({ });
 
-        //   buffer.perObjectOffsets.push([0, 0, 0]);
-        this._portions.push({
-            // vertsBase: vertsIndex,
-            numVertices: bucketGeometry.geometryData.numTriangles
-        });
+        bucketGeometry.geometryData.accumulateSubPortionId(subPortionId);
 
         if (this._subPortionReadableGeometries) {
             this._subPortionReadableGeometries[subPortionId] = {
                 indices: bucket.indices,
                 positionsCompressed: bucket.positionsCompressed,
-                positionsDecodeMatrix: portionCfg.positionsDecodeMatrix,
-                meshMatrix: portionCfg.meshMatrix
+                positionsDecodeMatrix: portionCfg.positionsDecodeMatrix
             };
         }
 
