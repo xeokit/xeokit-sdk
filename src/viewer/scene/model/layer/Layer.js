@@ -419,6 +419,17 @@ export class Layer {
         // The axis-aligned World-space boundary of this Layer's positions.
         this._aabb = math.collapseAABB3();
         this._aabbDirty = true;
+
+        // These counts are used to avoid unnecessary render passes
+        this._numVisibleLayerPortions = 0;
+        this._numTransparentLayerPortions = 0;
+        this._numXRayedLayerPortions = 0;
+        this._numSelectedLayerPortions = 0;
+        this._numHighlightedLayerPortions = 0;
+        this._numClippableLayerPortions = 0;
+        this._numEdgesLayerPortions = 0;
+        this._numPickableLayerPortions = 0;
+        this._numCulledLayerPortions = 0;
     }
 
     aabbChanged() { this._aabbDirty = true; }
