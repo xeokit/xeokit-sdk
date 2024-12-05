@@ -185,13 +185,12 @@ class MetaScene {
         // Remove MetaObjects
 
         if (metaModel.metaObjects) {
-            for (let i = 0, len = metaModel.metaObjects.length; i < len; i++) {
-                const metaObject = metaModel.metaObjects[i];
-                const id = metaObject.id;
+            for (let objectId in metaModel.metaObjects) {
+                const metaObject = metaModel.metaObjects[objectId];
                 if (metaObject.metaModels.length === 1 && metaObject.metaModels[0].id === metaModelId) { // MetaObject owned only by this model, delete
-                    delete this.metaObjects[id];
+                    delete this.metaObjects[objectId];
                     if (!metaObject.parent) {
-                        delete this.rootMetaObjects[id];
+                        delete this.rootMetaObjects[objectId];
                     }
                 } else {
                     metaObject.metaModels = metaObject.metaModels.filter(metaModel => metaModel.id !== metaModelId);
