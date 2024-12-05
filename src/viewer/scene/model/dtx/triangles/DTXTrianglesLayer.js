@@ -433,44 +433,24 @@ export class DTXTrianglesLayer extends Layer {
         buffer.perObjectPickColors.push(pickColor);
         buffer.perObjectVertexBases.push(bucketGeometry.vertexBase);
 
-        {
-            let currentNumIndices;
-            if (bucketGeometry.numVertices <= (1 << 8)) {
-                currentNumIndices = state.numIndices8Bits;
-            } else if (bucketGeometry.numVertices <= (1 << 16)) {
-                currentNumIndices = state.numIndices16Bits;
-            } else {
-                currentNumIndices = state.numIndices32Bits;
-            }
-            buffer.perObjectIndexBaseOffsets.push(currentNumIndices / 3 - bucketGeometry.indicesBase);
-        }
-
-        {
-            let currentNumEdgeIndices;
-            if (bucketGeometry.numVertices <= (1 << 8)) {
-                currentNumEdgeIndices = state.numEdgeIndices8Bits;
-            } else if (bucketGeometry.numVertices <= (1 << 16)) {
-                currentNumEdgeIndices = state.numEdgeIndices16Bits;
-            } else {
-                currentNumEdgeIndices = state.numEdgeIndices32Bits;
-            }
-            buffer.perObjectEdgeIndexBaseOffsets.push(currentNumEdgeIndices / 2 - bucketGeometry.edgeIndicesBase);
-        }
-
         const subPortionId = this._portions.length;
+        let currentNumIndices = 0;
         if (bucketGeometry.numTriangles > 0) {
             let numIndices = bucketGeometry.numTriangles * 3;
             let indicesPortionIdBuffer;
             if (bucketGeometry.numVertices <= (1 << 8)) {
                 indicesPortionIdBuffer = buffer.perTriangleNumberPortionId8Bits;
+                currentNumIndices = state.numIndices8Bits;
                 state.numIndices8Bits += numIndices;
                 dataTextureRamStats.totalPolygons8Bits += bucketGeometry.numTriangles;
             } else if (bucketGeometry.numVertices <= (1 << 16)) {
                 indicesPortionIdBuffer = buffer.perTriangleNumberPortionId16Bits;
+                currentNumIndices = state.numIndices16Bits;
                 state.numIndices16Bits += numIndices;
                 dataTextureRamStats.totalPolygons16Bits += bucketGeometry.numTriangles;
             } else {
                 indicesPortionIdBuffer = buffer.perTriangleNumberPortionId32Bits;
+                currentNumIndices = state.numIndices32Bits;
                 state.numIndices32Bits += numIndices;
                 dataTextureRamStats.totalPolygons32Bits += bucketGeometry.numTriangles;
             }
@@ -479,20 +459,25 @@ export class DTXTrianglesLayer extends Layer {
                 indicesPortionIdBuffer.push(subPortionId);
             }
         }
+        buffer.perObjectIndexBaseOffsets.push(currentNumIndices / 3 - bucketGeometry.indicesBase);
 
+        let currentNumEdgeIndices = 0;
         if (bucketGeometry.numEdges > 0) {
             let numEdgeIndices = bucketGeometry.numEdges * 2;
             let edgeIndicesPortionIdBuffer;
             if (bucketGeometry.numVertices <= (1 << 8)) {
                 edgeIndicesPortionIdBuffer = buffer.perEdgeNumberPortionId8Bits;
+                currentNumEdgeIndices = state.numEdgeIndices8Bits;
                 state.numEdgeIndices8Bits += numEdgeIndices;
                 dataTextureRamStats.totalEdges8Bits += bucketGeometry.numEdges;
             } else if (bucketGeometry.numVertices <= (1 << 16)) {
                 edgeIndicesPortionIdBuffer = buffer.perEdgeNumberPortionId16Bits;
+                currentNumEdgeIndices = state.numEdgeIndices16Bits;
                 state.numEdgeIndices16Bits += numEdgeIndices;
                 dataTextureRamStats.totalEdges16Bits += bucketGeometry.numEdges;
             } else {
                 edgeIndicesPortionIdBuffer = buffer.perEdgeNumberPortionId32Bits;
+                currentNumEdgeIndices = state.numEdgeIndices32Bits;
                 state.numEdgeIndices32Bits += numEdgeIndices;
                 dataTextureRamStats.totalEdges32Bits += bucketGeometry.numEdges;
             }
@@ -501,6 +486,7 @@ export class DTXTrianglesLayer extends Layer {
                 edgeIndicesPortionIdBuffer.push(subPortionId);
             }
         }
+        buffer.perObjectEdgeIndexBaseOffsets.push(currentNumEdgeIndices / 2 - bucketGeometry.edgeIndicesBase);
 
         //   buffer.perObjectOffsets.push([0, 0, 0]);
 
