@@ -137,24 +137,24 @@ export const makeDTXRenderingAttributes = function(gl, subGeometry) {
 
         appendFragmentDefinitions: (src) => { },
 
-        makeDrawCall: function(program) {
-            const uSceneModelMatrix                  = program.getLocation("sceneModelMatrix");
-            const uViewMatrix                        = program.getLocation("viewMatrix");
-            const uProjMatrix                        = program.getLocation("projMatrix");
-            const uCameraEyeRtc                      = isTriangle && program.getLocation("uCameraEyeRtc");
+        makeDrawCall: function(getInputSetter) {
+            const uSceneModelMatrix                  = getInputSetter("sceneModelMatrix");
+            const uViewMatrix                        = getInputSetter("viewMatrix");
+            const uProjMatrix                        = getInputSetter("projMatrix");
+            const uCameraEyeRtc                      = isTriangle && getInputSetter("uCameraEyeRtc");
 
-            const uTexPerObjectPositionsDecodeMatrix = program.getSampler("uTexPerObjectPositionsDecodeMatrix");
-            const uTexPerVertexIdCoordinates         = program.getSampler("uTexPerVertexIdCoordinates");
-            const uTexPerObjectColorsAndFlags        = program.getSampler("uTexPerObjectColorsAndFlags");
-            const uTexPerObjectMatrix                = program.getSampler("uTexPerObjectMatrix");
-            const uTexPerPrimitiveIdPortionIds       = program.getSampler("uTexPerPrimitiveIdPortionIds");
-            const uTexPerPrimitiveIdIndices          = program.getSampler("uTexPerPrimitiveIdIndices");
+            const uTexPerObjectPositionsDecodeMatrix = getInputSetter("uTexPerObjectPositionsDecodeMatrix");
+            const uTexPerVertexIdCoordinates         = getInputSetter("uTexPerVertexIdCoordinates");
+            const uTexPerObjectColorsAndFlags        = getInputSetter("uTexPerObjectColorsAndFlags");
+            const uTexPerObjectMatrix                = getInputSetter("uTexPerObjectMatrix");
+            const uTexPerPrimitiveIdPortionIds       = getInputSetter("uTexPerPrimitiveIdPortionIds");
+            const uTexPerPrimitiveIdIndices          = getInputSetter("uTexPerPrimitiveIdIndices");
 
             return function(frameCtx, layer, sceneModelMat, viewMatrix, projMatrix, rtcOrigin, eye) {
-                gl.uniformMatrix4fv(uSceneModelMatrix, false, sceneModelMat);
-                gl.uniformMatrix4fv(uViewMatrix,       false, viewMatrix);
-                gl.uniformMatrix4fv(uProjMatrix,       false, projMatrix);
-                uCameraEyeRtc && gl.uniform3fv(uCameraEyeRtc, math.subVec3(eye, rtcOrigin, tempVec3));
+                uSceneModelMatrix(sceneModelMat);
+                uViewMatrix(viewMatrix);
+                uProjMatrix(projMatrix);
+                uCameraEyeRtc && uCameraEyeRtc(math.subVec3(eye, rtcOrigin, tempVec3));
 
                 layer.bindCommonTextures(
                     uTexPerObjectPositionsDecodeMatrix,

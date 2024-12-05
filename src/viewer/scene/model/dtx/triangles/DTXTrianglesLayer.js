@@ -215,15 +215,15 @@ export class DTXTrianglesLayer extends Layer {
                     return {
                         indices: function(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode) {
                             if (numIndices > 0) {
-                                uTexPerPrimitiveIdPortionIds.bindTexture(portionIdsTexture, 5); // webgl texture unit
-                                uTexPerPrimitiveIdIndices.bindTexture(   indicesTexture,    6); // webgl texture unit
+                                uTexPerPrimitiveIdPortionIds(portionIdsTexture, 5); // webgl texture unit
+                                uTexPerPrimitiveIdIndices(   indicesTexture,    6); // webgl texture unit
                                 gl.drawArrays(glMode, 0, numIndices);
                             }
                         },
                         edges: function(uTexPerPrimitiveIdPortionIds, uTexPerPrimitiveIdIndices, glMode) {
                             if (numEdgeIndices > 0) {
-                                uTexPerPrimitiveIdPortionIds.bindTexture(portionEdgeIdsTexture, 5); // webgl texture unit
-                                uTexPerPrimitiveIdIndices.bindTexture(   edgeIndicesTexture,    6); // webgl texture unit
+                                uTexPerPrimitiveIdPortionIds(portionEdgeIdsTexture, 5); // webgl texture unit
+                                uTexPerPrimitiveIdIndices(   edgeIndicesTexture,    6); // webgl texture unit
                                 gl.drawArrays(glMode, 0, numEdgeIndices);
                             }
                         }
@@ -549,10 +549,10 @@ export class DTXTrianglesLayer extends Layer {
             uTexPerVertexIdCoordinates,
             uTexPerObjectColorsAndFlags,
             uTexPerObjectMatrix) {
-            uTexPerObjectPositionsDecodeMatrix.bindTexture(texturePerObjectPositionsDecodeMatrix, 1);
-            uTexPerVertexIdCoordinates.bindTexture(texturePerVertexIdCoordinates,                 2);
-            uTexPerObjectColorsAndFlags.bindTexture(texturePerObjectColorsAndFlags,               3);
-            uTexPerObjectMatrix.bindTexture(texturePerObjectInstanceMatrices,                     4);
+            uTexPerObjectPositionsDecodeMatrix(texturePerObjectPositionsDecodeMatrix, 1);
+            uTexPerVertexIdCoordinates(texturePerVertexIdCoordinates,                 2);
+            uTexPerObjectColorsAndFlags(texturePerObjectColorsAndFlags,               3);
+            uTexPerObjectMatrix(texturePerObjectInstanceMatrices,                     4);
         };
 
         const draw8  = buffer.geometry8Bits.createDrawers( createTextureForSingleItems, gl.UNSIGNED_BYTE);
