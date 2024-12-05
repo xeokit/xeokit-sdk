@@ -147,14 +147,9 @@ export class DTXTrianglesLayer extends Layer {
             indices32Bits: [],
             lenIndices32Bits: 0,
 
-            edgeIndices8Bits: [],
-            lenEdgeIndices8Bits: 0,
-
-            edgeIndices16Bits: [],
-            lenEdgeIndices16Bits: 0,
-
-            edgeIndices32Bits: [],
-            lenEdgeIndices32Bits: 0,
+            edgeIndices8Bits:  { buf: [], len: 0 },
+            edgeIndices16Bits: { buf: [], len: 0 },
+            edgeIndices32Bits: { buf: [], len: 0 },
 
             perObjectColors: [],
             perObjectPickColors: [],
@@ -369,27 +364,6 @@ export class DTXTrianglesLayer extends Layer {
             indicesBuffer.push(indices);
         }
 
-        let edgeIndicesBase;
-        let numEdges = 0;
-        if (edgeIndices) {
-            numEdges = edgeIndices.length / 2;
-            let edgeIndicesBuffer;
-            if (numVertices <= (1 << 8)) {
-                edgeIndicesBuffer = buffer.edgeIndices8Bits;
-                edgeIndicesBase = buffer.lenEdgeIndices8Bits / 2;
-                buffer.lenEdgeIndices8Bits += edgeIndices.length;
-            } else if (numVertices <= (1 << 16)) {
-                edgeIndicesBuffer = buffer.edgeIndices16Bits;
-                edgeIndicesBase = buffer.lenEdgeIndices16Bits / 2;
-                buffer.lenEdgeIndices16Bits += edgeIndices.length;
-            } else {
-                edgeIndicesBuffer = buffer.edgeIndices32Bits;
-                edgeIndicesBase = buffer.lenEdgeIndices32Bits / 2;
-                buffer.lenEdgeIndices32Bits += edgeIndices.length;
-            }
-            edgeIndicesBuffer.push(edgeIndices);
-        }
-
         this._state.numVertices += numVertices;
 
         dataTextureRamStats.numberOfGeometries++;
@@ -398,9 +372,27 @@ export class DTXTrianglesLayer extends Layer {
             vertexBase,
             numVertices,
             numTriangles,
-            numEdges,
             indicesBase,
-            edgeIndicesBase
+            edgesData: edgeIndices && (function() {
+                const accumulate = buf => {
+                    const edgeIndicesBuffer = buf.buf;
+                    const edgeIndicesBase = buf.len / 2;
+                    buf.len += edgeIndices.length;
+                    edgeIndicesBuffer.push(edgeIndices);
+                    return {
+                        numEdges: edgeIndices.length / 2,
+                        edgeIndicesBase: edgeIndicesBase
+                    };
+                };
+
+                if (numVertices <= (1 << 8)) {
+                    return accumulate(buffer.edgeIndices8Bits);
+                } else if (numVertices <= (1 << 16)) {
+                    return accumulate(buffer.edgeIndices16Bits);
+                } else {
+                    return accumulate(buffer.edgeIndices32Bits);
+                }
+            })()
         };
 
         return bucketGeometry;
@@ -461,31 +453,32 @@ export class DTXTrianglesLayer extends Layer {
         buffer.perObjectIndexBaseOffsets.push(currentNumIndices / 3 - bucketGeometry.indicesBase);
 
         let currentNumEdgeIndices = 0;
-        if (bucketGeometry.numEdges > 0) {
-            let numEdgeIndices = bucketGeometry.numEdges * 2;
+        if (bucketGeometry.edgesData.numEdges > 0) {
+            const numEdges = bucketGeometry.edgesData.numEdges;
+            let numEdgeIndices = numEdges * 2;
             let edgeIndicesPortionIdBuffer;
             if (bucketGeometry.numVertices <= (1 << 8)) {
                 edgeIndicesPortionIdBuffer = buffer.perEdgeNumberPortionId8Bits;
                 currentNumEdgeIndices = state.numEdgeIndices8Bits;
                 state.numEdgeIndices8Bits += numEdgeIndices;
-                dataTextureRamStats.totalEdges8Bits += bucketGeometry.numEdges;
+                dataTextureRamStats.totalEdges8Bits += numEdges;
             } else if (bucketGeometry.numVertices <= (1 << 16)) {
                 edgeIndicesPortionIdBuffer = buffer.perEdgeNumberPortionId16Bits;
                 currentNumEdgeIndices = state.numEdgeIndices16Bits;
                 state.numEdgeIndices16Bits += numEdgeIndices;
-                dataTextureRamStats.totalEdges16Bits += bucketGeometry.numEdges;
+                dataTextureRamStats.totalEdges16Bits += numEdges;
             } else {
                 edgeIndicesPortionIdBuffer = buffer.perEdgeNumberPortionId32Bits;
                 currentNumEdgeIndices = state.numEdgeIndices32Bits;
                 state.numEdgeIndices32Bits += numEdgeIndices;
-                dataTextureRamStats.totalEdges32Bits += bucketGeometry.numEdges;
+                dataTextureRamStats.totalEdges32Bits += numEdges;
             }
-            dataTextureRamStats.totalEdges += bucketGeometry.numEdges;
-            for (let i = 0; i < bucketGeometry.numEdges; i += INDICES_EDGE_INDICES_ALIGNEMENT_SIZE) {
+            dataTextureRamStats.totalEdges += numEdges;
+            for (let i = 0; i < numEdges; i += INDICES_EDGE_INDICES_ALIGNEMENT_SIZE) {
                 edgeIndicesPortionIdBuffer.push(subPortionId);
             }
         }
-        buffer.perObjectEdgeIndexBaseOffsets.push(currentNumEdgeIndices / 2 - bucketGeometry.edgeIndicesBase);
+        buffer.perObjectEdgeIndexBaseOffsets.push(currentNumEdgeIndices / 2 - bucketGeometry.edgesData.edgeIndicesBase);
 
         //   buffer.perObjectOffsets.push([0, 0, 0]);
 
@@ -744,9 +737,9 @@ export class DTXTrianglesLayer extends Layer {
         };
 
         // Texture that holds the unique-vertex-indices for 8-bit based edge indices.
-        const edgeIndices8  = createTextureForEdgeIndices(buffer.edgeIndices8Bits,  buffer.lenEdgeIndices8Bits,  gl.UNSIGNED_BYTE);
-        const edgeIndices16 = createTextureForEdgeIndices(buffer.edgeIndices16Bits, buffer.lenEdgeIndices16Bits, gl.UNSIGNED_SHORT);
-        const edgeIndices32 = createTextureForEdgeIndices(buffer.edgeIndices32Bits, buffer.lenEdgeIndices32Bits, gl.UNSIGNED_INT);
+        const edgeIndices8  = createTextureForEdgeIndices(buffer.edgeIndices8Bits.buf,  buffer.edgeIndices8Bits.len,  gl.UNSIGNED_BYTE);
+        const edgeIndices16 = createTextureForEdgeIndices(buffer.edgeIndices16Bits.buf, buffer.edgeIndices16Bits.len, gl.UNSIGNED_SHORT);
+        const edgeIndices32 = createTextureForEdgeIndices(buffer.edgeIndices32Bits.buf, buffer.edgeIndices32Bits.len, gl.UNSIGNED_INT);
 
         const bindCommonTextures = function(
             program,
