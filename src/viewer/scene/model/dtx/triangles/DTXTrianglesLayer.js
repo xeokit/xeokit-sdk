@@ -243,7 +243,6 @@ export class DTXTrianglesLayer extends Layer {
             perObjectColors: [],
             perObjectPickColors: [],
             perObjectSolid: [],
-            perObjectOffsets: [],
             perObjectPositionsDecodeMatrices: [],
             perObjectInstancePositioningMatrices: [],
             perObjectVertexBases: [],
@@ -411,12 +410,10 @@ export class DTXTrianglesLayer extends Layer {
             buffer.perObjectVertexBases.push(bucketGeometry.vertexBase);
 
             const colors = portionCfg.colors;
-            const color  = portionCfg.color;
-            if (colors) {
-                buffer.perObjectColors.push([colors[0] * 255, colors[1] * 255, colors[2] * 255, 255]);
-            } else if (color) { // Color is pre-quantized by SceneModel
-                buffer.perObjectColors.push([color[0], color[1], color[2], portionCfg.opacity]);
-            }
+            const color = portionCfg.color; // Color is pre-quantized by SceneModel
+            buffer.perObjectColors.push(colors
+                                        ? [ colors[0] * 255, colors[1] * 255, colors[2] * 255, 255 ]
+                                        : [ color[0],        color[1],        color[2],        portionCfg.opacity ]);
 
             const subPortionId = this._portions.length;
             this._portions.push({ });
@@ -452,144 +449,42 @@ export class DTXTrianglesLayer extends Layer {
             return;
         }
 
-        const textureState = this._state.textureState;
         const gl = this.model.scene.canvas.gl;
         const buffer = this._buffer;
-
-        const state = this._state;
-        state.gl = gl;
-
-        const createBindableDataTexture = function(entitiesCnt, entitySize, type, entitiesPerRow, populateTexArray, statsProp, exposeData) {
-            if ((entitySize > 4) && ((entitySize % 4) > 0)) {
-                throw "Unhandled data size " + entitySize;
-            }
-            const pixelsPerEntity = Math.ceil(entitySize / 4);
-            const pixelWidth = entitySize / pixelsPerEntity;
-
-            const [ arrayType, internalFormat, format ] = (function() {
-                switch(type) {
-                case gl.UNSIGNED_BYTE:
-                    return [ Uint8Array,   ...((pixelWidth === 1) ? [ gl.R8UI,  gl.RED_INTEGER ] : ((pixelWidth === 2) ? [ gl.RG8UI,  gl.RG_INTEGER ] : ((pixelWidth === 3) ? [ gl.RGB8UI,  gl.RGB_INTEGER ] : [ gl.RGBA8UI,  gl.RGBA_INTEGER ]))) ];
-                case gl.UNSIGNED_SHORT:
-                    return [ Uint16Array,  ...((pixelWidth === 1) ? [ gl.R16UI, gl.RED_INTEGER ] : ((pixelWidth === 2) ? [ gl.RG16UI, gl.RG_INTEGER ] : ((pixelWidth === 3) ? [ gl.RGB16UI, gl.RGB_INTEGER ] : [ gl.RGBA16UI, gl.RGBA_INTEGER ]))) ];
-                case gl.UNSIGNED_INT:
-                    return [ Uint32Array,  ...((pixelWidth === 1) ? [ gl.R32UI, gl.RED_INTEGER ] : ((pixelWidth === 2) ? [ gl.RG32UI, gl.RG_INTEGER ] : ((pixelWidth === 3) ? [ gl.RGB32UI, gl.RGB_INTEGER ] : [ gl.RGBA32UI, gl.RGBA_INTEGER ]))) ];
-                case gl.FLOAT:
-                    return [ Float32Array, ...((pixelWidth === 1) ? [ gl.R32F,  gl.RED ]         : ((pixelWidth === 2) ? [ gl.RG32F,  gl.RG ]         : ((pixelWidth === 3) ? [ gl.RGB32F,  gl.RGB ]         : [ gl.RGBA32F,  gl.RGBA ]))) ];
-                default:
-                    throw "Unhandled data type " + type;
-                }
-            })();
-
-            const textureWidth = entitiesPerRow * pixelsPerEntity;
-            const textureHeight = Math.ceil(entitiesCnt / entitiesPerRow);
-            if (textureHeight === 0) {
-                throw "texture height===0";
-            }
-            const texArray = new arrayType(textureWidth * textureHeight * pixelWidth);
-            dataTextureRamStats[statsProp] += texArray.byteLength;
-            dataTextureRamStats.numberOfTextures++;
-
-            populateTexArray(texArray);
-
-            const texture = gl.createTexture();
-            gl.bindTexture(gl.TEXTURE_2D, texture);
-            gl.texStorage2D(gl.TEXTURE_2D, 1, internalFormat, textureWidth, textureHeight);
-            gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, format, type, texArray);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-            gl.bindTexture(gl.TEXTURE_2D, null);
-
-            return {
-                // called by Sampler::bindTexture
-                bind(unit) {
-                    gl.activeTexture(gl["TEXTURE" + unit]);
-                    gl.bindTexture(gl.TEXTURE_2D, texture);
-                    return true;
-                },
-
-                unbind(unit) {
-                    // This `unbind` method is ignored at the moment to allow avoiding
-                    // to rebind same texture already bound to a texture unit.
-
-                    // this._gl.activeTexture(this.state.gl["TEXTURE" + unit]);
-                    // this._gl.bindTexture(this.state.gl.TEXTURE_2D, null);
-                },
-
-                textureData: exposeData && {
-                    setData(data, subPortionId, offset = 0, load = false) {
-                        texArray.set(data, subPortionId * entitySize + offset * pixelWidth);
-                        if (load) {
-                            gl.bindTexture(gl.TEXTURE_2D, texture);
-                            const xoffset = (subPortionId % entitiesPerRow) * pixelsPerEntity + offset;
-                            const yoffset = Math.floor(subPortionId / entitiesPerRow);
-                            const width = data.length / pixelWidth;
-                            gl.texSubImage2D(gl.TEXTURE_2D, 0, xoffset, yoffset, width, 1, format, type, data);
-                            // gl.bindTexture (gl.TEXTURE_2D, null);
-                        }
-                    },
-
-                    reloadData() {
-                        gl.bindTexture(gl.TEXTURE_2D, texture);
-                        gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, format, type, texArray);
-                    }
-                }
-            };
-        };
 
         /*
          * Texture that holds colors/pickColors/flags/flags2 per-object:
          * - columns: one concept per column => color / pick-color / ...
          * - row: the object Id
-         * This will generate an RGBA texture for:
-         * - colors
-         * - pickColors
-         * - flags
-         * - flags2
-         * - vertex bases
-         * - vertex base offsets
-         *
          * The texture will have:
          * - 4 RGBA columns per row: for each object (pick) color and flags(2)
          * - N rows where N is the number of objects
          */
-        const texturePerObjectColorsAndFlags = (function() {
-            const colors = buffer.perObjectColors;
-            const pickColors = buffer.perObjectPickColors;
-            const vertexBases = buffer.perObjectVertexBases;
-            const indexBaseOffsets = buffer.perObjectIndexBaseOffsets;
-            const edgeIndexBaseOffsets = buffer.perObjectEdgeIndexBaseOffsets;
-            const solid = buffer.perObjectSolid;
+        const numPortions = this._portions.length;
 
-            // The number of rows in the texture is the number of objects in the layer.
-            const numPortions = colors.length;
-
+        const populateTexArray = texArray => {
             const pack32as4x8 = ui32 => [
                 (ui32 >> 24) & 255,
                 (ui32 >> 16) & 255,
                 (ui32 >>  8) & 255,
                 (ui32)       & 255
             ];
+            for (let i = 0; i < numPortions; i++) {
+                // 8 columns per texture row:
+                texArray.set(buffer.perObjectColors[i],                            i * 32 +  0); // (RGBA)
+                texArray.set(buffer.perObjectPickColors[i],                        i * 32 +  4); // (packed Uint32 as RGBA)
+                texArray.set([0, 0, 0, 0], /* flags */                             i * 32 +  8); // (packed 4 bytes as RGBA)
+                texArray.set([0, 0, 0, 0], /* flags2 */                            i * 32 + 12); // (packed 4 bytes as RGBA)
+                texArray.set(pack32as4x8(buffer.perObjectVertexBases[i]),          i * 32 + 16); // (packed Uint32 bytes as RGBA)
+                texArray.set(pack32as4x8(buffer.perObjectIndexBaseOffsets[i]),     i * 32 + 20); // (packed Uint32 bytes as RGBA)
+                texArray.set(pack32as4x8(buffer.perObjectEdgeIndexBaseOffsets[i]), i * 32 + 24); // (packed Uint32 bytes as RGBA)
+                texArray.set([buffer.perObjectSolid[i] ? 1 : 0, 0, 0, 0],          i * 32 + 28); // (packed 4 bytes as RGBA)
+            }
+        };
 
-            const populateTexArray = texArray => {
-                for (let i = 0; i < numPortions; i++) {
-                    // 8 columns per texture row:
-                    texArray.set(colors[i],                            i * 32 +  0); // - col0: (RGBA) object color RGBA
-                    texArray.set(pickColors[i],                        i * 32 +  4); // - col1: (packed Uint32 as RGBA) object pick color
-                    texArray.set([0, 0, 0, 0],                         i * 32 +  8); // - col2: (packed 4 bytes as RGBA) object flags
-                    texArray.set([0, 0, 0, 0],                         i * 32 + 12); // - col3: (packed 4 bytes as RGBA) object flags2
-                    texArray.set(pack32as4x8(vertexBases[i]),          i * 32 + 16); // - col4: (packed Uint32 bytes as RGBA) vertex base
-                    texArray.set(pack32as4x8(indexBaseOffsets[i]),     i * 32 + 20); // - col5: (packed Uint32 bytes as RGBA) index base offset
-                    texArray.set(pack32as4x8(edgeIndexBaseOffsets[i]), i * 32 + 24); // - col6: (packed Uint32 bytes as RGBA) edge index base offset
-                    texArray.set([solid[i] ? 1 : 0, 0, 0, 0],          i * 32 + 28); // - col7: (packed 4 bytes as RGBA) is-solid flag for objects
-                }
-            };
-
-            return createBindableDataTexture(numPortions, 32, gl.UNSIGNED_BYTE, 512, populateTexArray, "sizeDataColorsAndFlags", true);
-        })();
-        textureState.texturePerObjectColorsAndFlagsData = texturePerObjectColorsAndFlags.textureData;
+        // The number of rows in the texture is the number of objects in the layer.
+        const texturePerObjectColorsAndFlags = createBindableDataTexture(gl, numPortions, 32, gl.UNSIGNED_BYTE, 512, populateTexArray, "sizeDataColorsAndFlags", true);
+        this._state.textureState.texturePerObjectColorsAndFlagsData = texturePerObjectColorsAndFlags.textureData;
 
         const createDataTexture = function(dataArrays, entitiesCnt, entitySize, type, entitiesPerRow, statsProp, exposeData) {
             const populateTexArray = texArray => {
@@ -599,7 +494,7 @@ export class DTXTrianglesLayer extends Layer {
                     j += pc.length;
                 }
             };
-            return createBindableDataTexture(entitiesCnt, entitySize, type, entitiesPerRow, populateTexArray, statsProp, exposeData);
+            return createBindableDataTexture(gl, entitiesCnt, entitySize, type, entitiesPerRow, populateTexArray, statsProp, exposeData);
         };
 
         const createTextureForMatrices = function(matrices, statsProp, exposeData) {
@@ -619,7 +514,7 @@ export class DTXTrianglesLayer extends Layer {
          * - N rows where N is the number of objects
          */
         const texturePerObjectInstanceMatrices = createTextureForMatrices(buffer.perObjectInstancePositioningMatrices, "sizeDataInstancesMatrices", true);
-        textureState.texturePerObjectInstanceMatricesData = texturePerObjectInstanceMatrices.textureData;
+        this._state.textureState.texturePerObjectInstanceMatricesData = texturePerObjectInstanceMatrices.textureData;
 
         /*
          * Texture that holds the objectDecodeAndInstanceMatrix per-object:
@@ -649,7 +544,7 @@ export class DTXTrianglesLayer extends Layer {
             buffer.positionsCompressed, buffer.lenPositionsCompressed, 3, gl.UNSIGNED_SHORT, "sizeDataTexturePositions");
 
 
-        const bindCommonTextures = function(
+        this.bindCommonTextures = function(
             program,
             objectDecodeMatricesShaderName,
             vertexTextureShaderName,
@@ -668,21 +563,10 @@ export class DTXTrianglesLayer extends Layer {
 
         this.drawTriangles = function(
             program,
-            uTexturePerObjectPositionsDecodeMatrix,
-            uTexturePerVertexIdCoordinates,
-            uTexturePerObjectColorsAndFlags,
-            uTexturePerObjectMatrix,
             uTexturePerPrimitiveIdPortionIds,
             uTexturePerPrimitiveIdIndices,
             glMode)
         {
-            bindCommonTextures(
-                program,
-                uTexturePerObjectPositionsDecodeMatrix,
-                uTexturePerVertexIdCoordinates,
-                uTexturePerObjectColorsAndFlags,
-                uTexturePerObjectMatrix);
-
             draw8.indices( program, uTexturePerPrimitiveIdPortionIds, uTexturePerPrimitiveIdIndices, glMode);
             draw16.indices(program, uTexturePerPrimitiveIdPortionIds, uTexturePerPrimitiveIdIndices, glMode);
             draw32.indices(program, uTexturePerPrimitiveIdPortionIds, uTexturePerPrimitiveIdIndices, glMode);
@@ -690,21 +574,10 @@ export class DTXTrianglesLayer extends Layer {
 
         this.drawEdges = function(
             program,
-            uTexturePerObjectPositionsDecodeMatrix,
-            uTexturePerVertexIdCoordinates,
-            uTexturePerObjectColorsAndFlags,
-            uTexturePerObjectMatrix,
             uTexturePerPrimitiveIdPortionIds,
             uTexturePerPrimitiveIdIndices,
             glMode)
         {
-            bindCommonTextures(
-                program,
-                uTexturePerObjectPositionsDecodeMatrix,
-                uTexturePerVertexIdCoordinates,
-                uTexturePerObjectColorsAndFlags,
-                uTexturePerObjectMatrix);
-
             draw8.edges( program, uTexturePerPrimitiveIdPortionIds, uTexturePerPrimitiveIdIndices, glMode);
             draw16.edges(program, uTexturePerPrimitiveIdPortionIds, uTexturePerPrimitiveIdIndices, glMode);
             draw32.edges(program, uTexturePerPrimitiveIdPortionIds, uTexturePerPrimitiveIdIndices, glMode);
@@ -889,3 +762,83 @@ export class DTXTrianglesLayer extends Layer {
         this._destroyed = true;
     }
 }
+
+const createBindableDataTexture = function(gl, entitiesCnt, entitySize, type, entitiesPerRow, populateTexArray, statsProp, exposeData) {
+    if ((entitySize > 4) && ((entitySize % 4) > 0)) {
+        throw "Unhandled data size " + entitySize;
+    }
+    const pixelsPerEntity = Math.ceil(entitySize / 4);
+    const pixelWidth = entitySize / pixelsPerEntity;
+
+    const [ arrayType, internalFormat, format ] = (function() {
+        switch(type) {
+        case gl.UNSIGNED_BYTE:
+            return [ Uint8Array,   ...((pixelWidth === 1) ? [ gl.R8UI,  gl.RED_INTEGER ] : ((pixelWidth === 2) ? [ gl.RG8UI,  gl.RG_INTEGER ] : ((pixelWidth === 3) ? [ gl.RGB8UI,  gl.RGB_INTEGER ] : [ gl.RGBA8UI,  gl.RGBA_INTEGER ]))) ];
+        case gl.UNSIGNED_SHORT:
+            return [ Uint16Array,  ...((pixelWidth === 1) ? [ gl.R16UI, gl.RED_INTEGER ] : ((pixelWidth === 2) ? [ gl.RG16UI, gl.RG_INTEGER ] : ((pixelWidth === 3) ? [ gl.RGB16UI, gl.RGB_INTEGER ] : [ gl.RGBA16UI, gl.RGBA_INTEGER ]))) ];
+        case gl.UNSIGNED_INT:
+            return [ Uint32Array,  ...((pixelWidth === 1) ? [ gl.R32UI, gl.RED_INTEGER ] : ((pixelWidth === 2) ? [ gl.RG32UI, gl.RG_INTEGER ] : ((pixelWidth === 3) ? [ gl.RGB32UI, gl.RGB_INTEGER ] : [ gl.RGBA32UI, gl.RGBA_INTEGER ]))) ];
+        case gl.FLOAT:
+            return [ Float32Array, ...((pixelWidth === 1) ? [ gl.R32F,  gl.RED ]         : ((pixelWidth === 2) ? [ gl.RG32F,  gl.RG ]         : ((pixelWidth === 3) ? [ gl.RGB32F,  gl.RGB ]         : [ gl.RGBA32F,  gl.RGBA ]))) ];
+        default:
+            throw "Unhandled data type " + type;
+        }
+    })();
+
+    const textureWidth = entitiesPerRow * pixelsPerEntity;
+    const textureHeight = Math.ceil(entitiesCnt / entitiesPerRow);
+    if (textureHeight === 0) {
+        throw "texture height===0";
+    }
+    const texArray = new arrayType(textureWidth * textureHeight * pixelWidth);
+    dataTextureRamStats[statsProp] += texArray.byteLength;
+    dataTextureRamStats.numberOfTextures++;
+
+    populateTexArray(texArray);
+
+    const texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texStorage2D(gl.TEXTURE_2D, 1, internalFormat, textureWidth, textureHeight);
+    gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, format, type, texArray);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.bindTexture(gl.TEXTURE_2D, null);
+
+    return {
+        // called by Sampler::bindTexture
+        bind(unit) {
+            gl.activeTexture(gl["TEXTURE" + unit]);
+            gl.bindTexture(gl.TEXTURE_2D, texture);
+            return true;
+        },
+
+        unbind(unit) {
+            // This `unbind` method is ignored at the moment to allow avoiding
+            // to rebind same texture already bound to a texture unit.
+
+            // this._gl.activeTexture(gl["TEXTURE" + unit]);
+            // this._gl.bindTexture(gl.TEXTURE_2D, null);
+        },
+
+        textureData: exposeData && {
+            setData(data, subPortionId, offset = 0, load = false) {
+                texArray.set(data, subPortionId * entitySize + offset * pixelWidth);
+                if (load) {
+                    gl.bindTexture(gl.TEXTURE_2D, texture);
+                    const xoffset = (subPortionId % entitiesPerRow) * pixelsPerEntity + offset;
+                    const yoffset = Math.floor(subPortionId / entitiesPerRow);
+                    const width = data.length / pixelWidth;
+                    gl.texSubImage2D(gl.TEXTURE_2D, 0, xoffset, yoffset, width, 1, format, type, data);
+                    // gl.bindTexture (gl.TEXTURE_2D, null);
+                }
+            },
+
+            reloadData() {
+                gl.bindTexture(gl.TEXTURE_2D, texture);
+                gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, format, type, texArray);
+            }
+        }
+    };
+};

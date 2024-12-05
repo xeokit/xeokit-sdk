@@ -158,12 +158,15 @@ export const makeDTXRenderingAttributes = function(gl, subGeometry) {
                     gl.uniform3fv(uCameraEyeRtc, math.subVec3(eye, rtcOrigin, tempVec3));
                 }
 
-                (subGeometry ? layer.drawEdges : layer.drawTriangles)(
+                layer.bindCommonTextures(
                     program,
                     uTexturePerObjectPositionsDecodeMatrix,
                     uTexturePerVertexIdCoordinates,
                     uTexturePerObjectColorsAndFlags,
-                    uTexturePerObjectMatrix,
+                    uTexturePerObjectMatrix);
+
+                (subGeometry ? layer.drawEdges : layer.drawTriangles)(
+                    program,
                     uTexturePerPrimitiveIdPortionIds,
                     uTexturePerPrimitiveIdIndices,
                     subGeometry ? (subGeometry.vertices ? gl.POINTS : gl.LINES) : gl.TRIANGLES);
