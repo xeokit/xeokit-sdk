@@ -382,36 +382,26 @@ export class DTXTrianglesLayer extends Layer {
 
     _createBucketGeometry(portionCfg, bucket) {
 
-        // Indices alignement
-        // This will make every mesh consume a multiple of INDICES_EDGE_INDICES_ALIGNEMENT_SIZE
-        // array items for storing the triangles of the mesh, and it supports:
-        // - a memory optimization of factor INDICES_EDGE_INDICES_ALIGNEMENT_SIZE
-        // - in exchange for a small RAM overhead
-        //   (by adding some padding until a size that is multiple of INDICES_EDGE_INDICES_ALIGNEMENT_SIZE)
+        const aligned = (indices, elementSize, statsProp) => {
+            // Indices and EdgeIndices alignement
+            // This will make every mesh consume a multiple of INDICES_EDGE_INDICES_ALIGNEMENT_SIZE
+            // array items for storing the triangles and edges of the mesh, and it supports:
+            // - a memory optimization of factor INDICES_EDGE_INDICES_ALIGNEMENT_SIZE
+            // - in exchange for a small RAM overhead
+            //   (by adding some padding until a size that is multiple of INDICES_EDGE_INDICES_ALIGNEMENT_SIZE)
+            if (bucket) {
+                const alignedLen = Math.ceil((indices.length / elementSize) / INDICES_EDGE_INDICES_ALIGNEMENT_SIZE) * INDICES_EDGE_INDICES_ALIGNEMENT_SIZE * elementSize;
+                const alignedArray = new Uint32Array(alignedLen);
+                alignedArray.set(indices);
+                dataTextureRamStats[statsProp] += 2 * (alignedArray.length - indices.length);
+                return alignedArray;
+            } else {
+                return indices;
+            }
+        };
 
-        if (bucket.indices) {
-            const alignedIndicesLen = Math.ceil((bucket.indices.length / 3) / INDICES_EDGE_INDICES_ALIGNEMENT_SIZE) * INDICES_EDGE_INDICES_ALIGNEMENT_SIZE * 3;
-            dataTextureRamStats.overheadSizeAlignementIndices += 2 * (alignedIndicesLen - bucket.indices.length);
-            const alignedIndices = new Uint32Array(alignedIndicesLen);
-            alignedIndices.fill(0);
-            alignedIndices.set(bucket.indices);
-            bucket.indices = alignedIndices;
-        }
-
-        // EdgeIndices alignement
-        // This will make every mesh consume a multiple of INDICES_EDGE_INDICES_ALIGNEMENT_SIZE
-        // array items for storing the edges of the mesh, and it supports:
-        // - a memory optimization of factor INDICES_EDGE_INDICES_ALIGNEMENT_SIZE
-        // - in exchange for a small RAM overhead
-        //   (by adding some padding until a size that is multiple of INDICES_EDGE_INDICES_ALIGNEMENT_SIZE)
-
-        if (bucket.edgeIndices) {
-            const alignedEdgeIndicesLen = Math.ceil((bucket.edgeIndices.length / 2) / INDICES_EDGE_INDICES_ALIGNEMENT_SIZE) * INDICES_EDGE_INDICES_ALIGNEMENT_SIZE * 2;
-            dataTextureRamStats.overheadSizeAlignementEdgeIndices += 2 * (alignedEdgeIndicesLen - bucket.edgeIndices.length);
-            const alignedEdgeIndices = new Uint32Array(alignedEdgeIndicesLen);
-            alignedEdgeIndices.set(bucket.edgeIndices);
-            bucket.edgeIndices = alignedEdgeIndices;
-        }
+        bucket.indices     = aligned(bucket.indices,     3, "overheadSizeAlignementIndices");
+        bucket.edgeIndices = aligned(bucket.edgeIndices, 2, "overheadSizeAlignementEdgeIndices");
 
         const positionsCompressed = bucket.positionsCompressed;
         const buffer = this._buffer;
