@@ -2979,7 +2979,7 @@ export class SceneModel extends Component {
             case "triangles":
             case "solid":
             case "surface":
-                dtxLayer = new DTXTrianglesLayer(this, {layerIndex: 0, origin, primitive}); // layerIndex is set in #finalize()
+                dtxLayer = new DTXTrianglesLayer(this, {origin, primitive});
                 break;
             default:
                 return;
@@ -3015,7 +3015,6 @@ export class SceneModel extends Component {
                 primitive: primitive,
                 origin: origin,
                 textureSet: cfg.textureSet,
-                layerIndex: 0,
                 ...(instancing ? {
                     geometry: geometry,
                 } : {
